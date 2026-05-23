@@ -1,5 +1,10 @@
 // src/ui/viewmodel/useExamViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import getAnsweredCountLabel from "../../utils/viewmodelutils/getAnsweredCountLabel.js";
+import getScoreLabel from "../../utils/viewmodelutils/getScoreLabel.js";
+import getQuestionProgressLabel from "../../utils/viewmodelutils/getQuestionProgressLabel.js";
+import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggleLabel.js";
+
 const INITIAL_FILTER = "all";
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
@@ -258,33 +263,4 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		setFilter,
 		isAnswerCorrect
 	};
-}
-
-// Hjelpemetoder
-function getAnsweredCountLabel(answeredCount, questionCount) {
-	return `${answeredCount}/${questionCount}`;
-}
-
-function getScoreLabel(submitted, score, totalPoints) {
-	if (submitted) {
-		return `${score}/${totalPoints}`;
-	}
-
-	return "—";
-}
-
-function getQuestionProgressLabel(currentQuestionIndex, questionCount) {
-	if (questionCount === 0) {
-		return "0 / 0";
-	}
-
-	return `${currentQuestionIndex + 1} / ${questionCount}`;
-}
-
-function getFeedbackToggleLabel(showAllFeedback) {
-	if (showAllFeedback) {
-		return "Skjul fasit";
-	}
-
-	return "Vis fasit";
 }

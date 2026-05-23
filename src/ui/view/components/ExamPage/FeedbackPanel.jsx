@@ -1,6 +1,6 @@
 //src/ui/view/components/ExamPage/FeedbackPanel.jsx
 import { BookOpen, CheckCircle2, XCircle } from "lucide-react";
-import { getAnswerLabel } from "../../../../utils/exam/answerUtils.js";
+import getAnswerLabel from "../../../../utils/answerutils/getAnswerLabel.js";
 
 export default function FeedbackPanel({ question, selected, correct }) {
     return (
