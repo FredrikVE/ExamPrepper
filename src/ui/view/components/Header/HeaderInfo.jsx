@@ -1,7 +1,7 @@
-//src/ui/view/components/ExamHeader/ExamHeaderInfo.jsx
+//src/ui/view/components/Header/HeaderInfo.jsx
 import { ClipboardList } from "lucide-react";
 
-export default function ExamHeaderInfo({ currentQuestionIndex, questionCount }) {
+export default function HeaderInfo({ currentQuestionIndex, questionCount }) {
     return (
         <div>
             <div className="exam-header-label">

@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamFooter/FooterNavigationButton.jsx
+//src/ui/view/components/Footer/FooterNavigationButton.jsx
 export default function FooterNavigationButton({ onClick, disabled, variant, icon, children }) {
 	const variantClassName = getFooterButtonVariantClassName(variant);
 	const showIconLeft = variant === "previous";

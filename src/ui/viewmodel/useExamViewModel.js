@@ -1,52 +1,22 @@
 // src/ui/viewmodel/useExamViewModel.js
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+const INITIAL_FILTER = "all";
+const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase) {
+export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase) {
 	
-    const [questions, setQuestions] = useState([]);
+	//Statevariabler
+	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
-	const [filter, setFilter] = useState("all");
+	const [filter, setFilter] = useState(INITIAL_FILTER);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-	useEffect(() => {
-		let cancelled = false;
 
-		async function loadQuestions() {
-			try {
-				setLoading(true);
-				setError(null);
-
-				const result = await getExamQuestionsUseCase.execute();
-
-				if (!cancelled) {
-					setQuestions(result);
-				}
-			}
-
-			catch (error) {
-				if (!cancelled) {
-					setError(error?.message ?? "Kunne ikke laste eksamen");
-				}
-			}
-
-			finally {
-				if (!cancelled) {
-					setLoading(false);
-				}
-			}
-		}
-
-		loadQuestions();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [getExamQuestionsUseCase]);
-
+	//Usememo for data
 	const result = useMemo(() => {
 		return calculateExamScoreUseCase.execute(questions, answers);
 	}, [questions, answers, calculateExamScoreUseCase]);
@@ -64,7 +34,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	}, [questions, answers]);
 
 	const visibleQuestions = useMemo(() => {
-		if (!submitted || filter === "all") {
+		if (!submitted || filter === INITIAL_FILTER) {
 			return questions;
 		}
 
@@ -89,40 +59,35 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	const visibleQuestionCount = visibleQuestions.length;
 	const questionCount = questions.length;
 
-	useEffect(() => {
-		if (visibleQuestionCount === 0) {
-			setCurrentQuestionIndex(0);
-			return;
-		}
-
-		if (currentQuestionIndex > visibleQuestionCount - 1) {
-			setCurrentQuestionIndex(visibleQuestionCount - 1);
-		}
-	}, [visibleQuestionCount, currentQuestionIndex]);
-
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
 
 	const canGoPrevious = currentQuestionIndex > 0;
 	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
 
 	const answeredCountLabel = getAnsweredCountLabel(answeredCount, questionCount);
+
 	const scoreLabel = getScoreLabel(
-		submitted,
-		result.score,
+		submitted, 
+		result.score, 
 		result.totalPoints
 	);
+
 	const questionProgressLabel = getQuestionProgressLabel(
 		currentQuestionIndex,
 		visibleQuestionCount
 	);
 
-	function previousQuestion() {
+	const feedbackToggleLabel = getFeedbackToggleLabel(showAllFeedback);
+
+
+	//Handlers og navigasjon
+	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
 			return Math.max(previousIndex - 1, 0);
 		});
-	}
+	}, []);
 
-	function nextQuestion() {
+	const nextQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
 			if (visibleQuestionCount === 0) {
 				return 0;
@@ -130,17 +95,19 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 
 			return Math.min(previousIndex + 1, visibleQuestionCount - 1);
 		});
-	}
+	}, [visibleQuestionCount]);
 
-	function goToQuestion(index) {
+	const goToQuestion = useCallback((index) => {
 		if (index < 0 || index >= visibleQuestionCount) {
 			return;
 		}
 
 		setCurrentQuestionIndex(index);
-	}
+	}, [visibleQuestionCount]);
 
-	function setSingleAnswer(questionId, value) {
+
+	//Handlefunksjoner for svar
+	const setSingleAnswer = useCallback((questionId, value) => {
 		if (submitted) {
 			return;
 		}
@@ -151,9 +118,9 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 				[questionId]: value
 			};
 		});
-	}
+	}, [submitted]);
 
-	function toggleMultiAnswer(questionId, value) {
+	const toggleMultiAnswer = useCallback((questionId, value) => {
 		if (submitted) {
 			return;
 		}
@@ -172,32 +139,87 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 				[questionId]: nextAnswer
 			};
 		});
-	}
+	}, [submitted]);
 
-	function submitExam() {
+
+	//Handler for eksamen
+	const submitExam = useCallback(() => {
 		setSubmitted(true);
-	}
+	}, []);
 
-	function resetExam() {
+	const resetExam = useCallback(() => {
 		setAnswers({});
 		setSubmitted(false);
 		setShowAllFeedback(true);
-		setFilter("all");
+		setFilter(INITIAL_FILTER);
 		setCurrentQuestionIndex(0);
 
 		window.scrollTo({
 			top: 0,
 			behavior: "smooth"
 		});
-	}
+	}, []);
 
-	function toggleShowAllFeedback() {
+	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((value) => !value);
-	}
+	}, []);
 
-	function isAnswerCorrect(question) {
+	const isAnswerCorrect = useCallback((question) => {
 		return gradeAnswerUseCase.execute(question, answers[question.id]);
-	}
+	}, [gradeAnswerUseCase, answers]);
+
+
+	// Effekter for datahåntering
+	const onMountedLoadQuestions = useCallback(() => {
+		let cancelled = false;
+
+		const run = async () => {
+			try {
+				setLoading(true);
+				setError(null);
+
+				const result = await getExamQuestionsUseCase.execute();
+
+				if (!cancelled) {
+					setQuestions(result);
+				}
+			}
+
+			catch (error) {
+				if (!cancelled) {
+					setError(error?.message ?? LOAD_ERROR_MESSAGE);
+				}
+			}
+
+			finally {
+				if (!cancelled) {
+					setLoading(false);
+				}
+			}
+		};
+
+		run();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [getExamQuestionsUseCase]);
+
+
+	//Effekter for navigasjon mellom sidene
+	const onVisibleQuestionsChangedClampCurrentIndex = useCallback(() => {
+		if (visibleQuestionCount === 0) {
+			setCurrentQuestionIndex(0);
+			return;
+		}
+
+		if (currentQuestionIndex > visibleQuestionCount - 1) {
+			setCurrentQuestionIndex(visibleQuestionCount - 1);
+		}
+	}, [visibleQuestionCount, currentQuestionIndex]);
+
+	useEffect(onMountedLoadQuestions, [onMountedLoadQuestions]);
+	useEffect(onVisibleQuestionsChangedClampCurrentIndex, [onVisibleQuestionsChangedClampCurrentIndex]);
 
 	return {
 		questions,
@@ -219,6 +241,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		answeredCountLabel,
 		scoreLabel,
 		questionProgressLabel,
+		feedbackToggleLabel,
 
 		canGoPrevious,
 		canGoNext,
@@ -237,6 +260,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	};
 }
 
+// Hjelpemetoder
 function getAnsweredCountLabel(answeredCount, questionCount) {
 	return `${answeredCount}/${questionCount}`;
 }
@@ -255,4 +279,12 @@ function getQuestionProgressLabel(currentQuestionIndex, questionCount) {
 	}
 
 	return `${currentQuestionIndex + 1} / ${questionCount}`;
+}
+
+function getFeedbackToggleLabel(showAllFeedback) {
+	if (showAllFeedback) {
+		return "Skjul fasit";
+	}
+
+	return "Vis fasit";
 }

@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamFooter/ExamFooter.jsx
+//src/ui/view/components/Footer/Footer.jsx
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FooterNavigationButton from "./FooterNavigationButton.jsx";
 

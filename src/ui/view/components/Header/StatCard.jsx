@@ -1,5 +1,5 @@
-//src/ui/view/components/ExamHeader/ExamHeaderStatCard.jsx
-export default function ExamHeaderStatCard({ value, label }) {
+//src/ui/view/components/Header/StatCard.jsx
+export default function StatCard({ value, label }) {
     return (
         <div className="exam-header-stat-card">
             <div className="exam-header-stat-value">

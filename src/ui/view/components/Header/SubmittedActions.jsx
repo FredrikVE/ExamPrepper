@@ -1,7 +1,7 @@
-//src/ui/view/components/ExamHeader/SubmittedExamActions.jsx
+//src/ui/view/components/Header/SubmittedActions.jsx
 import { Eye, EyeOff, RotateCcw } from "lucide-react";
 
-export default function SubmittedExamActions({ showAllFeedback, onToggleFeedback, onResetExam }) {
+export default function SubmittedActions({ showAllFeedback, onToggleFeedback, onResetExam }) {
     return (
         <>
             <button

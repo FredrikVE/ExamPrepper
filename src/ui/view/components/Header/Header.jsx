@@ -1,18 +1,18 @@
-//src/ui/view/components/ExamHeader/ExamHeader.jsx
-import ExamHeaderInfo from "./ExamHeaderInfo.jsx";
-import ExamHeaderActions from "./ExamHeaderActions.jsx";
+//src/ui/view/components/Header/Header.jsx
+import HeaderInfo from "./HeaderInfo.jsx";
+import HeaderActions from "./HeaderActions.jsx";
 
-export default function ExamHeader({ viewModel }) {
+export default function Header({ viewModel }) {
 	return (
 		<header className="exam-header">
 			<div className="exam-header-container">
 				<div className="exam-header-layout">
-					<ExamHeaderInfo
+					<HeaderInfo
 						currentQuestionIndex={viewModel.currentQuestionIndex}
 						questionCount={viewModel.visibleQuestions.length}
 					/>
 
-					<ExamHeaderActions viewModel={viewModel} />
+					<HeaderActions viewModel={viewModel} />
 				</div>
 			</div>
 		</header>

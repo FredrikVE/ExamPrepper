@@ -1,10 +1,10 @@
-// src/ui/view/components/ExamHeader/ExamHeaderButtons.jsx
-import SubmittedExamActions from "./SubmittedExamActions.jsx";
+//src/ui/view/components/Header/SubmittedActions.jsx
+import SubmittedActions from "./SubmittedActions.jsx";
 
-export default function ExamHeaderButtons({ viewModel }) {
+export default function HeaderButtons({ viewModel }) {
 	if (viewModel.submitted) {
 		return (
-			<SubmittedExamActions
+			<SubmittedActions
 				showAllFeedback={viewModel.showAllFeedback}
 				onToggleFeedback={viewModel.toggleShowAllFeedback}
 				onResetExam={viewModel.resetExam}
