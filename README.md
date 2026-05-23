@@ -165,13 +165,12 @@ end
 %% =========================
 subgraph AppLayer["App Layer"]
     App["App.jsx"]
-    ExamPageWrapper["ExamPageWrapper"]
 end
 
 %% =========================
-%% VIEW
+%% VIEW / PAGES
 %% =========================
-subgraph View["View"]
+subgraph View["View / Pages & Components"]
     ExamSelectPage["ExamSelectPage.jsx"]
     ExamPage["ExamPage.jsx"]
     Header["Header"]
@@ -221,22 +220,20 @@ DI -.-> App
 NavGraph -.-> App
 
 %% =========================
-%% APP FLOW
+%% APP → PAGES
 %% =========================
 App --> ExamSelectPage
-App --> ExamPageWrapper
+App --> ExamPage
 
 %% =========================
-%% EXAM SELECTION FLOW
+%% SELECT PAGE FLOW
 %% =========================
-App --> GetAvailableExamsUC
-GetAvailableExamsUC --> Repo
+ExamSelectPage --> GetAvailableExamsUC
 
 %% =========================
-%% EXAM PAGE FLOW
+%% VIEW → VIEWMODEL
 %% =========================
-ExamPageWrapper --> ExamVM
-ExamPageWrapper --> ExamPage
+ExamPage --> ExamVM
 
 %% =========================
 %% VIEW COMPOSITION
@@ -246,7 +243,7 @@ ExamPage --> QuestionCard
 ExamPage --> Footer
 
 %% =========================
-%% MVVM FLOW
+%% VIEWMODEL → DOMAIN
 %% =========================
 ExamVM --> GetExamQuestionsUC
 ExamVM --> GradeAnswerUC
@@ -258,12 +255,13 @@ ExamVM --> CalculateScoreUC
 CalculateScoreUC --> GradeAnswerUC
 
 %% =========================
-%% DOMAIN TO MODEL
+%% DOMAIN → MODEL
 %% =========================
+GetAvailableExamsUC --> Repo
 GetExamQuestionsUC --> Repo
 
 %% =========================
-%% MODEL TO DATA
+%% MODEL → DATA
 %% =========================
 Repo --> DS
 DS --> DataRegistry
@@ -277,15 +275,34 @@ DataRegistry --> MockExam2
 DataRegistry --> MockExamN
 
 %% =========================
-%% STYLING
+%% NODE COLORS
 %% =========================
-style SideInputs stroke:#000000,fill:#E0E0E0
-style AppLayer stroke:#000000,fill:#E1BEE7
-style View stroke:#000000,fill:#FFF9C4
-style ViewModel stroke:#000000,fill:#FFCDD2
-style Domain stroke:#000000,fill:#C5CAE9
-style Model stroke:#000000,fill:#DCEDC8
-style Data stroke:#000000,fill:#FFE082
+classDef sideNode fill:#E0E0E0,stroke:#424242,color:#000000
+classDef appNode fill:#C5E1A5,stroke:#33691E,color:#000000
+classDef viewNode fill:#C5E1A5,stroke:#33691E,color:#000000
+classDef viewModelNode fill:#C5E1A5,stroke:#33691E,color:#000000
+classDef domainNode fill:#C5E1A5,stroke:#33691E,color:#000000
+classDef modelNode fill:#C5E1A5,stroke:#33691E,color:#000000
+classDef dataNode fill:#C5E1A5,stroke:#33691E,color:#000000
+
+class DI,NavGraph sideNode
+class App appNode
+class ExamSelectPage,ExamPage,Header,QuestionCard,Footer viewNode
+class ExamVM viewModelNode
+class GetAvailableExamsUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
+class Repo,DS modelNode
+class DataRegistry,MockExam1,MockExam2,MockExamN dataNode
+
+%% =========================
+%% SUBGRAPH COLORS
+%% =========================
+style SideInputs stroke:#000000,fill:#E0E0E0,color:#000000
+style AppLayer stroke:#000000,fill:#E1BEE7,color:#000000
+style View stroke:#000000,fill:#FFF9C4,color:#000000
+style ViewModel stroke:#000000,fill:#FFCDD2,color:#000000
+style Domain stroke:#000000,fill:#C5CAE9,color:#000000
+style Model stroke:#000000,fill:#DCEDC8,color:#000000
+style Data stroke:#000000,fill:#FFE082,color:#000000
 ```
 
 ### Arkitekturflyt
