@@ -5,21 +5,18 @@ import getScoreLabel from "../../utils/viewmodelutils/getScoreLabel.js";
 import getQuestionProgressLabel from "../../utils/viewmodelutils/getQuestionProgressLabel.js";
 import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggleLabel.js";
 
-const INITIAL_FILTER = "all";
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase) {
+export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase) {
 	
 	//Statevariabler
 	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
-	const [filter, setFilter] = useState(INITIAL_FILTER);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-
 
 	//Usememo for data
 	const result = useMemo(() => {
@@ -38,29 +35,7 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		}).length;
 	}, [questions, answers]);
 
-	const visibleQuestions = useMemo(() => {
-		if (!submitted || filter === INITIAL_FILTER) {
-			return questions;
-		}
-
-		return questions.filter((question) => {
-			const correct = gradeAnswerUseCase.execute(
-				question,
-				answers[question.id]
-			);
-
-			if (filter === "wrong") {
-				return !correct;
-			}
-
-			if (filter === "right") {
-				return correct;
-			}
-
-			return true;
-		});
-	}, [questions, answers, submitted, filter, gradeAnswerUseCase]);
-
+	const visibleQuestions = questions;
 	const visibleQuestionCount = visibleQuestions.length;
 	const questionCount = questions.length;
 
@@ -69,11 +44,21 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 	const canGoPrevious = currentQuestionIndex > 0;
 	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
 
-	const answeredCountLabel = getAnsweredCountLabel(answeredCount, questionCount);
+	const currentQuestionIsCorrect = getCurrentQuestionIsCorrect(
+		submitted,
+		currentQuestion,
+		answers,
+		gradeAnswerUseCase
+	);
+
+	const answeredCountLabel = getAnsweredCountLabel(
+		answeredCount,
+		questionCount
+	);
 
 	const scoreLabel = getScoreLabel(
-		submitted, 
-		result.score, 
+		submitted,
+		result.score,
 		result.totalPoints
 	);
 
@@ -83,7 +68,6 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 	);
 
 	const feedbackToggleLabel = getFeedbackToggleLabel(showAllFeedback);
-
 
 	//Handlers og navigasjon
 	const previousQuestion = useCallback(() => {
@@ -110,8 +94,7 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		setCurrentQuestionIndex(index);
 	}, [visibleQuestionCount]);
 
-
-	//Handlefunksjoner for svar
+	// Handlefunksjoner for svar
 	const setSingleAnswer = useCallback((questionId, value) => {
 		if (submitted) {
 			return;
@@ -146,7 +129,6 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		});
 	}, [submitted]);
 
-
 	//Handler for eksamen
 	const submitExam = useCallback(() => {
 		setSubmitted(true);
@@ -156,7 +138,6 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		setAnswers({});
 		setSubmitted(false);
 		setShowAllFeedback(true);
-		setFilter(INITIAL_FILTER);
 		setCurrentQuestionIndex(0);
 
 		window.scrollTo({
@@ -173,8 +154,7 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		return gradeAnswerUseCase.execute(question, answers[question.id]);
 	}, [gradeAnswerUseCase, answers]);
 
-
-	// Effekter for datahåntering
+	//Effekter for datahåndtering
 	const onMountedLoadQuestions = useCallback(() => {
 		let cancelled = false;
 
@@ -210,7 +190,6 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		};
 	}, [getExamQuestionsUseCase]);
 
-
 	//Effekter for navigasjon mellom sidene
 	const onVisibleQuestionsChangedClampCurrentIndex = useCallback(() => {
 		if (visibleQuestionCount === 0) {
@@ -224,20 +203,22 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 	}, [visibleQuestionCount, currentQuestionIndex]);
 
 	useEffect(onMountedLoadQuestions, [onMountedLoadQuestions]);
-	useEffect(onVisibleQuestionsChangedClampCurrentIndex, [onVisibleQuestionsChangedClampCurrentIndex]);
+	useEffect(onVisibleQuestionsChangedClampCurrentIndex, [
+		onVisibleQuestionsChangedClampCurrentIndex
+	]);
 
 	return {
 		questions,
 		visibleQuestions,
 		currentQuestion,
 		currentQuestionIndex,
+		currentQuestionIsCorrect,
 		answers,
 
 		loading,
 		error,
 		submitted,
 		showAllFeedback,
-		filter,
 
 		score: result.score,
 		totalPoints: result.totalPoints,
@@ -260,7 +241,21 @@ export default function useExamViewModel( getExamQuestionsUseCase, gradeAnswerUs
 		resetExam,
 		toggleShowAllFeedback,
 		setShowAllFeedback,
-		setFilter,
 		isAnswerCorrect
 	};
 }
+
+const getCurrentQuestionIsCorrect = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {
+	if (!submitted) {
+		return false;
+	}
+
+	if (!currentQuestion) {
+		return false;
+	}
+
+	return gradeAnswerUseCase.execute(
+		currentQuestion,
+		answers[currentQuestion.id]
+	);
+};
