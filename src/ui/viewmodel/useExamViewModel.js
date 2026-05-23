@@ -1,175 +1,227 @@
-//src/ui/viewmodel/useExamViewModel.js
+// src/ui/viewmodel/useExamViewModel.js
 import { useEffect, useMemo, useState } from "react";
 
-export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase) {
-    const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState({});
-    const [submitted, setSubmitted] = useState(false);
-    const [showAllFeedback, setShowAllFeedback] = useState(true);
-    const [filter, setFilter] = useState("all");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export default function useExamViewModel(
+	getExamQuestionsUseCase,
+	gradeAnswerUseCase,
+	calculateExamScoreUseCase
+) {
+	const [questions, setQuestions] = useState([]);
+	const [answers, setAnswers] = useState({});
+	const [submitted, setSubmitted] = useState(false);
+	const [showAllFeedback, setShowAllFeedback] = useState(true);
+	const [filter, setFilter] = useState("all");
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-    useEffect(() => {
-        let cancelled = false;
+	useEffect(() => {
+		let cancelled = false;
 
-        async function loadQuestions() {
-            try {
-                setLoading(true);
-                setError(null);
-                const result = await getExamQuestionsUseCase.execute();
-                if (!cancelled) setQuestions(result);
-            }
+		async function loadQuestions() {
+			try {
+				setLoading(true);
+				setError(null);
 
-            catch (error) {
-                if (!cancelled) setError(error?.message ?? "Kunne ikke laste eksamen");
-            }
+				const result = await getExamQuestionsUseCase.execute();
 
-            finally {
-                if (!cancelled) setLoading(false);
-            }
-        }
+				if (!cancelled) {
+					setQuestions(result);
+				}
+			}
 
-        loadQuestions();
-        return () => { 
-            cancelled = true; 
-        };
-    }, [getExamQuestionsUseCase]);
+			catch (error) {
+				if (!cancelled) {
+					setError(error?.message ?? "Kunne ikke laste eksamen");
+				}
+			}
 
-    const result = useMemo(
-        () => calculateExamScoreUseCase.execute(questions, answers),
-        [questions, answers, calculateExamScoreUseCase]
-    );
+			finally {
+				if (!cancelled) {
+					setLoading(false);
+				}
+			}
+		}
 
-    const answeredCount = useMemo(() => {
-        return questions.filter((question) => {
-            const answer = answers[question.id];
-            if (question.type === "multi") {
-                return Array.isArray(answer) && answer.length > 0;
-            }
+		loadQuestions();
 
-            return answer !== undefined && String(answer).trim() !== "";
-        }).length;
-    }, [questions, answers]);
+		return () => {
+			cancelled = true;
+		};
+	}, [getExamQuestionsUseCase]);
 
-    const visibleQuestions = useMemo(() => {
-        if (!submitted || filter === "all") {
-            return questions;
-        }
+	const result = useMemo(
+		() => calculateExamScoreUseCase.execute(questions, answers),
+		[questions, answers, calculateExamScoreUseCase]
+	);
 
-        return questions.filter((question) => {
-            const correct = gradeAnswerUseCase.execute(question, answers[question.id]);
-            if (filter === "wrong") return !correct;
-            if (filter === "right") return correct;
-            return true;
-        });
-    }, [questions, answers, submitted, filter, gradeAnswerUseCase]);
+	const answeredCount = useMemo(() => {
+		return questions.filter((question) => {
+			const answer = answers[question.id];
 
+			if (question.type === "multi") {
+				return Array.isArray(answer) && answer.length > 0;
+			}
 
-    useEffect(() => {
-        if (visibleQuestions.length === 0) {
-            setCurrentQuestionIndex(0);
-            return;
-        }
+			return answer !== undefined && String(answer).trim() !== "";
+		}).length;
+	}, [questions, answers]);
 
-        if (currentQuestionIndex > visibleQuestions.length - 1) {
-            setCurrentQuestionIndex(visibleQuestions.length - 1);
-        }
-    }, [visibleQuestions, currentQuestionIndex]);
+	const visibleQuestions = useMemo(() => {
+		if (!submitted || filter === "all") {
+			return questions;
+		}
 
-    const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
+		return questions.filter((question) => {
+			const correct = gradeAnswerUseCase.execute(
+				question,
+				answers[question.id]
+			);
 
-    const canGoPrevious = currentQuestionIndex > 0;
-    const canGoNext = currentQuestionIndex < visibleQuestions.length - 1;
+			if (filter === "wrong") {
+				return !correct;
+			}
 
-    function previousQuestion() {
-        setCurrentQuestionIndex((prev) => Math.max(prev - 1, 0));
-    }
+			if (filter === "right") {
+				return correct;
+			}
 
-    function nextQuestion() {
-        setCurrentQuestionIndex((prev) => Math.min(prev + 1, visibleQuestions.length - 1));
-    }
+			return true;
+		});
+	}, [questions, answers, submitted, filter, gradeAnswerUseCase]);
 
-    function goToQuestion(index) {
-        if (index < 0 || index >= visibleQuestions.length) {
-            return;
-        }
+	useEffect(() => {
+		if (visibleQuestions.length === 0) {
+			setCurrentQuestionIndex(0);
+			return;
+		}
 
-        setCurrentQuestionIndex(index);
-    }
+		if (currentQuestionIndex > visibleQuestions.length - 1) {
+			setCurrentQuestionIndex(visibleQuestions.length - 1);
+		}
+	}, [visibleQuestions, currentQuestionIndex]);
 
-    function setSingleAnswer(questionId, value) {
-        if (submitted) {
-            return;
-        }
+	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
 
-        setAnswers((previous) => ({ ...previous, [questionId]: value }));
-    }
+	const canGoPrevious = currentQuestionIndex > 0;
+	const canGoNext = currentQuestionIndex < visibleQuestions.length - 1;
 
-    function toggleMultiAnswer(questionId, value) {
-        if (submitted) {
-            return;
-        }
+	const answeredCountLabel = `${answeredCount}/${questions.length}`;
+	const scoreLabel = submitted ? `${result.score}/${result.totalPoints}` : "—";
 
-        setAnswers((previous) => {
-            const current = Array.isArray(previous[questionId]) ? previous[questionId] : [];
-            const next = current.includes(value)
-                ? current.filter((item) => item !== value)
-                : [...current, value];
+	function previousQuestion() {
+		setCurrentQuestionIndex((previousIndex) => {
+			return Math.max(previousIndex - 1, 0);
+		});
+	}
 
-            return { ...previous, [questionId]: next };
-        });
-    }
+	function nextQuestion() {
+		setCurrentQuestionIndex((previousIndex) => {
+			return Math.min(previousIndex + 1, visibleQuestions.length - 1);
+		});
+	}
 
-    function submitExam() {
-        setSubmitted(true);
-    }
+	function goToQuestion(index) {
+		if (index < 0 || index >= visibleQuestions.length) {
+			return;
+		}
 
-    function resetExam() {
-        setAnswers({});
-        setSubmitted(false);
-        setShowAllFeedback(true);
-        setFilter("all");
-        setCurrentQuestionIndex(0);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+		setCurrentQuestionIndex(index);
+	}
 
-    function isAnswerCorrect(question) {
-        return gradeAnswerUseCase.execute(question, answers[question.id]);
-    }
+	function setSingleAnswer(questionId, value) {
+		if (submitted) {
+			return;
+		}
 
-    return {
-        questions,
-        visibleQuestions,
-        currentQuestion,
-        currentQuestionIndex,
-        answers,
+		setAnswers((previousAnswers) => {
+			return {
+				...previousAnswers,
+				[questionId]: value
+			};
+		});
+	}
 
-        loading,
-        error,
-        submitted,
-        showAllFeedback,
-        filter,
+	function toggleMultiAnswer(questionId, value) {
+		if (submitted) {
+			return;
+		}
 
-        score: result.score,
-        totalPoints: result.totalPoints,
-        percentage: result.percentage,
-        answeredCount,
+		setAnswers((previousAnswers) => {
+			const currentAnswer = Array.isArray(previousAnswers[questionId])
+				? previousAnswers[questionId]
+				: [];
 
-        canGoPrevious,
-        canGoNext,
-        previousQuestion,
-        nextQuestion,
-        goToQuestion,
+			const nextAnswer = currentAnswer.includes(value)
+				? currentAnswer.filter((item) => item !== value)
+				: [...currentAnswer, value];
 
-        setSingleAnswer,
-        toggleMultiAnswer,
-        submitExam,
-        resetExam,
-        setShowAllFeedback,
-        setFilter,
-        isAnswerCorrect
-    };
+			return {
+				...previousAnswers,
+				[questionId]: nextAnswer
+			};
+		});
+	}
+
+	function submitExam() {
+		setSubmitted(true);
+	}
+
+	function resetExam() {
+		setAnswers({});
+		setSubmitted(false);
+		setShowAllFeedback(true);
+		setFilter("all");
+		setCurrentQuestionIndex(0);
+
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth"
+		});
+	}
+
+	function toggleShowAllFeedback() {
+		setShowAllFeedback((value) => !value);
+	}
+
+	function isAnswerCorrect(question) {
+		return gradeAnswerUseCase.execute(question, answers[question.id]);
+	}
+
+	return {
+		questions,
+		visibleQuestions,
+		currentQuestion,
+		currentQuestionIndex,
+		answers,
+
+		loading,
+		error,
+		submitted,
+		showAllFeedback,
+		filter,
+
+		score: result.score,
+		totalPoints: result.totalPoints,
+		percentage: result.percentage,
+		answeredCount,
+		answeredCountLabel,
+		scoreLabel,
+
+		canGoPrevious,
+		canGoNext,
+		previousQuestion,
+		nextQuestion,
+		goToQuestion,
+
+		setSingleAnswer,
+		toggleMultiAnswer,
+		submitExam,
+		resetExam,
+		toggleShowAllFeedback,
+		setShowAllFeedback,
+		setFilter,
+		isAnswerCorrect
+	};
 }

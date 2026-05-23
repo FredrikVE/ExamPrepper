@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/ExamFooter.jsx
+//src/ui/view/components/ExamFooter/ExamFooter.jsx
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ExamFooter({ viewModel }) {

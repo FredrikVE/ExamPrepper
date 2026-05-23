@@ -85,13 +85,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
     );
 }
 
-function OptionList({
-    question,
-    answer,
-    submitted,
-    onSingleAnswer,
-    onToggleMultiAnswer
-}) {
+function OptionList({ question, answer, submitted, onSingleAnswer, onToggleMultiAnswer }) {
     return (
         <div className="question-card-option-list">
             {question.options.map((option, index) => {

@@ -1,7 +1,8 @@
 // src/ui/view/pages/ExamPage.jsx
-import ExamHeader from "../components/ExamPage/ExamHeader.jsx";
+import ExamHeader from "../components/ExamHeader/ExamHeader.jsx";
 import QuestionCard from "../components/ExamPage/QuestionCard.jsx";
-import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
+import ExamFooter from "../components/ExamFooter/ExamFooter.jsx";
+
 
 export default function ExamPage({ viewModel }) {
     if (viewModel.loading) {
