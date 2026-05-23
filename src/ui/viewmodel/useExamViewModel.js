@@ -10,6 +10,9 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // NY: peker på hvilket spørsmål brukeren står på
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
     useEffect(() => {
         let cancelled = false;
 
@@ -30,7 +33,10 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
         return () => { cancelled = true; };
     }, [getExamQuestionsUseCase]);
 
-    const result = useMemo(() => calculateExamScoreUseCase.execute(questions, answers), [questions, answers, calculateExamScoreUseCase]);
+    const result = useMemo(
+        () => calculateExamScoreUseCase.execute(questions, answers),
+        [questions, answers, calculateExamScoreUseCase]
+    );
 
     const answeredCount = useMemo(() => {
         return questions.filter((question) => {
@@ -42,6 +48,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 
     const visibleQuestions = useMemo(() => {
         if (!submitted || filter === "all") return questions;
+
         return questions.filter((question) => {
             const correct = gradeAnswerUseCase.execute(question, answers[question.id]);
             if (filter === "wrong") return !correct;
@@ -49,6 +56,36 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
             return true;
         });
     }, [questions, answers, submitted, filter, gradeAnswerUseCase]);
+
+    // Pass på at index alltid er gyldig hvis filter endrer antall spørsmål
+    useEffect(() => {
+        if (visibleQuestions.length === 0) {
+            setCurrentQuestionIndex(0);
+            return;
+        }
+
+        if (currentQuestionIndex > visibleQuestions.length - 1) {
+            setCurrentQuestionIndex(visibleQuestions.length - 1);
+        }
+    }, [visibleQuestions, currentQuestionIndex]);
+
+    const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
+
+    const canGoPrevious = currentQuestionIndex > 0;
+    const canGoNext = currentQuestionIndex < visibleQuestions.length - 1;
+
+    function previousQuestion() {
+        setCurrentQuestionIndex((prev) => Math.max(prev - 1, 0));
+    }
+
+    function nextQuestion() {
+        setCurrentQuestionIndex((prev) => Math.min(prev + 1, visibleQuestions.length - 1));
+    }
+
+    function goToQuestion(index) {
+        if (index < 0 || index >= visibleQuestions.length) return;
+        setCurrentQuestionIndex(index);
+    }
 
     function setSingleAnswer(questionId, value) {
         if (submitted) return;
@@ -59,18 +96,24 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
         if (submitted) return;
         setAnswers((previous) => {
             const current = Array.isArray(previous[questionId]) ? previous[questionId] : [];
-            const next = current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
+            const next = current.includes(value)
+                ? current.filter((item) => item !== value)
+                : [...current, value];
+
             return { ...previous, [questionId]: next };
         });
     }
 
-    function submitExam() { setSubmitted(true); }
+    function submitExam() {
+        setSubmitted(true);
+    }
 
     function resetExam() {
         setAnswers({});
         setSubmitted(false);
         setShowAllFeedback(true);
         setFilter("all");
+        setCurrentQuestionIndex(0);
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -81,16 +124,27 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
     return {
         questions,
         visibleQuestions,
+        currentQuestion,
+        currentQuestionIndex,
         answers,
+
         loading,
         error,
         submitted,
         showAllFeedback,
         filter,
+
         score: result.score,
         totalPoints: result.totalPoints,
         percentage: result.percentage,
         answeredCount,
+
+        canGoPrevious,
+        canGoNext,
+        previousQuestion,
+        nextQuestion,
+        goToQuestion,
+
         setSingleAnswer,
         toggleMultiAnswer,
         submitExam,
