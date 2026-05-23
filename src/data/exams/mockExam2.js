@@ -1,4 +1,4 @@
-//src/data/questions2.js
+//src/data/exams/mockExam2.js
 export const mockExam2 = {
 	id: "mock-exam-2",
 	title: "Øveeksamen 2: Fordypning",

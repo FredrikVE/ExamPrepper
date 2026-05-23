@@ -4,13 +4,15 @@
 
 Et **JavaScript, React, Vite og Tailwind CSS**-prosjekt laget for å øve til skoleeksamen i **IN5431 – IT and Management**.
 
-Prosjektet er en interaktiv eksamens-emulator med spørsmålstyper som ligner en Inspera-style eksamen:
+Prosjektet er en interaktiv eksamenssimulator der brukeren kan velge mellom flere øveeksamener og få umiddelbar tilbakemelding etter levering.
+
+Appen støtter flere spørsmålstyper:
 
 1. Multiple choice med ett riktig svar
 2. Multiple choice med flere riktige svar
 3. Fyll inn riktig begrep
 
-Etter levering får brukeren umiddelbar tilbakemelding på hvert spørsmål:
+Etter levering får brukeren tilbakemelding på hvert spørsmål:
 
 - Om svaret er riktig eller feil
 - Hva fasiten er
@@ -18,24 +20,9 @@ Etter levering får brukeren umiddelbar tilbakemelding på hvert spørsmål:
 - Hvorfor gale alternativer er gale
 - Henvisning til pensum, forelesning eller fasitgrunnlag
 
-Prosjektet er skrevet om etter samme arkitekturmønster som **Opplett-appen**, med tydelig lagdeling mellom datasource, repository, use cases, viewmodel, page og komponenter.
+Prosjektet er strukturert etter MVVM-arkitekturmønsteret med tydelig lagdeling mellom data, datasource, repository, use cases, viewmodel, page og komponenter.
 
-Målet med prosjektet er både å lage et nyttig eksamensverktøy og å øve på en mer ryddig frontend-arkitektur i React.
-
----
-
-## Problemstilling
-
-Hvordan kan man lage en enkel, modulær og utvidbar eksamens-emulator for IN5431 som gir studenten aktiv trening i pensumbegreper, samtidig som koden følger et ryddig arkitekturmønster?
-
-Prosjektet forsøker å løse dette ved å kombinere:
-
-- Pensumbaserte spørsmål
-- Automatisk retting
-- Forklarende fasit
-- Poengberegning
-- Filtrering på riktige og gale svar
-- En MVVM / Clean Architecture-inspirert React-struktur
+Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstrere tydelig modularisering av en React-applikasjon.
 
 ---
 
@@ -43,6 +30,7 @@ Prosjektet forsøker å løse dette ved å kombinere:
 
 | Funksjon | Beskrivelse |
 |----------|-------------|
+| Valg av eksamen | Brukeren kan velge mellom flere øveeksamener |
 | Multiple choice | Støtter både ett riktig svar og flere riktige svar |
 | Fyll inn begrep | Brukeren skriver inn riktig fagbegrep, med støtte for flere aksepterte svar |
 | Automatisk retting | Svarene rettes når brukeren trykker «Lever og sjekk» |
@@ -51,6 +39,7 @@ Prosjektet forsøker å løse dette ved å kombinere:
 | Poengscore | Viser antall poeng og prosent riktig |
 | Filtrering | Etter levering kan brukeren filtrere på alle, riktige eller gale svar |
 | Ny runde | Eksamen kan nullstilles og tas på nytt |
+| Utvidbart eksamensregister | Nye øveeksamener kan legges til som egne datafiler |
 
 ---
 
@@ -68,7 +57,11 @@ IN5431-Exam-Emulator/
     ├── App.jsx
     ├── index.css
     ├── data/
-    │   └── questions.js
+    │   ├── data.js
+    │   └── exams/
+    │       ├── mockExam1.js
+    │       ├── mockExam2.js
+    │       └── mockExamN.js
     ├── di/
     │   └── dependencies.js
     ├── model/
@@ -90,6 +83,7 @@ IN5431-Exam-Emulator/
     │           └── ExamPage/
     │               ├── ExamHeader.jsx
     │               ├── ExamInstructions.jsx
+    │               ├── ExamSelector.jsx
     │               ├── QuestionCard.jsx
     │               ├── FeedbackPanel.jsx
     │               ├── ResultBadge.jsx
@@ -101,76 +95,208 @@ IN5431-Exam-Emulator/
 
 ---
 
+## Eksamensdata
+
+Eksamensinnholdet er delt opp i flere egne filer under `src/data/exams/`.
+
+Hver eksamen eksporterer et objekt med metadata og spørsmål:
+
+```js
+export const mockExam1 = {
+  id: "mock-exam-1",
+  title: "Øveeksamen 1: Full repetisjon",
+  description: "CIO toolbox, D4D, IT governance, strategy og sustainability.",
+  questions: [
+    {
+      id: 1,
+      type: "fill",
+      title: "Business process",
+      // ...
+    },
+  ],
+};
+```
+
+Alle eksamener samles i `src/data/data.js`:
+
+```js
+import { mockExam1 } from "./exams/mockExam1.js";
+import { mockExam2 } from "./exams/mockExam2.js";
+import { mockExamN } from "./exams/mockExamN.js";
+
+export const DEFAULT_EXAM_ID = "mock-exam-1";
+
+export const EXAMS = [
+  mockExam1,
+  mockExam2,
+  mockExamN,
+];
+
+export function getExamById(examId) {
+  return EXAMS.find((exam) => exam.id === examId) ?? EXAMS[0];
+}
+
+export function getExamQuestions(examId = DEFAULT_EXAM_ID) {
+  return getExamById(examId).questions;
+}
+```
+
+Dette gjør det enkelt å legge til nye øveeksamener uten å endre UI-komponentene.
+
+---
+
 ## Arkitektur
 
 Prosjektet følger et lagdelt mønster inspirert av MVVM og Clean Architecture.
 
 ```mermaid
+---
+config:
+  layout: elk
+  elk:
+    mergeEdges: false
+    nodePlacementStrategy: NETWORK_SIMPLEX
+    cycleBreakingStrategy: DEPTH_FIRST
+    edgeRouting: ORTHOGONAL
+  theme: forest
+---
 flowchart TB
 
-    App["App.jsx"]
-    DI["dependencies.js<br/>Composition Root"]
+%% =========================
+%% APP LAYER (COMPOSITION ROOT)
+%% =========================
+subgraph AppLayer["App (Composition Root)"]
+	App["App.jsx"]
+	DI["dependencies.js<br/>Composition Root"]
+end
 
-    subgraph Data["Data"]
-        Questions["questions.js<br/>Spørsmål og fasit"]
-    end
+%% =========================
+%% DATA
+%% =========================
+subgraph Data["Data"]
+	DataRegistry["data.js<br/>EXAMS / DEFAULT_EXAM_ID"]
+	MockExam1["mockExam1.js<br/>Øveeksamen 1"]
+	MockExam2["mockExam2.js<br/>Øveeksamen 2"]
+	MockExamN["mockExamN.js<br/>Øveeksamen N"]
+end
 
-    subgraph Model["Model"]
-        DS["ExamQuestionDataSource"]
-        Repo["ExamRepository"]
-    end
+%% =========================
+%% MODEL
+%% =========================
+subgraph Model["Model"]
+	DS["ExamQuestionDataSource"]
+	Repo["ExamRepository"]
+end
 
-    subgraph Domain["Domain / UseCases"]
-        GetQuestions["GetExamQuestionsUseCase"]
-        GradeAnswer["GradeAnswerUseCase"]
-        CalculateScore["CalculateExamScoreUseCase"]
-    end
+%% =========================
+%% DOMAIN / USECASES
+%% =========================
+subgraph Domain["Domain Layer (UseCases)"]
+	GetQuestions["GetExamQuestionsUseCase"]
+	GradeAnswer["GradeAnswerUseCase"]
+	CalculateScore["CalculateExamScoreUseCase"]
+end
 
-    subgraph ViewModel["ViewModel"]
-        ExamVM["useExamViewModel"]
-    end
+%% =========================
+%% VIEWMODEL (MVVM)
+%% =========================
+subgraph ViewModel["ViewModel (Hook)"]
+	ExamVM["useExamViewModel"]
+end
 
-    subgraph View["View"]
-        ExamPage["ExamPage.jsx"]
-        Header["ExamHeader"]
-        Instructions["ExamInstructions"]
-        QuestionCard["QuestionCard"]
-        Feedback["FeedbackPanel"]
-        Badge["ResultBadge"]
-        Footer["ExamFooter"]
-    end
+%% =========================
+%% VIEW
+%% =========================
+subgraph View["View / Components"]
+	ExamPage["ExamPage.jsx"]
+	Header["ExamHeader"]
+	Instructions["ExamInstructions"]
+	ExamSelector["ExamSelector"]
+	QuestionCard["QuestionCard"]
+	Feedback["FeedbackPanel"]
+	Badge["ResultBadge"]
+	Footer["ExamFooter"]
+end
 
-    Questions --> DS
-    DS --> Repo
-    Repo --> GetQuestions
-    GradeAnswer --> CalculateScore
+%% =========================
+%% APP CONNECTIONS
+%% =========================
+App --> DI
+App --> ExamPage
 
-    DI --> DS
-    DI --> Repo
-    DI --> GetQuestions
-    DI --> GradeAnswer
-    DI --> CalculateScore
+%% =========================
+%% COMPOSITION ROOT → DEPENDENCIES
+%% =========================
+DI --> DS
+DI --> Repo
+DI --> GetQuestions
+DI --> GradeAnswer
+DI --> CalculateScore
 
-    App --> DI
-    App --> ExamVM
+%% =========================
+%% DATA REGISTRY
+%% =========================
+DataRegistry --> MockExam1
+DataRegistry --> MockExam2
+DataRegistry --> MockExamN
 
-    GetQuestions --> ExamVM
-    GradeAnswer --> ExamVM
-    CalculateScore --> ExamVM
+%% =========================
+%% MODEL → DATA
+%% =========================
+DS --> DataRegistry
+Repo --> DS
 
-    ExamVM --> ExamPage
-    ExamPage --> Header
-    ExamPage --> Instructions
-    ExamPage --> QuestionCard
-    QuestionCard --> Feedback
-    QuestionCard --> Badge
-    ExamPage --> Footer
+%% =========================
+%% DOMAIN → MODEL
+%% =========================
+GetQuestions --> Repo
+
+%% =========================
+%% VIEWMODEL → DOMAIN
+%% =========================
+ExamVM --> GetQuestions
+ExamVM --> GradeAnswer
+ExamVM --> CalculateScore
+
+%% =========================
+%% DOMAIN INTERNAL FLOW
+%% =========================
+GradeAnswer --> CalculateScore
+
+%% =========================
+%% VIEW → VIEWMODEL
+%% =========================
+ExamPage --> ExamVM
+
+%% =========================
+%% VIEW COMPOSITION
+%% =========================
+ExamPage --> Header
+ExamPage --> Instructions
+ExamPage --> ExamSelector
+ExamPage --> QuestionCard
+ExamPage --> Footer
+
+QuestionCard --> Feedback
+QuestionCard --> Badge
+
+%% =========================
+%% STYLING
+%% =========================
+style AppLayer stroke:#000000,fill:#E1BEE7
+style Data stroke:#000000,fill:#FFE082
+style Model stroke:#000000,fill:#DCEDC8
+style Domain stroke:#000000,fill:#C5CAE9
+style ViewModel stroke:#000000,fill:#FFCDD2
+style View stroke:#000000,fill:#FFF9C4
 ```
 
 ### Arkitekturflyt
 
 ```text
-questions.js
+mockExam-filer
+  ↓
+data.js
   ↓
 ExamQuestionDataSource
   ↓
@@ -191,13 +317,13 @@ UI Components
 
 | Lag | Filer | Ansvar |
 |-----|-------|--------|
-| **Data** | `src/data/questions.js` | Inneholder spørsmål, svaralternativer, fasit, forklaringer og kilder |
-| **DataSource** | `ExamQuestionDataSource.js` | Henter spørsmål fra lokal datakilde |
-| **Repository** | `ExamRepository.js` | Gir domenelaget tilgang til spørsmålene uten at domenet kjenner datakilden |
+| **Data** | `src/data/data.js`, `src/data/exams/*.js` | Inneholder eksamensregister, standardeksamen og alle øveeksamener |
+| **DataSource** | `ExamQuestionDataSource.js` | Henter eksamensdata og spørsmål fra lokal datakilde |
+| **Repository** | `ExamRepository.js` | Gir domenelaget tilgang til eksamener og spørsmål uten at domenet kjenner datakilden |
 | **Domain / UseCases** | `GetExamQuestionsUseCase`, `GradeAnswerUseCase`, `CalculateExamScoreUseCase` | Inneholder appens sentrale regler: hente spørsmål, rette svar og beregne score |
-| **ViewModel** | `useExamViewModel.js` | Holder React-state, bruker use cases og eksponerer data/actions til viewet |
+| **ViewModel** | `useExamViewModel.js` | Holder React-state, valgt eksamen, svar, leveringstilstand, filter og score |
 | **View / Page** | `ExamPage.jsx` | Setter sammen siden og sender props videre til komponentene |
-| **Components** | `ExamHeader`, `QuestionCard`, `FeedbackPanel` osv. | Rene UI-komponenter som viser data og sender brukerhandlinger oppover |
+| **Components** | `ExamHeader`, `ExamSelector`, `QuestionCard`, `FeedbackPanel` osv. | Rene UI-komponenter som viser data og sender brukerhandlinger oppover |
 | **Utils** | `answerUtils.js` | Hjelpefunksjoner for normalisering, fasitlabels og riktige indekser |
 
 ---
@@ -237,8 +363,14 @@ npm run preview
 
 ## Designvalg
 
-**Spørsmålene ligger i én egen datafil.**  
-`questions.js` inneholder selve eksamensinnholdet. Dette gjør det enkelt å legge til, endre eller fjerne spørsmål uten å endre UI-komponentene.
+**Eksamensdata er delt opp i flere filer.**  
+Hver øveeksamen ligger i en egen fil under `src/data/exams/`.  
+`data.js` fungerer som et samlet eksamensregister som eksponerer `EXAMS`, `DEFAULT_EXAM_ID`, `getExamById` og `getExamQuestions`.
+
+Dette gjør det enkelt å legge til, endre eller fjerne øveeksamener uten å endre UI-komponentene.
+
+**Hver eksamen har egen metadata.**  
+Hver øveeksamen har en unik `id`, en `title`, en `description` og en liste med `questions`. Dette gjør at appen kan vise riktig tittel, beskrivelse og spørsmål basert på valgt eksamen.
 
 **Rette-logikken ligger i domenelaget.**  
 `GradeAnswerUseCase` avgjør om et svar er riktig. Dette gjør at komponentene ikke trenger å kjenne reglene for single choice, multiple choice eller fill-in.
@@ -247,7 +379,7 @@ npm run preview
 `CalculateExamScoreUseCase` gjør poengberegning separat fra både UI og datalagring.
 
 **ViewModel samler React-state.**  
-`useExamViewModel` håndterer answers, submitted, filter, showAllFeedback og loading. Dermed holdes `ExamPage.jsx` enklere.
+`useExamViewModel` håndterer valgt eksamen, brukerens svar, submitted-status, filter, feedback-visning, loading og score. Dermed holdes `ExamPage.jsx` enklere.
 
 **Komponentene er presentasjonsorienterte.**  
 Komponentene viser data, men eier minst mulig forretningslogikk. Dette gjør dem lettere å lese, teste og bytte ut.
@@ -259,30 +391,13 @@ Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det
 
 ## Teknologier
 
-<table>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>JavaScript</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>React</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Vite</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>Tailwind CSS</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>lucide-react</td>
-    </tr>
-  </tbody>
-</table>
+| Teknologi | Bruk |
+|----------|------|
+| JavaScript | Programmeringsspråk |
+| React | UI-bibliotek |
+| Vite | Byggverktøy og utviklingsserver |
+| Tailwind CSS | Styling |
+| lucide-react | Ikoner |
 
 ---
 
@@ -290,14 +405,72 @@ Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det
 
 | Fil | Beskrivelse |
 |-----|-------------|
-| `src/data/questions.js` | Alle spørsmål, fasit, forklaringer og pensumhenvisninger |
+| `src/data/data.js` | Samler alle tilgjengelige eksamener, setter standardeksamen og eksponerer hjelpefunksjoner for å hente eksamen/spørsmål |
+| `src/data/exams/mockExam1.js` | Inneholder metadata, spørsmål, fasit, forklaringer og pensumhenvisninger for øveeksamen 1 |
+| `src/data/exams/mockExam2.js` | Inneholder metadata, spørsmål, fasit, forklaringer og pensumhenvisninger for øveeksamen 2 |
 | `src/di/dependencies.js` | Dependency injection / composition root |
+| `src/model/datasource/ExamQuestionDataSource.js` | Henter eksamensdata fra lokal datakilde |
+| `src/model/repositories/ExamRepository.js` | Gir domenelaget tilgang til eksamener og spørsmål |
+| `src/model/domain/GetExamQuestionsUseCase.js` | Henter spørsmål for valgt eksamen |
 | `src/model/domain/GradeAnswerUseCase.js` | Retter enkeltsvar |
 | `src/model/domain/CalculateExamScoreUseCase.js` | Beregner score og prosent |
-| `src/ui/viewmodel/useExamViewModel.js` | Holder eksamensstate og eksponerer actions |
+| `src/ui/viewmodel/useExamViewModel.js` | Holder eksamensstate og eksponerer actions til viewet |
 | `src/ui/view/pages/ExamPage.jsx` | Hovedsiden for eksamen |
-| `src/ui/view/components/ExamPage/QuestionCard.jsx` | Viser ett spørsmål med input/alternativer |
+| `src/ui/view/components/ExamPage/ExamHeader.jsx` | Viser overskrift og overordnet informasjon om eksamen |
+| `src/ui/view/components/ExamPage/ExamInstructions.jsx` | Viser instruksjoner før eller under eksamen |
+| `src/ui/view/components/ExamPage/ExamSelector.jsx` | Lar brukeren velge mellom tilgjengelige øveeksamener |
+| `src/ui/view/components/ExamPage/QuestionCard.jsx` | Viser ett spørsmål med input eller svaralternativer |
 | `src/ui/view/components/ExamPage/FeedbackPanel.jsx` | Viser fasit og forklaring etter levering |
+| `src/ui/view/components/ExamPage/ResultBadge.jsx` | Viser om et spørsmål er riktig eller feil |
+| `src/ui/view/components/ExamPage/ExamFooter.jsx` | Viser handlinger som levering, filtrering eller ny runde |
+| `src/utils/exam/answerUtils.js` | Hjelpefunksjoner for normalisering, fasitlabels og riktige indekser |
+
+---
+
+## Legge til en ny øveeksamen
+
+For å legge til en ny øveeksamen:
+
+1. Opprett en ny fil i `src/data/exams/`, for eksempel `mockExam3.js`.
+2. Eksporter et eksamensobjekt med unik `id`.
+3. Importer eksamenen i `src/data/data.js`.
+4. Legg eksamenen inn i `EXAMS`-listen.
+
+Eksempel:
+
+```js
+// src/data/exams/mockExam3.js
+
+export const mockExam3 = {
+  id: "mock-exam-3",
+  title: "Øveeksamen 3: Strategi og IT governance",
+  description: "Repetisjon av strategy, governance, architecture og digital transformation.",
+  questions: [
+    {
+      id: 1,
+      type: "single",
+      title: "Strategic positioning",
+      // ...
+    },
+  ],
+};
+```
+
+Deretter registreres eksamenen i `data.js`:
+
+```js
+import { mockExam1 } from "./exams/mockExam1.js";
+import { mockExam2 } from "./exams/mockExam2.js";
+import { mockExam3 } from "./exams/mockExam3.js";
+
+export const EXAMS = [
+  mockExam1,
+  mockExam2,
+  mockExam3,
+];
+```
+
+Alle eksamener må ha unik `id`.
 
 ---
 
@@ -305,20 +478,22 @@ Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det
 
 Mulige forbedringer:
 
-- Legge til flere spørsmål fra pensum
-- Lage egne kategorier, for eksempel CIO Toolbox, D4D, strategi, IT governance og bærekraft
+- Legge til flere øveeksamener fra pensum
+- Lage egne eksamener per tema, for eksempel CIO Toolbox, D4D, strategi, IT governance og bærekraft
 - Legge til vanskelighetsgrad per spørsmål
-- Lagre progresjon i localStorage
+- Legge til kategorier eller tags per spørsmål
+- Lagre valgt eksamen og progresjon i localStorage
 - Lage eksamensmodus med tilfeldig rekkefølge
 - Lage statistikk over hvilke temaer brukeren ofte svarer feil på
 - Legge til tester for `GradeAnswerUseCase` og `CalculateExamScoreUseCase`
+- Legge til tester for henting av riktig eksamen basert på `examId`
 - Hente spørsmål fra ekstern JSON-fil eller API
 
 ---
 
 ## Pensumgrunnlag
 
-Spørsmålene er basert på sentrale temaer i IN5431, blant annet:
+Øveeksamenene er basert på sentrale temaer i IN5431, blant annet:
 
 | Tema | Eksempler |
 |------|-----------|
@@ -333,7 +508,7 @@ Spørsmålene er basert på sentrale temaer i IN5431, blant annet:
 
 ## Kort oppsummert
 
-Dette prosjektet er en liten, men strukturert React-applikasjon for eksamenstrening i IN5431.
+Dette prosjektet er en strukturert React-applikasjon for eksamenstrening i IN5431.
 
 Det viktigste læringspoenget er todelt:
 
@@ -341,5 +516,5 @@ Det viktigste læringspoenget er todelt:
 2. Øve på modularisering av React-kode med tydelig ansvarsdeling
 
 ```text
-DataSource → Repository → UseCase → ViewModel → Page → Components
+Exam files → data.js → DataSource → Repository → UseCase → ViewModel → Page → Components
 ```

@@ -1,4 +1,4 @@
-// src/data/exams/mock_exams_1.js
+//src/data/exams/mock_exams_1.js
 export const mockExam1 = {
   id: "mock-exam-1",
   title: "Øveeksamen 1: Full repetisjon",
