@@ -1,9 +1,10 @@
 /* src/ui/style/Global.css */
 @import "tailwindcss";
 
+@import "./ExamSelectPage.css";
 @import "./ExamPage.css";
-@import "./ExamHeader.css";
-@import "./ExamFooter.css";
+@import "./Header.css";
+@import "./Footer.css";
 @import "./QuestionCard.css";
 @import "./FeedbackPanel.css";
 @import "./ResultBadge.css";

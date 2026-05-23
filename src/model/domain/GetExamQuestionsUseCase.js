@@ -4,7 +4,7 @@ export default class GetExamQuestionsUseCase {
         this.examRepository = examRepository;
     }
 
-    async execute() {
-        return this.examRepository.getQuestions();
+    async execute(examId) {
+        return this.examRepository.getQuestions(examId);
     }
 }

@@ -3,7 +3,7 @@ import Header from "../components/Header/Header.jsx";
 import QuestionCard from "../components/ExamPage/QuestionCard.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 
-export default function ExamPage({ viewModel }) {
+export default function ExamPage({ viewModel, onBack }) {
 	if (viewModel.loading) {
 		return (
 			<div className="exam-page-state">
@@ -28,7 +28,7 @@ export default function ExamPage({ viewModel }) {
 
 	return (
 		<div className="exam-page">
-			<Header viewModel={viewModel} />
+			<Header viewModel={viewModel} onBack={onBack} />
 
 			<main className="exam-page-main">
 				<div className="exam-page-content">

@@ -7,7 +7,7 @@ import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggle
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase) {
+export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId) {
 	
 	//Statevariabler
 	const [questions, setQuestions] = useState([]);
@@ -155,7 +155,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	}, [gradeAnswerUseCase, answers]);
 
 	//Effekter for datahåndtering
-	const onMountedLoadQuestions = useCallback(() => {
+	const loadQuestions = useCallback(() => {
 		let cancelled = false;
 
 		const run = async () => {
@@ -163,7 +163,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 				setLoading(true);
 				setError(null);
 
-				const result = await getExamQuestionsUseCase.execute();
+				const result = await getExamQuestionsUseCase.execute(examId);
 
 				if (!cancelled) {
 					setQuestions(result);
@@ -188,7 +188,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		return () => {
 			cancelled = true;
 		};
-	}, [getExamQuestionsUseCase]);
+	}, [getExamQuestionsUseCase, examId]);
 
 	//Effekter for navigasjon mellom sidene
 	const onVisibleQuestionsChangedClampCurrentIndex = useCallback(() => {
@@ -202,7 +202,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		}
 	}, [visibleQuestionCount, currentQuestionIndex]);
 
-	useEffect(onMountedLoadQuestions, [onMountedLoadQuestions]);
+	useEffect(loadQuestions, [loadQuestions]);
 	useEffect(onVisibleQuestionsChangedClampCurrentIndex, [
 		onVisibleQuestionsChangedClampCurrentIndex
 	]);

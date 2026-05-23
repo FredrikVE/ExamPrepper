@@ -2,7 +2,7 @@
 import HeaderInfo from "./HeaderInfo.jsx";
 import HeaderActions from "./HeaderActions.jsx";
 
-export default function Header({ viewModel }) {
+export default function Header({ viewModel, onBack }) {
 	return (
 		<header className="exam-header">
 			<div className="exam-header-container">
@@ -10,6 +10,7 @@ export default function Header({ viewModel }) {
 					<HeaderInfo
 						currentQuestionIndex={viewModel.currentQuestionIndex}
 						questionCount={viewModel.visibleQuestions.length}
+						onBack={onBack}
 					/>
 
 					<HeaderActions viewModel={viewModel} />

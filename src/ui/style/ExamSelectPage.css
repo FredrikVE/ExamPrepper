@@ -1,0 +1,64 @@
+/* src/ui/style/ExamSelectPage.css */
+.exam-select-page {
+    @apply flex min-h-screen items-center justify-center bg-neutral-100 px-4 py-12;
+}
+
+.exam-select-container {
+    @apply w-full max-w-2xl;
+}
+
+.exam-select-header {
+    @apply mb-8 text-center;
+}
+
+.exam-select-icon-wrapper {
+    @apply mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-neutral-950 text-white;
+}
+
+.exam-select-main-icon {
+    @apply h-8 w-8;
+}
+
+.exam-select-title {
+    @apply text-3xl font-bold tracking-tight text-neutral-950;
+}
+
+.exam-select-subtitle {
+    @apply mt-2 text-neutral-500;
+}
+
+.exam-select-list {
+    @apply space-y-3;
+}
+
+.exam-select-card {
+    @apply flex w-full items-center gap-4 rounded-2xl border border-neutral-300 bg-white px-5 py-5 text-left shadow-sm transition-all hover:border-neutral-400 hover:shadow-md;
+}
+
+.exam-select-card-icon-wrapper {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-neutral-100 text-neutral-600;
+}
+
+.exam-select-card-icon {
+    @apply h-5 w-5;
+}
+
+.exam-select-card-content {
+    @apply min-w-0 flex-1;
+}
+
+.exam-select-card-title {
+    @apply text-lg font-bold text-neutral-950;
+}
+
+.exam-select-card-description {
+    @apply mt-0.5 text-sm text-neutral-500;
+}
+
+.exam-select-card-meta {
+    @apply mt-1.5 inline-block rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600;
+}
+
+.exam-select-card-arrow {
+    @apply h-5 w-5 shrink-0 text-neutral-400;
+}

@@ -54,3 +54,7 @@
 .exam-header-button-secondary {
     @apply border border-neutral-300 bg-white hover:bg-neutral-50;
 }
+
+.exam-header-back-button {
+    @apply flex h-7 w-7 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700;
+}

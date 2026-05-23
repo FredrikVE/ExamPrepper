@@ -1,8 +1,8 @@
 //src/model/datasource/ExamQuestionDataSource.js
-import { QUESTIONS } from "../../data/questions.js";
+import { getExamQuestions } from "../../data/data.js";
 
 export default class ExamQuestionDataSource {
-    async fetchQuestions() {
-        return QUESTIONS;
+    async fetchQuestions(examId) {
+        return getExamQuestions(examId);
     }
 }
