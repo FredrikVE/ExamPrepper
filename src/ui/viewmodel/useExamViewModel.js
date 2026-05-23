@@ -1,19 +1,15 @@
 // src/ui/viewmodel/useExamViewModel.js
 import { useEffect, useMemo, useState } from "react";
 
-export default function useExamViewModel(
-	getExamQuestionsUseCase,
-	gradeAnswerUseCase,
-	calculateExamScoreUseCase
-) {
-	const [questions, setQuestions] = useState([]);
+export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase) {
+	
+    const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
 	const [filter, setFilter] = useState("all");
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
 	useEffect(() => {
@@ -51,10 +47,9 @@ export default function useExamViewModel(
 		};
 	}, [getExamQuestionsUseCase]);
 
-	const result = useMemo(
-		() => calculateExamScoreUseCase.execute(questions, answers),
-		[questions, answers, calculateExamScoreUseCase]
-	);
+	const result = useMemo(() => {
+		return calculateExamScoreUseCase.execute(questions, answers);
+	}, [questions, answers, calculateExamScoreUseCase]);
 
 	const answeredCount = useMemo(() => {
 		return questions.filter((question) => {
@@ -91,24 +86,35 @@ export default function useExamViewModel(
 		});
 	}, [questions, answers, submitted, filter, gradeAnswerUseCase]);
 
+	const visibleQuestionCount = visibleQuestions.length;
+	const questionCount = questions.length;
+
 	useEffect(() => {
-		if (visibleQuestions.length === 0) {
+		if (visibleQuestionCount === 0) {
 			setCurrentQuestionIndex(0);
 			return;
 		}
 
-		if (currentQuestionIndex > visibleQuestions.length - 1) {
-			setCurrentQuestionIndex(visibleQuestions.length - 1);
+		if (currentQuestionIndex > visibleQuestionCount - 1) {
+			setCurrentQuestionIndex(visibleQuestionCount - 1);
 		}
-	}, [visibleQuestions, currentQuestionIndex]);
+	}, [visibleQuestionCount, currentQuestionIndex]);
 
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
 
 	const canGoPrevious = currentQuestionIndex > 0;
-	const canGoNext = currentQuestionIndex < visibleQuestions.length - 1;
+	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
 
-	const answeredCountLabel = `${answeredCount}/${questions.length}`;
-	const scoreLabel = submitted ? `${result.score}/${result.totalPoints}` : "—";
+	const answeredCountLabel = getAnsweredCountLabel(answeredCount, questionCount);
+	const scoreLabel = getScoreLabel(
+		submitted,
+		result.score,
+		result.totalPoints
+	);
+	const questionProgressLabel = getQuestionProgressLabel(
+		currentQuestionIndex,
+		visibleQuestionCount
+	);
 
 	function previousQuestion() {
 		setCurrentQuestionIndex((previousIndex) => {
@@ -118,12 +124,16 @@ export default function useExamViewModel(
 
 	function nextQuestion() {
 		setCurrentQuestionIndex((previousIndex) => {
-			return Math.min(previousIndex + 1, visibleQuestions.length - 1);
+			if (visibleQuestionCount === 0) {
+				return 0;
+			}
+
+			return Math.min(previousIndex + 1, visibleQuestionCount - 1);
 		});
 	}
 
 	function goToQuestion(index) {
-		if (index < 0 || index >= visibleQuestions.length) {
+		if (index < 0 || index >= visibleQuestionCount) {
 			return;
 		}
 
@@ -208,6 +218,7 @@ export default function useExamViewModel(
 		answeredCount,
 		answeredCountLabel,
 		scoreLabel,
+		questionProgressLabel,
 
 		canGoPrevious,
 		canGoNext,
@@ -224,4 +235,24 @@ export default function useExamViewModel(
 		setFilter,
 		isAnswerCorrect
 	};
+}
+
+function getAnsweredCountLabel(answeredCount, questionCount) {
+	return `${answeredCount}/${questionCount}`;
+}
+
+function getScoreLabel(submitted, score, totalPoints) {
+	if (submitted) {
+		return `${score}/${totalPoints}`;
+	}
+
+	return "—";
+}
+
+function getQuestionProgressLabel(currentQuestionIndex, questionCount) {
+	if (questionCount === 0) {
+		return "0 / 0";
+	}
+
+	return `${currentQuestionIndex + 1} / ${questionCount}`;
 }

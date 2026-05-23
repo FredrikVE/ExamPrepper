@@ -1,32 +1,33 @@
 //src/ui/view/components/ExamFooter/ExamFooter.jsx
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import FooterNavigationButton from "./FooterNavigationButton.jsx";
 
 export default function ExamFooter({ viewModel }) {
-    return (
-        <footer className="exam-footer">
-            <div className="exam-footer-container">
-                <button
-                    onClick={viewModel.previousQuestion}
-                    disabled={!viewModel.canGoPrevious}
-                    className="exam-footer-button exam-footer-button-previous"
-                >
-                    <ChevronLeft className="exam-footer-icon" />
-                    Previous
-                </button>
+	return (
+		<footer className="exam-footer">
+			<div className="exam-footer-container">
+				<FooterNavigationButton
+					onClick={viewModel.previousQuestion}
+					disabled={!viewModel.canGoPrevious}
+					variant="previous"
+					icon={<ChevronLeft className="exam-footer-icon" />}
+				>
+					Previous
+				</FooterNavigationButton>
 
-                <div className="exam-footer-counter">
-                    {viewModel.currentQuestionIndex + 1} / {viewModel.visibleQuestions.length}
-                </div>
+				<div className="exam-footer-counter">
+					{viewModel.questionProgressLabel}
+				</div>
 
-                <button
-                    onClick={viewModel.nextQuestion}
-                    disabled={!viewModel.canGoNext}
-                    className="exam-footer-button exam-footer-button-next"
-                >
-                    Next
-                    <ChevronRight className="exam-footer-icon" />
-                </button>
-            </div>
-        </footer>
-    );
+				<FooterNavigationButton
+					onClick={viewModel.nextQuestion}
+					disabled={!viewModel.canGoNext}
+					variant="next"
+					icon={<ChevronRight className="exam-footer-icon" />}
+				>
+					Next
+				</FooterNavigationButton>
+			</div>
+		</footer>
+	);
 }
