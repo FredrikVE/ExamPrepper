@@ -3,28 +3,28 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ExamFooter({ viewModel }) {
     return (
-        <footer className="sticky bottom-0 z-30 border-t border-neutral-300 bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
-            <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+        <footer className="exam-footer">
+            <div className="exam-footer-container">
                 <button
                     onClick={viewModel.previousQuestion}
                     disabled={!viewModel.canGoPrevious}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-sm font-semibold hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="exam-footer-button exam-footer-button-previous"
                 >
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="exam-footer-icon" />
                     Previous
                 </button>
 
-                <div className="text-sm font-medium text-neutral-600">
+                <div className="exam-footer-counter">
                     {viewModel.currentQuestionIndex + 1} / {viewModel.visibleQuestions.length}
                 </div>
 
                 <button
                     onClick={viewModel.nextQuestion}
                     disabled={!viewModel.canGoNext}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-neutral-950 px-4 py-3 text-sm font-semibold text-white hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="exam-footer-button exam-footer-button-next"
                 >
                     Next
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="exam-footer-icon" />
                 </button>
             </div>
         </footer>

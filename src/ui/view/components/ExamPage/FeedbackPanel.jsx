@@ -4,29 +4,115 @@ import { getAnswerLabel } from "../../../../utils/exam/answerUtils.js";
 
 export default function FeedbackPanel({ question, selected, correct }) {
     return (
-        <div className="mt-5 space-y-3">
-            <div className={`rounded-2xl border p-4 ${correct ? "border-emerald-200 bg-emerald-50" : "border-red-200 bg-red-50"}`}>
-                <div className="flex items-center gap-2 font-bold">{correct ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />} Din besvarelse er {correct ? "riktig" : "feil"}</div>
-                <p className="mt-2 text-sm leading-6"><span className="font-semibold">Fasit:</span> {getAnswerLabel(question)}</p>
+        <div className="feedback-panel">
+            <div
+                className={`feedback-panel-summary ${
+                    correct
+                        ? "feedback-panel-summary-correct"
+                        : "feedback-panel-summary-wrong"
+                }`}
+            >
+                <div className="feedback-panel-summary-title">
+                    {correct ? (
+                        <CheckCircle2 className="feedback-panel-summary-icon" />
+                    ) : (
+                        <XCircle className="feedback-panel-summary-icon" />
+                    )}
+
+                    Din besvarelse er {correct ? "riktig" : "feil"}
+                </div>
+
+                <p className="feedback-panel-answer">
+                    <span className="feedback-panel-answer-label">Fasit:</span>{" "}
+                    {getAnswerLabel(question)}
+                </p>
             </div>
-            {question.type === "fill" ? <FillFeedback question={question} correct={correct} /> : <OptionFeedback question={question} selected={selected} />}
-            <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm leading-6 text-blue-950"><div className="flex items-center gap-2 font-semibold"><BookOpen className="h-4 w-4" /> Henvisning til fasit/pensum</div><p className="mt-1">{question.source}</p></div>
+
+            {question.type === "fill" ? (
+                <FillFeedback question={question} correct={correct} />
+            ) : (
+                <OptionFeedback question={question} selected={selected} />
+            )}
+
+            <div className="feedback-panel-source">
+                <div className="feedback-panel-source-title">
+                    <BookOpen className="feedback-panel-source-icon" />
+                    Henvisning til fasit/pensum
+                </div>
+
+                <p className="feedback-panel-source-text">
+                    {question.source}
+                </p>
+            </div>
         </div>
     );
 }
 
 function FillFeedback({ question, correct }) {
-    return <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6"><div className="font-semibold">Hvorfor er fasit riktig?</div><p>{question.whyCorrect}</p>{!correct && <><div className="mt-3 font-semibold">Hvorfor ble ditt svar vurdert som galt?</div><p>{question.whyWrong}</p></>}</div>;
+    return (
+        <div className="feedback-panel-box">
+            <div className="feedback-panel-box-title">
+                Hvorfor er fasit riktig?
+            </div>
+
+            <p>{question.whyCorrect}</p>
+
+            {!correct && (
+                <>
+                    <div className="feedback-panel-box-title-spaced">
+                        Hvorfor ble ditt svar vurdert som galt?
+                    </div>
+
+                    <p>{question.whyWrong}</p>
+                </>
+            )}
+        </div>
+    );
 }
 
 function OptionFeedback({ question, selected }) {
     return (
-        <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6">
-            <div className="mb-2 font-semibold">Hvorfor er alternativene riktige/gale?</div>
-            <div className="space-y-2">
+        <div className="feedback-panel-box">
+            <div className="feedback-panel-options-title">
+                Hvorfor er alternativene riktige/gale?
+            </div>
+
+            <div className="feedback-panel-options-list">
                 {question.options.map((option, index) => {
-                    const wasSelected = question.type === "single" ? selected === index : Array.isArray(selected) && selected.includes(index);
-                    return <div key={index} className="rounded-xl bg-white p-3"><div className="flex flex-wrap items-center gap-2 font-semibold"><span>{String.fromCharCode(65 + index)}.</span><span className={option.correct ? "text-emerald-700" : "text-red-700"}>{option.correct ? "Riktig alternativ" : "Galt alternativ"}</span>{wasSelected && <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">du valgte denne</span>}</div><p className="mt-1 text-neutral-700">{option.why}</p></div>;
+                    const wasSelected =
+                        question.type === "single"
+                            ? selected === index
+                            : Array.isArray(selected) && selected.includes(index);
+
+                    return (
+                        <div key={index} className="feedback-panel-option">
+                            <div className="feedback-panel-option-header">
+                                <span>{String.fromCharCode(65 + index)}.</span>
+
+                                <span
+                                    className={
+                                        option.correct
+                                            ? "feedback-panel-option-correct"
+                                            : "feedback-panel-option-wrong"
+                                    }
+                                >
+                                    {option.correct
+                                        ? "Riktig alternativ"
+                                        : "Galt alternativ"}
+                                </span>
+
+                                {wasSelected && (
+                                    <span className="feedback-panel-option-selected">
+                                        du valgte denne
+                                    </span>
+                                )}
+                            </div>
+
+                            <p className="feedback-panel-option-text">
+                                {option.why}
+                            </p>
+                        </div>
+                    );
                 })}
             </div>
         </div>

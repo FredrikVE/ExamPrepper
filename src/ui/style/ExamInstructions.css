@@ -1,0 +1,76 @@
+/* src/ui/style/ExamInstructions.css */
+.exam-instructions {
+    @apply mb-6 rounded-2xl border border-neutral-300 bg-white p-5 shadow-sm;
+}
+
+.exam-instructions-layout {
+    @apply flex flex-col gap-4 md:flex-row md:items-center md:justify-between;
+}
+
+.exam-instructions-title {
+    @apply text-lg font-semibold;
+}
+
+.exam-instructions-text {
+    @apply mt-1 text-sm leading-6 text-neutral-700;
+}
+
+.exam-instructions-actions {
+    @apply flex flex-wrap gap-2;
+}
+
+.exam-instructions-button {
+    @apply inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold;
+}
+
+.exam-instructions-button-primary {
+    @apply bg-neutral-950 text-white shadow-sm hover:bg-neutral-800;
+}
+
+.exam-instructions-button-secondary {
+    @apply border border-neutral-300 bg-white hover:bg-neutral-50;
+}
+
+.exam-instructions-icon {
+    @apply h-4 w-4;
+}
+
+.exam-instructions-result {
+    @apply mt-5 rounded-2xl bg-neutral-100 p-4;
+}
+
+.exam-instructions-result-layout {
+    @apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+}
+
+.exam-instructions-result-summary {
+    @apply flex items-center gap-3;
+}
+
+.exam-instructions-result-icon {
+    @apply h-6 w-6;
+}
+
+.exam-instructions-result-title {
+    @apply font-bold;
+}
+
+.exam-instructions-result-subtitle {
+    @apply text-sm text-neutral-600;
+}
+
+.exam-instructions-filter-list {
+    @apply flex gap-2;
+}
+
+.exam-instructions-filter-button {
+    @apply rounded-xl px-3 py-2 text-sm font-medium;
+}
+
+.exam-instructions-filter-button-active {
+    @apply bg-neutral-950 text-white;
+}
+
+.exam-instructions-filter-button-inactive {
+    @apply bg-white hover:bg-neutral-50;
+}

@@ -6,16 +6,18 @@ import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
 export default function ExamPage({ viewModel }) {
     if (viewModel.loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-neutral-100 text-neutral-950">
-                <p className="rounded-2xl bg-white px-5 py-4 shadow-sm">Laster eksamen...</p>
+            <div className="exam-page-state">
+                <p className="exam-page-loading-message">
+                    Laster eksamen...
+                </p>
             </div>
         );
     }
 
     if (viewModel.error) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-neutral-100 text-neutral-950">
-                <p className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-800">
+            <div className="exam-page-state">
+                <p className="exam-page-error-message">
                     Feil: {viewModel.error}
                 </p>
             </div>
@@ -23,11 +25,11 @@ export default function ExamPage({ viewModel }) {
     }
 
     return (
-        <div className="flex min-h-screen flex-col bg-neutral-100 text-neutral-950">
+        <div className="exam-page">
             <ExamHeader viewModel={viewModel} />
 
-            <main className="mx-auto flex w-full max-w-5xl flex-1 items-start px-4 py-6">
-                <div className="mx-auto w-full max-w-4xl pb-24">
+            <main className="exam-page-main">
+                <div className="exam-page-content">
                     {viewModel.currentQuestion ? (
                         <QuestionCard
                             question={viewModel.currentQuestion}
@@ -43,7 +45,7 @@ export default function ExamPage({ viewModel }) {
                             onToggleMultiAnswer={viewModel.toggleMultiAnswer}
                         />
                     ) : (
-                        <div className="rounded-2xl border border-neutral-300 bg-white p-6 shadow-sm">
+                        <div className="exam-page-empty">
                             Ingen spørsmål i dette filteret.
                         </div>
                     )}

@@ -1,0 +1,16 @@
+/* src/ui/style/ResultBadge.css */
+.result-badge {
+    @apply flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-sm font-semibold;
+}
+
+.result-badge-correct {
+    @apply bg-emerald-50 text-emerald-700;
+}
+
+.result-badge-wrong {
+    @apply bg-red-50 text-red-700;
+}
+
+.result-badge-icon {
+    @apply h-4 w-4;
+}
