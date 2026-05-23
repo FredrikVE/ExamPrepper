@@ -150,88 +150,124 @@ Dette gjør det enkelt å legge til nye øveeksamener uten å endre UI-komponent
 Prosjektet følger et lagdelt mønster inspirert av MVVM og Clean Architecture.
 
 ```mermaid
----
-config:
-  layout: elk
-  elk:
-    mergeEdges: false
-    nodePlacementStrategy: NETWORK_SIMPLEX
-    cycleBreakingStrategy: DEPTH_FIRST
-    edgeRouting: ORTHOGONAL
-  theme: forest
----
 flowchart TB
 
 %% =========================
-%% APP LAYER (COMPOSITION ROOT)
+%% SIDE INPUTS
 %% =========================
-subgraph AppLayer["App (Composition Root)"]
-	App["App.jsx"]
-	DI["dependencies.js<br/>Composition Root"]
+subgraph SideInputs["Side Inputs"]
+    DI["dependencies.js"]
+    NavGraph["navGraph.js"]
 end
 
 %% =========================
-%% DATA
+%% APP
 %% =========================
-subgraph Data["Data"]
-	DataRegistry["data.js<br/>EXAMS / DEFAULT_EXAM_ID"]
-	MockExam1["mockExam1.js<br/>Øveeksamen 1"]
-	MockExam2["mockExam2.js<br/>Øveeksamen 2"]
-	MockExamN["mockExamN.js<br/>Øveeksamen N"]
+subgraph AppLayer["App Layer"]
+    App["App.jsx"]
+    ExamPageWrapper["ExamPageWrapper"]
+end
+
+%% =========================
+%% VIEW
+%% =========================
+subgraph View["View"]
+    ExamSelectPage["ExamSelectPage.jsx"]
+    ExamPage["ExamPage.jsx"]
+    Header["Header"]
+    QuestionCard["QuestionCard"]
+    Footer["Footer"]
+end
+
+%% =========================
+%% VIEWMODEL
+%% =========================
+subgraph ViewModel["ViewModel"]
+    ExamVM["useExamViewModel"]
+end
+
+%% =========================
+%% DOMAIN
+%% =========================
+subgraph Domain["Domain Layer"]
+    GetAvailableExamsUC["GetAvailableExamsUseCase"]
+    GetExamQuestionsUC["GetExamQuestionsUseCase"]
+    GradeAnswerUC["GradeAnswerUseCase"]
+    CalculateScoreUC["CalculateExamScoreUseCase"]
 end
 
 %% =========================
 %% MODEL
 %% =========================
 subgraph Model["Model"]
-	DS["ExamQuestionDataSource"]
-	Repo["ExamRepository"]
+    Repo["ExamRepository"]
+    DS["ExamQuestionDataSource"]
 end
 
 %% =========================
-%% DOMAIN / USECASES
+%% DATA
 %% =========================
-subgraph Domain["Domain Layer (UseCases)"]
-	GetQuestions["GetExamQuestionsUseCase"]
-	GradeAnswer["GradeAnswerUseCase"]
-	CalculateScore["CalculateExamScoreUseCase"]
+subgraph Data["Data"]
+    DataRegistry["data.js"]
+    MockExam1["mockExam1.js"]
+    MockExam2["mockExam2.js"]
+    MockExamN["mockExamN.js"]
 end
 
 %% =========================
-%% VIEWMODEL (MVVM)
+%% SIDE INPUTS INTO APP
 %% =========================
-subgraph ViewModel["ViewModel (Hook)"]
-	ExamVM["useExamViewModel"]
-end
+DI -.-> App
+NavGraph -.-> App
 
 %% =========================
-%% VIEW
+%% APP FLOW
 %% =========================
-subgraph View["View / Components"]
-	ExamPage["ExamPage.jsx"]
-	Header["ExamHeader"]
-	Instructions["ExamInstructions"]
-	ExamSelector["ExamSelector"]
-	QuestionCard["QuestionCard"]
-	Feedback["FeedbackPanel"]
-	Badge["ResultBadge"]
-	Footer["ExamFooter"]
-end
+App --> ExamSelectPage
+App --> ExamPageWrapper
 
 %% =========================
-%% APP CONNECTIONS
+%% EXAM SELECTION FLOW
 %% =========================
-App --> DI
-App --> ExamPage
+App --> GetAvailableExamsUC
+GetAvailableExamsUC --> Repo
 
 %% =========================
-%% COMPOSITION ROOT → DEPENDENCIES
+%% EXAM PAGE FLOW
 %% =========================
-DI --> DS
-DI --> Repo
-DI --> GetQuestions
-DI --> GradeAnswer
-DI --> CalculateScore
+ExamPageWrapper --> ExamVM
+ExamPageWrapper --> ExamPage
+
+%% =========================
+%% VIEW COMPOSITION
+%% =========================
+ExamPage --> Header
+ExamPage --> QuestionCard
+ExamPage --> Footer
+
+%% =========================
+%% MVVM FLOW
+%% =========================
+ExamVM --> GetExamQuestionsUC
+ExamVM --> GradeAnswerUC
+ExamVM --> CalculateScoreUC
+
+%% =========================
+%% DOMAIN INTERNAL
+%% =========================
+CalculateScoreUC --> GradeAnswerUC
+
+%% =========================
+%% DOMAIN TO MODEL
+%% =========================
+GetExamQuestionsUC --> Repo
+
+%% =========================
+%% MODEL TO DATA
+%% =========================
+Repo --> DS
+DS --> DataRegistry
+Repo --> DataRegistry
 
 %% =========================
 %% DATA REGISTRY
@@ -241,54 +277,15 @@ DataRegistry --> MockExam2
 DataRegistry --> MockExamN
 
 %% =========================
-%% MODEL → DATA
-%% =========================
-DS --> DataRegistry
-Repo --> DS
-
-%% =========================
-%% DOMAIN → MODEL
-%% =========================
-GetQuestions --> Repo
-
-%% =========================
-%% VIEWMODEL → DOMAIN
-%% =========================
-ExamVM --> GetQuestions
-ExamVM --> GradeAnswer
-ExamVM --> CalculateScore
-
-%% =========================
-%% DOMAIN INTERNAL FLOW
-%% =========================
-GradeAnswer --> CalculateScore
-
-%% =========================
-%% VIEW → VIEWMODEL
-%% =========================
-ExamPage --> ExamVM
-
-%% =========================
-%% VIEW COMPOSITION
-%% =========================
-ExamPage --> Header
-ExamPage --> Instructions
-ExamPage --> ExamSelector
-ExamPage --> QuestionCard
-ExamPage --> Footer
-
-QuestionCard --> Feedback
-QuestionCard --> Badge
-
-%% =========================
 %% STYLING
 %% =========================
+style SideInputs stroke:#000000,fill:#E0E0E0
 style AppLayer stroke:#000000,fill:#E1BEE7
-style Data stroke:#000000,fill:#FFE082
-style Model stroke:#000000,fill:#DCEDC8
-style Domain stroke:#000000,fill:#C5CAE9
-style ViewModel stroke:#000000,fill:#FFCDD2
 style View stroke:#000000,fill:#FFF9C4
+style ViewModel stroke:#000000,fill:#FFCDD2
+style Domain stroke:#000000,fill:#C5CAE9
+style Model stroke:#000000,fill:#DCEDC8
+style Data stroke:#000000,fill:#FFE082
 ```
 
 ### Arkitekturflyt
