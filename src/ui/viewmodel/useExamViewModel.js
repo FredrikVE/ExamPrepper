@@ -10,7 +10,6 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // NY: peker på hvilket spørsmål brukeren står på
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
     useEffect(() => {
@@ -22,15 +21,21 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
                 setError(null);
                 const result = await getExamQuestionsUseCase.execute();
                 if (!cancelled) setQuestions(result);
-            } catch (error) {
+            }
+
+            catch (error) {
                 if (!cancelled) setError(error?.message ?? "Kunne ikke laste eksamen");
-            } finally {
+            }
+
+            finally {
                 if (!cancelled) setLoading(false);
             }
         }
 
         loadQuestions();
-        return () => { cancelled = true; };
+        return () => { 
+            cancelled = true; 
+        };
     }, [getExamQuestionsUseCase]);
 
     const result = useMemo(
@@ -41,13 +46,18 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
     const answeredCount = useMemo(() => {
         return questions.filter((question) => {
             const answer = answers[question.id];
-            if (question.type === "multi") return Array.isArray(answer) && answer.length > 0;
+            if (question.type === "multi") {
+                return Array.isArray(answer) && answer.length > 0;
+            }
+
             return answer !== undefined && String(answer).trim() !== "";
         }).length;
     }, [questions, answers]);
 
     const visibleQuestions = useMemo(() => {
-        if (!submitted || filter === "all") return questions;
+        if (!submitted || filter === "all") {
+            return questions;
+        }
 
         return questions.filter((question) => {
             const correct = gradeAnswerUseCase.execute(question, answers[question.id]);
@@ -57,7 +67,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
         });
     }, [questions, answers, submitted, filter, gradeAnswerUseCase]);
 
-    // Pass på at index alltid er gyldig hvis filter endrer antall spørsmål
+
     useEffect(() => {
         if (visibleQuestions.length === 0) {
             setCurrentQuestionIndex(0);
@@ -83,17 +93,26 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
     }
 
     function goToQuestion(index) {
-        if (index < 0 || index >= visibleQuestions.length) return;
+        if (index < 0 || index >= visibleQuestions.length) {
+            return;
+        }
+
         setCurrentQuestionIndex(index);
     }
 
     function setSingleAnswer(questionId, value) {
-        if (submitted) return;
+        if (submitted) {
+            return;
+        }
+
         setAnswers((previous) => ({ ...previous, [questionId]: value }));
     }
 
     function toggleMultiAnswer(questionId, value) {
-        if (submitted) return;
+        if (submitted) {
+            return;
+        }
+
         setAnswers((previous) => {
             const current = Array.isArray(previous[questionId]) ? previous[questionId] : [];
             const next = current.includes(value)
