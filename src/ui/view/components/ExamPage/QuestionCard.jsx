@@ -9,6 +9,7 @@ const FILL_MAX_LENGTH = 80;
 export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
     const answerText = String(answer || "");
+    const hasInlineFillBlank = question.type === "fill" && /_{3,}/.test(question.prompt);
 
     return (
         <section className="question-card">
@@ -34,11 +35,36 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
             <div className="question-card-body">
                 <div className="question-card-divider" />
 
-                <p className="question-card-prompt">
-                    {question.prompt}
-                </p>
+                {hasInlineFillBlank ? (
+                    <div className="question-card-inline-answer-block">
+                        <p className="question-card-prompt question-card-prompt-inline">
+                            <PromptWithInlineAnswer
+                                question={question}
+                                answerText={answerText}
+                                submitted={submitted}
+                                onSingleAnswer={onSingleAnswer}
+                                t={t}
+                            />
+                        </p>
 
-                {question.type === "fill" && (
+                        <div className="question-card-input-meta question-card-inline-input-meta">
+                            <span className="question-card-input-rule">
+                                <Info />
+                                {t.questionInputRule}
+                            </span>
+
+                            <span className="question-card-character-count">
+                                {t.questionCharacterCount(answerText.length, FILL_MAX_LENGTH)}
+                            </span>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="question-card-prompt">
+                        {question.prompt}
+                    </p>
+                )}
+
+                {question.type === "fill" && !hasInlineFillBlank && (
                     <div className="question-card-answer-block">
                         <label className="question-card-answer-label" htmlFor={`question-${question.id}-answer`}>
                             {t.questionAnswerLabel}
@@ -119,6 +145,36 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
             </div>
         </section>
     );
+}
+
+
+function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswer, t }) {
+    const parts = question.prompt.split(/(_{3,})/g);
+    let renderedInput = false;
+
+    return parts.map((part, index) => {
+        if (/^_{3,}$/.test(part) && !renderedInput) {
+            renderedInput = true;
+
+            return (
+                <input
+                    key={`blank-${index}`}
+                    id={`question-${question.id}-answer`}
+                    aria-label={t.questionAnswerLabel}
+                    disabled={submitted}
+                    value={answerText}
+                    maxLength={FILL_MAX_LENGTH}
+                    onChange={(event) =>
+                        onSingleAnswer(question.id, event.target.value)
+                    }
+                    placeholder={t.questionInputPlaceholder}
+                    className="question-card-inline-input"
+                />
+            );
+        }
+
+        return <span key={`text-${index}`}>{part}</span>;
+    });
 }
 
 function OptionList({ question, answer, submitted, onSingleAnswer, onToggleMultiAnswer }) {
