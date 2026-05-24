@@ -4,22 +4,14 @@
     overflow: hidden;
     border: 1px solid var(--line-strong);
     border-radius: 18px;
-    background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
+    background: var(--panel-strong);
     box-shadow: var(--shadow-card);
-    backdrop-filter: blur(18px);
 }
 
 .dark .question-card {
-    background: rgba(7, 22, 42, 0.76);
+    background: #07162a;
 }
 
-.question-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(circle at 85% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 18rem);
-}
 
 .question-card-header {
     position: relative;
