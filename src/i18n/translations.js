@@ -47,7 +47,6 @@ export const translations = {
         questionAnswerLabel: "Ditt svar",
         questionInputRule: "Skriv kun ett begrep. Ingen mellomrom før eller etter.",
         questionCharacterCount: (count, max) => `${count} / ${max} tegn`,
-        questionHint: "Tenk på prosesser som skaper verdi fra start til slutt.",
         questionWrongTitle: "Feil svar",
         questionWrongHint: "Trykk «Vis fasit» øverst for forklaring og pensumhenvisning.",
 
@@ -117,7 +116,6 @@ export const translations = {
         questionAnswerLabel: "Your answer",
         questionInputRule: "Write one term only. No leading or trailing spaces.",
         questionCharacterCount: (count, max) => `${count} / ${max} chars`,
-        questionHint: "Think about processes that create value from start to finish.",
         questionWrongTitle: "Wrong answer",
         questionWrongHint: "Press \"Show answers\" above for explanation and curriculum reference.",
 

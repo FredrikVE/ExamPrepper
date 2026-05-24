@@ -205,39 +205,6 @@
     flex: 0 0 auto;
 }
 
-.question-card-hint {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 28px;
-    border-radius: 14px;
-    background: rgba(244, 247, 251, 0.82);
-    color: var(--text-muted);
-    padding: 14px 18px;
-    font-size: 0.92rem;
-    font-weight: 650;
-}
-
-.dark .question-card-hint {
-    background: rgba(255, 255, 255, 0.055);
-}
-
-.question-card-hint-icon {
-    display: grid;
-    width: 34px;
-    height: 34px;
-    flex: 0 0 auto;
-    place-items: center;
-    border-radius: 12px;
-    color: #be8a00;
-    background: rgba(245, 191, 37, 0.16);
-}
-
-.question-card-hint-icon svg {
-    width: 20px;
-    height: 20px;
-}
-
 .question-card-warning {
     display: flex;
     align-items: flex-start;
