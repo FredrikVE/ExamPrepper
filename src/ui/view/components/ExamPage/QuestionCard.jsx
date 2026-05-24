@@ -1,5 +1,5 @@
 //src/ui/view/components/ExamPage/QuestionCard.jsx
-import { AlertTriangle, Edit3, Info, Network } from "lucide-react";
+import { AlertTriangle, Edit3, Info } from "lucide-react";
 import ResultBadge from "./ResultBadge.jsx";
 import FeedbackPanel from "./FeedbackPanel.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
@@ -28,11 +28,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
 
                 {submitted ? (
                     <ResultBadge correct={correct} />
-                ) : (
-                    <div className="question-card-corner-icon" aria-hidden="true">
-                        <Network />
-                    </div>
-                )}
+                ) : null}
             </div>
 
             <div className="question-card-body">

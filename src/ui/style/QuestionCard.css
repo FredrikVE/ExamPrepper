@@ -83,22 +83,6 @@
     line-height: 1.1;
 }
 
-.question-card-corner-icon {
-    display: grid;
-    width: 58px;
-    height: 58px;
-    flex: 0 0 auto;
-    place-items: center;
-    border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
-    border-radius: 18px;
-    color: var(--accent);
-    background: var(--accent-soft);
-}
-
-.question-card-corner-icon svg {
-    width: 28px;
-    height: 28px;
-}
 
 .question-card-body {
     position: relative;
@@ -299,8 +283,4 @@
         flex-direction: column;
     }
 
-    .question-card-corner-icon {
-        width: 48px;
-        height: 48px;
-    }
 }
