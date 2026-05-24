@@ -1,5 +1,6 @@
 //src/App.jsx
 import { useState, useCallback, useEffect, useRef } from "react";
+import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import useExamViewModel from "./ui/viewmodel/useExamViewModel.js";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
@@ -8,13 +9,15 @@ import { getExamQuestionsUseCase, getAvailableExamsUseCase, gradeAnswerUseCase, 
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
 import { getExamById } from "./data/data.js";
 
-import "./ui/style/Global.css";
+import "./ui/style/App.css";
 
 export default function App() {
     return (
-        <LanguageProvider>
-            <AppContent />
-        </LanguageProvider>
+        <ThemeProvider>
+            <LanguageProvider>
+                <AppContent />
+            </LanguageProvider>
+        </ThemeProvider>
     );
 }
 
@@ -55,7 +58,7 @@ function AppContent() {
         }
         setActiveScreen(NAV_SCREENS.SELECT);
         setSelectedExamId(null);
-        
+
     }, [language, activeScreen, selectedExamId]);
 
     useEffect(onLanguageChangedSwitchExam, [onLanguageChangedSwitchExam]);

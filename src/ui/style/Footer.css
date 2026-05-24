@@ -1,31 +1,75 @@
-/* src/ui/style/ExamFooter.css */
+/* src/ui/style/Footer.css */
 @layer components {
     .exam-footer {
-        @apply sticky bottom-0 z-30 border-t border-neutral-300 bg-white;
+        @apply 
+        sticky
+        bottom-0
+        z-30
+        border-t
+        border-neutral-300
+        bg-white
+        dark:border-slate-700
+        dark:bg-slate-900;
         box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
     }
 
     .exam-footer-container {
-        @apply mx-auto flex max-w-5xl items-center justify-between px-4 py-3;
+        @apply 
+        mx-auto
+        flex
+        max-w-5xl
+        items-center
+        justify-between
+        px-4
+        py-3;
     }
 
     .exam-footer-button {
-        @apply inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40;
+        @apply 
+        inline-flex
+        items-center
+        gap-2
+        rounded-2xl
+        px-4
+        py-3
+        text-sm
+        font-semibold
+        disabled:cursor-not-allowed
+        disabled:opacity-40;
     }
 
     .exam-footer-button-previous {
-        @apply border border-neutral-300 bg-white hover:bg-neutral-50;
+        @apply 
+        border
+        border-neutral-300
+        bg-white
+        hover:bg-neutral-50
+        dark:border-slate-600
+        dark:bg-slate-800
+        dark:hover:bg-slate-700;
     }
 
     .exam-footer-button-next {
-        @apply bg-neutral-950 text-white hover:bg-neutral-800;
+        @apply 
+        bg-neutral-950
+        text-white
+        hover:bg-neutral-800
+        dark:bg-emerald-600
+        dark:text-white
+        dark:hover:bg-emerald-500;
     }
 
     .exam-footer-icon {
-        @apply h-4 w-4;
+        @apply 
+        h-4
+        w-4;
     }
 
     .exam-footer-counter {
-        @apply text-sm font-medium text-neutral-600;
+        @apply 
+        text-sm
+        font-medium
+        text-neutral-600
+        dark:text-slate-400;
     }
 }

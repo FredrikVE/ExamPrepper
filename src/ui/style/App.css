@@ -1,5 +1,7 @@
-/* src/ui/style/Global.css */
+/* src/ui/style/App.css */
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @import "./ExamSelectPage.css";
 @import "./ExamPage.css";
