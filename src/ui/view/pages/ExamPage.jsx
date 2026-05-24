@@ -27,7 +27,7 @@ export default function ExamPage({ viewModel, onBack }) {
 		);
 	}
 
-	const pageContent = getPageContent(viewModel);
+	const pageContent = getPageContent(viewModel, t);
 
 	return (
 		<div className="exam-page">
@@ -44,9 +44,7 @@ export default function ExamPage({ viewModel, onBack }) {
 	);
 }
 
-function getPageContent(viewModel) {
-	const { t } = useLanguage();
-
+function getPageContent(viewModel, t) {
 	if (!viewModel.currentQuestion) {
 		return (
 			<div className="exam-page-empty">

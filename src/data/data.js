@@ -4,7 +4,7 @@ import { mockExam1_en } from "./exams/mockExam1_en.js";
 import { mockExam2_no } from "./exams/mockExam2_no.js";
 import { mockExam2_en } from "./exams/mockExam2_en.js";
 
-export const DEFAULT_EXAM_ID = "mock-exam-1";
+export const DEFAULT_EXAM_ID = "mock-exam-1-no";
 
 export const EXAMS = [
   mockExam1_no,

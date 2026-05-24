@@ -19,4 +19,15 @@ export default class ExamRepository {
             questionCount: questions.length
         }));
     }
+
+    getExamByBaseIdAndLang(baseId, lang) {
+        const allExams = this.dataSource.fetchAllExams();
+        
+        for (const exam of allExams) {
+            if (exam.baseId === baseId && exam.lang === lang) {
+                return exam;
+            }
+        }
+        return null;
+    }
 }

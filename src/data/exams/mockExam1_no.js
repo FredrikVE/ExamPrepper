@@ -1,6 +1,7 @@
 //src/data/exams/mockExam1_no.js
 export const mockExam1_no = {
-  id: "mock-exam-1",
+  id: "mock-exam-1-no",
+  baseId: "mock-exam-1",
   lang: "no",
   title: "Øveeksamen 1: Full repetisjon",
   description: "CIO toolbox, D4D, IT governance, strategy og sustainability.",
@@ -10,9 +11,9 @@ export const mockExam1_no = {
       type: "fill",
       title: "Business process",
       points: 1,
-      prompt: "A business ________ is the combination of a set of activities within an enterprise with a structure describing their logical order and dependence whose objective is to produce a desired result.",
-      answers: ["process", "prosess", "business process", "forretningsprosess"],
-      answerKey: "process / business process / forretningsprosess",
+      prompt: "En forretnings________ er kombinasjonen av et sett aktiviteter i en virksomhet med en struktur som beskriver deres logiske rekkefølge og avhengighet, der målet er å produsere et ønsket resultat.",
+      answers: ["prosess", "process", "forretningsprosess", "business process"],
+      answerKey: "prosess / forretningsprosess",
       source: "Fasit: Forelesning 5, Business processes and IT Architecture, slide 'What is a business process?'",
       whyCorrect: "Setningen er definisjonen av business process: et sett aktiviteter med logisk orden og avhengigheter som produserer et ønsket resultat.",
       whyWrong: "Andre begreper som project, platform eller architecture passer ikke fordi definisjonen handler om selve arbeidsflyten av aktiviteter i en virksomhet."

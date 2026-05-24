@@ -1,11 +1,12 @@
 //src/App.jsx
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import useExamViewModel from "./ui/viewmodel/useExamViewModel.js";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { getExamQuestionsUseCase, getAvailableExamsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase } from "./di/dependencies.js";
+import { getExamQuestionsUseCase, getAvailableExamsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, getExamByBaseIdAndLangUseCase } from "./di/dependencies.js";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
+import { getExamById } from "./data/data.js";
 
 import "./ui/style/Global.css";
 
@@ -21,6 +22,7 @@ function AppContent() {
     const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SELECT);
     const [selectedExamId, setSelectedExamId] = useState(null);
     const { language } = useLanguage();
+    const prevLanguageRef = useRef(language);
 
     const handleSelectExam = useCallback((examId) => {
         setSelectedExamId(examId);
@@ -31,6 +33,32 @@ function AppContent() {
         setSelectedExamId(null);
         setActiveScreen(NAV_SCREENS.SELECT);
     }, []);
+
+    const onLanguageChangedSwitchExam = useCallback(() => {
+        if (prevLanguageRef.current === language) {
+            return;
+        }
+
+        prevLanguageRef.current = language;
+        if (activeScreen !== NAV_SCREENS.EXAM || !selectedExamId) {
+            return;
+        }
+
+        const currentExam = getExamById(selectedExamId);
+        
+        if (currentExam?.baseId) {
+            const translatedExam = getExamByBaseIdAndLangUseCase.execute(currentExam.baseId, language);
+            if (translatedExam) {
+                setSelectedExamId(translatedExam.id);
+                return;
+            }
+        }
+        setActiveScreen(NAV_SCREENS.SELECT);
+        setSelectedExamId(null);
+        
+    }, [language, activeScreen, selectedExamId]);
+
+    useEffect(onLanguageChangedSwitchExam, [onLanguageChangedSwitchExam]);
 
     if (activeScreen === NAV_SCREENS.SELECT) {
         const exams = getAvailableExamsUseCase.execute(language);
@@ -45,7 +73,6 @@ function AppContent() {
 
     return (
         <ExamPageWrapper
-            key={selectedExamId}
             examId={selectedExamId}
             onBack={handleBackToList}
         />

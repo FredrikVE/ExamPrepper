@@ -6,6 +6,8 @@ import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js"
 import GetAvailableExamsUseCase from "../model/domain/GetAvailableExamsUseCase.js";
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
+import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
+
 
 //Datasource
 const examQuestionDataSource = new ExamQuestionDataSource();
@@ -18,11 +20,13 @@ const gradeAnswerUseCase = new GradeAnswerUseCase();
 const getExamQuestionsUseCase = new GetExamQuestionsUseCase(examRepository);
 const getAvailableExamsUseCase = new GetAvailableExamsUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
+const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepository);
 
 //Export
 export {
     getExamQuestionsUseCase,
     getAvailableExamsUseCase,
     gradeAnswerUseCase,
-    calculateExamScoreUseCase
+    calculateExamScoreUseCase,
+    getExamByBaseIdAndLangUseCase
 };

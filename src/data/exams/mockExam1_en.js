@@ -1,6 +1,7 @@
 //src/data/exams/mockExam1_en.js
 export const mockExam1_en = {
   id: "mock-exam-1-en",
+  baseId: "mock-exam-1",
   lang: "en",
   title: "Practice Exam 1: Full Review",
   description: "CIO toolbox, D4D, IT governance, strategy and sustainability.",

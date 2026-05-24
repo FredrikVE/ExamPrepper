@@ -1,6 +1,7 @@
 //src/data/exams/mockExam2_en.js
 export const mockExam2_en = {
   id: "mock-exam-2-en",
+  baseId: "mock-exam-2",
   lang: "en",
   title: "Practice Exam 2: Deep Dive",
   description: "Operating models, governance archetypes, D4D roadmap, sustainability and Cynefin.",
