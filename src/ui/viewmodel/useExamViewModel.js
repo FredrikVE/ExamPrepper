@@ -17,6 +17,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
 	//Usememo for data
 	const result = useMemo(() => {
@@ -68,6 +69,10 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	);
 
 	const feedbackToggleLabel = getFeedbackToggleLabel(showAllFeedback);
+
+	const elapsedTimeLabel = useMemo(() => {
+		return formatElapsedTime(elapsedSeconds);
+	}, [elapsedSeconds]);
 
 	//Handlers og navigasjon
 	const previousQuestion = useCallback(() => {
@@ -139,6 +144,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		setSubmitted(false);
 		setShowAllFeedback(true);
 		setCurrentQuestionIndex(0);
+		setElapsedSeconds(0);
 
 		window.scrollTo({
 			top: 0,
@@ -207,6 +213,18 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		onVisibleQuestionsChangedClampCurrentIndex
 	]);
 
+	useEffect(() => {
+		if (submitted) {
+			return;
+		}
+
+		const intervalId = window.setInterval(() => {
+			setElapsedSeconds((value) => value + 1);
+		}, 1000);
+
+		return () => window.clearInterval(intervalId);
+	}, [submitted]);
+
 	return {
 		questions,
 		visibleQuestions,
@@ -228,6 +246,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		scoreLabel,
 		questionProgressLabel,
 		feedbackToggleLabel,
+		elapsedTimeLabel,
 
 		canGoPrevious,
 		canGoNext,
@@ -244,6 +263,14 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		isAnswerCorrect
 	};
 }
+
+const formatElapsedTime = (seconds) => {
+	const safeSeconds = Math.max(seconds, 0);
+	const minutes = Math.floor(safeSeconds / 60);
+	const remainingSeconds = safeSeconds % 60;
+
+	return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+};
 
 const getCurrentQuestionIsCorrect = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {
 	if (!submitted) {

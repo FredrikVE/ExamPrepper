@@ -1,172 +1,125 @@
 /* src/ui/style/FeedbackPanel.css */
 .feedback-panel {
-    @apply 
-    mt-5
-    space-y-3;
+    display: grid;
+    gap: 14px;
+    margin-top: 26px;
 }
 
-.feedback-panel-summary {
-    @apply 
-    rounded-2xl
-    border
-    p-4;
+.feedback-panel-summary,
+.feedback-panel-box,
+.feedback-panel-source {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px;
 }
 
 .feedback-panel-summary-correct {
-    @apply 
-    border-emerald-200
-    bg-emerald-50
-    dark:border-emerald-800
-    dark:bg-emerald-950;
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
 }
 
 .feedback-panel-summary-wrong {
-    @apply 
-    border-red-200
-    bg-red-50
-    dark:border-red-800
-    dark:bg-red-950;
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
 }
 
-.feedback-panel-summary-title {
-    @apply 
-    flex
-    items-center
-    gap-2
-    font-bold;
+.feedback-panel-summary-title,
+.feedback-panel-source-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-main);
+    font-weight: 850;
 }
 
-.feedback-panel-summary-icon {
-    @apply 
-    h-5
-    w-5;
+.feedback-panel-summary-icon,
+.feedback-panel-source-icon {
+    width: 20px;
+    height: 20px;
 }
 
-.feedback-panel-answer {
-    @apply 
-    mt-2
-    text-sm
-    leading-6;
+.feedback-panel-answer,
+.feedback-panel-source-text {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    line-height: 1.65;
 }
 
-.feedback-panel-answer-label {
-    @apply 
-    font-semibold;
+.feedback-panel-answer-label,
+.feedback-panel-box-title,
+.feedback-panel-box-title-spaced,
+.feedback-panel-options-title {
+    color: var(--text-main);
+    font-weight: 850;
 }
 
-.feedback-panel-box {
-    @apply 
-    rounded-2xl
-    border
-    p-4
-    text-sm
-    leading-6
-    border-neutral-200
-    bg-neutral-50
-    dark:border-slate-700
-    dark:bg-slate-800;
+.feedback-panel-box,
+.feedback-panel-source {
+    background: rgba(244, 247, 251, 0.62);
+    color: var(--text-muted);
+    line-height: 1.7;
 }
 
-.feedback-panel-box-title {
-    @apply 
-    font-semibold;
+.dark .feedback-panel-box,
+.dark .feedback-panel-source {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.feedback-panel-box p {
+    margin: 6px 0 0;
 }
 
 .feedback-panel-box-title-spaced {
-    @apply 
-    mt-3
-    font-semibold;
-}
-
-.feedback-panel-options-title {
-    @apply 
-    mb-2
-    font-semibold;
+    margin-top: 14px;
 }
 
 .feedback-panel-options-list {
-    @apply 
-    space-y-2;
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 .feedback-panel-option {
-    @apply 
-    rounded-xl
-    p-3
-    bg-white
-    dark:bg-slate-700;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--panel-strong) 70%, transparent);
+    padding: 12px;
 }
 
 .feedback-panel-option-header {
-    @apply 
-    flex
-    flex-wrap
-    items-center
-    gap-2
-    font-semibold;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-main);
+    font-weight: 850;
 }
 
 .feedback-panel-option-correct {
-    @apply 
-    text-emerald-700
-    dark:text-emerald-400;
+    color: #059669;
 }
 
 .feedback-panel-option-wrong {
-    @apply 
-    text-red-700
-    dark:text-red-400;
+    color: #dc2626;
+}
+
+.dark .feedback-panel-option-correct {
+    color: #34d399;
+}
+
+.dark .feedback-panel-option-wrong {
+    color: #f87171;
 }
 
 .feedback-panel-option-selected {
-    @apply 
-    rounded-full
-    px-2
-    py-0.5
-    text-xs
-    bg-neutral-100
-    text-neutral-600
-    dark:bg-slate-700
-    dark:text-slate-300;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 8px;
+    font-size: 0.76rem;
 }
 
 .feedback-panel-option-text {
-    @apply 
-    mt-1
-    text-neutral-700
-    dark:text-slate-300;
-}
-
-.feedback-panel-source {
-    @apply 
-    rounded-2xl
-    border
-    p-4
-    text-sm
-    leading-6
-    border-blue-200
-    bg-blue-50
-    text-blue-950
-    dark:border-blue-800
-    dark:bg-blue-950
-    dark:text-blue-200;
-}
-
-.feedback-panel-source-title {
-    @apply 
-    flex
-    items-center
-    gap-2
-    font-semibold;
-}
-
-.feedback-panel-source-icon {
-    @apply 
-    h-4
-    w-4;
-}
-
-.feedback-panel-source-text {
-    @apply 
-    mt-1;
+    margin: 5px 0 0;
+    color: var(--text-muted);
+    line-height: 1.55;
 }

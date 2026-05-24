@@ -1,5 +1,5 @@
 //src/ui/view/components/Header/HeaderInfo.jsx
-import { ClipboardList, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function HeaderInfo({ currentQuestionIndex, questionCount, onBack }) {
@@ -10,6 +10,7 @@ export default function HeaderInfo({ currentQuestionIndex, questionCount, onBack
             <div className="exam-header-label">
                 {onBack && (
                     <button
+                        type="button"
                         onClick={onBack}
                         className="exam-header-back-button"
                         title={t.headerBackTitle}
@@ -18,8 +19,7 @@ export default function HeaderInfo({ currentQuestionIndex, questionCount, onBack
                     </button>
                 )}
 
-                <ClipboardList className="exam-header-icon" />
-                {t.headerLabel}
+                <span>{t.headerLabel}</span>
             </div>
 
             <h1 className="exam-header-title">

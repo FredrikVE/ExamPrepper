@@ -1,43 +1,88 @@
 //src/ui/view/components/ExamPage/QuestionCard.jsx
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Edit3, Info, Lightbulb, Network } from "lucide-react";
 import ResultBadge from "./ResultBadge.jsx";
 import FeedbackPanel from "./FeedbackPanel.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
+const FILL_MAX_LENGTH = 80;
+
 export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
+    const answerText = String(answer || "");
 
     return (
         <section className="question-card">
             <div className="question-card-header">
-                <div>
+                <div className="question-card-heading">
                     <div className="question-card-meta">
-                        {t.questionMeta(question.id, question.points, getQuestionTypeLabel(question.type, t))}
+                        <span className="question-card-number">{question.id}</span>
+                        <span>{t.questionMeta(question.id, question.points, getQuestionTypeLabel(question.type, t))}</span>
                     </div>
 
-                    <h3 className="question-card-title">
-                        {question.title}
-                    </h3>
+                    <div className="question-card-title-row">
+                        <h3 className="question-card-title">
+                            {question.title}
+                        </h3>
+                    </div>
                 </div>
 
-                {submitted && <ResultBadge correct={correct} />}
+                {submitted ? (
+                    <ResultBadge correct={correct} />
+                ) : (
+                    <div className="question-card-corner-icon" aria-hidden="true">
+                        <Network />
+                    </div>
+                )}
             </div>
 
             <div className="question-card-body">
+                <div className="question-card-divider" />
+
                 <p className="question-card-prompt">
                     {question.prompt}
                 </p>
 
                 {question.type === "fill" && (
-                    <input
-                        disabled={submitted}
-                        value={answer || ""}
-                        onChange={(event) =>
-                            onSingleAnswer(question.id, event.target.value)
-                        }
-                        placeholder={t.questionInputPlaceholder}
-                        className="question-card-input"
-                    />
+                    <div className="question-card-answer-block">
+                        <label className="question-card-answer-label" htmlFor={`question-${question.id}-answer`}>
+                            {t.questionAnswerLabel}
+                        </label>
+
+                        <div className="question-card-input-wrap">
+                            <input
+                                id={`question-${question.id}-answer`}
+                                disabled={submitted}
+                                value={answerText}
+                                maxLength={FILL_MAX_LENGTH}
+                                onChange={(event) =>
+                                    onSingleAnswer(question.id, event.target.value)
+                                }
+                                placeholder={t.questionInputPlaceholder}
+                                className="question-card-input"
+                            />
+                            <span className="question-card-input-icon" aria-hidden="true">
+                                <Edit3 />
+                            </span>
+                        </div>
+
+                        <div className="question-card-input-meta">
+                            <span className="question-card-input-rule">
+                                <Info />
+                                {t.questionInputRule}
+                            </span>
+
+                            <span className="question-card-character-count">
+                                {t.questionCharacterCount(answerText.length, FILL_MAX_LENGTH)}
+                            </span>
+                        </div>
+
+                        <div className="question-card-hint">
+                            <span className="question-card-hint-icon" aria-hidden="true">
+                                <Lightbulb />
+                            </span>
+                            <span>{t.questionHint}</span>
+                        </div>
+                    </div>
                 )}
 
                 {question.type === "single" && (
