@@ -8,8 +8,8 @@
         border-t
         border-neutral-300
         bg-white
-        dark:border-neutral-700
-        dark:bg-neutral-800;
+        dark:border-slate-700
+        dark:bg-slate-900;
         box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
     }
 
@@ -44,9 +44,9 @@
         border-neutral-300
         bg-white
         hover:bg-neutral-50
-        dark:border-neutral-600
-        dark:bg-neutral-700
-        dark:hover:bg-neutral-600;
+        dark:border-slate-600
+        dark:bg-slate-800
+        dark:hover:bg-slate-700;
     }
 
     .exam-footer-button-next {
@@ -54,9 +54,9 @@
         bg-neutral-950
         text-white
         hover:bg-neutral-800
-        dark:bg-neutral-100
-        dark:text-neutral-950
-        dark:hover:bg-neutral-300;
+        dark:bg-emerald-600
+        dark:text-white
+        dark:hover:bg-emerald-500;
     }
 
     .exam-footer-icon {
@@ -70,6 +70,6 @@
         text-sm
         font-medium
         text-neutral-600
-        dark:text-neutral-400;
+        dark:text-slate-400;
     }
 }

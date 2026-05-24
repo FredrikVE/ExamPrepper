@@ -7,8 +7,8 @@
     shadow-sm
     border-neutral-300
     bg-white
-    dark:border-neutral-700
-    dark:bg-neutral-800;
+    dark:border-slate-700
+    dark:bg-slate-800;
 }
 
 .question-card-header {
@@ -22,8 +22,8 @@
     py-4
     border-neutral-200
     bg-neutral-50
-    dark:border-neutral-700
-    dark:bg-neutral-700;
+    dark:border-slate-700
+    dark:bg-slate-900;
 }
 
 .question-card-meta {
@@ -33,7 +33,7 @@
     uppercase
     tracking-wide
     text-neutral-500
-    dark:text-neutral-400;
+    dark:text-slate-400;
 }
 
 .question-card-title {
@@ -67,10 +67,10 @@
     border-neutral-300
     focus:border-neutral-950
     disabled:bg-neutral-100
-    dark:border-neutral-600
-    dark:bg-neutral-700
-    dark:focus:border-neutral-400
-    dark:disabled:bg-neutral-800;
+    dark:border-slate-600
+    dark:bg-slate-700
+    dark:focus:border-emerald-500
+    dark:disabled:bg-slate-800;
 }
 
 .question-card-warning {
@@ -149,14 +149,14 @@
     @apply 
     border-neutral-950
     bg-neutral-50
-    dark:border-neutral-300
-    dark:bg-neutral-700;
+    dark:border-emerald-500
+    dark:bg-slate-700;
 }
 
 .question-card-option-default {
     @apply 
     border-neutral-200
     hover:bg-neutral-50
-    dark:border-neutral-600
-    dark:hover:bg-neutral-700;
+    dark:border-slate-600
+    dark:hover:bg-slate-700;
 }
