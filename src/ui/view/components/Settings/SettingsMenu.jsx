@@ -1,14 +1,16 @@
 //src/ui/view/components/Settings/SettingsMenu.jsx
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X, Globe, Moon, Sun } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { LANGUAGES, LANGUAGE_LABELS } from "../../../../i18n/translations.js";
+import { useTheme } from "../../../theme/ThemeContext.jsx";
 
 export default function SettingsMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const panelRef = useRef(null);
     const buttonRef = useRef(null);
     const { language, setLanguage, t } = useLanguage();
+    const { isDark, toggleTheme } = useTheme();
 
     const toggleMenu = useCallback(() => {
         setIsOpen((prev) => !prev);
@@ -108,6 +110,30 @@ export default function SettingsMenu() {
                                 </button>
                             ))}
                         </div>
+                    </div>
+
+                    <div className="settings-section settings-section-spaced">
+                        <div className="settings-section-label">
+                            {isDark ? (
+                                <Moon className="settings-section-icon" />
+                            ) : (
+                                <Sun className="settings-section-icon" />
+                            )}
+                            {t.settingsDarkMode}
+                        </div>
+
+                        <button
+                            onClick={toggleTheme}
+                            className="settings-toggle-track"
+                            role="switch"
+                            aria-checked={isDark}
+                        >
+                            <span
+                                className={`settings-toggle-thumb ${
+                                    isDark ? "settings-toggle-thumb-on" : ""
+                                }`}
+                            />
+                        </button>
                     </div>
                 </div>
             </div>

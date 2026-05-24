@@ -66,7 +66,8 @@ export const translations = {
         settingsTitle: "Innstillinger",
         settingsLanguage: "Språk",
         settingsClose: "Lukk innstillinger",
-        settingsOpenMenu: "Åpne meny"
+        settingsOpenMenu: "Åpne meny",
+        settingsDarkMode: "Mørkt tema",
     },
 
     [LANGUAGES.EN]: {
@@ -125,6 +126,7 @@ export const translations = {
         settingsTitle: "Settings",
         settingsLanguage: "Language",
         settingsClose: "Close settings",
-        settingsOpenMenu: "Open menu"
+        settingsOpenMenu: "Open menu",
+        settingsDarkMode: "Dark mode",
     }
 };

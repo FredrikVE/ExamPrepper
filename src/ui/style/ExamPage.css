@@ -1,28 +1,79 @@
 /* src/ui/style/ExamPage.css */
 .exam-page {
-    @apply flex min-h-screen flex-col bg-neutral-100 text-neutral-950;
+    @apply 
+    flex
+    min-h-screen
+    flex-col
+    bg-neutral-100
+    text-neutral-950
+    dark:bg-neutral-900
+    dark:text-neutral-100;
 }
 
 .exam-page-state {
-    @apply flex min-h-screen items-center justify-center bg-neutral-100 text-neutral-950;
+    @apply 
+    flex
+    min-h-screen
+    items-center
+    justify-center
+    bg-neutral-100
+    text-neutral-950
+    dark:bg-neutral-900
+    dark:text-neutral-100;
 }
 
 .exam-page-loading-message {
-    @apply rounded-2xl bg-white px-5 py-4 shadow-sm;
+    @apply 
+    rounded-2xl
+    px-5
+    py-4
+    shadow-sm
+    bg-white
+    dark:bg-neutral-800;
 }
 
 .exam-page-error-message {
-    @apply rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-800;
+    @apply 
+    rounded-2xl
+    border
+    px-5
+    py-4
+    border-red-200
+    bg-red-50
+    text-red-800
+    dark:border-red-800
+    dark:bg-red-950
+    dark:text-red-200;
 }
 
 .exam-page-main {
-    @apply mx-auto flex w-full max-w-5xl flex-1 items-start px-4 py-6;
+    @apply 
+    mx-auto
+    flex
+    w-full
+    max-w-5xl
+    flex-1
+    items-start
+    px-4
+    py-6;
 }
 
 .exam-page-content {
-    @apply mx-auto w-full max-w-4xl pb-24;
+    @apply 
+    mx-auto
+    w-full
+    max-w-4xl
+    pb-24;
 }
 
 .exam-page-empty {
-    @apply rounded-2xl border border-neutral-300 bg-white p-6 shadow-sm;
+    @apply 
+    rounded-2xl
+    border
+    p-6
+    shadow-sm
+    border-neutral-300
+    bg-white
+    dark:border-neutral-700
+    dark:bg-neutral-800;
 }
