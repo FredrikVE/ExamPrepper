@@ -2,7 +2,9 @@
 .exam-footer {
     position: relative;
     z-index: 4;
-    width: min(100% - 64px, 860px);
+    width: 70%;
+    max-width: 70%;
+    min-width: 0;
     margin: 16px auto 28px;
     border: 1px solid var(--line);
     border-radius: 18px;
@@ -18,7 +20,7 @@
 
 .exam-footer-container {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 18px;
     padding: 14px 16px;
@@ -36,6 +38,7 @@
     padding: 0 17px;
     font-size: 0.92rem;
     font-weight: 800;
+    white-space: nowrap;
     transition: transform 160ms ease, opacity 160ms ease, box-shadow 160ms ease;
 }
 
@@ -68,28 +71,36 @@
 .exam-footer-icon {
     width: 17px;
     height: 17px;
+    flex: 0 0 auto;
 }
 
 .exam-footer-counter {
     display: grid;
-    justify-items: center;
+    width: 100%;
+    min-width: 0;
+    justify-items: stretch;
     gap: 6px;
     color: var(--text-muted);
     font-size: 0.82rem;
     font-weight: 700;
+    overflow: hidden;
 }
 
 .exam-footer-dots {
     display: flex;
-    max-width: 360px;
+    width: 100%;
+    min-width: 0;
     flex-wrap: nowrap;
-    justify-content: center;
-    gap: 7px;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(2px, 0.35vw, 8px);
+    overflow: hidden;
 }
 
 .exam-footer-dot {
-    width: 7px;
-    height: 7px;
+    flex: 0 0 auto;
+    width: clamp(5px, 0.45vw, 8px);
+    height: clamp(5px, 0.45vw, 8px);
     border: 0;
     border-radius: 999px;
     background: rgba(126, 139, 160, 0.28);
@@ -107,17 +118,16 @@
 }
 
 .exam-footer-counter-label {
+    justify-self: center;
     line-height: 1;
 }
 
-@media (max-width: 920px) {
-    .exam-footer {
-        width: calc(100% - 32px);
-        margin-bottom: 18px;
-    }
-}
-
-@media (max-width: 700px) {
+/*
+   Når 70%-footeren blir for smal for:
+   [Forrige] + [alle prikkene] + [Neste],
+   flytter vi prikkene til egen rad.
+*/
+@media (max-width: 1180px) {
     .exam-footer-container {
         grid-template-columns: 1fr 1fr;
     }
@@ -133,7 +143,32 @@
     }
 
     .exam-footer-dots {
-        max-width: 260px;
-        gap: 6px;
+        width: min(100%, 520px);
+    }
+}
+
+@media (max-width: 920px) {
+    .exam-footer {
+        width: calc(100% - 32px);
+        max-width: none;
+        margin-bottom: 18px;
+    }
+}
+
+@media (max-width: 700px) {
+    .exam-footer-container {
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .exam-footer-dots {
+        width: min(100%, 320px);
+        max-width: 320px;
+        gap: 5px;
+    }
+
+    .exam-footer-button {
+        min-height: 44px;
+        padding: 0 14px;
     }
 }

@@ -183,7 +183,9 @@
 }
 
 .exam-page-content {
-    width: min(100%, 860px);
+    width: 70%;
+    max-width: 70%;
+    min-width: 0;
 }
 
 .exam-page-empty {
@@ -195,7 +197,9 @@
 }
 
 .exam-progress {
-    width: min(100% - 64px, 860px);
+    width: 70%;
+    max-width: 70%;
+    min-width: 0;
     margin: 0 auto 6px;
     padding: 6px 0 0;
 }
@@ -297,7 +301,9 @@
         padding: 18px 16px;
     }
 
+    .exam-page-content,
     .exam-progress {
         width: calc(100% - 32px);
+        max-width: none;
     }
 }
