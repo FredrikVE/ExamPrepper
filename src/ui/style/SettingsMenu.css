@@ -1,0 +1,64 @@
+/* src/ui/style/SettingsMenu.css */
+.settings-menu-trigger {
+    @apply flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700;
+}
+
+.settings-menu-trigger-icon {
+    @apply h-5 w-5;
+}
+
+.settings-overlay {
+    @apply fixed inset-0 z-40 bg-black/20 transition-opacity;
+}
+
+.settings-panel {
+    @apply fixed left-0 top-0 z-50 flex h-full w-72 -translate-x-full flex-col bg-white shadow-xl transition-transform duration-200 ease-in-out;
+}
+
+.settings-panel-open {
+    @apply translate-x-0;
+}
+
+.settings-panel-header {
+    @apply flex items-center justify-between border-b border-neutral-200 px-5 py-4;
+}
+
+.settings-panel-title {
+    @apply text-lg font-bold tracking-tight;
+}
+
+.settings-panel-close {
+    @apply flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700;
+}
+
+.settings-panel-close-icon {
+    @apply h-5 w-5;
+}
+
+.settings-panel-content {
+    @apply flex-1 overflow-y-auto px-5 py-5;
+}
+
+.settings-section {
+    @apply space-y-3;
+}
+
+.settings-section-label {
+    @apply flex items-center gap-2 text-sm font-semibold text-neutral-700;
+}
+
+.settings-section-icon {
+    @apply h-4 w-4;
+}
+
+.settings-language-options {
+    @apply flex gap-2;
+}
+
+.settings-language-button {
+    @apply rounded-xl border border-neutral-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50;
+}
+
+.settings-language-button-active {
+    @apply border-neutral-950 bg-neutral-950 text-white hover:bg-neutral-800;
+}

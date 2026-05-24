@@ -1,7 +1,10 @@
 //src/ui/view/components/Header/SubmittedActions.jsx
 import { Eye, EyeOff, RotateCcw } from "lucide-react";
+import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function SubmittedActions({ showAllFeedback, onToggleFeedback, onResetExam }) {
+    const { t } = useLanguage();
+
     return (
         <>
             <button
@@ -14,7 +17,7 @@ export default function SubmittedActions({ showAllFeedback, onToggleFeedback, on
                     <Eye className="exam-header-icon" />
                 )}
 
-                {showAllFeedback ? "Skjul fasit" : "Vis fasit"}
+                {showAllFeedback ? t.headerHideFeedback : t.headerShowFeedback}
             </button>
 
             <button
@@ -22,7 +25,7 @@ export default function SubmittedActions({ showAllFeedback, onToggleFeedback, on
                 className="exam-header-button exam-header-button-primary"
             >
                 <RotateCcw className="exam-header-icon" />
-                Ny runde
+                {t.headerResetButton}
             </button>
         </>
     );

@@ -5,10 +5,19 @@ import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import { NAV_SCREENS } from "./navigation/navGraph.js";
 import { getExamQuestionsUseCase, getAvailableExamsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase } from "./di/dependencies.js";
+import { LanguageProvider } from "./i18n/LanguageContext.jsx";
 
 import "./ui/style/Global.css";
 
 export default function App() {
+    return (
+        <LanguageProvider>
+            <AppContent />
+        </LanguageProvider>
+    );
+}
+
+function AppContent() {
     const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SELECT);
     const [selectedExamId, setSelectedExamId] = useState(null);
 

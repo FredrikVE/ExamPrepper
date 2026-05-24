@@ -1,9 +1,17 @@
 //src/ui/view/pages/ExamSelectPage.jsx
 import { ClipboardList, ChevronRight, BookOpen } from "lucide-react";
+import { useLanguage } from "../../../i18n/LanguageContext.jsx";
+import SettingsMenu from "../components/Settings/SettingsMenu.jsx";
 
 export default function ExamSelectPage({ exams, onSelectExam }) {
+    const { t } = useLanguage();
+
     return (
         <div className="exam-select-page">
+            <div className="exam-select-settings">
+                <SettingsMenu />
+            </div>
+
             <div className="exam-select-container">
                 <header className="exam-select-header">
                     <div className="exam-select-icon-wrapper">
@@ -11,11 +19,11 @@ export default function ExamSelectPage({ exams, onSelectExam }) {
                     </div>
 
                     <h1 className="exam-select-title">
-                        IN5431 Eksamens-emulator
+                        {t.selectTitle}
                     </h1>
 
                     <p className="exam-select-subtitle">
-                        Velg en øveeksamen for å starte
+                        {t.selectSubtitle}
                     </p>
                 </header>
 
@@ -40,7 +48,7 @@ export default function ExamSelectPage({ exams, onSelectExam }) {
                                 </p>
 
                                 <span className="exam-select-card-meta">
-                                    {exam.questionCount} spørsmål
+                                    {t.selectQuestionCount(exam.questionCount)}
                                 </span>
                             </div>
 

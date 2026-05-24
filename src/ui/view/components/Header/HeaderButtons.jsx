@@ -1,7 +1,10 @@
-//src/ui/view/components/Header/SubmittedActions.jsx
+//src/ui/view/components/Header/HeaderButtons.jsx
 import SubmittedActions from "./SubmittedActions.jsx";
+import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function HeaderButtons({ viewModel }) {
+	const { t } = useLanguage();
+
 	if (viewModel.submitted) {
 		return (
 			<SubmittedActions
@@ -17,7 +20,7 @@ export default function HeaderButtons({ viewModel }) {
 			onClick={viewModel.submitExam}
 			className="exam-header-button exam-header-button-primary"
 		>
-			Lever nå
+			{t.headerSubmitButton}
 		</button>
 	);
 }

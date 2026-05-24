@@ -2,15 +2,17 @@
 import { AlertTriangle } from "lucide-react";
 import ResultBadge from "./ResultBadge.jsx";
 import FeedbackPanel from "./FeedbackPanel.jsx";
+import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, onSingleAnswer, onToggleMultiAnswer }) {
+    const { t } = useLanguage();
+
     return (
         <section className="question-card">
             <div className="question-card-header">
                 <div>
                     <div className="question-card-meta">
-                        Oppgave {question.id} · {question.points}p ·{" "}
-                        {getQuestionTypeLabel(question.type)}
+                        {t.questionMeta(question.id, question.points, getQuestionTypeLabel(question.type, t))}
                     </div>
 
                     <h3 className="question-card-title">
@@ -33,7 +35,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                         onChange={(event) =>
                             onSingleAnswer(question.id, event.target.value)
                         }
-                        placeholder="Skriv begrep her"
+                        placeholder={t.questionInputPlaceholder}
                         className="question-card-input"
                     />
                 )}
@@ -62,12 +64,11 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
 
                         <div>
                             <div className="question-card-warning-title">
-                                Feil svar
+                                {t.questionWrongTitle}
                             </div>
 
                             <p>
-                                Trykk «Vis fasit» øverst for forklaring og
-                                pensumhenvisning.
+                                {t.questionWrongHint}
                             </p>
                         </div>
                     </div>
@@ -131,10 +132,10 @@ function OptionList({ question, answer, submitted, onSingleAnswer, onToggleMulti
     );
 }
 
-function getQuestionTypeLabel(type) {
-    if (type === "fill") return "Fyll inn";
-    if (type === "multi") return "Flervalg";
-    return "Ett riktig svar";
+function getQuestionTypeLabel(type, t) {
+    if (type === "fill") return t.questionTypeFill;
+    if (type === "multi") return t.questionTypeMulti;
+    return t.questionTypeSingle;
 }
 
 function getOptionClassName({ showRight, showWrongSelection, isSelected }) {

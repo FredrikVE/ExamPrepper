@@ -2,13 +2,16 @@
 import Header from "../components/Header/Header.jsx";
 import QuestionCard from "../components/ExamPage/QuestionCard.jsx";
 import Footer from "../components/Footer/Footer.jsx";
+import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel, onBack }) {
+	const { t } = useLanguage();
+
 	if (viewModel.loading) {
 		return (
 			<div className="exam-page-state">
 				<p className="exam-page-loading-message">
-					Laster eksamen...
+					{t.loadingMessage}
 				</p>
 			</div>
 		);
@@ -18,7 +21,7 @@ export default function ExamPage({ viewModel, onBack }) {
 		return (
 			<div className="exam-page-state">
 				<p className="exam-page-error-message">
-					Feil: {viewModel.error}
+					{t.errorPrefix}: {viewModel.error}
 				</p>
 			</div>
 		);
@@ -42,10 +45,12 @@ export default function ExamPage({ viewModel, onBack }) {
 }
 
 function getPageContent(viewModel) {
+	const { t } = useLanguage();
+
 	if (!viewModel.currentQuestion) {
 		return (
 			<div className="exam-page-empty">
-				Ingen spørsmål funnet...
+				{t.emptyMessage}
 			</div>
 		);
 	}

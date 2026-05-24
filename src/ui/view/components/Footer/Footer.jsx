@@ -1,8 +1,11 @@
 //src/ui/view/components/Footer/Footer.jsx
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FooterNavigationButton from "./FooterNavigationButton.jsx";
+import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function ExamFooter({ viewModel }) {
+	const { t } = useLanguage();
+
 	return (
 		<footer className="exam-footer">
 			<div className="exam-footer-container">
@@ -12,7 +15,7 @@ export default function ExamFooter({ viewModel }) {
 					variant="previous"
 					icon={<ChevronLeft className="exam-footer-icon" />}
 				>
-					Previous
+					{t.footerPrevious}
 				</FooterNavigationButton>
 
 				<div className="exam-footer-counter">
@@ -25,7 +28,7 @@ export default function ExamFooter({ viewModel }) {
 					variant="next"
 					icon={<ChevronRight className="exam-footer-icon" />}
 				>
-					Next
+					{t.footerNext}
 				</FooterNavigationButton>
 			</div>
 		</footer>
