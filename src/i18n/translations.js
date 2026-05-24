@@ -37,6 +37,8 @@ export const translations = {
         // Footer
         footerPrevious: "Forrige",
         footerNext: "Neste",
+        footerQuestionNavigationLabel: "Hopp direkte til spørsmål",
+        footerGoToQuestion: (number) => `Gå til spørsmål ${number}`,
 
         // QuestionCard
         questionMeta: (id, points, typeLabel) => `Oppgave ${id} · ${points}p · ${typeLabel}`,
@@ -106,6 +108,8 @@ export const translations = {
         // Footer
         footerPrevious: "Previous",
         footerNext: "Next",
+        footerQuestionNavigationLabel: "Jump directly to a question",
+        footerGoToQuestion: (number) => `Go to question ${number}`,
 
         // QuestionCard
         questionMeta: (id, points, typeLabel) => `Question ${id} · ${points}p · ${typeLabel}`,

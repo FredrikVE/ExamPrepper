@@ -19,7 +19,7 @@ export default function ExamFooter({ viewModel }) {
                 </FooterNavigationButton>
 
                 <div className="exam-footer-counter">
-                    <QuestionDots viewModel={viewModel} />
+                    <QuestionDots viewModel={viewModel} t={t} />
                     <span className="exam-footer-counter-label">
                         {viewModel.questionProgressLabel}
                     </span>
@@ -38,20 +38,26 @@ export default function ExamFooter({ viewModel }) {
     );
 }
 
-function QuestionDots({ viewModel }) {
+function QuestionDots({ viewModel, t }) {
     return (
-        <div className="exam-footer-dots" aria-hidden="true">
-            {viewModel.visibleQuestions.map((question, index) => (
-                <button
-                    key={question.id}
-                    type="button"
-                    onClick={() => viewModel.goToQuestion(index)}
-                    className={`exam-footer-dot ${
-                        index === viewModel.currentQuestionIndex ? "exam-footer-dot-active" : ""
-                    }`}
-                    tabIndex={-1}
-                />
-            ))}
+        <div className="exam-footer-dots" role="navigation" aria-label={t.footerQuestionNavigationLabel}>
+            {viewModel.visibleQuestions.map((question, index) => {
+                const questionNumber = index + 1;
+                const isActive = index === viewModel.currentQuestionIndex;
+
+                return (
+                    <button
+                        key={question.id}
+                        type="button"
+                        onClick={() => viewModel.goToQuestion(index)}
+                        className={`exam-footer-dot ${isActive ? "exam-footer-dot-active" : ""}`}
+                        aria-current={isActive ? "step" : undefined}
+                        aria-label={t.footerGoToQuestion(questionNumber)}
+                        title={t.footerGoToQuestion(questionNumber)}
+                        data-question-number={questionNumber}
+                    />
+                );
+            })}
         </div>
     );
 }
