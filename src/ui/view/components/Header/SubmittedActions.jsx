@@ -8,6 +8,7 @@ export default function SubmittedActions({ showAllFeedback, onToggleFeedback, on
     return (
         <>
             <button
+                type="button"
                 onClick={onToggleFeedback}
                 className="exam-header-button exam-header-button-secondary"
             >
@@ -21,6 +22,7 @@ export default function SubmittedActions({ showAllFeedback, onToggleFeedback, on
             </button>
 
             <button
+                type="button"
                 onClick={onResetExam}
                 className="exam-header-button exam-header-button-primary"
             >

@@ -1,43 +1,104 @@
 //src/ui/view/components/ExamPage/QuestionCard.jsx
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Edit3, Info } from "lucide-react";
 import ResultBadge from "./ResultBadge.jsx";
 import FeedbackPanel from "./FeedbackPanel.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
+const FILL_MAX_LENGTH = 80;
+
 export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
+    const answerText = String(answer || "");
+    const hasInlineFillBlank = question.type === "fill" && /_{3,}/.test(question.prompt);
 
     return (
         <section className="question-card">
             <div className="question-card-header">
-                <div>
+                <div className="question-card-heading">
                     <div className="question-card-meta">
-                        {t.questionMeta(question.id, question.points, getQuestionTypeLabel(question.type, t))}
+                        <span className="question-card-number">{question.id}</span>
+                        <span>{t.questionMeta(question.id, question.points, getQuestionTypeLabel(question.type, t))}</span>
                     </div>
 
-                    <h3 className="question-card-title">
-                        {question.title}
-                    </h3>
+                    <div className="question-card-title-row">
+                        <h3 className="question-card-title">
+                            {question.title}
+                        </h3>
+                    </div>
                 </div>
 
-                {submitted && <ResultBadge correct={correct} />}
+                {submitted ? (
+                    <ResultBadge correct={correct} />
+                ) : null}
             </div>
 
             <div className="question-card-body">
-                <p className="question-card-prompt">
-                    {question.prompt}
-                </p>
+                <div className="question-card-divider" />
 
-                {question.type === "fill" && (
-                    <input
-                        disabled={submitted}
-                        value={answer || ""}
-                        onChange={(event) =>
-                            onSingleAnswer(question.id, event.target.value)
-                        }
-                        placeholder={t.questionInputPlaceholder}
-                        className="question-card-input"
-                    />
+                {hasInlineFillBlank ? (
+                    <div className="question-card-inline-answer-block">
+                        <p className="question-card-prompt question-card-prompt-inline">
+                            <PromptWithInlineAnswer
+                                question={question}
+                                answerText={answerText}
+                                submitted={submitted}
+                                onSingleAnswer={onSingleAnswer}
+                                t={t}
+                            />
+                        </p>
+
+                        <div className="question-card-input-meta question-card-inline-input-meta">
+                            <span className="question-card-input-rule">
+                                <Info />
+                                {t.questionInputRule}
+                            </span>
+
+                            <span className="question-card-character-count">
+                                {t.questionCharacterCount(answerText.length, FILL_MAX_LENGTH)}
+                            </span>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="question-card-prompt">
+                        {question.prompt}
+                    </p>
+                )}
+
+                {question.type === "fill" && !hasInlineFillBlank && (
+                    <div className="question-card-answer-block">
+                        <label className="question-card-answer-label" htmlFor={`question-${question.id}-answer`}>
+                            {t.questionAnswerLabel}
+                        </label>
+
+                        <div className="question-card-input-wrap">
+                            <input
+                                id={`question-${question.id}-answer`}
+                                disabled={submitted}
+                                value={answerText}
+                                maxLength={FILL_MAX_LENGTH}
+                                onChange={(event) =>
+                                    onSingleAnswer(question.id, event.target.value)
+                                }
+                                placeholder={t.questionInputPlaceholder}
+                                className="question-card-input"
+                            />
+                            <span className="question-card-input-icon" aria-hidden="true">
+                                <Edit3 />
+                            </span>
+                        </div>
+
+                        <div className="question-card-input-meta">
+                            <span className="question-card-input-rule">
+                                <Info />
+                                {t.questionInputRule}
+                            </span>
+
+                            <span className="question-card-character-count">
+                                {t.questionCharacterCount(answerText.length, FILL_MAX_LENGTH)}
+                            </span>
+                        </div>
+
+                    </div>
                 )}
 
                 {question.type === "single" && (
@@ -84,6 +145,36 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
             </div>
         </section>
     );
+}
+
+
+function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswer, t }) {
+    const parts = question.prompt.split(/(_{3,})/g);
+    let renderedInput = false;
+
+    return parts.map((part, index) => {
+        if (/^_{3,}$/.test(part) && !renderedInput) {
+            renderedInput = true;
+
+            return (
+                <input
+                    key={`blank-${index}`}
+                    id={`question-${question.id}-answer`}
+                    aria-label={t.questionAnswerLabel}
+                    disabled={submitted}
+                    value={answerText}
+                    maxLength={FILL_MAX_LENGTH}
+                    onChange={(event) =>
+                        onSingleAnswer(question.id, event.target.value)
+                    }
+                    placeholder={t.questionInputPlaceholder}
+                    className="question-card-inline-input"
+                />
+            );
+        }
+
+        return <span key={`text-${index}`}>{part}</span>;
+    });
 }
 
 function OptionList({ question, answer, submitted, onSingleAnswer, onToggleMultiAnswer }) {
