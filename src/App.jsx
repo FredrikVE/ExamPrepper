@@ -5,7 +5,7 @@ import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import { NAV_SCREENS } from "./navigation/navGraph.js";
 import { getExamQuestionsUseCase, getAvailableExamsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase } from "./di/dependencies.js";
-import { LanguageProvider } from "./i18n/LanguageContext.jsx";
+import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
 
 import "./ui/style/Global.css";
 
@@ -20,6 +20,7 @@ export default function App() {
 function AppContent() {
     const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SELECT);
     const [selectedExamId, setSelectedExamId] = useState(null);
+    const { language } = useLanguage();
 
     const handleSelectExam = useCallback((examId) => {
         setSelectedExamId(examId);
@@ -32,7 +33,7 @@ function AppContent() {
     }, []);
 
     if (activeScreen === NAV_SCREENS.SELECT) {
-        const exams = getAvailableExamsUseCase.execute();
+        const exams = getAvailableExamsUseCase.execute(language);
 
         return (
             <ExamSelectPage

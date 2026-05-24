@@ -1,10 +1,10 @@
 //src/model/domain/GetAvailableExamsUseCase.js
 export default class GetAvailableExamsUseCase {
-    constructor(examRepository) {
-        this.examRepository = examRepository;
+    constructor(repository) {
+        this.repository = repository;
     }
 
-    execute() {
-        return this.examRepository.getAvailableExams();
+    execute(lang) {
+        return this.repository.getAvailableExams(lang);
     }
 }
