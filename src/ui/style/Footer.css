@@ -84,12 +84,12 @@
     max-width: 360px;
     flex-wrap: nowrap;
     justify-content: center;
-    gap: 9px;
+    gap: 7px;
 }
 
 .exam-footer-dot {
-    width: 9px;
-    height: 9px;
+    width: 7px;
+    height: 7px;
     border: 0;
     border-radius: 999px;
     background: rgba(126, 139, 160, 0.28);

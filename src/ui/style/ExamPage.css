@@ -45,7 +45,7 @@
 .exam-shell {
     position: relative;
     display: grid;
-    grid-template-columns: 136px minmax(0, 1fr);
+    grid-template-columns: 172px minmax(0, 1fr);
     min-height: calc(100vh - 44px);
     overflow: hidden;
     border: 1px solid var(--line);
@@ -87,12 +87,11 @@
     min-height: 100%;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
     overflow: hidden;
     border-right: 1px solid var(--line);
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.84) 62%, rgba(206, 234, 255, 0.86) 100%);
-    padding: 28px 16px;
+    padding: 28px 18px;
 }
 
 .dark .exam-sidebar {
@@ -123,12 +122,6 @@
     filter: saturate(0.9) brightness(0.65);
 }
 
-.exam-sidebar-menu {
-    position: relative;
-    z-index: 2;
-    align-self: flex-start;
-}
-
 .exam-sidebar-nav {
     position: relative;
     z-index: 2;
@@ -136,6 +129,7 @@
     width: 100%;
     flex-direction: column;
     gap: 12px;
+    margin-top: 0;
 }
 
 .exam-sidebar-item {

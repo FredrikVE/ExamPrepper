@@ -1,32 +1,4 @@
 /* src/ui/style/SettingsMenu.css */
-.settings-menu-trigger {
-    display: grid;
-    width: 56px;
-    height: 56px;
-    place-items: center;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: color-mix(in srgb, var(--panel-strong) 68%, transparent);
-    color: var(--text-main);
-    transition: transform 160ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
-}
-
-.settings-menu-trigger[aria-expanded="true"] {
-    border-color: color-mix(in srgb, var(--accent) 44%, var(--line));
-    background: var(--accent-soft);
-    color: var(--accent);
-}
-
-.settings-menu-trigger:hover {
-    transform: translateY(-1px);
-    background: var(--panel-strong);
-}
-
-.settings-menu-trigger-icon {
-    width: 24px;
-    height: 24px;
-}
-
 .settings-overlay {
     position: fixed;
     inset: 0;

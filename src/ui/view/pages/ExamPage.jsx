@@ -1,4 +1,5 @@
 // src/ui/view/pages/ExamPage.jsx
+import { useState } from "react";
 import { BookOpen, Flag, Grid2X2, PencilLine, Settings } from "lucide-react";
 import Header from "../components/Header/Header.jsx";
 import QuestionCard from "../components/ExamPage/QuestionCard.jsx";
@@ -8,6 +9,7 @@ import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel, onBack }) {
     const { t } = useLanguage();
+    const [settingsOpen, setSettingsOpen] = useState(false);
 
     if (viewModel.loading) {
         return (
@@ -34,7 +36,11 @@ export default function ExamPage({ viewModel, onBack }) {
     return (
         <div className="exam-page">
             <div className="exam-shell">
-                <ExamSidebar t={t} />
+                <ExamSidebar
+                    t={t}
+                    settingsOpen={settingsOpen}
+                    onOpenSettings={() => setSettingsOpen(true)}
+                />
 
                 <div className="exam-workspace">
                     <Header viewModel={viewModel} onBack={onBack} />
@@ -49,31 +55,42 @@ export default function ExamPage({ viewModel, onBack }) {
 
                     <Footer viewModel={viewModel} />
                 </div>
+
+                <SettingsMenu
+                    isOpen={settingsOpen}
+                    onOpenChange={setSettingsOpen}
+                />
             </div>
         </div>
     );
 }
 
-function ExamSidebar({ t }) {
+function ExamSidebar({ t, settingsOpen, onOpenSettings }) {
     const items = [
-        { label: t.sidebarTask, icon: BookOpen, active: true },
+        { label: t.sidebarTask, icon: BookOpen, active: !settingsOpen },
         { label: t.sidebarOverview, icon: Grid2X2 },
         { label: t.sidebarNotes, icon: PencilLine },
-        { label: t.sidebarSettings, icon: Settings }
+        {
+            label: t.sidebarSettings,
+            icon: Settings,
+            active: settingsOpen,
+            onClick: onOpenSettings,
+            ariaControls: "settings-panel",
+            ariaExpanded: settingsOpen
+        }
     ];
 
     return (
         <aside className="exam-sidebar" aria-label={t.sidebarLabel}>
-            <div className="exam-sidebar-menu">
-                <SettingsMenu />
-            </div>
-
             <nav className="exam-sidebar-nav">
-                {items.map(({ label, icon: Icon, active }) => (
+                {items.map(({ label, icon: Icon, active, onClick, ariaControls, ariaExpanded }) => (
                     <button
                         key={label}
                         type="button"
+                        onClick={onClick}
                         className={`exam-sidebar-item ${active ? "exam-sidebar-item-active" : ""}`}
+                        aria-controls={ariaControls}
+                        aria-expanded={ariaExpanded}
                     >
                         <Icon className="exam-sidebar-icon" />
                         <span>{label}</span>
