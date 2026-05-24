@@ -4,7 +4,7 @@
     inset: 0;
     z-index: 900;
     background: rgba(2, 8, 19, 0.38);
-    backdrop-filter: blur(4px);
+    backdrop-filter: var(--blur-overlay);
 }
 
 .settings-panel {
@@ -20,14 +20,13 @@
     flex-direction: column;
     overflow: hidden;
     border: 1px solid var(--line);
-    border-radius: 24px;
+    border-radius: var(--radius-xl);
     background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
     box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
     transition: transform 200ms ease-in-out;
 }
 
 .dark .settings-panel {
-    background: color-mix(in srgb, var(--panel-strong) 94%, #020813);
     box-shadow: 0 28px 90px rgba(0, 0, 0, 0.52);
 }
 
@@ -56,7 +55,7 @@
     height: 38px;
     place-items: center;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     background: transparent;
     color: var(--text-muted);
 }
@@ -117,13 +116,13 @@
 .settings-language-button {
     min-width: 96px;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     background: transparent;
     color: var(--text-muted);
     padding: 10px 14px;
     font-size: 0.92rem;
     font-weight: 750;
-    transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .settings-language-button:hover {
@@ -147,10 +146,10 @@
     width: 52px;
     height: 30px;
     border: 0;
-    border-radius: 999px;
-    background: rgba(126, 139, 160, 0.35);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-soft) 35%, transparent);
     padding: 0;
-    transition: background 160ms ease;
+    transition: background var(--transition-fast);
 }
 
 .dark .settings-toggle-track {
@@ -163,16 +162,15 @@
     left: 4px;
     width: 22px;
     height: 22px;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     background: white;
     box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
-    transition: transform 160ms ease;
+    transition: transform var(--transition-fast);
 }
 
 .settings-toggle-thumb-on {
     transform: translateX(22px);
 }
-
 
 @media (max-width: 640px) {
     .settings-panel {

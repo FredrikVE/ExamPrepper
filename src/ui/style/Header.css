@@ -24,7 +24,6 @@
     gap: 18px;
 }
 
-
 .exam-header-label {
     display: flex;
     align-items: center;
@@ -68,14 +67,14 @@
     align-items: center;
     gap: 8px;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     background: color-mix(in srgb, var(--panel-strong) 80%, transparent);
     box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
     padding: 10px 12px;
 }
 
 .dark .exam-header-stat-card {
-    background: rgba(4, 14, 29, 0.62);
+    background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
 }
 
@@ -85,7 +84,7 @@
     height: 28px;
     place-items: center;
     border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     color: var(--accent);
     background: var(--accent-soft);
 }
@@ -117,11 +116,11 @@
     justify-content: center;
     gap: 8px;
     border: 0;
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
     padding: 0 18px;
     font-size: 0.94rem;
     font-weight: 800;
-    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
 }
 
 .exam-header-button:hover {
@@ -130,13 +129,8 @@
 
 .exam-header-button-primary {
     color: white;
-    background: linear-gradient(135deg, #14c7a2 0%, #07966f 100%);
-    box-shadow: 0 14px 28px rgba(7, 150, 111, 0.24);
-}
-
-.dark .exam-header-button-primary {
-    background: linear-gradient(135deg, #20d5b0 0%, #059669 100%);
-    box-shadow: 0 14px 28px rgba(5, 150, 105, 0.24);
+    background: linear-gradient(135deg, var(--success) 0%, var(--success-text) 100%);
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
 }
 
 .exam-header-button-secondary {
@@ -151,10 +145,10 @@
     height: 30px;
     place-items: center;
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: var(--radius-xs);
     color: var(--text-muted);
     background: color-mix(in srgb, var(--panel-strong) 68%, transparent);
-    transition: color 160ms ease, background 160ms ease;
+    transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .exam-header-back-button:hover {
@@ -171,7 +165,6 @@
         align-items: flex-start;
         flex-direction: column;
     }
-
 
     .exam-header-actions {
         width: 100%;
