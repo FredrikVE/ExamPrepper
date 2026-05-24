@@ -2,8 +2,8 @@
 .exam-footer {
     position: relative;
     z-index: 4;
-    width: 70%;
-    max-width: 70%;
+    width: var(--exam-content-width);
+    max-width: var(--exam-content-max-width);
     min-width: 0;
     margin: 16px auto 28px;
     border: 1px solid var(--line);
@@ -143,14 +143,14 @@
     }
 
     .exam-footer-dots {
-        width: min(100%, 520px);
+        width: 100%;
     }
 }
 
 @media (max-width: 920px) {
     .exam-footer {
-        width: calc(100% - 32px);
-        max-width: none;
+        width: var(--exam-content-width);
+        max-width: var(--exam-content-max-width);
         margin-bottom: 18px;
     }
 }
@@ -162,8 +162,7 @@
     }
 
     .exam-footer-dots {
-        width: min(100%, 320px);
-        max-width: 320px;
+        width: 100%;
         gap: 5px;
     }
 
