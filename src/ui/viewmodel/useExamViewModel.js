@@ -8,7 +8,6 @@ import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggle
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
 export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId) {
-	
 	//Statevariabler
 	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
@@ -18,8 +17,9 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	const [error, setError] = useState(null);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
+	const [expandedAnswerOptionByQuestionId, setExpandedAnswerOptionByQuestionId] = useState({});
 
-	//Usememo for data
+	//UseMemo for data
 	const result = useMemo(() => {
 		return calculateExamScoreUseCase.execute(questions, answers);
 	}, [questions, answers, calculateExamScoreUseCase]);
@@ -41,6 +41,10 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	const questionCount = questions.length;
 
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
+
+	const expandedAnswerOptionIndex = currentQuestion
+		? expandedAnswerOptionByQuestionId[currentQuestion.id] ?? null
+		: null;
 
 	const canGoPrevious = currentQuestionIndex > 0;
 	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
@@ -99,7 +103,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		setCurrentQuestionIndex(index);
 	}, [visibleQuestionCount]);
 
-	// Handlefunksjoner for svar
+	//Handlefunksjoner for svar
 	const setSingleAnswer = useCallback((questionId, value) => {
 		if (submitted) {
 			return;
@@ -134,6 +138,24 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		});
 	}, [submitted]);
 
+	//Handlefunksjon for åpne/lukke svarkort
+	const toggleAnswerOptionExpanded = useCallback((questionId, optionIndex) => {
+		setExpandedAnswerOptionByQuestionId((previous) => {
+			const currentExpandedIndex = previous[questionId];
+
+			if (currentExpandedIndex === optionIndex) {
+				const next = { ...previous };
+				delete next[questionId];
+				return next;
+			}
+
+			return {
+				...previous,
+				[questionId]: optionIndex
+			};
+		});
+	}, []);
+
 	//Handler for eksamen
 	const submitExam = useCallback(() => {
 		setSubmitted(true);
@@ -145,6 +167,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		setShowAllFeedback(true);
 		setCurrentQuestionIndex(0);
 		setElapsedSeconds(0);
+		setExpandedAnswerOptionByQuestionId({});
 
 		window.scrollTo({
 			top: 0,
@@ -173,6 +196,12 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 
 				if (!cancelled) {
 					setQuestions(result);
+					setAnswers({});
+					setSubmitted(false);
+					setShowAllFeedback(true);
+					setCurrentQuestionIndex(0);
+					setElapsedSeconds(0);
+					setExpandedAnswerOptionByQuestionId({});
 				}
 			}
 
@@ -209,9 +238,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 	}, [visibleQuestionCount, currentQuestionIndex]);
 
 	useEffect(loadQuestions, [loadQuestions]);
-	useEffect(onVisibleQuestionsChangedClampCurrentIndex, [
-		onVisibleQuestionsChangedClampCurrentIndex
-	]);
+	useEffect(onVisibleQuestionsChangedClampCurrentIndex, [onVisibleQuestionsChangedClampCurrentIndex]);
 
 	useEffect(() => {
 		if (submitted) {
@@ -248,6 +275,8 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 		feedbackToggleLabel,
 		elapsedTimeLabel,
 
+		expandedAnswerOptionIndex,
+
 		canGoPrevious,
 		canGoNext,
 		previousQuestion,
@@ -256,6 +285,7 @@ export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUse
 
 		setSingleAnswer,
 		toggleMultiAnswer,
+		toggleAnswerOptionExpanded,
 		submitExam,
 		resetExam,
 		toggleShowAllFeedback,

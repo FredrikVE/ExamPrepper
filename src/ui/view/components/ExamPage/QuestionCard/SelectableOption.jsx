@@ -3,15 +3,8 @@ import { QUESTION_TYPES } from "../../../../../constants/QuestionTypes.js";
 import getOptionLetter from "../../../../../utils/answerutils/getOptionLetter.js";
 import { getSelectableOptionClassName } from "./questionCardClassNames.js";
 
-export default function SelectableOption({
-    question,
-    option,
-    index,
-    isSelected,
-    submitted,
-    onSingleAnswer,
-    onToggleMultiAnswer
-}) {
+export default function SelectableOption({ question, option, index, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
+    
     const inputType = question.type === QUESTION_TYPES.SINGLE ? "radio" : "checkbox";
 
     const handleChange = () => {

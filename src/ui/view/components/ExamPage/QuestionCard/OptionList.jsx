@@ -2,18 +2,10 @@
 import isOptionSelected from "../../../../../utils/answerutils/isOptionSelected.js";
 import AnswerOptionCard from "./AnswerOptionCard.jsx";
 import SelectableOption from "./SelectableOption.jsx";
-import { useExpandedOptions } from "./useExpandedOptions.js";
 
-export default function OptionList({
-    question,
-    answer,
-    feedbackMode,
-    submitted,
-    onSingleAnswer,
-    onToggleMultiAnswer,
-    t
-}) {
-    const { isExpanded, toggleExpanded } = useExpandedOptions(question.id);
+export default function OptionList({ question, answer, submitted, showAllFeedback, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, t }) {
+    const feedbackMode = submitted && showAllFeedback;
+
     const listClassName = feedbackMode
         ? "question-card-option-list question-card-answer-card-list"
         : "question-card-option-list";
@@ -31,8 +23,8 @@ export default function OptionList({
                             option={option}
                             index={index}
                             isSelected={selected}
-                            isExpanded={isExpanded(index)}
-                            onToggleExpanded={() => toggleExpanded(index)}
+                            isExpanded={expandedAnswerOptionIndex === index}
+                            onToggleExpanded={() => onToggleAnswerOptionExpanded(question.id, index)}
                             t={t}
                         />
                     );

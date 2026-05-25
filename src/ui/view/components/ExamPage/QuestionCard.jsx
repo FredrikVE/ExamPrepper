@@ -8,18 +8,15 @@ import PromptSection from "./QuestionCard/PromptSection.jsx";
 import QuestionFeedback from "./QuestionCard/QuestionFeedback.jsx";
 import QuestionHeader from "./QuestionCard/QuestionHeader.jsx";
 
-export default function QuestionCard({
-    question,
-    answer,
-    submitted,
-    showAllFeedback,
-    correct,
-    onSingleAnswer,
-    onToggleMultiAnswer
-}) {
+export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
     const answerText = String(answer ?? "");
-    const viewState = getQuestionViewState({ question, submitted, showAllFeedback, correct });
+    const viewState = getQuestionViewState({
+        question,
+        submitted,
+        showAllFeedback,
+        correct
+    });
 
     return (
         <section className="question-card">
@@ -56,11 +53,12 @@ export default function QuestionCard({
                     <OptionList
                         question={question}
                         answer={answer}
-                        feedbackMode={viewState.feedbackMode}
                         submitted={submitted}
+                        showAllFeedback={showAllFeedback}
+                        expandedAnswerOptionIndex={expandedAnswerOptionIndex}
+                        onToggleAnswerOptionExpanded={onToggleAnswerOptionExpanded}
                         onSingleAnswer={onSingleAnswer}
                         onToggleMultiAnswer={onToggleMultiAnswer}
-                        t={t}
                     />
                 ) : null}
 

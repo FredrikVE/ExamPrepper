@@ -146,7 +146,7 @@ function ExamProgress({ viewModel }) {
     );
 }
 
-function getPageContent(viewModel, t) {
+const getPageContent = (viewModel, t) => {
     if (!viewModel.currentQuestion) {
         return (
             <div className="exam-page-empty">
@@ -162,6 +162,8 @@ function getPageContent(viewModel, t) {
             submitted={viewModel.submitted}
             showAllFeedback={viewModel.showAllFeedback}
             correct={viewModel.currentQuestionIsCorrect}
+            expandedAnswerOptionIndex={viewModel.expandedAnswerOptionIndex}
+            onToggleAnswerOptionExpanded={viewModel.toggleAnswerOptionExpanded}
             onSingleAnswer={viewModel.setSingleAnswer}
             onToggleMultiAnswer={viewModel.toggleMultiAnswer}
         />
