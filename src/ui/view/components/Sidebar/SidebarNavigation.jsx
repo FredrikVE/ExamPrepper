@@ -1,5 +1,4 @@
-//src/ui/view/components/Sidebar/SidebarNavigation.jsx
-import { BarChart3, FileText, Home, PencilLine } from "lucide-react";
+import { BarChart3, Home, PencilLine } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function SidebarNavigation({ activeScreen, onChangeScreen, SCREENS }) {
@@ -7,7 +6,6 @@ export default function SidebarNavigation({ activeScreen, onChangeScreen, SCREEN
 
     const navItems = [
         { screen: SCREENS.SELECT, label: t.sidebarHome, icon: Home },
-        { screen: SCREENS.EXAM, label: t.sidebarTask, icon: FileText },
         { screen: SCREENS.OVERVIEW, label: t.sidebarOverview, icon: BarChart3 },
         { screen: SCREENS.NOTES, label: t.sidebarNotes, icon: PencilLine }
     ];
