@@ -95,14 +95,24 @@ IN5431-Exam-Emulator/
     │   │   ├── Tokens.css
     │   │   ├── Global.css
     │   │   ├── Responsive.css
-    │   │   ├── ExamPage/                     <-- Hver Page har hver sin mappe med CSS-styling-filer
+    │   │   ├── ExamPage/
+    │   │   │   └── ...
     │   │   ├── ExamSelectPage/
+    │   │   │   └── ...
     │   │   ├── Header/
+    │   │   │   └── ...
     │   │   ├── Footer/
-    │   │   ├── QuestionCard/                 <-- Hver subkomponent har sin mappe med CSS-filer
+    │   │   │   └── ...
+    │   │   ├── QuestionCard/
+    │   │   │   └── ...
     │   │   ├── FeedbackPanel/
+    │   │   │   └── ...
     │   │   ├── SettingsMenu/
+    │   │   │   └── ...
+    │   │   ├── Sidebar/
+    │   │   │   └── ...
     │   │   └── ResultBadge/
+    │   │       └── ...
     │   ├── theme/
     │   │   └── ThemeContext.jsx
     │   ├── view/
@@ -110,27 +120,58 @@ IN5431-Exam-Emulator/
     │   │   │   ├── ExamPage.jsx
     │   │   │   └── ExamSelectPage.jsx
     │   │   └── components/
-    │   │       ├── ExamPage/
-    │   │       │   ├── FeedbackPanel.jsx
-    │   │       │   ├── QuestionCard.jsx
-    │   │       │   ├── ResultBadge.jsx
-    │   │       │   └── QuestionCard/
-    │   │       │       ├── AnswerCard/
-    │   │       │       ├── Feedback/
-    │   │       │       ├── Header/
-    │   │       │       ├── InputField/
-    │   │       │       ├── Options/
-    │   │       │       ├── Prompt/
-    │   │       │       └── Styling/
-    │   │       ├── Footer/
+    │   │       ├── ExamSelectPage/
+    │   │       │   ├── ExamSelectCard.jsx
+    │   │       │   ├── ExamSelectGrid.jsx
+    │   │       │   ├── ExamSelectIntro.jsx
+    │   │       │   └── ExamSelectTopbar.jsx
+    │   │       ├── Sidebar/
+    │   │       │   ├── AppSidebar.jsx
+    │   │       │   ├── SidebarBrand.jsx
+    │   │       │   ├── SidebarCloseButton.jsx
+    │   │       │   ├── SidebarMenuButton.jsx
+    │   │       │   ├── SidebarNavigation.jsx
+    │   │       │   ├── SidebarSettingsButton.jsx
+    │   │       │   └── SidebarUserCard.jsx
     │   │       ├── Header/
-    │   │       └── Settings/
+    │   │       │   ├── Header.jsx
+    │   │       │   ├── HeaderActions.jsx
+    │   │       │   ├── HeaderButtons.jsx
+    │   │       │   ├── StatCard.jsx
+    │   │       │   └── SubmittedActions.jsx
+    │   │       ├── Footer/
+    │   │       │   ├── Footer.jsx
+    │   │       │   └── FooterNavigationButton.jsx
+    │   │       ├── Settings/
+    │   │       │   └── SettingsMenu.jsx
+    │   │       └── ExamPage/
+    │   │           ├── FeedbackPanel.jsx
+    │   │           ├── QuestionCard.jsx
+    │   │           ├── ResultBadge.jsx
+    │   │           └── QuestionCard/
+    │   │               ├── AnswerCard/
+    │   │               │   └── ...
+    │   │               ├── Feedback/
+    │   │               │   └── ...
+    │   │               ├── Header/
+    │   │               │   └── ...
+    │   │               ├── InputField/
+    │   │               │   └── ...
+    │   │               ├── Options/
+    │   │               │   └── ...
+    │   │               ├── Prompt/
+    │   │               │   └── ...
+    │   │               └── Styling/
+    │   │                   └── ...
     │   └── viewmodel/
     │       └── useExamViewModel.js
     └── utils/
         ├── answerutils/
+        │   └── ...
         ├── questionutils/
+        │   └── ...
         └── viewmodelutils/
+            └── ...
 ```
 
 ---
