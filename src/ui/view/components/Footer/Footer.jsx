@@ -1,13 +1,12 @@
-// src/ui/view/components/Footer/Footer.jsx
-import { ChevronLeft, ChevronRight, Send } from "lucide-react";
+//src/ui/view/components/Footer/Footer.jsx
 import FooterNavigationButton from "./FooterNavigationButton.jsx";
+import FooterActionButton from "./FooterActionButton.jsx";
 import QuestionDots from "./QuestionDots.jsx";
+import { ChevronLeft } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function ExamFooter({ viewModel }) {
     const { t } = useLanguage();
-    const isLastQuestion = !viewModel.canGoNext;
-    const showSubmitButton = isLastQuestion && !viewModel.submitted;
 
     return (
         <footer className="exam-footer">
@@ -28,25 +27,7 @@ export default function ExamFooter({ viewModel }) {
                     </span>
                 </div>
 
-                {showSubmitButton ? (
-                    <FooterNavigationButton
-                        onClick={viewModel.submitExam}
-                        disabled={false}
-                        variant="submit"
-                        icon={<Send className="exam-footer-icon" />}
-                    >
-                        {t.footerSubmit}
-                    </FooterNavigationButton>
-                ) : (
-                    <FooterNavigationButton
-                        onClick={viewModel.nextQuestion}
-                        disabled={!viewModel.canGoNext}
-                        variant="next"
-                        icon={<ChevronRight className="exam-footer-icon" />}
-                    >
-                        {t.footerNext}
-                    </FooterNavigationButton>
-                )}
+                <FooterActionButton viewModel={viewModel} t={t} />
             </div>
         </footer>
     );
