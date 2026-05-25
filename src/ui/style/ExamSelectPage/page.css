@@ -1,7 +1,8 @@
 /* src/ui/style/ExamSelectPage/page.css */
 .exam-select-page {
-    min-height: 100vh;
+    height: 100vh;
     padding: var(--space-6);
+    overflow: hidden;
     color: var(--text-main);
     background:
         radial-gradient(circle at 76% 5%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),

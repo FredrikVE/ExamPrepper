@@ -1,7 +1,8 @@
 /*src/ui/style/ExamPage/page.css*/
 .exam-page {
-    min-height: 100vh;
+    height: 100vh;
     padding: 16px;
+    overflow: hidden;
     color: var(--text-main);
     background:
         radial-gradient(circle at 76% 5%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
@@ -40,7 +41,7 @@
     display: grid;
     grid-template-columns: 320px minmax(0, 1fr);
     gap: 14px;
-    min-height: calc(100vh - 32px);
+    height: calc(100vh - 32px);
 }
 
 .exam-workspace {
@@ -48,9 +49,9 @@
     z-index: 1;
     display: flex;
     min-width: 0;
-    min-height: 100%;
+    height: 100%;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-lg);
     background: var(--shell-bg);
@@ -110,11 +111,11 @@
 
     .exam-shell {
         display: block;
-        min-height: 100vh;
+        height: 100vh;
     }
 
     .exam-workspace {
-        min-height: 100vh;
+        height: 100vh;
         border-radius: 0;
         border-inline: 0;
     }

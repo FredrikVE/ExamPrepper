@@ -1,7 +1,10 @@
+/*src/ui/style/Sidebar/app-sidebar.css*/
 .app-sidebar {
-    position: relative;
+    position: sticky;
+    top: 16px;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 32px);
     min-height: 0;
     overflow: hidden;
     border: 1px solid var(--line-strong);

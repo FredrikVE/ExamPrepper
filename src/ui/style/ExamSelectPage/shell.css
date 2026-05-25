@@ -2,6 +2,7 @@
 .exam-select-shell {
     display: grid;
     grid-template-columns: 320px minmax(0, 1fr);
+    align-items: start;
     gap: var(--space-5);
-    min-height: calc(100vh - 32px);
+    height: calc(100vh - 32px);
 }
