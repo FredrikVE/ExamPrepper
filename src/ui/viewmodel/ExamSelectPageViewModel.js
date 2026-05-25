@@ -1,47 +1,70 @@
 //src/ui/viewmodel/ExamSelectPageViewModel.js
+//src/ui/viewmodel/ExamSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamener";
+function normalizeExamResult(result) {
+    if (Array.isArray(result)) {
+        return result;
+    }
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam) {
-    // Statevariabler for eksamens-data, loading og error
+    if (Array.isArray(result?.exams)) {
+        return result.exams;
+    }
+
+    if (Array.isArray(result?.availableExams)) {
+        return result.availableExams;
+    }
+
+    return [];
+}
+
+export default function useExamSelectPageViewModel(
+    getAvailableExamsUseCase,
+    language,
+    t,
+    selectedSubject,
+    onSelectExam
+) {
     const [exams, setExams] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const subjectId = selectedSubject?.id ?? null;
 
-    // Henter eksamener for valgt fag og aktivt språk
     useEffect(() => {
+        if (!subjectId) {
+            setExams([]);
+            setLoading(false);
+            setError(null);
+            return;
+        }
+
         let cancelled = false;
 
         const fetchExams = async () => {
-            if (!subjectId) {
-                setExams([]);
-                setLoading(false);
-                return;
-            }
-
             try {
                 setLoading(true);
                 setError(null);
 
                 const result = await getAvailableExamsUseCase.execute({
-                    lang: language,
-                    subjectId
+                    subjectId,
+                    language
                 });
 
-                if (!cancelled) {
-                    setExams(result);
+                if (cancelled) {
+                    return;
                 }
-            }
+
+                setExams(normalizeExamResult(result));
+            } 
             catch (error) {
                 console.error("Feil ved henting av eksamener:", error);
 
                 if (!cancelled) {
-                    setError(error?.message ?? LOAD_ERROR_MESSAGE);
+                    setExams([]);
+                    setError(t.selectErrorMessage ?? "Kunne ikke laste inn eksamener.");
                 }
-            }
+            } 
             finally {
                 if (!cancelled) {
                     setLoading(false);
@@ -54,17 +77,18 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         return () => {
             cancelled = true;
         };
-    }, [getAvailableExamsUseCase, language, subjectId]);
+    }, [getAvailableExamsUseCase, subjectId, language, t]);
 
-    const examCount = exams.length;
-    const hasExams = examCount > 0;
-
-    const pageTitle = useMemo(() => {
+    const subtitle = useMemo(() => {
         if (!selectedSubject?.code) {
-            return t.selectTitle;
+            return t.selectSubtitleFallback ?? "Velg en øvingsprøve for å starte";
         }
 
-        return t.selectSubtitle(selectedSubject.code);
+        if (typeof t.selectSubtitle === "function") {
+            return t.selectSubtitle(selectedSubject.code);
+        }
+
+        return `Velg en øvingsprøve for ${selectedSubject.code}`;
     }, [selectedSubject, t]);
 
     const selectExam = useCallback((examId) => {
@@ -75,12 +99,18 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         // Data
         exams,
         selectedSubject,
-        examCount,
-        hasExams,
-        pageTitle,
         loading,
         error,
+
+        // Tekster
         t,
+        title: t.selectTitle ?? "Eksamens-emulator",
+        introTitle: t.selectIntroTitle ?? "Velg eksamen",
+        subtitle,
+
+        // Derived UI-state
+        hasExams: exams.length > 0,
+        examCount: exams.length,
 
         // Handlers
         selectExam
