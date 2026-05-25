@@ -1,3 +1,4 @@
+// src/ui/view/components/ExamPage/QuestionCard/QuestionFeedback.jsx
 import { AlertTriangle, BookOpen } from "lucide-react";
 
 export default function QuestionFeedback({ question, t, shouldShowWarning, shouldShowSource }) {

@@ -1,3 +1,4 @@
+// src/ui/view/components/ExamPage/QuestionCard/PromptSection.jsx
 import InputMeta from "./InputMeta.jsx";
 import PromptWithInlineAnswer from "./PromptWithInlineAnswer.jsx";
 

@@ -1,16 +1,25 @@
+// src/ui/view/components/ExamPage/QuestionCard.jsx
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
+import { getQuestionViewState } from "../../../../utils/questionutils/questionViewStateUtils.js";
 import FeedbackPanel from "./FeedbackPanel.jsx";
 import FillAnswerInput from "./QuestionCard/FillAnswerInput.jsx";
 import OptionList from "./QuestionCard/OptionList.jsx";
 import PromptSection from "./QuestionCard/PromptSection.jsx";
 import QuestionFeedback from "./QuestionCard/QuestionFeedback.jsx";
 import QuestionHeader from "./QuestionCard/QuestionHeader.jsx";
-import { getQuestionViewState } from "./QuestionCard/questionCardUtils.js";
 
-export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, onSingleAnswer, onToggleMultiAnswer }) {
+export default function QuestionCard({
+    question,
+    answer,
+    submitted,
+    showAllFeedback,
+    correct,
+    onSingleAnswer,
+    onToggleMultiAnswer
+}) {
     const { t } = useLanguage();
-    const viewState = getQuestionViewState({ question, submitted, showAllFeedback, correct });
     const answerText = String(answer ?? "");
+    const viewState = getQuestionViewState({ question, submitted, showAllFeedback, correct });
 
     return (
         <section className="question-card">
@@ -33,7 +42,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                     t={t}
                 />
 
-                {viewState.shouldShowFillInput && (
+                {viewState.shouldShowFillInput ? (
                     <FillAnswerInput
                         question={question}
                         answerText={answerText}
@@ -41,9 +50,9 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                         onSingleAnswer={onSingleAnswer}
                         t={t}
                     />
-                )}
+                ) : null}
 
-                {viewState.shouldShowOptions && (
+                {viewState.shouldShowOptions ? (
                     <OptionList
                         question={question}
                         answer={answer}
@@ -53,7 +62,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                         onToggleMultiAnswer={onToggleMultiAnswer}
                         t={t}
                     />
-                )}
+                ) : null}
 
                 <QuestionFeedback
                     question={question}
@@ -62,13 +71,13 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                     shouldShowSource={viewState.shouldShowSource}
                 />
 
-                {viewState.shouldShowFillFeedback && (
+                {viewState.shouldShowFillFeedback ? (
                     <FeedbackPanel
                         question={question}
                         selected={answer}
                         correct={correct}
                     />
-                )}
+                ) : null}
             </div>
         </section>
     );

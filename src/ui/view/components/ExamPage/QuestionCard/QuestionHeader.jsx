@@ -1,5 +1,6 @@
+// src/ui/view/components/ExamPage/QuestionCard/QuestionHeader.jsx
+import { QUESTION_TYPES } from "../../../../../constants/QuestionTypes.js";
 import ResultBadge from "../ResultBadge.jsx";
-import { getQuestionTypeLabel } from "./questionCardUtils.js";
 
 export default function QuestionHeader({ question, submitted, correct, t }) {
     return (
@@ -26,4 +27,10 @@ export default function QuestionHeader({ question, submitted, correct, t }) {
             {submitted ? <ResultBadge correct={correct} /> : null}
         </div>
     );
+}
+
+function getQuestionTypeLabel(type, t) {
+    if (type === QUESTION_TYPES.FILL) return t.questionTypeFill;
+    if (type === QUESTION_TYPES.MULTI) return t.questionTypeMulti;
+    return t.questionTypeSingle;
 }

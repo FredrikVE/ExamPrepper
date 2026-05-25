@@ -1,11 +1,13 @@
-import { FILL_MAX_LENGTH, INLINE_FILL_BLANK_PATTERN, INLINE_FILL_SPLIT_PATTERN } from "./constants.js";
+// src/ui/view/components/ExamPage/QuestionCard/PromptWithInlineAnswer.jsx
+import { QUESTION_CONFIG } from "../../../../../constants/QuestionConfig.js";
+import { isInlineBlankPart,splitPromptByInlineBlank } from "../../../../../utils/questionutils/fillPromptUtils.js";
 
 export default function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswer, t }) {
-    const parts = question.prompt.split(INLINE_FILL_SPLIT_PATTERN);
+    const parts = splitPromptByInlineBlank(question.prompt);
     let renderedInput = false;
 
     return parts.map((part, index) => {
-        if (INLINE_FILL_BLANK_PATTERN.test(part) && !renderedInput) {
+        if (isInlineBlankPart(part) && !renderedInput) {
             renderedInput = true;
 
             return (
@@ -15,7 +17,7 @@ export default function PromptWithInlineAnswer({ question, answerText, submitted
                     aria-label={t.questionAnswerLabel}
                     disabled={submitted}
                     value={answerText}
-                    maxLength={FILL_MAX_LENGTH}
+                    maxLength={QUESTION_CONFIG.FILL_MAX_LENGTH}
                     onChange={(event) => onSingleAnswer(question.id, event.target.value)}
                     placeholder={t.questionInputPlaceholder}
                     className="question-card-inline-input"

@@ -1,9 +1,8 @@
+// src/ui/view/components/ExamPage/QuestionCard/AnswerOptionCard.jsx
 import { CheckCircle2, ChevronDown, XCircle } from "lucide-react";
-import {
-    getAnswerCardClassName,
-    getExtendedExplanation,
-    getOptionLetter
-} from "./questionCardUtils.js";
+import getOptionLetter from "../../../../../utils/answerutils/getOptionLetter.js";
+import { getExtendedExplanationPoints } from "../../../../../utils/questionutils/optionExplanationUtils.js";
+import { getAnswerCardClassName } from "./questionCardClassNames.js";
 
 export default function AnswerOptionCard({
     questionId,
@@ -14,8 +13,8 @@ export default function AnswerOptionCard({
     onToggleExpanded,
     t
 }) {
-    const explanation = getExtendedExplanation(option);
-    const hasExtended = explanation.length > 0;
+    const explanationPoints = getExtendedExplanationPoints(option);
+    const hasExtended = explanationPoints.length > 0;
     const expandedId = `question-${questionId}-option-${index}-extended`;
     const StatusIcon = option.correct ? CheckCircle2 : XCircle;
 
@@ -53,7 +52,7 @@ export default function AnswerOptionCard({
                 ) : null}
 
                 {hasExtended && isExpanded ? (
-                    <ExpandedExplanation id={expandedId} points={explanation} />
+                    <ExpandedExplanation id={expandedId} points={explanationPoints} />
                 ) : null}
             </div>
         </article>

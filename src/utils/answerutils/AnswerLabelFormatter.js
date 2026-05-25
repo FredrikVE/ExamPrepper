@@ -1,4 +1,5 @@
-// src/utils/exam/answer/AnswerLabelFormatter.js
+// src/utils/answerutils/AnswerLabelFormatter.js
+import getOptionLetter from "./getOptionLetter.js";
 export default class AnswerLabelFormatter {
     
 	constructor(separator = " | ") {
@@ -34,12 +35,8 @@ export default class AnswerLabelFormatter {
 	}
 
 	#createOptionLabel(option, index) {
-		const optionLetter = this.#getOptionLetter(index);
+		const optionLetter = getOptionLetter(index);
 
 		return `${optionLetter}. ${option.text}`;
-	}
-
-	#getOptionLetter(index) {
-		return String.fromCharCode(65 + index);
 	}
 }

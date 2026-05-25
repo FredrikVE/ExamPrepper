@@ -1,5 +1,6 @@
+// src/ui/view/components/ExamPage/QuestionCard/FillAnswerInput.jsx
 import { Edit3 } from "lucide-react";
-import { FILL_MAX_LENGTH } from "./constants.js";
+import { QUESTION_CONFIG } from "../../../../../constants/QuestionConfig.js";
 import InputMeta from "./InputMeta.jsx";
 
 export default function FillAnswerInput({ question, answerText, submitted, onSingleAnswer, t }) {
@@ -16,7 +17,7 @@ export default function FillAnswerInput({ question, answerText, submitted, onSin
                     id={inputId}
                     disabled={submitted}
                     value={answerText}
-                    maxLength={FILL_MAX_LENGTH}
+                    maxLength={QUESTION_CONFIG.FILL_MAX_LENGTH}
                     onChange={(event) => onSingleAnswer(question.id, event.target.value)}
                     placeholder={t.questionInputPlaceholder}
                     className="question-card-input"

@@ -1,4 +1,7 @@
-import { getOptionLetter, getSelectableOptionClassName } from "./questionCardUtils.js";
+// src/ui/view/components/ExamPage/QuestionCard/SelectableOption.jsx
+import { QUESTION_TYPES } from "../../../../../constants/QuestionTypes.js";
+import getOptionLetter from "../../../../../utils/answerutils/getOptionLetter.js";
+import { getSelectableOptionClassName } from "./questionCardClassNames.js";
 
 export default function SelectableOption({
     question,
@@ -9,10 +12,10 @@ export default function SelectableOption({
     onSingleAnswer,
     onToggleMultiAnswer
 }) {
-    const inputType = question.type === "single" ? "radio" : "checkbox";
+    const inputType = question.type === QUESTION_TYPES.SINGLE ? "radio" : "checkbox";
 
     const handleChange = () => {
-        if (question.type === "single") {
+        if (question.type === QUESTION_TYPES.SINGLE) {
             onSingleAnswer(question.id, index);
             return;
         }

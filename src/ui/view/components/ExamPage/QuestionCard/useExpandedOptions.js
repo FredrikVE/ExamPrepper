@@ -1,3 +1,4 @@
+// src/ui/view/components/ExamPage/QuestionCard/useExpandedOptions.js
 import { useCallback, useEffect, useState } from "react";
 
 export function useExpandedOptions(resetKey) {

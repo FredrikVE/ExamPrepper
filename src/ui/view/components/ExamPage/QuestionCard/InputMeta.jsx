@@ -1,5 +1,6 @@
+// src/ui/view/components/ExamPage/QuestionCard/InputMeta.jsx
 import { Info } from "lucide-react";
-import { FILL_MAX_LENGTH } from "./constants.js";
+import { QUESTION_CONFIG } from "../../../../../constants/QuestionConfig.js";
 
 export default function InputMeta({ answerLength, className = "", t }) {
     return (
@@ -10,7 +11,7 @@ export default function InputMeta({ answerLength, className = "", t }) {
             </span>
 
             <span className="question-card-character-count">
-                {t.questionCharacterCount(answerLength, FILL_MAX_LENGTH)}
+                {t.questionCharacterCount(answerLength, QUESTION_CONFIG.FILL_MAX_LENGTH)}
             </span>
         </div>
     );
