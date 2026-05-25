@@ -3,6 +3,8 @@ import { mockExam1_no } from "./exams/mockExam1_no.js";
 import { mockExam1_en } from "./exams/mockExam1_en.js";
 import { mockExam2_no } from "./exams/mockExam2_no.js";
 import { mockExam2_en } from "./exams/mockExam2_en.js";
+import { mockExam3_no } from "./exams/mockExam3_no.js";
+import { mockExam3_en } from "./exams/mockExam3_en.js";
 
 import { DEFAULT_SUBJECT_ID, SUBJECTS } from "./subjects.js";
 
@@ -12,7 +14,9 @@ export const EXAMS = [
     mockExam1_no,
     mockExam1_en,
     mockExam2_no,
-    mockExam2_en
+    mockExam2_en,
+    mockExam3_no,
+    mockExam3_en,
 ];
 
 export {
