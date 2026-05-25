@@ -1,15 +1,15 @@
 /* src/ui/style/Header/buttons.css */
 .exam-header-button {
     display: inline-flex;
-    min-height: 54px;
+    min-height: var(--header-button-min-height);
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--space-2);
     border: 0;
     border-radius: var(--radius-sm);
-    padding: 0 18px;
-    font-size: 0.94rem;
-    font-weight: 800;
+    padding: var(--header-button-padding);
+    font-size: var(--header-button-font-size);
+    font-weight: var(--header-button-font-weight);
     transition:
         transform var(--transition-fast),
         box-shadow var(--transition-fast),
@@ -17,13 +17,13 @@
 }
 
 .exam-header-button:hover {
-    transform: translateY(-1px);
+    transform: translateY(var(--header-button-hover-offset));
 }
 
 .exam-header-button-primary {
     color: white;
     background: linear-gradient(135deg, var(--success) 0%, var(--success-text) 100%);
-    box-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
+    box-shadow: var(--header-primary-button-shadow);
 }
 
 .exam-header-button-secondary {
@@ -33,6 +33,6 @@
 }
 
 .exam-header-icon {
-    width: 18px;
-    height: 18px;
+    width: var(--header-icon-size);
+    height: var(--header-icon-size);
 }

@@ -1,10 +1,7 @@
 /* src/ui/style/Header/responsive.css */
 @media (max-width: 980px) {
-    .exam-header {
-        --exam-header-padding-top: 18px;
-        --exam-header-padding-right: 16px;
-        --exam-header-padding-bottom: 14px;
-        --exam-header-padding-left: 92px;
+    .exam-header-container {
+        padding: var(--header-padding-tablet);
     }
 
     .exam-header-layout {
@@ -17,11 +14,8 @@
 }
 
 @media (max-width: 640px) {
-    .exam-header {
-        --exam-header-padding-top: 86px;
-        --exam-header-padding-right: 16px;
-        --exam-header-padding-bottom: 18px;
-        --exam-header-padding-left: 16px;
+    .exam-header-container {
+        padding: var(--header-padding-mobile);
     }
 
     .exam-header-layout {
@@ -33,7 +27,7 @@
         display: grid;
         width: 100%;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px;
+        gap: var(--header-actions-gap);
     }
 
     .exam-header-stat-card {
@@ -55,6 +49,6 @@
     }
 
     .exam-header-stat-card {
-        padding: 10px;
+        padding: var(--header-stat-card-mobile-padding);
     }
 }
