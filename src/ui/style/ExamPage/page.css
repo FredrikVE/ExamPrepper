@@ -1,4 +1,4 @@
-/* ExamPage — page wrapper, shell, workspace, main content */
+/*src/ui/style/ExamPage/page.css*/
 .exam-page {
     min-height: 100vh;
     padding: 16px;
@@ -24,6 +24,9 @@
     background: var(--panel-strong);
     box-shadow: var(--shadow-card);
     padding: 1rem 1.25rem;
+    color: var(--text-soft);
+    font-size: 18px;
+    font-weight: 650;
 }
 
 .exam-page-error-message {
@@ -45,6 +48,7 @@
     z-index: 1;
     display: flex;
     min-width: 0;
+    min-height: 100%;
     flex-direction: column;
     overflow: hidden;
     border: 1px solid var(--line-strong);
@@ -69,14 +73,16 @@
 .exam-page-main {
     display: flex;
     flex: 1;
+    width: 100%;
     justify-content: center;
-    padding: 24px 0 20px;
+    padding: clamp(44px, 6vh, 72px) 0 32px;
 }
 
 .exam-page-content {
     width: var(--exam-content-width);
     max-width: var(--exam-content-max-width);
     min-width: 0;
+    margin: 0 auto;
 }
 
 .exam-page-empty {
@@ -85,6 +91,9 @@
     background: var(--panel-strong);
     box-shadow: var(--shadow-card);
     padding: 1.5rem;
+    color: var(--text-soft);
+    font-size: 18px;
+    font-weight: 650;
 }
 
 /* ── Responsive ───────────────────────── */
