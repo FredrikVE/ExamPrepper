@@ -10,7 +10,10 @@
     padding: 0 18px;
     font-size: 0.94rem;
     font-weight: 800;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast);
 }
 
 .exam-header-button:hover {
@@ -29,19 +32,7 @@
     background: color-mix(in srgb, var(--panel-strong) 80%, transparent);
 }
 
-.exam-header-back-button {
-    display: inline-grid;
-    width: 30px;
-    height: 30px;
-    place-items: center;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-xs);
-    color: var(--text-muted);
-    background: color-mix(in srgb, var(--panel-strong) 68%, transparent);
-    transition: color var(--transition-fast), background var(--transition-fast);
-}
-
-.exam-header-back-button:hover {
-    color: var(--text-main);
-    background: var(--panel-strong);
+.exam-header-icon {
+    width: 18px;
+    height: 18px;
 }

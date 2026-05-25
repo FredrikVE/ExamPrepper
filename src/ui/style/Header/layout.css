@@ -1,5 +1,10 @@
 /* src/ui/style/Header/layout.css */
 .exam-header {
+    --exam-header-padding-top: 28px;
+    --exam-header-padding-right: 32px;
+    --exam-header-padding-bottom: 20px;
+    --exam-header-padding-left: 32px;
+
     position: relative;
     z-index: 5;
     background: transparent;
@@ -7,7 +12,11 @@
 
 .exam-header-container {
     width: 100%;
-    padding: 28px 32px 20px;
+    padding:
+        var(--exam-header-padding-top)
+        var(--exam-header-padding-right)
+        var(--exam-header-padding-bottom)
+        var(--exam-header-padding-left);
 }
 
 .exam-header-layout {
