@@ -1,0 +1,5 @@
+/* src/ui/style/Footer/index.css */
+@import "./layout.css";
+@import "./buttons.css";
+@import "./progress.css";
+@import "./responsive.css";
