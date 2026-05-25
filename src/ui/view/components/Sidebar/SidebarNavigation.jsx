@@ -10,18 +10,39 @@ const SIDEBAR_ICONS = {
     notes: PencilLine
 };
 
-function SidebarNavigationItem({ Icon, label, active, onClick }) {
-    const className = active
-        ? "sidebar-navigation-item sidebar-navigation-item-active"
-        : "sidebar-navigation-item";
+const CLASS_NAMES = {
+    navigation: "sidebar-navigation",
+    item: "sidebar-navigation-item",
+    itemActive: "sidebar-navigation-item-active",
+    icon: "sidebar-navigation-icon"
+};
 
+function getNavigationItemClassName(active) {
+    if (active) {
+        return `${CLASS_NAMES.item} ${CLASS_NAMES.itemActive}`;
+    }
+
+    return CLASS_NAMES.item;
+}
+
+function SidebarNavigationIcon({ Icon }) {
+    return (
+        <Icon
+            className={CLASS_NAMES.icon}
+            aria-hidden="true"
+            focusable="false"
+        />
+    );
+}
+
+function SidebarNavigationItem({ Icon, label, active, onClick }) {
     return (
         <button
             type="button"
-            className={className}
+            className={getNavigationItemClassName(active)}
             onClick={onClick}
         >
-            <Icon className="sidebar-navigation-icon" strokeWidth={2.2} />
+            <SidebarNavigationIcon Icon={Icon} />
             <span>{label}</span>
         </button>
     );
@@ -32,7 +53,7 @@ export default function SidebarNavigation({ activeScreen, onChangeScreen }) {
 
     return (
         <nav
-            className="sidebar-navigation"
+            className={CLASS_NAMES.navigation}
             aria-label={t.sidebarLabel ?? "Eksamensnavigasjon"}
         >
             {SIDEBAR_NAV_ITEMS.map((item) => {
