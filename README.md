@@ -252,19 +252,26 @@ subgraph AppLayer["App Layer"]
 end
 
 subgraph View["View / Pages & Components"]
-    ExamSelectPage["ExamSelectPage.jsx"]
-    ExamSelectTopbar["ExamSelectTopbar"]
-    ExamSelectIntro["ExamSelectIntro"]
-    ExamSelectGrid["ExamSelectGrid"]
-    ExamSelectCard["ExamSelectCard"]
 
-    ExamPage["ExamPage.jsx"]
+    subgraph ExamSelectPageBox["Komponenter til ExamSelectPage.jsx"]
+        ExamSelectPage["ExamSelectPage.jsx"]
+        ExamSelectTopbar["ExamSelectTopbar"]
+        ExamSelectIntro["ExamSelectIntro"]
+        ExamSelectGrid["ExamSelectGrid"]
+        ExamSelectCard["ExamSelectCard"]
+    end
+
+    subgraph ExamPageBox["Komponenter til ExamPage.jsx"]
+        ExamPage["ExamPage.jsx"]
+        Header["Header"]
+        QuestionCard["QuestionCard"]
+        FeedbackPanel["FeedbackPanel"]
+        Footer["Footer"]
+    end
+
     AppSidebar["AppSidebar"]
-    Header["Header"]
-    QuestionCard["QuestionCard"]
-    FeedbackPanel["FeedbackPanel"]
-    Footer["Footer"]
     SettingsMenu["SettingsMenu"]
+
 end
 
 subgraph ViewModel["ViewModel"]
@@ -356,6 +363,9 @@ style ViewModel stroke:#000000,fill:#FFCDD2,color:#000000
 style Domain stroke:#000000,fill:#C5CAE9,color:#000000
 style Model stroke:#000000,fill:#DCEDC8,color:#000000
 style Data stroke:#000000,fill:#FFE082,color:#000000
+
+style ExamSelectPageBox stroke:#827717,fill:#FFFDE7,color:#000000
+style ExamPageBox stroke:#E65100,fill:#FFF3E0,color:#000000
 ```
 
 ### Arkitekturflyt
