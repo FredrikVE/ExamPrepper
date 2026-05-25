@@ -1,7 +1,7 @@
-// src/ui/view/components/ExamPage/QuestionCard/SelectableOption.jsx
-import { QUESTION_TYPES } from "../../../../../constants/QuestionTypes.js";
-import getOptionLetter from "../../../../../utils/answerutils/getOptionLetter.js";
-import { getSelectableOptionClassName } from "./questionCardClassNames.js";
+// src/ui/view/components/ExamPage/QuestionCard/Options/SelectableOption.jsx
+import { QUESTION_TYPES } from "../../../../../../constants/QuestionTypes.js";
+import getOptionLetter from "../../../../../../utils/answerutils/getOptionLetter.js";
+import { getSelectableOptionClassName } from "../Styling/questionCardClassNames.js";
 
 export default function SelectableOption({ question, option, index, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
     

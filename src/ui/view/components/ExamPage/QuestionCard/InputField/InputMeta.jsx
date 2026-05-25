@@ -1,6 +1,6 @@
-// src/ui/view/components/ExamPage/QuestionCard/InputMeta.jsx
+// src/ui/view/components/ExamPage/QuestionCard/InputField/InputMeta.jsx
 import { Info } from "lucide-react";
-import { QUESTION_CONFIG } from "../../../../../constants/QuestionConfig.js";
+import { QUESTION_CONFIG } from "../../../../../../constants/QuestionConfig.js";
 
 export default function InputMeta({ answerLength, className = "", t }) {
     return (

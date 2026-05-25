@@ -1,6 +1,6 @@
-// src/ui/view/components/ExamPage/QuestionCard/PromptWithInlineAnswer.jsx
-import { QUESTION_CONFIG } from "../../../../../constants/QuestionConfig.js";
-import { isInlineBlankPart,splitPromptByInlineBlank } from "../../../../../utils/questionutils/fillPromptUtils.js";
+// src/ui/view/components/ExamPage/QuestionCard/Prompt/PromptWithInlineAnswer.jsx
+import { QUESTION_CONFIG } from "../../../../../../constants/QuestionConfig.js";
+import { isInlineBlankPart, splitPromptByInlineBlank } from "../../../../../../utils/questionutils/fillPromptUtils.js";
 
 export default function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswer, t }) {
     const parts = splitPromptByInlineBlank(question.prompt);

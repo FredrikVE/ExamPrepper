@@ -2,11 +2,11 @@
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { getQuestionViewState } from "../../../../utils/questionutils/questionViewStateUtils.js";
 import FeedbackPanel from "./FeedbackPanel.jsx";
-import FillAnswerInput from "./QuestionCard/FillAnswerInput.jsx";
-import OptionList from "./QuestionCard/OptionList.jsx";
-import PromptSection from "./QuestionCard/PromptSection.jsx";
-import QuestionFeedback from "./QuestionCard/QuestionFeedback.jsx";
-import QuestionHeader from "./QuestionCard/QuestionHeader.jsx";
+import FillAnswerInput from "./QuestionCard/InputField/FillAnswerInput.jsx";
+import OptionList from "./QuestionCard/Options/OptionList.jsx";
+import PromptSection from "./QuestionCard/Prompt/PromptSection.jsx";
+import QuestionFeedback from "./QuestionCard/Feedback/QuestionFeedback.jsx";
+import QuestionHeader from "./QuestionCard/Header/QuestionHeader.jsx";
 
 export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
@@ -59,6 +59,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                         onToggleAnswerOptionExpanded={onToggleAnswerOptionExpanded}
                         onSingleAnswer={onSingleAnswer}
                         onToggleMultiAnswer={onToggleMultiAnswer}
+                        t={t}
                     />
                 ) : null}
 

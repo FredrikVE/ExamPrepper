@@ -1,6 +1,6 @@
-// src/ui/view/components/ExamPage/QuestionCard/FillAnswerInput.jsx
+// src/ui/view/components/ExamPage/QuestionCard/InputField/FillAnswerInput.jsx
 import { Edit3 } from "lucide-react";
-import { QUESTION_CONFIG } from "../../../../../constants/QuestionConfig.js";
+import { QUESTION_CONFIG } from "../../../../../../constants/QuestionConfig.js";
 import InputMeta from "./InputMeta.jsx";
 
 export default function FillAnswerInput({ question, answerText, submitted, onSingleAnswer, t }) {

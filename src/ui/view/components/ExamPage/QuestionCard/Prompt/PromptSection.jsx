@@ -1,5 +1,5 @@
-// src/ui/view/components/ExamPage/QuestionCard/PromptSection.jsx
-import InputMeta from "./InputMeta.jsx";
+// src/ui/view/components/ExamPage/QuestionCard/Prompt/PromptSection.jsx
+import InputMeta from "../InputField/InputMeta.jsx";
 import PromptWithInlineAnswer from "./PromptWithInlineAnswer.jsx";
 
 export default function PromptSection({ question, answerText, submitted, hasInlineFillBlank, onSingleAnswer, t }) {

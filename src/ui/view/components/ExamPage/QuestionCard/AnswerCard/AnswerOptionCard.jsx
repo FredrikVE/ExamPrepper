@@ -1,4 +1,4 @@
-// src/ui/view/components/ExamPage/QuestionCard/AnswerOptionCard.jsx
+// src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionCard.jsx
 import { CheckCircle2, ChevronDown, XCircle } from "lucide-react";
 
 export default function AnswerOptionCard({ questionId, option, index, isSelected, isExpanded, onToggleExpanded, t }) {

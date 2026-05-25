@@ -1,6 +1,6 @@
-// src/ui/view/components/ExamPage/QuestionCard/OptionList.jsx
-import isOptionSelected from "../../../../../utils/answerutils/isOptionSelected.js";
-import AnswerOptionCard from "./AnswerOptionCard.jsx";
+// src/ui/view/components/ExamPage/QuestionCard/Options/OptionList.jsx
+import isOptionSelected from "../../../../../../utils/answerutils/isOptionSelected.js";
+import AnswerOptionCard from "../AnswerCard/AnswerOptionCard.jsx";
 import SelectableOption from "./SelectableOption.jsx";
 
 export default function OptionList({ question, answer, submitted, showAllFeedback, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, t }) {

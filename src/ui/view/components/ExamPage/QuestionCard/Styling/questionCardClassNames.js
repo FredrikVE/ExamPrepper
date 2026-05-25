@@ -1,4 +1,4 @@
-// src/ui/view/components/ExamPage/QuestionCard/questionCardClassNames.js
+// src/ui/view/components/ExamPage/QuestionCard/Styling/questionCardClassNames.js
 export function getSelectableOptionClassName({ isSelected }) {
     return isSelected ? "question-card-option-selected" : "question-card-option-default";
 }

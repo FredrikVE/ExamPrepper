@@ -1,6 +1,6 @@
-// src/ui/view/components/ExamPage/QuestionCard/QuestionHeader.jsx
-import { QUESTION_TYPES } from "../../../../../constants/QuestionTypes.js";
-import ResultBadge from "../ResultBadge.jsx";
+// src/ui/view/components/ExamPage/QuestionCard/Header/QuestionHeader.jsx
+import { QUESTION_TYPES } from "../../../../../../constants/QuestionTypes.js";
+import ResultBadge from "../../ResultBadge.jsx";
 
 export default function QuestionHeader({ question, submitted, correct, t }) {
     return (
