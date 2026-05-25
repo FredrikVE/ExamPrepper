@@ -17,10 +17,8 @@
 }
 
 @media (max-width: 700px) {
-    .question-card-header,
-    .question-card-body {
-        padding-left: 20px;
-        padding-right: 20px;
+    .question-card {
+        --qc-card-x-padding: 20px;
     }
 
     .question-card-header {

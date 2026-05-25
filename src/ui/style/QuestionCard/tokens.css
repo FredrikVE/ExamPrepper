@@ -1,0 +1,33 @@
+/* src/ui/style/QuestionCard/tokens.css */
+.question-card {
+    /* Local aliases for global design tokens from App.css */
+    --qc-bg: var(--panel-strong);
+    --qc-panel-bg: var(--panel-bg);
+    --qc-border: var(--line-strong);
+    --qc-border-soft: var(--line);
+    --qc-text: var(--text-main);
+    --qc-text-muted: var(--text-muted);
+    --qc-text-soft: var(--text-soft);
+    --qc-accent: var(--accent);
+    --qc-accent-soft: var(--accent-soft);
+    --qc-shadow: var(--shadow-card);
+
+    --qc-success: var(--success);
+    --qc-success-soft: var(--success-soft);
+    --qc-success-border: var(--success-border);
+    --qc-success-text: var(--success-text);
+
+    --qc-danger: var(--danger);
+    --qc-danger-soft: var(--danger-soft);
+    --qc-danger-border: var(--danger-border);
+    --qc-danger-text: var(--danger-text);
+
+    --qc-radius-card: 18px;
+    --qc-radius-option: 14px;
+    --qc-radius-inner: var(--radius-sm);
+    --qc-radius-control: var(--radius-xs);
+    --qc-radius-pill: var(--radius-full);
+
+    --qc-card-x-padding: 32px;
+    --qc-transition: var(--transition-fast);
+}

@@ -3,10 +3,10 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    border: 1px solid var(--line-strong);
-    border-radius: 18px;
-    background: var(--panel-strong);
-    box-shadow: var(--shadow-card);
+    border: 1px solid var(--qc-border);
+    border-radius: var(--qc-radius-card);
+    background: var(--qc-bg);
+    box-shadow: var(--qc-shadow);
 }
 
 .dark .question-card {
@@ -26,7 +26,7 @@
     display: block;
     background: radial-gradient(
         circle at 88% 0%,
-        color-mix(in srgb, var(--accent) 16%, transparent),
+        color-mix(in srgb, var(--qc-accent) 16%, transparent),
         transparent 18rem
     );
 }
@@ -34,11 +34,11 @@
 .question-card-body {
     position: relative;
     z-index: 1;
-    padding: 0 32px 34px;
+    padding: 0 var(--qc-card-x-padding) 34px;
 }
 
 .question-card-divider {
     height: 1px;
     margin: 0 0 24px;
-    background: var(--line);
+    background: var(--qc-border-soft);
 }

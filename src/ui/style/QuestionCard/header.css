@@ -6,7 +6,7 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 18px;
-    padding: 28px 32px 16px;
+    padding: 28px var(--qc-card-x-padding) 16px;
 }
 
 .question-card-heading {
@@ -18,10 +18,10 @@
     align-items: center;
     gap: 8px;
     min-height: 32px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-xs);
-    background: color-mix(in srgb, var(--panel-bg) 72%, transparent);
-    color: var(--accent);
+    border: 1px solid var(--qc-border-soft);
+    border-radius: var(--qc-radius-control);
+    background: color-mix(in srgb, var(--qc-panel-bg) 72%, transparent);
+    color: var(--qc-accent);
     padding: 0 12px 0 7px;
     font-size: 0.76rem;
     font-weight: 850;
@@ -34,11 +34,11 @@
     width: 22px;
     height: 22px;
     place-items: center;
-    border-radius: var(--radius-full);
+    border-radius: var(--qc-radius-pill);
     color: white;
-    background: var(--accent);
+    background: var(--qc-accent);
     font-size: 0.76rem;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--qc-accent) 12%, transparent);
 }
 
 .question-card-title-row {
@@ -50,7 +50,7 @@
 
 .question-card-title {
     margin: 26px 0 0;
-    color: var(--text-main);
+    color: var(--qc-text);
     font-size: clamp(1.55rem, 2.2vw, 2rem);
     font-weight: 850;
     letter-spacing: -0.045em;

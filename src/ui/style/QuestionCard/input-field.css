@@ -1,33 +1,40 @@
 /* src/ui/style/QuestionCard/input-field.css */
+.question-card-inline-input,
+.question-card-input {
+    border: 2px solid var(--qc-accent);
+    outline: none;
+    background: color-mix(in srgb, var(--qc-bg) 76%, transparent);
+    color: var(--qc-text);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--qc-accent) 10%, transparent);
+}
+
+.dark .question-card-inline-input,
+.dark .question-card-input {
+    background: color-mix(in srgb, var(--qc-bg) 62%, transparent);
+}
+
+.question-card-inline-input::placeholder,
+.question-card-input::placeholder {
+    color: var(--qc-text-soft);
+}
+
+.question-card-inline-input:disabled,
+.question-card-input:disabled {
+    opacity: 0.75;
+}
+
 .question-card-inline-input {
     display: inline-block;
     width: min(16rem, calc(100% - 1rem));
     min-width: min(12rem, calc(100% - 1rem));
     height: 2.85rem;
     margin: 0 0.35rem;
-    border: 2px solid var(--accent);
-    border-radius: var(--radius-xs);
-    outline: none;
-    background: color-mix(in srgb, var(--panel-strong) 76%, transparent);
-    color: var(--text-main);
+    border-radius: var(--qc-radius-control);
     padding: 0 14px;
     font-size: 0.98rem;
     font-weight: 500;
     line-height: normal;
     vertical-align: middle;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
-}
-
-.dark .question-card-inline-input {
-    background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
-}
-
-.question-card-inline-input::placeholder {
-    color: var(--text-soft);
-}
-
-.question-card-inline-input:disabled {
-    opacity: 0.75;
 }
 
 .question-card-inline-input-meta {
@@ -37,7 +44,7 @@
 .question-card-answer-label {
     display: block;
     margin-bottom: 8px;
-    color: var(--accent);
+    color: var(--qc-accent);
     font-size: 0.78rem;
     font-weight: 850;
     letter-spacing: 0.04em;
@@ -51,26 +58,9 @@
 .question-card-input {
     width: 100%;
     height: 58px;
-    border: 2px solid var(--accent);
-    border-radius: var(--radius-sm);
-    outline: none;
-    background: color-mix(in srgb, var(--panel-strong) 76%, transparent);
-    color: var(--text-main);
+    border-radius: var(--qc-radius-inner);
     padding: 0 58px 0 16px;
     font-size: 1rem;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
-}
-
-.dark .question-card-input {
-    background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
-}
-
-.question-card-input::placeholder {
-    color: var(--text-soft);
-}
-
-.question-card-input:disabled {
-    opacity: 0.75;
 }
 
 .question-card-input-icon {
@@ -82,9 +72,9 @@
     height: 36px;
     transform: translateY(-50%);
     place-items: center;
-    border-radius: var(--radius-xs);
-    color: var(--accent);
-    background: var(--accent-soft);
+    border-radius: var(--qc-radius-control);
+    color: var(--qc-accent);
+    background: var(--qc-accent-soft);
 }
 
 .question-card-input-icon svg {
@@ -98,7 +88,7 @@
     justify-content: space-between;
     gap: 12px;
     margin-top: 12px;
-    color: var(--text-muted);
+    color: var(--qc-text-muted);
     font-size: 0.82rem;
     font-weight: 600;
 }
