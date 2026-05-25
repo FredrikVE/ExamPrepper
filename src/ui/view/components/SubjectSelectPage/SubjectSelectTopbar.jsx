@@ -6,7 +6,7 @@ export default function SubjectSelectTopbar({ t }) {
         <div className="subject-select-topbar">
             <div>
                 <h1 className="subject-select-title">
-                    {t.subjectSelectIntroTitle}
+                    {t.subjectSelectTitle}
                 </h1>
 
                 <p className="subject-select-subtitle">
