@@ -9,8 +9,6 @@ export default function HeaderButtons({ viewModel }) {
     if (viewModel.submitted) {
         return (
             <SubmittedActions
-                showAllFeedback={viewModel.showAllFeedback}
-                onToggleFeedback={viewModel.toggleShowAllFeedback}
                 onResetExam={viewModel.resetExam}
             />
         );

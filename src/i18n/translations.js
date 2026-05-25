@@ -13,7 +13,6 @@ export const translations = {
     [LANGUAGES.NO]: {
         // ExamSelectPage
         selectTitle: "IN5431 Eksamens-emulator",
-        selectIntroKicker: "IN5431 mock skoleeksamen",
         selectIntroTitle: "Velg eksamen",
         selectSubtitle: "Velg en øvingsprøve for å starte",
         selectStatistics: "Din statistikk",
@@ -29,8 +28,6 @@ export const translations = {
         headerStatScore: "score",
         headerStatTime: "tid brukt",
         headerSubmitButton: "Lever nå",
-        headerShowFeedback: "Vis fasit",
-        headerHideFeedback: "Skjul fasit",
         headerResetButton: "Ny runde",
         headerBackTitle: "Tilbake til eksamenslisten",
 
@@ -92,7 +89,6 @@ export const translations = {
     [LANGUAGES.EN]: {
         // ExamSelectPage
         selectTitle: "IN5431 Exam Emulator",
-        selectIntroKicker: "IN5431 mock exam",
         selectIntroTitle: "Choose exam",
         selectSubtitle: "Choose a practice exam to begin",
         selectStatistics: "Your statistics",
@@ -108,8 +104,6 @@ export const translations = {
         headerStatScore: "score",
         headerStatTime: "time used",
         headerSubmitButton: "Submit",
-        headerShowFeedback: "Show answers",
-        headerHideFeedback: "Hide answers",
         headerResetButton: "New round",
         headerBackTitle: "Back to exam list",
 
