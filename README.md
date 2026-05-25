@@ -2,7 +2,7 @@
 
 ## Om prosjektet
 
-Et **JavaScript, React, Vite og Tailwind CSS**-prosjekt laget for å øve til skoleeksamen i **IN5431 – IT and Management**.
+Et **JavaScript, CSS, React og Vite**-prosjekt laget for å øve til skoleeksamen i **IN5431 – IT and Management**.
 
 Prosjektet er en interaktiv eksamenssimulator der brukeren kan velge mellom flere øveeksamener og få umiddelbar tilbakemelding etter levering.
 
@@ -54,7 +54,6 @@ IN5431-Exam-Emulator/
 ├── README.md
 ├── index.html
 ├── package.json
-├── tailwind.config.js
 ├── vite.config.js
 └── src/
     ├── App.jsx
@@ -442,7 +441,6 @@ Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det
 | JavaScript | Programmeringsspråk |
 | React | UI-bibliotek |
 | Vite | Byggverktøy og utviklingsserver |
-| Tailwind CSS | Styling og utility-klasser |
 | CSS | Komponentbasert styling for layout, header, footer, cards og settings |
 | lucide-react | Ikoner |
 
