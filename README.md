@@ -4,7 +4,7 @@
 
 Et **JavaScript, CSS, React og Vite**-prosjekt laget for å øve til skoleeksamen i **IN5431 – IT and Management**.
 
-Prosjektet er en interaktiv eksamenssimulator der brukeren kan velge mellom flere øveeksamener og få umiddelbar tilbakemelding etter levering.
+Prosjektet er en interaktiv eksamenssimulator der brukeren kan velge mellom flere øveeksamener, svare på spørsmål og få umiddelbar tilbakemelding etter levering.
 
 Appen støtter flere spørsmålstyper:
 
@@ -16,11 +16,11 @@ Etter levering får brukeren tilbakemelding på hvert spørsmål:
 
 - Om svaret er riktig eller feil
 - Hva fasiten er
-- Hvorfor riktig alternativ er riktig
-- Hvorfor gale alternativer er gale
+- Kort forklaring på hvert svaralternativ
+- Mulighet til å åpne svarkort for utvidet forklaring når `whyExtended` finnes i eksamensdataene
 - Henvisning til pensum, forelesning eller fasitgrunnlag
 
-Prosjektet er strukturert etter MVVM-arkitekturmønsteret med tydelig lagdeling mellom data, datasource, repository, use cases, viewmodel, page og komponenter.
+Prosjektet er strukturert etter et MVVM-inspirert arkitekturmønster med tydelig lagdeling mellom data, datasource, repository, use cases, viewmodel, page og komponenter.
 
 Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstrere tydelig modularisering av en React-applikasjon.
 
@@ -35,9 +35,10 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 | Fyll inn begrep | Brukeren skriver inn riktig fagbegrep, med støtte for flere aksepterte svar |
 | Automatisk retting | Svarene rettes når brukeren trykker «Lever og sjekk» |
 | Fasit med forklaring | Viser hvorfor svaret er riktig eller galt |
-| Pensumhenvisning | Hvert spørsmål har kilde/fasitlinje mot forelesning eller pensum |
+| Utvidede forklaringer | Svarkort kan åpnes for å vise mer detaljert forklaring |
+| Pensumhenvisning | Hvert spørsmål kan ha kilde/fasitlinje mot forelesning eller pensum |
 | Poengscore | Viser antall poeng og prosent riktig |
-| Filtrering | Etter levering kan brukeren filtrere på alle, riktige eller gale svar |
+| Feedback-visning | Brukeren kan vise eller skjule detaljert feedback etter levering |
 | Ny runde | Eksamen kan nullstilles og tas på nytt |
 | Språkvalg | Brukeren kan bytte mellom norsk og engelsk |
 | Lys/mørk modus | Brukeren kan bytte mellom light mode og dark mode fra innstillinger |
@@ -53,12 +54,15 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 IN5431-Exam-Emulator/
 ├── README.md
 ├── index.html
+├── package-lock.json
 ├── package.json
+├── public/
 ├── vite.config.js
 └── src/
     ├── App.jsx
     ├── main.jsx
     ├── constants/
+    │   ├── QuestionConfig.js
     │   └── QuestionTypes.js
     ├── data/
     │   ├── data.js
@@ -88,14 +92,17 @@ IN5431-Exam-Emulator/
     ├── ui/
     │   ├── style/
     │   │   ├── App.css
-    │   │   ├── ExamPage.css
-    │   │   ├── ExamSelectPage.css
-    │   │   ├── FeedbackPanel.css
-    │   │   ├── Footer.css
-    │   │   ├── Header.css
-    │   │   ├── QuestionCard.css
-    │   │   ├── ResultBadge.css
-    │   │   └── SettingsMenu.css
+    │   │   ├── Tokens.css
+    │   │   ├── Global.css
+    │   │   ├── Responsive.css
+    │   │   ├── ExamPage/                     <-- Hver Page har hver sin mappe med CSS-styling-filer
+    │   │   ├── ExamSelectPage/
+    │   │   ├── Header/
+    │   │   ├── Footer/
+    │   │   ├── QuestionCard/                 <-- Hver subkomponent har sin mappe med CSS-filer
+    │   │   ├── FeedbackPanel/
+    │   │   ├── SettingsMenu/
+    │   │   └── ResultBadge/
     │   ├── theme/
     │   │   └── ThemeContext.jsx
     │   ├── view/
@@ -106,32 +113,24 @@ IN5431-Exam-Emulator/
     │   │       ├── ExamPage/
     │   │       │   ├── FeedbackPanel.jsx
     │   │       │   ├── QuestionCard.jsx
-    │   │       │   └── ResultBadge.jsx
+    │   │       │   ├── ResultBadge.jsx
+    │   │       │   └── QuestionCard/
+    │   │       │       ├── AnswerCard/
+    │   │       │       ├── Feedback/
+    │   │       │       ├── Header/
+    │   │       │       ├── InputField/
+    │   │       │       ├── Options/
+    │   │       │       ├── Prompt/
+    │   │       │       └── Styling/
     │   │       ├── Footer/
-    │   │       │   ├── Footer.jsx
-    │   │       │   └── FooterNavigationButton.jsx
     │   │       ├── Header/
-    │   │       │   ├── Header.jsx
-    │   │       │   ├── HeaderActions.jsx
-    │   │       │   ├── HeaderButtons.jsx
-    │   │       │   ├── HeaderInfo.jsx
-    │   │       │   ├── StatCard.jsx
-    │   │       │   └── SubmittedActions.jsx
     │   │       └── Settings/
-    │   │           └── SettingsMenu.jsx
     │   └── viewmodel/
     │       └── useExamViewModel.js
     └── utils/
         ├── answerutils/
-        │   ├── AnswerLabelFormatter.js
-        │   ├── getAnswerLabel.js
-        │   ├── getCorrectIndexes.js
-        │   └── normalizeAnswer.js
+        ├── questionutils/
         └── viewmodelutils/
-            ├── getAnsweredCountLabel.js
-            ├── getFeedbackToggleLabel.js
-            ├── getQuestionProgressLabel.js
-            └── getScoreLabel.js
 ```
 
 ---
@@ -152,15 +151,54 @@ export const mockExam1No = {
   questions: [
     {
       id: 1,
-      type: "fill",
+      type: "single",
       title: "Business process",
-      // ...
-    },
-  ],
+      prompt: "Hva beskriver best en business process?",
+      options: [
+        {
+          text: "En koordinert samling aktiviteter som skaper verdi.",
+          correct: true,
+          why: "Riktig: En business process beskriver hvordan arbeid utføres for å skape verdi.",
+          whyExtended: [
+            "En prosess består vanligvis av flere aktiviteter som henger sammen.",
+            "Prosesser går ofte på tvers av avdelinger og roller.",
+            "Poenget er å beskrive flyten fra input til output, ikke bare én isolert oppgave."
+          ]
+        },
+        {
+          text: "Kun en teknisk database.",
+          correct: false,
+          why: "Galt: En database kan støtte en prosess, men er ikke selve prosessen.",
+          whyExtended: [
+            "Teknologi kan være en del av prosessen, men prosessen handler om arbeid og verdiskaping.",
+            "En database beskriver lagring av data, ikke nødvendigvis flyt, roller eller aktiviteter."
+          ]
+        }
+      ]
+    }
+  ]
 };
 ```
 
 Alle eksamener samles i `src/data/data.js`. Tanken med dette er å gjøre det enkelt å legge til nye øveeksamener og språkversjoner uten å endre UI-komponentene.
+
+### Spørsmålstyper
+
+| Type | Beskrivelse |
+|------|-------------|
+| `single` | Multiple choice med ett riktig svar |
+| `multi` | Multiple choice med flere riktige svar |
+| `fill` | Fyll inn riktig fagbegrep |
+
+### Forklaringsfelter
+
+| Felt | Bruk |
+|------|-----|
+| `why` | Kort forklaring som vises direkte på svarkortet etter levering |
+| `whyExtended` | Valgfri liste med utvidede forklaringspunkter som vises når svarkortet åpnes |
+| `source` | Valgfri kildehenvisning mot forelesning, pensum eller fasitgrunnlag |
+
+Hvis `whyExtended` mangler, vises ikke utvidet forklaring for det alternativet.
 
 ---
 
@@ -171,43 +209,29 @@ Prosjektet følger et lagdelt mønster inspirert av MVVM og Clean Architecture.
 ```mermaid
 flowchart TB
 
-%% =========================
-%% SIDE INPUTS
-%% =========================
 subgraph SideInputs["Side Inputs"]
     DI["dependencies.js"]
     NavGraph["navGraph.js"]
 end
 
-%% =========================
-%% APP
-%% =========================
 subgraph AppLayer["App Layer"]
     App["App.jsx"]
 end
 
-%% =========================
-%% VIEW / PAGES
-%% =========================
 subgraph View["View / Pages & Components"]
     ExamSelectPage["ExamSelectPage.jsx"]
     ExamPage["ExamPage.jsx"]
     Header["Header"]
     QuestionCard["QuestionCard"]
+    FeedbackPanel["FeedbackPanel"]
     Footer["Footer"]
     SettingsMenu["SettingsMenu"]
 end
 
-%% =========================
-%% VIEWMODEL
-%% =========================
 subgraph ViewModel["ViewModel"]
     ExamVM["useExamViewModel"]
 end
 
-%% =========================
-%% DOMAIN
-%% =========================
 subgraph Domain["Domain Layer"]
     GetAvailableExamsUC["GetAvailableExamsUseCase"]
     GetExamByBaseIdAndLangUC["GetExamByBaseIdAndLangUseCase"]
@@ -216,17 +240,11 @@ subgraph Domain["Domain Layer"]
     CalculateScoreUC["CalculateExamScoreUseCase"]
 end
 
-%% =========================
-%% MODEL
-%% =========================
 subgraph Model["Model"]
     Repo["ExamRepository"]
     DS["ExamQuestionDataSource"]
 end
 
-%% =========================
-%% DATA
-%% =========================
 subgraph Data["Data"]
     DataRegistry["data.js"]
     MockExam1No["mockExam1_no.js"]
@@ -235,74 +253,41 @@ subgraph Data["Data"]
     MockExam2En["mockExam2_en.js"]
 end
 
-%% =========================
-%% SIDE INPUTS INTO APP
-%% =========================
 DI -.-> App
 NavGraph -.-> App
 
-%% =========================
-%% APP → PAGES
-%% =========================
 App --> ExamSelectPage
 App --> ExamPage
 
-%% =========================
-%% SELECT PAGE FLOW
-%% =========================
 ExamSelectPage --> GetAvailableExamsUC
-
-%% =========================
-%% VIEW → VIEWMODEL
-%% =========================
 ExamPage --> ExamVM
 
-%% =========================
-%% VIEW COMPOSITION
-%% =========================
 ExamPage --> Header
 ExamPage --> QuestionCard
+QuestionCard --> FeedbackPanel
 ExamPage --> Footer
 ExamPage --> SettingsMenu
 
-%% =========================
-%% VIEWMODEL → DOMAIN
-%% =========================
 ExamVM --> GetExamByBaseIdAndLangUC
 ExamVM --> GetExamQuestionsUC
 ExamVM --> GradeAnswerUC
 ExamVM --> CalculateScoreUC
 
-%% =========================
-%% DOMAIN INTERNAL
-%% =========================
 CalculateScoreUC --> GradeAnswerUC
 
-%% =========================
-%% DOMAIN → MODEL
-%% =========================
 GetAvailableExamsUC --> Repo
 GetExamByBaseIdAndLangUC --> Repo
 GetExamQuestionsUC --> Repo
 
-%% =========================
-%% MODEL → DATA
-%% =========================
 Repo --> DS
 DS --> DataRegistry
 Repo --> DataRegistry
 
-%% =========================
-%% DATA REGISTRY
-%% =========================
 DataRegistry --> MockExam1No
 DataRegistry --> MockExam1En
 DataRegistry --> MockExam2No
 DataRegistry --> MockExam2En
 
-%% =========================
-%% NODE COLORS
-%% =========================
 classDef sideNode fill:#E0E0E0,stroke:#424242,color:#000000
 classDef appNode fill:#C5E1A5,stroke:#33691E,color:#000000
 classDef viewNode fill:#C5E1A5,stroke:#33691E,color:#000000
@@ -313,15 +298,12 @@ classDef dataNode fill:#C5E1A5,stroke:#33691E,color:#000000
 
 class DI,NavGraph sideNode
 class App appNode
-class ExamSelectPage,ExamPage,Header,QuestionCard,Footer,SettingsMenu viewNode
+class ExamSelectPage,ExamPage,Header,QuestionCard,FeedbackPanel,Footer,SettingsMenu viewNode
 class ExamVM viewModelNode
 class GetAvailableExamsUC,GetExamByBaseIdAndLangUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
 class Repo,DS modelNode
 class DataRegistry,MockExam1No,MockExam1En,MockExam2No,MockExam2En dataNode
 
-%% =========================
-%% SUBGRAPH COLORS
-%% =========================
 style SideInputs stroke:#000000,fill:#E0E0E0,color:#000000
 style AppLayer stroke:#000000,fill:#E1BEE7,color:#000000
 style View stroke:#000000,fill:#FFF9C4,color:#000000
@@ -357,16 +339,17 @@ UI Components
 
 | Lag | Filer | Ansvar |
 |-----|-------|--------|
-| **Data** | `src/data/data.js`, `src/data/exams/*.js` | Inneholder eksamensregister, standardeksamen og alle øveeksamener |
+| **Data** | `src/data/data.js`, `src/data/exams/*.js` | Inneholder eksamensregister og alle øveeksamener |
 | **DataSource** | `ExamQuestionDataSource.js` | Henter eksamensdata og spørsmål fra lokal datakilde |
 | **Repository** | `ExamRepository.js` | Gir domenelaget tilgang til eksamener og spørsmål uten at domenet kjenner datakilden |
 | **Domain / UseCases** | `GetAvailableExamsUseCase`, `GetExamByBaseIdAndLangUseCase`, `GetExamQuestionsUseCase`, `GradeAnswerUseCase`, `CalculateExamScoreUseCase` | Inneholder appens sentrale regler |
-| **ViewModel** | `useExamViewModel.js` | Holder React-state, valgt eksamen, svar, leveringstilstand, filter, feedback-visning, språktilpasset eksamen og score |
+| **ViewModel** | `useExamViewModel.js` | Holder React-state, brukerens svar, leveringstilstand, feedback-visning, åpne/lukkede svarkort, timer, navigasjon mellom spørsmål og score |
 | **View / Page** | `ExamPage.jsx`, `ExamSelectPage.jsx` | Setter sammen sidene og sender props videre til komponentene |
-| **Components** | `Header`, `QuestionCard`, `FeedbackPanel`, `Footer`, `SettingsMenu` | Rene UI-komponenter som viser data og sender brukerhandlinger oppover |
+| **Components** | `Header`, `QuestionCard`, `FeedbackPanel`, `Footer`, `SettingsMenu`, `ResultBadge` | Rene UI-komponenter som viser data og sender brukerhandlinger oppover |
 | **i18n** | `LanguageContext.jsx`, `translations.js` | Håndterer språkvalg og tekstnøkler |
 | **Theme** | `ThemeContext.jsx` | Håndterer light mode og dark mode |
-| **Utils** | `answerutils`, `viewmodelutils` | Hjelpefunksjoner for svar, labels og visningslogikk |
+| **Utils** | `answerutils`, `questionutils`, `viewmodelutils` | Hjelpefunksjoner for svar, spørsmålspresentasjon, labels og visningslogikk |
+| **Constants** | `QuestionConfig.js`, `QuestionTypes.js` | Globale spørsmålsverdier og spørsmålstyper |
 
 ---
 
@@ -418,7 +401,13 @@ Hver øveeksamen har en unik `id`, en `baseId`, et språkfelt, en `title`, en `d
 `CalculateExamScoreUseCase` gjør poengberegning separat fra både UI og datalagring.
 
 **ViewModel samler React-state.**  
-`useExamViewModel` håndterer valgt eksamen, brukerens svar, submitted-status, filter, feedback-visning, loading, score og navigasjon mellom spørsmål. Dermed holdes `ExamPage.jsx` enklere.
+`useExamViewModel` håndterer brukerens svar, submitted-status, feedback-visning, åpne/lukkede svarkort, loading, timer, score og navigasjon mellom spørsmål. Dermed holdes side- og komponentlaget enklere.
+
+**UI-komponentene er mest mulig dumme.**  
+Komponentene får data og handlers via props. State og brukerflyt eies primært av viewModelen, slik at komponentene i hovedsak fokuserer på presentasjon.
+
+**QuestionCard er delt i funksjonelle underområder.**  
+`QuestionCard` består av egne undermapper for `Header`, `Prompt`, `InputField`, `Options`, `AnswerCard`, `Feedback` og `Styling`. Dette gjør det lettere å finne riktig subkomponent og videreutvikle kortet uten at én fil får for mye ansvar.
 
 **UI-et er delt inn i tydelige visuelle soner.**  
 Eksamenssiden består av en sidebar, header/statistikk, progressbar, question card og footer-navigasjon. Dette gjør at brukeren hele tiden ser hvor langt de har kommet, hvilken oppgave de jobber med, og hvilke handlinger som er tilgjengelige.
@@ -426,8 +415,11 @@ Eksamenssiden består av en sidebar, header/statistikk, progressbar, question ca
 **Språk og tema håndteres globalt.**  
 Språkvalg håndteres gjennom `LanguageContext`, mens light/dark mode håndteres gjennom `ThemeContext`. Dette gjør at komponentene kan bruke felles tilstand uten å duplisere logikk.
 
-**Styling er samlet per UI-område.**  
-Stilarkene ligger under `src/ui/style/` og er delt etter område, for eksempel `ExamPage.css`, `Header.css`, `Footer.css`, `QuestionCard.css` og `SettingsMenu.css`.
+**Styling er modulært organisert per UI-område.**  
+`src/ui/style/App.css` fungerer som samlet CSS-entrypoint. Globale designverdier, global reset og responsiv grunnkonfigurasjon ligger i `Tokens.css`, `Global.css` og `Responsive.css`. Større UI-områder som `ExamPage`, `ExamSelectPage`, `Header`, `Footer`, `QuestionCard`, `FeedbackPanel`, `SettingsMenu` og `ResultBadge` har egne mapper med `index.css` og mindre CSS-moduler.
+
+**Prosjektet bruker vanlig CSS og design tokens.**  
+Tailwind er fjernet til fordel for vanlige CSS-filer, CSS custom properties og en tydelig modulstruktur. Farger, tekst, radius, skygger, overganger og tema defineres som globale design tokens.
 
 **Composition Root i `dependencies.js`.**  
 Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det gjør appen mer ryddig og gjør det lettere å bytte implementasjoner senere.
@@ -441,7 +433,8 @@ Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det
 | JavaScript | Programmeringsspråk |
 | React | UI-bibliotek |
 | Vite | Byggverktøy og utviklingsserver |
-| CSS | Komponentbasert styling for layout, header, footer, cards og settings |
+| CSS | Modulær styling, layout, komponentstiler og dark mode |
+| CSS custom properties | Globale design tokens for farger, radius, shadows, transitions og tema |
 | lucide-react | Ikoner |
 
 ---
@@ -461,7 +454,6 @@ Eksempel:
 
 ```js
 //src/data/exams/mockExam3_no.js
-
 export const mockExam3No = {
   id: "mock-exam-3-no",
   baseId: "mock-exam-3",
@@ -473,9 +465,31 @@ export const mockExam3No = {
       id: 1,
       type: "single",
       title: "Strategic positioning",
-      // ...
-    },
-  ],
+      prompt: "Hva kjennetegner strategic positioning?",
+      source: "Porter: What Is Strategy?",
+      options: [
+        {
+          text: "Å velge en unik posisjon og gjøre trade-offs.",
+          correct: true,
+          why: "Riktig: Strategi handler om valg, trade-offs og en unik posisjon.",
+          whyExtended: [
+            "Strategisk posisjonering handler ikke bare om å være effektiv.",
+            "Virksomheten må velge hva den ikke skal gjøre.",
+            "Trade-offs gjør strategien vanskeligere å kopiere."
+          ]
+        },
+        {
+          text: "Å gjøre de samme aktivitetene som konkurrentene, bare raskere.",
+          correct: false,
+          why: "Galt: Dette beskriver mer operational effectiveness enn strategi.",
+          whyExtended: [
+            "Operational effectiveness kan være nødvendig, men er ikke nok for en varig strategi.",
+            "Hvis alle gjør det samme, blir forskjellene mellom aktørene mindre."
+          ]
+        }
+      ]
+    }
+  ]
 };
 ```
 
@@ -495,11 +509,44 @@ export const EXAMS = [
   mockExam2No,
   mockExam2En,
   mockExam3No,
-  mockExam3En,
+  mockExam3En
 ];
 ```
 
 Alle eksamener må ha unik `id`. Språkversjoner av samme eksamen bør dele samme `baseId`.
+
+---
+
+## Legge til eller endre styling
+
+Global styling importeres fra `src/ui/style/App.css`.
+
+```css
+/* src/ui/style/App.css */
+
+@import "./Tokens.css";
+@import "./Global.css";
+@import "./Responsive.css";
+
+@import "./ExamSelectPage/index.css";
+@import "./ExamPage/index.css";
+
+@import "./Header/index.css";
+@import "./Footer/index.css";
+@import "./QuestionCard/index.css";
+@import "./FeedbackPanel/index.css";
+@import "./SettingsMenu/index.css";
+@import "./ResultBadge/index.css";
+```
+
+Retningslinjer:
+
+- Globale designverdier legges i `Tokens.css`.
+- Global reset og basisregler legges i `Global.css`.
+- Globale responsive regler legges i `Responsive.css`.
+- Side-spesifikk styling legges i mappen for siden, for eksempel `ExamPage/`.
+- Komponentområde-spesifikk styling legges i mappen for komponentområdet, for eksempel `QuestionCard/`.
+- Hver mappe bør ha en `index.css` som importerer del-filene i riktig rekkefølge.
 
 ---
 
@@ -511,11 +558,13 @@ Mulige forbedringer:
 - Lage egne eksamener per tema, for eksempel CIO Toolbox, D4D, strategi, IT governance og bærekraft
 - Legge til vanskelighetsgrad per spørsmål
 - Legge til kategorier eller tags per spørsmål
+- Fylle ut `whyExtended` i alle språkversjoner
 - Lagre valgt eksamen og progresjon i localStorage
 - Lage eksamensmodus med tilfeldig rekkefølge
 - Lage statistikk over hvilke temaer brukeren ofte svarer feil på
 - Legge til tester for `GradeAnswerUseCase` og `CalculateExamScoreUseCase`
 - Legge til tester for henting av riktig eksamen basert på `examId`, `baseId` og språk
+- Legge til komponenttester for `QuestionCard`, `AnswerOptionCard` og `FeedbackPanel`
 - Hente spørsmål fra ekstern JSON-fil eller API
 
 ---
@@ -542,8 +591,4 @@ Dette prosjektet er en strukturert React-applikasjon for eksamenstrening i IN543
 Det viktigste læringspoenget er todelt:
 
 1. Øve på pensumbegreper gjennom aktiv testing og forklarende fasit
-2. Øve på modularisering av React-kode med tydelig ansvarsdeling
-
-```text
-Exam files → data.js → DataSource → Repository → UseCase → ViewModel → Page → Components
-```
+2. Øve på modularisering av React-kode og CSS med tydelig ansvarsdeling
