@@ -1,0 +1,30 @@
+/* src/ui/style/SettingsMenu/sections.css */
+.settings-section + .settings-section {
+    margin-top: 26px;
+}
+
+.settings-section-spaced {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.settings-section-spaced .settings-section-label {
+    margin-bottom: 0;
+}
+
+.settings-section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: var(--text-main);
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+.settings-section-icon {
+    width: 18px;
+    height: 18px;
+}

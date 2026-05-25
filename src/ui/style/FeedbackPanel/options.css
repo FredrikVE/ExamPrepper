@@ -1,0 +1,48 @@
+/* src/ui/style/FeedbackPanel/options.css */
+.feedback-panel-options-title {
+    color: var(--text-main);
+    font-weight: 850;
+}
+
+.feedback-panel-options-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.feedback-panel-option {
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--panel-strong) 70%, transparent);
+    padding: 12px;
+}
+
+.feedback-panel-option-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-main);
+    font-weight: 850;
+}
+
+.feedback-panel-option-correct {
+    color: var(--success-text);
+}
+
+.feedback-panel-option-wrong {
+    color: var(--danger-text);
+}
+
+.feedback-panel-option-selected {
+    border-radius: var(--radius-full);
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 8px;
+    font-size: 0.76rem;
+}
+
+.feedback-panel-option-text {
+    margin: 5px 0 0;
+    color: var(--text-muted);
+    line-height: 1.55;
+}

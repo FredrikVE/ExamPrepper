@@ -1,0 +1,40 @@
+/* src/ui/style/FeedbackPanel/summary.css */
+.feedback-panel-summary {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.feedback-panel-summary-correct {
+    border-color: var(--success-border);
+    background: var(--success-soft);
+}
+
+.feedback-panel-summary-wrong {
+    border-color: var(--danger-border);
+    background: var(--danger-soft);
+}
+
+.feedback-panel-summary-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-main);
+    font-weight: 850;
+}
+
+.feedback-panel-summary-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.feedback-panel-answer {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+
+.feedback-panel-answer-label {
+    color: var(--text-main);
+    font-weight: 850;
+}

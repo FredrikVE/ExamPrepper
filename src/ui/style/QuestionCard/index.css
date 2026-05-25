@@ -1,0 +1,9 @@
+/* src/ui/style/QuestionCard/index.css */
+@import "./base.css";
+@import "./header.css";
+@import "./prompt.css";
+@import "./input-field.css";
+@import "./options.css";
+@import "./answer-card.css";
+@import "./feedback.css";
+@import "./responsive.css";

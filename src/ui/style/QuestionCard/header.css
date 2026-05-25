@@ -1,0 +1,58 @@
+/* src/ui/style/QuestionCard/header.css */
+.question-card-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 28px 32px 16px;
+}
+
+.question-card-heading {
+    min-width: 0;
+}
+
+.question-card-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-bg) 72%, transparent);
+    color: var(--accent);
+    padding: 0 12px 0 7px;
+    font-size: 0.76rem;
+    font-weight: 850;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+}
+
+.question-card-number {
+    display: inline-grid;
+    width: 22px;
+    height: 22px;
+    place-items: center;
+    border-radius: var(--radius-full);
+    color: white;
+    background: var(--accent);
+    font-size: 0.76rem;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.question-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.question-card-title {
+    margin: 26px 0 0;
+    color: var(--text-main);
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
+    font-weight: 850;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+}

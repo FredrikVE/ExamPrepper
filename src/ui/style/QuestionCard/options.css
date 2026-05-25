@@ -1,0 +1,56 @@
+/* src/ui/style/QuestionCard/options.css */
+.question-card-option-list {
+    display: grid;
+    gap: 12px;
+}
+
+.question-card-option {
+    display: flex;
+    cursor: pointer;
+    align-items: flex-start;
+    gap: 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--panel-strong) 70%, transparent);
+    padding: 15px 16px;
+    color: var(--text-main);
+    font-weight: 600;
+    line-height: 1.5;
+    transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+}
+
+.question-card-option:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+.question-card-option-disabled {
+    cursor: default;
+}
+
+.question-card-option-disabled:hover {
+    transform: none;
+}
+
+.question-card-option-input {
+    margin-top: 4px;
+    accent-color: var(--accent);
+}
+
+.question-card-option-letter {
+    color: var(--accent);
+    font-weight: 900;
+}
+
+.question-card-option-selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.question-card-option-default {
+    border-color: var(--line);
+}
+
+.question-card-option-choice-text {
+    min-width: 0;
+}

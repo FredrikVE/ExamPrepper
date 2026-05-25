@@ -1,0 +1,31 @@
+/* src/ui/style/SettingsMenu/toggle.css */
+.settings-toggle-track {
+    position: relative;
+    width: 52px;
+    height: 30px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-soft) 35%, transparent);
+    padding: 0;
+    transition: background var(--transition-fast);
+}
+
+.dark .settings-toggle-track {
+    background: var(--accent);
+}
+
+.settings-toggle-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-full);
+    background: white;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+    transition: transform var(--transition-fast);
+}
+
+.settings-toggle-thumb-on {
+    transform: translateX(22px);
+}

@@ -78,6 +78,7 @@ export const translations = {
         feedbackOptionCorrect: "Riktig alternativ",
         feedbackOptionWrong: "Galt alternativ",
         feedbackOptionSelected: "du valgte denne",
+        feedbackExtendedLabel: "Utvidet forklaring",
         feedbackSourceTitle: "Henvisning til fasit/pensum",
 
         // ResultBadge
@@ -166,6 +167,7 @@ export const translations = {
         feedbackOptionCorrect: "Correct option",
         feedbackOptionWrong: "Wrong option",
         feedbackOptionSelected: "you chose this",
+        feedbackExtendedLabel: "Extended explanation",
         feedbackSourceTitle: "Curriculum reference",
 
         // ResultBadge

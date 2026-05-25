@@ -1,0 +1,46 @@
+/* src/ui/style/Footer/responsive.css */
+/* Når 70%-footeren blir for smal, flytt prikkene til egen rad */
+@media (max-width: 1180px) {
+    .exam-footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .exam-footer-counter {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .exam-footer-button {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .exam-footer-dots {
+        width: 100%;
+    }
+}
+
+@media (max-width: 920px) {
+    .exam-footer {
+        width: var(--exam-content-width);
+        max-width: var(--exam-content-max-width);
+        margin-bottom: 18px;
+    }
+}
+
+@media (max-width: 700px) {
+    .exam-footer-container {
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .exam-footer-dots {
+        width: 100%;
+        gap: 5px;
+    }
+
+    .exam-footer-button {
+        min-height: 44px;
+        padding: 0 14px;
+    }
+}

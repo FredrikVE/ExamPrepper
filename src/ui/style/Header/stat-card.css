@@ -1,0 +1,49 @@
+/* src/ui/style/Header/stat-card.css */
+.exam-header-stat-card {
+    display: grid;
+    min-width: 84px;
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--panel-strong) 80%, transparent);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+    padding: 10px 12px;
+}
+
+.dark .exam-header-stat-card {
+    background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+
+.exam-header-stat-icon {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-full);
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.exam-header-stat-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.exam-header-stat-value {
+    color: var(--text-main);
+    font-size: 0.94rem;
+    font-weight: 850;
+    line-height: 1.05;
+}
+
+.exam-header-stat-label {
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1;
+}

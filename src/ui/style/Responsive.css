@@ -1,0 +1,8 @@
+/* src/ui/style/foundation/responsive.css */
+
+@media (max-width: 920px) {
+    :root {
+        --exam-content-width: calc(100% - 32px);
+        --exam-content-max-width: none;
+    }
+}

@@ -1,0 +1,27 @@
+/* src/ui/style/FeedbackPanel/box.css */
+.feedback-panel-box {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-bg) 62%, transparent);
+    color: var(--text-muted);
+    padding: 16px;
+    line-height: 1.7;
+}
+
+.dark .feedback-panel-box {
+    background: color-mix(in srgb, var(--panel-strong) 5%, transparent);
+}
+
+.feedback-panel-box p {
+    margin: 6px 0 0;
+}
+
+.feedback-panel-box-title,
+.feedback-panel-box-title-spaced {
+    color: var(--text-main);
+    font-weight: 850;
+}
+
+.feedback-panel-box-title-spaced {
+    margin-top: 14px;
+}
