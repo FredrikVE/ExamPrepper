@@ -1,6 +1,6 @@
 //src/ui/view/components/ExamPage/QuestionCard.jsx
-import { useState } from "react";
-import { AlertTriangle, Edit3, Info, BookOpen, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AlertTriangle, BookOpen, CheckCircle2, ChevronDown, Edit3, Info, XCircle } from "lucide-react";
 import ResultBadge from "./ResultBadge.jsx";
 import FeedbackPanel from "./FeedbackPanel.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
@@ -28,9 +28,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                     </div>
                 </div>
 
-                {submitted ? (
-                    <ResultBadge correct={correct} />
-                ) : null}
+                {submitted ? <ResultBadge correct={correct} /> : null}
             </div>
 
             <div className="question-card-body">
@@ -66,58 +64,22 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                 )}
 
                 {question.type === "fill" && !hasInlineFillBlank && (
-                    <div className="question-card-answer-block">
-                        <label className="question-card-answer-label" htmlFor={`question-${question.id}-answer`}>
-                            {t.questionAnswerLabel}
-                        </label>
-
-                        <div className="question-card-input-wrap">
-                            <input
-                                id={`question-${question.id}-answer`}
-                                disabled={submitted}
-                                value={answerText}
-                                maxLength={FILL_MAX_LENGTH}
-                                onChange={(event) =>
-                                    onSingleAnswer(question.id, event.target.value)
-                                }
-                                placeholder={t.questionInputPlaceholder}
-                                className="question-card-input"
-                            />
-                            <span className="question-card-input-icon" aria-hidden="true">
-                                <Edit3 />
-                            </span>
-                        </div>
-
-                        <div className="question-card-input-meta">
-                            <span className="question-card-input-rule">
-                                <Info />
-                                {t.questionInputRule}
-                            </span>
-
-                            <span className="question-card-character-count">
-                                {t.questionCharacterCount(answerText.length, FILL_MAX_LENGTH)}
-                            </span>
-                        </div>
-
-                    </div>
+                    <FillAnswerInput
+                        question={question}
+                        answerText={answerText}
+                        submitted={submitted}
+                        onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
                 )}
 
-                {question.type === "single" && (
+                {question.type !== "fill" && (
                     <OptionList
                         question={question}
                         answer={answer}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
                         onSingleAnswer={onSingleAnswer}
-                    />
-                )}
-
-                {question.type === "multi" && (
-                    <OptionList
-                        question={question}
-                        answer={answer}
-                        submitted={submitted}
-                        showAllFeedback={showAllFeedback}
                         onToggleMultiAnswer={onToggleMultiAnswer}
                     />
                 )}
@@ -131,14 +93,11 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                                 {t.questionWrongTitle}
                             </div>
 
-                            <p>
-                                {t.questionWrongHint}
-                            </p>
+                            <p>{t.questionWrongHint}</p>
                         </div>
                     </div>
                 )}
 
-                {/* Fill-in: vis FeedbackPanel som før (den har ingen options å vise inline) */}
                 {submitted && showAllFeedback && question.type === "fill" && (
                     <FeedbackPanel
                         question={question}
@@ -147,9 +106,8 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                     />
                 )}
 
-                {/* Single/multi: kildehenvisning under opsjonene (forklaringene er nå inne i hver boks) */}
-                {submitted && showAllFeedback && question.type !== "fill" && (
-                    <div className="feedback-panel" style={{ marginTop: 26 }}>
+                {submitted && showAllFeedback && question.type !== "fill" && question.source && (
+                    <div className="feedback-panel question-card-source-panel">
                         <div className="feedback-panel-source">
                             <div className="feedback-panel-source-title">
                                 <BookOpen className="feedback-panel-source-icon" />
@@ -167,6 +125,41 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
     );
 }
 
+function FillAnswerInput({ question, answerText, submitted, onSingleAnswer, t }) {
+    return (
+        <div className="question-card-answer-block">
+            <label className="question-card-answer-label" htmlFor={`question-${question.id}-answer`}>
+                {t.questionAnswerLabel}
+            </label>
+
+            <div className="question-card-input-wrap">
+                <input
+                    id={`question-${question.id}-answer`}
+                    disabled={submitted}
+                    value={answerText}
+                    maxLength={FILL_MAX_LENGTH}
+                    onChange={(event) => onSingleAnswer(question.id, event.target.value)}
+                    placeholder={t.questionInputPlaceholder}
+                    className="question-card-input"
+                />
+                <span className="question-card-input-icon" aria-hidden="true">
+                    <Edit3 />
+                </span>
+            </div>
+
+            <div className="question-card-input-meta">
+                <span className="question-card-input-rule">
+                    <Info />
+                    {t.questionInputRule}
+                </span>
+
+                <span className="question-card-character-count">
+                    {t.questionCharacterCount(answerText.length, FILL_MAX_LENGTH)}
+                </span>
+            </div>
+        </div>
+    );
+}
 
 function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswer, t }) {
     const parts = question.prompt.split(/(_{3,})/g);
@@ -184,9 +177,7 @@ function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswe
                     disabled={submitted}
                     value={answerText}
                     maxLength={FILL_MAX_LENGTH}
-                    onChange={(event) =>
-                        onSingleAnswer(question.id, event.target.value)
-                    }
+                    onChange={(event) => onSingleAnswer(question.id, event.target.value)}
                     placeholder={t.questionInputPlaceholder}
                     className="question-card-inline-input"
                 />
@@ -200,112 +191,164 @@ function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswe
 function OptionList({ question, answer, submitted, showAllFeedback, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
     const [expandedOptions, setExpandedOptions] = useState({});
+    const feedbackMode = submitted && showAllFeedback;
+
+    useEffect(() => {
+        setExpandedOptions({});
+    }, [question.id]);
 
     const toggleExpanded = (index) => {
-        setExpandedOptions((prev) => ({
-            ...prev,
-            [index]: !prev[index]
+        setExpandedOptions((previous) => ({
+            ...previous,
+            [index]: !previous[index]
         }));
     };
 
     return (
-        <div className="question-card-option-list">
+        <div className={`question-card-option-list ${feedbackMode ? "question-card-answer-card-list" : ""}`}>
             {question.options.map((option, index) => {
-                const isSelected =
-                    question.type === "single"
-                        ? answer === index
-                        : Array.isArray(answer) && answer.includes(index);
+                const isSelected = isOptionSelected(question.type, answer, index);
 
-                const showRight = submitted && option.correct;
-                const showWrongSelection = submitted && isSelected && !option.correct;
-                const hasExtended = Array.isArray(option.whyExtended) && option.whyExtended.length > 0;
-                const isExpanded = expandedOptions[index] || false;
+                if (feedbackMode) {
+                    return (
+                        <AnswerOptionCard
+                            key={index}
+                            question={question}
+                            option={option}
+                            index={index}
+                            isSelected={isSelected}
+                            isExpanded={Boolean(expandedOptions[index])}
+                            onToggleExpanded={() => toggleExpanded(index)}
+                            t={t}
+                        />
+                    );
+                }
 
                 return (
-                    <div key={index}>
-                        <label
-                            className={`question-card-option ${getOptionClassName({
-                                showRight,
-                                showWrongSelection,
-                                isSelected
-                            })}`}
-                        >
-                            <input
-                                type={question.type === "single" ? "radio" : "checkbox"}
-                                disabled={submitted}
-                                checked={isSelected}
-                                onChange={() =>
-                                    question.type === "single"
-                                        ? onSingleAnswer(question.id, index)
-                                        : onToggleMultiAnswer(question.id, index)
-                                }
-                                className="question-card-option-input"
-                            />
-
-                            <div className="question-card-option-content">
-                                <div className="question-card-option-top-row">
-                                    <span>
-                                        <span className="question-card-option-letter">
-                                            {String.fromCharCode(65 + index)}.
-                                        </span>{" "}
-                                        {option.text}
-                                    </span>
-
-                                    {submitted && showAllFeedback && (
-                                        <div className="question-card-option-status-row">
-                                            <span
-                                                className={
-                                                    option.correct
-                                                        ? "question-card-option-badge-correct"
-                                                        : "question-card-option-badge-wrong"
-                                                }
-                                            >
-                                                {option.correct
-                                                    ? `✓ ${t.feedbackOptionCorrect}`
-                                                    : `✗ ${t.feedbackOptionWrong}`}
-                                            </span>
-
-                                            {hasExtended && (
-                                                <button
-                                                    type="button"
-                                                    className={`question-card-option-expand-btn ${isExpanded ? "question-card-option-expand-btn-open" : ""}`}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        toggleExpanded(index);
-                                                    }}
-                                                >
-                                                    {t.feedbackExtendedLabel}
-                                                    <ChevronDown className="question-card-option-expand-icon" />
-                                                </button>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-
-                                {submitted && showAllFeedback && (
-                                    <div className="question-card-option-feedback">
-                                        <p className="question-card-option-feedback-text">
-                                            {option.why}
-                                        </p>
-
-                                        {hasExtended && isExpanded && (
-                                            <ul className="question-card-option-extended-list">
-                                                {option.whyExtended.map((point, i) => (
-                                                    <li key={i} className="question-card-option-extended-item">
-                                                        {point}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </label>
-                    </div>
+                    <SelectableOption
+                        key={index}
+                        question={question}
+                        option={option}
+                        index={index}
+                        isSelected={isSelected}
+                        submitted={submitted}
+                        onSingleAnswer={onSingleAnswer}
+                        onToggleMultiAnswer={onToggleMultiAnswer}
+                    />
                 );
             })}
         </div>
     );
+}
+
+function SelectableOption({ question, option, index, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
+    return (
+        <label
+            className={`question-card-option ${getSelectableOptionClassName({ isSelected })} ${submitted ? "question-card-option-disabled" : ""}`}
+        >
+            <input
+                type={question.type === "single" ? "radio" : "checkbox"}
+                disabled={submitted}
+                checked={isSelected}
+                onChange={() =>
+                    question.type === "single"
+                        ? onSingleAnswer(question.id, index)
+                        : onToggleMultiAnswer(question.id, index)
+                }
+                className="question-card-option-input"
+            />
+
+            <span className="question-card-option-choice-text">
+                <span className="question-card-option-letter">
+                    {String.fromCharCode(65 + index)}.
+                </span>{" "}
+                {option.text}
+            </span>
+        </label>
+    );
+}
+
+function AnswerOptionCard({ question, option, index, isSelected, isExpanded, onToggleExpanded, t }) {
+    const letter = String.fromCharCode(65 + index);
+    const hasExtended = Array.isArray(option.whyExtended) && option.whyExtended.length > 0;
+    const expandedId = `question-${question.id}-option-${index}-extended`;
+    const statusText = option.correct ? t.resultCorrect : t.resultWrong;
+    const StatusIcon = option.correct ? CheckCircle2 : XCircle;
+
+    return (
+        <article
+            className={`question-card-answer-card ${getAnswerCardClassName({ correct: option.correct, isSelected })}`}
+        >
+            <div className="question-card-answer-card-left" aria-hidden="true">
+                <span className="question-card-answer-letter">{letter}.</span>
+                <StatusIcon className="question-card-answer-state-icon" />
+            </div>
+
+            <div className="question-card-answer-card-main">
+                <div className="question-card-answer-card-header">
+                    <div className="question-card-answer-card-copy">
+                        <h4 className="question-card-answer-card-title">
+                            {option.text}
+                        </h4>
+                        <p className="question-card-answer-card-reason">
+                            {option.why}
+                        </p>
+                    </div>
+
+                    <div className="question-card-answer-card-actions">
+                        <span
+                            className={`question-card-answer-badge ${
+                                option.correct
+                                    ? "question-card-answer-badge-correct"
+                                    : "question-card-answer-badge-wrong"
+                            }`}
+                        >
+                            <StatusIcon />
+                            {statusText}
+                        </span>
+
+                        {hasExtended ? (
+                            <button
+                                type="button"
+                                className="question-card-answer-expand-button"
+                                aria-expanded={isExpanded}
+                                aria-controls={expandedId}
+                                onClick={onToggleExpanded}
+                            >
+                                {t.feedbackExtendedLabel}
+                                <ChevronDown
+                                    className={`question-card-answer-expand-icon ${
+                                        isExpanded ? "question-card-answer-expand-icon-open" : ""
+                                    }`}
+                                />
+                            </button>
+                        ) : null}
+                    </div>
+                </div>
+
+                {isSelected ? (
+                    <div className="question-card-answer-selected-pill">
+                        {t.feedbackOptionSelected}
+                    </div>
+                ) : null}
+
+                {hasExtended && isExpanded ? (
+                    <div id={expandedId} className="question-card-answer-extended">
+                        <ul className="question-card-answer-extended-list">
+                            {option.whyExtended.map((point, pointIndex) => (
+                                <li key={pointIndex}>{point}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : null}
+            </div>
+        </article>
+    );
+}
+
+function isOptionSelected(type, answer, index) {
+    if (type === "single") return answer === index;
+    return Array.isArray(answer) && answer.includes(index);
 }
 
 function getQuestionTypeLabel(type, t) {
@@ -314,9 +357,14 @@ function getQuestionTypeLabel(type, t) {
     return t.questionTypeSingle;
 }
 
-function getOptionClassName({ showRight, showWrongSelection, isSelected }) {
-    if (showRight) return "question-card-option-correct";
-    if (showWrongSelection) return "question-card-option-wrong";
-    if (isSelected) return "question-card-option-selected";
-    return "question-card-option-default";
+function getSelectableOptionClassName({ isSelected }) {
+    return isSelected ? "question-card-option-selected" : "question-card-option-default";
+}
+
+function getAnswerCardClassName({ correct, isSelected }) {
+    const statusClassName = correct
+        ? "question-card-answer-card-correct"
+        : "question-card-answer-card-wrong";
+
+    return `${statusClassName} ${isSelected ? "question-card-answer-card-selected" : ""}`;
 }
