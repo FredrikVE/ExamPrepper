@@ -5,11 +5,7 @@ export default function ExamSelectIntro() {
     const { t } = useLanguage();
 
     return (
-        <section className="exam-select-intro" aria-labelledby="exam-select-title">
-            <h1 id="exam-select-title" className="exam-select-title">
-                {t.selectIntroTitle}
-            </h1>
-
+        <section className="exam-select-intro" aria-label={t.selectTitle}>
             <p className="exam-select-subtitle">
                 {t.selectSubtitle}
             </p>

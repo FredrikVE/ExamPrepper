@@ -7,6 +7,10 @@ export default function ExamSelectTopbar() {
 
     return (
         <div className="exam-select-topbar">
+            <h1 className="exam-select-title">
+                {t.selectIntroTitle}
+            </h1>
+
             <button type="button" className="exam-select-statistics-button">
                 <Trophy className="exam-select-statistics-icon" />
                 <span>{t.selectStatistics}</span>

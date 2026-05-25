@@ -43,10 +43,19 @@
     position: relative;
     z-index: 1;
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: 24px;
-    margin-bottom: 42px;
+    margin-bottom: 18px;
+}
+
+.exam-select-title {
+    margin: 0;
+    font-size: clamp(48px, 5vw, 66px);
+    font-weight: 820;
+    line-height: 0.98;
+    letter-spacing: -0.06em;
+    color: var(--text-main);
 }
 
 .exam-select-statistics-button {
@@ -87,17 +96,8 @@
     margin-bottom: 58px;
 }
 
-.exam-select-title {
-    margin: 0;
-    font-size: clamp(48px, 5vw, 66px);
-    font-weight: 820;
-    line-height: 0.98;
-    letter-spacing: -0.06em;
-    color: var(--text-main);
-}
-
 .exam-select-subtitle {
-    margin: 26px 0 0;
+    margin: 0;
     font-size: clamp(21px, 1.7vw, 29px);
     color: var(--text-soft);
 }
@@ -140,7 +140,7 @@
     }
 
     .exam-select-topbar {
-        margin-bottom: 34px;
+        margin-bottom: 16px;
     }
 
     .exam-select-statistics-button span {
@@ -154,6 +154,7 @@
 
 @media (max-width: 680px) {
     .exam-select-topbar {
+        flex-direction: column;
         align-items: flex-start;
     }
 
