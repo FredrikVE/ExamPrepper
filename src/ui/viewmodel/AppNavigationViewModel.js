@@ -1,12 +1,12 @@
 //src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULT_SUBJECT_ID, getExamById } from "../../data/data.js";
+import { getExamById } from "../../data/data.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 
 export default function useAppNavigationViewModel(language, getExamByBaseIdAndLangUseCase) {
     // Navigasjons-state
     const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
-    const [selectedSubjectId, setSelectedSubjectId] = useState(DEFAULT_SUBJECT_ID);
+    const [selectedSubjectId, setSelectedSubjectId] = useState(null);
     const [selectedExamId, setSelectedExamId] = useState(null);
 
     // Layout-state
@@ -52,33 +52,57 @@ export default function useAppNavigationViewModel(language, getExamByBaseIdAndLa
 
     const backToExamList = useCallback(() => {
         setSelectedExamId(null);
-        setActiveScreen(NAV_SCREENS.SELECT);
+
+        if (selectedSubjectId) {
+            setActiveScreen(NAV_SCREENS.SELECT);
+        } else {
+            setActiveScreen(NAV_SCREENS.SUBJECTS);
+        }
+
         setSettingsOpen(false);
         setSidebarOpen(false);
-    }, []);
+    }, [selectedSubjectId]);
 
     const changeScreen = useCallback((nextScreen) => {
         setSettingsOpen(false);
         setSidebarOpen(false);
 
         if (nextScreen === NAV_SCREENS.SUBJECTS) {
-            setSelectedExamId(null);
-            setActiveScreen(NAV_SCREENS.SUBJECTS);
+            showAllSubjects();
             return;
         }
 
         if (nextScreen === NAV_SCREENS.SELECT) {
             setSelectedExamId(null);
-            setActiveScreen(NAV_SCREENS.SELECT);
+
+            if (selectedSubjectId) {
+                setActiveScreen(NAV_SCREENS.SELECT);
+            } else {
+                setActiveScreen(NAV_SCREENS.SUBJECTS);
+            }
+
             return;
         }
 
-        if (nextScreen === NAV_SCREENS.EXAM && !selectedExamId) {
+        if (nextScreen === NAV_SCREENS.EXAM) {
+            if (!selectedExamId) {
+                return;
+            }
+
+            setActiveScreen(NAV_SCREENS.EXAM);
             return;
         }
 
-        setActiveScreen(nextScreen);
-    }, [selectedExamId]);
+        if (nextScreen === NAV_SCREENS.OVERVIEW || nextScreen === NAV_SCREENS.NOTES) {
+            setSelectedExamId(null);
+            setActiveScreen(nextScreen);
+            return;
+        }
+
+        if (nextScreen === NAV_SCREENS.SETTINGS) {
+            setSettingsOpen(true);
+        }
+    }, [selectedSubjectId, selectedExamId, showAllSubjects]);
 
     const handleLanguageChangedSwitchExam = useCallback(() => {
         if (prevLanguageRef.current === language) {
@@ -91,32 +115,79 @@ export default function useAppNavigationViewModel(language, getExamByBaseIdAndLa
             return;
         }
 
-        const currentExam = getExamById(selectedExamId);
+        let cancelled = false;
 
-        if (currentExam?.baseId) {
-            const translatedExam = getExamByBaseIdAndLangUseCase.execute({
+        const switchExamLanguage = async () => {
+            const currentExam = getExamById(selectedExamId);
+
+            if (!currentExam?.baseId) {
+                setSelectedExamId(null);
+
+                if (selectedSubjectId) {
+                    setActiveScreen(NAV_SCREENS.SELECT);
+                } else {
+                    setActiveScreen(NAV_SCREENS.SUBJECTS);
+                }
+
+                setSettingsOpen(false);
+                setSidebarOpen(false);
+                return;
+            }
+
+            const translatedExam = await getExamByBaseIdAndLangUseCase.execute({
                 baseId: currentExam.baseId,
-                lang: language
+                lang: language,
+                language
             });
+
+            if (cancelled) {
+                return;
+            }
 
             if (translatedExam) {
                 setSelectedExamId(translatedExam.id);
-                setSelectedSubjectId(translatedExam.subjectId ?? DEFAULT_SUBJECT_ID);
+                setSelectedSubjectId(translatedExam.subjectId ?? selectedSubjectId);
                 return;
             }
-        }
 
-        setActiveScreen(NAV_SCREENS.SELECT);
-        setSelectedExamId(null);
-        setSettingsOpen(false);
-        setSidebarOpen(false);
-    }, [language, activeScreen, selectedExamId, getExamByBaseIdAndLangUseCase]);
+            setSelectedExamId(null);
+
+            if (selectedSubjectId) {
+                setActiveScreen(NAV_SCREENS.SELECT);
+            } else {
+                setActiveScreen(NAV_SCREENS.SUBJECTS);
+            }
+
+            setSettingsOpen(false);
+            setSidebarOpen(false);
+        };
+
+        switchExamLanguage();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [
+        language,
+        activeScreen,
+        selectedExamId,
+        selectedSubjectId,
+        getExamByBaseIdAndLangUseCase
+    ]);
 
     useEffect(handleLanguageChangedSwitchExam, [handleLanguageChangedSwitchExam]);
 
-    const isSelectionScreen = activeScreen === NAV_SCREENS.SUBJECTS || activeScreen === NAV_SCREENS.SELECT;
-    const pageClassName = isSelectionScreen ? "exam-select-page" : "exam-page";
-    const shellClassName = isSelectionScreen ? "exam-select-shell" : "exam-shell";
+    const isSelectionScreen =
+        activeScreen === NAV_SCREENS.SUBJECTS ||
+        activeScreen === NAV_SCREENS.SELECT;
+
+    const pageClassName = isSelectionScreen
+        ? "exam-select-page"
+        : "exam-page";
+
+    const shellClassName = isSelectionScreen
+        ? "exam-select-shell"
+        : "exam-shell";
 
     return {
         // Navigasjon

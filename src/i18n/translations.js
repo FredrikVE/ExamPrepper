@@ -99,16 +99,16 @@ export const translations = {
 
         // Sidebar
         sidebarLabel: "Eksamensnavigasjon",
-        sidebarSubjects: "Velg fag",
+        sidebarSubjects: "Velg fag fra hjemskjerm",
         sidebarExams: "Velg eksamen",
-        sidebarHome: "Velg fag",
+        sidebarHome: "Velg fag fra hjemskjerm",
         sidebarOverview: "Oversikt",
         sidebarNotes: "Notater",
         sidebarSettings: "Innstillinger"
     },
 
     [LANGUAGES.EN]: {
-        
+
         // SubjectSelectPage
         subjectSelectTitle: "Choose subject",
         subjectSelectSubtitle: "Choose which subject you want to practise before selecting a mock exam.",
@@ -197,9 +197,9 @@ export const translations = {
 
         // Sidebar
         sidebarLabel: "Exam navigation",
-        sidebarSubjects: "Choose subject",
+        sidebarSubjects: "Choose subject from home",
         sidebarExams: "Choose exam",
-        sidebarHome: "Choose subject",
+        sidebarHome: "Choose subject from home",
         sidebarOverview: "Overview",
         sidebarNotes: "Notes",
         sidebarSettings: "Settings"

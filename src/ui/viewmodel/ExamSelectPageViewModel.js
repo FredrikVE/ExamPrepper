@@ -1,5 +1,4 @@
 //src/ui/viewmodel/ExamSelectPageViewModel.js
-//src/ui/viewmodel/ExamSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 function normalizeExamResult(result) {
@@ -18,13 +17,7 @@ function normalizeExamResult(result) {
     return [];
 }
 
-export default function useExamSelectPageViewModel(
-    getAvailableExamsUseCase,
-    language,
-    t,
-    selectedSubject,
-    onSelectExam
-) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam) {
     const [exams, setExams] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
