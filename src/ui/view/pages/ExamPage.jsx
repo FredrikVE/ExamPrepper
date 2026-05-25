@@ -1,32 +1,33 @@
 // src/ui/view/pages/ExamPage.jsx
-import { useState } from "react";
-import { BookOpen, Flag, Grid2X2, PencilLine, Settings } from "lucide-react";
+import { Flag } from "lucide-react";
 import Header from "../components/Header/Header.jsx";
 import QuestionCard from "../components/ExamPage/QuestionCard.jsx";
 import Footer from "../components/Footer/Footer.jsx";
-import SettingsMenu from "../components/Settings/SettingsMenu.jsx";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel, onBack }) {
     const { t } = useLanguage();
-    const [settingsOpen, setSettingsOpen] = useState(false);
 
     if (viewModel.loading) {
         return (
-            <div className="exam-page-state">
-                <p className="exam-page-loading-message">
-                    {t.loadingMessage}
-                </p>
+            <div className="exam-workspace">
+                <div className="exam-page-state">
+                    <p className="exam-page-loading-message">
+                        {t.loadingMessage}
+                    </p>
+                </div>
             </div>
         );
     }
 
     if (viewModel.error) {
         return (
-            <div className="exam-page-state">
-                <p className="exam-page-error-message">
-                    {t.errorPrefix}: {viewModel.error}
-                </p>
+            <div className="exam-workspace">
+                <div className="exam-page-state">
+                    <p className="exam-page-error-message">
+                        {t.errorPrefix}: {viewModel.error}
+                    </p>
+                </div>
             </div>
         );
     }
@@ -34,70 +35,19 @@ export default function ExamPage({ viewModel, onBack }) {
     const pageContent = getPageContent(viewModel, t);
 
     return (
-        <div className="exam-page">
-            <div className="exam-shell">
-                <ExamSidebar
-                    t={t}
-                    settingsOpen={settingsOpen}
-                    onOpenSettings={() => setSettingsOpen(true)}
-                />
+        <div className="exam-workspace">
+            <Header viewModel={viewModel}/>
 
-                <div className="exam-workspace">
-                    <Header viewModel={viewModel} onBack={onBack} />
+            <ExamProgress viewModel={viewModel} />
 
-                    <ExamProgress viewModel={viewModel} />
-
-                    <main className="exam-page-main">
-                        <div className="exam-page-content">
-                            {pageContent}
-                        </div>
-                    </main>
-
-                    <Footer viewModel={viewModel} />
+            <main className="exam-page-main">
+                <div className="exam-page-content">
+                    {pageContent}
                 </div>
+            </main>
 
-                <SettingsMenu
-                    isOpen={settingsOpen}
-                    onOpenChange={setSettingsOpen}
-                />
-            </div>
+            <Footer viewModel={viewModel} />
         </div>
-    );
-}
-
-function ExamSidebar({ t, settingsOpen, onOpenSettings }) {
-    const items = [
-        { label: t.sidebarTask, icon: BookOpen, active: !settingsOpen },
-        { label: t.sidebarOverview, icon: Grid2X2 },
-        { label: t.sidebarNotes, icon: PencilLine },
-        {
-            label: t.sidebarSettings,
-            icon: Settings,
-            active: settingsOpen,
-            onClick: onOpenSettings,
-            ariaControls: "settings-panel",
-            ariaExpanded: settingsOpen
-        }
-    ];
-
-    return (
-        <aside className="exam-sidebar" aria-label={t.sidebarLabel}>
-            <nav className="exam-sidebar-nav">
-                {items.map(({ label, icon: Icon, active, onClick, ariaControls, ariaExpanded }) => (
-                    <button
-                        key={label}
-                        type="button"
-                        onClick={onClick}
-                        className={`exam-sidebar-item ${active ? "exam-sidebar-item-active" : ""}`}
-                        aria-controls={ariaControls}
-                        aria-expanded={ariaExpanded}
-                    >
-                        <Icon className="exam-sidebar-icon" />
-                        <span>{label}</span>
-                    </button>
-                ))}
-            </nav>
-        </aside>
     );
 }
 
@@ -168,4 +118,4 @@ const getPageContent = (viewModel, t) => {
             onToggleMultiAnswer={viewModel.toggleMultiAnswer}
         />
     );
-}
+};

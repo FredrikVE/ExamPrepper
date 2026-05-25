@@ -1,0 +1,51 @@
+/*src/ui/style/Sidebar/sidebar-user-card.css*/
+.sidebar-user-card {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+}
+
+.sidebar-user-avatar {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--text-main);
+    font-weight: 650;
+    background: var(--panel-bg);
+}
+
+.sidebar-user-copy {
+    min-width: 0;
+}
+
+.sidebar-user-name {
+    margin: 0;
+    overflow: hidden;
+    color: var(--text-main);
+    font-weight: 660;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user-email {
+    margin: 4px 0 0;
+    overflow: hidden;
+    color: var(--text-soft);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user-chevron {
+    width: 22px;
+    height: 22px;
+    color: var(--text-soft);
+}

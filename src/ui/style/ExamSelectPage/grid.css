@@ -1,0 +1,7 @@
+/* src/ui/style/ExamSelectPage/grid.css */
+.exam-select-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--space-9);
+}

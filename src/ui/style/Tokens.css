@@ -12,6 +12,20 @@
     --exam-content-width: 70%;
     --exam-content-max-width: 70%;
 
+    /* ── Spacing ───────────────────────────── */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 10px;
+    --space-4: 12px;
+    --space-5: 14px;
+    --space-6: 16px;
+    --space-7: 18px;
+    --space-8: 20px;
+    --space-9: 28px;
+    --space-10: 32px;
+    --space-11: 86px;
+    --space-12: 92px;
+
     /* ── Surfaces ──────────────────────────── */
     --app-bg: #f7fbff;
     --shell-bg: rgba(255, 255, 255, 0.94);
@@ -27,7 +41,7 @@
     --line: rgba(113, 128, 150, 0.22);
     --line-strong: rgba(43, 63, 92, 0.16);
 
-    /* ── Accent (primary brand colour) ──────── */
+    /* ── Accent ────────────────────────────── */
     --accent: #1067ff;
     --accent-soft: rgba(16, 103, 255, 0.1);
     --accent-strong: #0057ee;
@@ -70,28 +84,69 @@
     /* ── Backdrop ───────────────────────────── */
     --blur-panel: blur(24px);
     --blur-overlay: blur(4px);
+
+    /* ── Header component ──────────────────── */
+    --header-padding-desktop: var(--space-9) var(--space-10) var(--space-8);
+    --header-padding-tablet: var(--space-7) var(--space-6) var(--space-5) var(--space-12);
+    --header-padding-mobile: var(--space-11) var(--space-6) var(--space-7);
+
+    --header-layout-gap: var(--space-8);
+    --header-actions-gap: var(--space-3);
+
+    --header-button-min-height: 54px;
+    --header-button-padding: 0 var(--space-7);
+    --header-button-font-size: 0.94rem;
+    --header-button-font-weight: 800;
+    --header-button-hover-offset: -1px;
+
+    --header-icon-size: var(--space-7);
+
+    --header-stat-card-min-width: 84px;
+    --header-stat-card-icon-column: var(--space-9);
+    --header-stat-card-gap: var(--space-2);
+    --header-stat-card-padding: var(--space-3) var(--space-4);
+    --header-stat-card-mobile-padding: var(--space-3);
+
+    --header-stat-icon-size: var(--space-9);
+    --header-stat-icon-svg-size: 15px;
+
+    --header-stat-value-font-size: 0.94rem;
+    --header-stat-value-font-weight: 850;
+
+    --header-stat-label-margin-top: 2px;
+    --header-stat-label-font-size: 0.74rem;
+    --header-stat-label-font-weight: 600;
+
+    --header-stat-card-bg: color-mix(in srgb, var(--panel-strong) 80%, transparent);
+    --header-stat-card-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+    --header-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
 }
 
 .dark {
     color-scheme: dark;
 
+    /* ── Surfaces ──────────────────────────── */
     --app-bg: #020813;
     --shell-bg: rgba(4, 16, 31, 0.96);
     --panel-bg: rgba(7, 22, 42, 0.78);
     --panel-strong: rgba(8, 22, 40, 0.92);
 
+    /* ── Typography ────────────────────────── */
     --text-main: #f7fbff;
     --text-muted: #a8b3c7;
     --text-soft: #74819a;
 
+    /* ── Borders / dividers ─────────────────── */
     --line: rgba(148, 163, 184, 0.16);
     --line-strong: rgba(148, 163, 184, 0.24);
 
+    /* ── Accent ────────────────────────────── */
     --accent: #6d5cff;
     --accent-soft: rgba(109, 92, 255, 0.16);
     --accent-strong: #745cff;
     --accent-gradient: linear-gradient(135deg, #7b61ff 0%, #4d46ff 100%);
 
+    /* ── Semantic status ───────────────────── */
     --success: #19c6a2;
     --success-soft: rgba(16, 185, 129, 0.1);
     --success-border: rgba(16, 185, 129, 0.42);
@@ -107,8 +162,14 @@
     --warning-border: rgba(245, 158, 11, 0.28);
     --warning-text: #fde68a;
 
+    /* ── Elevation ─────────────────────────── */
     --shadow-soft: 0 26px 80px rgba(0, 0, 0, 0.42);
     --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.3);
     --shadow-heavy: 0 28px 90px rgba(0, 0, 0, 0.36);
     --shadow-button: 0 14px 26px rgba(109, 92, 255, 0.28);
+
+    /* ── Header component ──────────────────── */
+    --header-stat-card-bg: color-mix(in srgb, var(--panel-strong) 62%, transparent);
+    --header-stat-card-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    --header-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
 }

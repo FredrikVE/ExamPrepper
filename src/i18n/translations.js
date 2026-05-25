@@ -13,24 +13,12 @@ export const translations = {
     [LANGUAGES.NO]: {
         // ExamSelectPage
         selectTitle: "IN5431 Eksamens-emulator",
-        selectHeroKicker: "IN5431 mock skoleeksamen",
-        selectHeroTitle: "Velg eksamen",
+        selectIntroTitle: "Velg eksamen",
         selectSubtitle: "Velg en øvingsprøve for å starte",
         selectStatistics: "Din statistikk",
-        selectRecommended: "Anbefalt",
         selectPracticeExamLabel: (number) => `ØVINGSPRØVE ${number}`,
-        selectQuestionCount: (count) => `${count} spørsmål`,
         selectQuestionLabel: "spørsmål",
         selectMinuteLabel: "minutter",
-        selectFeatureStripLabel: "Fordeler med eksamensemulatoren",
-        selectFeatureRealisticTitle: "Realistiske eksamensspørsmål",
-        selectFeatureRealisticDescription: "Bygget for IN5431 pensum og nivå",
-        selectFeatureFeedbackTitle: "Umiddelbar tilbakemelding",
-        selectFeatureFeedbackDescription: "Se forklaringer og lær underveis",
-        selectFeatureProgressTitle: "Følg fremgangen din",
-        selectFeatureProgressDescription: "Statistikk og ytelse over tid",
-        selectFeaturePrivateTitle: "100 % privat og trygt",
-        selectFeaturePrivateDescription: "Dine resultater er kun for deg",
 
         // Header
         headerLabel: "IN5431 mock skoleeksamen",
@@ -40,8 +28,6 @@ export const translations = {
         headerStatScore: "score",
         headerStatTime: "tid brukt",
         headerSubmitButton: "Lever nå",
-        headerShowFeedback: "Vis fasit",
-        headerHideFeedback: "Skjul fasit",
         headerResetButton: "Ny runde",
         headerBackTitle: "Tilbake til eksamenslisten",
 
@@ -91,35 +77,24 @@ export const translations = {
         settingsClose: "Lukk innstillinger",
         settingsOpenMenu: "Åpne meny",
         settingsDarkMode: "Mørkt tema",
+
+        // Sidebar
         sidebarLabel: "Eksamensnavigasjon",
-        sidebarHome: "Hjem",
-        sidebarTask: "Oppgave",
+        sidebarHome: "Velg eksamen",
         sidebarOverview: "Oversikt",
         sidebarNotes: "Notater",
-        sidebarSettings: "Innstillinger",
+        sidebarSettings: "Innstillinger"
     },
 
     [LANGUAGES.EN]: {
         // ExamSelectPage
         selectTitle: "IN5431 Exam Emulator",
-        selectHeroKicker: "IN5431 mock exam",
-        selectHeroTitle: "Choose exam",
+        selectIntroTitle: "Choose exam",
         selectSubtitle: "Choose a practice exam to begin",
         selectStatistics: "Your statistics",
-        selectRecommended: "Recommended",
         selectPracticeExamLabel: (number) => `PRACTICE EXAM ${number}`,
-        selectQuestionCount: (count) => `${count} questions`,
         selectQuestionLabel: "questions",
         selectMinuteLabel: "minutes",
-        selectFeatureStripLabel: "Exam emulator benefits",
-        selectFeatureRealisticTitle: "Realistic exam questions",
-        selectFeatureRealisticDescription: "Built for the IN5431 syllabus and level",
-        selectFeatureFeedbackTitle: "Immediate feedback",
-        selectFeatureFeedbackDescription: "See explanations and learn as you go",
-        selectFeatureProgressTitle: "Track your progress",
-        selectFeatureProgressDescription: "Statistics and performance over time",
-        selectFeaturePrivateTitle: "100% private and safe",
-        selectFeaturePrivateDescription: "Your results are only for you",
 
         // Header
         headerLabel: "IN5431 mock exam",
@@ -129,8 +104,6 @@ export const translations = {
         headerStatScore: "score",
         headerStatTime: "time used",
         headerSubmitButton: "Submit",
-        headerShowFeedback: "Show answers",
-        headerHideFeedback: "Hide answers",
         headerResetButton: "New round",
         headerBackTitle: "Back to exam list",
 
@@ -180,11 +153,12 @@ export const translations = {
         settingsClose: "Close settings",
         settingsOpenMenu: "Open menu",
         settingsDarkMode: "Dark mode",
+
+        // Sidebar
         sidebarLabel: "Exam navigation",
-        sidebarHome: "Home",
-        sidebarTask: "Task",
+        sidebarHome: "Choose exam",
         sidebarOverview: "Overview",
         sidebarNotes: "Notes",
-        sidebarSettings: "Settings",
+        sidebarSettings: "Settings"
     }
 };

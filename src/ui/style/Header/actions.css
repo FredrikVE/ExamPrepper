@@ -1,8 +1,9 @@
 /* src/ui/style/Header/actions.css */
 .exam-header-actions {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
-    gap: 10px;
+    gap: var(--header-actions-gap);
+    width: max-content;
+    max-width: 100%;
 }

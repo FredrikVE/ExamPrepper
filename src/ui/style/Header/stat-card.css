@@ -1,26 +1,21 @@
 /* src/ui/style/Header/stat-card.css */
 .exam-header-stat-card {
     display: grid;
-    min-width: 84px;
-    grid-template-columns: 28px 1fr;
+    min-width: var(--header-stat-card-min-width);
+    grid-template-columns: var(--header-stat-card-icon-column) minmax(0, 1fr);
     align-items: center;
-    gap: 8px;
+    gap: var(--header-stat-card-gap);
     border: 1px solid var(--line);
     border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--panel-strong) 80%, transparent);
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
-    padding: 10px 12px;
-}
-
-.dark .exam-header-stat-card {
-    background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    background: var(--header-stat-card-bg);
+    box-shadow: var(--header-stat-card-shadow);
+    padding: var(--header-stat-card-padding);
 }
 
 .exam-header-stat-icon {
     display: grid;
-    width: 28px;
-    height: 28px;
+    width: var(--header-stat-icon-size);
+    height: var(--header-stat-icon-size);
     place-items: center;
     border: 1px solid var(--line);
     border-radius: var(--radius-full);
@@ -29,21 +24,21 @@
 }
 
 .exam-header-stat-icon svg {
-    width: 15px;
-    height: 15px;
+    width: var(--header-stat-icon-svg-size);
+    height: var(--header-stat-icon-svg-size);
 }
 
 .exam-header-stat-value {
     color: var(--text-main);
-    font-size: 0.94rem;
-    font-weight: 850;
+    font-size: var(--header-stat-value-font-size);
+    font-weight: var(--header-stat-value-font-weight);
     line-height: 1.05;
 }
 
 .exam-header-stat-label {
-    margin-top: 2px;
+    margin-top: var(--header-stat-label-margin-top);
     color: var(--text-muted);
-    font-size: 0.74rem;
-    font-weight: 600;
+    font-size: var(--header-stat-label-font-size);
+    font-weight: var(--header-stat-label-font-weight);
     line-height: 1;
 }
