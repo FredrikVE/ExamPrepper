@@ -316,6 +316,44 @@
     border-color: var(--line);
 }
 
+/* ── Inline feedback inside option ──── */
+.question-card-option-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.question-card-option-feedback {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+
+.question-card-option-feedback-label-correct {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--success-text);
+    font-size: 0.82rem;
+    font-weight: 850;
+}
+
+.question-card-option-feedback-label-wrong {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--danger-text);
+    font-size: 0.82rem;
+    font-weight: 850;
+}
+
+.question-card-option-feedback-text {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.55;
+}
+
 @media (max-width: 700px) {
     .question-card-header,
     .question-card-body {

@@ -1,5 +1,5 @@
 //src/ui/view/components/ExamPage/QuestionCard.jsx
-import { AlertTriangle, Edit3, Info } from "lucide-react";
+import { AlertTriangle, Edit3, Info, BookOpen } from "lucide-react";
 import ResultBadge from "./ResultBadge.jsx";
 import FeedbackPanel from "./FeedbackPanel.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
@@ -106,6 +106,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                         question={question}
                         answer={answer}
                         submitted={submitted}
+                        showAllFeedback={showAllFeedback}
                         onSingleAnswer={onSingleAnswer}
                     />
                 )}
@@ -115,6 +116,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                         question={question}
                         answer={answer}
                         submitted={submitted}
+                        showAllFeedback={showAllFeedback}
                         onToggleMultiAnswer={onToggleMultiAnswer}
                     />
                 )}
@@ -135,12 +137,29 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                     </div>
                 )}
 
-                {submitted && showAllFeedback && (
+                {/* Fill-in: vis FeedbackPanel som før (den har ingen options å vise inline) */}
+                {submitted && showAllFeedback && question.type === "fill" && (
                     <FeedbackPanel
                         question={question}
                         selected={answer}
                         correct={correct}
                     />
+                )}
+
+                {/* Single/multi: kildehenvisning under opsjonene (forklaringene er nå inne i hver boks) */}
+                {submitted && showAllFeedback && question.type !== "fill" && (
+                    <div className="feedback-panel" style={{ marginTop: 26 }}>
+                        <div className="feedback-panel-source">
+                            <div className="feedback-panel-source-title">
+                                <BookOpen className="feedback-panel-source-icon" />
+                                {t.feedbackSourceTitle}
+                            </div>
+
+                            <p className="feedback-panel-source-text">
+                                {question.source}
+                            </p>
+                        </div>
+                    </div>
                 )}
             </div>
         </section>
@@ -177,7 +196,9 @@ function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswe
     });
 }
 
-function OptionList({ question, answer, submitted, onSingleAnswer, onToggleMultiAnswer }) {
+function OptionList({ question, answer, submitted, showAllFeedback, onSingleAnswer, onToggleMultiAnswer }) {
+    const { t } = useLanguage();
+
     return (
         <div className="question-card-option-list">
             {question.options.map((option, index) => {
@@ -210,12 +231,34 @@ function OptionList({ question, answer, submitted, onSingleAnswer, onToggleMulti
                             className="question-card-option-input"
                         />
 
-                        <span>
-                            <span className="question-card-option-letter">
-                                {String.fromCharCode(65 + index)}.
-                            </span>{" "}
-                            {option.text}
-                        </span>
+                        <div className="question-card-option-content">
+                            <span>
+                                <span className="question-card-option-letter">
+                                    {String.fromCharCode(65 + index)}.
+                                </span>{" "}
+                                {option.text}
+                            </span>
+
+                            {submitted && showAllFeedback && (
+                                <div className="question-card-option-feedback">
+                                    <span
+                                        className={
+                                            option.correct
+                                                ? "question-card-option-feedback-label-correct"
+                                                : "question-card-option-feedback-label-wrong"
+                                        }
+                                    >
+                                        {option.correct
+                                            ? t.feedbackOptionCorrect
+                                            : t.feedbackOptionWrong}
+                                    </span>
+
+                                    <p className="question-card-option-feedback-text">
+                                        {option.why}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     </label>
                 );
             })}
