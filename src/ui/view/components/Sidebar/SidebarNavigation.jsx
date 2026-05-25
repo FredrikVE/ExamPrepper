@@ -10,10 +10,10 @@ const SIDEBAR_ICONS = {
     notes: PencilLine
 };
 
-function SidebarNavigationButton({ Icon, label, active, onClick }) {
+function SidebarNavigationItem({ Icon, label, active, onClick }) {
     const className = active
-        ? "sidebar-navigation-button active"
-        : "sidebar-navigation-button";
+        ? "sidebar-navigation-item sidebar-navigation-item-active"
+        : "sidebar-navigation-item";
 
     return (
         <button
@@ -21,7 +21,7 @@ function SidebarNavigationButton({ Icon, label, active, onClick }) {
             className={className}
             onClick={onClick}
         >
-            <Icon size={22} strokeWidth={2.2} />
+            <Icon className="sidebar-navigation-icon" strokeWidth={2.2} />
             <span>{label}</span>
         </button>
     );
@@ -41,7 +41,7 @@ export default function SidebarNavigation({ activeScreen, onChangeScreen }) {
                 const active = item.activeScreens.includes(activeScreen);
 
                 return (
-                    <SidebarNavigationButton
+                    <SidebarNavigationItem
                         key={item.id}
                         Icon={Icon}
                         label={label}
