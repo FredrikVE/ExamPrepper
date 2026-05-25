@@ -3,162 +3,19 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Global */
+@import "./Tokens.css";
+@import "./Global.css";
+@import "./Responsive.css";
+
+/* Pages */
 @import "./ExamSelectPage/index.css";
 @import "./ExamPage/index.css";
+
+/* Shared UI */
 @import "./Header/index.css";
 @import "./Footer/index.css";
 @import "./QuestionCard/index.css";
 @import "./FeedbackPanel/index.css";
 @import "./SettingsMenu/index.css";
 @import "./ResultBadge.css";
-
-/* ──────────────────────────────────────────────
-   DESIGN TOKENS
-   All child CSS files inherit from these.
-   To re-skin the app, edit only this block.
-   ────────────────────────────────────────────── */
-:root {
-    color-scheme: light;
-
-    /* ── Layout ────────────────────────────── */
-    --exam-content-width: 70%;
-    --exam-content-max-width: 70%;
-
-    /* ── Surfaces ──────────────────────────── */
-    --app-bg: #f7fbff;
-    --shell-bg: rgba(255, 255, 255, 0.94);
-    --panel-bg: rgba(255, 255, 255, 0.88);
-    --panel-strong: #ffffff;
-
-    /* ── Typography ────────────────────────── */
-    --text-main: #071124;
-    --text-muted: #5d6b85;
-    --text-soft: #8390a7;
-
-    /* ── Borders / dividers ─────────────────── */
-    --line: rgba(113, 128, 150, 0.22);
-    --line-strong: rgba(43, 63, 92, 0.16);
-
-    /* ── Accent (primary brand colour) ──────── */
-    --accent: #1067ff;
-    --accent-soft: rgba(16, 103, 255, 0.1);
-    --accent-strong: #0057ee;
-    --accent-gradient: linear-gradient(135deg, #0768ff 0%, #0051e6 100%);
-
-    /* ── Semantic status ───────────────────── */
-    --success: #12b886;
-    --success-soft: rgba(16, 185, 129, 0.1);
-    --success-border: rgba(16, 185, 129, 0.3);
-    --success-text: #059669;
-    --danger: #dc2626;
-    --danger-soft: rgba(239, 68, 68, 0.1);
-    --danger-border: rgba(239, 68, 68, 0.3);
-    --danger-text: #b91c1c;
-    --warning: #f5bf25;
-    --warning-soft: rgba(255, 251, 235, 0.76);
-    --warning-border: rgba(245, 158, 11, 0.28);
-    --warning-text: #92400e;
-
-    /* ── Elevation ─────────────────────────── */
-    --shadow-soft: 0 22px 60px rgba(18, 38, 63, 0.12);
-    --shadow-card: 0 16px 48px rgba(18, 38, 63, 0.09);
-    --shadow-heavy: 0 28px 90px rgba(18, 38, 63, 0.14);
-    --shadow-button: 0 14px 26px rgba(0, 87, 238, 0.22);
-
-    /* ── Radii ─────────────────────────────── */
-    --radius-xl: 28px;
-    --radius-lg: 20px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 10px;
-    --radius-full: 999px;
-
-    /* ── Transition ─────────────────────────── */
-    --transition-fast: 160ms ease;
-    --transition-normal: 200ms ease;
-
-    /* ── Backdrop ───────────────────────────── */
-    --blur-panel: blur(24px);
-    --blur-overlay: blur(4px);
-}
-
-.dark {
-    color-scheme: dark;
-
-    --app-bg: #020813;
-    --shell-bg: rgba(4, 16, 31, 0.96);
-    --panel-bg: rgba(7, 22, 42, 0.78);
-    --panel-strong: rgba(8, 22, 40, 0.92);
-
-    --text-main: #f7fbff;
-    --text-muted: #a8b3c7;
-    --text-soft: #74819a;
-
-    --line: rgba(148, 163, 184, 0.16);
-    --line-strong: rgba(148, 163, 184, 0.24);
-
-    --accent: #6d5cff;
-    --accent-soft: rgba(109, 92, 255, 0.16);
-    --accent-strong: #745cff;
-    --accent-gradient: linear-gradient(135deg, #7b61ff 0%, #4d46ff 100%);
-
-    --success: #19c6a2;
-    --success-soft: rgba(16, 185, 129, 0.1);
-    --success-border: rgba(16, 185, 129, 0.42);
-    --success-text: #34d399;
-    --danger: #f87171;
-    --danger-soft: rgba(239, 68, 68, 0.1);
-    --danger-border: rgba(239, 68, 68, 0.42);
-    --danger-text: #fecaca;
-    --warning: #f5c542;
-    --warning-soft: rgba(120, 53, 15, 0.2);
-    --warning-border: rgba(245, 158, 11, 0.28);
-    --warning-text: #fde68a;
-
-    --shadow-soft: 0 26px 80px rgba(0, 0, 0, 0.42);
-    --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.3);
-    --shadow-heavy: 0 28px 90px rgba(0, 0, 0, 0.36);
-    --shadow-button: 0 14px 26px rgba(109, 92, 255, 0.28);
-}
-
-/* ──────────────────────────────────────────────
-   GLOBAL RESETS
-   ────────────────────────────────────────────── */
-* {
-    box-sizing: border-box;
-}
-
-html {
-    min-height: 100%;
-    background: var(--app-bg);
-}
-
-body {
-    min-height: 100%;
-    margin: 0;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: var(--app-bg);
-    color: var(--text-main);
-}
-
-button,
-input {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-button:focus-visible,
-input:focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--accent) 25%, transparent);
-    outline-offset: 3px;
-}
-
-@media (max-width: 920px) {
-    :root {
-        --exam-content-width: calc(100% - 32px);
-        --exam-content-max-width: none;
-    }
-}
