@@ -1,18 +1,19 @@
 /* src/ui/style/QuestionCard/prompt.css */
 .question-card-prompt {
-    margin: 0 0 28px;
-    max-width: 760px;
+    margin: 0 0 var(--space-9);
     color: var(--text-main);
-    font-size: 1.04rem;
+    font-size: clamp(1.25rem, 1.5vw, 1.55rem);
     font-weight: 500;
-    line-height: 2;
+    line-height: 2.1;
 }
 
 .question-card-prompt-inline {
-    margin-bottom: 12px;
-    max-width: 840px;
+    margin-bottom: var(--space-4);
 }
 
 .question-card-inline-answer-block {
-    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-bottom: 0;
 }

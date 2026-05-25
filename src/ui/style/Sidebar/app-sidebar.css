@@ -1,7 +1,10 @@
+/*src/ui/style/Sidebar/app-sidebar.css*/
 .app-sidebar {
-    position: relative;
+    position: sticky;
+    top: 16px;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 32px);
     min-height: 0;
     overflow: hidden;
     border: 1px solid var(--line-strong);
@@ -10,6 +13,13 @@
     backdrop-filter: var(--blur-panel);
     padding: 36px 30px 28px;
     border-radius: var(--radius-lg);
+}
+
+.sidebar-brand-navigation-divider {
+    width: 100%;
+    height: 1px;
+    margin: 28px 0;
+    background: var(--line);
 }
 
 .app-sidebar-divider {
@@ -21,6 +31,10 @@
 
 .app-sidebar-backdrop {
     display: none;
+}
+
+.sidebar-spacer {
+    flex: 1;
 }
 
 @media (max-width: 1280px) {

@@ -1,16 +1,16 @@
 //src/model/domain/GetAvailableSubjectsUseCase.js
 export default class GetAvailableSubjectsUseCase {
-    constructor(subjectRepository, examRepository) {
+    constructor(subjectRepository) {
         this.subjectRepository = subjectRepository;
-        this.examRepository = examRepository;
     }
 
-    execute({ lang } = {}) {
-        const subjects = this.subjectRepository.getAvailableSubjects(lang);
+    async execute({ language } = {}) {
+        const subjects = await this.subjectRepository.getSubjectsWithExamCount({
+            language
+        });
 
-        return subjects.map((subject) => ({
-            ...subject,
-            examCount: this.examRepository.getAvailableExams(lang, subject.id).length
-        }));
+        return {
+            subjects: subjects.filter((subject) => subject.isVisible)
+        };
     }
 }

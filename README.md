@@ -45,6 +45,8 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 | Hamburger/drawer på små skjermer | På smale skjermer åpnes sidebaren via hamburgermeny og kan lukkes med backdrop eller lukkeknapp |
 | Responsivt grensesnitt | Layouten tilpasser seg skjermbredde |
 | Moderne eksamenslayout | Bruker sidebar, header/statistikk, progressbar, question cards og footer-navigasjon |
+| Lever nå-knapp | Siste spørsmål viser «Lever nå» i stedet for «Neste» i footer-navigasjonen |
+| Resultatdots | Etter levering viser footer-dots grønn eller rød farge per spørsmål |
 | Utvidbart eksamensregister | Nye øveeksamener kan legges til som egne datafiler |
 
 ---
@@ -67,6 +69,7 @@ IN5431-Exam-Emulator/
     │   └── QuestionTypes.js
     ├── data/
     │   ├── data.js
+    │   ├── subjects.js
     │   └── exams/
     │       ├── mockExam1_en.js
     │       ├── mockExam1_no.js
@@ -79,17 +82,22 @@ IN5431-Exam-Emulator/
     │   └── translations.js
     ├── model/
     │   ├── datasource/
-    │   │   └── ExamQuestionDataSource.js
+    │   │   ├── ExamQuestionDataSource.js
+    │   │   └── SubjectDataSource.js
     │   ├── domain/
     │   │   ├── CalculateExamScoreUseCase.js
     │   │   ├── GetAvailableExamsUseCase.js
+    │   │   ├── GetAvailableSubjectsUseCase.js
     │   │   ├── GetExamByBaseIdAndLangUseCase.js
     │   │   ├── GetExamQuestionsUseCase.js
+    │   │   ├── GetSubjectByIdUseCase.js
     │   │   └── GradeAnswerUseCase.js
     │   └── repositories/
-    │       └── ExamRepository.js
+    │       ├── ExamRepository.js
+    │       └── SubjectRepository.js
     ├── navigation/
-    │   └── navGraph.js
+    │   ├── navGraph.js
+    │   └── navItems.js
     ├── ui/
     │   ├── style/
     │   │   ├── App.css
@@ -112,6 +120,8 @@ IN5431-Exam-Emulator/
     │   │   │   └── ...
     │   │   ├── Sidebar/
     │   │   │   └── ...
+    │   │   ├── SubjectSelectPage/
+    │   │   │   └── ...
     │   │   └── ResultBadge/
     │   │       └── ...
     │   ├── theme/
@@ -119,7 +129,8 @@ IN5431-Exam-Emulator/
     │   ├── view/
     │   │   ├── pages/
     │   │   │   ├── ExamPage.jsx
-    │   │   │   └── ExamSelectPage.jsx
+    │   │   │   ├── ExamSelectPage.jsx
+    │   │   │   └── SubjectSelectPage.jsx
     │   │   └── components/
     │   │       ├── ExamSelectPage/
     │   │       │   ├── ExamSelectCard.jsx
@@ -142,9 +153,19 @@ IN5431-Exam-Emulator/
     │   │       │   └── SubmittedActions.jsx
     │   │       ├── Footer/
     │   │       │   ├── Footer.jsx
-    │   │       │   └── FooterNavigationButton.jsx
+    │   │       │   ├── FooterActionButton.jsx
+    │   │       │   ├── FooterNavigationButton.jsx
+    │   │       │   ├── QuestionDot.jsx
+    │   │       │   ├── QuestionDots.jsx
+    │   │       │   └── footerClassNames.js
     │   │       ├── Settings/
     │   │       │   └── SettingsMenu.jsx
+    │   │       ├── SubjectIcon.jsx
+    │   │       ├── SubjectSelectPage/
+    │   │       │   ├── SubjectSelectCard.jsx
+    │   │       │   ├── SubjectSelectControls.jsx
+    │   │       │   ├── SubjectSelectGrid.jsx
+    │   │       │   └── SubjectSelectTopbar.jsx
     │   │       └── ExamPage/
     │   │           ├── FeedbackPanel.jsx
     │   │           ├── QuestionCard.jsx
@@ -165,9 +186,15 @@ IN5431-Exam-Emulator/
     │   │               └── Styling/
     │   │                   └── ...
     │   └── viewmodel/
-    │       └── useExamViewModel.js
+    │       ├── AppNavigationViewModel.js
+    │       ├── ExamPageViewModel.js
+    │       ├── ExamSelectPageViewModel.js
+    │       ├── PlaceholderPageViewModel.js
+    │       └── SubjectSelectPageViewModel.js
     └── utils/
         ├── answerutils/
+        │   └── ...
+        ├── examPageUtils/
         │   └── ...
         ├── questionutils/
         │   └── ...
@@ -588,6 +615,9 @@ Forsiden er delt opp i `ExamSelectTopbar`, `ExamSelectIntro`, `ExamSelectGrid` o
 
 **QuestionCard er delt i funksjonelle underområder.**  
 `QuestionCard` består av egne undermapper for `Header`, `Prompt`, `InputField`, `Options`, `AnswerCard`, `Feedback` og `Styling`. Dette gjør det lettere å finne riktig subkomponent og videreutvikle kortet uten at én fil får for mye ansvar.
+
+**Footer er modularisert i funksjonelle enheter.**  
+Footer-komponenten er delt i `Footer`, `FooterActionButton`, `FooterNavigationButton`, `QuestionDots`, `QuestionDot` og `footerClassNames`. Handlingsknappen bytter mellom «Neste» og «Lever nå» avhengig av om brukeren er på siste spørsmål. Etter levering viser footer-dots riktig/feil-status med fargekoding.
 
 **UI-et er delt inn i tydelige visuelle soner.**  
 Eksamenssiden består av sidebar, header/statistikk, progressbar, question card og footer-navigasjon. Dette gjør at brukeren hele tiden ser hvor langt de har kommet, hvilken oppgave de jobber med, og hvilke handlinger som er tilgjengelige.

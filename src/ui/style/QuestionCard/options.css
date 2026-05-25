@@ -12,8 +12,9 @@
     border: 1px solid var(--line);
     border-radius: 14px;
     background: color-mix(in srgb, var(--panel-strong) 70%, transparent);
-    padding: 15px 16px;
+    padding: var(--space-6) var(--space-7);
     color: var(--text-main);
+    font-size: clamp(1.06rem, 1.16vw, 1.16rem);
     font-weight: 600;
     line-height: 1.5;
     transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
