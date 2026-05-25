@@ -19,18 +19,8 @@ export const translations = {
         selectStatistics: "Din statistikk",
         selectRecommended: "Anbefalt",
         selectPracticeExamLabel: (number) => `ØVINGSPRØVE ${number}`,
-        selectQuestionCount: (count) => `${count} spørsmål`,
         selectQuestionLabel: "spørsmål",
         selectMinuteLabel: "minutter",
-        selectFeatureStripLabel: "Fordeler med eksamensemulatoren",
-        selectFeatureRealisticTitle: "Realistiske eksamensspørsmål",
-        selectFeatureRealisticDescription: "Bygget for IN5431 pensum og nivå",
-        selectFeatureFeedbackTitle: "Umiddelbar tilbakemelding",
-        selectFeatureFeedbackDescription: "Se forklaringer og lær underveis",
-        selectFeatureProgressTitle: "Følg fremgangen din",
-        selectFeatureProgressDescription: "Statistikk og ytelse over tid",
-        selectFeaturePrivateTitle: "100 % privat og trygt",
-        selectFeaturePrivateDescription: "Dine resultater er kun for deg",
 
         // Header
         headerLabel: "IN5431 mock skoleeksamen",
@@ -91,12 +81,13 @@ export const translations = {
         settingsClose: "Lukk innstillinger",
         settingsOpenMenu: "Åpne meny",
         settingsDarkMode: "Mørkt tema",
+
+        // Sidebar
         sidebarLabel: "Eksamensnavigasjon",
         sidebarHome: "Velg eksamen",
-        sidebarTask: "Oppgave",
         sidebarOverview: "Oversikt",
         sidebarNotes: "Notater",
-        sidebarSettings: "Innstillinger",
+        sidebarSettings: "Innstillinger"
     },
 
     [LANGUAGES.EN]: {
@@ -108,18 +99,8 @@ export const translations = {
         selectStatistics: "Your statistics",
         selectRecommended: "Recommended",
         selectPracticeExamLabel: (number) => `PRACTICE EXAM ${number}`,
-        selectQuestionCount: (count) => `${count} questions`,
         selectQuestionLabel: "questions",
         selectMinuteLabel: "minutes",
-        selectFeatureStripLabel: "Exam emulator benefits",
-        selectFeatureRealisticTitle: "Realistic exam questions",
-        selectFeatureRealisticDescription: "Built for the IN5431 syllabus and level",
-        selectFeatureFeedbackTitle: "Immediate feedback",
-        selectFeatureFeedbackDescription: "See explanations and learn as you go",
-        selectFeatureProgressTitle: "Track your progress",
-        selectFeatureProgressDescription: "Statistics and performance over time",
-        selectFeaturePrivateTitle: "100% private and safe",
-        selectFeaturePrivateDescription: "Your results are only for you",
 
         // Header
         headerLabel: "IN5431 mock exam",
@@ -180,11 +161,12 @@ export const translations = {
         settingsClose: "Close settings",
         settingsOpenMenu: "Open menu",
         settingsDarkMode: "Dark mode",
+
+        // Sidebar
         sidebarLabel: "Exam navigation",
         sidebarHome: "Choose exam",
-        sidebarTask: "Task",
         sidebarOverview: "Overview",
         sidebarNotes: "Notes",
-        sidebarSettings: "Settings",
+        sidebarSettings: "Settings"
     }
 };

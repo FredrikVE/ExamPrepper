@@ -1,5 +1,5 @@
 //src/ui/view/pages/ExamSelectPage.jsx
-import { BarChart3, BookOpen, ChevronRight, CircleHelp, Clock3, ShieldCheck, Target, Trophy, TrendingUp } from "lucide-react";
+import { BookOpen, ChevronRight, CircleHelp, Clock3, Trophy } from "lucide-react";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 const CARD_TITLE_FALLBACKS = ["Full Review", "Deep Dive", "Application Focus"];
@@ -44,8 +44,6 @@ export default function ExamSelectPage({ exams, onSelectExam }) {
                     />
                 ))}
             </section>
-
-            <FeatureStrip t={t} />
         </main>
     );
 }
@@ -110,29 +108,6 @@ function ExamSelectCard({ exam, index, t, onSelectExam }) {
                 </span>
             </div>
         </button>
-    );
-}
-
-function FeatureStrip({ t }) {
-    const features = [
-        { icon: BarChart3, title: t.selectFeatureRealisticTitle, description: t.selectFeatureRealisticDescription },
-        { icon: Target, title: t.selectFeatureFeedbackTitle, description: t.selectFeatureFeedbackDescription },
-        { icon: TrendingUp, title: t.selectFeatureProgressTitle, description: t.selectFeatureProgressDescription },
-        { icon: ShieldCheck, title: t.selectFeaturePrivateTitle, description: t.selectFeaturePrivateDescription }
-    ];
-
-    return (
-        <section className="exam-select-feature-strip" aria-label={t.selectFeatureStripLabel}>
-            {features.map(({ icon: Icon, title, description }) => (
-                <article key={title} className="exam-select-feature-item">
-                    <Icon className="exam-select-feature-icon" />
-                    <div>
-                        <h3 className="exam-select-feature-title">{title}</h3>
-                        <p className="exam-select-feature-description">{description}</p>
-                    </div>
-                </article>
-            ))}
-        </section>
     );
 }
 
