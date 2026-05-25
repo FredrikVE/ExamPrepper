@@ -1,0 +1,31 @@
+/* src/ui/style/Sidebar/sidebar-close-button.css */
+.sidebar-close-button {
+    display: none;
+}
+
+.sidebar-close-button-icon {
+    width: 34px;
+    height: 34px;
+}
+
+@media (max-width: 980px) {
+    .sidebar-close-button {
+        display: grid;
+        place-items: center;
+        width: 58px;
+        height: 58px;
+        margin-bottom: 28px;
+        border: 0;
+        border-radius: var(--radius-full);
+        color: #ffffff;
+        background: var(--accent-gradient);
+        box-shadow: var(--shadow-button);
+        transition:
+            transform var(--transition-normal),
+            box-shadow var(--transition-normal);
+    }
+
+    .sidebar-close-button:hover {
+        transform: translateX(-3px);
+    }
+}
