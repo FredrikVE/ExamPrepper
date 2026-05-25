@@ -6,7 +6,8 @@ import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
 
-export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, settingsOpen, onOpenSettings, sidebarOpen, onCloseSidebar }) {
+export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, settingsOpen, onOpenSettings, sidebarOpen, onCloseSidebar, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+
     const { t } = useLanguage();
 
     return (
@@ -23,7 +24,12 @@ export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, sett
             >
                 <SidebarCloseButton onCloseSidebar={onCloseSidebar} />
 
-                <SidebarBrand />
+                <SidebarBrand
+                    subjects={subjects}
+                    selectedSubject={selectedSubject}
+                    onSelectSubject={onSelectSubject}
+                    onShowAllSubjects={onShowAllSubjects}
+                />
 
                 <SidebarNavigation
                     activeScreen={activeScreen}
