@@ -1,16 +1,23 @@
 //src/App.jsx
-import { useState, useCallback, useEffect, useRef } from "react";
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
-import useExamViewModel from "./ui/viewmodel/useExamViewModel.js";
-import ExamPage from "./ui/view/pages/ExamPage.jsx";
+import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
+
+import useAppNavigationViewModel from "./ui/viewmodel/AppNavigationViewModel.js";
+import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewModel.js";
+import useExamSelectPageViewModel from "./ui/viewmodel/ExamSelectPageViewModel.js";
+import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
+import usePlaceholderPageViewModel from "./ui/viewmodel/PlaceholderPageViewModel.js";
+
+import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
+import ExamPage from "./ui/view/pages/ExamPage.jsx";
+
 import AppSidebar from "./ui/view/components/Sidebar/AppSidebar.jsx";
 import SidebarMenuButton from "./ui/view/components/Sidebar/SidebarMenuButton.jsx";
 import SettingsMenu from "./ui/view/components/Settings/SettingsMenu.jsx";
+
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { getExamQuestionsUseCase, getAvailableExamsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, getExamByBaseIdAndLangUseCase } from "./di/dependencies.js";
-import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
-import { getExamById } from "./data/data.js";
+import { getExamQuestionsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, getExamByBaseIdAndLangUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -25,148 +32,91 @@ export default function App() {
 }
 
 function AppContent() {
-    const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SELECT);
-    const [selectedExamId, setSelectedExamId] = useState(null);
-    const [settingsOpen, setSettingsOpen] = useState(false);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-
     const { language, t } = useLanguage();
-    const prevLanguageRef = useRef(language);
 
-    const handleOpenSidebar = useCallback(() => {
-        setSidebarOpen(true);
-    }, []);
+    const navigationViewModel = useAppNavigationViewModel(
+        language,
+        getExamByBaseIdAndLangUseCase
+    );
 
-    const handleCloseSidebar = useCallback(() => {
-        setSidebarOpen(false);
-    }, []);
+    const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
+        getAvailableSubjectsUseCase,
+        language,
+        t,
+        navigationViewModel.selectedSubjectId,
+        navigationViewModel.selectSubject
+    );
 
-    const handleSelectExam = useCallback((examId) => {
-        setSelectedExamId(examId);
-        setActiveScreen(NAV_SCREENS.EXAM);
-        setSettingsOpen(false);
-        setSidebarOpen(false);
-    }, []);
+    const examSelectPageViewModel = useExamSelectPageViewModel(
+        getAvailableExamsUseCase,
+        language,
+        t,
+        subjectSelectPageViewModel.selectedSubject,
+        navigationViewModel.selectExam
+    );
 
-    const handleBackToList = useCallback(() => {
-        setSelectedExamId(null);
-        setActiveScreen(NAV_SCREENS.SELECT);
-        setSettingsOpen(false);
-        setSidebarOpen(false);
-    }, []);
+    const overviewPageViewModel = usePlaceholderPageViewModel(
+        t.sidebarOverview,
+        "Oversikt-siden er ikke implementert ennå."
+    );
 
-    const handleChangeScreen = useCallback((nextScreen) => {
-        setSettingsOpen(false);
-        setSidebarOpen(false);
-
-        if (nextScreen === NAV_SCREENS.SELECT) {
-            setSelectedExamId(null);
-            setActiveScreen(NAV_SCREENS.SELECT);
-            return;
-        }
-
-        if (nextScreen === NAV_SCREENS.EXAM && !selectedExamId) {
-            return;
-        }
-
-        setActiveScreen(nextScreen);
-    }, [selectedExamId]);
-
-    const handleOpenSettings = useCallback(() => {
-        setSettingsOpen(true);
-        setSidebarOpen(false);
-    }, []);
-
-    const handleLanguageChangedSwitchExam = useCallback(() => {
-        if (prevLanguageRef.current === language) {
-            return;
-        }
-
-        prevLanguageRef.current = language;
-
-        if (activeScreen !== NAV_SCREENS.EXAM || !selectedExamId) {
-            return;
-        }
-
-        const currentExam = getExamById(selectedExamId);
-
-        if (currentExam?.baseId) {
-            const translatedExam = getExamByBaseIdAndLangUseCase.execute(currentExam.baseId, language);
-
-            if (translatedExam) {
-                setSelectedExamId(translatedExam.id);
-                return;
-            }
-        }
-
-        setActiveScreen(NAV_SCREENS.SELECT);
-        setSelectedExamId(null);
-        setSettingsOpen(false);
-        setSidebarOpen(false);
-    }, [language, activeScreen, selectedExamId]);
-
-    useEffect(handleLanguageChangedSwitchExam, [handleLanguageChangedSwitchExam]);
-
-    const exams = getAvailableExamsUseCase.execute(language);
-    const isSelectScreen = activeScreen === NAV_SCREENS.SELECT;
-
-    const pageClassName = isSelectScreen ? "exam-select-page" : "exam-page";
-    const shellClassName = isSelectScreen ? "exam-select-shell" : "exam-shell";
+    const notesPageViewModel = usePlaceholderPageViewModel(
+        t.sidebarNotes,
+        "Notater-siden er ikke implementert ennå."
+    );
 
     return (
-        <div className={pageClassName}>
-            <div className={shellClassName}>
-                <SidebarMenuButton onOpenSidebar={handleOpenSidebar} />
+        <div className={navigationViewModel.pageClassName}>
+            <div className={navigationViewModel.shellClassName}>
+                <SidebarMenuButton onOpenSidebar={navigationViewModel.openSidebar} />
 
                 <AppSidebar
-                    activeScreen={activeScreen}
-                    onChangeScreen={handleChangeScreen}
+                    activeScreen={navigationViewModel.activeScreen}
+                    onChangeScreen={navigationViewModel.changeScreen}
                     SCREENS={NAV_SCREENS}
-                    settingsOpen={settingsOpen}
-                    onOpenSettings={handleOpenSettings}
-                    sidebarOpen={sidebarOpen}
-                    onCloseSidebar={handleCloseSidebar}
+                    settingsOpen={navigationViewModel.settingsOpen}
+                    onOpenSettings={navigationViewModel.openSettings}
+                    sidebarOpen={navigationViewModel.sidebarOpen}
+                    onCloseSidebar={navigationViewModel.closeSidebar}
+                    subjects={subjectSelectPageViewModel.subjects}
+                    selectedSubject={subjectSelectPageViewModel.selectedSubject}
+                    onSelectSubject={navigationViewModel.selectSubject}
+                    onShowAllSubjects={navigationViewModel.showAllSubjects}
                 />
 
-                {activeScreen === NAV_SCREENS.SELECT && (
-                    <ExamSelectPage
-                        exams={exams}
-                        onSelectExam={handleSelectExam}
-                    />
+                {navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS && (
+                    <SubjectSelectPage viewModel={subjectSelectPageViewModel} />
                 )}
 
-                {activeScreen === NAV_SCREENS.EXAM && (
+                {navigationViewModel.activeScreen === NAV_SCREENS.SELECT && (
+                    <ExamSelectPage viewModel={examSelectPageViewModel} />
+                )}
+
+                {navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
                     <ExamPageWrapper
-                        examId={selectedExamId}
-                        onBack={handleBackToList}
+                        examId={navigationViewModel.selectedExamId}
                     />
                 )}
 
-                {activeScreen === NAV_SCREENS.OVERVIEW && (
-                    <PlaceholderPage
-                        title={t.sidebarOverview}
-                        description="Oversikt-siden er ikke implementert ennå."
-                    />
+                {navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
+                    <PlaceholderPage viewModel={overviewPageViewModel} />
                 )}
 
-                {activeScreen === NAV_SCREENS.NOTES && (
-                    <PlaceholderPage
-                        title={t.sidebarNotes}
-                        description="Notater-siden er ikke implementert ennå."
-                    />
+                {navigationViewModel.activeScreen === NAV_SCREENS.NOTES && (
+                    <PlaceholderPage viewModel={notesPageViewModel} />
                 )}
 
                 <SettingsMenu
-                    isOpen={settingsOpen}
-                    onOpenChange={setSettingsOpen}
+                    isOpen={navigationViewModel.settingsOpen}
+                    onOpenChange={navigationViewModel.setSettingsOpen}
                 />
             </div>
         </div>
     );
 }
 
-function ExamPageWrapper({ examId, onBack }) {
-    const examViewModel = useExamViewModel(
+function ExamPageWrapper({ examId }) {
+    const examPageViewModel = useExamPageViewModel(
         getExamQuestionsUseCase,
         gradeAnswerUseCase,
         calculateExamScoreUseCase,
@@ -175,20 +125,19 @@ function ExamPageWrapper({ examId, onBack }) {
 
     return (
         <ExamPage
-            viewModel={examViewModel}
-            onBack={onBack}
+            viewModel={examPageViewModel}
         />
     );
 }
 
-function PlaceholderPage({ title, description }) {
+function PlaceholderPage({ viewModel }) {
     return (
         <div className="exam-workspace">
             <main className="exam-page-main">
                 <div className="exam-page-content">
                     <div className="exam-page-empty">
-                        <h1>{title}</h1>
-                        <p>{description}</p>
+                        <h1>{viewModel.title}</h1>
+                        <p>{viewModel.description}</p>
                     </div>
                 </div>
             </main>

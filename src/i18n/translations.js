@@ -11,17 +11,36 @@ export const LANGUAGE_LABELS = {
 
 export const translations = {
     [LANGUAGES.NO]: {
+        // SubjectSelectPage
+        subjectSelectTitle: "Velg fag",
+        subjectSelectSubtitle: "Velg hvilket fag du vil øve på før du velger mock-eksamen.",
+        subjectSelectEyebrow: "Mock Exam Simulator",
+        subjectSearchLabel: "Søk etter fag",
+        subjectSearchPlaceholder: "Søk på fagkode eller navn...",
+        subjectFacultyLabel: "Fakultet",
+        subjectAllFaculties: "Alle fakulteter",
+        subjectEmptyMessage: "Fant ingen fag som matcher søket ditt.",
+        subjectLoadingMessage: "Laster fag...",
+        subjectErrorMessage: "Kunne ikke laste inn fag.",
+        subjectMockExamCount: (count) => `${count} mock-eksamen${count === 1 ? "" : "er"}`,
+
         // ExamSelectPage
-        selectTitle: "IN5431 Eksamens-emulator",
+        selectTitle: "Eksamens-emulator",
         selectIntroTitle: "Velg eksamen",
-        selectSubtitle: "Velg en øvingsprøve for å starte",
+        selectSubtitle: (subjectCode) => `Velg en øvingsprøve for ${subjectCode}`,
+        selectSubtitleFallback: "Velg en øvingsprøve for å starte",
         selectStatistics: "Din statistikk",
         selectPracticeExamLabel: (number) => `ØVINGSPRØVE ${number}`,
         selectQuestionLabel: "spørsmål",
         selectMinuteLabel: "minutter",
+        selectEmptyTitle: "Ingen eksamener tilgjengelig",
+        selectEmptyMessage: "Dette faget har ingen mock-eksamener ennå.",
+        selectLoadingMessage: "Laster eksamener...",
+        selectErrorMessage: "Kunne ikke laste inn eksamener.",
+        selectBackToSubjects: "Tilbake til fag",
 
         // Header
-        headerLabel: "IN5431 mock skoleeksamen",
+        headerLabel: "Mock skoleeksamen",
         headerTitle: "Eksamens-emulator med fasit",
         headerQuestionProgress: (current, total) => `Spørsmål ${current} av ${total}`,
         headerStatAnswered: "besvart",
@@ -80,24 +99,46 @@ export const translations = {
 
         // Sidebar
         sidebarLabel: "Eksamensnavigasjon",
-        sidebarHome: "Velg eksamen",
+        sidebarSubjects: "Velg fag",
+        sidebarExams: "Velg eksamen",
+        sidebarHome: "Velg fag",
         sidebarOverview: "Oversikt",
         sidebarNotes: "Notater",
         sidebarSettings: "Innstillinger"
     },
 
     [LANGUAGES.EN]: {
+        
+        // SubjectSelectPage
+        subjectSelectTitle: "Choose subject",
+        subjectSelectSubtitle: "Choose which subject you want to practise before selecting a mock exam.",
+        subjectSelectEyebrow: "Mock Exam Simulator",
+        subjectSearchLabel: "Search for subject",
+        subjectSearchPlaceholder: "Search by subject code or name...",
+        subjectFacultyLabel: "Faculty",
+        subjectAllFaculties: "All faculties",
+        subjectEmptyMessage: "No subjects matched your search.",
+        subjectLoadingMessage: "Loading subjects...",
+        subjectErrorMessage: "Could not load subjects.",
+        subjectMockExamCount: (count) => `${count} mock exam${count === 1 ? "" : "s"}`,
+
         // ExamSelectPage
-        selectTitle: "IN5431 Exam Emulator",
+        selectTitle: "Exam Emulator",
         selectIntroTitle: "Choose exam",
-        selectSubtitle: "Choose a practice exam to begin",
+        selectSubtitle: (subjectCode) => `Choose a practice exam for ${subjectCode}`,
+        selectSubtitleFallback: "Choose a practice exam to begin",
         selectStatistics: "Your statistics",
         selectPracticeExamLabel: (number) => `PRACTICE EXAM ${number}`,
         selectQuestionLabel: "questions",
         selectMinuteLabel: "minutes",
+        selectEmptyTitle: "No exams available",
+        selectEmptyMessage: "This subject does not have any mock exams yet.",
+        selectLoadingMessage: "Loading exams...",
+        selectErrorMessage: "Could not load exams.",
+        selectBackToSubjects: "Back to subjects",
 
         // Header
-        headerLabel: "IN5431 mock exam",
+        headerLabel: "Mock exam",
         headerTitle: "Exam emulator with answer key",
         headerQuestionProgress: (current, total) => `Question ${current} of ${total}`,
         headerStatAnswered: "answered",
@@ -156,7 +197,9 @@ export const translations = {
 
         // Sidebar
         sidebarLabel: "Exam navigation",
-        sidebarHome: "Choose exam",
+        sidebarSubjects: "Choose subject",
+        sidebarExams: "Choose exam",
+        sidebarHome: "Choose subject",
         sidebarOverview: "Overview",
         sidebarNotes: "Notes",
         sidebarSettings: "Settings"

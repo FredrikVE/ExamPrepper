@@ -3,6 +3,7 @@ import { mockExam1_no } from "./exams/mockExam1_no.js";
 import { mockExam1_en } from "./exams/mockExam1_en.js";
 import { mockExam2_no } from "./exams/mockExam2_no.js";
 import { mockExam2_en } from "./exams/mockExam2_en.js";
+import { DEFAULT_SUBJECT_ID, SUBJECTS, getSubjectById, getSubjects } from "./subjects.js";
 
 export const DEFAULT_EXAM_ID = "mock-exam-1-no";
 
@@ -13,8 +14,15 @@ export const EXAMS = [
   mockExam2_en
 ];
 
-export function getExamsByLanguage(lang) {
-  return EXAMS.filter((exam) => exam.lang === lang);
+export { DEFAULT_SUBJECT_ID, SUBJECTS, getSubjectById, getSubjects };
+
+export function getExamsByLanguage(lang, subjectId = DEFAULT_SUBJECT_ID) {
+  return EXAMS.filter((exam) => {
+    const languageMatches = !lang || exam.lang === lang;
+    const subjectMatches = !subjectId || exam.subjectId === subjectId;
+
+    return languageMatches && subjectMatches;
+  });
 }
 
 export function getExamById(examId) {

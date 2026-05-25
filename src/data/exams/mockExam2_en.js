@@ -1,6 +1,7 @@
 //src/data/exams/mockExam2_en.js
 export const mockExam2_en = {
   id: "mock-exam-2-en",
+  subjectId: "in5431",
   baseId: "mock-exam-2",
   lang: "en",
   title: "Practice Exam 2: Deep Dive",
