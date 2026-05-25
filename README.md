@@ -240,45 +240,103 @@ Hvis `whyExtended` mangler, vises ikke utvidet forklaring for det alternativet.
 Prosjektet følger et lagdelt mønster inspirert av MVVM og Clean Architecture.
 
 ```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "lineColor": "#111111",
+    "primaryBorderColor": "#111111",
+    "clusterBorder": "#111111",
+    "edgeLabelBackground": "#FFFFFF"
+  },
+  "flowchart": {
+    "curve": "basis"
+  }
+}}%%
+
 flowchart TB
 
-subgraph SideInputs["Side Inputs"]
+%% =========================
+%% 0. SIDE INPUTS
+%% =========================
+
+subgraph SideInputs["0. Side Inputs / Configuration"]
+direction LR
     DI["dependencies.js"]
     NavGraph["navGraph.js"]
 end
 
-subgraph AppLayer["App Layer"]
-    App["App.jsx"]
-end
+%% =========================
+%% 1. APP SHELL
+%% =========================
 
-subgraph View["View / Pages & Components"]
+subgraph AppShell["1. App Shell"]
+direction LR
 
-    subgraph ExamSelectPageBox["Komponenter til ExamSelectPage.jsx"]
-        ExamSelectPage["ExamSelectPage.jsx"]
-        ExamSelectTopbar["ExamSelectTopbar"]
-        ExamSelectIntro["ExamSelectIntro"]
-        ExamSelectGrid["ExamSelectGrid"]
-        ExamSelectCard["ExamSelectCard"]
+    subgraph AppLayer["Main App"]
+        App["App.jsx"]
     end
 
-    subgraph ExamPageBox["Komponenter til ExamPage.jsx"]
+    subgraph GlobalComponents["Global Components"]
+    direction TB
+        AppSidebar["AppSidebar"]
+        SettingsMenu["SettingsMenu"]
+    end
+
+end
+
+%% =========================
+%% 2. PAGES + COMPONENTS
+%% =========================
+
+subgraph PagesAndComponents["2. Pages & Page Components"]
+direction TB
+
+    subgraph ExamPageRow["ExamPage.jsx"]
+    direction LR
+
+        subgraph ExamPageComponents["ExamPage Components"]
+        direction TB
+            Header["Header"]
+            QuestionCard["QuestionCard"]
+            FeedbackPanel["FeedbackPanel"]
+            Footer["Footer"]
+        end
+
         ExamPage["ExamPage.jsx"]
-        Header["Header"]
-        QuestionCard["QuestionCard"]
-        FeedbackPanel["FeedbackPanel"]
-        Footer["Footer"]
+
     end
 
-    AppSidebar["AppSidebar"]
-    SettingsMenu["SettingsMenu"]
+    subgraph ExamSelectPageRow["ExamSelectPage.jsx"]
+    direction LR
+
+        ExamSelectPage["ExamSelectPage.jsx"]
+
+        subgraph ExamSelectComponents["ExamSelectPage Components"]
+        direction TB
+            ExamSelectTopbar["ExamSelectTopbar"]
+            ExamSelectIntro["ExamSelectIntro"]
+            ExamSelectGrid["ExamSelectGrid"]
+            ExamSelectCard["ExamSelectCard"]
+        end
+
+    end
 
 end
 
-subgraph ViewModel["ViewModel"]
+%% =========================
+%% 3. VIEWMODEL
+%% =========================
+
+subgraph ViewModel["3. ViewModel"]
     ExamVM["useExamViewModel"]
 end
 
-subgraph Domain["Domain Layer"]
+%% =========================
+%% 4. DOMAIN
+%% =========================
+
+subgraph Domain["4. Domain Layer / Use Cases"]
+direction TB
     GetAvailableExamsUC["GetAvailableExamsUseCase"]
     GetExamByBaseIdAndLangUC["GetExamByBaseIdAndLangUseCase"]
     GetExamQuestionsUC["GetExamQuestionsUseCase"]
@@ -286,39 +344,59 @@ subgraph Domain["Domain Layer"]
     CalculateScoreUC["CalculateExamScoreUseCase"]
 end
 
-subgraph Model["Model"]
+%% =========================
+%% 5. MODEL
+%% =========================
+
+subgraph Model["5. Model"]
+direction TB
     Repo["ExamRepository"]
     DS["ExamQuestionDataSource"]
 end
 
-subgraph Data["Data"]
+%% =========================
+%% 6. DATA
+%% =========================
+
+subgraph Data["6. Data"]
+direction TB
     DataRegistry["data.js"]
-    MockExam1No["mockExam1_no.js"]
-    MockExam1En["mockExam1_en.js"]
-    MockExam2No["mockExam2_no.js"]
-    MockExam2En["mockExam2_en.js"]
+
+    subgraph MockData["Mock Exam Data"]
+    direction LR
+        MockExam1No["mockExam1_no.js"]
+        MockExam1En["mockExam1_en.js"]
+        MockExam2No["mockExam2_no.js"]
+        MockExam2En["mockExam2_en.js"]
+    end
 end
+
+%% =========================
+%% CONNECTIONS
+%% =========================
 
 DI -.-> App
 NavGraph -.-> App
 
 App --> AppSidebar
-App --> ExamSelectPage
-App --> ExamPage
 App --> SettingsMenu
+
+App --> ExamPage
+App --> ExamSelectPage
+
+ExamPage --> Header
+ExamPage --> QuestionCard
+QuestionCard --> FeedbackPanel
+ExamPage --> Footer
 
 ExamSelectPage --> ExamSelectTopbar
 ExamSelectPage --> ExamSelectIntro
 ExamSelectPage --> ExamSelectGrid
 ExamSelectGrid --> ExamSelectCard
 
-ExamSelectPage --> GetAvailableExamsUC
-
 ExamPage --> ExamVM
-ExamPage --> Header
-ExamPage --> QuestionCard
-QuestionCard --> FeedbackPanel
-ExamPage --> Footer
+
+ExamSelectPage --> GetAvailableExamsUC
 
 ExamVM --> GetExamByBaseIdAndLangUC
 ExamVM --> GetExamQuestionsUC
@@ -340,32 +418,73 @@ DataRegistry --> MockExam1En
 DataRegistry --> MockExam2No
 DataRegistry --> MockExam2En
 
-classDef sideNode fill:#E0E0E0,stroke:#424242,color:#000000
-classDef appNode fill:#C5E1A5,stroke:#33691E,color:#000000
-classDef viewNode fill:#FFF9C4,stroke:#827717,color:#000000
-classDef viewModelNode fill:#FFCDD2,stroke:#B71C1C,color:#000000
-classDef domainNode fill:#C5CAE9,stroke:#1A237E,color:#000000
-classDef modelNode fill:#DCEDC8,stroke:#33691E,color:#000000
-classDef dataNode fill:#FFE082,stroke:#E65100,color:#000000
+%% =========================
+%% CLEARER ARROWS / EDGES
+%% =========================
+
+linkStyle default stroke:#111111,stroke-width:2.6px,color:#000000
+
+%% Side input arrows
+linkStyle 0 stroke:#424242,stroke-width:2.2px,stroke-dasharray:6 4
+linkStyle 1 stroke:#424242,stroke-width:2.2px,stroke-dasharray:6 4
+
+%% App shell arrows
+linkStyle 2,3,4,5 stroke:#111111,stroke-width:3px
+
+%% Page/component arrows
+linkStyle 6,7,8,9,10,11,12,13,14 stroke:#111111,stroke-width:2.8px
+
+%% ViewModel and Domain arrows
+linkStyle 15,16,17,18,19,20,21,22 stroke:#111111,stroke-width:2.8px
+
+%% Model/Data arrows
+linkStyle 23,24,25,26,27,28,29,30 stroke:#111111,stroke-width:2.8px
+
+%% =========================
+%% CLASSES
+%% =========================
+
+classDef sideNode fill:#E0E0E0,stroke:#424242,stroke-width:2px,color:#000000
+classDef appNode fill:#C5E1A5,stroke:#33691E,stroke-width:2.5px,color:#000000
+classDef pageNode fill:#FFF9C4,stroke:#827717,stroke-width:2.5px,color:#000000
+classDef componentNode fill:#DCE775,stroke:#827717,stroke-width:2px,color:#000000
+classDef globalNode fill:#E1BEE7,stroke:#4A148C,stroke-width:2px,color:#000000
+classDef viewModelNode fill:#FFCDD2,stroke:#B71C1C,stroke-width:2.5px,color:#000000
+classDef domainNode fill:#C5CAE9,stroke:#1A237E,stroke-width:2px,color:#000000
+classDef modelNode fill:#DCEDC8,stroke:#33691E,stroke-width:2px,color:#000000
+classDef dataNode fill:#FFE082,stroke:#E65100,stroke-width:2px,color:#000000
 
 class DI,NavGraph sideNode
 class App appNode
-class ExamSelectPage,ExamSelectTopbar,ExamSelectIntro,ExamSelectGrid,ExamSelectCard,ExamPage,AppSidebar,Header,QuestionCard,FeedbackPanel,Footer,SettingsMenu viewNode
+class ExamPage,ExamSelectPage pageNode
+class Header,QuestionCard,FeedbackPanel,Footer,ExamSelectTopbar,ExamSelectIntro,ExamSelectGrid,ExamSelectCard componentNode
+class AppSidebar,SettingsMenu globalNode
 class ExamVM viewModelNode
 class GetAvailableExamsUC,GetExamByBaseIdAndLangUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
 class Repo,DS modelNode
 class DataRegistry,MockExam1No,MockExam1En,MockExam2No,MockExam2En dataNode
 
-style SideInputs stroke:#000000,fill:#E0E0E0,color:#000000
-style AppLayer stroke:#000000,fill:#E1BEE7,color:#000000
-style View stroke:#000000,fill:#FFF9C4,color:#000000
-style ViewModel stroke:#000000,fill:#FFCDD2,color:#000000
-style Domain stroke:#000000,fill:#C5CAE9,color:#000000
-style Model stroke:#000000,fill:#DCEDC8,color:#000000
-style Data stroke:#000000,fill:#FFE082,color:#000000
+%% =========================
+%% SUBGRAPH STYLES
+%% =========================
 
-style ExamSelectPageBox stroke:#827717,fill:#FFFDE7,color:#000000
-style ExamPageBox stroke:#E65100,fill:#FFF3E0,color:#000000
+style SideInputs stroke:#000000,stroke-width:2px,fill:#E0E0E0,color:#000000
+style AppShell stroke:#000000,stroke-width:2px,fill:#F5F5F5,color:#000000
+style AppLayer stroke:#000000,stroke-width:2px,fill:#E1BEE7,color:#000000
+style GlobalComponents stroke:#000000,stroke-width:2px,fill:#E1BEE7,color:#000000
+
+style PagesAndComponents stroke:#000000,stroke-width:2px,fill:#FFFDE7,color:#000000
+style ExamPageRow stroke:#000000,stroke-width:2px,fill:#E3F2FD,color:#000000
+style ExamSelectPageRow stroke:#000000,stroke-width:2px,fill:#FFF9C4,color:#000000
+
+style ExamPageComponents stroke:#000000,stroke-width:2px,fill:#BBDEFB,color:#000000
+style ExamSelectComponents stroke:#000000,stroke-width:2px,fill:#C8E6C9,color:#000000
+
+style ViewModel stroke:#000000,stroke-width:2px,fill:#FFCDD2,color:#000000
+style Domain stroke:#000000,stroke-width:2px,fill:#C5CAE9,color:#000000
+style Model stroke:#000000,stroke-width:2px,fill:#DCEDC8,color:#000000
+style Data stroke:#000000,stroke-width:2px,fill:#FFE082,color:#000000
+style MockData stroke:#E65100,stroke-width:2px,fill:#FFECB3,color:#000000
 ```
 
 ### Arkitekturflyt
