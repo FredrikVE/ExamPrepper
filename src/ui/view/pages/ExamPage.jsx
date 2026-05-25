@@ -36,7 +36,7 @@ export default function ExamPage({ viewModel, onBack }) {
 
     return (
         <div className="exam-workspace">
-            <Header viewModel={viewModel} onBack={onBack} />
+            <Header viewModel={viewModel}/>
 
             <ExamProgress viewModel={viewModel} />
 

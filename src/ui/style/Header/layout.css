@@ -13,13 +13,6 @@
 .exam-header-layout {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 20px;
-}
-
-.exam-header-left {
-    display: flex;
-    min-width: 0;
-    align-items: center;
-    gap: 18px;
 }

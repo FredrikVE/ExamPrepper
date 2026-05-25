@@ -1,9 +1,11 @@
+//src/App.jsx
 import { useState, useCallback, useEffect, useRef } from "react";
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import useExamViewModel from "./ui/viewmodel/useExamViewModel.js";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import AppSidebar from "./ui/view/components/Sidebar/AppSidebar.jsx";
+import SidebarMenuButton from "./ui/view/components/Sidebar/SidebarMenuButton.jsx";
 import SettingsMenu from "./ui/view/components/Settings/SettingsMenu.jsx";
 import { NAV_SCREENS } from "./navigation/navGraph.js";
 import { getExamQuestionsUseCase, getAvailableExamsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, getExamByBaseIdAndLangUseCase } from "./di/dependencies.js";
@@ -26,24 +28,36 @@ function AppContent() {
     const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SELECT);
     const [selectedExamId, setSelectedExamId] = useState(null);
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const { language, t } = useLanguage();
     const prevLanguageRef = useRef(language);
+
+    const handleOpenSidebar = useCallback(() => {
+        setSidebarOpen(true);
+    }, []);
+
+    const handleCloseSidebar = useCallback(() => {
+        setSidebarOpen(false);
+    }, []);
 
     const handleSelectExam = useCallback((examId) => {
         setSelectedExamId(examId);
         setActiveScreen(NAV_SCREENS.EXAM);
         setSettingsOpen(false);
+        setSidebarOpen(false);
     }, []);
 
     const handleBackToList = useCallback(() => {
         setSelectedExamId(null);
         setActiveScreen(NAV_SCREENS.SELECT);
         setSettingsOpen(false);
+        setSidebarOpen(false);
     }, []);
 
     const handleChangeScreen = useCallback((nextScreen) => {
         setSettingsOpen(false);
+        setSidebarOpen(false);
 
         if (nextScreen === NAV_SCREENS.SELECT) {
             setSelectedExamId(null);
@@ -60,6 +74,7 @@ function AppContent() {
 
     const handleOpenSettings = useCallback(() => {
         setSettingsOpen(true);
+        setSidebarOpen(false);
     }, []);
 
     const handleLanguageChangedSwitchExam = useCallback(() => {
@@ -86,6 +101,8 @@ function AppContent() {
 
         setActiveScreen(NAV_SCREENS.SELECT);
         setSelectedExamId(null);
+        setSettingsOpen(false);
+        setSidebarOpen(false);
     }, [language, activeScreen, selectedExamId]);
 
     useEffect(handleLanguageChangedSwitchExam, [handleLanguageChangedSwitchExam]);
@@ -99,12 +116,16 @@ function AppContent() {
     return (
         <div className={pageClassName}>
             <div className={shellClassName}>
+                <SidebarMenuButton onOpenSidebar={handleOpenSidebar} />
+
                 <AppSidebar
                     activeScreen={activeScreen}
                     onChangeScreen={handleChangeScreen}
                     SCREENS={NAV_SCREENS}
                     settingsOpen={settingsOpen}
                     onOpenSettings={handleOpenSettings}
+                    sidebarOpen={sidebarOpen}
+                    onCloseSidebar={handleCloseSidebar}
                 />
 
                 {activeScreen === NAV_SCREENS.SELECT && (

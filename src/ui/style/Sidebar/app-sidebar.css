@@ -19,6 +19,10 @@
     background: var(--line);
 }
 
+.app-sidebar-backdrop {
+    display: none;
+}
+
 @media (max-width: 1280px) {
     .app-sidebar {
         padding: 28px 20px 22px;
@@ -27,6 +31,32 @@
 
 @media (max-width: 980px) {
     .app-sidebar {
-        display: none;
+        position: fixed;
+        inset: 14px auto 14px 14px;
+        z-index: 90;
+        width: min(320px, calc(100vw - 28px));
+        min-height: auto;
+        transform: translateX(calc(-100% - 24px));
+        transition: transform var(--transition-normal);
+    }
+
+    .app-sidebar-open {
+        transform: translateX(0);
+    }
+
+    .app-sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 70;
+        display: block;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.42);
+        opacity: 0;
+        transition: opacity var(--transition-normal);
+    }
+
+    .app-sidebar-backdrop-open {
+        pointer-events: auto;
+        opacity: 1;
     }
 }
