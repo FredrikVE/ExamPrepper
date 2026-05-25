@@ -1,8 +1,58 @@
-/* src/ui/style/foundation/responsive.css */
+/* src/ui/style/QuestionCard/responsive.css */
+@media (max-width: 860px) {
+    .question-card-answer-card-header,
+    .question-card-answer-card-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 
-@media (max-width: 920px) {
-    :root {
-        --exam-content-width: calc(100% - 32px);
-        --exam-content-max-width: none;
+    .question-card-answer-card-actions {
+        gap: var(--space-3);
+    }
+
+    .question-card-answer-expand-button {
+        border-left: 0;
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .question-card-header {
+        padding-left: var(--space-8);
+        padding-right: var(--space-8);
+        flex-direction: column;
+    }
+
+    .question-card-body {
+        padding-left: var(--space-8);
+        padding-right: var(--space-8);
+    }
+
+    .question-card-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .question-card-inline-input {
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+
+    .question-card-inline-input-meta,
+    .question-card-input-meta {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .question-card-answer-card {
+        grid-template-columns: 48px minmax(0, 1fr);
+    }
+
+    .question-card-answer-card-left {
+        padding: var(--space-5) var(--space-2);
+    }
+
+    .question-card-answer-card-main {
+        padding: var(--space-5);
     }
 }

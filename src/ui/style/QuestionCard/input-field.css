@@ -3,17 +3,17 @@
 /* ── Inline input (inside prompt text) ──── */
 .question-card-inline-input {
     display: inline-block;
-    width: min(26rem, calc(100% - 1rem));
-    min-width: min(14rem, calc(100% - 1rem));
-    height: clamp(3.4rem, 4.2vw, 4.2rem);
-    margin: 0 0.75rem;
+    width: min(16rem, 40%);
+    min-width: 10rem;
+    height: clamp(2.8rem, 3.4vw, 3.4rem);
+    margin: 0 0.5rem;
     border: 2px solid var(--accent);
     border-radius: var(--radius-sm);
     outline: none;
     background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
     color: var(--text-main);
-    padding: 0 var(--space-8);
-    font-size: clamp(1.1rem, 1.25vw, 1.35rem);
+    padding: 0 var(--space-6);
+    font-size: inherit;
     font-weight: 650;
     line-height: normal;
     vertical-align: middle;
