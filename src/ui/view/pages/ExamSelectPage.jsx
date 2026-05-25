@@ -1,145 +1,52 @@
 //src/ui/view/pages/ExamSelectPage.jsx
-import { useState } from "react";
-import {
-    BarChart3,
-    BookOpen,
-    ChevronDown,
-    ChevronRight,
-    CircleHelp,
-    ClipboardList,
-    Clock3,
-    FileText,
-    Home,
-    PencilLine,
-    Settings,
-    ShieldCheck,
-    Target,
-    Trophy,
-    TrendingUp
-} from "lucide-react";
+import { BarChart3, BookOpen, ChevronRight, CircleHelp, Clock3, ShieldCheck, Target, Trophy, TrendingUp } from "lucide-react";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
-import SettingsMenu from "../components/Settings/SettingsMenu.jsx";
 
 const CARD_TITLE_FALLBACKS = ["Full Review", "Deep Dive", "Application Focus"];
 
 export default function ExamSelectPage({ exams, onSelectExam }) {
     const { t } = useLanguage();
-    const [settingsOpen, setSettingsOpen] = useState(false);
 
     return (
-        <div className="exam-select-page">
-            <div className="exam-select-shell">
-                <SelectSidebar
-                    t={t}
-                    settingsOpen={settingsOpen}
-                    onOpenSettings={() => setSettingsOpen(true)}
-                />
+        <main className="exam-select-workspace">
+            <div className="exam-select-ambient-light" aria-hidden="true" />
 
-                <main className="exam-select-workspace">
-                    <div className="exam-select-ambient-light" aria-hidden="true" />
+            <div className="exam-select-topbar">
+                <p className="exam-select-kicker">
+                    {t.selectHeroKicker}
+                </p>
 
-                    <div className="exam-select-topbar">
-                        <p className="exam-select-kicker">
-                            {t.selectHeroKicker}
-                        </p>
-
-                        <button type="button" className="exam-select-statistics-button">
-                            <Trophy className="exam-select-statistics-icon" />
-                            <span>{t.selectStatistics}</span>
-                            <ChevronRight className="exam-select-statistics-chevron" />
-                        </button>
-                    </div>
-
-                    <section className="exam-select-hero" aria-labelledby="exam-select-title">
-                        <h1 id="exam-select-title" className="exam-select-title">
-                            {t.selectHeroTitle}
-                        </h1>
-
-                        <p className="exam-select-subtitle">
-                            {t.selectSubtitle}
-                        </p>
-                    </section>
-
-                    <section className="exam-select-grid" aria-label={t.selectTitle}>
-                        {exams.map((exam, index) => (
-                            <ExamSelectCard
-                                key={exam.id}
-                                exam={exam}
-                                index={index}
-                                t={t}
-                                onSelectExam={onSelectExam}
-                            />
-                        ))}
-                    </section>
-
-                    <FeatureStrip t={t} />
-                </main>
-
-                <SettingsMenu
-                    isOpen={settingsOpen}
-                    onOpenChange={setSettingsOpen}
-                />
-            </div>
-        </div>
-    );
-}
-
-function SelectSidebar({ t, settingsOpen, onOpenSettings }) {
-    const navItems = [
-        { label: t.sidebarHome, icon: Home, active: true },
-        { label: t.sidebarTask, icon: FileText },
-        { label: t.sidebarOverview, icon: BarChart3 },
-        { label: t.sidebarNotes, icon: PencilLine }
-    ];
-
-    return (
-        <aside className="exam-select-sidebar" aria-label={t.sidebarLabel}>
-            <div className="exam-select-brand">
-                <div className="exam-select-brand-mark">
-                    <ClipboardList className="exam-select-brand-icon" />
-                </div>
-
-                <div>
-                    <p className="exam-select-brand-title">IN5431</p>
-                    <p className="exam-select-brand-subtitle">Exam Emulator</p>
-                </div>
+                <button type="button" className="exam-select-statistics-button">
+                    <Trophy className="exam-select-statistics-icon" />
+                    <span>{t.selectStatistics}</span>
+                    <ChevronRight className="exam-select-statistics-chevron" />
+                </button>
             </div>
 
-            <nav className="exam-select-sidebar-nav">
-                {navItems.map(({ label, icon: Icon, active }) => (
-                    <button
-                        key={label}
-                        type="button"
-                        className={`exam-select-sidebar-item ${active ? "exam-select-sidebar-item-active" : ""}`}
-                    >
-                        <Icon className="exam-select-sidebar-icon" />
-                        <span>{label}</span>
-                    </button>
+            <section className="exam-select-hero" aria-labelledby="exam-select-title">
+                <h1 id="exam-select-title" className="exam-select-title">
+                    {t.selectHeroTitle}
+                </h1>
+
+                <p className="exam-select-subtitle">
+                    {t.selectSubtitle}
+                </p>
+            </section>
+
+            <section className="exam-select-grid" aria-label={t.selectTitle}>
+                {exams.map((exam, index) => (
+                    <ExamSelectCard
+                        key={exam.id}
+                        exam={exam}
+                        index={index}
+                        t={t}
+                        onSelectExam={onSelectExam}
+                    />
                 ))}
-            </nav>
+            </section>
 
-            <div className="exam-select-sidebar-divider" />
-
-            <button
-                type="button"
-                onClick={onOpenSettings}
-                className={`exam-select-sidebar-item exam-select-settings-button ${settingsOpen ? "exam-select-sidebar-item-active" : ""}`}
-                aria-controls="settings-panel"
-                aria-expanded={settingsOpen}
-            >
-                <Settings className="exam-select-sidebar-icon" />
-                <span>{t.sidebarSettings}</span>
-            </button>
-
-            <div className="exam-select-user-card">
-                <div className="exam-select-user-avatar">HS</div>
-                <div className="exam-select-user-copy">
-                    <p className="exam-select-user-name">Hans Student</p>
-                    <p className="exam-select-user-email">hans@student.no</p>
-                </div>
-                <ChevronDown className="exam-select-user-chevron" />
-            </div>
-        </aside>
+            <FeatureStrip t={t} />
+        </main>
     );
 }
 

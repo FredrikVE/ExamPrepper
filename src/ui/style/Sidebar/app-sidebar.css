@@ -1,0 +1,32 @@
+.app-sidebar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    background: var(--shell-bg);
+    box-shadow: var(--shadow-heavy);
+    backdrop-filter: var(--blur-panel);
+    padding: 36px 30px 28px;
+    border-radius: var(--radius-lg);
+}
+
+.app-sidebar-divider {
+    width: 100%;
+    height: 1px;
+    margin: 34px 0 20px;
+    background: var(--line);
+}
+
+@media (max-width: 1280px) {
+    .app-sidebar {
+        padding: 28px 20px 22px;
+    }
+}
+
+@media (max-width: 980px) {
+    .app-sidebar {
+        display: none;
+    }
+}
