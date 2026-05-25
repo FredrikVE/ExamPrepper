@@ -1,7 +1,4 @@
 /* src/ui/style/App.css */
-@import "tailwindcss";
-
-@custom-variant dark (&:where(.dark, .dark *));
 
 /* Global */
 @import "./Tokens.css";
