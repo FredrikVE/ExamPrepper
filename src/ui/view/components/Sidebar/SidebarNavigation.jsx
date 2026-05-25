@@ -2,10 +2,11 @@
 import { BookOpen, BarChart3, Home } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { SIDEBAR_NAV_ITEMS } from "../../../../navigation/navItems.js";
+import { NAV_SCREENS } from "../../../../navigation/navGraph.js";
 
 const SIDEBAR_ICONS = {
-    exams: BookOpen,
     subjects: Home,
+    exams: BookOpen,
     overview: BarChart3
 };
 
@@ -16,46 +17,23 @@ const CLASS_NAMES = {
     icon: "sidebar-navigation-icon"
 };
 
-function getNavigationItemClassName(active) {
-    if (active) {
-        return `${CLASS_NAMES.item} ${CLASS_NAMES.itemActive}`;
-    }
-
-    return CLASS_NAMES.item;
-}
-
-function SidebarNavigationIcon({ Icon }) {
-    return (
-        <Icon
-            className={CLASS_NAMES.icon}
-            aria-hidden="true"
-            focusable="false"
-        />
-    );
-}
-
-function SidebarNavigationItem({ Icon, label, active, onClick }) {
-    return (
-        <button
-            type="button"
-            className={getNavigationItemClassName(active)}
-            onClick={onClick}
-        >
-            <SidebarNavigationIcon Icon={Icon} />
-            <span>{label}</span>
-        </button>
-    );
-}
-
-export default function SidebarNavigation({ activeScreen, onChangeScreen }) {
+export default function SidebarNavigation({ activeScreen, onChangeScreen, section}) {
     const { t } = useLanguage();
+
+    const visibleItems = SIDEBAR_NAV_ITEMS.filter((item) => {
+        return item.section === section && shouldShowNavigationItem(item, activeScreen);
+    });
+
+    if (visibleItems.length === 0) {
+        return null;
+    }
 
     return (
         <nav
             className={CLASS_NAMES.navigation}
             aria-label={t.sidebarLabel ?? "Eksamensnavigasjon"}
         >
-            {SIDEBAR_NAV_ITEMS.map((item) => {
+            {visibleItems.map((item) => {
                 const Icon = SIDEBAR_ICONS[item.id] ?? BookOpen;
                 const label = t[item.labelKey] ?? item.fallbackLabel;
                 const active = item.activeScreens.includes(activeScreen);
@@ -73,3 +51,45 @@ export default function SidebarNavigation({ activeScreen, onChangeScreen }) {
         </nav>
     );
 }
+
+function getNavigationItemClassName() {
+    return CLASS_NAMES.item;
+}
+
+const SidebarNavigationIcon = ({ Icon }) => {
+    return (
+        <Icon
+            className={CLASS_NAMES.icon}
+            aria-hidden="true"
+            focusable="false"
+        />
+    );
+};
+
+const SidebarNavigationItem = ({ Icon, label, active, onClick }) => {
+    return (
+        <button
+            type="button"
+            className={getNavigationItemClassName(active)}
+            onClick={onClick}
+        >
+            <SidebarNavigationIcon Icon={Icon} />
+            <span>{label}</span>
+        </button>
+    );
+};
+
+const shouldShowNavigationItem = (item, activeScreen) => {
+    const isSubjectHomeButton = item.screen === NAV_SCREENS.SUBJECTS;
+    const isExamSelectButton = item.screen === NAV_SCREENS.SELECT;
+
+    if (activeScreen === NAV_SCREENS.SUBJECTS) {
+        return !isSubjectHomeButton && !isExamSelectButton;
+    }
+
+    if (activeScreen === NAV_SCREENS.SELECT) {
+        return !isExamSelectButton;
+    }
+
+    return true;
+};

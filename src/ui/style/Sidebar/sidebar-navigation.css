@@ -27,8 +27,8 @@
         color var(--transition-normal);
 }
 
-.sidebar-navigation-item:hover,
-.sidebar-navigation-item-active {
+.sidebar-navigation-item:hover {
+    transform: translateX(2px);
     color: var(--text-main);
     border-color: color-mix(in srgb, var(--accent) 28%, transparent);
     background:
@@ -37,10 +37,6 @@
             color-mix(in srgb, var(--accent) 14%, transparent),
             color-mix(in srgb, var(--accent) 8%, transparent)
         );
-}
-
-.sidebar-navigation-item:hover {
-    transform: translateX(2px);
 }
 
 .sidebar-navigation-icon {

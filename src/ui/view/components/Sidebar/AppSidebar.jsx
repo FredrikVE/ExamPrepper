@@ -5,7 +5,7 @@ import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 
-export default function AppSidebar({activeScreen, onChangeScreen, SCREENS, onOpenSettings, sidebarOpen, onCloseSidebar, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, onOpenSettings, sidebarOpen, onCloseSidebar, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
     const className = sidebarOpen
         ? "app-sidebar app-sidebar-open"
         : "app-sidebar";
@@ -32,6 +32,15 @@ export default function AppSidebar({activeScreen, onChangeScreen, SCREENS, onOpe
             )}
 
             <SidebarNavigation
+                section="primary"
+                activeScreen={activeScreen}
+                onChangeScreen={onChangeScreen}
+            />
+
+            <div className="sidebar-spacer" />
+
+            <SidebarNavigation
+                section="secondary"
                 activeScreen={activeScreen}
                 onChangeScreen={onChangeScreen}
             />
