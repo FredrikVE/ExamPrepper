@@ -9,8 +9,8 @@
 @import "./Footer/index.css";
 @import "./QuestionCard/index.css";
 @import "./FeedbackPanel/index.css";
+@import "./SettingsMenu/index.css";
 @import "./ResultBadge.css";
-@import "./SettingsMenu.css";
 
 /* ──────────────────────────────────────────────
    DESIGN TOKENS
