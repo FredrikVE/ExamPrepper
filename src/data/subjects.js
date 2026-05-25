@@ -29,5 +29,14 @@ export const SUBJECTS = [
         description: "Grunnleggende sikkerhetsprinsipper, trusler, sårbarheter og beskyttelse av digitale systemer.",
         faculty: "Informatikk",
         icon: "shield"
+    },
+    {
+        id: "econ1310",
+        code: "ECON1310",
+        name: "Makroøkonomi",
+        appName: "Makroøkonomi",
+        description: "Nasjonalregnskap, konjunkturer, inflasjon, arbeidsledighet og økonomisk politikk.",
+        faculty: "Samfunnsøkonomi",
+        icon: "chart"
     }
 ];
