@@ -7,7 +7,13 @@ export default function ExamSelectPage({ viewModel }) {
     if (viewModel.loading) {
         return (
             <main className="exam-select-workspace">
-                <p>{viewModel.t.selectLoadingMessage ?? "Laster eksamener..."}</p>
+                <div className="exam-select-ambient-light" aria-hidden="true" />
+
+                <section className="exam-select-state">
+                    <p>
+                        {viewModel.t.selectLoadingMessage ?? "Laster eksamener..."}
+                    </p>
+                </section>
             </main>
         );
     }
@@ -15,7 +21,11 @@ export default function ExamSelectPage({ viewModel }) {
     if (viewModel.error) {
         return (
             <main className="exam-select-workspace">
-                <p>{viewModel.error}</p>
+                <div className="exam-select-ambient-light" aria-hidden="true" />
+
+                <section className="exam-select-state">
+                    <p>{viewModel.error}</p>
+                </section>
             </main>
         );
     }
@@ -29,7 +39,9 @@ export default function ExamSelectPage({ viewModel }) {
                 selectedSubject={viewModel.selectedSubject}
             />
 
-            <ExamSelectIntro viewModel={viewModel} />
+            <ExamSelectIntro
+                selectedSubject={viewModel.selectedSubject}
+            />
 
             <ExamSelectGrid
                 exams={viewModel.exams}
