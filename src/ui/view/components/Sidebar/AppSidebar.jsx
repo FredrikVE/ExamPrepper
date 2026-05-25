@@ -1,51 +1,44 @@
 //src/ui/view/components/Sidebar/AppSidebar.jsx
-import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import SidebarBrand from "./SidebarBrand.jsx";
-import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
+import SidebarCloseButton from "./SidebarCloseButton.jsx";
 
-export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, settingsOpen, onOpenSettings, sidebarOpen, onCloseSidebar, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+export default function AppSidebar({activeScreen, onChangeScreen, SCREENS, onOpenSettings, sidebarOpen, onCloseSidebar, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+    const className = sidebarOpen
+        ? "app-sidebar app-sidebar-open"
+        : "app-sidebar";
 
-    const { t } = useLanguage();
+    const shouldShowSubjectSwitcher =
+        activeScreen === SCREENS.SELECT ||
+        activeScreen === SCREENS.EXAM;
 
     return (
-        <>
-            <div
-                className={`app-sidebar-backdrop ${sidebarOpen ? "app-sidebar-backdrop-open" : ""}`}
-                onClick={onCloseSidebar}
-                aria-hidden="true"
+        <aside className={className}>
+            <SidebarCloseButton onCloseSidebar={onCloseSidebar} />
+
+            {shouldShowSubjectSwitcher && (
+                <>
+                    <SidebarBrand
+                        subjects={subjects}
+                        selectedSubject={selectedSubject}
+                        onSelectSubject={onSelectSubject}
+                        onShowAllSubjects={onShowAllSubjects}
+                    />
+
+                    <div className="sidebar-brand-navigation-divider" />
+                </>
+            )}
+
+            <SidebarNavigation
+                activeScreen={activeScreen}
+                onChangeScreen={onChangeScreen}
             />
 
-            <aside
-                className={`app-sidebar ${sidebarOpen ? "app-sidebar-open" : ""}`}
-                aria-label={t.sidebarLabel}
-            >
-                <SidebarCloseButton onCloseSidebar={onCloseSidebar} />
+            <SidebarSettingsButton onOpenSettings={onOpenSettings} />
 
-                <SidebarBrand
-                    subjects={subjects}
-                    selectedSubject={selectedSubject}
-                    onSelectSubject={onSelectSubject}
-                    onShowAllSubjects={onShowAllSubjects}
-                />
-
-                <SidebarNavigation
-                    activeScreen={activeScreen}
-                    onChangeScreen={onChangeScreen}
-                    SCREENS={SCREENS}
-                />
-
-                <div className="app-sidebar-divider" />
-
-                <SidebarSettingsButton
-                    settingsOpen={settingsOpen}
-                    onOpenSettings={onOpenSettings}
-                />
-
-                <SidebarUserCard />
-            </aside>
-        </>
+            <SidebarUserCard />
+        </aside>
     );
 }

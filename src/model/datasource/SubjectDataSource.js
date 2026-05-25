@@ -2,7 +2,7 @@
 import { SUBJECTS } from "../../data/subjects.js";
 
 export default class SubjectDataSource {
-    fetchAllSubjects() {
+    async fetchSubjects() {
         return SUBJECTS;
     }
 }

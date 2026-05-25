@@ -4,7 +4,22 @@ export default class GetSubjectByIdUseCase {
         this.subjectRepository = subjectRepository;
     }
 
-    execute({ subjectId, lang } = {}) {
-        return this.subjectRepository.getSubjectById(subjectId, lang);
+    async execute(input) {
+        const subjectId = typeof input === "string"
+            ? input
+            : input?.subjectId;
+
+        const language = typeof input === "object"
+            ? input.language
+            : undefined;
+
+        if (!subjectId) {
+            return null;
+        }
+
+        return await this.subjectRepository.getSubjectByIdWithExamCount({
+            subjectId,
+            language
+        });
     }
 }

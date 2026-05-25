@@ -1,13 +1,12 @@
 //src/ui/view/components/Sidebar/SidebarNavigation.jsx
-import { BookOpen, BarChart3, Home, PencilLine } from "lucide-react";
+import { BookOpen, BarChart3, Home } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { SIDEBAR_NAV_ITEMS } from "../../../../navigation/navItems.js";
 
 const SIDEBAR_ICONS = {
     exams: BookOpen,
     subjects: Home,
-    overview: BarChart3,
-    notes: PencilLine
+    overview: BarChart3
 };
 
 const CLASS_NAMES = {

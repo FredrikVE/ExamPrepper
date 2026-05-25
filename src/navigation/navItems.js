@@ -22,12 +22,5 @@ export const SIDEBAR_NAV_ITEMS = [
         labelKey: "sidebarOverview",
         fallbackLabel: "Oversikt",
         activeScreens: [NAV_SCREENS.OVERVIEW]
-    },
-    {
-        id: "notes",
-        screen: NAV_SCREENS.NOTES,
-        labelKey: "sidebarNotes",
-        fallbackLabel: "Notater",
-        activeScreens: [NAV_SCREENS.NOTES]
     }
 ];
