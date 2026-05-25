@@ -13,21 +13,21 @@ export const SUBJECTS = [
         recommended: true
     },
     {
-        id: "it4600",
-        code: "IT4600",
-        name: "Digital Strategy",
-        appName: "Digital Strategy",
-        description: "Strategi, forretningsmodeller og digital transformasjon i praksis.",
+        id: "in2000",
+        code: "IN2000",
+        name: "Software Engineering",
+        appName: "Software Engineering",
+        description: "Programvareutviklingsprosesser, arkitektur og kvalitetssikring.",
         faculty: "Informatikk",
-        icon: "barChart"
+        icon: "code"
     },
     {
-        id: "tdt4252",
-        code: "TDT4252",
-        name: "Data Engineering",
-        appName: "Data Engineering",
-        description: "Datainnhenting, dataplattformer og skalerbare data pipelines.",
+        id: "in2120",
+        code: "IN2120",
+        name: "Cybersikkerhet",
+        appName: "Cybersikkerhet",
+        description: "Grunnleggende sikkerhetsprinsipper, trusler, sårbarheter og beskyttelse av digitale systemer.",
         faculty: "Informatikk",
-        icon: "database"
+        icon: "shield"
     }
 ];
