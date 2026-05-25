@@ -5,6 +5,8 @@
     isolation: isolate;
     overflow: hidden;
 
+    display: flex;
+    flex-direction: column;
     min-height: clamp(520px, 56vh, 680px);
 
     border: 1px solid var(--line-strong);
@@ -41,6 +43,10 @@
     position: relative;
     z-index: 1;
     padding: 0 clamp(var(--space-10), 4vw, 54px) var(--space-10);
+
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .question-card-divider {
