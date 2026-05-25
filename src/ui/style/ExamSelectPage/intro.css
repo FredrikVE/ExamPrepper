@@ -1,0 +1,11 @@
+/* src/ui/style/ExamSelectPage/intro.css */
+.exam-select-intro {
+    position: relative;
+    margin-bottom: 58px;
+}
+
+.exam-select-subtitle {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: clamp(21px, 1.7vw, 29px);
+}

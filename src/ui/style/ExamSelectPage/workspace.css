@@ -1,0 +1,23 @@
+/* src/ui/style/ExamSelectPage/workspace.css */
+.exam-select-workspace {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--shell-bg);
+    box-shadow: var(--shadow-heavy);
+    backdrop-filter: var(--blur-panel);
+    padding: clamp(42px, 5vw, 72px);
+}
+
+.exam-select-ambient-light {
+    position: absolute;
+    inset: -20% -10% auto auto;
+    width: min(820px, 64vw);
+    height: 520px;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 15%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%);
+    filter: blur(2px);
+}

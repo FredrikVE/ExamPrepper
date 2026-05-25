@@ -1,0 +1,7 @@
+/* src/ui/style/ExamSelectPage/shell.css */
+.exam-select-shell {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: var(--space-5);
+    min-height: calc(100vh - 32px);
+}
