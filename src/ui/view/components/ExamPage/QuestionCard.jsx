@@ -1,5 +1,6 @@
 //src/ui/view/components/ExamPage/QuestionCard.jsx
-import { AlertTriangle, Edit3, Info, BookOpen } from "lucide-react";
+import { useState } from "react";
+import { AlertTriangle, Edit3, Info, BookOpen, ChevronDown } from "lucide-react";
 import ResultBadge from "./ResultBadge.jsx";
 import FeedbackPanel from "./FeedbackPanel.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
@@ -198,6 +199,14 @@ function PromptWithInlineAnswer({ question, answerText, submitted, onSingleAnswe
 
 function OptionList({ question, answer, submitted, showAllFeedback, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
+    const [expandedOptions, setExpandedOptions] = useState({});
+
+    const toggleExpanded = (index) => {
+        setExpandedOptions((prev) => ({
+            ...prev,
+            [index]: !prev[index]
+        }));
+    };
 
     return (
         <div className="question-card-option-list">
@@ -209,57 +218,90 @@ function OptionList({ question, answer, submitted, showAllFeedback, onSingleAnsw
 
                 const showRight = submitted && option.correct;
                 const showWrongSelection = submitted && isSelected && !option.correct;
+                const hasExtended = Array.isArray(option.whyExtended) && option.whyExtended.length > 0;
+                const isExpanded = expandedOptions[index] || false;
 
                 return (
-                    <label
-                        key={index}
-                        className={`question-card-option ${getOptionClassName({
-                            showRight,
-                            showWrongSelection,
-                            isSelected
-                        })}`}
-                    >
-                        <input
-                            type={question.type === "single" ? "radio" : "checkbox"}
-                            disabled={submitted}
-                            checked={isSelected}
-                            onChange={() =>
-                                question.type === "single"
-                                    ? onSingleAnswer(question.id, index)
-                                    : onToggleMultiAnswer(question.id, index)
-                            }
-                            className="question-card-option-input"
-                        />
+                    <div key={index}>
+                        <label
+                            className={`question-card-option ${getOptionClassName({
+                                showRight,
+                                showWrongSelection,
+                                isSelected
+                            })}`}
+                        >
+                            <input
+                                type={question.type === "single" ? "radio" : "checkbox"}
+                                disabled={submitted}
+                                checked={isSelected}
+                                onChange={() =>
+                                    question.type === "single"
+                                        ? onSingleAnswer(question.id, index)
+                                        : onToggleMultiAnswer(question.id, index)
+                                }
+                                className="question-card-option-input"
+                            />
 
-                        <div className="question-card-option-content">
-                            <span>
-                                <span className="question-card-option-letter">
-                                    {String.fromCharCode(65 + index)}.
-                                </span>{" "}
-                                {option.text}
-                            </span>
-
-                            {submitted && showAllFeedback && (
-                                <div className="question-card-option-feedback">
-                                    <span
-                                        className={
-                                            option.correct
-                                                ? "question-card-option-feedback-label-correct"
-                                                : "question-card-option-feedback-label-wrong"
-                                        }
-                                    >
-                                        {option.correct
-                                            ? t.feedbackOptionCorrect
-                                            : t.feedbackOptionWrong}
+                            <div className="question-card-option-content">
+                                <div className="question-card-option-top-row">
+                                    <span>
+                                        <span className="question-card-option-letter">
+                                            {String.fromCharCode(65 + index)}.
+                                        </span>{" "}
+                                        {option.text}
                                     </span>
 
-                                    <p className="question-card-option-feedback-text">
-                                        {option.why}
-                                    </p>
+                                    {submitted && showAllFeedback && (
+                                        <div className="question-card-option-status-row">
+                                            <span
+                                                className={
+                                                    option.correct
+                                                        ? "question-card-option-badge-correct"
+                                                        : "question-card-option-badge-wrong"
+                                                }
+                                            >
+                                                {option.correct
+                                                    ? `✓ ${t.feedbackOptionCorrect}`
+                                                    : `✗ ${t.feedbackOptionWrong}`}
+                                            </span>
+
+                                            {hasExtended && (
+                                                <button
+                                                    type="button"
+                                                    className={`question-card-option-expand-btn ${isExpanded ? "question-card-option-expand-btn-open" : ""}`}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        toggleExpanded(index);
+                                                    }}
+                                                >
+                                                    {t.feedbackExtendedLabel}
+                                                    <ChevronDown className="question-card-option-expand-icon" />
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                    </label>
+
+                                {submitted && showAllFeedback && (
+                                    <div className="question-card-option-feedback">
+                                        <p className="question-card-option-feedback-text">
+                                            {option.why}
+                                        </p>
+
+                                        {hasExtended && isExpanded && (
+                                            <ul className="question-card-option-extended-list">
+                                                {option.whyExtended.map((point, i) => (
+                                                    <li key={i} className="question-card-option-extended-item">
+                                                        {point}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </label>
+                    </div>
                 );
             })}
         </div>
