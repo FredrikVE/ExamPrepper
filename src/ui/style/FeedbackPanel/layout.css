@@ -1,0 +1,6 @@
+/* src/ui/style/FeedbackPanel/layout.css */
+.feedback-panel {
+    display: grid;
+    gap: 14px;
+    margin-top: 26px;
+}
