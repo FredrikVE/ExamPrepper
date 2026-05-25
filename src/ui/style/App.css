@@ -7,7 +7,7 @@
 @import "./ExamPage/index.css";
 @import "./Header.css";
 @import "./Footer.css";
-@import "./QuestionCard.css";
+@import "./QuestionCard/index.css";
 @import "./FeedbackPanel.css";
 @import "./ResultBadge.css";
 @import "./SettingsMenu.css";

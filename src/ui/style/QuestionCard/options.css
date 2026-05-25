@@ -9,19 +9,19 @@
     cursor: pointer;
     align-items: flex-start;
     gap: 14px;
-    border: 1px solid var(--qc-border-soft);
-    border-radius: var(--qc-radius-option);
-    background: color-mix(in srgb, var(--qc-bg) 70%, transparent);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--panel-strong) 70%, transparent);
     padding: 15px 16px;
-    color: var(--qc-text);
+    color: var(--text-main);
     font-weight: 600;
     line-height: 1.5;
-    transition: border-color var(--qc-transition), background var(--qc-transition), transform var(--qc-transition);
+    transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
 }
 
 .question-card-option:hover {
     transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--qc-accent) 45%, var(--qc-border-soft));
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
 }
 
 .question-card-option-disabled {
@@ -34,21 +34,21 @@
 
 .question-card-option-input {
     margin-top: 4px;
-    accent-color: var(--qc-accent);
+    accent-color: var(--accent);
 }
 
 .question-card-option-letter {
-    color: var(--qc-accent);
+    color: var(--accent);
     font-weight: 900;
 }
 
 .question-card-option-selected {
-    border-color: var(--qc-accent);
-    background: var(--qc-accent-soft);
+    border-color: var(--accent);
+    background: var(--accent-soft);
 }
 
 .question-card-option-default {
-    border-color: var(--qc-border-soft);
+    border-color: var(--line);
 }
 
 .question-card-option-choice-text {

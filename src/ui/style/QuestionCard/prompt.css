@@ -2,7 +2,7 @@
 .question-card-prompt {
     margin: 0 0 28px;
     max-width: 760px;
-    color: var(--qc-text);
+    color: var(--text-main);
     font-size: 1.04rem;
     font-weight: 500;
     line-height: 2;
