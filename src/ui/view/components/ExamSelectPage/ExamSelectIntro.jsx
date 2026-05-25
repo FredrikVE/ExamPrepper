@@ -1,13 +1,13 @@
-//src/ui/view/components/ExamSelectPage/ExamSelectHero.jsx
+//src/ui/view/components/ExamSelectPage/ExamSelectIntro.jsx
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function ExamSelectHero() {
+export default function ExamSelectIntro() {
     const { t } = useLanguage();
 
     return (
-        <section className="exam-select-hero" aria-labelledby="exam-select-title">
+        <section className="exam-select-intro" aria-labelledby="exam-select-title">
             <h1 id="exam-select-title" className="exam-select-title">
-                {t.selectHeroTitle}
+                {t.selectIntroTitle}
             </h1>
 
             <p className="exam-select-subtitle">

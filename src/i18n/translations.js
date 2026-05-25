@@ -13,8 +13,8 @@ export const translations = {
     [LANGUAGES.NO]: {
         // ExamSelectPage
         selectTitle: "IN5431 Eksamens-emulator",
-        selectHeroKicker: "IN5431 mock skoleeksamen",
-        selectHeroTitle: "Velg eksamen",
+        selectIntroKicker: "IN5431 mock skoleeksamen",
+        selectIntroTitle: "Velg eksamen",
         selectSubtitle: "Velg en øvingsprøve for å starte",
         selectStatistics: "Din statistikk",
         selectPracticeExamLabel: (number) => `ØVINGSPRØVE ${number}`,
@@ -92,8 +92,8 @@ export const translations = {
     [LANGUAGES.EN]: {
         // ExamSelectPage
         selectTitle: "IN5431 Exam Emulator",
-        selectHeroKicker: "IN5431 mock exam",
-        selectHeroTitle: "Choose exam",
+        selectIntroKicker: "IN5431 mock exam",
+        selectIntroTitle: "Choose exam",
         selectSubtitle: "Choose a practice exam to begin",
         selectStatistics: "Your statistics",
         selectPracticeExamLabel: (number) => `PRACTICE EXAM ${number}`,

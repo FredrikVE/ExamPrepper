@@ -1,7 +1,7 @@
 //src/ui/view/pages/ExamSelectPage.jsx
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx";
-import ExamSelectHero from "../components/ExamSelectPage/ExamSelectHero.jsx";
+import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
 
 export default function ExamSelectPage({ exams, onSelectExam }) {
@@ -13,7 +13,7 @@ export default function ExamSelectPage({ exams, onSelectExam }) {
 
             <ExamSelectTopbar />
 
-            <ExamSelectHero />
+            <ExamSelectIntro />
 
             <ExamSelectGrid
                 exams={exams}

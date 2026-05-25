@@ -1,5 +1,4 @@
-/* ExamSelectPage — page wrapper, shell layout, workspace, hero, topbar */
-
+/*src/ui/style/ExamSelectPage/page.css*/
 .exam-select-page {
     min-height: 100vh;
     padding: 16px;
@@ -45,15 +44,9 @@
     z-index: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 24px;
     margin-bottom: 42px;
-}
-
-.exam-select-kicker {
-    margin: 0;
-    font-size: clamp(17px, 1.2vw, 22px);
-    color: var(--accent);
 }
 
 .exam-select-statistics-button {
@@ -87,8 +80,8 @@
     height: 20px;
 }
 
-/* ── Hero ──────────────────────────────── */
-.exam-select-hero {
+/* ── Intro ────────────────────────────── */
+.exam-select-intro {
     position: relative;
     z-index: 1;
     margin-bottom: 58px;
@@ -154,7 +147,7 @@
         display: none;
     }
 
-    .exam-select-hero {
+    .exam-select-intro {
         margin-bottom: 34px;
     }
 }
