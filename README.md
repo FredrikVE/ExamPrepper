@@ -4,7 +4,7 @@
 
 Et **JavaScript, CSS, React og Vite**-prosjekt laget for å øve til skoleeksamen i **IN5431 – IT and Management**.
 
-Prosjektet er en interaktiv eksamenssimulator der brukeren kan velge mellom flere øveeksamener, svare på spørsmål og få umiddelbar tilbakemelding etter levering.
+Prosjektet er en interaktiv eksamenssimulator der brukeren kan velge mellom flere øveeksamener, svare på spørsmål og få fasit med forklaring etter levering.
 
 Appen støtter flere spørsmålstyper:
 
@@ -33,17 +33,18 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 | Valg av eksamen | Brukeren kan velge mellom flere øveeksamener |
 | Multiple choice | Støtter både ett riktig svar og flere riktige svar |
 | Fyll inn begrep | Brukeren skriver inn riktig fagbegrep, med støtte for flere aksepterte svar |
-| Automatisk retting | Svarene rettes når brukeren trykker «Lever og sjekk» |
-| Fasit med forklaring | Viser hvorfor svaret er riktig eller galt |
+| Automatisk retting | Svarene rettes når brukeren trykker «Lever nå» |
+| Fasit etter levering | Etter levering vises fasit, forklaringer og vurdering av svarene |
 | Utvidede forklaringer | Svarkort kan åpnes for å vise mer detaljert forklaring |
 | Pensumhenvisning | Hvert spørsmål kan ha kilde/fasitlinje mot forelesning eller pensum |
 | Poengscore | Viser antall poeng og prosent riktig |
-| Feedback-visning | Brukeren kan vise eller skjule detaljert feedback etter levering |
 | Ny runde | Eksamen kan nullstilles og tas på nytt |
 | Språkvalg | Brukeren kan bytte mellom norsk og engelsk |
 | Lys/mørk modus | Brukeren kan bytte mellom light mode og dark mode fra innstillinger |
+| Felles sidebar | Samme sidebar brukes på tvers av hele appen |
+| Hamburger/drawer på små skjermer | På smale skjermer åpnes sidebaren via hamburgermeny og kan lukkes med backdrop eller lukkeknapp |
 | Responsivt grensesnitt | Layouten tilpasser seg skjermbredde |
-| Moderne eksamenslayout | Bruker sidebar, progressbar, question cards og footer-navigasjon |
+| Moderne eksamenslayout | Bruker sidebar, header/statistikk, progressbar, question cards og footer-navigasjon |
 | Utvidbart eksamensregister | Nye øveeksamener kan legges til som egne datafiler |
 
 ---
@@ -205,15 +206,6 @@ export const mockExam1No = {
             "Prosesser går ofte på tvers av avdelinger og roller.",
             "Poenget er å beskrive flyten fra input til output, ikke bare én isolert oppgave."
           ]
-        },
-        {
-          text: "Kun en teknisk database.",
-          correct: false,
-          why: "Galt: En database kan støtte en prosess, men er ikke selve prosessen.",
-          whyExtended: [
-            "Teknologi kan være en del av prosessen, men prosessen handler om arbeid og verdiskaping.",
-            "En database beskriver lagring av data, ikke nødvendigvis flyt, roller eller aktiviteter."
-          ]
         }
       ]
     }
@@ -262,6 +254,7 @@ end
 subgraph View["View / Pages & Components"]
     ExamSelectPage["ExamSelectPage.jsx"]
     ExamPage["ExamPage.jsx"]
+    AppSidebar["AppSidebar"]
     Header["Header"]
     QuestionCard["QuestionCard"]
     FeedbackPanel["FeedbackPanel"]
@@ -297,17 +290,16 @@ end
 DI -.-> App
 NavGraph -.-> App
 
+App --> AppSidebar
 App --> ExamSelectPage
 App --> ExamPage
+App --> SettingsMenu
 
-ExamSelectPage --> GetAvailableExamsUC
 ExamPage --> ExamVM
-
 ExamPage --> Header
 ExamPage --> QuestionCard
 QuestionCard --> FeedbackPanel
 ExamPage --> Footer
-ExamPage --> SettingsMenu
 
 ExamVM --> GetExamByBaseIdAndLangUC
 ExamVM --> GetExamQuestionsUC
@@ -328,30 +320,6 @@ DataRegistry --> MockExam1No
 DataRegistry --> MockExam1En
 DataRegistry --> MockExam2No
 DataRegistry --> MockExam2En
-
-classDef sideNode fill:#E0E0E0,stroke:#424242,color:#000000
-classDef appNode fill:#C5E1A5,stroke:#33691E,color:#000000
-classDef viewNode fill:#C5E1A5,stroke:#33691E,color:#000000
-classDef viewModelNode fill:#C5E1A5,stroke:#33691E,color:#000000
-classDef domainNode fill:#C5E1A5,stroke:#33691E,color:#000000
-classDef modelNode fill:#C5E1A5,stroke:#33691E,color:#000000
-classDef dataNode fill:#C5E1A5,stroke:#33691E,color:#000000
-
-class DI,NavGraph sideNode
-class App appNode
-class ExamSelectPage,ExamPage,Header,QuestionCard,FeedbackPanel,Footer,SettingsMenu viewNode
-class ExamVM viewModelNode
-class GetAvailableExamsUC,GetExamByBaseIdAndLangUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
-class Repo,DS modelNode
-class DataRegistry,MockExam1No,MockExam1En,MockExam2No,MockExam2En dataNode
-
-style SideInputs stroke:#000000,fill:#E0E0E0,color:#000000
-style AppLayer stroke:#000000,fill:#E1BEE7,color:#000000
-style View stroke:#000000,fill:#FFF9C4,color:#000000
-style ViewModel stroke:#000000,fill:#FFCDD2,color:#000000
-style Domain stroke:#000000,fill:#C5CAE9,color:#000000
-style Model stroke:#000000,fill:#DCEDC8,color:#000000
-style Data stroke:#000000,fill:#FFE082,color:#000000
 ```
 
 ### Arkitekturflyt
@@ -369,7 +337,7 @@ UseCases
   ↓
 useExamViewModel
   ↓
-ExamPage
+ExamPage / ExamSelectPage
   ↓
 UI Components
 ```
@@ -384,9 +352,9 @@ UI Components
 | **DataSource** | `ExamQuestionDataSource.js` | Henter eksamensdata og spørsmål fra lokal datakilde |
 | **Repository** | `ExamRepository.js` | Gir domenelaget tilgang til eksamener og spørsmål uten at domenet kjenner datakilden |
 | **Domain / UseCases** | `GetAvailableExamsUseCase`, `GetExamByBaseIdAndLangUseCase`, `GetExamQuestionsUseCase`, `GradeAnswerUseCase`, `CalculateExamScoreUseCase` | Inneholder appens sentrale regler |
-| **ViewModel** | `useExamViewModel.js` | Holder React-state, brukerens svar, leveringstilstand, feedback-visning, åpne/lukkede svarkort, timer, navigasjon mellom spørsmål og score |
+| **ViewModel** | `useExamViewModel.js` | Holder React-state, brukerens svar, leveringstilstand, timer, navigasjon mellom spørsmål og score |
 | **View / Page** | `ExamPage.jsx`, `ExamSelectPage.jsx` | Setter sammen sidene og sender props videre til komponentene |
-| **Components** | `Header`, `QuestionCard`, `FeedbackPanel`, `Footer`, `SettingsMenu`, `ResultBadge` | Rene UI-komponenter som viser data og sender brukerhandlinger oppover |
+| **Components** | `Header`, `QuestionCard`, `FeedbackPanel`, `Footer`, `SettingsMenu`, `Sidebar`, `ResultBadge` | Rene UI-komponenter som viser data og sender brukerhandlinger oppover |
 | **i18n** | `LanguageContext.jsx`, `translations.js` | Håndterer språkvalg og tekstnøkler |
 | **Theme** | `ThemeContext.jsx` | Håndterer light mode og dark mode |
 | **Utils** | `answerutils`, `questionutils`, `viewmodelutils` | Hjelpefunksjoner for svar, spørsmålspresentasjon, labels og visningslogikk |
@@ -442,25 +410,31 @@ Hver øveeksamen har en unik `id`, en `baseId`, et språkfelt, en `title`, en `d
 `CalculateExamScoreUseCase` gjør poengberegning separat fra både UI og datalagring.
 
 **ViewModel samler React-state.**  
-`useExamViewModel` håndterer brukerens svar, submitted-status, feedback-visning, åpne/lukkede svarkort, loading, timer, score og navigasjon mellom spørsmål. Dermed holdes side- og komponentlaget enklere.
+`useExamViewModel` håndterer brukerens svar, submitted-status, åpne/lukkede svarkort, loading, timer, score og navigasjon mellom spørsmål. Dermed holdes side- og komponentlaget enklere.
 
 **UI-komponentene er mest mulig dumme.**  
-Komponentene får data og handlers via props. State og brukerflyt eies primært av viewModelen, slik at komponentene i hovedsak fokuserer på presentasjon.
+Komponentene får data og handlers via props. State og brukerflyt eies primært av viewModelen og `App.jsx`, slik at komponentene i hovedsak fokuserer på presentasjon.
+
+**Sidebar er felles for hele appen.**  
+Navigasjonen eies av `App.jsx`, mens `AppSidebar` kun presenterer navigasjonen. På smale skjermer vises sidebaren som en hamburgerstyrt drawer med backdrop og lukkeknapp.
+
+**ExamSelectPage er modularisert.**  
+Forsiden er delt opp i `ExamSelectTopbar`, `ExamSelectIntro`, `ExamSelectGrid` og `ExamSelectCard`. Dette gjør siden lettere å vedlikeholde og gjør det enklere å endre layout uten at page-filen vokser.
 
 **QuestionCard er delt i funksjonelle underområder.**  
 `QuestionCard` består av egne undermapper for `Header`, `Prompt`, `InputField`, `Options`, `AnswerCard`, `Feedback` og `Styling`. Dette gjør det lettere å finne riktig subkomponent og videreutvikle kortet uten at én fil får for mye ansvar.
 
 **UI-et er delt inn i tydelige visuelle soner.**  
-Eksamenssiden består av en sidebar, header/statistikk, progressbar, question card og footer-navigasjon. Dette gjør at brukeren hele tiden ser hvor langt de har kommet, hvilken oppgave de jobber med, og hvilke handlinger som er tilgjengelige.
+Eksamenssiden består av sidebar, header/statistikk, progressbar, question card og footer-navigasjon. Dette gjør at brukeren hele tiden ser hvor langt de har kommet, hvilken oppgave de jobber med, og hvilke handlinger som er tilgjengelige.
 
 **Språk og tema håndteres globalt.**  
 Språkvalg håndteres gjennom `LanguageContext`, mens light/dark mode håndteres gjennom `ThemeContext`. Dette gjør at komponentene kan bruke felles tilstand uten å duplisere logikk.
 
 **Styling er modulært organisert per UI-område.**  
-`src/ui/style/App.css` fungerer som samlet CSS-entrypoint. Globale designverdier, global reset og responsiv grunnkonfigurasjon ligger i `Tokens.css`, `Global.css` og `Responsive.css`. Større UI-områder som `ExamPage`, `ExamSelectPage`, `Header`, `Footer`, `QuestionCard`, `FeedbackPanel`, `SettingsMenu` og `ResultBadge` har egne mapper med `index.css` og mindre CSS-moduler.
+`src/ui/style/App.css` fungerer som samlet CSS-entrypoint. Globale designverdier, global reset og responsiv grunnkonfigurasjon ligger i `Tokens.css`, `Global.css` og `Responsive.css`. Større UI-områder som `ExamPage`, `ExamSelectPage`, `Header`, `Footer`, `QuestionCard`, `FeedbackPanel`, `SettingsMenu`, `Sidebar` og `ResultBadge` har egne mapper med `index.css` og mindre CSS-moduler.
 
 **Prosjektet bruker vanlig CSS og design tokens.**  
-Tailwind er fjernet til fordel for vanlige CSS-filer, CSS custom properties og en tydelig modulstruktur. Farger, tekst, radius, skygger, overganger og tema defineres som globale design tokens.
+Tailwind er fjernet til fordel for vanlige CSS-filer, CSS custom properties og en tydelig modulstruktur. Farger, tekst, radius, skygger, spacing, overganger og tema defineres som globale design tokens. Flere komponentverdier hentes fra `Tokens.css`, slik at tokens fungerer som SSOT for visuelle grunnverdier.
 
 **Composition Root i `dependencies.js`.**  
 Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det gjør appen mer ryddig og gjør det lettere å bytte implementasjoner senere.
@@ -475,7 +449,7 @@ Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det
 | React | UI-bibliotek |
 | Vite | Byggverktøy og utviklingsserver |
 | CSS | Modulær styling, layout, komponentstiler og dark mode |
-| CSS custom properties | Globale design tokens for farger, radius, shadows, transitions og tema |
+| CSS custom properties | Globale design tokens for farger, radius, shadows, spacing, transitions og tema |
 | lucide-react | Ikoner |
 
 ---
@@ -517,15 +491,6 @@ export const mockExam3No = {
             "Strategisk posisjonering handler ikke bare om å være effektiv.",
             "Virksomheten må velge hva den ikke skal gjøre.",
             "Trade-offs gjør strategien vanskeligere å kopiere."
-          ]
-        },
-        {
-          text: "Å gjøre de samme aktivitetene som konkurrentene, bare raskere.",
-          correct: false,
-          why: "Galt: Dette beskriver mer operational effectiveness enn strategi.",
-          whyExtended: [
-            "Operational effectiveness kan være nødvendig, men er ikke nok for en varig strategi.",
-            "Hvis alle gjør det samme, blir forskjellene mellom aktørene mindre."
           ]
         }
       ]
@@ -572,6 +537,7 @@ Global styling importeres fra `src/ui/style/App.css`.
 @import "./ExamSelectPage/index.css";
 @import "./ExamPage/index.css";
 
+@import "./Sidebar/index.css";
 @import "./Header/index.css";
 @import "./Footer/index.css";
 @import "./QuestionCard/index.css";
@@ -585,9 +551,10 @@ Retningslinjer:
 - Globale designverdier legges i `Tokens.css`.
 - Global reset og basisregler legges i `Global.css`.
 - Globale responsive regler legges i `Responsive.css`.
-- Side-spesifikk styling legges i mappen for siden, for eksempel `ExamPage/`.
-- Komponentområde-spesifikk styling legges i mappen for komponentområdet, for eksempel `QuestionCard/`.
+- Side-spesifikk styling legges i mappen for siden, for eksempel `ExamPage/` eller `ExamSelectPage/`.
+- Komponentområde-spesifikk styling legges i mappen for komponentområdet, for eksempel `Header/`, `Sidebar/` eller `QuestionCard/`.
 - Hver mappe bør ha en `index.css` som importerer del-filene i riktig rekkefølge.
+- Komponenter bør bruke design tokens fra `Tokens.css` fremfor hardkodede verdier når verdien er gjenbrukbar.
 
 ---
 
