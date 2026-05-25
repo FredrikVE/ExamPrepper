@@ -253,6 +253,11 @@ end
 
 subgraph View["View / Pages & Components"]
     ExamSelectPage["ExamSelectPage.jsx"]
+    ExamSelectTopbar["ExamSelectTopbar"]
+    ExamSelectIntro["ExamSelectIntro"]
+    ExamSelectGrid["ExamSelectGrid"]
+    ExamSelectCard["ExamSelectCard"]
+
     ExamPage["ExamPage.jsx"]
     AppSidebar["AppSidebar"]
     Header["Header"]
@@ -295,6 +300,13 @@ App --> ExamSelectPage
 App --> ExamPage
 App --> SettingsMenu
 
+ExamSelectPage --> ExamSelectTopbar
+ExamSelectPage --> ExamSelectIntro
+ExamSelectPage --> ExamSelectGrid
+ExamSelectGrid --> ExamSelectCard
+
+ExamSelectPage --> GetAvailableExamsUC
+
 ExamPage --> ExamVM
 ExamPage --> Header
 ExamPage --> QuestionCard
@@ -320,6 +332,30 @@ DataRegistry --> MockExam1No
 DataRegistry --> MockExam1En
 DataRegistry --> MockExam2No
 DataRegistry --> MockExam2En
+
+classDef sideNode fill:#E0E0E0,stroke:#424242,color:#000000
+classDef appNode fill:#C5E1A5,stroke:#33691E,color:#000000
+classDef viewNode fill:#FFF9C4,stroke:#827717,color:#000000
+classDef viewModelNode fill:#FFCDD2,stroke:#B71C1C,color:#000000
+classDef domainNode fill:#C5CAE9,stroke:#1A237E,color:#000000
+classDef modelNode fill:#DCEDC8,stroke:#33691E,color:#000000
+classDef dataNode fill:#FFE082,stroke:#E65100,color:#000000
+
+class DI,NavGraph sideNode
+class App appNode
+class ExamSelectPage,ExamSelectTopbar,ExamSelectIntro,ExamSelectGrid,ExamSelectCard,ExamPage,AppSidebar,Header,QuestionCard,FeedbackPanel,Footer,SettingsMenu viewNode
+class ExamVM viewModelNode
+class GetAvailableExamsUC,GetExamByBaseIdAndLangUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
+class Repo,DS modelNode
+class DataRegistry,MockExam1No,MockExam1En,MockExam2No,MockExam2En dataNode
+
+style SideInputs stroke:#000000,fill:#E0E0E0,color:#000000
+style AppLayer stroke:#000000,fill:#E1BEE7,color:#000000
+style View stroke:#000000,fill:#FFF9C4,color:#000000
+style ViewModel stroke:#000000,fill:#FFCDD2,color:#000000
+style Domain stroke:#000000,fill:#C5CAE9,color:#000000
+style Model stroke:#000000,fill:#DCEDC8,color:#000000
+style Data stroke:#000000,fill:#FFE082,color:#000000
 ```
 
 ### Arkitekturflyt
