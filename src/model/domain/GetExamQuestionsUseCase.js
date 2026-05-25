@@ -5,6 +5,12 @@ export default class GetExamQuestionsUseCase {
     }
 
     async execute(examId) {
-        return this.examRepository.getQuestions(examId);
+        if (!examId) {
+            return [];
+        }
+
+        const questions = await this.examRepository.getExamQuestions(examId);
+
+        return questions;
     }
 }

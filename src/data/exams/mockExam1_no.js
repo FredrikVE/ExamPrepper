@@ -1,6 +1,7 @@
 //src/data/exams/mockExam1_no.js
 export const mockExam1_no = {
   id: "mock-exam-1-no",
+  subjectId: "in5431",
   baseId: "mock-exam-1",
   lang: "no",
   title: "Øveeksamen 1: Full repetisjon",

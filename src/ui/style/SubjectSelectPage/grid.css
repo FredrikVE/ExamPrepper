@@ -1,13 +1,15 @@
-/* src/ui/style/ExamSelectPage/grid.css */
-.exam-select-grid {
+/* src/ui/style/SubjectSelectPage/grid.css */
+.subject-select-grid {
     position: relative;
+    z-index: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: var(--space-9);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
 }
 
-.exam-select-empty {
+.subject-select-empty {
     position: relative;
+    z-index: 1;
     max-width: 760px;
     padding: 42px;
     border: 1px dashed color-mix(in srgb, var(--accent) 34%, var(--line-strong));
@@ -15,14 +17,14 @@
     background: color-mix(in srgb, var(--accent) 6%, var(--panel-bg));
 }
 
-.exam-select-empty h2 {
+.subject-select-empty h2 {
     margin: 0;
     color: var(--text-main);
     font-size: clamp(28px, 2.4vw, 38px);
     letter-spacing: -0.04em;
 }
 
-.exam-select-empty p {
+.subject-select-empty p {
     max-width: 580px;
     margin: 16px 0 0;
     color: var(--text-muted);

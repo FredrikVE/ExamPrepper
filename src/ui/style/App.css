@@ -6,6 +6,7 @@
 @import "./Responsive.css";
 
 /* Pages */
+@import "./SubjectSelectPage/index.css";
 @import "./ExamSelectPage/index.css";
 @import "./ExamPage/index.css";
 

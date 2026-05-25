@@ -1,14 +1,14 @@
 //src/ui/view/components/ExamSelectPage/ExamSelectIntro.jsx
-import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-
-export default function ExamSelectIntro() {
-    const { t } = useLanguage();
-
+export default function ExamSelectIntro({ viewModel }) {
     return (
-        <section className="exam-select-intro" aria-label={t.selectTitle}>
-            <p className="exam-select-subtitle">
-                {t.selectSubtitle}
+        <section className="exam-select-intro">
+            <p className="exam-select-eyebrow">
+                {viewModel.selectedSubject?.code ?? "Mock Exam"}
             </p>
+
+            <h1>{viewModel.introTitle}</h1>
+
+            <p>{viewModel.subtitle}</p>
         </section>
     );
 }

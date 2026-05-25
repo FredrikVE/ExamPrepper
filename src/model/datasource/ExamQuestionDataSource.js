@@ -1,12 +1,18 @@
 //src/model/datasource/ExamQuestionDataSource.js
-import { getExamQuestions, EXAMS } from "../../data/data.js";
+import { EXAMS } from "../../data/data.js";
 
 export default class ExamQuestionDataSource {
-    fetchQuestions(examId) {
-        return getExamQuestions(examId);
+    async fetchAllExams() {
+        return EXAMS;
     }
 
-    fetchAllExams() {
-        return EXAMS;
+    async fetchExamById(examId) {
+        return EXAMS.find((exam) => exam.id === examId) ?? null;
+    }
+
+    async fetchExamByBaseIdAndLang(baseId, language) {
+        return EXAMS.find((exam) => {
+            return exam.baseId === baseId && exam.lang === language;
+        }) ?? null;
     }
 }

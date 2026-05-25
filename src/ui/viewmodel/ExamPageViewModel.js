@@ -1,4 +1,4 @@
-// src/ui/viewmodel/useExamViewModel.js
+//src/ui/viewmodel/ExamPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 import getAnsweredCountLabel from "../../utils/viewmodelutils/getAnsweredCountLabel.js";
 import getScoreLabel from "../../utils/viewmodelutils/getScoreLabel.js";
@@ -7,7 +7,7 @@ import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggle
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId) {
+export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId) {
 	//Statevariabler
 	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
