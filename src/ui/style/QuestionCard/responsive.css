@@ -1,0 +1,57 @@
+/* src/ui/style/QuestionCard/responsive.css */
+@media (max-width: 860px) {
+    .question-card-answer-card-header,
+    .question-card-answer-card-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .question-card-answer-card-actions {
+        gap: 10px;
+    }
+
+    .question-card-answer-expand-button {
+        border-left: 0;
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .question-card-header,
+    .question-card-body {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .question-card-header {
+        flex-direction: column;
+    }
+
+    .question-card-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .question-card-inline-input {
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+
+    .question-card-inline-input-meta,
+    .question-card-input-meta {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .question-card-answer-card {
+        grid-template-columns: 48px minmax(0, 1fr);
+    }
+
+    .question-card-answer-card-left {
+        padding: 14px 6px;
+    }
+
+    .question-card-answer-card-main {
+        padding: 14px;
+    }
+}
