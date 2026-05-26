@@ -1,6 +1,10 @@
-# IN5431 Exam Emulator
+<h1 align="center">
+  <img src="./docs/images/Full_logo_transparent.png" alt="ExamPrepper logo" width="520" />
+</h1>
 
-## Om prosjektet
+<br>
+
+## Om ExamPrepper prosjektet
 
 Et **JavaScript, CSS, React og Vite**-prosjekt laget for å øve til skoleeksamen i **IN5431 – IT and Management**.
 

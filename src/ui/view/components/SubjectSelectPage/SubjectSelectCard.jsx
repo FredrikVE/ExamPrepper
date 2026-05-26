@@ -9,11 +9,6 @@ export default function SubjectSelectCard({ t, subject, index, isSelected, onSel
             className={`subject-card subject-card-${index + 1} ${isSelected ? "subject-card-selected" : ""}`}
             onClick={() => onSelectSubject(subject.id)}
         >
-            {subject.recommended ? (
-                <span className="subject-card-badge">
-                    {t.subjectRecommended}
-                </span>
-            ) : null}
 
             <span className="subject-card-icon-wrap" aria-hidden="true">
                 <SubjectIcon subject={subject} className="subject-card-icon" />

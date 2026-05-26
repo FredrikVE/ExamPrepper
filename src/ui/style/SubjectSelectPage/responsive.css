@@ -142,8 +142,7 @@
         border-radius: 15px;
     }
 
-    .subject-card:hover,
-    .subject-card-selected {
+    .subject-card:hover {
         transform: none;
     }
 

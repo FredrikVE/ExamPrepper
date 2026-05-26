@@ -46,6 +46,10 @@
     opacity: 1;
 }
 
+.exam-select-card:focus:not(:focus-visible) {
+    outline: none;
+}
+
 .exam-select-card:focus-visible {
     z-index: 2;
 }

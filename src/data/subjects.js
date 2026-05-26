@@ -10,7 +10,6 @@ export const SUBJECTS = [
         description: "Øv deg til eksamen med realistiske mock-eksamener og umiddelbar tilbakemelding.",
         faculty: "Informatikk",
         icon: "clipboard",
-        recommended: true
     },
     {
         id: "in2000",

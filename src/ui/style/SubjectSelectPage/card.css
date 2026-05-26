@@ -34,17 +34,19 @@
     transition: opacity var(--transition-normal);
 }
 
-.subject-card:hover,
-.subject-card-selected {
+.subject-card:hover {
     z-index: 2;
     transform: translateY(-4px);
     border-color: color-mix(in srgb, var(--subject-accent, var(--accent)) 62%, transparent);
     box-shadow: 0 26px 62px color-mix(in srgb, var(--subject-accent, var(--accent)) 12%, transparent);
 }
 
-.subject-card:hover::before,
-.subject-card-selected::before {
+.subject-card:hover::before {
     opacity: 1;
+}
+
+.subject-card:focus:not(:focus-visible) {
+    outline: none;
 }
 
 .subject-card:focus-visible {
@@ -52,7 +54,8 @@
 }
 
 .subject-card-selected {
-    border-color: color-mix(in srgb, var(--accent) 72%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 44%, var(--line-strong));
+    background: color-mix(in srgb, var(--accent) 3%, var(--panel-bg));
 }
 
 .subject-card-1 {
