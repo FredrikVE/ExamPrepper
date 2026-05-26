@@ -330,7 +330,7 @@
 
 .exam-select-grid {
     width: 100%;
-    overflow-x: hidden;
+    overflow: visible;
 }
 
 .exam-select-grid > * {

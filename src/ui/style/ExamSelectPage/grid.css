@@ -1,6 +1,7 @@
 /* src/ui/style/ExamSelectPage/grid.css */
 .exam-select-grid {
     position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: repeat(
         auto-fit,
@@ -12,6 +13,7 @@
 
 .exam-select-empty {
     position: relative;
+    z-index: 1;
     max-width: 760px;
     padding: 42px;
     border: 1px dashed color-mix(in srgb, var(--accent) 34%, var(--line-strong));

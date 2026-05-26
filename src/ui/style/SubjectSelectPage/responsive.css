@@ -315,7 +315,7 @@
 
 .subject-select-grid {
     width: 100%;
-    overflow-x: hidden;
+    overflow: visible;
 }
 
 .subject-select-grid > * {
