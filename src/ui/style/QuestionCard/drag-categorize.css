@@ -9,7 +9,8 @@
 }
 
 .drag-categorize-item-bank {
-    --drag-categorize-bank-card-max-width: 320px;
+    --drag-categorize-bank-card-min-width: 180px;
+    --drag-categorize-bank-card-max-width: 360px;
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--panel-strong) 76%, transparent);
@@ -39,9 +40,10 @@
 }
 
 .drag-categorize-item-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
-    justify-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
     gap: 12px;
 }
 
@@ -81,7 +83,30 @@
 }
 
 .drag-categorize-item-card {
-    max-width: min(100%, var(--drag-categorize-bank-card-max-width));
+    inline-size: fit-content;
+    min-inline-size: min(100%, var(--drag-categorize-bank-card-min-width));
+    max-inline-size: min(100%, var(--drag-categorize-bank-card-max-width));
+    flex: 0 1 auto;
+}
+
+.drag-categorize-item-card-short {
+    --drag-categorize-bank-card-min-width: 170px;
+    --drag-categorize-bank-card-max-width: 240px;
+}
+
+.drag-categorize-item-card-medium {
+    --drag-categorize-bank-card-min-width: 210px;
+    --drag-categorize-bank-card-max-width: 340px;
+}
+
+.drag-categorize-item-card-long {
+    --drag-categorize-bank-card-min-width: 260px;
+    --drag-categorize-bank-card-max-width: 480px;
+}
+
+.drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-min-width: 300px;
+    --drag-categorize-bank-card-max-width: 560px;
 }
 
 .drag-categorize-item-card:hover,
@@ -271,12 +296,12 @@
     opacity: 0.72;
 }
 
-.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-bank {
-    --drag-categorize-bank-card-max-width: 560px;
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-long {
+    --drag-categorize-bank-card-max-width: 520px;
 }
 
-.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-list {
-    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-max-width: 620px;
 }
 
 .exam-workspace-dense-drag-categorize-mode .drag-categorize-category-grid {
@@ -288,8 +313,8 @@
     --drag-categorize-placed-grip-width: 14px;
 }
 
-.exam-workspace-extra-wide-question-mode .drag-categorize-item-bank {
-    --drag-categorize-bank-card-max-width: 620px;
+.exam-workspace-extra-wide-question-mode .drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-max-width: 660px;
 }
 
 .exam-workspace-extra-wide-question-mode .drag-categorize-category-grid {
@@ -337,6 +362,24 @@
     padding: 14px 16px;
 }
 
+.drag-categorize-item-bank-feedback .drag-categorize-feedback-card {
+    flex: 0 1 auto;
+    inline-size: fit-content;
+    min-inline-size: min(100%, 240px);
+    max-inline-size: min(100%, 520px);
+}
+
+.drag-categorize-item-bank-feedback .drag-categorize-feedback-title {
+    max-inline-size: 46ch;
+}
+
+.drag-categorize-empty-slot-feedback {
+    border-color: color-mix(in srgb, var(--danger) 22%, var(--line));
+    background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+    color: var(--text-soft);
+    font-style: italic;
+}
+
 .drag-categorize-question-feedback .drag-categorize-drop-zone {
     min-height: 130px;
 }
@@ -359,11 +402,9 @@
 }
 
 .drag-categorize-feedback-main {
-    display: flex;
+    display: grid;
     min-height: 52px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
     padding: 10px 12px;
 }
 
@@ -373,6 +414,16 @@
     align-items: center;
     min-width: 0;
     gap: 8px;
+}
+
+.drag-categorize-feedback-title-row {
+    align-items: flex-start;
+}
+
+.drag-categorize-feedback-actions {
+    justify-content: center;
+    padding-top: 6px;
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
 }
 
 .drag-categorize-feedback-title {
@@ -411,8 +462,9 @@
 }
 
 @media (max-width: 1180px) {
-    .drag-categorize-item-list {
-        grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+    .drag-categorize-item-card-long,
+    .drag-categorize-item-card-extra-long {
+        --drag-categorize-bank-card-max-width: 420px;
     }
 }
 
@@ -421,7 +473,9 @@
         justify-self: stretch;
     }
 
-    .drag-categorize-item-list {
-        grid-template-columns: 1fr;
+    .drag-categorize-item-card,
+    .drag-categorize-item-bank-feedback .drag-categorize-feedback-card {
+        inline-size: 100%;
+        max-inline-size: 100%;
     }
 }

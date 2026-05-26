@@ -12,9 +12,7 @@ export function useDragCategorizeQuestion(params) {
     const [expandedItemId, setExpandedItemId] = useState(null);
 
     const itemsById = createItemsById(params.question?.items);
-    const availableItems = feedbackMode
-        ? getSafeArray(params.question?.items)
-        : getUnplacedItems(params.question, safeAnswer);
+    const availableItems = getUnplacedItems(params.question, safeAnswer);
     const stats = getDragCategorizeStats(params.question, safeAnswer);
 
     let rootClassName = "drag-categorize-question";

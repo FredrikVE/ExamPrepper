@@ -66,9 +66,26 @@ export default function DragCategorizeDropZone(props) {
                 );
             })}
 
-            <div className="drag-categorize-empty-slot">
-                {props.t.dragCategorizeDropHere}
+            {renderEmptySlots(props)}
+        </div>
+    );
+}
+
+function renderEmptySlots(props) {
+    if (props.feedbackMode) {
+        return Array.from({ length: props.unansweredSlotCount }, (_, index) => (
+            <div
+                key={`unanswered-${index}`}
+                className="drag-categorize-empty-slot drag-categorize-empty-slot-feedback"
+            >
+                {props.t.dragDropUnanswered}
             </div>
+        ));
+    }
+
+    return (
+        <div className="drag-categorize-empty-slot">
+            {props.t.dragCategorizeDropHere}
         </div>
     );
 }

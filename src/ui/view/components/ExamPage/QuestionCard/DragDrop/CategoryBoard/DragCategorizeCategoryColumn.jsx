@@ -13,6 +13,7 @@ export default function DragCategorizeCategoryColumn(props) {
                 question={props.question}
                 category={props.category}
                 itemIds={getSafeArray(props.itemIds)}
+                unansweredSlotCount={props.unansweredSlotCount}
                 itemsById={props.itemsById}
                 feedbackMode={props.feedbackMode}
                 isDragOver={props.isDragOver}

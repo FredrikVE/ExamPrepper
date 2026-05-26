@@ -7,7 +7,7 @@ import DragDropFeedbackExplanation from "../Feedback/DragDropFeedbackExplanation
 export default function DragCategorizeFeedbackCard(props) {
     const correctCategoryId = getCorrectCategoryId(props.question, props.item.id);
     const correctCategoryLabel = getCategoryLabelById(props.question, correctCategoryId);
-    const itemIsCorrect = isItemCorrectlyPlaced(props.question, props.category.id, props.item.id);
+    const itemIsCorrect = !props.unanswered && isItemCorrectlyPlaced(props.question, props.category?.id, props.item.id);
     const feedback = getItemFeedback(props.question, props.item.id);
     const reason = itemIsCorrect
         ? feedback.whyCorrect
@@ -15,7 +15,7 @@ export default function DragCategorizeFeedbackCard(props) {
     const extendedPoints = Array.isArray(feedback.whyExtended)
         ? feedback.whyExtended
         : [];
-    const showCorrectAnswer = !itemIsCorrect && Boolean(correctCategoryLabel);
+    const showCorrectAnswer = (props.unanswered || !itemIsCorrect) && Boolean(correctCategoryLabel);
     const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || showCorrectAnswer;
 
     let expandButton = null;
@@ -46,7 +46,7 @@ export default function DragCategorizeFeedbackCard(props) {
     }
 
     return (
-        <article className={getFeedbackCardClassName(itemIsCorrect)}>
+        <article className={getFeedbackCardClassName({ itemIsCorrect, unanswered: props.unanswered })}>
             <div className="drag-categorize-feedback-main">
                 <div className="drag-categorize-feedback-title-row">
                     {itemIsCorrect ? (
@@ -62,7 +62,7 @@ export default function DragCategorizeFeedbackCard(props) {
 
                 <div className="drag-categorize-feedback-actions">
                     <span className="drag-categorize-feedback-status">
-                        {itemIsCorrect ? props.t.resultCorrect : props.t.resultWrong}
+                        {getFeedbackStatus({ itemIsCorrect, unanswered: props.unanswered, t: props.t })}
                     </span>
 
                     {expandButton}
@@ -74,7 +74,7 @@ export default function DragCategorizeFeedbackCard(props) {
     );
 }
 
-const getFeedbackCardClassName = (itemIsCorrect) => {
+const getFeedbackCardClassName = ({ itemIsCorrect, unanswered }) => {
     let className = "drag-categorize-feedback-card";
 
     if (itemIsCorrect) {
@@ -83,5 +83,21 @@ const getFeedbackCardClassName = (itemIsCorrect) => {
         className += " drag-categorize-feedback-card-wrong";
     }
 
+    if (unanswered) {
+        className += " drag-categorize-feedback-card-unanswered";
+    }
+
     return className;
+};
+
+const getFeedbackStatus = ({ itemIsCorrect, unanswered, t }) => {
+    if (unanswered) {
+        return t.dragDropUnanswered;
+    }
+
+    if (itemIsCorrect) {
+        return t.resultCorrect;
+    }
+
+    return t.resultWrong;
 };

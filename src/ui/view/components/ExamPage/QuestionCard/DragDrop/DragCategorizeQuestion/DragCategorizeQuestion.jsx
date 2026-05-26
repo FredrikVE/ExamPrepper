@@ -16,11 +16,15 @@ export default function DragCategorizeQuestion(props) {
             ) : null}
 
             <DragCategorizeItemBank
+                question={props.question}
                 items={dragCategorize.availableItems}
+                feedbackMode={dragCategorize.feedbackMode}
                 selectedItemId={dragCategorize.selectedItemId}
+                expandedItemId={dragCategorize.expandedItemId}
                 disabled={dragCategorize.feedbackMode}
                 onItemSelect={dragCategorize.handleItemSelect}
                 onItemDragStart={dragCategorize.handleItemDragStart}
+                onToggleExpanded={dragCategorize.toggleExpanded}
                 t={props.t}
             />
 
