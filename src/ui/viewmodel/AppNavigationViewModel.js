@@ -136,8 +136,7 @@ export default function useAppNavigationViewModel(language, getExamByBaseIdAndLa
 
             const translatedExam = await getExamByBaseIdAndLangUseCase.execute({
                 baseId: currentExam.baseId,
-                lang: language,
-                language
+                lang: language
             });
 
             if (cancelled) {

@@ -83,8 +83,12 @@ describe("exam flow integration", () => {
         expect(gradeAnswerUseCase.execute(singleQuestion, buildCorrectAnswer(singleQuestion))).toBe(true);
     });
 
-    test("finds translated exam by base id and language", async () => {
-        const exam = await getExamByBaseIdAndLangUseCase.execute("mock-exam-1", "en");
+
+    test("finds translated exam by base id and lang", async () => {
+        const exam = await getExamByBaseIdAndLangUseCase.execute({
+            baseId: "mock-exam-1",
+            lang: "en"
+        });
 
         expect(exam).toMatchObject({
             id: "mock-exam-1-en",

@@ -4,11 +4,11 @@ export default class GetExamByBaseIdAndLangUseCase {
 		this.examRepository = examRepository;
 	}
 
-	execute(baseId, language) {
-		if (!baseId || !language) {
+	execute({ baseId, lang }) {
+		if (!baseId || !lang) {
 			return null;
 		}
 
-		return this.examRepository.getExamByBaseIdAndLang(baseId, language);
+		return this.examRepository.getExamByBaseIdAndLang(baseId, lang);
 	}
 }
