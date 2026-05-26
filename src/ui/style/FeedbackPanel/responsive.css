@@ -1,0 +1,22 @@
+/*src/ui/style/FeedbackPanel/responsive.css*/
+@media (max-width: 760px) {
+    .feedback-panel-fill-summary {
+        padding: 18px;
+    }
+
+    .feedback-panel-fill-comparison {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .feedback-panel-fill-column + .feedback-panel-fill-column {
+        border-left: 0;
+        border-top: 1px solid color-mix(in srgb, var(--line) 86%, transparent);
+        padding-left: 0;
+        padding-top: 18px;
+    }
+
+    .feedback-panel-fill-answer-pill {
+        width: 100%;
+    }
+}

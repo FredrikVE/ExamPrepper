@@ -77,6 +77,8 @@ export const translations = {
         feedbackCorrectLabel: "Din besvarelse er riktig",
         feedbackWrongLabel: "Din besvarelse er feil",
         feedbackAnswerLabel: "Fasit:",
+        feedbackYourAnswerLabel: "Du svarte",
+        feedbackCorrectAnswerLabel: "Riktig svar",
         feedbackWhyCorrectTitle: "Hvorfor er fasit riktig?",
         feedbackWhyWrongTitle: "Hvorfor ble ditt svar vurdert som galt?",
         feedbackOptionsTitle: "Hvorfor er alternativene riktige/gale?",
@@ -108,7 +110,6 @@ export const translations = {
     },
 
     [LANGUAGES.EN]: {
-
         // SubjectSelectPage
         subjectSelectTitle: "Choose subject",
         subjectSelectSubtitle: "Choose which subject you want to practise before selecting a mock exam.",
@@ -175,6 +176,8 @@ export const translations = {
         feedbackCorrectLabel: "Your answer is correct",
         feedbackWrongLabel: "Your answer is incorrect",
         feedbackAnswerLabel: "Answer key:",
+        feedbackYourAnswerLabel: "You answered",
+        feedbackCorrectAnswerLabel: "Correct answer",
         feedbackWhyCorrectTitle: "Why is this correct?",
         feedbackWhyWrongTitle: "Why was your answer marked as wrong?",
         feedbackOptionsTitle: "Why are the options correct/wrong?",

@@ -6,10 +6,43 @@ import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 export default function FeedbackPanel({ question, selected, correct }) {
     const { t } = useLanguage();
 
+    if (question.type === "fill") {
+        return (
+            <FillFeedbackPanel
+                question={question}
+                selected={selected}
+                correct={correct}
+                t={t}
+            />
+        );
+    }
+
+    return (
+        <div className="feedback-panel">
+            <FeedbackSummary correct={correct} t={t} />
+
+            <OptionFeedback
+                question={question}
+                selected={selected}
+                t={t}
+            />
+
+            <FeedbackSource
+                source={question.source}
+                t={t}
+            />
+        </div>
+    );
+}
+
+function FillFeedbackPanel({ question, selected, correct, t }) {
+    const selectedAnswer = String(selected ?? "").trim();
+    const correctAnswer = getAnswerLabel(question);
+
     return (
         <div className="feedback-panel">
             <div
-                className={`feedback-panel-summary ${
+                className={`feedback-panel-summary feedback-panel-fill-summary ${
                     correct
                         ? "feedback-panel-summary-correct"
                         : "feedback-panel-summary-wrong"
@@ -25,33 +58,81 @@ export default function FeedbackPanel({ question, selected, correct }) {
                     {correct ? t.feedbackCorrectLabel : t.feedbackWrongLabel}
                 </div>
 
+                <div className="feedback-panel-fill-divider" />
+
+                <div className="feedback-panel-fill-comparison">
+                    <div className="feedback-panel-fill-column">
+                        <div className="feedback-panel-fill-column-title">
+                            {t.feedbackYourAnswerLabel}
+                        </div>
+
+                        <div
+                            className={`feedback-panel-fill-answer-pill ${
+                                correct
+                                    ? "feedback-panel-fill-answer-pill-correct"
+                                    : "feedback-panel-fill-answer-pill-wrong"
+                            }`}
+                        >
+                            {selectedAnswer || "—"}
+                        </div>
+                    </div>
+
+                    <div className="feedback-panel-fill-column">
+                        <div className="feedback-panel-fill-column-title">
+                            {t.feedbackCorrectAnswerLabel}
+                        </div>
+
+                        <div className="feedback-panel-fill-answer-pill feedback-panel-fill-answer-pill-correct">
+                            {correctAnswer}
+                        </div>
+                    </div>
+                </div>
+
                 <p className="feedback-panel-answer">
-                    <span className="feedback-panel-answer-label">{t.feedbackAnswerLabel}</span>{" "}
-                    {getAnswerLabel(question)}
+                    <span className="feedback-panel-answer-label">
+                        {t.feedbackAnswerLabel}
+                    </span>{" "}
+                    {correctAnswer}
                 </p>
             </div>
 
-            {question.type === "fill" ? (
-                <FillFeedback question={question} correct={correct} t={t} />
-            ) : (
-                <OptionFeedback question={question} selected={selected} t={t} />
-            )}
+            <FillExplanation
+                question={question}
+                correct={correct}
+                t={t}
+            />
 
-            <div className="feedback-panel-source">
-                <div className="feedback-panel-source-title">
-                    <BookOpen className="feedback-panel-source-icon" />
-                    {t.feedbackSourceTitle}
-                </div>
+            <FeedbackSource
+                source={question.source}
+                t={t}
+            />
+        </div>
+    );
+}
 
-                <p className="feedback-panel-source-text">
-                    {question.source}
-                </p>
+function FeedbackSummary({ correct, t }) {
+    return (
+        <div
+            className={`feedback-panel-summary ${
+                correct
+                    ? "feedback-panel-summary-correct"
+                    : "feedback-panel-summary-wrong"
+            }`}
+        >
+            <div className="feedback-panel-summary-title">
+                {correct ? (
+                    <CheckCircle2 className="feedback-panel-summary-icon" />
+                ) : (
+                    <XCircle className="feedback-panel-summary-icon" />
+                )}
+
+                {correct ? t.feedbackCorrectLabel : t.feedbackWrongLabel}
             </div>
         </div>
     );
 }
 
-function FillFeedback({ question, correct, t }) {
+function FillExplanation({ question, correct, t }) {
     return (
         <div className="feedback-panel-box">
             <div className="feedback-panel-box-title">
@@ -60,7 +141,7 @@ function FillFeedback({ question, correct, t }) {
 
             <p>{question.whyCorrect}</p>
 
-            {!correct && (
+            {!correct && question.whyWrong ? (
                 <>
                     <div className="feedback-panel-box-title-spaced">
                         {t.feedbackWhyWrongTitle}
@@ -68,7 +149,7 @@ function FillFeedback({ question, correct, t }) {
 
                     <p>{question.whyWrong}</p>
                 </>
-            )}
+            ) : null}
         </div>
     );
 }
@@ -104,11 +185,11 @@ function OptionFeedback({ question, selected, t }) {
                                         : t.feedbackOptionWrong}
                                 </span>
 
-                                {wasSelected && (
+                                {wasSelected ? (
                                     <span className="feedback-panel-option-selected">
                                         {t.feedbackOptionSelected}
                                     </span>
-                                )}
+                                ) : null}
                             </div>
 
                             <p className="feedback-panel-option-text">
@@ -118,6 +199,21 @@ function OptionFeedback({ question, selected, t }) {
                     );
                 })}
             </div>
+        </div>
+    );
+}
+
+function FeedbackSource({ source, t }) {
+    return (
+        <div className="feedback-panel-source">
+            <div className="feedback-panel-source-title">
+                <BookOpen className="feedback-panel-source-icon" />
+                {t.feedbackSourceTitle}
+            </div>
+
+            <p className="feedback-panel-source-text">
+                {source}
+            </p>
         </div>
     );
 }
