@@ -27,12 +27,22 @@ export default function ExamPage({ viewModel }) {
         activeDragCategorizeCategoryCount >= 5 ||
         activeDragCategorizeLongestText >= 34
     );
+    const shouldUseExtraWideQuestionLayout = isDragCategorizeQuestion && (
+        (activeDragCategorizeCategoryCount >= 5 && activeDragCategorizeLongestText >= 44) ||
+        activeDragCategorizeLongestText >= 62
+    );
+    const shouldUseDenseDragCategorizeLayout = isDragCategorizeQuestion && (
+        activeDragCategorizeCategoryCount >= 5 ||
+        activeDragCategorizeLongestText >= 44
+    );
 
     const workspaceClassName = [
         "exam-workspace",
         viewModel.submitted ? "exam-workspace-feedback-mode" : "",
         shouldUseScrollFooter ? "exam-workspace-scroll-footer-mode" : "",
-        shouldUseWideQuestionLayout ? "exam-workspace-wide-question-mode" : ""
+        shouldUseWideQuestionLayout ? "exam-workspace-wide-question-mode" : "",
+        shouldUseExtraWideQuestionLayout ? "exam-workspace-extra-wide-question-mode" : "",
+        shouldUseDenseDragCategorizeLayout ? "exam-workspace-dense-drag-categorize-mode" : ""
     ].filter(Boolean).join(" ");
 
     if (viewModel.loading) {

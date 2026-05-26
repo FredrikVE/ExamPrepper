@@ -74,7 +74,8 @@
     flex: 1 1 auto;
     overflow-wrap: break-word;
     word-break: normal;
-    hyphens: manual;
+    hyphens: auto;
+    text-wrap: pretty;
 }
 
 .drag-categorize-item-card:hover,
@@ -140,6 +141,11 @@
     border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
+    --drag-categorize-placed-font-size: 0.8rem;
+    --drag-categorize-placed-line-height: 1.22;
+    --drag-categorize-placed-padding: 10px 34px 10px 10px;
+    --drag-categorize-placed-gap: 8px;
+    --drag-categorize-placed-grip-width: 16px;
 }
 
 .drag-categorize-category-column {
@@ -170,7 +176,8 @@
     text-transform: uppercase;
     overflow-wrap: break-word;
     word-break: normal;
-    hyphens: manual;
+    hyphens: auto;
+    text-wrap: balance;
 }
 
 .dark .drag-categorize-category-header {
@@ -202,15 +209,15 @@
 .drag-categorize-placed-card {
     position: relative;
     display: grid;
-    grid-template-columns: 16px minmax(0, 1fr);
+    grid-template-columns: var(--drag-categorize-placed-grip-width) minmax(0, 1fr);
     align-items: start;
     min-height: 56px;
-    gap: 8px;
+    gap: var(--drag-categorize-placed-gap);
     background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
     box-shadow: 0 8px 18px rgba(18, 38, 63, 0.05);
-    padding: 10px 34px 10px 10px;
-    font-size: 0.8rem;
-    line-height: 1.22;
+    padding: var(--drag-categorize-placed-padding);
+    font-size: var(--drag-categorize-placed-font-size);
+    line-height: var(--drag-categorize-placed-line-height);
 }
 
 .drag-categorize-placed-card-remove {
@@ -256,6 +263,60 @@
 .drag-categorize-drop-zone:not(.drag-categorize-drop-zone-empty) .drag-categorize-empty-slot {
     min-height: 42px;
     opacity: 0.72;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-list {
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-category-grid {
+    --drag-categorize-category-min-width: 220px;
+    --drag-categorize-placed-font-size: clamp(0.68rem, 0.62rem + 0.22vw, 0.76rem);
+    --drag-categorize-placed-line-height: 1.14;
+    --drag-categorize-placed-padding: 9px 30px 9px 8px;
+    --drag-categorize-placed-gap: 6px;
+    --drag-categorize-placed-grip-width: 14px;
+}
+
+.exam-workspace-extra-wide-question-mode .drag-categorize-category-grid {
+    --drag-categorize-category-min-width: 240px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-category-header {
+    min-height: 52px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    line-height: 1.13;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-drop-zone {
+    gap: 9px;
+    padding: 10px 12px 12px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card {
+    min-height: 48px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-grip {
+    width: 15px;
+    height: 15px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-remove {
+    right: 5px;
+    width: 21px;
+    height: 21px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-remove svg {
+    width: 14px;
+    height: 14px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-empty-slot {
+    min-height: 42px;
+    font-size: 0.8rem;
 }
 
 .drag-categorize-question-feedback .drag-categorize-item-bank {

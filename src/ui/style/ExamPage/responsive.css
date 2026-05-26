@@ -207,6 +207,40 @@
     }
 }
 
+/* ── Extra-wide drag-categorize mode ──────────────
+   Very long draggable labels need more than the normal wide mode.
+   Keep progress, QuestionCard and footer aligned by overriding the
+   same content-width variables at workspace level. */
+.exam-workspace-extra-wide-question-mode {
+    --exam-content-width: calc(100% - clamp(18px, 2.5vw, 48px));
+    --exam-content-max-width: 1480px;
+}
+
+.exam-workspace-extra-wide-question-mode .question-card-body {
+    padding-inline: clamp(var(--space-5), 2.2vw, 32px);
+}
+
+@media (min-width: 1440px) {
+    .exam-workspace-extra-wide-question-mode {
+        --exam-content-width: 94%;
+        --exam-content-max-width: 1540px;
+    }
+}
+
+@media (min-width: 1760px) {
+    .exam-workspace-extra-wide-question-mode {
+        --exam-content-width: 92%;
+        --exam-content-max-width: 1620px;
+    }
+}
+
+@media (max-width: 1280px) and (min-width: 981px) {
+    .exam-workspace-extra-wide-question-mode {
+        --exam-content-width: calc(100% - clamp(18px, 2.8vw, 40px));
+        --exam-content-max-width: 1200px;
+    }
+}
+
 /* ── Very short viewport fallback ─────────
    Når viewport-høyden blir ekstremt lav, må innholdet få vokse
    naturlig i stedet for at footer/header presser QuestionCard. */
