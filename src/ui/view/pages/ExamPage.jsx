@@ -12,11 +12,15 @@ export default function ExamPage({ viewModel }) {
 
     const activeOptionCount = viewModel.currentQuestion?.options?.length ?? 0;
     const activeDragDropTargetCount = viewModel.currentQuestion?.targets?.length ?? 0;
+    const activeDragCategorizeCategoryCount = viewModel.currentQuestion?.categories?.length ?? 0;
     const isDragDropQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.DRAG_DROP;
+    const isDragCategorizeQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
     const shouldUseScrollFooter = !viewModel.submitted && (
         activeOptionCount >= 6 ||
         isDragDropQuestion ||
-        activeDragDropTargetCount >= 5
+        isDragCategorizeQuestion ||
+        activeDragDropTargetCount >= 5 ||
+        activeDragCategorizeCategoryCount >= 4
     );
 
     const workspaceClassName = [

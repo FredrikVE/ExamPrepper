@@ -4,9 +4,13 @@ import DragCategorizeCategoryColumn from "./DragCategorizeCategoryColumn.jsx";
 
 export default function DragCategorizeCategoryGrid(props) {
     const categories = getSafeArray(props.question?.categories);
+    const categoryCount = Math.max(categories.length, 1);
 
     return (
-        <div className="drag-categorize-category-grid">
+        <div
+            className="drag-categorize-category-grid"
+            style={{ "--drag-categorize-category-count": String(categoryCount) }}
+        >
             {categories.map((category) => (
                 <DragCategorizeCategoryColumn
                     key={category.id}

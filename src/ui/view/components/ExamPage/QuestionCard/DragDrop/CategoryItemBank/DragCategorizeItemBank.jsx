@@ -1,5 +1,4 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryItemBank/DragCategorizeItemBank.jsx
-import { Info } from "lucide-react";
 import DragCategorizeItemCard from "./DragCategorizeItemCard.jsx";
 
 export default function DragCategorizeItemBank(props) {
@@ -8,14 +7,6 @@ export default function DragCategorizeItemBank(props) {
             className="drag-categorize-item-bank"
             aria-label={props.t.dragCategorizeItemBankTitle}
         >
-            <div className="drag-categorize-item-bank-title-row">
-                <h4 className="drag-categorize-item-bank-title">
-                    {props.t.dragCategorizeItemBankTitle}
-                </h4>
-
-                <Info className="drag-categorize-item-bank-icon" aria-hidden="true" />
-            </div>
-
             <div className="drag-categorize-item-list">
                 {props.items.map((item) => (
                     <DragCategorizeItemCard
@@ -29,12 +20,6 @@ export default function DragCategorizeItemBank(props) {
                     />
                 ))}
             </div>
-
-            <p className="drag-categorize-item-bank-hint">
-                {props.disabled
-                    ? props.t.dragCategorizeFeedbackBankHint
-                    : props.t.dragCategorizeItemBankHint}
-            </p>
         </aside>
     );
 }
