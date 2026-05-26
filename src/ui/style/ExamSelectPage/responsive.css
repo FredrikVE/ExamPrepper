@@ -1,4 +1,5 @@
 /* src/ui/style/ExamSelectPage/responsive.css */
+
 @media (max-width: 1280px) {
     .exam-select-shell {
         grid-template-columns: 270px minmax(0, 1fr);
@@ -76,7 +77,6 @@
         line-clamp: 8;
     }
 }
-
 
 /* ── Very short viewport fallback ─────────
    Når viewport-høyden blir ekstremt lav, bytter exam cards
@@ -297,4 +297,69 @@
         width: 21px;
         height: 21px;
     }
+}
+
+/* ── Horizontal overflow guard ─────────
+   ExamSelectPage skal ikke kunne skrolle sidelengs. */
+.exam-select-page,
+.exam-select-shell,
+.exam-select-workspace {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.exam-select-page,
+.exam-select-shell,
+.exam-select-workspace,
+.exam-select-topbar,
+.exam-select-intro,
+.exam-select-grid,
+.exam-select-card,
+.exam-select-card-main-row,
+.exam-select-card-copy,
+.exam-select-card-footer {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.exam-select-topbar,
+.exam-select-card-footer {
+    flex-wrap: wrap;
+}
+
+.exam-select-grid {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.exam-select-grid > * {
+    min-width: 0;
+}
+
+.exam-select-title,
+.exam-select-subject-line,
+.exam-select-card-eyebrow,
+.exam-select-card-title,
+.exam-select-card-description {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.exam-select-card-description {
+    min-width: 0;
+}
+
+.exam-select-card-footer {
+    min-width: 0;
+}
+
+.exam-select-statistics-button {
+    max-width: 100%;
+}
+
+.exam-select-ambient-light {
+    right: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
