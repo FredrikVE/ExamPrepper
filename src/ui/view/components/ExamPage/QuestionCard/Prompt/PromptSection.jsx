@@ -2,7 +2,7 @@
 import InputMeta from "../InputField/InputMeta.jsx";
 import PromptWithInlineAnswer from "./PromptWithInlineAnswer.jsx";
 
-export default function PromptSection({ question, answerText, submitted, hasInlineFillBlank, onSingleAnswer, t }) {
+export default function PromptSection({ question, answerText, submitted, correct, hasInlineFillBlank, onSingleAnswer, t }) {
     if (!hasInlineFillBlank) {
         return <p className="question-card-prompt">{question.prompt}</p>;
     }
@@ -14,6 +14,7 @@ export default function PromptSection({ question, answerText, submitted, hasInli
                     question={question}
                     answerText={answerText}
                     submitted={submitted}
+                    correct={correct}
                     onSingleAnswer={onSingleAnswer}
                     t={t}
                 />

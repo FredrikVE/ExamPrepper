@@ -140,3 +140,45 @@
     color: var(--accent);
     font-weight: 850;
 }
+
+/* ── Fill input feedback state ───────────────────────── */
+.question-card-fill-input-feedback {
+    cursor: default;
+    opacity: 1;
+}
+
+.question-card-fill-input-feedback:focus {
+    box-shadow: inherit;
+}
+
+.question-card-fill-input-feedback-correct {
+    border-color: var(--success-border);
+    background: var(--success-soft);
+    color: var(--success-text);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--success-border) 18%, transparent);
+}
+
+.question-card-fill-input-feedback-correct::placeholder {
+    color: color-mix(in srgb, var(--success-text) 62%, var(--text-soft));
+}
+
+.question-card-fill-input-feedback-wrong {
+    border-color: var(--danger-border);
+    background: var(--danger-soft);
+    color: var(--danger-text);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--danger-border) 16%, transparent);
+}
+
+.question-card-fill-input-feedback-wrong::placeholder {
+    color: color-mix(in srgb, var(--danger-text) 62%, var(--text-soft));
+}
+
+.question-card-input.question-card-fill-input-feedback-correct + .question-card-input-icon {
+    background: var(--success-soft);
+    color: var(--success-text);
+}
+
+.question-card-input.question-card-fill-input-feedback-wrong + .question-card-input-icon {
+    background: var(--danger-soft);
+    color: var(--danger-text);
+}

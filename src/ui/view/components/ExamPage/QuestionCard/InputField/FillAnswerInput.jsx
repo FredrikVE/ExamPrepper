@@ -3,7 +3,7 @@ import { Edit3 } from "lucide-react";
 import { QUESTION_CONFIG } from "../../../../../../constants/QuestionConfig.js";
 import InputMeta from "./InputMeta.jsx";
 
-export default function FillAnswerInput({ question, answerText, submitted, onSingleAnswer, t }) {
+export default function FillAnswerInput({ question, answerText, submitted, correct, onSingleAnswer, t }) {
     const inputId = `question-${question.id}-answer`;
 
     return (
@@ -15,13 +15,21 @@ export default function FillAnswerInput({ question, answerText, submitted, onSin
             <div className="question-card-input-wrap">
                 <input
                     id={inputId}
-                    disabled={submitted}
+                    readOnly={submitted}
                     value={answerText}
                     maxLength={QUESTION_CONFIG.FILL_MAX_LENGTH}
-                    onChange={(event) => onSingleAnswer(question.id, event.target.value)}
+                    onChange={submitted
+                        ? undefined
+                        : (event) => onSingleAnswer(question.id, event.target.value)
+                    }
                     placeholder={t.questionInputPlaceholder}
-                    className="question-card-input"
+                    className={getFillAnswerInputClassName({
+                        baseClassName: "question-card-input",
+                        submitted,
+                        correct
+                    })}
                 />
+
                 <span className="question-card-input-icon" aria-hidden="true">
                     <Edit3 />
                 </span>
@@ -31,3 +39,17 @@ export default function FillAnswerInput({ question, answerText, submitted, onSin
         </div>
     );
 }
+
+const getFillAnswerInputClassName = ({ baseClassName, submitted, correct }) => {
+    if (!submitted) {
+        return baseClassName;
+    }
+
+    return [
+        baseClassName,
+        "question-card-fill-input-feedback",
+        correct
+            ? "question-card-fill-input-feedback-correct"
+            : "question-card-fill-input-feedback-wrong"
+    ].join(" ");
+};

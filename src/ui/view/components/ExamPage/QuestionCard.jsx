@@ -39,6 +39,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                     question={question}
                     answerText={answerText}
                     submitted={submitted}
+                    correct={correct}
                     hasInlineFillBlank={viewState.hasInlineFillBlank}
                     onSingleAnswer={onSingleAnswer}
                     t={t}
@@ -49,6 +50,7 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
                         question={question}
                         answerText={answerText}
                         submitted={submitted}
+                        correct={correct}
                         onSingleAnswer={onSingleAnswer}
                         t={t}
                     />
