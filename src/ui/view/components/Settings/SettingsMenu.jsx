@@ -1,12 +1,12 @@
 //src/ui/view/components/Settings/SettingsMenu.jsx
 import { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { X, Globe, Moon, Sun } from "lucide-react";
+import { X, Globe, Moon, Shuffle, Sun } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { LANGUAGES, LANGUAGE_LABELS } from "../../../../i18n/translations.js";
 import { useTheme } from "../../../theme/ThemeContext.jsx";
 
-export default function SettingsMenu({ isOpen, onOpenChange }) {
+export default function SettingsMenu({ isOpen, onOpenChange, randomizeAnswerOptions, onToggleRandomizeAnswerOptions }) {
     const panelRef = useRef(null);
     const { language, setLanguage, t } = useLanguage();
     const { isDark, toggleTheme } = useTheme();
@@ -99,6 +99,19 @@ export default function SettingsMenu({ isOpen, onOpenChange }) {
 
                     <div className="settings-section settings-section-spaced">
                         <div className="settings-section-label">
+                            <Shuffle className="settings-section-icon" />
+                            {t.settingsRandomizeAnswers}
+                        </div>
+
+                        <SettingsToggle
+                            checked={randomizeAnswerOptions}
+                            onToggle={onToggleRandomizeAnswerOptions}
+                            ariaLabel={t.settingsRandomizeAnswers}
+                        />
+                    </div>
+
+                    <div className="settings-section settings-section-spaced">
+                        <div className="settings-section-label">
                             {isDark ? (
                                 <Moon className="settings-section-icon" />
                             ) : (
@@ -107,23 +120,34 @@ export default function SettingsMenu({ isOpen, onOpenChange }) {
                             {t.settingsDarkMode}
                         </div>
 
-                        <button
-                            type="button"
-                            onClick={toggleTheme}
-                            className="settings-toggle-track"
-                            role="switch"
-                            aria-checked={isDark}
-                        >
-                            <span
-                                className={`settings-toggle-thumb ${
-                                    isDark ? "settings-toggle-thumb-on" : ""
-                                }`}
-                            />
-                        </button>
+                        <SettingsToggle
+                            checked={isDark}
+                            onToggle={toggleTheme}
+                            ariaLabel={t.settingsDarkMode}
+                        />
                     </div>
                 </div>
             </div>
         </>,
         document.body
+    );
+}
+
+function SettingsToggle({ checked, onToggle, ariaLabel }) {
+    return (
+        <button
+            type="button"
+            onClick={onToggle}
+            className={`settings-toggle-track ${checked ? "settings-toggle-track-on" : ""}`}
+            role="switch"
+            aria-checked={checked}
+            aria-label={ariaLabel}
+        >
+            <span
+                className={`settings-toggle-thumb ${
+                    checked ? "settings-toggle-thumb-on" : ""
+                }`}
+            />
+        </button>
     );
 }

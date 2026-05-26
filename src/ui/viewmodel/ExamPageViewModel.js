@@ -7,7 +7,7 @@ import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggle
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId) {
+export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId, randomizeAnswerOptions = false) {
 	//Statevariabler
 	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
@@ -18,6 +18,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 	const [expandedAnswerOptionByQuestionId, setExpandedAnswerOptionByQuestionId] = useState({});
+	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
 
 	const examWorkspaceRef = useRef(null);
 
@@ -176,9 +177,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setCurrentQuestionIndex(0);
 		setElapsedSeconds(0);
 		setExpandedAnswerOptionByQuestionId({});
+		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questions));
 
 		scrollExamWorkspaceToTop(examWorkspaceRef);
-	}, [examWorkspaceRef]);
+	}, [examWorkspaceRef, questions]);
 
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((value) => !value);
@@ -207,6 +209,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 					setCurrentQuestionIndex(0);
 					setElapsedSeconds(0);
 					setExpandedAnswerOptionByQuestionId({});
+					setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(result));
 				}
 			}
 
@@ -269,6 +272,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		error,
 		submitted,
 		showAllFeedback,
+		randomizeAnswerOptions,
+		answerOptionOrderByQuestionId,
 
 		score: result.score,
 		totalPoints: result.totalPoints,
@@ -331,4 +336,27 @@ const getCurrentQuestionIsCorrect = (submitted, currentQuestion, answers, gradeA
 		currentQuestion,
 		answers[currentQuestion.id]
 	);
+};
+
+const createAnswerOptionOrderByQuestionId = (questions) => {
+	return questions.reduce((orders, question) => {
+		if (!Array.isArray(question.options) || question.options.length === 0) {
+			return orders;
+		}
+
+		orders[question.id] = shuffleIndexes(question.options.length);
+
+		return orders;
+	}, {});
+};
+
+const shuffleIndexes = (length) => {
+	const indexes = Array.from({ length }, (_, index) => index);
+
+	for (let index = indexes.length - 1; index > 0; index -= 1) {
+		const randomIndex = Math.floor(Math.random() * (index + 1));
+		[indexes[index], indexes[randomIndex]] = [indexes[randomIndex], indexes[index]];
+	}
+
+	return indexes;
 };

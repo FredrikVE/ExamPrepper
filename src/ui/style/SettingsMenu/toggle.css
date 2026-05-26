@@ -7,10 +7,15 @@
     border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--text-soft) 35%, transparent);
     padding: 0;
-    transition: background var(--transition-fast);
+    transition: background var(--transition-fast), transform var(--transition-fast);
 }
 
-.dark .settings-toggle-track {
+.settings-toggle-track:hover {
+    transform: translateY(-1px);
+}
+
+.settings-toggle-track-on,
+.dark .settings-toggle-track-on {
     background: var(--accent);
 }
 

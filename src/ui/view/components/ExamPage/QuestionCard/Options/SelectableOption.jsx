@@ -3,17 +3,16 @@ import { QUESTION_TYPES } from "../../../../../../constants/QuestionTypes.js";
 import getOptionLetter from "../../../../../../utils/answerutils/getOptionLetter.js";
 import { getSelectableOptionClassName } from "../Styling/questionCardClassNames.js";
 
-export default function SelectableOption({ question, option, index, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
-    
+export default function SelectableOption({ question, option, optionIndex, displayIndex, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
     const inputType = question.type === QUESTION_TYPES.SINGLE ? "radio" : "checkbox";
 
     const handleChange = () => {
         if (question.type === QUESTION_TYPES.SINGLE) {
-            onSingleAnswer(question.id, index);
+            onSingleAnswer(question.id, optionIndex);
             return;
         }
 
-        onToggleMultiAnswer(question.id, index);
+        onToggleMultiAnswer(question.id, optionIndex);
     };
 
     return (
@@ -32,7 +31,7 @@ export default function SelectableOption({ question, option, index, isSelected, 
 
             <span className="question-card-option-choice-text">
                 <span className="question-card-option-letter">
-                    {getOptionLetter(index)}.
+                    {getOptionLetter(displayIndex)}.
                 </span>{" "}
                 {option.text}
             </span>

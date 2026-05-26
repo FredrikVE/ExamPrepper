@@ -6,7 +6,7 @@ import useAppNavigationViewModel from "./ui/viewmodel/AppNavigationViewModel.js"
 import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewModel.js";
 import useExamSelectPageViewModel from "./ui/viewmodel/ExamSelectPageViewModel.js";
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
-import usePlaceholderPageViewModel from "./ui/viewmodel/PlaceholderPageViewModel.js";
+import useSettingsMenuViewModel from "./ui/viewmodel/SettingsMenuViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
@@ -34,6 +34,8 @@ export default function App() {
 function AppContent() {
     const { language, t } = useLanguage();
 
+    const settingsMenuViewModel = useSettingsMenuViewModel();
+
     const navigationViewModel = useAppNavigationViewModel(
         language,
         getExamByBaseIdAndLangUseCase
@@ -53,16 +55,6 @@ function AppContent() {
         t,
         subjectSelectPageViewModel.selectedSubject,
         navigationViewModel.selectExam
-    );
-
-    const overviewPageViewModel = usePlaceholderPageViewModel(
-        t.sidebarOverview,
-        "Oversikt-siden er ikke implementert ennå."
-    );
-
-    const notesPageViewModel = usePlaceholderPageViewModel(
-        t.sidebarNotes,
-        "Notater-siden er ikke implementert ennå."
     );
 
     return (
@@ -95,52 +87,33 @@ function AppContent() {
                 {navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
                     <ExamPageWrapper
                         examId={navigationViewModel.selectedExamId}
+                        randomizeAnswerOptions={settingsMenuViewModel.randomizeAnswerOptions}
                     />
-                )}
-
-                {navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
-                    <PlaceholderPage viewModel={overviewPageViewModel} />
-                )}
-
-                {navigationViewModel.activeScreen === NAV_SCREENS.NOTES && (
-                    <PlaceholderPage viewModel={notesPageViewModel} />
                 )}
 
                 <SettingsMenu
                     isOpen={navigationViewModel.settingsOpen}
                     onOpenChange={navigationViewModel.setSettingsOpen}
+                    randomizeAnswerOptions={settingsMenuViewModel.randomizeAnswerOptions}
+                    onToggleRandomizeAnswerOptions={settingsMenuViewModel.toggleRandomizeAnswerOptions}
                 />
             </div>
         </div>
     );
 }
 
-function ExamPageWrapper({ examId }) {
+function ExamPageWrapper({ examId, randomizeAnswerOptions }) {
     const examPageViewModel = useExamPageViewModel(
         getExamQuestionsUseCase,
         gradeAnswerUseCase,
         calculateExamScoreUseCase,
-        examId
+        examId,
+        randomizeAnswerOptions
     );
 
     return (
         <ExamPage
             viewModel={examPageViewModel}
         />
-    );
-}
-
-function PlaceholderPage({ viewModel }) {
-    return (
-        <div className="exam-workspace">
-            <main className="exam-page-main">
-                <div className="exam-page-content">
-                    <div className="exam-page-empty">
-                        <h1>{viewModel.title}</h1>
-                        <p>{viewModel.description}</p>
-                    </div>
-                </div>
-            </main>
-        </div>
     );
 }

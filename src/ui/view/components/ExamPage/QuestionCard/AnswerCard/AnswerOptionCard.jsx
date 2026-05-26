@@ -5,8 +5,8 @@ import AnswerOptionExtendedPanel from "./AnswerOptionExtendedPanel.jsx";
 import AnswerOptionMarker from "./AnswerOptionMarker.jsx";
 import { getAnswerCardClassName, getExtendedExplanationPoints, getOptionLetter } from "../../../../../../utils/answerutils/answerOptionUtils/answerOptionCardUtils.js";
 
-export default function AnswerOptionCard({ questionId, option, index, isSelected, isExpanded, onToggleExpanded, t }) {
-    const letter = getOptionLetter(index);
+export default function AnswerOptionCard({ questionId, option, optionIndex, displayIndex, isSelected, isExpanded, onToggleExpanded, t }) {
+    const letter = getOptionLetter(displayIndex);
     const statusText = option.correct
         ? t?.resultCorrect ?? "Riktig"
         : t?.resultWrong ?? "Feil";
@@ -16,7 +16,7 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
     const extendedPoints = getExtendedExplanationPoints(option);
     const hasExtended = extendedPoints.length > 0;
 
-    const expandedId = `question-${questionId}-option-${index}-extended`;
+    const expandedId = `question-${questionId}-option-${optionIndex}-extended`;
 
     return (
         <article
