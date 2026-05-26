@@ -1,5 +1,6 @@
 //src/ui/viewmodel/ExamPageViewModel.js
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSettings } from "../settings/SettingsContext.jsx";
 import getAnsweredCountLabel from "../../utils/viewmodelutils/getAnsweredCountLabel.js";
 import getScoreLabel from "../../utils/viewmodelutils/getScoreLabel.js";
 import getQuestionProgressLabel from "../../utils/viewmodelutils/getQuestionProgressLabel.js";
@@ -7,7 +8,10 @@ import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggle
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId, randomizeAnswerOptions = false) {
+export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId) {
+	// Settings
+	const { randomizeAnswerOptions } = useSettings();
+
 	//Statevariabler
 	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});

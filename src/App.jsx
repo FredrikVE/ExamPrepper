@@ -1,12 +1,12 @@
 //src/App.jsx
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
+import { SettingsProvider } from "./ui/settings/SettingsContext.jsx";
 
 import useAppNavigationViewModel from "./ui/viewmodel/AppNavigationViewModel.js";
 import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewModel.js";
 import useExamSelectPageViewModel from "./ui/viewmodel/ExamSelectPageViewModel.js";
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
-import useSettingsMenuViewModel from "./ui/viewmodel/SettingsMenuViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
@@ -25,7 +25,9 @@ export default function App() {
     return (
         <ThemeProvider>
             <LanguageProvider>
-                <AppContent />
+                <SettingsProvider>
+                    <AppContent />
+                </SettingsProvider>
             </LanguageProvider>
         </ThemeProvider>
     );
@@ -33,8 +35,6 @@ export default function App() {
 
 function AppContent() {
     const { language, t } = useLanguage();
-
-    const settingsMenuViewModel = useSettingsMenuViewModel();
 
     const navigationViewModel = useAppNavigationViewModel(
         language,
@@ -87,28 +87,24 @@ function AppContent() {
                 {navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
                     <ExamPageWrapper
                         examId={navigationViewModel.selectedExamId}
-                        randomizeAnswerOptions={settingsMenuViewModel.randomizeAnswerOptions}
                     />
                 )}
 
                 <SettingsMenu
                     isOpen={navigationViewModel.settingsOpen}
                     onOpenChange={navigationViewModel.setSettingsOpen}
-                    randomizeAnswerOptions={settingsMenuViewModel.randomizeAnswerOptions}
-                    onToggleRandomizeAnswerOptions={settingsMenuViewModel.toggleRandomizeAnswerOptions}
                 />
             </div>
         </div>
     );
 }
 
-function ExamPageWrapper({ examId, randomizeAnswerOptions }) {
+function ExamPageWrapper({ examId }) {
     const examPageViewModel = useExamPageViewModel(
         getExamQuestionsUseCase,
         gradeAnswerUseCase,
         calculateExamScoreUseCase,
-        examId,
-        randomizeAnswerOptions
+        examId
     );
 
     return (

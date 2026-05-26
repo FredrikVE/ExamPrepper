@@ -1,10 +1,11 @@
-//src/ui/viewmodel/SettingsMenuViewModel.js
-import { useCallback, useEffect, useState } from "react";
+//src/ui/settings/SettingsContext.jsx
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+
+const SettingsContext = createContext(null);
 
 const RANDOMIZE_ANSWER_OPTIONS_STORAGE_KEY = "exam-emulator-randomize-answer-options";
 
-export default function useSettingsMenuViewModel() {
-    // Settings-state
+export function SettingsProvider({ children }) {
     const [randomizeAnswerOptions, setRandomizeAnswerOptions] = useState(getInitialRandomizeAnswerOptions);
 
     const toggleRandomizeAnswerOptions = useCallback(() => {
@@ -20,10 +21,26 @@ export default function useSettingsMenuViewModel() {
 
     useEffect(handleRandomizeAnswerOptionsChanged, [handleRandomizeAnswerOptionsChanged]);
 
-    return {
-        randomizeAnswerOptions,                     // Settings
-        toggleRandomizeAnswerOptions                // Handlers
-    };
+    return (
+        <SettingsContext.Provider
+            value={{
+                randomizeAnswerOptions,
+                toggleRandomizeAnswerOptions
+            }}
+        >
+            {children}
+        </SettingsContext.Provider>
+    );
+}
+
+export function useSettings() {
+    const context = useContext(SettingsContext);
+
+    if (!context) {
+        throw new Error("useSettings må brukes inni SettingsProvider");
+    }
+
+    return context;
 }
 
 const getInitialRandomizeAnswerOptions = () => {
