@@ -3,8 +3,9 @@ import isOptionSelected from "../../../../../../utils/answerutils/isOptionSelect
 import AnswerOptionCard from "../AnswerCard/AnswerOptionCard.jsx";
 import SelectableOption from "./SelectableOption.jsx";
 
-export default function OptionList({ question, answer, submitted, showAllFeedback, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, t }) {
+export default function OptionList({ question, answer, answerOptionOrder, submitted, showAllFeedback, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, t }) {
     const feedbackMode = submitted && showAllFeedback;
+    const optionItems = createOptionDisplayItems(question, answerOptionOrder);
 
     const listClassName = feedbackMode
         ? "question-card-option-list question-card-answer-card-list"
@@ -12,19 +13,20 @@ export default function OptionList({ question, answer, submitted, showAllFeedbac
 
     return (
         <div className={listClassName}>
-            {question.options.map((option, index) => {
-                const selected = isOptionSelected(question.type, answer, index);
+            {optionItems.map(({ option, optionIndex, displayIndex }) => {
+                const selected = isOptionSelected(question.type, answer, optionIndex);
 
                 if (feedbackMode) {
                     return (
                         <AnswerOptionCard
-                            key={index}
+                            key={optionIndex}
                             questionId={question.id}
                             option={option}
-                            index={index}
+                            optionIndex={optionIndex}
+                            displayIndex={displayIndex}
                             isSelected={selected}
-                            isExpanded={expandedAnswerOptionIndex === index}
-                            onToggleExpanded={() => onToggleAnswerOptionExpanded(question.id, index)}
+                            isExpanded={expandedAnswerOptionIndex === optionIndex}
+                            onToggleExpanded={() => onToggleAnswerOptionExpanded(question.id, optionIndex)}
                             t={t}
                         />
                     );
@@ -32,10 +34,11 @@ export default function OptionList({ question, answer, submitted, showAllFeedbac
 
                 return (
                     <SelectableOption
-                        key={index}
+                        key={optionIndex}
                         question={question}
                         option={option}
-                        index={index}
+                        optionIndex={optionIndex}
+                        displayIndex={displayIndex}
                         isSelected={selected}
                         submitted={submitted}
                         onSingleAnswer={onSingleAnswer}
@@ -45,4 +48,29 @@ export default function OptionList({ question, answer, submitted, showAllFeedbac
             })}
         </div>
     );
+}
+
+function createOptionDisplayItems(question, answerOptionOrder) {
+    const fallbackOrder = question.options.map((_, index) => index);
+    const order = isValidOptionOrder(answerOptionOrder, question.options.length)
+        ? answerOptionOrder
+        : fallbackOrder;
+
+    return order.map((optionIndex, displayIndex) => ({
+        option: question.options[optionIndex],
+        optionIndex,
+        displayIndex
+    }));
+}
+
+function isValidOptionOrder(answerOptionOrder, optionCount) {
+    if (!Array.isArray(answerOptionOrder) || answerOptionOrder.length !== optionCount) {
+        return false;
+    }
+
+    const uniqueIndexes = new Set(answerOptionOrder);
+
+    return answerOptionOrder.every((index) => {
+        return Number.isInteger(index) && index >= 0 && index < optionCount;
+    }) && uniqueIndexes.size === optionCount;
 }

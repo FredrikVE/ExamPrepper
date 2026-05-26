@@ -97,6 +97,7 @@ export const translations = {
         settingsLanguage: "Språk",
         settingsClose: "Lukk innstillinger",
         settingsOpenMenu: "Åpne meny",
+        settingsRandomizeAnswers: "Randomisering",
         settingsDarkMode: "Mørkt tema",
 
         // Sidebar
@@ -196,6 +197,7 @@ export const translations = {
         settingsLanguage: "Language",
         settingsClose: "Close settings",
         settingsOpenMenu: "Open menu",
+        settingsRandomizeAnswers: "Randomization",
         settingsDarkMode: "Dark mode",
 
         // Sidebar

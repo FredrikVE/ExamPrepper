@@ -10,10 +10,15 @@ export default function ExamPageContent({ viewModel, t }) {
         );
     }
 
+    const answerOptionOrder = viewModel.randomizeAnswerOptions
+        ? viewModel.answerOptionOrderByQuestionId[viewModel.currentQuestion.id]
+        : null;
+
     return (
         <QuestionCard
             question={viewModel.currentQuestion}
             answer={viewModel.answers[viewModel.currentQuestion.id]}
+            answerOptionOrder={answerOptionOrder}
             submitted={viewModel.submitted}
             showAllFeedback={viewModel.showAllFeedback}
             correct={viewModel.currentQuestionIsCorrect}

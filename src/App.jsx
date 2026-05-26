@@ -1,4 +1,5 @@
 //src/App.jsx
+import { useCallback, useEffect, useState } from "react";
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
 
@@ -33,6 +34,22 @@ export default function App() {
 
 function AppContent() {
     const { language, t } = useLanguage();
+    const [randomizeAnswerOptions, setRandomizeAnswerOptions] = useState(getInitialRandomizeAnswerOptions);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(
+                RANDOMIZE_ANSWER_OPTIONS_STORAGE_KEY,
+                randomizeAnswerOptions ? "true" : "false"
+            );
+        } catch {
+            // localStorage not available
+        }
+    }, [randomizeAnswerOptions]);
+
+    const toggleRandomizeAnswerOptions = useCallback(() => {
+        setRandomizeAnswerOptions((value) => !value);
+    }, []);
 
     const navigationViewModel = useAppNavigationViewModel(
         language,
@@ -95,6 +112,7 @@ function AppContent() {
                 {navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
                     <ExamPageWrapper
                         examId={navigationViewModel.selectedExamId}
+                        randomizeAnswerOptions={randomizeAnswerOptions}
                     />
                 )}
 
@@ -109,18 +127,21 @@ function AppContent() {
                 <SettingsMenu
                     isOpen={navigationViewModel.settingsOpen}
                     onOpenChange={navigationViewModel.setSettingsOpen}
+                    randomizeAnswerOptions={randomizeAnswerOptions}
+                    onToggleRandomizeAnswerOptions={toggleRandomizeAnswerOptions}
                 />
             </div>
         </div>
     );
 }
 
-function ExamPageWrapper({ examId }) {
+function ExamPageWrapper({ examId, randomizeAnswerOptions }) {
     const examPageViewModel = useExamPageViewModel(
         getExamQuestionsUseCase,
         gradeAnswerUseCase,
         calculateExamScoreUseCase,
-        examId
+        examId,
+        randomizeAnswerOptions
     );
 
     return (
@@ -143,4 +164,15 @@ function PlaceholderPage({ viewModel }) {
             </main>
         </div>
     );
+}
+
+
+const RANDOMIZE_ANSWER_OPTIONS_STORAGE_KEY = "exam-emulator-randomize-answer-options";
+
+function getInitialRandomizeAnswerOptions() {
+    try {
+        return localStorage.getItem(RANDOMIZE_ANSWER_OPTIONS_STORAGE_KEY) === "true";
+    } catch {
+        return false;
+    }
 }
