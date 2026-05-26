@@ -83,6 +83,52 @@ describe("GradeAnswerUseCase", () => {
         });
     });
 
+
+    describe("drag and drop", () => {
+        const question = {
+            type: QUESTION_TYPES.DRAG_DROP,
+            points: 3,
+            targets: [
+                { id: "row-1", correctCardId: "a" },
+                { id: "row-2", correctCardId: "b" },
+                { id: "row-3", correctCardId: "c" }
+            ]
+        };
+
+        test("returns true only when all targets match", () => {
+            expect(useCase.execute(question, {
+                "row-1": "a",
+                "row-2": "b",
+                "row-3": "c"
+            })).toBe(true);
+
+            expect(useCase.execute(question, {
+                "row-1": "a",
+                "row-2": "c",
+                "row-3": "b"
+            })).toBe(false);
+        });
+
+        test("calculates partial score from correct target matches", () => {
+            expect(useCase.getQuestionScore(question, {
+                "row-1": "a",
+                "row-2": "wrong",
+                "row-3": "c"
+            })).toBe(2);
+        });
+
+        test("returns drag and drop stats", () => {
+            expect(useCase.getDragDropStats(question, {
+                "row-1": "a",
+                "row-2": "wrong"
+            })).toEqual({
+                correct: 1,
+                wrong: 1,
+                unanswered: 1
+            });
+        });
+    });
+
     test("returns false when question is missing", () => {
         expect(useCase.execute(null, 0)).toBe(false);
     });

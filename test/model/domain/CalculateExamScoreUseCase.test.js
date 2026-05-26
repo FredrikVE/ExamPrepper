@@ -56,6 +56,29 @@ describe("CalculateExamScoreUseCase", () => {
         expect(gradeAnswerUseCase.execute).toHaveBeenCalledWith(questions[1], [1, 2]);
     });
 
+
+    test("uses partial question score when the grader provides it", () => {
+        const questions = [
+            { id: "q1", points: 3 },
+            { id: "q2", points: 2 }
+        ];
+        const answers = { q1: { a: "a" }, q2: 0 };
+
+        gradeAnswerUseCase.getQuestionScore = jest.fn()
+            .mockReturnValueOnce(1.5)
+            .mockReturnValueOnce(2);
+
+        const result = useCase.execute(questions, answers);
+
+        expect(result).toEqual({
+            score: 3.5,
+            totalPoints: 5,
+            percentage: 70
+        });
+        expect(gradeAnswerUseCase.getQuestionScore).toHaveBeenCalledWith(questions[0], answers.q1);
+        expect(gradeAnswerUseCase.getQuestionScore).toHaveBeenCalledWith(questions[1], answers.q2);
+    });
+
     test("returns zero percentage when there are no questions", () => {
         const result = useCase.execute([], {});
 

@@ -6,8 +6,13 @@ export function isFillQuestion(question) {
     return question?.type === QUESTION_TYPES.FILL;
 }
 
+export function isDragDropQuestion(question) {
+    return question?.type === QUESTION_TYPES.DRAG_DROP;
+}
+
 export function getQuestionViewState({ question, submitted, showAllFeedback, correct }) {
     const fillQuestion = isFillQuestion(question);
+    const dragDropQuestion = isDragDropQuestion(question);
     const inlineFillBlank = hasInlineFillBlank(question);
     const feedbackMode = Boolean(submitted && showAllFeedback);
 
@@ -15,7 +20,8 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
         feedbackMode,
         hasInlineFillBlank: inlineFillBlank,
         shouldShowFillInput: fillQuestion && !inlineFillBlank,
-        shouldShowOptions: !fillQuestion,
+        shouldShowOptions: !fillQuestion && !dragDropQuestion,
+        shouldShowDragDrop: dragDropQuestion,
         shouldShowWarning: Boolean(submitted && !showAllFeedback && !correct),
         shouldShowFillFeedback: feedbackMode && fillQuestion,
         shouldShowSource: feedbackMode && !fillQuestion && Boolean(question?.source)

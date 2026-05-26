@@ -32,5 +32,6 @@ export default function QuestionHeader({ question, submitted, correct, t }) {
 function getQuestionTypeLabel(type, t) {
     if (type === QUESTION_TYPES.FILL) return t.questionTypeFill;
     if (type === QUESTION_TYPES.MULTI) return t.questionTypeMulti;
+    if (type === QUESTION_TYPES.DRAG_DROP) return t.questionTypeDragDrop;
     return t.questionTypeSingle;
 }

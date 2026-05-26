@@ -7,6 +7,7 @@ import OptionList from "./QuestionCard/Options/OptionList.jsx";
 import PromptSection from "./QuestionCard/Prompt/PromptSection.jsx";
 import QuestionFeedback from "./QuestionCard/Feedback/QuestionFeedback.jsx";
 import QuestionHeader from "./QuestionCard/Header/QuestionHeader.jsx";
+import DragDropQuestion from "./QuestionCard/DragDrop/DragDropQuestion.jsx";
 
 export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
@@ -51,6 +52,17 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                         answerText={answerText}
                         submitted={submitted}
                         correct={correct}
+                        onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
+                ) : null}
+
+                {viewState.shouldShowDragDrop ? (
+                    <DragDropQuestion
+                        question={question}
+                        answer={answer}
+                        submitted={submitted}
+                        showAllFeedback={showAllFeedback}
                         onSingleAnswer={onSingleAnswer}
                         t={t}
                     />

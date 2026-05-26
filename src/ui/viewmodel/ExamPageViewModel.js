@@ -5,6 +5,7 @@ import getAnsweredCountLabel from "../../utils/viewmodelutils/getAnsweredCountLa
 import getScoreLabel from "../../utils/viewmodelutils/getScoreLabel.js";
 import getQuestionProgressLabel from "../../utils/viewmodelutils/getQuestionProgressLabel.js";
 import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggleLabel.js";
+import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
@@ -33,13 +34,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const answeredCount = useMemo(() => {
 		return questions.filter((question) => {
-			const answer = answers[question.id];
-
-			if (question.type === "multi") {
-				return Array.isArray(answer) && answer.length > 0;
-			}
-
-			return answer !== undefined && String(answer).trim() !== "";
+			return isQuestionAnswered(question, answers[question.id]);
 		}).length;
 	}, [questions, answers]);
 
@@ -309,6 +304,23 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		isAnswerCorrect
 	};
 }
+
+const isQuestionAnswered = (question, answer) => {
+	if (question.type === QUESTION_TYPES.MULTI) {
+		return Array.isArray(answer) && answer.length > 0;
+	}
+
+	if (question.type === QUESTION_TYPES.DRAG_DROP) {
+		return Boolean(
+			answer &&
+			typeof answer === "object" &&
+			!Array.isArray(answer) &&
+			Object.values(answer).some(Boolean)
+		);
+	}
+
+	return answer !== undefined && String(answer).trim() !== "";
+};
 
 const scrollExamWorkspaceToTop = (examWorkspaceRef) => {
 	window.requestAnimationFrame(() => {
