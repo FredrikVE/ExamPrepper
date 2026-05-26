@@ -1,12 +1,13 @@
 // src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionCard.jsx
-import { CheckCircle2, ChevronDown, XCircle } from "lucide-react";
+import { Check, CheckCircle2, ChevronDown, X, XCircle } from "lucide-react";
 
 export default function AnswerOptionCard({ questionId, option, index, isSelected, isExpanded, onToggleExpanded, t }) {
-
     const letter = getOptionLetter(index);
     const statusText = option.correct ? t?.resultCorrect ?? "Riktig" : t?.resultWrong ?? "Galt";
 
     const StatusIcon = option.correct ? CheckCircle2 : XCircle;
+    const SelectedIcon = option.correct ? Check : X;
+
     const extendedPoints = getExtendedExplanationPoints(option);
     const hasExtended = extendedPoints.length > 0;
 
@@ -24,7 +25,21 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
                     {letter}.
                 </span>
 
-                <StatusIcon className="question-card-answer-state-icon" />
+                <span
+                    className={`question-card-answer-marker ${
+                        isSelected
+                            ? "question-card-answer-marker-selected"
+                            : option.correct
+                                ? "question-card-answer-marker-correct"
+                                : "question-card-answer-marker-wrong"
+                    }`}
+                >
+                    {isSelected ? (
+                        <SelectedIcon className="question-card-answer-marker-icon" />
+                    ) : (
+                        <StatusIcon className="question-card-answer-marker-icon" />
+                    )}
+                </span>
             </div>
 
             <div className="question-card-answer-card-main">
@@ -52,12 +67,6 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
                         t={t}
                     />
                 </div>
-
-                {isSelected ? (
-                    <div className="question-card-answer-selected-pill">
-                        {t?.feedbackOptionSelected ?? "Ditt svar"}
-                    </div>
-                ) : null}
 
                 {hasExtended && isExpanded ? (
                     <AnswerOptionExtendedPanel
@@ -121,11 +130,11 @@ function AnswerOptionExtendedPanel({ expandedId, points }) {
 
 const getExtendedExplanationPoints = (option) => {
     return Array.isArray(option?.whyExtended) ? option.whyExtended : [];
-}
+};
 
 const getOptionLetter = (index) => {
     return String.fromCharCode(65 + index);
-}
+};
 
 const getAnswerCardClassName = ({ correct, isSelected }) => {
     const statusClassName = correct
@@ -135,4 +144,4 @@ const getAnswerCardClassName = ({ correct, isSelected }) => {
     return `${statusClassName} ${
         isSelected ? "question-card-answer-card-selected" : ""
     }`;
-}
+};
