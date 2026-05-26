@@ -36,7 +36,7 @@ export default function SidebarBrand({ subjects, selectedSubject, onSelectSubjec
                 aria-expanded={isOpen}
             >
                 <div className="sidebar-brand-icon">
-                    <SubjectIcon icon={currentSubject.icon} code={currentSubject.code} />
+                    <SubjectIcon icon={currentSubject.icon} />
                 </div>
 
                 <div className="sidebar-brand-copy">
@@ -69,7 +69,7 @@ export default function SidebarBrand({ subjects, selectedSubject, onSelectSubjec
                                     onClick={() => handleSelectSubject(subject.id)}
                                 >
                                     <div className="sidebar-subject-item-icon">
-                                        <SubjectIcon icon={subject.icon} code={subject.code} />
+                                        <SubjectIcon icon={subject.icon} />
                                     </div>
 
                                     <div className="sidebar-subject-item-copy">
