@@ -58,3 +58,229 @@
         width: 100%;
     }
 }
+
+
+/* ── Very short viewport fallback ─────────
+   Når viewport-høyden blir ekstremt lav, bytter subject cards
+   fra store grid-kort til en kompakt listevisning. */
+@media (max-height: 700px) and (min-width: 981px) {
+    .subject-select-workspace {
+        padding: clamp(18px, 3vw, 30px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .subject-select-topbar {
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .subject-select-title {
+        font-size: clamp(34px, 4vw, 46px);
+        line-height: 0.95;
+    }
+
+    .subject-select-subtitle {
+        display: none;
+    }
+
+    .subject-select-statistics-button {
+        min-height: 46px;
+        padding: 0 16px;
+        border-radius: 14px;
+    }
+
+    .subject-select-controls {
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .subject-select-search,
+    .subject-select-filter {
+        min-height: 44px;
+        border-radius: 12px;
+    }
+
+    .subject-select-search {
+        width: min(420px, 100%);
+    }
+
+    .subject-select-filter {
+        min-width: 220px;
+    }
+
+    .subject-select-search input,
+    .subject-select-filter select {
+        min-height: 42px;
+        font-size: 15px;
+    }
+
+    .subject-select-search-icon,
+    .subject-select-filter-icon {
+        width: 19px;
+        height: 19px;
+        margin-left: 16px;
+    }
+
+    .subject-select-filter-chevron {
+        right: 14px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .subject-select-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .subject-card {
+        display: grid;
+        grid-template-columns: 56px minmax(130px, 0.55fr) minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 16px;
+        min-height: 82px;
+        padding: 12px 16px;
+        border-radius: 15px;
+    }
+
+    .subject-card:hover,
+    .subject-card-selected {
+        transform: none;
+    }
+
+    .subject-card-badge {
+        display: none;
+    }
+
+    .subject-card-icon-wrap {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+    }
+
+    .subject-card-icon {
+        width: 27px;
+        height: 27px;
+    }
+
+    .subject-card-code {
+        grid-column: 2;
+        grid-row: 1;
+        margin-top: 0;
+        font-size: 13px;
+        line-height: 1;
+    }
+
+    .subject-card-title {
+        grid-column: 2;
+        grid-row: 2;
+        margin-top: 4px;
+        font-size: clamp(18px, 1.5vw, 22px);
+        line-height: 1.05;
+    }
+
+    .subject-card-description {
+        grid-column: 3;
+        grid-row: 1 / span 2;
+        max-width: none;
+        margin-top: 0;
+        font-size: 14px;
+        line-height: 1.35;
+
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .subject-card-footer {
+        grid-column: 4;
+        grid-row: 1 / span 2;
+        gap: 12px;
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+    .subject-card-meta {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .subject-card-meta-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .subject-card-arrow {
+        width: 42px;
+        height: 42px;
+    }
+
+    .subject-card-arrow-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Ekstremt lav høyde: enda mer kompakt liste. */
+@media (max-height: 540px) and (min-width: 981px) {
+    .subject-select-topbar {
+        margin-bottom: 10px;
+    }
+
+    .subject-select-title {
+        font-size: clamp(28px, 3.4vw, 38px);
+    }
+
+    .subject-select-controls {
+        margin-bottom: 10px;
+    }
+
+    .subject-card {
+        grid-template-columns: 48px minmax(150px, 1fr) auto;
+        min-height: 66px;
+        padding: 9px 14px;
+        column-gap: 12px;
+    }
+
+    .subject-card-icon-wrap {
+        width: 46px;
+        height: 46px;
+    }
+
+    .subject-card-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .subject-card-code {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .subject-card-title {
+        grid-column: 2;
+        grid-row: 2;
+        font-size: 18px;
+    }
+
+    .subject-card-description {
+        display: none;
+    }
+
+    .subject-card-footer {
+        grid-column: 3;
+        grid-row: 1 / span 2;
+    }
+
+    .subject-card-meta {
+        display: none;
+    }
+
+    .subject-card-arrow {
+        width: 38px;
+        height: 38px;
+    }
+}

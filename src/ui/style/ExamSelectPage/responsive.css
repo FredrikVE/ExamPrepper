@@ -76,3 +76,225 @@
         line-clamp: 8;
     }
 }
+
+
+/* ── Very short viewport fallback ─────────
+   Når viewport-høyden blir ekstremt lav, bytter exam cards
+   fra store grid-kort til en kompakt listevisning. */
+@media (max-height: 700px) and (min-width: 981px) {
+    .exam-select-workspace {
+        padding: clamp(18px, 3vw, 30px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .exam-select-topbar {
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .exam-select-title {
+        font-size: clamp(34px, 4vw, 46px);
+        line-height: 0.95;
+    }
+
+    .exam-select-intro {
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
+
+    .exam-select-subject-line {
+        font-size: 15px;
+    }
+
+    .exam-select-statistics-button {
+        min-height: 46px;
+        padding: 0 16px;
+        border-radius: 14px;
+    }
+
+    .exam-select-statistics-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .exam-select-statistics-chevron {
+        width: 22px;
+        height: 22px;
+    }
+
+    .exam-select-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .exam-select-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 18px;
+        min-height: 92px;
+        padding: 14px 16px;
+        border-radius: 16px;
+    }
+
+    .exam-select-card:hover {
+        transform: none;
+    }
+
+    .exam-select-card-main-row {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        align-items: center;
+        gap: 16px;
+        min-width: 0;
+    }
+
+    .exam-select-card-icon-wrapper {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+    }
+
+    .exam-select-card-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .exam-select-card-copy {
+        min-width: 0;
+    }
+
+    .exam-select-card-eyebrow {
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    .exam-select-card-title {
+        max-width: none;
+        margin-top: 6px;
+        font-size: clamp(20px, 1.7vw, 25px);
+        line-height: 1.05;
+    }
+
+    .exam-select-card-description {
+        max-width: none;
+        margin-top: 6px;
+        font-size: 14px;
+        line-height: 1.35;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+
+    .exam-select-card-footer {
+        align-self: center;
+        gap: 12px;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+    }
+
+    .exam-select-card-meta {
+        gap: 7px;
+    }
+
+    .exam-select-card-meta-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .exam-select-card-meta strong {
+        font-size: 15px;
+    }
+
+    .exam-select-card-meta span {
+        font-size: 11px;
+    }
+
+    .exam-select-card-footer-divider {
+        display: none;
+    }
+
+    .exam-select-card-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+    .exam-select-card-arrow-icon {
+        width: 23px;
+        height: 23px;
+    }
+}
+
+/* Ekstremt lav høyde: enda mer kompakt eksamensliste. */
+@media (max-height: 540px) and (min-width: 981px) {
+    .exam-select-topbar {
+        margin-bottom: 8px;
+    }
+
+    .exam-select-title {
+        font-size: clamp(30px, 3.5vw, 40px);
+    }
+
+    .exam-select-intro {
+        margin-bottom: 10px;
+    }
+
+    .exam-select-subject-line {
+        display: none;
+    }
+
+    .exam-select-grid {
+        gap: 8px;
+    }
+
+    .exam-select-card {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 68px;
+        padding: 9px 14px;
+        column-gap: 12px;
+    }
+
+    .exam-select-card-main-row {
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .exam-select-card-icon-wrapper {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .exam-select-card-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .exam-select-card-eyebrow {
+        font-size: 11px;
+    }
+
+    .exam-select-card-title {
+        margin-top: 4px;
+        font-size: 18px;
+    }
+
+    .exam-select-card-description {
+        display: none;
+    }
+
+    .exam-select-card-meta {
+        display: none;
+    }
+
+    .exam-select-card-arrow {
+        width: 36px;
+        height: 36px;
+    }
+
+    .exam-select-card-arrow-icon {
+        width: 21px;
+        height: 21px;
+    }
+}
