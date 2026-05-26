@@ -10,6 +10,12 @@ export default function DragDropQuestion({ question, answer, submitted, showAllF
     const [expandedTargetId, setExpandedTargetId] = useState(null);
 
     const cardsById = useMemo(() => createCardsById(question.cards), [question.cards]);
+    const usedCardIds = useMemo(() => new Set(
+        Object.values(safeAnswer).filter(Boolean)
+    ), [safeAnswer]);
+    const availableCards = useMemo(() => (
+        Array.isArray(question.cards) ? question.cards.filter((card) => !usedCardIds.has(card.id)) : []
+    ), [question.cards, usedCardIds]);
     const stats = useMemo(() => getDragDropStats(question, safeAnswer), [question, safeAnswer]);
 
     const assignCard = (targetId, cardId) => {
@@ -93,7 +99,7 @@ export default function DragDropQuestion({ question, answer, submitted, showAllF
             <div className="drag-drop-layout">
                 {!feedbackMode ? (
                     <CardBank
-                        cards={question.cards}
+                        cards={availableCards}
                         selectedCardId={selectedCardId}
                         onCardSelect={handleCardSelect}
                         onCardDragStart={handleCardDragStart}
