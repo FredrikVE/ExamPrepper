@@ -1,9 +1,11 @@
 // src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionCard.jsx
-import { Check, CheckCircle2, ChevronDown, X, XCircle } from "lucide-react";
+import { Check, CheckCircle2, ChevronDown, Info, X, XCircle } from "lucide-react";
 
 export default function AnswerOptionCard({ questionId, option, index, isSelected, isExpanded, onToggleExpanded, t }) {
     const letter = getOptionLetter(index);
-    const statusText = option.correct ? t?.resultCorrect ?? "Riktig" : t?.resultWrong ?? "Galt";
+    const statusText = option.correct
+        ? t?.resultCorrect ?? "Riktig"
+        : t?.resultWrong ?? "Feil";
 
     const StatusIcon = option.correct ? CheckCircle2 : XCircle;
     const SelectedIcon = option.correct ? Check : X;
@@ -20,7 +22,10 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
                 isSelected
             })}`}
         >
-            <div className="question-card-answer-card-left" aria-hidden="true">
+            <div
+                className="question-card-answer-card-left"
+                aria-hidden="true"
+            >
                 <span className="question-card-answer-letter">
                     {letter}.
                 </span>
@@ -72,6 +77,7 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
                     <AnswerOptionExtendedPanel
                         expandedId={expandedId}
                         points={extendedPoints}
+                        t={t}
                     />
                 ) : null}
             </div>
@@ -116,9 +122,21 @@ function AnswerOptionActions({ option, statusText, StatusIcon, hasExtended, isEx
     );
 }
 
-function AnswerOptionExtendedPanel({ expandedId, points }) {
+function AnswerOptionExtendedPanel({ expandedId, points, t }) {
     return (
-        <div id={expandedId} className="question-card-answer-extended">
+        <div
+            id={expandedId}
+            className="question-card-answer-extended"
+        >
+            <div className="question-card-answer-extended-title-row">
+                <Info className="question-card-answer-extended-title-icon" />
+                <h5 className="question-card-answer-extended-title">
+                    {t?.feedbackExtendedLabel ?? "Utvidet forklaring"}
+                </h5>
+            </div>
+
+            <div className="question-card-answer-extended-divider" />
+
             <ul className="question-card-answer-extended-list">
                 {points.map((point, pointIndex) => (
                     <li key={pointIndex}>{point}</li>
@@ -129,7 +147,9 @@ function AnswerOptionExtendedPanel({ expandedId, points }) {
 }
 
 const getExtendedExplanationPoints = (option) => {
-    return Array.isArray(option?.whyExtended) ? option.whyExtended : [];
+    return Array.isArray(option?.whyExtended)
+        ? option.whyExtended
+        : [];
 };
 
 const getOptionLetter = (index) => {
@@ -142,6 +162,8 @@ const getAnswerCardClassName = ({ correct, isSelected }) => {
         : "question-card-answer-card-wrong";
 
     return `${statusClassName} ${
-        isSelected ? "question-card-answer-card-selected" : ""
+        isSelected
+            ? "question-card-answer-card-selected"
+            : ""
     }`;
 };

@@ -5,8 +5,12 @@
 
 .question-card-answer-card {
     --answer-accent: var(--accent);
-    --answer-panel-border: color-mix(in srgb, var(--line) 76%, transparent);
-    --answer-panel-bg: color-mix(in srgb, var(--panel-bg) 48%, transparent);
+    --answer-panel-border: color-mix(in srgb, var(--accent) 24%, var(--line));
+    --answer-panel-bg: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--accent) 5%, var(--panel-strong)),
+        color-mix(in srgb, var(--panel-bg) 84%, white)
+    );
 
     display: grid;
     grid-template-columns: 64px minmax(0, 1fr);
@@ -23,52 +27,28 @@
 
 .question-card-answer-card-correct {
     --answer-accent: var(--success-text);
-    --answer-panel-border: color-mix(in srgb, var(--success-border) 82%, transparent);
-    --answer-panel-bg: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--success-soft) 62%, transparent),
-        color-mix(in srgb, var(--panel-bg) 34%, transparent)
-    );
 
     border-color: var(--success-border);
-    background: color-mix(in srgb, var(--success-soft) 76%, transparent);
+    background: color-mix(in srgb, var(--success-soft) 64%, transparent);
 }
 
 .question-card-answer-card-wrong {
     --answer-accent: var(--danger-text);
-    --answer-panel-border: color-mix(in srgb, var(--danger-border) 82%, transparent);
-    --answer-panel-bg: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--danger-soft) 62%, transparent),
-        color-mix(in srgb, var(--panel-bg) 34%, transparent)
-    );
 
     border-color: var(--danger-border);
-    background: color-mix(in srgb, var(--danger-soft) 76%, transparent);
+    background: color-mix(in srgb, var(--danger-soft) 64%, transparent);
 }
 
 .dark .question-card-answer-card-correct {
-    --answer-panel-bg: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--success-soft) 46%, transparent),
-        color-mix(in srgb, var(--panel-strong) 30%, transparent)
-    );
-
     background:
         radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--success) 9%, transparent), transparent 16rem),
-        color-mix(in srgb, var(--success-soft) 58%, transparent);
+        color-mix(in srgb, var(--success-soft) 50%, transparent);
 }
 
 .dark .question-card-answer-card-wrong {
-    --answer-panel-bg: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--danger-soft) 46%, transparent),
-        color-mix(in srgb, var(--panel-strong) 30%, transparent)
-    );
-
     background:
         radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--danger) 9%, transparent), transparent 16rem),
-        color-mix(in srgb, var(--danger-soft) 58%, transparent);
+        color-mix(in srgb, var(--danger-soft) 50%, transparent);
 }
 
 .question-card-answer-card-selected {
@@ -82,8 +62,8 @@
     background:
         linear-gradient(
             135deg,
-            color-mix(in srgb, var(--success-soft) 54%, transparent),
-            color-mix(in srgb, var(--accent-soft) 28%, transparent)
+            color-mix(in srgb, var(--success-soft) 48%, transparent),
+            color-mix(in srgb, var(--accent-soft) 24%, transparent)
         ),
         color-mix(in srgb, var(--panel-strong) 68%, transparent);
 }
@@ -92,8 +72,8 @@
     background:
         linear-gradient(
             135deg,
-            color-mix(in srgb, var(--danger-soft) 54%, transparent),
-            color-mix(in srgb, var(--accent-soft) 24%, transparent)
+            color-mix(in srgb, var(--danger-soft) 48%, transparent),
+            color-mix(in srgb, var(--accent-soft) 22%, transparent)
         ),
         color-mix(in srgb, var(--panel-strong) 68%, transparent);
 }
@@ -246,18 +226,60 @@
     transform: rotate(180deg);
 }
 
+/* ── Extended explanation panel ───────────────────────── */
 .question-card-answer-extended {
-    margin-top: 14px;
-    border: 1px solid var(--answer-panel-border);
-    border-radius: var(--radius-xs);
-    background: var(--answer-panel-bg);
-    padding: 12px 14px;
+    margin-top: 18px;
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--accent) 4%, white),
+            color-mix(in srgb, var(--panel-bg) 88%, white)
+        );
+    padding: 22px 26px 24px;
+}
+
+.dark .question-card-answer-extended {
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--accent) 10%, var(--panel-strong)),
+            color-mix(in srgb, var(--panel-bg) 92%, var(--panel-strong))
+        );
+}
+
+.question-card-answer-extended-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.question-card-answer-extended-title-icon {
+    width: 34px;
+    height: 34px;
+    color: var(--accent);
+    flex: 0 0 auto;
+}
+
+.question-card-answer-extended-title {
+    margin: 0;
+    color: var(--text-main);
+    font-size: clamp(1.25rem, 1.7vw, 1.75rem);
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.question-card-answer-extended-divider {
+    height: 1px;
+    margin: 16px 0 18px;
+    background: color-mix(in srgb, var(--accent) 16%, var(--line));
 }
 
 .question-card-answer-extended-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 14px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -265,22 +287,86 @@
 
 .question-card-answer-extended-list li {
     position: relative;
-    padding-left: 18px;
+    padding-left: 34px;
     color: var(--text-main);
-    font-size: 0.92rem;
+    font-size: 1rem;
     font-weight: 500;
-    line-height: 1.55;
+    line-height: 1.6;
 }
 
 .question-card-answer-extended-list li::before {
     content: "";
     position: absolute;
-    left: 0;
-    top: 0.72em;
-    width: 5px;
-    height: 5px;
+    left: 10px;
+    top: 0.9em;
+    width: 11px;
+    height: 11px;
     transform: translateY(-50%);
     border-radius: var(--radius-full);
-    background: var(--answer-accent);
-    box-shadow: 0 0 10px color-mix(in srgb, var(--answer-accent) 68%, transparent);
+    background: var(--accent);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* ── Responsive ───────────────────────── */
+@media (max-width: 860px) {
+    .question-card-answer-card-header,
+    .question-card-answer-card-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .question-card-answer-card-actions {
+        gap: var(--space-3);
+    }
+
+    .question-card-answer-expand-button {
+        border-left: 0;
+        padding-left: 0;
+    }
+
+    .question-card-answer-extended {
+        padding: 18px 18px 20px;
+    }
+
+    .question-card-answer-extended-title {
+        font-size: 1.35rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .question-card-answer-card {
+        grid-template-columns: 48px minmax(0, 1fr);
+    }
+
+    .question-card-answer-card-left {
+        padding: var(--space-5) var(--space-2);
+    }
+
+    .question-card-answer-card-main {
+        padding: var(--space-5);
+    }
+
+    .question-card-answer-extended-title-row {
+        gap: 10px;
+    }
+
+    .question-card-answer-extended-title-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .question-card-answer-extended-title {
+        font-size: 1.15rem;
+    }
+
+    .question-card-answer-extended-list li {
+        padding-left: 24px;
+        font-size: 0.95rem;
+    }
+
+    .question-card-answer-extended-list li::before {
+        left: 4px;
+        width: 9px;
+        height: 9px;
+    }
 }
