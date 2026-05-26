@@ -13,6 +13,7 @@ export default function ExamPage({ viewModel }) {
     const activeOptionCount = viewModel.currentQuestion?.options?.length ?? 0;
     const activeDragDropTargetCount = viewModel.currentQuestion?.targets?.length ?? 0;
     const activeDragCategorizeCategoryCount = viewModel.currentQuestion?.categories?.length ?? 0;
+    const activeDragCategorizeLongestText = getLongestDragCategorizeTextLength(viewModel.currentQuestion);
     const isDragDropQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.DRAG_DROP;
     const isDragCategorizeQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
     const shouldUseScrollFooter = !viewModel.submitted && (
@@ -22,11 +23,16 @@ export default function ExamPage({ viewModel }) {
         activeDragDropTargetCount >= 5 ||
         activeDragCategorizeCategoryCount >= 4
     );
+    const shouldUseWideQuestionLayout = isDragCategorizeQuestion && (
+        activeDragCategorizeCategoryCount >= 5 ||
+        activeDragCategorizeLongestText >= 34
+    );
 
     const workspaceClassName = [
         "exam-workspace",
         viewModel.submitted ? "exam-workspace-feedback-mode" : "",
-        shouldUseScrollFooter ? "exam-workspace-scroll-footer-mode" : ""
+        shouldUseScrollFooter ? "exam-workspace-scroll-footer-mode" : "",
+        shouldUseWideQuestionLayout ? "exam-workspace-wide-question-mode" : ""
     ].filter(Boolean).join(" ");
 
     if (viewModel.loading) {
@@ -72,3 +78,14 @@ export default function ExamPage({ viewModel }) {
         </div>
     );
 }
+
+const getLongestDragCategorizeTextLength = (question) => {
+    if (question?.type !== QUESTION_TYPES.DRAG_CATEGORIZE) {
+        return 0;
+    }
+
+    const itemLengths = (question.items ?? []).map((item) => String(item?.label ?? "").length);
+    const categoryLengths = (question.categories ?? []).map((category) => String(category?.label ?? "").length);
+
+    return Math.max(0, ...itemLengths, ...categoryLengths);
+};

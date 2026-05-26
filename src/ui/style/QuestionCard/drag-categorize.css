@@ -39,7 +39,7 @@
 
 .drag-categorize-item-list {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
     gap: 12px;
 }
 
@@ -47,20 +47,20 @@
 .drag-categorize-placed-card {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
     width: 100%;
-    min-height: 46px;
+    min-height: 50px;
     border: 1px solid var(--line);
     border-radius: var(--radius-xs);
     background: color-mix(in srgb, var(--panel-strong) 94%, transparent);
     color: var(--text-main);
     cursor: grab;
     box-shadow: 0 8px 18px rgba(18, 38, 63, 0.06);
-    padding: 9px 12px;
+    padding: 10px 12px;
     text-align: left;
-    font-size: 0.9rem;
+    font-size: 0.84rem;
     font-weight: 850;
-    line-height: 1.2;
+    line-height: 1.22;
     transition:
         border-color var(--transition-fast),
         background var(--transition-fast),
@@ -72,9 +72,9 @@
 .drag-categorize-placed-card > span {
     min-width: 0;
     flex: 1 1 auto;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
     word-break: normal;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 .drag-categorize-item-card:hover,
@@ -117,6 +117,10 @@
     color: var(--text-soft);
 }
 
+.drag-categorize-placed-card-grip {
+    margin-top: 2px;
+}
+
 .drag-categorize-item-bank-hint {
     margin: 12px 0 0;
     color: var(--text-muted);
@@ -126,7 +130,10 @@
 
 .drag-categorize-category-grid {
     display: grid;
-    grid-template-columns: repeat(var(--drag-categorize-category-count, 4), minmax(150px, 1fr));
+    grid-template-columns: repeat(
+        var(--drag-categorize-category-count, 4),
+        minmax(var(--drag-categorize-category-min-width, 190px), 1fr)
+    );
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
@@ -161,9 +168,9 @@
     line-height: 1.15;
     letter-spacing: 0.03em;
     text-transform: uppercase;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
     word-break: normal;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 .dark .drag-categorize-category-header {
@@ -194,18 +201,27 @@
 
 .drag-categorize-placed-card {
     position: relative;
-    min-height: 46px;
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    align-items: start;
+    min-height: 56px;
+    gap: 8px;
     background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
     box-shadow: 0 8px 18px rgba(18, 38, 63, 0.05);
+    padding: 10px 34px 10px 10px;
+    font-size: 0.8rem;
+    line-height: 1.22;
 }
 
 .drag-categorize-placed-card-remove {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
     display: inline-grid;
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     place-items: center;
-    flex: 0 0 auto;
-    margin-left: auto;
     border: 0;
     border-radius: var(--radius-full);
     background: transparent;
@@ -321,7 +337,7 @@
 
 @media (max-width: 1180px) {
     .drag-categorize-item-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
     }
 }
 

@@ -180,6 +180,33 @@
     }
 }
 
+/* ── Wide question mode ──────────────
+   Drag-categorize questions with many columns or long labels need more
+   horizontal room. The same content variables drive the progress rail,
+   question card and footer, so they stay aligned. */
+.exam-workspace-wide-question-mode {
+    --exam-content-width: calc(100% - clamp(28px, 4vw, 72px));
+    --exam-content-max-width: 1220px;
+}
+
+.exam-workspace-wide-question-mode .question-card-body {
+    padding-inline: clamp(var(--space-7), 3vw, 42px);
+}
+
+@media (min-width: 1440px) {
+    .exam-workspace-wide-question-mode {
+        --exam-content-width: 86%;
+        --exam-content-max-width: 1280px;
+    }
+}
+
+@media (max-width: 1280px) and (min-width: 981px) {
+    .exam-workspace-wide-question-mode {
+        --exam-content-width: calc(100% - clamp(24px, 3.5vw, 56px));
+        --exam-content-max-width: 1120px;
+    }
+}
+
 /* ── Very short viewport fallback ─────────
    Når viewport-høyden blir ekstremt lav, må innholdet få vokse
    naturlig i stedet for at footer/header presser QuestionCard. */
