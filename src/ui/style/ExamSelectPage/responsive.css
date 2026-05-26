@@ -5,13 +5,7 @@
     }
 
     .exam-select-workspace {
-        padding: 44px 36px;
-    }
-}
-
-@media (max-width: 1100px) {
-    .exam-select-grid {
-        grid-template-columns: 1fr;
+        padding: 40px 34px;
     }
 }
 
@@ -45,5 +39,40 @@
 
     .exam-select-statistics-button span {
         display: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .exam-select-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exam-select-card {
+        min-height: 0;
+    }
+
+    .exam-select-card-footer {
+        flex-wrap: wrap;
+    }
+
+    .exam-select-card-arrow {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+@media (max-width: 560px) {
+    .exam-select-topbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .exam-select-statistics-button {
+        align-self: flex-start;
+    }
+
+    .exam-select-card-description {
+        -webkit-line-clamp: 8;
+        line-clamp: 8;
     }
 }
