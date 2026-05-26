@@ -1,5 +1,5 @@
 //src/ui/view/components/ExamPage/FeedbackPanel.jsx
-import { BookOpen, CheckCircle2, XCircle } from "lucide-react";
+import { AlertTriangle, BookOpen, CheckCircle2, Info, Quote, XCircle } from "lucide-react";
 import getAnswerLabel from "../../../../utils/answerutils/getAnswerLabel.js";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
@@ -134,21 +134,39 @@ function FeedbackSummary({ correct, t }) {
 
 function FillExplanation({ question, correct, t }) {
     return (
-        <div className="feedback-panel-box">
-            <div className="feedback-panel-box-title">
-                {t.feedbackWhyCorrectTitle}
-            </div>
+        <div className="feedback-panel-explanation-list">
+            <section className="feedback-panel-explanation-card feedback-panel-explanation-card-correct">
+                <div className="feedback-panel-explanation-icon-wrap">
+                    <Info className="feedback-panel-explanation-icon" />
+                </div>
 
-            <p>{question.whyCorrect}</p>
+                <div className="feedback-panel-explanation-content">
+                    <h3 className="feedback-panel-explanation-title">
+                        {t.feedbackWhyCorrectTitle}
+                    </h3>
+
+                    <p className="feedback-panel-explanation-text">
+                        {question.whyCorrect}
+                    </p>
+                </div>
+            </section>
 
             {!correct && question.whyWrong ? (
-                <>
-                    <div className="feedback-panel-box-title-spaced">
-                        {t.feedbackWhyWrongTitle}
+                <section className="feedback-panel-explanation-card feedback-panel-explanation-card-wrong">
+                    <div className="feedback-panel-explanation-icon-wrap">
+                        <AlertTriangle className="feedback-panel-explanation-icon" />
                     </div>
 
-                    <p>{question.whyWrong}</p>
-                </>
+                    <div className="feedback-panel-explanation-content">
+                        <h3 className="feedback-panel-explanation-title">
+                            {t.feedbackWhyWrongTitle}
+                        </h3>
+
+                        <p className="feedback-panel-explanation-text">
+                            {question.whyWrong}
+                        </p>
+                    </div>
+                </section>
             ) : null}
         </div>
     );
@@ -206,14 +224,23 @@ function OptionFeedback({ question, selected, t }) {
 function FeedbackSource({ source, t }) {
     return (
         <div className="feedback-panel-source">
-            <div className="feedback-panel-source-title">
-                <BookOpen className="feedback-panel-source-icon" />
-                {t.feedbackSourceTitle}
+            <div className="feedback-panel-source-header">
+                <span className="feedback-panel-source-icon-wrap">
+                    <BookOpen className="feedback-panel-source-icon" />
+                </span>
+
+                <h3 className="feedback-panel-source-title">
+                    {t.feedbackSourceTitle}
+                </h3>
             </div>
 
-            <p className="feedback-panel-source-text">
-                {source}
-            </p>
+            <div className="feedback-panel-source-quote">
+                <Quote className="feedback-panel-source-quote-icon" />
+
+                <p className="feedback-panel-source-text">
+                    {source}
+                </p>
+            </div>
         </div>
     );
 }

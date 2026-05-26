@@ -1,4 +1,5 @@
 /*src/ui/style/FeedbackPanel/responsive.css*/
+
 @media (max-width: 760px) {
     .feedback-panel-fill-summary {
         padding: 18px;
@@ -18,5 +19,44 @@
 
     .feedback-panel-fill-answer-pill {
         width: 100%;
+    }
+
+    .feedback-panel-explanation-card {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 20px;
+    }
+
+    .feedback-panel-explanation-icon-wrap {
+        width: 40px;
+        height: 40px;
+    }
+
+    .feedback-panel-explanation-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .feedback-panel-explanation-title {
+        font-size: 1.35rem;
+    }
+
+    .feedback-panel-explanation-text {
+        font-size: 1rem;
+    }
+
+    .feedback-panel-source {
+        padding: 20px;
+    }
+
+    .feedback-panel-source-quote {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .feedback-panel-source-quote-icon {
+        width: 30px;
+        height: 30px;
     }
 }
