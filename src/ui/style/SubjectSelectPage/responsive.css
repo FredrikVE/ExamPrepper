@@ -59,7 +59,6 @@
     }
 }
 
-
 /* ── Very short viewport fallback ─────────
    Når viewport-høyden blir ekstremt lav, bytter subject cards
    fra store grid-kort til en kompakt listevisning. */
@@ -196,8 +195,6 @@
         -webkit-box-orient: vertical;
     }
 
-
-
     .subject-card-footer {
         grid-column: 4;
         grid-row: 1 / span 2;
@@ -286,4 +283,59 @@
         width: 38px;
         height: 38px;
     }
+}
+
+/* ── Horizontal overflow guard ─────────
+   SubjectSelectPage skal ikke kunne skrolle sidelengs. */
+.subject-select-workspace {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.subject-select-workspace,
+.subject-select-topbar,
+.subject-select-controls,
+.subject-select-grid,
+.subject-card {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.subject-select-topbar,
+.subject-select-controls {
+    flex-wrap: wrap;
+}
+
+.subject-select-search,
+.subject-select-filter {
+    max-width: 100%;
+    min-width: 0;
+}
+
+.subject-select-grid {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.subject-select-grid > * {
+    min-width: 0;
+}
+
+.subject-select-title,
+.subject-select-subtitle,
+.subject-card-title,
+.subject-card-description {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.subject-card-footer {
+    min-width: 0;
+}
+
+.subject-select-ambient-light {
+    right: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
