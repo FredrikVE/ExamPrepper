@@ -1,5 +1,4 @@
 //src/App.jsx
-import { useCallback, useEffect, useState } from "react";
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
 
@@ -7,7 +6,7 @@ import useAppNavigationViewModel from "./ui/viewmodel/AppNavigationViewModel.js"
 import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewModel.js";
 import useExamSelectPageViewModel from "./ui/viewmodel/ExamSelectPageViewModel.js";
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
-import usePlaceholderPageViewModel from "./ui/viewmodel/PlaceholderPageViewModel.js";
+import useSettingsMenuViewModel from "./ui/viewmodel/SettingsMenuViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
@@ -18,7 +17,14 @@ import SidebarMenuButton from "./ui/view/components/Sidebar/SidebarMenuButton.js
 import SettingsMenu from "./ui/view/components/Settings/SettingsMenu.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { getExamQuestionsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, getExamByBaseIdAndLangUseCase } from "./di/dependencies.js";
+import {
+    getExamQuestionsUseCase,
+    getAvailableExamsUseCase,
+    getAvailableSubjectsUseCase,
+    gradeAnswerUseCase,
+    calculateExamScoreUseCase,
+    getExamByBaseIdAndLangUseCase
+} from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -34,22 +40,8 @@ export default function App() {
 
 function AppContent() {
     const { language, t } = useLanguage();
-    const [randomizeAnswerOptions, setRandomizeAnswerOptions] = useState(getInitialRandomizeAnswerOptions);
 
-    useEffect(() => {
-        try {
-            localStorage.setItem(
-                RANDOMIZE_ANSWER_OPTIONS_STORAGE_KEY,
-                randomizeAnswerOptions ? "true" : "false"
-            );
-        } catch {
-            // localStorage not available
-        }
-    }, [randomizeAnswerOptions]);
-
-    const toggleRandomizeAnswerOptions = useCallback(() => {
-        setRandomizeAnswerOptions((value) => !value);
-    }, []);
+    const settingsMenuViewModel = useSettingsMenuViewModel();
 
     const navigationViewModel = useAppNavigationViewModel(
         language,
@@ -70,16 +62,6 @@ function AppContent() {
         t,
         subjectSelectPageViewModel.selectedSubject,
         navigationViewModel.selectExam
-    );
-
-    const overviewPageViewModel = usePlaceholderPageViewModel(
-        t.sidebarOverview,
-        "Oversikt-siden er ikke implementert ennå."
-    );
-
-    const notesPageViewModel = usePlaceholderPageViewModel(
-        t.sidebarNotes,
-        "Notater-siden er ikke implementert ennå."
     );
 
     return (
@@ -112,23 +94,15 @@ function AppContent() {
                 {navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
                     <ExamPageWrapper
                         examId={navigationViewModel.selectedExamId}
-                        randomizeAnswerOptions={randomizeAnswerOptions}
+                        randomizeAnswerOptions={settingsMenuViewModel.randomizeAnswerOptions}
                     />
-                )}
-
-                {navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
-                    <PlaceholderPage viewModel={overviewPageViewModel} />
-                )}
-
-                {navigationViewModel.activeScreen === NAV_SCREENS.NOTES && (
-                    <PlaceholderPage viewModel={notesPageViewModel} />
                 )}
 
                 <SettingsMenu
                     isOpen={navigationViewModel.settingsOpen}
                     onOpenChange={navigationViewModel.setSettingsOpen}
-                    randomizeAnswerOptions={randomizeAnswerOptions}
-                    onToggleRandomizeAnswerOptions={toggleRandomizeAnswerOptions}
+                    randomizeAnswerOptions={settingsMenuViewModel.randomizeAnswerOptions}
+                    onToggleRandomizeAnswerOptions={settingsMenuViewModel.toggleRandomizeAnswerOptions}
                 />
             </div>
         </div>
@@ -149,30 +123,4 @@ function ExamPageWrapper({ examId, randomizeAnswerOptions }) {
             viewModel={examPageViewModel}
         />
     );
-}
-
-function PlaceholderPage({ viewModel }) {
-    return (
-        <div className="exam-workspace">
-            <main className="exam-page-main">
-                <div className="exam-page-content">
-                    <div className="exam-page-empty">
-                        <h1>{viewModel.title}</h1>
-                        <p>{viewModel.description}</p>
-                    </div>
-                </div>
-            </main>
-        </div>
-    );
-}
-
-
-const RANDOMIZE_ANSWER_OPTIONS_STORAGE_KEY = "exam-emulator-randomize-answer-options";
-
-function getInitialRandomizeAnswerOptions() {
-    try {
-        return localStorage.getItem(RANDOMIZE_ANSWER_OPTIONS_STORAGE_KEY) === "true";
-    } catch {
-        return false;
-    }
 }
