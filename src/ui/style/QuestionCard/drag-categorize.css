@@ -9,6 +9,7 @@
 }
 
 .drag-categorize-item-bank {
+    --drag-categorize-bank-card-max-width: 320px;
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--panel-strong) 76%, transparent);
@@ -40,6 +41,7 @@
 .drag-categorize-item-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+    justify-items: start;
     gap: 12px;
 }
 
@@ -76,6 +78,10 @@
     word-break: normal;
     hyphens: auto;
     text-wrap: pretty;
+}
+
+.drag-categorize-item-card {
+    max-width: min(100%, var(--drag-categorize-bank-card-max-width));
 }
 
 .drag-categorize-item-card:hover,
@@ -265,6 +271,10 @@
     opacity: 0.72;
 }
 
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-bank {
+    --drag-categorize-bank-card-max-width: 560px;
+}
+
 .exam-workspace-dense-drag-categorize-mode .drag-categorize-item-list {
     grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
 }
@@ -276,6 +286,10 @@
     --drag-categorize-placed-padding: 9px 30px 9px 8px;
     --drag-categorize-placed-gap: 6px;
     --drag-categorize-placed-grip-width: 14px;
+}
+
+.exam-workspace-extra-wide-question-mode .drag-categorize-item-bank {
+    --drag-categorize-bank-card-max-width: 620px;
 }
 
 .exam-workspace-extra-wide-question-mode .drag-categorize-category-grid {
