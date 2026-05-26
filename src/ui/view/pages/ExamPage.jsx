@@ -1,4 +1,4 @@
-// src/ui/view/pages/ExamPage.jsx
+//src/ui/view/pages/ExamPage.jsx
 import Header from "../components/Header/Header.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress.jsx";
@@ -8,9 +8,15 @@ import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel }) {
     const { t } = useLanguage();
-    const workspaceClassName = viewModel.submitted
-        ? "exam-workspace exam-workspace-feedback-mode"
-        : "exam-workspace";
+
+    const activeOptionCount = viewModel.currentQuestion?.options?.length ?? 0;
+    const shouldUseScrollFooter = !viewModel.submitted && activeOptionCount >= 6;
+
+    const workspaceClassName = [
+        "exam-workspace",
+        viewModel.submitted ? "exam-workspace-feedback-mode" : "",
+        shouldUseScrollFooter ? "exam-workspace-scroll-footer-mode" : ""
+    ].filter(Boolean).join(" ");
 
     if (viewModel.loading) {
         return (

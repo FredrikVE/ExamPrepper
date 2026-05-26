@@ -11,6 +11,7 @@ import QuestionHeader from "./QuestionCard/Header/QuestionHeader.jsx";
 export default function QuestionCard({ question, answer, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
     const answerText = String(answer ?? "");
+
     const viewState = getQuestionViewState({
         question,
         submitted,

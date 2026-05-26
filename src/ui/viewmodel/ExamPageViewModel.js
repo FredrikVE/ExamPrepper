@@ -85,7 +85,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setCurrentQuestionIndex((previousIndex) => {
 			return Math.max(previousIndex - 1, 0);
 		});
-	}, []);
+
+		scrollExamWorkspaceToTop(examWorkspaceRef);
+	}, [examWorkspaceRef]);
 
 	const nextQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
@@ -95,7 +97,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 			return Math.min(previousIndex + 1, visibleQuestionCount - 1);
 		});
-	}, [visibleQuestionCount]);
+
+		scrollExamWorkspaceToTop(examWorkspaceRef);
+	}, [visibleQuestionCount, examWorkspaceRef]);
 
 	const goToQuestion = useCallback((index) => {
 		if (index < 0 || index >= visibleQuestionCount) {
@@ -103,7 +107,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setCurrentQuestionIndex(index);
-	}, [visibleQuestionCount]);
+		scrollExamWorkspaceToTop(examWorkspaceRef);
+	}, [visibleQuestionCount, examWorkspaceRef]);
 
 	//Handlefunksjoner for svar
 	const setSingleAnswer = useCallback((questionId, value) => {
@@ -161,7 +166,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	//Handler for eksamen
 	const submitExam = useCallback(() => {
 		setSubmitted(true);
-	}, []);
+		scrollExamWorkspaceToTop(examWorkspaceRef);
+	}, [examWorkspaceRef]);
 
 	const resetExam = useCallback(() => {
 		setAnswers({});
@@ -172,7 +178,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setExpandedAnswerOptionByQuestionId({});
 
 		scrollExamWorkspaceToTop(examWorkspaceRef);
-	}, []);
+	}, [examWorkspaceRef]);
 
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((value) => !value);
@@ -296,9 +302,11 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 }
 
 const scrollExamWorkspaceToTop = (examWorkspaceRef) => {
-	examWorkspaceRef.current?.scrollTo({
-		top: 0,
-		behavior: "smooth"
+	window.requestAnimationFrame(() => {
+		examWorkspaceRef.current?.scrollTo({
+			top: 0,
+			behavior: "smooth"
+		});
 	});
 };
 

@@ -129,6 +129,7 @@
         max-width: var(--exam-content-max-width);
     }
 }
+
 /* ── Laptop-first exam layout ─────────────
    Keeps the widescreen 70% layout, but gives 14–17" laptops
    a wider and shorter working area so the footer stays reachable. */
@@ -199,5 +200,26 @@
     .exam-workspace-feedback-mode {
         --exam-content-width: calc(100% - 28px);
         --exam-content-max-width: 880px;
+    }
+}
+
+/* ── Long active questions ──────────────
+   Some active questions can have enough options to become taller than
+   the laptop viewport. In that case the footer should return to the
+   normal scroll flow instead of sitting on top of the question card. */
+.exam-workspace-scroll-footer-mode {
+    --exam-content-width: calc(100% - clamp(40px, 5vw, 96px));
+    --exam-content-max-width: 1040px;
+}
+
+.exam-workspace-scroll-footer-mode .exam-page-main {
+    flex: 0 0 auto;
+    padding-bottom: clamp(10px, 1.5vh, 18px);
+}
+
+@media (max-width: 1280px) and (min-width: 981px) {
+    .exam-workspace-scroll-footer-mode {
+        --exam-content-width: calc(100% - clamp(32px, 4vw, 72px));
+        --exam-content-max-width: 980px;
     }
 }

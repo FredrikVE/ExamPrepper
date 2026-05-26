@@ -130,3 +130,17 @@
 .exam-workspace-feedback-mode .exam-footer-container {
     padding-block: 10px;
 }
+
+/* Long active questions use the same footer behavior as feedback mode:
+   the footer becomes part of the scroll flow so it cannot cover answers. */
+.exam-workspace-scroll-footer-mode .exam-footer {
+    position: relative;
+    bottom: auto;
+    z-index: 1;
+    margin-top: clamp(14px, 2vh, 24px);
+    margin-bottom: clamp(20px, 3vh, 34px);
+}
+
+.exam-workspace-scroll-footer-mode .exam-footer-container {
+    padding-block: 10px;
+}
