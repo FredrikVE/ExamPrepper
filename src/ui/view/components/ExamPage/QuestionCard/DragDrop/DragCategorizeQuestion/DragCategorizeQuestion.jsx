@@ -1,5 +1,4 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/DragCategorizeQuestion/DragCategorizeQuestion.jsx
-import DragDropScoreSummary from "../Feedback/DragDropScoreSummary.jsx";
 import DragCategorizeCategoryGrid from "../CategoryBoard/DragCategorizeCategoryGrid.jsx";
 import DragCategorizeItemBank from "../CategoryItemBank/DragCategorizeItemBank.jsx";
 import { useDragCategorizeQuestion } from "./useDragCategorizeQuestion.js";
@@ -11,10 +10,6 @@ export default function DragCategorizeQuestion(props) {
 
     return (
         <div className={dragCategorize.rootClassName}>
-            {dragCategorize.feedbackMode ? (
-                <DragDropScoreSummary stats={dragCategorize.stats} t={props.t} />
-            ) : null}
-
             <DragCategorizeItemBank
                 question={props.question}
                 items={dragCategorize.availableItems}

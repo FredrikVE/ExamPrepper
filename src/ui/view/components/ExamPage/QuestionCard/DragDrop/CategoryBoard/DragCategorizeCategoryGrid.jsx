@@ -10,9 +10,11 @@ export default function DragCategorizeCategoryGrid(props) {
         ? props.question.correctAnswer
         : {};
 
+    const className = getCategoryGridClassName(categoryCount);
+
     return (
         <div
-            className="drag-categorize-category-grid"
+            className={className}
             style={{ "--drag-categorize-category-count": String(categoryCount) }}
         >
             {categories.map((category) => (
@@ -55,4 +57,15 @@ function getUnansweredSlotCount({ categoryId, correctAnswer, placedItemIds, feed
     const expectedItemIds = getSafeArray(correctAnswer[categoryId]);
 
     return expectedItemIds.filter((itemId) => !placedItemIds.has(itemId)).length;
+}
+
+
+function getCategoryGridClassName(categoryCount) {
+    let className = "drag-categorize-category-grid";
+
+    if (categoryCount > 4) {
+        className += " drag-categorize-category-grid-transposable";
+    }
+
+    return className;
 }
