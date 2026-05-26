@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/DragDrop/DragDropQuestion.jsx
-import { CheckCircle2, ChevronDown, GripVertical, Info, RotateCcw, X, XCircle } from "lucide-react";
+import { ChevronDown, GripVertical, Info, RotateCcw, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export default function DragDropQuestion({ question, answer, submitted, showAllFeedback, onSingleAnswer, t }) {
@@ -268,10 +268,10 @@ function DropTarget({ target, selectedCard, selectedCardId, isDragOver, onClick,
 
 function FeedbackTarget({ target, selectedCard, targetIsAnswered, targetIsCorrect, isExpanded, onToggleExpanded, t }) {
     const status = getTargetStatus({ targetIsAnswered, targetIsCorrect, t });
-    const StatusIcon = targetIsCorrect ? CheckCircle2 : XCircle;
     const reason = targetIsCorrect ? target.whyCorrect : target.whyWrong;
     const extendedPoints = Array.isArray(target.whyExtended) ? target.whyExtended : [];
-    const hasExtended = extendedPoints.length > 0;
+    const correctAnswerLabel = target.correctLabel ?? target.correctCardId;
+    const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || (!targetIsCorrect && Boolean(correctAnswerLabel));
 
     const className = [
         "drag-drop-feedback-target",
@@ -283,46 +283,52 @@ function FeedbackTarget({ target, selectedCard, targetIsAnswered, targetIsCorrec
     return (
         <article className={className}>
             <div className="drag-drop-feedback-target-main">
-                <div>
-                    <div className="drag-drop-feedback-answer-title">
-                        {selectedCard?.text ?? t.dragDropUnanswered}
-                    </div>
+                <div className="drag-drop-feedback-answer-title">
+                    {selectedCard?.text ?? t.dragDropUnanswered}
+                </div>
 
+                <div className="drag-drop-feedback-actions">
+                    <span className="drag-drop-feedback-status">
+                        {status}
+                    </span>
+
+                    {hasExplanation ? (
+                        <button
+                            type="button"
+                            className="drag-drop-feedback-expand"
+                            onClick={onToggleExpanded}
+                            aria-expanded={isExpanded}
+                            aria-label={isExpanded ? t.dragDropHideExplanation : t.dragDropShowExplanation}
+                        >
+                            <ChevronDown
+                                className={isExpanded ? "drag-drop-feedback-chevron drag-drop-feedback-chevron-open" : "drag-drop-feedback-chevron"}
+                                aria-hidden="true"
+                            />
+                        </button>
+                    ) : null}
+                </div>
+            </div>
+
+            {hasExplanation && isExpanded ? (
+                <div className="drag-drop-feedback-explanation">
                     {reason ? (
                         <p className="drag-drop-feedback-reason">{reason}</p>
                     ) : null}
 
                     {!targetIsCorrect ? (
                         <p className="drag-drop-feedback-correct-answer">
-                            {t.feedbackCorrectAnswerLabel}: <strong>{target.correctLabel ?? target.correctCardId}</strong>
+                            {t.feedbackCorrectAnswerLabel}: <strong>{correctAnswerLabel}</strong>
                         </p>
                     ) : null}
-                </div>
 
-                <div className="drag-drop-feedback-actions">
-                    <span className="drag-drop-feedback-status">
-                        <StatusIcon aria-hidden="true" />
-                        {status}
-                    </span>
-
-                    {hasExtended ? (
-                        <button
-                            type="button"
-                            className="drag-drop-feedback-expand"
-                            onClick={onToggleExpanded}
-                        >
-                            {isExpanded ? t.dragDropHideExplanation : t.dragDropShowExplanation}
-                        </button>
+                    {extendedPoints.length > 0 ? (
+                        <ul className="drag-drop-feedback-extended-list">
+                            {extendedPoints.map((point, index) => (
+                                <li key={index}>{point}</li>
+                            ))}
+                        </ul>
                     ) : null}
                 </div>
-            </div>
-
-            {hasExtended && isExpanded ? (
-                <ul className="drag-drop-feedback-extended-list">
-                    {extendedPoints.map((point, index) => (
-                        <li key={index}>{point}</li>
-                    ))}
-                </ul>
             ) : null}
         </article>
     );

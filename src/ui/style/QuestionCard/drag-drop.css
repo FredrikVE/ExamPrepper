@@ -325,20 +325,20 @@
 }
 
 .drag-drop-feedback-target {
+    overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--radius-xs);
     background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
-    padding: 12px 14px;
 }
 
 .drag-drop-feedback-target-correct {
     border-color: var(--success-border);
-    background: color-mix(in srgb, var(--success-soft) 68%, transparent);
+    background: color-mix(in srgb, var(--success-soft) 62%, var(--panel-strong));
 }
 
 .drag-drop-feedback-target-wrong {
     border-color: var(--danger-border);
-    background: color-mix(in srgb, var(--danger-soft) 68%, transparent);
+    background: color-mix(in srgb, var(--danger-soft) 62%, var(--panel-strong));
 }
 
 .drag-drop-feedback-target-unanswered {
@@ -348,8 +348,11 @@
 
 .drag-drop-feedback-target-main {
     display: flex;
+    min-height: 52px;
+    align-items: center;
     justify-content: space-between;
     gap: 14px;
+    padding: 10px 14px;
 }
 
 .drag-drop-feedback-answer-title {
@@ -358,12 +361,24 @@
     font-weight: 950;
 }
 
+.drag-drop-feedback-explanation {
+    border-top: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+    background: color-mix(in srgb, var(--panel-strong) 54%, transparent);
+    padding: 10px 14px 12px;
+}
+
 .drag-drop-feedback-reason,
 .drag-drop-feedback-correct-answer {
-    margin: 5px 0 0;
+    margin: 0;
     color: var(--text-muted);
     font-size: 0.86rem;
     line-height: 1.45;
+}
+
+.drag-drop-feedback-reason + .drag-drop-feedback-correct-answer,
+.drag-drop-feedback-correct-answer + .drag-drop-feedback-extended-list,
+.drag-drop-feedback-reason + .drag-drop-feedback-extended-list {
+    margin-top: 8px;
 }
 
 .drag-drop-feedback-correct-answer strong {
@@ -372,22 +387,18 @@
 
 .drag-drop-feedback-actions {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     flex: 0 0 auto;
-    gap: 10px;
+    gap: 8px;
 }
 
 .drag-drop-feedback-status {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
     min-height: 30px;
-    border-radius: 9px;
-    padding: 0 10px;
-    background: color-mix(in srgb, var(--panel-strong) 64%, transparent);
     color: var(--text-muted);
-    font-size: 0.8rem;
-    font-weight: 900;
+    font-size: 0.82rem;
+    font-weight: 950;
 }
 
 .drag-drop-feedback-target-correct .drag-drop-feedback-status {
@@ -398,34 +409,50 @@
     color: var(--danger-text);
 }
 
-.drag-drop-feedback-status svg {
-    width: 16px;
-    height: 16px;
+.drag-drop-feedback-expand {
+    display: inline-grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: currentColor;
+    cursor: pointer;
+    padding: 0;
 }
 
-.drag-drop-feedback-expand {
-    min-height: 30px;
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    background: transparent;
+.drag-drop-feedback-target-correct .drag-drop-feedback-expand {
+    color: var(--success-text);
+}
+
+.drag-drop-feedback-target-wrong .drag-drop-feedback-expand {
+    color: var(--danger-text);
+}
+
+.drag-drop-feedback-target-unanswered .drag-drop-feedback-expand {
     color: var(--text-muted);
-    cursor: pointer;
-    padding: 0 10px;
-    font-size: 0.8rem;
-    font-weight: 800;
 }
 
 .drag-drop-feedback-expand:hover,
 .drag-drop-feedback-expand:focus-visible {
-    border-color: var(--accent);
-    color: var(--accent);
+    background: color-mix(in srgb, currentColor 10%, transparent);
     outline: none;
 }
 
+.drag-drop-feedback-chevron {
+    width: 18px;
+    height: 18px;
+    transition: transform var(--transition-fast);
+}
+
+.drag-drop-feedback-chevron-open {
+    transform: rotate(180deg);
+}
+
 .drag-drop-feedback-extended-list {
-    margin: 10px 0 0;
-    border-top: 1px solid var(--line);
-    padding: 10px 0 0 18px;
+    margin: 0;
+    padding: 0 0 0 18px;
     color: var(--text-muted);
     font-size: 0.86rem;
     line-height: 1.55;
