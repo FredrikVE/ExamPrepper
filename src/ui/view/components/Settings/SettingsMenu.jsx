@@ -4,11 +4,13 @@ import { createPortal } from "react-dom";
 import { X, Globe, Moon, Shuffle, Sun } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { LANGUAGES, LANGUAGE_LABELS } from "../../../../i18n/translations.js";
+import { useSettings } from "../../../settings/SettingsContext.jsx";
 import { useTheme } from "../../../theme/ThemeContext.jsx";
 
-export default function SettingsMenu({ isOpen, onOpenChange, randomizeAnswerOptions, onToggleRandomizeAnswerOptions }) {
+export default function SettingsMenu({ isOpen, onOpenChange }) {
     const panelRef = useRef(null);
     const { language, setLanguage, t } = useLanguage();
+    const { randomizeAnswerOptions, toggleRandomizeAnswerOptions } = useSettings();
     const { isDark, toggleTheme } = useTheme();
 
     const closeMenu = useCallback(() => {
@@ -105,7 +107,7 @@ export default function SettingsMenu({ isOpen, onOpenChange, randomizeAnswerOpti
 
                         <SettingsToggle
                             checked={randomizeAnswerOptions}
-                            onToggle={onToggleRandomizeAnswerOptions}
+                            onToggle={toggleRandomizeAnswerOptions}
                             ariaLabel={t.settingsRandomizeAnswers}
                         />
                     </div>
