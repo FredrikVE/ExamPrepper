@@ -33,7 +33,10 @@ export default function ExamPage({ viewModel }) {
     }
 
     return (
-        <div className={workspaceClassName}>
+        <div
+            ref={viewModel.examWorkspaceRef}
+            className={workspaceClassName}
+        >
             <Header viewModel={viewModel} />
 
             <ExamProgress

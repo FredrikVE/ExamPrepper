@@ -1,5 +1,5 @@
 //src/ui/viewmodel/ExamPageViewModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import getAnsweredCountLabel from "../../utils/viewmodelutils/getAnsweredCountLabel.js";
 import getScoreLabel from "../../utils/viewmodelutils/getScoreLabel.js";
 import getQuestionProgressLabel from "../../utils/viewmodelutils/getQuestionProgressLabel.js";
@@ -18,6 +18,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 	const [expandedAnswerOptionByQuestionId, setExpandedAnswerOptionByQuestionId] = useState({});
+
+	const examWorkspaceRef = useRef(null);
 
 	//UseMemo for data
 	const result = useMemo(() => {
@@ -169,7 +171,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setElapsedSeconds(0);
 		setExpandedAnswerOptionByQuestionId({});
 
-		scrollExamWorkspaceToTop();
+		scrollExamWorkspaceToTop(examWorkspaceRef);
 	}, []);
 
 	const toggleShowAllFeedback = useCallback(() => {
@@ -274,6 +276,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 		expandedAnswerOptionIndex,
 
+		examWorkspaceRef,
+
 		canGoPrevious,
 		canGoNext,
 		previousQuestion,
@@ -291,14 +295,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	};
 }
 
-const scrollExamWorkspaceToTop = () => {
-	const workspace = document.querySelector(".exam-workspace");
-
-	if (!workspace) {
-		return;
-	}
-
-	workspace.scrollTo({
+const scrollExamWorkspaceToTop = (examWorkspaceRef) => {
+	examWorkspaceRef.current?.scrollTo({
 		top: 0,
 		behavior: "smooth"
 	});
