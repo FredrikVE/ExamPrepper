@@ -144,3 +144,20 @@
 .exam-workspace-scroll-footer-mode .exam-footer-container {
     padding-block: 10px;
 }
+
+/* ── Very short viewport fallback ─────────
+   Footeren skal ikke være sticky når høyden er for lav,
+   fordi den ellers legger seg oppå QuestionCard. */
+@media (max-height: 700px) and (min-width: 981px) {
+    .exam-footer {
+        position: relative;
+        bottom: auto;
+        z-index: 1;
+        margin-top: 12px;
+        margin-bottom: 16px;
+    }
+
+    .exam-footer-container {
+        padding: 8px 10px;
+    }
+}

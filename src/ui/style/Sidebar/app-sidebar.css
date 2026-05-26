@@ -74,3 +74,36 @@
         opacity: 1;
     }
 }
+
+
+/* ── Very short viewport fallback ─────────
+   Sidebaren må kunne scrolle når høyden blir veldig liten. */
+@media (max-height: 700px) and (min-width: 981px) {
+    .app-sidebar {
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+    }
+
+    .sidebar-brand-navigation-divider {
+        margin: 18px 0;
+    }
+
+    .app-sidebar-divider {
+        margin: 22px 0 14px;
+    }
+
+    .sidebar-navigation {
+        gap: 10px;
+    }
+
+    .sidebar-navigation-item,
+    .sidebar-settings-button {
+        min-height: 56px;
+    }
+
+    .sidebar-user-card {
+        margin-top: 24px;
+    }
+}

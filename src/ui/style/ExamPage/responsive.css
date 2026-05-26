@@ -179,3 +179,22 @@
         --exam-content-max-width: 980px;
     }
 }
+
+/* ── Very short viewport fallback ─────────
+   Når viewport-høyden blir ekstremt lav, må innholdet få vokse
+   naturlig i stedet for at footer/header presser QuestionCard. */
+@media (max-height: 700px) and (min-width: 981px) {
+    .exam-page-main {
+        flex: 0 0 auto;
+        padding: 10px 0 8px;
+    }
+
+    .exam-progress {
+        margin-bottom: 0;
+        padding-top: 0;
+    }
+
+    .exam-progress-track {
+        height: 30px;
+    }
+}
