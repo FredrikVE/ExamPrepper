@@ -1,5 +1,9 @@
 // src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionCard.jsx
-import { Check, CheckCircle2, ChevronDown, Info, X, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
+import AnswerOptionActions from "./AnswerOptionActions.jsx";
+import AnswerOptionExtendedPanel from "./AnswerOptionExtendedPanel.jsx";
+import AnswerOptionMarker from "./AnswerOptionMarker.jsx";
+import { getAnswerCardClassName, getExtendedExplanationPoints, getOptionLetter } from "../../../../../../utils/answerutils/answerOptionUtils/answerOptionCardUtils.js";
 
 export default function AnswerOptionCard({ questionId, option, index, isSelected, isExpanded, onToggleExpanded, t }) {
     const letter = getOptionLetter(index);
@@ -8,7 +12,6 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
         : t?.resultWrong ?? "Feil";
 
     const StatusIcon = option.correct ? CheckCircle2 : XCircle;
-    const SelectedIcon = option.correct ? Check : X;
 
     const extendedPoints = getExtendedExplanationPoints(option);
     const hasExtended = extendedPoints.length > 0;
@@ -22,30 +25,11 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
                 isSelected
             })}`}
         >
-            <div
-                className="question-card-answer-card-left"
-                aria-hidden="true"
-            >
-                <span className="question-card-answer-letter">
-                    {letter}.
-                </span>
-
-                <span
-                    className={`question-card-answer-marker ${
-                        isSelected
-                            ? "question-card-answer-marker-selected"
-                            : option.correct
-                                ? "question-card-answer-marker-correct"
-                                : "question-card-answer-marker-wrong"
-                    }`}
-                >
-                    {isSelected ? (
-                        <SelectedIcon className="question-card-answer-marker-icon" />
-                    ) : (
-                        <StatusIcon className="question-card-answer-marker-icon" />
-                    )}
-                </span>
-            </div>
+            <AnswerOptionMarker
+                letter={letter}
+                correct={option.correct}
+                isSelected={isSelected}
+            />
 
             <div className="question-card-answer-card-main">
                 <div className="question-card-answer-card-header">
@@ -62,7 +46,7 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
                     </div>
 
                     <AnswerOptionActions
-                        option={option}
+                        correct={option.correct}
                         statusText={statusText}
                         StatusIcon={StatusIcon}
                         hasExtended={hasExtended}
@@ -84,86 +68,3 @@ export default function AnswerOptionCard({ questionId, option, index, isSelected
         </article>
     );
 }
-
-function AnswerOptionActions({ option, statusText, StatusIcon, hasExtended, isExpanded, expandedId, onToggleExpanded, t }) {
-    return (
-        <div className="question-card-answer-card-actions">
-            <span
-                className={`question-card-answer-badge ${
-                    option.correct
-                        ? "question-card-answer-badge-correct"
-                        : "question-card-answer-badge-wrong"
-                }`}
-            >
-                <StatusIcon />
-                {statusText}
-            </span>
-
-            {hasExtended ? (
-                <button
-                    type="button"
-                    className="question-card-answer-expand-button"
-                    aria-expanded={isExpanded}
-                    aria-controls={expandedId}
-                    onClick={onToggleExpanded}
-                >
-                    {t?.feedbackExtendedLabel ?? "Utvidet forklaring"}
-
-                    <ChevronDown
-                        className={`question-card-answer-expand-icon ${
-                            isExpanded
-                                ? "question-card-answer-expand-icon-open"
-                                : ""
-                        }`}
-                    />
-                </button>
-            ) : null}
-        </div>
-    );
-}
-
-function AnswerOptionExtendedPanel({ expandedId, points, t }) {
-    return (
-        <div
-            id={expandedId}
-            className="question-card-answer-extended"
-        >
-            <div className="question-card-answer-extended-title-row">
-                <Info className="question-card-answer-extended-title-icon" />
-                <h5 className="question-card-answer-extended-title">
-                    {t?.feedbackExtendedLabel ?? "Utvidet forklaring"}
-                </h5>
-            </div>
-
-            <div className="question-card-answer-extended-divider" />
-
-            <ul className="question-card-answer-extended-list">
-                {points.map((point, pointIndex) => (
-                    <li key={pointIndex}>{point}</li>
-                ))}
-            </ul>
-        </div>
-    );
-}
-
-const getExtendedExplanationPoints = (option) => {
-    return Array.isArray(option?.whyExtended)
-        ? option.whyExtended
-        : [];
-};
-
-const getOptionLetter = (index) => {
-    return String.fromCharCode(65 + index);
-};
-
-const getAnswerCardClassName = ({ correct, isSelected }) => {
-    const statusClassName = correct
-        ? "question-card-answer-card-correct"
-        : "question-card-answer-card-wrong";
-
-    return `${statusClassName} ${
-        isSelected
-            ? "question-card-answer-card-selected"
-            : ""
-    }`;
-};
