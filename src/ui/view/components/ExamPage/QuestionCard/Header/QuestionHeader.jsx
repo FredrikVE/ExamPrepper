@@ -33,5 +33,6 @@ function getQuestionTypeLabel(type, t) {
     if (type === QUESTION_TYPES.FILL) return t.questionTypeFill;
     if (type === QUESTION_TYPES.MULTI) return t.questionTypeMulti;
     if (type === QUESTION_TYPES.DRAG_DROP) return t.questionTypeDragDrop;
+    if (type === QUESTION_TYPES.DRAG_CATEGORIZE) return t.questionTypeDragCategorize;
     return t.questionTypeSingle;
 }

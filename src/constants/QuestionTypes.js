@@ -3,5 +3,6 @@ export const QUESTION_TYPES = {
 	SINGLE: "single",
 	MULTI: "multi",
 	FILL: "fill",
-	DRAG_DROP: "dragDrop"
+	DRAG_DROP: "dragDrop",
+	DRAG_CATEGORIZE: "drag-categorize"
 };

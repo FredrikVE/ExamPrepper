@@ -1,0 +1,324 @@
+/* src/ui/style/QuestionCard/drag-categorize.css */
+.drag-categorize-question {
+    display: grid;
+    gap: 20px;
+}
+
+.drag-categorize-question .drag-drop-summary {
+    justify-self: end;
+}
+
+.drag-categorize-item-bank {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-strong) 78%, transparent);
+    padding: 16px;
+}
+
+.drag-categorize-item-bank-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.drag-categorize-item-bank-title {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 0.98rem;
+    font-weight: 950;
+}
+
+.drag-categorize-item-bank-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-soft);
+}
+
+.drag-categorize-item-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.drag-categorize-item-card,
+.drag-categorize-placed-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
+    color: var(--text-main);
+    cursor: grab;
+    padding: 0 12px;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 850;
+    line-height: 1.2;
+    transition:
+        border-color var(--transition-fast),
+        background var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.drag-categorize-item-card:hover,
+.drag-categorize-item-card:focus-visible,
+.drag-categorize-placed-card:hover,
+.drag-categorize-placed-card:focus-visible {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+    outline: none;
+}
+
+.drag-categorize-item-card:active,
+.drag-categorize-placed-card:active {
+    cursor: grabbing;
+}
+
+.drag-categorize-item-card-selected,
+.drag-categorize-placed-card-selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.drag-categorize-item-card-disabled {
+    cursor: default;
+}
+
+.drag-categorize-item-card-disabled:hover,
+.drag-categorize-item-card-disabled:focus-visible {
+    transform: none;
+    border-color: var(--line);
+    box-shadow: none;
+}
+
+.drag-categorize-item-card-grip,
+.drag-categorize-placed-card-grip {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    color: var(--text-soft);
+}
+
+.drag-categorize-item-bank-hint {
+    margin: 12px 0 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.drag-categorize-category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
+}
+
+.drag-categorize-category-column {
+    min-width: 0;
+    border-right: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+}
+
+.drag-categorize-category-column:last-child {
+    border-right: 0;
+}
+
+.drag-categorize-category-header {
+    display: grid;
+    min-height: 62px;
+    place-items: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    background: color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong));
+    color: var(--text-main);
+    padding: 12px 14px;
+    text-align: center;
+    font-size: 0.86rem;
+    font-weight: 950;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.drag-categorize-drop-zone {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    min-height: 210px;
+    padding: 14px;
+    cursor: pointer;
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.drag-categorize-drop-zone:focus-visible,
+.drag-categorize-drop-zone-over {
+    background: color-mix(in srgb, var(--accent-soft) 36%, transparent);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    outline: none;
+}
+
+.drag-categorize-placed-card {
+    position: relative;
+    min-height: 46px;
+    background: color-mix(in srgb, var(--panel-strong) 86%, transparent);
+}
+
+.drag-categorize-placed-card-remove {
+    display: inline-grid;
+    width: 26px;
+    height: 26px;
+    place-items: center;
+    flex: 0 0 auto;
+    margin-left: auto;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.drag-categorize-placed-card-remove:hover,
+.drag-categorize-placed-card-remove:focus-visible {
+    background: var(--danger-soft);
+    color: var(--danger-text);
+    outline: none;
+}
+
+.drag-categorize-placed-card-remove svg {
+    width: 16px;
+    height: 16px;
+}
+
+.drag-categorize-empty-slot {
+    display: grid;
+    min-height: 46px;
+    place-items: center;
+    border: 1px dashed color-mix(in srgb, var(--accent) 34%, var(--line));
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--accent-soft) 20%, transparent);
+    color: var(--text-soft);
+    font-size: 0.86rem;
+    font-weight: 850;
+}
+
+.drag-categorize-drop-zone:not(.drag-categorize-drop-zone-empty) .drag-categorize-empty-slot {
+    opacity: 0.85;
+}
+
+.drag-categorize-feedback-card {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
+}
+
+.drag-categorize-feedback-card-correct {
+    border-color: var(--success-border);
+    background: color-mix(in srgb, var(--success-soft) 62%, var(--panel-strong));
+}
+
+.drag-categorize-feedback-card-wrong {
+    border-color: var(--danger-border);
+    background: color-mix(in srgb, var(--danger-soft) 62%, var(--panel-strong));
+}
+
+.drag-categorize-feedback-main {
+    display: flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+}
+
+.drag-categorize-feedback-title-row,
+.drag-categorize-feedback-actions {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 8px;
+}
+
+.drag-categorize-feedback-title {
+    overflow-wrap: anywhere;
+    color: var(--text-main);
+    font-size: 0.88rem;
+    font-weight: 950;
+    line-height: 1.25;
+}
+
+.drag-categorize-feedback-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+}
+
+.drag-categorize-feedback-card-correct .drag-categorize-feedback-icon,
+.drag-categorize-feedback-card-correct .drag-categorize-feedback-status,
+.drag-categorize-feedback-card-correct .drag-drop-feedback-expand {
+    color: var(--success-text);
+}
+
+.drag-categorize-feedback-card-wrong .drag-categorize-feedback-icon,
+.drag-categorize-feedback-card-wrong .drag-categorize-feedback-status,
+.drag-categorize-feedback-card-wrong .drag-drop-feedback-expand {
+    color: var(--danger-text);
+}
+
+.drag-categorize-feedback-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 950;
+}
+
+@media (max-width: 1180px) {
+    .drag-categorize-item-list,
+    .drag-categorize-category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .drag-categorize-category-column:nth-child(2n) {
+        border-right: 0;
+    }
+
+    .drag-categorize-category-column:nth-child(-n + 2) {
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    }
+}
+
+@media (max-width: 760px) {
+    .drag-categorize-question .drag-drop-summary {
+        justify-self: stretch;
+    }
+
+    .drag-categorize-item-list,
+    .drag-categorize-category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .drag-categorize-category-column,
+    .drag-categorize-category-column:nth-child(2n) {
+        border-right: 0;
+    }
+
+    .drag-categorize-category-column,
+    .drag-categorize-category-column:nth-child(-n + 2) {
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    }
+
+    .drag-categorize-category-column:last-child {
+        border-bottom: 0;
+    }
+}

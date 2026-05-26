@@ -67,6 +67,7 @@ export const translations = {
         questionTypeMulti: "Flervalg",
         questionTypeSingle: "Ett riktig svar",
         questionTypeDragDrop: "Dra og slipp",
+        questionTypeDragCategorize: "Dra til kategori",
         questionInputPlaceholder: "Skriv begrep her...",
         questionAnswerLabel: "Ditt svar",
         questionInputRule: "Skriv kun ett begrep. Ingen mellomrom før eller etter.",
@@ -90,6 +91,12 @@ export const translations = {
         dragDropUnanswered: "Ubesvart",
         dragDropShowExplanation: "Vis forklaring",
         dragDropHideExplanation: "Skjul forklaring",
+
+        dragCategorizeItemBankTitle: "Svar-kort",
+        dragCategorizeItemBankHint: "Dra et kort til riktig kategori, eller klikk kortet og deretter kategorien.",
+        dragCategorizeFeedbackBankHint: "Kortene over viser oppgavens mulige svar.",
+        dragCategorizeDropHere: "Slipp her",
+        dragCategorizeRemoveAnswer: "Fjern svar",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Din besvarelse er riktig",
@@ -185,6 +192,7 @@ export const translations = {
         questionTypeMulti: "Multiple choice",
         questionTypeSingle: "Single answer",
         questionTypeDragDrop: "Drag and drop",
+        questionTypeDragCategorize: "Category sort",
         questionInputPlaceholder: "Type term here...",
         questionAnswerLabel: "Your answer",
         questionInputRule: "Write one term only. No leading or trailing spaces.",
@@ -208,6 +216,12 @@ export const translations = {
         dragDropUnanswered: "Unanswered",
         dragDropShowExplanation: "Show explanation",
         dragDropHideExplanation: "Hide explanation",
+
+        dragCategorizeItemBankTitle: "Answer cards",
+        dragCategorizeItemBankHint: "Drag a card into the correct category, or click a card and then click the category.",
+        dragCategorizeFeedbackBankHint: "The cards above show the possible answers for this task.",
+        dragCategorizeDropHere: "Drop here",
+        dragCategorizeRemoveAnswer: "Remove answer",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Your answer is correct",

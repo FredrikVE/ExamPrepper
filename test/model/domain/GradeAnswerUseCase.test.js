@@ -129,6 +129,65 @@ describe("GradeAnswerUseCase", () => {
         });
     });
 
+
+    describe("drag categorize", () => {
+        const question = {
+            type: QUESTION_TYPES.DRAG_CATEGORIZE,
+            points: 4,
+            items: [
+                { id: "business-case", label: "Business case" },
+                { id: "design-thinking", label: "Design thinking" },
+                { id: "it-governance", label: "IT governance" },
+                { id: "projects", label: "Projects" }
+            ],
+            categories: [
+                { id: "choice", label: "VALG" },
+                { id: "innovation", label: "UTFORSKNING" },
+                { id: "governance", label: "STYRING" },
+                { id: "organizing", label: "ORGANISERING" }
+            ],
+            correctAnswer: {
+                choice: ["business-case"],
+                innovation: ["design-thinking"],
+                governance: ["it-governance"],
+                organizing: ["projects"]
+            }
+        };
+
+        test("returns true only when all items are placed in the correct categories", () => {
+            expect(useCase.execute(question, {
+                choice: ["business-case"],
+                innovation: ["design-thinking"],
+                governance: ["it-governance"],
+                organizing: ["projects"]
+            })).toBe(true);
+
+            expect(useCase.execute(question, {
+                choice: ["business-case", "design-thinking"],
+                governance: ["it-governance"],
+                organizing: ["projects"]
+            })).toBe(false);
+        });
+
+        test("calculates partial score from correctly categorized items", () => {
+            expect(useCase.getQuestionScore(question, {
+                choice: ["business-case", "design-thinking"],
+                governance: ["it-governance"]
+            })).toBe(2);
+        });
+
+        test("returns drag categorize stats", () => {
+            expect(useCase.getDragCategorizeStats(question, {
+                choice: ["business-case", "design-thinking"],
+                governance: ["it-governance"]
+            })).toEqual({
+                correct: 2,
+                wrong: 1,
+                unanswered: 1
+            });
+        });
+    });
+
     test("returns false when question is missing", () => {
         expect(useCase.execute(null, 0)).toBe(false);
     });

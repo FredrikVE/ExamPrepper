@@ -26,6 +26,10 @@ export default class GradeAnswerUseCase {
             return this.#isDragDropAnswerFullyCorrect(question, answer);
         }
 
+        if (question.type === QUESTION_TYPES.DRAG_CATEGORIZE) {
+            return this.#isDragCategorizeAnswerFullyCorrect(question, answer);
+        }
+
         return false;
     }
 
@@ -36,6 +40,10 @@ export default class GradeAnswerUseCase {
 
         if (question.type === QUESTION_TYPES.DRAG_DROP) {
             return this.#getDragDropQuestionScore(question, answer);
+        }
+
+        if (question.type === QUESTION_TYPES.DRAG_CATEGORIZE) {
+            return this.#getDragCategorizeQuestionScore(question, answer);
         }
 
         return this.execute(question, answer) ? question.points : 0;
@@ -54,6 +62,28 @@ export default class GradeAnswerUseCase {
             }
 
             if (target.correctCardId === selectedCardId) {
+                stats.correct += 1;
+                return stats;
+            }
+
+            stats.wrong += 1;
+            return stats;
+        }, { correct: 0, wrong: 0, unanswered: 0 });
+    }
+
+    getDragCategorizeStats(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+        const safeAnswer = this.#normalizeCategoryAnswer(question, answer);
+
+        return items.reduce((stats, item) => {
+            const categoryId = this.#getPlacedCategoryId(safeAnswer, item.id);
+
+            if (!categoryId) {
+                stats.unanswered += 1;
+                return stats;
+            }
+
+            if (this.#isCategoryPlacementCorrect(question, categoryId, item.id)) {
                 stats.correct += 1;
                 return stats;
             }
@@ -114,6 +144,97 @@ export default class GradeAnswerUseCase {
 
         return Number(rawScore.toFixed(2));
     }
+
+    #isDragCategorizeAnswerFullyCorrect(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+        const safeAnswer = this.#normalizeCategoryAnswer(question, answer);
+
+        if (items.length === 0) {
+            return false;
+        }
+
+        return items.every((item) => {
+            const categoryId = this.#getPlacedCategoryId(safeAnswer, item.id);
+
+            return this.#isCategoryPlacementCorrect(question, categoryId, item.id);
+        });
+    }
+
+    #getDragCategorizeQuestionScore(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+
+        if (items.length === 0) {
+            return 0;
+        }
+
+        const stats = this.getDragCategorizeStats(question, answer);
+        const rawScore = question.points * (stats.correct / items.length);
+
+        return Number(rawScore.toFixed(2));
+    }
+
+    #normalizeCategoryAnswer(question, answer) {
+        const categories = Array.isArray(question?.categories) ? question.categories : [];
+        const safeAnswer = this.#isPlainObject(answer) ? answer : {};
+        const usedItemIds = new Set();
+        const normalizedAnswer = {};
+
+        for (const category of categories) {
+            const answerItemIds = Array.isArray(safeAnswer[category.id])
+                ? safeAnswer[category.id]
+                : [];
+
+            normalizedAnswer[category.id] = [];
+
+            for (const itemId of answerItemIds) {
+                if (!itemId || usedItemIds.has(itemId)) {
+                    continue;
+                }
+
+                normalizedAnswer[category.id].push(itemId);
+                usedItemIds.add(itemId);
+            }
+        }
+
+        return normalizedAnswer;
+    }
+
+    #getPlacedCategoryId(answer, itemId) {
+        for (const categoryId in answer) {
+            if (Array.isArray(answer[categoryId]) && answer[categoryId].includes(itemId)) {
+                return categoryId;
+            }
+        }
+
+        return null;
+    }
+
+    #getCorrectCategoryId(question, itemId) {
+        const correctAnswer = this.#isPlainObject(question?.correctAnswer)
+            ? question.correctAnswer
+            : {};
+
+        for (const categoryId in correctAnswer) {
+            const categoryItemIds = Array.isArray(correctAnswer[categoryId])
+                ? correctAnswer[categoryId]
+                : [];
+
+            if (categoryItemIds.includes(itemId)) {
+                return categoryId;
+            }
+        }
+
+        return null;
+    }
+
+    #isCategoryPlacementCorrect(question, categoryId, itemId) {
+        if (!categoryId || !itemId) {
+            return false;
+        }
+
+        return this.#getCorrectCategoryId(question, itemId) === categoryId;
+    }
+
 
     #getSortedSelectedIndexes(answer) {
         if (!Array.isArray(answer)) {

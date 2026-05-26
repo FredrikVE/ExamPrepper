@@ -8,6 +8,7 @@ import PromptSection from "./QuestionCard/Prompt/PromptSection.jsx";
 import QuestionFeedback from "./QuestionCard/Feedback/QuestionFeedback.jsx";
 import QuestionHeader from "./QuestionCard/Header/QuestionHeader.jsx";
 import DragDropQuestion from "./QuestionCard/DragDrop/DragDropQuestion/DragDropQuestion.jsx";
+import DragCategorizeQuestion from "./QuestionCard/DragDrop/DragCategorizeQuestion/DragCategorizeQuestion.jsx";
 
 
 export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
@@ -58,7 +59,18 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                     />
                 ) : null}
 
-                {viewState.shouldShowDragDrop ? (
+                {viewState.shouldShowDragCategorize ? (
+                    <DragCategorizeQuestion
+                        question={question}
+                        answer={answer}
+                        submitted={submitted}
+                        showAllFeedback={showAllFeedback}
+                        onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
+                ) : null}
+
+                {viewState.shouldShowDragDrop && !viewState.shouldShowDragCategorize ? (
                     <DragDropQuestion
                         question={question}
                         answer={answer}

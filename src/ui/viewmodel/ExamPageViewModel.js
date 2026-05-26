@@ -310,7 +310,7 @@ const isQuestionAnswered = (question, answer) => {
 		return Array.isArray(answer) && answer.length > 0;
 	}
 
-	if (question.type === QUESTION_TYPES.DRAG_DROP) {
+	if (question.type === QUESTION_TYPES.DRAG_DROP || question.type === QUESTION_TYPES.DRAG_CATEGORIZE) {
 		return Boolean(
 			answer &&
 			typeof answer === "object" &&

@@ -7,7 +7,11 @@ export function isFillQuestion(question) {
 }
 
 export function isDragDropQuestion(question) {
-    return question?.type === QUESTION_TYPES.DRAG_DROP;
+    return question?.type === QUESTION_TYPES.DRAG_DROP || question?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
+}
+
+export function isDragCategorizeQuestion(question) {
+    return question?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
 }
 
 export function getQuestionViewState({ question, submitted, showAllFeedback, correct }) {
@@ -22,6 +26,7 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
         shouldShowFillInput: fillQuestion && !inlineFillBlank,
         shouldShowOptions: !fillQuestion && !dragDropQuestion,
         shouldShowDragDrop: dragDropQuestion,
+        shouldShowDragCategorize: isDragCategorizeQuestion(question),
         shouldShowWarning: Boolean(submitted && !showAllFeedback && !correct),
         shouldShowFillFeedback: feedbackMode && fillQuestion,
         shouldShowSource: feedbackMode && !fillQuestion && Boolean(question?.source)
