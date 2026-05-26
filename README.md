@@ -241,141 +241,81 @@ Testene dekker blant annet:
 <table>
     <thead>
         <tr>
-            <th>ID</th>
             <th>Test-case</th>
             <th>Testbetingelse</th>
-            <th>Testdata / input</th>
-            <th>Forventet resultat</th>
             <th>Testfil</th>
-            <th>Risiko</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>UT-01</td>
             <td>Rette single choice-svar</td>
-            <td>Systemet skal avgjøre om valgt alternativ er korrekt</td>
-            <td>Spørsmål av typen <code>single</code> + valgt index</td>
-            <td>Returnerer <code>true</code> for riktig alternativ og <code>false</code> for feil alternativ</td>
+            <td>Systemet skal avgjøre om valgt alternativ er korrekt.</td>
             <td><code>GradeAnswerUseCase.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>UT-02</td>
             <td>Rette multiple choice-svar</td>
-            <td>Systemet skal håndtere flere riktige alternativer</td>
-            <td>Spørsmål av typen <code>multi</code> + liste med valgte indexer</td>
-            <td>Returnerer <code>true</code> bare når alle og kun riktige alternativer er valgt</td>
+            <td>Systemet skal håndtere flere riktige alternativer.</td>
             <td><code>GradeAnswerUseCase.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>UT-03</td>
             <td>Rette fill-in-svar</td>
-            <td>Systemet skal godta riktige tekstsvar og alternative svar</td>
-            <td>Spørsmål av typen <code>fill</code> + tekstinput</td>
-            <td>Returnerer <code>true</code> for godkjente svar og <code>false</code> for feil svar</td>
+            <td>Systemet skal godta riktige tekstsvar og alternative svar.</td>
             <td><code>GradeAnswerUseCase.test.js</code> / <code>answerUtils.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>UT-04</td>
             <td>Beregne eksamensscore</td>
-            <td>Systemet skal beregne poengsum og prosent etter levering</td>
-            <td>Liste med spørsmål + brukerens svar</td>
-            <td>Returnerer korrekt <code>score</code>, <code>totalPoints</code> og <code>percentage</code></td>
+            <td>Systemet skal beregne poengsum og prosent etter levering.</td>
             <td><code>CalculateExamScoreUseCase.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>UT-05</td>
             <td>Hente tilgjengelige fag</td>
-            <td>Systemet skal vise fag som kan velges i appen</td>
-            <td><code>{ language: "no" }</code></td>
-            <td>Returnerer fagliste med riktige fag, synlighet og eksamensteller</td>
+            <td>Systemet skal vise fag som kan velges i appen.</td>
             <td><code>GetAvailableSubjectsUseCase.test.js</code></td>
-            <td>Alvorlig</td>
         </tr>
         <tr>
-            <td>UT-06</td>
             <td>Hente fag basert på ID</td>
-            <td>Systemet skal finne riktig fag når <code>subjectId</code> er valgt</td>
-            <td><code>{ subjectId: "in5431", language: "en" }</code></td>
-            <td>Returnerer riktig fag med kode, navn og <code>examCount</code></td>
+            <td>Systemet skal finne riktig fag når <code>subjectId</code> er valgt.</td>
             <td><code>GetSubjectByIdUseCase.test.js</code></td>
-            <td>Alvorlig</td>
         </tr>
         <tr>
-            <td>UT-07</td>
             <td>Hente tilgjengelige eksamener for fag og språk</td>
-            <td>Systemet skal vise riktige eksamener for valgt fag og språk</td>
-            <td><code>{ subjectId: "in5431", language: "no" }</code></td>
-            <td>Returnerer riktige eksamener med riktig <code>id</code>, <code>lang</code> og spørsmålsteller</td>
+            <td>Systemet skal vise riktige eksamener for valgt fag og språk.</td>
             <td><code>GetAvailableExamsUseCase.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>UT-08</td>
             <td>Hente spørsmål for valgt eksamen</td>
-            <td>Systemet skal laste spørsmålene til valgt eksamen</td>
-            <td><code>examId: "mock-exam-1-no"</code></td>
-            <td>Returnerer riktig antall spørsmål og riktige spørsmålstyper</td>
+            <td>Systemet skal laste spørsmålene til valgt eksamen.</td>
             <td><code>GetExamQuestionsUseCase.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>UT-09</td>
             <td>Hente språkversjon av samme eksamen</td>
-            <td>Systemet skal kunne finne eksamen basert på <code>baseId</code> og <code>lang</code></td>
-            <td><code>{ baseId: "mock-exam-1", lang: "en" }</code></td>
-            <td>Returnerer eksamen med riktig <code>id</code>, samme <code>baseId</code> og riktig <code>lang</code></td>
+            <td>Systemet skal finne eksamen basert på <code>baseId</code> og <code>lang</code>.</td>
             <td><code>GetExamByBaseIdAndLangUseCase.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>UT-10</td>
-            <td>Repository returnerer riktige eksamensdata</td>
-            <td>Repository-laget skal hente eksamener og spørsmål fra datagrunnlaget</td>
-            <td>Eksisterende og ikke-eksisterende <code>examId</code>, <code>baseId</code>, <code>lang</code></td>
-            <td>Returnerer riktig eksamen/spørsmål, eller <code>null</code>/tom liste når data mangler</td>
+            <td>Teste repository for eksamensdata</td>
+            <td>Repository-laget skal hente eksamener og spørsmål fra datagrunnlaget.</td>
             <td><code>ExamRepository.test.js</code></td>
-            <td>Alvorlig</td>
         </tr>
         <tr>
-            <td>UT-11</td>
-            <td>Repository returnerer riktige fagdata</td>
-            <td>Repository-laget skal hente fag og fagmetadata fra datagrunnlaget</td>
-            <td>Eksisterende og ikke-eksisterende <code>subjectId</code></td>
-            <td>Returnerer riktig fag eller <code>null</code> når fag ikke finnes</td>
+            <td>Teste repository for fagdata</td>
+            <td>Repository-laget skal hente fag og fagmetadata fra datagrunnlaget.</td>
             <td><code>SubjectRepository.test.js</code></td>
-            <td>Alvorlig</td>
         </tr>
         <tr>
-            <td>UT-12</td>
-            <td>Hjelpefunksjoner for svarlogikk</td>
-            <td>Utils skal tolke og normalisere svar likt på tvers av appen</td>
-            <td>Tekstsvar, valgt index, valgte alternativer</td>
-            <td>Returnerer riktig normalisert svar og riktig vurderingsgrunnlag</td>
+            <td>Teste hjelpefunksjoner for svarlogikk</td>
+            <td>Utils skal tolke og normalisere svar likt på tvers av appen.</td>
             <td><code>answerUtils.test.js</code></td>
-            <td>Alvorlig</td>
         </tr>
         <tr>
-            <td>UT-13</td>
-            <td>Hjelpefunksjoner for spørsmål</td>
-            <td>Utils skal gi riktig presentasjonsdata for spørsmål</td>
-            <td>Spørsmålsobjekter med ulike typer</td>
-            <td>Returnerer riktige labels, verdier og visningsdata</td>
+            <td>Teste hjelpefunksjoner for spørsmål</td>
+            <td>Utils skal gi riktig presentasjonsdata for spørsmål.</td>
             <td><code>questionUtils.test.js</code></td>
-            <td>Moderat</td>
         </tr>
         <tr>
-            <td>UT-14</td>
-            <td>Hjelpefunksjoner for ViewModel-visning</td>
-            <td>Utils skal gi riktig UI-status basert på state</td>
-            <td>Svarstatus, submitted-status og spørsmålsdata</td>
-            <td>Returnerer riktige statusverdier og visningsflagg</td>
+            <td>Teste hjelpefunksjoner for ViewModel-visning</td>
+            <td>Utils skal gi riktig UI-status basert på state.</td>
             <td><code>viewModelUtils.test.js</code></td>
-            <td>Moderat</td>
         </tr>
     </tbody>
 </table>
@@ -385,69 +325,41 @@ Testene dekker blant annet:
 <table>
     <thead>
         <tr>
-            <th>ID</th>
             <th>Test-case</th>
             <th>Testbetingelse</th>
-            <th>Testdata / input</th>
-            <th>Forventet resultat</th>
             <th>Testfil</th>
-            <th>Risiko</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>IT-01</td>
             <td>Laste synlige fag med eksamensteller</td>
-            <td>Appen skal kunne hente fag fra ekte datagrunnlag</td>
-            <td><code>{ language: "no" }</code></td>
-            <td>Returnerer fagliste der <code>IN5431</code> har <code>examCount: 3</code>, og fag uten eksamener fortsatt vises riktig</td>
+            <td>Appen skal kunne hente fag fra ekte datagrunnlag.</td>
             <td><code>examFlow.integration.test.js</code></td>
-            <td>Alvorlig</td>
         </tr>
         <tr>
-            <td>IT-02</td>
             <td>Laste norske eksamener for IN5431</td>
-            <td>Appen skal hente riktige eksamener for valgt fag og språk</td>
-            <td><code>{ subjectId: "in5431", language: "no" }</code></td>
-            <td>Returnerer <code>mock-exam-1-no</code>, <code>mock-exam-2-no</code> og <code>mock-exam-3-no</code></td>
+            <td>Appen skal hente riktige eksamener for valgt fag og språk.</td>
             <td><code>examFlow.integration.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>IT-03</td>
             <td>Laste spørsmål og beregne full score</td>
-            <td>Appen skal kunne hente spørsmål og beregne resultat når alle svar er riktige</td>
-            <td><code>examId: "mock-exam-1-no"</code> + korrekte svar</td>
-            <td>Returnerer <code>score: 25</code>, <code>totalPoints: 25</code>, <code>percentage: 100</code></td>
+            <td>Appen skal kunne hente spørsmål og beregne resultat når alle svar er riktige.</td>
             <td><code>examFlow.integration.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>IT-04</td>
             <td>Rette faktiske spørsmål fra eksamensdata</td>
-            <td>Retting skal fungere med ekte <code>single</code>, <code>multi</code> og <code>fill</code>-spørsmål</td>
-            <td>Spørsmål fra <code>mock-exam-1-en</code></td>
-            <td><code>GradeAnswerUseCase</code> returnerer <code>true</code> for korrekte svar fra data</td>
+            <td>Retting skal fungere med ekte <code>single</code>, <code>multi</code> og <code>fill</code>-spørsmål.</td>
             <td><code>examFlow.integration.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>IT-05</td>
             <td>Finne oversatt eksamen basert på <code>baseId</code> og <code>lang</code></td>
-            <td>Språkbytte skal finne riktig språkversjon av samme eksamen</td>
-            <td><code>{ baseId: "mock-exam-1", lang: "en" }</code></td>
-            <td>Returnerer eksamen med <code>id: "mock-exam-1-en"</code>, <code>baseId: "mock-exam-1"</code> og <code>lang: "en"</code></td>
+            <td>Språkbytte skal finne riktig språkversjon av samme eksamen.</td>
             <td><code>examFlow.integration.test.js</code></td>
-            <td>Svært alvorlig</td>
         </tr>
         <tr>
-            <td>IT-06</td>
             <td>Finne fag med eksamensteller</td>
-            <td>Appen skal hente valgt fag og beregne antall tilgjengelige eksamener</td>
-            <td><code>{ subjectId: "in5431", language: "en" }</code></td>
-            <td>Returnerer <code>IN5431</code> med <code>examCount: 3</code></td>
+            <td>Appen skal hente valgt fag og beregne antall tilgjengelige eksamener.</td>
             <td><code>examFlow.integration.test.js</code></td>
-            <td>Alvorlig</td>
         </tr>
     </tbody>
 </table>
