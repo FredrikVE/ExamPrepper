@@ -7,7 +7,9 @@ import OptionList from "./QuestionCard/Options/OptionList.jsx";
 import PromptSection from "./QuestionCard/Prompt/PromptSection.jsx";
 import QuestionFeedback from "./QuestionCard/Feedback/QuestionFeedback.jsx";
 import QuestionHeader from "./QuestionCard/Header/QuestionHeader.jsx";
-import DragDropQuestion from "./QuestionCard/DragDrop/DragDropQuestion.jsx";
+//import DragDropQuestion from "./QuestionCard/DragDrop/DragDropQuestion.jsx";
+import DragDropQuestion from "./QuestionCard/DragDrop/DragDropQuestion/DragDropQuestion.jsx";
+
 
 export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
