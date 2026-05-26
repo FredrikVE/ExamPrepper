@@ -5,12 +5,19 @@ import ExamProgress from "../components/ExamPage/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
+import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
 
 export default function ExamPage({ viewModel }) {
     const { t } = useLanguage();
 
     const activeOptionCount = viewModel.currentQuestion?.options?.length ?? 0;
-    const shouldUseScrollFooter = !viewModel.submitted && activeOptionCount >= 6;
+    const activeDragDropTargetCount = viewModel.currentQuestion?.targets?.length ?? 0;
+    const isDragDropQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.DRAG_DROP;
+    const shouldUseScrollFooter = !viewModel.submitted && (
+        activeOptionCount >= 6 ||
+        isDragDropQuestion ||
+        activeDragDropTargetCount >= 5
+    );
 
     const workspaceClassName = [
         "exam-workspace",
