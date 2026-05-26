@@ -8,6 +8,9 @@ import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel }) {
     const { t } = useLanguage();
+    const workspaceClassName = viewModel.submitted
+        ? "exam-workspace exam-workspace-feedback-mode"
+        : "exam-workspace";
 
     if (viewModel.loading) {
         return (
@@ -30,7 +33,7 @@ export default function ExamPage({ viewModel }) {
     }
 
     return (
-        <div className="exam-workspace">
+        <div className={workspaceClassName}>
             <Header viewModel={viewModel} />
 
             <ExamProgress

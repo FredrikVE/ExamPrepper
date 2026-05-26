@@ -1,10 +1,14 @@
 //src/model/domain/GetExamByBaseIdAndLangUseCase.js
 export default class GetExamByBaseIdAndLangUseCase {
-    constructor(repository) {
-        this.repository = repository;
-    }
+	constructor(examRepository) {
+		this.examRepository = examRepository;
+	}
 
-    execute(baseId, lang) {
-        return this.repository.getExamByBaseIdAndLang(baseId, lang);
-    }
+	execute(baseId, language) {
+		if (!baseId || !language) {
+			return null;
+		}
+
+		return this.examRepository.getExamByBaseIdAndLang(baseId, language);
+	}
 }

@@ -169,10 +169,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setElapsedSeconds(0);
 		setExpandedAnswerOptionByQuestionId({});
 
-		window.scrollTo({
-			top: 0,
-			behavior: "smooth"
-		});
+		scrollExamWorkspaceToTop();
 	}, []);
 
 	const toggleShowAllFeedback = useCallback(() => {
@@ -293,6 +290,19 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		isAnswerCorrect
 	};
 }
+
+const scrollExamWorkspaceToTop = () => {
+	const workspace = document.querySelector(".exam-workspace");
+
+	if (!workspace) {
+		return;
+	}
+
+	workspace.scrollTo({
+		top: 0,
+		behavior: "smooth"
+	});
+};
 
 const formatElapsedTime = (seconds) => {
 	const safeSeconds = Math.max(seconds, 0);

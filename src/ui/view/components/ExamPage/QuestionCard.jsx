@@ -18,8 +18,12 @@ export default function QuestionCard({ question, answer, submitted, showAllFeedb
         correct
     });
 
+    const cardClassName = viewState.feedbackMode
+        ? "question-card question-card-feedback-mode"
+        : "question-card";
+
     return (
-        <section className="question-card">
+        <section className={cardClassName}>
             <QuestionHeader
                 question={question}
                 submitted={submitted}

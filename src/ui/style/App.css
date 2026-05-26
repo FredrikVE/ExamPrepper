@@ -3,7 +3,6 @@
 /* Global */
 @import "./Tokens.css";
 @import "./Global.css";
-@import "./Responsive.css";
 
 /* Pages */
 @import "./SubjectSelectPage/index.css";
