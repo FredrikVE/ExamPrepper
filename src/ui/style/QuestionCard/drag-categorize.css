@@ -1,0 +1,533 @@
+/* src/ui/style/QuestionCard/drag-categorize.css */
+.drag-categorize-question {
+    display: grid;
+    gap: 16px;
+}
+
+.drag-categorize-question .drag-drop-summary {
+    justify-self: end;
+}
+
+.drag-categorize-item-bank {
+    --drag-categorize-bank-card-min-width: 180px;
+    --drag-categorize-bank-card-max-width: 360px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-strong) 76%, transparent);
+    box-shadow: 0 10px 28px rgba(18, 38, 63, 0.04);
+    padding: 14px 16px;
+}
+
+.drag-categorize-item-bank-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.drag-categorize-item-bank-title {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 0.98rem;
+    font-weight: 950;
+}
+
+.drag-categorize-item-bank-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-soft);
+}
+
+.drag-categorize-item-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.drag-categorize-item-card,
+.drag-categorize-placed-card {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 50px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-strong) 94%, transparent);
+    color: var(--text-main);
+    cursor: grab;
+    box-shadow: 0 8px 18px rgba(18, 38, 63, 0.06);
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.84rem;
+    font-weight: 850;
+    line-height: 1.22;
+    transition:
+        border-color var(--transition-fast),
+        background var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.drag-categorize-item-card > span,
+.drag-categorize-placed-card > span {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+    text-wrap: pretty;
+}
+
+.drag-categorize-item-card {
+    inline-size: fit-content;
+    min-inline-size: min(100%, var(--drag-categorize-bank-card-min-width));
+    max-inline-size: min(100%, var(--drag-categorize-bank-card-max-width));
+    flex: 0 1 auto;
+}
+
+.drag-categorize-item-card-short {
+    --drag-categorize-bank-card-min-width: 170px;
+    --drag-categorize-bank-card-max-width: 240px;
+}
+
+.drag-categorize-item-card-medium {
+    --drag-categorize-bank-card-min-width: 210px;
+    --drag-categorize-bank-card-max-width: 340px;
+}
+
+.drag-categorize-item-card-long {
+    --drag-categorize-bank-card-min-width: 260px;
+    --drag-categorize-bank-card-max-width: 480px;
+}
+
+.drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-min-width: 300px;
+    --drag-categorize-bank-card-max-width: 560px;
+}
+
+.drag-categorize-item-card:hover,
+.drag-categorize-item-card:focus-visible,
+.drag-categorize-placed-card:hover,
+.drag-categorize-placed-card:focus-visible {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+    outline: none;
+}
+
+.drag-categorize-item-card:active,
+.drag-categorize-placed-card:active {
+    cursor: grabbing;
+}
+
+.drag-categorize-item-card-selected,
+.drag-categorize-placed-card-selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.drag-categorize-item-card-disabled {
+    cursor: default;
+}
+
+.drag-categorize-item-card-disabled:hover,
+.drag-categorize-item-card-disabled:focus-visible {
+    transform: none;
+    border-color: var(--line);
+    box-shadow: none;
+}
+
+.drag-categorize-item-card-grip,
+.drag-categorize-placed-card-grip {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    color: var(--text-soft);
+}
+
+.drag-categorize-placed-card-grip {
+    margin-top: 2px;
+}
+
+.drag-categorize-item-bank-hint {
+    margin: 12px 0 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.drag-categorize-category-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        var(--drag-categorize-category-count, 4),
+        minmax(var(--drag-categorize-category-min-width, 190px), 1fr)
+    );
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
+    --drag-categorize-placed-font-size: 0.8rem;
+    --drag-categorize-placed-line-height: 1.22;
+    --drag-categorize-placed-padding: 10px 34px 10px 10px;
+    --drag-categorize-placed-gap: 8px;
+    --drag-categorize-placed-grip-width: 16px;
+}
+
+.drag-categorize-category-column {
+    min-width: 0;
+    border-right: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+}
+
+.drag-categorize-category-column:last-child {
+    border-right: 0;
+}
+
+.drag-categorize-category-header {
+    display: grid;
+    min-height: 56px;
+    place-items: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    background:
+        linear-gradient(180deg,
+        color-mix(in srgb, var(--accent) 8%, var(--panel-strong)),
+        color-mix(in srgb, var(--accent) 5%, var(--panel-bg)));
+    color: var(--text-main);
+    padding: 12px 14px;
+    text-align: center;
+    font-size: 0.86rem;
+    font-weight: 950;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+    text-wrap: balance;
+}
+
+.dark .drag-categorize-category-header {
+    background:
+        linear-gradient(180deg,
+        color-mix(in srgb, var(--accent) 16%, var(--panel-strong)),
+        color-mix(in srgb, var(--accent) 10%, var(--panel-bg)));
+}
+
+.drag-categorize-drop-zone {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    min-height: 138px;
+    padding: 12px 14px 14px;
+    cursor: pointer;
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.drag-categorize-drop-zone:focus-visible,
+.drag-categorize-drop-zone-over {
+    background: color-mix(in srgb, var(--accent-soft) 36%, transparent);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    outline: none;
+}
+
+.drag-categorize-placed-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--drag-categorize-placed-grip-width) minmax(0, 1fr);
+    align-items: start;
+    min-height: 56px;
+    gap: var(--drag-categorize-placed-gap);
+    background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
+    box-shadow: 0 8px 18px rgba(18, 38, 63, 0.05);
+    padding: var(--drag-categorize-placed-padding);
+    font-size: var(--drag-categorize-placed-font-size);
+    line-height: var(--drag-categorize-placed-line-height);
+}
+
+.drag-categorize-placed-card-remove {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    display: inline-grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.drag-categorize-placed-card-remove:hover,
+.drag-categorize-placed-card-remove:focus-visible {
+    background: var(--danger-soft);
+    color: var(--danger-text);
+    outline: none;
+}
+
+.drag-categorize-placed-card-remove svg {
+    width: 16px;
+    height: 16px;
+}
+
+.drag-categorize-empty-slot {
+    display: grid;
+    min-height: 46px;
+    place-items: center;
+    border: 1px dashed color-mix(in srgb, var(--accent) 34%, var(--line));
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-bg) 72%, transparent);
+    color: var(--text-soft);
+    font-size: 0.86rem;
+    font-weight: 850;
+}
+
+.drag-categorize-drop-zone:not(.drag-categorize-drop-zone-empty) .drag-categorize-empty-slot {
+    min-height: 42px;
+    opacity: 0.72;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-long {
+    --drag-categorize-bank-card-max-width: 520px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-max-width: 620px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-category-grid {
+    --drag-categorize-category-min-width: 220px;
+    --drag-categorize-placed-font-size: clamp(0.68rem, 0.62rem + 0.22vw, 0.76rem);
+    --drag-categorize-placed-line-height: 1.14;
+    --drag-categorize-placed-padding: 9px 30px 9px 8px;
+    --drag-categorize-placed-gap: 6px;
+    --drag-categorize-placed-grip-width: 14px;
+}
+
+.exam-workspace-extra-wide-question-mode .drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-max-width: 660px;
+}
+
+.exam-workspace-extra-wide-question-mode .drag-categorize-category-grid {
+    --drag-categorize-category-min-width: 240px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-category-header {
+    min-height: 52px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    line-height: 1.13;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-drop-zone {
+    gap: 9px;
+    padding: 10px 12px 12px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card {
+    min-height: 48px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-grip {
+    width: 15px;
+    height: 15px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-remove {
+    right: 5px;
+    width: 21px;
+    height: 21px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-remove svg {
+    width: 14px;
+    height: 14px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-empty-slot {
+    min-height: 42px;
+    font-size: 0.8rem;
+}
+
+.drag-categorize-question-feedback .drag-categorize-item-bank {
+    padding: 14px 16px;
+}
+
+.drag-categorize-item-bank-feedback .drag-categorize-feedback-card {
+    flex: 0 1 auto;
+    inline-size: fit-content;
+    min-inline-size: min(100%, 240px);
+    max-inline-size: min(100%, 520px);
+}
+
+.drag-categorize-item-bank-feedback .drag-categorize-feedback-title {
+    max-inline-size: 46ch;
+}
+
+.drag-categorize-empty-slot-feedback {
+    border-color: color-mix(in srgb, var(--danger) 22%, var(--line));
+    background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+    color: var(--text-soft);
+    font-style: italic;
+}
+
+.drag-categorize-question-feedback .drag-categorize-drop-zone {
+    min-height: 130px;
+}
+
+.drag-categorize-feedback-card {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
+}
+
+.drag-categorize-feedback-card-correct {
+    border-color: var(--success-border);
+    background: color-mix(in srgb, var(--success-soft) 62%, var(--panel-strong));
+}
+
+.drag-categorize-feedback-card-wrong {
+    border-color: var(--danger-border);
+    background: color-mix(in srgb, var(--danger-soft) 62%, var(--panel-strong));
+}
+
+.drag-categorize-feedback-main {
+    display: grid;
+    min-height: 52px;
+    gap: 8px;
+    padding: 10px 12px;
+}
+
+.drag-categorize-feedback-title-row,
+.drag-categorize-feedback-actions {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 8px;
+}
+
+.drag-categorize-feedback-title-row {
+    align-items: flex-start;
+}
+
+.drag-categorize-feedback-actions {
+    justify-content: center;
+    padding-top: 6px;
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.drag-categorize-feedback-title {
+    overflow-wrap: anywhere;
+    color: var(--text-main);
+    font-size: 0.88rem;
+    font-weight: 950;
+    line-height: 1.25;
+}
+
+.drag-categorize-feedback-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+}
+
+.drag-categorize-feedback-card-correct .drag-categorize-feedback-icon,
+.drag-categorize-feedback-card-correct .drag-categorize-feedback-status,
+.drag-categorize-feedback-card-correct .drag-drop-feedback-expand {
+    color: var(--success-text);
+}
+
+.drag-categorize-feedback-card-wrong .drag-categorize-feedback-icon,
+.drag-categorize-feedback-card-wrong .drag-categorize-feedback-status,
+.drag-categorize-feedback-card-wrong .drag-drop-feedback-expand {
+    color: var(--danger-text);
+}
+
+.drag-categorize-feedback-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 950;
+}
+
+@media (max-width: 1600px) {
+    .drag-categorize-category-grid-transposable {
+        display: block;
+        overflow-x: visible;
+        overflow-y: visible;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-column {
+        display: grid;
+        grid-template-columns: minmax(170px, 230px) minmax(0, 1fr);
+        border-right: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-column:last-child {
+        border-bottom: 0;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-header {
+        min-height: 100%;
+        border-right: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+        border-bottom: 0;
+        padding: 14px 12px;
+        font-size: 0.78rem;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-drop-zone {
+        min-height: 78px;
+        padding: 12px 14px;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-drop-zone-empty {
+        align-content: center;
+    }
+}
+
+@media (max-width: 880px) {
+    .drag-categorize-category-grid-transposable .drag-categorize-category-column {
+        display: block;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-header {
+        min-height: 48px;
+        border-right: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-drop-zone {
+        min-height: 96px;
+    }
+}
+
+@media (max-width: 1180px) {
+    .drag-categorize-item-card-long,
+    .drag-categorize-item-card-extra-long {
+        --drag-categorize-bank-card-max-width: 420px;
+    }
+}
+
+@media (max-width: 760px) {
+    .drag-categorize-question .drag-drop-summary {
+        justify-self: stretch;
+    }
+
+    .drag-categorize-item-card,
+    .drag-categorize-item-bank-feedback .drag-categorize-feedback-card {
+        inline-size: 100%;
+        max-inline-size: 100%;
+    }
+}

@@ -1242,5 +1242,102 @@ export const mockExam4_en = {
         }
       ]
     }
+
+    ,{
+      id: 26,
+      type: "dragDrop",
+      title: "IT Governance matrix",
+      points: 3,
+      prompt: "Drag each IT governance archetype into the most fitting description.",
+      source: "Source: Lecture 6, CIO Toolbox 4, slides on six archetypal approaches and the governance matrix; Weill & Ross (2004).",
+      cards: [
+        { id: "business-monarchy", text: "Business Monarchy" },
+        { id: "it-monarchy", text: "IT Monarchy" },
+        { id: "federal", text: "Federal" },
+        { id: "duopoly", text: "Duopoly" },
+        { id: "feudal", text: "Feudal" },
+        { id: "anarchy", text: "Anarchy" }
+      ],
+      targets: [
+        {
+          id: "business-monarchy",
+          description: "Top business executives make IT decisions",
+          correctCardId: "business-monarchy",
+          correctLabel: "Business Monarchy",
+          whyCorrect: "Business monarchy means that senior business executives make the decision for the enterprise.",
+          whyWrong: "This row describes business monarchy, because authority sits with top business executives rather than IT leaders, business units or individual users.",
+          whyExtended: [
+            "The key cue is 'top business executives'.",
+            "The CIO may be involved, but the archetype is still business-led rather than IT-led.",
+            "In the governance matrix this describes who decides within a given IT decision domain."
+          ]
+        },
+        {
+          id: "it-monarchy",
+          description: "IT leaders make the decisions",
+          correctCardId: "it-monarchy",
+          correctLabel: "IT Monarchy",
+          whyCorrect: "IT monarchy means that one IT leader or a group of IT leaders make the decision.",
+          whyWrong: "This row describes IT monarchy, because the decision rights are placed with IT leaders, not with business executives or local business units.",
+          whyExtended: [
+            "The key cue is 'IT leaders'.",
+            "This differs from business monarchy, where top business executives make the decisions.",
+            "It also differs from duopoly, where IT shares authority with business representatives."
+          ]
+        },
+        {
+          id: "feudal",
+          description: "Business units decide independently",
+          correctCardId: "feudal",
+          correctLabel: "Feudal",
+          whyCorrect: "Feudal governance means that business unit or process leaders make separate decisions based on their own unit's needs.",
+          whyWrong: "This row describes a feudal model: local business units decide separately and independently.",
+          whyExtended: [
+            "The key cue is 'business units decide independently'.",
+            "Feudal governance is decentralized, but it is decentralized to business units or processes.",
+            "This differs from anarchy, where individual users or small groups follow their own IT agenda."
+          ]
+        },
+        {
+          id: "duopoly",
+          description: "IT and business representatives decide together",
+          correctCardId: "duopoly",
+          correctLabel: "Duopoly",
+          whyCorrect: "IT duopoly means that IT leaders and business representatives share decision authority.",
+          whyWrong: "This row describes duopoly, because decision-making is shared specifically between IT and business representatives.",
+          whyExtended: [
+            "The key cue is the two-party structure: IT + business.",
+            "Duopoly is not the same as federal: federal combines corporate-level leadership and business units more broadly.",
+            "Duopoly is useful when decisions require both technical expertise and business ownership."
+          ]
+        },
+        {
+          id: "anarchy",
+          description: "Each individual user follows their own IT agenda",
+          correctCardId: "anarchy",
+          correctLabel: "Anarchy",
+          whyCorrect: "Anarchy is the most decentralized archetype: individual users or small groups pursue their own IT agenda.",
+          whyWrong: "This row describes anarchy, because the decision rights are not assigned to executives, IT leaders or business units, but effectively to individual users.",
+          whyExtended: [
+            "The key cue is 'each individual user'.",
+            "Anarchy can increase local freedom, but usually creates problems with standardization, integration and security.",
+            "It is the opposite extreme of monarchy-style centralized decision-making."
+          ]
+        },
+        {
+          id: "federal",
+          description: "Central and local actors share decision authority",
+          correctCardId: "federal",
+          correctLabel: "Federal",
+          whyCorrect: "Federal governance combines central/corporate actors with representatives from business units.",
+          whyWrong: "This row describes a federal model, because it mixes central authority with local business-unit representation.",
+          whyExtended: [
+            "The key cue is the combination of central and local actors.",
+            "The lecture compares this to a federal political system with central and local levels.",
+            "Federal governance tries to balance enterprise-wide coordination with local knowledge."
+          ]
+        }
+      ]
+    }
   ]
 };

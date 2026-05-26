@@ -18,11 +18,7 @@ const ExamProgressPointIcon = ({ isFlag }) => {
     return <span className="exam-progress-dot" />;
 };
 
-const ExamProgressPoint = ({
-    point,
-    currentQuestionNumber,
-    onGoToQuestion
-}) => {
+const ExamProgressPoint = ({ point, currentQuestionNumber, onGoToQuestion }) => {
     const isActive = currentQuestionNumber >= point.question;
 
     return (
@@ -38,11 +34,7 @@ const ExamProgressPoint = ({
     );
 };
 
-export default function ExamProgress({
-    visibleQuestions,
-    currentQuestionIndex,
-    onGoToQuestion
-}) {
+export default function ExamProgress({ visibleQuestions, currentQuestionIndex, onGoToQuestion }) {
     const total = Math.max(visibleQuestions.length, 1);
     const currentQuestionNumber = Math.min(currentQuestionIndex + 1, total);
 

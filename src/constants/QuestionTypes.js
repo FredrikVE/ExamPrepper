@@ -2,5 +2,7 @@
 export const QUESTION_TYPES = {
 	SINGLE: "single",
 	MULTI: "multi",
-	FILL: "fill"
+	FILL: "fill",
+	DRAG_DROP: "dragDrop",
+	DRAG_CATEGORIZE: "drag-categorize"
 };
