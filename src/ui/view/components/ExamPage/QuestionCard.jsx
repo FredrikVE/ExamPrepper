@@ -1,14 +1,16 @@
 // src/ui/view/components/ExamPage/QuestionCard.jsx
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { getQuestionViewState } from "../../../../utils/questionutils/questionViewStateUtils.js";
+import { QUESTION_TYPES } from "../../../../constants/QuestionTypes.js";
 import FeedbackPanel from "./FeedbackPanel.jsx";
-import FillAnswerInput from "./QuestionCard/InputField/FillAnswerInput.jsx";
-import OptionList from "./QuestionCard/Options/OptionList.jsx";
-import PromptSection from "./QuestionCard/Prompt/PromptSection.jsx";
-import QuestionFeedback from "./QuestionCard/Feedback/QuestionFeedback.jsx";
-import QuestionHeader from "./QuestionCard/Header/QuestionHeader.jsx";
-import DragDropQuestion from "./QuestionCard/DragDrop/DragDropQuestion/DragDropQuestion.jsx";
-import DragCategorizeQuestion from "./QuestionCard/DragDrop/DragCategorizeQuestion/DragCategorizeQuestion.jsx";
+import FillBlankInputFieldQuestion from "./QuestionCard/QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
+import CategorySortQuestion from "./QuestionCard/QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
+import TableMatchQuestion from "./QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";
+import MultiCheckboxSelectQuestion from "./QuestionCard/QuestionTypes/MultiCheckboxSelect/MultiCheckboxSelectQuestion.jsx";
+import SingleRadioButtonChoiceQuestion from "./QuestionCard/QuestionTypes/SingleRadioButtonChoice/SingleRadioButtonChoiceQuestion.jsx";
+import PromptSection from "./QuestionCard/Shared/Prompt/PromptSection.jsx";
+import QuestionFeedback from "./QuestionCard/Shared/Feedback/QuestionFeedback.jsx";
+import QuestionHeader from "./QuestionCard/Shared/Header/QuestionHeader.jsx";
 
 
 export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
@@ -49,7 +51,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                 />
 
                 {viewState.shouldShowFillInput ? (
-                    <FillAnswerInput
+                    <FillBlankInputFieldQuestion
                         question={question}
                         answerText={answerText}
                         submitted={submitted}
@@ -60,7 +62,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                 ) : null}
 
                 {viewState.shouldShowDragCategorize ? (
-                    <DragCategorizeQuestion
+                    <CategorySortQuestion
                         question={question}
                         answer={answer}
                         submitted={submitted}
@@ -71,7 +73,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                 ) : null}
 
                 {viewState.shouldShowDragDrop && !viewState.shouldShowDragCategorize ? (
-                    <DragDropQuestion
+                    <TableMatchQuestion
                         question={question}
                         answer={answer}
                         submitted={submitted}
@@ -81,8 +83,23 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                     />
                 ) : null}
 
-                {viewState.shouldShowOptions ? (
-                    <OptionList
+                {viewState.shouldShowOptions && question.type === QUESTION_TYPES.MULTI ? (
+                    <MultiCheckboxSelectQuestion
+                        question={question}
+                        answer={answer}
+                        answerOptionOrder={answerOptionOrder}
+                        submitted={submitted}
+                        showAllFeedback={showAllFeedback}
+                        expandedAnswerOptionIndex={expandedAnswerOptionIndex}
+                        onToggleAnswerOptionExpanded={onToggleAnswerOptionExpanded}
+                        onSingleAnswer={onSingleAnswer}
+                        onToggleMultiAnswer={onToggleMultiAnswer}
+                        t={t}
+                    />
+                ) : null}
+
+                {viewState.shouldShowOptions && question.type === QUESTION_TYPES.SINGLE ? (
+                    <SingleRadioButtonChoiceQuestion
                         question={question}
                         answer={answer}
                         answerOptionOrder={answerOptionOrder}
