@@ -71,9 +71,9 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 
 ## Prosjektstruktur
 
-Selve React-komponentene ligger under `ui/view/components/`, mens sider ligger under `ui/view/pages/`. Styling er samlet separat i `ui/style/`, slik at komponentstruktur og CSS-struktur holdes adskilt.
+Selve React-komponentene ligger under `ui/view/components/`, mens sider ligger under `ui/view/pages/`. Styling er samlet separat i `ui/style/`, slik at komponentstruktur og CSS-struktur holdes adskilt, men fortsatt speiler hverandre der det gir bedre feature-eierskap.
 
-Den mest detaljerte delen av strukturen ligger under `ExamPage/QuestionCard/`, der oppgavetypene er samlet i `QuestionTypes/`. Hver oppgavetype har egne komponenter og eventuelle lokale `Utils/`, mens felles komponenter for hele spørsmålsvisningen ligger i `Shared/`. Globale hjelpefunksjoner beholdes kun i `src/utils/` når de brukes på tvers av flere lag eller features.
+Den mest detaljerte delen av strukturen ligger under `ExamPage/QuestionCard/`, der oppgavetypene er samlet i `QuestionTypes/`. Hver oppgavetype har egne komponenter og eventuelle lokale `Utils/`, mens felles komponenter for hele spørsmålsvisningen ligger i `Shared/`. CSS-en for `QuestionCard` følger samme feature-inndeling under `src/ui/style/QuestionCard`, med delte base-stiler i `Base/` og spørsmålstype-spesifikk styling under `QuestionTypes/`. Globale hjelpefunksjoner beholdes kun i `src/utils/` når de brukes på tvers av flere lag eller features.
 
 ```bash
 IN5431-Exam-Emulator/
@@ -148,6 +148,24 @@ IN5431-Exam-Emulator/
     │   │   ├── Header/
     │   │   │   └── ...
     │   │   ├── QuestionCard/
+    │   │   │   ├── AnswerCard/
+    │   │   │   │   └── ...
+    │   │   │   ├── Base/
+    │   │   │   │   └── ...
+    │   │   │   ├── QuestionTypes/
+    │   │   │   │   ├── ChoiceShared/
+    │   │   │   │   │   └── ...
+    │   │   │   │   ├── FillBlankInputField/
+    │   │   │   │   │   └── ...
+    │   │   │   │   └── DragDrop/
+    │   │   │   │       ├── Shared/
+    │   │   │   │       │   └── ...
+    │   │   │   │       ├── CategorySort/
+    │   │   │   │       │   └── ...
+    │   │   │   │       ├── TableMatch/
+    │   │   │   │       │   └── ...
+    │   │   │   │       └── MatrixPlacement/
+    │   │   │   │           └── ...
     │   │   │   └── ...
     │   │   ├── ResultBadge/
     │   │   │   └── ...
@@ -258,6 +276,7 @@ test/
 │       └── SubjectRepository.test.js
 ├── ui/
 │   └── QuestionCard/
+│       └── matrixPlacementAnswerLogic.test.js
 └── utils/
     ├── answerUtils.test.js
     ├── questionUtils.test.js
@@ -917,9 +936,10 @@ Footer-komponenten er delt i `Footer`, `FooterActionButton`, `FooterNavigationBu
 Eksamenssiden består av sidebar, header/statistikk, progressbar, question card og footer-navigasjon. Dette gjør at brukeren hele tiden ser hvor langt de har kommet, hvilken oppgave de jobber med, og hvilke handlinger som er tilgjengelige.
 
 **Responsivitet håndteres lokalt per UI-område.**  
-`QuestionCard/matrix-placement.css` inneholder styling for den generiske 2x2 matrix-placement-oppgavetypen, inkludert akser, piler, drop zones, fasitkort, brukerplasseringer og responsive regler.
-
 Responsiv styling ligger som hovedregel i `responsive.css` i den relevante side- eller komponentmappen. Det gjør at for eksempel `ExamPage`, `ExamSelectPage`, `SubjectSelectPage`, `QuestionCard`, `Footer`, `Header` og `FeedbackPanel` kan justeres hver for seg uten én stor global responsive-fil.
+
+**QuestionCard-CSS speiler oppgavetype-strukturen.**  
+CSS for `QuestionCard` ligger fortsatt samlet under `src/ui/style/QuestionCard`, men er delt etter samme feature-logikk som komponentene. Delte spørsmålsstiler ligger i `Base/`, svarkortstiler i `AnswerCard/`, og spørsmålstype-spesifikke regler under `QuestionTypes/`. Drag-and-drop-stiler er videre delt i `Shared/`, `CategorySort/`, `TableMatch/` og `MatrixPlacement/`. `MatrixPlacement` har egne filer for `question`, `item-bank`, `matrix`, `feedback` og `responsive`, slik at layout, kortbank, matrisevisning, feedback og responsive regler kan vedlikeholdes separat.
 
 **Laptop- og edge-case-layout er håndtert eksplisitt.**  
 Layouten er optimalisert for typiske laptop-skjermer, inkludert 14–17 tommers skjermer og svært lave viewport-høyder. På veldig lave høyder kan store kort falle tilbake til mer kompakte listevisninger, og sticky footer kan gå tilbake i vanlig scroll-flow for å unngå overlay.
@@ -1047,6 +1067,26 @@ Global styling importeres fra `src/ui/style/App.css`.
 @import "./Sidebar/index.css";
 ```
 
+### CSS-struktur for QuestionCard
+
+`QuestionCard`-styling er organisert etter samme feature-inndeling som komponentene, men ligger fortsatt samlet under `src/ui/style/QuestionCard`. Delte stiler for hele spørsmålsvisningen ligger i `QuestionCard/Base`, mens stiler for bestemte deler eller oppgavetyper ligger i egne undermapper, for eksempel `AnswerCard`, `QuestionTypes/ChoiceShared`, `QuestionTypes/FillBlankInputField` og `QuestionTypes/DragDrop`.
+
+```bash
+src/ui/style/QuestionCard/
+├── AnswerCard/
+├── Base/
+└── QuestionTypes/
+    ├── ChoiceShared/
+    ├── FillBlankInputField/
+    └── DragDrop/
+        ├── Shared/
+        ├── CategorySort/
+        ├── TableMatch/
+        └── MatrixPlacement/
+```
+
+Hver mappe skal ha en `index.css` som importerer lokale CSS-filer i riktig rekkefølge. Nye spørsmålstype-spesifikke regler skal ikke legges flatt direkte under `QuestionCard`; de skal legges i riktig feature-mappe. Delte regler skal ligge i `Base` eller `Shared`, ikke inne i én spesifikk spørsmålstype.
+
 Retningslinjer:
 
 - Globale designverdier legges i `Tokens.css`.
@@ -1057,6 +1097,9 @@ Retningslinjer:
 - Komponentområde-spesifikk styling legges i mappen for komponentområdet, for eksempel `Header/`, `Sidebar/`, `QuestionCard/` eller `FeedbackPanel/`.
 - Hver mappe bør ha en `index.css` som importerer del-filene i riktig rekkefølge.
 - `responsive.css` bør importeres sist i mappen sin `index.css`, slik at responsive regler kan overstyre base-styling.
+- `QuestionCard`-spesifikke base-regler legges i `QuestionCard/Base/`.
+- Spørsmålstype-spesifikk CSS legges under `QuestionCard/QuestionTypes/` og skal speile oppgavetypens feature-mappe.
+- Felles drag-and-drop-regler legges i `QuestionCard/QuestionTypes/DragDrop/Shared/`.
 - Komponenter bør bruke design tokens fra `Tokens.css` fremfor hardkodede verdier når verdien er gjenbrukbar.
 
 ---

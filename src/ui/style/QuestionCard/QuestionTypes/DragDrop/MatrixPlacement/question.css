@@ -1,0 +1,19 @@
+/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/question.css */
+.matrix-placement-question {
+    display: grid;
+    gap: 16px;
+    container-type: inline-size;
+}
+
+
+.matrix-placement-layout {
+    display: grid;
+    grid-template-columns: minmax(190px, 280px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: stretch;
+    min-width: 0;
+}
+
+.matrix-placement-layout-no-bank {
+    grid-template-columns: minmax(0, 1fr);
+}

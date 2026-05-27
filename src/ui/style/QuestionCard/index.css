@@ -1,13 +1,9 @@
 /* src/ui/style/QuestionCard/index.css */
-@import "./base.css";
-@import "./header.css";
-@import "./prompt.css";
-@import "./input-field.css";
-@import "./options.css";
-@import "./answer-card.css";
-@import "./drag-drop.css";
-@import "./drag-categorize.css";
-@import "./matrix-placement.css";
-@import "./feedback.css";
-@import "./drag-drop-feedback-unanswered.css";
-@import "./responsive.css";
+@import "./Base/index.css";
+@import "./QuestionTypes/FillBlankInputField/index.css";
+@import "./QuestionTypes/ChoiceShared/index.css";
+@import "./AnswerCard/index.css";
+@import "./QuestionTypes/DragDrop/index.css";
+@import "./Base/feedback.css";
+@import "./QuestionTypes/DragDrop/Shared/index.css";
+@import "./Base/responsive.css";
