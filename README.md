@@ -15,6 +15,8 @@ Appen støtter flere spørsmålstyper:
 1. Multiple choice med ett riktig svar
 2. Multiple choice med flere riktige svar
 3. Fyll inn riktig begrep
+4. Dra-og-slipp til riktige kategorier
+5. Dra-og-slipp matching i tabell
 
 Etter levering får brukeren tilbakemelding på hvert spørsmål:
 
@@ -40,6 +42,9 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 | Valg av eksamen | Brukeren kan velge mellom flere øveeksamener |
 | Multiple choice | Støtter både ett riktig svar og flere riktige svar |
 | Fyll inn begrep | Brukeren skriver inn riktig fagbegrep, med støtte for flere aksepterte svar |
+| Category sort | Brukeren kan dra svaralternativer inn i riktige kategorier |
+| Table match | Brukeren kan matche kort med riktig rad/beskrivelse i en tabell |
+| Drag-and-drop feedback | Drag-and-drop-oppgaver viser score, riktige/feil plasseringer og forklaringer etter levering |
 | Automatisk retting | Svarene rettes når brukeren trykker «Lever nå» |
 | Fasit etter levering | Etter levering vises fasit, forklaringer og vurdering av svarene |
 | Tydelig fill-in feedback | Fill-in-spørsmål viser brukerens svar og riktig svar side om side etter levering |
@@ -64,6 +69,10 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 
 ## Prosjektstruktur
 
+Selve React-komponentene ligger under `ui/view/components/`, mens sider ligger under `ui/view/pages/`. Styling er samlet separat i `ui/style/`, slik at komponentstruktur og CSS-struktur holdes adskilt.
+
+Den mest detaljerte delen av strukturen ligger under `ExamPage/QuestionCard/`, der oppgavetypene er samlet i `QuestionTypes/`. Hver oppgavetype har egne komponenter og eventuelle lokale `Utils/`, mens felles komponenter for hele spørsmålsvisningen ligger i `Shared/`. Globale hjelpefunksjoner beholdes kun i `src/utils/` når de brukes på tvers av flere lag eller features.
+
 ```bash
 IN5431-Exam-Emulator/
 ├── README.md
@@ -71,8 +80,16 @@ IN5431-Exam-Emulator/
 ├── package-lock.json
 ├── package.json
 ├── public/
+│   └── favicon.ico
 ├── test/
-│   └── ...
+│   ├── integration/
+│   │   └── ...
+│   ├── model/
+│   │   └── ...
+│   ├── ui/
+│   │   └── ...
+│   └── utils/
+│       └── ...
 ├── vite.config.js
 └── src/
     ├── App.jsx
@@ -89,7 +106,11 @@ IN5431-Exam-Emulator/
     │       ├── mockExam2_en.js
     │       ├── mockExam2_no.js
     │       ├── mockExam3_en.js
-    │       └── mockExam3_no.js
+    │       ├── mockExam3_no.js
+    │       ├── mockExam4_en.js
+    │       ├── mockExam4_no.js
+    │       ├── mockExam5_en.js
+    │       └── mockExamDragCategorize_no.js
     ├── di/
     │   └── dependencies.js
     ├── i18n/
@@ -106,32 +127,34 @@ IN5431-Exam-Emulator/
     │   ├── navGraph.js
     │   └── navItems.js
     ├── ui/
+    │   ├── settings/
+    │   │   └── SettingsContext.jsx
+    │   ├── theme/
+    │   │   └── ThemeContext.jsx
     │   ├── style/
     │   │   ├── App.css
-    │   │   ├── Tokens.css
     │   │   ├── Global.css
+    │   │   ├── Tokens.css
     │   │   ├── ExamPage/
     │   │   │   └── ...
     │   │   ├── ExamSelectPage/
     │   │   │   └── ...
-    │   │   ├── SubjectSelectPage/
-    │   │   │   └── ...
-    │   │   ├── Header/
+    │   │   ├── FeedbackPanel/
     │   │   │   └── ...
     │   │   ├── Footer/
     │   │   │   └── ...
+    │   │   ├── Header/
+    │   │   │   └── ...
     │   │   ├── QuestionCard/
     │   │   │   └── ...
-    │   │   ├── FeedbackPanel/
+    │   │   ├── ResultBadge/
     │   │   │   └── ...
     │   │   ├── SettingsMenu/
     │   │   │   └── ...
     │   │   ├── Sidebar/
     │   │   │   └── ...
-    │   │   └── ResultBadge/
+    │   │   └── SubjectSelectPage/
     │   │       └── ...
-    │   ├── theme/
-    │   │   └── ThemeContext.jsx
     │   ├── view/
     │   │   ├── pages/
     │   │   │   ├── ExamPage.jsx
@@ -139,35 +162,69 @@ IN5431-Exam-Emulator/
     │   │   │   └── SubjectSelectPage.jsx
     │   │   └── components/
     │   │       ├── ExamPage/
-    │   │       │   └── ...
+    │   │       │   ├── ExamPageContent.jsx
+    │   │       │   ├── ExamPageState.jsx
+    │   │       │   ├── ExamProgress/
+    │   │       │   │   └── ...
+    │   │       │   ├── FeedbackPanel/
+    │   │       │   │   └── ...
+    │   │       │   ├── QuestionCard/
+    │   │       │   │   ├── QuestionCard.jsx
+    │   │       │   │   ├── AnswerCard/
+    │   │       │   │   │   └── ...
+    │   │       │   │   ├── QuestionTypes/
+    │   │       │   │   │   ├── ChoiceShared/
+    │   │       │   │   │   │   └── ...
+    │   │       │   │   │   ├── FillBlankInputField/
+    │   │       │   │   │   │   └── ...
+    │   │       │   │   │   ├── MultiCheckboxSelect/
+    │   │       │   │   │   │   └── MultiCheckboxSelectQuestion.jsx
+    │   │       │   │   │   ├── SingleRadioButtonChoice/
+    │   │       │   │   │   │   └── SingleRadioButtonChoiceQuestion.jsx
+    │   │       │   │   │   └── DragDrop/
+    │   │       │   │   │       ├── Shared/
+    │   │       │   │   │       │   └── ...
+    │   │       │   │   │       ├── CategorySort/
+    │   │       │   │   │       │   └── ...
+    │   │       │   │   │       └── TableMatch/
+    │   │       │   │   │           └── ...
+    │   │       │   │   └── Shared/
+    │   │       │   │       ├── Feedback/
+    │   │       │   │       │   └── ...
+    │   │       │   │       ├── Prompt/
+    │   │       │   │       │   └── ...
+    │   │       │   │       ├── QuestionHeader/
+    │   │       │   │       │   └── ...
+    │   │       │   │       ├── Styling/
+    │   │       │   │       │   └── ...
+    │   │       │   │       └── Utils/
+    │   │       │   │           └── ...
+    │   │       │   └── ResultBadge/
+    │   │       │       └── ResultBadge.jsx
     │   │       ├── ExamSelectPage/
     │   │       │   └── ...
-    │   │       ├── SubjectSelectPage/
+    │   │       ├── Footer/
     │   │       │   └── ...
     │   │       ├── Header/
-    │   │       │   └── ...
-    │   │       ├── Footer/
     │   │       │   └── ...
     │   │       ├── Settings/
     │   │       │   └── ...
     │   │       ├── Sidebar/
     │   │       │   └── ...
-    │   │       └── SubjectIcon.jsx
+    │   │       ├── SubjectIcon.jsx
+    │   │       └── SubjectSelectPage/
+    │   │           └── ...
     │   └── viewmodel/
     │       ├── AppNavigationViewModel.js
     │       ├── ExamPageViewModel.js
     │       ├── ExamSelectPageViewModel.js
-    │       ├── PlaceholderPageViewModel.js
-    │       └── SubjectSelectPageViewModel.js
+    │       ├── SubjectSelectPageViewModel.js
+    │       └── Utils/
+    │           └── ...
     └── utils/
-        ├── answerutils/
-        │   └── ...
-        ├── examPageUtils/
-        │   └── ...
-        ├── questionutils/
-        │   └── ...
-        └── viewmodelutils/
-            └── ...
+        └── answer/
+            ├── getCorrectIndexes.js
+            └── normalizeAnswer.js
 ```
 ---
 
@@ -191,6 +248,8 @@ test/
 │   └── repositories/
 │       ├── ExamRepository.test.js
 │       └── SubjectRepository.test.js
+├── ui/
+│   └── QuestionCard/
 └── utils/
     ├── answerUtils.test.js
     ├── questionUtils.test.js
@@ -204,7 +263,8 @@ Testmappene har følgende ansvar:
 | `test/integration/` | Tester samlet eksamensflyt med ekte data fra prosjektet |
 | `test/model/domain/` | Tester use cases og domenelogikk isolert |
 | `test/model/repositories/` | Tester repository-laget og henting av fag/eksamensdata |
-| `test/utils/` | Tester hjelpefunksjoner for svar, spørsmål og viewmodel-visning |
+| `test/ui/` | Klargjort for komponentnære UI-tester |
+| `test/utils/` | Tester felles og feature-nære hjelpefunksjoner for svar, spørsmål og viewmodel-visning |
 
 ---
 
@@ -229,6 +289,9 @@ Testene dekker blant annet:
 - retting av single choice-svar
 - retting av multiple choice-svar
 - retting av fill-in-svar
+- retting av drag-and-drop-oppgaver
+- retting av category sort-oppgaver
+- retting av table match-oppgaver
 - beregning av score og prosent
 - henting av fag
 - henting av eksamener
@@ -236,6 +299,7 @@ Testene dekker blant annet:
 - henting av riktig språkversjon av samme eksamen
 - repository-logikk
 - hjelpefunksjoner for svar, spørsmål og visning
+- feature-nære hjelpefunksjoner etter refaktorering av `QuestionCard`, `FeedbackPanel`, `ExamProgress` og `Footer`
 - integrert eksamensflyt med ekte data
 
 ---
@@ -352,7 +416,7 @@ Testene dekker blant annet:
         </tr>
         <tr>
             <td>Rette faktiske spørsmål fra eksamensdata</td>
-            <td>Retting skal fungere med ekte <code>single</code>, <code>multi</code> og <code>fill</code>-spørsmål.</td>
+            <td>Retting skal fungere med ekte <code>single</code>, <code>multi</code>, <code>fill</code> og drag-and-drop-spørsmål.</td>
             <td><code>examFlow.integration.test.js</code></td>
         </tr>
         <tr>
@@ -411,11 +475,13 @@ Alle eksamener samles i `src/data/data.js`. Tanken med dette er å gjøre det en
 
 ### Spørsmålstyper
 
-| Type | Beskrivelse |
-|------|-------------|
-| `single` | Multiple choice med ett riktig svar |
-| `multi` | Multiple choice med flere riktige svar |
-| `fill` | Fyll inn riktig fagbegrep |
+| Type | UI-navn | Beskrivelse |
+|------|---------|-------------|
+| `single` | `SingleRadioButtonChoice` | Multiple choice med ett riktig svar |
+| `multi` | `MultiCheckboxSelect` | Multiple choice med flere riktige svar |
+| `fill` | `FillBlankInputField` | Fyll inn riktig fagbegrep |
+| `drag-categorize` | `CategorySort` | Dra kort inn i riktig kategori |
+| `drag-drop` | `TableMatch` | Dra kort til riktig rad/beskrivelse i en tabell |
 
 ### Forklaringsfelter
 
@@ -560,6 +626,10 @@ direction TB
         MockExam2En["mockExam2_en.js"]
         MockExam3No["mockExam3_no.js"]
         MockExam3En["mockExam3_en.js"]
+        MockExam4No["mockExam6_no.js"]
+        MockExam4En["mockExam6_en.js"]
+        MockExam5En["mockExam5_en.js"]
+        MockExamDragCategorizeNo["mockExamDragCategorize_no.js"]
     end
 end
 
@@ -620,6 +690,10 @@ DataRegistry --> MockExam2No
 DataRegistry --> MockExam2En
 DataRegistry --> MockExam3No
 DataRegistry --> MockExam3En
+DataRegistry --> MockExam4No
+DataRegistry --> MockExam4En
+DataRegistry --> MockExam5En
+DataRegistry --> MockExamDragCategorizeNo
 
 linkStyle default stroke:#111111,stroke-width:2.6px,color:#000000
 
@@ -641,7 +715,7 @@ class AppSidebar,SettingsMenu globalNode
 class AppNavVM,ExamPageVM,ExamSelectVM,SubjectSelectVM viewModelNode
 class GetAvailableSubjectsUC,GetSubjectByIdUC,GetAvailableExamsUC,GetExamByBaseIdAndLangUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
 class ExamRepo,SubjectRepo,ExamDS,SubjectDS modelNode
-class DataRegistry,SubjectsData,MockExam1No,MockExam1En,MockExam2No,MockExam2En,MockExam3No,MockExam3En dataNode
+class DataRegistry,SubjectsData,MockExam1No,MockExam1En,MockExam2No,MockExam2En,MockExam3No,MockExam3En,MockExam4No,MockExam4En,MockExam5En,MockExamDragCategorizeNo dataNode
 ```
 
 ### Arkitekturflyt
@@ -677,7 +751,7 @@ UI components
 | **Components** | `Header`, `QuestionCard`, `FeedbackPanel`, `Footer`, `SettingsMenu`, `Sidebar`, `ResultBadge` | Rene UI-komponenter som viser data og sender brukerhandlinger oppover |
 | **i18n** | `LanguageContext.jsx`, `translations.js` | Håndterer språkvalg og tekstnøkler |
 | **Theme** | `ThemeContext.jsx` | Håndterer light mode og dark mode |
-| **Utils** | `answerutils`, `examPageUtils`, `questionutils`, `viewmodelutils` | Hjelpefunksjoner for svar, spørsmålspresentasjon, eksamensprogress, labels og visningslogikk |
+| **Utils** | Lokale `Utils/`-mapper under relevante features, samt `src/utils/answer` | Hjelpefunksjoner ligger nær komponenten eller feature-området de brukes av. Kun funksjoner som brukes på tvers av flere lag ligger globalt i `src/utils/`. |
 | **Constants** | `QuestionConfig.js`, `QuestionTypes.js` | Globale spørsmålsverdier og spørsmålstyper |
 
 ---
@@ -733,7 +807,7 @@ Hver øveeksamen har en unik `id`, en `baseId`, et språkfelt, en `title`, en `d
 Fag ligger i `subjects.js`, mens eksamener ligger i egne mock-exam-filer. Det gjør det mulig å vise fagoversikt først, og deretter filtrere eksamener basert på valgt fag.
 
 **Rette-logikken ligger i domenelaget.**  
-`GradeAnswerUseCase` avgjør om et svar er riktig. Dette gjør at komponentene ikke trenger å kjenne reglene for single choice, multiple choice eller fill-in.
+`GradeAnswerUseCase` avgjør om et svar er riktig. Dette gjør at komponentene ikke trenger å kjenne reglene for single choice, multiple choice, fill-in eller drag-and-drop.
 
 **Score beregnes i en egen use case.**  
 `CalculateExamScoreUseCase` gjør poengberegning separat fra både UI og datalagring.
@@ -753,14 +827,17 @@ Fagvelgeren er delt opp i `SubjectSelectTopbar`, `SubjectSelectControls`, `Subje
 **ExamSelectPage er modularisert.**  
 Eksamensvelgeren er delt opp i `ExamSelectTopbar`, `ExamSelectIntro`, `ExamSelectGrid` og `ExamSelectCard`. Dette gjør siden lettere å vedlikeholde og gjør det enklere å endre layout uten at page-filen vokser.
 
-**QuestionCard er delt i funksjonelle underområder.**  
-`QuestionCard` består av egne undermapper for `Header`, `Prompt`, `InputField`, `Options`, `AnswerCard`, `Feedback` og `Styling`. Dette gjør det lettere å finne riktig subkomponent og videreutvikle kortet uten at én fil får for mye ansvar.
+**QuestionCard er delt etter oppgavetyper og fellesdeler.**  
+`QuestionCard` har en egen entrypoint-komponent i `QuestionCard/QuestionCard.jsx`. Konkrete oppgavetyper ligger under `QuestionTypes/`, blant annet `FillBlankInputField`, `MultiCheckboxSelect`, `SingleRadioButtonChoice` og `DragDrop`. Drag-and-drop-oppgaver er videre delt i `CategorySort` og `TableMatch`. Felles deler som prompt, feedback, header, styling og view-state ligger i `Shared/`.
 
 **AnswerCard er modularisert.**  
-Svarkortene i feedback-mode er delt i `AnswerOptionCard`, `AnswerOptionActions`, `AnswerOptionMarker` og `AnswerOptionExtendedPanel`. Hjelpefunksjoner for CSS-klasser, option letters og `whyExtended` ligger i `answerutils/answerOptionUtils/`.
+Svarkortene i feedback-mode er delt i `AnswerOptionCard`, `AnswerOptionActions`, `AnswerOptionMarker` og `AnswerOptionExtendedPanel`. Hjelpefunksjoner for AnswerCard ligger lokalt i `QuestionCard/AnswerCard/Utils/`.
 
 **FeedbackPanel er tydeligere strukturert.**  
 Fill-in feedback viser brukerens svar og riktig svar side om side. Forklaringer og pensumhenvisninger vises som tydelige kort, slik at feedback-mode blir lettere å lese.
+
+**Feature-nære Utils-mapper brukes for lokal logikk.**  
+Hjelpefunksjoner som bare brukes av ett komponentområde ligger i lokale `Utils/`-mapper, for eksempel under `QuestionCard`, `FeedbackPanel`, `ExamProgress` og `Footer`. Globale utils beholdes kun når funksjonen brukes på tvers av flere lag eller features.
 
 **Footer er modularisert i funksjonelle enheter.**  
 Footer-komponenten er delt i `Footer`, `FooterActionButton`, `FooterNavigationButton`, `QuestionDots`, `QuestionDot` og `footerClassNames`. Handlingsknappen bytter mellom «Neste» og «Lever nå» avhengig av om brukeren er på siste spørsmål. Etter levering viser footer-dots riktig/feil-status med fargekoding.
@@ -805,7 +882,7 @@ Alle datasource-, repository- og use case-instansene opprettes på ett sted. Det
 
 For å legge til en ny øveeksamen:
 
-1. Opprett nye filer i `src/data/exams/`, for eksempel `mockExam4_no.js` og `mockExam4_en.js`.
+1. Opprett nye filer i `src/data/exams/`, for eksempel `mockExam6_no.js` og `mockExam6_en.js`.
 2. Eksporter eksamensobjekter med unik `id`.
 3. Bruk samme `baseId` for språkversjonene.
 4. Sett riktig språkfelt, for eksempel `lang: "no"` og `lang: "en"`.
@@ -815,10 +892,10 @@ For å legge til en ny øveeksamen:
 Eksempel:
 
 ```js
-//src/data/exams/mockExam4_no.js
-export const mockExam4No = {
-  id: "mock-exam-4-no",
-  baseId: "mock-exam-4",
+//src/data/exams/mockExam6_no.js
+export const mockExam6No = {
+  id: "mock-exam-6-no",
+  baseId: "mock-exam-6",
   lang: "no",
   title: "Øveeksamen 4: Strategi og IT governance",
   description: "Repetisjon av strategy, governance, architecture og digital transformation.",
@@ -855,8 +932,8 @@ import { mockExam2No } from "./exams/mockExam2_no.js";
 import { mockExam2En } from "./exams/mockExam2_en.js";
 import { mockExam3No } from "./exams/mockExam3_no.js";
 import { mockExam3En } from "./exams/mockExam3_en.js";
-import { mockExam4No } from "./exams/mockExam4_no.js";
-import { mockExam4En } from "./exams/mockExam4_en.js";
+import { mockExam6No } from "./exams/mockExam6_no.js";
+import { mockExam6En } from "./exams/mockExam6_en.js";
 
 export const EXAMS = [
   mockExam1No,
@@ -865,8 +942,8 @@ export const EXAMS = [
   mockExam2En,
   mockExam3No,
   mockExam3En,
-  mockExam4No,
-  mockExam4En
+  mockExam6No,
+  mockExam6En
 ];
 ```
 
@@ -923,7 +1000,9 @@ Mulige forbedringer:
 - Lagre valgt eksamen og progresjon i localStorage
 - Lage eksamensmodus med tilfeldig rekkefølge
 - Lage statistikk over hvilke temaer brukeren ofte svarer feil på
-- Legge til komponenttester for `QuestionCard`, `AnswerOptionCard` og `FeedbackPanel`
+- Legge til komponenttester for `QuestionCard`, `AnswerOptionCard`, `FeedbackPanel`, `ExamProgress` og `ResultBadge`
+- Legge til komponenttester for oppgavetypene under `QuestionCard/QuestionTypes`
+- Legge til tester for drag-and-drop-interaksjoner med React Testing Library
 - Hente spørsmål fra ekstern JSON-fil eller API
 
 ---
