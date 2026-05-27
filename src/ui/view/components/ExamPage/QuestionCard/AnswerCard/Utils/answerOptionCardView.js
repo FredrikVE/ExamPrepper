@@ -5,8 +5,43 @@ export const getExtendedExplanationPoints = (option) => {
         : [];
 };
 
+export const getExtendedExplanationImage = (option) => {
+    const image = option?.whyExtendedImage
+        ?? option?.conceptImage
+        ?? option?.extendedImage
+        ?? option?.image;
+
+    if (typeof image === "string") {
+        const src = image.trim();
+
+        return src
+            ? { src, alt: option?.text ?? "" }
+            : null;
+    }
+
+    if (!image || typeof image !== "object") {
+        return null;
+    }
+
+    const src = typeof image.src === "string"
+        ? image.src.trim()
+        : "";
+
+    if (!src) {
+        return null;
+    }
+
+    return {
+        src,
+        alt: image.alt ?? image.title ?? option?.text ?? "",
+        title: image.title,
+        caption: image.caption
+    };
+};
+
 export const hasExtendedExplanation = (option) => {
-    return getExtendedExplanationPoints(option).length > 0;
+    return getExtendedExplanationPoints(option).length > 0
+        || Boolean(getExtendedExplanationImage(option));
 };
 
 export const getOptionLetter = (index) => {

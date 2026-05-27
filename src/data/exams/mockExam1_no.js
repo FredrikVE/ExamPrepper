@@ -207,7 +207,13 @@ export const mockExam1_no = {
             "OB er en av de fem byggeklossene som D4D-boken og forelesning 13 identifiserer som nødvendige for digital suksess.",
             "44 % av ledere identifiserer OB som den største hindringen for digital transformasjon — det viser hvor sentral denne byggeklossen er.",
             "OB tilhører architecture transformation i D4D sin dual transformation-teori."
-          ]
+          ],
+          whyExtendedImage: {
+            src: "/concept-images/operational-backbone-practice.svg",
+            alt: "Operational Backbone i praksis",
+            title: "Operational Backbone i praksis",
+            caption: "Kortet kan vise et konseptbilde når option.whyExtendedImage er satt i mockExam-dataene."
+          }
         },
         {
           text: "Shared Customer Insights",
@@ -262,7 +268,13 @@ export const mockExam1_no = {
             "ExDP åpner digitale komponenter for partnere og eksterne utviklere, typisk via API-er og boundary resources.",
             "Forelesning 12 viser to typer ExDP: én som lar partnere bruke interne komponenter (som Google Maps), og én som skaper en markedsplass (som Apple App Store).",
             "D4D-roadmapen anbefaler å ikke forhaste seg med ExDP — det krever moden OB og DP først."
-          ]
+          ],
+          whyExtendedImage: {
+            src: "/concept-images/d4d-building-blocks.svg",
+            alt: "D4D-byggklossene",
+            title: "D4D-byggklossene",
+            caption: "Oversikt over de fem byggeklossene som hører til Designed for Digital."
+          }
         }
       ]
     },

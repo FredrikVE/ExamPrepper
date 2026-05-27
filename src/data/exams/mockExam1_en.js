@@ -207,7 +207,13 @@ export const mockExam1_en = {
             "OB is one of the five building blocks that the D4D book and Lecture 13 identify as necessary for digital success.",
             "44% of executives identify OB as the biggest obstacle to digital transformation — showing how central this building block is.",
             "OB belongs to architecture transformation in D4D's dual transformation theory."
-          ]
+          ],
+          whyExtendedImage: {
+            src: "/concept-images/operational-backbone-practice.svg",
+            alt: "Operational Backbone in practice",
+            title: "Operational Backbone in practice",
+            caption: "The card can show a concept image when option.whyExtendedImage is set in the mock exam data."
+          }
         },
         {
           text: "Shared Customer Insights",
@@ -262,7 +268,13 @@ export const mockExam1_en = {
             "ExDP opens digital components to partners and external developers, typically via APIs and boundary resources.",
             "Lecture 12 shows two types of ExDP: one that lets partners use internal components in their own offerings (like Google Maps), and one that creates a marketplace (like Apple App Store).",
             "The D4D roadmap recommends not rushing into an ExDP — it requires a mature OB and DP first."
-          ]
+          ],
+          whyExtendedImage: {
+            src: "/concept-images/d4d-building-blocks.svg",
+            alt: "D4D building blocks",
+            title: "D4D building blocks",
+            caption: "Overview of the five building blocks in Designed for Digital."
+          }
         }
       ]
     },
