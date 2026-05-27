@@ -635,6 +635,8 @@ direction TB
         subgraph ExamPageComponents["ExamPage Components"]
         direction TB
             Header["Header"]
+            ExamProgress["ExamProgress"]
+            ExamPageContent["ExamPageContent"]
             QuestionCard["QuestionCard"]
             FeedbackPanel["FeedbackPanel"]
             Footer["Footer"]
@@ -679,6 +681,7 @@ end
 subgraph ViewModel["3. ViewModel"]
 direction TB
     AppNavVM["AppNavigationViewModel"]
+    ResolveTranslated["resolveTranslatedExamId"]
     ExamPageVM["ExamPageViewModel"]
     ExamSelectVM["ExamSelectPageViewModel"]
     SubjectSelectVM["SubjectSelectPageViewModel"]
@@ -689,6 +692,7 @@ direction TB
     GetAvailableSubjectsUC["GetAvailableSubjectsUseCase"]
     GetSubjectByIdUC["GetSubjectByIdUseCase"]
     GetAvailableExamsUC["GetAvailableExamsUseCase"]
+    GetExamByIdUC["GetExamByIdUseCase"]
     GetExamByBaseIdAndLangUC["GetExamByBaseIdAndLangUseCase"]
     GetExamQuestionsUC["GetExamQuestionsUseCase"]
     GradeAnswerUC["GradeAnswerUseCase"]
@@ -700,6 +704,7 @@ direction TB
     ExamRepo["ExamRepository"]
     SubjectRepo["SubjectRepository"]
     ExamDS["ExamQuestionDataSource"]
+    ConceptImageDS["ConceptImageDataSource"]
     SubjectDS["SubjectDataSource"]
 end
 
@@ -707,6 +712,12 @@ subgraph Data["6. Data"]
 direction TB
     DataRegistry["data.js"]
     SubjectsData["subjects.js"]
+    ConceptImageRegistry["conceptImageCatalogRegistry.js"]
+
+    subgraph ConceptImageData["Concept Image Catalogs"]
+    direction LR
+        In5431ConceptImages["in5431/conceptImages.js"]
+    end
 
     subgraph MockData["Mock Exam Data"]
     direction LR
@@ -744,15 +755,20 @@ ExamSelectPage --> ExamSelectGrid
 ExamSelectGrid --> ExamSelectCard
 
 ExamPage --> Header
-ExamPage --> QuestionCard
+ExamPage --> ExamProgress
+ExamPage --> ExamPageContent
+ExamPageContent --> QuestionCard
 QuestionCard --> FeedbackPanel
 ExamPage --> Footer
 
 App --> AppNavVM
+AppNavVM --> ResolveTranslated
 SubjectSelectPage --> SubjectSelectVM
 ExamSelectPage --> ExamSelectVM
 ExamPage --> ExamPageVM
 
+AppNavVM --> GetExamByIdUC
+AppNavVM --> GetExamByBaseIdAndLangUC
 SubjectSelectVM --> GetAvailableSubjectsUC
 SubjectSelectVM --> GetSubjectByIdUC
 ExamSelectVM --> GetAvailableExamsUC
@@ -766,13 +782,17 @@ CalculateScoreUC --> GradeAnswerUC
 GetAvailableSubjectsUC --> SubjectRepo
 GetSubjectByIdUC --> SubjectRepo
 GetAvailableExamsUC --> ExamRepo
+GetExamByIdUC --> ExamRepo
 GetExamByBaseIdAndLangUC --> ExamRepo
 GetExamQuestionsUC --> ExamRepo
 
 ExamRepo --> ExamDS
-ExamDS --> DataRegistry
+ExamRepo --> ConceptImageDS
 SubjectRepo --> SubjectDS
+ExamDS --> DataRegistry
 SubjectDS --> SubjectsData
+ConceptImageDS --> ConceptImageRegistry
+ConceptImageRegistry --> In5431ConceptImages
 
 DataRegistry --> MockExam1No
 DataRegistry --> MockExam1En
@@ -793,6 +813,7 @@ classDef pageNode fill:#FFF9C4,stroke:#827717,stroke-width:2.5px,color:#000000
 classDef componentNode fill:#DCE775,stroke:#827717,stroke-width:2px,color:#000000
 classDef globalNode fill:#E1BEE7,stroke:#4A148C,stroke-width:2px,color:#000000
 classDef viewModelNode fill:#FFCDD2,stroke:#B71C1C,stroke-width:2.5px,color:#000000
+classDef helperNode fill:#FFEBEE,stroke:#C62828,stroke-width:1.5px,color:#000000
 classDef domainNode fill:#C5CAE9,stroke:#1A237E,stroke-width:2px,color:#000000
 classDef modelNode fill:#DCEDC8,stroke:#33691E,stroke-width:2px,color:#000000
 classDef dataNode fill:#FFE082,stroke:#E65100,stroke-width:2px,color:#000000
@@ -800,13 +821,15 @@ classDef dataNode fill:#FFE082,stroke:#E65100,stroke-width:2px,color:#000000
 class DI,NavGraph sideNode
 class App appNode
 class SubjectSelectPage,ExamSelectPage,ExamPage pageNode
-class Header,QuestionCard,FeedbackPanel,Footer,ExamSelectTopbar,ExamSelectIntro,ExamSelectGrid,ExamSelectCard,SubjectSelectTopbar,SubjectSelectControls,SubjectSelectGrid,SubjectSelectCard componentNode
+class Header,ExamProgress,ExamPageContent,QuestionCard,FeedbackPanel,Footer,ExamSelectTopbar,ExamSelectIntro,ExamSelectGrid,ExamSelectCard,SubjectSelectTopbar,SubjectSelectControls,SubjectSelectGrid,SubjectSelectCard componentNode
 class AppSidebar,SettingsMenu globalNode
 class AppNavVM,ExamPageVM,ExamSelectVM,SubjectSelectVM viewModelNode
-class GetAvailableSubjectsUC,GetSubjectByIdUC,GetAvailableExamsUC,GetExamByBaseIdAndLangUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
-class ExamRepo,SubjectRepo,ExamDS,SubjectDS modelNode
-class DataRegistry,SubjectsData,MockExam1No,MockExam1En,MockExam2No,MockExam2En,MockExam3No,MockExam3En,MockExam4No,MockExam4En,MockExam5En,MockExamDragCategorizeNo dataNode
+class ResolveTranslated helperNode
+class GetAvailableSubjectsUC,GetSubjectByIdUC,GetAvailableExamsUC,GetExamByIdUC,GetExamByBaseIdAndLangUC,GetExamQuestionsUC,GradeAnswerUC,CalculateScoreUC domainNode
+class ExamRepo,SubjectRepo,ExamDS,ConceptImageDS,SubjectDS modelNode
+class DataRegistry,SubjectsData,ConceptImageRegistry,In5431ConceptImages,MockExam1No,MockExam1En,MockExam2No,MockExam2En,MockExam3No,MockExam3En,MockExam4No,MockExam4En,MockExam5En,MockExamDragCategorizeNo dataNode
 ```
+
 
 ### Arkitekturflyt
 
