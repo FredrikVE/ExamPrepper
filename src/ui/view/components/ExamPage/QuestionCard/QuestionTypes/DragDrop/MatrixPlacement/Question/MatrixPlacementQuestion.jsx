@@ -10,10 +10,6 @@ export default function MatrixPlacementQuestion(props) {
 
     return (
         <div className={matrixPlacement.rootClassName}>
-            {matrixPlacement.feedbackMode ? (
-                <MatrixPlacementScoreSummary stats={matrixPlacement.stats} t={props.t} />
-            ) : null}
-
             <div className={getLayoutClassName(matrixPlacement.feedbackMode, matrixPlacement.availableItems.length)}>
                 <MatrixPlacementItemBank
                     question={props.question}
@@ -47,46 +43,6 @@ export default function MatrixPlacementQuestion(props) {
                     onToggleExpanded={matrixPlacement.toggleExpanded}
                     t={props.t}
                 />
-            </div>
-        </div>
-    );
-}
-
-function MatrixPlacementScoreSummary(props) {
-    const answered = props.stats.correct + props.stats.wrong;
-    const title = props.stats.wrong > 0 || props.stats.unanswered > 0
-        ? props.t.dragDropPartlyCorrect
-        : props.t.feedbackCorrectLabel;
-
-    return (
-        <div className="drag-drop-summary matrix-placement-summary" aria-label={props.t.dragDropSummaryTitle}>
-            <h4>{title}</h4>
-            <div className="drag-drop-summary-metrics">
-                <div className="drag-drop-summary-metric drag-drop-summary-metric-correct">
-                    <strong>{props.stats.correct}</strong>
-                    <span>{props.t.dragDropCorrectShort}</span>
-                </div>
-
-                <div className="drag-drop-summary-divider" />
-
-                <div className="drag-drop-summary-metric drag-drop-summary-metric-wrong">
-                    <strong>{props.stats.wrong}</strong>
-                    <span>{props.t.dragDropWrongShort}</span>
-                </div>
-
-                <div className="drag-drop-summary-divider" />
-
-                <div className="drag-drop-summary-metric">
-                    <strong>{props.stats.unanswered}</strong>
-                    <span>{props.t.dragDropUnansweredShort}</span>
-                </div>
-
-                <div className="drag-drop-summary-divider" />
-
-                <div className="drag-drop-summary-metric">
-                    <strong>{answered}</strong>
-                    <span>{props.t.matrixPlacementPlacedSuffix}</span>
-                </div>
             </div>
         </div>
     );

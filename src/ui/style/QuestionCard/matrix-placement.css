@@ -4,9 +4,6 @@
     gap: 16px;
 }
 
-.matrix-placement-question .drag-drop-summary {
-    justify-self: end;
-}
 
 .matrix-placement-layout {
     display: grid;
