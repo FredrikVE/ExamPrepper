@@ -2,14 +2,16 @@
 .matrix-placement-question {
     display: grid;
     gap: 16px;
+    container-type: inline-size;
 }
 
 
 .matrix-placement-layout {
     display: grid;
-    grid-template-columns: minmax(210px, 280px) minmax(0, 1fr);
+    grid-template-columns: minmax(190px, 280px) minmax(0, 1fr);
     gap: 18px;
     align-items: stretch;
+    min-width: 0;
 }
 
 .matrix-placement-layout-no-bank {
@@ -188,6 +190,7 @@
 
 .matrix-placement-board {
     display: grid;
+    width: 100%;
     grid-template-columns: 44px minmax(0, 1fr);
     grid-template-rows: 1fr auto;
     column-gap: 12px;
@@ -234,7 +237,7 @@
     grid-column: 2;
     grid-row: 1;
     display: grid;
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
@@ -535,7 +538,96 @@
 }
 
 .exam-workspace-extra-wide-question-mode .matrix-placement-grid {
-    grid-template-columns: repeat(2, minmax(310px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@container (max-width: 920px) {
+    .matrix-placement-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .matrix-placement-item-bank {
+        width: 100%;
+    }
+
+    .matrix-placement-item-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .matrix-placement-item-card {
+        width: auto;
+        min-width: min(180px, 100%);
+        max-width: min(100%, 340px);
+    }
+
+    .matrix-placement-quadrant-header {
+        min-height: 68px;
+        padding: 10px 9px;
+    }
+
+    .matrix-placement-quadrant-header h4 {
+        font-size: 0.76rem;
+    }
+
+    .matrix-placement-quadrant-header p {
+        font-size: 0.7rem;
+    }
+
+    .matrix-placement-feedback-main,
+    .matrix-placement-answer-key-card {
+        gap: 7px;
+        padding: 9px 10px;
+    }
+
+    .matrix-placement-feedback-status,
+    .matrix-placement-answer-key-pill {
+        font-size: 0.64rem;
+    }
+}
+
+@container (max-width: 660px) {
+    .matrix-placement-board {
+        grid-template-columns: 28px minmax(0, 1fr);
+    }
+
+    .matrix-placement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .matrix-placement-quadrant {
+        min-height: 180px;
+        border-right: 0;
+    }
+
+    .matrix-placement-quadrant:nth-last-child(-n + 2) {
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    }
+
+    .matrix-placement-quadrant:last-child {
+        border-bottom: 0;
+    }
+
+    .matrix-placement-y-axis-label {
+        font-size: 0.74rem;
+    }
+
+    .matrix-placement-x-axis {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .matrix-placement-x-axis span:last-child {
+        justify-self: center;
+    }
+
+    .matrix-placement-feedback-main {
+        grid-template-columns: 1fr;
+    }
+
+    .matrix-placement-feedback-actions {
+        justify-content: flex-start;
+    }
 }
 
 @media (max-width: 1100px) {
