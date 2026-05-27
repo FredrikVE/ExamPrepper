@@ -1,7 +1,7 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/TableMatchQuestion/useTableMatchQuestion.js
 import { useState } from "react";
-import { clearCardFromOtherTargets, createCardsById, isPlainObject } from "../Logic/tableMatchAnswerLogic.js";
-import { getTableMatchStats } from "../Logic/tableMatchFeedbackStats.js";
+import { clearCardFromOtherTargets, createCardsById, isPlainObject } from "../Utils/tableMatchAnswerLogic.js";
+import { getTableMatchStats } from "../Utils/tableMatchFeedbackStats.js";
 
 export function useTableMatchQuestion(params) {
     const safeAnswer = getSafeAnswer(params.answer);

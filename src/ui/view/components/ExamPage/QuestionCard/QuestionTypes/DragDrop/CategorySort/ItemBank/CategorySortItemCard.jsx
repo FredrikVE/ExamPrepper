@@ -1,6 +1,6 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryItemBank/CategorySortItemCard.jsx
 import { GripVertical } from "lucide-react";
-import { getItemLabel } from "../Logic/categorySortAnswerLogic.js";
+import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
 
 export default function CategorySortItemCard(props) {
     const label = getItemLabel(props.item);

@@ -1,8 +1,8 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/Feedback/TableMatchFeedbackCard.jsx
-import { getTargetStatus } from "../Logic/tableMatchAnswerLogic.js";
+import { getTargetStatus } from "../Utils/tableMatchAnswerLogic.js";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";
-import { getAnswerText, getExtendedPoints, getFeedbackCardClassName, getFeedbackReason, shouldShowCorrectAnswer } from "./tableMatchFeedbackCardView.js";
+import { getAnswerText, getExtendedPoints, getFeedbackCardClassName, getFeedbackReason, shouldShowCorrectAnswer } from "../Utils/tableMatchFeedbackCardView.js";
 
 export default function TableMatchFeedbackCard(props) {
     const status = getTargetStatus({

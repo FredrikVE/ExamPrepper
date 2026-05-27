@@ -1,7 +1,7 @@
 //src/ui/view/pages/ExamPage.jsx
 import Header from "../components/Header/Header.jsx";
 import Footer from "../components/Footer/Footer.jsx";
-import ExamProgress from "../components/ExamPage/ExamProgress.jsx";
+import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";

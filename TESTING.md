@@ -92,7 +92,7 @@ Siste testkjøring:
 
 ```text
 Test Suites: 13 passed, 13 total
-Tests:       70 passed, 70 total
+Tests:       77 passed, 77 total
 Snapshots:   0 total
 ```
 
@@ -118,6 +118,8 @@ test/
 │   └── repositories/
 │       ├── ExamRepository.test.js
 │       └── SubjectRepository.test.js
+├── ui/
+│   └── QuestionCard/
 └── utils/
     ├── answerUtils.test.js
     ├── questionUtils.test.js
@@ -131,7 +133,8 @@ Testmappene har følgende ansvar:
 | `test/integration/` | Tester samlet eksamensflyt med ekte data fra prosjektet |
 | `test/model/domain/` | Tester use cases og domenelogikk isolert |
 | `test/model/repositories/` | Tester repository-laget og henting av fag/eksamensdata |
-| `test/utils/` | Tester hjelpefunksjoner for svar, spørsmål og viewmodel-visning |
+| `test/ui/` | Klargjort for komponentnære UI-tester |
+| `test/utils/` | Tester felles og feature-nære hjelpefunksjoner for svar, spørsmål og viewmodel-visning |
 
 ---
 
@@ -156,6 +159,9 @@ Testene dekker blant annet:
 - retting av single choice-svar
 - retting av multiple choice-svar
 - retting av fill-in-svar
+- retting av drag-and-drop-oppgaver
+- retting av category sort-oppgaver
+- retting av table match-oppgaver
 - beregning av score og prosent
 - henting av fag
 - henting av eksamener
@@ -163,6 +169,7 @@ Testene dekker blant annet:
 - henting av riktig språkversjon av samme eksamen
 - repository-logikk
 - hjelpefunksjoner for svar, spørsmål og visning
+- feature-nære hjelpefunksjoner etter refaktorering av `QuestionCard`, `FeedbackPanel`, `ExamProgress` og `Footer`
 - integrert eksamensflyt med ekte data
 
 ---
@@ -192,12 +199,12 @@ Testene dekker blant annet:
 
 | ID | Test-case | Testbetingelse | Testdata / input | Forventet resultat | Testfil | Risiko |
 |---|---|---|---|---|---|---|
-| IT-01 | Laste synlige fag med eksamensteller | Appen skal kunne hente fag fra ekte datagrunnlag | `{ language: "no" }` | Returnerer fagliste der `IN5431` har `examCount: 3`, og fag uten eksamener fortsatt vises riktig | `examFlow.integration.test.js` | Alvorlig |
-| IT-02 | Laste norske eksamener for IN5431 | Appen skal hente riktige eksamener for valgt fag og språk | `{ subjectId: "in5431", language: "no" }` | Returnerer `mock-exam-1-no`, `mock-exam-2-no` og `mock-exam-3-no` | `examFlow.integration.test.js` | Svært alvorlig |
-| IT-03 | Laste spørsmål og beregne full score | Appen skal kunne hente spørsmål og beregne resultat når alle svar er riktige | `examId: "mock-exam-1-no"` + korrekte svar | Returnerer `score: 25`, `totalPoints: 25`, `percentage: 100` | `examFlow.integration.test.js` | Svært alvorlig |
-| IT-04 | Rette faktiske spørsmål fra eksamensdata | Retting skal fungere med ekte `single`, `multi` og `fill`-spørsmål | Spørsmål fra `mock-exam-1-en` | `GradeAnswerUseCase` returnerer `true` for korrekte svar fra data | `examFlow.integration.test.js` | Svært alvorlig |
-| IT-05 | Finne oversatt eksamen basert på `baseId` og `lang` | Språkbytte skal finne riktig språkversjon av samme eksamen | `{ baseId: "mock-exam-1", lang: "en" }` | Returnerer eksamen med `id: "mock-exam-1-en"`, `baseId: "mock-exam-1"` og `lang: "en"` | `examFlow.integration.test.js` | Svært alvorlig |
-| IT-06 | Finne fag med eksamensteller | Appen skal hente valgt fag og beregne antall tilgjengelige eksamener | `{ subjectId: "in5431", language: "en" }` | Returnerer `IN5431` med `examCount: 3` | `examFlow.integration.test.js` | Alvorlig |
+| IT-01 | Laste synlige fag med eksamensteller | Appen skal kunne hente fag fra ekte datagrunnlag | `{ language: "no" }` | Returnerer fagliste der `IN5431` har riktig `examCount`, og fag uten eksamener fortsatt vises riktig | `examFlow.integration.test.js` | Alvorlig |
+| IT-02 | Laste norske eksamener for IN5431 | Appen skal hente riktige eksamener for valgt fag og språk | `{ subjectId: "in5431", language: "no" }` | Returnerer norske eksamener for `IN5431` med riktig `id`, `baseId`, `lang` og spørsmålsteller | `examFlow.integration.test.js` | Svært alvorlig |
+| IT-03 | Laste spørsmål og beregne full score | Appen skal kunne hente spørsmål og beregne resultat når alle svar er riktige | Valgt eksamen + korrekte svar | Returnerer riktig `score`, `totalPoints` og `percentage` | `examFlow.integration.test.js` | Svært alvorlig |
+| IT-04 | Rette faktiske spørsmål fra eksamensdata | Retting skal fungere med ekte spørsmålstyper fra eksamensdata | Spørsmål fra eksamensdata | `GradeAnswerUseCase` returnerer `true` for korrekte svar fra data | `examFlow.integration.test.js` | Svært alvorlig |
+| IT-05 | Finne oversatt eksamen basert på `baseId` og `lang` | Språkbytte skal finne riktig språkversjon av samme eksamen | `{ baseId: "mock-exam-1", lang: "en" }` | Returnerer eksamen med riktig `id`, samme `baseId` og riktig `lang` | `examFlow.integration.test.js` | Svært alvorlig |
+| IT-06 | Finne fag med eksamensteller | Appen skal hente valgt fag og beregne antall tilgjengelige eksamener | `{ subjectId: "in5431", language: "en" }` | Returnerer `IN5431` med riktig `examCount` | `examFlow.integration.test.js` | Alvorlig |
 
 ---
 
@@ -270,7 +277,9 @@ og oppdatere både produksjonskode og tester til å bruke samme struktur.
 
 Mulige forbedringer i testoppsettet:
 
-- Legge til komponenttester for `QuestionCard`, `AnswerOptionCard` og `FeedbackPanel`
+- Legge til komponenttester for `QuestionCard`, `AnswerOptionCard`, `FeedbackPanel`, `ExamProgress` og `ResultBadge`
+- Legge til komponenttester for oppgavetypene under `QuestionCard/QuestionTypes`
+- Legge til tester for drag-and-drop-interaksjoner med React Testing Library
 - Legge til tester for ViewModels med React Testing Library eller Vitest
 - Legge testkjøring inn i GitHub Actions
 - Lage coverage-krav for pull requests

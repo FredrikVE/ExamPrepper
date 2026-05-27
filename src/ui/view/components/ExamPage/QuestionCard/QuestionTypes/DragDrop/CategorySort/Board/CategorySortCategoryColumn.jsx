@@ -1,5 +1,5 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryBoard/CategorySortCategoryColumn.jsx
-import { getSafeArray } from "../Logic/categorySortAnswerLogic.js";
+import { getSafeArray } from "../Utils/categorySortAnswerLogic.js";
 import CategorySortDropZone from "./CategorySortDropZone.jsx";
 
 export default function CategorySortCategoryColumn(props) {

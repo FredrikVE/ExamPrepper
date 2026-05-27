@@ -1,6 +1,6 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/AnswerTable/TableMatchAnswerRow.jsx
 import TableMatchFeedbackCard from "../Feedback/TableMatchFeedbackCard.jsx";
-import { isTargetCorrect } from "../Logic/tableMatchAnswerLogic.js";
+import { isTargetCorrect } from "../Utils/tableMatchAnswerLogic.js";
 import TableMatchAnswerSlot from "./TableMatchAnswerSlot.jsx";
 
 export default function TableMatchAnswerRow(props) {

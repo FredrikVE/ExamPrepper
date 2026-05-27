@@ -1,6 +1,6 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryBoard/CategorySortPlacedItemCard.jsx
 import { GripVertical, X } from "lucide-react";
-import { getItemLabel } from "../Logic/categorySortAnswerLogic.js";
+import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
 
 export default function CategorySortPlacedItemCard(props) {
     let className = "drag-categorize-placed-card";

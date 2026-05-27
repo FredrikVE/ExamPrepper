@@ -3,7 +3,7 @@ import CategorySortCategoryGrid from "../Board/CategorySortCategoryGrid.jsx";
 import CategorySortItemBank from "../ItemBank/CategorySortItemBank.jsx";
 import { useCategorySortQuestion } from "./useCategorySortQuestion.js";
 
-export { getCategorySortStats } from "../Logic/categorySortFeedbackStats.js";
+export { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";
 
 export default function CategorySortQuestion(props) {
     const categorySort = useCategorySortQuestion(props);

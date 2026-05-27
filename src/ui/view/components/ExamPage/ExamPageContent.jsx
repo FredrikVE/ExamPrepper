@@ -1,5 +1,5 @@
 //src/ui/view/components/ExamPage/ExamPageContent.jsx
-import QuestionCard from "./QuestionCard.jsx";
+import QuestionCard from "./QuestionCard/QuestionCard.jsx";
 
 export default function ExamPageContent({ viewModel, t }) {
     if (!viewModel.currentQuestion) {

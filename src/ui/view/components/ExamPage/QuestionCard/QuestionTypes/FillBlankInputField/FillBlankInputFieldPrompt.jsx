@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/FillBlankInputField/FillBlankInputFieldPrompt.jsx
 import { QUESTION_CONFIG } from "../../../../../../../constants/QuestionConfig.js";
-import { isInlineBlankPart, splitPromptByInlineBlank } from "../../../../../../../utils/questionutils/fillPromptUtils.js";
+import { isInlineBlankPart, splitPromptByInlineBlank } from "./Utils/fillBlankPromptUtils.js";
 
 export default function FillBlankInputFieldPrompt({ question, answerText, submitted, correct, onSingleAnswer, t }) {
     const parts = splitPromptByInlineBlank(question.prompt);

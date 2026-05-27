@@ -1,6 +1,6 @@
 //src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionMarker.jsx
 import { Check, CheckCircle2, X, XCircle } from "lucide-react";
-import { getAnswerMarkerClassName } from "../../../../../../utils/answerutils/answerOptionUtils/answerOptionCardUtils.js";
+import { getAnswerMarkerClassName } from "./Utils/answerOptionCardView.js";
 
 export default function AnswerOptionMarker({ letter, correct, isSelected }) {
     const StatusIcon = correct ? CheckCircle2 : XCircle;

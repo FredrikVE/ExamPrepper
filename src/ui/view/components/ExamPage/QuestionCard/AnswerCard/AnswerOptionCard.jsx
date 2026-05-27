@@ -3,7 +3,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import AnswerOptionActions from "./AnswerOptionActions.jsx";
 import AnswerOptionExtendedPanel from "./AnswerOptionExtendedPanel.jsx";
 import AnswerOptionMarker from "./AnswerOptionMarker.jsx";
-import { getAnswerCardClassName, getExtendedExplanationPoints, getOptionLetter } from "../../../../../../utils/answerutils/answerOptionUtils/answerOptionCardUtils.js";
+import { getAnswerCardClassName, getExtendedExplanationPoints, getOptionLetter } from "./Utils/answerOptionCardView.js";
 
 export default function AnswerOptionCard({ questionId, option, optionIndex, displayIndex, isSelected, isExpanded, onToggleExpanded, t }) {
     const letter = getOptionLetter(displayIndex);

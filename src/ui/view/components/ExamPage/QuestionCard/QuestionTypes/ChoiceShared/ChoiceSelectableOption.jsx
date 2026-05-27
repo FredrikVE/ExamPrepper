@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/ChoiceSelectableOption.jsx
 import { QUESTION_TYPES } from "../../../../../../../constants/QuestionTypes.js";
-import getOptionLetter from "../../../../../../../utils/answerutils/getOptionLetter.js";
+import getOptionLetter from "./Utils/getOptionLetter.js";
 import { getSelectableOptionClassName } from "../../Shared/Styling/questionCardClassNames.js";
 
 export default function ChoiceSelectableOption({ question, option, optionIndex, displayIndex, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
