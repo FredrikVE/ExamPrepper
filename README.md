@@ -17,6 +17,7 @@ Appen støtter flere spørsmålstyper:
 3. Fyll inn riktig begrep
 4. Dra-og-slipp til riktige kategorier
 5. Dra-og-slipp matching i tabell
+6. Dra-og-slipp plassering i 2x2-matrise
 
 Etter levering får brukeren tilbakemelding på hvert spørsmål:
 
@@ -44,7 +45,8 @@ Målet med prosjektet er både å lage et nyttig eksamensverktøy og å demonstr
 | Fyll inn begrep | Brukeren skriver inn riktig fagbegrep, med støtte for flere aksepterte svar |
 | Category sort | Brukeren kan dra svaralternativer inn i riktige kategorier |
 | Table match | Brukeren kan matche kort med riktig rad/beskrivelse i en tabell |
-| Drag-and-drop feedback | Drag-and-drop-oppgaver viser score, riktige/feil plasseringer og forklaringer etter levering |
+| Matrix placement | Brukeren kan plassere kort i riktig kvadrant i en generisk 2x2-matrise |
+| Drag-and-drop feedback | Drag-and-drop-oppgaver viser riktige/feil plasseringer, ubesvarte kort, fasitkort og forklaringer etter levering |
 | Automatisk retting | Svarene rettes når brukeren trykker «Lever nå» |
 | Fasit etter levering | Etter levering vises fasit, forklaringer og vurdering av svarene |
 | Tydelig fill-in feedback | Fill-in-spørsmål viser brukerens svar og riktig svar side om side etter levering |
@@ -186,6 +188,12 @@ IN5431-Exam-Emulator/
     │   │       │   │   │       │   └── ...
     │   │       │   │   │       ├── CategorySort/
     │   │       │   │   │       │   └── ...
+    │   │       │   │   │       ├── MatrixPlacement/
+    │   │       │   │   │       │   ├── Feedback/
+    │   │       │   │   │       │   ├── ItemBank/
+    │   │       │   │   │       │   ├── Matrix/
+    │   │       │   │   │       │   ├── Question/
+    │   │       │   │   │       │   └── Utils/
     │   │       │   │   │       └── TableMatch/
     │   │       │   │   │           └── ...
     │   │       │   │   └── Shared/
@@ -292,6 +300,7 @@ Testene dekker blant annet:
 - retting av drag-and-drop-oppgaver
 - retting av category sort-oppgaver
 - retting av table match-oppgaver
+- retting av matrix placement-oppgaver
 - beregning av score og prosent
 - henting av fag
 - henting av eksamener
@@ -329,6 +338,11 @@ Testene dekker blant annet:
             <td>Rette fill-in-svar</td>
             <td>Systemet skal godta riktige tekstsvar og alternative svar.</td>
             <td><code>GradeAnswerUseCase.test.js</code> / <code>answerUtils.test.js</code></td>
+        </tr>
+        <tr>
+            <td>Rette matrix placement-svar</td>
+            <td>Systemet skal avgjøre om kort er plassert i riktig kvadrant i en 2x2-matrise.</td>
+            <td><code>GradeAnswerUseCase.test.js</code></td>
         </tr>
         <tr>
             <td>Beregne eksamensscore</td>
@@ -416,7 +430,7 @@ Testene dekker blant annet:
         </tr>
         <tr>
             <td>Rette faktiske spørsmål fra eksamensdata</td>
-            <td>Retting skal fungere med ekte <code>single</code>, <code>multi</code>, <code>fill</code> og drag-and-drop-spørsmål.</td>
+            <td>Retting skal fungere med ekte <code>single</code>, <code>multi</code>, <code>fill</code>, category sort, table match og matrix placement-spørsmål.</td>
             <td><code>examFlow.integration.test.js</code></td>
         </tr>
         <tr>
@@ -482,6 +496,7 @@ Alle eksamener samles i `src/data/data.js`. Tanken med dette er å gjøre det en
 | `fill` | `FillBlankInputField` | Fyll inn riktig fagbegrep |
 | `drag-categorize` | `CategorySort` | Dra kort inn i riktig kategori |
 | `drag-drop` | `TableMatch` | Dra kort til riktig rad/beskrivelse i en tabell |
+| `matrix-placement` | `MatrixPlacement` | Dra kort til riktig kvadrant i en generisk 2x2-matrise |
 
 ### Forklaringsfelter
 
@@ -491,7 +506,63 @@ Alle eksamener samles i `src/data/data.js`. Tanken med dette er å gjøre det en
 | `whyExtended` | Valgfri liste med utvidede forklaringspunkter som vises når svarkortet åpnes |
 | `source` | Valgfri kildehenvisning mot forelesning, pensum eller fasitgrunnlag |
 
-Hvis `whyExtended` mangler, vises ikke utvidet forklaring for det alternativet.
+Hvis `whyExtended` mangler, vises ikke utvidet forklaring for det alternativet. For `matrix-placement` brukes `why` på hvert kort/item for å forklare hvorfor kortet hører hjemme i riktig kvadrant.
+
+### Eksempel på matrix placement-spørsmål
+
+`matrix-placement` er datadrevet og ikke hardkodet til én bestemt fagmodell. Samme komponent kan derfor brukes til for eksempel operating model matrix, risk awareness matrix eller andre 2x2-matriser.
+
+```js
+{
+  id: 5,
+  type: "matrix-placement",
+  title: "Operating model matrix",
+  points: 3,
+  prompt: "Dra hver operating model til riktig kvadrant.",
+  source: "Fasit: IN5431, CIO Toolbox, forelesning 3–6.",
+  matrix: {
+    xAxis: {
+      label: "Forretningsprosessintegrasjon",
+      lowLabel: "Lav",
+      highLabel: "Høy"
+    },
+    yAxis: {
+      label: "Prosessstandardisering",
+      lowLabel: "Lav",
+      highLabel: "Høy"
+    },
+    quadrants: [
+      { id: "high-standardization-low-integration", title: "Høy standardisering / Lav integrasjon" },
+      { id: "high-standardization-high-integration", title: "Høy standardisering / Høy integrasjon" },
+      { id: "low-standardization-low-integration", title: "Lav standardisering / Lav integrasjon" },
+      { id: "low-standardization-high-integration", title: "Lav standardisering / Høy integrasjon" }
+    ]
+  },
+  items: [
+    {
+      id: "replication",
+      label: "Replication",
+      correctQuadrantId: "high-standardization-low-integration",
+      why: "Replication betyr høy standardisering, men lav integrasjon."
+    }
+  ]
+}
+```
+
+For matriser som ikke naturlig bruker lav/høy på aksene, kan aksene også beskrives med mer generiske retningslabels:
+
+```js
+xAxis: {
+  label: "Measurement accuracy",
+  leftLabel: "High",
+  rightLabel: "Low"
+},
+yAxis: {
+  label: "Risk awareness",
+  topLabel: "High",
+  bottomLabel: "Low"
+}
+```
 
 ---
 
@@ -626,8 +697,8 @@ direction TB
         MockExam2En["mockExam2_en.js"]
         MockExam3No["mockExam3_no.js"]
         MockExam3En["mockExam3_en.js"]
-        MockExam4No["mockExam6_no.js"]
-        MockExam4En["mockExam6_en.js"]
+        MockExam4No["mockExam4_no.js"]
+        MockExam4En["mockExam4_en.js"]
         MockExam5En["mockExam5_en.js"]
         MockExamDragCategorizeNo["mockExamDragCategorize_no.js"]
     end
@@ -828,7 +899,7 @@ Fagvelgeren er delt opp i `SubjectSelectTopbar`, `SubjectSelectControls`, `Subje
 Eksamensvelgeren er delt opp i `ExamSelectTopbar`, `ExamSelectIntro`, `ExamSelectGrid` og `ExamSelectCard`. Dette gjør siden lettere å vedlikeholde og gjør det enklere å endre layout uten at page-filen vokser.
 
 **QuestionCard er delt etter oppgavetyper og fellesdeler.**  
-`QuestionCard` har en egen entrypoint-komponent i `QuestionCard/QuestionCard.jsx`. Konkrete oppgavetyper ligger under `QuestionTypes/`, blant annet `FillBlankInputField`, `MultiCheckboxSelect`, `SingleRadioButtonChoice` og `DragDrop`. Drag-and-drop-oppgaver er videre delt i `CategorySort` og `TableMatch`. Felles deler som prompt, feedback, header, styling og view-state ligger i `Shared/`.
+`QuestionCard` har en egen entrypoint-komponent i `QuestionCard/QuestionCard.jsx`. Konkrete oppgavetyper ligger under `QuestionTypes/`, blant annet `FillBlankInputField`, `MultiCheckboxSelect`, `SingleRadioButtonChoice` og `DragDrop`. Drag-and-drop-oppgaver er videre delt i `CategorySort`, `TableMatch` og `MatrixPlacement`. `MatrixPlacement` er laget som en generisk 2x2-matriseoppgave, slik at samme komponent kan brukes til flere faglige matriser, for eksempel operating model matrix og risk awareness matrix. Felles deler som prompt, feedback, header, styling og view-state ligger i `Shared/`.
 
 **AnswerCard er modularisert.**  
 Svarkortene i feedback-mode er delt i `AnswerOptionCard`, `AnswerOptionActions`, `AnswerOptionMarker` og `AnswerOptionExtendedPanel`. Hjelpefunksjoner for AnswerCard ligger lokalt i `QuestionCard/AnswerCard/Utils/`.
@@ -846,6 +917,8 @@ Footer-komponenten er delt i `Footer`, `FooterActionButton`, `FooterNavigationBu
 Eksamenssiden består av sidebar, header/statistikk, progressbar, question card og footer-navigasjon. Dette gjør at brukeren hele tiden ser hvor langt de har kommet, hvilken oppgave de jobber med, og hvilke handlinger som er tilgjengelige.
 
 **Responsivitet håndteres lokalt per UI-område.**  
+`QuestionCard/matrix-placement.css` inneholder styling for den generiske 2x2 matrix-placement-oppgavetypen, inkludert akser, piler, drop zones, fasitkort, brukerplasseringer og responsive regler.
+
 Responsiv styling ligger som hovedregel i `responsive.css` i den relevante side- eller komponentmappen. Det gjør at for eksempel `ExamPage`, `ExamSelectPage`, `SubjectSelectPage`, `QuestionCard`, `Footer`, `Header` og `FeedbackPanel` kan justeres hver for seg uten én stor global responsive-fil.
 
 **Laptop- og edge-case-layout er håndtert eksplisitt.**  

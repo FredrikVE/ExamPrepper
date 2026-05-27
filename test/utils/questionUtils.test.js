@@ -2,7 +2,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { hasInlineFillBlank, isInlineBlankPart, splitPromptByInlineBlank } from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/FillBlankInputField/Utils/fillBlankPromptUtils.js";
 import { getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/ExamPage/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";
-import { getQuestionViewState, isFillQuestion } from "../../src/ui/view/components/ExamPage/QuestionCard/Shared/Utils/questionCardViewState.js";
+import { getQuestionViewState, isFillQuestion, isMatrixPlacementQuestion } from "../../src/ui/view/components/ExamPage/QuestionCard/Shared/Utils/questionCardViewState.js";
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";
 
 describe("question utils", () => {
@@ -33,6 +33,24 @@ describe("question utils", () => {
         expect(isFillQuestion({ type: QUESTION_TYPES.MULTI })).toBe(false);
     });
 
+
+    test("identifies matrix placement as a drag-drop question without options", () => {
+        const state = getQuestionViewState({
+            question: { type: QUESTION_TYPES.MATRIX_PLACEMENT },
+            submitted: false,
+            showAllFeedback: true,
+            correct: false
+        });
+
+        expect(isMatrixPlacementQuestion({ type: QUESTION_TYPES.MATRIX_PLACEMENT })).toBe(true);
+        expect(state).toMatchObject({
+            shouldShowOptions: false,
+            shouldShowPrompt: false,
+            shouldShowDragDrop: true,
+            shouldShowMatrixPlacement: true
+        });
+    });
+
     test("builds view state before submit", () => {
         const state = getQuestionViewState({
             question: { type: QUESTION_TYPES.SINGLE, source: "Lecture" },
@@ -43,6 +61,7 @@ describe("question utils", () => {
 
         expect(state).toMatchObject({
             feedbackMode: false,
+            shouldShowPrompt: true,
             shouldShowOptions: true,
             shouldShowWarning: false,
             shouldShowSource: false

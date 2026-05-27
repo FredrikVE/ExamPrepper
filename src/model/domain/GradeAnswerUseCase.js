@@ -30,6 +30,10 @@ export default class GradeAnswerUseCase {
             return this.#isDragCategorizeAnswerFullyCorrect(question, answer);
         }
 
+        if (question.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
+            return this.#isMatrixPlacementAnswerFullyCorrect(question, answer);
+        }
+
         return false;
     }
 
@@ -44,6 +48,10 @@ export default class GradeAnswerUseCase {
 
         if (question.type === QUESTION_TYPES.DRAG_CATEGORIZE) {
             return this.#getDragCategorizeQuestionScore(question, answer);
+        }
+
+        if (question.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
+            return this.#getMatrixPlacementQuestionScore(question, answer);
         }
 
         return this.execute(question, answer) ? question.points : 0;
@@ -84,6 +92,28 @@ export default class GradeAnswerUseCase {
             }
 
             if (this.#isCategoryPlacementCorrect(question, categoryId, item.id)) {
+                stats.correct += 1;
+                return stats;
+            }
+
+            stats.wrong += 1;
+            return stats;
+        }, { correct: 0, wrong: 0, unanswered: 0 });
+    }
+
+    getMatrixPlacementStats(question, answer) {
+        const items = this.#getSafeMatrixItems(question);
+        const safeAnswer = this.#normalizeMatrixPlacementAnswer(question, answer);
+
+        return items.reduce((stats, item) => {
+            const quadrantId = safeAnswer[item.id];
+
+            if (!quadrantId) {
+                stats.unanswered += 1;
+                return stats;
+            }
+
+            if (this.#isMatrixPlacementCorrect(question, quadrantId, item.id)) {
                 stats.correct += 1;
                 return stats;
             }
@@ -173,6 +203,34 @@ export default class GradeAnswerUseCase {
         return Number(rawScore.toFixed(2));
     }
 
+    #isMatrixPlacementAnswerFullyCorrect(question, answer) {
+        const items = this.#getSafeMatrixItems(question);
+        const safeAnswer = this.#normalizeMatrixPlacementAnswer(question, answer);
+
+        if (items.length === 0) {
+            return false;
+        }
+
+        return items.every((item) => {
+            const quadrantId = safeAnswer[item.id];
+
+            return this.#isMatrixPlacementCorrect(question, quadrantId, item.id);
+        });
+    }
+
+    #getMatrixPlacementQuestionScore(question, answer) {
+        const items = this.#getSafeMatrixItems(question);
+
+        if (items.length === 0) {
+            return 0;
+        }
+
+        const stats = this.getMatrixPlacementStats(question, answer);
+        const rawScore = question.points * (stats.correct / items.length);
+
+        return Number(rawScore.toFixed(2));
+    }
+
     #normalizeCategoryAnswer(question, answer) {
         const categories = Array.isArray(question?.categories) ? question.categories : [];
         const safeAnswer = this.#isPlainObject(answer) ? answer : {};
@@ -194,6 +252,33 @@ export default class GradeAnswerUseCase {
                 normalizedAnswer[category.id].push(itemId);
                 usedItemIds.add(itemId);
             }
+        }
+
+        return normalizedAnswer;
+    }
+
+    #normalizeMatrixPlacementAnswer(question, answer) {
+        const rawAnswer = this.#isPlainObject(answer?.placements)
+            ? answer.placements
+            : answer;
+        const safeAnswer = this.#isPlainObject(rawAnswer) ? rawAnswer : {};
+        const itemIds = new Set(this.#getSafeMatrixItems(question).map((item) => item.id));
+        const quadrantIds = new Set(this.#getMatrixQuadrants(question).map((quadrant) => quadrant.id));
+        const shouldValidate = itemIds.size > 0 && quadrantIds.size > 0;
+        const normalizedAnswer = {};
+
+        for (const itemId in safeAnswer) {
+            const quadrantId = safeAnswer[itemId];
+
+            if (!quadrantId) {
+                continue;
+            }
+
+            if (shouldValidate && (!itemIds.has(itemId) || !quadrantIds.has(quadrantId))) {
+                continue;
+            }
+
+            normalizedAnswer[itemId] = quadrantId;
         }
 
         return normalizedAnswer;
@@ -227,6 +312,24 @@ export default class GradeAnswerUseCase {
         return null;
     }
 
+    #getCorrectMatrixQuadrantId(question, itemId) {
+        const correctAnswer = this.#isPlainObject(question?.correctAnswer)
+            ? question.correctAnswer
+            : {};
+        const correctPlacements = this.#isPlainObject(question?.correctPlacements)
+            ? question.correctPlacements
+            : {};
+        const item = this.#getSafeMatrixItems(question).find((candidate) => {
+            return candidate.id === itemId;
+        });
+
+        return correctAnswer[itemId]
+            ?? correctPlacements[itemId]
+            ?? item?.correctQuadrantId
+            ?? item?.quadrantId
+            ?? null;
+    }
+
     #isCategoryPlacementCorrect(question, categoryId, itemId) {
         if (!categoryId || !itemId) {
             return false;
@@ -235,6 +338,29 @@ export default class GradeAnswerUseCase {
         return this.#getCorrectCategoryId(question, itemId) === categoryId;
     }
 
+    #isMatrixPlacementCorrect(question, quadrantId, itemId) {
+        if (!quadrantId || !itemId) {
+            return false;
+        }
+
+        return this.#getCorrectMatrixQuadrantId(question, itemId) === quadrantId;
+    }
+
+    #getSafeMatrixItems(question) {
+        return Array.isArray(question?.items) ? question.items : [];
+    }
+
+    #getMatrixQuadrants(question) {
+        if (Array.isArray(question?.matrix?.quadrants)) {
+            return question.matrix.quadrants;
+        }
+
+        if (Array.isArray(question?.quadrants)) {
+            return question.quadrants;
+        }
+
+        return [];
+    }
 
     #getSortedSelectedIndexes(answer) {
         if (!Array.isArray(answer)) {

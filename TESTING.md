@@ -91,8 +91,8 @@ Denne advarselen kommer fordi Jest kjøres med ES Modules-støtte. Testene kan l
 Siste testkjøring:
 
 ```text
-Test Suites: 13 passed, 13 total
-Tests:       77 passed, 77 total
+Test Suites: 14 passed, 14 total
+Tests:       88 passed, 88 total
 Snapshots:   0 total
 ```
 
@@ -120,6 +120,7 @@ test/
 │       └── SubjectRepository.test.js
 ├── ui/
 │   └── QuestionCard/
+│       └── matrixPlacementAnswerLogic.test.js
 └── utils/
     ├── answerUtils.test.js
     ├── questionUtils.test.js
@@ -133,7 +134,7 @@ Testmappene har følgende ansvar:
 | `test/integration/` | Tester samlet eksamensflyt med ekte data fra prosjektet |
 | `test/model/domain/` | Tester use cases og domenelogikk isolert |
 | `test/model/repositories/` | Tester repository-laget og henting av fag/eksamensdata |
-| `test/ui/` | Klargjort for komponentnære UI-tester |
+| `test/ui/` | Tester komponentnær og feature-nær UI-logikk, blant annet matrix placement-visningslogikk |
 | `test/utils/` | Tester felles og feature-nære hjelpefunksjoner for svar, spørsmål og viewmodel-visning |
 
 ---
@@ -162,6 +163,9 @@ Testene dekker blant annet:
 - retting av drag-and-drop-oppgaver
 - retting av category sort-oppgaver
 - retting av table match-oppgaver
+- retting av matrix placement-oppgaver
+- defensive edge cases for matrix placement, inkludert tomme svar, ukjente items og ukjente quadrants
+- matrix placement-visningsrekkefølge med både legacy low/high-labels og generiske left/right/top/bottom-labels
 - beregning av score og prosent
 - henting av fag
 - henting av eksamener
@@ -192,6 +196,8 @@ Testene dekker blant annet:
 | UT-12 | Hjelpefunksjoner for svarlogikk | Utils skal tolke og normalisere svar likt på tvers av appen | Tekstsvar, valgt index, valgte alternativer | Returnerer riktig normalisert svar og riktig vurderingsgrunnlag | `answerUtils.test.js` | Alvorlig |
 | UT-13 | Hjelpefunksjoner for spørsmål | Utils skal gi riktig presentasjonsdata for spørsmål | Spørsmålsobjekter med ulike typer | Returnerer riktige labels, verdier og visningsdata | `questionUtils.test.js` | Moderat |
 | UT-14 | Hjelpefunksjoner for ViewModel-visning | Utils skal gi riktig UI-status basert på state | Svarstatus, submitted-status og spørsmålsdata | Returnerer riktige statusverdier og visningsflagg | `viewModelUtils.test.js` | Moderat |
+| UT-15 | Rette matrix placement-svar | Systemet skal avgjøre om kort er plassert i riktig kvadrant i en 2x2-matrise | `matrix-placement`-spørsmål med riktige, feil, tomme og ugyldige svar | Returnerer korrekt boolean, delscore og stats for riktig/feil/ubesvart | `GradeAnswerUseCase.test.js` | Svært alvorlig |
+| UT-16 | Matrix placement-visningslogikk | UI-logikken skal sortere quadrants og normalisere svar defensivt | 2x2-matriser med `lowLabel`/`highLabel`, `leftLabel`/`rightLabel`/`topLabel`/`bottomLabel` og ugyldige svar | Returnerer riktig quadrant-rekkefølge og filtrerer ugyldige svar | `matrixPlacementAnswerLogic.test.js` | Alvorlig |
 
 ---
 
@@ -202,7 +208,7 @@ Testene dekker blant annet:
 | IT-01 | Laste synlige fag med eksamensteller | Appen skal kunne hente fag fra ekte datagrunnlag | `{ language: "no" }` | Returnerer fagliste der `IN5431` har riktig `examCount`, og fag uten eksamener fortsatt vises riktig | `examFlow.integration.test.js` | Alvorlig |
 | IT-02 | Laste norske eksamener for IN5431 | Appen skal hente riktige eksamener for valgt fag og språk | `{ subjectId: "in5431", language: "no" }` | Returnerer norske eksamener for `IN5431` med riktig `id`, `baseId`, `lang` og spørsmålsteller | `examFlow.integration.test.js` | Svært alvorlig |
 | IT-03 | Laste spørsmål og beregne full score | Appen skal kunne hente spørsmål og beregne resultat når alle svar er riktige | Valgt eksamen + korrekte svar | Returnerer riktig `score`, `totalPoints` og `percentage` | `examFlow.integration.test.js` | Svært alvorlig |
-| IT-04 | Rette faktiske spørsmål fra eksamensdata | Retting skal fungere med ekte spørsmålstyper fra eksamensdata | Spørsmål fra eksamensdata | `GradeAnswerUseCase` returnerer `true` for korrekte svar fra data | `examFlow.integration.test.js` | Svært alvorlig |
+| IT-04 | Rette faktiske spørsmål fra eksamensdata | Retting skal fungere med ekte spørsmålstyper fra eksamensdata, inkludert matrix placement | Spørsmål fra eksamensdata | `GradeAnswerUseCase` returnerer `true` for korrekte svar fra data | `examFlow.integration.test.js` | Svært alvorlig |
 | IT-05 | Finne oversatt eksamen basert på `baseId` og `lang` | Språkbytte skal finne riktig språkversjon av samme eksamen | `{ baseId: "mock-exam-1", lang: "en" }` | Returnerer eksamen med riktig `id`, samme `baseId` og riktig `lang` | `examFlow.integration.test.js` | Svært alvorlig |
 | IT-06 | Finne fag med eksamensteller | Appen skal hente valgt fag og beregne antall tilgjengelige eksamener | `{ subjectId: "in5431", language: "en" }` | Returnerer `IN5431` med riktig `examCount` | `examFlow.integration.test.js` | Alvorlig |
 

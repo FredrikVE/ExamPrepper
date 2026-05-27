@@ -6,6 +6,7 @@ import FeedbackPanel from "../FeedbackPanel/FeedbackPanel.jsx";
 import FillBlankInputFieldQuestion from "./QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
 import CategorySortQuestion from "./QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
 import TableMatchQuestion from "./QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";
+import MatrixPlacementQuestion from "./QuestionTypes/DragDrop/MatrixPlacement/Question/MatrixPlacementQuestion.jsx";
 import MultiCheckboxSelectQuestion from "./QuestionTypes/MultiCheckboxSelect/MultiCheckboxSelectQuestion.jsx";
 import SingleRadioButtonChoiceQuestion from "./QuestionTypes/SingleRadioButtonChoice/SingleRadioButtonChoiceQuestion.jsx";
 import PromptSection from "./Shared/Prompt/PromptSection.jsx";
@@ -40,15 +41,17 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
             <div className="question-card-body">
                 <div className="question-card-divider" />
 
-                <PromptSection
-                    question={question}
-                    answerText={answerText}
-                    submitted={submitted}
-                    correct={correct}
-                    hasInlineFillBlank={viewState.hasInlineFillBlank}
-                    onSingleAnswer={onSingleAnswer}
-                    t={t}
-                />
+                {viewState.shouldShowPrompt ? (
+                    <PromptSection
+                        question={question}
+                        answerText={answerText}
+                        submitted={submitted}
+                        correct={correct}
+                        hasInlineFillBlank={viewState.hasInlineFillBlank}
+                        onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
+                ) : null}
 
                 {viewState.shouldShowFillInput ? (
                     <FillBlankInputFieldQuestion
@@ -72,7 +75,18 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                     />
                 ) : null}
 
-                {viewState.shouldShowDragDrop && !viewState.shouldShowDragCategorize ? (
+                {viewState.shouldShowMatrixPlacement ? (
+                    <MatrixPlacementQuestion
+                        question={question}
+                        answer={answer}
+                        submitted={submitted}
+                        showAllFeedback={showAllFeedback}
+                        onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
+                ) : null}
+
+                {viewState.shouldShowDragDrop && !viewState.shouldShowDragCategorize && !viewState.shouldShowMatrixPlacement ? (
                     <TableMatchQuestion
                         question={question}
                         answer={answer}
