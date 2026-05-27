@@ -1,16 +1,16 @@
-// src/ui/view/components/ExamPage/QuestionCard.jsx
-import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-import { getQuestionViewState } from "./QuestionCard/Shared/Utils/questionCardViewState.js";
-import { QUESTION_TYPES } from "../../../../constants/QuestionTypes.js";
-import FeedbackPanel from "./FeedbackPanel/FeedbackPanel.jsx";
-import FillBlankInputFieldQuestion from "./QuestionCard/QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
-import CategorySortQuestion from "./QuestionCard/QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
-import TableMatchQuestion from "./QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";
-import MultiCheckboxSelectQuestion from "./QuestionCard/QuestionTypes/MultiCheckboxSelect/MultiCheckboxSelectQuestion.jsx";
-import SingleRadioButtonChoiceQuestion from "./QuestionCard/QuestionTypes/SingleRadioButtonChoice/SingleRadioButtonChoiceQuestion.jsx";
-import PromptSection from "./QuestionCard/Shared/Prompt/PromptSection.jsx";
-import QuestionFeedback from "./QuestionCard/Shared/Feedback/QuestionFeedback.jsx";
-import QuestionHeader from "./QuestionCard/Shared/Header/QuestionHeader.jsx";
+// src/ui/view/components/ExamPage/QuestionCard/QuestionCard.jsx
+import { useLanguage } from "../../../../../i18n/LanguageContext.jsx";
+import { getQuestionViewState } from "./Shared/Utils/questionCardViewState.js";
+import { QUESTION_TYPES } from "../../../../../constants/QuestionTypes.js";
+import FeedbackPanel from "../FeedbackPanel/FeedbackPanel.jsx";
+import FillBlankInputFieldQuestion from "./QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
+import CategorySortQuestion from "./QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
+import TableMatchQuestion from "./QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";
+import MultiCheckboxSelectQuestion from "./QuestionTypes/MultiCheckboxSelect/MultiCheckboxSelectQuestion.jsx";
+import SingleRadioButtonChoiceQuestion from "./QuestionTypes/SingleRadioButtonChoice/SingleRadioButtonChoiceQuestion.jsx";
+import PromptSection from "./Shared/Prompt/PromptSection.jsx";
+import QuestionFeedback from "./Shared/Feedback/QuestionFeedback.jsx";
+import QuestionHeader from "./Shared/Header/QuestionHeader.jsx";
 
 
 export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
