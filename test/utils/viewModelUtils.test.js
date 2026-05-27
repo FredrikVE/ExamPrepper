@@ -1,10 +1,10 @@
 //test/utils/viewModelUtils.test.js
 import { describe, expect, test } from "@jest/globals";
-import getAnsweredCountLabel from "../../src/utils/viewmodelutils/getAnsweredCountLabel.js";
-import getFeedbackToggleLabel from "../../src/utils/viewmodelutils/getFeedbackToggleLabel.js";
-import getQuestionProgressLabel from "../../src/utils/viewmodelutils/getQuestionProgressLabel.js";
-import getScoreLabel from "../../src/utils/viewmodelutils/getScoreLabel.js";
-import { buildExamProgressPoints } from "../../src/utils/examPageUtils/buildExamProgressPoints.js";
+import getAnsweredCountLabel from "../../src/ui/viewmodel/Utils/getAnsweredCountLabel.js";
+import getFeedbackToggleLabel from "../../src/ui/viewmodel/Utils/getFeedbackToggleLabel.js";
+import getQuestionProgressLabel from "../../src/ui/viewmodel/Utils/getQuestionProgressLabel.js";
+import getScoreLabel from "../../src/ui/viewmodel/Utils/getScoreLabel.js";
+import { buildExamProgressPoints } from "../../src/ui/view/components/ExamPage/ExamProgress/Utils/buildExamProgressPoints.js";
 
 describe("view model utils", () => {
     test("formats answered count", () => {

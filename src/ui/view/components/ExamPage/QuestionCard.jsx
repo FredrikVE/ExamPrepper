@@ -1,8 +1,8 @@
 // src/ui/view/components/ExamPage/QuestionCard.jsx
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-import { getQuestionViewState } from "../../../../utils/questionutils/questionViewStateUtils.js";
+import { getQuestionViewState } from "./QuestionCard/Shared/Utils/questionCardViewState.js";
 import { QUESTION_TYPES } from "../../../../constants/QuestionTypes.js";
-import FeedbackPanel from "./FeedbackPanel.jsx";
+import FeedbackPanel from "./FeedbackPanel/FeedbackPanel.jsx";
 import FillBlankInputFieldQuestion from "./QuestionCard/QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
 import CategorySortQuestion from "./QuestionCard/QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
 import TableMatchQuestion from "./QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";

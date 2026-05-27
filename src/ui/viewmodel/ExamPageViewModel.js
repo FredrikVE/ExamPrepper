@@ -1,10 +1,10 @@
 //src/ui/viewmodel/ExamPageViewModel.js
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
-import getAnsweredCountLabel from "../../utils/viewmodelutils/getAnsweredCountLabel.js";
-import getScoreLabel from "../../utils/viewmodelutils/getScoreLabel.js";
-import getQuestionProgressLabel from "../../utils/viewmodelutils/getQuestionProgressLabel.js";
-import getFeedbackToggleLabel from "../../utils/viewmodelutils/getFeedbackToggleLabel.js";
+import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
+import getScoreLabel from "./Utils/getScoreLabel.js";
+import getQuestionProgressLabel from "./Utils/getQuestionProgressLabel.js";
+import getFeedbackToggleLabel from "./Utils/getFeedbackToggleLabel.js";
 import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";

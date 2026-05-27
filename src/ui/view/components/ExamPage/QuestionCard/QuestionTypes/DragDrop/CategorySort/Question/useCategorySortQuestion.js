@@ -1,7 +1,7 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategorySortQuestion/useCategorySortQuestion.js
 import { useState } from "react";
-import { clearItemFromAllCategories, createItemsById, getSafeArray, getUnplacedItems, normalizeCategoryAnswer } from "../Logic/categorySortAnswerLogic.js";
-import { getCategorySortStats } from "../Logic/categorySortFeedbackStats.js";
+import { clearItemFromAllCategories, createItemsById, getSafeArray, getUnplacedItems, normalizeCategoryAnswer } from "../Utils/categorySortAnswerLogic.js";
+import { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";
 
 export function useCategorySortQuestion(params) {
     const safeAnswer = normalizeCategoryAnswer(params.question, params.answer);

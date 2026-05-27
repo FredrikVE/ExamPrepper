@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/ChoiceOptionList.jsx
-import isOptionSelected from "../../../../../../../utils/answerutils/isOptionSelected.js";
+import isOptionSelected from "./Utils/isOptionSelected.js";
 import AnswerOptionCard from "../../AnswerCard/AnswerOptionCard.jsx";
 import ChoiceSelectableOption from "./ChoiceSelectableOption.jsx";
 

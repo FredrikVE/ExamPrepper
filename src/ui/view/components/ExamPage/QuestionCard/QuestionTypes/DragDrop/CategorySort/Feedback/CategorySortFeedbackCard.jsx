@@ -1,6 +1,6 @@
 //src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryFeedback/CategorySortFeedbackCard.jsx
 import { CheckCircle2, XCircle } from "lucide-react";
-import { getCategoryLabelById, getCorrectCategoryId, getItemFeedback, getItemLabel, isItemCorrectlyPlaced } from "../Logic/categorySortAnswerLogic.js";
+import { getCategoryLabelById, getCorrectCategoryId, getItemFeedback, getItemLabel, isItemCorrectlyPlaced } from "../Utils/categorySortAnswerLogic.js";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 

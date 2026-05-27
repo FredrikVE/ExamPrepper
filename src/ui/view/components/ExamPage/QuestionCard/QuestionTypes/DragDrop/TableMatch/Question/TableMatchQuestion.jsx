@@ -4,7 +4,7 @@ import TableMatchCardBank from "../CardBank/TableMatchCardBank.jsx";
 import TableMatchScoreSummary from "../Feedback/TableMatchScoreSummary.jsx";
 import { useTableMatchQuestion } from "./useTableMatchQuestion.js";
 
-export { getTableMatchStats } from "../Logic/tableMatchFeedbackStats.js";
+export { getTableMatchStats } from "../Utils/tableMatchFeedbackStats.js";
 
 export default function TableMatchQuestion(props) {
     const { question, t } = props;

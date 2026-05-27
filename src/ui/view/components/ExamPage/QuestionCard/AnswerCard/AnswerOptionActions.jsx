@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionActions.jsx
 import { ChevronDown } from "lucide-react";
-import { getAnswerBadgeClassName } from "../../../../../../utils/answerutils/answerOptionUtils/answerOptionCardUtils.js";
+import { getAnswerBadgeClassName } from "./Utils/answerOptionCardView.js";
 
 export default function AnswerOptionActions({ correct, statusText, StatusIcon, hasExtended, isExpanded, expandedId, onToggleExpanded, t }) {
     return (

@@ -1,11 +1,11 @@
 //test/utils/answerUtils.test.js
 import { describe, expect, test } from "@jest/globals";
-import normalizeAnswer from "../../src/utils/answerutils/normalizeAnswer.js";
-import getCorrectIndexes from "../../src/utils/answerutils/getCorrectIndexes.js";
-import getOptionLetter from "../../src/utils/answerutils/getOptionLetter.js";
-import isOptionSelected from "../../src/utils/answerutils/isOptionSelected.js";
-import getAnswerLabel from "../../src/utils/answerutils/getAnswerLabel.js";
-import AnswerLabelFormatter from "../../src/utils/answerutils/AnswerLabelFormatter.js";
+import normalizeAnswer from "../../src/utils/answer/normalizeAnswer.js";
+import getCorrectIndexes from "../../src/utils/answer/getCorrectIndexes.js";
+import getOptionLetter from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/Utils/getOptionLetter.js";
+import isOptionSelected from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/Utils/isOptionSelected.js";
+import getAnswerLabel from "../../src/ui/view/components/ExamPage/FeedbackPanel/Utils/getAnswerLabel.js";
+import AnswerLabelFormatter from "../../src/ui/view/components/ExamPage/FeedbackPanel/Utils/AnswerLabelFormatter.js";
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";
 
 describe("answer utils", () => {
