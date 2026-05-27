@@ -1,7 +1,7 @@
 //test/utils/questionUtils.test.js
 import { describe, expect, test } from "@jest/globals";
 import { hasInlineFillBlank, isInlineBlankPart, splitPromptByInlineBlank } from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/FillBlankInputField/Utils/fillBlankPromptUtils.js";
-import { getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/ExamPage/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";
+import { getExtendedExplanationImages, getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/ExamPage/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";
 import { getQuestionViewState, isFillQuestion, isMatrixPlacementQuestion } from "../../src/ui/view/components/ExamPage/QuestionCard/Shared/Utils/questionCardViewState.js";
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";
 
@@ -20,11 +20,32 @@ describe("question utils", () => {
         expect(isInlineBlankPart("__x__")).toBe(false);
     });
 
-    test("reads extended explanation points", () => {
-        const option = { whyExtended: ["Point 1", "Point 2"] };
+    test("reads extended explanation points and optional concept images", () => {
+        const option = {
+            whyExtended: ["Point 1", "Point 2"],
+            whyExtendedImages: [
+                {
+                    id: "example",
+                    src: "/subjects/in5431/designed-for-digital/d4d-building-blocks/example.svg",
+                    alt: "Example diagram",
+                    title: "Example",
+                    caption: "A helpful visual."
+                }
+            ]
+        };
 
         expect(getExtendedExplanationPoints(option)).toEqual(["Point 1", "Point 2"]);
+        expect(getExtendedExplanationImages(option)).toEqual([
+            {
+                id: "example",
+                src: "/subjects/in5431/designed-for-digital/d4d-building-blocks/example.svg",
+                alt: "Example diagram",
+                title: "Example",
+                caption: "A helpful visual."
+            }
+        ]);
         expect(hasExtendedExplanation(option)).toBe(true);
+        expect(hasExtendedExplanation({ whyExtendedImages: ["/subjects/in5431/designed-for-digital/d4d-building-blocks/only-image.svg"] })).toBe(true);
         expect(hasExtendedExplanation({})).toBe(false);
     });
 

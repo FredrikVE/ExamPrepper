@@ -5,8 +5,19 @@ export const getExtendedExplanationPoints = (option) => {
         : [];
 };
 
+export const getExtendedExplanationImages = (option) => {
+    const images = Array.isArray(option?.whyExtendedImages)
+        ? option.whyExtendedImages
+        : [];
+
+    return images
+        .map((image) => normalizeImage(image, option))
+        .filter(Boolean);
+};
+
 export const hasExtendedExplanation = (option) => {
-    return getExtendedExplanationPoints(option).length > 0;
+    return getExtendedExplanationPoints(option).length > 0
+        || getExtendedExplanationImages(option).length > 0;
 };
 
 export const getOptionLetter = (index) => {
@@ -39,3 +50,33 @@ export const getAnswerBadgeClassName = ({ correct }) => {
         ? "question-card-answer-badge-correct"
         : "question-card-answer-badge-wrong";
 };
+
+function normalizeImage(image, option) {
+    if (typeof image === "string") {
+        const src = image.trim();
+
+        return src
+            ? { src, alt: option?.text ?? "" }
+            : null;
+    }
+
+    if (!image || typeof image !== "object") {
+        return null;
+    }
+
+    const src = typeof image.src === "string"
+        ? image.src.trim()
+        : "";
+
+    if (!src) {
+        return null;
+    }
+
+    return {
+        id: image.id,
+        src,
+        alt: image.alt ?? image.title ?? option?.text ?? "",
+        title: image.title,
+        caption: image.caption
+    };
+}

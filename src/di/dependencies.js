@@ -1,4 +1,7 @@
 //src/di/dependencies.js
+import { conceptImageCatalogsBySubjectId } from "../data/conceptImageCatalogRegistry.js";
+
+import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
 import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
 import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
 
@@ -9,17 +12,19 @@ import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js"
 import GetAvailableExamsUseCase from "../model/domain/GetAvailableExamsUseCase.js";
 import GetAvailableSubjectsUseCase from "../model/domain/GetAvailableSubjectsUseCase.js";
 import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
+import GetExamByIdUseCase from "../model/domain/GetExamByIdUseCase.js";
 import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
 
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
 
 // Datasources
+const conceptImageDataSource = new ConceptImageDataSource(conceptImageCatalogsBySubjectId);
 const examQuestionDataSource = new ExamQuestionDataSource();
 const subjectDataSource = new SubjectDataSource();
 
 // Repositories
-const examRepository = new ExamRepository(examQuestionDataSource);
+const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
 
 // Use cases
@@ -29,6 +34,7 @@ const getAvailableExamsUseCase = new GetAvailableExamsUseCase(examRepository);
 const getAvailableSubjectsUseCase = new GetAvailableSubjectsUseCase(subjectRepository);
 const getSubjectByIdUseCase = new GetSubjectByIdUseCase(subjectRepository);
 const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepository);
+const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 
 // Export
@@ -37,6 +43,7 @@ export {
     getAvailableExamsUseCase,
     getAvailableSubjectsUseCase,
     getSubjectByIdUseCase,
+    getExamByIdUseCase,
     getExamByBaseIdAndLangUseCase,
     gradeAnswerUseCase,
     calculateExamScoreUseCase

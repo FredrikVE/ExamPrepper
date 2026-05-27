@@ -32,6 +32,9 @@ describe("GetExamQuestionsUseCase", () => {
         const result = await useCase.execute("mock-exam-1-no");
 
         expect(result).toBe(questions);
-        expect(examRepository.getExamQuestions).toHaveBeenCalledWith("mock-exam-1-no");
+        expect(examRepository.getExamQuestions).toHaveBeenCalledWith({
+            examId: "mock-exam-1-no",
+            language: undefined
+        });
     });
 });

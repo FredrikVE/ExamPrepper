@@ -9,7 +9,7 @@ import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId) {
+export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId, language) {
 	// Settings
 	const { randomizeAnswerOptions } = useSettings();
 
@@ -198,7 +198,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 				setLoading(true);
 				setError(null);
 
-				const result = await getExamQuestionsUseCase.execute(examId);
+				const result = await getExamQuestionsUseCase.execute({
+					examId,
+					language
+				});
 
 				if (!cancelled) {
 					setQuestions(result);
@@ -230,7 +233,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return () => {
 			cancelled = true;
 		};
-	}, [getExamQuestionsUseCase, examId]);
+	}, [getExamQuestionsUseCase, examId, language]);
 
 	//Effekter for navigasjon mellom sidene
 	const onVisibleQuestionsChangedClampCurrentIndex = useCallback(() => {

@@ -4,13 +4,30 @@ export default class GetExamQuestionsUseCase {
         this.examRepository = examRepository;
     }
 
-    async execute(examId) {
+    async execute(input) {
+        const { examId, language } = normalizeExecuteInput(input);
+
         if (!examId) {
             return [];
         }
 
-        const questions = await this.examRepository.getExamQuestions(examId);
-
-        return questions;
+        return await this.examRepository.getExamQuestions({
+            examId,
+            language
+        });
     }
+}
+
+function normalizeExecuteInput(input) {
+    if (typeof input === "string") {
+        return {
+            examId: input,
+            language: undefined
+        };
+    }
+
+    return {
+        examId: input?.examId,
+        language: input?.language
+    };
 }

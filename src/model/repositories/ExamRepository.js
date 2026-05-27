@@ -1,7 +1,8 @@
 //src/model/repositories/ExamRepository.js
 export default class ExamRepository {
-    constructor(examQuestionDataSource) {
+    constructor(examQuestionDataSource, conceptImageDataSource) {
         this.examQuestionDataSource = examQuestionDataSource;
+        this.conceptImageDataSource = conceptImageDataSource;
     }
 
     async getAllExams() {
@@ -21,9 +22,18 @@ export default class ExamRepository {
         return await this.examQuestionDataSource.fetchExamById(examId);
     }
 
-    async getExamQuestions(examId) {
+    async getExamQuestions(input) {
+        const { examId, language } = normalizeGetExamQuestionsInput(input);
         const exam = await this.getExamById(examId);
-        return exam?.questions ?? [];
+
+        if (!exam) {
+            return [];
+        }
+
+        return this.enrichQuestionsWithConceptImages(exam.questions ?? [], {
+            subjectId: exam.subjectId,
+            language: language ?? exam.lang
+        });
     }
 
     async getExamByBaseIdAndLang(baseId, language) {
@@ -31,6 +41,54 @@ export default class ExamRepository {
             baseId,
             language
         );
+    }
+
+    enrichQuestionsWithConceptImages(questions, examContext) {
+        return questions.map((question) => {
+            return this.enrichQuestionWithConceptImages(question, examContext);
+        });
+    }
+
+    enrichQuestionWithConceptImages(question, examContext) {
+        if (!Array.isArray(question.options)) {
+            return { ...question };
+        }
+
+        const questionContext = {
+            ...examContext,
+            subjectId: question.subjectId ?? examContext.subjectId,
+            moduleId: question.moduleId,
+            groupId: question.groupId
+        };
+
+        return {
+            ...question,
+            options: question.options.map((option) => {
+                return this.enrichAnswerOptionWithConceptImages(option, questionContext);
+            })
+        };
+    }
+
+    enrichAnswerOptionWithConceptImages(option, context) {
+        const imageRefs = getAnswerOptionConceptImageRefs(option);
+
+        if (!this.conceptImageDataSource || imageRefs.length === 0) {
+            return { ...option };
+        }
+
+        const whyExtendedImages = this.conceptImageDataSource.getConceptImages(
+            imageRefs,
+            context
+        );
+
+        if (whyExtendedImages.length === 0) {
+            return { ...option };
+        }
+
+        return {
+            ...option,
+            whyExtendedImages
+        };
     }
 
     matchesSubject(exam, subjectId) {
@@ -62,4 +120,24 @@ export default class ExamRepository {
             questionCount: exam.questionCount ?? exam.questions?.length ?? 0
         };
     }
+}
+
+function normalizeGetExamQuestionsInput(input) {
+    if (typeof input === "string") {
+        return {
+            examId: input,
+            language: undefined
+        };
+    }
+
+    return {
+        examId: input?.examId,
+        language: input?.language
+    };
+}
+
+function getAnswerOptionConceptImageRefs(option) {
+    return Array.isArray(option?.whyExtendedImageRefs)
+        ? option.whyExtendedImageRefs
+        : [];
 }
