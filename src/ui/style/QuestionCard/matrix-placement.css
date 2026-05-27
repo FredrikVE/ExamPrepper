@@ -189,6 +189,9 @@
 }
 
 .matrix-placement-board {
+    --matrix-placement-axis-color: color-mix(in srgb, var(--accent) 46%, var(--text-muted));
+
+    position: relative;
     display: grid;
     width: 100%;
     grid-template-columns: 44px minmax(0, 1fr);
@@ -199,6 +202,8 @@
 
 .matrix-placement-y-high,
 .matrix-placement-y-low {
+    position: relative;
+    z-index: 1;
     grid-column: 1;
     grid-row: 1;
     justify-self: end;
@@ -206,6 +211,7 @@
     font-size: 0.78rem;
     font-weight: 800;
     line-height: 1;
+    padding-right: 18px;
 }
 
 .matrix-placement-y-high {
@@ -231,6 +237,41 @@
     text-align: center;
     transform: rotate(-90deg);
     white-space: nowrap;
+}
+
+.matrix-placement-y-axis-line {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: stretch;
+    justify-self: end;
+    position: relative;
+    width: 12px;
+    pointer-events: none;
+}
+
+.matrix-placement-y-axis-line::before {
+    content: "";
+    position: absolute;
+    top: 28px;
+    bottom: 18px;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: var(--matrix-placement-axis-color);
+}
+
+.matrix-placement-y-axis-line::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-bottom: 9px solid var(--matrix-placement-axis-color);
 }
 
 .matrix-placement-grid {
@@ -359,6 +400,7 @@
 }
 
 .matrix-placement-x-axis {
+    position: relative;
     grid-column: 2;
     grid-row: 2;
     display: grid;
@@ -366,9 +408,32 @@
     gap: 10px;
     align-items: center;
     color: var(--text-muted);
-    padding: 12px 0 0;
+    padding: 24px 0 0;
     font-size: 0.78rem;
     font-weight: 800;
+}
+
+.matrix-placement-x-axis::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    left: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--matrix-placement-axis-color);
+}
+
+.matrix-placement-x-axis::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 9px solid var(--matrix-placement-axis-color);
 }
 
 .matrix-placement-x-axis strong {
@@ -588,7 +653,7 @@
 
 @container (max-width: 660px) {
     .matrix-placement-board {
-        grid-template-columns: 28px minmax(0, 1fr);
+        grid-template-columns: 34px minmax(0, 1fr);
     }
 
     .matrix-placement-grid {
@@ -610,6 +675,20 @@
 
     .matrix-placement-y-axis-label {
         font-size: 0.74rem;
+    }
+
+    .matrix-placement-y-high,
+    .matrix-placement-y-low {
+        padding-right: 14px;
+    }
+
+    .matrix-placement-y-axis-line::before {
+        top: 24px;
+        bottom: 16px;
+    }
+
+    .matrix-placement-y-axis-line::after {
+        top: 14px;
     }
 
     .matrix-placement-x-axis {
@@ -649,7 +728,7 @@
 
 @media (max-width: 760px) {
     .matrix-placement-board {
-        grid-template-columns: 28px minmax(0, 1fr);
+        grid-template-columns: 34px minmax(0, 1fr);
     }
 
     .matrix-placement-grid {
@@ -671,6 +750,20 @@
 
     .matrix-placement-y-axis-label {
         font-size: 0.74rem;
+    }
+
+    .matrix-placement-y-high,
+    .matrix-placement-y-low {
+        padding-right: 14px;
+    }
+
+    .matrix-placement-y-axis-line::before {
+        top: 24px;
+        bottom: 16px;
+    }
+
+    .matrix-placement-y-axis-line::after {
+        top: 14px;
     }
 
     .matrix-placement-x-axis {

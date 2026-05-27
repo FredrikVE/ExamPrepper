@@ -1,4 +1,4 @@
-// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementGrid.jsx
+//src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementGrid.jsx
 import { getMatrixAxis, getMatrixQuadrantsForDisplay } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementQuadrant from "./MatrixPlacementQuadrant.jsx";
 
@@ -18,6 +18,7 @@ export default function MatrixPlacementGrid(props) {
             <div className="matrix-placement-y-axis-label">
                 {yAxis.label ?? "Y-axis"}
             </div>
+            <div className="matrix-placement-y-axis-line" aria-hidden="true" />
 
             <div className="matrix-placement-grid">
                 {quadrants.map((quadrant) => (
