@@ -1,0 +1,4 @@
+/* src/ui/style/QuestionCard/Base/index.css */
+@import "./base.css";
+@import "./header.css";
+@import "./prompt.css";

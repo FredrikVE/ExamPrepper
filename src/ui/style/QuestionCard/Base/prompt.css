@@ -1,4 +1,4 @@
-/* src/ui/style/QuestionCard/prompt.css */
+/* src/ui/style/QuestionCard/Base/prompt.css */
 .question-card-prompt {
     margin: 0 0 var(--space-9);
     color: var(--text-main);
