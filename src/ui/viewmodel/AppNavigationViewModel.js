@@ -1,9 +1,9 @@
 //src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getExamById } from "../../data/data.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
-export default function useAppNavigationViewModel(language, getExamByBaseIdAndLangUseCase) {
+export default function useAppNavigationViewModel(language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase) {
 	// Navigasjons-state
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
 	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
@@ -105,7 +105,20 @@ export default function useAppNavigationViewModel(language, getExamByBaseIdAndLa
 		}
 	}, [selectedSubjectId, selectedExamId, showAllSubjects]);
 
-	const handleLanguageChangedSwitchExam = useCallback(() => {
+	const navigateBackToList = useCallback(() => {
+		setSelectedExamId(null);
+
+		if (selectedSubjectId) {
+			setActiveScreen(NAV_SCREENS.SELECT);
+		} else {
+			setActiveScreen(NAV_SCREENS.SUBJECTS);
+		}
+
+		setSettingsOpen(false);
+		setSidebarOpen(false);
+	}, [selectedSubjectId]);
+
+	const syncSelectedExamWithLanguage = useCallback(() => {
 		if (prevLanguageRef.current === language) {
 			return;
 		}
@@ -118,51 +131,33 @@ export default function useAppNavigationViewModel(language, getExamByBaseIdAndLa
 
 		let cancelled = false;
 
-		const switchExamLanguage = async () => {
-			const currentExam = getExamById(selectedExamId);
+		const run = async () => {
+			try {
+				const resolved = await resolveTranslatedExamId(
+					selectedExamId,
+					language,
+					getExamByIdUseCase,
+					getExamByBaseIdAndLangUseCase
+				);
 
-			if (!currentExam?.baseId) {
-				setSelectedExamId(null);
-
-				if (selectedSubjectId) {
-					setActiveScreen(NAV_SCREENS.SELECT);
-				} else {
-					setActiveScreen(NAV_SCREENS.SUBJECTS);
+				if (cancelled) {
+					return;
 				}
 
-				setSettingsOpen(false);
-				setSidebarOpen(false);
-				return;
+				if (resolved) {
+					setSelectedExamId(resolved.examId);
+					setSelectedSubjectId(resolved.subjectId ?? selectedSubjectId);
+				} else {
+					navigateBackToList();
+				}
+			} catch {
+				if (!cancelled) {
+					navigateBackToList();
+				}
 			}
-
-			const translatedExam = await getExamByBaseIdAndLangUseCase.execute({
-				baseId: currentExam.baseId,
-				lang: language
-			});
-
-			if (cancelled) {
-				return;
-			}
-
-			if (translatedExam) {
-				setSelectedExamId(translatedExam.id);
-				setSelectedSubjectId(translatedExam.subjectId ?? selectedSubjectId);
-				return;
-			}
-
-			setSelectedExamId(null);
-
-			if (selectedSubjectId) {
-				setActiveScreen(NAV_SCREENS.SELECT);
-			} else {
-				setActiveScreen(NAV_SCREENS.SUBJECTS);
-			}
-
-			setSettingsOpen(false);
-			setSidebarOpen(false);
 		};
 
-		switchExamLanguage();
+		run();
 
 		return () => {
 			cancelled = true;
@@ -172,10 +167,12 @@ export default function useAppNavigationViewModel(language, getExamByBaseIdAndLa
 		activeScreen,
 		selectedExamId,
 		selectedSubjectId,
-		getExamByBaseIdAndLangUseCase
+		getExamByIdUseCase,
+		getExamByBaseIdAndLangUseCase,
+		navigateBackToList
 	]);
 
-	useEffect(handleLanguageChangedSwitchExam, [handleLanguageChangedSwitchExam]);
+	useEffect(syncSelectedExamWithLanguage, [syncSelectedExamWithLanguage]);
 
 	const isSelectionScreen =
 		activeScreen === NAV_SCREENS.SUBJECTS ||

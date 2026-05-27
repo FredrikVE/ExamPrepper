@@ -12,6 +12,7 @@ import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js"
 import GetAvailableExamsUseCase from "../model/domain/GetAvailableExamsUseCase.js";
 import GetAvailableSubjectsUseCase from "../model/domain/GetAvailableSubjectsUseCase.js";
 import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
+import GetExamByIdUseCase from "../model/domain/GetExamByIdUseCase.js";
 import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
 
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
@@ -33,6 +34,7 @@ const getAvailableExamsUseCase = new GetAvailableExamsUseCase(examRepository);
 const getAvailableSubjectsUseCase = new GetAvailableSubjectsUseCase(subjectRepository);
 const getSubjectByIdUseCase = new GetSubjectByIdUseCase(subjectRepository);
 const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepository);
+const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 
 // Export
@@ -41,6 +43,7 @@ export {
     getAvailableExamsUseCase,
     getAvailableSubjectsUseCase,
     getSubjectByIdUseCase,
+    getExamByIdUseCase,
     getExamByBaseIdAndLangUseCase,
     gradeAnswerUseCase,
     calculateExamScoreUseCase
