@@ -376,9 +376,9 @@
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 10px;
     align-items: center;
-    border: 1px dashed var(--success-border);
+    border: 1px dashed color-mix(in srgb, var(--text-main) 72%, var(--line));
     border-radius: var(--radius-xs);
-    background: color-mix(in srgb, var(--success-soft) 50%, var(--panel-strong));
+    background: color-mix(in srgb, var(--success-soft) 20%, var(--panel-strong));
     color: var(--text-main);
     padding: 10px 12px;
 }
@@ -394,7 +394,7 @@
     width: 17px;
     height: 17px;
     flex: 0 0 auto;
-    color: var(--success-text);
+    color: color-mix(in srgb, var(--success-text) 82%, var(--text-muted));
 }
 
 .matrix-placement-answer-key-title {
@@ -408,8 +408,8 @@
 
 .matrix-placement-answer-key-pill {
     border-radius: 999px;
-    background: color-mix(in srgb, var(--success-soft) 78%, var(--panel-strong));
-    color: var(--success-text);
+    background: color-mix(in srgb, var(--success-soft) 32%, var(--panel-strong));
+    color: color-mix(in srgb, var(--success-text) 76%, var(--text-muted));
     padding: 4px 8px;
     font-size: 0.68rem;
     font-weight: 950;
@@ -441,6 +441,18 @@
     border-style: dashed;
     border-color: var(--warning-border);
     background: color-mix(in srgb, var(--warning-soft) 44%, var(--panel-strong));
+}
+
+.matrix-placement-feedback-card-user-placement {
+    border-color: color-mix(in srgb, var(--accent) 78%, #2563eb);
+    box-shadow:
+        0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent),
+        0 8px 18px rgba(18, 38, 63, 0.06);
+}
+
+.matrix-placement-feedback-card-user-placement.matrix-placement-feedback-card-correct,
+.matrix-placement-feedback-card-user-placement.matrix-placement-feedback-card-wrong {
+    border-width: 2px;
 }
 
 .matrix-placement-feedback-main {

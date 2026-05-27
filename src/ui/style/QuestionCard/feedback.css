@@ -24,5 +24,31 @@
 }
 
 .question-card-source-panel {
-    margin-top: 18px;
+    margin-top: 10px;
+}
+
+.question-card-source-panel .feedback-panel-source {
+    border-radius: 14px;
+    box-shadow: none;
+    padding: 12px 16px;
+}
+
+.question-card-source-panel .feedback-panel-source-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: clamp(1rem, 1vw, 1.18rem);
+    line-height: 1.15;
+}
+
+.question-card-source-panel .feedback-panel-source-icon {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+}
+
+.question-card-source-panel .feedback-panel-source-text {
+    margin-top: 6px;
+    font-size: 0.92rem;
+    line-height: 1.35;
 }

@@ -91,6 +91,7 @@ function renderItem(props, item) {
                 isExpanded={props.expandedItemId === item.id}
                 onToggleExpanded={() => props.onToggleExpanded(item.id)}
                 t={props.t}
+                isUserPlacementCard
             />
         );
     }

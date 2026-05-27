@@ -20,7 +20,11 @@ export default function MatrixPlacementFeedbackCard(props) {
     const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || showCorrectAnswer || showSelectedAnswer;
 
     return (
-        <article className={getFeedbackCardClassName({ itemIsCorrect, unanswered })}>
+        <article className={getFeedbackCardClassName({
+            itemIsCorrect,
+            unanswered,
+            isUserPlacementCard: props.isUserPlacementCard
+        })}>
             <div className="matrix-placement-feedback-main">
                 <div className="matrix-placement-feedback-title-row">
                     {itemIsCorrect ? (
@@ -85,7 +89,7 @@ function MatrixPlacementFeedbackExplanation(props) {
     );
 }
 
-function getFeedbackCardClassName({ itemIsCorrect, unanswered }) {
+function getFeedbackCardClassName({ itemIsCorrect, unanswered, isUserPlacementCard }) {
     let className = "matrix-placement-feedback-card";
 
     if (itemIsCorrect) {
@@ -96,6 +100,10 @@ function getFeedbackCardClassName({ itemIsCorrect, unanswered }) {
 
     if (unanswered) {
         className += " matrix-placement-feedback-card-unanswered";
+    }
+
+    if (isUserPlacementCard) {
+        className += " matrix-placement-feedback-card-user-placement";
     }
 
     return className;
