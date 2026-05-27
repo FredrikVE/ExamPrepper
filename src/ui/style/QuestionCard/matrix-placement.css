@@ -189,7 +189,7 @@
 }
 
 .matrix-placement-board {
-    --matrix-placement-axis-color: color-mix(in srgb, var(--accent) 46%, var(--text-muted));
+    --matrix-placement-axis-color: color-mix(in srgb, var(--text-muted) 58%, var(--panel-strong));
 
     position: relative;
     display: grid;
