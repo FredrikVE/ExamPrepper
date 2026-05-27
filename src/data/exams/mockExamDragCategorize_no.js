@@ -357,8 +357,5 @@ export const mockExamDragCategorize_no = {
         }
       ]
     }
-
-
-
   ]
 };
