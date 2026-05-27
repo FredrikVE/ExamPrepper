@@ -18,6 +18,12 @@ function buildCorrectAnswer(question) {
         return question.answers[0];
     }
 
+    if (question.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
+        return Object.fromEntries(
+            (question.items ?? []).map((item) => [item.id, item.correctQuadrantId ?? item.quadrantId])
+        );
+    }
+
     return undefined;
 }
 

@@ -311,15 +311,23 @@ const isQuestionAnswered = (question, answer) => {
 	}
 
 	if (question.type === QUESTION_TYPES.DRAG_DROP || question.type === QUESTION_TYPES.DRAG_CATEGORIZE) {
-		return Boolean(
-			answer &&
-			typeof answer === "object" &&
-			!Array.isArray(answer) &&
-			Object.values(answer).some(Boolean)
-		);
+		return answerHasAtLeastOneObjectValue(answer);
+	}
+
+	if (question.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
+		return answerHasAtLeastOneObjectValue(answer?.placements ?? answer);
 	}
 
 	return answer !== undefined && String(answer).trim() !== "";
+};
+
+const answerHasAtLeastOneObjectValue = (answer) => {
+	return Boolean(
+		answer &&
+		typeof answer === "object" &&
+		!Array.isArray(answer) &&
+		Object.values(answer).some(Boolean)
+	);
 };
 
 const scrollExamWorkspaceToTop = (examWorkspaceRef) => {

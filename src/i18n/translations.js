@@ -68,6 +68,7 @@ export const translations = {
         questionTypeSingle: "Ett riktig svar",
         questionTypeDragDrop: "Dra og slipp",
         questionTypeDragCategorize: "Dra til kategori",
+        questionTypeMatrixPlacement: "Matriseplassering",
         questionInputPlaceholder: "Skriv begrep her...",
         questionAnswerLabel: "Ditt svar",
         questionInputRule: "Skriv kun ett begrep. Ingen mellomrom før eller etter.",
@@ -97,6 +98,13 @@ export const translations = {
         dragCategorizeFeedbackBankHint: "Kortene over viser oppgavens mulige svar.",
         dragCategorizeDropHere: "Slipp her",
         dragCategorizeRemoveAnswer: "Fjern svar",
+
+        matrixPlacementItemBankTitle: "Svar-kort",
+        matrixPlacementItemBankHint: "Dra et kort til riktig kvadrant, eller klikk kortet og deretter kvadranten.",
+        matrixPlacementDropHere: "Slipp kort her",
+        matrixPlacementRemoveAnswer: "Fjern svar",
+        matrixPlacementPlacedSuffix: "plassert",
+        matrixPlacementNoPlacedItems: "Ingen kort plassert",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Din besvarelse er riktig",
@@ -193,6 +201,7 @@ export const translations = {
         questionTypeSingle: "Single answer",
         questionTypeDragDrop: "Drag and drop",
         questionTypeDragCategorize: "Category sort",
+        questionTypeMatrixPlacement: "Matrix placement",
         questionInputPlaceholder: "Type term here...",
         questionAnswerLabel: "Your answer",
         questionInputRule: "Write one term only. No leading or trailing spaces.",
@@ -222,6 +231,13 @@ export const translations = {
         dragCategorizeFeedbackBankHint: "The cards above show the possible answers for this task.",
         dragCategorizeDropHere: "Drop here",
         dragCategorizeRemoveAnswer: "Remove answer",
+
+        matrixPlacementItemBankTitle: "Answer cards",
+        matrixPlacementItemBankHint: "Drag a card into the correct quadrant, or click a card and then click the quadrant.",
+        matrixPlacementDropHere: "Drop card here",
+        matrixPlacementRemoveAnswer: "Remove answer",
+        matrixPlacementPlacedSuffix: "placed",
+        matrixPlacementNoPlacedItems: "No cards placed",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Your answer is correct",

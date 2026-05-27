@@ -13,24 +13,32 @@ export default function ExamPage({ viewModel }) {
     const activeOptionCount = viewModel.currentQuestion?.options?.length ?? 0;
     const activeDragDropTargetCount = viewModel.currentQuestion?.targets?.length ?? 0;
     const activeDragCategorizeCategoryCount = viewModel.currentQuestion?.categories?.length ?? 0;
+    const activeMatrixQuadrantCount = viewModel.currentQuestion?.matrix?.quadrants?.length ?? viewModel.currentQuestion?.quadrants?.length ?? 0;
     const activeDragCategorizeLongestText = getLongestDragCategorizeTextLength(viewModel.currentQuestion);
+    const activeMatrixPlacementLongestText = getLongestMatrixPlacementTextLength(viewModel.currentQuestion);
     const isDragDropQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.DRAG_DROP;
     const isDragCategorizeQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
+    const isMatrixPlacementQuestion = viewModel.currentQuestion?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
     const shouldUseScrollFooter = !viewModel.submitted && (
         activeOptionCount >= 6 ||
         isDragDropQuestion ||
         isDragCategorizeQuestion ||
+        isMatrixPlacementQuestion ||
         activeDragDropTargetCount >= 5 ||
-        activeDragCategorizeCategoryCount >= 4
+        activeDragCategorizeCategoryCount >= 4 ||
+        activeMatrixQuadrantCount >= 4
     );
-    const shouldUseWideQuestionLayout = isDragCategorizeQuestion && (
+    const shouldUseWideQuestionLayout = (isDragCategorizeQuestion && (
         activeDragCategorizeCategoryCount >= 5 ||
         activeDragCategorizeLongestText >= 34
-    );
-    const shouldUseExtraWideQuestionLayout = isDragCategorizeQuestion && (
+    )) || (isMatrixPlacementQuestion && (
+        activeMatrixQuadrantCount >= 4 ||
+        activeMatrixPlacementLongestText >= 34
+    ));
+    const shouldUseExtraWideQuestionLayout = (isDragCategorizeQuestion && (
         (activeDragCategorizeCategoryCount >= 5 && activeDragCategorizeLongestText >= 44) ||
         activeDragCategorizeLongestText >= 62
-    );
+    )) || (isMatrixPlacementQuestion && activeMatrixPlacementLongestText >= 70);
     const shouldUseDenseDragCategorizeLayout = isDragCategorizeQuestion && (
         activeDragCategorizeCategoryCount >= 5 ||
         activeDragCategorizeLongestText >= 44
@@ -42,7 +50,8 @@ export default function ExamPage({ viewModel }) {
         shouldUseScrollFooter ? "exam-workspace-scroll-footer-mode" : "",
         shouldUseWideQuestionLayout ? "exam-workspace-wide-question-mode" : "",
         shouldUseExtraWideQuestionLayout ? "exam-workspace-extra-wide-question-mode" : "",
-        shouldUseDenseDragCategorizeLayout ? "exam-workspace-dense-drag-categorize-mode" : ""
+        shouldUseDenseDragCategorizeLayout ? "exam-workspace-dense-drag-categorize-mode" : "",
+        isMatrixPlacementQuestion ? "exam-workspace-matrix-placement-mode" : ""
     ].filter(Boolean).join(" ");
 
     if (viewModel.loading) {
@@ -98,4 +107,24 @@ const getLongestDragCategorizeTextLength = (question) => {
     const categoryLengths = (question.categories ?? []).map((category) => String(category?.label ?? "").length);
 
     return Math.max(0, ...itemLengths, ...categoryLengths);
+};
+
+
+const getLongestMatrixPlacementTextLength = (question) => {
+    if (question?.type !== QUESTION_TYPES.MATRIX_PLACEMENT) {
+        return 0;
+    }
+
+    const quadrants = question.matrix?.quadrants ?? question.quadrants ?? [];
+    const itemLengths = (question.items ?? []).map((item) => String(item?.label ?? item?.text ?? item?.title ?? "").length);
+    const quadrantLengths = quadrants.flatMap((quadrant) => [
+        String(quadrant?.title ?? quadrant?.label ?? "").length,
+        String(quadrant?.description ?? quadrant?.text ?? "").length
+    ]);
+    const axisLengths = [
+        String(question.matrix?.xAxis?.label ?? "").length,
+        String(question.matrix?.yAxis?.label ?? "").length
+    ];
+
+    return Math.max(0, ...itemLengths, ...quadrantLengths, ...axisLengths);
 };

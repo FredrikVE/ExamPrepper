@@ -188,6 +188,70 @@ describe("GradeAnswerUseCase", () => {
         });
     });
 
+
+    describe("matrix placement", () => {
+        const question = {
+            type: QUESTION_TYPES.MATRIX_PLACEMENT,
+            points: 3,
+            matrix: {
+                quadrants: [
+                    { id: "low-standardization-low-integration", title: "Low standardization / Low integration" },
+                    { id: "low-standardization-high-integration", title: "Low standardization / High integration" },
+                    { id: "high-standardization-low-integration", title: "High standardization / Low integration" },
+                    { id: "high-standardization-high-integration", title: "High standardization / High integration" }
+                ]
+            },
+            items: [
+                { id: "diversification", label: "Diversification", correctQuadrantId: "low-standardization-low-integration" },
+                { id: "coordination", label: "Coordination", correctQuadrantId: "low-standardization-high-integration" },
+                { id: "replication", label: "Replication", correctQuadrantId: "high-standardization-low-integration" }
+            ]
+        };
+
+        test("returns true only when all items are placed in the correct quadrants", () => {
+            expect(useCase.execute(question, {
+                diversification: "low-standardization-low-integration",
+                coordination: "low-standardization-high-integration",
+                replication: "high-standardization-low-integration"
+            })).toBe(true);
+
+            expect(useCase.execute(question, {
+                diversification: "low-standardization-low-integration",
+                coordination: "high-standardization-low-integration",
+                replication: "low-standardization-high-integration"
+            })).toBe(false);
+        });
+
+        test("supports the wrapped placements answer shape", () => {
+            expect(useCase.execute(question, {
+                placements: {
+                    diversification: "low-standardization-low-integration",
+                    coordination: "low-standardization-high-integration",
+                    replication: "high-standardization-low-integration"
+                }
+            })).toBe(true);
+        });
+
+        test("calculates partial score from correctly placed items", () => {
+            expect(useCase.getQuestionScore(question, {
+                diversification: "low-standardization-low-integration",
+                coordination: "wrong-quadrant",
+                replication: "high-standardization-low-integration"
+            })).toBe(2);
+        });
+
+        test("returns matrix placement stats", () => {
+            expect(useCase.getMatrixPlacementStats(question, {
+                diversification: "low-standardization-low-integration",
+                coordination: "high-standardization-low-integration"
+            })).toEqual({
+                correct: 1,
+                wrong: 1,
+                unanswered: 1
+            });
+        });
+    });
+
     test("returns false when question is missing", () => {
         expect(useCase.execute(null, 0)).toBe(false);
     });

@@ -288,6 +288,77 @@ export const mockExamDragCategorize_no = {
           ]
         }
       }
+    },
+    {
+      id: 5,
+      type: "matrix-placement",
+      title: "Operating model matrix",
+      points: 3,
+      prompt: "Dra hver operasjonsmodell til riktig kvadrant.",
+      source: "Fasit: IN5431, CIO Toolbox, forelesning 3–6.",
+      matrix: {
+        xAxis: {
+          label: "Forretningsprosessintegrasjon",
+          lowLabel: "Lav",
+          highLabel: "Høy"
+        },
+        yAxis: {
+          label: "Prosessstandardisering",
+          lowLabel: "Lav",
+          highLabel: "Høy"
+        },
+        quadrants: [
+          {
+            id: "high-standardization-low-integration",
+            title: "Høy standardisering / Lav integrasjon",
+            description: "Standardiserte, begrenset ende-til-ende prosessintegrering"
+          },
+          {
+            id: "high-standardization-high-integration",
+            title: "Høy standardisering / Høy integrasjon",
+            description: "Fullt integrert og standardisert operasjonsmodell"
+          },
+          {
+            id: "low-standardization-low-integration",
+            title: "Lav standardisering / Lav integrasjon",
+            description: "Lokal autonomi og variasjon"
+          },
+          {
+            id: "low-standardization-high-integration",
+            title: "Lav standardisering / Høy integrasjon",
+            description: "Tilpassede prosesser med lokal tilpasning og fleksibilitet"
+          }
+        ]
+      },
+      items: [
+        {
+          id: "replication",
+          label: "Replication",
+          correctQuadrantId: "high-standardization-low-integration",
+          why: "Replication har høy standardisering, men lav integrasjon."
+        },
+        {
+          id: "unification",
+          label: "Unification",
+          correctQuadrantId: "high-standardization-high-integration",
+          why: "Unification har både høy standardisering og høy integrasjon."
+        },
+        {
+          id: "diversification",
+          label: "Diversification",
+          correctQuadrantId: "low-standardization-low-integration",
+          why: "Diversification har lav standardisering og lav integrasjon."
+        },
+        {
+          id: "coordination",
+          label: "Coordination",
+          correctQuadrantId: "low-standardization-high-integration",
+          why: "Coordination har høy integrasjon, men lavere standardisering."
+        }
+      ]
     }
+
+
+
   ]
 };
