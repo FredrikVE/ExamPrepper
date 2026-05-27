@@ -105,6 +105,7 @@ export const translations = {
         matrixPlacementRemoveAnswer: "Fjern svar",
         matrixPlacementPlacedSuffix: "plassert",
         matrixPlacementNoPlacedItems: "Ingen kort plassert",
+        matrixPlacementAnswerKeyPill: "Fasit",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Din besvarelse er riktig",
@@ -238,6 +239,7 @@ export const translations = {
         matrixPlacementRemoveAnswer: "Remove answer",
         matrixPlacementPlacedSuffix: "placed",
         matrixPlacementNoPlacedItems: "No cards placed",
+        matrixPlacementAnswerKeyPill: "Answer key",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Your answer is correct",

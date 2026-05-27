@@ -371,6 +371,53 @@
     justify-self: end;
 }
 
+.matrix-placement-answer-key-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    border: 1px dashed var(--success-border);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--success-soft) 50%, var(--panel-strong));
+    color: var(--text-main);
+    padding: 10px 12px;
+}
+
+.matrix-placement-answer-key-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.matrix-placement-answer-key-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    color: var(--success-text);
+}
+
+.matrix-placement-answer-key-title {
+    min-width: 0;
+    overflow-wrap: break-word;
+    color: var(--text-main);
+    font-size: 0.82rem;
+    font-weight: 900;
+    line-height: 1.25;
+}
+
+.matrix-placement-answer-key-pill {
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--success-soft) 78%, var(--panel-strong));
+    color: var(--success-text);
+    padding: 4px 8px;
+    font-size: 0.68rem;
+    font-weight: 950;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
 .matrix-placement-feedback-card {
     border: 1px solid var(--line);
     border-radius: var(--radius-xs);

@@ -1,13 +1,18 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementDropZone.jsx
+import { CheckCircle2 } from "lucide-react";
 import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard.jsx";
-import { getItemsInQuadrant } from "../Utils/matrixPlacementAnswerLogic.js";
+import { getItemLabel, getItemsInQuadrant, getMissingCorrectItemsInQuadrant } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementPlacedItemCard from "./MatrixPlacementPlacedItemCard.jsx";
 
 export default function MatrixPlacementDropZone(props) {
     const items = getItemsInQuadrant(props.question, props.safeAnswer, props.quadrant.id);
+    const answerKeyItems = props.feedbackMode
+        ? getMissingCorrectItemsInQuadrant(props.question, props.safeAnswer, props.quadrant.id)
+        : [];
+    const hasVisibleItems = items.length > 0 || answerKeyItems.length > 0;
     const className = getDropZoneClassName({
         isDragOver: props.isDragOver,
-        empty: items.length === 0,
+        empty: !hasVisibleItems,
         selectable: Boolean(props.selectedItemId) && !props.feedbackMode,
         feedbackMode: props.feedbackMode
     });
@@ -37,19 +42,41 @@ export default function MatrixPlacementDropZone(props) {
             aria-label={`${props.t.matrixPlacementDropHere}: ${props.quadrant.title ?? props.quadrant.label}`}
         >
             {items.map((item) => renderItem(props, item))}
+            {answerKeyItems.map((item) => renderAnswerKeyItem(props, item))}
 
-            {items.length === 0 && !props.feedbackMode ? (
+            {!hasVisibleItems && !props.feedbackMode ? (
                 <div className="matrix-placement-empty-slot">
                     {props.t.matrixPlacementDropHere}
                 </div>
             ) : null}
 
-            {items.length === 0 && props.feedbackMode ? (
+            {!hasVisibleItems && props.feedbackMode ? (
                 <div className="matrix-placement-empty-slot matrix-placement-empty-slot-feedback">
                     {props.t.matrixPlacementNoPlacedItems}
                 </div>
             ) : null}
         </div>
+    );
+}
+
+function renderAnswerKeyItem(props, item) {
+    return (
+        <article
+            key={`answer-key-${item.id}`}
+            className="matrix-placement-answer-key-card"
+            aria-label={`${props.t.feedbackCorrectAnswerLabel}: ${getItemLabel(item)}`}
+        >
+            <div className="matrix-placement-answer-key-title-row">
+                <CheckCircle2 className="matrix-placement-answer-key-icon" aria-hidden="true" />
+                <span className="matrix-placement-answer-key-title">
+                    {getItemLabel(item)}
+                </span>
+            </div>
+
+            <span className="matrix-placement-answer-key-pill">
+                {props.t.matrixPlacementAnswerKeyPill}
+            </span>
+        </article>
     );
 }
 

@@ -145,6 +145,22 @@ export function getItemsInQuadrant(question, answer, quadrantId) {
         .filter(Boolean);
 }
 
+export function getMissingCorrectItemsInQuadrant(question, answer, quadrantId) {
+    const safeAnswer = normalizeMatrixPlacementAnswer(question, answer);
+
+    return getSafeArray(question?.items).filter((item) => {
+        if (!item?.id) {
+            return false;
+        }
+
+        if (getCorrectQuadrantId(question, item.id) !== quadrantId) {
+            return false;
+        }
+
+        return safeAnswer[item.id] !== quadrantId;
+    });
+}
+
 export function getCorrectQuadrantId(question, itemId) {
     const correctAnswer = isPlainObject(question?.correctAnswer)
         ? question.correctAnswer
