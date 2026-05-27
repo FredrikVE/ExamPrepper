@@ -10,7 +10,7 @@ import MultiCheckboxSelectQuestion from "./QuestionTypes/MultiCheckboxSelect/Mul
 import SingleRadioButtonChoiceQuestion from "./QuestionTypes/SingleRadioButtonChoice/SingleRadioButtonChoiceQuestion.jsx";
 import PromptSection from "./Shared/Prompt/PromptSection.jsx";
 import QuestionFeedback from "./Shared/Feedback/QuestionFeedback.jsx";
-import QuestionHeader from "./Shared/Header/QuestionHeader.jsx";
+import QuestionHeader from "./Shared/QuestionHeader/QuestionHeader.jsx";
 
 
 export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
