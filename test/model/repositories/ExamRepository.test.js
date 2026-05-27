@@ -87,6 +87,72 @@ describe("ExamRepository", () => {
         expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
 
+
+    test("hydrates answer options with subject-scoped concept images", async () => {
+        const examWithImage = {
+            id: "exam-with-image",
+            baseId: "exam-with-image",
+            subjectId: "in5431",
+            lang: "no",
+            title: "Exam with image",
+            questions: [
+                {
+                    id: 1,
+                    moduleId: "designed-for-digital",
+                    groupId: "d4d-building-blocks",
+                    options: [
+                        {
+                            text: "Operational Backbone",
+                            whyExtendedImageRefs: [
+                                { imageId: "operational-backbone" }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const localDataSource = {
+            fetchAllExams: jest.fn().mockResolvedValue([examWithImage]),
+            fetchExamById: jest.fn().mockResolvedValue(examWithImage),
+            fetchExamByBaseIdAndLang: jest.fn()
+        };
+
+        const conceptImageDataSource = {
+            getConceptImages: jest.fn().mockReturnValue([
+                {
+                    id: "operational-backbone",
+                    src: "/subjects/in5431/designed-for-digital/d4d-building-blocks/operational-backbone.svg",
+                    alt: "Operational Backbone i praksis",
+                    title: "Operational Backbone",
+                    caption: "Caption"
+                }
+            ])
+        };
+
+        const localRepository = new ExamRepository(localDataSource, conceptImageDataSource);
+
+        const result = await localRepository.getExamQuestions("exam-with-image");
+
+        expect(conceptImageDataSource.getConceptImages).toHaveBeenCalledWith(
+            [{ imageId: "operational-backbone" }],
+            {
+                subjectId: "in5431",
+                moduleId: "designed-for-digital",
+                groupId: "d4d-building-blocks",
+                language: "no"
+            }
+        );
+        expect(result[0].options[0].whyExtendedImages).toEqual([
+            expect.objectContaining({
+                id: "operational-backbone",
+                src: "/subjects/in5431/designed-for-digital/d4d-building-blocks/operational-backbone.svg",
+                alt: "Operational Backbone i praksis"
+            })
+        ]);
+        expect(examWithImage.questions[0].options[0].whyExtendedImages).toBeUndefined();
+    });
+
     test("returns empty questions when exam is not found", async () => {
         const result = await repository.getExamQuestions("missing");
 

@@ -1,8 +1,9 @@
 //src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionExtendedPanel.jsx
 import { Info } from "lucide-react";
 
-export default function AnswerOptionExtendedPanel({ expandedId, points, image, t }) {
+export default function AnswerOptionExtendedPanel({ expandedId, points, images = [], t }) {
     const hasPoints = points.length > 0;
+    const hasImages = images.length > 0;
 
     return (
         <div
@@ -29,34 +30,39 @@ export default function AnswerOptionExtendedPanel({ expandedId, points, image, t
                 </ul>
             ) : null}
 
-            {image ? (
-                <figure
-                    className={`question-card-answer-extended-figure ${
-                        hasPoints
-                            ? ""
-                            : "question-card-answer-extended-figure-first"
-                    }`}
-                >
-                    {image.title ? (
-                        <figcaption className="question-card-answer-extended-figure-title">
-                            {image.title}
-                        </figcaption>
-                    ) : null}
+            {hasImages ? (
+                <div className="question-card-answer-extended-images">
+                    {images.map((image) => (
+                        <figure
+                            key={image.id ?? image.src}
+                            className={`question-card-answer-extended-figure ${
+                                hasPoints
+                                    ? ""
+                                    : "question-card-answer-extended-figure-first"
+                            }`}
+                        >
+                            {image.title ? (
+                                <figcaption className="question-card-answer-extended-figure-title">
+                                    {image.title}
+                                </figcaption>
+                            ) : null}
 
-                    <img
-                        className="question-card-answer-extended-image"
-                        src={image.src}
-                        alt={image.alt ?? ""}
-                        loading="lazy"
-                        decoding="async"
-                    />
+                            <img
+                                className="question-card-answer-extended-image"
+                                src={image.src}
+                                alt={image.alt ?? ""}
+                                loading="lazy"
+                                decoding="async"
+                            />
 
-                    {image.caption ? (
-                        <p className="question-card-answer-extended-figure-caption">
-                            {image.caption}
-                        </p>
-                    ) : null}
-                </figure>
+                            {image.caption ? (
+                                <p className="question-card-answer-extended-figure-caption">
+                                    {image.caption}
+                                </p>
+                            ) : null}
+                        </figure>
+                    ))}
+                </div>
             ) : null}
         </div>
     );

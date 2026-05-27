@@ -87,6 +87,7 @@ function AppContent() {
                 {navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
                     <ExamPageWrapper
                         examId={navigationViewModel.selectedExamId}
+                        language={language}
                     />
                 )}
 
@@ -99,12 +100,13 @@ function AppContent() {
     );
 }
 
-function ExamPageWrapper({ examId }) {
+function ExamPageWrapper({ examId, language }) {
     const examPageViewModel = useExamPageViewModel(
         getExamQuestionsUseCase,
         gradeAnswerUseCase,
         calculateExamScoreUseCase,
-        examId
+        examId,
+        language
     );
 
     return (

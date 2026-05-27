@@ -1,4 +1,7 @@
 //src/di/dependencies.js
+import { conceptImageCatalogsBySubjectId } from "../data/conceptImageCatalogRegistry.js";
+
+import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
 import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
 import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
 
@@ -15,11 +18,12 @@ import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
 
 // Datasources
+const conceptImageDataSource = new ConceptImageDataSource(conceptImageCatalogsBySubjectId);
 const examQuestionDataSource = new ExamQuestionDataSource();
 const subjectDataSource = new SubjectDataSource();
 
 // Repositories
-const examRepository = new ExamRepository(examQuestionDataSource);
+const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
 
 // Use cases

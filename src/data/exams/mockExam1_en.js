@@ -194,6 +194,8 @@ export const mockExam1_en = {
       id: 6,
       type: "multi",
       title: "Designed for Digital",
+      moduleId: "designed-for-digital",
+      groupId: "d4d-building-blocks",
       points: 1,
       prompt: "Which of these are among the five D4D building blocks?",
       source: "Source: Lecture 13, Designed for digital summary, slide 'Assembling the building blocks'.",
@@ -208,12 +210,9 @@ export const mockExam1_en = {
             "44% of executives identify OB as the biggest obstacle to digital transformation — showing how central this building block is.",
             "OB belongs to architecture transformation in D4D's dual transformation theory."
           ],
-          whyExtendedImage: {
-            src: "/concept-images/operational-backbone-practice.svg",
-            alt: "Operational Backbone in practice",
-            title: "Operational Backbone in practice",
-            caption: "The card can show a concept image when option.whyExtendedImage is set in the mock exam data."
-          }
+          whyExtendedImageRefs: [
+            { imageId: "operational-backbone" }
+          ]
         },
         {
           text: "Shared Customer Insights",
@@ -224,6 +223,9 @@ export const mockExam1_en = {
             "This building block is about shared understanding of customer needs and market opportunities — shared across the organization.",
             "Lecture 8 shows that this is the foundation for customer-driven digital offerings.",
             "SCI belongs to governance transformation in D4D's dual transformation theory."
+          ],
+          whyExtendedImageRefs: [
+            { imageId: "shared-customer-insights" }
           ]
         },
         {
@@ -246,6 +248,9 @@ export const mockExam1_en = {
             "DP provides access to reusable data, business and technology components that enable rapid innovation.",
             "Lecture 10 clearly distinguishes DP from OB: OB provides stability, while DP enables experimentation and continuous improvement.",
             "DP belongs to architecture transformation together with OB."
+          ],
+          whyExtendedImageRefs: [
+            { imageId: "digital-platform" }
           ]
         },
         {
@@ -257,6 +262,9 @@ export const mockExam1_en = {
             "AF ensures that digital initiatives are followed up with clear ownership — component owners rather than project managers.",
             "Lecture 11 emphasizes the balance between autonomy (creativity, speed) and alignment (common direction, reuse).",
             "AF belongs to governance transformation in D4D's dual transformation theory."
+          ],
+          whyExtendedImageRefs: [
+            { imageId: "accountability-framework" }
           ]
         },
         {
@@ -269,12 +277,9 @@ export const mockExam1_en = {
             "Lecture 12 shows two types of ExDP: one that lets partners use internal components in their own offerings (like Google Maps), and one that creates a marketplace (like Apple App Store).",
             "The D4D roadmap recommends not rushing into an ExDP — it requires a mature OB and DP first."
           ],
-          whyExtendedImage: {
-            src: "/concept-images/d4d-building-blocks.svg",
-            alt: "D4D building blocks",
-            title: "D4D building blocks",
-            caption: "Overview of the five building blocks in Designed for Digital."
-          }
+          whyExtendedImageRefs: [
+            { imageId: "external-developer-platform" }
+          ]
         }
       ]
     },

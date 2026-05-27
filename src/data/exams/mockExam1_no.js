@@ -194,6 +194,8 @@ export const mockExam1_no = {
       id: 6,
       type: "multi",
       title: "Designed for Digital",
+      moduleId: "designed-for-digital",
+      groupId: "d4d-building-blocks",
       points: 1,
       prompt: "Hvilke av disse er blant de fem D4D-byggeklossene?",
       source: "Fasit: Forelesning 13, Designed for digital summary, slide 'Assembling the building blocks'.",
@@ -208,12 +210,9 @@ export const mockExam1_no = {
             "44 % av ledere identifiserer OB som den største hindringen for digital transformasjon — det viser hvor sentral denne byggeklossen er.",
             "OB tilhører architecture transformation i D4D sin dual transformation-teori."
           ],
-          whyExtendedImage: {
-            src: "/concept-images/operational-backbone-practice.svg",
-            alt: "Operational Backbone i praksis",
-            title: "Operational Backbone i praksis",
-            caption: "Kortet kan vise et konseptbilde når option.whyExtendedImage er satt i mockExam-dataene."
-          }
+          whyExtendedImageRefs: [
+            { imageId: "operational-backbone" }
+          ]
         },
         {
           text: "Shared Customer Insights",
@@ -224,6 +223,9 @@ export const mockExam1_no = {
             "Byggeklossen handler om felles forståelse av kundebehov og markedsmuligheter — delt på tvers av organisasjonen.",
             "Forelesning 8 viser at dette er grunnlaget for kundedrevne digitale tilbud (digital offerings).",
             "SCI tilhører governance transformation i D4D sin dual transformation-teori."
+          ],
+          whyExtendedImageRefs: [
+            { imageId: "shared-customer-insights" }
           ]
         },
         {
@@ -246,6 +248,9 @@ export const mockExam1_no = {
             "DP gir tilgang til gjenbrukbare data-, business- og teknologikomponenter som muliggjør rask innovasjon.",
             "Forelesning 10 skiller tydelig DP fra OB: OB gir stabilitet, mens DP muliggjør eksperimentering og kontinuerlig forbedring.",
             "DP tilhører architecture transformation sammen med OB."
+          ],
+          whyExtendedImageRefs: [
+            { imageId: "digital-platform" }
           ]
         },
         {
@@ -257,6 +262,9 @@ export const mockExam1_no = {
             "AF sikrer at digitale initiativer følges opp med klart eierskap — component owners fremfor prosjektledere.",
             "Forelesning 11 vektlegger balansen mellom autonomi (kreativitet, hastighet) og alignment (felles retning, gjenbruk).",
             "AF tilhører governance transformation i D4D sin dual transformation-teori."
+          ],
+          whyExtendedImageRefs: [
+            { imageId: "accountability-framework" }
           ]
         },
         {
@@ -269,12 +277,9 @@ export const mockExam1_no = {
             "Forelesning 12 viser to typer ExDP: én som lar partnere bruke interne komponenter (som Google Maps), og én som skaper en markedsplass (som Apple App Store).",
             "D4D-roadmapen anbefaler å ikke forhaste seg med ExDP — det krever moden OB og DP først."
           ],
-          whyExtendedImage: {
-            src: "/concept-images/d4d-building-blocks.svg",
-            alt: "D4D-byggklossene",
-            title: "D4D-byggklossene",
-            caption: "Oversikt over de fem byggeklossene som hører til Designed for Digital."
-          }
+          whyExtendedImageRefs: [
+            { imageId: "external-developer-platform" }
+          ]
         }
       ]
     },
