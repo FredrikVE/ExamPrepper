@@ -294,7 +294,7 @@ export const mockExamDragCategorize_no = {
       type: "matrix-placement",
       title: "Operating model matrix",
       points: 3,
-      prompt: "Dra hver operasjonsmodell til riktig kvadrant.",
+      prompt: "Dra hver operating model til riktig kvadrant.",
       source: "Fasit: IN5431, CIO Toolbox, forelesning 3–6.",
       matrix: {
         xAxis: {
@@ -335,25 +335,25 @@ export const mockExamDragCategorize_no = {
           id: "replication",
           label: "Replication",
           correctQuadrantId: "high-standardization-low-integration",
-          why: "Replication har høy standardisering, men lav integrasjon."
+          why: "Replication betyr høy standardisering, men lav integrasjon. Forretningsenhetene er relativt uavhengige, men bruker like eller standardiserte prosesser slik at beste praksis kan kopieres på tvers."
         },
         {
           id: "unification",
           label: "Unification",
           correctQuadrantId: "high-standardization-high-integration",
-          why: "Unification har både høy standardisering og høy integrasjon."
+          why: "Unification betyr både høy standardisering og høy integrasjon. Virksomheten opererer som én samlet enhet med felles prosesser, felles data og tett koordinering på tvers."
         },
         {
           id: "diversification",
           label: "Diversification",
           correctQuadrantId: "low-standardization-low-integration",
-          why: "Diversification har lav standardisering og lav integrasjon."
+          why: "Diversification betyr lav standardisering og lav integrasjon. Forretningsenhetene har stor lokal autonomi, ulike kunder, ulike arbeidsmåter og lite behov for felles prosesser eller delt data."
         },
         {
           id: "coordination",
           label: "Coordination",
           correctQuadrantId: "low-standardization-high-integration",
-          why: "Coordination har høy integrasjon, men lavere standardisering."
+          why: "Coordination betyr høy integrasjon, men lav standardisering. Enhetene kan ha ulike prosesser, men må dele informasjon og koordinere på tvers, for eksempel fordi én enhets transaksjoner påvirker en annen."
         }
       ]
     }
