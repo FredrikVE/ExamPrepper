@@ -29,6 +29,7 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
     return {
         feedbackMode,
         hasInlineFillBlank: inlineFillBlank,
+        shouldShowPrompt: !isMatrixPlacementQuestion(question),
         shouldShowFillInput: fillQuestion && !inlineFillBlank,
         shouldShowOptions: !fillQuestion && !dragDropQuestion,
         shouldShowDragDrop: dragDropQuestion,

@@ -41,15 +41,17 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
             <div className="question-card-body">
                 <div className="question-card-divider" />
 
-                <PromptSection
-                    question={question}
-                    answerText={answerText}
-                    submitted={submitted}
-                    correct={correct}
-                    hasInlineFillBlank={viewState.hasInlineFillBlank}
-                    onSingleAnswer={onSingleAnswer}
-                    t={t}
-                />
+                {viewState.shouldShowPrompt ? (
+                    <PromptSection
+                        question={question}
+                        answerText={answerText}
+                        submitted={submitted}
+                        correct={correct}
+                        hasInlineFillBlank={viewState.hasInlineFillBlank}
+                        onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
+                ) : null}
 
                 {viewState.shouldShowFillInput ? (
                     <FillBlankInputFieldQuestion

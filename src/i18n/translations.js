@@ -100,6 +100,7 @@ export const translations = {
         dragCategorizeRemoveAnswer: "Fjern svar",
 
         matrixPlacementItemBankTitle: "Svar-kort",
+        matrixPlacementItemBankSubtitle: "Dra hver blokk til riktig kvadrant.",
         matrixPlacementItemBankHint: "Dra et kort til riktig kvadrant, eller klikk kortet og deretter kvadranten.",
         matrixPlacementDropHere: "Slipp kort her",
         matrixPlacementRemoveAnswer: "Fjern svar",
@@ -234,6 +235,7 @@ export const translations = {
         dragCategorizeRemoveAnswer: "Remove answer",
 
         matrixPlacementItemBankTitle: "Answer cards",
+        matrixPlacementItemBankSubtitle: "Drag each block into the correct quadrant.",
         matrixPlacementItemBankHint: "Drag a card into the correct quadrant, or click a card and then click the quadrant.",
         matrixPlacementDropHere: "Drop card here",
         matrixPlacementRemoveAnswer: "Remove answer",

@@ -34,7 +34,7 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
 }
 
 .matrix-placement-item-bank-title {
@@ -50,6 +50,14 @@
     font-size: 0.82rem;
     font-weight: 850;
     white-space: nowrap;
+}
+
+.matrix-placement-item-bank-subtitle {
+    margin: 0 0 12px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 650;
+    line-height: 1.35;
 }
 
 .matrix-placement-item-list {

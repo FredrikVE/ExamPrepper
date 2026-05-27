@@ -26,6 +26,12 @@ export default function MatrixPlacementItemBank(props) {
                 ) : null}
             </div>
 
+            {!props.feedbackMode ? (
+                <p className="matrix-placement-item-bank-subtitle">
+                    {props.question?.itemBankSubtitle ?? props.t.matrixPlacementItemBankSubtitle}
+                </p>
+            ) : null}
+
             <div className="matrix-placement-item-list">
                 {props.items.map((item) => renderItem(props, item))}
             </div>

@@ -45,6 +45,7 @@ describe("question utils", () => {
         expect(isMatrixPlacementQuestion({ type: QUESTION_TYPES.MATRIX_PLACEMENT })).toBe(true);
         expect(state).toMatchObject({
             shouldShowOptions: false,
+            shouldShowPrompt: false,
             shouldShowDragDrop: true,
             shouldShowMatrixPlacement: true
         });
@@ -60,6 +61,7 @@ describe("question utils", () => {
 
         expect(state).toMatchObject({
             feedbackMode: false,
+            shouldShowPrompt: true,
             shouldShowOptions: true,
             shouldShowWarning: false,
             shouldShowSource: false
