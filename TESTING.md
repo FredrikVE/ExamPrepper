@@ -86,6 +86,40 @@ Denne advarselen kommer fordi Jest kjøres med ES Modules-støtte. Testene kan l
 
 ---
 
+## Bygg og lokal kontroll
+
+Jest-testene dekker forretningslogikk, repository-logikk, use cases og feature-nære hjelpefunksjoner. De starter ikke Vite og tester ikke visuell styling direkte. Etter endringer i UI, CSS eller komponentstruktur bør derfor produksjonsbuilden også testes.
+
+Kjør produksjonsbuild:
+
+```bash
+npm run build
+```
+
+Test den ferdige builden lokalt med Vite preview:
+
+```bash
+npm run preview
+```
+
+Åpne URL-en som Vite viser, vanligvis:
+
+```text
+http://localhost:4173/
+```
+
+Ved CSS- eller layoutendringer bør følgende sjekkes visuelt i preview:
+
+- vanlige single choice- og multiple choice-spørsmål
+- fill blank-spørsmål
+- drag-and-drop-variantene `TableMatch`, `CategorySort` og `MatrixPlacement`
+- feedback-visning før og etter levering
+- responsiv visning i smal skjerm / devtools
+
+Hvis Vite viser en advarsel om store chunks etter build, er det en ytelses-/optimaliseringsadvarsel og ikke nødvendigvis en testfeil. Builden regnes som grønn så lenge `vite build` fullfører uten feil.
+
+---
+
 ## Nåværende teststatus
 
 Siste testkjøring:
@@ -153,7 +187,7 @@ UseCases
 ViewModel / Utils
 ```
 
-Målet er å teste mest mulig av forretningslogikken uten å måtte starte Vite eller åpne appen i nettleseren.
+Målet er å teste mest mulig av forretningslogikken uten å måtte starte Vite eller åpne appen i nettleseren. Automatiserte Jest-tester dekker ikke visuelle CSS-regresjoner direkte, så UI- og stylingendringer bør i tillegg valideres med `npm run build` og lokal preview.
 
 Testene dekker blant annet:
 
@@ -284,7 +318,9 @@ og oppdatere både produksjonskode og tester til å bruke samme struktur.
 Mulige forbedringer i testoppsettet:
 
 - Legge til komponenttester for `QuestionCard`, `AnswerOptionCard`, `FeedbackPanel`, `ExamProgress` og `ResultBadge`
-- Legge til komponenttester for oppgavetypene under `QuestionCard/QuestionTypes`
+- Legge til komponenttester for oppgavetypene under `QuestionCard/QuestionTypes`, spesielt drag-and-drop-variantene `TableMatch`, `CategorySort` og `MatrixPlacement`
+- Legge til visuelle/regresjonstester for sentrale `QuestionCard`-varianter etter CSS-refaktoreringen
+- Teste at nye oppgavetyper følger samme struktur for feature-nær logikk og CSS
 - Legge til tester for drag-and-drop-interaksjoner med React Testing Library
 - Legge til tester for ViewModels med React Testing Library eller Vitest
 - Legge testkjøring inn i GitHub Actions
