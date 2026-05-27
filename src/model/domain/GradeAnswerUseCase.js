@@ -102,7 +102,7 @@ export default class GradeAnswerUseCase {
     }
 
     getMatrixPlacementStats(question, answer) {
-        const items = Array.isArray(question?.items) ? question.items : [];
+        const items = this.#getSafeMatrixItems(question);
         const safeAnswer = this.#normalizeMatrixPlacementAnswer(question, answer);
 
         return items.reduce((stats, item) => {
@@ -204,7 +204,7 @@ export default class GradeAnswerUseCase {
     }
 
     #isMatrixPlacementAnswerFullyCorrect(question, answer) {
-        const items = Array.isArray(question?.items) ? question.items : [];
+        const items = this.#getSafeMatrixItems(question);
         const safeAnswer = this.#normalizeMatrixPlacementAnswer(question, answer);
 
         if (items.length === 0) {
@@ -219,7 +219,7 @@ export default class GradeAnswerUseCase {
     }
 
     #getMatrixPlacementQuestionScore(question, answer) {
-        const items = Array.isArray(question?.items) ? question.items : [];
+        const items = this.#getSafeMatrixItems(question);
 
         if (items.length === 0) {
             return 0;
@@ -229,70 +229,6 @@ export default class GradeAnswerUseCase {
         const rawScore = question.points * (stats.correct / items.length);
 
         return Number(rawScore.toFixed(2));
-    }
-
-    #normalizeMatrixPlacementAnswer(question, answer) {
-        const rawAnswer = this.#isPlainObject(answer?.placements)
-            ? answer.placements
-            : answer;
-        const safeAnswer = this.#isPlainObject(rawAnswer) ? rawAnswer : {};
-        const itemIds = new Set((Array.isArray(question?.items) ? question.items : []).map((item) => item.id));
-        const quadrantIds = new Set(this.#getMatrixQuadrants(question).map((quadrant) => quadrant.id));
-        const normalizedAnswer = {};
-
-        for (const itemId in safeAnswer) {
-            const quadrantId = safeAnswer[itemId];
-
-            if (!itemIds.has(itemId)) {
-                continue;
-            }
-
-            if (!quadrantIds.has(quadrantId)) {
-                continue;
-            }
-
-            normalizedAnswer[itemId] = quadrantId;
-        }
-
-        return normalizedAnswer;
-    }
-
-    #getMatrixQuadrants(question) {
-        if (Array.isArray(question?.matrix?.quadrants)) {
-            return question.matrix.quadrants;
-        }
-
-        if (Array.isArray(question?.quadrants)) {
-            return question.quadrants;
-        }
-
-        return [];
-    }
-
-    #getCorrectQuadrantId(question, itemId) {
-        const correctAnswer = this.#isPlainObject(question?.correctAnswer)
-            ? question.correctAnswer
-            : {};
-        const correctPlacements = this.#isPlainObject(question?.correctPlacements)
-            ? question.correctPlacements
-            : {};
-        const item = Array.isArray(question?.items)
-            ? question.items.find((candidate) => candidate.id === itemId)
-            : null;
-
-        return correctAnswer[itemId]
-            ?? correctPlacements[itemId]
-            ?? item?.correctQuadrantId
-            ?? item?.quadrantId
-            ?? null;
-    }
-
-    #isMatrixPlacementCorrect(question, quadrantId, itemId) {
-        if (!quadrantId || !itemId) {
-            return false;
-        }
-
-        return this.#getCorrectQuadrantId(question, itemId) === quadrantId;
     }
 
     #normalizeCategoryAnswer(question, answer) {
@@ -316,6 +252,33 @@ export default class GradeAnswerUseCase {
                 normalizedAnswer[category.id].push(itemId);
                 usedItemIds.add(itemId);
             }
+        }
+
+        return normalizedAnswer;
+    }
+
+    #normalizeMatrixPlacementAnswer(question, answer) {
+        const rawAnswer = this.#isPlainObject(answer?.placements)
+            ? answer.placements
+            : answer;
+        const safeAnswer = this.#isPlainObject(rawAnswer) ? rawAnswer : {};
+        const itemIds = new Set(this.#getSafeMatrixItems(question).map((item) => item.id));
+        const quadrantIds = new Set(this.#getMatrixQuadrants(question).map((quadrant) => quadrant.id));
+        const shouldValidate = itemIds.size > 0 && quadrantIds.size > 0;
+        const normalizedAnswer = {};
+
+        for (const itemId in safeAnswer) {
+            const quadrantId = safeAnswer[itemId];
+
+            if (!quadrantId) {
+                continue;
+            }
+
+            if (shouldValidate && (!itemIds.has(itemId) || !quadrantIds.has(quadrantId))) {
+                continue;
+            }
+
+            normalizedAnswer[itemId] = quadrantId;
         }
 
         return normalizedAnswer;
@@ -349,6 +312,24 @@ export default class GradeAnswerUseCase {
         return null;
     }
 
+    #getCorrectMatrixQuadrantId(question, itemId) {
+        const correctAnswer = this.#isPlainObject(question?.correctAnswer)
+            ? question.correctAnswer
+            : {};
+        const correctPlacements = this.#isPlainObject(question?.correctPlacements)
+            ? question.correctPlacements
+            : {};
+        const item = this.#getSafeMatrixItems(question).find((candidate) => {
+            return candidate.id === itemId;
+        });
+
+        return correctAnswer[itemId]
+            ?? correctPlacements[itemId]
+            ?? item?.correctQuadrantId
+            ?? item?.quadrantId
+            ?? null;
+    }
+
     #isCategoryPlacementCorrect(question, categoryId, itemId) {
         if (!categoryId || !itemId) {
             return false;
@@ -357,6 +338,29 @@ export default class GradeAnswerUseCase {
         return this.#getCorrectCategoryId(question, itemId) === categoryId;
     }
 
+    #isMatrixPlacementCorrect(question, quadrantId, itemId) {
+        if (!quadrantId || !itemId) {
+            return false;
+        }
+
+        return this.#getCorrectMatrixQuadrantId(question, itemId) === quadrantId;
+    }
+
+    #getSafeMatrixItems(question) {
+        return Array.isArray(question?.items) ? question.items : [];
+    }
+
+    #getMatrixQuadrants(question) {
+        if (Array.isArray(question?.matrix?.quadrants)) {
+            return question.matrix.quadrants;
+        }
+
+        if (Array.isArray(question?.quadrants)) {
+            return question.quadrants;
+        }
+
+        return [];
+    }
 
     #getSortedSelectedIndexes(answer) {
         if (!Array.isArray(answer)) {

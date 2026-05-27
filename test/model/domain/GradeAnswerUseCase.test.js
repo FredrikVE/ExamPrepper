@@ -250,6 +250,37 @@ describe("GradeAnswerUseCase", () => {
                 unanswered: 1
             });
         });
+
+
+        test("treats null, undefined and empty answers as unanswered", () => {
+            expect(useCase.execute(question, null)).toBe(false);
+            expect(useCase.execute(question, undefined)).toBe(false);
+            expect(useCase.getQuestionScore(question, {})).toBe(0);
+            expect(useCase.getMatrixPlacementStats(question, {})).toEqual({
+                correct: 0,
+                wrong: 0,
+                unanswered: 3
+            });
+        });
+
+        test("ignores unknown items and unknown quadrants", () => {
+            expect(useCase.getMatrixPlacementStats(question, {
+                diversification: "unknown-quadrant",
+                unknownItem: "low-standardization-low-integration",
+                coordination: "low-standardization-high-integration"
+            })).toEqual({
+                correct: 1,
+                wrong: 0,
+                unanswered: 2
+            });
+        });
+
+        test("does not allow a partial answer to count as fully correct", () => {
+            expect(useCase.execute(question, {
+                diversification: "low-standardization-low-integration",
+                coordination: "low-standardization-high-integration"
+            })).toBe(false);
+        });
     });
 
     test("returns false when question is missing", () => {

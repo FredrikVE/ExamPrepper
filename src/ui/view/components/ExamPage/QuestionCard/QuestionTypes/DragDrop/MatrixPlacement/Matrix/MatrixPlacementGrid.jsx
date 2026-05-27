@@ -10,10 +10,10 @@ export default function MatrixPlacementGrid(props) {
     return (
         <section className="matrix-placement-board" aria-label={props.question?.matrix?.label ?? props.question?.title}>
             <div className="matrix-placement-y-high" aria-hidden="true">
-                {yAxis.highLabel ?? "High"}
+                {yAxis.topLabel ?? yAxis.highLabel ?? "High"}
             </div>
             <div className="matrix-placement-y-low" aria-hidden="true">
-                {yAxis.lowLabel ?? "Low"}
+                {yAxis.bottomLabel ?? yAxis.lowLabel ?? "Low"}
             </div>
             <div className="matrix-placement-y-axis-label">
                 {yAxis.label ?? "Y-axis"}
@@ -45,9 +45,9 @@ export default function MatrixPlacementGrid(props) {
             </div>
 
             <div className="matrix-placement-x-axis" aria-hidden="true">
-                <span>{xAxis.lowLabel ?? "Low"}</span>
+                <span>{xAxis.leftLabel ?? xAxis.lowLabel ?? "Low"}</span>
                 <strong>{xAxis.label ?? "X-axis"}</strong>
-                <span>{xAxis.highLabel ?? "High"}</span>
+                <span>{xAxis.rightLabel ?? xAxis.highLabel ?? "High"}</span>
             </div>
         </section>
     );

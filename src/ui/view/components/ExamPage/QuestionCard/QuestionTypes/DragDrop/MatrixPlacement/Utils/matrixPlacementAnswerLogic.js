@@ -238,12 +238,22 @@ export function isPlainObject(value) {
 function getAxisRank({ quadrant, axis, axisName, highRank, lowRank }) {
     const directValue = getDirectAxisValue(quadrant, axisName);
     const normalizedDirectValue = normalizeForSearch(directValue);
+    const highRankValues = getHighRankAxisValues(axis, axisName);
+    const lowRankValues = getLowRankAxisValues(axis, axisName);
 
-    if (isHighValue(normalizedDirectValue, axis)) {
+    if (matchesAxisValue(normalizedDirectValue, highRankValues)) {
         return highRank;
     }
 
-    if (isLowValue(normalizedDirectValue, axis)) {
+    if (matchesAxisValue(normalizedDirectValue, lowRankValues)) {
+        return lowRank;
+    }
+
+    if (matchesNumericRank(directValue, highRank)) {
+        return highRank;
+    }
+
+    if (matchesNumericRank(directValue, lowRank)) {
         return lowRank;
     }
 
@@ -255,11 +265,11 @@ function getAxisRank({ quadrant, axis, axisName, highRank, lowRank }) {
     ].filter(Boolean).join(" "));
     const axisKeywords = getAxisKeywords(axis);
 
-    if (hasAxisValueInText(searchableText, axisKeywords, axis?.highLabel ?? "High")) {
+    if (hasAxisValueInText(searchableText, axisKeywords, highRankValues)) {
         return highRank;
     }
 
-    if (hasAxisValueInText(searchableText, axisKeywords, axis?.lowLabel ?? "Low")) {
+    if (hasAxisValueInText(searchableText, axisKeywords, lowRankValues)) {
         return lowRank;
     }
 
@@ -274,22 +284,70 @@ function getDirectAxisValue(quadrant, axisName) {
     return quadrant?.y ?? quadrant?.yValue ?? quadrant?.row ?? quadrant?.vertical;
 }
 
-function isHighValue(value, axis) {
-    return value === "high" || value === normalizeForSearch(axis?.highLabel ?? "High");
+function getHighRankAxisValues(axis, axisName) {
+    const usesDirectionalLabels = hasDirectionalAxisLabels(axis, axisName);
+    const directionalValue = axisName === "x" ? "right" : "top";
+    const directionalLabel = axisName === "x" ? axis?.rightLabel : axis?.topLabel;
+    const legacyValues = usesDirectionalLabels
+        ? []
+        : [axis?.highLabel ?? "High", "high"];
+
+    return getDefinedValues([
+        directionalLabel,
+        directionalValue,
+        axis?.highLabel,
+        ...legacyValues
+    ]);
 }
 
-function isLowValue(value, axis) {
-    return value === "low" || value === normalizeForSearch(axis?.lowLabel ?? "Low");
+function getLowRankAxisValues(axis, axisName) {
+    const usesDirectionalLabels = hasDirectionalAxisLabels(axis, axisName);
+    const directionalValue = axisName === "x" ? "left" : "bottom";
+    const directionalLabel = axisName === "x" ? axis?.leftLabel : axis?.bottomLabel;
+    const legacyValues = usesDirectionalLabels
+        ? []
+        : [axis?.lowLabel ?? "Low", "low"];
+
+    return getDefinedValues([
+        directionalLabel,
+        directionalValue,
+        axis?.lowLabel,
+        ...legacyValues
+    ]);
 }
 
-function hasAxisValueInText(text, axisKeywords, value) {
-    const normalizedValue = normalizeForSearch(value);
+function hasDirectionalAxisLabels(axis, axisName) {
+    if (axisName === "x") {
+        return Boolean(axis?.leftLabel || axis?.rightLabel);
+    }
 
-    return axisKeywords.some((keyword) => {
-        return text.includes(`${normalizedValue} ${keyword}`)
-            || text.includes(`${normalizedValue}-${keyword}`)
-            || text.includes(`${keyword} ${normalizedValue}`)
-            || text.includes(`${keyword}-${normalizedValue}`);
+    return Boolean(axis?.topLabel || axis?.bottomLabel);
+}
+
+function getDefinedValues(values) {
+    return values.filter((value) => value !== undefined && value !== null && value !== "");
+}
+
+function matchesAxisValue(value, values) {
+    return values.some((candidate) => value === normalizeForSearch(candidate));
+}
+
+function matchesNumericRank(value, rank) {
+    if (value === rank) {
+        return true;
+    }
+
+    return String(value) === String(rank);
+}
+
+function hasAxisValueInText(text, axisKeywords, values) {
+    return values.some((value) => {
+        const normalizedValue = normalizeForSearch(value);
+
+        return axisKeywords.some((keyword) => {
+            return text.includes(`${normalizedValue} ${keyword}`)
+                || text.includes(`${normalizedValue}-${keyword}`);
+        });
     });
 }
 
