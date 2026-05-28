@@ -120,5 +120,190 @@ export const in5431ConceptImages = [
         title: { no: "External Developer Platform", en: "External Developer Platform" },
         alt: { no: "External Developer Platform som D4D-byggekloss", en: "External Developer Platform as a D4D building block" },
         caption: { no: "External Developer Platform åpner digitale komponenter for partnere og eksterne utviklere.", en: "The external developer platform opens digital components to partners and external developers." }
+    },
+
+    {
+        moduleId: "cio-tool-box",
+        groupId: "business-case",
+        imageId: "NPV_formula",
+        ext: "png",
+        title: { no: "Net Present Value (NPV)", en: "Net Present Value (NPV)" },
+        alt: { no: "NPV-formel for diskonterte kontantstrømmer", en: "NPV formula for discounted cash flows" },
+        caption: { no: "NPV brukes i business case for å sammenligne forventet nytte, kostnad, timing og risiko.", en: "NPV is used in business cases to compare expected benefits, costs, timing and risk." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "business-case",
+        imageId: "PV_formula",
+        ext: "png",
+        title: { no: "Present Value (PV)", en: "Present Value (PV)" },
+        alt: { no: "PV-formel for nåverdi av en fremtidig kontantstrøm", en: "PV formula for the present value of a future cash flow" },
+        caption: { no: "PV viser hvorfor timing betyr noe: fremtidige gevinster diskonteres tilbake til verdi i dag.", en: "PV shows why timing matters: future benefits are discounted back to today's value." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "design-thinking",
+        imageId: "double_diamond_model",
+        ext: "png",
+        title: { no: "Double Diamond", en: "Double Diamond" },
+        alt: { no: "Double Diamond-modellen med Discover, Define, Develop og Deliver", en: "The Double Diamond model with Discover, Define, Develop and Deliver" },
+        caption: { no: "Double Diamond viser design thinking som utforskning av problemrom og løsningsrom gjennom divergens og konvergens.", en: "The Double Diamond shows design thinking as exploration of problem space and solution space through divergence and convergence." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "operating-model",
+        imageId: "business_process_matrix_en",
+        ext: "png",
+        title: { no: "Operating model matrix", en: "Operating model matrix" },
+        alt: { no: "Matrise for prosessintegrasjon og prosessstandardisering", en: "Matrix for process integration and process standardization" },
+        caption: { no: "Operating model beskriver ønsket nivå av prosessintegrasjon og standardisering: diversification, coordination, replication og unification.", en: "The operating model describes the desired level of process integration and standardization: diversification, coordination, replication and unification." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "operating-model",
+        imageId: "operating_model_matrix_no",
+        ext: "png",
+        title: { no: "Operating model-matrisen", en: "Operating model matrix" },
+        alt: { no: "Norsk operating model-matrise for integrasjon og standardisering", en: "Norwegian operating model matrix for integration and standardization" },
+        caption: { no: "Matrisen brukes til å plassere Coordination, Unification, Diversification og Replication.", en: "The matrix is used to place Coordination, Unification, Diversification and Replication." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "business-process-modeling",
+        imageId: "umbrella_heaven_and_process_model",
+        ext: "png",
+        title: { no: "Umbrella Heaven og prosessmodell", en: "Umbrella Heaven and process model" },
+        alt: { no: "Kobling mellom Umbrella Heaven-caset og prosessmodellering", en: "Connection between the Umbrella Heaven case and process modeling" },
+        caption: { no: "Caset viser hvordan strategi, prosesser og IT-arkitektur henger sammen i praksis.", en: "The case shows how strategy, processes and IT architecture connect in practice." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "business-process-modeling",
+        imageId: "umbrella_heaven_ordering_process",
+        ext: "png",
+        title: { no: "Umbrella Heaven bestillingsprosess", en: "Umbrella Heaven ordering process" },
+        alt: { no: "BPMN-lignende swimlane-prosess for bestilling i Umbrella Heaven", en: "BPMN-like swimlane process for ordering in Umbrella Heaven" },
+        caption: { no: "Prosessmodellen viser aktiviteter, roller/swimlanes, avhengigheter og flyt fra kunde til lager og betalingsleverandør.", en: "The process model shows activities, roles/swimlanes, dependencies and flow from customer to warehouse and payment provider." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "business-process-modeling",
+        imageId: "umbrella_heaven_return_process",
+        ext: "png",
+        title: { no: "Umbrella Heaven returprosess", en: "Umbrella Heaven return process" },
+        alt: { no: "Prosessmodell for retur og refundering", en: "Process model for returns and refunds" },
+        caption: { no: "Returprosessen viser hvordan en prosess kan modelleres med manuelle og automatiske aktiviteter på tvers av aktører.", en: "The return process shows how a process can be modeled with manual and automated activities across actors." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "enterprise-architecture",
+        imageId: "togaf_arkitekturtaksonomi",
+        ext: "png",
+        title: { no: "TOGAF arkitekturtaksonomi", en: "TOGAF architecture taxonomy" },
+        alt: { no: "TOGAFs nivåer: Business, Data, Application og Technology Architecture", en: "TOGAF levels: Business, Data, Application and Technology Architecture" },
+        caption: { no: "TOGAF deler enterprise architecture inn i Business, Data, Application og Technology Architecture.", en: "TOGAF divides enterprise architecture into Business, Data, Application and Technology Architecture." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "enterprise-architecture",
+        imageId: "togaf_levels_model",
+        ext: "png",
+        title: { no: "TOGAF-nivåer", en: "TOGAF levels" },
+        alt: { no: "Modell over arkitekturlag i TOGAF", en: "Model of architecture layers in TOGAF" },
+        caption: { no: "Arkitekturlagene hjelper å strukturere sammenhengen mellom virksomhet, data, applikasjoner og teknologi.", en: "The architecture layers help structure the relationship between business, data, applications and technology." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "enterprise-architecture",
+        imageId: "togaf_adm_en",
+        ext: "png",
+        title: { no: "TOGAF ADM", en: "TOGAF ADM" },
+        alt: { no: "Architecture Development Method i TOGAF", en: "The Architecture Development Method in TOGAF" },
+        caption: { no: "ADM viser TOGAF som en styrt metode for å utvikle og forvalte enterprise architecture.", en: "ADM shows TOGAF as a governed method for developing and managing enterprise architecture." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "enterprise-architecture",
+        imageId: "togaf_adm_no",
+        title: { no: "TOGAF ADM", en: "TOGAF ADM" },
+        alt: { no: "Norsk modell av Architecture Development Method", en: "Norwegian model of the Architecture Development Method" },
+        caption: { no: "TOGAF ADM strukturerer arkitekturarbeid i faser med styring og iterasjon.", en: "TOGAF ADM structures architecture work into phases with governance and iteration." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "it-governance",
+        imageId: "it_governance_matrix",
+        ext: "png",
+        title: { no: "IT governance-matrisen", en: "IT governance matrix" },
+        alt: { no: "Matrise som kobler IT-beslutningsdomener med styringsarketyper", en: "Matrix connecting IT decision domains with governance archetypes" },
+        caption: { no: "Styringsmatrisen viser hvem som bør ha beslutningsrettigheter for ulike typer IT-beslutninger.", en: "The governance matrix shows who should have decision rights for different types of IT decisions." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "it-governance",
+        imageId: "decision_rights_matrix",
+        ext: "png",
+        title: { no: "Decision rights matrix", en: "Decision rights matrix" },
+        alt: { no: "Oversikt over beslutningsrettigheter i IT governance", en: "Overview of decision rights in IT governance" },
+        caption: { no: "IT governance handler om å avgjøre hvem som tar og bidrar til IT-beslutninger, og hvem som holdes ansvarlig.", en: "IT governance determines who makes and contributes to IT decisions, and who is accountable." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "it-governance",
+        imageId: "Domene_modell_IT_beslutninger_spm",
+        ext: "png",
+        title: { no: "Domener for IT-beslutninger", en: "IT decision domains" },
+        alt: { no: "Modell over sentrale domener for IT-beslutninger", en: "Model of key IT decision domains" },
+        caption: { no: "De fem beslutningsdomenene er IT-prinsipper, IT-arkitektur, IT-infrastruktur, business application needs og IT-investeringer.", en: "The five decision domains are IT principles, IT architecture, IT infrastructure, business application needs and IT investments." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "it-governance",
+        imageId: "it_beslutninger_sentrale_domener_handler_om",
+        ext: "png",
+        title: { no: "Hva IT-beslutningsdomener handler om", en: "What IT decision domains concern" },
+        alt: { no: "Forklaring av hva de sentrale IT-beslutningsdomenene handler om", en: "Explanation of what the key IT decision domains concern" },
+        caption: { no: "Figuren utdyper innholdet i de sentrale IT-beslutningsdomenene i Weill og Ross-modellen.", en: "The figure elaborates the content of the key IT decision domains in the Weill and Ross model." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "it-governance",
+        imageId: "performance_based_IT-governance_model",
+        ext: "png",
+        title: { no: "Performance-basert IT governance", en: "Performance-based IT governance" },
+        alt: { no: "Modell som kobler governance-design med mål som lønnsomhet, ressursutnyttelse og vekst", en: "Model connecting governance design with goals such as profitability, asset utilization and growth" },
+        caption: { no: "Governance-design må vurderes opp mot ønskede resultater som lønnsomhet, ressursutnyttelse og vekst.", en: "Governance design must be assessed against desired outcomes such as profitability, asset utilization and growth." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "digital_strategy_model",
+        title: { no: "Digital strategi", en: "Digital strategy" },
+        alt: { no: "Modell som skiller mellom forretningsstrategi, IT-strategi og digital strategi", en: "Model distinguishing business strategy, IT strategy and digital strategy" },
+        caption: { no: "Digital strategi handler om å bruke digitale ressurser til å skape differensierende verdi, ikke bare å anskaffe IT-systemer.", en: "Digital strategy is about using digital resources to create differential value, not merely acquiring IT systems." }
+    },
+    {
+        moduleId: "sustainability",
+        groupId: "three-dimensions",
+        imageId: "sustainability_three_dimensions",
+        title: { no: "Tre dimensjoner av bærekraft", en: "Three dimensions of sustainability" },
+        alt: { no: "Økonomisk, sosial og miljømessig bærekraft / triple bottom line", en: "Economic, social and environmental sustainability / triple bottom line" },
+        caption: { no: "Bærekraft vurderes ofte langs økonomiske, sosiale og miljømessige dimensjoner — profit, people and planet.", en: "Sustainability is often assessed along economic, social and environmental dimensions — profit, people and planet." }
+    },
+    {
+        moduleId: "sustainability",
+        groupId: "reporting",
+        imageId: "double_materiality",
+        title: { no: "Dobbel vesentlighet", en: "Double materiality" },
+        alt: { no: "Dobbel vesentlighet i bærekraftsrapportering", en: "Double materiality in sustainability reporting" },
+        caption: { no: "Dobbel vesentlighet kombinerer hvordan virksomheten påvirker omgivelsene og hvordan bærekraftsforhold påvirker virksomheten.", en: "Double materiality combines how the organization impacts its surroundings and how sustainability matters affect the organization." }
+    },
+    {
+        moduleId: "sustainability",
+        groupId: "reporting",
+        imageId: "scope_1_2_3",
+        title: { no: "Scope 1, 2 og 3", en: "Scope 1, 2 and 3" },
+        alt: { no: "Utslippskategoriene Scope 1, Scope 2 og Scope 3", en: "The emission categories Scope 1, Scope 2 and Scope 3" },
+        caption: { no: "Scope 1, 2 og 3 skiller mellom direkte utslipp, indirekte energirelaterte utslipp og andre verdikjedeutslipp.", en: "Scope 1, 2 and 3 distinguish direct emissions, indirect energy-related emissions and other value-chain emissions." }
     }
 ];
