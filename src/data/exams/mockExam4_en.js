@@ -2695,7 +2695,295 @@ export const mockExam4_en = {
           ]
         }
       }
+    },
+    {
+      "id": 40,
+      "type": "dragDrop",
+      "title": "TOGAF architecture taxonomy",
+      "points": 3,
+      "prompt": "Drag each TOGAF architecture type to the description it fits best.",
+      "source": "Source: Lecture 5, CIO Toolbox 3, slide 'Architecture taxonomy (according to TOGAF)'.",
+      "moduleId": "cio-tool-box",
+      "groupId": "enterprise-architecture",
+      "cards": [
+        {
+          "id": "togaf-business-architecture",
+          "text": "Business Architecture"
+        },
+        {
+          "id": "togaf-data-architecture",
+          "text": "Data Architecture"
+        },
+        {
+          "id": "togaf-application-architecture",
+          "text": "Application Architecture"
+        },
+        {
+          "id": "togaf-technology-architecture",
+          "text": "Technology Architecture"
+        }
+      ],
+      "targets": [
+        {
+          "id": "business-architecture",
+          "description": "Defines business strategy, governance, organization and key business processes",
+          "correctCardId": "togaf-business-architecture",
+          "correctLabel": "Business Architecture",
+          "whyCorrect": "Business Architecture describes the business side of the enterprise: strategy, governance, organization and key business processes.",
+          "whyWrong": "This description belongs to Business Architecture, because it concerns the organization's strategy, governance, structure and business processes rather than data, applications or infrastructure.",
+          "whyExtended": [
+            "In the TOGAF taxonomy, Business Architecture is the architecture layer closest to strategy and organizational design.",
+            "It defines how the business works before specifying which data, applications and technology are needed to support it.",
+            "This connects TOGAF to the CIO toolbox purpose of understanding and structuring the IT portfolio in relation to business needs."
+          ]
+        },
+        {
+          "id": "data-architecture",
+          "description": "Describes logical and physical data assets and data management resources",
+          "correctCardId": "togaf-data-architecture",
+          "correctLabel": "Data Architecture",
+          "whyCorrect": "Data Architecture describes the structure of data assets and data management resources.",
+          "whyWrong": "This description belongs to Data Architecture, because it is about data assets and data management, not business processes, application interaction or technical infrastructure.",
+          "whyExtended": [
+            "Data Architecture matters because integration and standardization often depend on shared definitions of data and master data.",
+            "It links naturally to topics such as the operating model and the Operational Backbone in Designed for Digital.",
+            "Without a shared data architecture, application integration and enterprise-wide reporting become much harder."
+          ]
+        },
+        {
+          "id": "application-architecture",
+          "description": "Provides a blueprint for applications, their interactions and their relationship to core business processes",
+          "correctCardId": "togaf-application-architecture",
+          "correctLabel": "Application Architecture",
+          "whyCorrect": "Application Architecture describes applications, how they interact and how they support core business processes.",
+          "whyWrong": "This description belongs to Application Architecture, because it is about the application portfolio and its relationship to business processes.",
+          "whyExtended": [
+            "Application Architecture is central when analyzing and structuring an organization's systems portfolio.",
+            "It helps distinguish which applications support core processes, which applications should interact, and where duplication or fragmentation exists.",
+            "This is why TOGAF appears under IT Architecture in the CIO toolbox."
+          ]
+        },
+        {
+          "id": "technology-architecture",
+          "description": "Describes software and hardware capabilities such as infrastructure, middleware, networks and standards",
+          "correctCardId": "togaf-technology-architecture",
+          "correctLabel": "Technology Architecture",
+          "whyCorrect": "Technology Architecture describes the technical capabilities needed to support business, data and application services.",
+          "whyWrong": "This description belongs to Technology Architecture, because it concerns infrastructure, middleware, networks, processing and standards.",
+          "whyExtended": [
+            "Technology Architecture is the most technical layer in the TOGAF taxonomy.",
+            "It supports the deployment of business, data and application services.",
+            "It should not be confused with Application Architecture: applications are software systems and interactions; technology architecture is the underlying technical capability."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "type": "dragDrop",
+      "title": "Architecture perspectives: TOGAF, Fowler and Open Agile Architecture",
+      "points": 3,
+      "prompt": "Drag each architecture perspective to the description that best captures it in the course.",
+      "source": "Source: Lecture 5, CIO Toolbox 3, slides on different views on architecture and Open Agile Architecture.",
+      "moduleId": "cio-tool-box",
+      "groupId": "enterprise-architecture",
+      "cards": [
+        {
+          "id": "perspective-togaf",
+          "text": "TOGAF"
+        },
+        {
+          "id": "perspective-fowler",
+          "text": "Martin Fowler"
+        },
+        {
+          "id": "perspective-open-agile",
+          "text": "Open Agile Architecture"
+        },
+        {
+          "id": "perspective-enterprise-architecture",
+          "text": "Enterprise Architecture"
+        }
+      ],
+      "targets": [
+        {
+          "id": "formal-centralized",
+          "description": "Formal and often centralized perspective on architecture work",
+          "correctCardId": "perspective-togaf",
+          "correctLabel": "TOGAF",
+          "whyCorrect": "TOGAF represents the formal, often centralized view of architecture work in the lecture.",
+          "whyWrong": "This description belongs to TOGAF, because the lecture explicitly contrasts TOGAF's formal/centralized orientation with Fowler's more decentralized perspective.",
+          "whyExtended": [
+            "TOGAF is presented as an enterprise architecture framework from The Open Group.",
+            "It is associated with architecture governance and structured methods such as ADM.",
+            "This is why it maps to the IT Architecture tool in the CIO toolbox."
+          ]
+        },
+        {
+          "id": "important-stuff",
+          "description": "Architecture is 'the important stuff'; collaborative and more decentralized orientation",
+          "correctCardId": "perspective-fowler",
+          "correctLabel": "Martin Fowler",
+          "whyCorrect": "Fowler's perspective is that architecture is about what developers and stakeholders regard as important.",
+          "whyWrong": "This description belongs to Martin Fowler, because the lecture uses Fowler to represent a more meritocratic and decentralized perspective on architecture.",
+          "whyExtended": [
+            "The lecture contrasts Fowler with TOGAF: Fowler is closer to agile development thinking.",
+            "His view emphasizes judgment, collaboration and attention to what actually matters in a given system.",
+            "This does not mean architecture is unimportant; it means the architectural boundary depends on context."
+          ]
+        },
+        {
+          "id": "modularity-standardization-responsiveness",
+          "description": "Modularity, standardization and built-in responsiveness to change",
+          "correctCardId": "perspective-open-agile",
+          "correctLabel": "Open Agile Architecture",
+          "whyCorrect": "Open Agile Architecture is summarized in the lecture by modularity, standardization and responsiveness to change.",
+          "whyWrong": "This description belongs to Open Agile Architecture, because the lecture presents it as an alternative to TOGAF with modularity, standardization and built-in responsiveness to change.",
+          "whyExtended": [
+            "Modularity supports team autonomy and resilience.",
+            "Standardization supports reconfiguration of products and operating models.",
+            "Responsiveness to change keeps architecture from becoming a static control mechanism."
+          ]
+        },
+        {
+          "id": "optimize-fragmented-legacy",
+          "description": "Optimize fragmented processes into an integrated environment that supports business strategy",
+          "correctCardId": "perspective-enterprise-architecture",
+          "correctLabel": "Enterprise Architecture",
+          "whyCorrect": "Enterprise Architecture is presented as an approach for optimizing fragmented processes and systems into an integrated environment that supports strategy.",
+          "whyWrong": "This description belongs to Enterprise Architecture as a broader field, not to one specific named framework or author.",
+          "whyExtended": [
+            "Enterprise Architecture is broader than TOGAF, although TOGAF is a major framework for doing enterprise architecture work.",
+            "The lecture emphasizes that organizations often have fragmented legacy processes and systems.",
+            "EA aims to create an integrated environment responsive to change and supportive of business strategy."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "type": "single",
+      "title": "TOGAF ADM",
+      "points": 1,
+      "prompt": "In the TOGAF context, what is ADM?",
+      "source": "Source: Lecture 5, CIO Toolbox 3, slide 'TOGAF: The Architecture Development Method (ADM)'.",
+      "moduleId": "cio-tool-box",
+      "groupId": "enterprise-architecture",
+      "options": [
+        {
+          "text": "Architecture Development Method — a structured method for developing and managing enterprise architecture",
+          "correct": true,
+          "why": "Correct: ADM stands for Architecture Development Method and is the core structured method in TOGAF.",
+          "whyExtended": [
+            "The lecture presents TOGAF through the Architecture Development Method (ADM).",
+            "ADM structures architecture work through phases and governance rather than treating architecture as an ad hoc activity.",
+            "In the CIO toolbox, this belongs under IT Architecture because it helps analyze and structure the IT portfolio and architecture work.",
+            "A key exam cue is the word 'method': TOGAF is not only a taxonomy of architecture layers, but also a method for architecture development."
+          ]
+        },
+        {
+          "text": "Agile Delivery Model — a Scrum method for sprint planning",
+          "correct": false,
+          "why": "Wrong: ADM is not a Scrum or sprint-planning method.",
+          "whyExtended": [
+            "Scrum belongs to agile software delivery and product teams, not to TOGAF's enterprise architecture method.",
+            "ADM stands for Architecture Development Method, not Agile Delivery Model.",
+            "TOGAF is mapped to IT Architecture, while Scrum is mapped to Product teams and agile methods in the frameworks slide.",
+            "This distinction is important because both are frameworks, but they support different management problems."
+          ]
+        },
+        {
+          "text": "Application Data Matrix — a list of database tables for one application",
+          "correct": false,
+          "why": "Wrong: TOGAF includes Data and Application Architecture, but ADM does not mean Application Data Matrix.",
+          "whyExtended": [
+            "ADM is a method for architecture development across the enterprise, not a local database artifact.",
+            "The TOGAF taxonomy includes Business, Data, Application and Technology Architecture, but ADM refers to the process/method side of TOGAF.",
+            "Application and data concerns may appear within ADM work, but they are not the meaning of ADM itself.",
+            "Do not confuse architecture layers with the Architecture Development Method."
+          ]
+        },
+        {
+          "text": "Automated Decision Management — a governance model for replacing architects with automated rules",
+          "correct": false,
+          "why": "Wrong: ADM is about structured architecture development, not automating away architectural judgment.",
+          "whyExtended": [
+            "The lecture emphasizes that architecture work still requires judgment about what should be coordinated centrally and what can be decentralized.",
+            "TOGAF may be formal and centralized, but it is not described as automated decision-making.",
+            "Frameworks guide architecture work; they do not replace leadership, dialogue and contextual judgment.",
+            "The correct expansion is Architecture Development Method."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "type": "multi",
+      "title": "TOGAF and enterprise architecture caveats",
+      "points": 1,
+      "prompt": "Mark the statements that fit how TOGAF and enterprise architecture are presented in the course.",
+      "source": "Source: Lecture 5, CIO Toolbox 3, slides on TOGAF, Enterprise Architecture and different architecture perspectives.",
+      "moduleId": "cio-tool-box",
+      "groupId": "enterprise-architecture",
+      "options": [
+        {
+          "text": "TOGAF is associated with enterprise architecture and a formal, often centralized perspective on architecture work.",
+          "correct": true,
+          "why": "Correct: the lecture explicitly presents TOGAF as formal and often centralized.",
+          "whyExtended": [
+            "TOGAF is introduced as a framework for enterprise architecture.",
+            "The Open Group, through TOGAF, represents the formal and often centralized perspective in the lecture.",
+            "This contrasts with Fowler's more meritocratic and decentralized architecture perspective.",
+            "The point is not that TOGAF is always wrong, but that its usefulness depends on context."
+          ]
+        },
+        {
+          "text": "Enterprise architecture aims to reduce fragmentation and create an integrated environment that supports business strategy.",
+          "correct": true,
+          "why": "Correct: this is the purpose of enterprise architecture presented in the lecture.",
+          "whyExtended": [
+            "The lecture defines the purpose of enterprise architecture as optimizing fragmented legacy processes into an integrated environment.",
+            "The target environment should be responsive to change and supportive of business strategy delivery.",
+            "This explains why enterprise architecture sits between business processes and IT architecture in the CIO toolbox.",
+            "It is not just technical documentation; it is supposed to support strategic execution."
+          ]
+        },
+        {
+          "text": "TOGAF replaces the need to understand business processes because it is only about hardware and networks.",
+          "correct": false,
+          "why": "Wrong: TOGAF includes Business Architecture and Application/Data layers, not only hardware and networks.",
+          "whyExtended": [
+            "The TOGAF taxonomy includes Business, Data, Application and Technology Architecture.",
+            "Business Architecture explicitly covers business strategy, governance, organization and key business processes.",
+            "Technology Architecture is only one of the four layers, not the whole framework.",
+            "The lecture places TOGAF in the broader context of business processes and IT architecture."
+          ]
+        },
+        {
+          "text": "Enterprise architecture initiatives can become too top-down and continue without producing concrete business value.",
+          "correct": true,
+          "why": "Correct: the course notes that EA can be hard, top-down and sometimes criticized for limited concrete results.",
+          "whyExtended": [
+            "The course summary notes that enterprise architecture management can be holistic and useful for complex portfolios, but difficult in practice.",
+            "A common challenge is that EA initiatives can seem to go on forever without concrete results.",
+            "The lecture also contrasts central coordination with more decentralized architecture thinking.",
+            "This is why the exam point is not 'TOGAF is always best', but 'TOGAF is one formal architecture framework whose value is context-sensitive'."
+          ]
+        },
+        {
+          "text": "Fowler and TOGAF are presented as identical views with different names.",
+          "correct": false,
+          "why": "Wrong: the lecture explicitly contrasts TOGAF and Fowler as different architecture perspectives.",
+          "whyExtended": [
+            "TOGAF is the formal, often centralized perspective.",
+            "Fowler represents a more meritocratic and decentralized perspective associated with agile development.",
+            "Fowler's phrase 'architecture is about the important stuff' signals context-sensitive judgment rather than a fixed formal taxonomy alone.",
+            "Understanding this contrast is more important than memorizing TOGAF as a universally correct method."
+          ]
+        }
+      ]
     }
+
 
   ]
 };
