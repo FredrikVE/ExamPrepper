@@ -23,6 +23,13 @@ export const mockExam3_en = {
             "The lecture lists this as the first element of an action plan: activities to change or develop the current operation to meet strategic goals.",
             "Without concrete activities, strategy remains an intention rather than something that can be implemented.",
             "This connects strategy to actual management work: prioritized initiatives must be started to achieve the desired results."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -33,6 +40,13 @@ export const mockExam3_en = {
             "The lecture lists 'assigned responsibility for these activities' as a requirement for an action plan.",
             "This connects to accountability: someone must be responsible for progress and outcomes.",
             "Without accountability, it becomes difficult to know who should make decisions, escalate problems or deliver."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -43,6 +57,13 @@ export const mockExam3_en = {
             "The lecture formulates this as 'expected ordering and timeframe for executing the activities aka roadmap'.",
             "The roadmap makes the plan operational and helps the organization prioritize over time.",
             "This is especially important when activities depend on one another, for example when an operational backbone must be improved before new digital offerings can be scaled."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -53,6 +74,13 @@ export const mockExam3_en = {
             "The lecture lists 'estimates/budgets' as a separate element of the action plan.",
             "The estimates make it possible to prioritize between initiatives and assess whether the organization has enough capacity.",
             "This links strategy to CIO toolbox tools such as business case, alternative analysis and project planning."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -147,6 +175,13 @@ export const mockExam3_en = {
             "Alternative analysis starts with root-cause analysis and understanding the situation.",
             "This can include internal competencies, technical assets and cultural factors.",
             "Without this, one risks solving the wrong problem or comparing irrelevant alternatives."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process"
+            }
           ]
         },
         {
@@ -157,6 +192,13 @@ export const mockExam3_en = {
             "The lecture describes a concept as an internally consistent set of work or initiatives.",
             "The point is to identify relevant alternatives, not only evaluate the first solution someone suggests.",
             "This is especially important in vendor selection, product choice and larger organizational changes."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process"
+            }
           ]
         },
         {
@@ -167,6 +209,13 @@ export const mockExam3_en = {
             "The evaluation can use business case, plus/minus method, cost ranking or real options.",
             "The level of detail depends on impact, experience, uncertainty and trust between decision-makers.",
             "The goal is not just analysis, but to provide a basis for decision-making."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process"
+            }
           ]
         },
         {
@@ -312,6 +361,13 @@ export const mockExam3_en = {
             "This means that experiences from previous and ongoing work should be actively used.",
             "The principle makes project governance more learning-oriented and less mechanical.",
             "It fits with the course's point that frameworks are aids, not goals in themselves."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -322,6 +378,13 @@ export const mockExam3_en = {
             "The project organization must know who is responsible for what.",
             "This supports accountability and reduces ambiguity in coordination.",
             "The principle connects to the project as a temporary organization."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -332,6 +395,13 @@ export const mockExam3_en = {
             "Managing by stages creates control points where the project can be reassessed.",
             "This fits uncertainty in projects: one should not necessarily lock the entire project in detail from the start.",
             "Stage-based governance makes it possible to adjust plans based on experience."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -342,6 +412,13 @@ export const mockExam3_en = {
             "This matters because the course emphasizes that frameworks are context-dependent.",
             "A heavy framework used uncritically can become bureaucratic and inappropriate.",
             "Tailoring makes the framework more relevant to the actual project environment."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -372,6 +449,13 @@ export const mockExam3_en = {
             "The course summary says that a risk management approach and a risk register should be created.",
             "This fits projects' uncertainty around expectations, funding and implementation.",
             "Risk is not just a cost item, but a management task throughout the project."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -798,6 +882,13 @@ export const mockExam3_en = {
             "MVP reduces the risk of building a full solution no one wants.",
             "Digital offerings are software-based and therefore suitable for rapid testing.",
             "Feedback can be used to improve or reject the idea."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "shared-customer-insights",
+              imageId: "SCI"
+            }
           ]
         },
         {
@@ -808,6 +899,13 @@ export const mockExam3_en = {
             "This fits the uncertainty about what customers will actually pay for.",
             "Rapid experiments support continuous learning.",
             "The method contrasts with spending a long time on a solution without validation."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "shared-customer-insights",
+              imageId: "SCI"
+            }
           ]
         },
         {
@@ -818,6 +916,13 @@ export const mockExam3_en = {
             "Co-creation reduces the risk of building something that does not match actual needs.",
             "It supports Shared Customer Insights by turning customer insight into organizational learning.",
             "Cross-functional teams can combine IT, product, operations, market and risk."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "shared-customer-insights",
+              imageId: "SCI"
+            }
           ]
         },
         {
@@ -848,6 +953,13 @@ export const mockExam3_en = {
             "Operational backbone requires standardized and integrated processes/data.",
             "Silos can lead to the same information being registered multiple times.",
             "Digital business often requires seamless end-to-end processes across units."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -858,6 +970,13 @@ export const mockExam3_en = {
             "Old routines, processes and practices can prevent standardization.",
             "This shows that OB is not only technical architecture, but also organizational change.",
             "Habits can be linked to functions, practices and fragmented architectures."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -868,6 +987,13 @@ export const mockExam3_en = {
             "Fragmentation makes integration and data quality more difficult.",
             "It can lead to multiple logins, poorly updated systems and duplicate registration.",
             "A working OB requires systems, processes and data to fit together."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -898,6 +1024,13 @@ export const mockExam3_en = {
             "Digital Platform is a repository of business, data and infrastructure components.",
             "Reusable components can be used in several digital offerings.",
             "This is the opposite of monolithic systems built for one specific product and often lacking reusable APIs."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "digital-platform",
+              imageId: "DP"
+            }
           ]
         },
         {
@@ -948,6 +1081,13 @@ export const mockExam3_en = {
             "External partners can use components to extend the portfolio of digital offerings.",
             "This creates ecosystem logic rather than only an internal value chain.",
             "ExDP builds on internal components being well designed and managed."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "external-developer-platform",
+              imageId: "ExDP"
+            }
           ]
         },
         {
@@ -958,6 +1098,13 @@ export const mockExam3_en = {
             "Boundary resources make it possible to control how external actors get access.",
             "This gives a balance between openness and control.",
             "Without such interfaces, external use becomes unstructured and risky."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "external-developer-platform",
+              imageId: "ExDP"
+            }
           ]
         },
         {
@@ -968,6 +1115,13 @@ export const mockExam3_en = {
             "Google Maps is used as an example where partners can use a component in their own offerings.",
             "Apple is used as an example of an industry/ecosystem platform.",
             "Both variants increase the potential for external innovation."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "external-developer-platform",
+              imageId: "ExDP"
+            }
           ]
         },
         {

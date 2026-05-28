@@ -144,6 +144,13 @@ export const mockExam4_en = {
             "Step 1 focuses on understanding the 'whys' — internal competency, technical assets, cultural factors.",
             "Step 2 is about presenting alternative actions as 'concepts' — an internally consistent set of work. The goal is to ensure all relevant options are considered.",
             "Step 3 uses evaluation methods including business case (tool 1), plus/minus method, cost ranking, and real options."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process"
+            }
           ]
         },
         {
@@ -491,6 +498,13 @@ export const mockExam4_en = {
             "This means the business case must remain valid throughout the project — if justification disappears, the project should be stopped.",
             "This connects to the business case tool in the CIO toolbox: the business case is not just an upfront exercise but an ongoing concern.",
             "PRINCE2 has 'business case' as one of its seven themes, reinforcing the link to continued justification."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -502,6 +516,13 @@ export const mockExam4_en = {
             "Stage-based management allows for regular decision points where the project board can authorize the next stage.",
             "This provides natural checkpoints to reassess the business case and adjust plans based on learning.",
             "Managing by stages balances detailed planning (near-term) with higher-level planning (later stages)."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -524,6 +545,13 @@ export const mockExam4_en = {
             "This aligns with the CIO toolbox's overarching message that frameworks are context-dependent.",
             "A small, low-risk project should use a lighter PRINCE2 implementation than a large, complex one.",
             "This tailoring principle connects to Cynefin: the management approach should match the complexity of the situation."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -792,6 +820,13 @@ export const mockExam4_en = {
             "In a complicated situation (analyzable), a business case and structured planning are appropriate.",
             "In a complex situation (unknown factors), design thinking and agile/product teams with experimentation are needed.",
             "Cynefin serves as a meta-tool that helps decide which of the other tools is most appropriate for the given context."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -857,6 +892,13 @@ export const mockExam4_en = {
             "Complicated situations use Sense → Analyze → Respond — apply expertise to analyze the situation and determine the right approach.",
             "The key distinction from complex is that in complicated situations, the answer can be found through analysis — it just requires expertise.",
             "Examples include engineering challenges, detailed planning, and structured decision-making where the problem is understood but the solution requires skill."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -1139,6 +1181,13 @@ export const mockExam4_en = {
             "A project with 3 fixed factors and 0 added complexity is Complex; with 3 fixed factors and 1+ added complexity it becomes Chaotic.",
             "A project with 1 fixed factor and 2 added complexity factors is Clear; with 1 fixed factor and 3+ it becomes Complex.",
             "The key insight is that fixing all constraints removes flexibility, while complexity factors add unknowns — together they escalate the management challenge."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {

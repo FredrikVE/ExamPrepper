@@ -151,6 +151,13 @@ export const mockExam4_no = {
             "Trinn 1 fokuserer på å forstå 'hvorfor' — intern kompetanse, tekniske ressurser og kulturelle faktorer.",
             "Trinn 2 handler om å presentere alternative handlinger som 'concepts' — et internt konsistent sett med arbeid. Målet er å sikre at alle relevante alternativer vurderes.",
             "Trinn 3 bruker evalueringsmetoder som business case (verktøy 1), plus/minus-metoden, kostnadsrangering og real options."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process_no"
+            }
           ]
         },
         {

@@ -23,6 +23,13 @@ export const mockExam3_no = {
             "Forelesningen lister dette som første punkt i action plan: activities to change or develop the current operation to meet strategic goals.",
             "Uten konkrete aktiviteter blir strategien bare en intensjon, ikke noe som kan gjennomføres.",
             "Dette knytter strategi til faktisk ledelsesarbeid: prioriterte tiltak må settes i gang for å oppnå ønskede resultater."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -33,6 +40,13 @@ export const mockExam3_no = {
             "Forelesningen lister 'assigned responsibility for these activities' som et krav til action plan.",
             "Dette henger sammen med accountability: noen må kunne holdes ansvarlig for fremdrift og resultat.",
             "Uten ansvarliggjøring blir det vanskelig å vite hvem som skal ta beslutninger, eskalere problemer eller levere."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -43,6 +57,13 @@ export const mockExam3_no = {
             "Forelesningen formulerer dette som 'expected ordering and timeframe for executing the activities aka roadmap'.",
             "Roadmapet gjør planen operasjonell og hjelper organisasjonen å prioritere over tid.",
             "Dette er særlig viktig når tiltakene er avhengige av hverandre, for eksempel når et operasjonelt fundament må forbedres før nye digitale tilbud kan skaleres."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -53,6 +74,13 @@ export const mockExam3_no = {
             "Forelesningen lister 'estimates/budgets' som et eget punkt i handlingsplanen.",
             "Estimatene gjør det mulig å prioritere mellom tiltak og vurdere om organisasjonen har kapasitet.",
             "Dette kobler strategi til CIO toolbox-verktøy som business case, alternative analysis og prosjektplanlegging."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "strategy",
+              groupId: "action-plan",
+              imageId: "strategy_action_plan_model"
+            }
           ]
         },
         {
@@ -148,6 +176,13 @@ export const mockExam3_no = {
             "Alternative analysis starter med root-cause analysis og forståelse av situasjonen.",
             "Dette kan inkludere interne kompetanser, tekniske eiendeler og kulturelle faktorer.",
             "Uten dette risikerer man å løse feil problem eller sammenligne irrelevante alternativer."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process_no"
+            }
           ]
         },
         {
@@ -158,6 +193,13 @@ export const mockExam3_no = {
             "Forelesningen beskriver et konsept som et internt konsistent sett av arbeid/tiltak.",
             "Poenget er å få frem relevante alternativer, ikke bare vurdere den første løsningen noen foreslår.",
             "Dette er særlig viktig ved leverandørvalg, produktvalg og større organisatoriske endringer."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process_no"
+            }
           ]
         },
         {
@@ -168,6 +210,13 @@ export const mockExam3_no = {
             "Evalueringen kan bruke business case, plus/minus-metode, kostnadsrangering eller real options.",
             "Detaljnivået avhenger av impact, erfaring, usikkerhet og tillit mellom beslutningstakere.",
             "Målet er ikke bare analyse, men å gi et beslutningsgrunnlag."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "decision-making",
+              imageId: "generic_decision_making_process_no"
+            }
           ]
         },
         {
@@ -965,6 +1014,13 @@ export const mockExam3_no = {
             "Digital Platform er et repository av business-, data- og infrastrukturkomponenter.",
             "Gjenbrukbare komponenter kan brukes i flere digitale tilbud.",
             "Dette er motsatsen til monolittiske systemer som er bygget for ett bestemt produkt og ofte mangler gjenbrukbare APIer."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "digital-platform",
+              imageId: "DP"
+            }
           ]
         },
         {

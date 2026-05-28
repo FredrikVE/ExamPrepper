@@ -25,6 +25,15 @@ export const in5431ConceptImages = [
         alt: { no: "Tre steg: forstå situasjonen, syntetiser alternativer, evaluer og anbefal", en: "Three steps: understand situation, synthesize options, evaluate and propose" },
         caption: { no: "Beslutningsprosessen går fra situasjonsforståelse via alternativer til anbefaling, med iterasjon.", en: "The decision process moves from understanding through alternatives to recommendation, with iteration." }
     },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "decision-making",
+        imageId: "generic_decision_making_process",
+        ext: "png",
+        title: { no: "Generisk beslutningsprosess", en: "Generic decision making process" },
+        alt: { no: "Tre steg i beslutningsprosessen: forstå situasjonen, syntetiser alternativer, evaluer og anbefal", en: "Three steps in the decision process: understand the situation, synthesize options, evaluate and propose" },
+        caption: { no: "Beslutningsprosessen brukes i alternativanalyse for å bevege seg fra situasjonsforståelse til anbefaling.", en: "The decision process is used in alternative analysis to move from understanding the situation to a recommendation." }
+    },
 
     // ── CIO Toolbox: Triple constraint (forelesning 4) ─────
     {

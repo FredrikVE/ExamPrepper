@@ -25,6 +25,13 @@ export const mockExam5_en = {
             "This means the business case must remain valid throughout the project — if justification disappears, the project should be stopped.",
             "This connects to the business case tool (tool 1) in the CIO toolbox: justification is not just an upfront exercise but an ongoing concern.",
             "PRINCE2 also has 'business case' as one of its seven themes, reinforcing the link between the principle and the theme."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -36,6 +43,13 @@ export const mockExam5_en = {
             "This requires the project to capture lessons learned and apply them from previous projects.",
             "Learning from experience connects to the broader agile/product team principle of pivots and learning.",
             "Without learning, organizations repeat mistakes across projects — this principle prevents that."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -58,6 +72,13 @@ export const mockExam5_en = {
             "This means delegating authority within defined tolerances, and escalating only when tolerances are exceeded.",
             "Manage by exception prevents micro-management while maintaining control — the project board only intervenes when needed.",
             "This principle supports efficiency: managers at each level handle issues within their authority, freeing senior management for exceptional situations."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -90,6 +111,13 @@ export const mockExam5_en = {
             "It ensures that the project remains viable and worth investing in at every stage gate.",
             "The business case theme also links to tool 1 in the CIO toolbox — both deal with structured justification of investments.",
             "The seven themes are: business case, organization, quality, plans, risk, change, progress."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -101,6 +129,13 @@ export const mockExam5_en = {
             "Risk management is continuous throughout the project, not a one-time activity.",
             "The course summary notes: 'risk -> risk management approach and risk register should be created during process 3 (initiating a project).'",
             "Risk connects to the business case tool in the CIO toolbox, where risk is one of the four factors in utility maximisation."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -123,6 +158,13 @@ export const mockExam5_en = {
             "This is related to but different from organizational change management (Prosci/ADKAR), which is outside the CIO toolbox.",
             "In PRINCE2, change control prevents uncontrolled scope creep that could violate the triple constraint.",
             "The change theme works together with the risk theme — changes often introduce new risks."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -134,6 +176,13 @@ export const mockExam5_en = {
             "It connects directly to principle 4 (manage by stages) — progress is assessed at each stage boundary.",
             "It also connects to principle 5 (manage by exception) — tolerances are set, and deviations trigger escalation.",
             "Progress tracking enables informed decision-making about whether to continue, adjust or stop the project."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         }
       ]
@@ -166,6 +215,13 @@ export const mockExam5_en = {
             "The project board authorizes initiation, authorizes each stage, gives ad hoc direction, and authorizes project closure.",
             "This process implements the 'manage by exception' principle — the board only intervenes when tolerances are exceeded.",
             "The seven processes are: starting up, directing, initiating, controlling a stage, managing product delivery, managing stage boundaries, closing."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -221,6 +277,13 @@ export const mockExam5_en = {
             "This means the project is defined by what it produces (products), not by the activities performed.",
             "Product descriptions specify purpose, composition, quality criteria and quality methods — they drive the work.",
             "This principle ensures the project delivers tangible results, not just completed activities."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -275,6 +338,13 @@ export const mockExam5_en = {
             "This aligns with the CIO toolbox's core message: 'Tools are not goals in themselves — they are only meaningful if they serve their purpose.'",
             "Lecture 6 states: 'For these (and similar) frameworks, their usefulness and value is highly context-sensitive — and sometimes disputed.'",
             "A small internal project needs lighter governance than a multi-million enterprise transformation — PRINCE2 accommodates both."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "prince2",
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -1051,6 +1121,13 @@ export const mockExam5_en = {
             "The approach is Sense → Categorize → Respond: recognize the type of situation, categorize it, apply the known procedure.",
             "This is the domain of best practice — answers are known and repeatable.",
             "The CIO toolbox model confirms: 'Clear → procedures, best practice.'"
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -1073,6 +1150,13 @@ export const mockExam5_en = {
             "The approach is Probe → Sense → Respond: try something, observe results, adapt — learning emerges from action.",
             "The CIO toolbox model states: 'Complex → experimentation, design thinking, agile.'",
             "Emergent practice means the right approach is discovered through iteration, not determined in advance."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -1084,6 +1168,13 @@ export const mockExam5_en = {
             "The approach is Act → Sense → Respond: stabilize first, then assess the situation and determine next steps.",
             "Novel practice means the response is unprecedented — the situation is too urgent for established or emergent approaches.",
             "The CIO toolbox model confirms: 'Chaotic → immediate action.'"
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         }
       ]
@@ -1105,6 +1196,13 @@ export const mockExam5_en = {
             "The CIO toolbox model states: 'Scope, time, cost — all three fixed → vulnerable.'",
             "Fixing all constraints eliminates the ability to adjust — any unexpected issue becomes a problem that cannot be absorbed.",
             "With even 1 additional complexity factor (3 fixed + 1+), the situation escalates to Chaotic."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -1159,6 +1257,13 @@ export const mockExam5_en = {
             "Cynefin maps: 'business case (analyze) ↔ design thinking (explore) ↔ projects (plan) ↔ product teams (iterate).'",
             "A meta-tool is a tool about tools — it does not do the work itself but guides which tool should do the work.",
             "This makes Cynefin the starting point for contextual decision-making: assess the domain first, then select the appropriate approach."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {

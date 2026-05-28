@@ -420,6 +420,13 @@ export const mockExam2_no = {
             "Governance transformation handler om hvordan organisasjonen styrer og koordinerer sine digitale satsinger — hvem bestemmer hva, og hvordan deles innsikt.",
             "SCI handler om felles organisatorisk læring om kundebehov, AF handler om fordeling av ansvar — begge er governance-mekanismer.",
             "D4D sin dual transformation skiller mellom architecture (OB, DP) og governance (SCI, AF) — dette er et sentralt organiseringsprinsipp i boken."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "overview",
+              imageId: "D4D-overview"
+            }
           ]
         },
         {
@@ -694,6 +701,13 @@ export const mockExam2_no = {
             "Dette skiftet er sentralt i AF: fra midlertidig prosjekteierskap til varig komponenteierskap.",
             "Komponenteiere har langvarig ansvar for sine komponenter — de kjenner dem best og er best posisjonert til å ta beslutninger.",
             "Kursoppsummeringen beskriver dette som 'tighter relation between decision making and decision impact'."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "accountability-framework",
+              imageId: "AF"
+            }
           ]
         },
         {
@@ -705,6 +719,13 @@ export const mockExam2_no = {
             "AF erstatter detaljstyring ovenfra med målbare resultater som teamene selv jobber mot.",
             "Forelesning 11 sin oppsummering av nøkkelmekanismer inkluderer 'missions — metrics that support enterprise goals'.",
             "Datadrevet styring gir teamene autonomi i hvordan de oppnår målene, mens alignment sikres gjennom felles målsetninger."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "accountability-framework",
+              imageId: "AF"
+            }
           ]
         },
         {
@@ -716,6 +737,13 @@ export const mockExam2_no = {
             "Tillit er en forutsetning for autonomi — uten tillit kan man ikke gi team frihet til å ta egne beslutninger.",
             "AF-oppsummeringen sier: 'More coaching and less hierarchy' — dette forutsetter tillit.",
             "Kursoppsummeringen beskriver AF som 'enabling creativity while avoiding chaos' — tillit balanseres med alignment-mekanismer."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "accountability-framework",
+              imageId: "AF"
+            }
           ]
         },
         {
@@ -876,6 +904,13 @@ export const mockExam2_no = {
             "OB er fundamentet — uten stabil OB mangler man grunnlaget for Digital Platform og deretter for nye digitale tilbud.",
             "44% av ledere identifiserer OB som den største hindringen for digital transformasjon — det understreker viktigheten av å fikse den først.",
             "Forelesning 9 sier at 'Building an OB is a long-term Commitment' — det er noe man må starte med tidlig."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "overview",
+              imageId: "D4D-overview"
+            }
           ]
         },
         {
@@ -887,6 +922,13 @@ export const mockExam2_no = {
             "DP bør starte parallelt med eller like etter OB-arbeidet fordi den muliggjør eksperimentering og innovasjon.",
             "Forelesning 10 understreker at 'An Operational Backbone is Not Enough for Digital Success' — DP er nødvendig i tillegg.",
             "Roadmapen anbefaler også å 'synchronize customer insights and DP development' — SCI og DP bør utvikles i takt."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "overview",
+              imageId: "D4D-overview"
+            }
           ]
         },
         {
@@ -898,6 +940,13 @@ export const mockExam2_no = {
             "Forelesning 12 presiserer at ExDP krever 'a very well designed and managed internal platform' — det forutsetter moden OB og DP.",
             "ExDP åpner digitale komponenter for eksterne parter, noe som krever at de interne komponentene er robuste og godt forvaltet.",
             "Å åpne en umoden plattform for eksterne utviklere ville skape problemer med kvalitet, sikkerhet og pålitelighet."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "overview",
+              imageId: "D4D-overview"
+            }
           ]
         },
         {
@@ -940,6 +989,13 @@ export const mockExam2_no = {
             "Boundary resources inkluderer API-er (for datatilgang), dokumentasjon (for å forstå plattformen) og utviklerverktøy (for å bygge på plattformen).",
             "Forelesning 12 viser to typer ExDP: én der partnere bruker interne komponenter (som Google Maps API), og én som skaper en markedsplass (som Apple App Store) — begge krever boundary resources.",
             "Uten boundary resources har ikke eksterne parter noen strukturert måte å interagere med plattformen på."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "external-developer-platform",
+              imageId: "ExDP"
+            }
           ]
         },
         {
@@ -1049,6 +1105,13 @@ export const mockExam2_no = {
             "Forelesning 9 lister 'Supports seamless end-to-end transaction processing' som første funksjon i OB.",
             "End-to-end transaction processing betyr at transaksjoner flyter sømløst gjennom hele verdikjeden uten manuelle steg.",
             "Dette krever integrerte systemer og standardiserte prosesser — kjernen i OB-definisjonen."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -1059,6 +1122,13 @@ export const mockExam2_no = {
             "Forelesning 9 lister 'Provides reliable, and accessible master data' som en sentral OB-funksjon.",
             "Master data er kjernedata om kunder, produkter, leverandører osv. som brukes på tvers av systemer.",
             "Pålitelige kjernedata er en forutsetning for Digital Platform — data components i DP bygger på data fra OB."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -1069,6 +1139,13 @@ export const mockExam2_no = {
             "Forelesning 9 lister 'Automate repetitive processes' som en OB-funksjon.",
             "Kursoppsummeringen beskriver OB som å 'eliminate or reduce non-value-adding variability in a company's systems, processes and data'.",
             "Automatisering erstatter manuelt, repetitivt arbeid med digitaliserte prosesser — det er 'the essence of digitization: produce an OB that replaces individual heroes with digitized processes'."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {

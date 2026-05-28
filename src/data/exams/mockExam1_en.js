@@ -311,6 +311,13 @@ export const mockExam1_en = {
             "Lecture 9 emphasizes that OB provides a 'tightly integrated, bulletproof production environment to ensure reliability and security of business processes'.",
             "MIT CISR research shows that companies with an effective OB are 2.5 times more agile and 44% more innovative than companies without.",
             "OB is the foundation that enables further digital transformation — without a functioning OB, you lack a stable base to build on."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -365,6 +372,13 @@ export const mockExam1_en = {
             "Lecture 12 divides DP components into four types: data components (API access to data), infrastructure components (authentication, access control), business components (dashboards, customer alerts) and cloud services (hosting, performance management).",
             "Lecture 10 emphasizes that DP provides 'easy access to the data, business and technology components that make up digital offerings — experimentation, rapid innovation and continuous feature enhancement'.",
             "DP differs from OB by focusing on flexibility and reuse rather than stability and standardization."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "digital-platform",
+              imageId: "DP"
+            }
           ]
         },
         {
@@ -431,6 +445,13 @@ export const mockExam1_en = {
             "Lecture 11 describes AF key mechanisms: empowered teams (autonomy), modular architecture (loose coupling), missions (common direction) and knowledge sharing (alignment).",
             "AF promotes 'component owners, not project owners', 'metrics, not directives', 'trust, not control' and 'experiments, not major launches'.",
             "The challenge AF addresses is: how to unleash creativity and innovation (autonomy) without losing common direction and standardization (alignment)."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "accountability-framework",
+              imageId: "AF"
+            }
           ]
         },
         {
@@ -485,6 +506,13 @@ export const mockExam1_en = {
             "Lecture 12 describes two types of ExDP: one where partners use the company's internal components in their own offerings (e.g. Google Maps), and one that creates a marketplace for related digital offerings (e.g. Apple App Store).",
             "ExDP requires boundary resources — APIs, documentation and tools that let externals build on the platform.",
             "Lecture 12 specifies that ExDP requires 'a very well designed and managed internal platform' — it presupposes a mature OB and DP."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "external-developer-platform",
+              imageId: "ExDP"
+            }
           ]
         },
         {
@@ -1055,6 +1083,13 @@ export const mockExam1_en = {
             "The CIO toolbox model states: 'Complex → experimentation, design thinking, agile.'",
             "In the Cynefin model, the complex domain uses Probe → Sense → Respond — try something, observe the results, and adapt based on learning.",
             "This approach connects directly to design thinking (exploration) and agile (iteration and adaptation) in the CIO toolbox."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "cio-tool-box",
+              groupId: "cynefin",
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -1087,6 +1122,13 @@ export const mockExam1_en = {
             "The OB definition emphasizes standardization and integration of systems, processes and data.",
             "Lecture 9 shows examples: Nordstrom uses OB for correct inventory management; Kaiser Permanente uses OB for standardized treatment across units.",
             "OB is about making existing core processes reliable and efficient — it is the foundation for further digital success."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -1098,6 +1140,13 @@ export const mockExam1_en = {
             "DP consists of reusable components: data components, infrastructure components, business components and cloud services.",
             "The difference between OB and DP is focus: OB = stability and security for core processes; DP = experimentation and innovation for new offerings.",
             "The D4D roadmap recommends: 'Fix the backbone' first, then 'Don't put off your digital platform for long — connect the modules.'"
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "digital-platform",
+              imageId: "DP"
+            }
           ]
         },
         {
@@ -1120,6 +1169,13 @@ export const mockExam1_en = {
             "Challenges with a weak OB include legacy systems, fragmented data and lack of process standardization.",
             "The D4D roadmap therefore prioritizes: 'Fix the backbone — you need to have a proper structure on the data, processes and applications.'",
             "Without a stable OB, you lack the foundation for Digital Platform, and thereby also for rapid innovation and new digital offerings."
+          ],
+          whyExtendedImageRefs: [
+            {
+              moduleId: "designed-for-digital",
+              groupId: "operational-backbone",
+              imageId: "OB"
+            }
           ]
         }
       ]
