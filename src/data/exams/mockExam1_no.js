@@ -1,4 +1,4 @@
-//src/data/exams/mockExam1_no.js
+// src/data/exams/mockExam1_no.js
 export const mockExam1_no = {
   id: "mock-exam-1-no",
   subjectId: "in5431",
@@ -13,7 +13,12 @@ export const mockExam1_no = {
       title: "Business process",
       points: 1,
       prompt: "En forretnings________ er kombinasjonen av et sett aktiviteter i en virksomhet med en struktur som beskriver deres logiske rekkefølge og avhengighet, der målet er å produsere et ønsket resultat.",
-      answers: ["prosess", "process", "forretningsprosess", "business process"],
+      answers: [
+        "prosess",
+        "process",
+        "forretningsprosess",
+        "business process"
+      ],
       answerKey: "prosess / forretningsprosess",
       source: "Fasit: Forelesning 5, Business processes and IT Architecture, slide 'What is a business process?'",
       whyCorrect: "Setningen er definisjonen av business process: et sett aktiviteter med logisk orden og avhengigheter som produserer et ønsket resultat.",
@@ -184,7 +189,12 @@ export const mockExam1_no = {
       title: "Digital Business Design",
       points: 1,
       prompt: "Digital business design er en helhetlig organisatorisk konfigurasjon av mennesker, prosesser og ________.",
-      answers: ["teknologi", "technology", "it", "digital teknologi"],
+      answers: [
+        "teknologi",
+        "technology",
+        "it",
+        "digital teknologi"
+      ],
       answerKey: "teknologi / technology",
       source: "Fasit: Forelesning 7 og Operational Backbone-forelesningen, definisjon av Digital Business Design.",
       whyCorrect: "Riktig fordi digital business design beskriver samspillet mellom people, processes and technology, ikke bare IT-systemer isolert.",
@@ -211,7 +221,9 @@ export const mockExam1_no = {
             "OB tilhører architecture transformation i D4D sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-            { imageId: "operational-backbone" }
+            {
+              imageId: "operational-backbone"
+            }
           ]
         },
         {
@@ -225,7 +237,9 @@ export const mockExam1_no = {
             "SCI tilhører governance transformation i D4D sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-            { imageId: "shared-customer-insights" }
+            {
+              imageId: "shared-customer-insights"
+            }
           ]
         },
         {
@@ -250,7 +264,9 @@ export const mockExam1_no = {
             "DP tilhører architecture transformation sammen med OB."
           ],
           whyExtendedImageRefs: [
-            { imageId: "digital-platform" }
+            {
+              imageId: "digital-platform"
+            }
           ]
         },
         {
@@ -264,7 +280,9 @@ export const mockExam1_no = {
             "AF tilhører governance transformation i D4D sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-            { imageId: "accountability-framework" }
+            {
+              imageId: "accountability-framework"
+            }
           ]
         },
         {
@@ -278,7 +296,9 @@ export const mockExam1_no = {
             "D4D-roadmapen anbefaler å ikke forhaste seg med ExDP — det krever moden OB og DP først."
           ],
           whyExtendedImageRefs: [
-            { imageId: "external-developer-platform" }
+            {
+              imageId: "external-developer-platform"
+            }
           ]
         }
       ]
@@ -311,6 +331,11 @@ export const mockExam1_no = {
             "Forelesning 9 understreker at OB gir en 'tightly integrated, bulletproof production environment to ensure reliability and security of business processes'.",
             "MIT CISR-forskningen viser at selskaper med effektiv OB er 2.5 ganger mer smidige og 44 % mer innovative enn selskaper uten.",
             "OB er fundamentet som muliggjør videre digital transformasjon — uten fungerende OB mangler man stabil grunn å bygge på."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -335,7 +360,9 @@ export const mockExam1_no = {
             "OB fokuserer på systemer, prosesser og data for stabil drift — det er en infrastruktur-kapabilitet, ikke en brukerinnsiktsmetode."
           ]
         }
-      ]
+      ],
+      moduleId: "designed-for-digital",
+      groupId: "operational-backbone"
     },
     {
       id: 8,
@@ -365,6 +392,11 @@ export const mockExam1_no = {
             "Forelesning 12 deler DP-komponenter i fire typer: data components (API-tilgang til data), infrastructure components (autentisering, tilgangskontroll), business components (dashboards, kundevarsler) og cloud services (hosting, performance management).",
             "Forelesning 10 understreker at DP gir 'easy access to the data, business and technology components that make up digital offerings — experimentation, rapid innovation and continuous feature enhancement'.",
             "DP skiller seg fra OB ved å fokusere på fleksibilitet og gjenbruk fremfor stabilitet og standardisering."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "DP"
+            }
           ]
         },
         {
@@ -389,7 +421,9 @@ export const mockExam1_no = {
             "Prosjektlogikk med triple constraint (scope, tid, kostnad) passer dårlig med den kontinuerlige, iterative utviklingen DP muliggjør."
           ]
         }
-      ]
+      ],
+      moduleId: "designed-for-digital",
+      groupId: "digital-platform"
     },
     {
       id: 9,
@@ -397,7 +431,11 @@ export const mockExam1_no = {
       title: "Shared Customer Insights",
       points: 1,
       prompt: "Shared Customer Insights handler om organisatorisk læring om hva kunder er villige til å ________ for, og hvordan digital teknologi kan levere på kundenes krav.",
-      answers: ["betale", "pay", "betale for"],
+      answers: [
+        "betale",
+        "pay",
+        "betale for"
+      ],
       answerKey: "betale / pay",
       source: "Fasit: Forelesning 8, Shared Customer Insight, og eksamens-eksempelfilen slide 'Example: Shared customer insights'.",
       whyCorrect: "Riktig fordi Shared Customer Insights defineres som organisasjonslæring om hva kunder vil betale for og hvordan digital teknologi kan møte behovene.",
@@ -431,6 +469,11 @@ export const mockExam1_no = {
             "Forelesning 11 beskriver AF-nøkkelmekanismer: empowered teams (autonomi), modular architecture (løs kobling), missions (felles retning) og knowledge sharing (alignment).",
             "AF fremmer 'component owners, not project owners', 'metrics, not directives', 'trust, not control' og 'experiments, not major launches'.",
             "Utfordringen AF adresserer er: hvordan frigjøre kreativitet og innovasjon (autonomi) uten å miste felles retning og standardisering (alignment)."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "AF"
+            }
           ]
         },
         {
@@ -455,7 +498,9 @@ export const mockExam1_no = {
             "Produktteam-logikken i CIO toolbox (verktøy 6) erstatter nettopp scope/budsjett-tenkning med 'outcome over output' og kontinuerlig utvikling."
           ]
         }
-      ]
+      ],
+      moduleId: "designed-for-digital",
+      groupId: "accountability-framework"
     },
     {
       id: 11,
@@ -485,6 +530,11 @@ export const mockExam1_no = {
             "Forelesning 12 beskriver to typer ExDP: én der partnere bruker selskapets interne komponenter i sine egne tilbud (f.eks. Google Maps), og én som skaper en markedsplass for relaterte digitale tilbud (f.eks. Apple App Store).",
             "ExDP krever boundary resources — API-er, dokumentasjon og verktøy som lar eksterne bygge på plattformen.",
             "Forelesning 12 presiserer at ExDP krever 'a very well designed and managed internal platform' — det forutsetter moden OB og DP."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "ExDP"
+            }
           ]
         },
         {
@@ -509,7 +559,9 @@ export const mockExam1_no = {
             "De seks governance-arketypene (Business Monarchy, IT Monarchy, Federal, IT Duopoly, Feudal, Anarchy) tilhører IT governance-verktøyet, ikke D4D-byggeblokkene."
           ]
         }
-      ]
+      ],
+      moduleId: "designed-for-digital",
+      groupId: "external-developer-platform"
     },
     {
       id: 12,
@@ -730,7 +782,13 @@ export const mockExam1_no = {
       title: "Project",
       points: 1,
       prompt: "Et prosjekt er en ________ organisasjon etablert for å levere spesifiserte resultater eller produkter innen en spesifisert periode.",
-      answers: ["midlertidig", "temporary", "temporær", "ad hoc", "ad-hoc"],
+      answers: [
+        "midlertidig",
+        "temporary",
+        "temporær",
+        "ad hoc",
+        "ad-hoc"
+      ],
       answerKey: "midlertidig / temporary",
       source: "Fasit: Forelesning 4, slide 'What is a project?'.",
       whyCorrect: "Riktig fordi prosjektet defineres som en temporary organization med spesifisert resultat og tidsperiode.",
@@ -904,7 +962,11 @@ export const mockExam1_no = {
       title: "SMACIT",
       points: 1,
       prompt: "SMACIT står for Social, Mobile, Analytics, Cloud og Internet of ________.",
-      answers: ["things", "ting", "iot"],
+      answers: [
+        "things",
+        "ting",
+        "iot"
+      ],
       answerKey: "Things / IoT",
       source: "Fasit: Forelesning 7, Designed for digital, SMACIT slide.",
       whyCorrect: "Riktig: SMACIT = Social, Mobile, Analytics, Cloud, Internet of Things.",
@@ -1055,6 +1117,11 @@ export const mockExam1_no = {
             "CIO toolbox-modellen sier: 'Complex → experimentation, design thinking, agile.'",
             "I Cynefin-modellen bruker complex-domenet Probe → Sense → Respond — prøv noe, observer resultatene, og tilpass basert på læring.",
             "Denne tilnærmingen kobler direkte til design thinking (utforskning) og agile (iterasjon og tilpasning) i CIO toolbox."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -1068,7 +1135,9 @@ export const mockExam1_no = {
             "I komplekse situasjoner har man tid til å eksperimentere og lære — det er i kaotiske situasjoner man må handle umiddelbart uten forutgående analyse."
           ]
         }
-      ]
+      ],
+      moduleId: "cio-tool-box",
+      groupId: "cynefin"
     },
     {
       id: 24,
@@ -1087,6 +1156,11 @@ export const mockExam1_no = {
             "OB-definisjonen vektlegger standardisering og integrasjon av systemer, prosesser og data.",
             "Forelesning 9 viser eksempler: Nordstrom bruker OB til korrekt lagerstyring; Kaiser Permanente bruker OB for standardisert behandling på tvers av enheter.",
             "OB handler om å gjøre eksisterende kjerneprosesser pålitelige og effektive — det er fundamentet for videre digital suksess."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "OB"
+            }
           ]
         },
         {
@@ -1098,6 +1172,13 @@ export const mockExam1_no = {
             "DP består av gjenbrukbare komponenter: data components, infrastructure components, business components og cloud services.",
             "Forskjellen mellom OB og DP er fokus: OB = stabilitet og sikkerhet for kjerneprosesser; DP = eksperimentering og innovasjon for nye tilbud.",
             "D4D-roadmapen anbefaler: 'Fix the backbone' først, deretter 'Don't put off your digital platform for long — connect the modules.'"
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "DP",
+              moduleId: "designed-for-digital",
+              groupId: "digital-platform"
+            }
           ]
         },
         {
@@ -1120,9 +1201,19 @@ export const mockExam1_no = {
             "Utfordringer med svak OB inkluderer legacy-systemer, fragmenterte data og manglende prosessstandardisering.",
             "D4D-roadmapen prioriterer derfor: 'Fix the backbone — you need to have a proper structure on the data, processes and applications.'",
             "Uten stabil OB mangler man grunnlaget for Digital Platform, og dermed også for rask innovasjon og nye digitale tilbud."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "OB"
+            },
+            {
+              imageId: "OB"
+            }
           ]
         }
-      ]
+      ],
+      moduleId: "designed-for-digital",
+      groupId: "operational-backbone"
     },
     {
       id: 25,

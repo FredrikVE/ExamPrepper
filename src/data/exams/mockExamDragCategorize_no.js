@@ -64,7 +64,7 @@ export const mockExamDragCategorize_no = {
             "Relevante begreper er operating model, BPMN, enterprise architecture og TOGAF."
           ]
         },
-        "projects": {
+        projects: {
           whyCorrect: "Projects hører til ORGANISERING fordi prosjekter er midlertidige organisasjoner for å levere bestemte resultater.",
           whyWrong: "Prosjekter brukes til å planlegge og organisere utviklingsarbeid.",
           whyExtended: [

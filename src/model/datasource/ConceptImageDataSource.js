@@ -18,9 +18,11 @@ export default class ConceptImageDataSource {
             return null;
         }
 
+        const ext = entry.ext ?? "svg";
+
         return {
             id: imageId,
-            src: this.#buildSrc(subjectId, moduleId, groupId, imageId),
+            src: this.#buildSrc(subjectId, moduleId, groupId, imageId, ext),
             alt: this.#getLocalizedText(entry.alt, language, ""),
             title: this.#getLocalizedText(entry.title, language, undefined),
             caption: this.#getLocalizedText(entry.caption, language, undefined)
@@ -75,8 +77,8 @@ export default class ConceptImageDataSource {
         return `${subjectId}/${moduleId}/${groupId}/${imageId}`;
     }
 
-    #buildSrc(subjectId, moduleId, groupId, imageId) {
-        return `/subjects/${subjectId}/${moduleId}/${groupId}/${imageId}.svg`;
+    #buildSrc(subjectId, moduleId, groupId, imageId, ext) {
+        return `/subjects/${subjectId}/${moduleId}/${groupId}/${imageId}.${ext}`;
     }
 
     #getLocalizedText(value, language, fallbackValue) {

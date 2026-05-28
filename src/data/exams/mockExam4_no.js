@@ -1,4 +1,4 @@
-//src/data/exams/mockExam4_no.js
+// src/data/exams/mockExam4_no.js
 export const mockExam4_no = {
   id: "mock-exam-4-no",
   subjectId: "in5431",
@@ -121,7 +121,14 @@ export const mockExam4_no = {
       title: "NPV-formel",
       points: 1,
       prompt: "I en business case brukes ________ for å ta hensyn til risikoen for at fremtidige kontantstrømmer ikke materialiserer seg som forventet.",
-      answers: ["diskonteringsrate", "diskonteringsrente", "diskonteringsfaktor", "risikopremie", "discount rate", "risk premium"],
+      answers: [
+        "diskonteringsrate",
+        "diskonteringsrente",
+        "diskonteringsfaktor",
+        "risikopremie",
+        "discount rate",
+        "risk premium"
+      ],
       answerKey: "diskonteringsrate / risikopremie",
       source: "Kilde: Forelesning 3, CIO Toolbox 1, lysbilder om finansiell business case og NPV.",
       whyCorrect: "Riktig fordi diskonteringsraten (som inkluderer en risikopremie) reduserer nåverdien av fremtidige kontantstrømmer for å reflektere usikkerhet. Høyere risiko betyr høyere diskonteringsrate, som senker NPV.",
@@ -468,7 +475,14 @@ export const mockExam4_no = {
       title: "Triple constraint",
       points: 1,
       prompt: "Prosjekter med fast kostnad, scope og ________ er spesielt sårbare for skuffelse.",
-      answers: ["tid", "time", "tidsplan", "frist", "deadline", "schedule"],
+      answers: [
+        "tid",
+        "time",
+        "tidsplan",
+        "frist",
+        "deadline",
+        "schedule"
+      ],
       answerKey: "tid",
       source: "Kilde: Forelesning 4, CIO Toolbox 2, lysbilde 'The triple constraint'.",
       whyCorrect: "Riktig fordi triple constraint består av scope, kostnad og tid. Når alle tre er faste, finnes det ingen fleksibilitet til justering, noe som gjør prosjektet svært sårbart for skuffelse.",
@@ -491,6 +505,11 @@ export const mockExam4_no = {
             "Det betyr at business casen må være gyldig gjennom hele prosjektet — hvis begrunnelsen forsvinner, bør prosjektet stoppes.",
             "Dette kobler til business case-verktøyet i CIO Toolbox: business case er ikke bare en øvelse i starten, men en løpende bekymring.",
             "PRINCE2 har 'business case' som ett av sine sju temaer, noe som forsterker koblingen til fortsatt begrunnelse."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -502,6 +521,11 @@ export const mockExam4_no = {
             "Fasebasert styring gir jevnlige beslutningspunkter der prosjektstyret kan godkjenne neste fase.",
             "Dette gir naturlige sjekkpunkter for å revurdere business case og justere planer basert på læring.",
             "Manage by stages balanserer detaljert planlegging på kort sikt med mer overordnet planlegging for senere faser."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -524,6 +548,11 @@ export const mockExam4_no = {
             "Dette stemmer med CIO Toolbox sitt overordnede budskap om at rammeverk er kontekstavhengige.",
             "Et lite prosjekt med lav risiko bør bruke en lettere PRINCE2-implementering enn et stort og komplekst prosjekt.",
             "Tilpasningsprinsippet kobler også til Cynefin: ledelsestilnærmingen bør passe kompleksiteten i situasjonen."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "prince2_framework_model"
+            }
           ]
         },
         {
@@ -537,7 +566,9 @@ export const mockExam4_no = {
             "Kursoppsummeringen identifiserer læring som et nøkkelprinsipp for prosjektsuksess."
           ]
         }
-      ]
+      ],
+      moduleId: "cio-tool-box",
+      groupId: "prince2"
     },
     {
       id: 12,
@@ -792,6 +823,11 @@ export const mockExam4_no = {
             "I en komplisert situasjon (analyserbar) passer business case og strukturert planlegging.",
             "I en kompleks situasjon (ukjente faktorer) trengs design thinking og agile/produktteam med eksperimentering.",
             "Cynefin fungerer som et metaverktøy som hjelper til med å avgjøre hvilket av de andre verktøyene som passer best i konteksten."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -827,7 +863,9 @@ export const mockExam4_no = {
             "Cynefin er et metaverktøy; TOGAF er et operasjonelt rammeverk innen IT Architecture-verktøyet."
           ]
         }
-      ]
+      ],
+      moduleId: "cio-tool-box",
+      groupId: "cynefin"
     },
     {
       id: 17,
@@ -857,6 +895,11 @@ export const mockExam4_no = {
             "Complicated-situasjoner bruker Sense → Analyze → Respond — bruk ekspertise til å analysere situasjonen og finne riktig tilnærming.",
             "Nøkkelforskjellen fra complex er at svaret i complicated-situasjoner kan finnes gjennom analyse — det krever bare ekspertise.",
             "Eksempler er ingeniørutfordringer, detaljert planlegging og strukturert beslutningstaking der problemet er forstått, men løsningen krever kompetanse."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "cynefin_theory_of_everything"
+            }
           ]
         },
         {
@@ -881,7 +924,9 @@ export const mockExam4_no = {
             "Chaotic er det mest ekstreme domenet, med flest kompleksitetsfaktorer og faste begrensninger."
           ]
         }
-      ]
+      ],
+      moduleId: "cio-tool-box",
+      groupId: "cynefin"
     },
     {
       id: 18,
@@ -889,7 +934,11 @@ export const mockExam4_no = {
       title: "Definisjon av IT governance",
       points: 1,
       prompt: "IT governance handler ikke om å ta IT-beslutninger — ________ gjør det — men avgjør heller hvem som systematisk tar og bidrar til disse beslutningene.",
-      answers: ["management", "ledelse", "administrasjon"],
+      answers: [
+        "management",
+        "ledelse",
+        "administrasjon"
+      ],
       answerKey: "management / ledelse",
       source: "Kilde: Forelesning 11, Accountability Framework, lysbilde 'IT governance', sitat fra Weill og Ross (2004).",
       whyCorrect: "Riktig fordi Weill og Ross-definisjonen eksplisitt sier at management (ikke governance) tar beslutningene, mens governance avgjør hvem som har rett og ansvar til å ta dem.",
@@ -1139,6 +1188,16 @@ export const mockExam4_no = {
             "Et prosjekt med 3 faste faktorer og 0 ekstra kompleksitet er Complex; med 3 faste faktorer og 1+ ekstra kompleksitet blir det Chaotic.",
             "Et prosjekt med 1 fast faktor og 2 ekstra kompleksitetsfaktorer er Clear; med 1 fast faktor og 3+ blir det Complex.",
             "Nøkkelinnsikten er at låsing av alle begrensninger fjerner fleksibilitet, mens kompleksitetsfaktorer tilfører ukjente — sammen eskalerer de ledelsesutfordringen."
+          ],
+          whyExtendedImageRefs: [
+            {
+              imageId: "cynefin_theory_of_everything"
+            },
+            {
+              imageId: "triple_constraint_1",
+              moduleId: "cio-tool-box",
+              groupId: "triple-constraint"
+            }
           ]
         },
         {
@@ -1174,7 +1233,9 @@ export const mockExam4_no = {
             "Mappingen er en todimensjonal vurdering, ikke bare basert på én variabel alene."
           ]
         }
-      ]
+      ],
+      moduleId: "cio-tool-box",
+      groupId: "cynefin"
     },
     {
       id: 24,
@@ -1182,7 +1243,14 @@ export const mockExam4_no = {
       title: "Styringsmatrisen",
       points: 1,
       prompt: "Styringsmatrisen kombinerer beslutnings-________ med governance-arketyper for å tydeliggjøre hvem som bestemmer hva i IT governance.",
-      answers: ["domener", "domene", "områder", "domains", "domain", "areas"],
+      answers: [
+        "domener",
+        "domene",
+        "områder",
+        "domains",
+        "domain",
+        "areas"
+      ],
       answerKey: "domener",
       source: "Kilde: Forelesning 6, CIO Toolbox 4, lysbilde 'Styringsmatrisen'.",
       whyCorrect: "Riktig fordi styringsmatrisen har de fem beslutningsdomenene (IT principles, IT architecture, IT infrastructure, business application needs, IT investment) på én akse og de seks arketypene på den andre.",
