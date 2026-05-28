@@ -2,7 +2,7 @@
 import { getTargetStatus } from "../Utils/tableMatchAnswerLogic.js";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";
-import { getAnswerText, getExtendedPoints, getFeedbackCardClassName, getFeedbackReason, shouldShowCorrectAnswer } from "../Utils/tableMatchFeedbackCardView.js";
+import { getAnswerText, getExtendedImages, getExtendedPoints, getFeedbackCardClassName, getFeedbackReason, shouldShowCorrectAnswer } from "../Utils/tableMatchFeedbackCardView.js";
 
 export default function TableMatchFeedbackCard(props) {
     const status = getTargetStatus({
@@ -13,6 +13,7 @@ export default function TableMatchFeedbackCard(props) {
 
     const reason = getFeedbackReason(props.target, props.targetIsCorrect);
     const extendedPoints = getExtendedPoints(props.target);
+    const extendedImages = getExtendedImages(props.target);
     const correctAnswerLabel = props.target.correctLabel ?? props.target.correctCardId;
 
     const showCorrectAnswer = shouldShowCorrectAnswer({
@@ -20,7 +21,7 @@ export default function TableMatchFeedbackCard(props) {
         correctAnswerLabel
     });
 
-    const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || showCorrectAnswer;
+    const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || extendedImages.length > 0 || showCorrectAnswer;
 
     let expandButton = null;
     if (hasExplanation) {
@@ -40,6 +41,7 @@ export default function TableMatchFeedbackCard(props) {
             <DragDropFeedbackExplanation
                 reason={reason}
                 extendedPoints={extendedPoints}
+                images={extendedImages}
                 showCorrectAnswer={showCorrectAnswer}
                 correctAnswerLabel={correctAnswerLabel}
                 correctAnswerPrefix={props.t.feedbackCorrectAnswerLabel}

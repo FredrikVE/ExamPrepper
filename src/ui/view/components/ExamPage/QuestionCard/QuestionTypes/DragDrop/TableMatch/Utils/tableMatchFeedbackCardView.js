@@ -15,6 +15,14 @@ export const getExtendedPoints = (target) => {
     return [];
 };
 
+export const getExtendedImages = (target) => {
+    if (Array.isArray(target.whyExtendedImages)) {
+        return target.whyExtendedImages;
+    }
+
+    return [];
+};
+
 export const getCorrectAnswerLabel = (target) => {
     if (target.correctLabel !== undefined && target.correctLabel !== null) {
         return target.correctLabel;

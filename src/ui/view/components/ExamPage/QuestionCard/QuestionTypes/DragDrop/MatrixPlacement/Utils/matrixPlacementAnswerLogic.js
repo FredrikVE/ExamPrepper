@@ -24,7 +24,8 @@ export function getItemFeedback(question, itemId) {
     return {
         whyCorrect: item?.whyCorrect ?? item?.why ?? item?.explanation ?? itemFeedback[itemId]?.whyCorrect,
         whyWrong: item?.whyWrong ?? itemFeedback[itemId]?.whyWrong ?? item?.why ?? item?.explanation,
-        whyExtended: getSafeArray(item?.whyExtended ?? item?.extendedExplanation ?? item?.explanationPoints ?? itemFeedback[itemId]?.whyExtended)
+        whyExtended: getSafeArray(item?.whyExtended ?? item?.extendedExplanation ?? item?.explanationPoints ?? itemFeedback[itemId]?.whyExtended),
+        whyExtendedImages: getSafeArray(item?.whyExtendedImages ?? itemFeedback[itemId]?.whyExtendedImages)
     };
 }
 

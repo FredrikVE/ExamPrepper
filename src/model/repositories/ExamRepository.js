@@ -1,4 +1,6 @@
 //src/model/repositories/ExamRepository.js
+import { getIn5431DefaultQuestionImageRefs } from "../../data/subjects/in5431/defaultQuestionImageRefs.js";
+
 export default class ExamRepository {
     constructor(examQuestionDataSource, conceptImageDataSource) {
         this.examQuestionDataSource = examQuestionDataSource;
@@ -31,6 +33,8 @@ export default class ExamRepository {
         }
 
         return this.enrichQuestionsWithConceptImages(exam.questions ?? [], {
+            examId: exam.id,
+            baseId: exam.baseId,
             subjectId: exam.subjectId,
             language: language ?? exam.lang
         });
@@ -50,43 +54,111 @@ export default class ExamRepository {
     }
 
     enrichQuestionWithConceptImages(question, examContext) {
-        if (!Array.isArray(question.options)) {
-            return { ...question };
-        }
-
         const questionContext = {
             ...examContext,
             subjectId: question.subjectId ?? examContext.subjectId,
             moduleId: question.moduleId,
-            groupId: question.groupId
+            groupId: question.groupId,
+            questionId: question.id
         };
+        const questionImageRefs = getQuestionConceptImageRefs(question, questionContext);
 
-        return {
-            ...question,
-            options: question.options.map((option) => {
-                return this.enrichAnswerOptionWithConceptImages(option, questionContext);
-            })
-        };
+        const enrichedQuestion = this.enrichFeedbackEntryWithConceptImages(
+            question,
+            questionContext,
+            questionImageRefs
+        );
+
+        if (Array.isArray(question.options)) {
+            enrichedQuestion.options = this.enrichAnswerOptionsWithConceptImages(
+                question.options,
+                questionContext,
+                questionImageRefs
+            );
+        }
+
+        if (Array.isArray(question.targets)) {
+            enrichedQuestion.targets = this.enrichFeedbackListWithConceptImages(
+                question.targets,
+                questionContext,
+                questionImageRefs
+            );
+        }
+
+        if (isPlainObject(question.itemFeedback)) {
+            enrichedQuestion.itemFeedback = this.enrichFeedbackMapWithConceptImages(
+                question.itemFeedback,
+                questionContext,
+                questionImageRefs
+            );
+        }
+
+        return enrichedQuestion;
     }
 
-    enrichAnswerOptionWithConceptImages(option, context) {
-        const imageRefs = getAnswerOptionConceptImageRefs(option);
+    enrichAnswerOptionsWithConceptImages(options, context, fallbackImageRefs) {
+        if (!Array.isArray(options)) {
+            return options;
+        }
+
+        return options.map((option) => {
+            return this.enrichFeedbackEntryWithConceptImages(
+                option,
+                context,
+                fallbackImageRefs
+            );
+        });
+    }
+
+    enrichFeedbackListWithConceptImages(entries, context, fallbackImageRefs) {
+        if (!Array.isArray(entries)) {
+            return entries;
+        }
+
+        return entries.map((entry) => {
+            return this.enrichFeedbackEntryWithConceptImages(
+                entry,
+                context,
+                fallbackImageRefs
+            );
+        });
+    }
+
+    enrichFeedbackMapWithConceptImages(feedbackMap, context, fallbackImageRefs) {
+        if (!isPlainObject(feedbackMap)) {
+            return feedbackMap;
+        }
+
+        return Object.fromEntries(
+            Object.entries(feedbackMap).map(([key, entry]) => [
+                key,
+                this.enrichFeedbackEntryWithConceptImages(
+                    entry,
+                    context,
+                    fallbackImageRefs
+                )
+            ])
+        );
+    }
+
+    enrichFeedbackEntryWithConceptImages(entry, context, fallbackImageRefs = []) {
+        const imageRefs = getConceptImageRefs(entry, fallbackImageRefs);
 
         if (!this.conceptImageDataSource || imageRefs.length === 0) {
-            return { ...option };
+            return { ...entry };
         }
 
         const whyExtendedImages = this.conceptImageDataSource.getConceptImages(
             imageRefs,
-            context
+            getImageLookupContext(context)
         );
 
         if (whyExtendedImages.length === 0) {
-            return { ...option };
+            return { ...entry };
         }
 
         return {
-            ...option,
+            ...entry,
             whyExtendedImages
         };
     }
@@ -136,8 +208,49 @@ function normalizeGetExamQuestionsInput(input) {
     };
 }
 
-function getAnswerOptionConceptImageRefs(option) {
-    return Array.isArray(option?.whyExtendedImageRefs)
-        ? option.whyExtendedImageRefs
+function getImageLookupContext(context) {
+    return {
+        subjectId: context.subjectId,
+        moduleId: context.moduleId,
+        groupId: context.groupId,
+        language: context.language
+    };
+}
+
+function getQuestionConceptImageRefs(question, context) {
+    const explicitImageRefs = getExplicitConceptImageRefs(question);
+
+    if (explicitImageRefs.length > 0) {
+        return explicitImageRefs;
+    }
+
+    if (context.subjectId !== "in5431") {
+        return [];
+    }
+
+    return getIn5431DefaultQuestionImageRefs({
+        baseId: context.baseId,
+        language: context.language,
+        questionId: context.questionId
+    });
+}
+
+function getConceptImageRefs(entry, fallbackImageRefs = []) {
+    const explicitImageRefs = getExplicitConceptImageRefs(entry);
+
+    return explicitImageRefs.length > 0
+        ? explicitImageRefs
+        : fallbackImageRefs;
+}
+
+function getExplicitConceptImageRefs(entry) {
+    return Array.isArray(entry?.whyExtendedImageRefs)
+        ? entry.whyExtendedImageRefs
         : [];
+}
+
+function isPlainObject(value) {
+    return Boolean(value)
+        && typeof value === "object"
+        && !Array.isArray(value);
 }

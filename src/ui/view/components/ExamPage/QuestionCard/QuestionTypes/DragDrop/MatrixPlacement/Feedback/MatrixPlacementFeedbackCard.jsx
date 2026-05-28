@@ -15,9 +15,10 @@ export default function MatrixPlacementFeedbackCard(props) {
     const selectedQuadrantLabel = getQuadrantLabelById(props.question, selectedQuadrantId);
     const reason = itemIsCorrect ? feedback.whyCorrect : feedback.whyWrong;
     const extendedPoints = Array.isArray(feedback.whyExtended) ? feedback.whyExtended : [];
+    const extendedImages = Array.isArray(feedback.whyExtendedImages) ? feedback.whyExtendedImages : [];
     const showCorrectAnswer = !itemIsCorrect && Boolean(correctQuadrantLabel);
     const showSelectedAnswer = !unanswered && !itemIsCorrect && Boolean(selectedQuadrantLabel);
-    const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || showCorrectAnswer || showSelectedAnswer;
+    const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || extendedImages.length > 0 || showCorrectAnswer || showSelectedAnswer;
 
     return (
         <article className={getFeedbackCardClassName({
@@ -58,6 +59,7 @@ export default function MatrixPlacementFeedbackCard(props) {
                 <MatrixPlacementFeedbackExplanation
                     reason={reason}
                     extendedPoints={extendedPoints}
+                    images={extendedImages}
                     showCorrectAnswer={showCorrectAnswer}
                     correctQuadrantLabel={correctQuadrantLabel}
                     showSelectedAnswer={showSelectedAnswer}

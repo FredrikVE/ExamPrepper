@@ -133,6 +133,10 @@ function FeedbackSummary({ correct, t }) {
 }
 
 function FillExplanation({ question, correct, t }) {
+    const images = Array.isArray(question.whyExtendedImages)
+        ? question.whyExtendedImages
+        : [];
+
     return (
         <div className="feedback-panel-explanation-list">
             <section className="feedback-panel-explanation-card feedback-panel-explanation-card-correct">
@@ -168,6 +172,45 @@ function FillExplanation({ question, correct, t }) {
                     </div>
                 </section>
             ) : null}
+
+            <FeedbackImages images={images} />
+        </div>
+    );
+}
+
+function FeedbackImages({ images }) {
+    if (images.length === 0) {
+        return null;
+    }
+
+    return (
+        <div className="question-card-answer-extended-images feedback-panel-explanation-images">
+            {images.map((image) => (
+                <figure
+                    key={image.id ?? image.src}
+                    className="question-card-answer-extended-figure feedback-panel-explanation-figure"
+                >
+                    {image.title ? (
+                        <figcaption className="question-card-answer-extended-figure-title">
+                            {image.title}
+                        </figcaption>
+                    ) : null}
+
+                    <img
+                        className="question-card-answer-extended-image"
+                        src={image.src}
+                        alt={image.alt ?? ""}
+                        loading="lazy"
+                        decoding="async"
+                    />
+
+                    {image.caption ? (
+                        <p className="question-card-answer-extended-figure-caption">
+                            {image.caption}
+                        </p>
+                    ) : null}
+                </figure>
+            ))}
         </div>
     );
 }

@@ -15,8 +15,11 @@ export default function CategorySortFeedbackCard(props) {
     const extendedPoints = Array.isArray(feedback.whyExtended)
         ? feedback.whyExtended
         : [];
+    const extendedImages = Array.isArray(feedback.whyExtendedImages)
+        ? feedback.whyExtendedImages
+        : [];
     const showCorrectAnswer = (props.unanswered || !itemIsCorrect) && Boolean(correctCategoryLabel);
-    const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || showCorrectAnswer;
+    const hasExplanation = Boolean(reason) || extendedPoints.length > 0 || extendedImages.length > 0 || showCorrectAnswer;
 
     let expandButton = null;
 
@@ -38,6 +41,7 @@ export default function CategorySortFeedbackCard(props) {
             <DragDropFeedbackExplanation
                 reason={reason}
                 extendedPoints={extendedPoints}
+                images={extendedImages}
                 showCorrectAnswer={showCorrectAnswer}
                 correctAnswerLabel={correctCategoryLabel}
                 correctAnswerPrefix={props.t.feedbackCorrectAnswerLabel}
