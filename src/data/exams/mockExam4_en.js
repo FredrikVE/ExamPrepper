@@ -1483,6 +1483,1219 @@ export const mockExam4_en = {
           ]
         }
       }
+    },
+    {
+      "id": 28,
+      "type": "dragDrop",
+      "title": "Designed for Digital building blocks",
+      "points": 3,
+      "prompt": "Drag each definition to the correct Designed for Digital building block.",
+      "source": "Source: Designed for Digital lectures, D4D building block definitions.",
+      "moduleId": "designed-for-digital",
+      "groupId": "overview",
+      "cards": [
+        {
+          "id": "d4d-def-ob",
+          "text": "A coherent set of standardized, integrated systems, processes and data supporting core operations"
+        },
+        {
+          "id": "d4d-def-sci",
+          "text": "Organizational learning about what customers will pay for and how digital technologies can deliver to their demands"
+        },
+        {
+          "id": "d4d-def-dp",
+          "text": "A repository of business, data and infrastructure components used to rapidly configure digital offerings"
+        },
+        {
+          "id": "d4d-def-af",
+          "text": "A distribution of responsibilities for digital offerings and components that balances autonomy and alignment"
+        },
+        {
+          "id": "d4d-def-exdp",
+          "text": "A repository of digital components open to external parties"
+        }
+      ],
+      "targets": [
+        {
+          "id": "operational-backbone",
+          "description": "Operational Backbone",
+          "correctCardId": "d4d-def-ob",
+          "correctLabel": "A coherent set of standardized, integrated systems, processes and data supporting core operations",
+          "whyCorrect": "Operational Backbone is the standardized and integrated core of systems, processes and data.",
+          "whyWrong": "This definition belongs to Operational Backbone: it is about stable core operations, not customer learning or ecosystem access.",
+          "whyExtended": [
+            "Operational Backbone supports reliable end-to-end transaction processing and accessible master data.",
+            "It is the exploit/stability side of digital business design."
+          ]
+        },
+        {
+          "id": "shared-customer-insights",
+          "description": "Shared Customer Insights",
+          "correctCardId": "d4d-def-sci",
+          "correctLabel": "Organizational learning about what customers will pay for and how digital technologies can deliver to their demands",
+          "whyCorrect": "Shared Customer Insights is organizational learning about customer demand and digital possibilities.",
+          "whyWrong": "This definition belongs to Shared Customer Insights because the key cue is what customers will pay for.",
+          "whyExtended": [
+            "The building block helps the organization discover which digital offerings customers actually value.",
+            "It is built through experiments, co-creation and shared learning."
+          ]
+        },
+        {
+          "id": "digital-platform",
+          "description": "Digital Platform",
+          "correctCardId": "d4d-def-dp",
+          "correctLabel": "A repository of business, data and infrastructure components used to rapidly configure digital offerings",
+          "whyCorrect": "Digital Platform is a repository of reusable business, data and infrastructure components.",
+          "whyWrong": "This definition belongs to Digital Platform because it describes reusable components for rapidly configuring digital offerings.",
+          "whyExtended": [
+            "Digital Platform makes experimentation and rapid innovation easier by giving teams access to reusable components.",
+            "It differs from Operational Backbone: OB runs the core business reliably, while DP enables new digital offerings."
+          ]
+        },
+        {
+          "id": "accountability-framework",
+          "description": "Accountability Framework",
+          "correctCardId": "d4d-def-af",
+          "correctLabel": "A distribution of responsibilities for digital offerings and components that balances autonomy and alignment",
+          "whyCorrect": "Accountability Framework distributes responsibility while balancing autonomy and alignment.",
+          "whyWrong": "This definition belongs to Accountability Framework because it is about roles, decision rights and ownership.",
+          "whyExtended": [
+            "AF helps teams innovate without creating chaos.",
+            "It defines who owns digital offerings and digital components."
+          ]
+        },
+        {
+          "id": "external-developer-platform",
+          "description": "External Developer Platform",
+          "correctCardId": "d4d-def-exdp",
+          "correctLabel": "A repository of digital components open to external parties",
+          "whyCorrect": "External Developer Platform opens digital components to external parties.",
+          "whyWrong": "This definition belongs to External Developer Platform because the key cue is external parties.",
+          "whyExtended": [
+            "ExDP often uses APIs or other boundary resources to let partners build on the company's components.",
+            "It should normally come after the internal platform is sufficiently mature."
+          ]
+        }
+      ]
+    },
+    {
+      id: 29,
+      type: "drag-categorize",
+      title: "D4D transformation theory",
+      points: 3,
+      prompt: "Drag each element to the transformation area it belongs to in the Designed for Digital summary model.",
+      source: "Source: Lecture 13, Designed for Digital summary, transformation theory slide.",
+      moduleId: "designed-for-digital",
+      groupId: "overview",
+      items: [
+        { id: "new-digital-value-propositions", label: "New value creation through digital value propositions" },
+        { id: "operational-backbone-transform", label: "Operational Backbone" },
+        { id: "digital-platform-transform", label: "Digital Platform" },
+        { id: "digital-offerings-transform", label: "Digital Offerings" },
+        { id: "shared-customer-insight-transform", label: "Shared Customer Insight" },
+        { id: "accountability-framework-transform", label: "Accountability Framework" }
+      ],
+      categories: [
+        { id: "business-transformation", label: "Business Transformation" },
+        { id: "architecture-transformation", label: "Architecture Transformation" },
+        { id: "governance-transformation", label: "Governance Transformation" }
+      ],
+      correctAnswer: {
+        "business-transformation": ["new-digital-value-propositions"],
+        "architecture-transformation": ["operational-backbone-transform", "digital-platform-transform", "digital-offerings-transform"],
+        "governance-transformation": ["shared-customer-insight-transform", "accountability-framework-transform"]
+      },
+      itemFeedback: {
+        "new-digital-value-propositions": {
+          whyCorrect: "Business Transformation is about new value creation through digital value propositions.",
+          whyWrong: "New digital value propositions belong to Business Transformation, because they change how the organization creates value.",
+          whyExtended: [
+            "The D4D summary separates business, architecture and governance transformation.",
+            "Business transformation is the value proposition layer."
+          ]
+        },
+        "operational-backbone-transform": {
+          whyCorrect: "Operational Backbone belongs to Architecture Transformation.",
+          whyWrong: "Operational Backbone belongs to Architecture Transformation because it structures core systems, processes and data.",
+          whyExtended: [
+            "It provides the stable, reliable foundation for digital business.",
+            "In the transformation theory slide it is grouped together with Digital Platform and Digital Offerings."
+          ]
+        },
+        "digital-platform-transform": {
+          whyCorrect: "Digital Platform belongs to Architecture Transformation.",
+          whyWrong: "Digital Platform belongs to Architecture Transformation because it is a reusable component architecture for digital offerings.",
+          whyExtended: [
+            "The platform gives teams access to business, data and infrastructure components.",
+            "It connects the operational backbone to innovation-facing digital offerings."
+          ]
+        },
+        "digital-offerings-transform": {
+          whyCorrect: "Digital Offerings belongs to Architecture Transformation in this model.",
+          whyWrong: "Digital Offerings is grouped under Architecture Transformation in the summary slide, together with OB and DP.",
+          whyExtended: [
+            "Digital offerings are the concrete software-enabled solutions delivered to customers.",
+            "They depend on the architecture and platform components underneath them."
+          ]
+        },
+        "shared-customer-insight-transform": {
+          whyCorrect: "Shared Customer Insight belongs to Governance Transformation.",
+          whyWrong: "Shared Customer Insight belongs to Governance Transformation because it shapes organizational learning and prioritization.",
+          whyExtended: [
+            "It is not only a data or architecture issue; it concerns how the organization learns what to build.",
+            "The summary slide groups it with Accountability Framework under governance transformation."
+          ]
+        },
+        "accountability-framework-transform": {
+          whyCorrect: "Accountability Framework belongs to Governance Transformation.",
+          whyWrong: "Accountability Framework belongs to Governance Transformation because it allocates ownership and decision responsibility.",
+          whyExtended: [
+            "It balances autonomy and alignment for digital offerings and components.",
+            "This is governance because it determines responsibility and accountability."
+          ]
+        }
+      }
+    },
+    {
+      "id": 30,
+      "type": "dragDrop",
+      "title": "IT governance archetypes",
+      "points": 3,
+      "prompt": "Drag each description to the correct IT governance archetype.",
+      "source": "Source: Lecture 6, IT governance, Weill and Ross governance archetypes.",
+      "moduleId": "cio-tool-box",
+      "groupId": "it-governance",
+      "cards": [
+        {
+          "id": "business-monarchy-desc",
+          "text": "Senior business executives make the decision for the enterprise"
+        },
+        {
+          "id": "it-monarchy-desc",
+          "text": "IT executives make the decision"
+        },
+        {
+          "id": "feudal-desc",
+          "text": "Business units or process owners make separate local decisions"
+        },
+        {
+          "id": "federal-desc",
+          "text": "Corporate-level leaders and business-unit representatives share authority"
+        },
+        {
+          "id": "it-duopoly-desc",
+          "text": "IT leaders and one business group decide together"
+        },
+        {
+          "id": "anarchy-desc",
+          "text": "Individual users or small groups pursue their own IT agenda"
+        }
+      ],
+      "targets": [
+        {
+          "id": "business-monarchy",
+          "description": "Business Monarchy",
+          "correctCardId": "business-monarchy-desc",
+          "correctLabel": "Senior business executives make the decision for the enterprise",
+          "whyCorrect": "Business Monarchy means senior business executives make the decision.",
+          "whyWrong": "This description belongs to Business Monarchy because the decision rights sit with top business leadership.",
+          "whyExtended": [
+            "The CIO may be involved, but the archetype is still business-led.",
+            "This is a centralized governance archetype."
+          ]
+        },
+        {
+          "id": "it-monarchy",
+          "description": "IT Monarchy",
+          "correctCardId": "it-monarchy-desc",
+          "correctLabel": "IT executives make the decision",
+          "whyCorrect": "IT Monarchy means IT leaders make the decision.",
+          "whyWrong": "This description belongs to IT Monarchy because the decision rights sit with IT executives.",
+          "whyExtended": [
+            "It is centralized like business monarchy, but authority is placed in the IT function.",
+            "It differs from IT duopoly, where IT shares authority with business representatives."
+          ]
+        },
+        {
+          "id": "feudal",
+          "description": "Feudal",
+          "correctCardId": "feudal-desc",
+          "correctLabel": "Business units or process owners make separate local decisions",
+          "whyCorrect": "Feudal means business units make separate local decisions.",
+          "whyWrong": "This description belongs to Feudal because authority is decentralized to business units or processes.",
+          "whyExtended": [
+            "Feudal governance gives local units autonomy.",
+            "The risk is fragmentation across the enterprise."
+          ]
+        },
+        {
+          "id": "federal",
+          "description": "Federal",
+          "correctCardId": "federal-desc",
+          "correctLabel": "Corporate-level leaders and business-unit representatives share authority",
+          "whyCorrect": "Federal combines central/corporate actors with business-unit representatives.",
+          "whyWrong": "This description belongs to Federal because it mixes central and local authority.",
+          "whyExtended": [
+            "The lecture compares it to a federal political system.",
+            "It tries to balance enterprise coordination with local knowledge."
+          ]
+        },
+        {
+          "id": "it-duopoly",
+          "description": "IT Duopoly",
+          "correctCardId": "it-duopoly-desc",
+          "correctLabel": "IT leaders and one business group decide together",
+          "whyCorrect": "IT Duopoly means IT and business representatives decide together.",
+          "whyWrong": "This description belongs to IT Duopoly because it is specifically a two-party IT + business arrangement.",
+          "whyExtended": [
+            "The key cue is that IT shares decision rights with one business group.",
+            "It differs from Federal, which combines broader central and local representation."
+          ]
+        },
+        {
+          "id": "anarchy",
+          "description": "Anarchy",
+          "correctCardId": "anarchy-desc",
+          "correctLabel": "Individual users or small groups pursue their own IT agenda",
+          "whyCorrect": "Anarchy means individual users or small groups follow their own IT agenda.",
+          "whyWrong": "This description belongs to Anarchy because decision rights are effectively left to individuals or small groups.",
+          "whyExtended": [
+            "Anarchy is the most decentralized archetype.",
+            "It can create problems for standardization, integration and security."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "type": "dragDrop",
+      "title": "IT governance decision domains",
+      "points": 3,
+      "prompt": "Drag each description to the correct IT governance decision domain.",
+      "source": "Source: Lecture 6, IT governance, Weill and Ross decision domains.",
+      "moduleId": "cio-tool-box",
+      "groupId": "it-governance",
+      "cards": [
+        {
+          "id": "principles-domain-desc",
+          "text": "IT's role in the enterprise and the high-level principles for using IT"
+        },
+        {
+          "id": "architecture-domain-desc",
+          "text": "Core processes, data integration and standardization of technical capabilities"
+        },
+        {
+          "id": "infrastructure-domain-desc",
+          "text": "Shared technical services and foundational IT capabilities"
+        },
+        {
+          "id": "business-app-domain-desc",
+          "text": "Business requirements and needs for applications"
+        },
+        {
+          "id": "investment-domain-desc",
+          "text": "Which IT initiatives should be funded and prioritized"
+        }
+      ],
+      "targets": [
+        {
+          "id": "it-principles",
+          "description": "IT Principles",
+          "correctCardId": "principles-domain-desc",
+          "correctLabel": "IT's role in the enterprise and the high-level principles for using IT",
+          "whyCorrect": "IT Principles concerns IT's role and high-level direction in the enterprise.",
+          "whyWrong": "This description belongs to IT Principles because it is about the overall role and principles of IT.",
+          "whyExtended": [
+            "IT principles translate business principles into guidelines for IT.",
+            "They are broader than application needs or infrastructure services."
+          ]
+        },
+        {
+          "id": "it-architecture",
+          "description": "IT Architecture",
+          "correctCardId": "architecture-domain-desc",
+          "correctLabel": "Core processes, data integration and standardization of technical capabilities",
+          "whyCorrect": "IT Architecture concerns core processes, data integration and standardization.",
+          "whyWrong": "This description belongs to IT Architecture because the key cues are integration and standardization.",
+          "whyExtended": [
+            "Architecture decisions define shared technical capabilities and process/data logic across the enterprise.",
+            "This is where operating model concerns become relevant."
+          ]
+        },
+        {
+          "id": "it-infrastructure",
+          "description": "IT Infrastructure",
+          "correctCardId": "infrastructure-domain-desc",
+          "correctLabel": "Shared technical services and foundational IT capabilities",
+          "whyCorrect": "IT Infrastructure concerns shared technical services and foundational capabilities.",
+          "whyWrong": "This description belongs to IT Infrastructure because it is about shared technical services.",
+          "whyExtended": [
+            "Examples include networks, identity, security services, cloud platforms and shared operations capabilities.",
+            "Infrastructure decisions enable application and business capabilities."
+          ]
+        },
+        {
+          "id": "business-application-needs",
+          "description": "Business Application Needs",
+          "correctCardId": "business-app-domain-desc",
+          "correctLabel": "Business requirements and needs for applications",
+          "whyCorrect": "Business Application Needs concerns the applications required by business units and processes.",
+          "whyWrong": "This description belongs to Business Application Needs because it starts from business requirements for applications.",
+          "whyExtended": [
+            "This domain is about what the business needs applications to do.",
+            "It differs from architecture, which focuses on integration and standardization logic."
+          ]
+        },
+        {
+          "id": "it-investment",
+          "description": "IT Investment",
+          "correctCardId": "investment-domain-desc",
+          "correctLabel": "Which IT initiatives should be funded and prioritized",
+          "whyCorrect": "IT Investment concerns funding and prioritization of IT initiatives.",
+          "whyWrong": "This description belongs to IT Investment because the key cue is funding and prioritization.",
+          "whyExtended": [
+            "Investment decisions determine which IT initiatives receive resources.",
+            "This links governance to business case and portfolio prioritization."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "type": "dragDrop",
+      "title": "Cynefin and management approach",
+      "points": 2,
+      "prompt": "Drag each management approach to the Cynefin domain where it best fits.",
+      "source": "Source: CIO Toolbox lectures, Cynefin as a meta-tool for choosing management approach.",
+      "moduleId": "cio-tool-box",
+      "groupId": "cynefin",
+      "cards": [
+        {
+          "id": "procedure-best-practice",
+          "text": "Use procedures and best practice"
+        },
+        {
+          "id": "expert-analysis-planning",
+          "text": "Use expert analysis and planning"
+        },
+        {
+          "id": "experimentation-learning",
+          "text": "Use experimentation, design thinking and learning"
+        },
+        {
+          "id": "immediate-action",
+          "text": "Act immediately to stabilize the situation"
+        }
+      ],
+      "targets": [
+        {
+          "id": "clear",
+          "description": "Clear",
+          "correctCardId": "procedure-best-practice",
+          "correctLabel": "Use procedures and best practice",
+          "whyCorrect": "Clear contexts are suited to procedures and best practice.",
+          "whyWrong": "Procedures and best practice belong to Clear contexts, where cause and effect are obvious.",
+          "whyExtended": [
+            "In clear contexts the manager can sense, categorize and respond.",
+            "The point is not to overcomplicate a routine situation."
+          ]
+        },
+        {
+          "id": "complicated",
+          "description": "Complicated",
+          "correctCardId": "expert-analysis-planning",
+          "correctLabel": "Use expert analysis and planning",
+          "whyCorrect": "Complicated contexts require expert analysis and planning.",
+          "whyWrong": "Expert analysis and planning belong to Complicated contexts, where cause and effect exist but require expertise.",
+          "whyExtended": [
+            "Business case and alternative analysis fit this logic when the problem can be analyzed.",
+            "There may be several good practices rather than one obvious best practice."
+          ]
+        },
+        {
+          "id": "complex",
+          "description": "Complex",
+          "correctCardId": "experimentation-learning",
+          "correctLabel": "Use experimentation, design thinking and learning",
+          "whyCorrect": "Complex contexts require experimentation, learning and iteration.",
+          "whyWrong": "Experimentation belongs to Complex contexts, where the answer cannot be fully known in advance.",
+          "whyExtended": [
+            "Design thinking and agile/product-team approaches are useful when the problem or solution is uncertain.",
+            "The manager probes, senses and responds."
+          ]
+        },
+        {
+          "id": "chaotic",
+          "description": "Chaotic",
+          "correctCardId": "immediate-action",
+          "correctLabel": "Act immediately to stabilize the situation",
+          "whyCorrect": "Chaotic contexts require immediate action to stabilize the situation.",
+          "whyWrong": "Immediate action belongs to Chaotic contexts, where there is no time for detailed analysis before acting.",
+          "whyExtended": [
+            "The first goal is to establish enough order to move the situation out of chaos.",
+            "Long analysis is usually inappropriate in the first response."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "type": "dragDrop",
+      "title": "CIO toolbox tools and purposes",
+      "points": 3,
+      "prompt": "Drag each CIO toolbox tool to its typical purpose.",
+      "source": "Source: CIO Toolbox lectures, overview table of tools and typical purposes.",
+      "moduleId": "cio-tool-box",
+      "groupId": "decision-making",
+      "cards": [
+        {
+          "id": "tool-business-case",
+          "text": "Business case"
+        },
+        {
+          "id": "tool-alternative-analysis",
+          "text": "Alternative analysis"
+        },
+        {
+          "id": "tool-design-thinking",
+          "text": "Design thinking"
+        },
+        {
+          "id": "tool-it-architecture",
+          "text": "IT Architecture"
+        },
+        {
+          "id": "tool-projects",
+          "text": "Projects"
+        },
+        {
+          "id": "tool-product-teams",
+          "text": "Product teams and agile methods"
+        },
+        {
+          "id": "tool-it-governance",
+          "text": "IT governance"
+        }
+      ],
+      "targets": [
+        {
+          "id": "purpose-prioritization-funding",
+          "description": "Prioritization of digital services and funding",
+          "correctCardId": "tool-business-case",
+          "correctLabel": "Business case",
+          "whyCorrect": "Business case is used to prioritize digital services and funding.",
+          "whyWrong": "Business case belongs with prioritization and funding because it compares expected benefit, cost, timing and risk.",
+          "whyExtended": [
+            "It is a decision-support and communication tool.",
+            "It can include both NPV and non-quantifiable benefits."
+          ]
+        },
+        {
+          "id": "purpose-vendor-product-choice",
+          "description": "Vendor selection and product choice",
+          "correctCardId": "tool-alternative-analysis",
+          "correctLabel": "Alternative analysis",
+          "whyCorrect": "Alternative analysis is used for vendor selection and product choice.",
+          "whyWrong": "Alternative analysis belongs with vendor/product choice because it structures options and evaluates alternatives.",
+          "whyExtended": [
+            "The generic process is: understand the situation, synthesize options, evaluate and propose.",
+            "Business case can be one evaluation method inside alternative analysis."
+          ]
+        },
+        {
+          "id": "purpose-unclear-problem",
+          "description": "Exploration when the problem is unclear",
+          "correctCardId": "tool-design-thinking",
+          "correctLabel": "Design thinking",
+          "whyCorrect": "Design thinking is used when the problem is unclear and needs exploration.",
+          "whyWrong": "Design thinking belongs with exploration because it uses user insight, reframing, prototyping and testing.",
+          "whyExtended": [
+            "It is useful when the organization is not sure what problem to solve.",
+            "The Double Diamond is the core model in the lecture."
+          ]
+        },
+        {
+          "id": "purpose-structure-portfolio",
+          "description": "Analyze and structure the IT portfolio",
+          "correctCardId": "tool-it-architecture",
+          "correctLabel": "IT Architecture",
+          "whyCorrect": "IT Architecture is used to analyze and structure the IT portfolio.",
+          "whyWrong": "IT Architecture belongs with structuring the IT portfolio within and among systems and services.",
+          "whyExtended": [
+            "Relevant subtopics are operating model, business process modeling and enterprise architecture.",
+            "TOGAF is a framework connected to this tool."
+          ]
+        },
+        {
+          "id": "purpose-plan-organize-development",
+          "description": "Plan and organize development",
+          "correctCardId": "tool-projects",
+          "correctLabel": "Projects",
+          "whyCorrect": "Projects are used to plan and organize development as temporary organizations.",
+          "whyWrong": "Projects belong with planning and organizing development because they deliver specified results within a specified period.",
+          "whyExtended": [
+            "PRINCE2 is an example of a project governance and management framework.",
+            "Projects are especially relevant when work can be planned around a defined delivery."
+          ]
+        },
+        {
+          "id": "purpose-continuous-product-development",
+          "description": "Continuous product development and operations",
+          "correctCardId": "tool-product-teams",
+          "correctLabel": "Product teams and agile methods",
+          "whyCorrect": "Product teams and agile methods support continuous product development and operations.",
+          "whyWrong": "Product teams belong with continuous product development because they have lasting ownership of a product or service.",
+          "whyExtended": [
+            "The key contrast with projects is lasting ownership rather than temporary delivery.",
+            "Scrum and SAFe are examples of agile frameworks connected to this area."
+          ]
+        },
+        {
+          "id": "purpose-distribute-responsibility",
+          "description": "Distribute responsibility for IT among organizational units",
+          "correctCardId": "tool-it-governance",
+          "correctLabel": "IT governance",
+          "whyCorrect": "IT governance distributes responsibility for IT among organizational units.",
+          "whyWrong": "IT governance belongs with distributing responsibility because it determines who makes IT decisions and who is accountable.",
+          "whyExtended": [
+            "Weill and Ross describe decision domains, archetypes and a governance matrix.",
+            "The central dilemma is often centralization versus decentralization."
+          ]
+        }
+      ]
+    },
+    {
+      id: 34,
+      type: "drag-categorize",
+      title: "Project vs product team",
+      points: 2,
+      prompt: "Drag each statement to the organizing logic it best describes.",
+      source: "Source: CIO Toolbox 2, projects, product teams and agile methods.",
+      moduleId: "cio-tool-box",
+      groupId: "triple-constraint",
+      items: [
+        { id: "temporary-organization", label: "Temporary organization" },
+        { id: "specified-result-period", label: "Specified result within a specified period" },
+        { id: "triple-constraint", label: "Scope, time and cost are central constraints" },
+        { id: "lasting-ownership", label: "Lasting ownership of a digital product or service" },
+        { id: "continuous-development-operations", label: "Continuous development and operations" },
+        { id: "outcome-over-output", label: "Outcome over output; pivots and learning are expected" }
+      ],
+      categories: [
+        { id: "project", label: "Project" },
+        { id: "product-team", label: "Product team / agile methods" }
+      ],
+      correctAnswer: {
+        project: ["temporary-organization", "specified-result-period", "triple-constraint"],
+        "product-team": ["lasting-ownership", "continuous-development-operations", "outcome-over-output"]
+      },
+      itemFeedback: {
+        "temporary-organization": {
+          whyCorrect: "A project is a temporary organization.",
+          whyWrong: "Temporary organization belongs to Project, not product team, because projects are established for a limited period.",
+          whyExtended: [
+            "The lecture defines a project as a temporary organization created to deliver one or more specified results or products.",
+            "Product teams are more lasting structures."
+          ]
+        },
+        "specified-result-period": {
+          whyCorrect: "Specified result within a specified period is project logic.",
+          whyWrong: "This belongs to Project because projects are defined around a deliverable and a time boundary.",
+          whyExtended: [
+            "Project planning often uses roadmaps, estimates, budgets and defined milestones.",
+            "Product-team work is more continuous and outcome-oriented."
+          ]
+        },
+        "triple-constraint": {
+          whyCorrect: "Scope, time and cost are central to project management.",
+          whyWrong: "Triple constraint belongs to Project because project delivery is often managed through scope, time and cost.",
+          whyExtended: [
+            "The lecture warns that projects where all three are fixed are especially vulnerable to disappointment.",
+            "Product teams typically expect learning and adaptation rather than locking all constraints."
+          ]
+        },
+        "lasting-ownership": {
+          whyCorrect: "Lasting ownership is product-team logic.",
+          whyWrong: "Lasting ownership belongs to Product team / agile methods, not temporary project logic.",
+          whyExtended: [
+            "Product teams own a digital product or service over time.",
+            "They are responsible for continuous improvement, not just one delivery."
+          ]
+        },
+        "continuous-development-operations": {
+          whyCorrect: "Continuous development and operations is product-team logic.",
+          whyWrong: "Continuous development and operations belongs to Product team / agile methods because the work continues after initial launch.",
+          whyExtended: [
+            "This is closer to DevOps/product thinking than project closure.",
+            "The team keeps learning from use and improving the product."
+          ]
+        },
+        "outcome-over-output": {
+          whyCorrect: "Outcome over output, pivots and learning are product-team logic.",
+          whyWrong: "Outcome over output belongs to Product team / agile methods because product teams optimize for value and learning, not only delivery of predefined outputs.",
+          whyExtended: [
+            "Product teams balance autonomy with alignment.",
+            "Pivots are expected when learning shows that the original plan was wrong."
+          ]
+        }
+      }
+    },
+    {
+      "id": 35,
+      "type": "dragDrop",
+      "title": "Design thinking and the Double Diamond",
+      "points": 2,
+      "prompt": "Drag each activity to the correct Double Diamond phase.",
+      "source": "Source: CIO Toolbox 2, Design thinking and the Double Diamond model.",
+      "moduleId": "cio-tool-box",
+      "groupId": "design-thinking",
+      "cards": [
+        {
+          "id": "user-research",
+          "text": "User research and understanding the situation"
+        },
+        {
+          "id": "problem-reframing",
+          "text": "Problem reframing and defining the challenge"
+        },
+        {
+          "id": "generate-solution-ideas",
+          "text": "Generate alternative solution ideas and co-design"
+        },
+        {
+          "id": "prototype-test",
+          "text": "Prototype, test, reject or improve solutions"
+        }
+      ],
+      "targets": [
+        {
+          "id": "discover",
+          "description": "Discover",
+          "correctCardId": "user-research",
+          "correctLabel": "User research and understanding the situation",
+          "whyCorrect": "Discover is about understanding users and the situation.",
+          "whyWrong": "User research belongs to Discover because this phase opens up the problem space.",
+          "whyExtended": [
+            "The aim is to learn from the people affected before defining the problem too narrowly.",
+            "This is the first diverging phase of the Double Diamond."
+          ]
+        },
+        {
+          "id": "define",
+          "description": "Define",
+          "correctCardId": "problem-reframing",
+          "correctLabel": "Problem reframing and defining the challenge",
+          "whyCorrect": "Define is about reframing and specifying the challenge.",
+          "whyWrong": "Problem reframing belongs to Define because this phase converges on a clearer problem statement.",
+          "whyExtended": [
+            "The point is not necessarily to find the one 'true' problem, but a better problem to solve.",
+            "Define bridges insight and solution development."
+          ]
+        },
+        {
+          "id": "develop",
+          "description": "Develop",
+          "correctCardId": "generate-solution-ideas",
+          "correctLabel": "Generate alternative solution ideas and co-design",
+          "whyCorrect": "Develop is about generating solution ideas and co-designing alternatives.",
+          "whyWrong": "Generating solution ideas belongs to Develop because this phase opens up the solution space.",
+          "whyExtended": [
+            "Teams explore possible answers to the defined problem.",
+            "Co-design and external inspiration are typical practices."
+          ]
+        },
+        {
+          "id": "deliver",
+          "description": "Deliver",
+          "correctCardId": "prototype-test",
+          "correctLabel": "Prototype, test, reject or improve solutions",
+          "whyCorrect": "Deliver is about prototyping, testing and improving or rejecting solutions.",
+          "whyWrong": "Prototype and testing belongs to Deliver because this phase narrows solutions through small-scale testing.",
+          "whyExtended": [
+            "Deliver does not mean launching blindly; it means testing which solution works.",
+            "Poor solutions should be rejected or improved."
+          ]
+        }
+      ]
+    },
+    {
+      id: 36,
+      type: "drag-categorize",
+      title: "Business case factors",
+      points: 2,
+      prompt: "Drag each card to the correct business case category.",
+      source: "Source: CIO Toolbox 1, business case, utility maximisation and non-quantifiable benefits.",
+      moduleId: "cio-tool-box",
+      groupId: "business-case",
+      items: [
+        { id: "expected-benefit", label: "Expected benefit" },
+        { id: "expected-cost", label: "Expected cost" },
+        { id: "timing", label: "Timing: when benefits and costs occur" },
+        { id: "risk", label: "Risk that benefits or costs differ from estimates" },
+        { id: "compliance", label: "Compliance with legal or regulatory requirements" },
+        { id: "security-safety", label: "Security or safety improvements" }
+      ],
+      categories: [
+        { id: "business-case-factor", label: "Business case factor" },
+        { id: "non-quantifiable-benefit", label: "Non-quantifiable benefit" }
+      ],
+      correctAnswer: {
+        "business-case-factor": ["expected-benefit", "expected-cost", "timing", "risk"],
+        "non-quantifiable-benefit": ["compliance", "security-safety"]
+      },
+      itemFeedback: {
+        "expected-benefit": {
+          whyCorrect: "Expected benefit is one of the core factors in utility maximisation.",
+          whyWrong: "Expected benefit belongs to Business case factor because it is one of the four main factors: benefit, cost, timing and risk.",
+          whyExtended: [
+            "Benefits may be monetary or non-monetary.",
+            "The difficult part is estimating them realistically."
+          ]
+        },
+        "expected-cost": {
+          whyCorrect: "Expected cost is one of the core factors in utility maximisation.",
+          whyWrong: "Expected cost belongs to Business case factor because cost is part of comparing options.",
+          whyExtended: [
+            "Cost includes investment and often operating/maintenance costs.",
+            "Cost estimates are uncertain and should be treated as assumptions."
+          ]
+        },
+        timing: {
+          whyCorrect: "Timing is one of the core factors because benefits in the future are discounted.",
+          whyWrong: "Timing belongs to Business case factor because when benefits and costs happen affects value.",
+          whyExtended: [
+            "This is why present value and NPV matter in financial business cases.",
+            "Benefits later in time are worth less today than immediate benefits."
+          ]
+        },
+        risk: {
+          whyCorrect: "Risk is one of the core factors because estimates may be wrong.",
+          whyWrong: "Risk belongs to Business case factor because decision-makers must consider uncertainty in benefits and costs.",
+          whyExtended: [
+            "Risk can be reflected in a risk premium or a higher discount rate.",
+            "Qualitative risk discussion is often necessary when numbers are uncertain."
+          ]
+        },
+        compliance: {
+          whyCorrect: "Compliance is a non-quantifiable benefit often considered alongside NPV.",
+          whyWrong: "Compliance belongs to Non-quantifiable benefit because it can be crucial even when it is hard to price directly.",
+          whyExtended: [
+            "Some initiatives are necessary to meet legal or regulatory requirements.",
+            "The business case is therefore not only about financial returns."
+          ]
+        },
+        "security-safety": {
+          whyCorrect: "Security and safety improvements are non-quantifiable benefits.",
+          whyWrong: "Security or safety belongs to Non-quantifiable benefit because the value may be hard to express as cash flow.",
+          whyExtended: [
+            "Avoided incidents, resilience and safety can be strategically important.",
+            "They should be presented alongside quantitative calculations."
+          ]
+        }
+      }
+    },
+    {
+      id: 37,
+      type: "drag-categorize",
+      title: "Sustainability reporting: Scope 1, 2 and 3",
+      points: 2,
+      prompt: "Drag each emissions example to the correct reporting scope.",
+      source: "Source: Sustainability lecture, sustainability reporting and Scope 1, 2 and 3.",
+      moduleId: "sustainability",
+      groupId: "reporting",
+      items: [
+        { id: "company-vehicles", label: "Fuel burned by company-owned vehicles" },
+        { id: "onsite-boilers", label: "Emissions from company-controlled boilers or generators" },
+        { id: "purchased-electricity", label: "Purchased electricity used in offices or data centers" },
+        { id: "purchased-heating-cooling", label: "Purchased heating, cooling or steam" },
+        { id: "supplier-emissions", label: "Emissions from suppliers and purchased goods" },
+        { id: "business-travel", label: "Business travel and employee commuting" },
+        { id: "customer-use", label: "Customer use of the organization's products" }
+      ],
+      categories: [
+        { id: "scope-1", label: "Scope 1: Direct emissions" },
+        { id: "scope-2", label: "Scope 2: Purchased energy" },
+        { id: "scope-3", label: "Scope 3: Value-chain emissions" }
+      ],
+      correctAnswer: {
+        "scope-1": ["company-vehicles", "onsite-boilers"],
+        "scope-2": ["purchased-electricity", "purchased-heating-cooling"],
+        "scope-3": ["supplier-emissions", "business-travel", "customer-use"]
+      },
+      itemFeedback: {
+        "company-vehicles": {
+          whyCorrect: "Company-owned vehicles create direct emissions, so they are Scope 1.",
+          whyWrong: "Company-owned vehicle emissions belong to Scope 1 because the organization directly controls the source.",
+          whyExtended: [
+            "Scope 1 covers direct emissions from sources owned or controlled by the organization.",
+            "The key cue is direct control of the emitting asset."
+          ]
+        },
+        "onsite-boilers": {
+          whyCorrect: "Company-controlled boilers or generators create direct Scope 1 emissions.",
+          whyWrong: "On-site company-controlled combustion belongs to Scope 1 because the organization directly emits the greenhouse gases.",
+          whyExtended: [
+            "Scope 1 includes direct emissions from owned or controlled facilities.",
+            "This differs from purchased electricity, which is Scope 2."
+          ]
+        },
+        "purchased-electricity": {
+          whyCorrect: "Purchased electricity is Scope 2.",
+          whyWrong: "Purchased electricity belongs to Scope 2 because the emissions are indirect but energy-related.",
+          whyExtended: [
+            "The organization uses the electricity, but the emissions occur where the electricity is generated.",
+            "This is the classic Scope 2 example."
+          ]
+        },
+        "purchased-heating-cooling": {
+          whyCorrect: "Purchased heating, cooling or steam is Scope 2.",
+          whyWrong: "Purchased heating/cooling belongs to Scope 2 because it is purchased energy.",
+          whyExtended: [
+            "Scope 2 covers indirect emissions from purchased electricity, heat, steam or cooling.",
+            "The organization consumes the energy even if it does not directly emit at the generation site."
+          ]
+        },
+        "supplier-emissions": {
+          whyCorrect: "Supplier emissions are Scope 3 value-chain emissions.",
+          whyWrong: "Supplier emissions belong to Scope 3 because they occur in the upstream value chain.",
+          whyExtended: [
+            "Scope 3 includes indirect emissions outside Scope 2, such as purchased goods and services.",
+            "These emissions are often difficult to measure but important for reporting."
+          ]
+        },
+        "business-travel": {
+          whyCorrect: "Business travel and commuting are Scope 3 value-chain emissions.",
+          whyWrong: "Business travel and commuting belong to Scope 3 because they are indirect value-chain emissions.",
+          whyExtended: [
+            "They are caused by the organization's activity but usually occur in assets not owned or controlled by the organization.",
+            "This makes them neither Scope 1 nor Scope 2."
+          ]
+        },
+        "customer-use": {
+          whyCorrect: "Customer use of products is Scope 3 downstream value-chain emissions.",
+          whyWrong: "Customer use belongs to Scope 3 because it happens downstream in the value chain.",
+          whyExtended: [
+            "Scope 3 can include both upstream and downstream emissions.",
+            "For some products, customer use is the largest part of lifecycle emissions."
+          ]
+        }
+      }
+    },
+    {
+      "id": 38,
+      "type": "dragDrop",
+      "title": "Digital strategy elements",
+      "points": 2,
+      "prompt": "Drag each meaning to the correct element of a digital strategy.",
+      "source": "Source: Digital strategy lecture, content of a digital strategy.",
+      "moduleId": "strategy",
+      "groupId": "digital-strategy",
+      "cards": [
+        {
+          "id": "vision-meaning",
+          "text": "A challenging and inspiring direction for digital change"
+        },
+        {
+          "id": "portfolio-meaning",
+          "text": "A prioritized set of digital initiatives"
+        },
+        {
+          "id": "roadmap-meaning",
+          "text": "A planning tool for timing and sequencing initiatives"
+        },
+        {
+          "id": "responsibility-meaning",
+          "text": "A definition of who owns and is accountable for what"
+        }
+      ],
+      "targets": [
+        {
+          "id": "digital-vision",
+          "description": "Digital vision",
+          "correctCardId": "vision-meaning",
+          "correctLabel": "A challenging and inspiring direction for digital change",
+          "whyCorrect": "A digital vision gives a challenging and inspiring direction.",
+          "whyWrong": "This meaning belongs to Digital vision because it is about direction and ambition.",
+          "whyExtended": [
+            "A digital vision should guide digital initiatives, not just describe a system purchase.",
+            "It connects digital resources to desired value creation."
+          ]
+        },
+        {
+          "id": "portfolio-of-initiatives",
+          "description": "Portfolio of digital initiatives",
+          "correctCardId": "portfolio-meaning",
+          "correctLabel": "A prioritized set of digital initiatives",
+          "whyCorrect": "A portfolio of digital initiatives is the prioritized set of digital efforts.",
+          "whyWrong": "This meaning belongs to Portfolio of digital initiatives because it is about choosing and prioritizing initiatives.",
+          "whyExtended": [
+            "The portfolio turns the vision into a set of concrete initiatives.",
+            "It creates a bridge to prioritization and funding decisions."
+          ]
+        },
+        {
+          "id": "roadmap",
+          "description": "Roadmap",
+          "correctCardId": "roadmap-meaning",
+          "correctLabel": "A planning tool for timing and sequencing initiatives",
+          "whyCorrect": "A roadmap is a planning tool for timing and sequencing.",
+          "whyWrong": "This meaning belongs to Roadmap because it is about when and in what order initiatives should happen.",
+          "whyExtended": [
+            "The roadmap does not only list initiatives; it sequences them over time.",
+            "It helps coordinate dependencies and communicate the journey."
+          ]
+        },
+        {
+          "id": "definition-of-responsibility",
+          "description": "Definition of responsibility",
+          "correctCardId": "responsibility-meaning",
+          "correctLabel": "A definition of who owns and is accountable for what",
+          "whyCorrect": "Definition of responsibility clarifies ownership and accountability.",
+          "whyWrong": "This meaning belongs to Definition of responsibility because it answers who owns what.",
+          "whyExtended": [
+            "Without responsibility, a digital strategy can become a wish list rather than an execution plan.",
+            "This connects digital strategy to governance and accountability."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "type": "drag-categorize",
+      "title": "Course structure: three parts of IN5431",
+      "points": 3,
+      "prompt": "Drag each topic to the part of the IN5431 curriculum where it primarily belongs.",
+      "source": "Source: Lecture 2, course outline: Strategy and strategic context; Management tools and frameworks — the CIO toolkit; Designed for digital.",
+      "moduleId": "strategy",
+      "groupId": "action-plan",
+      "items": [
+        { "id": "purpose", "label": "Purpose" },
+        { "id": "strategic-goals", "label": "Strategic goals" },
+        { "id": "stakeholders", "label": "Stakeholders" },
+        { "id": "operational-effectiveness", "label": "Operational effectiveness" },
+        { "id": "strategic-positioning", "label": "Strategic positioning" },
+        { "id": "action-plan-roadmap", "label": "Action plan / roadmap" },
+        { "id": "business-case", "label": "Business case" },
+        { "id": "alternative-analysis", "label": "Alternative analysis" },
+        { "id": "design-thinking", "label": "Design thinking" },
+        { "id": "it-architecture-tool", "label": "IT Architecture" },
+        { "id": "projects", "label": "Projects" },
+        { "id": "product-teams-agile", "label": "Product teams and agile methods" },
+        { "id": "it-governance-tool", "label": "IT governance" },
+        { "id": "cynefin", "label": "Cynefin" },
+        { "id": "digital-business-design", "label": "Digital business design" },
+        { "id": "digital-offerings", "label": "Digital offerings" },
+        { "id": "shared-customer-insights", "label": "Shared Customer Insights" },
+        { "id": "operational-backbone", "label": "Operational Backbone" },
+        { "id": "digital-platform", "label": "Digital Platform" },
+        { "id": "accountability-framework", "label": "Accountability Framework" },
+        { "id": "external-developer-platform", "label": "External Developer Platform" }
+      ],
+      "categories": [
+        { "id": "strategy-context", "label": "Strategy and strategic context" },
+        { "id": "cio-toolkit", "label": "Management tools and frameworks — the CIO toolkit" },
+        { "id": "designed-for-digital", "label": "Designed for digital" }
+      ],
+      "correctAnswer": {
+        "strategy-context": [
+          "purpose",
+          "strategic-goals",
+          "stakeholders",
+          "operational-effectiveness",
+          "strategic-positioning",
+          "action-plan-roadmap"
+        ],
+        "cio-toolkit": [
+          "business-case",
+          "alternative-analysis",
+          "design-thinking",
+          "it-architecture-tool",
+          "projects",
+          "product-teams-agile",
+          "it-governance-tool",
+          "cynefin"
+        ],
+        "designed-for-digital": [
+          "digital-business-design",
+          "digital-offerings",
+          "shared-customer-insights",
+          "operational-backbone",
+          "digital-platform",
+          "accountability-framework",
+          "external-developer-platform"
+        ]
+      },
+      "itemFeedback": {
+        "purpose": {
+          "whyCorrect": "Purpose belongs to Strategy and strategic context.",
+          "whyWrong": "Purpose belongs to Strategy and strategic context, because this part of the course asks what the organization is trying to achieve and for whom.",
+          "whyExtended": [
+            "The strategy lecture links purpose to goals, stakeholders and alignment.",
+            "It frames later choices about IT initiatives and management tools."
+          ]
+        },
+        "strategic-goals": {
+          "whyCorrect": "Strategic goals belong to Strategy and strategic context.",
+          "whyWrong": "Strategic goals belong to Strategy and strategic context, because they define what the organization should improve or achieve before tools are selected.",
+          "whyExtended": [
+            "The course first establishes the strategic context: what should be improved in the coming years?",
+            "CIO toolbox methods are then used to analyze, prioritize and organize initiatives that support those goals."
+          ]
+        },
+        "stakeholders": {
+          "whyCorrect": "Stakeholders belong to Strategy and strategic context.",
+          "whyWrong": "Stakeholders belong to Strategy and strategic context, because the strategy lecture discusses owners, members, citizens, politicians, boards and administration as sources of goals and expectations.",
+          "whyExtended": [
+            "Stakeholders explain who the organization is working for and who can define or constrain strategic goals.",
+            "This context matters before deciding which IT initiatives or frameworks make sense."
+          ]
+        },
+        "operational-effectiveness": {
+          "whyCorrect": "Operational effectiveness belongs to Strategy and strategic context.",
+          "whyWrong": "Operational effectiveness belongs to Strategy and strategic context, especially in the Porter distinction between operational effectiveness and strategic positioning.",
+          "whyExtended": [
+            "Operational effectiveness means performing similar activities better than rivals.",
+            "The strategy lecture stresses that operational effectiveness is necessary, but not the same as strategy."
+          ]
+        },
+        "strategic-positioning": {
+          "whyCorrect": "Strategic positioning belongs to Strategy and strategic context.",
+          "whyWrong": "Strategic positioning belongs to Strategy and strategic context, because it concerns performing different activities or similar activities in different ways.",
+          "whyExtended": [
+            "This comes from the strategy part of the course, especially Porter's view of strategy.",
+            "It provides context for deciding what digital and IT initiatives should support."
+          ]
+        },
+        "action-plan-roadmap": {
+          "whyCorrect": "Action plan / roadmap belongs to Strategy and strategic context.",
+          "whyWrong": "Action plan / roadmap belongs to Strategy and strategic context here, because the strategy process should produce activities, responsibilities, sequencing and estimates.",
+          "whyExtended": [
+            "The action plan translates strategic goals into concrete work.",
+            "Later CIO toolbox methods can help evaluate, organize and govern that work."
+          ]
+        },
+        "business-case": {
+          "whyCorrect": "Business case belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "Business case belongs to the CIO toolkit, because it is a decision tool for prioritizing digital services and funding.",
+          "whyExtended": [
+            "The business case is used to compare benefits, costs, timing and risk.",
+            "It is a management tool, not one of the D4D building blocks."
+          ]
+        },
+        "alternative-analysis": {
+          "whyCorrect": "Alternative analysis belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "Alternative analysis belongs to the CIO toolkit, because it supports vendor selection, product choice and evaluation of alternative concepts.",
+          "whyExtended": [
+            "The generic decision-making process moves from understanding the situation to synthesizing options and evaluating them.",
+            "Business case can be one method inside the evaluation step."
+          ]
+        },
+        "design-thinking": {
+          "whyCorrect": "Design thinking belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "Design thinking belongs to the CIO toolkit, because it is an explorative approach for unclear problems and product/service choices.",
+          "whyExtended": [
+            "Design thinking is especially relevant when the problem is not yet well understood.",
+            "It connects to discovery, reframing, prototyping and testing."
+          ]
+        },
+        "it-architecture-tool": {
+          "whyCorrect": "IT Architecture belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "IT Architecture belongs to the CIO toolkit, because it is used to analyze and structure the IT portfolio, systems and services.",
+          "whyExtended": [
+            "This includes operating models, business processes and enterprise architecture perspectives such as TOGAF.",
+            "It is part of the management toolbox even though architecture also connects to Designed for Digital."
+          ]
+        },
+        "projects": {
+          "whyCorrect": "Projects belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "Projects belongs to the CIO toolkit, because projects are a way to plan and organize development work.",
+          "whyExtended": [
+            "A project is a temporary organization established to deliver specified results within a specified period.",
+            "Project governance frameworks such as PRINCE2 are discussed in this part of the course."
+          ]
+        },
+        "product-teams-agile": {
+          "whyCorrect": "Product teams and agile methods belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "Product teams and agile methods belongs to the CIO toolkit, because it concerns how to organize development and operations around lasting digital products.",
+          "whyExtended": [
+            "Product teams emphasize lasting ownership, continuous development and outcome over output.",
+            "Scrum and SAFe are examples of agile frameworks associated with this area."
+          ]
+        },
+        "it-governance-tool": {
+          "whyCorrect": "IT governance belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "IT governance belongs to the CIO toolkit, because it concerns who makes IT decisions and who is accountable for outcomes.",
+          "whyExtended": [
+            "The course uses Weill and Ross to discuss decision domains and governance archetypes.",
+            "IT governance distributes responsibility for IT among organizational units."
+          ]
+        },
+        "cynefin": {
+          "whyCorrect": "Cynefin belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyWrong": "Cynefin belongs to the CIO toolkit area in this course, because it helps choose a management approach based on context.",
+          "whyExtended": [
+            "Cynefin connects analysis, planning, experimentation and immediate action to different types of situations.",
+            "It functions as a meta-tool for choosing among other management approaches."
+          ]
+        },
+        "digital-business-design": {
+          "whyCorrect": "Digital business design belongs to Designed for digital.",
+          "whyWrong": "Digital business design belongs to Designed for digital, because it is the central organizing idea in the D4D part of the course.",
+          "whyExtended": [
+            "It concerns the holistic configuration of people, processes and technology to deliver digital value propositions.",
+            "It is broader than IT architecture alone."
+          ]
+        },
+        "digital-offerings": {
+          "whyCorrect": "Digital offerings belongs to Designed for digital.",
+          "whyWrong": "Digital offerings belongs to Designed for digital, because D4D focuses on new software-enabled offerings and value propositions.",
+          "whyExtended": [
+            "Digital offerings are specific solutions that deliver a company's digital value proposition.",
+            "They sit at the intersection of customer desires and digitally inspired solutions."
+          ]
+        },
+        "shared-customer-insights": {
+          "whyCorrect": "Shared Customer Insights belongs to Designed for digital.",
+          "whyWrong": "Shared Customer Insights belongs to Designed for digital, because it is one of the five D4D building blocks.",
+          "whyExtended": [
+            "It is organizational learning about what customers will pay for and how digital technologies can meet customer demands.",
+            "It supports experimentation and discovery of valuable digital offerings."
+          ]
+        },
+        "operational-backbone": {
+          "whyCorrect": "Operational Backbone belongs to Designed for digital.",
+          "whyWrong": "Operational Backbone belongs to Designed for digital, because it is one of the five D4D building blocks.",
+          "whyExtended": [
+            "It is the standardized and integrated foundation of systems, processes and data supporting core operations.",
+            "It provides reliability and efficiency for digital business."
+          ]
+        },
+        "digital-platform": {
+          "whyCorrect": "Digital Platform belongs to Designed for digital.",
+          "whyWrong": "Digital Platform belongs to Designed for digital, because it is one of the five D4D building blocks.",
+          "whyExtended": [
+            "It is a repository of reusable business, data and infrastructure components.",
+            "It enables faster configuration of new digital offerings."
+          ]
+        },
+        "accountability-framework": {
+          "whyCorrect": "Accountability Framework belongs to Designed for digital.",
+          "whyWrong": "Accountability Framework belongs to Designed for digital, because it is one of the five D4D building blocks.",
+          "whyExtended": [
+            "It distributes responsibilities for digital offerings and components.",
+            "It balances autonomy and alignment in digital business design."
+          ]
+        },
+        "external-developer-platform": {
+          "whyCorrect": "External Developer Platform belongs to Designed for digital.",
+          "whyWrong": "External Developer Platform belongs to Designed for digital, because it is one of the five D4D building blocks.",
+          "whyExtended": [
+            "It opens digital components to external partners, often through APIs or other boundary resources.",
+            "It is relevant when the company wants partners or ecosystems to extend its digital offerings."
+          ]
+        }
+      }
     }
+
   ]
 };
