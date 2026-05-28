@@ -132,6 +132,8 @@ export const mockExam4_en = {
       type: "single",
       title: "Alternative analysis process",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "decision-making",
       prompt: "What is the correct order of steps in the generic decision-making process (alternative analysis)?",
       source: "Source: Lecture 3, CIO Toolbox 1, slide on generic decision making process.",
       options: [
@@ -486,6 +488,8 @@ export const mockExam4_en = {
       type: "multi",
       title: "PRINCE2 principles",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "Which of the following are among the seven PRINCE2 principles?",
       source: "Source: Lecture 4, CIO Toolbox 2, and course summary on PRINCE2.",
       options: [
@@ -808,6 +812,8 @@ export const mockExam4_en = {
       type: "single",
       title: "Cynefin and the CIO toolbox",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
       prompt: "How does Cynefin connect to the other tools in the CIO toolbox?",
       source: "Source: Lecture 4 and CIO toolbox model, meta-tool Cynefin.",
       options: [
@@ -869,6 +875,8 @@ export const mockExam4_en = {
       type: "single",
       title: "Cynefin domains",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
       prompt: "In which Cynefin domain is cause-and-effect still possible to analyze in advance, making it the 'domain of experts'?",
       source: "Source: Lecture 4, CIO Toolbox 2, slide on Cynefin.",
       options: [
@@ -1169,6 +1177,8 @@ export const mockExam4_en = {
       type: "single",
       title: "Cynefin and triple constraint",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
       prompt: "According to the lecture, how does the number of fixed triple constraint elements relate to Cynefin domains?",
       source: "Source: Lecture 4, CIO Toolbox 2, slide on Cynefin and triple constraint mapping.",
       options: [

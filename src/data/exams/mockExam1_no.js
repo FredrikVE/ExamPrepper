@@ -221,11 +221,8 @@ export const mockExam1_no = {
             "OB tilhører architecture transformation i D4D sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "OB",
-              groupId: "operational-backbone"
-            }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         },
         {
           text: "Shared Customer Insights",
@@ -238,11 +235,8 @@ export const mockExam1_no = {
             "SCI tilhører governance transformation i D4D sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "SCI",
-              groupId: "shared-customer-insights"
-            }
-          ]
+              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+            ]
         },
         {
           text: "PRINCE2",
@@ -266,11 +260,8 @@ export const mockExam1_no = {
             "DP tilhører architecture transformation sammen med OB."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "DP",
-              groupId: "digital-platform"
-            }
-          ]
+              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+            ]
         },
         {
           text: "Accountability Framework",
@@ -283,11 +274,8 @@ export const mockExam1_no = {
             "AF tilhører governance transformation i D4D sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "AF",
-              groupId: "accountability-framework"
-            }
-          ]
+              { imageId: "AF", moduleId: "designed-for-digital", groupId: "accountability-framework" }
+            ]
         },
         {
           text: "External Developer Platform",
@@ -300,11 +288,8 @@ export const mockExam1_no = {
             "D4D-roadmapen anbefaler å ikke forhaste seg med ExDP — det krever moden OB og DP først."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "ExDP",
-              groupId: "external-developer-platform"
-            }
-          ]
+              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+            ]
         }
       ]
     },
@@ -338,10 +323,8 @@ export const mockExam1_no = {
             "OB er fundamentet som muliggjør videre digital transformasjon — uten fungerende OB mangler man stabil grunn å bygge på."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "OB"
-            }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         },
         {
           text: "En ekstern markedsplass for tredjepartsutviklere",
@@ -399,10 +382,8 @@ export const mockExam1_no = {
             "DP skiller seg fra OB ved å fokusere på fleksibilitet og gjenbruk fremfor stabilitet og standardisering."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "DP"
-            }
-          ]
+              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+            ]
         },
         {
           text: "Å bestemme hvem som har beslutningsrettigheter i IT-governance",
@@ -476,10 +457,8 @@ export const mockExam1_no = {
             "Utfordringen AF adresserer er: hvordan frigjøre kreativitet og innovasjon (autonomi) uten å miste felles retning og standardisering (alignment)."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "AF"
-            }
-          ]
+              { imageId: "AF", moduleId: "designed-for-digital", groupId: "accountability-framework" }
+            ]
         },
         {
           text: "hardware og software",
@@ -537,10 +516,8 @@ export const mockExam1_no = {
             "Forelesning 12 presiserer at ExDP krever 'a very well designed and managed internal platform' — det forutsetter moden OB og DP."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "ExDP"
-            }
-          ]
+              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+            ]
         },
         {
           text: "En teknikk for å lage BPMN-diagrammer",
@@ -1124,10 +1101,8 @@ export const mockExam1_no = {
             "Denne tilnærmingen kobler direkte til design thinking (utforskning) og agile (iterasjon og tilpasning) i CIO toolbox."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "cynefin_theory_of_everything"
-            }
-          ]
+              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+            ]
         },
         {
           text: "Umiddelbar handling uten analyse",
@@ -1163,10 +1138,8 @@ export const mockExam1_no = {
             "OB handler om å gjøre eksisterende kjerneprosesser pålitelige og effektive — det er fundamentet for videre digital suksess."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "OB"
-            }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         },
         {
           text: "Digital Platform vektlegger komponenter som kan brukes til rask innovasjon og digitale tilbud.",
@@ -1208,13 +1181,8 @@ export const mockExam1_no = {
             "Uten stabil OB mangler man grunnlaget for Digital Platform, og dermed også for rask innovasjon og nye digitale tilbud."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "OB"
-            },
-            {
-              imageId: "OB"
-            }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         }
       ],
       moduleId: "designed-for-digital",

@@ -388,6 +388,8 @@ export const mockExam2_no = {
       type: "single",
       title: "Transformation theory",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "overview",
       prompt: "Ifølge D4D krever dual transformation tre typer transformasjon. Hvilken inkluderer Shared Customer Insights og Accountability Framework?",
       source: "Fasit: Forelesning 13, D4D summary, slide 'Transformation theory'.",
       options: [
@@ -689,6 +691,8 @@ export const mockExam2_no = {
       type: "multi",
       title: "Autonomy & Alignment i AF",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "accountability-framework",
       prompt: "Marker utsagn som passer med Accountability Framework-tankegangen.",
       source: "Fasit: Forelesning 11, slides 'AF promotes Autonomy AND alignment'.",
       options: [
@@ -858,10 +862,8 @@ export const mockExam2_no = {
             "API-tilgang til data er en forutsetning for rask konfigurering av nye digitale tilbud."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "DP"
-            }
-          ]
+              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+            ]
         },
         {
           text: "Business components",
@@ -892,6 +894,8 @@ export const mockExam2_no = {
       type: "multi",
       title: "Digital roadmap-rekkefølge",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "overview",
       prompt: "Marker utsagn som stemmer med D4D sin anbefalte rekkefølge for digital transformasjon.",
       source: "Fasit: Forelesning 13, D4D summary, slides om digital roadmap.",
       options: [
@@ -967,6 +971,8 @@ export const mockExam2_no = {
       type: "single",
       title: "Boundary resources",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "external-developer-platform",
       prompt: "Hva er boundary resources i konteksten av External Developer Platform?",
       source: "Fasit: Forelesning 12, External Development Platform.",
       options: [
@@ -1094,6 +1100,8 @@ export const mockExam2_no = {
       type: "multi",
       title: "Hva OB gjør",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "operational-backbone",
       prompt: "Marker funksjoner som tilhører Operational Backbone.",
       source: "Fasit: Forelesning 9, Operational Backbone, og IN5431-oppsummeringen.",
       options: [

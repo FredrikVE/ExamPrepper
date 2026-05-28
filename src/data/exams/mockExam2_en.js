@@ -123,6 +123,8 @@ export const mockExam2_en = {
       type: "single",
       title: "Transformation theory",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "overview",
       prompt: "According to D4D, dual transformation requires three types of transformation. Which one includes Shared Customer Insights and Accountability Framework?",
       source: "Source: Lecture 13, D4D summary, slide 'Transformation theory'.",
       options: [
@@ -217,6 +219,8 @@ export const mockExam2_en = {
       type: "multi",
       title: "Autonomy & Alignment in AF",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "accountability-framework",
       prompt: "Mark statements that fit with Accountability Framework thinking.",
       source: "Source: Lecture 11, slides 'AF promotes Autonomy AND alignment'.",
       options: [
@@ -257,6 +261,8 @@ export const mockExam2_en = {
       type: "single",
       title: "Digital platform components",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "digital-platform",
       prompt: "Which type of component in the Digital Platform provides access to data from various sources through APIs?",
       source: "Source: Lecture 10, slide 'Digital platform'.",
       options: [
@@ -271,6 +277,8 @@ export const mockExam2_en = {
       type: "multi",
       title: "Digital roadmap sequence",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "overview",
       prompt: "Mark statements that match D4D's recommended sequence for digital transformation.",
       source: "Source: Lecture 13, D4D summary, slides on digital roadmap.",
       options: [
@@ -285,6 +293,8 @@ export const mockExam2_en = {
       type: "single",
       title: "Boundary resources",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "external-developer-platform",
       prompt: "What are boundary resources in the context of External Developer Platform?",
       source: "Source: Lecture 12, External Development Platform.",
       options: [
@@ -325,6 +335,8 @@ export const mockExam2_en = {
       type: "multi",
       title: "What OB does",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "operational-backbone",
       prompt: "Mark functions that belong to the Operational Backbone.",
       source: "Source: Lecture 9, Operational Backbone, and the IN5431 summary.",
       options: [

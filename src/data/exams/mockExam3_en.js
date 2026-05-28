@@ -12,6 +12,8 @@ export const mockExam3_en = {
       type: "multi",
       title: "The action plan in a strategy process",
       points: 1,
+      moduleId: "strategy",
+      groupId: "action-plan",
       prompt: "Mark the elements that, according to the lecture, should be included in a working action plan after a strategy process.",
       source: "Source: Lecture 4, slide 'Recall from our lecture on strategy that the result of a strategy process is an action plan'.",
       options: [
@@ -164,6 +166,8 @@ export const mockExam3_en = {
       type: "multi",
       title: "Generic decision-making process",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "decision-making",
       prompt: "Mark the steps that belong to the generic decision-making process in alternative analysis.",
       source: "Source: Lecture 3 / IN5431 summary, Generic decision-making process.",
       options: [
@@ -350,6 +354,8 @@ export const mockExam3_en = {
       type: "multi",
       title: "PRINCE2 principles",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "Mark the PRINCE2 principles that are part of the course summary.",
       source: "Source: IN5431 summary, PRINCE2 Principles.",
       options: [
@@ -438,6 +444,8 @@ export const mockExam3_en = {
       type: "single",
       title: "PRINCE2 themes",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "Which PRINCE2 theme is linked to establishing a risk management approach and a risk register?",
       source: "Source: IN5431 summary, PRINCE2 Themes.",
       options: [
@@ -871,6 +879,8 @@ export const mockExam3_en = {
       type: "multi",
       title: "Experimentation in Shared Customer Insights",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "shared-customer-insights",
       prompt: "Mark practices that fit with building Shared Customer Insights.",
       source: "Source: IN5431 Concepts, Minimum Viable Product, Test-and-learn process, Discovery-driven planning, Customer co-creation and Cross-functional teams.",
       options: [
@@ -942,6 +952,8 @@ export const mockExam3_en = {
       type: "multi",
       title: "Obstacles to Operational Backbone",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "operational-backbone",
       prompt: "Mark the conditions that the lecture connects to problems with an inefficient operational backbone.",
       source: "Source: Lectures 9 and 10, Operational Backbone and Digital Platform, slides on problems with inefficient operational backbone.",
       options: [
@@ -1013,6 +1025,8 @@ export const mockExam3_en = {
       type: "single",
       title: "Componentization vs monolithic systems",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "digital-platform",
       prompt: "Why is componentization important in the D4D/digital platform logic?",
       source: "Source: IN5431 Concepts, Chapter 4 Digital Platform: componentization and monolithic systems.",
       options: [
@@ -1070,6 +1084,8 @@ export const mockExam3_en = {
       type: "multi",
       title: "External Developer Platform in practice",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "external-developer-platform",
       prompt: "Mark the statements that fit with External Developer Platform.",
       source: "Source: Lecture 12, External Development Platform, slides 'External Developer Platform' and 'External developer platform'.",
       options: [

@@ -12,6 +12,8 @@ export const mockExam3_no = {
       type: "multi",
       title: "Strategiprosessens handlingsplan",
       points: 1,
+      moduleId: "strategy",
+      groupId: "action-plan",
       prompt: "Marker elementene som ifølge forelesningen bør inngå i en fungerende action plan etter en strategiprosess.",
       source: "Fasit: Forelesning 4, slide 'Recall from our lecture on strategy that the result of a strategy process is an action plan'.",
       options: [
@@ -165,6 +167,8 @@ export const mockExam3_no = {
       type: "multi",
       title: "Generic decision-making process",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "decision-making",
       prompt: "Marker stegene som hører til den generiske beslutningsprosessen i alternative analysis.",
       source: "Fasit: Forelesning 3 / IN5431 summary, Generic decision-making process.",
       options: [
@@ -365,10 +369,8 @@ export const mockExam3_no = {
             "Det passer med kursets poeng om at rammeverk er hjelpemidler, ikke mål i seg selv."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Defined roles and responsibilities.",
@@ -380,10 +382,8 @@ export const mockExam3_no = {
             "Prinsippet henger sammen med prosjekt som en midlertidig organisasjon."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Manage by stages.",
@@ -395,10 +395,8 @@ export const mockExam3_no = {
             "Fasevis styring gjør det mulig å justere planene basert på erfaring."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Tailor to suit the project environment.",
@@ -410,10 +408,8 @@ export const mockExam3_no = {
             "Tilpasning gjør rammeverket mer relevant for faktisk prosjektmiljø."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Maximize scope, time and cost simultaneously.",
@@ -447,10 +443,8 @@ export const mockExam3_no = {
             "Risiko er ikke bare en kostnadspost, men en ledelsesoppgave gjennom hele prosjektet."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Quality",
@@ -882,10 +876,8 @@ export const mockExam3_no = {
             "Tilbakemeldingen kan brukes til å forbedre eller forkaste ideen."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "SCI"
-            }
-          ]
+              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+            ]
         },
         {
           text: "Test-and-learn: raske eksperimenter brukes for å validere ideer.",
@@ -897,10 +889,8 @@ export const mockExam3_no = {
             "Metoden kontrasteres med å bruke lang tid på en løsning uten validering."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "SCI"
-            }
-          ]
+              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+            ]
         },
         {
           text: "Customer co-creation: selskapet jobber direkte med kunder tidlig i prosessen.",
@@ -912,10 +902,8 @@ export const mockExam3_no = {
             "Tverrfaglige team kan kombinere IT, produkt, drift, marked og risiko."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "SCI"
-            }
-          ]
+              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+            ]
         },
         {
           text: "Big-bang delivery: bygg hele løsningen ferdig uten kundekontakt for å unngå usikkerhet.",
@@ -949,10 +937,8 @@ export const mockExam3_no = {
             "Digital business krever ofte sømløse end-to-end-prosesser på tvers av enheter."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "OB"
-            }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         },
         {
           text: "Entrenched organizational habits, altså innarbeidede vaner som må avlæres.",
@@ -964,10 +950,8 @@ export const mockExam3_no = {
             "Vaner kan være knyttet til funksjoner, praksis og fragmenterte arkitekturer."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "OB"
-            }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         },
         {
           text: "Fragmenterte arkitekturer.",
@@ -979,10 +963,8 @@ export const mockExam3_no = {
             "En fungerende OB krever at systemer, prosesser og data henger sammen."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "OB"
-            }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         },
         {
           text: "For mye stabil masterdata og for godt integrerte prosesser.",
@@ -1003,6 +985,8 @@ export const mockExam3_no = {
       type: "single",
       title: "Componentization vs monolittiske systemer",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "digital-platform",
       prompt: "Hvorfor er componentization viktig i D4D/digital platform-logikken?",
       source: "Fasit: IN5431 Begreper, Kap. 4 Digital Platform: componentization og monolithic systems.",
       options: [
@@ -1073,10 +1057,8 @@ export const mockExam3_no = {
             "ExDP bygger på at interne komponenter er godt designet og forvaltet."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "ExDP"
-            }
-          ]
+              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+            ]
         },
         {
           text: "ExDP krever typisk APIer eller lignende boundary resources som gir strukturert tilgang.",
@@ -1088,10 +1070,8 @@ export const mockExam3_no = {
             "Uten slike grensesnitt blir ekstern bruk ustrukturert og risikabel."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "ExDP"
-            }
-          ]
+              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+            ]
         },
         {
           text: "ExDP kan enten la partnere bruke internt utviklede komponenter, eller skape en bransjeplattform/marked for relaterte digitale tilbud.",
@@ -1103,10 +1083,8 @@ export const mockExam3_no = {
             "Begge variantene øker potensialet for ekstern innovasjon."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "ExDP"
-            }
-          ]
+              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+            ]
         },
         {
           text: "ExDP betyr at alle interne data åpnes fritt uten styring, eierskap eller sikkerhet.",

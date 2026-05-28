@@ -211,8 +211,8 @@ export const mockExam1_en = {
             "OB belongs to architecture transformation in D4D's dual transformation theory."
           ],
           whyExtendedImageRefs: [
-            { imageId: "OB", groupId: "operational-backbone" }
-          ]
+              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+            ]
         },
         {
           text: "Shared Customer Insights",
@@ -225,8 +225,8 @@ export const mockExam1_en = {
             "SCI belongs to governance transformation in D4D's dual transformation theory."
           ],
           whyExtendedImageRefs: [
-            { imageId: "SCI", groupId: "shared-customer-insights" }
-          ]
+              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+            ]
         },
         {
           text: "PRINCE2",
@@ -250,8 +250,8 @@ export const mockExam1_en = {
             "DP belongs to architecture transformation together with OB."
           ],
           whyExtendedImageRefs: [
-            { imageId: "DP", groupId: "digital-platform" }
-          ]
+              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+            ]
         },
         {
           text: "Accountability Framework",
@@ -264,8 +264,8 @@ export const mockExam1_en = {
             "AF belongs to governance transformation in D4D's dual transformation theory."
           ],
           whyExtendedImageRefs: [
-            { imageId: "AF", groupId: "accountability-framework" }
-          ]
+              { imageId: "AF", moduleId: "designed-for-digital", groupId: "accountability-framework" }
+            ]
         },
         {
           text: "External Developer Platform",
@@ -278,8 +278,8 @@ export const mockExam1_en = {
             "The D4D roadmap recommends not rushing into an ExDP — it requires a mature OB and DP first."
           ],
           whyExtendedImageRefs: [
-            { imageId: "ExDP", groupId: "external-developer-platform" }
-          ]
+              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+            ]
         }
       ]
     },
@@ -288,6 +288,8 @@ export const mockExam1_en = {
       type: "single",
       title: "Operational Backbone",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "operational-backbone",
       prompt: "What best describes an Operational Backbone?",
       source: "Source: Lecture 9, Operational Backbone, and the D4D definition sheet.",
       options: [
@@ -349,6 +351,8 @@ export const mockExam1_en = {
       type: "single",
       title: "Digital Platform",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "digital-platform",
       prompt: "What is the main purpose of a Digital Platform in D4D?",
       source: "Source: Lecture 10, Digital Platform, slides 'A digital platform - what is it' and 'Digital platform'.",
       options: [
@@ -422,6 +426,8 @@ export const mockExam1_en = {
       type: "single",
       title: "Accountability Framework",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "accountability-framework",
       prompt: "The Accountability Framework should particularly balance ...",
       source: "Source: Lecture 11, Accountability Framework, slides on autonomy and alignment.",
       options: [
@@ -483,6 +489,8 @@ export const mockExam1_en = {
       type: "single",
       title: "External Developer Platform",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "external-developer-platform",
       prompt: "What best describes an External Developer Platform?",
       source: "Source: Lecture 12, External Development Platform, slide 'External Developer Platform'.",
       options: [
@@ -1049,6 +1057,8 @@ export const mockExam1_en = {
       type: "single",
       title: "Cynefin",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
       prompt: "Which management approach fits best in a complex domain?",
       source: "Source: CIO toolbox model, meta-tool Cynefin.",
       options: [
@@ -1110,6 +1120,8 @@ export const mockExam1_en = {
       type: "multi",
       title: "Operational Backbone vs Digital Platform",
       points: 1,
+      moduleId: "designed-for-digital",
+      groupId: "operational-backbone",
       prompt: "Mark the correct differences between Operational Backbone and Digital Platform.",
       source: "Source: Lecture 10, Digital Platform, slide 'An Operational Backbone is Not Enough for Digital Success'.",
       options: [

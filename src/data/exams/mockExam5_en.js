@@ -13,6 +13,8 @@ export const mockExam5_en = {
       type: "multi",
       title: "PRINCE2 principles",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "Which of the following are among the seven PRINCE2 principles?",
       source: "Source: Lecture 4, CIO Toolbox 2, and course summary on PRINCE2.",
       options: [
@@ -99,6 +101,8 @@ export const mockExam5_en = {
       type: "multi",
       title: "PRINCE2 themes",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "Which of the following are among the seven PRINCE2 themes?",
       source: "Source: Course summary on PRINCE2 themes.",
       options: [
@@ -192,6 +196,8 @@ export const mockExam5_en = {
       type: "single",
       title: "PRINCE2 processes",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "Which PRINCE2 process is responsible for authorizing and directing the project at a high level throughout its lifecycle?",
       source: "Source: Course summary on PRINCE2 processes.",
       options: [
@@ -265,6 +271,8 @@ export const mockExam5_en = {
       type: "single",
       title: "PRINCE2 focus on products",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "What does the PRINCE2 principle 'focus on products' mean?",
       source: "Source: Course summary, PRINCE2 principle 6.",
       options: [
@@ -326,6 +334,8 @@ export const mockExam5_en = {
       type: "single",
       title: "PRINCE2 tailor to suit",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "prince2",
       prompt: "Why does PRINCE2 include the principle 'tailor to suit the project environment'?",
       source: "Source: Course summary, PRINCE2 principle 7, and Lecture 6 caveat on frameworks.",
       options: [
@@ -1109,6 +1119,8 @@ export const mockExam5_en = {
       type: "multi",
       title: "Cynefin domains and approaches",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
       prompt: "Match the correct approach to each Cynefin domain. Which pairings are correct?",
       source: "Source: Lecture 4, CIO Toolbox 2, slide on Cynefin, and CIO toolbox model.",
       options: [
@@ -1184,6 +1196,8 @@ export const mockExam5_en = {
       type: "single",
       title: "Cynefin and triple constraint",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
       prompt: "According to the lecture, what happens when all three elements of the triple constraint (scope, time, cost) are fixed?",
       source: "Source: Lecture 4, CIO Toolbox 2, slides on Cynefin and triple constraint mapping.",
       options: [
@@ -1245,6 +1259,8 @@ export const mockExam5_en = {
       type: "single",
       title: "Cynefin as meta-tool",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
       prompt: "Why is Cynefin described as a 'meta-tool' in the CIO toolbox rather than a regular tool?",
       source: "Source: CIO toolbox model, meta-tool Cynefin.",
       options: [

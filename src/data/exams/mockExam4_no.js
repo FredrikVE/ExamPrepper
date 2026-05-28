@@ -139,6 +139,8 @@ export const mockExam4_no = {
       type: "single",
       title: "Prosess for alternativanalyse",
       points: 1,
+      moduleId: "cio-tool-box",
+      groupId: "decision-making",
       prompt: "Hva er riktig rekkefølge på trinnene i den generiske beslutningsprosessen (alternativanalyse)?",
       source: "Kilde: Forelesning 3, CIO Toolbox 1, lysbilde om generic decision making process.",
       options: [
@@ -514,10 +516,8 @@ export const mockExam4_no = {
             "PRINCE2 har 'business case' som ett av sine sju temaer, noe som forsterker koblingen til fortsatt begrunnelse."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Manage by stages",
@@ -530,10 +530,8 @@ export const mockExam4_no = {
             "Manage by stages balanserer detaljert planlegging på kort sikt med mer overordnet planlegging for senere faser."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Alltid maksimer antall teammedlemmer",
@@ -557,10 +555,8 @@ export const mockExam4_no = {
             "Tilpasningsprinsippet kobler også til Cynefin: ledelsestilnærmingen bør passe kompleksiteten i situasjonen."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "prince2_framework_model"
-            }
-          ]
+              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+            ]
         },
         {
           text: "Ignorer tidligere erfaringer for å bevare et friskt perspektiv",
@@ -832,10 +828,8 @@ export const mockExam4_no = {
             "Cynefin fungerer som et metaverktøy som hjelper til med å avgjøre hvilket av de andre verktøyene som passer best i konteksten."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "cynefin_theory_of_everything"
-            }
-          ]
+              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+            ]
         },
         {
           text: "Cynefin erstatter alle andre verktøy i CIO Toolbox",
@@ -904,10 +898,8 @@ export const mockExam4_no = {
             "Eksempler er ingeniørutfordringer, detaljert planlegging og strukturert beslutningstaking der problemet er forstått, men løsningen krever kompetanse."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "cynefin_theory_of_everything"
-            }
-          ]
+              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+            ]
         },
         {
           text: "Complex",
@@ -1197,15 +1189,9 @@ export const mockExam4_no = {
             "Nøkkelinnsikten er at låsing av alle begrensninger fjerner fleksibilitet, mens kompleksitetsfaktorer tilfører ukjente — sammen eskalerer de ledelsesutfordringen."
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "cynefin_theory_of_everything"
-            },
-            {
-              imageId: "triple_constraint_1",
-              moduleId: "cio-tool-box",
-              groupId: "triple-constraint"
-            }
-          ]
+              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" },
+              { imageId: "triple_constraint_1", moduleId: "cio-tool-box", groupId: "triple-constraint" }
+            ]
         },
         {
           text: "Antallet faste begrensninger har ingen sammenheng med Cynefin i det hele tatt",
