@@ -222,7 +222,8 @@ export const mockExam1_no = {
           ],
           whyExtendedImageRefs: [
             {
-              imageId: "operational-backbone"
+              imageId: "OB",
+              groupId: "operational-backbone"
             }
           ]
         },
@@ -238,7 +239,8 @@ export const mockExam1_no = {
           ],
           whyExtendedImageRefs: [
             {
-              imageId: "shared-customer-insights"
+              imageId: "SCI",
+              groupId: "shared-customer-insights"
             }
           ]
         },
@@ -265,7 +267,8 @@ export const mockExam1_no = {
           ],
           whyExtendedImageRefs: [
             {
-              imageId: "digital-platform"
+              imageId: "DP",
+              groupId: "digital-platform"
             }
           ]
         },
@@ -281,7 +284,8 @@ export const mockExam1_no = {
           ],
           whyExtendedImageRefs: [
             {
-              imageId: "accountability-framework"
+              imageId: "AF",
+              groupId: "accountability-framework"
             }
           ]
         },
@@ -297,7 +301,8 @@ export const mockExam1_no = {
           ],
           whyExtendedImageRefs: [
             {
-              imageId: "external-developer-platform"
+              imageId: "ExDP",
+              groupId: "external-developer-platform"
             }
           ]
         }

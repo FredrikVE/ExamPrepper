@@ -211,7 +211,7 @@ export const mockExam1_en = {
             "OB belongs to architecture transformation in D4D's dual transformation theory."
           ],
           whyExtendedImageRefs: [
-            { imageId: "operational-backbone" }
+            { imageId: "OB", groupId: "operational-backbone" }
           ]
         },
         {
@@ -225,7 +225,7 @@ export const mockExam1_en = {
             "SCI belongs to governance transformation in D4D's dual transformation theory."
           ],
           whyExtendedImageRefs: [
-            { imageId: "shared-customer-insights" }
+            { imageId: "SCI", groupId: "shared-customer-insights" }
           ]
         },
         {
@@ -250,7 +250,7 @@ export const mockExam1_en = {
             "DP belongs to architecture transformation together with OB."
           ],
           whyExtendedImageRefs: [
-            { imageId: "digital-platform" }
+            { imageId: "DP", groupId: "digital-platform" }
           ]
         },
         {
@@ -264,7 +264,7 @@ export const mockExam1_en = {
             "AF belongs to governance transformation in D4D's dual transformation theory."
           ],
           whyExtendedImageRefs: [
-            { imageId: "accountability-framework" }
+            { imageId: "AF", groupId: "accountability-framework" }
           ]
         },
         {
@@ -278,7 +278,7 @@ export const mockExam1_en = {
             "The D4D roadmap recommends not rushing into an ExDP — it requires a mature OB and DP first."
           ],
           whyExtendedImageRefs: [
-            { imageId: "external-developer-platform" }
+            { imageId: "ExDP", groupId: "external-developer-platform" }
           ]
         }
       ]
