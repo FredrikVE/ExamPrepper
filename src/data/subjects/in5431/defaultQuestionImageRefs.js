@@ -13,6 +13,8 @@ const DECISION_PROCESS_NO = ref("cio-tool-box", "decision-making", "generic_deci
 const TRIPLE_CONSTRAINT = ref("cio-tool-box", "triple-constraint", "triple_constraint_1");
 const CYNEFIN = ref("cio-tool-box", "cynefin", "cynefin_theory_of_everything");
 const PRINCE2 = ref("cio-tool-box", "prince2", "prince2_framework_model");
+const FRAMEWORKS_AND_BEST_PRACTICES = ref("cio-tool-box", "framewoks", "framewoks_and_best_practices");
+const ITIL = ref("cio-tool-box", "framewoks", "ITIL");
 const NPV = ref("cio-tool-box", "business-case", "NPV_formula");
 const PV = ref("cio-tool-box", "business-case", "PV_formula");
 const DOUBLE_DIAMOND = ref("cio-tool-box", "design-thinking", "double_diamond_model");
@@ -141,7 +143,8 @@ const COMMON_MOCK_EXAM_4 = {
     22: [TOGAF_LEVELS],
     23: [CYNEFIN, TRIPLE_CONSTRAINT],
     24: [IT_GOVERNANCE_MATRIX],
-    25: [PRINCE2]
+    25: [PRINCE2],
+    27: [FRAMEWORKS_AND_BEST_PRACTICES, ITIL]
 };
 
 export const in5431DefaultQuestionImageRefsByExamKey = {

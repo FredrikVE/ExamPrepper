@@ -1397,6 +1397,107 @@ export const mockExam4_en = {
           ]
         }
       ]
+    },
+    {
+      id: 27,
+      type: "dragDrop",
+      title: "Frameworks and best practice",
+      points: 3,
+      prompt: "Drag each framework into its intended usage.",
+      source: "Source: Lecture 6, CIO Toolbox 4, slide 'Frameworks and «best practice»'.",
+      moduleId: "cio-tool-box",
+      groupId: "framewoks",
+      cards: [
+        { id: "togaf", text: "TOGAF" },
+        { id: "prince2", text: "Prince 2" },
+        { id: "scrum", text: "Scrum" },
+        { id: "safe", text: "SAFe" },
+        { id: "itil", text: "ITIL" },
+        { id: "prosci-adkar", text: "Prosci / ADKAR model" }
+      ],
+      targets: [
+        {
+          id: "enterprise-architecture",
+          description: "Enterprise architecture",
+          correctCardId: "togaf",
+          correctLabel: "TOGAF",
+          whyCorrect: "TOGAF is intended for enterprise architecture.",
+          whyWrong: "This row describes TOGAF, because TOGAF is the framework in the table linked to enterprise architecture.",
+          whyExtended: [
+            "The key cue is 'Enterprise architecture'.",
+            "In the course, TOGAF belongs near the IT Architecture part of the CIO toolbox, where the purpose is to analyze and structure the IT portfolio.",
+            "TOGAF is therefore not primarily a project, agile delivery or service-management framework."
+          ]
+        },
+        {
+          id: "project-governance-management",
+          description: "Project governance and management",
+          correctCardId: "prince2",
+          correctLabel: "Prince 2",
+          whyCorrect: "PRINCE2 is intended for project governance and management.",
+          whyWrong: "This row describes PRINCE2, because PRINCE2 is the project governance and management framework in the table.",
+          whyExtended: [
+            "The key cue is 'Project governance and management'.",
+            "In the CIO toolbox, PRINCE2 belongs under the Projects tool, whose purpose is to plan and organize development.",
+            "PRINCE2 is not the same as Scrum or SAFe: those are agile software-delivery frameworks."
+          ]
+        },
+        {
+          id: "agile-software-delivery",
+          description: "(Agile) software delivery",
+          correctCardId: "scrum",
+          correctLabel: "Scrum",
+          whyCorrect: "Scrum is intended for agile software delivery.",
+          whyWrong: "This row describes Scrum, because Scrum is the framework in the table linked to agile software delivery.",
+          whyExtended: [
+            "The key cue is '(Agile) software delivery'.",
+            "Scrum is a team-level agile framework with sprints, roles and iterative delivery.",
+            "This differs from SAFe, which is specifically the scaled agile framework for larger organizations."
+          ]
+        },
+        {
+          id: "scaled-agile-software-delivery",
+          description: "(Scaled agile) software delivery",
+          correctCardId: "safe",
+          correctLabel: "SAFe",
+          whyCorrect: "SAFe is intended for scaled agile software delivery.",
+          whyWrong: "This row describes SAFe, because SAFe is the scaled agile software-delivery framework in the table.",
+          whyExtended: [
+            "The key cue is 'Scaled agile'.",
+            "SAFe means Scaled Agile Framework and is used when agile methods are coordinated across larger organizations or programs.",
+            "Scrum is also agile, but the table distinguishes Scrum as agile software delivery and SAFe as scaled agile software delivery."
+          ]
+        },
+        {
+          id: "it-service-management",
+          description: "IT Service management",
+          correctCardId: "itil",
+          correctLabel: "ITIL",
+          whyCorrect: "ITIL is intended for IT Service Management.",
+          whyWrong: "This row describes ITIL, because ITIL is the framework in the table linked to IT Service Management.",
+          whyExtended: [
+            "The key cue is 'IT Service management'.",
+            "ITIL is relevant for operation, delivery and management of IT services.",
+            "In this slide, ITIL is shown as a framework/best practice next to the CIO toolbox — not as one of the seven core CIO toolbox tools."
+          ],
+          whyExtendedImageRefs: [
+            { imageId: "ITIL", moduleId: "cio-tool-box", groupId: "framewoks" }
+          ]
+        },
+        {
+          id: "change-management",
+          description: "Change management",
+          correctCardId: "prosci-adkar",
+          correctLabel: "Prosci / ADKAR model",
+          whyCorrect: "Prosci / ADKAR is intended for change management.",
+          whyWrong: "This row describes Prosci / ADKAR, because it is the change management framework in the table.",
+          whyExtended: [
+            "The key cue is 'Change management'.",
+            "Prosci / ADKAR is about helping people and organizations adopt change, not about architecture, projects or IT service operations.",
+            "The slide presents it as a framework/best practice adjacent to the CIO toolbox."
+          ]
+        }
+      ]
     }
   ]
 };

@@ -66,6 +66,26 @@ export const in5431ConceptImages = [
         caption: { no: "PRINCE2 strukturerer prosjektstyring i tre lag: 7 prinsipper, 7 temaer og 7 prosesser.", en: "PRINCE2 structures project governance in three layers: 7 principles, 7 themes and 7 processes." }
     },
 
+    // ── CIO Toolbox: Frameworks and best practice (forelesning 6) ─
+    {
+        moduleId: "cio-tool-box",
+        groupId: "framewoks",
+        imageId: "framewoks_and_best_practices",
+        ext: "png",
+        title: { no: "Rammeverk og beste praksis", en: "Frameworks and best practice" },
+        alt: { no: "Lysbilde som kobler rammeverk som TOGAF, PRINCE2, Scrum, SAFe, ITIL og Prosci/ADKAR til bruksområder", en: "Slide mapping frameworks such as TOGAF, PRINCE2, Scrum, SAFe, ITIL and Prosci/ADKAR to intended uses" },
+        caption: { no: "ITIL vises som IT Service Management under rammeverk/beste praksis, ved siden av CIO toolboxen — ikke som et kjerneverktøy i toolboxen.", en: "ITIL is shown as IT Service Management under frameworks/best practice, next to the CIO toolbox — not as a core toolbox tool." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "framewoks",
+        imageId: "ITIL",
+        ext: "png",
+        title: { no: "ITIL", en: "ITIL" },
+        alt: { no: "Utsnitt av rammeverkstabellen der ITIL er koblet til IT Service Management", en: "Excerpt of the framework table where ITIL is linked to IT Service Management" },
+        caption: { no: "ITIL er relevant for drift, leveranse og styring av IT-tjenester, men er ikke ett av de syv hovedverktøyene i CIO toolboxen.", en: "ITIL is relevant for operation, delivery and management of IT services, but is not one of the seven core CIO toolbox tools." }
+    },
+
     // ── D4D building blocks (forelesning 7–12) ─────────────
     {
         moduleId: "designed-for-digital",
