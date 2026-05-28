@@ -1400,104 +1400,89 @@ export const mockExam4_en = {
     },
     {
       id: 27,
-      type: "dragDrop",
+      type: "drag-categorize",
       title: "Frameworks and best practice",
       points: 3,
-      prompt: "Drag each framework into its intended usage.",
+      prompt: "Drag each framework to the CIO toolbox tool it is mapped to in the slide. Frameworks without an arrow should be placed under 'Not used in CIO-toolbox'.",
       source: "Source: Lecture 6, CIO Toolbox 4, slide 'Frameworks and «best practice»'.",
       moduleId: "cio-tool-box",
       groupId: "framewoks",
-      cards: [
-        { id: "togaf", text: "TOGAF" },
-        { id: "prince2", text: "Prince 2" },
-        { id: "scrum", text: "Scrum" },
-        { id: "safe", text: "SAFe" },
-        { id: "itil", text: "ITIL" },
-        { id: "prosci-adkar", text: "Prosci / ADKAR model" }
+      items: [
+        { id: "togaf", label: "TOGAF" },
+        { id: "prince2", label: "Prince 2" },
+        { id: "scrum", label: "Scrum" },
+        { id: "safe", label: "SAFe" },
+        { id: "itil", label: "ITIL" },
+        { id: "prosci-adkar", label: "Prosci / ADKAR model" }
       ],
-      targets: [
-        {
-          id: "enterprise-architecture",
-          description: "Enterprise architecture",
-          correctCardId: "togaf",
-          correctLabel: "TOGAF",
-          whyCorrect: "TOGAF is intended for enterprise architecture.",
-          whyWrong: "This row describes TOGAF, because TOGAF is the framework in the table linked to enterprise architecture.",
+      categories: [
+        { id: "it-architecture", label: "IT Architecture" },
+        { id: "projects", label: "Projects" },
+        { id: "product-teams-agile", label: "Product teams and agile methods" },
+        { id: "not-used-in-cio-toolbox", label: "Not used in CIO-toolbox" }
+      ],
+      correctAnswer: {
+        "it-architecture": ["togaf"],
+        projects: ["prince2"],
+        "product-teams-agile": ["scrum", "safe"],
+        "not-used-in-cio-toolbox": ["itil", "prosci-adkar"]
+      },
+      itemFeedback: {
+        togaf: {
+          whyCorrect: "TOGAF is mapped by the slide arrow to IT Architecture.",
+          whyWrong: "TOGAF should be placed under IT Architecture, because the slide connects enterprise architecture / TOGAF to the IT Architecture tool in the CIO toolbox.",
           whyExtended: [
-            "The key cue is 'Enterprise architecture'.",
-            "In the course, TOGAF belongs near the IT Architecture part of the CIO toolbox, where the purpose is to analyze and structure the IT portfolio.",
-            "TOGAF is therefore not primarily a project, agile delivery or service-management framework."
+            "The framework table lists TOGAF as intended for enterprise architecture.",
+            "The CIO toolbox table lists IT Architecture as the tool for analyzing and structuring the IT portfolio.",
+            "That is why TOGAF maps to IT Architecture, not to projects, agile delivery or the 'not used' category."
           ]
         },
-        {
-          id: "project-governance-management",
-          description: "Project governance and management",
-          correctCardId: "prince2",
-          correctLabel: "Prince 2",
-          whyCorrect: "PRINCE2 is intended for project governance and management.",
-          whyWrong: "This row describes PRINCE2, because PRINCE2 is the project governance and management framework in the table.",
+        prince2: {
+          whyCorrect: "Prince 2 is mapped by the slide arrow to Projects.",
+          whyWrong: "Prince 2 should be placed under Projects, because it is the project governance and management framework shown in the slide.",
           whyExtended: [
-            "The key cue is 'Project governance and management'.",
-            "In the CIO toolbox, PRINCE2 belongs under the Projects tool, whose purpose is to plan and organize development.",
-            "PRINCE2 is not the same as Scrum or SAFe: those are agile software-delivery frameworks."
+            "The framework table lists Prince 2 as intended for project governance and management.",
+            "The CIO toolbox table lists Projects as the tool for planning and organizing development.",
+            "This makes Prince 2 a project-oriented framework rather than an architecture or agile delivery framework."
           ]
         },
-        {
-          id: "agile-software-delivery",
-          description: "(Agile) software delivery",
-          correctCardId: "scrum",
-          correctLabel: "Scrum",
-          whyCorrect: "Scrum is intended for agile software delivery.",
-          whyWrong: "This row describes Scrum, because Scrum is the framework in the table linked to agile software delivery.",
+        scrum: {
+          whyCorrect: "Scrum is mapped by the slide arrow to Product teams and agile methods.",
+          whyWrong: "Scrum should be placed under Product teams and agile methods, because it is the agile software delivery framework in the slide.",
           whyExtended: [
-            "The key cue is '(Agile) software delivery'.",
-            "Scrum is a team-level agile framework with sprints, roles and iterative delivery.",
-            "This differs from SAFe, which is specifically the scaled agile framework for larger organizations."
+            "The framework table lists Scrum as intended for agile software delivery.",
+            "The CIO toolbox table lists Product teams and agile methods as a way to plan and organize development.",
+            "Scrum is therefore part of the agile/product-team side of the toolbox, not a project governance framework like Prince 2."
           ]
         },
-        {
-          id: "scaled-agile-software-delivery",
-          description: "(Scaled agile) software delivery",
-          correctCardId: "safe",
-          correctLabel: "SAFe",
-          whyCorrect: "SAFe is intended for scaled agile software delivery.",
-          whyWrong: "This row describes SAFe, because SAFe is the scaled agile software-delivery framework in the table.",
+        safe: {
+          whyCorrect: "SAFe is mapped by the slide arrow to Product teams and agile methods.",
+          whyWrong: "SAFe should be placed under Product teams and agile methods, because it is the scaled agile software delivery framework in the slide.",
           whyExtended: [
-            "The key cue is 'Scaled agile'.",
-            "SAFe means Scaled Agile Framework and is used when agile methods are coordinated across larger organizations or programs.",
-            "Scrum is also agile, but the table distinguishes Scrum as agile software delivery and SAFe as scaled agile software delivery."
+            "The framework table lists SAFe as intended for scaled agile software delivery.",
+            "Like Scrum, it belongs with Product teams and agile methods in the CIO toolbox mapping.",
+            "The distinction is that Scrum is agile at team level, while SAFe is scaled agile for larger organizations or programs."
           ]
         },
-        {
-          id: "it-service-management",
-          description: "IT Service management",
-          correctCardId: "itil",
-          correctLabel: "ITIL",
-          whyCorrect: "ITIL is intended for IT Service Management.",
-          whyWrong: "This row describes ITIL, because ITIL is the framework in the table linked to IT Service Management.",
+        itil: {
+          whyCorrect: "ITIL has no arrow into the CIO toolbox in this slide, so it belongs under Not used in CIO-toolbox.",
+          whyWrong: "ITIL should not be placed under IT Architecture, Projects or Product teams. In the slide, ITIL appears as IT Service Management in the frameworks/best-practice table, but it has no arrow into the CIO toolbox table.",
           whyExtended: [
-            "The key cue is 'IT Service management'.",
-            "ITIL is relevant for operation, delivery and management of IT services.",
-            "In this slide, ITIL is shown as a framework/best practice next to the CIO toolbox — not as one of the seven core CIO toolbox tools."
-          ],
-          whyExtendedImageRefs: [
-            { imageId: "ITIL", moduleId: "cio-tool-box", groupId: "framewoks" }
+            "ITIL is relevant to IT Service Management: operation, delivery and management of IT services.",
+            "However, the slide does not map ITIL to one of the CIO toolbox tools on the right-hand side.",
+            "This is the exam point: ITIL is relevant for IT management, but it is not one of the core CIO toolbox tools shown by the arrows."
           ]
         },
-        {
-          id: "change-management",
-          description: "Change management",
-          correctCardId: "prosci-adkar",
-          correctLabel: "Prosci / ADKAR model",
-          whyCorrect: "Prosci / ADKAR is intended for change management.",
-          whyWrong: "This row describes Prosci / ADKAR, because it is the change management framework in the table.",
+        "prosci-adkar": {
+          whyCorrect: "Prosci / ADKAR has no arrow into the CIO toolbox in this slide, so it belongs under Not used in CIO-toolbox.",
+          whyWrong: "Prosci / ADKAR should not be placed under IT Architecture, Projects or Product teams. In the slide, it is listed as a change management framework/best practice, but it has no arrow into the CIO toolbox table.",
           whyExtended: [
-            "The key cue is 'Change management'.",
-            "Prosci / ADKAR is about helping people and organizations adopt change, not about architecture, projects or IT service operations.",
-            "The slide presents it as a framework/best practice adjacent to the CIO toolbox."
+            "Prosci / ADKAR is associated with change management.",
+            "Change management is relevant around IT initiatives, but it is not mapped by an arrow to a core CIO toolbox tool in the slide.",
+            "Placing it under 'Not used in CIO-toolbox' preserves the visual logic of the slide."
           ]
         }
-      ]
+      }
     }
   ]
 };
