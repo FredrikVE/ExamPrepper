@@ -116,7 +116,7 @@ describe("exam flow integration", () => {
         expect(subject).toMatchObject({
             id: "in5431",
             code: "IN5431",
-            examCount: 6
+            examCount: 7
         });
     });
 });

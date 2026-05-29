@@ -244,6 +244,13 @@ export const in5431DefaultQuestionImageRefsByExamKey = {
         3: [IT_DECISION_DOMAINS],
         4: [D4D_OVERVIEW],
         5: [OPERATING_MODEL_NO]
+    },
+    "mock-exam-drag-categorize:en": {
+        1: [DECISION_PROCESS_EN, DOUBLE_DIAMOND, IT_GOVERNANCE_MATRIX],
+        2: [D4D_OVERVIEW, OB, SCI, DP, AF, EXDP],
+        3: [IT_DECISION_DOMAINS],
+        4: [D4D_OVERVIEW],
+        5: [OPERATING_MODEL_EN]
     }
 };
 

@@ -12,6 +12,7 @@ import { mockExam5_en } from "./exams/mockExam5_en.js";
 import { mockExamDefinitions_no } from "./exams/mockExamDefinitions_no.js";
 import { mockExamDefinitions_en } from "./exams/mockExamDefinitions_en.js";
 import { mockExamDragCategorize_no } from "./exams/mockExamDragCategorize_no.js";
+import { mockExamDragCategorize_en } from "./exams/mockExamDragCategorize_en.js";
 
 import { DEFAULT_SUBJECT_ID, SUBJECTS } from "./subjects.js";
 
@@ -31,6 +32,7 @@ export const EXAMS = [
     mockExamDefinitions_no,
     mockExamDefinitions_en,
     mockExamDragCategorize_no,
+    mockExamDragCategorize_en,
 ];
 
 export {
