@@ -179,51 +179,52 @@ Les mer i [ARCHITECTURE.md](./docs/architecture/ARCHITECTURE.md).
 
 ## Kildehenvisning til spørsmål
 
-<b><b>Grov, J., Sampah, D. A., & Øvrelid, E.</b> (2026, Januar 19).</b> <i>Introduction to course lectures and group session.</i><br>
+<b>Grov, J., Sampah, D. A., & Øvrelid, E.</b> (2026, Januar 19).<br> <i>Introduction to course lectures and group session.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2025-01-19---introduction.pdf<br><br>
 
-<b><b>Grov, J.</b> (2026a, Februar 2).</b> <i>Strategy, governing documents, and other structural frames: What does it mean, and what is the importance of IT?</i><br>
+<b>Grov, J.</b> (2026a, Februar 2).<br> <i>Strategy, governing documents, and other structural frames: What does it mean, and what is the importance of IT?</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-<b><b>Grov, J.</b> (2026b, Februar 9).</b> <i>CIO Toolbox 1: Business case, concept selection and alternative analysis.</i><br>
+<b>Grov, J.</b> (2026b, Februar 9).<br> <i>CIO Toolbox 1: Business case, concept selection and alternative analysis.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2025-02-09---cio-toolbox-and-choices.pdf<br><br>
 
-<b><b>Grov, J.</b> (2026c, Februar 23).</b> <i>The CIO toolbox 2: How to organize development?</i><br>
+<b>Grov, J.</b> (2026c, Februar 23).<br> <i>The CIO toolbox 2: How to organize development?</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-<b><b>Grov, J.</b> (2026d, Mars 2).</b> <i>The CIO toolbox 3: How to understand business and technology architecture?</i><br>
+<b>Grov, J.</b> (2026d, Mars 2).<br> <i>The CIO toolbox 3: How to understand business and technology architecture?</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-<b><b>Grov, J.</b> (2026e, Mars 9).</b> <i>Guest lecture: Agile Startups.</i><br>
+<b>Grov, J.</b> (2026e, Mars 9).<br> <i>Guest lecture: Agile Startups.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-<b><b>Grov, J.</b> (2026f, Mars 16).</b> <i>CIO Toolbox 4: IT governance.</i><br>
+<b>Grov, J.</b> (2026f, Mars 16).<br> <i>CIO Toolbox 4: IT governance.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2026-03-15---it-governance-and-summary.pdf<br><br>
 
-<b><b>Øvrelid, E.</b> (2026a, Mars 23).</b> <i>Digital Business Design and Building Shared Customer Insights.</i><br>
+<b>Øvrelid, E.</b> (2026a, Mars 23).<br> <i>Digital Business Design and Building Shared Customer Insights.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-<b><b>Øvrelid, E.</b> (2026b, April 13).</b> <i>Operational Backbone.</i><br>
+<b>Øvrelid, E.</b> (2026b, April 13).<br> <i>Operational Backbone.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/lec3_operationalbackbone_26_final.pdf<br><br>
 
-<b><b>Øvrelid, E.</b> (2026c, April 13).</b> <i>Digital Platform.</i><br>
+<b>Øvrelid, E.</b> (2026c, April 13).<br> <i>Digital Platform.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-<b><b>Øvrelid, E., & Danilova, K.</b> (2026, April 20).</b> <i>Managing Digitalization in Organizations.</i><br>
+<b>Øvrelid, E., & Danilova, K.</b> (2026, April 20).<br> <i>Managing Digitalization in Organizations.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-<b><b>Øvrelid, E.</b> (2026d, Mai 4).</b> <i>Accountability Framework and External Developer Platform.</i><br>
+<b>Øvrelid, E.</b> (2026d, Mai 4).<br> <i>Accountability Framework and External Developer Platform.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
+
 
