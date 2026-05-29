@@ -5,5 +5,6 @@ export const QUESTION_TYPES = {
 	FILL: "fill",
 	DRAG_DROP: "dragDrop",
 	DRAG_CATEGORIZE: "drag-categorize",
-	MATRIX_PLACEMENT: "matrix-placement"
+	MATRIX_PLACEMENT: "matrix-placement",
+	SEQUENCE_ORDER: "SequenceOrder"
 };

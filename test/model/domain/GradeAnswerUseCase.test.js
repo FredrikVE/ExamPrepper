@@ -283,6 +283,77 @@ describe("GradeAnswerUseCase", () => {
         });
     });
 
+    describe("sequence order", () => {
+        const question = {
+            type: QUESTION_TYPES.SEQUENCE_ORDER,
+            points: 4,
+            items: [
+                { id: "strategy", label: "Service Strategy" },
+                { id: "design", label: "Service Design" },
+                { id: "transition", label: "Service Transition" },
+                { id: "operation", label: "Service Operation" }
+            ],
+            correctOrder: ["strategy", "design", "transition", "operation"]
+        };
+
+        test("returns true only when all items are in the correct order", () => {
+            expect(useCase.execute(question, [
+                "strategy",
+                "design",
+                "transition",
+                "operation"
+            ])).toBe(true);
+
+            expect(useCase.execute(question, [
+                "strategy",
+                "transition",
+                "design",
+                "operation"
+            ])).toBe(false);
+        });
+
+        test("supports the wrapped sequence answer shape", () => {
+            expect(useCase.execute(question, {
+                sequence: ["strategy", "design", "transition", "operation"]
+            })).toBe(true);
+        });
+
+        test("calculates partial score from correctly ordered items", () => {
+            expect(useCase.getQuestionScore(question, [
+                "strategy",
+                "transition",
+                "design",
+                "operation"
+            ])).toBe(2);
+        });
+
+        test("returns sequence order stats", () => {
+            expect(useCase.getSequenceOrderStats(question, [
+                "strategy",
+                "transition",
+                null,
+                "operation"
+            ])).toEqual({
+                correct: 2,
+                wrong: 1,
+                unanswered: 1
+            });
+        });
+
+        test("ignores duplicate and unknown items", () => {
+            expect(useCase.getSequenceOrderStats(question, [
+                "strategy",
+                "strategy",
+                "unknown",
+                "operation"
+            ])).toEqual({
+                correct: 2,
+                wrong: 0,
+                unanswered: 2
+            });
+        });
+    });
+
     test("returns false when question is missing", () => {
         expect(useCase.execute(null, 0)).toBe(false);
     });

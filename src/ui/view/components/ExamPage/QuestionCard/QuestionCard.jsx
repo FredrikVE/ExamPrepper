@@ -7,6 +7,7 @@ import FillBlankInputFieldQuestion from "./QuestionTypes/FillBlankInputField/Fil
 import CategorySortQuestion from "./QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
 import TableMatchQuestion from "./QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";
 import MatrixPlacementQuestion from "./QuestionTypes/DragDrop/MatrixPlacement/Question/MatrixPlacementQuestion.jsx";
+import SequenceOrderQuestion from "./QuestionTypes/DragDrop/SequenceOrder/Question/SequenceOrderQuestion.jsx";
 import MultiCheckboxSelectQuestion from "./QuestionTypes/MultiCheckboxSelect/MultiCheckboxSelectQuestion.jsx";
 import SingleRadioButtonChoiceQuestion from "./QuestionTypes/SingleRadioButtonChoice/SingleRadioButtonChoiceQuestion.jsx";
 import PromptSection from "./Shared/Prompt/PromptSection.jsx";
@@ -86,7 +87,18 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                     />
                 ) : null}
 
-                {viewState.shouldShowDragDrop && !viewState.shouldShowDragCategorize && !viewState.shouldShowMatrixPlacement ? (
+                {viewState.shouldShowSequenceOrder ? (
+                    <SequenceOrderQuestion
+                        question={question}
+                        answer={answer}
+                        submitted={submitted}
+                        showAllFeedback={showAllFeedback}
+                        onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
+                ) : null}
+
+                {viewState.shouldShowDragDrop && !viewState.shouldShowDragCategorize && !viewState.shouldShowMatrixPlacement && !viewState.shouldShowSequenceOrder ? (
                     <TableMatchQuestion
                         question={question}
                         answer={answer}
