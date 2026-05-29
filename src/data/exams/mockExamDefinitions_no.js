@@ -700,6 +700,69 @@ export const mockExamDefinitions_no = {
         { id: "operational-backbone", description: "Stabilt fundament for standardiserte og integrerte kjerneoperasjoner", correctCardId: "operational-backbone", correctLabel: "Operational backbone", whyCorrect: "Operational backbone er fundamentet for stabil drift.", whyWrong: "Nøkkelordene er stable foundation, core operations, standardization og integration.", whyExtended: ["Uten en god OB kan digital innovasjon bli hemmet av fragmenterte systemer."] },
         { id: "digital-platform", description: "Gjenbrukbare komponenter som muliggjør rask bygging av digitale tilbud", correctCardId: "digital-platform", correctLabel: "Digital platform", whyCorrect: "Digital platform gir gjenbrukbare komponenter for raske digitale tilbud.", whyWrong: "Denne forklaringen handler om reusable components, ikke stable core operations.", whyExtended: ["Digital Platform bygger ofte på Operational Backbone, men har annen innovasjonslogikk."] }
       ]
+    },
+    {
+      id: 28,
+      type: "SequenceOrder",
+      title: "Double Diamond – rekkefølgen i designprosessen",
+      points: 2,
+      prompt: "Sett fasene i Double Diamond-modellen i riktig rekkefølge.",
+      source: "Fasit: IN5431, CIO Toolbox 2: Projects, products and design thinking, slide ‘Example: the double diamond’.",
+      items: [
+        { id: "discover", label: "Discover" },
+        { id: "define", label: "Define" },
+        { id: "develop", label: "Develop" },
+        { id: "deliver", label: "Deliver" }
+      ],
+      correctOrder: [
+        "discover",
+        "define",
+        "develop",
+        "deliver"
+      ],
+      itemFeedback: {
+        discover: {
+          whyCorrect: "Discover kommer først fordi fasen handler om å forstå problemet før man antar hva løsningen er.",
+          whyWrong: "Discover må komme først. Før man definerer eller løser problemet, må man forstå situasjonen og menneskene som påvirkes.",
+          whyExtended: [
+            "I denne fasen snakker man med og bruker tid sammen med mennesker som er berørt av problemet.",
+            "Målet er å utforske problemet, ikke hoppe rett til løsning."
+          ]
+        },
+        define: {
+          whyCorrect: "Define kommer etter Discover fordi innsikten fra utforskningen brukes til å definere utfordringen tydeligere.",
+          whyWrong: "Define bygger på innsikten fra Discover. Man bør ikke definere utfordringen før man har undersøkt den.",
+          whyExtended: [
+            "Denne fasen snevrer inn problemet og hjelper teamet å formulere en mer presis utfordring.",
+            "Poenget er ofte å redefinere problemet basert på ny innsikt."
+          ]
+        },
+        develop: {
+          whyCorrect: "Develop kommer etter Define fordi man først bør utvikle løsningsforslag når problemet er tydelig definert.",
+          whyWrong: "Develop hører hjemme etter Define. Først når utfordringen er tydelig, kan man utforske ulike løsninger.",
+          whyExtended: [
+            "I denne fasen utvikles flere mulige svar på det definerte problemet.",
+            "Fasen kan innebære idéutvikling, inspirasjon utenfra og co-design med ulike grupper."
+          ]
+        },
+        deliver: {
+          whyCorrect: "Deliver kommer til slutt fordi løsninger testes, forbedres eller forkastes etter at de er utviklet.",
+          whyWrong: "Deliver kommer sist. Man kan ikke teste og forbedre løsninger før de er utviklet.",
+          whyExtended: [
+            "Denne fasen handler om å teste løsninger i liten skala.",
+            "Løsninger som ikke fungerer forkastes, mens lovende løsninger forbedres."
+          ]
+        }
+      },
+      whyCorrect: "Double Diamond følger rekkefølgen Discover → Define → Develop → Deliver.",
+      whyExtended: [
+        "Den første diamanten handler om å forstå og definere problemet.",
+        "Den andre diamanten handler om å utvikle og levere løsninger.",
+        "Modellen veksler mellom å åpne opp for innsikt og muligheter, og å snevre inn mot en tydelig definisjon eller løsning."
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+      ]
     }
   ]
 };
