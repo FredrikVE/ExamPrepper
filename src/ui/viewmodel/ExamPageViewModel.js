@@ -486,14 +486,32 @@ const getLongestMatrixPlacementTextLength = (question) => {
 
 const createAnswerOptionOrderByQuestionId = (questions) => {
 	return questions.reduce((answerOptionOrderByQuestionId, question) => {
-		if (!Array.isArray(question.options) || question.options.length === 0) {
+		const answerOptionCount = getAnswerOptionCount(question);
+
+		if (answerOptionCount === 0) {
 			return answerOptionOrderByQuestionId;
 		}
 
-		answerOptionOrderByQuestionId[question.id] = shuffleIndexes(question.options.length);
+		answerOptionOrderByQuestionId[question.id] = shuffleIndexes(answerOptionCount);
 
 		return answerOptionOrderByQuestionId;
 	}, {});
+};
+
+const getAnswerOptionCount = (question) => {
+	if (Array.isArray(question.options)) {
+		return question.options.length;
+	}
+
+	if (question.type === QUESTION_TYPES.DRAG_CATEGORIZE && Array.isArray(question.items)) {
+		return question.items.length;
+	}
+
+	if (question.type === QUESTION_TYPES.DRAG_DROP && Array.isArray(question.cards)) {
+		return question.cards.length;
+	}
+
+	return 0;
 };
 
 const shuffleIndexes = (length) => {

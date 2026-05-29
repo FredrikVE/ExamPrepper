@@ -69,6 +69,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                     <CategorySortQuestion
                         question={question}
                         answer={answer}
+                        answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
                         onSingleAnswer={onSingleAnswer}
@@ -102,6 +103,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                     <TableMatchQuestion
                         question={question}
                         answer={answer}
+                        answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
                         onSingleAnswer={onSingleAnswer}

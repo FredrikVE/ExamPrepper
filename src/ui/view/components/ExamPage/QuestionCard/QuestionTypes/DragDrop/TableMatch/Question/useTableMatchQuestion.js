@@ -1,5 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/useTableMatchQuestion.js
 import { useState } from "react";
+import orderItemsByIndexOrder from "../../Shared/Utils/orderItemsByIndexOrder.js";
 import { clearCardFromOtherTargets, createCardsById, isPlainObject } from "../Utils/tableMatchAnswerLogic.js";
 import { getTableMatchStats } from "../Utils/tableMatchFeedbackStats.js";
 
@@ -12,7 +13,11 @@ export function useTableMatchQuestion(params) {
     const [expandedTargetId, setExpandedTargetId] = useState(null);
 
     const cardsById = createCardsById(params.question.cards);
-    const availableCards = getAvailableCards(params.question.cards, safeAnswer);
+    const availableCards = orderItemsByIndexOrder(
+        getAvailableCards(params.question.cards, safeAnswer),
+        params.answerOptionOrder,
+        params.question.cards
+    );
     const stats = getTableMatchStats(params.question, safeAnswer);
 
     let rootClassName = "drag-drop-question";
