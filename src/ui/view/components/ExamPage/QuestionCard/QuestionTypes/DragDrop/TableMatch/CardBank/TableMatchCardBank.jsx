@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/CardBank/TableMatchCardBank.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/CardBank/TableMatchCardBank.jsx
 import { GripVertical, Info } from "lucide-react";
 
 export default function TableMatchCardBank(props) {

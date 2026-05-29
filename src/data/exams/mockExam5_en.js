@@ -1,4 +1,4 @@
-//src/data/exams/mockExam5_en.js
+// src/data/exams/mockExam5_en.js
 export const mockExam5_en = {
   id: "mock-exam-5-en",
   subjectId: "in5431",

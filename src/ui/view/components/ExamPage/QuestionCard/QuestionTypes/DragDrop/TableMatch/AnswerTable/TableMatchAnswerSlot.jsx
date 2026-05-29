@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/AnswerTable/TableMatchAnswerSlot.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/AnswerTable/TableMatchAnswerSlot.jsx
 import { ChevronDown, X } from "lucide-react";
 
 export default function TableMatchAnswerSlot(props) {

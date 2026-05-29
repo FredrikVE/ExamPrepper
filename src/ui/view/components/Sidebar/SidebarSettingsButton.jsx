@@ -1,4 +1,4 @@
-//src/ui/view/components/Sidebar/SidebarSettingsButton.jsx
+// src/ui/view/components/Sidebar/SidebarSettingsButton.jsx
 import { Settings } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 

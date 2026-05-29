@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/Feedback/TableMatchFeedbackCard.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Feedback/TableMatchFeedbackCard.jsx
 import { getTargetStatus } from "../Utils/tableMatchAnswerLogic.js";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";

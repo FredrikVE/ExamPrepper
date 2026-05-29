@@ -1,6 +1,6 @@
-//src/model/domain/GradeAnswerUseCase.js
+// src/model/domain/GradeAnswerUseCase.js
 import normalizeAnswer from "../../utils/answer/normalizeAnswer.js";
-import getCorrectIndexes from "../../utils/answer/getCorrectIndexes.js";
+import getCorrectIndexes from "./utils/getCorrectIndexes.js";
 import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 export default class GradeAnswerUseCase {

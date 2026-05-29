@@ -1,0 +1,59 @@
+/* src/ui/style/ExamPage/QuestionCard/Shared/header.css */
+.question-card-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-7);
+    padding: clamp(var(--space-10), 4vw, 48px) clamp(var(--space-10), 4vw, 54px) 0;
+}
+
+.question-card-heading {
+    min-width: 0;
+}
+
+.question-card-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 38px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-bg) 72%, transparent);
+    color: var(--accent);
+    padding: 0 var(--space-5) 0 var(--space-2);
+    font-size: 0.82rem;
+    font-weight: 850;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+}
+
+.question-card-number {
+    display: inline-grid;
+    width: 26px;
+    height: 26px;
+    place-items: center;
+    border-radius: var(--radius-full);
+    color: white;
+    background: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 850;
+    box-shadow: 0 0 0 var(--space-1) color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.question-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-7);
+}
+
+.question-card-title {
+    margin: var(--space-7) 0 var(--space-9);
+    color: var(--text-main);
+    font-size: clamp(1.9rem, 3vw, 2.8rem);
+    font-weight: 850;
+    letter-spacing: -0.045em;
+    line-height: 1.08;
+}

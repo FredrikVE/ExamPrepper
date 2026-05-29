@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/ExamPageState.jsx
+// src/ui/view/components/ExamPage/ExamPageState.jsx
 export default function ExamPageState({ children }) {
     return (
         <div className="exam-workspace">

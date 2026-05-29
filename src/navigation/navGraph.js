@@ -1,4 +1,4 @@
-//src/navigation/navGraph.js
+// src/navigation/navGraph.js
 export const NAV_SCREENS = {
     SUBJECTS: "subjects",
     SELECT: "select",

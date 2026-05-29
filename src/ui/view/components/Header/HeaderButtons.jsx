@@ -1,4 +1,4 @@
-//src/ui/view/components/Header/HeaderButtons.jsx
+// src/ui/view/components/Header/HeaderButtons.jsx
 import { CheckCircle2 } from "lucide-react";
 import SubmittedActions from "./SubmittedActions.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";

@@ -1,4 +1,4 @@
-//src/model/domain/GetAvailableSubjectsUseCase.js
+// src/model/domain/GetAvailableSubjectsUseCase.js
 export default class GetAvailableSubjectsUseCase {
     constructor(subjectRepository) {
         this.subjectRepository = subjectRepository;

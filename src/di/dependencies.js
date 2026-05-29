@@ -1,4 +1,4 @@
-//src/di/dependencies.js
+// src/di/dependencies.js
 import { conceptImageCatalogsBySubjectId } from "../data/conceptImageCatalogRegistry.js";
 
 import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";

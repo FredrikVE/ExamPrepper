@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamSelectPage/ExamSelectCard.jsx
+// src/ui/view/components/ExamSelectPage/ExamSelectCard.jsx
 import { BookOpen, ChevronRight, CircleHelp, Clock3 } from "lucide-react";
 
 const CARD_TITLE_FALLBACKS = ["Full Review", "Deep Dive", "Application Focus"];

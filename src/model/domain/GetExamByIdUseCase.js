@@ -1,4 +1,4 @@
-//src/model/domain/GetExamByIdUseCase.js
+// src/model/domain/GetExamByIdUseCase.js
 export default class GetExamByIdUseCase {
     constructor(examRepository) {
         this.examRepository = examRepository;

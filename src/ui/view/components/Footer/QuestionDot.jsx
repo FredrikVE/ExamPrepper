@@ -1,4 +1,4 @@
-//src/ui/view/components/Footer/QuestionDot.jsx
+// src/ui/view/components/Footer/QuestionDot.jsx
 import { getFooterDotClassName } from "./Utils/footerClassNames.js";
 
 export default function QuestionDot({ questionNumber, isActive, submitted, isCorrect, onClick, t }) {

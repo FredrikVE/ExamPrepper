@@ -2,3 +2,6 @@
 @import "./page.css";
 @import "./progress.css";
 @import "./responsive.css";
+@import "./FeedbackPanel/index.css";
+@import "./ResultBadge/index.css";
+@import "./QuestionCard/index.css";

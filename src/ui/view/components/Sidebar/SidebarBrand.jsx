@@ -1,4 +1,4 @@
-//src/ui/view/components/Sidebar/SidebarBrand.jsx
+// src/ui/view/components/Sidebar/SidebarBrand.jsx
 import { useState } from "react";
 import { ChevronDown, ChevronRight, Check } from "lucide-react";
 import SubjectIcon from "../SubjectIcon.jsx";

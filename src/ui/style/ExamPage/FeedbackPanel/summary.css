@@ -1,0 +1,105 @@
+/* src/ui/style/ExamPage/FeedbackPanel/summary.css */
+.feedback-panel-summary {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.feedback-panel-summary-correct {
+    border-color: var(--success-border);
+    background: var(--success-soft);
+}
+
+.feedback-panel-summary-wrong {
+    border-color: var(--danger-border);
+    background: var(--danger-soft);
+}
+
+.feedback-panel-summary-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-main);
+    font-weight: 850;
+}
+
+.feedback-panel-summary-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.feedback-panel-answer {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+
+.feedback-panel-answer-label {
+    color: var(--text-main);
+    font-weight: 850;
+}
+
+
+/* ── Fill feedback comparison ───────────────────────── */
+.feedback-panel-fill-summary {
+    padding: 22px 28px;
+}
+
+.feedback-panel-fill-divider {
+    height: 1px;
+    margin: 18px 0 20px;
+    background: color-mix(in srgb, var(--line) 86%, transparent);
+}
+
+.feedback-panel-fill-comparison {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 28px;
+}
+
+.feedback-panel-fill-column {
+    min-width: 0;
+}
+
+.feedback-panel-fill-column + .feedback-panel-fill-column {
+    border-left: 1px solid color-mix(in srgb, var(--line) 86%, transparent);
+    padding-left: 28px;
+}
+
+.feedback-panel-fill-column-title {
+    margin-bottom: 12px;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 850;
+}
+
+.feedback-panel-fill-answer-pill {
+    display: inline-flex;
+    max-width: 100%;
+    min-height: 46px;
+    align-items: center;
+    border-radius: 10px;
+    padding: 0 18px;
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    font-weight: 850;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.feedback-panel-fill-answer-pill-correct {
+    border: 1px solid var(--success-border);
+    background: var(--success-soft);
+    color: var(--success-text);
+}
+
+.feedback-panel-fill-answer-pill-wrong {
+    border: 1px solid var(--danger-border);
+    background: var(--danger-soft);
+    color: var(--danger-text);
+}
+
+.feedback-panel-fill-summary .feedback-panel-answer {
+    margin-top: 22px;
+    font-size: 1rem;
+}
+

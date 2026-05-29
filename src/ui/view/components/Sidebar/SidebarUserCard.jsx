@@ -1,4 +1,4 @@
-//src/ui/view/components/Sidebar/SidebarUserCard.jsx
+// src/ui/view/components/Sidebar/SidebarUserCard.jsx
 import { ChevronDown } from "lucide-react";
 
 export default function SidebarUserCard() {

@@ -1,4 +1,4 @@
-//src/data/conceptImageCatalogRegistry.js
+// src/data/conceptImageCatalogRegistry.js
 import { in5431ConceptImages } from "./subjects/in5431/conceptImages.js";
 
 export const conceptImageCatalogsBySubjectId = {

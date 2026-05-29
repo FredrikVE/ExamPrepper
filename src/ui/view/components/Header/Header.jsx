@@ -1,4 +1,4 @@
-//src/ui/view/components/Header/Header.jsx
+// src/ui/view/components/Header/Header.jsx
 import HeaderActions from "./HeaderActions.jsx";
 
 export default function Header({ viewModel }) {

@@ -1,4 +1,4 @@
-//src/ui/view/components/Sidebar/SidebarCloseButton.jsx
+// src/ui/view/components/Sidebar/SidebarCloseButton.jsx
 import { ChevronLeft } from "lucide-react";
 
 export default function SidebarCloseButton({ onCloseSidebar }) {

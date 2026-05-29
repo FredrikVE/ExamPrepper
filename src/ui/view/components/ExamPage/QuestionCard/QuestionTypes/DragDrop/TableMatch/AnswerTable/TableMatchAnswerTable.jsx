@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/AnswerTable/TableMatchAnswerTable.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/AnswerTable/TableMatchAnswerTable.jsx
 import TableMatchAnswerRow from "./TableMatchAnswerRow.jsx";
 
 export default function TableMatchAnswerTable(props) {

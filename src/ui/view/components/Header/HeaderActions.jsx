@@ -1,4 +1,4 @@
-//src/ui/view/components/Header/HeaderActions.jsx
+// src/ui/view/components/Header/HeaderActions.jsx
 import { CheckCircle2, Clock3, Star } from "lucide-react";
 import StatCard from "./StatCard.jsx";
 import HeaderButtons from "./HeaderButtons.jsx";

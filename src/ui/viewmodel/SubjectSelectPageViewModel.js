@@ -1,4 +1,4 @@
-//src/ui/viewmodel/SubjectSelectPageViewModel.js
+// src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste fag";

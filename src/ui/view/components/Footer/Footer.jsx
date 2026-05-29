@@ -1,4 +1,4 @@
-//src/ui/view/components/Footer/Footer.jsx
+// src/ui/view/components/Footer/Footer.jsx
 import FooterNavigationButton from "./FooterNavigationButton.jsx";
 import FooterActionButton from "./FooterActionButton.jsx";
 import QuestionDots from "./QuestionDots.jsx";

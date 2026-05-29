@@ -1,4 +1,4 @@
-//test/utils/viewModelUtils.test.js
+// test/utils/viewModelUtils.test.js
 import { describe, expect, test } from "@jest/globals";
 import getAnsweredCountLabel from "../../src/ui/viewmodel/Utils/getAnsweredCountLabel.js";
 import getFeedbackToggleLabel from "../../src/ui/viewmodel/Utils/getFeedbackToggleLabel.js";

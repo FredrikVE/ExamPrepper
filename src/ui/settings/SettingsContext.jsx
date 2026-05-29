@@ -1,4 +1,4 @@
-//src/ui/settings/SettingsContext.jsx
+// src/ui/settings/SettingsContext.jsx
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 const SettingsContext = createContext(null);

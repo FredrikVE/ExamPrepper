@@ -1,4 +1,4 @@
-//src/ui/view/components/SubjectSelectPage/SubjectSelectControls.jsx
+// src/ui/view/components/SubjectSelectPage/SubjectSelectControls.jsx
 import { ChevronDown, Funnel, Search } from "lucide-react";
 
 export default function SubjectSelectControls({ t, searchTerm, onSearchTermChange, faculty, onFacultyChange, faculties }) {

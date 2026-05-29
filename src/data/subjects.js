@@ -1,4 +1,4 @@
-//src/data/subjects.js
+// src/data/subjects.js
 export const DEFAULT_SUBJECT_ID = "in5431";
 
 export const SUBJECTS = [

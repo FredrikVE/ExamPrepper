@@ -1,4 +1,4 @@
-//test/model/domain/GetExamByBaseIdAndLangUseCase.test.js
+// test/model/domain/GetExamByBaseIdAndLangUseCase.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import GetExamByBaseIdAndLangUseCase from "../../../src/model/domain/GetExamByBaseIdAndLangUseCase.js";
 

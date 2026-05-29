@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamSelectPage/ExamSelectIntro.jsx
+// src/ui/view/components/ExamSelectPage/ExamSelectIntro.jsx
 export default function ExamSelectIntro({ selectedSubject }) {
     if (!selectedSubject) {
         return null;

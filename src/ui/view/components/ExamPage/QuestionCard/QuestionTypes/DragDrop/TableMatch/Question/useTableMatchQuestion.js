@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/TableMatchQuestion/useTableMatchQuestion.js
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/useTableMatchQuestion.js
 import { useState } from "react";
 import { clearCardFromOtherTargets, createCardsById, isPlainObject } from "../Utils/tableMatchAnswerLogic.js";
 import { getTableMatchStats } from "../Utils/tableMatchFeedbackStats.js";

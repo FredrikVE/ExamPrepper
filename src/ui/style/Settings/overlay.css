@@ -1,0 +1,8 @@
+/* src/ui/style/Settings/overlay.css */
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: rgba(2, 8, 19, 0.38);
+    backdrop-filter: var(--blur-overlay);
+}

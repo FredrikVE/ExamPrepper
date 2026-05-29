@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamSelectPage/ExamSelectGrid.jsx
+// src/ui/view/components/ExamSelectPage/ExamSelectGrid.jsx
 import ExamSelectCard from "./ExamSelectCard.jsx";
 
 export default function ExamSelectGrid({ exams, t, onSelectExam }) {

@@ -1,4 +1,4 @@
-//src/ui/view/components/Header/StatCard.jsx
+// src/ui/view/components/Header/StatCard.jsx
 export default function StatCard({ value, label, icon }) {
     return (
         <div className="exam-header-stat-card">

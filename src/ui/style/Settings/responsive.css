@@ -1,0 +1,11 @@
+/* src/ui/style/Settings/responsive.css */
+@media (max-width: 640px) {
+    .settings-panel {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: min(88vw, 360px);
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}

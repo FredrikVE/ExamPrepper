@@ -1,4 +1,4 @@
-/* src/ui/style/foundation/tokens.css */
+/* src/ui/style/Tokens.css */
 
 /* ──────────────────────────────────────────────
    DESIGN TOKENS
@@ -84,42 +84,6 @@
     /* ── Backdrop ───────────────────────────── */
     --blur-panel: blur(24px);
     --blur-overlay: blur(4px);
-
-    /* ── Header component ──────────────────── */
-    --header-padding-desktop: var(--space-9) var(--space-10) var(--space-8);
-    --header-padding-tablet: var(--space-7) var(--space-6) var(--space-5) var(--space-12);
-    --header-padding-mobile: var(--space-11) var(--space-6) var(--space-7);
-
-    --header-layout-gap: var(--space-8);
-    --header-actions-gap: var(--space-3);
-
-    --header-button-min-height: 54px;
-    --header-button-padding: 0 var(--space-7);
-    --header-button-font-size: 0.94rem;
-    --header-button-font-weight: 800;
-    --header-button-hover-offset: -1px;
-
-    --header-icon-size: var(--space-7);
-
-    --header-stat-card-min-width: 84px;
-    --header-stat-card-icon-column: var(--space-9);
-    --header-stat-card-gap: var(--space-2);
-    --header-stat-card-padding: var(--space-3) var(--space-4);
-    --header-stat-card-mobile-padding: var(--space-3);
-
-    --header-stat-icon-size: var(--space-9);
-    --header-stat-icon-svg-size: 15px;
-
-    --header-stat-value-font-size: 0.94rem;
-    --header-stat-value-font-weight: 850;
-
-    --header-stat-label-margin-top: 2px;
-    --header-stat-label-font-size: 0.74rem;
-    --header-stat-label-font-weight: 600;
-
-    --header-stat-card-bg: color-mix(in srgb, var(--panel-strong) 80%, transparent);
-    --header-stat-card-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
-    --header-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
 }
 
 .dark {
@@ -167,9 +131,4 @@
     --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.3);
     --shadow-heavy: 0 28px 90px rgba(0, 0, 0, 0.36);
     --shadow-button: 0 14px 26px rgba(109, 92, 255, 0.28);
-
-    /* ── Header component ──────────────────── */
-    --header-stat-card-bg: color-mix(in srgb, var(--panel-strong) 62%, transparent);
-    --header-stat-card-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
-    --header-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
 }

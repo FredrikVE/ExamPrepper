@@ -1,4 +1,4 @@
-//test/utils/questionUtils.test.js
+// test/utils/questionUtils.test.js
 import { describe, expect, test } from "@jest/globals";
 import { hasInlineFillBlank, isInlineBlankPart, splitPromptByInlineBlank } from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/FillBlankInputField/Utils/fillBlankPromptUtils.js";
 import { getExtendedExplanationImages, getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/ExamPage/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";

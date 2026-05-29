@@ -1,0 +1,122 @@
+/* src/ui/style/ExamPage/FeedbackPanel/box.css */
+.feedback-panel-box {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
+    padding: 18px;
+}
+
+.feedback-panel-box-title,
+.feedback-panel-box-title-spaced,
+.feedback-panel-options-title {
+    color: var(--text-main);
+    font-weight: 850;
+}
+
+.feedback-panel-box-title-spaced {
+    margin-top: 18px;
+}
+
+.feedback-panel-box p {
+    margin: 10px 0 0;
+    color: var(--text-muted);
+    line-height: 1.65;
+}
+
+/* ── Fill explanation cards ───────────────────────── */
+
+.feedback-panel-explanation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.feedback-panel-explanation-card {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 20px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px 28px;
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--shadow-color) 10%, transparent);
+}
+
+.feedback-panel-explanation-card-correct {
+    border-color: color-mix(in srgb, var(--accent) 18%, var(--line));
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--accent) 7%, white),
+            color-mix(in srgb, var(--panel-bg) 94%, white)
+        );
+}
+
+.feedback-panel-explanation-card-wrong {
+    border-color: color-mix(in srgb, var(--warning-border, #f6b36b) 42%, var(--line));
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, #f59e0b 9%, white),
+            color-mix(in srgb, var(--panel-bg) 94%, white)
+        );
+}
+
+.dark .feedback-panel-explanation-card-correct {
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--accent) 14%, var(--panel-strong)),
+            color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong))
+        );
+}
+
+.dark .feedback-panel-explanation-card-wrong {
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, #f59e0b 16%, var(--panel-strong)),
+            color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong))
+        );
+}
+
+.feedback-panel-explanation-icon-wrap {
+    display: inline-grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.feedback-panel-explanation-card-wrong .feedback-panel-explanation-icon-wrap {
+    background: #f97316;
+    box-shadow: 0 14px 28px color-mix(in srgb, #f97316 24%, transparent);
+}
+
+.feedback-panel-explanation-icon {
+    width: 27px;
+    height: 27px;
+    stroke-width: 2.6;
+}
+
+.feedback-panel-explanation-content {
+    min-width: 0;
+}
+
+.feedback-panel-explanation-title {
+    margin: 0;
+    color: var(--text-main);
+    font-size: clamp(1.35rem, 1.7vw, 1.9rem);
+    font-weight: 950;
+    line-height: 1.12;
+}
+
+.feedback-panel-explanation-text {
+    margin: 18px 0 0;
+    color: var(--text-main);
+    font-size: clamp(1rem, 1.12vw, 1.18rem);
+    font-weight: 500;
+    line-height: 1.75;
+}

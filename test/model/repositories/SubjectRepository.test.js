@@ -1,4 +1,4 @@
-//test/model/repositories/SubjectRepository.test.js
+// test/model/repositories/SubjectRepository.test.js
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import SubjectRepository from "../../../src/model/repositories/SubjectRepository.js";
 

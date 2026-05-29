@@ -1,0 +1,8 @@
+/* src/ui/style/Settings/index.css */
+@import "./overlay.css";
+@import "./panel.css";
+@import "./header.css";
+@import "./sections.css";
+@import "./language.css";
+@import "./toggle.css";
+@import "./responsive.css";

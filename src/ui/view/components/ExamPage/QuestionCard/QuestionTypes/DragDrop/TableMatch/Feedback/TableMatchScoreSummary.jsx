@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/Feedback/TableMatchScoreSummary.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Feedback/TableMatchScoreSummary.jsx
 export default function TableMatchScoreSummary(props) {
     let title = props.t.feedbackCorrectLabel;
 

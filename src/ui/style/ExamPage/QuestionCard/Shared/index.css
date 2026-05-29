@@ -1,0 +1,4 @@
+/* src/ui/style/ExamPage/QuestionCard/Shared/index.css */
+@import "./base.css";
+@import "./header.css";
+@import "./prompt.css";

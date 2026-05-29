@@ -1,0 +1,6 @@
+/* src/ui/style/ExamPage/ResultBadge/icon.css */
+.result-badge-icon {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+}

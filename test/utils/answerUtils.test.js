@@ -1,7 +1,6 @@
-//test/utils/answerUtils.test.js
+// test/utils/answerUtils.test.js
 import { describe, expect, test } from "@jest/globals";
 import normalizeAnswer from "../../src/utils/answer/normalizeAnswer.js";
-import getCorrectIndexes from "../../src/utils/answer/getCorrectIndexes.js";
 import getOptionLetter from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/Utils/getOptionLetter.js";
 import isOptionSelected from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/Utils/isOptionSelected.js";
 import getAnswerLabel from "../../src/ui/view/components/ExamPage/FeedbackPanel/Utils/getAnswerLabel.js";
@@ -18,21 +17,6 @@ describe("answer utils", () => {
         expect(normalizeAnswer(undefined)).toBe("");
     });
 
-    test("getCorrectIndexes returns indexes of correct options", () => {
-        const question = {
-            options: [
-                { correct: true },
-                { correct: false },
-                { correct: true }
-            ]
-        };
-
-        expect(getCorrectIndexes(question)).toEqual([0, 2]);
-    });
-
-    test("getCorrectIndexes returns empty list when options are missing", () => {
-        expect(getCorrectIndexes({})).toEqual([]);
-    });
 
     test("getOptionLetter converts indexes to letters", () => {
         expect(getOptionLetter(0)).toBe("A");

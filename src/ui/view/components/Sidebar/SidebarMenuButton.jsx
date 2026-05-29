@@ -1,4 +1,4 @@
-//src/ui/view/components/Sidebar/SidebarMenuButton.jsx
+// src/ui/view/components/Sidebar/SidebarMenuButton.jsx
 import { Menu } from "lucide-react";
 
 export default function SidebarMenuButton({ onOpenSidebar }) {

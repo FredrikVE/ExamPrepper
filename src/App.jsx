@@ -1,4 +1,4 @@
-//src/App.jsx
+// src/App.jsx
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
 import { SettingsProvider } from "./ui/settings/SettingsContext.jsx";
