@@ -179,27 +179,51 @@ Les mer i [ARCHITECTURE.md](./docs/architecture/ARCHITECTURE.md).
 
 ## Kildehenvisning til spørsmål
 
-Grov, J., Sampah, D. A., & Øvrelid, E. (2026, Januar 19). *Introduction to course lectures and group session*.Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2025-01-19---introduction.pdf
+<b><b>Grov, J., Sampah, D. A., & Øvrelid, E.</b> (2026, Januar 19).</b> <i>Introduction to course lectures and group session.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2025-01-19---introduction.pdf<br><br>
 
-Grov, J. (2026a, Februar 2). *Strategy, governing documents, and other structural frames: What does it mean, and what is the importance of IT?* Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Grov, J.</b> (2026a, Februar 2).</b> <i>Strategy, governing documents, and other structural frames: What does it mean, and what is the importance of IT?</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-Grov, J. (2026b, Februar 9). *CIO Toolbox 1: Business case, concept selection and alternative analysis*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2025-02-09---cio-toolbox-and-choices.pdf
+<b><b>Grov, J.</b> (2026b, Februar 9).</b> <i>CIO Toolbox 1: Business case, concept selection and alternative analysis.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2025-02-09---cio-toolbox-and-choices.pdf<br><br>
 
-Grov, J. (2026c, Februar 23). *The CIO toolbox 2: How to organize development?* Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Grov, J.</b> (2026c, Februar 23).</b> <i>The CIO toolbox 2: How to organize development?</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-Grov, J. (2026d, Mars 2). *The CIO toolbox 3: How to understand business and technology architecture?* Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Grov, J.</b> (2026d, Mars 2).</b> <i>The CIO toolbox 3: How to understand business and technology architecture?</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-Grov, J. (2026e, Mars 9). *Guest lecture: Agile Startups*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Grov, J.</b> (2026e, Mars 9).</b> <i>Guest lecture: Agile Startups.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-Grov, J. (2026f, Mars 16). *CIO Toolbox 4: IT governance*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2026-03-15---it-governance-and-summary.pdf
+<b><b>Grov, J.</b> (2026f, Mars 16).</b> <i>CIO Toolbox 4: IT governance.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/slides/in5431-2026-03-15---it-governance-and-summary.pdf<br><br>
 
-Øvrelid, E. (2026a, Mars 23). *Digital Business Design and Building Shared Customer Insights*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Øvrelid, E.</b> (2026a, Mars 23).</b> <i>Digital Business Design and Building Shared Customer Insights.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-Øvrelid, E. (2026b, April 13). *Operational Backbone*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/lec3_operationalbackbone_26_final.pdf
+<b><b>Øvrelid, E.</b> (2026b, April 13).</b> <i>Operational Backbone.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/lec3_operationalbackbone_26_final.pdf<br><br>
 
-Øvrelid, E. (2026c, April 13). *Digital Platform*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Øvrelid, E.</b> (2026c, April 13).</b> <i>Digital Platform.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-Øvrelid, E., & Danilova, K. (2026, April 20). *Managing Digitalization in Organizations*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Øvrelid, E., & Danilova, K.</b> (2026, April 20).</b> <i>Managing Digitalization in Organizations.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
-Øvrelid, E. (2026d, Mai 4). *Accountability Framework and External Developer Platform*. Hentet fra IT and Management: Timeplan V26: https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/
+<b><b>Øvrelid, E.</b> (2026d, Mai 4).</b> <i>Accountability Framework and External Developer Platform.</i><br>
+Hentet fra IT and Management: Timeplan V26:<br>
+https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 
