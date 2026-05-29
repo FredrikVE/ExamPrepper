@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/Feedback/DragDropFeedbackExpandButton.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/Feedback/DragDropFeedbackExpandButton.jsx
 import { ChevronDown } from "lucide-react";
 
 export default function DragDropFeedbackExpandButton(props) {

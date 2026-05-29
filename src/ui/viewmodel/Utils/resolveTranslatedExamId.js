@@ -1,4 +1,4 @@
-//src/ui/viewmodel/Utils/resolveTranslatedExamId.js
+// src/ui/viewmodel/Utils/resolveTranslatedExamId.js
 
 /**
  * Resolves the translated exam id when the user switches language

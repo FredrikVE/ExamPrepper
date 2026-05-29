@@ -1,4 +1,4 @@
-// src/utils/answer/getCorrectIndexes.js
+// src/model/domain/utils/getCorrectIndexes.js
 export default function getCorrectIndexes(question) {
 	if (!question.options) {
 		return [];

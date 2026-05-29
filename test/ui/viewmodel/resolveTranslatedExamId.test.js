@@ -1,4 +1,4 @@
-//test/ui/viewmodel/resolveTranslatedExamId.test.js
+// test/ui/viewmodel/resolveTranslatedExamId.test.js
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import resolveTranslatedExamId from "../../../src/ui/viewmodel/Utils/resolveTranslatedExamId.js";
 

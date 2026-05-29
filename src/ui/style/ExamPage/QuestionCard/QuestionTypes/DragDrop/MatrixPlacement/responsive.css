@@ -1,4 +1,4 @@
-/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/responsive.css */
+/* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/responsive.css */
 .exam-workspace-extra-wide-question-mode .matrix-placement-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }

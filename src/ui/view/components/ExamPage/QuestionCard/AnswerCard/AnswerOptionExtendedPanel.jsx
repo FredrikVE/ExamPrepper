@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionExtendedPanel.jsx
+// src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionExtendedPanel.jsx
 import { Info } from "lucide-react";
 
 export default function AnswerOptionExtendedPanel({ expandedId, points, images = [], t }) {

@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryBoard/CategorySortCategoryGrid.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortCategoryGrid.jsx
 import { getPlacedItemIds, getSafeArray, isPlainObject } from "../Utils/categorySortAnswerLogic.js";
 import CategorySortCategoryColumn from "./CategorySortCategoryColumn.jsx";
 

@@ -1,4 +1,4 @@
-//src/ui/view/components/Settings/SettingsMenu.jsx
+// src/ui/view/components/Settings/SettingsMenu.jsx
 import { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X, Globe, Moon, Shuffle, Sun } from "lucide-react";

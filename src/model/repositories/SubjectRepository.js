@@ -1,4 +1,4 @@
-//src/model/repositories/SubjectRepository.js
+// src/model/repositories/SubjectRepository.js
 export default class SubjectRepository {
     constructor(subjectDataSource, examRepository) {
         this.subjectDataSource = subjectDataSource;

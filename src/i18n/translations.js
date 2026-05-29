@@ -1,4 +1,4 @@
-//src/i18n/translations.js
+// src/i18n/translations.js
 export const LANGUAGES = {
     NO: "no",
     EN: "en"

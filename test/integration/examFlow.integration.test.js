@@ -1,4 +1,4 @@
-//test/integration/examFlow.integration.test.js
+// test/integration/examFlow.integration.test.js
 import { describe, expect, test } from "@jest/globals";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamQuestionsUseCase, getSubjectByIdUseCase, gradeAnswerUseCase } from "../../src/di/dependencies.js";
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";

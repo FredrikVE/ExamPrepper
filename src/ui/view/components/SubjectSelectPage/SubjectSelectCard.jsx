@@ -1,4 +1,4 @@
-//src/ui/view/components/SubjectSelectPage/SubjectSelectCard.jsx
+// src/ui/view/components/SubjectSelectPage/SubjectSelectCard.jsx
 import { ChevronRight, FileText } from "lucide-react";
 import SubjectIcon from "../SubjectIcon.jsx";
 

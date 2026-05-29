@@ -1,4 +1,4 @@
-/* src/ui/style/ResultBadge/states.css */
+/* src/ui/style/ExamPage/ResultBadge/states.css */
 .result-badge-correct {
     border: 1px solid var(--success-border);
     background: var(--success-soft);

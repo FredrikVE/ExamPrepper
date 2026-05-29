@@ -1,4 +1,4 @@
-//src/ui/view/pages/SubjectSelectPage.jsx
+// src/ui/view/pages/SubjectSelectPage.jsx
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectControls from "../components/SubjectSelectPage/SubjectSelectControls.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";

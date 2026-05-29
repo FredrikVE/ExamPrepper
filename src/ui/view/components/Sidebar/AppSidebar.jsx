@@ -1,4 +1,4 @@
-//src/ui/view/components/Sidebar/AppSidebar.jsx
+// src/ui/view/components/Sidebar/AppSidebar.jsx
 import SidebarBrand from "./SidebarBrand.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";

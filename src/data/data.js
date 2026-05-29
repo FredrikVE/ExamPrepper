@@ -1,4 +1,4 @@
-//src/data/data.js
+// src/data/data.js
 import { mockExam1_no } from "./exams/mockExam1_no.js";
 import { mockExam1_en } from "./exams/mockExam1_en.js";
 import { mockExam2_no } from "./exams/mockExam2_no.js";

@@ -27,3 +27,6 @@ dist-ssr
 *.patch
 *.diff
 *.rej
+
+# soul.md
+SOUL.md

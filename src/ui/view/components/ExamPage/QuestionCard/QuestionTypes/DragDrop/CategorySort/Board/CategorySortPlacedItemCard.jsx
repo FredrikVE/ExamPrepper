@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryBoard/CategorySortPlacedItemCard.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortPlacedItemCard.jsx
 import { GripVertical, X } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
 

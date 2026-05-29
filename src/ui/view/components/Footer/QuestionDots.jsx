@@ -1,4 +1,4 @@
-//src/ui/view/components/Footer/QuestionDots.jsx
+// src/ui/view/components/Footer/QuestionDots.jsx
 import QuestionDot from "./QuestionDot.jsx";
 
 export default function QuestionDots({ viewModel, t }) {

@@ -1,4 +1,4 @@
-//src/ui/view/components/Footer/FooterActionButton.jsx
+// src/ui/view/components/Footer/FooterActionButton.jsx
 import { ChevronRight, Send } from "lucide-react";
 import FooterNavigationButton from "./FooterNavigationButton.jsx";
 

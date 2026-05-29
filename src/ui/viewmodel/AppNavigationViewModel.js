@@ -1,4 +1,4 @@
-//src/ui/viewmodel/AppNavigationViewModel.js
+// src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";

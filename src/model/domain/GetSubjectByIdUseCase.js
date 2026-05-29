@@ -1,4 +1,4 @@
-//src/model/domain/GetSubjectByIdUseCase.js
+// src/model/domain/GetSubjectByIdUseCase.js
 export default class GetSubjectByIdUseCase {
     constructor(subjectRepository) {
         this.subjectRepository = subjectRepository;

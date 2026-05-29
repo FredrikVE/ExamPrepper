@@ -1,4 +1,4 @@
-//test/model/domain/GetExamQuestionsUseCase.test.js
+// test/model/domain/GetExamQuestionsUseCase.test.js
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import GetExamQuestionsUseCase from "../../../src/model/domain/GetExamQuestionsUseCase.js";
 

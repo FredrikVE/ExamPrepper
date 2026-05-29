@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/Shared/QuestionHeader/QuestionHeader.jsx
+// src/ui/view/components/ExamPage/QuestionCard/Shared/QuestionHeader/QuestionHeader.jsx
 import { QUESTION_TYPES } from "../../../../../../../constants/QuestionTypes.js";
 import ResultBadge from "../../../ResultBadge/ResultBadge.jsx";
 

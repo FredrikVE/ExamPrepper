@@ -1,4 +1,4 @@
-//src/ui/view/components/Sidebar/SidebarNavigation.jsx
+// src/ui/view/components/Sidebar/SidebarNavigation.jsx
 import { BookOpen, BarChart3, Home } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { SIDEBAR_NAV_ITEMS } from "../../../../navigation/navItems.js";

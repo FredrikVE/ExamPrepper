@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/TableMatchQuestion/TableMatchQuestion.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx
 import TableMatchAnswerTable from "../AnswerTable/TableMatchAnswerTable.jsx";
 import TableMatchCardBank from "../CardBank/TableMatchCardBank.jsx";
 import TableMatchScoreSummary from "../Feedback/TableMatchScoreSummary.jsx";

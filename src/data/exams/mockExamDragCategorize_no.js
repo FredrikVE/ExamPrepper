@@ -1,4 +1,4 @@
-//src/data/exams/mockExamDragCategorize_no.js
+// src/data/exams/mockExamDragCategorize_no.js
 export const mockExamDragCategorize_no = {
   id: "mock-exam-drag-categorize-no",
   subjectId: "in5431",

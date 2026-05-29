@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/AnswerTable/TableMatchAnswerRow.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/AnswerTable/TableMatchAnswerRow.jsx
 import TableMatchFeedbackCard from "../Feedback/TableMatchFeedbackCard.jsx";
 import { isTargetCorrect } from "../Utils/tableMatchAnswerLogic.js";
 import TableMatchAnswerSlot from "./TableMatchAnswerSlot.jsx";

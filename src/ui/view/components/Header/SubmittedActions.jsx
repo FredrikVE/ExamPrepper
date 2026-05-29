@@ -1,4 +1,4 @@
-//src/ui/view/components/Header/SubmittedActions.jsx
+// src/ui/view/components/Header/SubmittedActions.jsx
 import { RotateCcw } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 

@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionMarker.jsx
+// src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionMarker.jsx
 import { Check, CheckCircle2, X, XCircle } from "lucide-react";
 import { getAnswerMarkerClassName } from "./Utils/answerOptionCardView.js";
 

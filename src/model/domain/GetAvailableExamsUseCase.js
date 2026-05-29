@@ -1,4 +1,4 @@
-//src/model/domain/GetAvailableExamsUseCase.js
+// src/model/domain/GetAvailableExamsUseCase.js
 export default class GetAvailableExamsUseCase {
     constructor(examRepository) {
         this.examRepository = examRepository;

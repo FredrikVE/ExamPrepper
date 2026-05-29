@@ -1,4 +1,4 @@
-//src/ui/viewmodel/ExamPageViewModel.js
+// src/ui/viewmodel/ExamPageViewModel.js
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
@@ -10,16 +10,14 @@ import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId, language) {
-	// Settings
 	const { randomizeAnswerOptions } = useSettings();
 
-	//Statevariabler
 	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const [questionsLoading, setQuestionsLoading] = useState(true);
+	const [questionsLoadError, setQuestionsLoadError] = useState(null);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 	const [expandedAnswerOptionByQuestionId, setExpandedAnswerOptionByQuestionId] = useState({});
@@ -27,8 +25,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const examWorkspaceRef = useRef(null);
 
-	//UseMemo for data
-	const result = useMemo(() => {
+	const examScore = useMemo(() => {
 		return calculateExamScoreUseCase.execute(questions, answers);
 	}, [questions, answers, calculateExamScoreUseCase]);
 
@@ -43,6 +40,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const questionCount = questions.length;
 
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
+
+	const workspaceClassName = useMemo(() => {
+		return deriveWorkspaceClassName(currentQuestion, submitted);
+	}, [currentQuestion, submitted]);
 
 	const expandedAnswerOptionIndex = currentQuestion
 		? expandedAnswerOptionByQuestionId[currentQuestion.id] ?? null
@@ -65,8 +66,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const scoreLabel = getScoreLabel(
 		submitted,
-		result.score,
-		result.totalPoints
+		examScore.score,
+		examScore.totalPoints
 	);
 
 	const questionProgressLabel = getQuestionProgressLabel(
@@ -80,7 +81,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return formatElapsedTime(elapsedSeconds);
 	}, [elapsedSeconds]);
 
-	//Handlers og navigasjon
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
 			return Math.max(previousIndex - 1, 0);
@@ -110,8 +110,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		scrollExamWorkspaceToTop(examWorkspaceRef);
 	}, [visibleQuestionCount, examWorkspaceRef]);
 
-	//Handlefunksjoner for svar
-	const setSingleAnswer = useCallback((questionId, value) => {
+	const setSingleAnswer = useCallback((questionId, selectedValue) => {
 		if (submitted) {
 			return;
 		}
@@ -119,12 +118,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setAnswers((previousAnswers) => {
 			return {
 				...previousAnswers,
-				[questionId]: value
+				[questionId]: selectedValue
 			};
 		});
 	}, [submitted]);
 
-	const toggleMultiAnswer = useCallback((questionId, value) => {
+	const toggleMultiAnswer = useCallback((questionId, selectedValue) => {
 		if (submitted) {
 			return;
 		}
@@ -134,9 +133,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 				? previousAnswers[questionId]
 				: [];
 
-			const nextAnswer = currentAnswer.includes(value)
-				? currentAnswer.filter((item) => item !== value)
-				: [...currentAnswer, value];
+			const nextAnswer = currentAnswer.includes(selectedValue)
+				? currentAnswer.filter((answerValue) => answerValue !== selectedValue)
+				: [...currentAnswer, selectedValue];
 
 			return {
 				...previousAnswers,
@@ -145,25 +144,23 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		});
 	}, [submitted]);
 
-	//Handlefunksjon for åpne/lukke svarkort
 	const toggleAnswerOptionExpanded = useCallback((questionId, optionIndex) => {
-		setExpandedAnswerOptionByQuestionId((previous) => {
-			const currentExpandedIndex = previous[questionId];
+		setExpandedAnswerOptionByQuestionId((previousExpandedByQuestionId) => {
+			const currentExpandedIndex = previousExpandedByQuestionId[questionId];
 
 			if (currentExpandedIndex === optionIndex) {
-				const next = { ...previous };
-				delete next[questionId];
-				return next;
+				const nextExpandedByQuestionId = { ...previousExpandedByQuestionId };
+				delete nextExpandedByQuestionId[questionId];
+				return nextExpandedByQuestionId;
 			}
 
 			return {
-				...previous,
+				...previousExpandedByQuestionId,
 				[questionId]: optionIndex
 			};
 		});
 	}, []);
 
-	//Handler for eksamen
 	const submitExam = useCallback(() => {
 		setSubmitted(true);
 		scrollExamWorkspaceToTop(examWorkspaceRef);
@@ -182,48 +179,47 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	}, [examWorkspaceRef, questions]);
 
 	const toggleShowAllFeedback = useCallback(() => {
-		setShowAllFeedback((value) => !value);
+		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
 	}, []);
 
 	const isAnswerCorrect = useCallback((question) => {
 		return gradeAnswerUseCase.execute(question, answers[question.id]);
 	}, [gradeAnswerUseCase, answers]);
 
-	//Effekter for datahåndtering
 	const loadQuestions = useCallback(() => {
 		let cancelled = false;
 
 		const run = async () => {
 			try {
-				setLoading(true);
-				setError(null);
+				setQuestionsLoading(true);
+				setQuestionsLoadError(null);
 
-				const result = await getExamQuestionsUseCase.execute({
+				const loadedQuestions = await getExamQuestionsUseCase.execute({
 					examId,
 					language
 				});
 
 				if (!cancelled) {
-					setQuestions(result);
+					setQuestions(loadedQuestions);
 					setAnswers({});
 					setSubmitted(false);
 					setShowAllFeedback(true);
 					setCurrentQuestionIndex(0);
 					setElapsedSeconds(0);
 					setExpandedAnswerOptionByQuestionId({});
-					setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(result));
+					setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
 				}
 			}
 
-			catch (error) {
+			catch (questionsError) {
 				if (!cancelled) {
-					setError(error?.message ?? LOAD_ERROR_MESSAGE);
+					setQuestionsLoadError(questionsError?.message ?? LOAD_ERROR_MESSAGE);
 				}
 			}
 
 			finally {
 				if (!cancelled) {
-					setLoading(false);
+					setQuestionsLoading(false);
 				}
 			}
 		};
@@ -235,8 +231,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		};
 	}, [getExamQuestionsUseCase, examId, language]);
 
-	//Effekter for navigasjon mellom sidene
-	const onVisibleQuestionsChangedClampCurrentIndex = useCallback(() => {
+	const clampCurrentQuestionIndex = useCallback(() => {
 		if (visibleQuestionCount === 0) {
 			setCurrentQuestionIndex(0);
 			return;
@@ -248,7 +243,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	}, [visibleQuestionCount, currentQuestionIndex]);
 
 	useEffect(loadQuestions, [loadQuestions]);
-	useEffect(onVisibleQuestionsChangedClampCurrentIndex, [onVisibleQuestionsChangedClampCurrentIndex]);
+	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
 
 	useEffect(() => {
 		if (submitted) {
@@ -256,7 +251,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		const intervalId = window.setInterval(() => {
-			setElapsedSeconds((value) => value + 1);
+			setElapsedSeconds((elapsedSecondCount) => elapsedSecondCount + 1);
 		}, 1000);
 
 		return () => window.clearInterval(intervalId);
@@ -270,16 +265,17 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		currentQuestionIsCorrect,
 		answers,
 
-		loading,
-		error,
+		questionsLoading,
+		questionsLoadError,
 		submitted,
 		showAllFeedback,
 		randomizeAnswerOptions,
 		answerOptionOrderByQuestionId,
+		workspaceClassName,
 
-		score: result.score,
-		totalPoints: result.totalPoints,
-		percentage: result.percentage,
+		score: examScore.score,
+		totalPoints: examScore.totalPoints,
+		percentage: examScore.percentage,
 		answeredCount,
 		answeredCountLabel,
 		scoreLabel,
@@ -365,15 +361,124 @@ const getCurrentQuestionIsCorrect = (submitted, currentQuestion, answers, gradeA
 	);
 };
 
+const deriveWorkspaceClassName = (question, submitted) => {
+	const shouldUseScrollFooter = shouldQuestionUseScrollFooter(question, submitted);
+	const shouldUseWideQuestionLayout = shouldQuestionUseWideLayout(question);
+	const shouldUseExtraWideQuestionLayout = shouldQuestionUseExtraWideLayout(question);
+	const shouldUseDenseDragCategorizeLayout = shouldQuestionUseDenseDragCategorizeLayout(question);
+	const isMatrixPlacementQuestion = question?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
+
+	return [
+		"exam-workspace",
+		submitted ? "exam-workspace-feedback-mode" : "",
+		shouldUseScrollFooter ? "exam-workspace-scroll-footer-mode" : "",
+		shouldUseWideQuestionLayout ? "exam-workspace-wide-question-mode" : "",
+		shouldUseExtraWideQuestionLayout ? "exam-workspace-extra-wide-question-mode" : "",
+		shouldUseDenseDragCategorizeLayout ? "exam-workspace-dense-drag-categorize-mode" : "",
+		isMatrixPlacementQuestion ? "exam-workspace-matrix-placement-mode" : ""
+	].filter(Boolean).join(" ");
+};
+
+const shouldQuestionUseScrollFooter = (question, submitted) => {
+	if (submitted) {
+		return false;
+	}
+
+	const optionCount = question?.options?.length ?? 0;
+	const dragDropTargetCount = question?.targets?.length ?? 0;
+	const dragCategorizeCategoryCount = question?.categories?.length ?? 0;
+	const matrixQuadrantCount = getMatrixPlacementQuadrantCount(question);
+	const isDragDropQuestion = question?.type === QUESTION_TYPES.DRAG_DROP;
+	const isDragCategorizeQuestion = question?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
+	const isMatrixPlacementQuestion = question?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
+
+	return optionCount >= 6 ||
+		isDragDropQuestion ||
+		isDragCategorizeQuestion ||
+		isMatrixPlacementQuestion ||
+		dragDropTargetCount >= 5 ||
+		dragCategorizeCategoryCount >= 4 ||
+		matrixQuadrantCount >= 4;
+};
+
+const shouldQuestionUseWideLayout = (question) => {
+	if (question?.type === QUESTION_TYPES.DRAG_CATEGORIZE) {
+		return question.categories?.length >= 5 || getLongestDragCategorizeTextLength(question) >= 34;
+	}
+
+	if (question?.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
+		return getMatrixPlacementQuadrantCount(question) >= 4 || getLongestMatrixPlacementTextLength(question) >= 34;
+	}
+
+	return false;
+};
+
+const shouldQuestionUseExtraWideLayout = (question) => {
+	if (question?.type === QUESTION_TYPES.DRAG_CATEGORIZE) {
+		const categoryCount = question.categories?.length ?? 0;
+		const longestTextLength = getLongestDragCategorizeTextLength(question);
+
+		return (categoryCount >= 5 && longestTextLength >= 44) || longestTextLength >= 62;
+	}
+
+	if (question?.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
+		return getLongestMatrixPlacementTextLength(question) >= 70;
+	}
+
+	return false;
+};
+
+const shouldQuestionUseDenseDragCategorizeLayout = (question) => {
+	if (question?.type !== QUESTION_TYPES.DRAG_CATEGORIZE) {
+		return false;
+	}
+
+	return question.categories?.length >= 5 || getLongestDragCategorizeTextLength(question) >= 44;
+};
+
+const getMatrixPlacementQuadrantCount = (question) => {
+	return question?.matrix?.quadrants?.length ?? question?.quadrants?.length ?? 0;
+};
+
+const getLongestDragCategorizeTextLength = (question) => {
+	if (question?.type !== QUESTION_TYPES.DRAG_CATEGORIZE) {
+		return 0;
+	}
+
+	const itemLengths = (question.items ?? []).map((questionItem) => String(questionItem?.label ?? "").length);
+	const categoryLengths = (question.categories ?? []).map((category) => String(category?.label ?? "").length);
+
+	return Math.max(0, ...itemLengths, ...categoryLengths);
+};
+
+const getLongestMatrixPlacementTextLength = (question) => {
+	if (question?.type !== QUESTION_TYPES.MATRIX_PLACEMENT) {
+		return 0;
+	}
+
+	const quadrants = question.matrix?.quadrants ?? question.quadrants ?? [];
+	const itemLengths = (question.items ?? []).map((questionItem) => String(questionItem?.label ?? questionItem?.text ?? questionItem?.title ?? "").length);
+	const quadrantLengths = quadrants.flatMap((quadrant) => [
+		String(quadrant?.title ?? quadrant?.label ?? "").length,
+		String(quadrant?.description ?? quadrant?.text ?? "").length
+	]);
+	const axisLengths = [
+		String(question.matrix?.xAxis?.label ?? "").length,
+		String(question.matrix?.yAxis?.label ?? "").length
+	];
+
+	return Math.max(0, ...itemLengths, ...quadrantLengths, ...axisLengths);
+};
+
 const createAnswerOptionOrderByQuestionId = (questions) => {
-	return questions.reduce((orders, question) => {
+	return questions.reduce((answerOptionOrderByQuestionId, question) => {
 		if (!Array.isArray(question.options) || question.options.length === 0) {
-			return orders;
+			return answerOptionOrderByQuestionId;
 		}
 
-		orders[question.id] = shuffleIndexes(question.options.length);
+		answerOptionOrderByQuestionId[question.id] = shuffleIndexes(question.options.length);
 
-		return orders;
+		return answerOptionOrderByQuestionId;
 	}, {});
 };
 

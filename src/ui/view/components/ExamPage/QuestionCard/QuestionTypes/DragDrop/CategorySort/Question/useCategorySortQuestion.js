@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategorySortQuestion/useCategorySortQuestion.js
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Question/useCategorySortQuestion.js
 import { useState } from "react";
 import { clearItemFromAllCategories, createItemsById, getSafeArray, getUnplacedItems, normalizeCategoryAnswer } from "../Utils/categorySortAnswerLogic.js";
 import { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";

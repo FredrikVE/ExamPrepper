@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/ExamPageContent.jsx
+// src/ui/view/components/ExamPage/ExamPageContent.jsx
 import QuestionCard from "./QuestionCard/QuestionCard.jsx";
 
 export default function ExamPageContent({ viewModel, t }) {

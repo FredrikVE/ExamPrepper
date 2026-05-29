@@ -1,4 +1,4 @@
-//test/model/domain/GetAvailableSubjectsUseCase.test.js
+// test/model/domain/GetAvailableSubjectsUseCase.test.js
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import GetAvailableSubjectsUseCase from "../../../src/model/domain/GetAvailableSubjectsUseCase.js";
 

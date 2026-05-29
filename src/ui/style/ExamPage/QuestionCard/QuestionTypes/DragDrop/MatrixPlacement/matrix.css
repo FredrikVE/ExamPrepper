@@ -1,4 +1,4 @@
-/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/matrix.css */
+/* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/matrix.css */
 .matrix-placement-board {
     --matrix-placement-axis-color: color-mix(in srgb, var(--text-muted) 58%, var(--panel-strong));
 

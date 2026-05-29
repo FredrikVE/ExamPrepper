@@ -1,4 +1,4 @@
-//src/navigation/navItems.js
+// src/navigation/navItems.js
 import { NAV_SCREENS } from "./navGraph.js";
 
 export const SIDEBAR_NAV_ITEMS = [

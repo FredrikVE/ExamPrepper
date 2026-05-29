@@ -1,4 +1,4 @@
-//src/ui/view/pages/ExamSelectPage.jsx
+// src/ui/view/pages/ExamSelectPage.jsx
 import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx";
 import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";

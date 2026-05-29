@@ -1,4 +1,4 @@
-//src/ui/view/components/SubjectSelectPage/SubjectSelectTopbar.jsx
+// src/ui/view/components/SubjectSelectPage/SubjectSelectTopbar.jsx
 import { ChevronRight, Trophy } from "lucide-react";
 
 export default function SubjectSelectTopbar({ t }) {

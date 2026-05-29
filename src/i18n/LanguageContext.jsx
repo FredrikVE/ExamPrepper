@@ -1,4 +1,4 @@
-//src/i18n/LanguageContext.jsx
+// src/i18n/LanguageContext.jsx
 import { createContext, useCallback, useContext, useState } from "react";
 import { LANGUAGES, translations } from "./translations.js";
 

@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategoryBoard/CategorySortDropZone.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortDropZone.jsx
 import CategorySortFeedbackCard from "../Feedback/CategorySortFeedbackCard.jsx";
 import CategorySortPlacedItemCard from "./CategorySortPlacedItemCard.jsx";
 

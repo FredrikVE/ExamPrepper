@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/QuestionCard/DragDrop/CategorySortQuestion/CategorySortQuestion.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx
 import CategorySortCategoryGrid from "../Board/CategorySortCategoryGrid.jsx";
 import CategorySortItemBank from "../ItemBank/CategorySortItemBank.jsx";
 import { useCategorySortQuestion } from "./useCategorySortQuestion.js";

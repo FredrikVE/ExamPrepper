@@ -1,4 +1,4 @@
-//test/model/domain/GradeAnswerUseCase.test.js
+// test/model/domain/GradeAnswerUseCase.test.js
 import { describe, expect, test, beforeEach } from "@jest/globals";
 import GradeAnswerUseCase from "../../../src/model/domain/GradeAnswerUseCase.js";
 import { QUESTION_TYPES } from "../../../src/constants/QuestionTypes.js";

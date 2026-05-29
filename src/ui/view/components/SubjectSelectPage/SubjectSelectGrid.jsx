@@ -1,4 +1,4 @@
-//src/ui/view/components/SubjectSelectPage/SubjectSelectGrid.jsx
+// src/ui/view/components/SubjectSelectPage/SubjectSelectGrid.jsx
 import SubjectSelectCard from "./SubjectSelectCard.jsx";
 
 export default function SubjectSelectGrid({ t, subjects, selectedSubject, onSelectSubject }) {

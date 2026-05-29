@@ -1,4 +1,4 @@
-//src/ui/view/components/ExamPage/ResultBadge/ResultBadge.jsx
+// src/ui/view/components/ExamPage/ResultBadge/ResultBadge.jsx
 import { CheckCircle2, XCircle } from "lucide-react";
 import { useLanguage } from "../../../../../i18n/LanguageContext.jsx";
 

@@ -1,4 +1,4 @@
-//src/model/repositories/ExamRepository.js
+// src/model/repositories/ExamRepository.js
 import { getIn5431DefaultQuestionImageRefs } from "../../data/subjects/in5431/defaultQuestionImageRefs.js";
 
 export default class ExamRepository {

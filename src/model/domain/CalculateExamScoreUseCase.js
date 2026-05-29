@@ -1,4 +1,4 @@
-//src/model/domain/CalculateExamScoreUseCase.js
+// src/model/domain/CalculateExamScoreUseCase.js
 export default class CalculateExamScoreUseCase {
     constructor(gradeAnswerUseCase) {
         this.gradeAnswerUseCase = gradeAnswerUseCase;

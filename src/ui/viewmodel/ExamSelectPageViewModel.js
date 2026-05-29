@@ -1,4 +1,4 @@
-//src/ui/viewmodel/ExamSelectPageViewModel.js
+// src/ui/viewmodel/ExamSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 function normalizeExamResult(result) {
