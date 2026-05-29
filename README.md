@@ -6,11 +6,13 @@
 
 # ExamPrepper
 
-ExamPrepper er et **JavaScript, CSS, React og Vite**-prosjekt laget for å øve til skoleeksamen i **IN5431 – IT and Management**.
+ExamPrepper er en interaktiv eksamenssimulator bygget med **JavaScript**, **React**, **Vite** og **CSS**. Prosjektet er laget for å øve til skoleeksamen i **IN5431 – IT and Management**, samtidig som det demonstrerer modularisering av en React-applikasjon med tydelig lagdeling.
 
-Prosjektet er en interaktiv eksamenssimulator der brukeren kan velge mellom flere øveeksamener, svare på spørsmål og få fasit med forklaring etter levering.
+Appen lar brukeren velge fag, velge øveeksamen, svare på spørsmål og få fasit med forklaring etter levering. Den støtter `multiple choice`, `fill-in-svar`, `category sort`, `table match` og `matrix placement`. Etter levering får brukeren `automatisk retting`, `poengscore`, `fasit` og `forklaringer`. Appen har også `norsk/engelsk språkvalg`, `light/dark mode` og `responsivt grensesnitt`.
 
-Prosjektet er strukturert etter et MVVM-inspirert arkitekturmønster med tydelig lagdeling mellom data, datasource, repository, use cases, viewmodel, page og komponenter.
+Prosjektet følger et MVVM-inspirert arkitekturmønster med skille mellom `data`, `datasource`, `repository`, `use cases`, `viewmodel`, `pages` og `komponenter`.
+
+Se full oversikt i [FEATURES.md](./docs/documentation/FEATURES.md).
 
 ---
 
@@ -65,58 +67,6 @@ Prosjektet er strukturert etter et MVVM-inspirert arkitekturmønster med tydelig
 
 ---
 
-## Kort om prosjektet
-
-Appen lar brukeren velge fag, velge øveeksamen, svare på ulike spørsmålstyper og få fasit med forklaring etter levering.
-
-Den støtter blant annet:
-
-- multiple choice med ett riktig svar
-- multiple choice med flere riktige svar
-- fill-in-svar
-- category sort
-- table match
-- matrix placement
-- automatisk retting
-- poengscore
-- norsk og engelsk språkvalg
-- light mode og dark mode
-- responsivt grensesnitt
-
-Se full oversikt i [FEATURES.md](./docs/documentation/FEATURES.md).
-
----
-
-## Hurtigstart
-
-Installer avhengigheter:
-
-```bash
-npm install
-```
-
-Start utviklingsserver:
-
-```bash
-npm run dev
-```
-
-Kjør tester:
-
-```bash
-npm test
-```
-
-Bygg produksjonsversjon:
-
-```bash
-npm run build
-```
-
-Se full oppsettsguide i [SETUP.md](./docs/documentation/SETUP.md).
-
----
-
 ## Prosjektstruktur
 
 Prosjektet er organisert med tydelig skille mellom data, domenelogikk, viewmodels, sider, komponenter og styling.
@@ -159,6 +109,7 @@ Den mest detaljerte UI-strukturen finnes rundt `ExamPage/QuestionCard`, der hver
 
 Se full struktur i [PROJECT_STRUCTURE.md](./docs/documentation/PROJECT_STRUCTURE.md).
 
+---
 
 ## Arkitektur
 
@@ -188,8 +139,6 @@ Skisse som viser appen oppbygging visuelt
 Les mer i [ARCHITECTURE.md](./docs/architecture/ARCHITECTURE.md).
 
 ---
-
-
 
 ## Teknologier
 
