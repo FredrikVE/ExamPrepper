@@ -1,22 +1,36 @@
 // src/ui/view/components/Footer/Utils/footerClassNames.js
-export function getFooterDotClassName(isActive, submitted, isCorrect, variant = "normal") {
-    const classes = ["exam-footer-dot"];
+export function getFooterDotClassName(isActive, submitted, isCorrect, dotDisplayMode = "normal") {
+    const footerDotClassNames = ["exam-footer-dot"];
 
-    if (variant === "filled-compact") {
-        classes.push("exam-footer-dot-filled-compact");
+    if (dotDisplayMode === "filled-compact") {
+        footerDotClassNames.push("exam-footer-dot-filled-compact");
     }
 
-    if (variant === "compact") {
-        classes.push("exam-footer-dot-compact");
+    if (dotDisplayMode === "compact") {
+        footerDotClassNames.push("exam-footer-dot-compact");
     }
 
     if (isActive) {
-        classes.push("exam-footer-dot-active");
+        footerDotClassNames.push("exam-footer-dot-active");
     }
 
     if (submitted) {
-        classes.push(isCorrect ? "exam-footer-dot-correct" : "exam-footer-dot-wrong");
+        footerDotClassNames.push(isCorrect ? "exam-footer-dot-correct" : "exam-footer-dot-wrong");
     }
 
-    return classes.join(" ");
+    return footerDotClassNames.join(" ");
+}
+
+export function getQuestionDotsClassName(shouldUseCompactDots, shouldUseResponsiveCompactDots) {
+    const questionDotsClassNames = ["exam-footer-dots"];
+
+    if (shouldUseCompactDots) {
+        questionDotsClassNames.push("exam-footer-dots-compact-by-count");
+    }
+
+    if (shouldUseResponsiveCompactDots) {
+        questionDotsClassNames.push("exam-footer-dots-responsive-compact");
+    }
+
+    return questionDotsClassNames.join(" ");
 }
