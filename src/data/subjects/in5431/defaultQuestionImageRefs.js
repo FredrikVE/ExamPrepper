@@ -205,7 +205,11 @@ export const in5431DefaultQuestionImageRefsByExamKey = {
         1: [DECISION_PROCESS_NO],
         4: [DECISION_PROCESS_NO],
         5: [DECISION_PROCESS_NO, NPV],
-        8: [OPERATING_MODEL_NO]
+        8: [OPERATING_MODEL_NO],
+        26: [IT_GOVERNANCE_MATRIX],
+        33: [DECISION_PROCESS_NO, DOUBLE_DIAMOND, IT_GOVERNANCE_MATRIX],
+        41: [TOGAF_TAXONOMY, TOGAF_LEVELS, TOGAF_ADM_NO],
+        43: [TOGAF_TAXONOMY, TOGAF_ADM_NO]
     },
     "mock-exam-5:en": {
         1: [PRINCE2],
