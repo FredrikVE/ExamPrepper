@@ -4,6 +4,7 @@ import getAnsweredCountLabel from "../../src/ui/viewmodel/Utils/getAnsweredCount
 import getFeedbackToggleLabel from "../../src/ui/viewmodel/Utils/getFeedbackToggleLabel.js";
 import getQuestionProgressLabel from "../../src/ui/viewmodel/Utils/getQuestionProgressLabel.js";
 import getScoreLabel from "../../src/ui/viewmodel/Utils/getScoreLabel.js";
+import toggleExpandedAnswerOptionIndexes from "../../src/ui/viewmodel/Utils/toggleExpandedAnswerOptionIndexes.js";
 import { buildExamProgressPoints } from "../../src/ui/view/components/ExamPage/ExamProgress/Utils/buildExamProgressPoints.js";
 
 describe("view model utils", () => {
@@ -24,6 +25,12 @@ describe("view model utils", () => {
     test("formats score label", () => {
         expect(getScoreLabel(true, 7, 10)).toBe("7/10");
         expect(getScoreLabel(false, 7, 10)).toBe("—");
+    });
+
+    test("toggles multiple expanded answer option indexes", () => {
+        expect(toggleExpandedAnswerOptionIndexes(undefined, 1)).toEqual([1]);
+        expect(toggleExpandedAnswerOptionIndexes([1], 3)).toEqual([1, 3]);
+        expect(toggleExpandedAnswerOptionIndexes([1, 3], 1)).toEqual([3]);
     });
 
     test("builds progress points for multiple questions", () => {

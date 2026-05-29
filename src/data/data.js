@@ -13,6 +13,8 @@ import { mockExamDefinitions_no } from "./exams/mockExamDefinitions_no.js";
 import { mockExamDefinitions_en } from "./exams/mockExamDefinitions_en.js";
 import { mockExamDragCategorize_no } from "./exams/mockExamDragCategorize_no.js";
 import { mockExamDragCategorize_en } from "./exams/mockExamDragCategorize_en.js";
+import { mockExamSustainability_no } from "./exams/mockExamSustainability_no.js";
+import { mockExamDigitalStrategy_no } from "./exams/mockExamDigitalStrategy_no.js";
 
 import { DEFAULT_SUBJECT_ID, SUBJECTS } from "./subjects.js";
 
@@ -33,6 +35,8 @@ export const EXAMS = [
     mockExamDefinitions_en,
     mockExamDragCategorize_no,
     mockExamDragCategorize_en,
+    mockExamSustainability_no,
+    mockExamDigitalStrategy_no,
 ];
 
 export {

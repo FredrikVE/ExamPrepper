@@ -22,7 +22,7 @@ export default function ExamPageContent({ viewModel, t }) {
             submitted={viewModel.submitted}
             showAllFeedback={viewModel.showAllFeedback}
             correct={viewModel.currentQuestionIsCorrect}
-            expandedAnswerOptionIndex={viewModel.expandedAnswerOptionIndex}
+            expandedAnswerOptionIndexes={viewModel.expandedAnswerOptionIndexes}
             onToggleAnswerOptionExpanded={viewModel.toggleAnswerOptionExpanded}
             onSingleAnswer={viewModel.setSingleAnswer}
             onToggleMultiAnswer={viewModel.toggleMultiAnswer}
