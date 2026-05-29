@@ -1,6 +1,14 @@
 // src/ui/view/components/Footer/Utils/footerClassNames.js
-export function getFooterDotClassName(isActive, submitted, isCorrect) {
+export function getFooterDotClassName(isActive, submitted, isCorrect, variant = "normal") {
     const classes = ["exam-footer-dot"];
+
+    if (variant === "filled-compact") {
+        classes.push("exam-footer-dot-filled-compact");
+    }
+
+    if (variant === "compact") {
+        classes.push("exam-footer-dot-compact");
+    }
 
     if (isActive) {
         classes.push("exam-footer-dot-active");

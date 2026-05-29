@@ -9,22 +9,72 @@
     font-size: 0.82rem;
     font-weight: 700;
     overflow: hidden;
+    container-type: inline-size;
 }
 
 .exam-footer-dots {
-    display: grid;
     width: 100%;
     min-width: 0;
-    grid-template-columns: repeat(auto-fit, minmax(clamp(16px, 1.55vw, 22px), 1fr));
+    overflow: hidden;
+}
+
+.exam-footer-dot-list {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
     align-items: center;
-    justify-items: center;
+    justify-content: space-between;
     gap: clamp(2px, 0.35vw, 8px);
-    overflow: visible;
+    overflow: hidden;
+}
+
+.exam-footer-dot-list-filled-compact,
+.exam-footer-dot-list-compact {
+    display: none;
+}
+
+.exam-footer-dot-list-filled-compact {
+    gap: clamp(4px, 0.65vw, 12px);
+}
+
+.exam-footer-dot-list-compact {
+    justify-content: center;
+    gap: clamp(12px, 2.2vw, 28px);
+}
+
+.exam-footer-dots-compact-by-count .exam-footer-dot-list-normal {
+    display: none;
+}
+
+.exam-footer-dots-compact-by-count .exam-footer-dot-list-filled-compact {
+    display: flex;
+}
+
+@container (max-width: 520px) {
+    .exam-footer-dots-responsive-compact .exam-footer-dot-list-normal {
+        display: none;
+    }
+
+    .exam-footer-dots-responsive-compact .exam-footer-dot-list-filled-compact {
+        display: flex;
+    }
+}
+
+@container (max-width: 280px) {
+    .exam-footer-dots-responsive-compact .exam-footer-dot-list-filled-compact {
+        display: none;
+    }
+
+    .exam-footer-dots-responsive-compact .exam-footer-dot-list-compact {
+        display: flex;
+    }
 }
 
 .exam-footer-dot {
     position: relative;
     display: inline-grid;
+    flex: 0 0 clamp(16px, 1.55vw, 22px);
     width: clamp(16px, 1.55vw, 22px);
     height: clamp(16px, 1.55vw, 22px);
     place-items: center;
@@ -65,6 +115,81 @@
 .exam-footer-dot-active::before {
     background: var(--accent);
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.exam-footer-dot-filled-compact {
+    flex-basis: clamp(16px, 1.35vw, 22px);
+    width: clamp(16px, 1.35vw, 22px);
+    height: clamp(16px, 1.35vw, 22px);
+}
+
+.exam-footer-dot-filled-compact::before {
+    width: clamp(8px, 0.8vw, 12px);
+    height: clamp(8px, 0.8vw, 12px);
+    border: 1.5px solid color-mix(in srgb, var(--text-soft) 52%, transparent);
+    background: transparent;
+}
+
+.exam-footer-dot-filled-compact:hover::before,
+.exam-footer-dot-filled-compact:focus-visible::before {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--accent) 54%, var(--text-soft));
+}
+
+.exam-footer-dot-filled-compact.exam-footer-dot-active::before,
+.exam-footer-dot-filled-compact.exam-footer-dot-active:hover::before,
+.exam-footer-dot-filled-compact.exam-footer-dot-active:focus-visible::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.exam-footer-dot-compact {
+    flex-basis: clamp(22px, 2vw, 28px);
+    width: clamp(22px, 2vw, 28px);
+    height: clamp(22px, 2vw, 28px);
+}
+
+.exam-footer-dot-compact::before {
+    width: clamp(13px, 1.25vw, 18px);
+    height: clamp(13px, 1.25vw, 18px);
+    border: 2px solid color-mix(in srgb, var(--text-soft) 56%, transparent);
+    background: transparent;
+}
+
+.exam-footer-dot-compact:hover::before,
+.exam-footer-dot-compact:focus-visible::before {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--accent) 54%, var(--text-soft));
+}
+
+.exam-footer-dot-compact.exam-footer-dot-active::before,
+.exam-footer-dot-compact.exam-footer-dot-active:hover::before,
+.exam-footer-dot-compact.exam-footer-dot-active:focus-visible::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.exam-footer-dot-ellipsis {
+    display: inline-grid;
+    place-items: center;
+    color: color-mix(in srgb, var(--text-soft) 68%, transparent);
+    font-weight: 800;
+    line-height: 1;
+    user-select: none;
+}
+
+.exam-footer-dot-ellipsis-filled-compact {
+    min-width: clamp(14px, 1.25vw, 20px);
+    min-height: clamp(16px, 1.35vw, 22px);
+    font-size: clamp(0.82rem, 1vw, 1.08rem);
+}
+
+.exam-footer-dot-ellipsis-compact {
+    min-width: clamp(18px, 1.7vw, 26px);
+    min-height: clamp(22px, 2vw, 28px);
+    font-size: clamp(1rem, 1.35vw, 1.35rem);
 }
 
 .exam-footer-counter-label {

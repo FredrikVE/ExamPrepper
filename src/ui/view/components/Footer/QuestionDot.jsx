@@ -1,12 +1,20 @@
 // src/ui/view/components/Footer/QuestionDot.jsx
 import { getFooterDotClassName } from "./Utils/footerClassNames.js";
 
-export default function QuestionDot({ questionNumber, isActive, submitted, isCorrect, onClick, t }) {
+export default function QuestionDot({
+    questionNumber,
+    isActive,
+    submitted,
+    isCorrect,
+    onClick,
+    t,
+    variant = "normal"
+}) {
     return (
         <button
             type="button"
             onClick={onClick}
-            className={getFooterDotClassName(isActive, submitted, isCorrect)}
+            className={getFooterDotClassName(isActive, submitted, isCorrect, variant)}
             aria-current={isActive ? "step" : undefined}
             aria-label={t.footerGoToQuestion(questionNumber)}
             title={t.footerGoToQuestion(questionNumber)}
