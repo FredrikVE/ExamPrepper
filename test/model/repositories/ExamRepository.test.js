@@ -14,8 +14,11 @@ describe("ExamRepository", () => {
             lang: "no",
             title: "Norsk eksamen",
             description: "Beskrivelse",
+            modeLabel: "FULL ØVEKSAMEN",
+            estimatedMinutes: "45–60",
             duration: "2 timer",
             durationMinutes: 120,
+            sortOrder: 20,
             questions: [{ id: 1 }, { id: 2 }]
         },
         {
@@ -24,6 +27,7 @@ describe("ExamRepository", () => {
             subjectId: "in5431",
             lang: "en",
             title: "English exam",
+            sortOrder: 10,
             questions: [{ id: 3 }]
         },
         {
@@ -32,6 +36,7 @@ describe("ExamRepository", () => {
             subjectId: "in2000",
             lang: "no",
             title: "Other exam",
+            sortOrder: 30,
             questionCount: 7,
             questions: []
         }
@@ -62,6 +67,9 @@ describe("ExamRepository", () => {
             id: "exam-no",
             subjectId: "in5431",
             lang: "no",
+            modeLabel: "FULL ØVEKSAMEN",
+            estimatedMinutes: "45–60",
+            sortOrder: 20,
             questionCount: 2
         });
     });
@@ -79,6 +87,16 @@ describe("ExamRepository", () => {
         const result = await repository.getAvailableExams();
 
         expect(result).toHaveLength(3);
+    });
+
+    test("sorts available exams by explicit sortOrder", async () => {
+        const result = await repository.getAvailableExams();
+
+        expect(result.map((exam) => exam.id)).toEqual([
+            "exam-en",
+            "exam-no",
+            "other-subject"
+        ]);
     });
 
     test("returns questions for exam", async () => {

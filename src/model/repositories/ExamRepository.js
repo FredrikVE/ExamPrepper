@@ -17,6 +17,7 @@ export default class ExamRepository {
         return exams
             .filter((exam) => this.matchesSubject(exam, subjectId))
             .filter((exam) => this.matchesLanguage(exam, language))
+            .sort((a, b) => this.compareExamListOrder(a, b))
             .map((exam) => this.toExamListItem(exam));
     }
 
@@ -179,6 +180,17 @@ export default class ExamRepository {
         return exam.lang === language;
     }
 
+    compareExamListOrder(a, b) {
+        const sortOrderA = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
+        const sortOrderB = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
+
+        if (sortOrderA !== sortOrderB) {
+            return sortOrderA - sortOrderB;
+        }
+
+        return String(a.title ?? "").localeCompare(String(b.title ?? ""));
+    }
+
     toExamListItem(exam) {
         return {
             id: exam.id,
@@ -187,8 +199,11 @@ export default class ExamRepository {
             lang: exam.lang,
             title: exam.title,
             description: exam.description,
+            modeLabel: exam.modeLabel,
+            estimatedMinutes: exam.estimatedMinutes,
             duration: exam.duration,
             durationMinutes: exam.durationMinutes,
+            sortOrder: exam.sortOrder,
             questionCount: exam.questionCount ?? exam.questions?.length ?? 0
         };
     }

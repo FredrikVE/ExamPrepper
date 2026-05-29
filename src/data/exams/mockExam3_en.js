@@ -4,8 +4,11 @@ export const mockExam3_en = {
   subjectId: "in5431",
   baseId: "mock-exam-3",
   lang: "en",
-  title: "Practice Exam 3: Uncovered Curriculum",
-  description: "Supplementary exam set covering topics that are only lightly covered in Practice Exams 1 and 2: PRINCE2, alternative evaluation techniques, architecture perspectives, strategic context, digitalization culture, D4D details and sustainability frameworks.",
+  title: "Practice Exam 3: Cases and Hard Distinctions",
+  description: "Questions that train conceptual distinctions and application: PRINCE2, alternative evaluation techniques, architecture perspectives, strategic context, digitalization culture, D4D details and sustainability frameworks.",
+  modeLabel: "CASE AND CONTRASTS",
+  estimatedMinutes: "45–60",
+  sortOrder: 30,
   questions: [
     {
       id: 201,

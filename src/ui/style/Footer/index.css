@@ -2,4 +2,6 @@
 @import "./layout.css";
 @import "./buttons.css";
 @import "./progress.css";
+@import "./question-dots.css";
+@import "./question-dot-variants.css";
 @import "./responsive.css";

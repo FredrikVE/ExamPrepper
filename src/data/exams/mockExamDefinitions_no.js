@@ -4,8 +4,11 @@ export const mockExamDefinitions_no = {
   subjectId: "in5431",
   baseId: "mock-exam-definitions",
   lang: "no",
-  title: "Øveeksamen: Viktige definisjoner",
-  description: "Begrepsøving for IN5431: digitalisering, arkitektur, governance, prosess, business case, prosjekter, rammeverk og Designed for Digital.",
+  title: "Begrepsdrill: definisjoner og nøkkelbegreper",
+  description: "Presis begrepsøving for IN5431: digitalisering, arkitektur, governance, prosess, business case, prosjekter, rammeverk og Designed for Digital.",
+  modeLabel: "BEGREPSDRILL",
+  estimatedMinutes: "30–45",
+  sortOrder: 80,
   questions: [
     {
       id: 1,

@@ -36,6 +36,9 @@
 
     .exam-footer-dots {
         width: 100%;
+    }
+
+    .exam-footer-dot-list {
         gap: 5px;
     }
 
@@ -78,7 +81,7 @@
         font-size: 0.78rem;
     }
 
-    .exam-footer-dots {
+    .exam-footer-dot-list {
         gap: clamp(1px, 0.25vw, 5px);
     }
 
@@ -91,6 +94,36 @@
     .exam-footer-dot::before {
         width: clamp(5px, 0.4vw, 7px);
         height: clamp(5px, 0.4vw, 7px);
+    }
+
+    .exam-footer-dot-list-filled-compact {
+        gap: clamp(3px, 0.45vw, 8px);
+    }
+
+    .exam-footer-dot-filled-compact {
+        flex-basis: clamp(14px, 1vw, 18px);
+        width: clamp(14px, 1vw, 18px);
+        height: clamp(14px, 1vw, 18px);
+    }
+
+    .exam-footer-dot-filled-compact::before {
+        width: clamp(7px, 0.62vw, 10px);
+        height: clamp(7px, 0.62vw, 10px);
+    }
+
+    .exam-footer-dot-list-compact {
+        gap: clamp(10px, 1.8vw, 22px);
+    }
+
+    .exam-footer-dot-compact {
+        flex-basis: clamp(20px, 1.6vw, 24px);
+        width: clamp(20px, 1.6vw, 24px);
+        height: clamp(20px, 1.6vw, 24px);
+    }
+
+    .exam-footer-dot-compact::before {
+        width: clamp(12px, 1vw, 16px);
+        height: clamp(12px, 1vw, 16px);
     }
 }
 

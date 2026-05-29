@@ -9,85 +9,10 @@
     font-size: 0.82rem;
     font-weight: 700;
     overflow: hidden;
-}
-
-.exam-footer-dots {
-    display: flex;
-    width: 100%;
-    min-width: 0;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: clamp(2px, 0.35vw, 8px);
-    overflow: hidden;
-}
-
-.exam-footer-dot {
-    position: relative;
-    display: inline-grid;
-    flex: 0 0 clamp(16px, 1.55vw, 22px);
-    width: clamp(16px, 1.55vw, 22px);
-    height: clamp(16px, 1.55vw, 22px);
-    place-items: center;
-    border: 0;
-    border-radius: var(--radius-full);
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
-    transition: transform var(--transition-fast), background var(--transition-fast);
-}
-
-.exam-footer-dot::before {
-    content: "";
-    width: clamp(5px, 0.45vw, 8px);
-    height: clamp(5px, 0.45vw, 8px);
-    border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--text-soft) 28%, transparent);
-    transition: transform var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.exam-footer-dot:hover,
-.exam-footer-dot:focus-visible {
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-    transform: translateY(-1px);
-}
-
-.exam-footer-dot:hover::before,
-.exam-footer-dot:focus-visible::before {
-    transform: scale(1.35);
-    background: color-mix(in srgb, var(--accent) 48%, var(--text-soft));
-}
-
-.exam-footer-dot:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
-    outline-offset: 2px;
-}
-
-.exam-footer-dot-active::before {
-    background: var(--accent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+    container-type: inline-size;
 }
 
 .exam-footer-counter-label {
     justify-self: center;
     line-height: 1;
-}
-
-/* ── Submitted result states ──────────── */
-.exam-footer-dot-correct::before {
-    background: var(--success);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 18%, transparent);
-}
-
-.exam-footer-dot-wrong::before {
-    background: var(--danger);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 18%, transparent);
-}
-
-.exam-footer-dot-correct.exam-footer-dot-active::before {
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 28%, transparent);
-}
-
-.exam-footer-dot-wrong.exam-footer-dot-active::before {
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 28%, transparent);
 }

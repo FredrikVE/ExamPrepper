@@ -4,8 +4,11 @@ export const mockExam2_en = {
   subjectId: "in5431",
   baseId: "mock-exam-2",
   lang: "en",
-  title: "Practice Exam 2: Deep Dive",
-  description: "Operating models, governance archetypes, D4D roadmap, sustainability and Cynefin.",
+  title: "Practice Exam 2: Full Curriculum – Deep Dive",
+  description: "Deep dive into operating models, governance archetypes, D4D roadmap, sustainability and Cynefin.",
+  modeLabel: "FULL PRACTICE",
+  estimatedMinutes: "45–60",
+  sortOrder: 20,
   questions: [
     {
       id: 101,

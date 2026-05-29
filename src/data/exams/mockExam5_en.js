@@ -4,8 +4,11 @@ export const mockExam5_en = {
   subjectId: "in5431",
   baseId: "mock-exam-5",
   lang: "en",
-  title: "Practice Exam 5: Frameworks Deep Dive",
-  description: "PRINCE2, BPMN, Design Thinking & Double Diamond, TOGAF and Cynefin.",
+  title: "Framework Drill: PRINCE2, BPMN, TOGAF and Cynefin",
+  description: "Focused framework practice for PRINCE2, BPMN, Design Thinking and Double Diamond, TOGAF and Cynefin.",
+  modeLabel: "FRAMEWORK DRILL",
+  estimatedMinutes: "45–60",
+  sortOrder: 50,
   questions: [
     // ===== PRINCE2 (questions 1–7) =====
     {

@@ -4,8 +4,11 @@ export const mockExam4_en = {
   subjectId: "in5431",
   baseId: "mock-exam-4",
   lang: "en",
-  title: "Practice Exam 4: The CIO Toolbox",
-  description: "Business case, alternative analysis, design thinking, IT architecture, projects, product teams, IT governance and Cynefin.",
+  title: "Practice Exam 4: The CIO Toolbox – Case-Based",
+  description: "Choose the right tool, framework and governance logic: business case, alternative analysis, design thinking, IT architecture, projects, product teams, IT governance and Cynefin.",
+  modeLabel: "CIO TOOLBOX",
+  estimatedMinutes: "60–90",
+  sortOrder: 40,
   questions: [
     {
       id: 1,

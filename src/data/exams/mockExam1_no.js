@@ -4,8 +4,11 @@ export const mockExam1_no = {
   subjectId: "in5431",
   baseId: "mock-exam-1",
   lang: "no",
-  title: "Øveeksamen 1: Full repetisjon",
-  description: "CIO toolbox, D4D, IT governance, strategy og sustainability.",
+  title: "Øveeksamen 1: Full pensum – grunnnivå",
+  description: "Blandet repetisjon på grunnnivå: CIO Toolbox, D4D, IT governance, strategi og bærekraft.",
+  modeLabel: "FULL ØVEKSAMEN",
+  estimatedMinutes: "45–60",
+  sortOrder: 10,
   questions: [
     {
       id: 1,
