@@ -5,6 +5,7 @@ import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
 import getScoreLabel from "./Utils/getScoreLabel.js";
 import getQuestionProgressLabel from "./Utils/getQuestionProgressLabel.js";
 import getFeedbackToggleLabel from "./Utils/getFeedbackToggleLabel.js";
+import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
 import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
@@ -20,7 +21,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [questionsLoadError, setQuestionsLoadError] = useState(null);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
-	const [expandedAnswerOptionByQuestionId, setExpandedAnswerOptionByQuestionId] = useState({});
+	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
 
 	const examWorkspaceRef = useRef(null);
@@ -45,9 +46,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return deriveWorkspaceClassName(currentQuestion, submitted);
 	}, [currentQuestion, submitted]);
 
-	const expandedAnswerOptionIndex = currentQuestion
-		? expandedAnswerOptionByQuestionId[currentQuestion.id] ?? null
-		: null;
+	const expandedAnswerOptionIndexes = currentQuestion
+		? expandedAnswerOptionIndexesByQuestionId[currentQuestion.id] ?? []
+		: [];
 
 	const canGoPrevious = currentQuestionIndex > 0;
 	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
@@ -145,19 +146,20 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	}, [submitted]);
 
 	const toggleAnswerOptionExpanded = useCallback((questionId, optionIndex) => {
-		setExpandedAnswerOptionByQuestionId((previousExpandedByQuestionId) => {
-			const currentExpandedIndex = previousExpandedByQuestionId[questionId];
+		setExpandedAnswerOptionIndexesByQuestionId((previousExpandedIndexesByQuestionId) => {
+			const nextExpandedIndexes = toggleExpandedAnswerOptionIndexes(
+				previousExpandedIndexesByQuestionId[questionId],
+				optionIndex
+			);
+			const nextExpandedIndexesByQuestionId = { ...previousExpandedIndexesByQuestionId };
 
-			if (currentExpandedIndex === optionIndex) {
-				const nextExpandedByQuestionId = { ...previousExpandedByQuestionId };
-				delete nextExpandedByQuestionId[questionId];
-				return nextExpandedByQuestionId;
+			if (nextExpandedIndexes.length === 0) {
+				delete nextExpandedIndexesByQuestionId[questionId];
+				return nextExpandedIndexesByQuestionId;
 			}
 
-			return {
-				...previousExpandedByQuestionId,
-				[questionId]: optionIndex
-			};
+			nextExpandedIndexesByQuestionId[questionId] = nextExpandedIndexes;
+			return nextExpandedIndexesByQuestionId;
 		});
 	}, []);
 
@@ -172,7 +174,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setShowAllFeedback(true);
 		setCurrentQuestionIndex(0);
 		setElapsedSeconds(0);
-		setExpandedAnswerOptionByQuestionId({});
+		setExpandedAnswerOptionIndexesByQuestionId({});
 		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questions));
 
 		scrollExamWorkspaceToTop(examWorkspaceRef);
@@ -206,7 +208,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 					setShowAllFeedback(true);
 					setCurrentQuestionIndex(0);
 					setElapsedSeconds(0);
-					setExpandedAnswerOptionByQuestionId({});
+					setExpandedAnswerOptionIndexesByQuestionId({});
 					setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
 				}
 			}
@@ -283,7 +285,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		feedbackToggleLabel,
 		elapsedTimeLabel,
 
-		expandedAnswerOptionIndex,
+		expandedAnswerOptionIndexes,
 
 		examWorkspaceRef,
 

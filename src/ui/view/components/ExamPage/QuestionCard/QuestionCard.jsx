@@ -15,7 +15,7 @@ import QuestionFeedback from "./Shared/Feedback/QuestionFeedback.jsx";
 import QuestionHeader from "./Shared/QuestionHeader/QuestionHeader.jsx";
 
 
-export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndex, onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
+export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
     const answerText = String(answer ?? "");
 
@@ -116,7 +116,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                         answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
-                        expandedAnswerOptionIndex={expandedAnswerOptionIndex}
+                        expandedAnswerOptionIndexes={expandedAnswerOptionIndexes}
                         onToggleAnswerOptionExpanded={onToggleAnswerOptionExpanded}
                         onSingleAnswer={onSingleAnswer}
                         onToggleMultiAnswer={onToggleMultiAnswer}
@@ -131,7 +131,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
                         answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
-                        expandedAnswerOptionIndex={expandedAnswerOptionIndex}
+                        expandedAnswerOptionIndexes={expandedAnswerOptionIndexes}
                         onToggleAnswerOptionExpanded={onToggleAnswerOptionExpanded}
                         onSingleAnswer={onSingleAnswer}
                         onToggleMultiAnswer={onToggleMultiAnswer}
