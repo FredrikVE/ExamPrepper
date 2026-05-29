@@ -1,9 +1,9 @@
-/* src/ui/style/QuestionCard/index.css */
-@import "./Base/index.css";
+/* src/ui/style/ExamPage/QuestionCard/index.css */
+@import "./Shared/index.css";
 @import "./QuestionTypes/FillBlankInputField/index.css";
 @import "./QuestionTypes/ChoiceShared/index.css";
 @import "./AnswerCard/index.css";
 @import "./QuestionTypes/DragDrop/index.css";
-@import "./Base/feedback.css";
+@import "./Shared/feedback.css";
 @import "./QuestionTypes/DragDrop/Shared/index.css";
-@import "./Base/responsive.css";
+@import "./Shared/responsive.css";

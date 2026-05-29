@@ -12,8 +12,5 @@
 /* Shared UI */
 @import "./Header/index.css";
 @import "./Footer/index.css";
-@import "./QuestionCard/index.css";
-@import "./FeedbackPanel/index.css";
-@import "./SettingsMenu/index.css";
-@import "./ResultBadge/index.css";
+@import "./Settings/index.css";
 @import "./Sidebar/index.css";
