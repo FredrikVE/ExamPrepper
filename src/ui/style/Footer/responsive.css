@@ -79,6 +79,7 @@
     }
 
     .exam-footer-dots {
+        grid-template-columns: repeat(auto-fit, minmax(clamp(13px, 1.15vw, 18px), 1fr));
         gap: clamp(1px, 0.25vw, 5px);
     }
 

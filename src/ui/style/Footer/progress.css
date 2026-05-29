@@ -12,20 +12,19 @@
 }
 
 .exam-footer-dots {
-    display: flex;
+    display: grid;
     width: 100%;
     min-width: 0;
-    flex-wrap: nowrap;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(16px, 1.55vw, 22px), 1fr));
     align-items: center;
-    justify-content: space-between;
+    justify-items: center;
     gap: clamp(2px, 0.35vw, 8px);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .exam-footer-dot {
     position: relative;
     display: inline-grid;
-    flex: 0 0 clamp(16px, 1.55vw, 22px);
     width: clamp(16px, 1.55vw, 22px);
     height: clamp(16px, 1.55vw, 22px);
     place-items: center;
