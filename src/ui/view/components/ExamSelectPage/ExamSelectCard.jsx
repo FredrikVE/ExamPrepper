@@ -1,10 +1,11 @@
 // src/ui/view/components/ExamSelectPage/ExamSelectCard.jsx
 import { BookOpen, ChevronRight, CircleHelp, Clock3 } from "lucide-react";
 
-const CARD_TITLE_FALLBACKS = ["Full Review", "Deep Dive", "Application Focus"];
+const DEFAULT_ESTIMATED_MINUTES = "45–60";
 
 export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
-    const displayTitle = getDisplayTitle(exam, index);
+    const modeLabel = exam.modeLabel ?? t.selectPracticeExamLabel(index + 1);
+    const estimatedMinutes = exam.estimatedMinutes ?? DEFAULT_ESTIMATED_MINUTES;
 
     return (
         <button
@@ -19,11 +20,11 @@ export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
 
                 <div className="exam-select-card-copy">
                     <p className="exam-select-card-eyebrow">
-                        {t.selectPracticeExamLabel(index + 1)}
+                        {modeLabel}
                     </p>
 
                     <h2 className="exam-select-card-title">
-                        {displayTitle}
+                        {exam.title}
                     </h2>
 
                     <p className="exam-select-card-description">
@@ -46,7 +47,7 @@ export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
                 <div className="exam-select-card-meta">
                     <Clock3 className="exam-select-card-meta-icon" />
                     <div>
-                        <strong>45-60</strong>
+                        <strong>{estimatedMinutes}</strong>
                         <span>{t.selectMinuteLabel}</span>
                     </div>
                 </div>
@@ -57,13 +58,4 @@ export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
             </div>
         </button>
     );
-}
-
-function getDisplayTitle(exam, index) {
-    if (CARD_TITLE_FALLBACKS[index]) {
-        return CARD_TITLE_FALLBACKS[index];
-    }
-
-    const parts = exam.title.split(":");
-    return parts.length > 1 ? parts.slice(1).join(":").trim() : exam.title;
 }

@@ -4,8 +4,11 @@ export const mockExam2_no = {
   subjectId: "in5431",
   baseId: "mock-exam-2",
   lang: "no",
-  title: "Øveeksamen 2: Fordypning",
-  description: "Operating models, governance-arketyper, D4D roadmap, bærekraft og Cynefin.",
+  title: "Øveeksamen 2: Full pensum – fordypning",
+  description: "Fordypning i operating model, governance-arketyper, D4D-roadmap, bærekraft og Cynefin.",
+  modeLabel: "FULL ØVEKSAMEN",
+  estimatedMinutes: "45–60",
+  sortOrder: 20,
   questions: [
     {
       id: 101,

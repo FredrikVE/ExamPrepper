@@ -4,8 +4,11 @@ export const mockExam4_no = {
   subjectId: "in5431",
   baseId: "mock-exam-4",
   lang: "no",
-  title: "Øvingseksamen 4: CIO Toolbox",
-  description: "Business case, alternativanalyse, design thinking, IT-arkitektur, prosjekter, produktteam, IT-styring og Cynefin.",
+  title: "Øveeksamen 4: CIO Toolbox – casebasert",
+  description: "Velg riktig verktøy, rammeverk og styringslogikk: business case, alternativanalyse, design thinking, IT-arkitektur, prosjekter, produktteam, IT-styring og Cynefin.",
+  modeLabel: "CIO TOOLBOX",
+  estimatedMinutes: "45–60",
+  sortOrder: 40,
   questions: [
     {
       id: 1,

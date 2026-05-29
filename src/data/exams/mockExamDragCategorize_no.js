@@ -4,8 +4,11 @@ export const mockExamDragCategorize_no = {
   subjectId: "in5431",
   baseId: "mock-exam-drag-categorize",
   lang: "no",
-  title: "Øveeksamen: Drag-categorize test",
-  description: "Fire korte testoppgaver for den nye dra-til-kategori-oppgavetypen: CIO Toolbox, D4D-byggeklosser, IT governance og transformation theory.",
+  title: "Modelltrening: dra, sorter og plasser",
+  description: "Fem interaktive oppgaver for modellforståelse: CIO Toolbox, D4D-byggeklosser, IT governance, transformation theory og operating model-matrisen.",
+  modeLabel: "MODELLTRENING",
+  estimatedMinutes: "20–30",
+  sortOrder: 90,
   questions: [
     {
       id: 1,

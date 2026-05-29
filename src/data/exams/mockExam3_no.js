@@ -4,8 +4,11 @@ export const mockExam3_no = {
   subjectId: "in5431",
   baseId: "mock-exam-3",
   lang: "no",
-  title: "Øveeksamen 3: Udekket pensum",
-  description: "Supplerende eksamenssett med temaer som i liten grad er dekket i øveeksamen 1 og 2: PRINCE2, alternative evalueringsteknikker, arkitekturperspektiver, strategisk kontekst, digitaliseringskultur, D4D-detaljer og bærekraftsrammeverk.",
+  title: "Øveeksamen 3: Case og vanskelige skiller",
+  description: "Oppgaver som trener forvekslinger og anvendelse: PRINCE2, alternative evalueringsteknikker, arkitekturperspektiver, strategisk kontekst, digitaliseringskultur, D4D-detaljer og bærekraftsrammeverk.",
+  modeLabel: "CASE OG SKILLE",
+  estimatedMinutes: "45–60",
+  sortOrder: 30,
   questions: [
     {
       id: 201,

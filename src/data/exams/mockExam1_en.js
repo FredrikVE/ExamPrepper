@@ -4,8 +4,11 @@ export const mockExam1_en = {
   subjectId: "in5431",
   baseId: "mock-exam-1",
   lang: "en",
-  title: "Practice Exam 1: Full Review",
-  description: "CIO toolbox, D4D, IT governance, strategy and sustainability.",
+  title: "Practice Exam 1: Full Curriculum – Foundation",
+  description: "Mixed foundation-level review: CIO Toolbox, D4D, IT governance, strategy and sustainability.",
+  modeLabel: "FULL PRACTICE",
+  estimatedMinutes: "45–60",
+  sortOrder: 10,
   questions: [
     {
       id: 1,
