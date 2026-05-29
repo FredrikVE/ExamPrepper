@@ -69,6 +69,7 @@ export const translations = {
         questionTypeDragDrop: "Dra og slipp",
         questionTypeDragCategorize: "Dra til kategori",
         questionTypeMatrixPlacement: "Matriseplassering",
+        questionTypeSequenceOrder: "Rekkefølge",
         questionInputPlaceholder: "Skriv begrep her...",
         questionAnswerLabel: "Ditt svar",
         questionInputRule: "Skriv kun ett begrep. Ingen mellomrom før eller etter.",
@@ -107,6 +108,13 @@ export const translations = {
         matrixPlacementPlacedSuffix: "plassert",
         matrixPlacementNoPlacedItems: "Ingen kort plassert",
         matrixPlacementAnswerKeyPill: "Fasit",
+
+        sequenceOrderAlternativeBankTitle: "Alternativbank",
+        sequenceOrderAlternativeBankHint: "Dra et alternativ inn i riktig rekkefølge, eller klikk alternativet og deretter feltet.",
+        sequenceOrderCorrectSequenceTitle: "Riktig rekkefølge",
+        sequenceOrderCorrectOrderTitle: "Riktig rekkefølge",
+        sequenceOrderSubmittedSequenceTitle: "Din rekkefølge",
+        sequenceOrderRemoveAnswer: "Fjern alternativ",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Din besvarelse er riktig",
@@ -204,6 +212,7 @@ export const translations = {
         questionTypeDragDrop: "Drag and drop",
         questionTypeDragCategorize: "Category sort",
         questionTypeMatrixPlacement: "Matrix placement",
+        questionTypeSequenceOrder: "Sequence order",
         questionInputPlaceholder: "Type term here...",
         questionAnswerLabel: "Your answer",
         questionInputRule: "Write one term only. No leading or trailing spaces.",
@@ -242,6 +251,13 @@ export const translations = {
         matrixPlacementPlacedSuffix: "placed",
         matrixPlacementNoPlacedItems: "No cards placed",
         matrixPlacementAnswerKeyPill: "Answer key",
+
+        sequenceOrderAlternativeBankTitle: "Alternative bank",
+        sequenceOrderAlternativeBankHint: "Drag an alternative into the correct order, or click an alternative and then click a slot.",
+        sequenceOrderCorrectSequenceTitle: "Correct sequence",
+        sequenceOrderCorrectOrderTitle: "Correct order",
+        sequenceOrderSubmittedSequenceTitle: "Your sequence",
+        sequenceOrderRemoveAnswer: "Remove alternative",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Your answer is correct",

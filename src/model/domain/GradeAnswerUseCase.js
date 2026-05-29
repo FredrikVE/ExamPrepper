@@ -34,6 +34,10 @@ export default class GradeAnswerUseCase {
             return this.#isMatrixPlacementAnswerFullyCorrect(question, answer);
         }
 
+        if (question.type === QUESTION_TYPES.SEQUENCE_ORDER) {
+            return this.#isSequenceOrderAnswerFullyCorrect(question, answer);
+        }
+
         return false;
     }
 
@@ -52,6 +56,10 @@ export default class GradeAnswerUseCase {
 
         if (question.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
             return this.#getMatrixPlacementQuestionScore(question, answer);
+        }
+
+        if (question.type === QUESTION_TYPES.SEQUENCE_ORDER) {
+            return this.#getSequenceOrderQuestionScore(question, answer);
         }
 
         return this.execute(question, answer) ? question.points : 0;
@@ -114,6 +122,28 @@ export default class GradeAnswerUseCase {
             }
 
             if (this.#isMatrixPlacementCorrect(question, quadrantId, item.id)) {
+                stats.correct += 1;
+                return stats;
+            }
+
+            stats.wrong += 1;
+            return stats;
+        }, { correct: 0, wrong: 0, unanswered: 0 });
+    }
+
+    getSequenceOrderStats(question, answer) {
+        const correctOrder = this.#getCorrectSequenceOrder(question);
+        const safeAnswer = this.#normalizeSequenceOrderAnswer(question, answer);
+
+        return correctOrder.reduce((stats, correctItemId, index) => {
+            const selectedItemId = safeAnswer[index];
+
+            if (!selectedItemId) {
+                stats.unanswered += 1;
+                return stats;
+            }
+
+            if (selectedItemId === correctItemId) {
                 stats.correct += 1;
                 return stats;
             }
@@ -227,6 +257,32 @@ export default class GradeAnswerUseCase {
 
         const stats = this.getMatrixPlacementStats(question, answer);
         const rawScore = question.points * (stats.correct / items.length);
+
+        return Number(rawScore.toFixed(2));
+    }
+
+    #isSequenceOrderAnswerFullyCorrect(question, answer) {
+        const correctOrder = this.#getCorrectSequenceOrder(question);
+        const safeAnswer = this.#normalizeSequenceOrderAnswer(question, answer);
+
+        if (correctOrder.length === 0) {
+            return false;
+        }
+
+        return correctOrder.every((correctItemId, index) => {
+            return safeAnswer[index] === correctItemId;
+        });
+    }
+
+    #getSequenceOrderQuestionScore(question, answer) {
+        const correctOrder = this.#getCorrectSequenceOrder(question);
+
+        if (correctOrder.length === 0) {
+            return 0;
+        }
+
+        const stats = this.getSequenceOrderStats(question, answer);
+        const rawScore = question.points * (stats.correct / correctOrder.length);
 
         return Number(rawScore.toFixed(2));
     }
@@ -348,6 +404,117 @@ export default class GradeAnswerUseCase {
 
     #getSafeMatrixItems(question) {
         return Array.isArray(question?.items) ? question.items : [];
+    }
+
+    #getSequenceItems(question) {
+        if (Array.isArray(question?.items)) {
+            return question.items;
+        }
+
+        if (Array.isArray(question?.alternatives)) {
+            return question.alternatives;
+        }
+
+        if (Array.isArray(question?.cards)) {
+            return question.cards;
+        }
+
+        return [];
+    }
+
+    #getCorrectSequenceOrder(question) {
+        const explicitOrder = this.#getExplicitCorrectSequenceOrder(question);
+
+        if (explicitOrder.length > 0) {
+            return explicitOrder;
+        }
+
+        const items = this.#getSequenceItems(question);
+        const orderedItems = items.filter((item) => {
+            return Number.isFinite(item?.correctIndex) || Number.isFinite(item?.correctPosition) || Number.isFinite(item?.order);
+        });
+
+        if (orderedItems.length > 0) {
+            return [...orderedItems]
+                .sort((firstItem, secondItem) => this.#getSequenceSortIndex(firstItem) - this.#getSequenceSortIndex(secondItem))
+                .map((item) => item.id)
+                .filter(Boolean);
+        }
+
+        return items.map((item) => item.id).filter(Boolean);
+    }
+
+    #getExplicitCorrectSequenceOrder(question) {
+        const correctOrder = question?.correctOrder ?? question?.correctSequence ?? question?.correctAnswer;
+
+        if (!Array.isArray(correctOrder)) {
+            return [];
+        }
+
+        return correctOrder
+            .map((entry) => this.#getSequenceOrderEntryId(entry))
+            .filter(Boolean);
+    }
+
+    #getSequenceOrderEntryId(entry) {
+        if (typeof entry === "string") {
+            return entry;
+        }
+
+        if (Number.isFinite(entry)) {
+            return String(entry);
+        }
+
+        if (this.#isPlainObject(entry)) {
+            return entry.id ?? entry.sequenceItemId ?? entry.itemId ?? entry.cardId ?? null;
+        }
+
+        return null;
+    }
+
+    #normalizeSequenceOrderAnswer(question, answer) {
+        const correctOrder = this.#getCorrectSequenceOrder(question);
+        const itemIds = new Set(this.#getSequenceItems(question).map((item) => item.id).filter(Boolean));
+        const rawAnswer = Array.isArray(answer?.sequence)
+            ? answer.sequence
+            : Array.isArray(answer?.order)
+                ? answer.order
+                : answer;
+        const answerItemIds = Array.isArray(rawAnswer)
+            ? rawAnswer.map((entry) => this.#getSequenceOrderEntryId(entry))
+            : [];
+        const usedItemIds = new Set();
+
+        return correctOrder.map((_, index) => {
+            const itemId = answerItemIds[index];
+
+            if (!itemId || usedItemIds.has(itemId)) {
+                return null;
+            }
+
+            if (itemIds.size > 0 && !itemIds.has(itemId)) {
+                return null;
+            }
+
+            usedItemIds.add(itemId);
+            return itemId;
+        });
+    }
+
+    #getSequenceSortIndex(item) {
+        if (Number.isFinite(item?.correctIndex)) {
+            return item.correctIndex;
+        }
+
+        if (Number.isFinite(item?.correctPosition)) {
+            return item.correctPosition;
+        }
+
+        if (Number.isFinite(item?.order)) {
+            return item.order;
+        }
+
+        return 0;
     }
 
     #getMatrixQuadrants(question) {

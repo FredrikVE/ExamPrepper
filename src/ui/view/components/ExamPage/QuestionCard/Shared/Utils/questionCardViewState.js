@@ -9,7 +9,8 @@ export function isFillQuestion(question) {
 export function isDragDropQuestion(question) {
     return question?.type === QUESTION_TYPES.DRAG_DROP
         || question?.type === QUESTION_TYPES.DRAG_CATEGORIZE
-        || question?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
+        || question?.type === QUESTION_TYPES.MATRIX_PLACEMENT
+        || question?.type === QUESTION_TYPES.SEQUENCE_ORDER;
 }
 
 export function isDragCategorizeQuestion(question) {
@@ -18,6 +19,10 @@ export function isDragCategorizeQuestion(question) {
 
 export function isMatrixPlacementQuestion(question) {
     return question?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
+}
+
+export function isSequenceOrderQuestion(question) {
+    return question?.type === QUESTION_TYPES.SEQUENCE_ORDER;
 }
 
 export function getQuestionViewState({ question, submitted, showAllFeedback, correct }) {
@@ -35,6 +40,7 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
         shouldShowDragDrop: dragDropQuestion,
         shouldShowDragCategorize: isDragCategorizeQuestion(question),
         shouldShowMatrixPlacement: isMatrixPlacementQuestion(question),
+        shouldShowSequenceOrder: isSequenceOrderQuestion(question),
         shouldShowWarning: Boolean(submitted && !showAllFeedback && !correct),
         shouldShowFillFeedback: feedbackMode && fillQuestion,
         shouldShowSource: feedbackMode && !fillQuestion && Boolean(question?.source)

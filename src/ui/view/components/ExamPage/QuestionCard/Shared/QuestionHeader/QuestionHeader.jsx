@@ -35,5 +35,6 @@ function getQuestionTypeLabel(type, t) {
     if (type === QUESTION_TYPES.DRAG_DROP) return t.questionTypeDragDrop;
     if (type === QUESTION_TYPES.DRAG_CATEGORIZE) return t.questionTypeDragCategorize;
     if (type === QUESTION_TYPES.MATRIX_PLACEMENT) return t.questionTypeMatrixPlacement;
+    if (type === QUESTION_TYPES.SEQUENCE_ORDER) return t.questionTypeSequenceOrder;
     return t.questionTypeSingle;
 }

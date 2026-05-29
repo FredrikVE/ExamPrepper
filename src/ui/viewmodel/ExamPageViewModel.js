@@ -313,6 +313,16 @@ const isQuestionAnswered = (question, answer) => {
 		return answerHasAtLeastOneObjectValue(answer);
 	}
 
+	if (question.type === QUESTION_TYPES.SEQUENCE_ORDER) {
+		const sequenceAnswer = Array.isArray(answer?.sequence)
+			? answer.sequence
+			: Array.isArray(answer?.order)
+				? answer.order
+				: answer;
+
+		return Array.isArray(sequenceAnswer) && sequenceAnswer.some(Boolean);
+	}
+
 	if (question.type === QUESTION_TYPES.MATRIX_PLACEMENT) {
 		return answerHasAtLeastOneObjectValue(answer?.placements ?? answer);
 	}
@@ -391,11 +401,13 @@ const shouldQuestionUseScrollFooter = (question, submitted) => {
 	const isDragDropQuestion = question?.type === QUESTION_TYPES.DRAG_DROP;
 	const isDragCategorizeQuestion = question?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
 	const isMatrixPlacementQuestion = question?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
+	const isSequenceOrderQuestion = question?.type === QUESTION_TYPES.SEQUENCE_ORDER;
 
 	return optionCount >= 6 ||
 		isDragDropQuestion ||
 		isDragCategorizeQuestion ||
 		isMatrixPlacementQuestion ||
+		isSequenceOrderQuestion ||
 		dragDropTargetCount >= 5 ||
 		dragCategorizeCategoryCount >= 4 ||
 		matrixQuadrantCount >= 4;
