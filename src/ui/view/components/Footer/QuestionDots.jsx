@@ -101,40 +101,13 @@ function getQuestionDotsClassName(shouldUseCompactDotsByQuestionCount, shouldAll
 }
 
 function getFilledCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex) {
-    const questionCount = visibleQuestions.length;
+    const questionIndexes = getAnchoredCompactQuestionIndexes(
+        visibleQuestions.length,
+        currentQuestionIndex,
+        FILLED_COMPACT_VISIBLE_DOT_COUNT
+    );
 
-    if (questionCount <= FILLED_COMPACT_VISIBLE_DOT_COUNT) {
-        return visibleQuestions.map((question, questionIndex) => (
-            createQuestionDotEntry(`visible-${questionIndex}`, questionIndex, question)
-        ));
-    }
-
-    const firstQuestionIndex = 0;
-    const lastQuestionIndex = questionCount - 1;
-    const visibleDotSlotsBetweenEdges = FILLED_COMPACT_VISIBLE_DOT_COUNT - 2;
-    const firstWindowStartIndex = firstQuestionIndex + 1;
-    const lastWindowEndIndex = lastQuestionIndex - 1;
-    const centeredWindowStartIndex = currentQuestionIndex - Math.floor(visibleDotSlotsBetweenEdges / 2);
-    const maxWindowStartIndex = lastWindowEndIndex - visibleDotSlotsBetweenEdges + 1;
-    const windowStartIndex = clampNumber(centeredWindowStartIndex, firstWindowStartIndex, maxWindowStartIndex);
-    const windowEndIndex = windowStartIndex + visibleDotSlotsBetweenEdges - 1;
-    const questionDotEntries = [createQuestionDotEntry("first", firstQuestionIndex, visibleQuestions[firstQuestionIndex])];
-
-    if (windowStartIndex > firstWindowStartIndex) {
-        questionDotEntries.push(createQuestionEllipsisEntry("hidden-before-window"));
-    }
-
-    for (let questionIndex = windowStartIndex; questionIndex <= windowEndIndex; questionIndex += 1) {
-        questionDotEntries.push(createQuestionDotEntry("window", questionIndex, visibleQuestions[questionIndex]));
-    }
-
-    if (windowEndIndex < lastWindowEndIndex) {
-        questionDotEntries.push(createQuestionEllipsisEntry("hidden-after-window"));
-    }
-
-    questionDotEntries.push(createQuestionDotEntry("last", lastQuestionIndex, visibleQuestions[lastQuestionIndex]));
-
-    return questionDotEntries;
+    return createQuestionDotEntriesFromAnchoredIndexes(visibleQuestions, questionIndexes);
 }
 
 function getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex) {
@@ -145,35 +118,86 @@ function getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIn
     }
 
     if (questionCount === 1) {
-        return [createQuestionDotEntry("current", 0, visibleQuestions[0])];
+        return [createQuestionDotEntry("only-question", 0, visibleQuestions[0])];
     }
 
     const firstQuestionIndex = 0;
     const lastQuestionIndex = questionCount - 1;
+    const questionIndexes = currentQuestionIndex <= firstQuestionIndex || currentQuestionIndex >= lastQuestionIndex
+        ? [firstQuestionIndex, lastQuestionIndex]
+        : [firstQuestionIndex, currentQuestionIndex, lastQuestionIndex];
 
-    if (currentQuestionIndex <= firstQuestionIndex) {
-        return [
-            createQuestionDotEntry("current", firstQuestionIndex, visibleQuestions[firstQuestionIndex]),
-            createQuestionEllipsisEntry("hidden-after-current"),
-            createQuestionDotEntry("last", lastQuestionIndex, visibleQuestions[lastQuestionIndex])
-        ];
+    return createQuestionDotEntriesFromAnchoredIndexes(visibleQuestions, questionIndexes);
+}
+
+function getAnchoredCompactQuestionIndexes(questionCount, currentQuestionIndex, visibleDotCount) {
+    if (questionCount <= visibleDotCount) {
+        return createQuestionIndexRange(0, questionCount - 1);
     }
 
-    if (currentQuestionIndex >= lastQuestionIndex) {
-        return [
-            createQuestionDotEntry("first", firstQuestionIndex, visibleQuestions[firstQuestionIndex]),
-            createQuestionEllipsisEntry("hidden-before-current"),
-            createQuestionDotEntry("current", lastQuestionIndex, visibleQuestions[lastQuestionIndex])
-        ];
-    }
+    const firstQuestionIndex = 0;
+    const lastQuestionIndex = questionCount - 1;
+    const middleVisibleDotCount = visibleDotCount - 2;
+    const firstMiddleQuestionIndex = firstQuestionIndex + 1;
+    const lastMiddleQuestionIndex = lastQuestionIndex - 1;
+    const centeredMiddleStartIndex = currentQuestionIndex - Math.floor(middleVisibleDotCount / 2);
+    const latestMiddleStartIndex = lastMiddleQuestionIndex - middleVisibleDotCount + 1;
+    const middleStartIndex = clampNumber(
+        centeredMiddleStartIndex,
+        firstMiddleQuestionIndex,
+        latestMiddleStartIndex
+    );
+    const middleEndIndex = middleStartIndex + middleVisibleDotCount - 1;
 
     return [
-        createQuestionDotEntry("first", firstQuestionIndex, visibleQuestions[firstQuestionIndex]),
-        createQuestionEllipsisEntry("hidden-before-current"),
-        createQuestionDotEntry("current", currentQuestionIndex, visibleQuestions[currentQuestionIndex]),
-        createQuestionEllipsisEntry("hidden-after-current"),
-        createQuestionDotEntry("last", lastQuestionIndex, visibleQuestions[lastQuestionIndex])
+        firstQuestionIndex,
+        ...createQuestionIndexRange(middleStartIndex, middleEndIndex),
+        lastQuestionIndex
     ];
+}
+
+function createQuestionDotEntriesFromAnchoredIndexes(visibleQuestions, questionIndexes) {
+    const questionDotEntries = [];
+
+    questionIndexes.forEach((questionIndex, visibleIndex) => {
+        const previousQuestionIndex = questionIndexes[visibleIndex - 1];
+
+        if (previousQuestionIndex !== undefined && questionIndex - previousQuestionIndex > 1) {
+            questionDotEntries.push(createQuestionEllipsisEntry(
+                `hidden-${previousQuestionIndex + 1}-to-${questionIndex - 1}`
+            ));
+        }
+
+        questionDotEntries.push(createQuestionDotEntry(
+            getQuestionDotKeyPrefix(questionIndex, visibleQuestions.length),
+            questionIndex,
+            visibleQuestions[questionIndex]
+        ));
+    });
+
+    return questionDotEntries;
+}
+
+function getQuestionDotKeyPrefix(questionIndex, questionCount) {
+    if (questionIndex === 0) {
+        return "first-question";
+    }
+
+    if (questionIndex === questionCount - 1) {
+        return "last-question";
+    }
+
+    return "visible-question";
+}
+
+function createQuestionIndexRange(startIndex, endIndex) {
+    const questionIndexes = [];
+
+    for (let questionIndex = startIndex; questionIndex <= endIndex; questionIndex += 1) {
+        questionIndexes.push(questionIndex);
+    }
+
+    return questionIndexes;
 }
 
 function createQuestionDotEntry(keyPrefix, questionIndex, question) {
