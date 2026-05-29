@@ -763,6 +763,412 @@ export const mockExamDefinitions_no = {
       whyExtendedImageRefs: [
         { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
       ]
+    },
+    {
+      id: 29,
+      type: "SequenceOrder",
+      title: "Generisk beslutningsmodell – rekkefølge",
+      points: 2,
+      prompt: "Sett stegene i den generiske beslutningsmodellen i riktig rekkefølge.",
+      source: "Fasit: IN5431, CIO Toolbox 1: Business case, concept selection and alternative analysis.",
+      items: [
+        { id: "understand-situation", label: "Understand the situation" },
+        { id: "synthesize-options", label: "Synthesize options" },
+        { id: "evaluate-propose", label: "Evaluate and propose" }
+      ],
+      correctOrder: [
+        "understand-situation",
+        "synthesize-options",
+        "evaluate-propose"
+      ],
+      itemFeedback: {
+        "understand-situation": {
+          whyCorrect: "Understand the situation kommer først fordi beslutningstakere må forstå problemet, konteksten og de underliggende årsakene før alternativer utvikles.",
+          whyWrong: "Dette steget må komme først. Uten situasjonsforståelse risikerer man å lage alternativer for feil problem.",
+          whyExtended: [
+            "I pensum handler dette om å forstå ‘whys’, intern kompetanse, tekniske eiendeler og kulturelle faktorer.",
+            "Steget gir grunnlaget for å vurdere hvilke alternativer som faktisk er relevante."
+          ]
+        },
+        "synthesize-options": {
+          whyCorrect: "Synthesize options kommer etter situasjonsforståelse fordi man først da kan utvikle relevante og internt konsistente handlingsalternativer.",
+          whyWrong: "Dette steget bygger på forståelsen av situasjonen og bør komme før evaluering og anbefaling.",
+          whyExtended: [
+            "Alternativene kan presenteres som konsepter: sammenhengende pakker av arbeid eller tiltak.",
+            "Poenget er å sikre at relevante muligheter vurderes før man konkluderer."
+          ]
+        },
+        "evaluate-propose": {
+          whyCorrect: "Evaluate and propose kommer til slutt fordi alternativene må sammenlignes før man anbefaler et valg.",
+          whyWrong: "Evaluering og anbefaling bør komme etter at man har forstått situasjonen og utviklet alternativer.",
+          whyExtended: [
+            "Her vurderes fordeler, ulemper, kostnader, risiko og eventuelle kvalitative hensyn.",
+            "Resultatet er en begrunnet anbefaling, ikke bare en intuitiv beslutning."
+          ]
+        }
+      },
+      whyCorrect: "Den generiske beslutningsmodellen følger rekkefølgen Understand the situation → Synthesize options → Evaluate and propose.",
+      whyExtended: [
+        "Først forstås problemet og konteksten.",
+        "Deretter utvikles mulige handlingsalternativer.",
+        "Til slutt evalueres alternativene og en anbefaling foreslås."
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
+      ]
+    },
+    {
+      id: 30,
+      type: "SequenceOrder",
+      title: "PRINCE2 – forenklet prosessrekkefølge",
+      points: 3,
+      prompt: "Sett PRINCE2-prosessene i en forenklet livsløpsrekkefølge fra oppstart til avslutning.",
+      source: "Fasit: IN5431, CIO Toolbox 2: Projects, products and design thinking, PRINCE2.",
+      items: [
+        { id: "starting-up", label: "Starting up a project" },
+        { id: "directing", label: "Directing a project" },
+        { id: "initiating", label: "Initiating a project" },
+        { id: "controlling-stage", label: "Controlling a stage" },
+        { id: "managing-product-delivery", label: "Managing product delivery" },
+        { id: "managing-stage-boundaries", label: "Managing stage boundaries" },
+        { id: "closing", label: "Closing a project" }
+      ],
+      correctOrder: [
+        "starting-up",
+        "directing",
+        "initiating",
+        "controlling-stage",
+        "managing-product-delivery",
+        "managing-stage-boundaries",
+        "closing"
+      ],
+      itemFeedback: {
+        "starting-up": {
+          whyCorrect: "Starting up a project kommer først fordi prosjektet må vurderes og forberedes før det initieres fullt ut.",
+          whyWrong: "Oppstart kommer før initiering, styring av steg og leveransearbeid.",
+          whyExtended: [
+            "Her avklares blant annet om det finnes et grunnlag for å gå videre med prosjektet.",
+            "Prosjektet etableres ikke fullt før initieringsfasen."
+          ]
+        },
+        "directing": {
+          whyCorrect: "Directing a project plasseres tidlig fordi prosjektstyret gir overordnet retning og autorisasjon for videre arbeid.",
+          whyWrong: "Directing må komme før de operative prosessene drives videre, selv om styring i praksis skjer gjennom hele prosjektet.",
+          whyExtended: [
+            "I PRINCE2 er Directing a project ikke bare et enkelt punkt, men en overordnet styringsprosess som følger prosjektet.",
+            "I denne oppgaven brukes den i en forenklet livsløpsrekkefølge for å trene hovedlogikken."
+          ]
+        },
+        "initiating": {
+          whyCorrect: "Initiating a project kommer etter oppstart og styringsbeslutning fordi prosjektets planer, business case og styringsgrunnlag må etableres.",
+          whyWrong: "Initiering skjer før man kontrollerer prosjektsteg og leveranser i drift.",
+          whyExtended: [
+            "Her utarbeides et tydeligere grunnlag for hvordan prosjektet skal styres og gjennomføres.",
+            "Dette gjør senere kontroll og leveransearbeid mulig."
+          ]
+        },
+        "controlling-stage": {
+          whyCorrect: "Controlling a stage kommer når prosjektet gjennomfører et godkjent steg og må styre arbeid, risiko og avvik.",
+          whyWrong: "Dette hører hjemme etter initiering og før/under produktleveranse i prosjektsteget.",
+          whyExtended: [
+            "Prosjektlederen følger opp arbeidet i et steg og håndterer avvik innenfor toleranser.",
+            "Dette kobler planlagt styring til faktisk prosjektarbeid."
+          ]
+        },
+        "managing-product-delivery": {
+          whyCorrect: "Managing product delivery kommer når teamene leverer produktene eller resultatene prosjektet skal skape.",
+          whyWrong: "Produktleveranse forutsetter at prosjektet er startet, initiert og at et steg kontrolleres.",
+          whyExtended: [
+            "Denne prosessen handler om avtale, utførelse og levering av arbeidspakker.",
+            "Den er tett koblet til Controlling a stage."
+          ]
+        },
+        "managing-stage-boundaries": {
+          whyCorrect: "Managing stage boundaries kommer etter arbeid i et steg, når neste steg skal planlegges og besluttes.",
+          whyWrong: "Stage boundaries handler om overgangen mellom steg og bør derfor komme etter stegkontroll og leveransearbeid.",
+          whyExtended: [
+            "Her vurderes status, erfaringer, business case og plan for neste steg.",
+            "Prosjektstyret kan da beslutte om prosjektet skal fortsette."
+          ]
+        },
+        "closing": {
+          whyCorrect: "Closing a project kommer til slutt fordi prosjektet formelt avsluttes når leveranser og avslutningsaktiviteter er håndtert.",
+          whyWrong: "Avslutning kommer etter at prosjektets steg og leveranser er gjennomført eller prosjektet stoppes kontrollert.",
+          whyExtended: [
+            "Her bekreftes avslutning, erfaringer fanges opp og videre ansvar kan overføres.",
+            "Dette skiller prosjektlogikk fra løpende drift."
+          ]
+        }
+      },
+      whyCorrect: "I en forenklet livsløpsrekkefølge går PRINCE2 fra oppstart via styring, initiering, stegkontroll og leveranser til avslutning.",
+      whyExtended: [
+        "PRINCE2 er et prosjektstyringsrammeverk, ikke en utviklingsmetode for selve programvaren.",
+        "Directing a project er egentlig en overordnet styringsprosess gjennom prosjektet, men plasseres tidlig her for å vise at prosjektstyret autoriserer og styrer prosjektet.",
+        "Poenget i IN5431 er å forstå prosjekt som styrt, midlertidig organisering for å levere spesifiserte resultater."
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+      ]
+    },
+    {
+      id: 31,
+      type: "SequenceOrder",
+      title: "TOGAF ADM – arkitekturfaser",
+      points: 3,
+      prompt: "Sett de sentrale TOGAF ADM-fasene i riktig rekkefølge.",
+      source: "Fasit: IN5431, CIO Toolbox 3: Business processes and IT Architecture, TOGAF ADM.",
+      items: [
+        { id: "architecture-vision", label: "Architecture Vision" },
+        { id: "business-architecture", label: "Business Architecture" },
+        { id: "information-systems", label: "Information Systems Architecture" },
+        { id: "technology-architecture", label: "Technology Architecture" },
+        { id: "opportunities-solutions", label: "Opportunities and Solutions" },
+        { id: "migration-planning", label: "Migration Planning" },
+        { id: "implementation-governance", label: "Implementation Governance" },
+        { id: "architecture-change", label: "Architecture Change Management" }
+      ],
+      correctOrder: [
+        "architecture-vision",
+        "business-architecture",
+        "information-systems",
+        "technology-architecture",
+        "opportunities-solutions",
+        "migration-planning",
+        "implementation-governance",
+        "architecture-change"
+      ],
+      itemFeedback: {
+        "architecture-vision": {
+          whyCorrect: "Architecture Vision kommer først i hovedløpet fordi den etablerer retning og omfang for arkitekturarbeidet.",
+          whyWrong: "Arkitekturvisjonen må settes før man beskriver business-, data-, applikasjons- og teknologiarkitektur.",
+          whyExtended: [
+            "Visjonen gir felles forståelse av hva arkitekturarbeidet skal oppnå.",
+            "Den bygger på forarbeid og krav, men er første fase i hovedsekvensen A–H."
+          ]
+        },
+        "business-architecture": {
+          whyCorrect: "Business Architecture kommer etter visjonen fordi virksomhet, prosesser og styring må forstås før informasjonssystemer og teknologi detaljeres.",
+          whyWrong: "Business Architecture bør komme før Information Systems og Technology Architecture.",
+          whyExtended: [
+            "Dette kobler arkitekturarbeidet til strategi, organisasjon og forretningsprosesser.",
+            "IT-arkitektur skal støtte virksomhetsarkitekturen, ikke omvendt."
+          ]
+        },
+        "information-systems": {
+          whyCorrect: "Information Systems Architecture kommer etter Business Architecture og beskriver data- og applikasjonsarkitektur.",
+          whyWrong: "Information Systems Architecture bygger på forståelsen av business architecture og kommer før technology architecture.",
+          whyExtended: [
+            "Denne fasen dekker hvordan data og applikasjoner skal støtte virksomhetens behov.",
+            "I TOGAF deles dette ofte i Data Architecture og Application Architecture."
+          ]
+        },
+        "technology-architecture": {
+          whyCorrect: "Technology Architecture kommer etter informasjonssystemarkitekturen fordi teknologifundamentet skal støtte applikasjoner og data.",
+          whyWrong: "Teknologiarkitekturen bør ikke komme før business- og informasjonssystembehovene er forstått.",
+          whyExtended: [
+            "Denne fasen beskriver infrastruktur, plattformer, nettverk og teknologistandarder.",
+            "Den tekniske arkitekturen er en muliggjører, ikke startpunktet alene."
+          ]
+        },
+        "opportunities-solutions": {
+          whyCorrect: "Opportunities and Solutions kommer etter arkitekturbeskrivelsene fordi mulige løsninger identifiseres når målarkitekturen er forstått.",
+          whyWrong: "Man bør ikke velge løsninger før business-, informasjonssystem- og teknologiarkitektur er analysert.",
+          whyExtended: [
+            "Her oversettes arkitekturgap og målarkitektur til løsningsmuligheter.",
+            "Fasen peker mot konkrete endringstiltak."
+          ]
+        },
+        "migration-planning": {
+          whyCorrect: "Migration Planning kommer etter at løsningsmuligheter er identifisert, fordi tiltakene må prioriteres og planlegges.",
+          whyWrong: "Migrasjonsplanlegging forutsetter at man vet hvilke løsninger og endringer som er aktuelle.",
+          whyExtended: [
+            "Her struktureres veikart, prioriteringer og overgang fra nåsituasjon til målarkitektur.",
+            "Dette gjør arkitekturarbeidet gjennomførbart."
+          ]
+        },
+        "implementation-governance": {
+          whyCorrect: "Implementation Governance kommer etter migrasjonsplanlegging fordi gjennomføringen må styres opp mot arkitekturen.",
+          whyWrong: "Implementeringsstyring skjer når planlagte endringer realiseres, ikke før mål og migrasjon er definert.",
+          whyExtended: [
+            "Dette sikrer at prosjekter og tiltak følger arkitekturprinsipper og beslutninger.",
+            "Fasen kobler arkitekturarbeid til faktisk implementering."
+          ]
+        },
+        "architecture-change": {
+          whyCorrect: "Architecture Change Management kommer til slutt fordi arkitekturen må forvaltes og utvikles etter implementering.",
+          whyWrong: "Endringshåndtering kommer etter implementeringsstyring i hovedsekvensen og handler om videre evolusjon.",
+          whyExtended: [
+            "Organisasjoner endrer seg, og arkitekturen må derfor vedlikeholdes over tid.",
+            "Dette knytter tilbake til ideen om arkitektur som prinsipper og struktur som utvikles gjennom livsløpet."
+          ]
+        }
+      },
+      whyCorrect: "TOGAF ADM går fra Architecture Vision via business-, information systems- og technology architecture til løsninger, migrering, implementeringsstyring og endringshåndtering.",
+      whyExtended: [
+        "ADM står for Architecture Development Method.",
+        "TOGAF bruker ADM til å strukturere enterprise architecture-arbeid.",
+        "Requirements Management ligger sentralt i ADM og påvirker fasene, men er ikke lagt inn som et separat sekvenskort her."
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_no" }
+      ]
+    },
+    {
+      id: 32,
+      type: "SequenceOrder",
+      title: "Business case – fra alternativ til anbefaling",
+      points: 3,
+      prompt: "Sett stegene i en logisk business case-/NPV-vurdering i riktig rekkefølge.",
+      source: "Fasit: IN5431, CIO Toolbox 1: Business case, concept selection and alternative analysis.",
+      items: [
+        { id: "identify-alternatives", label: "Identify alternatives" },
+        { id: "estimate-benefits", label: "Estimate expected benefits" },
+        { id: "estimate-costs", label: "Estimate expected costs" },
+        { id: "estimate-timing", label: "Estimate timing" },
+        { id: "assess-risk-discount", label: "Assess risk / discount rate" },
+        { id: "compare-recommend", label: "Compare and recommend" }
+      ],
+      correctOrder: [
+        "identify-alternatives",
+        "estimate-benefits",
+        "estimate-costs",
+        "estimate-timing",
+        "assess-risk-discount",
+        "compare-recommend"
+      ],
+      itemFeedback: {
+        "identify-alternatives": {
+          whyCorrect: "Identify alternatives kommer først fordi business case brukes til å sammenligne mulige valg.",
+          whyWrong: "Før man beregner nytte, kostnader og risiko må man vite hvilke alternativer som vurderes.",
+          whyExtended: [
+            "Alternativer kan være ulike konsepter, leverandører, produkter eller tiltak.",
+            "En business case gir struktur til beslutningen."
+          ]
+        },
+        "estimate-benefits": {
+          whyCorrect: "Expected benefits må estimeres tidlig fordi nytten er en hoveddel av vurderingen av alternativets attraktivitet.",
+          whyWrong: "Nytteestimatet bør komme før selve sammenligningen og anbefalingen.",
+          whyExtended: [
+            "Nytte kan være monetær, men også kvalitativ eller vanskelig å tallfeste.",
+            "Eksempler er spart tid, økt inntekt, bedre sikkerhet eller compliance."
+          ]
+        },
+        "estimate-costs": {
+          whyCorrect: "Expected costs må estimeres fordi business case vurderer nytte opp mot kostnad.",
+          whyWrong: "Kostnader må kartlegges før timing, risiko og samlet vurdering kan gi mening.",
+          whyExtended: [
+            "Kostnader kan inkludere investering, drift, vedlikehold og organisatoriske kostnader.",
+            "Et alternativ med høy nytte kan fortsatt være lite attraktivt hvis kostnaden er høy."
+          ]
+        },
+        "estimate-timing": {
+          whyCorrect: "Timing kommer etter nytte og kostnad fordi NPV krever å vite når kontantstrømmer og gevinster oppstår.",
+          whyWrong: "Timing må vurderes før diskontering og sammenligning av nåverdi.",
+          whyExtended: [
+            "Fremtidige gevinster er mindre verdt enn gevinster i dag når de diskonteres.",
+            "Derfor er timing en eksplisitt del av nyttevurderingen."
+          ]
+        },
+        "assess-risk-discount": {
+          whyCorrect: "Risk / discount rate vurderes etter estimater for nytte, kostnad og timing fordi usikkerhet påvirker hvordan fremtidige kontantstrømmer diskonteres.",
+          whyWrong: "Risiko og diskonteringsrente brukes for å justere vurderingen før sammenligning og anbefaling.",
+          whyExtended: [
+            "Høyere usikkerhet kan gi høyere risikopremie og dermed lavere nåverdi.",
+            "Pensum understreker at estimater aldri er perfekt rasjonelle eller sikre."
+          ]
+        },
+        "compare-recommend": {
+          whyCorrect: "Compare and recommend kommer til slutt fordi alternativene først kan rangeres når nytte, kostnad, timing og risiko er vurdert.",
+          whyWrong: "Anbefaling bør ikke komme før business case-faktorene er analysert.",
+          whyExtended: [
+            "Sammenligningen kan kombinere NPV, pluss/minus-metode og ikke-kvantifiserbare gevinster.",
+            "Målet er å støtte beslutning, ikke produsere en mekanisk fasit."
+          ]
+        }
+      },
+      whyCorrect: "En business case vurderer alternativer gjennom nytte, kostnad, timing og risiko før en anbefaling gis.",
+      whyExtended: [
+        "NPV er ett verktøy for å gjøre fremtidige kontantstrømmer sammenlignbare i dagens verdi.",
+        "Ikke alle gevinster kan tallfestes, så business case bør ofte suppleres med kvalitative vurderinger.",
+        "Poenget er beslutningsstøtte og transparens, ikke perfekt prediksjon."
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+      ]
+    },
+    {
+      id: 33,
+      type: "SequenceOrder",
+      title: "Strategi til gjennomføring",
+      points: 2,
+      prompt: "Sett stegene i en logisk rekkefølge fra strategiske mål til gjennomføring.",
+      source: "Fasit: IN5431, Strategy and governing documents: the management context.",
+      items: [
+        { id: "strategic-goals", label: "Strategic goals" },
+        { id: "strategy", label: "Strategy" },
+        { id: "action-plan", label: "Action plan" },
+        { id: "roadmap-estimates", label: "Activities, roadmap and estimates" },
+        { id: "implementation", label: "Implementation" }
+      ],
+      correctOrder: [
+        "strategic-goals",
+        "strategy",
+        "action-plan",
+        "roadmap-estimates",
+        "implementation"
+      ],
+      itemFeedback: {
+        "strategic-goals": {
+          whyCorrect: "Strategic goals kommer først fordi organisasjonens mål setter retningen for strategiarbeidet.",
+          whyWrong: "Strategiske mål må være utgangspunktet før strategi, handlingsplan og gjennomføring gir mening.",
+          whyExtended: [
+            "I pensum settes mål av eiere, medlemmer eller borgere/politikere, avhengig av organisasjonstype.",
+            "Administrasjonen/toppledelsen har ansvar for å arbeide mot målene."
+          ]
+        },
+        strategy: {
+          whyCorrect: "Strategy kommer etter strategiske mål fordi strategien beskriver hvordan organisasjonen skal prioritere og posisjonere seg for å nå målene.",
+          whyWrong: "Strategi bygger på mål og kontekst, men kommer før konkret handlingsplan.",
+          whyExtended: [
+            "Strategi handler om valg, aktiviteter, trade-offs og strategisk posisjonering.",
+            "Operasjonell effektivitet er nødvendig, men ikke det samme som strategi."
+          ]
+        },
+        "action-plan": {
+          whyCorrect: "Action plan kommer etter strategi fordi strategien må oversettes til konkrete aktiviteter og ansvar.",
+          whyWrong: "Handlingsplanen er resultatet av strategiprosessen, ikke startpunktet.",
+          whyExtended: [
+            "Forelesningen beskriver handlingsplanen som et konkret resultat av strategiprosessen.",
+            "Den gjør strategien gjennomførbar."
+          ]
+        },
+        "roadmap-estimates": {
+          whyCorrect: "Activities, roadmap and estimates konkretiserer handlingsplanen gjennom aktivitetene som skal gjøres, rekkefølge/tidslinje og ressursanslag.",
+          whyWrong: "Aktiviteter, roadmap og estimater bør utformes etter at handlingsplanen er etablert.",
+          whyExtended: [
+            "Pensum sier at handlingsplanen bør inneholde aktiviteter, ansvar, forventet rekkefølge/tidsramme og estimater/budsjetter.",
+            "Detaljnivået kan variere med usikkerhet og organisasjonens arbeidsmåte."
+          ]
+        },
+        implementation: {
+          whyCorrect: "Implementation kommer til slutt fordi organisasjonen først må ha mål, strategi og plan før tiltakene gjennomføres.",
+          whyWrong: "Gjennomføring uten mål, strategi og plan kan bli tilfeldig og vanskelig å styre.",
+          whyExtended: [
+            "Gjennomføring kan skje gjennom prosjekter, reorganisering eller endrede prioriteringer i løpende drift.",
+            "Dette kobler strategidelen til CIO toolbox-verktøy som prosjekter, business case og governance."
+          ]
+        }
+      },
+      whyCorrect: "En logisk styringskjede er Strategic goals → Strategy → Action plan → Activities/roadmap/estimates → Implementation.",
+      whyExtended: [
+        "Strategi gir retning, men må oversettes til konkrete tiltak.",
+        "Handlingsplanen kobler strategisk valg til ansvar, tidslinje og ressurser.",
+        "Gjennomføring kan organiseres som prosjekter, produktteam, reorganisering eller prioriteringer i daglig drift."
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+      ]
     }
   ]
 };
