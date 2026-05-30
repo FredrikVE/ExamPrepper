@@ -145,6 +145,125 @@ Les mer i [ARCHITECTURE.md](./docs/architecture/ARCHITECTURE.md).
 
 ---
 
+## Testing
+
+Prosjektet bruker **Jest** som test-rammeverk for både enhetstester og integrasjonstester.
+
+Jest brukes til å teste forretningslogikk, repository-logikk, use cases, hjelpefunksjoner og integrert eksamensflyt med ekte data. Testene kjøres uten at Vite-serveren eller nettleseren må startes, noe som gjør dem raske og godt egnet for å kontrollere logikken i applikasjonen.
+
+Teststrategien følger samme lagdeling som resten av prosjektet:
+
+```txt
+Data
+  ↓
+Repository
+  ↓
+UseCases
+  ↓
+ViewModel / Utils
+```
+
+### Teststruktur
+
+Testene ligger i `test/` og er organisert etter hvilket lag eller område de tester:
+
+```txt
+test/
+├── integration/
+│   └── examFlow.integration.test.js
+├── model/
+│   ├── domain/
+│   │   ├── CalculateExamScoreUseCase.test.js
+│   │   ├── GetAvailableExamsUseCase.test.js
+│   │   ├── GetAvailableSubjectsUseCase.test.js
+│   │   ├── GetExamByBaseIdAndLangUseCase.test.js
+│   │   ├── GetExamQuestionsUseCase.test.js
+│   │   ├── GetSubjectByIdUseCase.test.js
+│   │   └── GradeAnswerUseCase.test.js
+│   └── repositories/
+│       ├── ExamRepository.test.js
+│       └── SubjectRepository.test.js
+├── ui/
+│   └── QuestionCard/
+│       └── matrixPlacementAnswerLogic.test.js
+└── utils/
+    ├── answerUtils.test.js
+    ├── questionUtils.test.js
+    └── viewModelUtils.test.js
+```
+
+### Viktigste testområder
+
+<table>
+    <tr>
+        <th>Område</th>
+        <th>Hva testes?</th>
+        <th>Eksempel på testfil</th>
+    </tr>
+    <tr>
+        <td>Rette svar</td>
+        <td>Single choice, multiple choice, fill-in, drag-and-drop, category sort, table match og matrix placement.</td>
+        <td><code>GradeAnswerUseCase.test.js</code></td>
+    </tr>
+    <tr>
+        <td>Scoreberegning</td>
+        <td>Poengsum, totalpoeng og prosent etter levering.</td>
+        <td><code>CalculateExamScoreUseCase.test.js</code></td>
+    </tr>
+    <tr>
+        <td>Fag og eksamener</td>
+        <td>Henting av tilgjengelige fag, eksamener, spørsmål og språkversjoner.</td>
+        <td><code>GetAvailableExamsUseCase.test.js</code></td>
+    </tr>
+    <tr>
+        <td>Repository-lag</td>
+        <td>Henting av fag- og eksamensdata fra datagrunnlaget.</td>
+        <td><code>ExamRepository.test.js</code></td>
+    </tr>
+    <tr>
+        <td>Hjelpefunksjoner</td>
+        <td>Normalisering av svar, spørsmålsdata og visningsstatus for ViewModel/UI.</td>
+        <td><code>answerUtils.test.js</code></td>
+    </tr>
+    <tr>
+        <td>Integrert eksamensflyt</td>
+        <td>Samspill mellom data, repository og use cases med ekte eksamensdata.</td>
+        <td><code>examFlow.integration.test.js</code></td>
+    </tr>
+</table>
+
+### Testkommandoer
+
+Kjør alle tester:
+
+```bash
+npm test
+```
+
+Kjør tester i watch mode:
+
+```bash
+npm run test:watch
+```
+
+Kjør tester med coverage:
+
+```bash
+npm run test:coverage
+```
+
+Ved UI-, CSS- eller komponentendringer bør produksjonsbuilden også sjekkes:
+
+```bash
+npm run build
+npm run preview
+```
+
+Automatiserte Jest-tester dekker ikke visuelle CSS-regresjoner direkte. Derfor bør layout, responsivitet og sentrale spørsmålsvisninger kontrolleres manuelt i preview etter visuelle endringer.
+
+Les mer i [testingdokumentasjonen](./docs/documentation/TESTING.md).
+
+
 ## Teknologier
 
 <p><strong>Prosjektet bruker blant annet:</strong></p>
