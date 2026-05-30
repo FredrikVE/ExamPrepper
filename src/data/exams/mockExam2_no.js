@@ -1032,7 +1032,7 @@ export const mockExam2_no = {
     {
       id: 122,
       type: "single",
-      title: "Double materiality",
+      title: "Double materiality (Dobbel vesentlighet)",
       points: 1,
       prompt: "Hva betyr 'double materiality' i bærekraftsrapportering?",
       source: "Fasit: Forelesning 15, slide 'Double materiality (dobbel vesentlighet)'.",
