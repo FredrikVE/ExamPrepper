@@ -773,6 +773,113 @@ export const mockExamSustainability_en = {
         { id: "informing-action", description: "Data is collected and used to inform action.", correctCardId: "monitoring", correctLabel: "Monitoring", whyCorrect: "Monitoring concerns measurement as a basis for action.", whyWrong: "This explanation concerns making conditions visible through data, not replacing physical activity.", whyExtended: ["Monitoring can make emissions, consumption or deviations measurable.", "This can support reporting, governance and practical improvement measures."] },
         { id: "new-technologies", description: "New technologies open up new solutions, services or ways of working.", correctCardId: "drive-innovation", correctLabel: "Drive innovation", whyCorrect: "Drive innovation means that new technologies can enable new solutions.", whyWrong: "This explanation concerns innovation, not only efficiency in existing processes.", whyExtended: ["Sustainability transitions can require new digital solutions and new organizational practices.", "This makes sustainability relevant for IT management, strategy and innovation work."] }
       ]
+    },
+    {
+      id: 27,
+      type: "dragDrop",
+      title: "Sustainability and IT management",
+      points: 2,
+      moduleId: "sustainability",
+      groupId: "management",
+      prompt: "Drag each point to the correct explanation.",
+      source: "Source: IN5431 Sustainability: Implications for management, slide 5.",
+      cards: [
+        { id: "responsible-technology", text: "Responsible use of digital technology" },
+        { id: "sustainability-innovation", text: "Innovation in sustainability transitions" },
+        { id: "data-reporting", text: "Data reporting in top-down policies" }
+      ],
+      targets: [
+        {
+          id: "responsible-technology",
+          description: "Organizations must consider how digital technology is used and what consequences that use has.",
+          correctCardId: "responsible-technology",
+          correctLabel: "Responsible use of digital technology",
+          whyCorrect: "Correct: the lecture says that companies should employ digital technology responsibly.",
+          whyWrong: "Wrong: this explanation is about responsible technology use, not innovation or reporting.",
+          whyExtended: [
+            "Digital technology can support sustainability, but it can also create environmental and social burdens.",
+            "That makes responsible use a topic for IT management."
+          ]
+        },
+        {
+          id: "sustainability-innovation",
+          description: "Transitions may require new solutions and open up new ways to organize technology, processes and services.",
+          correctCardId: "sustainability-innovation",
+          correctLabel: "Innovation in sustainability transitions",
+          whyCorrect: "Correct: the lecture says that sustainability transitions require and enable innovation.",
+          whyWrong: "Wrong: this explanation is about innovation, not only responsible use or reporting.",
+          whyExtended: [
+            "Sustainability is not only about following rules.",
+            "It can also drive new digital solutions, new processes and new forms of collaboration."
+          ]
+        },
+        {
+          id: "data-reporting",
+          description: "Steering from authorities and management needs data that can be collected, reported and used as a basis for decisions.",
+          correctCardId: "data-reporting",
+          correctLabel: "Data reporting in top-down policies",
+          whyCorrect: "Correct: the lecture says that top-down sustainability policies rely on data reporting.",
+          whyWrong: "Wrong: this explanation is about data reporting, not innovation or general technology use.",
+          whyExtended: [
+            "Reporting requirements make data, IT systems and governance important.",
+            "IT managers therefore need to understand how sustainability policy is operationalized through reporting."
+          ]
+        }
+      ]
+    },
+    {
+      id: 28,
+      type: "multi",
+      title: "Why sustainability matters for IT management",
+      points: 1,
+      moduleId: "sustainability",
+      groupId: "management",
+      prompt: "Select the statements that are part of the lecture's short version of today's message.",
+      source: "Source: IN5431 Sustainability: Implications for management, slide 5.",
+      options: [
+        {
+          text: "Companies should employ digital technology responsibly.",
+          correct: true,
+          why: "Correct: this is one of the three points on slide 5.",
+          whyExtended: [
+            "The point connects sustainability to choices about the use, operation and governance of digital technologies."
+          ]
+        },
+        {
+          text: "Sustainability transitions require and enable innovation.",
+          correct: true,
+          why: "Correct: the lecture points to innovation as part of sustainability transitions.",
+          whyExtended: [
+            "Sustainability may require new digital solutions, new processes and new forms of organization."
+          ]
+        },
+        {
+          text: "Top-down sustainability policies rely on data reporting.",
+          correct: true,
+          why: "Correct: slide 5 connects top-down policies to data reporting.",
+          whyExtended: [
+            "This makes data quality, reporting systems and IT governance relevant for sustainability."
+          ]
+        },
+        {
+          text: "Sustainability is mainly a topic for communication and branding.",
+          correct: false,
+          why: "Wrong: the lecture connects sustainability to technology use, innovation and reporting.",
+          whyExtended: [
+            "This is more concrete than communication.",
+            "It also concerns data, governance and organizational choices."
+          ]
+        },
+        {
+          text: "IT managers can leave sustainability to top management because it does not affect IT systems.",
+          correct: false,
+          why: "Wrong: slide 5 shows that sustainability is relevant for IT managers.",
+          whyExtended: [
+            "When policy relies on data reporting, IT systems and data governance become part of sustainability work."
+          ]
+        }
+      ]
+
     }
   ]
 };

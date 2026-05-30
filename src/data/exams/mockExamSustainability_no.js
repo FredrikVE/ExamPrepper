@@ -1329,6 +1329,113 @@ export const mockExamSustainability_no = {
           ]
         }
       ]
+    },
+    {
+      id: 27,
+      type: "dragDrop",
+      title: "Bærekraft og IT-ledelse",
+      points: 2,
+      moduleId: "sustainability",
+      groupId: "management",
+      prompt: "Dra hvert poeng til riktig forklaring.",
+      source: "Fasit: IN5431 Sustainability: Implications for management, slide 5.",
+      cards: [
+        { id: "responsible-technology", text: "Ansvarlig bruk av digital teknologi" },
+        { id: "sustainability-innovation", text: "Innovasjon i bærekraftsomstillinger" },
+        { id: "data-reporting", text: "Datarapportering i top-down policies" }
+      ],
+      targets: [
+        {
+          id: "responsible-technology",
+          description: "Virksomheter må ta hensyn til hvordan digital teknologi brukes og hvilke konsekvenser bruken har.",
+          correctCardId: "responsible-technology",
+          correctLabel: "Ansvarlig bruk av digital teknologi",
+          whyCorrect: "Riktig: forelesningen sier at virksomheter bør bruke digital teknologi ansvarlig.",
+          whyWrong: "Galt: denne forklaringen handler om ansvarlig teknologibruk, ikke innovasjon eller rapportering.",
+          whyExtended: [
+            "Digital teknologi kan støtte bærekraft, men den kan også gi miljømessige og sosiale belastninger.",
+            "Derfor blir ansvarlig bruk et tema for IT management."
+          ]
+        },
+        {
+          id: "sustainability-innovation",
+          description: "Omstillinger kan kreve nye løsninger og åpne for nye måter å organisere teknologi, prosesser og tjenester på.",
+          correctCardId: "sustainability-innovation",
+          correctLabel: "Innovasjon i bærekraftsomstillinger",
+          whyCorrect: "Riktig: forelesningen sier at bærekraftsomstillinger både krever og muliggjør innovasjon.",
+          whyWrong: "Galt: denne forklaringen handler om innovasjon, ikke bare ansvarlig bruk eller rapportering.",
+          whyExtended: [
+            "Bærekraft handler ikke bare om å følge regler.",
+            "Det kan også drive nye digitale løsninger, nye prosesser og nye former for samarbeid."
+          ]
+        },
+        {
+          id: "data-reporting",
+          description: "Styring fra myndigheter og ledelse trenger data som kan samles inn, rapporteres og brukes som beslutningsgrunnlag.",
+          correctCardId: "data-reporting",
+          correctLabel: "Datarapportering i top-down policies",
+          whyCorrect: "Riktig: forelesningen sier at top-down sustainability policies rely on data reporting.",
+          whyWrong: "Galt: denne forklaringen handler om datarapportering, ikke innovasjon eller generell teknologibruk.",
+          whyExtended: [
+            "Rapporteringskrav gjør data, IT-systemer og governance viktige.",
+            "IT-ledere må derfor forstå hvordan bærekraftspolitikk blir operasjonalisert gjennom rapportering."
+          ]
+        }
+      ]
+    },
+    {
+      id: 28,
+      type: "multi",
+      title: "Hvorfor bærekraft angår IT management",
+      points: 1,
+      moduleId: "sustainability",
+      groupId: "management",
+      prompt: "Marker utsagnene som ligger i kortversjonen av forelesningens budskap.",
+      source: "Fasit: IN5431 Sustainability: Implications for management, slide 5.",
+      options: [
+        {
+          text: "Virksomheter bør bruke digital teknologi ansvarlig.",
+          correct: true,
+          why: "Riktig: dette er ett av de tre poengene på slide 5.",
+          whyExtended: [
+            "Poenget kobler bærekraft til valg om bruk, drift og styring av digitale teknologier."
+          ]
+        },
+        {
+          text: "Bærekraftsomstillinger krever og muliggjør innovasjon.",
+          correct: true,
+          why: "Riktig: forelesningen peker på innovasjon som en del av bærekraftsomstillinger.",
+          whyExtended: [
+            "Bærekraft kan kreve nye digitale løsninger, nye prosesser og nye former for organisering."
+          ]
+        },
+        {
+          text: "Top-down sustainability policies bygger på datarapportering.",
+          correct: true,
+          why: "Riktig: slide 5 kobler top-down policies til data reporting.",
+          whyExtended: [
+            "Dette gjør datakvalitet, rapporteringssystemer og IT governance relevant for bærekraft."
+          ]
+        },
+        {
+          text: "Bærekraft er primært et tema for kommunikasjon og merkevarebygging.",
+          correct: false,
+          why: "Galt: forelesningen kobler bærekraft til teknologibruk, innovasjon og rapportering.",
+          whyExtended: [
+            "Dette er mer konkret enn kommunikasjon.",
+            "Det handler også om data, styring og organisatoriske valg."
+          ]
+        },
+        {
+          text: "IT-ledere kan overlate bærekraft til toppledelsen fordi temaet ikke påvirker IT-systemer.",
+          correct: false,
+          why: "Galt: slide 5 viser at bærekraft er relevant for IT-ledere.",
+          whyExtended: [
+            "Når politikk bygger på datarapportering, blir IT-systemer og datastyring del av bærekraftsarbeidet."
+          ]
+        }
+      ]
+
     }
   ]
 };
