@@ -102,18 +102,28 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		scrollExamWorkspaceToTop(examWorkspaceRef);
 	}, [visibleQuestionCount, examWorkspaceRef]);
 
-	const handleTestModeEnterKeyDown = useCallback((event) => {
-		if (!shouldHandleTestModeEnterKeyDown(event)) {
+	const handleFooterNavigationKeyDown = useCallback((event) => {
+		if (!shouldHandleFooterNavigationKeyDown(event)) {
 			return;
 		}
 
-		if (submitted || !canGoNext) {
+		if (event.key === "ArrowLeft" && canGoPrevious) {
+			event.preventDefault();
+			previousQuestion();
 			return;
 		}
 
-		event.preventDefault();
-		nextQuestion();
-	}, [submitted, canGoNext, nextQuestion]);
+		if (event.key === "ArrowRight" && canGoNext) {
+			event.preventDefault();
+			nextQuestion();
+			return;
+		}
+
+		if (event.key === "Enter" && !submitted && canGoNext) {
+			event.preventDefault();
+			nextQuestion();
+		}
+	}, [submitted, canGoPrevious, canGoNext, previousQuestion, nextQuestion]);
 
 	const goToQuestion = useCallback((index) => {
 		if (index < 0 || index >= visibleQuestionCount) {
@@ -261,10 +271,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
 
 	useEffect(() => {
-		window.addEventListener("keydown", handleTestModeEnterKeyDown);
+		window.addEventListener("keydown", handleFooterNavigationKeyDown);
 
-		return () => window.removeEventListener("keydown", handleTestModeEnterKeyDown);
-	}, [handleTestModeEnterKeyDown]);
+		return () => window.removeEventListener("keydown", handleFooterNavigationKeyDown);
+	}, [handleFooterNavigationKeyDown]);
 
 	useEffect(() => {
 		if (submitted) {
@@ -325,8 +335,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	};
 }
 
-const shouldHandleTestModeEnterKeyDown = (event) => {
-	if (event.key !== "Enter") {
+const FOOTER_NAVIGATION_KEYS = ["Enter", "ArrowLeft", "ArrowRight"];
+
+const shouldHandleFooterNavigationKeyDown = (event) => {
+	if (!FOOTER_NAVIGATION_KEYS.includes(event.key)) {
 		return false;
 	}
 
@@ -334,7 +346,11 @@ const shouldHandleTestModeEnterKeyDown = (event) => {
 		return false;
 	}
 
-	return !isEnterKeyHandledByFocusedElement(event.target);
+	if (event.key === "Enter") {
+		return !isEnterKeyHandledByFocusedElement(event.target);
+	}
+
+	return !isArrowKeyHandledByFocusedElement(event.target);
 };
 
 const isEnterKeyHandledByFocusedElement = (target) => {
@@ -365,6 +381,18 @@ const isEnterKeyHandledByFocusedElement = (target) => {
 		"time",
 		"week"
 	].includes(input.type);
+};
+
+const isArrowKeyHandledByFocusedElement = (target) => {
+	if (typeof Element === "undefined" || !(target instanceof Element)) {
+		return false;
+	}
+
+	return Boolean(
+		target.closest(
+			"input, select, textarea, [contenteditable='true'], [role='textbox'], [role='combobox'], [role='listbox'], [role='slider'], [role='spinbutton']"
+		)
+	);
 };
 
 const isQuestionAnswered = (question, answer) => {
