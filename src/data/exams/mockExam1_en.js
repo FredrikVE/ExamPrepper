@@ -337,14 +337,14 @@ export const mockExam1_en = {
           ]
         },
         {
-          text: "A method for customer journeys and empathy interviews",
+          text: "A repository of reusable components for rapidly configuring digital offerings",
           correct: false,
-          why: "Wrong: this fits better with design thinking/shared customer insight practices.",
+          why: "Wrong: this describes Digital Platform (DP), not Operational Backbone.",
           whyExtended: [
-            "Customer journeys and empathy interviews are techniques from design thinking, which is tool no. 3 in the CIO toolbox.",
-            "Design thinking is used when the problem is unclear and requires exploration — with the double diamond process: Discover, Define, Develop, Deliver.",
-            "Shared Customer Insights as a D4D building block is about organizational learning about what customers will pay for, but OB is not that building block.",
-            "OB focuses on systems, processes and data for stable operations — it is an infrastructure capability, not a user insight method."
+            "This is the definition of Digital Platform: 'repository of business, data, and infrastructure components used to rapidly configure digital offerings'.",
+            "OB and DP are two different D4D building blocks. OB provides stability and integration of core processes. DP provides reusable components for innovation.",
+            "Lecture 10 explicitly states 'An Operational Backbone is Not Enough for Digital Success', showing that OB and DP serve different purposes.",
+            "OB focuses on systems, processes and data for stable operations. DP focuses on modular components for rapid experimentation."
           ]
         }
       ]
@@ -360,14 +360,14 @@ export const mockExam1_en = {
       source: "Source: Lecture 10, Digital Platform, slides 'A digital platform - what is it' and 'Digital platform'.",
       options: [
         {
-          text: "To replace all business processes with manual routines",
+          text: "To standardize and integrate core systems, processes and data for reliable operations",
           correct: false,
-          why: "Wrong: a digital platform is about components and digital innovation, not manual routines.",
+          why: "Wrong: this describes Operational Backbone (OB), not Digital Platform.",
           whyExtended: [
-            "Digital Platform is about the opposite of manual routines — it is a repository of reusable digital components.",
-            "DP enables rapid innovation and continuous improvement through modular business, data and infrastructure components.",
-            "Lecture 10 distinguishes between OB (which automates and standardizes operations) and DP (which enables experimentation with new digital offerings).",
-            "Replacing digital processes with manual routines would be a step backward that undermines the entire D4D logic."
+            "This is close to the OB definition: 'a coherent set of standardized, integrated systems, processes, and data supporting a company's core operations'.",
+            "OB focuses on stability, reliability and integration of existing processes. DP focuses on reusable components for rapid innovation.",
+            "Lecture 10 distinguishes the two: OB provides a 'tightly integrated, bulletproof production environment'. DP provides 'easy access to data, business and technology components for experimentation'.",
+            "Students often confuse OB and DP because both involve systems and data. The key difference is purpose: OB = stable core, DP = rapid configuration of new offerings."
           ]
         },
         {
@@ -435,14 +435,14 @@ export const mockExam1_en = {
       source: "Source: Lecture 11, Accountability Framework, slides on autonomy and alignment.",
       options: [
         {
-          text: "cost and tax",
+          text: "centralization and decentralization",
           correct: false,
-          why: "Wrong: this is not the core of AF.",
+          why: "Wrong: centralization/decentralization is a governance concept. AF specifically balances autonomy and alignment.",
           whyExtended: [
-            "Accountability Framework is about organizational distribution of responsibility for digital offerings and components, not about tax matters.",
+            "Centralization and decentralization describe how decision authority is distributed in IT governance archetypes (Business Monarchy vs Anarchy).",
+            "AF is more specific: it distributes responsibilities for digital offerings and components so that teams have autonomy within a common direction.",
             "The AF definition is: 'distribution of responsibilities for digital offerings and components that balances autonomy and alignment'.",
-            "Cost may be a factor in decisions, but AF is about who has responsibility and decision authority — not about financial optimization.",
-            "Lecture 11 focuses on topics like component owners, metrics, trust and empowered teams — not on accounting or tax matters."
+            "Lecture 11 focuses on component owners, metrics, trust and empowered teams. These are mechanisms for balancing autonomy and alignment, not centralization and decentralization in general."
           ]
         },
         {
@@ -464,14 +464,14 @@ export const mockExam1_en = {
           ]
         },
         {
-          text: "hardware and software",
+          text: "IT governance and decision rights",
           correct: false,
-          why: "Wrong: AF is organizational/governance-oriented, not a hardware/software balance.",
+          why: "Wrong: IT governance distributes decision rights across domains. AF specifically balances autonomy and alignment for digital offerings.",
           whyExtended: [
-            "AF is an organizational building block about roles, responsibilities and decision rights — not about technology choices.",
-            "Hardware/software considerations belong more to the IT Architecture tool in the CIO toolbox, where one analyzes infrastructure and applications.",
-            "Lecture 11 is about 'encouraging desirable behaviour in using IT' and 'empowering people to imagine and build great components'.",
-            "D4D distinguishes between architecture transformation (OB, DP — technical components) and governance transformation (SCI, AF — organizational mechanisms)."
+            "IT governance and AF are related but distinct. IT governance determines who makes and contributes to IT decisions across five domains (Weill & Ross).",
+            "AF is a D4D building block that specifically addresses the distribution of responsibilities for digital offerings and components.",
+            "IT governance uses archetypes (Business Monarchy, Federal, IT Duopoly etc.) to structure decisions. AF uses mechanisms like component owners, metrics, trust and empowered teams.",
+            "D4D distinguishes between architecture transformation (OB, DP) and governance transformation (SCI, AF). AF is the D4D building block closest to governance, but its focus is narrower: autonomy vs alignment."
           ]
         },
         {
@@ -498,14 +498,14 @@ export const mockExam1_en = {
       source: "Source: Lecture 12, External Development Platform, slide 'External Developer Platform'.",
       options: [
         {
-          text: "An internal payroll system for employees",
+          text: "An internal platform of reusable business, data and infrastructure components",
           correct: false,
-          why: "Wrong: that is an internal system, not a platform opened to external parties.",
+          why: "Wrong: this describes Digital Platform (DP), not External Developer Platform (ExDP).",
           whyExtended: [
-            "ExDP explicitly deals with opening digital components to external parties — it is an outward-facing capability.",
-            "A payroll system is an internal support function that has nothing to do with platform strategy or digital innovation.",
-            "Lecture 12 shows that ExDP 'increases the payback on investments — you may need outside parties' creativity to generate digital offerings'.",
-            "ExDP requires APIs and boundary resources that give structured access to core components — something a payroll system does not offer."
+            "Digital Platform is an internal repository of reusable components used to rapidly configure digital offerings.",
+            "ExDP goes further by opening selected digital components to external parties via APIs and boundary resources.",
+            "Lecture 12 shows that ExDP 'increases the payback on investments. You may need outside parties' creativity to generate digital offerings'.",
+            "The distinction matters: DP is internal-facing for the organization's own product teams. ExDP is outward-facing toward partners and the ecosystem."
           ]
         },
         {
@@ -729,14 +729,14 @@ export const mockExam1_en = {
           ]
         },
         {
-          text: "individual motivation and personality",
+          text: "digital vision and transformation roadmap",
           correct: false,
-          why: "Wrong: this is HR/leadership, not operating model in the D4D/EA sense.",
+          why: "Wrong: digital vision belongs to digital strategy, not to the operating model concept.",
           whyExtended: [
-            "Individual motivation belongs to HR and personnel management, which is not part of the CIO toolbox or the D4D framework.",
-            "Operating model is an architecture concept about organizational design of processes and systems, not individual psychology.",
-            "Lecture 5 is about process integration and standardization as an architectural foundation — not about employee satisfaction.",
-            "The CIO toolbox model mentions HR under 'Outside the toolbox, but part of IT management' — it is a separate discipline."
+            "Digital vision and roadmap are elements of digital strategy (Lecture 14), not dimensions of the operating model.",
+            "Operating model is an architecture concept defined by two dimensions: process integration and process standardization.",
+            "Lecture 5 shows the operating model as a 'strategic bridge' under the IT Architecture tool, not under strategy.",
+            "Digital strategy and operating model are related but address different questions: strategy asks 'where are we going?', operating model asks 'how are processes structured?'."
           ]
         },
         {
@@ -751,14 +751,14 @@ export const mockExam1_en = {
           ]
         },
         {
-          text: "number of employees and number of meetings",
+          text: "autonomy and alignment",
           correct: false,
-          why: "Wrong: an operating model is about integration/standardization of processes, not administrative capacity.",
+          why: "Wrong: autonomy and alignment is the balance in the Accountability Framework, not the operating model.",
           whyExtended: [
-            "Operating model is defined along the dimensions of process integration and process standardization — not by staffing or meeting frequency.",
-            "Number of employees is a capacity question; operating model is about how processes are structured and coordinated.",
-            "The four operating models (coordination, unification, diversification, replication) all deal with process design, not organization size.",
-            "Even a small team can operate with a unification model (high integration + high standardization) — it is the design choice that matters, not the number of people."
+            "Autonomy and alignment are the two poles that the Accountability Framework balances for digital offerings and components.",
+            "Operating model is defined by two different dimensions: process integration and process standardization.",
+            "Both concepts involve organizational design, but they address different concerns: operating model addresses process architecture, AF addresses responsibility distribution.",
+            "The four operating models (coordination, unification, diversification, replication) are about how processes are structured, not about how responsibilities are distributed."
           ]
         }
       ]
