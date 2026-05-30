@@ -1113,6 +1113,64 @@ Start med å bevare fagpoenget.
 
 ---
 
+## Når du legger til nye eksamenssett
+
+Når en bot lager et nytt mockExam-sett, skal den også sjekke tester som bruker faktisk eksamensdata.
+
+Dette gjelder særlig denne filen.
+
+```txt
+test/integration/examFlow.integration.test.js
+```
+
+Når et nytt eksamenssett legges til i `src/data/data.js`, må botten kontrollere og eventuelt oppdatere disse testene.
+
+```txt
+loads visible subjects with exam counts from real data
+loads available Norwegian exams for IN5431 from real data
+```
+
+Disse testene kan feile fordi antall synlige eksamener endrer seg når et nytt sett registreres.
+
+Typiske ting som må oppdateres.
+
+```txt
+examCount for synlige fag
+forventet antall eksamener
+forventet liste med exam.id
+rekkefølge dersom sortOrder gjør at ny eksamen vises i listen
+```
+
+Ikke oppdater tester mekanisk.
+
+Hvis en test bruker subject-metadata direkte, skal tallet bare endres hvis metadataen faktisk er endret.
+
+Eksempel.
+
+```txt
+GetAvailableSubjectsUseCase kan telle synlige eksamener fra reelle data.
+GetSubjectByIdUseCase kan returnere examCount fra subject-metadata.
+
+Disse to trenger ikke alltid samme forventning.
+```
+
+Botten skal derfor lese testen før den endrer tallet.
+
+Hard regel.
+
+```txt
+Når et nytt mockExam-sett legges til, skal botten kjøre eller be brukeren kjøre:
+
+npm test -- --runInBand
+npm run build
+```
+
+Hvis testene feiler på eksamenstelling, skal botten lage en egen liten testpatch.
+
+Den patchen skal bare endre forventningene som faktisk følger av nytt eksamenssett.
+
+---
+
 ## Når du oversetter oppgaver
 
 Oversett mening, ikke pynt.
