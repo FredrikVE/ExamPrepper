@@ -5,9 +5,9 @@ export const mockExamDragCategorize_en = {
   baseId: "mock-exam-drag-categorize",
   lang: "en",
   title: "Model training: drag, sort and place",
-  description: "Five interactive tasks for model understanding: CIO Toolbox, D4D building blocks, IT governance, transformation theory and the operating model matrix.",
+  description: "Six interactive tasks for model understanding: CIO Toolbox, D4D building blocks, IT governance, transformation theory, the operating model matrix and the Autonomy and Alignment Matrix.",
   modeLabel: "MODEL TRAINING",
-  estimatedMinutes: "20–30",
+  estimatedMinutes: "25–35",
   sortOrder: 90,
   questions: [
     {
@@ -357,6 +357,103 @@ export const mockExamDragCategorize_en = {
           label: "Coordination",
           correctQuadrantId: "low-standardization-high-integration",
           why: "Coordination means high integration but low standardization. Units may have different processes, but must share information and coordinate across units, for example because one unit's transactions affect another."
+        }
+      ]
+    },
+    {
+      id: 6,
+      type: "matrix-placement",
+      title: "Autonomy and alignment",
+      moduleId: "d4d",
+      groupId: "accountability-framework",
+      points: 4,
+      prompt: "Drag each situation to the correct place in the Autonomy and Alignment Matrix.",
+      source: "Answer key: IN5431, Designed for Digital, lecture on Accountability Framework.",
+      itemBankTitle: "Situations",
+      itemBankSubtitle: "Place each card by degree of autonomy and alignment.",
+      itemBankHint: "Drag a card, or click a card and then a quadrant.",
+      matrix: {
+        xAxis: {
+          label: "Autonomy",
+          lowLabel: "Low",
+          highLabel: "High"
+        },
+        yAxis: {
+          label: "Alignment",
+          lowLabel: "Low",
+          highLabel: "High"
+        },
+        quadrants: [
+          {
+            id: "high-alignment-low-autonomy",
+            x: "low",
+            y: "high",
+            title: "High alignment / Low autonomy",
+            description: "Shared goal, but low local room for action"
+          },
+          {
+            id: "high-alignment-high-autonomy",
+            x: "high",
+            y: "high",
+            title: "High alignment / High autonomy",
+            description: "Shared direction, and the team figures out how"
+          },
+          {
+            id: "low-alignment-low-autonomy",
+            x: "low",
+            y: "low",
+            title: "Low alignment / Low autonomy",
+            description: "Little shared direction and little local room for action"
+          },
+          {
+            id: "low-alignment-high-autonomy",
+            x: "high",
+            y: "low",
+            title: "Low alignment / High autonomy",
+            description: "Teams act freely, but without a clear shared direction"
+          }
+        ]
+      },
+      items: [
+        {
+          id: "build-a-bridge",
+          label: "Management says that we need to cross the river, and that the team must build a bridge.",
+          correctQuadrantId: "high-alignment-low-autonomy",
+          whyCorrect: "Correct: the goal is clear, but the solution is decided in advance.",
+          whyWrong: "Wrong: the situation has high alignment, but low autonomy.",
+          whyExtended: [
+            "The team has a shared direction, but not real room to choose the solution."
+          ]
+        },
+        {
+          id: "figure-out-how",
+          label: "Management says that we need to cross the river. The team must figure out how.",
+          correctQuadrantId: "high-alignment-high-autonomy",
+          whyCorrect: "Correct: the goal is shared, and the team has autonomy to choose the solution.",
+          whyWrong: "Wrong: this is the combination with both high alignment and high autonomy.",
+          whyExtended: [
+            "This fits the AF logic best. The organization sets direction, while the team chooses the approach."
+          ]
+        },
+        {
+          id: "hope-someone-works-on-it",
+          label: "Teams work freely, but nobody knows whether the river problem is actually prioritized.",
+          correctQuadrantId: "low-alignment-high-autonomy",
+          whyCorrect: "Correct: the teams have room for action, but lack shared direction.",
+          whyWrong: "Wrong: this is high autonomy without enough alignment.",
+          whyExtended: [
+            "Autonomy without shared goals, metrics or priorities can become fragmented work."
+          ]
+        },
+        {
+          id: "waiting-for-direction",
+          label: "Nobody has a clear goal, and teams must wait for approval before doing anything.",
+          correctQuadrantId: "low-alignment-low-autonomy",
+          whyCorrect: "Correct: the situation lacks both shared direction and local room for action.",
+          whyWrong: "Wrong: both alignment and autonomy are low here.",
+          whyExtended: [
+            "This is the weakest combination. Teams do not know clearly what to achieve, and they also lack freedom to act."
+          ]
         }
       ]
     }

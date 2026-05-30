@@ -5,9 +5,9 @@ export const mockExamDragCategorize_no = {
   baseId: "mock-exam-drag-categorize",
   lang: "no",
   title: "Modelltrening: dra, sorter og plasser",
-  description: "Fem interaktive oppgaver for modellforståelse: CIO Toolbox, D4D-byggeklosser, IT governance, transformation theory og operating model-matrisen.",
+  description: "Seks interaktive oppgaver for modellforståelse: CIO Toolbox, D4D-byggeklosser, IT governance, transformation theory, operating model-matrisen og Autonomy and Alignment Matrix.",
   modeLabel: "MODELLTRENING",
-  estimatedMinutes: "20–30",
+  estimatedMinutes: "25–35",
   sortOrder: 90,
   questions: [
     {
@@ -357,6 +357,103 @@ export const mockExamDragCategorize_no = {
           label: "Coordination",
           correctQuadrantId: "low-standardization-high-integration",
           why: "Coordination betyr høy integrasjon, men lav standardisering. Enhetene kan ha ulike prosesser, men må dele informasjon og koordinere på tvers, for eksempel fordi én enhets transaksjoner påvirker en annen."
+        }
+      ]
+    },
+    {
+      id: 6,
+      type: "matrix-placement",
+      title: "Autonomy and alignment",
+      moduleId: "d4d",
+      groupId: "accountability-framework",
+      points: 4,
+      prompt: "Dra hver situasjon til riktig plass i Autonomy and Alignment Matrix.",
+      source: "Fasit: IN5431, Designed for Digital, forelesning om Accountability Framework.",
+      itemBankTitle: "Situasjoner",
+      itemBankSubtitle: "Plasser hvert kort etter grad av autonomy og alignment.",
+      itemBankHint: "Du kan dra et kort, eller klikke kortet og deretter en kvadrant.",
+      matrix: {
+        xAxis: {
+          label: "Autonomy",
+          lowLabel: "Lav",
+          highLabel: "Høy"
+        },
+        yAxis: {
+          label: "Alignment",
+          lowLabel: "Lav",
+          highLabel: "Høy"
+        },
+        quadrants: [
+          {
+            id: "high-alignment-low-autonomy",
+            x: "low",
+            y: "high",
+            title: "Høy alignment / Lav autonomy",
+            description: "Felles mål, men lavt lokalt handlingsrom"
+          },
+          {
+            id: "high-alignment-high-autonomy",
+            x: "high",
+            y: "high",
+            title: "Høy alignment / Høy autonomy",
+            description: "Felles retning, og teamet finner selv ut hvordan"
+          },
+          {
+            id: "low-alignment-low-autonomy",
+            x: "low",
+            y: "low",
+            title: "Lav alignment / Lav autonomy",
+            description: "Lite felles retning og lite lokalt handlingsrom"
+          },
+          {
+            id: "low-alignment-high-autonomy",
+            x: "high",
+            y: "low",
+            title: "Lav alignment / Høy autonomy",
+            description: "Teamene handler fritt, men uten tydelig felles retning"
+          }
+        ]
+      },
+      items: [
+        {
+          id: "build-a-bridge",
+          label: "Ledelsen sier at vi må krysse elven, og at teamet skal bygge en bro.",
+          correctQuadrantId: "high-alignment-low-autonomy",
+          whyCorrect: "Riktig: målet er tydelig, men løsningen er bestemt på forhånd.",
+          whyWrong: "Galt: situasjonen har høy alignment, men lav autonomy.",
+          whyExtended: [
+            "Teamet har felles retning, men ikke reelt handlingsrom til å velge løsning."
+          ]
+        },
+        {
+          id: "figure-out-how",
+          label: "Ledelsen sier at vi må krysse elven. Teamet må finne ut hvordan.",
+          correctQuadrantId: "high-alignment-high-autonomy",
+          whyCorrect: "Riktig: målet er felles, og teamet har autonomi til å velge løsning.",
+          whyWrong: "Galt: dette er kombinasjonen med både høy alignment og høy autonomy.",
+          whyExtended: [
+            "Dette passer AF-logikken best. Organisasjonen setter retning, mens teamet velger fremgangsmåte."
+          ]
+        },
+        {
+          id: "hope-someone-works-on-it",
+          label: "Teamene jobber fritt, men ingen vet om elveproblemet faktisk er prioritert.",
+          correctQuadrantId: "low-alignment-high-autonomy",
+          whyCorrect: "Riktig: teamene har handlingsrom, men mangler felles retning.",
+          whyWrong: "Galt: dette er høy autonomy uten nok alignment.",
+          whyExtended: [
+            "Autonomi uten felles mål, metrics eller prioriteringer kan bli fragmentert arbeid."
+          ]
+        },
+        {
+          id: "waiting-for-direction",
+          label: "Ingen har et tydelig mål, og teamene må vente på godkjenning før de gjør noe.",
+          correctQuadrantId: "low-alignment-low-autonomy",
+          whyCorrect: "Riktig: situasjonen mangler både felles retning og lokalt handlingsrom.",
+          whyWrong: "Galt: her er både alignment og autonomy lav.",
+          whyExtended: [
+            "Dette er den svakeste kombinasjonen. Teamene vet ikke tydelig hva de skal oppnå, og har heller ikke frihet til å handle."
+          ]
         }
       ]
     }

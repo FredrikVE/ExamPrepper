@@ -118,6 +118,30 @@ describe("exam flow integration", () => {
         expect(gradeAnswerUseCase.execute(singleQuestion, buildCorrectAnswer(singleQuestion))).toBe(true);
     });
 
+    test("grades Autonomy and alignment matrix questions from real data", async () => {
+        const examIds = [
+            "mock-exam-drag-categorize-no",
+            "mock-exam-drag-categorize-en"
+        ];
+
+        for (const examId of examIds) {
+            const questions = await getExamQuestionsUseCase.execute(examId);
+            const question = questions.find((candidate) => candidate.title === "Autonomy and alignment");
+
+            expect(question).toMatchObject({
+                type: QUESTION_TYPES.MATRIX_PLACEMENT,
+                moduleId: "d4d",
+                groupId: "accountability-framework",
+                points: 4
+            });
+            expect(question.items).toHaveLength(4);
+
+            const answer = buildCorrectAnswer(question);
+
+            expect(gradeAnswerUseCase.execute(question, answer)).toBe(true);
+            expect(gradeAnswerUseCase.getQuestionScore(question, answer)).toBe(4);
+        }
+    });
 
     test("finds translated exam by base id and lang", async () => {
         const exam = await getExamByBaseIdAndLangUseCase.execute({
