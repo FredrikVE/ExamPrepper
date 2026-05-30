@@ -1,6 +1,4 @@
 // src/model/repositories/ExamRepository.js
-import { getIn5431DefaultQuestionImageRefs } from "../../data/subjects/in5431/defaultQuestionImageRefs.js";
-
 export default class ExamRepository {
     constructor(examQuestionDataSource, conceptImageDataSource) {
         this.examQuestionDataSource = examQuestionDataSource;
@@ -35,7 +33,6 @@ export default class ExamRepository {
 
         return this.enrichQuestionsWithConceptImages(exam.questions ?? [], {
             examId: exam.id,
-            baseId: exam.baseId,
             subjectId: exam.subjectId,
             language: language ?? exam.lang
         });
@@ -59,10 +56,9 @@ export default class ExamRepository {
             ...examContext,
             subjectId: question.subjectId ?? examContext.subjectId,
             moduleId: question.moduleId,
-            groupId: question.groupId,
-            questionId: question.id
+            groupId: question.groupId
         };
-        const questionImageRefs = getQuestionConceptImageRefs(question, questionContext);
+        const questionImageRefs = getQuestionConceptImageRefs(question);
 
         const enrichedQuestion = this.enrichFeedbackEntryWithConceptImages(
             question,
@@ -232,22 +228,8 @@ function getImageLookupContext(context) {
     };
 }
 
-function getQuestionConceptImageRefs(question, context) {
-    const explicitImageRefs = getExplicitConceptImageRefs(question);
-
-    if (explicitImageRefs.length > 0) {
-        return explicitImageRefs;
-    }
-
-    if (context.subjectId !== "in5431") {
-        return [];
-    }
-
-    return getIn5431DefaultQuestionImageRefs({
-        baseId: context.baseId,
-        language: context.language,
-        questionId: context.questionId
-    });
+function getQuestionConceptImageRefs(question) {
+    return getExplicitConceptImageRefs(question);
 }
 
 function getConceptImageRefs(entry, fallbackImageRefs = []) {

@@ -378,10 +378,11 @@ Returnerer ferdige bildeobjekter: `{ id, src, alt, title, caption }`.
 
 Beriker spørsmålsobjekter med bilder ved lasting — ikke ved visning.
 Resultatet er at `whyExtendedImages` er et ferdigbygd array på spørsmålet
-når det når ViewModel. To nivåer av fallback:
+når det når ViewModel.
 
-- Eksplisitte `whyExtendedImageRefs` på selve objektet (spørsmål, svarsalternativ, target) vinner alltid
-- Ellers brukes `defaultQuestionImageRefs.js` som fallback per spørsmåls-ID
+Bildereferanser (`whyExtendedImageRefs`) ligger direkte på spørsmålet,
+svarsalternativet eller targeten i mockdata. Repository løser dem via
+`ConceptImageDataSource` og legger ferdige bildeobjekter på `whyExtendedImages`.
 
 **4. View — komponenter som rendrer bilder**
 
@@ -408,8 +409,7 @@ const src = `/subjects/${subjectId}/${moduleId}/${imageId}.svg`;
 
 1. Legg bildefilen i `public/subjects/{subjectId}/{moduleId}/{groupId}/`
 2. Legg til en oppføring i `src/data/subjects/{subjectId}/conceptImages.js`
-3. Pek på bildet via `whyExtendedImageRefs` på spørsmålet/alternativet i mockdata,
-   eller legg til en mapping i `defaultQuestionImageRefs.js`
+3. Legg til `whyExtendedImageRefs` på spørsmålet eller alternativet i mockdata
 
 View-laget trenger ingen endringer.
 

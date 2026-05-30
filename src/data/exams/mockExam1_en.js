@@ -20,7 +20,10 @@ export const mockExam1_en = {
       answerKey: "process / business process",
       source: "Source: Lecture 5, Business processes and IT Architecture, slide 'What is a business process?'",
       whyCorrect: "The sentence is the definition of a **business process**: a set of **activities** with **logical order** and **dependencies** that produce a **desired result**.",
-      whyWrong: "Other terms like project, platform or architecture don't fit because the definition describes the **workflow** of **activities** within an enterprise."
+      whyWrong: "Other terms like project, platform or architecture don't fit because the definition describes the **workflow** of **activities** within an enterprise.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+      ]
     },
     {
       id: 2,
@@ -72,6 +75,10 @@ export const mockExam1_en = {
             "The lecture specifies that for non-trivial development initiatives, setting correct estimates is impossible — they are always estimates with **uncertainty**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
       ]
     },
     {
@@ -125,6 +132,9 @@ export const mockExam1_en = {
             "Funding decisions require NPV and **business case**, not process diagrams."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
       ]
     },
     {
@@ -179,6 +189,9 @@ export const mockExam1_en = {
             "The NPV calculation shows that when the **risk premium** is equal, ranking is determined by **benefits**, **costs** and **timing** alone."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
       ]
     },
     {
@@ -191,7 +204,10 @@ export const mockExam1_en = {
       answerKey: "technology",
       source: "Source: Lecture 7 and the Operational Backbone lecture, definition of Digital Business Design.",
       whyCorrect: "Correct because **digital business design** describes the interplay between **people**, **processes** and **technology**, not just IT systems in isolation.",
-      whyWrong: "Wrong if the answer only points to data, strategy or architecture. The concept is explicitly three-part: **people**, **processes** and **technology**."
+      whyWrong: "Wrong if the answer only points to data, strategy or architecture. The concept is explicitly three-part: **people**, **processes** and **technology**.",
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+      ]
     },
     {
       id: 6,
@@ -422,7 +438,10 @@ export const mockExam1_en = {
       answerKey: "pay",
       source: "Source: Lecture 8, Shared Customer Insight, and the exam example file.",
       whyCorrect: "Correct because **Shared Customer Insights** is defined as **organizational learning** about **what customers will pay for** and how **digital technology** can meet their needs.",
-      whyWrong: "Wrong if the answer only mentions what customers 'like' or 'use'. The point is **willingness to pay**/value and the link to digital solutions."
+      whyWrong: "Wrong if the answer only mentions what customers 'like' or 'use'. The point is **willingness to pay**/value and the link to digital solutions.",
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
+      ]
     },
     {
       id: 10,
@@ -599,6 +618,9 @@ export const mockExam1_en = {
             "Weill & Ross (2005) published this approach in MIT Sloan Management Review as 'A Matrixed Approach to Designing **IT Governance**'."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
       ]
     },
     {
@@ -653,6 +675,9 @@ export const mockExam1_en = {
             "The archetype means that no one has overarching **responsibility** — it is placed at the bottom of the centralization scale in Weill & Ross's model."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
       ]
     },
     {
@@ -707,6 +732,9 @@ export const mockExam1_en = {
             "A project can implement architectural decisions, but the architecture lives on after the project is finished."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
       ]
     },
     {
@@ -761,6 +789,9 @@ export const mockExam1_en = {
             "The four operating models (coordination, unification, diversification, replication) are about how **processes** are structured, not about how **responsibilities** are distributed."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
       ]
     },
     {
@@ -773,7 +804,11 @@ export const mockExam1_en = {
       answerKey: "temporary",
       source: "Source: Lecture 4, slide 'What is a project?'.",
       whyCorrect: "Correct because a project is defined as a **temporary organization** with a specified result and time period.",
-      whyWrong: "Wrong if the answer suggests a permanent line organization. The defining feature of a project is precisely its temporary nature."
+      whyWrong: "Wrong if the answer suggests a permanent line organization. The defining feature of a project is precisely its temporary nature.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+      ]
     },
     {
       id: 17,
@@ -827,6 +862,9 @@ export const mockExam1_en = {
             "**Agile** method is 'NOT a process to follow or tools to use, but a mindset on how **people** think' — it is about flexibility and **learning**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -881,6 +919,9 @@ export const mockExam1_en = {
             "**IT governance** and **design thinking** solve different problems: governance is about who decides, **design thinking** is about what should be built."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
       ]
     },
     {
@@ -935,6 +976,9 @@ export const mockExam1_en = {
             "The **D4D** summary warns against precisely this under risks of **digital transformation**: 'dividing resources across so many building blocks → may not make real progress'."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
       ]
     },
     {
@@ -947,7 +991,10 @@ export const mockExam1_en = {
       answerKey: "Things / IoT",
       source: "Source: Lecture 7, Designed for digital, SMACIT slide.",
       whyCorrect: "Correct: **SMACIT** = **Social**, **Mobile**, **Analytics**, **Cloud**, **Internet of Things**.",
-      whyWrong: "Wrong if the last part does not refer to **IoT**/**Internet of Things**, because the acronym in the curriculum uses this as the T."
+      whyWrong: "Wrong if the last part does not refer to **IoT**/**Internet of Things**, because the acronym in the curriculum uses this as the T.",
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+      ]
     },
     {
       id: 21,
@@ -1001,6 +1048,9 @@ export const mockExam1_en = {
             "**BPMN** models can be used as tools in **design thinking** or process analysis, but they are not a strategic end product."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -1053,6 +1103,9 @@ export const mockExam1_en = {
             "The lecture summarizes that **sustainability** is relevant for IT leaders because '**sustainability** transitions require/enable **innovation**' and policy requires data."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
       ]
     },
     {
@@ -1247,6 +1300,9 @@ export const mockExam1_en = {
             "**Frameworks** reduce **uncertainty**, provide a common language and structure practice — but only when adapted to context."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     }
   ]

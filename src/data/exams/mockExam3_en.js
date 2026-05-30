@@ -112,7 +112,10 @@ export const mockExam3_en = {
       answerKey: "roadmap",
       source: "Source: Lecture 4, action plan: expected ordering and timeframe for executing the activities aka roadmap.",
       whyCorrect: "Correct: a roadmap describes the ordering and timeframe for implementation.",
-      whyWrong: "Wrong if the answer describes a calculation method or a governance archetype. The question asks for the time and ordering dimension of the plan."
+      whyWrong: "Wrong if the answer describes a calculation method or a governance archetype. The question asks for the time and ordering dimension of the plan.",
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+      ]
     },
     {
       id: 203,
@@ -162,6 +165,9 @@ export const mockExam3_en = {
             "This is why the course first establishes strategy and governing documents as the management context before introducing the CIO toolbox."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
       ]
     },
     {
@@ -285,6 +291,9 @@ export const mockExam3_en = {
             "BPMN belongs under the IT Architecture tool in the CIO toolbox, not under alternative analysis as an evaluation method."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
       ]
     },
     {
@@ -335,6 +344,9 @@ export const mockExam3_en = {
             "This gives a broader decision basis than net present value alone."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
       ]
     },
     {
@@ -350,7 +362,10 @@ export const mockExam3_en = {
       answerKey: "justification / business justification",
       source: "Source: IN5431 summary, PRINCE2 principles.",
       whyCorrect: "Correct: 'continued business justification' is one of the PRINCE2 principles.",
-      whyWrong: "Wrong if the answer points to a ceremony or governance archetype. The question asks for the PRINCE2 principle about ongoing justification."
+      whyWrong: "Wrong if the answer points to a ceremony or governance archetype. The question asks for the PRINCE2 principle about ongoing justification.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+      ]
     },
     {
       id: 208,
@@ -549,6 +564,10 @@ export const mockExam3_en = {
             "The course generally warns against using frameworks as goals in themselves."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
       ]
     },
     {
@@ -599,6 +618,9 @@ export const mockExam3_en = {
             "The two tools can support each other, but they are not the same thing."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
       ]
     },
     {
@@ -649,6 +671,9 @@ export const mockExam3_en = {
             "Mixing these makes it unclear which CIO toolbox tool is used for what."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
       ]
     },
     {
@@ -699,6 +724,9 @@ export const mockExam3_en = {
             "Employees must therefore be involved and competence must be developed in the transformation."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -759,6 +787,10 @@ export const mockExam3_en = {
             "This also connects to the ambidextrous organization: both exploitation and exploration must be handled."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" },
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
       ]
     },
     {
@@ -775,7 +807,10 @@ export const mockExam3_en = {
       answerKey: "inertia / organizational inertia",
       source: "Source: Lecture 14, slides 'Organizational Inertia'.",
       whyCorrect: "Correct: organizational inertia describes resistance/slowness that makes the organization continue on the same path.",
-      whyWrong: "Wrong if the answer describes agility or innovation. The question asks about inertia in sociotechnical systems."
+      whyWrong: "Wrong if the answer describes agility or innovation. The question asks about inertia in sociotechnical systems.",
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+      ]
     },
     {
       id: 216,
@@ -825,6 +860,9 @@ export const mockExam3_en = {
             "Requiring guaranteed benefits before learning can stop innovation."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -875,6 +913,9 @@ export const mockExam3_en = {
             "It concerns digital value propositions, not project administration."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
       ]
     },
     {
@@ -1203,6 +1244,9 @@ export const mockExam3_en = {
             "Management must therefore understand interactions and consequences across dimensions."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
       ]
     },
     {
@@ -1253,6 +1297,9 @@ export const mockExam3_en = {
             "Both can influence decisions, but at different levels."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "performance_based_IT-governance_model" }
       ]
     },
     {
@@ -1303,6 +1350,9 @@ export const mockExam3_en = {
             "Blind compliance can create bureaucracy and worse decisions."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -1353,6 +1403,9 @@ export const mockExam3_en = {
             "Digital transformation makes governance more important, not irrelevant."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     }
   ]

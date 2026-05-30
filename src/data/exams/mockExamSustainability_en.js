@@ -326,6 +326,10 @@ export const mockExamSustainability_en = {
           why: "Wrong: the lecture emphasizes data, reporting and regulation.",
           whyExtended: ["Circular economy is linked to LCA, MFA, EPD and Digital Product Passport.", "These require documentation, standards and data, not only communication."]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {
@@ -348,6 +352,9 @@ export const mockExamSustainability_en = {
         { id: "mfa", description: "Analysis of material flows and material costs in processes or value chains", correctCardId: "mfa", correctLabel: "Material Flow Analysis (MFA)", whyCorrect: "MFA concerns material flows.", whyWrong: "This explanation points to material flow, not life cycle declaration.", whyExtended: ["The lecture mentions ISO 14052:2017 Material flow cost accounting."] },
         { id: "epd", description: "Environmental declaration for a product, made on the basis of LCA", correctCardId: "epd", correctLabel: "Environmental Product Declaration (EPD)", whyCorrect: "EPD is an environmental declaration based on life cycle assessment.", whyWrong: "This is not a general market solution. It is documentation of a product's environmental data.", whyExtended: ["The lecture connects EPD to ISO 14025 Type III Environmental Labels and Declarations."] },
         { id: "dpp", description: "Digital documentation of origin, materials, production process and environmental impact", correctCardId: "dpp", correctLabel: "Digital Product Passport", whyCorrect: "Digital Product Passport makes product data digitally available.", whyWrong: "This is not a manual life cycle assessment. It is digital product documentation.", whyExtended: ["The lecture connects DPP to the EU and coming requirements for several product groups, including ICT and electronics."] }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {
@@ -365,6 +372,10 @@ export const mockExamSustainability_en = {
         { text: "Markets that connect supply and demand for materials.", correct: true, why: "Correct: digital markets can connect actors that have and need materials.", whyExtended: ["This can reduce waste by giving surplus materials new use."] },
         { text: "Sharing platforms and X-as-a-service models.", correct: true, why: "Correct: the lecture mentions both sharing platforms and servitization.", whyExtended: ["Servitization can shift focus from selling new products to access, maintenance and better resource use."] },
         { text: "Removing all data about materials so products become easier to resell.", correct: false, why: "Wrong: circular economy requires more information about materials and products, not less.", whyExtended: ["Without material data, repair, reuse, sorting and documentation become harder."] }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {
@@ -639,6 +650,11 @@ export const mockExamSustainability_en = {
         { text: "Financial incentives and sanctions can be linked to reported data.", correct: true, why: "Correct: the lecture points to significant financial incentives linked to the data.", whyExtended: ["The shipping case shows this clearly: emissions data can affect costs, financing and regulation.", "This makes data a governance object, not only a reporting exercise."] },
         { text: "IT governance becomes less relevant because sustainability reporting is only done by the communications department.", correct: false, why: "Wrong: the lecture argues that reporting requirements can expand and strengthen IT governance.", whyExtended: ["Communication can be part of reporting, but data capture, system support, verification and control are governance challenges.", "Sustainability reporting can resemble financial reporting by making internal control and data integrity central."] },
         { text: "Reported sustainability data does not need to be traceable back to sources.", correct: false, why: "Wrong: traceability, verification and data quality are central when data has governance and reporting functions.", whyExtended: ["Without traceability, the risk of errors, greenwashing and compliance failure increases."] }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" },
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
       ]
     },
     {
@@ -702,6 +718,9 @@ export const mockExamSustainability_en = {
         { text: "Digitalization is always sustainable because it is virtual.", correct: false, why: "Wrong: the lecture emphasizes that ICTs are also material artefacts.", whyExtended: ["Rare earth minerals, e-waste, energy consumption and social disruption show why this claim is too simple."] },
         { text: "Twin transitions can require new data flows, platforms and governance mechanisms.", correct: true, why: "Correct: circular economy, the shipping case and CSRD all point to this.", whyExtended: ["Data becomes necessary for optimization, reporting, verification and incentives."] },
         { text: "When a solution is digital, it does not need to be included in scope or materiality assessments.", correct: false, why: "Wrong: digital solutions can have direct, indirect and value-chain emissions as well as social consequences.", whyExtended: ["Double materiality and Scope 1-3 make digital solutions relevant for reporting and governance."] }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "twin-transitions", imageId: "twin_transitions" }
       ]
     },
     {
@@ -718,6 +737,10 @@ export const mockExamSustainability_en = {
         { text: "Delete material data when the product is sold to protect the supplier chain from insight.", correct: false, why: "Wrong: DPP concerns making more product information available, not less.", whyExtended: ["Without material data, repair, reuse, recycling and environmental reporting become harder."] },
         { text: "Only register marketing images and sales price because environmental data is not relevant.", correct: false, why: "Wrong: environmental impact, materials and production process are central.", whyExtended: ["A product passport is not only a sales catalog. It is documentation that can support circular value chains."] },
         { text: "Replace LCA and EPD with oral assessments without traceable data.", correct: false, why: "Wrong: the lecture connects circular economy to standardized analyses and documentation.", whyExtended: ["LCA, EPD, MFA and DPP point toward a more structured data basis, not less."] }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {

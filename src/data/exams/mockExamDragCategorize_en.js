@@ -88,7 +88,12 @@ export const mockExamDragCategorize_en = {
             "Weill & Ross describe decision domains, archetypes and a governance matrix."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" },
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" },
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+      ]
     },
     {
       id: 2,
@@ -154,7 +159,15 @@ export const mockExamDragCategorize_en = {
             "APIs and boundary resources are typical mechanisms for ExDP."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" },
+        { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" },
+        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" },
+        { moduleId: "designed-for-digital", groupId: "digital-platform", imageId: "DP" },
+        { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" },
+        { moduleId: "designed-for-digital", groupId: "external-developer-platform", imageId: "ExDP" }
+      ]
     },
     {
       id: 3,
@@ -220,7 +233,10 @@ export const mockExamDragCategorize_en = {
             "This domain decides which initiatives receive resources."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+      ]
     },
     {
       id: 4,
@@ -290,7 +306,10 @@ export const mockExamDragCategorize_en = {
             "Governance here is about enabling innovation without chaos."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+      ]
     },
     {
       id: 5,
@@ -358,6 +377,9 @@ export const mockExamDragCategorize_en = {
           correctQuadrantId: "low-standardization-high-integration",
           why: "Coordination means high integration but low standardization. Units may have different processes, but must share information and coordinate across units, for example because one unit's transactions affect another."
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
       ]
     },
     {

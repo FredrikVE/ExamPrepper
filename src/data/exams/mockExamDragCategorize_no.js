@@ -88,7 +88,12 @@ export const mockExamDragCategorize_no = {
             "Weill & Ross beskriver beslutningsdomener, arketyper og en governance matrix."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" },
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" },
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+      ]
     },
     {
       id: 2,
@@ -154,7 +159,15 @@ export const mockExamDragCategorize_no = {
             "API-er og boundary resources er typiske mekanismer for ExDP."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" },
+        { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" },
+        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" },
+        { moduleId: "designed-for-digital", groupId: "digital-platform", imageId: "DP" },
+        { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" },
+        { moduleId: "designed-for-digital", groupId: "external-developer-platform", imageId: "ExDP" }
+      ]
     },
     {
       id: 3,
@@ -220,7 +233,10 @@ export const mockExamDragCategorize_no = {
             "Dette domenet avgjør hvilke initiativer som får ressurser."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+      ]
     },
     {
       id: 4,
@@ -290,7 +306,10 @@ export const mockExamDragCategorize_no = {
             "Governance handler her om å muliggjøre innovasjon uten kaos."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+      ]
     },
     {
       id: 5,
@@ -358,6 +377,9 @@ export const mockExamDragCategorize_no = {
           correctQuadrantId: "low-standardization-high-integration",
           why: "Coordination betyr høy integrasjon, men lav standardisering. Enhetene kan ha ulike prosesser, men må dele informasjon og koordinere på tvers, for eksempel fordi én enhets transaksjoner påvirker en annen."
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "operating_model_matrix_no" }
       ]
     },
     {

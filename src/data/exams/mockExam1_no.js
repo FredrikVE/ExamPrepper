@@ -25,7 +25,10 @@ export const mockExam1_no = {
       answerKey: "prosess / forretningsprosess",
       source: "Fasit: Forelesning 5, Business processes and IT Architecture, slide 'What is a business process?'",
       whyCorrect: "Setningen er definisjonen av **business process**: et sett **aktiviteter** med logisk orden og **avhengigheter** som produserer et **ønsket resultat**.",
-      whyWrong: "Andre begreper som project, platform eller architecture passer ikke fordi definisjonen handler om selve **arbeidsflyten** av **aktiviteter** i en virksomhet."
+      whyWrong: "Andre begreper som project, platform eller architecture passer ikke fordi definisjonen handler om selve **arbeidsflyten** av **aktiviteter** i en virksomhet.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+      ]
     },
     {
       id: 2,
@@ -77,6 +80,10 @@ export const mockExam1_no = {
             "Forelesningen presiserer at for ikke-trivielle utviklingsinitiativer er korrekte estimater umulige — det er alltid estimater med **usikkerhet**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
       ]
     },
     {
@@ -130,6 +137,9 @@ export const mockExam1_no = {
             "Finansieringsbeslutninger krever NPV og **business case**, ikke prosessdiagrammer."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
       ]
     },
     {
@@ -184,6 +194,9 @@ export const mockExam1_no = {
             "NPV-beregningen viser at når risikopremien er lik, blir rangeringen bestemt av **nytte**, **kostnad** og **timing** alene."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
       ]
     },
     {
@@ -201,7 +214,10 @@ export const mockExam1_no = {
       answerKey: "teknologi / technology",
       source: "Fasit: Forelesning 7 og Operational Backbone-forelesningen, definisjon av Digital Business Design.",
       whyCorrect: "Riktig fordi **digital business design** beskriver samspillet mellom **people**, **processes** and **technology**, ikke bare IT-systemer isolert.",
-      whyWrong: "Galt hvis svaret peker på bare data, **strategi** eller arkitektur. Begrepet er eksplisitt tredelt: **mennesker**, **prosesser** og **teknologi**."
+      whyWrong: "Galt hvis svaret peker på bare data, **strategi** eller arkitektur. Begrepet er eksplisitt tredelt: **mennesker**, **prosesser** og **teknologi**.",
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+      ]
     },
     {
       id: 6,
@@ -428,7 +444,10 @@ export const mockExam1_no = {
       answerKey: "betale / pay",
       source: "Fasit: Forelesning 8, Shared Customer Insight, og eksamens-eksempelfilen slide 'Example: Shared customer insights'.",
       whyCorrect: "Riktig fordi **Shared Customer Insights** defineres som organisasjonslæring om **hva kunder vil betale for** og hvordan **digital teknologi** kan møte behovene.",
-      whyWrong: "Galt hvis svaret bare handler om hva kunder 'liker' eller 'bruker'. Poenget er **betalingsvilje**/verdi og koblingen til digitale løsninger."
+      whyWrong: "Galt hvis svaret bare handler om hva kunder 'liker' eller 'bruker'. Poenget er **betalingsvilje**/verdi og koblingen til digitale løsninger.",
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
+      ]
     },
     {
       id: 10,
@@ -597,6 +616,9 @@ export const mockExam1_no = {
             "Weill & Ross (2005) publiserte denne tilnærmingen i MIT Sloan Management Review som 'A Matrixed Approach to Designing **IT Governance**'."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
       ]
     },
     {
@@ -651,6 +673,9 @@ export const mockExam1_no = {
             "Arketypen innebærer at ingen har overordnet **ansvar** — den plasseres nederst på sentraliseringsskalaen i Weill & Ross' modell."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
       ]
     },
     {
@@ -705,6 +730,9 @@ export const mockExam1_no = {
             "Et prosjekt kan implementere arkitekturbeslutninger, men arkitekturen lever videre etter at prosjektet er avsluttet."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
       ]
     },
     {
@@ -759,6 +787,9 @@ export const mockExam1_no = {
             "Selv et lite team kan operere med et unification-modell (høy **integrasjon** + høy **standardisering**) — det er designvalget som avgjør, ikke antall personer."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "operating_model_matrix_no" }
       ]
     },
     {
@@ -777,7 +808,11 @@ export const mockExam1_no = {
       answerKey: "midlertidig / temporary",
       source: "Fasit: Forelesning 4, slide 'What is a project?'.",
       whyCorrect: "Riktig fordi prosjektet defineres som en **temporary organization** med spesifisert resultat og tidsperiode.",
-      whyWrong: "Galt hvis svaret antyder permanent linjeorganisasjon. Prosjektets særtrekk er nettopp midlertidig organisering."
+      whyWrong: "Galt hvis svaret antyder permanent linjeorganisasjon. Prosjektets særtrekk er nettopp midlertidig organisering.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+      ]
     },
     {
       id: 17,
@@ -831,6 +866,9 @@ export const mockExam1_no = {
             "**Agile** method er 'NOT a process to follow or tools to use, but a mindset on how **people** think' — det handler om fleksibilitet og **læring**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -885,6 +923,9 @@ export const mockExam1_no = {
             "**IT governance** og **design thinking** løser ulike problemer: governance handler om hvem som bestemmer, **design thinking** handler om hva som bør lages."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
       ]
     },
     {
@@ -939,6 +980,9 @@ export const mockExam1_no = {
             "**D4D**-oppsummeringen advarer mot nettopp dette under **risiko** ved **digital transformasjon**: 'dividing resources across so many building blocks → may not make real progress'."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
       ]
     },
     {
@@ -955,7 +999,10 @@ export const mockExam1_no = {
       answerKey: "Things / IoT",
       source: "Fasit: Forelesning 7, Designed for digital, SMACIT slide.",
       whyCorrect: "Riktig: **SMACIT** = **Social**, **Mobile**, **Analytics**, **Cloud**, **Internet of Things**.",
-      whyWrong: "Galt hvis siste ledd ikke viser til **IoT**/**Internet of Things**, fordi akronymet i pensum bruker dette som T-en."
+      whyWrong: "Galt hvis siste ledd ikke viser til **IoT**/**Internet of Things**, fordi akronymet i pensum bruker dette som T-en.",
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+      ]
     },
     {
       id: 21,
@@ -1009,6 +1056,9 @@ export const mockExam1_no = {
             "**BPMN**-modeller kan brukes som verktøy i **design thinking** eller prosessanalyse, men de er ikke et strategisk sluttprodukt."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -1061,6 +1111,9 @@ export const mockExam1_no = {
             "Forelesningen oppsummerer at **bærekraft** er relevant for IT-ledere fordi '**sustainability** transitions require/enable **innovation**' og politikk krever data."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
       ]
     },
     {
@@ -1243,6 +1296,9 @@ export const mockExam1_no = {
             "**Rammeverk** reduserer **usikkerhet**, gir felles språk og strukturerer praksis — men bare når de tilpasses kontekst."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     }
   ]

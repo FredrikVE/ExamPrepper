@@ -62,6 +62,9 @@ export const mockExam4_en = {
             "The course is about IT management challenges and strategies at the organizational level, not just within IT departments."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
       ]
     },
     {
@@ -116,6 +119,10 @@ export const mockExam4_en = {
             "A complete business case therefore combines quantitative NPV with qualitative assessment — pure numbers alone are insufficient."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
       ]
     },
     {
@@ -128,7 +135,11 @@ export const mockExam4_en = {
       answerKey: "discount (rate) / risk premium",
       source: "Source: Lecture 3, CIO Toolbox 1, slides on the financial business case and NPV.",
       whyCorrect: "Correct because the discount rate (which includes a risk premium) reduces the present value of future cash flows to reflect uncertainty. Higher risk means a higher discount rate, which lowers the NPV.",
-      whyWrong: "Wrong if the answer refers to interest rate alone without the risk dimension, or to concepts like conversion rate, which is a specific business metric rather than the general financial adjustment mechanism."
+      whyWrong: "Wrong if the answer refers to interest rate alone without the risk dimension, or to concepts like conversion rate, which is a specific business metric rather than the general financial adjustment mechanism.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+      ]
     },
     {
       id: 4,
@@ -245,6 +256,10 @@ export const mockExam4_en = {
             "Business case as a separate exercise before or after alternative analysis would lose the connection to the specific alternatives being evaluated."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" },
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
       ]
     },
     {
@@ -299,6 +314,9 @@ export const mockExam4_en = {
             "These are entirely different activities serving different purposes in the CIO toolbox."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
       ]
     },
     {
@@ -364,6 +382,9 @@ export const mockExam4_en = {
             "Technology Architecture underpins all other architecture layers — without appropriate infrastructure, applications and data cannot function."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
       ]
     },
     {
@@ -418,6 +439,9 @@ export const mockExam4_en = {
             "Replication offers economies of scale through standardized processes while allowing units to operate independently."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
       ]
     },
     {
@@ -472,6 +496,10 @@ export const mockExam4_en = {
             "Lecture 5 presents Fowler as 'the closest we get to an architecture thought leader in agile development' — he is deeply engaged with architecture, just from a different angle."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
       ]
     },
     {
@@ -484,7 +512,11 @@ export const mockExam4_en = {
       answerKey: "time",
       source: "Source: Lecture 4, CIO Toolbox 2, slide 'The triple constraint'.",
       whyCorrect: "Correct because the triple constraint consists of scope, cost and time. When all three are fixed, there is no flexibility to adjust, making the project highly vulnerable to disappointment.",
-      whyWrong: "Wrong if the answer refers to quality, risk or resources — while these are important project concerns, the triple constraint specifically consists of scope, cost and time."
+      whyWrong: "Wrong if the answer refers to quality, risk or resources — while these are important project concerns, the triple constraint specifically consists of scope, cost and time.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+      ]
     },
     {
       id: 11,
@@ -626,6 +658,10 @@ export const mockExam4_en = {
             "The choice depends on context — which connects to Cynefin as a meta-tool for choosing the right management approach."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" },
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -680,6 +716,9 @@ export const mockExam4_en = {
             "Governance archetypes like Federal and IT Duopoly involve many stakeholders beyond the CIO."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
       ]
     },
     {
@@ -754,6 +793,9 @@ export const mockExam4_en = {
             "The governance matrix uses these five specific domains matched against six archetypes."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
       ]
     },
     {
@@ -808,6 +850,9 @@ export const mockExam4_en = {
             "Management activities occur continuously within the governance framework — it is not a sequential relationship."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
       ]
     },
     {
@@ -946,7 +991,10 @@ export const mockExam4_en = {
       answerKey: "management",
       source: "Source: Lecture 11, Accountability Framework, slide 'IT governance', quoting Weill and Ross (2004).",
       whyCorrect: "Correct because the Weill and Ross definition explicitly states that management (not governance) makes decisions, while governance determines who has the right and responsibility to make them.",
-      whyWrong: "Wrong if the answer is governance, the board, or the CIO. The key distinction is that governance sets the structure while management operates within it."
+      whyWrong: "Wrong if the answer is governance, the board, or the CIO. The key distinction is that governance sets the structure while management operates within it.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+      ]
     },
     {
       id: 19,
@@ -1000,6 +1048,9 @@ export const mockExam4_en = {
             "Feudal can lead to fragmentation and duplication because there is no coordinating mechanism across units."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
       ]
     },
     {
@@ -1054,6 +1105,9 @@ export const mockExam4_en = {
             "The course uses the term to highlight that popularity does not equal universal applicability."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -1119,6 +1173,9 @@ export const mockExam4_en = {
             "The whole point of product teams over projects is continuity — 'Ensure continuity by creating lasting product teams instead of projects.'"
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -1173,6 +1230,9 @@ export const mockExam4_en = {
             "The three principles (modularity, standardization, responsiveness) are structural choices, not functional strategies."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
       ]
     },
     {
@@ -1248,7 +1308,10 @@ export const mockExam4_en = {
       answerKey: "domains",
       source: "Source: Lecture 6, CIO Toolbox 4, slide 'Styringsmatrisen'.",
       whyCorrect: "Correct because the governance matrix (styringsmatrisen) has the five decision domains (IT principles, IT architecture, IT infrastructure, business application needs, IT investment) on one axis and the six archetypes on the other.",
-      whyWrong: "Wrong if the answer refers to tools, methods or archetypes. The matrix combines domains (what is being decided) with archetypes (who decides), not with other structural elements."
+      whyWrong: "Wrong if the answer refers to tools, methods or archetypes. The matrix combines domains (what is being decided) with archetypes (who decides), not with other structural elements.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+      ]
     },
     {
       id: 25,
@@ -1300,8 +1363,14 @@ export const mockExam4_en = {
             "Its purpose is: 'How to distribute responsibility for IT among organizational units?'",
             "IT governance includes the five decision domains, six archetypes and the governance matrix — all inside the toolbox.",
             "IT governance is categorized under 'STYRING' (governance/steering) in the CIO toolbox model."
+          ],
+          whyExtendedImageRefs: [
+            { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
       ]
     }
 
@@ -1485,7 +1554,11 @@ export const mockExam4_en = {
             "Placing it under 'Not used in CIO-toolbox' preserves the visual logic of the slide."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "framewoks", imageId: "framewoks_and_best_practices" },
+        { moduleId: "cio-tool-box", groupId: "framewoks", imageId: "ITIL" }
+      ]
     },
     {
       "id": 28,
@@ -1579,6 +1652,14 @@ export const mockExam4_en = {
             "It should normally come after the internal platform is sufficiently mature."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" },
+        { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" },
+        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" },
+        { moduleId: "designed-for-digital", groupId: "digital-platform", imageId: "DP" },
+        { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" },
+        { moduleId: "designed-for-digital", groupId: "external-developer-platform", imageId: "ExDP" }
       ]
     },
     {
@@ -1657,7 +1738,10 @@ export const mockExam4_en = {
             "This is governance because it determines responsibility and accountability."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+      ]
     },
     {
       "id": 30,
@@ -1767,6 +1851,9 @@ export const mockExam4_en = {
             "It can create problems for standardization, integration and security."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
       ]
     },
     {
@@ -1861,6 +1948,9 @@ export const mockExam4_en = {
             "This links governance to business case and portfolio prioritization."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
       ]
     },
     {
@@ -1939,6 +2029,9 @@ export const mockExam4_en = {
             "Long analysis is usually inappropriate in the first response."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -2065,6 +2158,11 @@ export const mockExam4_en = {
             "The central dilemma is often centralization versus decentralization."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" },
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" },
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
       ]
     },
     {
@@ -2141,7 +2239,11 @@ export const mockExam4_en = {
             "Pivots are expected when learning shows that the original plan was wrong."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
+        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+      ]
     },
     {
       "id": 35,
@@ -2219,6 +2321,9 @@ export const mockExam4_en = {
             "Poor solutions should be rejected or improved."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
       ]
     },
     {
@@ -2295,7 +2400,11 @@ export const mockExam4_en = {
             "They should be presented alongside quantitative calculations."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+      ]
     },
     {
       id: 37,
@@ -2382,7 +2491,11 @@ export const mockExam4_en = {
             "For some products, customer use is the largest part of lifecycle emissions."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+      ]
     },
     {
       "id": 38,
@@ -2460,6 +2573,9 @@ export const mockExam4_en = {
             "This connects digital strategy to governance and accountability."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -2779,6 +2895,10 @@ export const mockExam4_en = {
             "It should not be confused with Application Architecture: applications are software systems and interactions; technology architecture is the underlying technical capability."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
       ]
     },
     {
@@ -2861,6 +2981,11 @@ export const mockExam4_en = {
             "EA aims to create an integrated environment responsive to change and supportive of business strategy."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
       ]
     },
     {
@@ -2917,6 +3042,10 @@ export const mockExam4_en = {
             "The correct expansion is Architecture Development Method."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_no" }
       ]
     },
     {
@@ -2984,6 +3113,10 @@ export const mockExam4_en = {
             "Understanding this contrast is more important than memorizing TOGAF as a universally correct method."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
       ]
     }
 

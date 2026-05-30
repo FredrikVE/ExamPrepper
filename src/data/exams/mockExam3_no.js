@@ -113,7 +113,10 @@ export const mockExam3_no = {
       answerKey: "roadmap / veikart",
       source: "Fasit: Forelesning 4, action plan: expected ordering and timeframe for executing the activities aka roadmap.",
       whyCorrect: "Riktig: roadmap/veikart beskriver rekkefølge og tidsramme for gjennomføring.",
-      whyWrong: "Galt hvis svaret beskriver en beregningsmetode eller governance-arketype. Her spørres det etter planens tids- og rekkefølgedimensjon."
+      whyWrong: "Galt hvis svaret beskriver en beregningsmetode eller governance-arketype. Her spørres det etter planens tids- og rekkefølgedimensjon.",
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+      ]
     },
     {
       id: 203,
@@ -163,6 +166,9 @@ export const mockExam3_no = {
             "Dette er grunnen til at kurset først etablerer strategi og styringsdokumenter som management context før CIO toolbox introduseres."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
       ]
     },
     {
@@ -286,6 +292,9 @@ export const mockExam3_no = {
             "BPMN ligger under IT Architecture-verktøyet i CIO toolbox, ikke alternative analysis sin evalueringsmetode."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
       ]
     },
     {
@@ -336,6 +345,9 @@ export const mockExam3_no = {
             "Dette gir et bredere beslutningsgrunnlag enn bare nåverdiberegning."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
       ]
     },
     {
@@ -352,7 +364,10 @@ export const mockExam3_no = {
       answerKey: "justification / business justification",
       source: "Fasit: IN5431 summary, PRINCE2 principles.",
       whyCorrect: "Riktig: 'continued business justification' er et av PRINCE2-prinsippene.",
-      whyWrong: "Galt hvis svaret peker på en seremoni eller en governance-arketype. Her spørres det etter PRINCE2-prinsippet om vedvarende begrunnelse."
+      whyWrong: "Galt hvis svaret peker på en seremoni eller en governance-arketype. Her spørres det etter PRINCE2-prinsippet om vedvarende begrunnelse.",
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+      ]
     },
     {
       id: 208,
@@ -531,6 +546,10 @@ export const mockExam3_no = {
             "Kurset advarer generelt mot å bruke rammeverk som mål i seg selv."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
       ]
     },
     {
@@ -581,6 +600,9 @@ export const mockExam3_no = {
             "De to verktøyene kan støtte hverandre, men de er ikke samme ting."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
       ]
     },
     {
@@ -631,6 +653,9 @@ export const mockExam3_no = {
             "Å blande disse gjør det uklart hvilket CIO toolbox-verktøy som brukes til hva."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
       ]
     },
     {
@@ -681,6 +706,9 @@ export const mockExam3_no = {
             "Derfor må ansatte involveres og kompetanse bygges i transformasjonen."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -741,6 +769,10 @@ export const mockExam3_no = {
             "Dette er også knyttet til ambidextrous organization: både exploitation og exploration må håndteres."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" },
+        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
       ]
     },
     {
@@ -759,7 +791,10 @@ export const mockExam3_no = {
       answerKey: "inertia / organisatorisk treghet",
       source: "Fasit: Forelesning 14, slides 'Organizational Inertia'.",
       whyCorrect: "Riktig: organizational inertia beskriver motstand/treghet som gjør at organisasjonen fortsetter på samme sti.",
-      whyWrong: "Galt hvis svaret beskriver smidighet eller innovasjon. Her spørres det om treghet i sosiotekniske systemer."
+      whyWrong: "Galt hvis svaret beskriver smidighet eller innovasjon. Her spørres det om treghet i sosiotekniske systemer.",
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+      ]
     },
     {
       id: 216,
@@ -809,6 +844,9 @@ export const mockExam3_no = {
             "Å kreve garantert gevinst før man lærer kan stoppe innovasjon."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -859,6 +897,9 @@ export const mockExam3_no = {
             "Det handler om digitale verdiforslag, ikke prosjektadministrasjon."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
       ]
     },
     {
@@ -1151,6 +1192,9 @@ export const mockExam3_no = {
             "Ledelse må derfor forstå samspill og konsekvenser på tvers av dimensjoner."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
       ]
     },
     {
@@ -1201,6 +1245,9 @@ export const mockExam3_no = {
             "De to kan begge påvirke beslutninger, men på ulike nivåer."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "performance_based_IT-governance_model" }
       ]
     },
     {
@@ -1251,6 +1298,9 @@ export const mockExam3_no = {
             "Blind etterlevelse kan skape byråkrati og dårligere beslutninger."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
       ]
     },
     {
@@ -1301,6 +1351,9 @@ export const mockExam3_no = {
             "Digital transformasjon gjør governance viktigere, ikke irrelevant."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     }
   ]

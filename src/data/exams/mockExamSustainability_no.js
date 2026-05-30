@@ -376,6 +376,10 @@ export const mockExamSustainability_no = {
             "Disse krever dokumentasjon, standarder og data, ikke bare kommunikasjon."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {
@@ -430,6 +434,9 @@ export const mockExamSustainability_no = {
           whyWrong: "Dette er ikke en manuell livsløpsanalyse, men digital produktdokumentasjon.",
           whyExtended: ["Forelesningen knytter DPP til EU og kommende krav for flere produktgrupper, inkludert ICT og elektronikk."]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {
@@ -472,6 +479,10 @@ export const mockExamSustainability_no = {
           why: "Galt: sirkulærøkonomi krever mer, ikke mindre, informasjon om materialer og produkter.",
           whyExtended: ["Uten materialdata blir reparasjon, gjenbruk, sortering og dokumentasjon vanskeligere."]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {
@@ -983,6 +994,11 @@ export const mockExamSustainability_no = {
           why: "Galt: sporbarhet, verifikasjon og datakvalitet er sentrale når data får styrings- og rapporteringsfunksjon.",
           whyExtended: ["Uten sporbarhet øker risikoen for feil, grønnvasking og sviktende compliance."]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" },
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
       ]
     },
     {
@@ -1118,6 +1134,9 @@ export const mockExamSustainability_no = {
           why: "Galt: digitale løsninger kan ha både direkte, indirekte og verdikjedebaserte utslipp samt sosiale konsekvenser.",
           whyExtended: ["Dobbel vesentlighet og scope 1–3 gjør digitale løsninger relevante for rapportering og styring."]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "twin-transitions", imageId: "twin_transitions" }
       ]
     },
     {
@@ -1158,6 +1177,10 @@ export const mockExamSustainability_no = {
           why: "Galt: forelesningen kobler sirkulærøkonomi til standardiserte analyser og dokumentasjon.",
           whyExtended: ["LCA, EPD, MFA og DPP peker i retning av mer strukturert datagrunnlag, ikke mindre."]
         }
+      ],
+      whyExtendedImageRefs: [
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
+        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
       ]
     },
     {
