@@ -24,6 +24,7 @@ const ORGANIZATION_AS_NETWORK_GROUPS = ref("strategy", "digital-strategy", "orga
 
 const DECISION_PROCESS_EN = ref("cio-tool-box", "decision-making", "generic_decision_making_process");
 const DECISION_PROCESS_NO = ref("cio-tool-box", "decision-making", "generic_decision_making_process_no");
+const TRIPLE_CONSTRAINT_EXPLAINED = ref("cio-tool-box", "triple-constraint", "Triple-Constraint-Explained-1080x1080-1");
 const TRIPLE_CONSTRAINT = ref("cio-tool-box", "triple-constraint", "triple_constraint_1");
 const CYNEFIN = ref("cio-tool-box", "cynefin", "cynefin_theory_of_everything");
 const PRINCE2 = ref("cio-tool-box", "prince2", "prince2_framework_model");
@@ -74,7 +75,7 @@ const COMMON_MOCK_EXAM_1 = {
     12: [DECISION_RIGHTS_MATRIX],
     13: [IT_GOVERNANCE_MATRIX],
     14: [TOGAF_TAXONOMY],
-    16: [TRIPLE_CONSTRAINT],
+    16: [TRIPLE_CONSTRAINT_EXPLAINED, TRIPLE_CONSTRAINT],
     17: [CYNEFIN],
     18: [DOUBLE_DIAMOND],
     19: [ACTION_PLAN],
@@ -98,7 +99,7 @@ const COMMON_MOCK_EXAM_2 = {
     111: [SCOPE_1_2_3_MODEL, SCOPE_1_2_3],
     112: [TWIN_TRANSITIONS],
     113: [DOUBLE_DIAMOND],
-    114: [TRIPLE_CONSTRAINT],
+    114: [TRIPLE_CONSTRAINT_EXPLAINED, TRIPLE_CONSTRAINT],
     115: [TOGAF_TAXONOMY],
     116: [AF],
     117: [D4D_OVERVIEW],
@@ -146,7 +147,7 @@ const COMMON_MOCK_EXAM_4 = {
     6: [DOUBLE_DIAMOND],
     7: [TOGAF_TAXONOMY],
     9: [TOGAF_TAXONOMY, TOGAF_LEVELS],
-    10: [TRIPLE_CONSTRAINT],
+    10: [TRIPLE_CONSTRAINT_EXPLAINED, TRIPLE_CONSTRAINT],
     11: [PRINCE2],
     12: [PRINCE2, CYNEFIN],
     13: [IT_GOVERNANCE_MATRIX],
@@ -159,7 +160,7 @@ const COMMON_MOCK_EXAM_4 = {
     20: [CYNEFIN],
     21: [CYNEFIN],
     22: [TOGAF_LEVELS],
-    23: [CYNEFIN, TRIPLE_CONSTRAINT],
+    23: [CYNEFIN, TRIPLE_CONSTRAINT_EXPLAINED, TRIPLE_CONSTRAINT],
     24: [IT_GOVERNANCE_MATRIX],
     25: [PRINCE2],
     27: [FRAMEWORKS_AND_BEST_PRACTICES, ITIL],
@@ -169,7 +170,7 @@ const COMMON_MOCK_EXAM_4 = {
     31: [IT_DECISION_DOMAINS],
     32: [CYNEFIN],
     33: [DECISION_PROCESS_EN, DOUBLE_DIAMOND, IT_GOVERNANCE_MATRIX],
-    34: [TRIPLE_CONSTRAINT],
+    34: [TRIPLE_CONSTRAINT_EXPLAINED, TRIPLE_CONSTRAINT],
     35: [DOUBLE_DIAMOND],
     36: [NPV, PV],
     37: [SCOPE_1_2_3_MODEL, SCOPE_1_2_3],

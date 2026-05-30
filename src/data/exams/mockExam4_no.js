@@ -1193,6 +1193,7 @@ export const mockExam4_no = {
           ],
           whyExtendedImageRefs: [
               { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" },
+              { imageId: "Triple-Constraint-Explained-1080x1080-1", moduleId: "cio-tool-box", groupId: "triple-constraint" },
               { imageId: "triple_constraint_1", moduleId: "cio-tool-box", groupId: "triple-constraint" }
             ]
         },

@@ -39,6 +39,15 @@ export const in5431ConceptImages = [
     {
         moduleId: "cio-tool-box",
         groupId: "triple-constraint",
+        imageId: "Triple-Constraint-Explained-1080x1080-1",
+        ext: "gif",
+        title: { no: "Triple constraint forklart", en: "Triple constraint explained" },
+        alt: { no: "Animert forklaring av sammenhengen mellom scope, time og cost", en: "Animated explanation of the relationship between scope, time and cost" },
+        caption: { no: "Animasjonen viser hvordan endringer i scope, time og cost påvirker hverandre i et prosjekt.", en: "The animation shows how changes in scope, time and cost affect each other in a project." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "triple-constraint",
         imageId: "triple_constraint_1",
         ext: "png",
         title: { no: "Triple constraint", en: "Triple constraint" },
