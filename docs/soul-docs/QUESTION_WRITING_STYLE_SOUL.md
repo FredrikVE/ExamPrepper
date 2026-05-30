@@ -2,7 +2,11 @@
 
 <!-- Sist oppdatert 2026-05-30 -->
 
-Dette dokumentet styrer hvordan oppgaver i ExamPrepper skal formuleres.
+Dette dokumentet styrer hvordan tekstinnholdet i ExamPrepper-oppgaver skal formuleres.
+
+`QUESTION_TYPE_SOUL.md` styrer oppgavetype, datastruktur og hvordan nye oppgaver legges til.
+
+Dette dokumentet styrer språk, tone, kildenærhet og formulering.
 
 Målet er oppgaver som høres ut som pensum.
 Ikke som generert tekst.
@@ -17,25 +21,57 @@ Oppgaven skal være faglig presis, kort og tett på forelesningsslides, pensumte
 
 Bruk dette dokumentet når du skriver eller endrer tekst i oppgavedata.
 
-Det gjelder særlig disse feltene.
+Det gjelder særlig tekst i disse feltene.
 
 ```txt
 title
 description
 prompt
-options text
+options.text
+cards.text
+items.label
+targets.description
 answers
 answerKey
 why
 whyCorrect
 whyWrong
 whyExtended
+itemFeedback
 source
 modeLabel
 ```
 
-Det gjelder ikke teknisk syntaks i kode.
-Ikke ødelegg JavaScript, JSON, Markdown eller filbaner for å følge skrivestil.
+Dette dokumentet gjelder ikke valg av oppgavetype.
+Det gjelder ikke appens datakontrakt.
+Det gjelder ikke komponentstruktur.
+
+Når du trenger regler for `type`, feltstruktur, scoring eller hvordan oppgaven legges inn i datafilene, bruk `QUESTION_TYPE_SOUL.md`.
+
+---
+
+## Ikke ødelegg teknisk syntaks
+
+Reglene i dette dokumentet gjelder vanlig prosa.
+
+De gjelder ikke teknisk syntaks i kode, JavaScript, JSON, Markdown, CSS, HTML, filbaner eller appens faktiske type-verdier.
+
+Ikke endre dette for å følge skrivestil.
+
+```txt
+"single"
+"multi"
+"fill"
+"dragDrop"
+"drag-categorize"
+"matrix-placement"
+"SequenceOrder"
+```
+
+Ikke endre `whyExtended`, `correctCardId`, `answerKey` eller andre feltnavn fordi de ser tekniske ut.
+
+Datakontrakten styres av appen.
+Språket inni feltene styres av dette dokumentet.
 
 ---
 
@@ -45,12 +81,19 @@ Når regler kolliderer, gjelder denne rekkefølgen.
 
 ```txt
 Faglig korrekthet først.
+Datakontrakt deretter.
 Nærhet til kilden deretter.
 Klarhet deretter.
 Skrivestil til slutt.
 ```
 
 Skriv aldri en penere oppgave som blir mindre presis.
+
+Ikke forkort bort informasjon som trengs for at fasiten skal bli entydig.
+
+Ikke fjern fagbegreper for å gjøre teksten mer hverdagslig.
+
+Ikke oversett engelske pensumbegreper bort.
 
 ---
 
@@ -99,8 +142,36 @@ spørsmålsform
 ```
 
 Når kilden sier `Operational Backbone`, skriv `Operational Backbone`.
+
 Når kilden sier `business process integration and standardization`, bruk de ordene.
+
 Når kilden sier `autonomy and alignment`, behold uttrykket.
+
+Når kilden sier `decision rights`, ikke skriv det om til et løst norsk uttrykk hvis det svekker koblingen til pensum.
+
+---
+
+## Presisjon slår korthet
+
+Korte oppgaver er bra.
+Entydige oppgaver er viktigere.
+
+Ikke gjør caset så kort at flere svar kan forsvares.
+
+Dårlig.
+
+```txt
+Bedriften har problemer med digitalisering. Hvilken D4D-byggekloss bør styrkes?
+```
+
+Bedre.
+
+```txt
+Bedriften har fragmenterte kundedata, manuelle overføringer og ulike kjerneprosesser i hver avdeling. Hvilken D4D-byggekloss bør styrkes?
+```
+
+Den første er kort, men for åpen.
+Den andre gir signalene som gjør `Operational Backbone` til en rettferdig fasit.
 
 ---
 
@@ -126,21 +197,24 @@ decision rights
 business application needs
 product teams
 design thinking
+digital transformation
+digitalization
+digitization
 ```
 
 Ikke oversett et begrep bare for å gjøre teksten mer norsk.
 Bruk norsk rundt begrepet.
 
-Dårlig
+Dårlig.
 
 ```txt
-Hvilken driftsmodell passer best for unike forretningsenheter
+Hvilken driftsmodell passer best for unike forretningsenheter?
 ```
 
-Bedre
+Bedre.
 
 ```txt
-Hvilken operating model passer best for unike forretningsenheter
+Hvilken operating model passer best for unike forretningsenheter?
 ```
 
 Bruk norsk bøyning når det gir bedre flyt.
@@ -149,7 +223,12 @@ Bruk norsk bøyning når det gir bedre flyt.
 roadmapet
 business casen
 governance-arketype
+D4D-byggekloss
 ```
+
+Ikke gjør norsk versjon friere enn engelsk versjon.
+
+Ikke legg til forklaringer i norsk versjon som ikke finnes i engelsk versjon.
 
 ---
 
@@ -179,28 +258,50 @@ Wikipedia-aktig
 AI-aktig
 ```
 
+Ikke ros studenten i selve oppgaveteksten.
+
+Ikke prøv å gjøre oppgaven morsom.
+
+Ikke skriv som om appen selger noe.
+
 ---
 
 ## Tegn og setningsflyt
 
-Ikke bruk em dash.
-Ikke bruk semikolon som setningstegn.
-Unngå kolon i vanlig prosa når punktum fungerer.
+Ikke bruk em dash i prosa.
+
+Ikke bruk semikolon som setningstegn i prosa.
+
+Unngå kolon i vanlig prosa når punktum fungerer bedre.
+
+Dette gjelder ikke kode, dataformater eller konkrete tekstverdier.
 
 Bruk korte setninger.
 Del opp lange forklaringer.
 La ett spørsmål teste ett poeng.
 
-Dårlig
+Dårlig.
 
 ```txt
-Hvilket utsagn illustrerer den sentrale rollen Operational Backbone spiller i en robust digital transformation
+Hvilket utsagn illustrerer den sentrale rollen Operational Backbone spiller i en robust digital transformation?
 ```
 
-Bedre
+Bedre.
 
 ```txt
-Hva beskriver best en Operational Backbone
+Hva beskriver best en Operational Backbone?
+```
+
+Dårlig.
+
+```txt
+Digital Platform gir organisasjonen nye muligheter, raskere innovasjon og en mer sømløs kundeopplevelse.
+```
+
+Bedre.
+
+```txt
+Digital Platform gir tilgang til gjenbrukbare komponenter for digitale tilbud.
 ```
 
 ---
@@ -231,15 +332,15 @@ showcase
 demonstrate
 ```
 
-Bruk slike ord bare når kilden selv bruker dem og begrepet er faglig viktig.
+Bruk slike ord bare når kilden selv bruker dem og ordet er faglig viktig i konteksten.
 
-Dårlig
+Dårlig.
 
 ```txt
 Digital Platform plays a crucial role in enabling seamless innovation.
 ```
 
-Bedre
+Bedre.
 
 ```txt
 Digital Platform gives access to reusable business, data and infrastructure components.
@@ -269,16 +370,28 @@ overall
 
 Skriv heller hva begrepet gjør i kurset.
 
-Dårlig
+Dårlig.
 
 ```txt
 IT governance plays a central role in ensuring a holistic digital strategy.
 ```
 
-Bedre
+Bedre.
 
 ```txt
 IT governance determines who makes and contributes to IT decisions.
+```
+
+Dårlig.
+
+```txt
+Operational Backbone is a vital foundation for a company's digital journey.
+```
+
+Bedre.
+
+```txt
+Operational Backbone is a coherent set of standardized, integrated systems, processes and data supporting core operations.
 ```
 
 ---
@@ -287,13 +400,13 @@ IT governance determines who makes and contributes to IT decisions.
 
 AI-tekst lager ofte tre ledd selv når to eller ett holder.
 
-Dårlig
+Dårlig.
 
 ```txt
 The Digital Platform enables innovation, agility and transformation.
 ```
 
-Bedre
+Bedre.
 
 ```txt
 The Digital Platform helps teams configure digital offerings faster.
@@ -301,11 +414,317 @@ The Digital Platform helps teams configure digital offerings faster.
 
 Bruk tre ledd bare når kilden faktisk har tre ledd.
 
-Eksempel fra D4D som skal beholdes.
+Eksempel som skal beholdes.
 
 ```txt
 people, processes and technology
 ```
+
+Eksempel som også kan beholdes hvis kilden bruker det.
+
+```txt
+benefit, cost, timing and risk
+```
+
+Ikke lag ekstra treledd for å få teksten til å høres balansert ut.
+
+---
+
+## Feltregler
+
+### `title`
+
+`title` skal være en kort faglig etikett.
+
+Godt.
+
+```txt
+Operating model
+Net Present Value
+Digital Platform
+IT governance
+Business case
+```
+
+Dårlig.
+
+```txt
+En viktig oppgave om hvordan digitale organisasjoner lykkes
+```
+
+Ikke skriv hele spørsmålet i `title`.
+
+---
+
+### `description`
+
+`description` brukes mest på eksamenssett.
+Skriv kort hva settet trener.
+
+Godt.
+
+```txt
+Blandet repetisjon på grunnnivå: CIO Toolbox, D4D, IT governance, strategi og bærekraft.
+```
+
+Dårlig.
+
+```txt
+En omfattende og engasjerende læringsopplevelse som hjelper studenten å mestre hele pensum.
+```
+
+---
+
+### `prompt`
+
+En prompt skal gi én tydelig instruks.
+
+Godt.
+
+```txt
+Hvilket verktøy i CIO toolbox er særlig knyttet til prioritering av digitale tjenester og finansiering?
+```
+
+Dårlig.
+
+```txt
+Hvordan kan man forstå den bredere betydningen av ulike styringsverktøy i en moderne digital organisasjon?
+```
+
+En prompt skal ikke forklare hele modellen før spørsmålet.
+Hvis konteksten trengs, bruk en kort case.
+
+---
+
+### `options.text`
+
+Alternativer skal være omtrent like lette å lese.
+Ikke gjør riktig alternativ lengst hver gang.
+Ikke legg inn ekstra presisjon bare i riktig alternativ.
+
+Dårlig.
+
+```txt
+A. Operational Backbone, which is the central and comprehensive organizational capability that enables robust digital transformation through standardized and integrated systems
+B. Digital Platform
+C. Shared Customer Insights
+D. Accountability Framework
+```
+
+Bedre.
+
+```txt
+A. Operational Backbone
+B. Digital Platform
+C. Shared Customer Insights
+D. Accountability Framework
+```
+
+Hvis alternativene er utsagn, hold samme form på alle.
+
+Dårlig.
+
+```txt
+A. High integration and low standardization
+B. Replication
+C. It is when organizations use a lot of data
+D. Digital innovation
+```
+
+Bedre.
+
+```txt
+A. High integration and low standardization
+B. High integration and high standardization
+C. Low integration and high standardization
+D. Low integration and low standardization
+```
+
+---
+
+### `answers`
+
+`answers` skal inneholde realistiske varianter studenten kan skrive.
+
+Ta med vanlige språkvarianter.
+Ikke ta med svar som endrer begrepet.
+
+Godt.
+
+```txt
+digitalization
+digitalisering
+```
+
+Godt.
+
+```txt
+process
+business process
+forretningsprosess
+```
+
+Dårlig.
+
+```txt
+change
+technology
+organization
+```
+
+For generelt.
+
+---
+
+### `answerKey`
+
+`answerKey` skal vise forventet svar kort.
+
+Godt.
+
+```txt
+Digitalization / digitalisering
+```
+
+Dårlig.
+
+```txt
+Alt som handler om å bruke teknologi til å endre organisasjoner
+```
+
+`answerKey` er ikke stedet for lang forklaring.
+Bruk `whyCorrect` eller `whyExtended`.
+
+---
+
+### `why`
+
+`why` skal normalt være én kort faglig begrunnelse.
+
+Godt.
+
+```txt
+Riktig: Coordination betyr høy integrasjon og lav standardisering.
+```
+
+Dårlig.
+
+```txt
+Riktig! Dette er et veldig godt valg fordi det viser en helhetlig forståelse av modellen.
+```
+
+`why` skal forklare faglig forskjell, ikke gi ros.
+
+---
+
+### `whyCorrect`
+
+`whyCorrect` skal forklare hvorfor svaret er riktig.
+
+Godt.
+
+```txt
+Riktig fordi Operational Backbone handler om standardiserte og integrerte systemer, prosesser og data som støtter core operations.
+```
+
+Dårlig.
+
+```txt
+Riktig fordi dette er det beste svaret.
+```
+
+---
+
+### `whyWrong`
+
+`whyWrong` skal forklare hvorfor et nærliggende feil svar er feil.
+
+Godt.
+
+```txt
+Galt fordi Digital Platform handler om gjenbrukbare komponenter for digitale tilbud, ikke stabilisering av kjerneprosesser.
+```
+
+Dårlig.
+
+```txt
+Galt fordi dette ikke stemmer.
+```
+
+Forklar forvekslingen.
+Ikke bare avvis svaret.
+
+---
+
+### `whyExtended`
+
+`whyExtended` skal gi repetisjon.
+Ikke skriv et miniessay.
+
+Hver linje skal gjøre én jobb.
+
+Gode linjer gjør dette.
+
+```txt
+knytter svaret til kilden
+forklarer forvekslingen
+viser hvorfor et annet begrep ikke passer
+viser hvordan modellen brukes
+```
+
+Godt.
+
+```txt
+Operational Backbone støtter core operations gjennom standardiserte og integrerte systemer, prosesser og data.
+Digital Platform bygger videre på dette ved å gi tilgang til gjenbrukbare komponenter for digitale tilbud.
+Skillet er viktig fordi stabil drift og rask innovasjon krever ulike kapabiliteter.
+```
+
+Dårlig.
+
+```txt
+Operational Backbone plays a crucial role in the organization's broader digital transformation journey by facilitating a robust and seamless foundation for strategic agility.
+```
+
+Maks fire linjer er normalt nok.
+
+Ikke avslutt med generiske oppsummeringer.
+
+---
+
+### `source`
+
+`source` skal være konkret nok til at fasiten kan sjekkes.
+
+Godt.
+
+```txt
+Fasit: Forelesning 5, Business processes and IT Architecture, slide 'What is a business process?'.
+```
+
+Godt.
+
+```txt
+Source: Lecture 7, D4D building blocks, slide 'What is the difference between digitization, digitalization and digital transformation?'.
+```
+
+Dårlig.
+
+```txt
+Fasit: Pensum.
+```
+
+Dårlig.
+
+```txt
+Source: ChatGPT.
+```
+
+Engelske datasett bruker `Source`.
+Norske datasett bruker `Fasit`.
+
+Hvis kilden ikke er kjent, ikke finn på en.
+Skriv at kilden må verifiseres før commit.
 
 ---
 
@@ -313,7 +732,7 @@ people, processes and technology
 
 En prompt skal være kort.
 Den skal spørre om ett faglig poeng.
-Den skal ikke forklare hele modellen før spørsmålet.
+Den skal være tydelig nok til at fasiten er rettferdig.
 
 Gode promptstartere på norsk.
 
@@ -323,6 +742,9 @@ Hvilket verktøy ...
 Hvilken situasjon ...
 Marker utsagnene ...
 Hvilke elementer ...
+Dra hvert begrep ...
+Sett stegene ...
+Plasser casene ...
 ```
 
 Gode promptstartere på engelsk.
@@ -333,6 +755,9 @@ Which tool ...
 Which situation ...
 Mark the statements ...
 Which elements ...
+Drag each concept ...
+Put the steps ...
+Place the cases ...
 ```
 
 Unngå dette.
@@ -360,22 +785,40 @@ God bruk.
 A project is a ________ organization established to deliver specified results or products within a specified period.
 ```
 
+God bruk.
+
 ```txt
 Digital transformation is a significant organizational change, driven or enabled by the extensive use of ________ technologies.
 ```
 
 Unngå fill når flere svar kan være rimelige.
+
 Unngå blanke felt for småord.
+
 Unngå blanke felt der studenten gjetter grammatikk i stedet for fag.
 
 Svarlisten skal tillate vanlige varianter.
 Den skal ikke tillate et svar som endrer begrepet.
 
+Dårlig.
+
+```txt
+Digital business design is ________.
+```
+
+Dette krever for langt svar.
+
+Bedre.
+
+```txt
+Digital business design is a holistic organizational configuration of people, processes and ________.
+```
+
 ---
 
 ## Single choice
 
-Bruk single choice når oppgaven tester ett skille.
+Single choice-tekst skal brukes når oppgaven tester ett skille.
 
 Typiske skiller.
 
@@ -386,6 +829,7 @@ IT governance vs IT management
 Operational Backbone vs Digital Platform
 project vs product team
 digitization vs digitalization
+digitalization vs digital transformation
 ```
 
 Riktig alternativ skal være direkte støttet av kilden.
@@ -394,23 +838,25 @@ Feilalternativer skal være plausible.
 De bør komme fra samme tema eller nærliggende modell.
 Ikke bruk tullete feilalternativer.
 
-Dårlig feilalternativ
+Dårlig feilalternativ.
 
 ```txt
 A pizza delivery method
 ```
 
-Bedre feilalternativ
+Bedre feilalternativ.
 
 ```txt
 A temporary project team for digital innovation
 ```
 
+Ikke gjør riktig alternativ tydeligere enn de andre bare gjennom lengde.
+
 ---
 
 ## Multi choice
 
-Bruk multi choice når kilden faktisk inneholder flere riktige elementer.
+Multi choice-tekst skal brukes når kilden faktisk inneholder flere riktige elementer.
 
 Eksempler.
 
@@ -420,12 +866,15 @@ five IT governance decision domains
 PRINCE2 principles
 action plan elements
 Scope 1, 2 and 3
+business case-estimater
 ```
 
 Ikke bruk multi choice for ett begrep med én korrekt definisjon.
 
 Alle riktige alternativer skal kunne forsvares direkte fra kilden.
-Alle gale alternativer skal være faglig men feil.
+
+Alle gale alternativer skal være faglige, men feil.
+
 Gale alternativer skal helst teste en vanlig forveksling.
 
 ---
@@ -447,6 +896,7 @@ hvem som tar beslutninger
 om problemet er uklart
 om tiltaket er midlertidig eller varig
 om fokus er stabil drift eller rask konfigurering
+om problemet handler om kundedata, komponenter eller ansvar
 ```
 
 Dårlig caseinformasjon.
@@ -458,15 +908,55 @@ morsomme detaljer
 bransjedetaljer som ikke påvirker svaret
 ```
 
+Svak case.
+
+```txt
+En virksomhet sliter med digitalisering. Hva bør den gjøre?
+```
+
+Sterkere case.
+
+```txt
+En virksomhet har kundedata spredt på flere systemer, ulike avdelinger bruker forskjellige prosesser, og ansatte må registrere samme informasjon flere ganger. Hvilken D4D-byggekloss er mest relevant å forbedre først?
+```
+
+---
+
+## Caseoppgaver bør bruke signaler
+
+Eksempler på signalord.
+
+```txt
+Fragmenterte data, manuelle overføringer, ulike prosesser
+→ Operational Backbone
+
+Gjenbrukbare komponenter, API-er, rask konfigurering av digitale tilbud
+→ Digital Platform
+
+Kundeinnsikt, betalingsvilje, eksperimentering, MVP, test-and-learn
+→ Shared Customer Insights
+
+Ansvar, beslutningsrettigheter, autonomi og alignment
+→ Accountability Framework
+
+Eksterne partnere, økosystem, åpne API-er, boundary resources
+→ External Developer Platform
+```
+
+Signalene må være tydelige nok til at oppgaven kan autogrades rettferdig.
+
 ---
 
 ## Alternativer
 
 Alternativer skal være omtrent like lette å lese.
+
 Ikke gjør riktig alternativ lengst hver gang.
+
 Ikke legg inn ekstra presisjon bare i riktig alternativ.
 
 Skriv alternativene som selvstendige svar.
+
 Ikke skriv alternativer som bare fungerer grammatisk med prompten hvis det gjør dem uklare.
 
 Gode distraktorer kommer fra pensum.
@@ -491,6 +981,51 @@ a nice customer experience
 
 ---
 
+## Distraktorer
+
+Distraktorer skal være plausible.
+
+Gode distraktorer er faglig nærliggende og tester reell forståelse.
+
+Dårlig.
+
+```txt
+Hva er TOGAF?
+
+A. Enterprise Architecture
+B. En type ost
+C. Et fotballag
+D. En printer
+```
+
+Godt.
+
+```txt
+Hva er TOGAF?
+
+A. Enterprise Architecture
+B. IT Service Management
+C. Project governance
+D. Agile software delivery
+```
+
+Typiske forvekslinger i IN5431.
+
+```txt
+TOGAF ↔ ITIL ↔ PRINCE2 ↔ Scrum
+Operational Backbone ↔ Digital Platform
+Shared Customer Insights ↔ Digital Platform
+Accountability Framework ↔ IT governance
+Digitization ↔ digitalization ↔ digital transformation
+Business case ↔ alternative analysis
+Projects ↔ product teams
+Centralization ↔ decentralization
+Unification ↔ Replication
+Coordination ↔ Diversification
+```
+
+---
+
 ## Feedback
 
 Feedback skal forklare faglig kobling.
@@ -504,6 +1039,8 @@ God form.
 Correct because Coordination has high integration and low standardization.
 ```
 
+God form.
+
 ```txt
 Galt fordi PRINCE2 handler om project governance and management, ikke finansieringsprioritering.
 ```
@@ -514,28 +1051,15 @@ Unngå dette.
 Great job, this answer beautifully captures the essence of the concept.
 ```
 
----
-
-## Utvidet feedback
-
-`whyExtended` skal brukes når studenten trenger faglig repetisjon.
-
-Hver linje skal gjøre én jobb.
-
-Gode linjer gjør dette.
+Unngå også dette.
 
 ```txt
-knytter svaret til kilden
-forklarer forvekslingen
-viser hvorfor et annet begrep ikke passer
-viser hvordan modellen brukes
+Riktig.
+Feil.
+Dette står i pensum.
 ```
 
-Ikke bruk `whyExtended` til å skrive et miniessay.
-Ikke avslutt med oppsummeringsfraser.
-Ikke gjenta samme poeng med nye ord.
-
-Maks fire linjer er normalt nok.
+Feedback skal forklare hva studenten bør lære av svaret.
 
 ---
 
@@ -558,8 +1082,11 @@ Hvis kilden ikke er kjent, ikke finn på en.
 Skriv at kilden må verifiseres før commit.
 
 Bruk samme språkstil som datasettet.
-Engelske datasett bruker `Source`.
-Norske datasett bruker `Fasit`.
+
+```txt
+Engelske datasett → Source
+Norske datasett → Fasit
+```
 
 ---
 
@@ -569,19 +1096,20 @@ Følg denne prosessen.
 
 ```txt
 1. Finn fagpoenget i kilden.
-2. Velg oppgavetype.
-3. Kopier modellnavn og sentrale formuleringer.
-4. Lag prompten kort.
+2. Finn den nærmeste slideformuleringen.
+3. Kopier modellnavn og sentrale begreper.
+4. Skriv prompten kort.
 5. Lag riktige alternativer fra kilden.
 6. Lag gale alternativer fra nærliggende begreper.
 7. Skriv kort feedback.
 8. Sjekk at kilden er konkret.
 9. Fjern AI-aktig språk.
 10. Sjekk tegn og setningsflyt.
+11. Sjekk at teksten fortsatt er kildenær.
 ```
 
-Ikke start med komponenten i appen.
-Start med hva studenten skal lære.
+Ikke start med å gjøre språket pent.
+Start med å bevare fagpoenget.
 
 ---
 
@@ -609,7 +1137,40 @@ bøying
 ```
 
 Ikke gjør norsk versjon friere enn engelsk versjon.
+
 Ikke legg til forklaringer som ikke finnes i originaloppgaven.
+
+Ikke oversett engelske pensumbegreper bort.
+
+Dårlig.
+
+```txt
+operating model → driftsmodell
+```
+
+Bedre.
+
+```txt
+operating model
+```
+
+Dårlig.
+
+```txt
+decision rights → avgjørelsesprivilegier
+```
+
+Bedre.
+
+```txt
+decision rights
+```
+
+Bruk norsk rundt begrepet.
+
+```txt
+Hvem har decision rights i denne situasjonen?
+```
 
 ---
 
@@ -643,78 +1204,138 @@ IT governance fordeler decision rights og accountability.
 
 ## Dårlig og bedre
 
-Dårlig
+Dårlig.
 
 ```txt
 Digital transformation is a comprehensive and powerful shift that highlights the importance of technology in today's digital landscape.
 ```
 
-Bedre
+Bedre.
 
 ```txt
 Digital transformation is a significant organizational change, driven or enabled by the extensive use of digital technologies.
 ```
 
-Dårlig
+Dårlig.
 
 ```txt
-Hvilket konsept spiller en sentral rolle i å skape en robust og sømløs digital organisasjon
+Hvilket konsept spiller en sentral rolle i å skape en robust og sømløs digital organisasjon?
 ```
 
-Bedre
+Bedre.
 
 ```txt
-Hvilket D4D building block beskriver standardiserte og integrerte systemer, prosesser og data som støtter core operations
+Hvilket D4D building block beskriver standardiserte og integrerte systemer, prosesser og data som støtter core operations?
 ```
 
-Dårlig
+Dårlig.
 
 ```txt
-Hvorfor er Accountability Framework viktig for en helhetlig digital transformasjon
+Hvorfor er Accountability Framework viktig for en helhetlig digital transformasjon?
 ```
 
-Bedre
+Bedre.
 
 ```txt
-Hva balanserer Accountability Framework ifølge D4D
+Hva balanserer Accountability Framework ifølge D4D?
+```
+
+Dårlig.
+
+```txt
+Hva er riktig?
+```
+
+Bedre.
+
+```txt
+Hvilket utsagn beskriver best forskjellen mellom IT governance og IT management?
+```
+
+Dårlig.
+
+```txt
+Hvilken modell er viktigst i digitalisering?
+```
+
+Bedre.
+
+```txt
+Hvilken D4D-byggekloss er mest relevant når virksomheten mangler standardiserte og integrerte kjerneprosesser?
 ```
 
 ---
 
-## Sjekkliste før commit
+## Språksjekk før commit
 
-Bruk denne sjekklisten før nye oppgaver legges inn.
+Bruk denne sjekklisten før nye eller endrede oppgavetekster legges inn.
 
 ```txt
-Oppgaven tester ett tydelig fagpoeng.
-Prompten er kort.
-Riktig svar støttes direkte av kilden.
-Distraktorer er plausible og pensumnære.
-Fagbegreper er beholdt på engelsk der kurset bruker engelsk.
-Norsk tekst er naturlig, men ikke løsrevet fra kilden.
-Feedback forklarer forvekslingen.
-Kilden er konkret.
-Ingen em dash i prosa.
-Ingen semikolon i prosa.
-Kolon er ikke brukt som pynt.
-Ingen reklameord.
-Ingen bred betydning uten kilde.
-Ingen avsluttende AI-oppsummering.
+[ ] Oppgaven tester ett tydelig fagpoeng.
+[ ] Prompten er kort nok.
+[ ] Prompten er presis nok.
+[ ] Riktig svar støttes direkte av kilden.
+[ ] Distraktorer er plausible og pensumnære.
+[ ] Fagbegreper er beholdt på engelsk der kurset bruker engelsk.
+[ ] Norsk tekst er naturlig, men ikke løsrevet fra kilden.
+[ ] Feedback forklarer forvekslingen.
+[ ] Kilden er konkret.
+[ ] Teksten ligger tett på slide eller pensum.
+[ ] Ingen em dash i prosa.
+[ ] Ingen semikolon i prosa.
+[ ] Kolon er ikke brukt som pynt.
+[ ] Ingen reklameord.
+[ ] Ingen bred betydning uten kilde.
+[ ] Ingen tom ros.
+[ ] Ingen avsluttende AI-oppsummering.
+[ ] Riktig alternativ er ikke alltid lengst.
+[ ] Caset inneholder nok signaler til rettferdig fasit.
 ```
 
 ---
 
 ## Hard stopp
 
-Ikke commit oppgaven hvis ett av punktene stemmer.
+Ikke commit oppgaveteksten hvis ett av punktene stemmer.
 
 ```txt
 Kilden mangler.
 Riktig svar er bare sannsynlig, ikke kildebelagt.
 Prompten kan tolkes på flere måter.
-To alternativer kan være riktige.
+To alternativer kan være riktige i en single choice.
 Et fagbegrep er oversatt bort.
 Forklaringen inneholder pynt i stedet for fag.
 Oppgaven tester språk mer enn fag.
 Oppgaven høres ut som AI.
+Caset er for åpent til autograding.
+Feedback sier bare riktig eller feil.
+```
+
+---
+
+## Kortversjon
+
+```txt
+Skriv kort.
+Skriv konkret.
+Start i kilden.
+Behold fagbegreper.
+Behold modellnavn.
+Behold sentrale slideformuleringer.
+Ikke pynt.
+Ikke overdriv.
+Ikke oversett bort engelske pensumbegreper.
+Ikke skriv som AI.
+```
+
+Den viktigste regelen.
+
+```txt
+Hold oppgaven tett på pensum.
+```
+
+Den nest viktigste regelen.
+
+```txt
+Skriv som en ryddig seminarleder, ikke som en tekstgenerator.
 ```
