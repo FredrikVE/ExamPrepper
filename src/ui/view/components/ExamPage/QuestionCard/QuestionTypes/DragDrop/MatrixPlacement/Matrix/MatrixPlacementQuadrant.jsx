@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementQuadrant.jsx
 import { getQuadrantDescription } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementDropZone from "./MatrixPlacementDropZone.jsx";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function MatrixPlacementQuadrant(props) {
     const description = getQuadrantDescription(props.quadrant);
@@ -8,8 +9,8 @@ export default function MatrixPlacementQuadrant(props) {
     return (
         <section className="matrix-placement-quadrant">
             <header className="matrix-placement-quadrant-header">
-                <h4>{props.quadrant.title ?? props.quadrant.label}</h4>
-                {description ? <p>{description}</p> : null}
+                <h4><FormattedText text={props.quadrant.title ?? props.quadrant.label} /></h4>
+                {description ? <p><FormattedText text={description} /></p> : null}
             </header>
 
             <MatrixPlacementDropZone

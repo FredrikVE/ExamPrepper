@@ -4,6 +4,7 @@ import AnswerOptionActions from "./AnswerOptionActions.jsx";
 import AnswerOptionExtendedPanel from "./AnswerOptionExtendedPanel.jsx";
 import AnswerOptionMarker from "./AnswerOptionMarker.jsx";
 import { getAnswerCardClassName, getExtendedExplanationImages, getExtendedExplanationPoints, getOptionLetter } from "./Utils/answerOptionCardView.js";
+import FormattedText from "../../../Shared/FormattedText.jsx";
 
 export default function AnswerOptionCard({ questionId, option, optionIndex, displayIndex, isSelected, isExpanded, onToggleExpanded, t }) {
     const letter = getOptionLetter(displayIndex);
@@ -36,12 +37,12 @@ export default function AnswerOptionCard({ questionId, option, optionIndex, disp
                 <div className="question-card-answer-card-header">
                     <div className="question-card-answer-card-copy">
                         <h4 className="question-card-answer-card-title">
-                            {option.text}
+                            <FormattedText text={option.text} />
                         </h4>
 
                         {option.why ? (
                             <p className="question-card-answer-card-reason">
-                                {option.why}
+                                <FormattedText text={option.why} />
                             </p>
                         ) : null}
                     </div>

@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 import { getSequenceItemFeedback, getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function SequenceOrderFeedbackSlot(props) {
     const selectedSequenceItemId = props.safeAnswer[props.index];
@@ -31,7 +32,7 @@ export default function SequenceOrderFeedbackSlot(props) {
                     )}
 
                     <span className="sequence-order-feedback-slot-label">
-                        {selectedSequenceItemLabel}
+                        <FormattedText text={selectedSequenceItemLabel} />
                     </span>
                 </div>
 

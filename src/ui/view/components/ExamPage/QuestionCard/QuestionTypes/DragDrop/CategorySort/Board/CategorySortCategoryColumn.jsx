@@ -1,12 +1,13 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortCategoryColumn.jsx
 import { getSafeArray } from "../Utils/categorySortAnswerLogic.js";
 import CategorySortDropZone from "./CategorySortDropZone.jsx";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function CategorySortCategoryColumn(props) {
     return (
         <section className="drag-categorize-category-column">
             <header className="drag-categorize-category-header">
-                {props.category.label}
+                <FormattedText text={props.category.label} />
             </header>
 
             <CategorySortDropZone

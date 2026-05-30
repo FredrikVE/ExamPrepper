@@ -102,6 +102,19 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		scrollExamWorkspaceToTop(examWorkspaceRef);
 	}, [visibleQuestionCount, examWorkspaceRef]);
 
+	const handleTestModeEnterKeyDown = useCallback((event) => {
+		if (!shouldHandleTestModeEnterKeyDown(event)) {
+			return;
+		}
+
+		if (submitted || !canGoNext) {
+			return;
+		}
+
+		event.preventDefault();
+		nextQuestion();
+	}, [submitted, canGoNext, nextQuestion]);
+
 	const goToQuestion = useCallback((index) => {
 		if (index < 0 || index >= visibleQuestionCount) {
 			return;
@@ -248,6 +261,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
 
 	useEffect(() => {
+		window.addEventListener("keydown", handleTestModeEnterKeyDown);
+
+		return () => window.removeEventListener("keydown", handleTestModeEnterKeyDown);
+	}, [handleTestModeEnterKeyDown]);
+
+	useEffect(() => {
 		if (submitted) {
 			return;
 		}
@@ -305,6 +324,48 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		isAnswerCorrect
 	};
 }
+
+const shouldHandleTestModeEnterKeyDown = (event) => {
+	if (event.key !== "Enter") {
+		return false;
+	}
+
+	if (event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing) {
+		return false;
+	}
+
+	return !isEnterKeyHandledByFocusedElement(event.target);
+};
+
+const isEnterKeyHandledByFocusedElement = (target) => {
+	if (typeof Element === "undefined" || !(target instanceof Element)) {
+		return false;
+	}
+
+	if (target.closest("button, a, select, textarea, [role='button'], [contenteditable='true']")) {
+		return true;
+	}
+
+	const input = target.closest("input");
+
+	if (!input) {
+		return false;
+	}
+
+	return [
+		"button",
+		"submit",
+		"reset",
+		"file",
+		"range",
+		"color",
+		"date",
+		"datetime-local",
+		"month",
+		"time",
+		"week"
+	].includes(input.type);
+};
 
 const isQuestionAnswered = (question, answer) => {
 	if (question.type === QUESTION_TYPES.MULTI) {

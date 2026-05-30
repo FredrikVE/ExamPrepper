@@ -4,6 +4,7 @@ import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedback
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
 import SequenceOrderFeedbackSlot from "./SequenceOrderFeedbackSlot.jsx";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function SequenceOrderFeedbackPanel(props) {
     const questionExplanation = getQuestionExplanation(props.question);
@@ -98,7 +99,7 @@ function SequenceOrderReadOnlySlotGroup(props) {
     return (
         <>
             <div className="sequence-order-readonly-slot">
-                {props.sequenceItem ? getSequenceItemLabel(props.sequenceItem) : props.fallbackLabel}
+                <FormattedText text={props.sequenceItem ? getSequenceItemLabel(props.sequenceItem) : props.fallbackLabel} />
             </div>
 
             {!props.isLastSlot ? (

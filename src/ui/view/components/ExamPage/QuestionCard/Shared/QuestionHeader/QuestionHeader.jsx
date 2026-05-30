@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/Shared/QuestionHeader/QuestionHeader.jsx
 import { QUESTION_TYPES } from "../../../../../../../constants/QuestionTypes.js";
 import ResultBadge from "../../../ResultBadge/ResultBadge.jsx";
+import FormattedText from "../../../../Shared/FormattedText.jsx";
 
 export default function QuestionHeader({ question, submitted, correct, t }) {
     return (
@@ -19,7 +20,7 @@ export default function QuestionHeader({ question, submitted, correct, t }) {
 
                 <div className="question-card-title-row">
                     <h3 className="question-card-title">
-                        {question.title}
+                        <FormattedText text={question.title} />
                     </h3>
                 </div>
             </div>

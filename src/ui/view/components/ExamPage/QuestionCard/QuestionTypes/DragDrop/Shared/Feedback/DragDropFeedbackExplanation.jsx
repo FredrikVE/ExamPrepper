@@ -1,4 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/Feedback/DragDropFeedbackExplanation.jsx
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 export default function DragDropFeedbackExplanation(props) {
     const images = Array.isArray(props.images) ? props.images : [];
     let reasonContent = null;
@@ -6,7 +7,7 @@ export default function DragDropFeedbackExplanation(props) {
     if (props.reason) {
         reasonContent = (
             <p className="drag-drop-feedback-reason">
-                {props.reason}
+                <FormattedText text={props.reason} />
             </p>
         );
     }
@@ -16,7 +17,7 @@ export default function DragDropFeedbackExplanation(props) {
     if (props.showCorrectAnswer) {
         correctAnswerContent = (
             <p className="drag-drop-feedback-correct-answer">
-                {props.correctAnswerPrefix}: <strong>{props.correctAnswerLabel}</strong>
+                {props.correctAnswerPrefix}: <strong><FormattedText text={props.correctAnswerLabel} /></strong>
             </p>
         );
     }
@@ -28,7 +29,7 @@ export default function DragDropFeedbackExplanation(props) {
             <ul className="drag-drop-feedback-extended-list">
                 {props.extendedPoints.map((point, index) => (
                     <li key={index}>
-                        {point}
+                        <FormattedText text={point} />
                     </li>
                 ))}
             </ul>

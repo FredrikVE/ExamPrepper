@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 import { getCorrectQuadrantId, getItemFeedback, getItemLabel, getMatrixPlacementItemStatus, getQuadrantLabelById, getSelectedQuadrantId } from "../Utils/matrixPlacementAnswerLogic.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function MatrixPlacementFeedbackCard(props) {
     const status = getMatrixPlacementItemStatus(props.question, props.answer, props.item.id);
@@ -35,7 +36,7 @@ export default function MatrixPlacementFeedbackCard(props) {
                     )}
 
                     <span className="matrix-placement-feedback-title">
-                        {getItemLabel(props.item)}
+                        <FormattedText text={getItemLabel(props.item)} />
                     </span>
                 </div>
 
@@ -76,7 +77,7 @@ function MatrixPlacementFeedbackExplanation(props) {
         <div className="matrix-placement-feedback-explanation">
             {props.showSelectedAnswer ? (
                 <p className="drag-drop-feedback-correct-answer matrix-placement-feedback-selected-answer">
-                    <strong>{props.t.feedbackYourAnswerLabel}:</strong> {props.selectedQuadrantLabel}
+                    <strong>{props.t.feedbackYourAnswerLabel}:</strong> <FormattedText text={props.selectedQuadrantLabel} />
                 </p>
             ) : null}
 

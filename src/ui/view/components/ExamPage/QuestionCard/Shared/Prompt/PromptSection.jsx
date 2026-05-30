@@ -1,10 +1,15 @@
 // src/ui/view/components/ExamPage/QuestionCard/Shared/Prompt/PromptSection.jsx
 import FillBlankInputFieldMeta from "../../QuestionTypes/FillBlankInputField/FillBlankInputFieldMeta.jsx";
 import FillBlankInputFieldPrompt from "../../QuestionTypes/FillBlankInputField/FillBlankInputFieldPrompt.jsx";
+import FormattedText from "../../../../Shared/FormattedText.jsx";
 
 export default function PromptSection({ question, answerText, submitted, correct, hasInlineFillBlank, onSingleAnswer, t }) {
     if (!hasInlineFillBlank) {
-        return <p className="question-card-prompt">{question.prompt}</p>;
+        return (
+            <p className="question-card-prompt">
+                <FormattedText text={question.prompt} />
+            </p>
+        );
     }
 
     return (

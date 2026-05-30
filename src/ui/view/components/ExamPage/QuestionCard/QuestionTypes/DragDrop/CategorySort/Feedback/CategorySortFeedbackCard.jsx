@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { getCategoryLabelById, getCorrectCategoryId, getItemFeedback, getItemLabel, isItemCorrectlyPlaced } from "../Utils/categorySortAnswerLogic.js";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function CategorySortFeedbackCard(props) {
     const correctCategoryId = getCorrectCategoryId(props.question, props.item.id);
@@ -60,7 +61,7 @@ export default function CategorySortFeedbackCard(props) {
                     )}
 
                     <span className="drag-categorize-feedback-title">
-                        {getItemLabel(props.item)}
+                        <FormattedText text={getItemLabel(props.item)} />
                     </span>
                 </div>
 

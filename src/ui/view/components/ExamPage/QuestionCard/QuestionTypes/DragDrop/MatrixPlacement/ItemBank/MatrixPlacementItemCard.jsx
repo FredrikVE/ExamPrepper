@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/ItemBank/MatrixPlacementItemCard.jsx
 import { GripVertical } from "lucide-react";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function MatrixPlacementItemCard(props) {
     const label = getItemLabel(props.item);
@@ -15,7 +16,7 @@ export default function MatrixPlacementItemCard(props) {
             onDragStart={props.disabled ? undefined : props.onDragStart}
         >
             <GripVertical className="matrix-placement-item-card-grip" aria-hidden="true" />
-            <span>{label}</span>
+            <span><FormattedText text={label} /></span>
         </button>
     );
 }

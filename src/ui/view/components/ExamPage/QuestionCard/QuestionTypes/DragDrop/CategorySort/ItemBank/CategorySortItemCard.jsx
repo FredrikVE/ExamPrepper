@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/ItemBank/CategorySortItemCard.jsx
 import { GripVertical } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function CategorySortItemCard(props) {
     const label = getItemLabel(props.item);
@@ -19,7 +20,7 @@ export default function CategorySortItemCard(props) {
             onDragStart={props.disabled ? undefined : props.onDragStart}
         >
             <GripVertical className="drag-categorize-item-card-grip" aria-hidden="true" />
-            <span>{label}</span>
+            <span><FormattedText text={label} /></span>
         </button>
     );
 }

@@ -1,5 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/Shared/Feedback/QuestionFeedback.jsx
 import { AlertTriangle, BookOpen } from "lucide-react";
+import FormattedText from "../../../../Shared/FormattedText.jsx";
 
 export default function QuestionFeedback({ question, t, shouldShowWarning, shouldShowSource }) {
     return (
@@ -36,7 +37,7 @@ function QuestionSourcePanel({ source, t }) {
                 </div>
 
                 <p className="feedback-panel-source-text">
-                    {source}
+                    <FormattedText text={source} />
                 </p>
             </div>
         </div>

@@ -2,6 +2,7 @@
 import { AlertTriangle, BookOpen, CheckCircle2, Info, Quote, XCircle } from "lucide-react";
 import getAnswerLabel from "./Utils/getAnswerLabel.js";
 import { useLanguage } from "../../../../../i18n/LanguageContext.jsx";
+import FormattedText from "../../Shared/FormattedText.jsx";
 
 export default function FeedbackPanel({ question, selected, correct }) {
     const { t } = useLanguage();
@@ -83,7 +84,7 @@ function FillFeedbackPanel({ question, selected, correct, t }) {
                         </div>
 
                         <div className="feedback-panel-fill-answer-pill feedback-panel-fill-answer-pill-correct">
-                            {correctAnswer}
+                            <FormattedText text={correctAnswer} />
                         </div>
                     </div>
                 </div>
@@ -92,7 +93,7 @@ function FillFeedbackPanel({ question, selected, correct, t }) {
                     <span className="feedback-panel-answer-label">
                         {t.feedbackAnswerLabel}
                     </span>{" "}
-                    {correctAnswer}
+                    <FormattedText text={correctAnswer} />
                 </p>
             </div>
 
@@ -150,7 +151,7 @@ function FillExplanation({ question, correct, t }) {
                     </h3>
 
                     <p className="feedback-panel-explanation-text">
-                        {question.whyCorrect}
+                        <FormattedText text={question.whyCorrect} />
                     </p>
                 </div>
             </section>
@@ -167,7 +168,7 @@ function FillExplanation({ question, correct, t }) {
                         </h3>
 
                         <p className="feedback-panel-explanation-text">
-                            {question.whyWrong}
+                            <FormattedText text={question.whyWrong} />
                         </p>
                     </div>
                 </section>
@@ -254,7 +255,7 @@ function OptionFeedback({ question, selected, t }) {
                             </div>
 
                             <p className="feedback-panel-option-text">
-                                {option.why}
+                                <FormattedText text={option.why} />
                             </p>
                         </div>
                     );
@@ -281,7 +282,7 @@ function FeedbackSource({ source, t }) {
                 <Quote className="feedback-panel-source-quote-icon" />
 
                 <p className="feedback-panel-source-text">
-                    {source}
+                    <FormattedText text={source} />
                 </p>
             </div>
         </div>

@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/ItemBank/SequenceOrderItemCard.jsx
 import { GripVertical } from "lucide-react";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function SequenceOrderItemCard(props) {
     const className = getItemCardClassName({
@@ -30,7 +31,7 @@ export default function SequenceOrderItemCard(props) {
             disabled={props.disabled}
         >
             <GripVertical className="sequence-order-item-card-grip" aria-hidden="true" />
-            <span>{getSequenceItemLabel(props.sequenceItem)}</span>
+            <span><FormattedText text={getSequenceItemLabel(props.sequenceItem)} /></span>
         </button>
     );
 }

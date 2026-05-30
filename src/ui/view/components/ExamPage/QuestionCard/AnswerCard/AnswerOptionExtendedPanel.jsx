@@ -1,5 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/AnswerCard/AnswerOptionExtendedPanel.jsx
 import { Info } from "lucide-react";
+import FormattedText from "../../../Shared/FormattedText.jsx";
 
 export default function AnswerOptionExtendedPanel({ expandedId, points, images = [], t }) {
     const hasPoints = points.length > 0;
@@ -24,7 +25,7 @@ export default function AnswerOptionExtendedPanel({ expandedId, points, images =
                 <ul className="question-card-answer-extended-list">
                     {points.map((point, pointIndex) => (
                         <li key={pointIndex}>
-                            {point}
+                            <FormattedText text={point} />
                         </li>
                     ))}
                 </ul>

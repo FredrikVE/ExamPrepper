@@ -3,6 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard.jsx";
 import { getItemLabel, getItemsInQuadrant, getMissingCorrectItemsInQuadrant } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementPlacedItemCard from "./MatrixPlacementPlacedItemCard.jsx";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function MatrixPlacementDropZone(props) {
     const items = getItemsInQuadrant(props.question, props.safeAnswer, props.quadrant.id);
@@ -69,7 +70,7 @@ function renderAnswerKeyItem(props, item) {
             <div className="matrix-placement-answer-key-title-row">
                 <CheckCircle2 className="matrix-placement-answer-key-icon" aria-hidden="true" />
                 <span className="matrix-placement-answer-key-title">
-                    {getItemLabel(item)}
+                    <FormattedText text={getItemLabel(item)} />
                 </span>
             </div>
 

@@ -2,6 +2,7 @@
 import TableMatchFeedbackCard from "../Feedback/TableMatchFeedbackCard.jsx";
 import { isTargetCorrect } from "../Utils/tableMatchAnswerLogic.js";
 import TableMatchAnswerSlot from "./TableMatchAnswerSlot.jsx";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function TableMatchAnswerRow(props) {
     const targetIsCorrect = isTargetCorrect(
@@ -53,7 +54,7 @@ export default function TableMatchAnswerRow(props) {
             </td>
 
             <td className="drag-drop-description-cell">
-                {props.target.description}
+                <FormattedText text={props.target.description} />
             </td>
 
             <td className="drag-drop-answer-cell">

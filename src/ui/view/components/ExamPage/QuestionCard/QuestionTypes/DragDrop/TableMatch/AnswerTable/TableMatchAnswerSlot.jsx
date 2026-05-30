@@ -1,5 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/AnswerTable/TableMatchAnswerSlot.jsx
 import { ChevronDown, X } from "lucide-react";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function TableMatchAnswerSlot(props) {
     const className = getAnswerSlotClassName({
@@ -80,7 +81,7 @@ export default function TableMatchAnswerSlot(props) {
 const SelectedAnswerPill = ({ selectedCard, onClearClick, clearLabel }) => {
     return (
         <div className="drag-drop-selected-pill">
-            <span>{selectedCard.text}</span>
+            <span><FormattedText text={selectedCard.text} /></span>
 
             <button
                 type="button"

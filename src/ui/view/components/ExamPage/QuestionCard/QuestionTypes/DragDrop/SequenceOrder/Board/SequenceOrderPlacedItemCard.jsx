@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderPlacedItemCard.jsx
 import { GripVertical, X } from "lucide-react";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function SequenceOrderPlacedItemCard(props) {
     const startItemDrag = (event) => {
@@ -20,7 +21,7 @@ export default function SequenceOrderPlacedItemCard(props) {
         >
             <GripVertical className="sequence-order-placed-card-grip" aria-hidden="true" />
 
-            <span>{getSequenceItemLabel(props.sequenceItem)}</span>
+            <span><FormattedText text={getSequenceItemLabel(props.sequenceItem)} /></span>
 
             {!props.disabled ? (
                 <button

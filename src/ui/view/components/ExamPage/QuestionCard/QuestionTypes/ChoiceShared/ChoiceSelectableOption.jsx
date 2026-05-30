@@ -2,6 +2,7 @@
 import { QUESTION_TYPES } from "../../../../../../../constants/QuestionTypes.js";
 import getOptionLetter from "./Utils/getOptionLetter.js";
 import { getSelectableOptionClassName } from "../../Shared/Styling/questionCardClassNames.js";
+import FormattedText from "../../../../Shared/FormattedText.jsx";
 
 export default function ChoiceSelectableOption({ question, option, optionIndex, displayIndex, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
     const inputType = question.type === QUESTION_TYPES.SINGLE ? "radio" : "checkbox";
@@ -33,7 +34,7 @@ export default function ChoiceSelectableOption({ question, option, optionIndex, 
                 <span className="question-card-option-letter">
                     {getOptionLetter(displayIndex)}.
                 </span>{" "}
-                {option.text}
+                <FormattedText text={option.text} />
             </span>
         </label>
     );

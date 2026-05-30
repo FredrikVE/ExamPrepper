@@ -3,6 +3,7 @@ import { getTargetStatus } from "../Utils/tableMatchAnswerLogic.js";
 import DragDropFeedbackExplanation from "../../Shared/Feedback/DragDropFeedbackExplanation.jsx";
 import DragDropFeedbackExpandButton from "../../Shared/Feedback/DragDropFeedbackExpandButton.jsx";
 import { getAnswerText, getExtendedImages, getExtendedPoints, getFeedbackCardClassName, getFeedbackReason, shouldShowCorrectAnswer } from "../Utils/tableMatchFeedbackCardView.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function TableMatchFeedbackCard(props) {
     const status = getTargetStatus({
@@ -58,10 +59,10 @@ export default function TableMatchFeedbackCard(props) {
         >
             <div className="drag-drop-feedback-target-main">
                 <div className="drag-drop-feedback-answer-title">
-                    {getAnswerText({
+                    <FormattedText text={getAnswerText({
                         selectedCard: props.selectedCard,
                         unansweredText: props.t.dragDropUnanswered
-                    })}
+                    })} />
                 </div>
 
                 <div className="drag-drop-feedback-actions">

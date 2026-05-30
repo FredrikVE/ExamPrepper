@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortPlacedItemCard.jsx
 import { GripVertical, X } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function CategorySortPlacedItemCard(props) {
     let className = "drag-categorize-placed-card";
@@ -44,7 +45,7 @@ export default function CategorySortPlacedItemCard(props) {
         >
             <GripVertical className="drag-categorize-placed-card-grip" aria-hidden="true" />
 
-            <span>{getItemLabel(props.item)}</span>
+            <span><FormattedText text={getItemLabel(props.item)} /></span>
 
             <button
                 type="button"

@@ -1,5 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/CardBank/TableMatchCardBank.jsx
 import { GripVertical, Info } from "lucide-react";
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function TableMatchCardBank(props) {
     const cardButtons = [];
@@ -23,7 +24,7 @@ export default function TableMatchCardBank(props) {
                 onDragStart={(event) => props.onCardDragStart(event, card.id)}
             >
                 <GripVertical className="drag-drop-card-grip" aria-hidden="true" />
-                <span>{card.text}</span>
+                <span><FormattedText text={card.text} /></span>
             </button>
         );
     }
