@@ -7,6 +7,20 @@ const ref = (moduleId, groupId, imageId) => ({ moduleId, groupId, imageId });
 
 const ACTION_PLAN = ref("strategy", "action-plan", "strategy_action_plan_model");
 const DIGITAL_STRATEGY = ref("strategy", "digital-strategy", "digital_strategy_model");
+const DIGITAL_STRATEGY_DEFINITION = ref("strategy", "digital-strategy", "digital_strategy_definition");
+const DIGITAL_STRATEGY_CONTENT = ref("strategy", "digital-strategy", "digital_strategy_content");
+const MACRO_MESO_MICRO_IMPACT = ref("strategy", "digital-strategy", "macro_meso_micro_impact");
+const DIGITAL_TRANSFORMATION_PROCESS = ref("strategy", "digital-strategy", "digital_transformation_process");
+const DIGITAL_TRANSFORMATION_BARRIERS = ref("strategy", "digital-strategy", "digital_transformation_barriers");
+const CULTURE_FOR_DIGITALIZATION = ref("strategy", "digital-strategy", "culture_for_digitalization");
+const ORGANIZATIONAL_INERTIA_DEFINITION = ref("strategy", "digital-strategy", "organizational_inertia_definition");
+const ORGANIZATIONAL_INERTIA_LEVELS = ref("strategy", "digital-strategy", "organizational_inertia_levels");
+const ADDRESSING_INERTIA = ref("strategy", "digital-strategy", "addressing_inertia");
+const LEADERSHIP_ROLE_DIGITAL_TRANSFORMATION = ref("strategy", "digital-strategy", "leadership_role_digital_transformation");
+const CDO_ROLES = ref("strategy", "digital-strategy", "cdo_roles");
+const CDO_CONTRIBUTION = ref("strategy", "digital-strategy", "cdo_contribution");
+const WHOLE_ORGANIZATION_INVOLVEMENT = ref("strategy", "digital-strategy", "whole_organization_involvement");
+const ORGANIZATION_AS_NETWORK_GROUPS = ref("strategy", "digital-strategy", "organization_as_network_groups");
 
 const DECISION_PROCESS_EN = ref("cio-tool-box", "decision-making", "generic_decision_making_process");
 const DECISION_PROCESS_NO = ref("cio-tool-box", "decision-making", "generic_decision_making_process_no");
@@ -39,8 +53,11 @@ const AF = ref("designed-for-digital", "accountability-framework", "AF");
 const EXDP = ref("designed-for-digital", "external-developer-platform", "ExDP");
 
 const SUSTAINABILITY_THREE_DIMENSIONS = ref("sustainability", "three-dimensions", "sustainability_three_dimensions");
+const CIRCULAR_ECONOMY_LOOP = ref("sustainability", "circular-economy", "circular_economy_loop");
+const WHAT_IS_CIRCULAR_ECONOMY = ref("sustainability", "circular-economy", "what_is_circular_economy");
 const DOUBLE_MATERIALITY = ref("sustainability", "reporting", "double_materiality");
 const SCOPE_1_2_3 = ref("sustainability", "reporting", "scope_1_2_3");
+const TWIN_TRANSITIONS = ref("sustainability", "twin-transitions", "twin_transitions");
 
 const COMMON_MOCK_EXAM_1 = {
     1: [UMBRELLA_ORDERING_PROCESS],
@@ -76,9 +93,9 @@ const COMMON_MOCK_EXAM_2 = {
     107: [IT_GOVERNANCE_MATRIX],
     108: [IT_DECISION_DOMAINS],
     109: [D4D_OVERVIEW],
-    110: [SUSTAINABILITY_THREE_DIMENSIONS],
+    110: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
     111: [SCOPE_1_2_3],
-    112: [SUSTAINABILITY_THREE_DIMENSIONS],
+    112: [TWIN_TRANSITIONS],
     113: [DOUBLE_DIAMOND],
     114: [TRIPLE_CONSTRAINT],
     115: [TOGAF_TAXONOMY],
@@ -210,6 +227,47 @@ export const in5431DefaultQuestionImageRefsByExamKey = {
         33: [DECISION_PROCESS_NO, DOUBLE_DIAMOND, IT_GOVERNANCE_MATRIX],
         41: [TOGAF_TAXONOMY, TOGAF_LEVELS, TOGAF_ADM_NO],
         43: [TOGAF_TAXONOMY, TOGAF_ADM_NO]
+    },
+    "mock-exam-digital-strategy:no": {
+        1: [DIGITAL_STRATEGY_DEFINITION],
+        2: [DIGITAL_STRATEGY],
+        3: [DIGITAL_STRATEGY_DEFINITION],
+        4: [DIGITAL_STRATEGY_CONTENT],
+        5: [MACRO_MESO_MICRO_IMPACT],
+        7: [DIGITAL_TRANSFORMATION_PROCESS],
+        8: [DIGITAL_TRANSFORMATION_PROCESS],
+        11: [DIGITAL_TRANSFORMATION_BARRIERS],
+        12: [DIGITAL_TRANSFORMATION_BARRIERS, CULTURE_FOR_DIGITALIZATION],
+        13: [CULTURE_FOR_DIGITALIZATION],
+        14: [ORGANIZATIONAL_INERTIA_DEFINITION],
+        15: [ORGANIZATIONAL_INERTIA_LEVELS],
+        16: [ADDRESSING_INERTIA],
+        17: [LEADERSHIP_ROLE_DIGITAL_TRANSFORMATION, CULTURE_FOR_DIGITALIZATION],
+        18: [CDO_ROLES, CDO_CONTRIBUTION],
+        19: [WHOLE_ORGANIZATION_INVOLVEMENT, ORGANIZATION_AS_NETWORK_GROUPS],
+        20: [CDO_ROLES, CDO_CONTRIBUTION]
+    },
+    "mock-exam-digital-transformation:no": {
+        1: [DIGITAL_TRANSFORMATION_PROCESS],
+        2: [DIGITAL_TRANSFORMATION_PROCESS],
+        3: [DIGITAL_TRANSFORMATION_PROCESS],
+        4: [DIGITAL_TRANSFORMATION_PROCESS],
+        5: [DIGITAL_TRANSFORMATION_PROCESS],
+        6: [DIGITAL_TRANSFORMATION_PROCESS],
+        7: [DIGITAL_TRANSFORMATION_PROCESS]
+    },
+    "mock-exam-sustainability:no": {
+        4: [SUSTAINABILITY_THREE_DIMENSIONS],
+        6: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
+        7: [CIRCULAR_ECONOMY_LOOP],
+        8: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
+        15: [DOUBLE_MATERIALITY],
+        16: [DOUBLE_MATERIALITY],
+        17: [SCOPE_1_2_3],
+        18: [SCOPE_1_2_3],
+        19: [DOUBLE_MATERIALITY, SCOPE_1_2_3],
+        22: [TWIN_TRANSITIONS],
+        23: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP]
     },
     "mock-exam-5:en": {
         1: [PRINCE2],

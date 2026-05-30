@@ -298,14 +298,142 @@ export const in5431ConceptImages = [
         moduleId: "strategy",
         groupId: "digital-strategy",
         imageId: "digital_strategy_model",
+        ext: "png",
         title: { no: "Digital strategi", en: "Digital strategy" },
         alt: { no: "Modell som skiller mellom forretningsstrategi, IT-strategi og digital strategi", en: "Model distinguishing business strategy, IT strategy and digital strategy" },
-        caption: { no: "Digital strategi handler om å bruke digitale ressurser til å skape differensierende verdi, ikke bare å anskaffe IT-systemer.", en: "Digital strategy is about using digital resources to create differential value, not merely acquiring IT systems." }
+        caption: { no: "Digital strategy plasseres mellom business strategy og IT-strategy: den bruker digitale ressurser til å skape differensierende verdi.", en: "Digital strategy sits between business strategy and IT strategy: it uses digital resources to create differential value." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "digital_strategy_definition",
+        ext: "png",
+        title: { no: "Definisjon av digital strategy", en: "Digital strategy definition" },
+        alt: { no: "Definisjon av digital strategy som organisatorisk strategi basert på digitale ressurser", en: "Definition of digital strategy as an organizational strategy based on digital resources" },
+        caption: { no: "Digital strategy er en organisatorisk strategi som utnytter digitale ressurser for å skape differential value.", en: "Digital strategy is an organizational strategy that leverages digital resources to create differential value." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "digital_strategy_content",
+        ext: "png",
+        title: { no: "Innhold i digital strategy", en: "Content of a digital strategy" },
+        alt: { no: "Figur over sentrale innholdselementer i en digital strategy", en: "Figure showing key content elements in a digital strategy" },
+        caption: { no: "En digital strategy må koble digital vision, digital initiatives, roadmap og ansvar.", en: "A digital strategy must connect digital vision, digital initiatives, roadmap and responsibilities." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "macro_meso_micro_impact",
+        ext: "png",
+        title: { no: "Macro, meso og micro level", en: "Macro, meso and micro level" },
+        alt: { no: "Modell over digitaliseringens effekt på macro-, meso- og micro-nivå", en: "Model of digitalization impact at macro, meso and micro levels" },
+        caption: { no: "Digitalization kan endre business models og økosystemer, interne prosesser og organisering, samt oppgaver og kompetansekrav.", en: "Digitalization can change business models and ecosystems, internal processes and organization, and tasks and competence requirements." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "digital_transformation_process",
+        ext: "png",
+        title: { no: "Digital transformation som prosess", en: "Digital transformation as a process" },
+        alt: { no: "Prosessmodell for digital transformation fra erkjennelse til CDO eller digital enhet", en: "Process model for digital transformation from realization to CDO or digital unit" },
+        caption: { no: "Prosessen kobler erkjennelse av endringsbehov, digital vision & strategy, digitalization projects, investeringer og organisatorisk ansvar.", en: "The process connects realization of the need for change, digital vision and strategy, digitalization projects, investments and organizational responsibility." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "digital_transformation_barriers",
+        ext: "png",
+        title: { no: "Barrierer for digital transformation", en: "Barriers to digital transformation" },
+        alt: { no: "Oversikt over barrierer som gjør digital transformation vanskelig", en: "Overview of barriers that make digital transformation difficult" },
+        caption: { no: "Barrierene viser hvorfor digital transformation krever strategi, governance, samarbeid, kompetanse, kultur og arbeid med inertia.", en: "The barriers show why digital transformation requires strategy, governance, collaboration, competence, culture and work on inertia." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "culture_for_digitalization",
+        ext: "png",
+        title: { no: "Culture for digitalization", en: "Culture for digitalization" },
+        alt: { no: "Kulturelle kjennetegn som støtter digitalization", en: "Cultural characteristics that support digitalization" },
+        caption: { no: "En kultur for digitalization vektlegger blant annet fleksibilitet, samarbeid, åpenhet, autonomi, læring og eksperimentering.", en: "A culture for digitalization emphasizes flexibility, collaboration, openness, autonomy, learning and experimentation." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "organizational_inertia_definition",
+        ext: "png",
+        title: { no: "Organizational inertia", en: "Organizational inertia" },
+        alt: { no: "Definisjon av organizational inertia som stickiness og motstand mot endring", en: "Definition of organizational inertia as stickiness and resistance to change" },
+        caption: { no: "Organizational inertia beskriver hvorfor organisasjoner kan holde fast ved eksisterende praksiser selv når omgivelsene endrer seg.", en: "Organizational inertia explains why organizations may hold on to existing practices even when the environment changes." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "organizational_inertia_levels",
+        ext: "png",
+        title: { no: "Nivåer av inertia", en: "Levels of inertia" },
+        alt: { no: "Individuelle og organisatoriske former for inertia", en: "Individual and organizational forms of inertia" },
+        caption: { no: "Inertia kan ligge hos individer, i sosio-tekniske spor, i økonomiske strukturer og i politiske eller kulturelle mønstre.", en: "Inertia can sit with individuals, in socio-technical paths, in economic structures and in political or cultural patterns." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "addressing_inertia",
+        ext: "png",
+        title: { no: "Hvordan adressere inertia", en: "Addressing inertia" },
+        alt: { no: "Tiltak for å adressere inertia i digital transformation", en: "Measures for addressing inertia in digital transformation" },
+        caption: { no: "Inertia kan adresseres gjennom awareness, kompetansebygging, kommunikasjon, change management, piloter, læring og en mer fleksibel digital foundation.", en: "Inertia can be addressed through awareness, competence building, communication, change management, pilots, learning and a more flexible digital foundation." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "leadership_role_digital_transformation",
+        ext: "png",
+        title: { no: "Lederrollen i digital transformation", en: "Leadership role in digital transformation" },
+        alt: { no: "Oversikt over lederrollen i digital transformation", en: "Overview of the leadership role in digital transformation" },
+        caption: { no: "Ledere må håndtere både tekniske og organisatoriske endringer, bygge kultur og balansere exploitation og exploration.", en: "Leaders must handle technical and organizational changes, build culture and balance exploitation and exploration." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "cdo_roles",
+        ext: "png",
+        title: { no: "CDO roles", en: "CDO roles" },
+        alt: { no: "Roller en Chief Digital Officer kan ha i digital transformation", en: "Roles a Chief Digital Officer can have in digital transformation" },
+        caption: { no: "CDO kan fungere som digital innovator, digital advocate, harmonizer og accelerator.", en: "A CDO can act as digital innovator, digital advocate, harmonizer and accelerator." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "cdo_contribution",
+        ext: "png",
+        title: { no: "CDO contribution", en: "CDO contribution" },
+        alt: { no: "Oversikt over hvordan CDO bidrar til digital transformation", en: "Overview of how the CDO contributes to digital transformation" },
+        caption: { no: "CDO kan bidra med felles mål, integrasjon av business og technology, brobygging mellom grupper og et mer helhetlig perspektiv.", en: "The CDO can contribute with shared goals, integration of business and technology, bridges between groups and a more holistic perspective." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "whole_organization_involvement",
+        ext: "png",
+        title: { no: "Hele organisasjonen i digital transformation", en: "Whole organization involvement" },
+        alt: { no: "Hvorfor hele organisasjonen må involveres i digital transformation", en: "Why the whole organization must be involved in digital transformation" },
+        caption: { no: "Digital transformation berører ofte cross-functional business processes, kompetanse, samarbeid og forståelsen av hvorfor endring er nødvendig.", en: "Digital transformation often affects cross-functional business processes, competence, collaboration and the understanding of why change is needed." }
+    },
+    {
+        moduleId: "strategy",
+        groupId: "digital-strategy",
+        imageId: "organization_as_network_groups",
+        ext: "png",
+        title: { no: "Organisasjonen som nettverk av grupper", en: "Organization as a network of groups" },
+        alt: { no: "Modell av organisasjonen som nettverk av grupper med ulike perspektiver og interesser", en: "Model of the organization as a network of groups with different perspectives and interests" },
+        caption: { no: "Modellen forklarer hvorfor digital transformation krever involvering, oversettelse og koordinering på tvers av grupper.", en: "The model explains why digital transformation requires involvement, translation and coordination across groups." }
     },
     {
         moduleId: "sustainability",
         groupId: "three-dimensions",
         imageId: "sustainability_three_dimensions",
+        ext: "png",
         title: { no: "Tre dimensjoner av bærekraft", en: "Three dimensions of sustainability" },
         alt: { no: "Økonomisk, sosial og miljømessig bærekraft / triple bottom line", en: "Economic, social and environmental sustainability / triple bottom line" },
         caption: { no: "Bærekraft vurderes ofte langs økonomiske, sosiale og miljømessige dimensjoner — profit, people and planet.", en: "Sustainability is often assessed along economic, social and environmental dimensions — profit, people and planet." }
@@ -314,6 +442,7 @@ export const in5431ConceptImages = [
         moduleId: "sustainability",
         groupId: "reporting",
         imageId: "double_materiality",
+        ext: "png",
         title: { no: "Dobbel vesentlighet", en: "Double materiality" },
         alt: { no: "Dobbel vesentlighet i bærekraftsrapportering", en: "Double materiality in sustainability reporting" },
         caption: { no: "Dobbel vesentlighet kombinerer hvordan virksomheten påvirker omgivelsene og hvordan bærekraftsforhold påvirker virksomheten.", en: "Double materiality combines how the organization impacts its surroundings and how sustainability matters affect the organization." }
@@ -322,8 +451,36 @@ export const in5431ConceptImages = [
         moduleId: "sustainability",
         groupId: "reporting",
         imageId: "scope_1_2_3",
+        ext: "png",
         title: { no: "Scope 1, 2 og 3", en: "Scope 1, 2 and 3" },
         alt: { no: "Utslippskategoriene Scope 1, Scope 2 og Scope 3", en: "The emission categories Scope 1, Scope 2 and Scope 3" },
         caption: { no: "Scope 1, 2 og 3 skiller mellom direkte utslipp, indirekte energirelaterte utslipp og andre verdikjedeutslipp.", en: "Scope 1, 2 and 3 distinguish direct emissions, indirect energy-related emissions and other value-chain emissions." }
+    },
+    {
+        moduleId: "sustainability",
+        groupId: "circular-economy",
+        imageId: "what_is_circular_economy",
+        ext: "png",
+        title: { no: "Hva er sirkulærøkonomi?", en: "What is circular economy?" },
+        alt: { no: "Forklaring av sirkulærøkonomi og ressursbruk i kretsløp", en: "Explanation of circular economy and keeping resources in loops" },
+        caption: { no: "Sirkulærøkonomi handler om å holde produkter, komponenter og materialer i bruk lengst mulig.", en: "Circular economy is about keeping products, components and materials in use for as long as possible." }
+    },
+    {
+        moduleId: "sustainability",
+        groupId: "circular-economy",
+        imageId: "circular_economy_loop",
+        ext: "png",
+        title: { no: "Sirkulærøkonomisk kretsløp", en: "Circular economy loop" },
+        alt: { no: "Kretsløpsmodell for sirkulærøkonomi", en: "Loop model for circular economy" },
+        caption: { no: "Kretsløpet viser hvordan gjenbruk, reparasjon, deling, ombruk og materialgjenvinning kan redusere ressursuttak og avfall.", en: "The loop shows how reuse, repair, sharing, remanufacturing and recycling can reduce resource extraction and waste." }
+    },
+    {
+        moduleId: "sustainability",
+        groupId: "twin-transitions",
+        imageId: "twin_transitions",
+        ext: "png",
+        title: { no: "Twin transitions", en: "Twin transitions" },
+        alt: { no: "Modell som kobler digital transformation og bærekraftsomstilling", en: "Model connecting digital transformation and sustainability transition" },
+        caption: { no: "Twin transitions betyr at digital transformation og bærekraftsomstilling må analyseres sammen, ikke hver for seg.", en: "Twin transitions means that digital transformation and sustainability transition must be analyzed together, not separately." }
     }
 ];

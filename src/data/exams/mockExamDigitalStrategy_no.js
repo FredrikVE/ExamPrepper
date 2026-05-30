@@ -118,7 +118,7 @@ export const mockExamDigitalStrategy_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "business_it_digital_strategy_example" }
+        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
       ]
     },
     {
@@ -288,10 +288,7 @@ export const mockExamDigitalStrategy_no = {
           text: "Characteristics",
           correct: true,
           why: "Riktig: ledere må forstå teknologiens kjennetegn.",
-          whyExtended: ["Uten å forstå characteristics er det vanskelig å vurdere hva teknologien faktisk kan og ikke kan gjøre."],
-          whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_technology_leader_questions" }
-          ]
+          whyExtended: ["Uten å forstå characteristics er det vanskelig å vurdere hva teknologien faktisk kan og ikke kan gjøre."]
         },
         {
           text: "Opportunities",
@@ -348,8 +345,7 @@ export const mockExamDigitalStrategy_no = {
             "Kane et al.-poenget er at mennesker, kultur, struktur og oppgaver må alignes med teknologien."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_definition" },
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_not_only_technology" }
+            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
           ]
         },
         {
@@ -443,10 +439,6 @@ export const mockExamDigitalStrategy_no = {
             "Den digitale visjonen var 'The best digital guest journey in the Nordic market'.",
             "Kronologien viser ikke én isolert IT-leveranse, men en serie organisatoriske og teknologiske initiativer fra 2014 til 2019.",
             "Caset brukes til å vise digital transformation i hotel sector, der kanaler og customer journey endres."
-          ],
-          whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "nordic_choice_chronology" },
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_guest_journey" }
           ]
         },
         {
@@ -494,7 +486,7 @@ export const mockExamDigitalStrategy_no = {
           why: "Riktig: dette er eksplisitt nevnt som en mulig driver.",
           whyExtended: ["Top-down digital strategy kan gi retning, prioritering og koordinering."],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_conclusions" }
+            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
           ]
         },
         {
@@ -674,7 +666,7 @@ export const mockExamDigitalStrategy_no = {
             "Kultur er dermed en enabler eller hindring for digital maturity."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "culture_as_barrier" }
+            { moduleId: "strategy", groupId: "digital-strategy", imageId: "culture_for_digitalization" }
           ]
         },
         {
@@ -794,7 +786,6 @@ export const mockExamDigitalStrategy_no = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "individual_inertia" },
         { moduleId: "strategy", groupId: "digital-strategy", imageId: "organizational_inertia_levels" }
       ]
     },

@@ -657,7 +657,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "The Double Diamond order is Discover → Define → Develop → Deliver.",
       whyExtended: ["The first diamond explores and defines the problem; the second develops and delivers solutions."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "double-diamond", imageId: "double_diamond_theory_of_everything" }
+        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
       ]
     },
     {
@@ -681,7 +681,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "The order is Understand the situation → Synthesize options → Evaluate and propose.",
       whyExtended: ["The process moves from problem understanding to alternatives and then to recommendation."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "alternative-analysis", imageId: "alternative_analysis_process" }
+        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
       ]
     },
     {
@@ -713,7 +713,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "A simplified PRINCE2 order is Starting up → Directing → Initiating → Controlling a stage → Managing product delivery → Managing stage boundaries → Closing.",
       whyExtended: ["PRINCE2 is a project governance and management framework, so the process order is tied to control and accountability."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_theory_of_everything" }
+        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
       ]
     },
     {
@@ -747,7 +747,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "The simplified ADM order is Architecture Vision → Business Architecture → Information Systems Architecture → Technology Architecture → Opportunities and Solutions → Migration Planning → Implementation Governance → Architecture Change Management.",
       whyExtended: ["ADM provides a structured lifecycle for architecture work."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "togaf", imageId: "togaf_adm_cycle" }
+        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
       ]
     },
     {
@@ -777,7 +777,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "A reasonable order is define the alternative → estimate benefits → estimate costs → assess timing → assess risk/discount rate → compare and recommend.",
       whyExtended: ["Business case is a structured way of making alternatives transparent, not a guarantee of perfectly rational choice."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "npv_plus_minus_method" }
+        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
       ]
     },
     {
