@@ -31,7 +31,7 @@ export const mockExam2_en = {
       source: "Source: Lecture 5, slide 'Four operating models' (Figure A1.1 from D4D).",
       options: [
         { text: "Diversification", correct: false, why: "diversification has low integration AND low standardization. Here the integration is high." },
-        { text: "Coordination", correct: true, why: "coordination = high integration, low standardization.\nUnique units that share data." },
+        { text: "Coordination", correct: true, why: "coordination = high integration, low standardization. Unique units that share data." },
         { text: "Unification", correct: false, why: "unification has high standardization in addition to high integration." },
         { text: "Replication", correct: false, why: "replication has high standardization but low integration." }
       ]
@@ -46,7 +46,7 @@ export const mockExam2_en = {
       options: [
         { text: "Coordination", correct: false, why: "coordination requires that units share data/transactions (high integration)." },
         { text: "Unification", correct: false, why: "unification also requires high integration between units." },
-        { text: "Replication", correct: true, why: "low integration, high standardization.\nSimilar processes, but units operate independently." },
+        { text: "Replication", correct: true, why: "low integration, high standardization. Similar processes, but units operate independently." },
         { text: "Diversification", correct: false, why: "diversification has low standardization, meaning different processes." }
       ]
     },
