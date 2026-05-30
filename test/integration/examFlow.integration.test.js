@@ -75,7 +75,7 @@ describe("exam flow integration", () => {
             language: "en"
         });
 
-        expect(exams).toHaveLength(8);
+        expect(exams).toHaveLength(9);
         expect(exams.map((exam) => exam.id)).toEqual([
             "mock-exam-1-en",
             "mock-exam-2-en",
@@ -85,6 +85,7 @@ describe("exam flow integration", () => {
             "mock-exam-definitions-en",
             "mock-exam-drag-categorize-en",
             "mock-exam-sustainability-en",
+            "mock-exam-digital-strategy-en",
         ]);
         expect(exams.every((exam) => exam.questionCount > 0)).toBe(true);
     });
@@ -139,7 +140,7 @@ describe("exam flow integration", () => {
         expect(subject).toMatchObject({
             id: "in5431",
             code: "IN5431",
-            examCount: 8
+            examCount: 9
         });
     });
 });
