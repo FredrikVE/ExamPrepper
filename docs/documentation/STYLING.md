@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Styling
 
 Global styling importeres fra `src/ui/style/App.css`.

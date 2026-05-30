@@ -1,3 +1,8 @@
+<p align="left">
+  <a href="https://github.com/fredrikvogth/ExamPrepper">← Tilbake til GitHub repo</a>
+</p>
+
+
 <h1 align="center">
   <img src="./docs/images/Full_logo_transparent.png" alt="ExamPrepper logo" width="520" />
 </h1>

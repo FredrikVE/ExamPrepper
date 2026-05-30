@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Pensumgrunnlag
 
 Øveeksamenene er basert på sentrale temaer i IN5431, blant annet:

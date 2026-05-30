@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Prosjektstruktur
 
 Selve React-komponentene ligger under `ui/view/components/`, mens sider ligger under `ui/view/pages/`. Styling er samlet separat i `ui/style/`, slik at komponentstruktur og CSS-struktur holdes adskilt, men fortsatt speiler hverandre der det gir bedre feature-eierskap.

@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Arkitektur
 
 Prosjektet følger et lagdelt mønster inspirert av MVVM og Clean Architecture.

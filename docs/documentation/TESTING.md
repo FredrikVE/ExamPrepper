@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Testing
 
 Testene ligger i en egen `test/`-mappe og er organisert etter samme lagdeling som resten av prosjektet.

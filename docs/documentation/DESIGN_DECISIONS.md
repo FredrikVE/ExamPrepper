@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Designvalg
 
 **Eksamensdata er delt opp i flere filer.**

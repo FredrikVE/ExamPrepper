@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Sentrale funksjoner
 
 | Funksjon | Beskrivelse |

@@ -1,3 +1,7 @@
+<a href="../../README.md">← Tilbake til README</a>
+
+---
+
 # Eksamensdata
 
 Eksamensinnholdet er delt opp i flere egne filer under `src/data/exams/`.
