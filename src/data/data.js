@@ -14,6 +14,7 @@ import { mockExamDefinitions_en } from "./exams/mockExamDefinitions_en.js";
 import { mockExamDragCategorize_no } from "./exams/mockExamDragCategorize_no.js";
 import { mockExamDragCategorize_en } from "./exams/mockExamDragCategorize_en.js";
 import { mockExamSustainability_no } from "./exams/mockExamSustainability_no.js";
+import { mockExamSustainability_en } from "./exams/mockExamSustainability_en.js";
 import { mockExamDigitalStrategy_no } from "./exams/mockExamDigitalStrategy_no.js";
 import { mockExamDigitalTransformation_no } from "./exams/mockExamDigitalTransformation_no.js";
 
@@ -37,6 +38,7 @@ export const EXAMS = [
     mockExamDragCategorize_no,
     mockExamDragCategorize_en,
     mockExamSustainability_no,
+    mockExamSustainability_en,
     mockExamDigitalStrategy_no,
     mockExamDigitalTransformation_no,
 ];

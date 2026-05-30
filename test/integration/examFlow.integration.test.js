@@ -69,6 +69,26 @@ describe("exam flow integration", () => {
         expect(exams.every((exam) => exam.questionCount > 0)).toBe(true);
     });
 
+    test("loads available English exams for IN5431 from real data", async () => {
+        const exams = await getAvailableExamsUseCase.execute({
+            subjectId: "in5431",
+            language: "en"
+        });
+
+        expect(exams).toHaveLength(8);
+        expect(exams.map((exam) => exam.id)).toEqual([
+            "mock-exam-1-en",
+            "mock-exam-2-en",
+            "mock-exam-3-en",
+            "mock-exam-4-en",
+            "mock-exam-5-en",
+            "mock-exam-definitions-en",
+            "mock-exam-drag-categorize-en",
+            "mock-exam-sustainability-en",
+        ]);
+        expect(exams.every((exam) => exam.questionCount > 0)).toBe(true);
+    });
+
     test("loads questions and calculates full score when all answers are correct", async () => {
         const questions = await getExamQuestionsUseCase.execute("mock-exam-1-no");
         const answers = Object.fromEntries(
@@ -119,7 +139,7 @@ describe("exam flow integration", () => {
         expect(subject).toMatchObject({
             id: "in5431",
             code: "IN5431",
-            examCount: 7
+            examCount: 8
         });
     });
 });

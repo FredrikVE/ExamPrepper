@@ -269,6 +269,19 @@ export const in5431DefaultQuestionImageRefsByExamKey = {
         22: [TWIN_TRANSITIONS],
         23: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP]
     },
+    "mock-exam-sustainability:en": {
+        4: [SUSTAINABILITY_THREE_DIMENSIONS],
+        6: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
+        7: [CIRCULAR_ECONOMY_LOOP],
+        8: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
+        15: [DOUBLE_MATERIALITY],
+        16: [DOUBLE_MATERIALITY],
+        17: [SCOPE_1_2_3],
+        18: [SCOPE_1_2_3],
+        19: [DOUBLE_MATERIALITY, SCOPE_1_2_3],
+        22: [TWIN_TRANSITIONS],
+        23: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP]
+    },
     "mock-exam-5:en": {
         1: [PRINCE2],
         2: [PRINCE2],
