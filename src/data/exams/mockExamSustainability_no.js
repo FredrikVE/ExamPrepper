@@ -909,7 +909,8 @@ export const mockExamSustainability_no = {
         "Scope 3 er ofte vanskeligst fordi data ligger utenfor virksomhetens direkte kontroll."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" }
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
       ]
     },
     {
@@ -926,7 +927,8 @@ export const mockExamSustainability_no = {
       whyCorrect: "Scope 3 er definert som alle andre utslipp assosiert med selskapets aktiviteter.",
       whyWrong: "Scope 1 er direkte utslipp fra egne/kontrollerte kilder, og Scope 2 er indirekte utslipp fra kjøpt elektrisitet, varme, damp og kjøling.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" }
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
       ]
     },
     {
