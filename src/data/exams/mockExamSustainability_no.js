@@ -1197,6 +1197,138 @@ export const mockExamSustainability_no = {
           whyExtended: ["Data kan skape insentiver, påvirke finansiering og støtte global governance."]
         }
       ]
+    },
+    {
+      id: 25,
+      type: "multi",
+      title: "Digital teknologi og bærekraftsomstilling",
+      points: 1,
+      moduleId: "sustainability",
+      groupId: "digital-technology",
+      prompt: "Hvilke måter kan digital teknologi støtte sustainability transitions på, slik forelesningen beskriver det?",
+      source: "Fasit: IN5431 Sustainability: Implications for management, slide 3.",
+      options: [
+        {
+          text: "Virtualization, der digitale løsninger erstatter fysiske aktiviteter.",
+          correct: true,
+          why: "Riktig: forelesningen nevner virtualization som en måte digital teknologi kan støtte bærekraftsomstilling.",
+          whyExtended: [
+            "Poenget er at digitale løsninger i noen tilfeller kan redusere behovet for fysiske produkter, reiser eller prosesser.",
+            "Effekten må likevel vurderes konkret, siden digitale løsninger også har miljøbelastninger."
+          ]
+        },
+        {
+          text: "Optimization, der data og digitale systemer brukes til å redusere waste.",
+          correct: true,
+          why: "Riktig: forelesningen beskriver optimization som reduce waste.",
+          whyExtended: [
+            "Digitale systemer kan støtte bedre planlegging, ressursbruk og koordinering.",
+            "I bærekraftssammenheng er dette relevant når teknologien faktisk reduserer energibruk, materialbruk eller unødvendige aktiviteter."
+          ]
+        },
+        {
+          text: "Monitoring, der måling og informasjon brukes til å informere handling.",
+          correct: true,
+          why: "Riktig: forelesningen beskriver monitoring som informing action.",
+          whyExtended: [
+            "Måling og datainnsamling kan gjøre utslipp, ressursbruk eller avvik synlige.",
+            "Da kan organisasjonen bruke informasjonen til styring, rapportering og forbedring."
+          ]
+        },
+        {
+          text: "Drive innovation, der nye teknologier gjør nye løsninger mulige.",
+          correct: true,
+          why: "Riktig: forelesningen nevner drive innovation gjennom new technologies.",
+          whyExtended: [
+            "Bærekraftsomstillinger kan kreve nye teknologier, nye tjenester og nye måter å organisere arbeid på.",
+            "Dette kobler bærekraft til innovasjon, ikke bare til rapportering og compliance."
+          ]
+        },
+        {
+          text: "Electronic waste, der mer digital teknologi automatisk gjør avfallshåndtering bærekraftig.",
+          correct: false,
+          why: "Galt: electronic waste er en negativ miljøkonsekvens av ICT, ikke en støtteform i listen på slide 3.",
+          whyExtended: [
+            "Forelesningen peker på at digital teknologi også har negative miljøpåvirkninger.",
+            "E-avfall viser at ICT ikke bare er virtuelt, men også består av materielle artefakter."
+          ]
+        },
+        {
+          text: "Energy consumption, der mer digital infrastruktur i seg selv gir lavere utslipp.",
+          correct: false,
+          why: "Galt: energiforbruk er en mulig negativ effekt, ikke et automatisk bærekraftsbidrag.",
+          whyExtended: [
+            "Digitale løsninger kan redusere sløsing i noen sammenhenger.",
+            "Men datasentre, nettverk, enheter og digital infrastruktur bruker også energi."
+          ]
+        }
+      ]
+    },
+    {
+      id: 26,
+      type: "dragDrop",
+      title: "Fire måter digital teknologi kan støtte bærekraft",
+      points: 2,
+      moduleId: "sustainability",
+      groupId: "digital-technology",
+      prompt: "Dra hvert begrep til riktig forklaring.",
+      source: "Fasit: IN5431 Sustainability: Implications for management, slide 3.",
+      cards: [
+        { id: "virtualization", text: "Virtualization" },
+        { id: "optimization", text: "Optimization" },
+        { id: "monitoring", text: "Monitoring" },
+        { id: "drive-innovation", text: "Drive innovation" }
+      ],
+      targets: [
+        {
+          id: "digital-replace-physical",
+          description: "Digitale løsninger erstatter fysiske aktiviteter, produkter eller prosesser.",
+          correctCardId: "virtualization",
+          correctLabel: "Virtualization",
+          whyCorrect: "Virtualization handler om at digitalt kan erstatte fysisk.",
+          whyWrong: "Denne forklaringen handler om å erstatte noe fysisk med en digital løsning.",
+          whyExtended: [
+            "Eksempler kan være digitale møter, digitale dokumenter eller digitale tjenester som reduserer behovet for fysisk transport eller materiale.",
+            "Effekten er ikke automatisk positiv. Den må veies mot energibruk, utstyr og andre konsekvenser."
+          ]
+        },
+        {
+          id: "reduce-waste",
+          description: "Digitale systemer brukes til å redusere waste gjennom bedre styring og beslutninger.",
+          correctCardId: "optimization",
+          correctLabel: "Optimization",
+          whyCorrect: "Optimization handler om å redusere sløsing.",
+          whyWrong: "Denne forklaringen handler ikke primært om måling eller nye teknologier, men om bedre ressursbruk.",
+          whyExtended: [
+            "Optimalisering kan handle om ruter, logistikk, energibruk, lagerstyring eller prosessflyt.",
+            "Bærekraftspoenget er at bedre bruk av data kan redusere unødvendig ressursbruk."
+          ]
+        },
+        {
+          id: "informing-action",
+          description: "Data samles inn og brukes til å informere handling.",
+          correctCardId: "monitoring",
+          correctLabel: "Monitoring",
+          whyCorrect: "Monitoring handler om måling som grunnlag for handling.",
+          whyWrong: "Denne forklaringen handler om å gjøre tilstander synlige gjennom data, ikke om å erstatte fysisk aktivitet.",
+          whyExtended: [
+            "Monitoring kan gjøre utslipp, forbruk eller avvik målbare.",
+            "Dette kan støtte rapportering, governance og praktiske forbedringstiltak."
+          ]
+        },
+        {
+          id: "new-technologies",
+          description: "Nye teknologier åpner for nye løsninger, tjenester eller arbeidsmåter.",
+          correctCardId: "drive-innovation",
+          correctLabel: "Drive innovation",
+          whyCorrect: "Drive innovation handler om at nye teknologier kan muliggjøre nye løsninger.",
+          whyWrong: "Denne forklaringen handler om innovasjon, ikke bare om effektivisering av eksisterende prosesser.",
+          whyExtended: [
+            "Bærekraftsomstillinger kan kreve nye digitale løsninger og nye organisatoriske praksiser.",
+            "Dette gjør bærekraft relevant for IT-ledelse, strategi og innovasjonsarbeid."
+          ]
+        }
+      ]
     }
   ]
 };
