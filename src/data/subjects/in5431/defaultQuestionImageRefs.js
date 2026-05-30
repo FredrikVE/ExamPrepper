@@ -56,7 +56,7 @@ const SUSTAINABILITY_THREE_DIMENSIONS = ref("sustainability", "three-dimensions"
 const CIRCULAR_ECONOMY_LOOP = ref("sustainability", "circular-economy", "circular_economy_loop");
 const WHAT_IS_CIRCULAR_ECONOMY = ref("sustainability", "circular-economy", "what_is_circular_economy");
 const DOUBLE_MATERIALITY = ref("sustainability", "reporting", "double_materiality");
-const SCOPE_1_2_3 = ref("sustainability", "reporting", "scope_1_2_3");
+const SCOPE_1_2_3_MODEL = ref("sustainability", "reporting", "scope_1_2_3_model");
 const TWIN_TRANSITIONS = ref("sustainability", "twin-transitions", "twin_transitions");
 
 const COMMON_MOCK_EXAM_1 = {
@@ -94,7 +94,7 @@ const COMMON_MOCK_EXAM_2 = {
     108: [IT_DECISION_DOMAINS],
     109: [D4D_OVERVIEW],
     110: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
-    111: [SCOPE_1_2_3],
+    111: [SCOPE_1_2_3_MODEL],
     112: [TWIN_TRANSITIONS],
     113: [DOUBLE_DIAMOND],
     114: [TRIPLE_CONSTRAINT],
@@ -171,7 +171,7 @@ const COMMON_MOCK_EXAM_4 = {
     34: [TRIPLE_CONSTRAINT],
     35: [DOUBLE_DIAMOND],
     36: [NPV, PV],
-    37: [SCOPE_1_2_3],
+    37: [SCOPE_1_2_3_MODEL],
     38: [DIGITAL_STRATEGY],
     40: [TOGAF_TAXONOMY, TOGAF_LEVELS],
     41: [TOGAF_TAXONOMY, TOGAF_LEVELS, TOGAF_ADM_EN],
@@ -291,9 +291,9 @@ export const in5431DefaultQuestionImageRefsByExamKey = {
         8: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
         15: [DOUBLE_MATERIALITY],
         16: [DOUBLE_MATERIALITY],
-        17: [SCOPE_1_2_3],
-        18: [SCOPE_1_2_3],
-        19: [DOUBLE_MATERIALITY, SCOPE_1_2_3],
+        17: [SCOPE_1_2_3_MODEL],
+        18: [SCOPE_1_2_3_MODEL],
+        19: [DOUBLE_MATERIALITY, SCOPE_1_2_3_MODEL],
         22: [TWIN_TRANSITIONS],
         23: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP]
     },
@@ -304,9 +304,9 @@ export const in5431DefaultQuestionImageRefsByExamKey = {
         8: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP],
         15: [DOUBLE_MATERIALITY],
         16: [DOUBLE_MATERIALITY],
-        17: [SCOPE_1_2_3],
-        18: [SCOPE_1_2_3],
-        19: [DOUBLE_MATERIALITY, SCOPE_1_2_3],
+        17: [SCOPE_1_2_3_MODEL],
+        18: [SCOPE_1_2_3_MODEL],
+        19: [DOUBLE_MATERIALITY, SCOPE_1_2_3_MODEL],
         22: [TWIN_TRANSITIONS],
         23: [WHAT_IS_CIRCULAR_ECONOMY, CIRCULAR_ECONOMY_LOOP]
     },

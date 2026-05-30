@@ -602,7 +602,7 @@ export const mockExamSustainability_en = {
         "Scope 3 is often hardest because the data lies outside the organization's direct control."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" }
       ]
     },
     {
@@ -619,7 +619,7 @@ export const mockExamSustainability_en = {
       whyCorrect: "Scope 3 is defined as all other emissions associated with the company's activities.",
       whyWrong: "Scope 1 is direct emissions from owned or controlled sources, and Scope 2 is indirect emissions from purchased electricity, heat, steam and cooling.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" }
       ]
     },
     {

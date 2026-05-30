@@ -458,6 +458,15 @@ export const in5431ConceptImages = [
     },
     {
         moduleId: "sustainability",
+        groupId: "reporting",
+        imageId: "scope_1_2_3_model",
+        ext: "png",
+        title: { no: "Scope 1, 2 og 3-modell", en: "Scope 1, 2 and 3 model" },
+        alt: { no: "Scope-pyramide og ringmodell for Scope 1, Scope 2 og Scope 3", en: "Scope pyramid and ring model for Scope 1, Scope 2 and Scope 3" },
+        caption: { no: "Modellen viser at Scope 1 er mest direkte og lettest å kontrollere, mens Scope 3 omfatter flere aktører og ofte er mer komplekst å måle.", en: "The model shows that Scope 1 is most direct and easiest to control, while Scope 3 involves more actors and is often more complex to measure." }
+    },
+    {
+        moduleId: "sustainability",
         groupId: "circular-economy",
         imageId: "what_is_circular_economy",
         ext: "png",
