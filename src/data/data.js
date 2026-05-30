@@ -18,6 +18,7 @@ import { mockExamSustainability_en } from "./exams/mockExamSustainability_en.js"
 import { mockExamDigitalStrategy_no } from "./exams/mockExamDigitalStrategy_no.js";
 import { mockExamDigitalStrategy_en } from "./exams/mockExamDigitalStrategy_en.js";
 import { mockExamDigitalTransformation_no } from "./exams/mockExamDigitalTransformation_no.js";
+import { mockExamDigitalTransformation_en } from "./exams/mockExamDigitalTransformation_en.js";
 
 import { DEFAULT_SUBJECT_ID, SUBJECTS } from "./subjects.js";
 
@@ -43,6 +44,7 @@ export const EXAMS = [
     mockExamDigitalStrategy_no,
     mockExamDigitalStrategy_en,
     mockExamDigitalTransformation_no,
+    mockExamDigitalTransformation_en,
 ];
 
 export {
