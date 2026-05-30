@@ -1,5 +1,5 @@
 <p align="left">
-  <a href="https://github.com/fredrikvogth/ExamPrepper">← Tilbake til GitHub repo</a>
+  <a href="https://github.com/FredrikVE/ExamPrepper">← Tilbake til GitHub repo</a>
 </p>
 
 
