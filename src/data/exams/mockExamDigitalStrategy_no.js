@@ -314,7 +314,8 @@ export const mockExamDigitalStrategy_no = {
           why: "Galt: pris kan være relevant i procurement, men dette er ikke et av de fire overordnede leder-spørsmålene i forelesningen.",
           whyExtended: ["Forelesningen løfter lederblikket fra anskaffelse til strategiske spørsmål om kjennetegn, muligheter, forutsetninger og konsekvenser."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_strategy_content"]
     },
     {
       id: 7,
@@ -468,7 +469,8 @@ export const mockExamDigitalStrategy_no = {
             "Forelesningen bruker senere kultur som et sentralt barrieretema."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_transformation_process"]
     },
     {
       id: 10,

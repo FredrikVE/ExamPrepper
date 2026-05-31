@@ -477,7 +477,8 @@ export const mockExamDragCategorize_no = {
             "Dette er den svakeste kombinasjonen. Teamene vet ikke tydelig hva de skal oppnå, og har heller ikke frihet til å handle."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["Hackman_authority_matrix"]
     }
   ]
 };

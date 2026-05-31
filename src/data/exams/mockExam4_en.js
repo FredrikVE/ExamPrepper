@@ -1440,6 +1440,10 @@ export const mockExam4_en = {
             "Federal governance tries to balance enterprise-wide coordination with local knowledge."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "it_governance_matrix",
+        "decision_rights_matrix"
       ]
     },
     {

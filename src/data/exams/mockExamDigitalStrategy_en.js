@@ -384,7 +384,8 @@ export const mockExamDigitalStrategy_en = {
             "The lecture moves the leader perspective from procurement to strategic questions about characteristics, opportunities, prerequisites and consequences."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_strategy_content"]
     },
     {
       "id": 7,
@@ -569,7 +570,8 @@ export const mockExamDigitalStrategy_en = {
             "The lecture later uses culture as a central barrier theme."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_transformation_process"]
     },
     {
       "id": 10,

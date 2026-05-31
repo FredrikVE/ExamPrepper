@@ -477,7 +477,8 @@ export const mockExamDragCategorize_en = {
             "This is the weakest combination. Teams do not know clearly what to achieve, and they also lack freedom to act."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["Hackman_authority_matrix"]
     }
   ]
 };

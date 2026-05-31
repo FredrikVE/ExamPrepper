@@ -94,7 +94,8 @@ export const mockExamDefinitions_no = {
           why: "Feil: dette beskriver organisering av IT-funksjonen, ikke nødvendigvis transformasjon.",
           whyExtended: ["En IT-avdeling kan støtte transformasjon, men er ikke i seg selv digital transformasjon."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_transformation_process"]
     },
     {
       id: 3,
@@ -190,7 +191,8 @@ export const mockExamDefinitions_no = {
           whyWrong: "Denne definisjonen handler om portefølje, prosesser og strategi på virksomhetsnivå.",
           whyExtended: ["TOGAF er ett rammeverk for enterprise architecture."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 5,
@@ -202,7 +204,8 @@ export const mockExamDefinitions_no = {
       answerKey: "design",
       source: "Fasit: IN5431, IT Architecture.",
       whyCorrect: "Arkitektur handler grunnleggende om design/utforming av systemer.",
-      whyWrong: "Det sentrale ordet i formuleringen er design. Arkitektur er ikke bare dokumentasjon, kode eller drift."
+      whyWrong: "Det sentrale ordet i formuleringen er design. Arkitektur er ikke bare dokumentasjon, kode eller drift.",
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 6,
@@ -218,7 +221,8 @@ export const mockExamDefinitions_no = {
         { text: "Structure of components and their interrelationships.", correct: true, why: "Riktig: komponenter og relasjoner er sentralt i den strukturelle definisjonen.", whyExtended: ["Denne delen peker på systemstruktur."] },
         { text: "Only the source code structure of one application.", correct: false, why: "Feil: TOGAF/EA er bredere enn kildekode i én applikasjon.", whyExtended: ["Arkitektur kan gjelde virksomhet, data, applikasjoner, teknologi og livsløp."] },
         { text: "Only project budget and timeline.", correct: false, why: "Feil: budsjett og tidsplan er prosjektstyring, ikke arkitekturdefinisjon.", whyExtended: ["Prosjektplaner kan påvirkes av arkitektur, men er ikke definisjonen av arkitektur."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 7,
@@ -270,7 +274,8 @@ export const mockExamDefinitions_no = {
           whyWrong: "Nøkkelordene er infrastruktur, nettverk, middleware og tekniske standarder.",
           whyExtended: ["Dette laget legger grunnlaget for drift, integrasjon og tekniske kapabiliteter."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 8,
@@ -284,7 +289,8 @@ export const mockExamDefinitions_no = {
         { text: "Agile Delivery Model — en metode for sprintplanlegging.", correct: false, why: "Feil: dette blander TOGAF med agile delivery.", whyExtended: ["Scrum/SAFe er mer relevante for agile delivery."] },
         { text: "Application Data Matrix — en tabell for datakvalitet.", correct: false, why: "Feil: ADM står ikke for Application Data Matrix i TOGAF.", whyExtended: ["TOGAF har modeller og artefakter, men ADM betyr Architecture Development Method."] },
         { text: "Automated Decision Management — et system for automatiserte beslutninger.", correct: false, why: "Feil: dette er ikke TOGAFs ADM.", whyExtended: ["TOGAF handler om arkitekturarbeid, ikke automatisert beslutningsstyring som sådan."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_adm_no"]
     },
     {
       id: 9,
@@ -300,7 +306,8 @@ export const mockExamDefinitions_no = {
         { text: "Fowler-perspektivet er mer samarbeidsorientert og desentralisert.", correct: true, why: "Riktig: pensum setter Fowler mer i retning av samarbeid og desentralisert orientering.", whyExtended: ["Dette kan passe bedre med agile arbeidsformer."] },
         { text: "Fowler er hovedsakelig et rammeverk for project governance.", correct: false, why: "Feil: project governance er mer PRINCE2 enn Fowler.", whyExtended: ["Fowler er relevant i diskusjoner om software architecture."] },
         { text: "TOGAF er hovedsakelig et rammeverk for IT Service Management.", correct: false, why: "Feil: IT Service Management hører til ITIL, ikke TOGAF.", whyExtended: ["TOGAF handler om enterprise architecture."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_levels_model"]
     },
     {
       id: 10,
@@ -320,7 +327,8 @@ export const mockExamDefinitions_no = {
         { id: "management", description: "Tar og gjennomfører beslutninger innenfor styringsstrukturen", correctCardId: "management", correctLabel: "Management", whyCorrect: "Management handler om å lede og gjennomføre arbeid innenfor governance-rammene.", whyWrong: "Dette beskriver utførelse og ledelse, ikke fordelingen av beslutningsrettigheter.", whyExtended: ["Governance setter rammene; management handler om handling innenfor rammene."] },
         { id: "accountability", description: "Å være ansvarlig for resultater og konsekvenser", correctCardId: "accountability", correctLabel: "Accountability", whyCorrect: "Accountability betyr at noen holdes ansvarlig for resultatet.", whyWrong: "Nøkkelordet er ansvar for outcomes, ikke bare rett til å bestemme.", whyExtended: ["I D4D handler Accountability Framework om ansvar for digitale tilbud og komponenter."] },
         { id: "decision-rights", description: "Myndighet til å ta eller bidra til bestemte beslutninger", correctCardId: "decision-rights", correctLabel: "Decision rights", whyCorrect: "Decision rights beskriver hvem som har myndighet til å ta eller bidra til beslutninger.", whyWrong: "Dette handler om beslutningsmyndighet, ikke generell ansvarlighet eller drift.", whyExtended: ["Weill & Ross bruker decision rights som kjerne i IT governance."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["decision_rights_matrix"]
     },
     {
       id: 11,
@@ -334,7 +342,8 @@ export const mockExamDefinitions_no = {
         { text: "Å la IT-avdelingen ta alle beslutninger alene.", correct: false, why: "Feil: dette beskriver én mulig arketype, IT monarchy, ikke governance som helhet.", whyExtended: ["Governance kan være business monarchy, federal, duopoly, feudal, anarchy osv."] },
         { text: "Å skrive kildekode raskere.", correct: false, why: "Feil: dette handler mer om utviklingspraksis enn governance.", whyExtended: ["Governance er styring av beslutningsrettigheter og ansvar."] },
         { text: "Å velge programmeringsspråk for hvert prosjekt.", correct: false, why: "Feil: det kan være en teknisk beslutning, men er ikke selve definisjonen av IT governance.", whyExtended: ["Spørsmålet i governance er hvem som skal ha myndighet til slike beslutninger."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["it_governance_matrix"]
     },
     {
       id: 12,
@@ -356,7 +365,8 @@ export const mockExamDefinitions_no = {
         { id: "it-infrastructure", description: "Felles tekniske tjenester og infrastrukturkapabiliteter", correctCardId: "it-infrastructure", correctLabel: "IT infrastructure strategies", whyCorrect: "IT infrastructure strategies handler om felles infrastruktur og tekniske tjenester.", whyWrong: "Dette er mer grunnleggende teknisk plattform enn business application needs.", whyExtended: ["Eksempler kan være nettverk, identitetstjenester, sikkerhet og felles plattformtjenester."] },
         { id: "business-application-needs", description: "Forretningskrav og muligheter for nye eller endrede applikasjoner", correctCardId: "business-application-needs", correctLabel: "Business application needs", whyCorrect: "Business application needs starter i forretningsenhetenes behov for applikasjoner.", whyWrong: "Denne forklaringen handler om konkrete applikasjonsbehov, ikke overordnet prinsipp eller infrastruktur.", whyExtended: ["Her vurderes behov for nye systemer eller endringer i eksisterende systemer."] },
         { id: "it-investment", description: "Finansiering, prioritering og porteføljebeslutninger", correctCardId: "it-investment", correctLabel: "IT investment", whyCorrect: "IT investment handler om hvilke IT-initiativer som skal finansieres og prioriteres.", whyWrong: "Når spørsmålet handler om funding og prioritering, er det investeringsdomenet.", whyExtended: ["Dette domenet kobler IT-porteføljen til virksomhetens strategiske prioriteringer."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["Domene_modell_IT_beslutninger_spm"]
     },
     {
       id: 13,
@@ -380,7 +390,8 @@ export const mockExamDefinitions_no = {
         { id: "it-duopoly", description: "IT-ledere og forretningsrepresentanter bestemmer sammen", correctCardId: "it-duopoly", correctLabel: "IT duopoly", whyCorrect: "IT duopoly er en to-parti-modell: IT + business.", whyWrong: "Nøkkelordene er IT-ledere og forretningsrepresentanter sammen.", whyExtended: ["Duopoly er smalere enn federal."] },
         { id: "feudal", description: "Forretningsenheter bestemmer uavhengig av hverandre", correctCardId: "feudal", correctLabel: "Feudal", whyCorrect: "Feudal betyr at business units tar egne separate beslutninger.", whyWrong: "Dette er desentralisering til forretningsenheter, ikke til individuelle brukere.", whyExtended: ["Kan gi lokal tilpasning, men kan svekke standardisering."] },
         { id: "anarchy", description: "Individuelle brukere eller små grupper følger sin egen IT-agenda", correctCardId: "anarchy", correctLabel: "Anarchy", whyCorrect: "Anarchy er den mest desentraliserte arketypen.", whyWrong: "Nøkkelordet er individuelle brukere/små grupper.", whyExtended: ["Dette kan gi stor frihet, men ofte lav standardisering og kontroll."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["decision_rights_matrix"]
     },
     {
       id: 14,
@@ -392,7 +403,8 @@ export const mockExamDefinitions_no = {
       answerKey: "activities / aktiviteter",
       source: "Fasit: IN5431, Business processes and IT Architecture.",
       whyCorrect: "En business process består av aktiviteter med logisk orden og avhengigheter.",
-      whyWrong: "Det manglende ordet er activities/aktiviteter. Prosessbegrepet handler om aktiviteter som produserer et ønsket resultat."
+      whyWrong: "Det manglende ordet er activities/aktiviteter. Prosessbegrepet handler om aktiviteter som produserer et ønsket resultat.",
+      whyExtendedImageRefs: ["umbrella_heaven_ordering_process"]
     },
     {
       id: 15,
@@ -416,7 +428,8 @@ export const mockExamDefinitions_no = {
         { id: "sequence-flow", description: "Viser rekkefølgen mellom aktiviteter", correctCardId: "sequence-flow", correctLabel: "Sequence flow", whyCorrect: "Sequence flow viser flyten/rekkefølgen i prosessen.", whyWrong: "Dette handler om piler/flyt mellom aktiviteter.", whyExtended: ["Det viser logisk rekkefølge og avhengighet."] },
         { id: "manual-activity", description: "Aktivitet som utføres manuelt av en person", correctCardId: "manual-activity", correctLabel: "Manual activity", whyCorrect: "Manual activity er en aktivitet utført av et menneske.", whyWrong: "Nøkkelordet er manuelt.", whyExtended: ["I prosessmodeller skilles ofte manuelle og automatiserte aktiviteter."] },
         { id: "automatic-activity", description: "Aktivitet som utføres automatisk av et system", correctCardId: "automatic-activity", correctLabel: "Automatic activity", whyCorrect: "Automatic activity utføres av et system.", whyWrong: "Nøkkelordet er automatisk/systemutført.", whyExtended: ["Automatiserte aktiviteter er viktige for å forstå koblingen mellom prosess og IT-systemer."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["umbrella_heaven_and_process_model"]
     },
     {
       id: 16,
@@ -430,7 +443,8 @@ export const mockExamDefinitions_no = {
         { text: "Fordi prosessmodeller erstatter strategi.", correct: false, why: "Feil: prosessmodeller støtter analyse og endring, men erstatter ikke strategi.", whyExtended: ["Strategi svarer på hva virksomheten skal oppnå; prosessmodeller hjelper å forstå hvordan arbeid utføres."] },
         { text: "Fordi alle prosesser alltid bør automatiseres fullt ut.", correct: false, why: "Feil: pensum sier ikke at alle prosesser bør automatiseres.", whyExtended: ["Poenget er å forstå prosesser og vurdere hensiktsmessige endringer."] },
         { text: "Fordi business processes bare er tekniske workflows.", correct: false, why: "Feil: forretningsprosesser inkluderer mennesker, roller, aktiviteter og organisasjon, ikke bare teknologi.", whyExtended: ["Prosessanalyse er sosio-teknisk."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["umbrella_heaven_and_process_model"]
     },
     {
       id: 17,
@@ -448,7 +462,8 @@ export const mockExamDefinitions_no = {
         { id: "understand", description: "Analyser problemet, konteksten og hvorfor situasjonen er som den er", correctCardId: "understand", correctLabel: "Understand the situation", whyCorrect: "Første steg er å forstå situasjonen og rotårsakene.", whyWrong: "Dette er analysefasen før man lager løsninger.", whyExtended: ["Her vurderes blant annet intern kompetanse, tekniske assets og kulturelle faktorer."] },
         { id: "synthesize", description: "Utvikle alternative handlinger eller konsepter", correctCardId: "synthesize", correctLabel: "Synthesize options", whyCorrect: "Andre steg er å lage alternative konsepter eller handlingsvalg.", whyWrong: "Dette handler om å skape alternativer, ikke evaluere dem ennå.", whyExtended: ["Målet er å sikre at relevante alternativer faktisk vurderes."] },
         { id: "evaluate", description: "Sammenlign alternativer og anbefal et valg", correctCardId: "evaluate", correctLabel: "Evaluate and propose", whyCorrect: "Tredje steg er evaluering og anbefaling.", whyWrong: "Dette er steget der man bruker business case, plus/minus-metode eller andre evalueringsmåter.", whyExtended: ["Detaljnivået bør skaleres etter beslutningens konsekvens, usikkerhet og tillit."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["generic_decision_making_process_no"]
     },
     {
       id: 18,
@@ -474,6 +489,10 @@ export const mockExamDefinitions_no = {
         { id: "npv", description: "Nåverdi av fremtidige kontantstrømmer minus investeringskostnad", correctCardId: "npv", correctLabel: "NPV", whyCorrect: "NPV sammenligner nåverdien av fremtidige kontantstrømmer med investeringskostnaden.", whyWrong: "Dette er den kvantitative business case-beregningen.", whyExtended: ["NPV brukes til å sammenligne alternativer økonomisk."] },
         { id: "discount-rate", description: "Renten som brukes til å diskontere fremtidige kontantstrømmer til nåverdi", correctCardId: "discount-rate", correctLabel: "Discount rate", whyCorrect: "Diskonteringsrenten konverterer fremtidige verdier til nåverdi.", whyWrong: "Dette er satsen i NPV-beregningen, ikke totalbudsjettet.", whyExtended: ["Høyere diskonteringsrente gjør fremtidige gevinster mindre verdt i dag."] },
         { id: "risk-premium", description: "Ekstra påslag i diskonteringen for å reflektere usikkerhet", correctCardId: "risk-premium", correctLabel: "Risk premium", whyCorrect: "Risk premium er et risikopåslag som kan øke diskonteringsrenten.", whyWrong: "Dette handler om risikojustering, ikke en ordinær kostnadspost.", whyExtended: ["I forelesningseksempler brukes ulik risikopremie for ulike alternativer."] }
+      ],
+      whyExtendedImageRefs: [
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -488,7 +507,8 @@ export const mockExamDefinitions_no = {
         { text: "Den fjerner all prosjektrisiko.", correct: false, why: "Feil: diskonteringsrenten kan reflektere risiko, men fjerner den ikke.", whyExtended: ["Estimater er fortsatt usikre."] },
         { text: "Den beregner totalbudsjettet direkte.", correct: false, why: "Feil: budsjettet er en kostnadsestimering; diskonteringsrenten brukes i nåverdiberegning.", whyExtended: ["Discount rate er ikke det samme som total cost."] },
         { text: "Den rangerer kvalitative gevinster automatisk.", correct: false, why: "Feil: kvalitative gevinster må vurderes separat.", whyExtended: ["Business case er mer enn NPV; non-quantifiable benefits må også vurderes."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["NPV_formula"]
     },
     {
       id: 20,
@@ -524,7 +544,8 @@ export const mockExamDefinitions_no = {
         security: { whyCorrect: "Sikkerhet er ofte en ikke-kvantifiserbar eller vanskelig kvantifiserbar gevinst.", whyWrong: "Sikkerhet er sjelden fullt fanget i enkel NPV.", whyExtended: ["Risiko og konsekvenser kan vurderes kvalitativt."] },
         safety: { whyCorrect: "Safety er ofte en ikke-kvantifiserbar gevinst.", whyWrong: "Safety handler om trygghet/skadeforebygging, ikke nødvendigvis direkte inntekt.", whyExtended: ["I noen sektorer kan dette være helt avgjørende."] },
         reputation: { whyCorrect: "Omdømme er vanligvis vanskelig å tallfeste presist.", whyWrong: "Dette er typisk kvalitativ gevinst.", whyExtended: ["Kan påvirke verdi, men er ofte usikkert å måle direkte."] }
-      }
+      },
+      whyExtendedImageRefs: ["NPV_formula"]
     },
     {
       id: 21,
@@ -548,6 +569,10 @@ export const mockExamDefinitions_no = {
         { id: "cost", description: "Budsjett eller ressursbegrensning", correctCardId: "cost", correctLabel: "Cost", whyCorrect: "Cost er budsjett-/ressursbegrensningen.", whyWrong: "Dette handler om ressursbruk, ikke hva som skal leveres.", whyExtended: ["Kostnad påvirkes av scope og time."] },
         { id: "triple-constraint", description: "Scope, time og cost samlet", correctCardId: "triple-constraint", correctLabel: "Triple constraint", whyCorrect: "Triple constraint er trekanten mellom scope, time og cost.", whyWrong: "Dette beskriver kombinasjonen av de tre begrensningene.", whyExtended: ["Når alle tre låses, blir prosjektet sårbart."] },
         { id: "prince2", description: "Rammeverk for project governance and management", correctCardId: "prince2", correctLabel: "PRINCE2", whyCorrect: "PRINCE2 er et prosjektstyringsrammeverk.", whyWrong: "Dette er ikke en begrensning, men et rammeverk for prosjektstyring.", whyExtended: ["PRINCE2 har prinsipper, temaer og prosesser."] }
+      ],
+      whyExtendedImageRefs: [
+        "triple_constraint_1",
+        "Triple-Constraint-Explained-1080x1080-1"
       ]
     },
     {
@@ -562,7 +587,8 @@ export const mockExamDefinitions_no = {
         { text: "Et prosjekt lykkes alltid hvis alle tre er fastlåst på forhånd.", correct: false, why: "Feil: dette er motsatt av læringspoenget.", whyExtended: ["Fastlåsing av alt kan gi urealistiske forventninger."] },
         { text: "Triple constraint handler bare om kostnader.", correct: false, why: "Feil: det handler om scope, time og cost samlet.", whyExtended: ["Trekanten viser avhengigheten mellom de tre."] },
         { text: "Triple constraint brukes bare i agile produktteam.", correct: false, why: "Feil: triple constraint er særlig knyttet til prosjektstyring.", whyExtended: ["Produktteam-logikk er mer kontinuerlig og outcome-orientert."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["triple_constraint_1"]
     },
     {
       id: 23,
@@ -622,7 +648,8 @@ export const mockExamDefinitions_no = {
         { id: "safe", description: "Scaled agile software delivery", correctCardId: "safe", correctLabel: "SAFe", whyCorrect: "SAFe står for Scaled Agile Framework og handler om skalering av agile.", whyWrong: "Scaled agile software delivery peker på SAFe.", whyExtended: ["SAFe knyttes også til product teams and agile methods."] },
         { id: "itil", description: "IT Service Management", correctCardId: "itil", correctLabel: "ITIL", whyCorrect: "ITIL er et rammeverk for IT Service Management.", whyWrong: "IT Service Management peker på ITIL.", whyExtended: ["ITIL er relevant for IT management, men ikke et kjerneverktøy i CIO toolboxen."] },
         { id: "prosci-adkar", description: "Change management", correctCardId: "prosci-adkar", correctLabel: "Prosci / ADKAR", whyCorrect: "Prosci/ADKAR er modeller for change management.", whyWrong: "Change management peker på Prosci/ADKAR.", whyExtended: ["Change management er relevant for IT-ledelse, men står utenfor selve CIO toolbox-tabellen."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["framewoks_and_best_practices"]
     },
     {
       id: 25,
@@ -658,7 +685,8 @@ export const mockExamDefinitions_no = {
         safe: { whyCorrect: "SAFe peker til Product teams and agile methods.", whyWrong: "SAFe er scaled agile software delivery.", whyExtended: ["Både Scrum og SAFe havner i samme kategori."] },
         itil: { whyCorrect: "ITIL har ingen pil inn i CIO toolboxen i figuren.", whyWrong: "ITIL er IT Service Management, men vises ikke som kjerneverktøy i CIO toolboxen.", whyExtended: ["Det er relevant som best practice, men ikke del av de syv verktøyene."] },
         "prosci-adkar": { whyCorrect: "Prosci/ADKAR har ingen pil inn i CIO toolboxen i figuren.", whyWrong: "Prosci/ADKAR er change management, men ikke kjerneverktøy i CIO toolboxen.", whyExtended: ["Det er et tilgrensende management framework."] }
-      }
+      },
+      whyExtendedImageRefs: ["framewoks_and_best_practices"]
     },
     {
       id: 26,
@@ -680,7 +708,8 @@ export const mockExamDefinitions_no = {
         { id: "dp", description: "Repositorium av business-, data- og infrastrukturkomponenter for rask konfigurering av digitale tilbud", correctCardId: "dp", correctLabel: "Digital Platform", whyCorrect: "Digital Platform er et lager av gjenbrukbare komponenter.", whyWrong: "Denne definisjonen handler om reusable components for digital offerings.", whyExtended: ["DP gjør rask innovasjon og gjenbruk lettere."] },
         { id: "af", description: "Fordeling av ansvar for digitale tilbud og komponenter som balanserer autonomi og alignment", correctCardId: "af", correctLabel: "Accountability Framework", whyCorrect: "Accountability Framework fordeler ansvar og balanserer autonomi og alignment.", whyWrong: "Nøkkelordene er responsibilities, autonomy og alignment.", whyExtended: ["AF skal muliggjøre innovasjon uten kaos."] },
         { id: "exdp", description: "Digitale komponenter som åpnes for eksterne parter", correctCardId: "exdp", correctLabel: "External Developer Platform", whyCorrect: "External Developer Platform åpner komponenter for eksterne utviklere/partnere.", whyWrong: "Nøkkelordet er external parties.", whyExtended: ["Dette kan skape økosystemer og eksterne innovasjonsmuligheter."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["D4D-overview"]
     },
     {
       id: 27,
@@ -702,7 +731,8 @@ export const mockExamDefinitions_no = {
         { id: "smacit", description: "Social, Mobile, Analytics, Cloud and Internet of Things", correctCardId: "smacit", correctLabel: "SMACIT", whyCorrect: "SMACIT er akronymet for teknologiene som driver digital økonomi.", whyWrong: "Denne forklaringen er et akronym, ikke en byggekloss.", whyExtended: ["SMACIT-teknologier muliggjør nye digitale verdiforslag."] },
         { id: "operational-backbone", description: "Stabilt fundament for standardiserte og integrerte kjerneoperasjoner", correctCardId: "operational-backbone", correctLabel: "Operational backbone", whyCorrect: "Operational backbone er fundamentet for stabil drift.", whyWrong: "Nøkkelordene er stable foundation, core operations, standardization og integration.", whyExtended: ["Uten en god OB kan digital innovasjon bli hemmet av fragmenterte systemer."] },
         { id: "digital-platform", description: "Gjenbrukbare komponenter som muliggjør rask bygging av digitale tilbud", correctCardId: "digital-platform", correctLabel: "Digital platform", whyCorrect: "Digital platform gir gjenbrukbare komponenter for raske digitale tilbud.", whyWrong: "Denne forklaringen handler om reusable components, ikke stable core operations.", whyExtended: ["Digital Platform bygger ofte på Operational Backbone, men har annen innovasjonslogikk."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["D4D-overview"]
     },
     {
       id: 28,

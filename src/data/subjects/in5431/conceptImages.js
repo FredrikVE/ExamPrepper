@@ -16,6 +16,17 @@ export const in5431ConceptImages = [
         caption: { no: "Strategiprosessen resulterer i en handlingsplan med aktiviteter, ansvar, roadmap og estimater.", en: "The strategy process results in an action plan with activities, responsibilities, roadmap and estimates." }
     },
 
+    // ── Strategy: Autonomy and alignment ────────────────────
+    {
+        moduleId: "strategy",
+        groupId: "autonomy-alignment",
+        imageId: "Hackman_authority_matrix",
+        ext: "png",
+        title: { no: "Hackman authority matrix", en: "Hackman authority matrix" },
+        alt: { no: "Matrise for autonomi og alignment i team", en: "Matrix for autonomy and alignment in teams" },
+        caption: { no: "Hackman-matrisen viser sammenhengen mellom grad av autonomi og alignment i ulike teamstrukturer.", en: "The Hackman matrix shows the relationship between the degree of autonomy and alignment in different team structures." }
+    },
+
     // ── CIO Toolbox: Decision making (forelesning 3) ───────
     {
         moduleId: "cio-tool-box",
@@ -63,6 +74,15 @@ export const in5431ConceptImages = [
         title: { no: "Cynefin-metoden", en: "The Cynefin method" },
         alt: { no: "Fra triple constraint via kompleksitetsfaktorer til Cynefin-kontekst og styringsmetode", en: "From triple constraint through complexity factors to Cynefin context and management approach" },
         caption: { no: "Cynefin kobler prosjektets egenskaper (faste constraints + kompleksitet) til anbefalt styringsmetode.", en: "Cynefin connects project characteristics (fixed constraints + complexity) to recommended management approach." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "cynefin",
+        imageId: "Cynefin_constraints",
+        ext: "png",
+        title: { no: "Cynefin-constraints", en: "Cynefin constraints" },
+        alt: { no: "Constraints i de fire Cynefin-domenene", en: "Constraints in the four Cynefin domains" },
+        caption: { no: "Hvert Cynefin-domene har ulik type constraint som påvirker valg av styringsmetode.", en: "Each Cynefin domain has a different type of constraint that affects the choice of management approach." }
     },
 
     // ── CIO Toolbox: PRINCE2 (forelesning 4) ───────────────

@@ -1466,6 +1466,10 @@ export const mockExam4_no = {
             "Federal governance forsøker å balansere enterprise-wide coordination med lokal kunnskap."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "it_governance_matrix",
+        "decision_rights_matrix"
       ]
     },
     {

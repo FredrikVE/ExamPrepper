@@ -60,7 +60,8 @@ export const mockExamSustainability_en = {
             "Reducing the topic to communication misses both the innovation and governance dimensions."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 2,
@@ -130,7 +131,8 @@ export const mockExamSustainability_en = {
           whyWrong: "This is not about efficiency. It is about social consequences of digitalization.",
           whyExtended: ["Sustainability is multidimensional: social effects must be assessed together with economy and environment."]
         }
-      }
+      },
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 3,
@@ -204,7 +206,8 @@ export const mockExamSustainability_en = {
           whyWrong: "This is not one emissions category. It is a perspective on simultaneous digital and sustainability transformation.",
           whyExtended: ["The lecture is critical: digital efficiency gains must be weighed against electricity use and rare materials."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 4,
@@ -290,7 +293,8 @@ export const mockExamSustainability_en = {
           why: "Wrong: this contradicts the sustainability perspective in the lecture.",
           whyExtended: ["The lecture also discusses degrowth and postgrowth as critiques of growth as the only goal.", "Net Zero is linked to climate targets, not to prioritizing growth over emission cuts."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["scope_1_2_3_model"]
     },
     {
       id: 6,
@@ -517,7 +521,8 @@ export const mockExamSustainability_en = {
         { text: "SOX shows that reporting requirements always reduce the need for IT governance.", correct: false, why: "Wrong: the lecture describes the opposite. Stronger reporting can strengthen governance.", whyExtended: ["Data integrity and internal control become more central when reported data matters."] },
         { text: "Sustainability reporting is completely different from financial reporting because data quality does not matter.", correct: false, why: "Wrong: data veracity, validation and verification are central points in the lecture.", whyExtended: ["When reported sustainability data can lead to benefits or sanctions, data quality becomes critical."] },
         { text: "Enron/SOX is used only as a historical example without relevance for IT management.", correct: false, why: "Wrong: the comparison is explicitly linked to IT governance.", whyExtended: ["The lecture shows that financial reporting drove information systems and governance, and asks whether CSRD can have similar effects."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["double_materiality"]
     },
     {
       id: 15,
@@ -775,7 +780,8 @@ export const mockExamSustainability_en = {
         { text: "Drive innovation, where new technologies make new solutions possible.", correct: true, why: "Correct: the lecture mentions drive innovation through new technologies.", whyExtended: ["Sustainability transitions can require new technologies, new services and new ways of organizing work.", "This connects sustainability to innovation, not only reporting and compliance."] },
         { text: "Electronic waste, where more digital technology automatically makes waste handling sustainable.", correct: false, why: "Wrong: electronic waste is a negative environmental consequence of ICT, not a support form in the list on slide 3.", whyExtended: ["The lecture points out that digital technology also has negative environmental impacts.", "E-waste shows that ICT is not only virtual, but also consists of material artefacts."] },
         { text: "Energy consumption, where more digital infrastructure by itself creates lower emissions.", correct: false, why: "Wrong: energy consumption is a possible negative effect, not an automatic sustainability contribution.", whyExtended: ["Digital solutions can reduce waste in some contexts.", "But data centers, networks, devices and digital infrastructure also use energy."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 26,
@@ -797,7 +803,8 @@ export const mockExamSustainability_en = {
         { id: "reduce-waste", description: "Digital systems are used to reduce waste through better governance and decisions.", correctCardId: "optimization", correctLabel: "Optimization", whyCorrect: "Optimization concerns reducing waste.", whyWrong: "This explanation is not primarily about measurement or new technologies. It concerns better resource use.", whyExtended: ["Optimization can concern routes, logistics, energy use, inventory management or process flow.", "The sustainability point is that better use of data can reduce unnecessary resource use."] },
         { id: "informing-action", description: "Data is collected and used to inform action.", correctCardId: "monitoring", correctLabel: "Monitoring", whyCorrect: "Monitoring concerns measurement as a basis for action.", whyWrong: "This explanation concerns making conditions visible through data, not replacing physical activity.", whyExtended: ["Monitoring can make emissions, consumption or deviations measurable.", "This can support reporting, governance and practical improvement measures."] },
         { id: "new-technologies", description: "New technologies open up new solutions, services or ways of working.", correctCardId: "drive-innovation", correctLabel: "Drive innovation", whyCorrect: "Drive innovation means that new technologies can enable new solutions.", whyWrong: "This explanation concerns innovation, not only efficiency in existing processes.", whyExtended: ["Sustainability transitions can require new digital solutions and new organizational practices.", "This makes sustainability relevant for IT management, strategy and innovation work."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 27,
@@ -850,7 +857,8 @@ export const mockExamSustainability_en = {
             "IT managers therefore need to understand how sustainability policy is operationalized through reporting."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 28,
@@ -903,8 +911,9 @@ export const mockExamSustainability_en = {
             "When policy relies on data reporting, IT systems and data governance become part of sustainability work."
           ]
         }
-      ]
+      ],
 
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     }
   ]
 };
