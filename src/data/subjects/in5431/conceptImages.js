@@ -111,6 +111,15 @@ export const in5431ConceptImages = [
         alt: { no: "Cynefin-matrise med domenene kompleks, komplisert, kaotisk og klar", en: "Cynefin matrix with the complex, complicated, chaotic and clear domains" },
         caption: { no: "Forklaringsbildet viser hvilken styringstilnærming som passer i hvert Cynefin-domene.", en: "The explanation image shows which management approach fits each Cynefin domain." }
     },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "cynefin",
+        imageId: "cynefin_frameworks",
+        ext: "png",
+        title: { no: "Cynefin og rammeverk", en: "Cynefin and frameworks" },
+        alt: { no: "Cynefin-figur som plasserer rammeverk og praksiser i de fire domenene", en: "Cynefin figure placing frameworks and practices in the four domains" },
+        caption: { no: "Forklaringsbildet viser primærplassering av rammeverk og praksiser i Cynefin-domenene.", en: "The explanation image shows the primary placement of frameworks and practices in the Cynefin domains." }
+    },
 
     // ── CIO Toolbox: PRINCE2 (forelesning 4) ───────────────
     {

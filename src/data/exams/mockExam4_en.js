@@ -3221,7 +3221,7 @@ export const mockExam4_en = {
       title: "Cynefin: primary placement of frameworks",
       points: 4,
       prompt: "Sort each framework or practice into the Cynefin domain where it primarily belongs. Use only the primary placement from the explanation figure.",
-      source: "Source: IN5431 Cynefin overview figure, based on the CIO Toolbox lectures on design thinking, projects, product teams, IT architecture, IT governance and best practice.",
+      source: "Source: IN5431 Cynefin frameworks figure, public/subjects/in5431/cio-tool-box/cynefin/cynefin_frameworks.png.",
       moduleId: "cio-tool-box",
       groupId: "cynefin",
       items: [
@@ -3231,18 +3231,11 @@ export const mockExam4_en = {
         { id: "cynefin-scrum", label: "Scrum" },
         { id: "cynefin-product-teams", label: "Product teams" },
         { id: "cynefin-agile-methods", label: "Agile methods" },
-        { id: "cynefin-safe", label: "SAFe" },
-        { id: "cynefin-business-case", label: "Business case" },
-        { id: "cynefin-alternative-analysis", label: "Alternative analysis" },
-        { id: "cynefin-it-architecture", label: "IT architecture" },
-        { id: "cynefin-togaf", label: "TOGAF" },
-        { id: "cynefin-bpmn", label: "BPMN" },
-        { id: "cynefin-operating-model", label: "Operating model" },
         { id: "cynefin-prince2-projects", label: "PRINCE2 / projects" },
-        { id: "cynefin-it-governance", label: "IT governance" },
+        { id: "cynefin-kanban", label: "Kanban" },
         { id: "cynefin-immediate-action", label: "Immediate action" },
         { id: "cynefin-crisis-stabilization", label: "Crisis stabilization" },
-        { id: "cynefin-procedures", label: "Procedures" },
+        { id: "cynefin-procedures", label: "Known procedures" },
         { id: "cynefin-standardization", label: "Standardization" },
         { id: "cynefin-best-practice", label: "Best practice" },
         { id: "cynefin-itil", label: "ITIL" }
@@ -3259,19 +3252,12 @@ export const mockExam4_en = {
           "cynefin-double-diamond",
           "cynefin-experimentation",
           "cynefin-scrum",
-          "cynefin-product-teams",
-          "cynefin-agile-methods",
-          "cynefin-safe"
+          "cynefin-agile-methods"
         ],
         complicated: [
-          "cynefin-business-case",
-          "cynefin-alternative-analysis",
-          "cynefin-it-architecture",
-          "cynefin-togaf",
-          "cynefin-bpmn",
-          "cynefin-operating-model",
+          "cynefin-product-teams",
           "cynefin-prince2-projects",
-          "cynefin-it-governance"
+          "cynefin-kanban"
         ],
         chaotic: [
           "cynefin-immediate-action",
@@ -3313,21 +3299,21 @@ export const mockExam4_en = {
           ]
         },
         "cynefin-scrum": {
-          whyCorrect: "Correct. Scrum primarily belongs in Complex in this figure because short iterations support learning and adaptation.",
-          whyWrong: "Scrum belongs in Complex in this primary sorting. The emphasis here is iterative learning, not only delivery planning.",
+          whyCorrect: "Correct. Scrum primarily belongs in Complex because short iterations support learning and adaptation.",
+          whyWrong: "Scrum belongs in Complex. The emphasis here is iterative learning, not only delivery planning.",
           whyExtended: [
-            "Scrum can include planning, but the main point in this Cynefin mapping is learning through iterations.",
+            "Scrum can include planning, but this primary placement emphasizes learning through iterations.",
             "Sprints create frequent opportunities to inspect and adapt the work.",
-            "That is why Scrum is placed with design thinking, product teams and agile methods."
+            "That is why Scrum is placed with design thinking and agile methods."
           ]
         },
         "cynefin-product-teams": {
-          whyCorrect: "Correct. Product teams primarily belong in Complex because lasting ownership supports continuous learning about the product and users.",
-          whyWrong: "Product teams belong in Complex. In this figure, product teams are about learning, adaptation and outcome over output.",
+          whyCorrect: "Correct. Product teams primarily belong in Complicated in this answer key because they concern organization, lasting ownership and governed development of a digital product.",
+          whyWrong: "Product teams belong in Complicated in this answer key. Here the emphasis is product teams as an organizing form for development and operations, not pure experimentation.",
           whyExtended: [
-            "Product teams own a digital service over time.",
-            "They can learn from use, data and feedback instead of only delivering a fixed one-time plan.",
-            "This fits when the solution must emerge through experience."
+            "Product teams own a digital service over time and prioritize further development within a governed setting.",
+            "The team can learn and adapt, but the organizing form also concerns responsibility, continuity and planned improvement.",
+            "That is why product teams are placed here with PRINCE2 / projects and Kanban in this simplified Cynefin sorting."
           ]
         },
         "cynefin-agile-methods": {
@@ -3339,85 +3325,22 @@ export const mockExam4_en = {
             "This connects them closely to probe, sense, respond."
           ]
         },
-        "cynefin-safe": {
-          whyCorrect: "Correct. SAFe primarily belongs in Complex in this figure because it is connected to agile methods and learning in larger organizations.",
-          whyWrong: "SAFe belongs in Complex in this primary sorting. Here it is treated as scaled agile, not as pure top-down planning.",
-          whyExtended: [
-            "SAFe can contain strong planning elements.",
-            "In this figure it is still placed primarily with agile methods because the connection is agile learning at larger scale.",
-            "This is a simplified primary placement, not a claim that SAFe never has complicated features."
-          ]
-        },
-        "cynefin-business-case": {
-          whyCorrect: "Correct. Business case primarily belongs in Complicated because benefits, costs, timing and risk are analyzed before a decision.",
-          whyWrong: "Business case belongs in Complicated. It is an analysis tool for situations where options can be assessed before response.",
-          whyExtended: [
-            "A business case structures assessment of costs, benefits, timing and risk.",
-            "This assumes the problem can be analyzed in a reasonable way.",
-            "That is why it fits sense, analyze, respond."
-          ]
-        },
-        "cynefin-alternative-analysis": {
-          whyCorrect: "Correct. Alternative analysis primarily belongs in Complicated because options are synthesized, assessed and recommended through analysis.",
-          whyWrong: "Alternative analysis belongs in Complicated. It fits when several choices can be investigated and compared before a decision.",
-          whyExtended: [
-            "Alternative analysis starts with understanding the situation.",
-            "Then alternatives are created and assessed with methods such as business case, plus/minus or real options.",
-            "This is expert analysis, not crisis stabilization or routine execution."
-          ]
-        },
-        "cynefin-it-architecture": {
-          whyCorrect: "Correct. IT architecture primarily belongs in Complicated because portfolios, processes, data and technology must be analyzed and structured.",
-          whyWrong: "IT architecture belongs in Complicated. Architecture work requires analysis of relationships between processes, systems and technical choices.",
-          whyExtended: [
-            "IT architecture analyzes and structures the IT portfolio.",
-            "The work can require expertise across business, data, application and technology.",
-            "This fits Complicated, where experts can find good practice."
-          ]
-        },
-        "cynefin-togaf": {
-          whyCorrect: "Correct. TOGAF primarily belongs in Complicated because it is a formal framework for enterprise architecture and architecture analysis.",
-          whyWrong: "TOGAF belongs in Complicated. It is used for structured architecture work, not immediate stabilization or simple routine execution.",
-          whyExtended: [
-            "TOGAF provides a formal language and method for enterprise architecture.",
-            "In the CIO Toolbox, it belongs under IT Architecture.",
-            "It requires analysis and architecture judgment."
-          ]
-        },
-        "cynefin-bpmn": {
-          whyCorrect: "Correct. BPMN primarily belongs in Complicated because processes are modeled and analyzed before improvement.",
-          whyWrong: "BPMN belongs in Complicated. It is a modeling technique for understanding processes, roles and dependencies.",
-          whyExtended: [
-            "BPMN makes business processes visible through activities, roles, flow and dependencies.",
-            "The model is used for process analysis and improvement.",
-            "This fits expert analysis in the complicated domain."
-          ]
-        },
-        "cynefin-operating-model": {
-          whyCorrect: "Correct. Operating model primarily belongs in Complicated because the business is assessed along integration and standardization.",
-          whyWrong: "Operating model belongs in Complicated. The model requires analysis of process integration and process standardization.",
-          whyExtended: [
-            "Operating model is used to understand or choose the desired level of integration and standardization.",
-            "It classifies the process landscape and the intended target state.",
-            "This requires analysis, not only immediate action or simple routine use."
-          ]
-        },
         "cynefin-prince2-projects": {
           whyCorrect: "Correct. PRINCE2 / projects primarily belongs in Complicated because project management relies on planning, roles and control.",
-          whyWrong: "PRINCE2 / projects belongs in Complicated. The primary logic here is expert analysis, planning and structured execution.",
+          whyWrong: "PRINCE2 / projects belongs in Complicated. The primary logic here is analysis, planning and structured execution.",
           whyExtended: [
             "Projects are used to deliver specified results within time, cost and scope.",
             "PRINCE2 provides governance structure with roles, processes and control points.",
             "This fits best when work can be planned and analyzed before execution."
           ]
         },
-        "cynefin-it-governance": {
-          whyCorrect: "Correct. IT governance primarily belongs in Complicated because decision rights and accountability must be analyzed and allocated.",
-          whyWrong: "IT governance belongs in Complicated in this primary sorting. It is about designing who makes IT decisions and who is accountable for outcomes.",
+        "cynefin-kanban": {
+          whyCorrect: "Correct. Kanban primarily belongs in Complicated in this answer key because work is managed through visible flow, WIP limits and process improvement.",
+          whyWrong: "Kanban belongs in Complicated in this answer key. The emphasis is workflow management, analysis and improvement.",
           whyExtended: [
-            "IT governance allocates decision rights and accountability.",
-            "It requires analysis of organization, priorities, architecture and responsibility.",
-            "That is why it primarily fits sense, analyze, respond."
+            "Kanban makes work, queues and bottlenecks visible.",
+            "It is often used to manage and improve an understood workflow.",
+            "That is why it is placed here with planning and project management."
           ]
         },
         "cynefin-immediate-action": {
@@ -3439,11 +3362,11 @@ export const mockExam4_en = {
           ]
         },
         "cynefin-procedures": {
-          whyCorrect: "Correct. Procedures primarily belong in Clear because cause and effect are known and action can be standardized.",
-          whyWrong: "Procedures belong in Clear. They fit when the situation is known and the right response is already established.",
+          whyCorrect: "Correct. Known procedures primarily belong in Clear because cause and effect are known and action can be standardized.",
+          whyWrong: "Known procedures belong in Clear. They fit when the situation is known and the right response is already established.",
           whyExtended: [
             "In clear situations, the organization can sense, categorize and respond.",
-            "Procedures make known work repeatable.",
+            "Known procedures make known work repeatable.",
             "The mistake is to treat a routine situation as if it needs heavy analysis or experimentation."
           ]
         },
@@ -3476,7 +3399,7 @@ export const mockExam4_en = {
         }
       },
       whyExtendedImageRefs: [
-        "cynefin_model"
+        "cynefin_frameworks"
       ]
     }
 
