@@ -50,6 +50,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		? expandedAnswerOptionIndexesByQuestionId[currentQuestion.id] ?? []
 		: [];
 
+	const currentQuestionNumber = currentQuestionIndex + 1;
+
 	const canGoPrevious = currentQuestionIndex > 0;
 	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
 
@@ -293,6 +295,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		visibleQuestions,
 		currentQuestion,
 		currentQuestionIndex,
+		currentQuestionNumber,
 		currentQuestionIsCorrect,
 		answers,
 

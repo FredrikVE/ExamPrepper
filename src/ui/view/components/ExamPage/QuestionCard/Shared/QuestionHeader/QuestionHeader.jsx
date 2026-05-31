@@ -3,15 +3,15 @@ import { QUESTION_TYPES } from "../../../../../../../constants/QuestionTypes.js"
 import ResultBadge from "../../../ResultBadge/ResultBadge.jsx";
 import FormattedText from "../../../../Shared/FormattedText.jsx";
 
-export default function QuestionHeader({ question, submitted, correct, t }) {
+export default function QuestionHeader({ question, questionNumber, submitted, correct, t }) {
     return (
         <div className="question-card-header">
             <div className="question-card-heading">
                 <div className="question-card-meta">
-                    <span className="question-card-number">{question.id}</span>
+                    <span className="question-card-number">{questionNumber}</span>
                     <span>
                         {t.questionMeta(
-                            question.id,
+                            questionNumber,
                             question.points,
                             getQuestionTypeLabel(question.type, t)
                         )}

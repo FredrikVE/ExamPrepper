@@ -11,7 +11,7 @@ export const mockExam3_no = {
   sortOrder: 30,
   questions: [
     {
-      id: 201,
+      id: 1,
       type: "multi",
       title: "Strategiprosessens handlingsplan",
       points: 1,
@@ -85,7 +85,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 202,
+      id: 2,
       type: "fill",
       title: "Roadmap",
       points: 1,
@@ -103,7 +103,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 203,
+      id: 3,
       type: "single",
       title: "Strategisk kontekst og interessenter",
       points: 1,
@@ -156,7 +156,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 204,
+      id: 4,
       type: "multi",
       title: "Generic decision-making process",
       points: 1,
@@ -217,7 +217,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 205,
+      id: 5,
       type: "single",
       title: "Plus/minus-metoden",
       points: 1,
@@ -270,7 +270,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 206,
+      id: 6,
       type: "multi",
       title: "Real options i alternativanalyse",
       points: 1,
@@ -323,7 +323,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 207,
+      id: 7,
       type: "fill",
       title: "PRINCE2",
       points: 1,
@@ -342,7 +342,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 208,
+      id: 8,
       type: "multi",
       title: "PRINCE2-prinsipper",
       points: 1,
@@ -416,7 +416,7 @@ export const mockExam3_no = {
       groupId: "prince2"
     },
     {
-      id: 209,
+      id: 9,
       type: "single",
       title: "PRINCE2 themes",
       points: 1,
@@ -471,7 +471,7 @@ export const mockExam3_no = {
       groupId: "prince2"
     },
     {
-      id: 210,
+      id: 10,
       type: "multi",
       title: "IT-arkitekturperspektiver",
       points: 1,
@@ -525,7 +525,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 211,
+      id: 11,
       type: "single",
       title: "Fowler: architecture as important stuff",
       points: 1,
@@ -578,7 +578,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 212,
+      id: 12,
       type: "multi",
       title: "BPMN og prosessmodellering",
       points: 1,
@@ -631,7 +631,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 213,
+      id: 13,
       type: "multi",
       title: "Digitalisering på makro-, meso- og mikronivå",
       points: 1,
@@ -684,7 +684,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 214,
+      id: 14,
       type: "multi",
       title: "Hvorfor digital transformasjon er vanskelig",
       points: 1,
@@ -748,7 +748,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 215,
+      id: 15,
       type: "fill",
       title: "Organizational inertia",
       points: 1,
@@ -769,7 +769,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 216,
+      id: 16,
       type: "single",
       title: "Kultur for digitalisering",
       points: 1,
@@ -822,7 +822,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 217,
+      id: 17,
       type: "single",
       title: "Digital offering og sweet spot",
       points: 1,
@@ -875,7 +875,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 218,
+      id: 18,
       type: "multi",
       title: "Eksperimentering i Shared Customer Insights",
       points: 1,
@@ -936,7 +936,7 @@ export const mockExam3_no = {
       groupId: "shared-customer-insights"
     },
     {
-      id: 219,
+      id: 19,
       type: "multi",
       title: "Hindringer for Operational Backbone",
       points: 1,
@@ -997,7 +997,7 @@ export const mockExam3_no = {
       groupId: "operational-backbone"
     },
     {
-      id: 220,
+      id: 20,
       type: "single",
       title: "Componentization vs monolittiske systemer",
       points: 1,
@@ -1052,7 +1052,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 221,
+      id: 21,
       type: "multi",
       title: "External Developer Platform i praksis",
       points: 1,
@@ -1113,7 +1113,7 @@ export const mockExam3_no = {
       groupId: "external-developer-platform"
     },
     {
-      id: 222,
+      id: 22,
       type: "multi",
       title: "Sustainability: tre dimensjoner og målkonflikter",
       points: 1,
@@ -1166,7 +1166,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 223,
+      id: 23,
       type: "single",
       title: "Strategiske drivere i IT governance",
       points: 1,
@@ -1219,7 +1219,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 224,
+      id: 24,
       type: "multi",
       title: "Management frameworks: kontekst og verdi",
       points: 1,
@@ -1272,7 +1272,7 @@ export const mockExam3_no = {
       ]
     },
     {
-      id: 225,
+      id: 25,
       type: "single",
       title: "Digital business strategy som transfunksjonell",
       points: 1,

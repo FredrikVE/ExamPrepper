@@ -15,7 +15,7 @@ import QuestionFeedback from "./Shared/Feedback/QuestionFeedback.jsx";
 import QuestionHeader from "./Shared/QuestionHeader/QuestionHeader.jsx";
 
 
-export default function QuestionCard({ question, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
+export default function QuestionCard({ question, questionNumber, answer, answerOptionOrder, submitted, showAllFeedback, correct, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
     const { t } = useLanguage();
     const answerText = String(answer ?? "");
 
@@ -34,6 +34,7 @@ export default function QuestionCard({ question, answer, answerOptionOrder, subm
         <section className={cardClassName}>
             <QuestionHeader
                 question={question}
+                questionNumber={questionNumber}
                 submitted={submitted}
                 correct={correct}
                 t={t}

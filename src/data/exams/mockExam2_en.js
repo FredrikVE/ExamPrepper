@@ -11,7 +11,7 @@ export const mockExam2_en = {
   sortOrder: 20,
   questions: [
     {
-      id: 101,
+      id: 1,
       type: "fill",
       title: "**Digitization vs digitalization**",
       points: 1,
@@ -26,7 +26,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 102,
+      id: 2,
       type: "single",
       title: "**Operating model: Coordination**",
       points: 1,
@@ -79,7 +79,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 103,
+      id: 3,
       type: "single",
       title: "**Operating model: Replication**",
       points: 1,
@@ -129,7 +129,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 104,
+      id: 4,
       type: "fill",
       title: "**Digital transformation**",
       points: 1,
@@ -145,7 +145,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 105,
+      id: 5,
       type: "multi",
       title: "**Contents of a digital strategy**",
       points: 1,
@@ -204,7 +204,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 106,
+      id: 6,
       type: "single",
       title: "**Governance vs management**",
       points: 1,
@@ -255,7 +255,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 107,
+      id: 7,
       type: "single",
       title: "**Federal vs IT Duopoly**",
       points: 1,
@@ -305,7 +305,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 108,
+      id: 8,
       type: "multi",
       title: "**Five decision domains in IT governance**",
       points: 1,
@@ -372,7 +372,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 109,
+      id: 9,
       type: "single",
       title: "**Transformation theory**",
       points: 1,
@@ -424,7 +424,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 110,
+      id: 10,
       type: "fill",
       title: "**Circular economy**",
       points: 1,
@@ -440,7 +440,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 111,
+      id: 11,
       type: "multi",
       title: "**Scope 1, 2 and 3**",
       points: 1,
@@ -490,7 +490,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 112,
+      id: 12,
       type: "single",
       title: "**Twin transitions**",
       points: 1,
@@ -540,7 +540,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 113,
+      id: 13,
       type: "single",
       title: "**Double Diamond**",
       points: 1,
@@ -590,7 +590,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 114,
+      id: 14,
       type: "fill",
       title: "**Triple constraint**",
       points: 1,
@@ -606,7 +606,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 115,
+      id: 15,
       type: "single",
       title: "**TOGAF architecture taxonomy**",
       points: 1,
@@ -655,7 +655,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 116,
+      id: 16,
       type: "multi",
       title: "**Autonomy & Alignment in AF**",
       points: 1,
@@ -716,7 +716,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 117,
+      id: 17,
       type: "single",
       title: "**Risk in digital transformation**",
       points: 1,
@@ -766,7 +766,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 118,
+      id: 18,
       type: "fill",
       title: "**Operational effectiveness**",
       points: 1,
@@ -781,7 +781,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 119,
+      id: 19,
       type: "single",
       title: "**Digital platform components**",
       points: 1,
@@ -833,7 +833,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 120,
+      id: 20,
       type: "multi",
       title: "**Digital roadmap sequence**",
       points: 1,
@@ -890,7 +890,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 121,
+      id: 21,
       type: "single",
       title: "**Boundary resources**",
       points: 1,
@@ -942,7 +942,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 122,
+      id: 22,
       type: "single",
       title: "**Double materiality**",
       points: 1,
@@ -992,7 +992,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 123,
+      id: 23,
       type: "fill",
       title: "**Cynefin** chaotic",
       points: 1,
@@ -1007,7 +1007,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 124,
+      id: 24,
       type: "multi",
       title: "**What OB does**",
       points: 1,
@@ -1064,7 +1064,7 @@ export const mockExam2_en = {
       ]
     },
     {
-      id: 125,
+      id: 25,
       type: "single",
       title: "**Management fashion**",
       points: 1,

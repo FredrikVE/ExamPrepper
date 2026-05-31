@@ -11,7 +11,7 @@ export const mockExam3_en = {
   sortOrder: 30,
   questions: [
     {
-      id: 201,
+      id: 1,
       type: "multi",
       title: "The action plan in a strategy process",
       points: 1,
@@ -85,7 +85,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 202,
+      id: 2,
       type: "fill",
       title: "Roadmap",
       points: 1,
@@ -102,7 +102,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 203,
+      id: 3,
       type: "single",
       title: "Strategic context and stakeholders",
       points: 1,
@@ -155,7 +155,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 204,
+      id: 4,
       type: "multi",
       title: "Generic decision-making process",
       points: 1,
@@ -216,7 +216,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 205,
+      id: 5,
       type: "single",
       title: "The plus/minus method",
       points: 1,
@@ -269,7 +269,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 206,
+      id: 6,
       type: "multi",
       title: "Real options in alternative analysis",
       points: 1,
@@ -322,7 +322,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 207,
+      id: 7,
       type: "fill",
       title: "PRINCE2",
       points: 1,
@@ -340,7 +340,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 208,
+      id: 8,
       type: "multi",
       title: "PRINCE2 principles",
       points: 1,
@@ -414,7 +414,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 209,
+      id: 9,
       type: "single",
       title: "PRINCE2 themes",
       points: 1,
@@ -469,7 +469,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 210,
+      id: 10,
       type: "multi",
       title: "IT architecture perspectives",
       points: 1,
@@ -523,7 +523,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 211,
+      id: 11,
       type: "single",
       title: "Fowler: architecture as important stuff",
       points: 1,
@@ -576,7 +576,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 212,
+      id: 12,
       type: "multi",
       title: "BPMN and process modeling",
       points: 1,
@@ -629,7 +629,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 213,
+      id: 13,
       type: "multi",
       title: "Digitalization at macro, meso and micro level",
       points: 1,
@@ -682,7 +682,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 214,
+      id: 14,
       type: "multi",
       title: "Why digital transformation is difficult",
       points: 1,
@@ -746,7 +746,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 215,
+      id: 15,
       type: "fill",
       title: "Organizational inertia",
       points: 1,
@@ -765,7 +765,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 216,
+      id: 16,
       type: "single",
       title: "Culture for digitalization",
       points: 1,
@@ -818,7 +818,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 217,
+      id: 17,
       type: "single",
       title: "Digital offering and sweet spot",
       points: 1,
@@ -871,7 +871,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 218,
+      id: 18,
       type: "multi",
       title: "Experimentation in Shared Customer Insights",
       points: 1,
@@ -932,7 +932,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 219,
+      id: 19,
       type: "multi",
       title: "Obstacles to Operational Backbone",
       points: 1,
@@ -993,7 +993,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 220,
+      id: 20,
       type: "single",
       title: "Componentization vs monolithic systems",
       points: 1,
@@ -1048,7 +1048,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 221,
+      id: 21,
       type: "multi",
       title: "External Developer Platform in practice",
       points: 1,
@@ -1109,7 +1109,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 222,
+      id: 22,
       type: "multi",
       title: "Sustainability: three dimensions and goal conflicts",
       points: 1,
@@ -1162,7 +1162,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 223,
+      id: 23,
       type: "single",
       title: "Strategic drivers in IT governance",
       points: 1,
@@ -1215,7 +1215,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 224,
+      id: 24,
       type: "multi",
       title: "Management frameworks: context and value",
       points: 1,
@@ -1268,7 +1268,7 @@ export const mockExam3_en = {
       ]
     },
     {
-      id: 225,
+      id: 25,
       type: "single",
       title: "Digital business strategy as trans-functional",
       points: 1,

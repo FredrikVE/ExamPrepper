@@ -62,7 +62,7 @@ export const translations = {
         footerGoToQuestion: (number) => `Gå til spørsmål ${number}`,
 
         // QuestionCard
-        questionMeta: (id, points, typeLabel) => `Oppgave ${id} · ${points}p · ${typeLabel}`,
+        questionMeta: (questionNumber, points, typeLabel) => `Oppgave ${questionNumber} · ${points}p · ${typeLabel}`,
         questionTypeFill: "Fyll inn",
         questionTypeMulti: "Flervalg",
         questionTypeSingle: "Ett riktig svar",
@@ -205,7 +205,7 @@ export const translations = {
         footerGoToQuestion: (number) => `Go to question ${number}`,
 
         // QuestionCard
-        questionMeta: (id, points, typeLabel) => `Question ${id} · ${points}p · ${typeLabel}`,
+        questionMeta: (questionNumber, points, typeLabel) => `Question ${questionNumber} · ${points}p · ${typeLabel}`,
         questionTypeFill: "Fill in",
         questionTypeMulti: "Multiple choice",
         questionTypeSingle: "Single answer",

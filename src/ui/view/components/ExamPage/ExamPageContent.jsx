@@ -17,6 +17,7 @@ export default function ExamPageContent({ viewModel, t }) {
     return (
         <QuestionCard
             question={viewModel.currentQuestion}
+            questionNumber={viewModel.currentQuestionNumber}
             answer={viewModel.answers[viewModel.currentQuestion.id]}
             answerOptionOrder={answerOptionOrder}
             submitted={viewModel.submitted}
