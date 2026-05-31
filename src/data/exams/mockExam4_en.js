@@ -19,13 +19,13 @@ export const mockExam4_en = {
       source: "Source: Lecture 3, CIO Toolbox 1, introductory slide and CIO toolbox model.",
       options: [
         {
-          text: "Tools are not goals in themselves — they are only meaningful if they serve their purpose",
+          text: "Tools are not goals in themselves – they are only meaningful if they serve their purpose",
           correct: true,
           why: "Correct: the CIO toolbox model explicitly states this as the guiding principle.",
           whyExtended: [
-            "The CIO toolbox model opens with: 'Tools are not goals in themselves — they are only meaningful if they serve their purpose.'",
-            "The toolbox metaphor emphasizes choosing the right tool depending on the decision — just like a craftsman picks the right tool for the job.",
-            "Lecture 6 reinforces this: 'For these (and similar) frameworks and methods, their usefulness and value is highly context-sensitive — and sometimes disputed.'",
+            "The CIO toolbox model opens with: 'Tools are not goals in themselves – they are only meaningful if they serve their purpose.'",
+            "The toolbox metaphor emphasizes choosing the right tool depending on the decision – just like a craftsman picks the right tool for the job.",
+            "Lecture 6 reinforces this: 'For these (and similar) frameworks and methods, their usefulness and value is highly context-sensitive – and sometimes disputed.'",
             "The three-step approach is: (1) Read the room, (2) Choose the right tool, (3) You cannot lead by theory."
           ]
         },
@@ -35,7 +35,7 @@ export const mockExam4_en = {
           why: "Wrong: the toolbox is used selectively depending on the situation and decision.",
           whyExtended: [
             "The CIO toolbox model states: 'We use the term «CIO toolbox» informally and also subjectively. Although many CIOs use many of these tools, few will use them all.'",
-            "The toolbox metaphor means you select the appropriate tool — using all tools at once would be impractical and unnecessary.",
+            "The toolbox metaphor means you select the appropriate tool – using all tools at once would be impractical and unnecessary.",
             "Different situations require different tools: a known problem may need a business case, while an unclear problem calls for design thinking.",
             "The Cynefin meta-tool is specifically designed to help choose the right management approach based on context."
           ]
@@ -47,7 +47,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Step 3 in the CIO toolbox model states: 'You cannot lead by theory: frameworks help, but leadership requires dialogue, judgement and learning.'",
             "Frameworks structure decision-making but cannot substitute for contextual understanding and interpersonal skills.",
-            "Lecture 3 notes: 'No standard way of making choices' — there is always a human element in decision-making.",
+            "Lecture 3 notes: 'No standard way of making choices' – there is always a human element in decision-making.",
             "The model emphasizes 'Read the room' as the first step, requiring judgment about purpose, strategy, resources, maturity and context."
           ]
         },
@@ -57,8 +57,8 @@ export const mockExam4_en = {
           why: "Wrong: the CIO toolbox addresses the intersection of business and IT leadership.",
           whyExtended: [
             "IT governance explicitly involves business leaders through archetypes like Business Monarchy and Federal system.",
-            "The business case tool is about prioritizing digital services and funding — a business decision, not purely an IT decision.",
-            "The operating model concept links business process integration and standardization to IT architecture — bridging business and IT.",
+            "The business case tool is about prioritizing digital services and funding – a business decision, not purely an IT decision.",
+            "The operating model concept links business process integration and standardization to IT architecture – bridging business and IT.",
             "The course is about IT management challenges and strategies at the organizational level, not just within IT departments."
           ]
         }
@@ -83,7 +83,7 @@ export const mockExam4_en = {
             "Lecture 3 presents utility maximisation with four factors: '(a) the expected benefit, (b) the expected cost, (c) the timing, (d) the estimated risk.'",
             "The CIO toolbox model lists these under 'Rational choices & utility maximisation' for the business case tool.",
             "Each factor addresses a different dimension: benefit is what you gain, cost is what you invest, timing is when you gain, and risk is the probability that estimates are wrong.",
-            "For non-trivial initiatives, setting these values correctly is impossible — they are always estimates."
+            "For non-trivial initiatives, setting these values correctly is impossible – they are always estimates."
           ]
         },
         {
@@ -92,7 +92,7 @@ export const mockExam4_en = {
           why: "Correct: the lecture explicitly highlights the communicative role of business cases.",
           whyExtended: [
             "Lecture 3 states: 'NPV has a strong communicative effect. In a decision process, NPV is often presented together with a set of non-quantifiable benefits.'",
-            "The CIO toolbox model lists 'Communicative effect — Business case as communication and transparency tool, not just calculation' as a key aspect.",
+            "The CIO toolbox model lists 'Communicative effect – Business case as communication and transparency tool, not just calculation' as a key aspect.",
             "Even when NPV estimates are imprecise, the structured format creates transparency about assumptions, making disagreements visible.",
             "This means a business case serves dual purposes: analytical (comparing options) and communicative (building shared understanding)."
           ]
@@ -102,10 +102,10 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: the lecture emphasizes that estimates are always uncertain, especially for non-trivial initiatives.",
           whyExtended: [
-            "Lecture 3 explicitly states: 'For any non-trivial development initiative, setting these values correctly is impossible — they are estimates.'",
-            "Benefits may be 'hard or impossible to estimate numerically — in particular if they are related to safety or security.'",
-            "Lecture 3 also notes that there are 'no completely rational actors' — decisions are 'blurred by both individual's emotions and the cultural context of the organization.'",
-            "The risk premium in NPV calculations is itself an estimate — the business case is a structured approximation, not a precise prediction."
+            "Lecture 3 explicitly states: 'For any non-trivial development initiative, setting these values correctly is impossible – they are estimates.'",
+            "Benefits may be 'hard or impossible to estimate numerically – in particular if they are related to safety or security.'",
+            "Lecture 3 also notes that there are 'no completely rational actors' – decisions are 'blurred by both individual's emotions and the cultural context of the organization.'",
+            "The risk premium in NPV calculations is itself an estimate – the business case is a structured approximation, not a precise prediction."
           ]
         },
         {
@@ -113,10 +113,10 @@ export const mockExam4_en = {
           correct: true,
           why: "Correct: the CIO toolbox model explicitly includes non-quantifiable benefits.",
           whyExtended: [
-            "The CIO toolbox model lists 'Qualitative considerations — Non-quantifiable benefits: compliance, security, safety' as part of the business case tool.",
+            "The CIO toolbox model lists 'Qualitative considerations – Non-quantifiable benefits: compliance, security, safety' as part of the business case tool.",
             "Lecture 3 says NPV is 'often presented together with a set of non-quantifiable benefits for each of the options.'",
             "Some of the most important benefits (regulatory compliance, security improvements, safety) cannot be expressed as cash flows.",
-            "A complete business case therefore combines quantitative NPV with qualitative assessment — pure numbers alone are insufficient."
+            "A complete business case therefore combines quantitative NPV with qualitative assessment – pure numbers alone are insufficient."
           ]
         }
       ],
@@ -157,8 +157,8 @@ export const mockExam4_en = {
           why: "Correct: these are the three steps in the generic decision-making process.",
           whyExtended: [
             "The CIO toolbox model describes the three steps: (1) Understand the situation (root-cause analysis), (2) Synthesize options (concepts), (3) Evaluate and propose.",
-            "Step 1 focuses on understanding the 'whys' — internal competency, technical assets, cultural factors.",
-            "Step 2 is about presenting alternative actions as 'concepts' — an internally consistent set of work. The goal is to ensure all relevant options are considered.",
+            "Step 1 focuses on understanding the 'whys' – internal competency, technical assets, cultural factors.",
+            "Step 2 is about presenting alternative actions as 'concepts' – an internally consistent set of work. The goal is to ensure all relevant options are considered.",
             "Step 3 uses evaluation methods including business case (tool 1), plus/minus method, cost ranking, and real options."
           ],
           whyExtendedImageRefs: [
@@ -170,7 +170,7 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: you cannot evaluate before understanding the situation and generating options.",
           whyExtended: [
-            "Evaluation requires alternatives to compare — you need to understand the problem and generate options first.",
+            "Evaluation requires alternatives to compare – you need to understand the problem and generate options first.",
             "Starting with evaluation would mean judging solutions without knowing what problem you are solving.",
             "The lecture places root-cause analysis first precisely because understanding the situation shapes which options are relevant.",
             "The generic process follows a logical sequence: diagnose → generate → evaluate."
@@ -183,8 +183,8 @@ export const mockExam4_en = {
           whyExtended: [
             "Design thinking's 'Discover' phase makes the same point: you must understand the problem before generating solutions.",
             "Without understanding the situation first, synthesized options may address symptoms rather than root causes.",
-            "The CIO toolbox model places 'Understand the situation (root-cause analysis)' as step 1 for a reason — it anchors the entire process.",
-            "Understanding the situation after evaluating would make the evaluation meaningless — you wouldn't know what criteria matter."
+            "The CIO toolbox model places 'Understand the situation (root-cause analysis)' as step 1 for a reason – it anchors the entire process.",
+            "Understanding the situation after evaluating would make the evaluation meaningless – you wouldn't know what criteria matter."
           ]
         },
         {
@@ -192,7 +192,7 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: this describes trial-and-error, not structured alternative analysis.",
           whyExtended: [
-            "Alternative analysis is a structured, analytical approach — not random experimentation.",
+            "Alternative analysis is a structured, analytical approach – not random experimentation.",
             "Choosing the cheapest option ignores the business case logic of weighing benefit, cost, timing and risk together.",
             "The generic process requires evaluation of all relevant options before making a recommendation.",
             "Trial-and-error may fit in Cynefin's complex domain (probe-sense-respond), but alternative analysis is designed for the complicated domain."
@@ -209,12 +209,12 @@ export const mockExam4_en = {
       source: "Source: Lecture 3, CIO toolbox model, note between tool 1 and tool 2.",
       options: [
         {
-          text: "Business case is one evaluation method inside alternative analysis (step 3); they are separate tools but tightly connected",
+          text: "Business case is one evaluation method inside alternative analysis (step 3). They are separate tools but tightly connected",
           correct: true,
           why: "Correct: the CIO toolbox model explicitly states this relationship.",
           whyExtended: [
             "The CIO toolbox model contains a note: 'Business case (tool 1) is one evaluation method inside alternative analysis (tool 2, step 3). They are separate tools but tightly connected.'",
-            "Alternative analysis has three steps; business case fits into step 3 (Evaluate and propose) as one of several evaluation methods.",
+            "Alternative analysis has three steps. Business case fits into step 3 (Evaluate and propose) as one of several evaluation methods.",
             "Other evaluation methods in step 3 include plus/minus method, cost ranking, and real options.",
             "This means every business case is part of an alternative analysis, but not every alternative analysis requires a full financial business case."
           ]
@@ -224,10 +224,10 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: they are explicitly described as tightly connected in the CIO toolbox model.",
           whyExtended: [
-            "The CIO toolbox model contains a specific note explaining their connection — they are not separate in that sense.",
+            "The CIO toolbox model contains a specific note explaining their connection – they are not separate in that sense.",
             "Both tools fall under the 'VALG' (choice) category in the CIO toolbox, indicating they serve related purposes.",
-            "Business case focuses on quantitative and qualitative evaluation; alternative analysis provides the broader process that includes evaluation.",
-            "Both are used across industries — they are general management tools, not industry-specific."
+            "Business case focuses on quantitative and qualitative evaluation. Alternative analysis provides the broader process that includes evaluation.",
+            "Both are used across industries – they are general management tools, not industry-specific."
           ]
         },
         {
@@ -236,7 +236,7 @@ export const mockExam4_en = {
           why: "Wrong: business case is a method within alternative analysis, not replaced by it.",
           whyExtended: [
             "Business case provides specific analytical tools (NPV, risk assessment) that alternative analysis does not replicate.",
-            "Alternative analysis is a broader process; it needs evaluation methods like business case to function in step 3.",
+            "Alternative analysis is a broader process. It needs evaluation methods like business case to function in step 3.",
             "The CIO toolbox keeps them as separate numbered tools (1 and 2) precisely because they each have distinct value.",
             "For high-impact decisions, a formal financial business case within the alternative analysis is often worthwhile."
           ]
@@ -272,8 +272,8 @@ export const mockExam4_en = {
           why: "Correct: this is a direct insight from the Discover phase, emphasizing problem-reframing.",
           whyExtended: [
             "Lecture 4 quotes Wedell-Wedellsborg: 'The point of reframing is not to find the \"real\" problem but, rather, to see if there is a better one to solve.'",
-            "The lecture also states: 'the very idea that a single root problem exists may be misleading; problems are typically multicausal and can be addressed in many ways.'",
-            "The Discover phase is about understanding rather than assuming what the problem is — it involves speaking to and spending time with people affected by the issues.",
+            "The lecture also states: 'the very idea that a single root problem exists may be misleading. Problems are typically multicausal and can be addressed in many ways.'",
+            "The Discover phase is about understanding rather than assuming what the problem is – it involves speaking to and spending time with people affected by the issues.",
             "This contrasts with the analytical approach in business case/alternative analysis, where the problem is assumed to be understood."
           ]
         },
@@ -282,10 +282,10 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: Discover is about understanding the problem, not implementing solutions.",
           whyExtended: [
-            "The Discover phase is the first diamond in the Double Diamond — it focuses on divergent exploration of the problem space.",
+            "The Discover phase is the first diamond in the Double Diamond – it focuses on divergent exploration of the problem space.",
             "Implementation happens in the Deliver phase, which is the last phase of the Double Diamond.",
-            "Full-scale implementation is explicitly avoided in design thinking; the Deliver phase involves 'testing out different solutions at small-scale'.",
-            "Jumping to implementation in the Discover phase would skip understanding, defining and developing — three critical phases."
+            "Full-scale implementation is explicitly avoided in design thinking. The Deliver phase involves 'testing out different solutions at small-scale'.",
+            "Jumping to implementation in the Discover phase would skip understanding, defining and developing – three critical phases."
           ]
         },
         {
@@ -293,7 +293,7 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: NPV is part of the business case tool, not design thinking's Discover phase.",
           whyExtended: [
-            "The Discover phase is qualitative and explorative — it uses techniques like user research, observation and empathy.",
+            "The Discover phase is qualitative and explorative – it uses techniques like user research, observation and empathy.",
             "NPV calculation belongs to the business case tool (tool 1) and the 'Evaluate' step of alternative analysis (tool 2).",
             "Design thinking and business case serve different purposes: design thinking explores what should be built, business case evaluates whether it is worth investing.",
             "In the CIO toolbox, these are separate tools with different typical purposes."
@@ -306,7 +306,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Governance archetypes (Business Monarchy, IT Monarchy, Federal, etc.) are part of tool 7 (IT governance) in the CIO toolbox.",
             "The Discover phase is about understanding user needs and the problem space, not about organizational decision structures.",
-            "IT governance determines 'who systematically makes and contributes to decisions' — design thinking determines 'what problem should we solve'.",
+            "IT governance determines 'who systematically makes and contributes to decisions' – design thinking determines 'what problem should we solve'.",
             "These are entirely different activities serving different purposes in the CIO toolbox."
           ]
         }
@@ -363,7 +363,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Lecture 5 defines Application Architecture as: 'provides a blueprint for the individual applications to be deployed, their interactions, and their relationships to the core business processes of the organization.'",
             "Application Architecture maps which applications exist, how they interact, and how they support business processes.",
-            "This is central to understanding the IT portfolio — which is the typical purpose of the IT Architecture tool in the CIO toolbox.",
+            "This is central to understanding the IT portfolio – which is the typical purpose of the IT Architecture tool in the CIO toolbox.",
             "In D4D terms, Application Architecture helps identify which components should be part of the Operational Backbone vs. the Digital Platform."
           ]
         },
@@ -372,10 +372,10 @@ export const mockExam4_en = {
           correct: true,
           why: "Correct: Technology Architecture describes the logical software and hardware capabilities required to support business, data, and application services.",
           whyExtended: [
-            "Lecture 5 defines Technology Architecture as: 'describes the logical software and hardware capabilities that are required to support the deployment of business, data, and application services; this includes IT infrastructure, middleware, networks, communications, processing, standards, etc.'",
+            "Lecture 5 defines Technology Architecture as: 'describes the logical software and hardware capabilities that are required to support the deployment of business, data, and application services. This includes IT infrastructure, middleware, networks, communications, processing, standards, etc.'",
             "Technology Architecture is the most 'technical' layer, dealing with infrastructure and platforms.",
             "It connects to the IT governance decision domain 'IT infrastructure strategies' from Lecture 6.",
-            "Technology Architecture underpins all other architecture layers — without appropriate infrastructure, applications and data cannot function."
+            "Technology Architecture underpins all other architecture layers – without appropriate infrastructure, applications and data cannot function."
           ]
         }
       ],
@@ -398,7 +398,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Coordination means business units share data and customers (high integration) but operate with different processes (low standardization).",
             "Example: a financial services company where different product lines share customer data but have unit-specific processes.",
-            "High integration means processes are connected and share data across units; low standardization means processes differ between units.",
+            "High integration means processes are connected and share data across units. Low standardization means processes differ between units.",
             "Coordination is the opposite of Replication on the standardization axis."
           ]
         },
@@ -449,13 +449,13 @@ export const mockExam4_en = {
       source: "Source: Lecture 5, CIO Toolbox 3, slide 'Different views on architecture and architects'.",
       options: [
         {
-          text: "TOGAF represents a formal, often centralized perspective; Fowler represents a more meritocratic and decentralized perspective",
+          text: "TOGAF represents a formal, often centralized perspective. Fowler represents a more meritocratic and decentralized perspective",
           correct: true,
           why: "Correct: this is the distinction drawn in Lecture 5.",
           whyExtended: [
-            "Lecture 5 states: 'The Open Group — through TOGAF — represents a formal, and often centralized, perspective on architecture and architecture work.'",
-            "In contrast: 'Martin Fowler — who is the closest we get to an architecture thought leader in agile development, represents a more meritocratic and decentralized perspective.'",
-            "The CIO toolbox model describes: 'TOGAF = formal architecture governance, often more centralized' vs. 'Fowler = architecture as \"the important stuff\"; collaborative, decentralized orientation'.",
+            "Lecture 5 states: 'The Open Group – through TOGAF – represents a formal, and often centralized, perspective on architecture and architecture work.'",
+            "In contrast: 'Martin Fowler – who is the closest we get to an architecture thought leader in agile development, represents a more meritocratic and decentralized perspective.'",
+            "The CIO toolbox model describes TOGAF as formal architecture governance, often more centralized. Fowler is described as architecture as \"the important stuff\", with a collaborative and decentralized orientation.",
             "This reflects a broader tension in IT management between structured governance and agile collaboration."
           ]
         },
@@ -464,10 +464,10 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: TOGAF is actually more commonly associated with larger, more complex organizations.",
           whyExtended: [
-            "TOGAF originated from US defence — an environment of large, complex organizations — and is used primarily by larger enterprises.",
+            "TOGAF originated from US defence – an environment of large, complex organizations – and is used primarily by larger enterprises.",
             "Fowler's perspective is more common in agile development environments, which can include both startups and large teams.",
             "The choice between perspectives is not about company size but about management philosophy: formal governance vs. collaborative decision-making.",
-            "Large organizations can use either approach — the question is about centralization vs. decentralization of architectural decisions."
+            "Large organizations can use either approach. The question is about centralization vs. decentralization of architectural decisions."
           ]
         },
         {
@@ -477,7 +477,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Lecture 5 presents them as alternatives on a spectrum from formal/centralized to collaborative/decentralized.",
             "TOGAF uses a structured Architecture Development Method (ADM) with defined phases and roles.",
-            "Fowler views architecture as emergent — 'the important stuff' that the team collectively identifies and cares about.",
+            "Fowler views architecture as emergent – 'the important stuff' that the team collectively identifies and cares about.",
             "The CIO toolbox also mentions Open Agile Architecture as a third perspective, further showing that multiple views exist."
           ]
         },
@@ -486,10 +486,10 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: Fowler defines architecture differently but does not reject it.",
           whyExtended: [
-            "Fowler defines architecture as 'the important stuff' — he reframes what architecture means rather than rejecting it.",
+            "Fowler defines architecture as 'the important stuff' – he reframes what architecture means rather than rejecting it.",
             "His perspective is that architecture is what the team collectively considers important to understand and preserve.",
-            "This is a pragmatic redefinition, not a rejection — it shifts architecture from formal documentation to shared understanding.",
-            "Lecture 5 presents Fowler as 'the closest we get to an architecture thought leader in agile development' — he is deeply engaged with architecture, just from a different angle."
+            "This is a pragmatic redefinition, not a rejection – it shifts architecture from formal documentation to shared understanding.",
+            "Lecture 5 presents Fowler as 'the closest we get to an architecture thought leader in agile development' – he is deeply engaged with architecture, just from a different angle."
           ]
         }
       ],
@@ -508,7 +508,7 @@ export const mockExam4_en = {
       answerKey: "time",
       source: "Source: Lecture 4, CIO Toolbox 2, slide 'The triple constraint'.",
       whyCorrect: "Correct because the triple constraint consists of scope, cost and time. When all three are fixed, there is no flexibility to adjust, making the project highly vulnerable to disappointment.",
-      whyWrong: "Wrong if the answer refers to quality, risk or resources — while these are important project concerns, the triple constraint specifically consists of scope, cost and time.",
+      whyWrong: "Wrong if the answer refers to quality, risk or resources – while these are important project concerns, the triple constraint specifically consists of scope, cost and time.",
       whyExtendedImageRefs: [
         "Triple-Constraint-Explained-1080x1080-1",
         "triple_constraint_1"
@@ -529,8 +529,8 @@ export const mockExam4_en = {
           correct: true,
           why: "Correct: a justifiable reason is required throughout the project's life.",
           whyExtended: [
-            "PRINCE2 principle 1: 'Continued business justification — a justifiable reason required to run a project.'",
-            "This means the business case must remain valid throughout the project — if justification disappears, the project should be stopped.",
+            "PRINCE2 principle 1: 'Continued business justification – a justifiable reason required to run a project.'",
+            "This means the business case must remain valid throughout the project – if justification disappears, the project should be stopped.",
             "This connects to the business case tool in the CIO toolbox: the business case is not just an upfront exercise but an ongoing concern.",
             "PRINCE2 has 'business case' as one of its seven themes, reinforcing the link to continued justification."
           ],
@@ -543,7 +543,7 @@ export const mockExam4_en = {
           correct: true,
           why: "Correct: projects should be planned, monitored and controlled stage by stage.",
           whyExtended: [
-            "PRINCE2 principle 4: 'Manage by stages — should be planned, monitored and controlled stage by stage.'",
+            "PRINCE2 principle 4: 'Manage by stages – should be planned, monitored and controlled stage by stage.'",
             "Stage-based management allows for regular decision points where the project board can authorize the next stage.",
             "This provides natural checkpoints to reassess the business case and adjust plans based on learning.",
             "Managing by stages balances detailed planning (near-term) with higher-level planning (later stages)."
@@ -558,8 +558,8 @@ export const mockExam4_en = {
           why: "Wrong: this is not a PRINCE2 principle. PRINCE2 focuses on defined roles, justification and tailoring.",
           whyExtended: [
             "The seven PRINCE2 principles are: continued business justification, learn from experience, defined roles and responsibilities, manage by stages, manage by exception, focus on products, tailor to suit the project environment.",
-            "None of these relate to maximizing team size — that would contradict the principle of tailoring to the project environment.",
-            "PRINCE2 principle 3 is about 'defined roles and responsibilities: clear organizational structure; accountability' — quality of roles, not quantity of people.",
+            "None of these relate to maximizing team size – that would contradict the principle of tailoring to the project environment.",
+            "PRINCE2 principle 3 is about defined roles and responsibilities, a clear organizational structure and accountability. It concerns quality of roles, not quantity of people.",
             "Adding more team members often introduces communication overhead that can slow projects down."
           ]
         },
@@ -568,7 +568,7 @@ export const mockExam4_en = {
           correct: true,
           why: "Correct: PRINCE2 should be tailored to the specific environment, size, complexity and risk.",
           whyExtended: [
-            "PRINCE2 principle 7: 'Tailor to suit the project environment — tailored to suit environment, size, complexity, importance, capability and risk.'",
+            "PRINCE2 principle 7: 'Tailor to suit the project environment – tailored to suit environment, size, complexity, importance, capability and risk.'",
             "This aligns with the CIO toolbox's overarching message that frameworks are context-dependent.",
             "A small, low-risk project should use a lighter PRINCE2 implementation than a large, complex one.",
             "This tailoring principle connects to Cynefin: the management approach should match the complexity of the situation."
@@ -582,8 +582,8 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: PRINCE2 explicitly requires learning from experience.",
           whyExtended: [
-            "PRINCE2 principle 2: 'Learn from experience — continually seek and draw lessons.'",
-            "This is the opposite of ignoring previous lessons — PRINCE2 mandates capturing and applying lessons learned.",
+            "PRINCE2 principle 2: 'Learn from experience – continually seek and draw lessons.'",
+            "This is the opposite of ignoring previous lessons – PRINCE2 mandates capturing and applying lessons learned.",
             "Learning from experience connects to the broader agile/product team principle of pivots and learning.",
             "The course summary identifies lesson 2 as a key principle for project success."
           ]
@@ -599,11 +599,11 @@ export const mockExam4_en = {
       source: "Source: Lecture 4, CIO Toolbox 2, slides on projects and product teams.",
       options: [
         {
-          text: "Projects are temporary organizations; product teams have lasting ownership of a digital product or service",
+          text: "Projects are temporary organizations. Product teams have lasting ownership of a digital product or service",
           correct: true,
           why: "Correct: this is the fundamental difference between the two approaches.",
           whyExtended: [
-            "The CIO toolbox model defines a project as 'temporary organization — Specified results within a specified period.'",
+            "The CIO toolbox model defines a project as 'temporary organization – Specified results within a specified period.'",
             "Product teams are described as having 'Lasting ownership of a digital product/service' with 'Continuous development and operations.'",
             "Lecture 4 summarizes: 'Ensure continuity by creating lasting product teams instead of projects.'",
             "This distinction is central: projects dissolve after delivery, while product teams persist and continuously improve their product."
@@ -612,10 +612,10 @@ export const mockExam4_en = {
         {
           text: "Projects focus on outcome while product teams focus on output",
           correct: false,
-          why: "Wrong: it is the other way around — product teams focus on outcome over output.",
+          why: "Wrong: it is the other way around – product teams focus on outcome over output.",
           whyExtended: [
             "The CIO toolbox model states that product team logic includes 'Outcome over output.'",
-            "Outcome means the business result or customer value achieved; output means the deliverables produced.",
+            "Outcome means the business result or customer value achieved. Output means the deliverables produced.",
             "Projects typically measure success by delivering the specified scope on time and budget (output), while product teams measure success by the value created (outcome).",
             "Lecture 4 emphasizes that product teams should focus on 'what difference does it make' rather than 'how much did we deliver'."
           ]
@@ -623,9 +623,9 @@ export const mockExam4_en = {
         {
           text: "Product teams never use any form of planning or estimation",
           correct: false,
-          why: "Wrong: product teams use planning, but at a different level — such as sprint-level planning in Scrum.",
+          why: "Wrong: product teams use planning, but at a different level – such as sprint-level planning in Scrum.",
           whyExtended: [
-            "The course summary states that Scrum 'requires planning at the sprint level' — product teams do plan.",
+            "The course summary states that Scrum 'requires planning at the sprint level' – product teams do plan.",
             "Product teams plan iteratively, adapting based on feedback and learning, rather than creating a complete upfront plan.",
             "Agile planning is about prioritizing by value and adjusting course, not about having no plan at all.",
             "The distinction is not planning vs. no planning, but detailed upfront planning (projects) vs. adaptive iterative planning (product teams)."
@@ -639,7 +639,7 @@ export const mockExam4_en = {
             "Lecture 4 concludes: 'Both projects or autonomous product teams can be useful or troublesome.'",
             "Projects have clear advantages: multiple stakeholders can be easily involved, and complex dependencies can be resolved through careful planning.",
             "Product teams face challenges: balancing autonomy and alignment, determining the right degree of autonomy, and adjusting agile practices.",
-            "The choice depends on context — which connects to Cynefin as a meta-tool for choosing the right management approach."
+            "The choice depends on context – which connects to Cynefin as a meta-tool for choosing the right management approach."
           ]
         }
       ],
@@ -664,7 +664,7 @@ export const mockExam4_en = {
             "The CIO toolbox model lists 'Governance dilemma: Centralization (scale, compliance) vs. decentralization (agility, local fit).'",
             "Centralization offers economies of scale, consistency and compliance with standards, but can reduce responsiveness.",
             "Decentralization enables agility and local adaptation, but can lead to fragmentation, duplication and lack of standards.",
-            "The governance matrix allows organizations to use different archetypes for different decision domains — IT infrastructure may be centralized while business application needs are decentralized."
+            "The governance matrix allows organizations to use different archetypes for different decision domains – IT infrastructure may be centralized while business application needs are decentralized."
           ]
         },
         {
@@ -674,7 +674,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Scrum and PRINCE2 are frameworks for organizing development (tools 5 and 6 in the CIO toolbox), not governance mechanisms.",
             "IT governance is about 'who systematically makes and contributes to decisions', not about which method to use.",
-            "The governance dilemma is structural — it is about how to distribute decision authority across the organization.",
+            "The governance dilemma is structural – it is about how to distribute decision authority across the organization.",
             "Method choice is a consequence of governance decisions, not the governance dilemma itself."
           ]
         },
@@ -683,10 +683,10 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: IT governance assumes IT investments exist and focuses on how to govern them.",
           whyExtended: [
-            "IT governance is defined as 'aligning IT investments with overall business priorities' — it assumes investments are being made.",
+            "IT governance is defined as 'aligning IT investments with overall business priorities' – it assumes investments are being made.",
             "The question of whether to invest in IT is a strategic business decision, not a governance dilemma.",
             "The governance dilemma is about how to organize decision-making for IT, not whether IT should exist.",
-            "One of the five governance decision domains is 'IT investment and prioritization' — which is about allocating investments, not eliminating them."
+            "One of the five governance decision domains is 'IT investment and prioritization' – which is about allocating investments, not eliminating them."
           ]
         },
         {
@@ -696,7 +696,7 @@ export const mockExam4_en = {
           whyExtended: [
             "The core governance dilemma is about the balance between centralized and decentralized decision-making across the entire organization.",
             "CIO reporting lines may influence governance outcomes, but the dilemma is broader than a single reporting relationship.",
-            "The governance matrix involves all business units and multiple decision domains — not just the CIO's position.",
+            "The governance matrix involves all business units and multiple decision domains – not just the CIO's position.",
             "Governance archetypes like Federal and IT Duopoly involve many stakeholders beyond the CIO."
           ]
         }
@@ -721,7 +721,7 @@ export const mockExam4_en = {
             "IT principles cover: the role of IT in business, desirable behaviors, and funding approach.",
             "This domain sets the overarching direction for how IT should operate in the organization.",
             "It translates business strategy into high-level IT guidelines that shape all other decisions.",
-            "The course summary describes IT principles as: 'how to translate from business; role of IT in business; desirable behaviors; funding.'"
+            "The course summary describes IT principles as translating business principles into IT guidelines, including IT's role in the business, desired behaviors and funding."
           ]
         },
         {
@@ -732,7 +732,7 @@ export const mockExam4_en = {
             "IT architecture decisions cover: standardization of processes, data integration, and technology choices.",
             "This connects directly to tool 4 (IT Architecture) in the CIO toolbox, including operating model, BPMN and TOGAF.",
             "Architecture decisions determine how tightly coupled or loosely coupled systems are across the organization.",
-            "The course summary lists: 'core business process + relates; what data + how integration; tech capability standardization.'"
+            "The course summary links IT architecture to core business processes, data integration and standardization of technical capability."
           ]
         },
         {
@@ -742,7 +742,7 @@ export const mockExam4_en = {
           whyExtended: [
             "IT infrastructure decisions cover: critical services, service-level requirements, pricing, and outsourcing.",
             "Infrastructure decisions often benefit from centralization to achieve economies of scale.",
-            "The course summary describes: 'critical services to achieve strategic goals; what should be implemented enterprise-wide; pricing; plan for keeping tech up-to-date; what services should be outsourced.'"
+            "The course summary describes infrastructure strategy as decisions about critical services, enterprise-wide implementation, pricing, technology renewal and outsourcing."
           ]
         },
         {
@@ -752,7 +752,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Business application needs cover: market opportunities, strategic experiments, and decisions within architectural standards.",
             "This domain is often more decentralized because business units best understand their own application needs.",
-            "The course summary describes: 'market and business process opportunities; strategic experiments design; how to address within architectural standards; accountability on outcomes.'"
+            "The course summary describes business application needs as market opportunities, strategic experiments, fit with architecture standards and accountability for outcomes."
           ]
         },
         {
@@ -761,9 +761,9 @@ export const mockExam4_en = {
           why: "Correct: IT investment and prioritization is one of the five decision domains.",
           whyExtended: [
             "IT investment decisions cover: most important process changes, distribution in the IT portfolio, and relative importance of enterprise-wide vs. business unit investment.",
-            "This domain directly connects to the business case tool (tool 1) — prioritization of digital services and funding.",
+            "This domain directly connects to the business case tool (tool 1) – prioritization of digital services and funding.",
             "Investment decisions are often the most politically sensitive because they determine resource allocation.",
-            "The course summary describes: 'most important process changes; distribution in the current IT portfolio; relative importance of enterprise-wide vs business unit investment; business value of IT projects.'"
+            "The course summary describes IT investment as prioritizing process changes, portfolio distribution, enterprise-wide versus unit-level investment and the business value of IT projects."
           ]
         },
         {
@@ -791,18 +791,18 @@ export const mockExam4_en = {
       source: "Source: Lecture 6 and Lecture 11, slides on IT governance definition.",
       options: [
         {
-          text: "Governance determines who systematically makes and contributes to IT decisions; management actually makes and implements them",
+          text: "Governance determines who systematically makes and contributes to IT decisions. Management actually makes and implements them",
           correct: true,
           why: "Correct: this is the distinction from Weill and Ross (2004).",
           whyExtended: [
-            "Lecture 11 quotes: 'IT governance is not about making IT decisions — management does that — but rather determines who systematically makes and contributes to those decisions.'",
+            "Lecture 11 quotes: 'IT governance is not about making IT decisions – management does that – but rather determines who systematically makes and contributes to those decisions.'",
             "Governance is the structural framework: who has decision rights and accountability.",
             "Management is the operational activity: actually analyzing, deciding and implementing.",
-            "The governance matrix specifies the structure; managers operate within that structure to make actual decisions."
+            "The governance matrix specifies the structure. Managers operate within that structure to make actual decisions."
           ]
         },
         {
-          text: "There is no difference; the terms are interchangeable",
+          text: "There is no difference. The terms are interchangeable",
           correct: false,
           why: "Wrong: the course explicitly distinguishes them.",
           whyExtended: [
@@ -813,12 +813,12 @@ export const mockExam4_en = {
           ]
         },
         {
-          text: "Governance is only for the IT department; management is for the rest of the organization",
+          text: "Governance is only for the IT department. Management is for the rest of the organization",
           correct: false,
           why: "Wrong: governance involves both business and IT stakeholders.",
           whyExtended: [
-            "The governance archetypes include Business Monarchy and Federal system — both heavily involving business leaders.",
-            "The five decision domains include 'business application needs' — a domain where business stakeholders have primary input.",
+            "The governance archetypes include Business Monarchy and Federal system – both heavily involving business leaders.",
+            "The five decision domains include 'business application needs' – a domain where business stakeholders have primary input.",
             "Governance is an organizational capability, not an IT-only function.",
             "The whole point of the governance matrix is to determine the right balance of IT and business involvement across different decision domains."
           ]
@@ -828,10 +828,10 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: governance structures should be established to guide management decisions.",
           whyExtended: [
-            "Governance sets the framework within which management operates — the structure should exist before decisions are made.",
+            "Governance sets the framework within which management operates – the structure should exist before decisions are made.",
             "Without governance structures, management decisions may be inconsistent, duplicated or conflicting.",
             "The governance matrix is designed to be established proactively, not as an afterthought.",
-            "Management activities occur continuously within the governance framework — it is not a sequential relationship."
+            "Management activities occur continuously within the governance framework – it is not a sequential relationship."
           ]
         }
       ],
@@ -869,9 +869,9 @@ export const mockExam4_en = {
           why: "Wrong: Cynefin is a meta-tool that helps choose among the other tools, not a replacement.",
           whyExtended: [
             "Cynefin is labeled as a 'META-TOOL' in the CIO toolbox model, meaning it operates at a level above the other tools.",
-            "Its purpose is 'Choose management approach based on context' — it guides tool selection, not tool execution.",
+            "Its purpose is 'Choose management approach based on context' – it guides tool selection, not tool execution.",
             "You still need the actual tools (business case, design thinking, PRINCE2, etc.) to do the work.",
-            "Cynefin provides the contextual awareness; the other tools provide the methods and frameworks."
+            "Cynefin provides the contextual awareness. The other tools provide the methods and frameworks."
           ]
         },
         {
@@ -888,12 +888,12 @@ export const mockExam4_en = {
         {
           text: "Cynefin is identical to the TOGAF Architecture Development Method",
           correct: false,
-          why: "Wrong: Cynefin is a sense-making framework; TOGAF ADM is an architecture development method.",
+          why: "Wrong: Cynefin is a sense-making framework. TOGAF ADM is an architecture development method.",
           whyExtended: [
             "Cynefin (Snowden and Boone, 2007) categorizes situations by complexity level to guide management approach.",
             "TOGAF ADM is a structured method for developing enterprise architecture through defined phases.",
-            "They serve completely different purposes: Cynefin helps decide how to approach a situation; TOGAF ADM specifies how to do architecture work.",
-            "Cynefin is a meta-tool; TOGAF is an operational framework within the IT Architecture tool."
+            "They serve completely different purposes: Cynefin helps decide how to approach a situation. TOGAF ADM specifies how to do architecture work.",
+            "Cynefin is a meta-tool. TOGAF is an operational framework within the IT Architecture tool."
           ]
         }
       ]
@@ -911,11 +911,11 @@ export const mockExam4_en = {
         {
           text: "Clear",
           correct: false,
-          why: "Wrong: the clear domain is for well-known issues with established procedures — no expert analysis needed.",
+          why: "Wrong: the clear domain is for well-known issues with established procedures – no expert analysis needed.",
           whyExtended: [
             "Lecture 4 defines clear: 'issues occurring are typically well known, and can be solved by previously agreed and often written procedures.'",
-            "Clear situations use Sense → Categorize → Respond — recognize the pattern and apply the standard response.",
-            "Clear is the domain of best practice, not expert analysis — the answers are already known.",
+            "Clear situations use Sense → Categorize → Respond – recognize the pattern and apply the standard response.",
+            "Clear is the domain of best practice, not expert analysis – the answers are already known.",
             "Clear situations have the least complexity: few fixed constraints and few complexity factors."
           ]
         },
@@ -924,9 +924,9 @@ export const mockExam4_en = {
           correct: true,
           why: "Correct: the complicated domain is explicitly called the 'domain of experts' where analysis is possible.",
           whyExtended: [
-            "Lecture 4 defines complicated: 'a lot of non-trivial decisions have to be made — however, the cause-and-effect relationships are still possible to analyze in advance. This is said to be the \"domain of experts\".'",
-            "Complicated situations use Sense → Analyze → Respond — apply expertise to analyze the situation and determine the right approach.",
-            "The key distinction from complex is that in complicated situations, the answer can be found through analysis — it just requires expertise.",
+            "Lecture 4 defines complicated: 'a lot of non-trivial decisions have to be made – however, the cause-and-effect relationships are still possible to analyze in advance. This is said to be the \"domain of experts\".'",
+            "Complicated situations use Sense → Analyze → Respond – apply expertise to analyze the situation and determine the right approach.",
+            "The key distinction from complex is that in complicated situations, the answer can be found through analysis – it just requires expertise.",
             "Examples include engineering challenges, detailed planning, and structured decision-making where the problem is understood but the solution requires skill."
           ],
           whyExtendedImageRefs: [
@@ -939,7 +939,7 @@ export const mockExam4_en = {
           why: "Wrong: in the complex domain, important factors are unknown and experimentation is needed.",
           whyExtended: [
             "Lecture 4 defines complex: 'several important factors influencing the outcome are unknown, and experimentation is typically necessary.'",
-            "Complex situations use Probe → Sense → Respond — you must try things and learn from the results.",
+            "Complex situations use Probe → Sense → Respond – you must try things and learn from the results.",
             "In complex situations, cause-and-effect can only be understood in retrospect, not predicted in advance.",
             "This is the domain where design thinking and agile methods are most appropriate."
           ]
@@ -950,8 +950,8 @@ export const mockExam4_en = {
           why: "Wrong: the chaotic domain requires immediate action without prior analysis.",
           whyExtended: [
             "Lecture 4 defines chaotic: 'there is typically an emergency which requires immediate action to move into a more stable state.'",
-            "Chaotic situations use Act → Sense → Respond — stabilize first, analyze later.",
-            "There is no time for expert analysis in chaos — the priority is to bring the situation under control.",
+            "Chaotic situations use Act → Sense → Respond – stabilize first, analyze later.",
+            "There is no time for expert analysis in chaos – the priority is to bring the situation under control.",
             "Chaotic is the most extreme domain, with the highest number of complexity factors and fixed constraints."
           ]
         }
@@ -962,12 +962,12 @@ export const mockExam4_en = {
       type: "fill",
       title: "IT governance definition",
       points: 1,
-      prompt: "IT governance is not about making IT decisions — ________ does that — but rather determines who systematically makes and contributes to those decisions.",
+      prompt: "According to Weill and Ross, who actually makes IT decisions? ________ makes the decisions. IT governance decides who should make and contribute to them.",
       answers: ["management"],
       answerKey: "management",
       source: "Source: Lecture 11, Accountability Framework, slide 'IT governance', quoting Weill and Ross (2004).",
-      whyCorrect: "Correct because the Weill and Ross definition explicitly states that management (not governance) makes decisions, while governance determines who has the right and responsibility to make them.",
-      whyWrong: "Wrong if the answer is governance, the board, or the CIO. The key distinction is that governance sets the structure while management operates within it.",
+      whyCorrect: "Correct because Weill and Ross separate management from governance. Management makes the IT decisions. IT governance defines who should make and contribute to those decisions.",
+      whyWrong: "Wrong if the answer is governance, the board or the CIO. Governance sets the decision structure. Management works inside that structure.",
       whyExtendedImageRefs: [
         "decision_rights_matrix"
       ]
@@ -983,9 +983,9 @@ export const mockExam4_en = {
         {
           text: "Business Monarchy",
           correct: false,
-          why: "Wrong: Business Monarchy is senior business executives (possibly with CIO) making decisions — not all operating groups collaborating.",
+          why: "Wrong: Business Monarchy is senior business executives (possibly with CIO) making decisions – not all operating groups collaborating.",
           whyExtended: [
-            "Lecture 6 defines Business Monarchy as: 'the most centralized approach — a senior business executive or a group of senior executives, sometimes including the CIO, makes all the IT-related decisions.'",
+            "Lecture 6 defines Business Monarchy as: 'the most centralized approach – a senior business executive or a group of senior executives, sometimes including the CIO, makes all the IT-related decisions.'",
             "The key difference is that Business Monarchy is top-down decision-making by senior leaders, not collaborative involvement of all operating groups.",
             "Business Monarchy does not require input from business representatives of individual operating units.",
             "It is the most centralized archetype, while Federal is more collaborative."
@@ -998,8 +998,8 @@ export const mockExam4_en = {
           whyExtended: [
             "Lecture 6 defines IT Duopoly as: 'a two-party decision-making approach involves IT executives and a group of business leaders representing the operating units.'",
             "The difference from Federal is scope: Duopoly involves IT + selected business leaders, while Federal involves C-level + all operating groups + IT.",
-            "Federal is broader and more inclusive than Duopoly — it resembles a government where central and local levels collaborate.",
-            "Duopoly is a bilateral relationship; Federal is a multilateral collaboration."
+            "Federal is broader and more inclusive than Duopoly – it resembles a government where central and local levels collaborate.",
+            "Duopoly is a bilateral relationship. Federal is a multilateral collaboration."
           ]
         },
         {
@@ -1019,8 +1019,8 @@ export const mockExam4_en = {
           why: "Wrong: Feudal means each business unit or process leader makes separate decisions based on local needs.",
           whyExtended: [
             "Lecture 6 defines Feudal: 'business unit or process leaders make separate decisions on the basis of the unit or process needs.'",
-            "Feudal is decentralized without collaboration — each unit acts independently, not together.",
-            "The difference from Federal is that Feudal lacks the collaborative element — units make isolated decisions.",
+            "Feudal is decentralized without collaboration – each unit acts independently, not together.",
+            "The difference from Federal is that Feudal lacks the collaborative element – units make isolated decisions.",
             "Feudal can lead to fragmentation and duplication because there is no coordinating mechanism across units."
           ]
         }
@@ -1043,9 +1043,9 @@ export const mockExam4_en = {
           why: "Correct: this is the definition of management fashion used in the course.",
           whyExtended: [
             "The course summary defines: 'Management fashion: management framework that has reached a critical mass and has become an intersubjective phenomenon.'",
-            "A management fashion means a framework has become widely adopted and discussed — it has become a 'trend' in management practice.",
-            "This does not necessarily mean the framework is good or bad — it means it has reached a level of popularity that makes it a shared reference point.",
-            "The distinction from a management framework is scale of adoption: a framework is a structured approach; a fashion is a widely adopted framework."
+            "A management fashion means a framework has become widely adopted and discussed – it has become a 'trend' in management practice.",
+            "This does not necessarily mean the framework is good or bad – it means it has reached a level of popularity that makes it a shared reference point.",
+            "The distinction from a management framework is scale of adoption: a framework is a structured approach. A fashion is a widely adopted framework."
           ]
         },
         {
@@ -1053,20 +1053,20 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: the course explicitly states that frameworks are context-sensitive and sometimes disputed.",
           whyExtended: [
-            "Lecture 6 states: 'For these (and similar) frameworks and methods, their usefulness and value is highly context-sensitive — and sometimes disputed.'",
-            "No framework works perfectly in every context — this is a core message of the CIO toolbox.",
+            "Lecture 6 states: 'For these (and similar) frameworks and methods, their usefulness and value is highly context-sensitive – and sometimes disputed.'",
+            "No framework works perfectly in every context – this is a core message of the CIO toolbox.",
             "Management fashions can be overhyped: the fact that something is popular does not mean it is universally applicable.",
-            "The CIO toolbox encourages 'Read the room' first — context always determines whether a framework is appropriate."
+            "The CIO toolbox encourages 'Read the room' first – context always determines whether a framework is appropriate."
           ]
         },
         {
-          text: "A synonym for management framework — the terms mean the same thing",
+          text: "A synonym for management framework – the terms mean the same thing",
           correct: false,
           why: "Wrong: the course distinguishes between framework (structure) and fashion (popularity).",
           whyExtended: [
-            "A management framework is: 'a combination of interlinked items that supports a particular approach to a specific objective' — it is structural.",
-            "A management fashion adds the dimension of widespread adoption — a framework becomes a fashion when it reaches critical mass.",
-            "Not all frameworks become fashions — some remain niche or specialized tools.",
+            "A management framework is 'a combination of interlinked items that supports a particular approach to a specific objective'. It is structural.",
+            "A management fashion adds the dimension of widespread adoption – a framework becomes a fashion when it reaches critical mass.",
+            "Not all frameworks become fashions – some remain niche or specialized tools.",
             "The distinction matters because popularity (fashion) can create pressure to adopt a framework regardless of fit (context)."
           ]
         },
@@ -1075,9 +1075,9 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: management fashion refers to current popularity, not obsolescence.",
           whyExtended: [
-            "The 'fashion' metaphor implies current widespread adoption, like trends in clothing — it is about what is popular now.",
+            "The 'fashion' metaphor implies current widespread adoption, like trends in clothing – it is about what is popular now.",
             "A management fashion can become outdated, but the term itself describes the peak of adoption, not decline.",
-            "Frameworks like Scrum and SAFe could be considered current management fashions — they are widely adopted and discussed.",
+            "Frameworks like Scrum and SAFe could be considered current management fashions – they are widely adopted and discussed.",
             "The course uses the term to highlight that popularity does not equal universal applicability."
           ]
         }
@@ -1111,8 +1111,8 @@ export const mockExam4_en = {
           why: "Correct: product teams measure success by results, not by the volume of deliverables.",
           whyExtended: [
             "The CIO toolbox model lists 'Outcome over output' as a core product team principle.",
-            "Outcome = the business result or customer value achieved; output = the features, code or documents produced.",
-            "Lecture 4 states: 'Focus on outcome not output' — what matters is the impact, not the activity.",
+            "Outcome = the business result or customer value achieved. Output = the features, code or documents produced.",
+            "Lecture 4 states: 'Focus on outcome not output' – what matters is the impact, not the activity.",
             "This principle connects to the product team takeaway: 'Give team members autonomy to innovate and explore.'"
           ]
         },
@@ -1121,9 +1121,9 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: fixing all three elements of the triple constraint is a project characteristic, and makes projects vulnerable.",
           whyExtended: [
-            "The CIO toolbox model states: 'Scope, time, cost — all three fixed → vulnerable' under Projects, not product teams.",
+            "The CIO toolbox model states: 'Scope, time, cost – all three fixed → vulnerable' under Projects, not product teams.",
             "Product teams embrace change: 'Pivots and learning expected' is listed as a product team characteristic.",
-            "Agile methods prioritize responding to change over following a plan — locking everything from the start contradicts this.",
+            "Agile methods prioritize responding to change over following a plan – locking everything from the start contradicts this.",
             "Product teams adjust scope continuously based on user feedback and business priorities."
           ]
         },
@@ -1133,7 +1133,7 @@ export const mockExam4_en = {
           why: "Correct: product teams are designed to learn and change direction as needed.",
           whyExtended: [
             "The CIO toolbox model lists 'Pivots and learning expected' as a product team characteristic.",
-            "Lecture 4 takeaway: 'Expect pivotal change' — direction changes are normal, not failures.",
+            "Lecture 4 takeaway: 'Expect pivotal change' – direction changes are normal, not failures.",
             "This connects to the complex domain in Cynefin, where experimentation is necessary because important factors are unknown.",
             "The Silicon Valley leadership lessons include: 'Embrace pivots' and 'Nurture a culture of innovation.'"
           ]
@@ -1141,12 +1141,12 @@ export const mockExam4_en = {
         {
           text: "The team disbands after each sprint",
           correct: false,
-          why: "Wrong: product teams have lasting ownership — they do not disband.",
+          why: "Wrong: product teams have lasting ownership – they do not disband.",
           whyExtended: [
             "Product teams persist over time with continuous ownership of their product or service.",
             "Disbanding after each sprint would make the team equivalent to a very short project, losing accumulated knowledge.",
             "Sprints are iterations within the team's ongoing work, not endpoints that terminate the team.",
-            "The whole point of product teams over projects is continuity — 'Ensure continuity by creating lasting product teams instead of projects.'"
+            "The whole point of product teams over projects is continuity – 'Ensure continuity by creating lasting product teams instead of projects.'"
           ]
         }
       ],
@@ -1169,8 +1169,8 @@ export const mockExam4_en = {
           whyExtended: [
             "Lecture 5 lists: 'Modularity, to facilitate team autonomy and increase resilience', 'Standardization, to facilitate product or operating model reconfiguration', 'Architecting for a built-in responsiveness to change.'",
             "These principles bridge the formal TOGAF approach with Fowler's agile perspective.",
-            "Modularity enables the autonomy that product teams need; standardization enables the alignment that governance requires.",
-            "Open Agile Architecture comes from The Open Group — the same organization behind TOGAF — showing evolution in their thinking."
+            "Modularity enables the autonomy that product teams need. Standardization enables the alignment that governance requires.",
+            "Open Agile Architecture comes from The Open Group – the same organization behind TOGAF – showing evolution in their thinking."
           ]
         },
         {
@@ -1181,16 +1181,16 @@ export const mockExam4_en = {
             "Open Agile Architecture focuses on structural principles for how to design enterprise architecture, not on cost metrics.",
             "Modularity is about team autonomy and resilience, not about reducing headcount.",
             "Standardization is about enabling reconfiguration, not about cutting costs.",
-            "Architecture principles guide design decisions; efficiency goals guide operational management."
+            "Architecture principles guide design decisions. Efficiency goals guide operational management."
           ]
         },
         {
           text: "Hierarchy, command-and-control, and fixed scope",
           correct: false,
-          why: "Wrong: these describe a traditional, rigid management style — the opposite of agile architecture.",
+          why: "Wrong: these describe a traditional, rigid management style – the opposite of agile architecture.",
           whyExtended: [
-            "Open Agile Architecture explicitly values 'responsiveness to change' — the opposite of fixed scope.",
-            "Modularity 'facilitates team autonomy' — the opposite of command-and-control.",
+            "Open Agile Architecture values 'responsiveness to change'. This is the opposite of fixed scope.",
+            "Modularity 'facilitates team autonomy'. This is the opposite of command-and-control.",
             "Agile architecture aims to be adaptive, not hierarchical and rigid.",
             "The 'Agile' in Open Agile Architecture signals alignment with agile values of flexibility and responsiveness."
           ]
@@ -1227,9 +1227,9 @@ export const mockExam4_en = {
           why: "Correct: the lecture shows that fixing more constraints and adding complexity factors increases the Cynefin domain.",
           whyExtended: [
             "Lecture 4 presents a table mapping fixed triple constraint factors and added complexity factors to Cynefin domains.",
-            "A project with 3 fixed factors and 0 added complexity is Complex; with 3 fixed factors and 1+ added complexity it becomes Chaotic.",
-            "A project with 1 fixed factor and 2 added complexity factors is Clear; with 1 fixed factor and 3+ it becomes Complex.",
-            "The key insight is that fixing all constraints removes flexibility, while complexity factors add unknowns — together they escalate the management challenge."
+            "A project with 3 fixed factors and 0 added complexity is Complex. With 3 fixed factors and 1+ added complexity it becomes Chaotic.",
+            "A project with 1 fixed factor and 2 added complexity factors is Clear. With 1 fixed factor and 3+ it becomes Complex.",
+            "The key insight is that fixed constraints remove flexibility, while complexity factors add unknowns. Together they escalate the management challenge."
           ],
           whyExtendedImageRefs: [
             "cynefin_theory_of_everything"
@@ -1252,8 +1252,8 @@ export const mockExam4_en = {
           why: "Wrong: fixing all three constraints (scope, time, cost) actually indicates Complex or Chaotic, not Clear.",
           whyExtended: [
             "Lecture 4's table shows that 3 fixed constraints with 0 complexity factors maps to Complex, not Clear.",
-            "The CIO toolbox model states: 'Scope, time, cost — all three fixed → vulnerable.'",
-            "Clear situations have low complexity and few fixed constraints — they are well-understood problems with known solutions.",
+            "The CIO toolbox model states: 'Scope, time, cost – all three fixed → vulnerable.'",
+            "Clear situations have low complexity and few fixed constraints – they are well-understood problems with known solutions.",
             "Fixing all three constraints removes all flexibility, which makes the project more complex to manage, not simpler."
           ]
         },
@@ -1299,7 +1299,7 @@ export const mockExam4_en = {
           why: "Correct: change management is explicitly listed as outside the toolbox but part of IT management.",
           whyExtended: [
             "The CIO toolbox model's bottom section lists: 'Outside the toolbox, but part of IT management: Change management (Prosci / ADKAR), IT service management (ITIL), Procurement / outsourcing, Communication, HR.'",
-            "Change management deals with how people adopt and adapt to organizational changes — a critical success factor for IT initiatives.",
+            "Change management deals with how people adopt and adapt to organizational changes. This is a critical success factor for IT initiatives.",
             "Prosci / ADKAR model is listed in Lecture 6's framework overview as a change management framework with private origin.",
             "While not one of the seven core tools, change management is essential for successful implementation of IT decisions."
           ]
@@ -1311,7 +1311,7 @@ export const mockExam4_en = {
           whyExtended: [
             "Business case is the first numbered tool in the CIO toolbox, with purpose 'Prioritization of digital services and funding.'",
             "It is one of the seven core tools, not an external management discipline.",
-            "Business case includes NPV, qualitative considerations and communicative effect — it is fully inside the toolbox.",
+            "Business case includes NPV, qualitative considerations and communicative effect. It is fully inside the toolbox.",
             "The 'outside the toolbox' category contains supporting disciplines that complement the seven core tools."
           ]
         },
@@ -1320,8 +1320,8 @@ export const mockExam4_en = {
           correct: false,
           why: "Wrong: design thinking is tool 3 inside the CIO toolbox.",
           whyExtended: [
-            "Design thinking is the third numbered tool, with purpose 'Prioritization and product choice — when the problem is unclear.'",
-            "It includes the Double Diamond process, problem-reframing, user insight and prototyping — all inside the toolbox.",
+            "Design thinking is the third numbered tool. Its purpose is 'Prioritization and product choice – when the problem is unclear.'",
+            "It includes the Double Diamond process, problem-reframing, user insight and prototyping. These are all inside the toolbox.",
             "Design thinking is categorized under 'INNOVASJON / UTFORSKNING' in the CIO toolbox model.",
             "The 'outside the toolbox' items are supporting disciplines, not innovation methods."
           ]
@@ -1333,7 +1333,7 @@ export const mockExam4_en = {
           whyExtended: [
             "IT governance is the seventh and final numbered tool in the CIO toolbox.",
             "Its purpose is: 'How to distribute responsibility for IT among organizational units?'",
-            "IT governance includes the five decision domains, six archetypes and the governance matrix — all inside the toolbox.",
+            "IT governance includes the five decision domains, six archetypes and the governance matrix. These are all inside the toolbox.",
             "IT governance is categorized under 'STYRING' (governance/steering) in the CIO toolbox model."
           ],
           whyExtendedImageRefs: [
@@ -1352,7 +1352,7 @@ export const mockExam4_en = {
       title: "IT Governance matrix",
       points: 3,
       prompt: "Drag each IT governance archetype into the most fitting description.",
-      source: "Source: Lecture 6, CIO Toolbox 4, slides on six archetypal approaches and the governance matrix; Weill & Ross (2004).",
+      source: "Source: Lecture 6, CIO Toolbox 4, slides on six archetypal approaches and the governance matrix. Weill & Ross (2004).",
       cards: [
         { id: "business-monarchy", text: "Business Monarchy" },
         { id: "it-monarchy", text: "IT Monarchy" },
@@ -1702,7 +1702,7 @@ export const mockExam4_en = {
           whyCorrect: "Shared Customer Insight belongs to Governance Transformation.",
           whyWrong: "Shared Customer Insight belongs to Governance Transformation because it shapes organizational learning and prioritization.",
           whyExtended: [
-            "It is not only a data or architecture issue; it concerns how the organization learns what to build.",
+            "It is not only a data or architecture issue. It concerns how the organization learns what to build.",
             "The summary slide groups it with Accountability Framework under governance transformation."
           ]
         },
@@ -2156,7 +2156,7 @@ export const mockExam4_en = {
         { id: "triple-constraint", label: "Scope, time and cost are central constraints" },
         { id: "lasting-ownership", label: "Lasting ownership of a digital product or service" },
         { id: "continuous-development-operations", label: "Continuous development and operations" },
-        { id: "outcome-over-output", label: "Outcome over output; pivots and learning are expected" }
+        { id: "outcome-over-output", label: "Outcome over output. Pivots and learning are expected" }
       ],
       categories: [
         { id: "project", label: "Project" },
@@ -2293,7 +2293,7 @@ export const mockExam4_en = {
           "whyCorrect": "Deliver is about prototyping, testing and improving or rejecting solutions.",
           "whyWrong": "Prototype and testing belongs to Deliver because this phase narrows solutions through small-scale testing.",
           "whyExtended": [
-            "Deliver does not mean launching blindly; it means testing which solution works.",
+            "Deliver does not mean launching blindly. It means testing which solution works.",
             "Poor solutions should be rejected or improved."
           ]
         }
@@ -2533,7 +2533,7 @@ export const mockExam4_en = {
           "whyCorrect": "A roadmap is a planning tool for timing and sequencing.",
           "whyWrong": "This meaning belongs to Roadmap because it is about when and in what order initiatives should happen.",
           "whyExtended": [
-            "The roadmap does not only list initiatives; it sequences them over time.",
+            "The roadmap does not only list initiatives. It sequences them over time.",
             "It helps coordinate dependencies and communicate the journey."
           ]
         },
@@ -2560,7 +2560,7 @@ export const mockExam4_en = {
       "title": "Course structure: three parts of IN5431",
       "points": 3,
       "prompt": "Drag each topic to the part of the IN5431 curriculum where it primarily belongs.",
-      "source": "Source: Lecture 2, course outline: Strategy and strategic context; Management tools and frameworks — the CIO toolkit; Designed for digital.",
+      "source": "Source: Lecture 2, course outline: Strategy and strategic context. Management tools and frameworks – the CIO toolkit. Designed for digital.",
       "moduleId": "strategy",
       "groupId": "action-plan",
       "items": [
@@ -2588,7 +2588,7 @@ export const mockExam4_en = {
       ],
       "categories": [
         { "id": "strategy-context", "label": "Strategy and strategic context" },
-        { "id": "cio-toolkit", "label": "Management tools and frameworks — the CIO toolkit" },
+        { "id": "cio-toolkit", "label": "Management tools and frameworks – the CIO toolkit" },
         { "id": "designed-for-digital", "label": "Designed for digital" }
       ],
       "correctAnswer": {
@@ -2670,7 +2670,7 @@ export const mockExam4_en = {
           ]
         },
         "business-case": {
-          "whyCorrect": "Business case belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "Business case belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "Business case belongs to the CIO toolkit, because it is a decision tool for prioritizing digital services and funding.",
           "whyExtended": [
             "The business case is used to compare benefits, costs, timing and risk.",
@@ -2678,7 +2678,7 @@ export const mockExam4_en = {
           ]
         },
         "alternative-analysis": {
-          "whyCorrect": "Alternative analysis belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "Alternative analysis belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "Alternative analysis belongs to the CIO toolkit, because it supports vendor selection, product choice and evaluation of alternative concepts.",
           "whyExtended": [
             "The generic decision-making process moves from understanding the situation to synthesizing options and evaluating them.",
@@ -2686,7 +2686,7 @@ export const mockExam4_en = {
           ]
         },
         "design-thinking": {
-          "whyCorrect": "Design thinking belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "Design thinking belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "Design thinking belongs to the CIO toolkit, because it is an explorative approach for unclear problems and product/service choices.",
           "whyExtended": [
             "Design thinking is especially relevant when the problem is not yet well understood.",
@@ -2694,7 +2694,7 @@ export const mockExam4_en = {
           ]
         },
         "it-architecture-tool": {
-          "whyCorrect": "IT Architecture belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "IT Architecture belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "IT Architecture belongs to the CIO toolkit, because it is used to analyze and structure the IT portfolio, systems and services.",
           "whyExtended": [
             "This includes operating models, business processes and enterprise architecture perspectives such as TOGAF.",
@@ -2702,7 +2702,7 @@ export const mockExam4_en = {
           ]
         },
         "projects": {
-          "whyCorrect": "Projects belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "Projects belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "Projects belongs to the CIO toolkit, because projects are a way to plan and organize development work.",
           "whyExtended": [
             "A project is a temporary organization established to deliver specified results within a specified period.",
@@ -2710,7 +2710,7 @@ export const mockExam4_en = {
           ]
         },
         "product-teams-agile": {
-          "whyCorrect": "Product teams and agile methods belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "Product teams and agile methods belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "Product teams and agile methods belongs to the CIO toolkit, because it concerns how to organize development and operations around lasting digital products.",
           "whyExtended": [
             "Product teams emphasize lasting ownership, continuous development and outcome over output.",
@@ -2718,7 +2718,7 @@ export const mockExam4_en = {
           ]
         },
         "it-governance-tool": {
-          "whyCorrect": "IT governance belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "IT governance belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "IT governance belongs to the CIO toolkit, because it concerns who makes IT decisions and who is accountable for outcomes.",
           "whyExtended": [
             "The course uses Weill and Ross to discuss decision domains and governance archetypes.",
@@ -2726,7 +2726,7 @@ export const mockExam4_en = {
           ]
         },
         "cynefin": {
-          "whyCorrect": "Cynefin belongs to Management tools and frameworks — the CIO toolkit.",
+          "whyCorrect": "Cynefin belongs to Management tools and frameworks – the CIO toolkit.",
           "whyWrong": "Cynefin belongs to the CIO toolkit area in this course, because it helps choose a management approach based on context.",
           "whyExtended": [
             "Cynefin connects analysis, planning, experimentation and immediate action to different types of situations.",
@@ -2868,7 +2868,7 @@ export const mockExam4_en = {
           "whyExtended": [
             "Technology Architecture is the most technical layer in the TOGAF taxonomy.",
             "It supports the deployment of business, data and application services.",
-            "It should not be confused with Application Architecture: applications are software systems and interactions; technology architecture is the underlying technical capability."
+            "It should not be confused with Application Architecture: applications are software systems and interactions. Technology Architecture is the underlying technical capability."
           ]
         }
       ],
@@ -2920,7 +2920,7 @@ export const mockExam4_en = {
         },
         {
           "id": "important-stuff",
-          "description": "Architecture is 'the important stuff'; collaborative and more decentralized orientation",
+          "description": "Architecture as 'the important stuff', with a collaborative and more decentralized orientation",
           "correctCardId": "perspective-fowler",
           "correctLabel": "Martin Fowler",
           "whyCorrect": "Fowler's perspective is that architecture is about what developers and stakeholders regard as important.",
@@ -2928,7 +2928,7 @@ export const mockExam4_en = {
           "whyExtended": [
             "The lecture contrasts Fowler with TOGAF: Fowler is closer to agile development thinking.",
             "His view emphasizes judgment, collaboration and attention to what actually matters in a given system.",
-            "This does not mean architecture is unimportant; it means the architectural boundary depends on context."
+            "This does not mean architecture is unimportant. It means the architectural boundary depends on context."
           ]
         },
         {
@@ -2975,7 +2975,7 @@ export const mockExam4_en = {
       "groupId": "enterprise-architecture",
       "options": [
         {
-          "text": "Architecture Development Method — a structured method for developing and managing enterprise architecture",
+          "text": "Architecture Development Method – a structured method for developing and managing enterprise architecture",
           "correct": true,
           "why": "Correct: ADM stands for Architecture Development Method and is the core structured method in TOGAF.",
           "whyExtended": [
@@ -2986,7 +2986,7 @@ export const mockExam4_en = {
           ]
         },
         {
-          "text": "Agile Delivery Model — a Scrum method for sprint planning",
+          "text": "Agile Delivery Model – a Scrum method for sprint planning",
           "correct": false,
           "why": "Wrong: ADM is not a Scrum or sprint-planning method.",
           "whyExtended": [
@@ -2997,7 +2997,7 @@ export const mockExam4_en = {
           ]
         },
         {
-          "text": "Application Data Matrix — a list of database tables for one application",
+          "text": "Application Data Matrix – a list of database tables for one application",
           "correct": false,
           "why": "Wrong: TOGAF includes Data and Application Architecture, but ADM does not mean Application Data Matrix.",
           "whyExtended": [
@@ -3008,13 +3008,13 @@ export const mockExam4_en = {
           ]
         },
         {
-          "text": "Automated Decision Management — a governance model for replacing architects with automated rules",
+          "text": "Automated Decision Management – a governance model for replacing architects with automated rules",
           "correct": false,
           "why": "Wrong: ADM is about structured architecture development, not automating away architectural judgment.",
           "whyExtended": [
             "The lecture emphasizes that architecture work still requires judgment about what should be coordinated centrally and what can be decentralized.",
             "TOGAF may be formal and centralized, but it is not described as automated decision-making.",
-            "Frameworks guide architecture work; they do not replace leadership, dialogue and contextual judgment.",
+            "Frameworks guide architecture work. They do not replace leadership, dialogue and contextual judgment.",
             "The correct expansion is Architecture Development Method."
           ]
         }
@@ -3053,7 +3053,7 @@ export const mockExam4_en = {
             "The lecture defines the purpose of enterprise architecture as optimizing fragmented legacy processes into an integrated environment.",
             "The target environment should be responsive to change and supportive of business strategy delivery.",
             "This explains why enterprise architecture sits between business processes and IT architecture in the CIO toolbox.",
-            "It is not just technical documentation; it is supposed to support strategic execution."
+            "It is not just technical documentation. It is supposed to support strategic execution."
           ]
         },
         {
