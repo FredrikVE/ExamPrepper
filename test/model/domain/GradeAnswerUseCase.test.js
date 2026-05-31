@@ -78,8 +78,52 @@ describe("GradeAnswerUseCase", () => {
             expect(useCase.execute(question, "  DIGITALIZATION!!!  ")).toBe(true);
         });
 
-        test("returns false for unaccepted answer", () => {
-            expect(useCase.execute(question, "digitization")).toBe(false);
+        test("returns true for fuzzy match on a close-enough answer", () => {
+            expect(useCase.execute(question, "digitization")).toBe(true);
+        });
+
+        test("returns false for completely wrong answer", () => {
+            expect(useCase.execute(question, "blockchain")).toBe(false);
+        });
+
+        test("returns true for answer with one typo in long word", () => {
+            expect(useCase.execute(question, "Digitalisation")).toBe(true);
+        });
+
+        test("returns false for answer that is too far off", () => {
+            expect(useCase.execute(question, "Diggitlzztion")).toBe(false);
+        });
+    });
+
+    describe("fill in — getFillMatchType", () => {
+        const question = {
+            type: QUESTION_TYPES.FILL,
+            answers: ["diskonteringsrate", "discount rate"]
+        };
+
+        test("returns exact for exact match", () => {
+            expect(useCase.getFillMatchType(question, "diskonteringsrate")).toBe("exact");
+        });
+
+        test("returns exact for normalized exact match", () => {
+            expect(useCase.getFillMatchType(question, "  Diskonteringsrate!  ")).toBe("exact");
+        });
+
+        test("returns fuzzy for answer with one typo", () => {
+            expect(useCase.getFillMatchType(question, "diskonteringsrat")).toBe("fuzzy");
+        });
+
+        test("returns none for completely wrong answer", () => {
+            expect(useCase.getFillMatchType(question, "banankake")).toBe("none");
+        });
+
+        test("returns none for non-fill question type", () => {
+            const singleQuestion = { type: QUESTION_TYPES.SINGLE };
+            expect(useCase.getFillMatchType(singleQuestion, "whatever")).toBe("none");
+        });
+
+        test("returns none for empty answer", () => {
+            expect(useCase.getFillMatchType(question, "")).toBe("none");
         });
     });
 

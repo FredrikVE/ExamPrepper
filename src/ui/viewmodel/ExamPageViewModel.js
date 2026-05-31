@@ -62,6 +62,13 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		gradeAnswerUseCase
 	);
 
+	const currentQuestionFillMatchType = getCurrentQuestionFillMatchType(
+		submitted,
+		currentQuestion,
+		answers,
+		gradeAnswerUseCase
+	);
+
 	const answeredCountLabel = getAnsweredCountLabel(
 		answeredCount,
 		questionCount
@@ -297,6 +304,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		currentQuestionIndex,
 		currentQuestionNumber,
 		currentQuestionIsCorrect,
+		currentQuestionFillMatchType,
 		answers,
 
 		questionsLoading,
@@ -460,6 +468,17 @@ const getCurrentQuestionIsCorrect = (submitted, currentQuestion, answers, gradeA
 	}
 
 	return gradeAnswerUseCase.execute(
+		currentQuestion,
+		answers[currentQuestion.id]
+	);
+};
+
+const getCurrentQuestionFillMatchType = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {
+	if (!submitted || !currentQuestion) {
+		return "none";
+	}
+
+	return gradeAnswerUseCase.getFillMatchType(
 		currentQuestion,
 		answers[currentQuestion.id]
 	);

@@ -37,7 +37,7 @@ describe("exam flow integration", () => {
         expect(result.subjects.length).toBeGreaterThan(0);
         expect(in5431).toMatchObject({
             code: "IN5431",
-            examCount: 10,
+            examCount: 11,
             isVisible: true
         });
         expect(in2000).toMatchObject({
@@ -53,12 +53,13 @@ describe("exam flow integration", () => {
             language: "no"
         });
 
-        expect(exams).toHaveLength(10);
+        expect(exams).toHaveLength(11);
         expect(exams.map((exam) => exam.id)).toEqual([
             "mock-exam-1-no",
             "mock-exam-2-no",
             "mock-exam-3-no",
-            "mock-exam-4-no",
+            "mock-exam-4a-no",
+            "mock-exam-4b-no",
             "mock-exam-5-no",
             "mock-exam-definitions-no",
             "mock-exam-drag-categorize-no",
@@ -75,12 +76,13 @@ describe("exam flow integration", () => {
             language: "en"
         });
 
-        expect(exams).toHaveLength(10);
+        expect(exams).toHaveLength(11);
         expect(exams.map((exam) => exam.id)).toEqual([
             "mock-exam-1-en",
             "mock-exam-2-en",
             "mock-exam-3-en",
-            "mock-exam-4-en",
+            "mock-exam-4a-en",
+            "mock-exam-4b-en",
             "mock-exam-5-en",
             "mock-exam-definitions-en",
             "mock-exam-drag-categorize-en",
@@ -165,7 +167,7 @@ describe("exam flow integration", () => {
         expect(subject).toMatchObject({
             id: "in5431",
             code: "IN5431",
-            examCount: 10
+            examCount: 11
         });
     });
 });

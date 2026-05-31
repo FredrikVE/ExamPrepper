@@ -51,6 +51,26 @@
     background: color-mix(in srgb, var(--line) 86%, transparent);
 }
 
+.feedback-panel-fill-fuzzy-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--success-soft) 60%, transparent);
+    color: var(--success-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.feedback-panel-fill-fuzzy-note-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+
 .feedback-panel-fill-comparison {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

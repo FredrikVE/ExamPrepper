@@ -4,7 +4,7 @@ import getAnswerLabel from "./Utils/getAnswerLabel.js";
 import { useLanguage } from "../../../../../i18n/LanguageContext.jsx";
 import FormattedText from "../../Shared/FormattedText.jsx";
 
-export default function FeedbackPanel({ question, selected, correct }) {
+export default function FeedbackPanel({ question, selected, correct, fillMatchType }) {
     const { t } = useLanguage();
 
     if (question.type === "fill") {
@@ -13,6 +13,7 @@ export default function FeedbackPanel({ question, selected, correct }) {
                 question={question}
                 selected={selected}
                 correct={correct}
+                fillMatchType={fillMatchType}
                 t={t}
             />
         );
@@ -36,9 +37,10 @@ export default function FeedbackPanel({ question, selected, correct }) {
     );
 }
 
-function FillFeedbackPanel({ question, selected, correct, t }) {
+function FillFeedbackPanel({ question, selected, correct, fillMatchType, t }) {
     const selectedAnswer = String(selected ?? "").trim();
     const correctAnswer = getAnswerLabel(question);
+    const isFuzzy = fillMatchType === "fuzzy";
 
     return (
         <div className="feedback-panel">
@@ -58,6 +60,13 @@ function FillFeedbackPanel({ question, selected, correct, t }) {
 
                     {correct ? t.feedbackCorrectLabel : t.feedbackWrongLabel}
                 </div>
+
+                {isFuzzy ? (
+                    <p className="feedback-panel-fill-fuzzy-note">
+                        <Info className="feedback-panel-fill-fuzzy-note-icon" />
+                        {t.feedbackFuzzyMatchNote}
+                    </p>
+                ) : null}
 
                 <div className="feedback-panel-fill-divider" />
 
