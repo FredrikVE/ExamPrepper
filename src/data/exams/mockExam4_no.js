@@ -2093,6 +2093,125 @@ export const mockExam4_no = {
         "togaf_adm_no"
       ]
     }
+    ,{
+      id: 44,
+      type: "matrix-placement",
+      title: "Cynefin: domener og styringstilnærming",
+      points: 4,
+      prompt: "Dra hver styringstilnærming til riktig Cynefin-domene.",
+      source: "Kilde: Forelesning 4, CIO Toolbox 2, Cynefin som metaverktøy for valg av styringstilnærming.",
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
+      itemBankTitle: "Styringstilnærminger",
+      itemBankSubtitle: "Plasser hvert kort i domenet der tilnærmingen passer best.",
+      itemBankHint: "Bruk forklaringsbildet som støtte. Klar, komplisert, kompleks og kaotisk krever ulike måter å respondere på.",
+      matrix: {
+        xAxis: {
+          label: "Årsak-virkning og forutsigbarhet",
+          lowLabel: "Uklar",
+          highLabel: "Tydeligere"
+        },
+        yAxis: {
+          label: "Behov for analyse før handling",
+          lowLabel: "Lavt",
+          highLabel: "Høyt"
+        },
+        quadrants: [
+          {
+            id: "complex",
+            x: "low",
+            y: "high",
+            title: "Kompleks (Complex)",
+            description: "Utforsk (probe), forstå (sense), responder (respond). Fremvoksende praksis."
+          },
+          {
+            id: "complicated",
+            x: "high",
+            y: "high",
+            title: "Komplisert (Complicated)",
+            description: "Forstå (sense), analyser (analyze), responder (respond). God praksis."
+          },
+          {
+            id: "chaotic",
+            x: "low",
+            y: "low",
+            title: "Kaotisk (Chaotic)",
+            description: "Handle (act), forstå (sense), responder (respond). Ny praksis."
+          },
+          {
+            id: "clear",
+            x: "high",
+            y: "low",
+            title: "Klar (Clear)",
+            description: "Forstå (sense), kategoriser (categorize), responder (respond). Beste praksis."
+          }
+        ]
+      },
+      items: [
+        {
+          id: "experimentation-learning",
+          label: "Bruk eksperimentering, design thinking og læring",
+          correctQuadrantId: "complex"
+        },
+        {
+          id: "expert-analysis-planning",
+          label: "Bruk ekspertanalyse og planlegging",
+          correctQuadrantId: "complicated"
+        },
+        {
+          id: "immediate-stabilization",
+          label: "Handle umiddelbart for å stabilisere situasjonen",
+          correctQuadrantId: "chaotic"
+        },
+        {
+          id: "procedures-best-practice",
+          label: "Bruk prosedyrer og best practice",
+          correctQuadrantId: "clear"
+        }
+      ],
+      itemFeedback: {
+        "experimentation-learning": {
+          whyCorrect: "Riktig. Denne tilnærmingen hører til det komplekse domenet.",
+          whyWrong: "Denne tilnærmingen hører til Kompleks, fordi problemet ikke kan analyseres sikkert på forhånd.",
+          whyExtended: [
+            "I komplekse situasjoner er viktige årsaksforhold ukjente før man prøver noe.",
+            "Derfor passer probe, sense, respond bedre enn ren ekspertanalyse eller faste prosedyrer.",
+            "Design thinking passer godt her fordi metoden bruker brukerinnsikt, prototyping og læring."
+          ]
+        },
+        "expert-analysis-planning": {
+          whyCorrect: "Riktig. Denne tilnærmingen hører til det kompliserte domenet.",
+          whyWrong: "Denne tilnærmingen hører til Komplisert, fordi årsak-virkning kan analyseres, men krever ekspertise.",
+          whyExtended: [
+            "I kompliserte situasjoner finnes det ikke nødvendigvis ett åpenbart svar.",
+            "Eksperter kan analysere situasjonen og velge en god praksis.",
+            "Business case og alternative analysis passer ofte her når problemet kan utredes."
+          ]
+        },
+        "immediate-stabilization": {
+          whyCorrect: "Riktig. Denne tilnærmingen hører til det kaotiske domenet.",
+          whyWrong: "Denne tilnærmingen hører til Kaotisk, fordi situasjonen først må stabiliseres.",
+          whyExtended: [
+            "I kaotiske situasjoner er det ikke tid til lang analyse før første respons.",
+            "Første steg er å handle for å skape orden nok til å forstå situasjonen.",
+            "Etter stabilisering kan man forstå og respondere mer målrettet."
+          ]
+        },
+        "procedures-best-practice": {
+          whyCorrect: "Riktig. Denne tilnærmingen hører til det klare domenet.",
+          whyWrong: "Denne tilnærmingen hører til Klar, fordi situasjonen er kjent og kan håndteres med etablerte prosedyrer.",
+          whyExtended: [
+            "I klare situasjoner er årsak-virkning tydelig.",
+            "Man kan forstå situasjonen, kategorisere den og bruke beste praksis.",
+            "Feilen er å gjøre en rutinesituasjon mer komplisert enn nødvendig."
+          ]
+        }
+      },
+      whyExtendedImageRefs: [
+        "cynefin_model"
+      ]
+    }
+
 
   ]
 };

@@ -102,6 +102,15 @@ export const in5431ConceptImages = [
         alt: { no: "Constraints i de fire Cynefin-domenene", en: "Constraints in the four Cynefin domains" },
         caption: { no: "Hvert Cynefin-domene har ulik type constraint som påvirker valg av styringsmetode.", en: "Each Cynefin domain has a different type of constraint that affects the choice of management approach." }
     },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "cynefin",
+        imageId: "cynefin_model",
+        ext: "png",
+        title: { no: "Cynefin-modellen", en: "The Cynefin model" },
+        alt: { no: "Cynefin-matrise med domenene kompleks, komplisert, kaotisk og klar", en: "Cynefin matrix with the complex, complicated, chaotic and clear domains" },
+        caption: { no: "Forklaringsbildet viser hvilken styringstilnærming som passer i hvert Cynefin-domene.", en: "The explanation image shows which management approach fits each Cynefin domain." }
+    },
 
     // ── CIO Toolbox: PRINCE2 (forelesning 4) ───────────────
     {

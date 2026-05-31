@@ -84,6 +84,7 @@ function MatrixPlacementFeedbackExplanation(props) {
             <DragDropFeedbackExplanation
                 reason={props.reason}
                 extendedPoints={props.extendedPoints}
+                images={props.images}
                 showCorrectAnswer={props.showCorrectAnswer}
                 correctAnswerLabel={props.correctQuadrantLabel}
                 correctAnswerPrefix={props.t.feedbackCorrectAnswerLabel}

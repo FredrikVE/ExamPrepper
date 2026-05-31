@@ -3096,6 +3096,125 @@ export const mockExam4_en = {
       ]
     }
 
+    ,{
+      id: 44,
+      type: "matrix-placement",
+      title: "Cynefin: domains and management approach",
+      points: 4,
+      prompt: "Drag each management approach to the Cynefin domain where it fits best.",
+      source: "Source: Lecture 4, CIO Toolbox 2, Cynefin as a meta-tool for choosing management approach.",
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
+      itemBankTitle: "Management approaches",
+      itemBankSubtitle: "Place each card in the domain where the approach fits best.",
+      itemBankHint: "Use the explanation image as support. Clear, complicated, complex and chaotic require different ways to respond.",
+      matrix: {
+        xAxis: {
+          label: "Cause-effect predictability",
+          lowLabel: "Unclear",
+          highLabel: "Clearer"
+        },
+        yAxis: {
+          label: "Need for analysis before action",
+          lowLabel: "Low",
+          highLabel: "High"
+        },
+        quadrants: [
+          {
+            id: "complex",
+            x: "low",
+            y: "high",
+            title: "Complex",
+            description: "Probe, sense, respond. Emergent practice."
+          },
+          {
+            id: "complicated",
+            x: "high",
+            y: "high",
+            title: "Complicated",
+            description: "Sense, analyze, respond. Good practice."
+          },
+          {
+            id: "chaotic",
+            x: "low",
+            y: "low",
+            title: "Chaotic",
+            description: "Act, sense, respond. Novel practice."
+          },
+          {
+            id: "clear",
+            x: "high",
+            y: "low",
+            title: "Clear",
+            description: "Sense, categorize, respond. Best practice."
+          }
+        ]
+      },
+      items: [
+        {
+          id: "experimentation-learning",
+          label: "Use experimentation, design thinking and learning",
+          correctQuadrantId: "complex"
+        },
+        {
+          id: "expert-analysis-planning",
+          label: "Use expert analysis and planning",
+          correctQuadrantId: "complicated"
+        },
+        {
+          id: "immediate-stabilization",
+          label: "Act immediately to stabilize the situation",
+          correctQuadrantId: "chaotic"
+        },
+        {
+          id: "procedures-best-practice",
+          label: "Use procedures and best practice",
+          correctQuadrantId: "clear"
+        }
+      ],
+      itemFeedback: {
+        "experimentation-learning": {
+          whyCorrect: "Correct. This approach belongs in the complex domain.",
+          whyWrong: "This approach belongs in Complex, because the problem cannot be analyzed reliably in advance.",
+          whyExtended: [
+            "In complex situations, important causal relationships are unknown before trying something.",
+            "That is why probe, sense, respond fits better than pure expert analysis or fixed procedures.",
+            "Design thinking fits here because it uses user insight, prototyping and learning."
+          ]
+        },
+        "expert-analysis-planning": {
+          whyCorrect: "Correct. This approach belongs in the complicated domain.",
+          whyWrong: "This approach belongs in Complicated, because cause and effect can be analyzed, but require expertise.",
+          whyExtended: [
+            "In complicated situations, there is not necessarily one obvious answer.",
+            "Experts can analyze the situation and choose a good practice.",
+            "Business case and alternative analysis often fit here when the problem can be investigated."
+          ]
+        },
+        "immediate-stabilization": {
+          whyCorrect: "Correct. This approach belongs in the chaotic domain.",
+          whyWrong: "This approach belongs in Chaotic, because the situation must first be stabilized.",
+          whyExtended: [
+            "In chaotic situations, there is no time for long analysis before the first response.",
+            "The first step is to act to create enough order to understand the situation.",
+            "After stabilization, the organization can sense and respond more deliberately."
+          ]
+        },
+        "procedures-best-practice": {
+          whyCorrect: "Correct. This approach belongs in the clear domain.",
+          whyWrong: "This approach belongs in Clear, because the situation is known and can be handled with established procedures.",
+          whyExtended: [
+            "In clear situations, cause and effect are obvious.",
+            "The organization can sense the situation, categorize it and use best practice.",
+            "The mistake is to overcomplicate a routine situation."
+          ]
+        }
+      },
+      whyExtendedImageRefs: [
+        "cynefin_model"
+      ]
+    }
+
 
   ]
 };
