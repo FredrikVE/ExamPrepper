@@ -54,6 +54,9 @@ export const mockExamDigitalTransformation_en = {
             "The definition points to organizational change, not only technology or vendor choices."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -114,6 +117,9 @@ export const mockExamDigitalTransformation_en = {
             "If the change does not affect the organization, it is hard to call it digital transformation in this definition."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -132,6 +138,9 @@ export const mockExamDigitalTransformation_en = {
       "whyExtended": [
         "Notice that the definition also requires significant organizational change.",
         "Extensive technology use alone is therefore not enough."
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -221,6 +230,9 @@ export const mockExamDigitalTransformation_en = {
             "Digital vision & strategy comes after the realization that change is necessary."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -320,7 +332,10 @@ export const mockExamDigitalTransformation_en = {
             "Organizational identity can change when digital technologies change the organization's role and work."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
+      ]
     },
     {
       "id": 6,
@@ -414,6 +429,9 @@ export const mockExamDigitalTransformation_en = {
             "The case includes process redesign, business model innovation and changes in structure and tasks."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -490,7 +508,10 @@ export const mockExamDigitalTransformation_en = {
             "CDO or digital unit points to the organization of digital transformation."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
+      ]
     }
   ]
 };

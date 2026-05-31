@@ -62,6 +62,9 @@ export const mockExam4_no = {
             "Kurset handler om IT-ledelsesutfordringer og strategier på organisasjonsnivå, ikke bare internt i IT-avdelinger."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "generic_decision_making_process_no"
       ]
     },
     {
@@ -116,6 +119,10 @@ export const mockExam4_no = {
             "En fullstendig business case kombinerer derfor kvantitativ NPV med kvalitativ vurdering — tall alene er ikke nok."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -135,7 +142,11 @@ export const mockExam4_no = {
       answerKey: "diskonteringsrate / risikopremie",
       source: "Kilde: Forelesning 3, CIO Toolbox 1, lysbilder om finansiell business case og NPV.",
       whyCorrect: "Riktig fordi diskonteringsraten (som inkluderer en risikopremie) reduserer nåverdien av fremtidige kontantstrømmer for å reflektere usikkerhet. Høyere risiko betyr høyere diskonteringsrate, som senker NPV.",
-      whyWrong: "Galt hvis svaret bare viser til rente uten risikodimensjonen, eller til begreper som konverteringsrate, som er en spesifikk forretningsmetrik og ikke den generelle finansielle justeringsmekanismen."
+      whyWrong: "Galt hvis svaret bare viser til rente uten risikodimensjonen, eller til begreper som konverteringsrate, som er en spesifikk forretningsmetrik og ikke den generelle finansielle justeringsmekanismen.",
+      whyExtendedImageRefs: [
+        "NPV_formula",
+        "PV_formula"
+      ]
     },
     {
       id: 4,
@@ -158,11 +169,7 @@ export const mockExam4_no = {
             "Trinn 3 bruker evalueringsmetoder som business case (verktøy 1), plus/minus-metoden, kostnadsrangering og real options."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process_no"
-            }
+            "generic_decision_making_process_no"
           ]
         },
         {
@@ -252,6 +259,10 @@ export const mockExam4_no = {
             "En business case som separat øvelse før eller etter alternativanalyse ville miste koblingen til de konkrete alternativene som evalueres."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "generic_decision_making_process_no",
+        "NPV_formula"
       ]
     },
     {
@@ -306,6 +317,9 @@ export const mockExam4_no = {
             "Dette er helt ulike aktiviteter med ulike formål i CIO Toolbox."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "double_diamond_model"
       ]
     },
     {
@@ -371,6 +385,9 @@ export const mockExam4_no = {
             "Technology Architecture understøtter alle de andre arkitekturlagene — uten passende infrastruktur kan applikasjoner og data ikke fungere."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -425,6 +442,9 @@ export const mockExam4_no = {
             "Replication gir stordriftsfordeler gjennom standardiserte prosesser samtidig som enheter kan operere selvstendig."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -479,6 +499,10 @@ export const mockExam4_no = {
             "Forelesning 5 presenterer Fowler som 'the closest we get to an architecture thought leader in agile development' — han er sterkt engasjert i arkitektur, bare fra en annen vinkel."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -498,7 +522,11 @@ export const mockExam4_no = {
       answerKey: "tid",
       source: "Kilde: Forelesning 4, CIO Toolbox 2, lysbilde 'The triple constraint'.",
       whyCorrect: "Riktig fordi triple constraint består av scope, kostnad og tid. Når alle tre er faste, finnes det ingen fleksibilitet til justering, noe som gjør prosjektet svært sårbart for skuffelse.",
-      whyWrong: "Galt hvis svaret viser til kvalitet, risiko eller ressurser — selv om dette er viktige prosjektforhold, består triple constraint spesifikt av scope, kostnad og tid."
+      whyWrong: "Galt hvis svaret viser til kvalitet, risiko eller ressurser — selv om dette er viktige prosjektforhold, består triple constraint spesifikt av scope, kostnad og tid.",
+      whyExtendedImageRefs: [
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
+      ]
     },
     {
       id: 11,
@@ -519,7 +547,7 @@ export const mockExam4_no = {
             "PRINCE2 har 'business case' som ett av sine sju temaer, noe som forsterker koblingen til fortsatt begrunnelse."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -533,7 +561,7 @@ export const mockExam4_no = {
             "Manage by stages balanserer detaljert planlegging på kort sikt med mer overordnet planlegging for senere faser."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -558,7 +586,7 @@ export const mockExam4_no = {
             "Tilpasningsprinsippet kobler også til Cynefin: ledelsestilnærmingen bør passe kompleksiteten i situasjonen."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -628,6 +656,10 @@ export const mockExam4_no = {
             "Valget avhenger av kontekst — noe som kobler til Cynefin som metaverktøy for å velge riktig ledelsestilnærming."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "prince2_framework_model",
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -682,6 +714,9 @@ export const mockExam4_no = {
             "Styringsarketyper som Federal og IT Duopoly involverer mange interessenter utover CIO."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "it_governance_matrix"
       ]
     },
     {
@@ -756,6 +791,9 @@ export const mockExam4_no = {
             "Styringsmatrisen bruker disse fem spesifikke domenene koblet mot seks arketyper."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -810,6 +848,9 @@ export const mockExam4_no = {
             "Management-aktiviteter skjer kontinuerlig innenfor governance-rammeverket — det er ikke et sekvensielt forhold."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "decision_rights_matrix"
       ]
     },
     {
@@ -831,7 +872,7 @@ export const mockExam4_no = {
             "Cynefin fungerer som et metaverktøy som hjelper til med å avgjøre hvilket av de andre verktøyene som passer best i konteksten."
           ],
           whyExtendedImageRefs: [
-              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+              "cynefin_theory_of_everything"
             ]
         },
         {
@@ -901,7 +942,7 @@ export const mockExam4_no = {
             "Eksempler er ingeniørutfordringer, detaljert planlegging og strukturert beslutningstaking der problemet er forstått, men løsningen krever kompetanse."
           ],
           whyExtendedImageRefs: [
-              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+              "cynefin_theory_of_everything"
             ]
         },
         {
@@ -944,7 +985,10 @@ export const mockExam4_no = {
       answerKey: "management / ledelse",
       source: "Kilde: Forelesning 11, Accountability Framework, lysbilde 'IT governance', sitat fra Weill og Ross (2004).",
       whyCorrect: "Riktig fordi Weill og Ross-definisjonen eksplisitt sier at management (ikke governance) tar beslutningene, mens governance avgjør hvem som har rett og ansvar til å ta dem.",
-      whyWrong: "Galt hvis svaret er governance, styret eller CIO. Nøkkelskillet er at governance setter strukturen, mens management opererer innenfor den."
+      whyWrong: "Galt hvis svaret er governance, styret eller CIO. Nøkkelskillet er at governance setter strukturen, mens management opererer innenfor den.",
+      whyExtendedImageRefs: [
+        "decision_rights_matrix"
+      ]
     },
     {
       id: 19,
@@ -998,6 +1042,9 @@ export const mockExam4_no = {
             "Feudal kan føre til fragmentering og duplisering fordi det ikke finnes en koordineringsmekanisme på tvers av enheter."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "it_governance_matrix"
       ]
     },
     {
@@ -1052,6 +1099,9 @@ export const mockExam4_no = {
             "Kurset bruker begrepet for å vise at popularitet ikke betyr universell anvendbarhet."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1117,6 +1167,9 @@ export const mockExam4_no = {
             "Hele poenget med produktteam fremfor prosjekter er kontinuitet — 'Ensure continuity by creating lasting product teams instead of projects.'"
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1171,6 +1224,9 @@ export const mockExam4_no = {
             "De tre prinsippene (modularitet, standardisering, responsivitet) er strukturelle valg, ikke funksjonelle strategier."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_levels_model"
       ]
     },
     {
@@ -1192,9 +1248,9 @@ export const mockExam4_no = {
             "Nøkkelinnsikten er at låsing av alle begrensninger fjerner fleksibilitet, mens kompleksitetsfaktorer tilfører ukjente — sammen eskalerer de ledelsesutfordringen."
           ],
           whyExtendedImageRefs: [
-              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" },
-              { imageId: "Triple-Constraint-Explained-1080x1080-1", moduleId: "cio-tool-box", groupId: "triple-constraint" },
-              { imageId: "triple_constraint_1", moduleId: "cio-tool-box", groupId: "triple-constraint" }
+              "cynefin_theory_of_everything",
+              "Triple-Constraint-Explained-1080x1080-1",
+              "triple_constraint_1"
             ]
         },
         {
@@ -1251,7 +1307,10 @@ export const mockExam4_no = {
       answerKey: "domener",
       source: "Kilde: Forelesning 6, CIO Toolbox 4, lysbilde 'Styringsmatrisen'.",
       whyCorrect: "Riktig fordi styringsmatrisen har de fem beslutningsdomenene (IT principles, IT architecture, IT infrastructure, business application needs, IT investment) på én akse og de seks arketypene på den andre.",
-      whyWrong: "Galt hvis svaret viser til verktøy, metoder eller arketyper. Matrisen kombinerer domener (hva som besluttes) med arketyper (hvem som bestemmer), ikke med andre strukturelle elementer."
+      whyWrong: "Galt hvis svaret viser til verktøy, metoder eller arketyper. Matrisen kombinerer domener (hva som besluttes) med arketyper (hvem som bestemmer), ikke med andre strukturelle elementer.",
+      whyExtendedImageRefs: [
+        "it_governance_matrix"
+      ]
     },
     {
       id: 25,
@@ -1303,8 +1362,14 @@ export const mockExam4_no = {
             "Formålet er: 'How to distribute responsibility for IT among organizational units?'",
             "IT governance inkluderer de fem beslutningsdomenene, seks arketypene og styringsmatrisen — alt inne i verktøykassen.",
             "IT governance er kategorisert under 'STYRING' i CIO toolbox-modellen."
+          ],
+          whyExtendedImageRefs: [
+            "it_governance_matrix"
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "prince2_framework_model"
       ]
     }
     ,{
@@ -1401,6 +1466,10 @@ export const mockExam4_no = {
             "Federal governance forsøker å balansere enterprise-wide coordination med lokal kunnskap."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "it_governance_matrix",
+        "decision_rights_matrix"
       ]
     },
     {
@@ -1463,7 +1532,11 @@ export const mockExam4_no = {
           whyWrong: "Prosci / ADKAR skal under Not used in CIO-toolbox i denne mappingen.",
           whyExtended: ["Prosci / ADKAR er change management.", "Change management er relevant for IT management, men er ikke ett av de sju CIO Toolbox-verktøyene her."]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "framewoks_and_best_practices",
+        "ITIL"
+      ]
     },
     {
       id: 28,
@@ -1527,6 +1600,14 @@ export const mockExam4_no = {
           whyWrong: "Denne definisjonen hører til External Developer Platform fordi nøkkelsignalet er external parties.",
           whyExtended: ["ExDP bruker ofte APIs eller andre boundary resources.", "Den bør normalt komme etter at den interne plattformen er moden nok."]
         }
+      ],
+      whyExtendedImageRefs: [
+        "D4D-overview",
+        "OB",
+        "SCI",
+        "DP",
+        "AF",
+        "ExDP"
       ]
     },
     {
@@ -1563,7 +1644,10 @@ export const mockExam4_no = {
         "digital-offerings-transform": { whyCorrect: "Digital Offerings hører til Architecture Transformation i denne modellen.", whyWrong: "Digital Offerings er gruppert under Architecture Transformation sammen med OB og DP i summary-sliden.", whyExtended: ["Digital offerings er konkrete software-enabled løsninger levert til kunder."] },
         "shared-customer-insight-transform": { whyCorrect: "Shared Customer Insight hører til Governance Transformation.", whyWrong: "Shared Customer Insight hører til Governance Transformation fordi det former organizational learning og prioritering.", whyExtended: ["Det handler om hvordan virksomheten lærer hva den bør bygge."] },
         "accountability-framework-transform": { whyCorrect: "Accountability Framework hører til Governance Transformation.", whyWrong: "Accountability Framework hører til Governance Transformation fordi det fordeler ownership og decision responsibility.", whyExtended: ["Det balanserer autonomy og alignment."] }
-      }
+      },
+      whyExtendedImageRefs: [
+        "D4D-overview"
+      ]
     },
     {
       id: 30,
@@ -1589,6 +1673,9 @@ export const mockExam4_no = {
         { id: "federal", description: "Federal", correctCardId: "federal-desc", correctLabel: "Corporate-level leaders og business-unit representatives deler authority", whyCorrect: "Federal kombinerer sentrale/corporate aktører med business-unit representatives.", whyWrong: "Denne beskrivelsen hører til Federal fordi den blander sentral og lokal authority.", whyExtended: ["Forelesningen sammenligner dette med et federal political system.", "Modellen forsøker å balansere enterprise coordination med local knowledge."] },
         { id: "it-duopoly", description: "IT Duopoly", correctCardId: "it-duopoly-desc", correctLabel: "IT leaders og én business group bestemmer sammen", whyCorrect: "IT Duopoly betyr at IT og business representatives bestemmer sammen.", whyWrong: "Denne beskrivelsen hører til IT Duopoly fordi det er en todelt IT + business-ordning.", whyExtended: ["Nøkkelsignalet er at IT deler decision rights med én business group.", "Den skiller seg fra Federal, som har bredere sentral/lokal representasjon."] },
         { id: "anarchy", description: "Anarchy", correctCardId: "anarchy-desc", correctLabel: "Individuelle brukere eller små grupper følger sin egen IT-agenda", whyCorrect: "Anarchy betyr at individuelle brukere eller små grupper følger sin egen IT-agenda.", whyWrong: "Denne beskrivelsen hører til Anarchy fordi decision rights i praksis overlates til individer eller små grupper.", whyExtended: ["Anarchy er den mest desentraliserte arketypen.", "Den kan skape problemer for standardization, integration og security."] }
+      ],
+      whyExtendedImageRefs: [
+        "decision_rights_matrix"
       ]
     },
     {
@@ -1613,6 +1700,9 @@ export const mockExam4_no = {
         { id: "it-infrastructure", description: "IT Infrastructure", correctCardId: "infrastructure-domain-desc", correctLabel: "Shared technical services og grunnleggende IT capabilities", whyCorrect: "IT Infrastructure handler om shared technical services og foundational capabilities.", whyWrong: "Denne beskrivelsen hører til IT Infrastructure fordi den handler om shared technical services.", whyExtended: ["Eksempler er networks, identity, security services, cloud platforms og shared operations capabilities.", "Infrastructure decisions muliggjør application og business capabilities."] },
         { id: "business-application-needs", description: "Business Application Needs", correctCardId: "business-app-domain-desc", correctLabel: "Business requirements og behov for applications", whyCorrect: "Business Application Needs handler om applications som business units og processes trenger.", whyWrong: "Denne beskrivelsen hører til Business Application Needs fordi den starter fra business requirements for applications.", whyExtended: ["Dette domain handler om hva business trenger at applications skal gjøre.", "Det skiller seg fra architecture, som fokuserer på integration og standardization logic."] },
         { id: "it-investment", description: "IT Investment", correctCardId: "investment-domain-desc", correctLabel: "Hvilke IT initiatives som skal finansieres og prioriteres", whyCorrect: "IT Investment handler om finansiering og prioritering av IT initiatives.", whyWrong: "Denne beskrivelsen hører til IT Investment fordi nøkkelsignalet er funding og prioritization.", whyExtended: ["Investment decisions bestemmer hvilke IT initiatives som får ressurser.", "Dette kobler governance til business case og portfolio prioritization."] }
+      ],
+      whyExtendedImageRefs: [
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -1635,6 +1725,9 @@ export const mockExam4_no = {
         { id: "complicated", description: "Complicated", correctCardId: "expert-analysis-planning", correctLabel: "Bruk expert analysis og planning", whyCorrect: "Complicated contexts krever expert analysis og planning.", whyWrong: "Expert analysis og planning hører til Complicated contexts, der cause and effect finnes, men krever expertise.", whyExtended: ["Business case og alternative analysis passer her når problemet kan analyseres.", "Det kan finnes flere good practices, ikke bare én obvious best practice."] },
         { id: "complex", description: "Complex", correctCardId: "experimentation-learning", correctLabel: "Bruk experimentation, design thinking og learning", whyCorrect: "Complex contexts krever experimentation, learning og iteration.", whyWrong: "Experimentation hører til Complex contexts, der svaret ikke kan være fullt kjent på forhånd.", whyExtended: ["Design thinking og agile/product-team approaches er nyttige når problem eller løsning er usikker.", "Manageren probes, senses and responds."] },
         { id: "chaotic", description: "Chaotic", correctCardId: "immediate-action", correctLabel: "Handle umiddelbart for å stabilisere situasjonen", whyCorrect: "Chaotic contexts krever umiddelbar handling for å stabilisere situasjonen.", whyWrong: "Immediate action hører til Chaotic contexts, der det ikke er tid til detaljert analyse før handling.", whyExtended: ["Første mål er å etablere nok orden til å flytte situasjonen ut av chaos.", "Lang analyse passer vanligvis dårlig i første respons."] }
+      ],
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1663,6 +1756,11 @@ export const mockExam4_no = {
         { id: "purpose-plan-organize-development", description: "Plan and organize development", correctCardId: "tool-projects", correctLabel: "Projects", whyCorrect: "Projects brukes til å planlegge og organisere development som temporary organizations.", whyWrong: "Projects hører til planning and organizing development fordi de leverer specified results within a specified period.", whyExtended: ["PRINCE2 er et eksempel på project governance and management framework.", "Projects er særlig relevant når arbeid kan planlegges rundt en definert delivery."] },
         { id: "purpose-continuous-product-development", description: "Continuous product development and operations", correctCardId: "tool-product-teams", correctLabel: "Product teams and agile methods", whyCorrect: "Product teams and agile methods støtter continuous product development and operations.", whyWrong: "Product teams hører til continuous product development fordi de har lasting ownership av et product eller service.", whyExtended: ["Nøkkelkontrasten til projects er lasting ownership fremfor temporary delivery.", "Scrum og SAFe er agile frameworks knyttet til dette området."] },
         { id: "purpose-distribute-responsibility", description: "Distribute responsibility for IT among organizational units", correctCardId: "tool-it-governance", correctLabel: "IT governance", whyCorrect: "IT governance fordeler responsibility for IT mellom organizational units.", whyWrong: "IT governance hører til distributing responsibility fordi det bestemmer hvem som tar IT decisions og hvem som er accountable.", whyExtended: ["Weill and Ross beskriver decision domains, archetypes og governance matrix.", "Et sentralt dilemma er centralization versus decentralization."] }
+      ],
+      whyExtendedImageRefs: [
+        "generic_decision_making_process_no",
+        "double_diamond_model",
+        "it_governance_matrix"
       ]
     },
     {
@@ -1697,7 +1795,11 @@ export const mockExam4_no = {
         "lasting-ownership": { whyCorrect: "Lasting ownership er product-team logic.", whyWrong: "Lasting ownership hører til Product team / agile methods, ikke temporary project logic.", whyExtended: ["Product teams eier et digital product eller service over tid."] },
         "continuous-development-operations": { whyCorrect: "Continuous development and operations er product-team logic.", whyWrong: "Continuous development and operations hører til Product team / agile methods fordi arbeidet fortsetter etter launch.", whyExtended: ["Teamet lærer fra bruk og forbedrer produktet kontinuerlig."] },
         "outcome-over-output": { whyCorrect: "Outcome over output, pivots og learning er product-team logic.", whyWrong: "Outcome over output hører til Product team / agile methods fordi product teams optimaliserer for value og learning, ikke bare predefined output.", whyExtended: ["Pivots forventes når læring viser at planen var feil."] }
-      }
+      },
+      whyExtendedImageRefs: [
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
+      ]
     },
     {
       id: 35,
@@ -1719,6 +1821,9 @@ export const mockExam4_no = {
         { id: "define", description: "Define", correctCardId: "problem-reframing", correctLabel: "Problem reframing og definering av challenge", whyCorrect: "Define handler om reframing og presisering av challenge.", whyWrong: "Problem reframing hører til Define fordi fasen konvergerer mot en tydeligere problem statement.", whyExtended: ["Poenget er ikke nødvendigvis å finne det ene sanne problemet, men et bedre problem å løse."] },
         { id: "develop", description: "Develop", correctCardId: "generate-solution-ideas", correctLabel: "Generere alternative solution ideas og co-design", whyCorrect: "Develop handler om å generere solution ideas og co-designe alternatives.", whyWrong: "Å generere solution ideas hører til Develop fordi fasen åpner solution space.", whyExtended: ["Teams utforsker mulige svar på det definerte problemet."] },
         { id: "deliver", description: "Deliver", correctCardId: "prototype-test", correctLabel: "Prototype, test, reject eller improve solutions", whyCorrect: "Deliver handler om prototyping, testing og forbedring eller forkasting av solutions.", whyWrong: "Prototype og testing hører til Deliver fordi fasen snevrer inn løsninger gjennom small-scale testing.", whyExtended: ["Deliver betyr ikke blind launch; det betyr å teste hvilken løsning som virker."] }
+      ],
+      whyExtendedImageRefs: [
+        "double_diamond_model"
       ]
     },
     {
@@ -1753,7 +1858,11 @@ export const mockExam4_no = {
         risk: { whyCorrect: "Risk er en kjernefaktor fordi estimates kan være feil.", whyWrong: "Risk hører til Business case factor fordi beslutningstakere må vurdere uncertainty i benefits og costs.", whyExtended: ["Risk kan reflekteres i en risk premium eller høyere discount rate."] },
         compliance: { whyCorrect: "Compliance er en non-quantifiable benefit som ofte vurderes sammen med NPV.", whyWrong: "Compliance hører til Non-quantifiable benefit fordi det kan være avgjørende selv om det er vanskelig å prissette direkte.", whyExtended: ["Noen initiativer er nødvendige for å møte legal eller regulatory requirements."] },
         "security-safety": { whyCorrect: "Security og safety improvements er non-quantifiable benefits.", whyWrong: "Security eller safety hører til Non-quantifiable benefit fordi verdien kan være vanskelig å uttrykke som cash flow.", whyExtended: ["Avoided incidents, resilience og safety kan være strategisk viktig."] }
-      }
+      },
+      whyExtendedImageRefs: [
+        "NPV_formula",
+        "PV_formula"
+      ]
     },
     {
       id: 37,
@@ -1791,7 +1900,11 @@ export const mockExam4_no = {
         "supplier-emissions": { whyCorrect: "Supplier emissions er Scope 3 value-chain emissions.", whyWrong: "Supplier emissions hører til Scope 3 fordi de skjer upstream i value chain.", whyExtended: ["Scope 3 inkluderer indirect emissions utenfor Scope 2, som purchased goods and services."] },
         "business-travel": { whyCorrect: "Business travel og commuting er Scope 3 value-chain emissions.", whyWrong: "Business travel og commuting hører til Scope 3 fordi de er indirect value-chain emissions.", whyExtended: ["De skyldes organisasjonens aktivitet, men skjer vanligvis i assets organisasjonen ikke eier eller kontrollerer."] },
         "customer-use": { whyCorrect: "Customer use of products er Scope 3 downstream value-chain emissions.", whyWrong: "Customer use hører til Scope 3 fordi det skjer downstream i value chain.", whyExtended: ["Scope 3 kan inkludere både upstream og downstream emissions."] }
-      }
+      },
+      whyExtendedImageRefs: [
+        "scope_1_2_3_model",
+        "scope_1_2_3"
+      ]
     },
     {
       id: 38,
@@ -1813,6 +1926,9 @@ export const mockExam4_no = {
         { id: "portfolio-of-initiatives", description: "Portfolio of digital initiatives", correctCardId: "portfolio-meaning", correctLabel: "Et prioritert sett av digital initiatives", whyCorrect: "En Portfolio of digital initiatives er det prioriterte settet av digitale tiltak.", whyWrong: "Denne betydningen hører til Portfolio of digital initiatives fordi den handler om valg og prioritering av initiatives.", whyExtended: ["Porteføljen gjør visjonen om til konkrete initiatives."] },
         { id: "roadmap", description: "Roadmap", correctCardId: "roadmap-meaning", correctLabel: "Et planning tool for timing og sequencing av initiatives", whyCorrect: "En Roadmap er et planning tool for timing og sequencing.", whyWrong: "Denne betydningen hører til Roadmap fordi den handler om når og i hvilken rekkefølge initiatives skal skje.", whyExtended: ["Roadmap lister ikke bare initiatives; den sekvenserer dem over tid."] },
         { id: "definition-of-responsibility", description: "Definition of responsibility", correctCardId: "responsibility-meaning", correctLabel: "En definisjon av hvem som owns og is accountable for what", whyCorrect: "Definition of responsibility klargjør ownership og accountability.", whyWrong: "Denne betydningen hører til Definition of responsibility fordi den svarer på hvem som eier hva.", whyExtended: ["Uten responsibility kan en digital strategy bli en ønskeliste i stedet for en execution plan."] }
+      ],
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
       ]
     },
     {
@@ -1901,6 +2017,10 @@ export const mockExam4_no = {
         { id: "data-architecture", description: "Beskriver logical and physical data assets og data management resources", correctCardId: "togaf-data-architecture", correctLabel: "Data Architecture", whyCorrect: "Data Architecture beskriver strukturen i data assets og data management resources.", whyWrong: "Denne beskrivelsen hører til Data Architecture fordi den handler om data assets og data management.", whyExtended: ["Data Architecture er viktig fordi integration og standardization ofte krever felles datadefinisjoner og master data."] },
         { id: "application-architecture", description: "Gir en blueprint for applications, deres interactions og forholdet til core business processes", correctCardId: "togaf-application-architecture", correctLabel: "Application Architecture", whyCorrect: "Application Architecture beskriver applications, hvordan de samhandler og hvordan de støtter core business processes.", whyWrong: "Denne beskrivelsen hører til Application Architecture fordi den handler om application portfolio og koblingen til business processes.", whyExtended: ["Application Architecture er sentral når man analyserer og strukturerer systems portfolio."] },
         { id: "technology-architecture", description: "Beskriver software og hardware capabilities som infrastructure, middleware, networks og standards", correctCardId: "togaf-technology-architecture", correctLabel: "Technology Architecture", whyCorrect: "Technology Architecture beskriver de tekniske capabilities som trengs for å støtte business, data og application services.", whyWrong: "Denne beskrivelsen hører til Technology Architecture fordi den gjelder infrastructure, middleware, networks, processing og standards.", whyExtended: ["Technology Architecture er det mest tekniske laget i TOGAF taxonomy."] }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -1923,6 +2043,11 @@ export const mockExam4_no = {
         { id: "important-stuff", description: "Architecture is 'the important stuff'; collaborative og mer desentralisert orientation", correctCardId: "perspective-fowler", correctLabel: "Martin Fowler", whyCorrect: "Fowlers perspektiv er at architecture handler om det utviklere og stakeholders vurderer som viktig.", whyWrong: "Denne beskrivelsen hører til Martin Fowler fordi forelesningen bruker Fowler som et mer meritocratic og decentralized architecture-perspektiv.", whyExtended: ["Fowler plasseres nærmere agile development thinking enn TOGAF."] },
         { id: "modularity-standardization-responsiveness", description: "Modularity, standardization og innebygd responsiveness to change", correctCardId: "perspective-open-agile", correctLabel: "Open Agile Architecture", whyCorrect: "Open Agile Architecture oppsummeres med modularity, standardization og responsiveness to change.", whyWrong: "Denne beskrivelsen hører til Open Agile Architecture fordi forelesningen presenterer det som et alternativ til TOGAF med modularity, standardization og responsiveness to change.", whyExtended: ["Modularity støtter team autonomy og resilience.", "Responsiveness to change hindrer architecture fra å bli en statisk kontrollmekanisme."] },
         { id: "optimize-fragmented-legacy", description: "Optimalisere fragmenterte processes til et integrert miljø som støtter business strategy", correctCardId: "perspective-enterprise-architecture", correctLabel: "Enterprise Architecture", whyCorrect: "Enterprise Architecture presenteres som en tilnærming for å optimalisere fragmenterte processes og systems til et integrert miljø som støtter strategy.", whyWrong: "Denne beskrivelsen hører til Enterprise Architecture som bredt fagfelt, ikke til ett bestemt framework eller én forfatter.", whyExtended: ["Enterprise Architecture er bredere enn TOGAF, selv om TOGAF er et stort framework for enterprise architecture work."] }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model",
+        "togaf_adm_no"
       ]
     },
     {
@@ -1939,6 +2064,10 @@ export const mockExam4_no = {
         { text: "Agile Delivery Model — en Scrum-metode for sprint planning", correct: false, why: "Galt: ADM er ikke en Scrum- eller sprint-planning-metode.", whyExtended: ["Scrum hører til agile software delivery og Product teams, ikke TOGAFs enterprise architecture method.", "ADM står for Architecture Development Method, ikke Agile Delivery Model."] },
         { text: "Application Data Matrix — en liste over database tables for én application", correct: false, why: "Galt: TOGAF inkluderer Data og Application Architecture, men ADM betyr ikke Application Data Matrix.", whyExtended: ["ADM er en metode for architecture development på enterprise-nivå, ikke et lokalt databaseartefakt."] },
         { text: "Automated Decision Management — en governance model som erstatter architects med automatiserte rules", correct: false, why: "Galt: ADM handler om strukturert architecture development, ikke om å automatisere bort architectural judgment.", whyExtended: ["Frameworks støtter architecture work, men erstatter ikke leadership, dialogue og contextual judgment."] }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_adm_en",
+        "togaf_adm_no"
       ]
     },
     {
@@ -1956,6 +2085,10 @@ export const mockExam4_no = {
         { text: "TOGAF erstatter behovet for å forstå business processes fordi det bare handler om hardware og networks.", correct: false, why: "Galt: TOGAF inkluderer Business Architecture og Application/Data-lag, ikke bare hardware og networks.", whyExtended: ["TOGAF taxonomy inkluderer Business, Data, Application og Technology Architecture.", "Technology Architecture er bare ett av fire lag."] },
         { text: "Enterprise architecture initiatives kan bli for top-down og fortsette uten å levere konkret business value.", correct: true, why: "Riktig: kurset peker på at EA kan være vanskelig, top-down og kritisert for begrensede konkrete resultater.", whyExtended: ["Et vanlig problem er at EA initiatives kan virke endeløse uten tydelige resultater.", "Derfor er poenget ikke at TOGAF alltid er best, men at nytten er context-sensitive."] },
         { text: "Fowler og TOGAF presenteres som identiske syn med ulike navn.", correct: false, why: "Galt: forelesningen kontrasterer TOGAF og Fowler som ulike architecture perspectives.", whyExtended: ["TOGAF er det formelle, ofte sentraliserte perspektivet.", "Fowler representerer et mer meritocratic og decentralized perspektiv knyttet til agile development."] }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi",
+        "togaf_adm_no"
       ]
     }
 

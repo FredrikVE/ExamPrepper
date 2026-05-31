@@ -20,7 +20,10 @@ export const mockExam1_en = {
       answerKey: "process / business process",
       source: "Source: Lecture 5, Business processes and IT Architecture, slide 'What is a business process?'",
       whyCorrect: "The sentence is the definition of a **business process**: a set of **activities** with **logical order** and **dependencies** that produce a **desired result**.",
-      whyWrong: "Other terms like project, platform or architecture don't fit because the definition describes the **workflow** of **activities** within an enterprise."
+      whyWrong: "Other terms like project, platform or architecture don't fit because the definition describes the **workflow** of **activities** within an enterprise.",
+      whyExtendedImageRefs: [
+        "umbrella_heaven_ordering_process"
+      ]
     },
     {
       id: 2,
@@ -72,6 +75,10 @@ export const mockExam1_en = {
             "The lecture specifies that for non-trivial development initiatives, setting correct estimates is impossible — they are always estimates with **uncertainty**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -125,6 +132,9 @@ export const mockExam1_en = {
             "Funding decisions require NPV and **business case**, not process diagrams."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "NPV_formula"
       ]
     },
     {
@@ -179,6 +189,9 @@ export const mockExam1_en = {
             "The NPV calculation shows that when the **risk premium** is equal, ranking is determined by **benefits**, **costs** and **timing** alone."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "generic_decision_making_process"
       ]
     },
     {
@@ -191,7 +204,10 @@ export const mockExam1_en = {
       answerKey: "technology",
       source: "Source: Lecture 7 and the Operational Backbone lecture, definition of Digital Business Design.",
       whyCorrect: "Correct because **digital business design** describes the interplay between **people**, **processes** and **technology**, not just IT systems in isolation.",
-      whyWrong: "Wrong if the answer only points to data, strategy or architecture. The concept is explicitly three-part: **people**, **processes** and **technology**."
+      whyWrong: "Wrong if the answer only points to data, strategy or architecture. The concept is explicitly three-part: **people**, **processes** and **technology**.",
+      whyExtendedImageRefs: [
+        "D4D-overview"
+      ]
     },
     {
       id: 6,
@@ -214,7 +230,7 @@ export const mockExam1_en = {
             "**OB** belongs to architecture transformation in **D4D**'s dual transformation theory."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -228,7 +244,7 @@ export const mockExam1_en = {
             "**SCI** belongs to governance transformation in **D4D**'s dual transformation theory."
           ],
           whyExtendedImageRefs: [
-              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+              "SCI"
             ]
         },
         {
@@ -253,7 +269,7 @@ export const mockExam1_en = {
             "**DP** belongs to architecture transformation together with **OB**."
           ],
           whyExtendedImageRefs: [
-              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+              "DP"
             ]
         },
         {
@@ -267,7 +283,7 @@ export const mockExam1_en = {
             "**AF** belongs to governance transformation in **D4D**'s dual transformation theory."
           ],
           whyExtendedImageRefs: [
-              { imageId: "AF", moduleId: "designed-for-digital", groupId: "accountability-framework" }
+              "AF"
             ]
         },
         {
@@ -281,7 +297,7 @@ export const mockExam1_en = {
             "The **D4D** roadmap recommends not rushing into an **ExDP** — it requires a mature **OB** and **DP** first."
           ],
           whyExtendedImageRefs: [
-              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+              "ExDP"
             ]
         }
       ]
@@ -318,11 +334,7 @@ export const mockExam1_en = {
             "**OB** is the foundation that enables further **digital transformation** — without a functioning **OB**, you lack a stable base to build on."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -381,11 +393,7 @@ export const mockExam1_en = {
             "**DP** differs from **OB** by focusing on flexibility and reuse rather than stability and **standardization**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform",
-              imageId: "DP"
-            }
+            "DP"
           ]
         },
         {
@@ -422,7 +430,10 @@ export const mockExam1_en = {
       answerKey: "pay",
       source: "Source: Lecture 8, Shared Customer Insight, and the exam example file.",
       whyCorrect: "Correct because **Shared Customer Insights** is defined as **organizational learning** about **what customers will pay for** and how **digital technology** can meet their needs.",
-      whyWrong: "Wrong if the answer only mentions what customers 'like' or 'use'. The point is **willingness to pay**/value and the link to digital solutions."
+      whyWrong: "Wrong if the answer only mentions what customers 'like' or 'use'. The point is **willingness to pay**/value and the link to digital solutions.",
+      whyExtendedImageRefs: [
+        "SCI"
+      ]
     },
     {
       id: 10,
@@ -456,11 +467,7 @@ export const mockExam1_en = {
             "The challenge **AF** addresses is: how to unleash creativity and **innovation** (**autonomy**) without losing common direction and **standardization** (**alignment**)."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -519,11 +526,7 @@ export const mockExam1_en = {
             "Lecture 12 specifies that **ExDP** requires 'a very well designed and managed internal platform' — it presupposes a mature **OB** and **DP**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -599,6 +602,9 @@ export const mockExam1_en = {
             "Weill & Ross (2005) published this approach in MIT Sloan Management Review as 'A Matrixed Approach to Designing **IT Governance**'."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "decision_rights_matrix"
       ]
     },
     {
@@ -653,6 +659,9 @@ export const mockExam1_en = {
             "The archetype means that no one has overarching **responsibility** — it is placed at the bottom of the centralization scale in Weill & Ross's model."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "it_governance_matrix"
       ]
     },
     {
@@ -707,6 +716,9 @@ export const mockExam1_en = {
             "A project can implement architectural decisions, but the architecture lives on after the project is finished."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -761,6 +773,9 @@ export const mockExam1_en = {
             "The four operating models (coordination, unification, diversification, replication) are about how **processes** are structured, not about how **responsibilities** are distributed."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "business_process_matrix_en"
       ]
     },
     {
@@ -773,7 +788,11 @@ export const mockExam1_en = {
       answerKey: "temporary",
       source: "Source: Lecture 4, slide 'What is a project?'.",
       whyCorrect: "Correct because a project is defined as a **temporary organization** with a specified result and time period.",
-      whyWrong: "Wrong if the answer suggests a permanent line organization. The defining feature of a project is precisely its temporary nature."
+      whyWrong: "Wrong if the answer suggests a permanent line organization. The defining feature of a project is precisely its temporary nature.",
+      whyExtendedImageRefs: [
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
+      ]
     },
     {
       id: 17,
@@ -827,6 +846,9 @@ export const mockExam1_en = {
             "**Agile** method is 'NOT a process to follow or tools to use, but a mindset on how **people** think' — it is about flexibility and **learning**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -881,6 +903,9 @@ export const mockExam1_en = {
             "**IT governance** and **design thinking** solve different problems: governance is about who decides, **design thinking** is about what should be built."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "double_diamond_model"
       ]
     },
     {
@@ -935,6 +960,9 @@ export const mockExam1_en = {
             "The **D4D** summary warns against precisely this under risks of **digital transformation**: 'dividing resources across so many building blocks → may not make real progress'."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -947,7 +975,10 @@ export const mockExam1_en = {
       answerKey: "Things / IoT",
       source: "Source: Lecture 7, Designed for digital, SMACIT slide.",
       whyCorrect: "Correct: **SMACIT** = **Social**, **Mobile**, **Analytics**, **Cloud**, **Internet of Things**.",
-      whyWrong: "Wrong if the last part does not refer to **IoT**/**Internet of Things**, because the acronym in the curriculum uses this as the T."
+      whyWrong: "Wrong if the last part does not refer to **IoT**/**Internet of Things**, because the acronym in the curriculum uses this as the T.",
+      whyExtendedImageRefs: [
+        "D4D-overview"
+      ]
     },
     {
       id: 21,
@@ -1001,6 +1032,9 @@ export const mockExam1_en = {
             "**BPMN** models can be used as tools in **design thinking** or process analysis, but they are not a strategic end product."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
       ]
     },
     {
@@ -1053,6 +1087,9 @@ export const mockExam1_en = {
             "The lecture summarizes that **sustainability** is relevant for IT leaders because '**sustainability** transitions require/enable **innovation**' and policy requires data."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -1098,11 +1135,7 @@ export const mockExam1_en = {
             "This approach connects directly to **design thinking** (exploration) and **agile** (**iteration** and adaptation) in the **CIO toolbox**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1139,11 +1172,7 @@ export const mockExam1_en = {
             "**OB** is about making existing core **processes** reliable and efficient — it is the foundation for further digital success."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1157,11 +1186,7 @@ export const mockExam1_en = {
             "The **D4D** roadmap recommends: 'Fix the backbone' first, then 'Don't put off your **digital platform** for long — connect the modules.'"
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform",
-              imageId: "DP"
-            }
+            "DP"
           ]
         },
         {
@@ -1186,11 +1211,7 @@ export const mockExam1_en = {
             "Without a stable **OB**, you lack the foundation for **Digital Platform**, and thereby also for **rapid innovation** and new **digital offerings**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         }
       ]
@@ -1247,6 +1268,9 @@ export const mockExam1_en = {
             "**Frameworks** reduce **uncertainty**, provide a common language and structure practice — but only when adapted to context."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
       ]
     }
   ]

@@ -30,11 +30,7 @@ export const mockExam3_en = {
             "This connects strategy to actual management work: prioritized initiatives must be started to achieve the desired results."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -47,11 +43,7 @@ export const mockExam3_en = {
             "Without accountability, it becomes difficult to know who should make decisions, escalate problems or deliver."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -64,11 +56,7 @@ export const mockExam3_en = {
             "This is especially important when activities depend on one another, for example when an operational backbone must be improved before new digital offerings can be scaled."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -81,11 +69,7 @@ export const mockExam3_en = {
             "This links strategy to CIO toolbox tools such as business case, alternative analysis and project planning."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -112,7 +96,10 @@ export const mockExam3_en = {
       answerKey: "roadmap",
       source: "Source: Lecture 4, action plan: expected ordering and timeframe for executing the activities aka roadmap.",
       whyCorrect: "Correct: a roadmap describes the ordering and timeframe for implementation.",
-      whyWrong: "Wrong if the answer describes a calculation method or a governance archetype. The question asks for the time and ordering dimension of the plan."
+      whyWrong: "Wrong if the answer describes a calculation method or a governance archetype. The question asks for the time and ordering dimension of the plan.",
+      whyExtendedImageRefs: [
+        "strategy_action_plan_model"
+      ]
     },
     {
       id: 203,
@@ -162,6 +149,9 @@ export const mockExam3_en = {
             "This is why the course first establishes strategy and governing documents as the management context before introducing the CIO toolbox."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -184,11 +174,7 @@ export const mockExam3_en = {
             "Without this, one risks solving the wrong problem or comparing irrelevant alternatives."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process"
-            }
+            "generic_decision_making_process"
           ]
         },
         {
@@ -201,11 +187,7 @@ export const mockExam3_en = {
             "This is especially important in vendor selection, product choice and larger organizational changes."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process"
-            }
+            "generic_decision_making_process"
           ]
         },
         {
@@ -218,11 +200,7 @@ export const mockExam3_en = {
             "The goal is not just analysis, but to provide a basis for decision-making."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process"
-            }
+            "generic_decision_making_process"
           ]
         },
         {
@@ -285,6 +263,9 @@ export const mockExam3_en = {
             "BPMN belongs under the IT Architecture tool in the CIO toolbox, not under alternative analysis as an evaluation method."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "generic_decision_making_process"
       ]
     },
     {
@@ -335,6 +316,9 @@ export const mockExam3_en = {
             "This gives a broader decision basis than net present value alone."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "generic_decision_making_process"
       ]
     },
     {
@@ -350,7 +334,10 @@ export const mockExam3_en = {
       answerKey: "justification / business justification",
       source: "Source: IN5431 summary, PRINCE2 principles.",
       whyCorrect: "Correct: 'continued business justification' is one of the PRINCE2 principles.",
-      whyWrong: "Wrong if the answer points to a ceremony or governance archetype. The question asks for the PRINCE2 principle about ongoing justification."
+      whyWrong: "Wrong if the answer points to a ceremony or governance archetype. The question asks for the PRINCE2 principle about ongoing justification.",
+      whyExtendedImageRefs: [
+        "prince2_framework_model"
+      ]
     },
     {
       id: 208,
@@ -372,11 +359,7 @@ export const mockExam3_en = {
             "It fits with the course's point that frameworks are aids, not goals in themselves."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -389,11 +372,7 @@ export const mockExam3_en = {
             "The principle connects to the project as a temporary organization."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -406,11 +385,7 @@ export const mockExam3_en = {
             "Stage-based governance makes it possible to adjust plans based on experience."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -423,11 +398,7 @@ export const mockExam3_en = {
             "Tailoring makes the framework more relevant to the actual project environment."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -462,11 +433,7 @@ export const mockExam3_en = {
             "Risk is not just a cost item, but a management task throughout the project."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -549,6 +516,10 @@ export const mockExam3_en = {
             "The course generally warns against using frameworks as goals in themselves."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -599,6 +570,9 @@ export const mockExam3_en = {
             "The two tools can support each other, but they are not the same thing."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_levels_model"
       ]
     },
     {
@@ -649,6 +623,9 @@ export const mockExam3_en = {
             "Mixing these makes it unclear which CIO toolbox tool is used for what."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -699,6 +676,9 @@ export const mockExam3_en = {
             "Employees must therefore be involved and competence must be developed in the transformation."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
       ]
     },
     {
@@ -759,6 +739,10 @@ export const mockExam3_en = {
             "This also connects to the ambidextrous organization: both exploitation and exploration must be handled."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_strategy_model",
+        "D4D-overview"
       ]
     },
     {
@@ -775,7 +759,10 @@ export const mockExam3_en = {
       answerKey: "inertia / organizational inertia",
       source: "Source: Lecture 14, slides 'Organizational Inertia'.",
       whyCorrect: "Correct: organizational inertia describes resistance/slowness that makes the organization continue on the same path.",
-      whyWrong: "Wrong if the answer describes agility or innovation. The question asks about inertia in sociotechnical systems."
+      whyWrong: "Wrong if the answer describes agility or innovation. The question asks about inertia in sociotechnical systems.",
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
+      ]
     },
     {
       id: 216,
@@ -825,6 +812,9 @@ export const mockExam3_en = {
             "Requiring guaranteed benefits before learning can stop innovation."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
       ]
     },
     {
@@ -875,6 +865,9 @@ export const mockExam3_en = {
             "It concerns digital value propositions, not project administration."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "SCI"
       ]
     },
     {
@@ -897,11 +890,7 @@ export const mockExam3_en = {
             "Feedback can be used to improve or reject the idea."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "shared-customer-insights",
-              imageId: "SCI"
-            }
+            "SCI"
           ]
         },
         {
@@ -914,11 +903,7 @@ export const mockExam3_en = {
             "The method contrasts with spending a long time on a solution without validation."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "shared-customer-insights",
-              imageId: "SCI"
-            }
+            "SCI"
           ]
         },
         {
@@ -931,11 +916,7 @@ export const mockExam3_en = {
             "Cross-functional teams can combine IT, product, operations, market and risk."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "shared-customer-insights",
-              imageId: "SCI"
-            }
+            "SCI"
           ]
         },
         {
@@ -970,11 +951,7 @@ export const mockExam3_en = {
             "Digital business often requires seamless end-to-end processes across units."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -987,11 +964,7 @@ export const mockExam3_en = {
             "Habits can be linked to functions, practices and fragmented architectures."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1004,11 +977,7 @@ export const mockExam3_en = {
             "A working OB requires systems, processes and data to fit together."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1043,11 +1012,7 @@ export const mockExam3_en = {
             "This is the opposite of monolithic systems built for one specific product and often lacking reusable APIs."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform",
-              imageId: "DP"
-            }
+            "DP"
           ]
         },
         {
@@ -1102,11 +1067,7 @@ export const mockExam3_en = {
             "ExDP builds on internal components being well designed and managed."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1119,11 +1080,7 @@ export const mockExam3_en = {
             "Without such interfaces, external use becomes unstructured and risky."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1136,11 +1093,7 @@ export const mockExam3_en = {
             "Both variants increase the potential for external innovation."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1203,6 +1156,9 @@ export const mockExam3_en = {
             "Management must therefore understand interactions and consequences across dimensions."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -1253,6 +1209,9 @@ export const mockExam3_en = {
             "Both can influence decisions, but at different levels."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "performance_based_IT-governance_model"
       ]
     },
     {
@@ -1303,6 +1262,9 @@ export const mockExam3_en = {
             "Blind compliance can create bureaucracy and worse decisions."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1353,6 +1315,9 @@ export const mockExam3_en = {
             "Digital transformation makes governance more important, not irrelevant."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
       ]
     }
   ]

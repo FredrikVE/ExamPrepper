@@ -40,7 +40,7 @@ export const mockExamDigitalStrategy_no = {
             "Derfor må ledere forstå både characteristics, opportunities, prerequisites og consequences ved digital technology."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_definition" }
+            "digital_strategy_definition"
           ]
         },
         {
@@ -118,7 +118,7 @@ export const mockExamDigitalStrategy_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -139,7 +139,7 @@ export const mockExamDigitalStrategy_no = {
         "Digital resources kan omfatte teknologi, data, digitale komponenter, plattformer og kompetanser som brukes til å skape ny eller differensierende verdi."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_definition" }
+        "digital_strategy_definition"
       ]
     },
     {
@@ -161,7 +161,7 @@ export const mockExamDigitalStrategy_no = {
             "I Nordic Choice/Strawberry-caset uttrykkes dette som ambisjonen om 'the best digital guest journey in the Nordic market'."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_content" }
+            "digital_strategy_content"
           ]
         },
         {
@@ -271,7 +271,7 @@ export const mockExamDigitalStrategy_no = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "macro_meso_micro_impact" }
+        "macro_meso_micro_impact"
       ]
     },
     {
@@ -314,7 +314,8 @@ export const mockExamDigitalStrategy_no = {
           why: "Galt: pris kan være relevant i procurement, men dette er ikke et av de fire overordnede leder-spørsmålene i forelesningen.",
           whyExtended: ["Forelesningen løfter lederblikket fra anskaffelse til strategiske spørsmål om kjennetegn, muligheter, forutsetninger og konsekvenser."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_strategy_content"]
     },
     {
       id: 7,
@@ -345,7 +346,7 @@ export const mockExamDigitalStrategy_no = {
             "Kane et al.-poenget er at mennesker, kultur, struktur og oppgaver må alignes med teknologien."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+            "digital_transformation_process"
           ]
         },
         {
@@ -418,7 +419,7 @@ export const mockExamDigitalStrategy_no = {
         "Poenget er å koble endringsbehov, strategisk retning, konkrete initiativer, ressurser og organisatorisk ansvar."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     },
     {
@@ -468,7 +469,8 @@ export const mockExamDigitalStrategy_no = {
             "Forelesningen bruker senere kultur som et sentralt barrieretema."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_transformation_process"]
     },
     {
       id: 10,
@@ -486,7 +488,7 @@ export const mockExamDigitalStrategy_no = {
           why: "Riktig: dette er eksplisitt nevnt som en mulig driver.",
           whyExtended: ["Top-down digital strategy kan gi retning, prioritering og koordinering."],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+            "digital_transformation_process"
           ]
         },
         {
@@ -534,7 +536,7 @@ export const mockExamDigitalStrategy_no = {
             "Dette kobler barriers-delen direkte tilbake til digital strategy-delen av forelesningen."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_barriers" }
+            "digital_transformation_barriers"
           ]
         },
         {
@@ -633,8 +635,8 @@ export const mockExamDigitalStrategy_no = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_barriers" },
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "culture_for_digitalization" }
+        "digital_transformation_barriers",
+        "culture_for_digitalization"
       ]
     },
     {
@@ -666,7 +668,7 @@ export const mockExamDigitalStrategy_no = {
             "Kultur er dermed en enabler eller hindring for digital maturity."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "culture_for_digitalization" }
+            "culture_for_digitalization"
           ]
         },
         {
@@ -707,7 +709,7 @@ export const mockExamDigitalStrategy_no = {
         "Inertia kan være nødvendig og positivt fordi det gir stabilitet, men kan også bli en barriere for digital transformation."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "organizational_inertia_definition" }
+        "organizational_inertia_definition"
       ]
     },
     {
@@ -786,7 +788,7 @@ export const mockExamDigitalStrategy_no = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "organizational_inertia_levels" }
+        "organizational_inertia_levels"
       ]
     },
     {
@@ -805,7 +807,7 @@ export const mockExamDigitalStrategy_no = {
           why: "Riktig: disse er eksplisitt nevnt i forelesningen.",
           whyExtended: ["Inertia må først gjøres synlig og forståelig før den kan endres."],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "addressing_inertia" }
+            "addressing_inertia"
           ]
         },
         {
@@ -856,7 +858,7 @@ export const mockExamDigitalStrategy_no = {
           why: "Riktig: forelesningen sier eksplisitt at leader engagement at all levels er nødvendig.",
           whyExtended: ["Digital transformation skjer på tvers av funksjoner og nivåer, så ledelse kan ikke isoleres til toppen alene."],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "leadership_role_digital_transformation" }
+            "leadership_role_digital_transformation"
           ]
         },
         {
@@ -939,8 +941,8 @@ export const mockExamDigitalStrategy_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "cdo_roles" },
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "cdo_contribution" }
+        "cdo_roles",
+        "cdo_contribution"
       ]
     },
     {
@@ -963,8 +965,8 @@ export const mockExamDigitalStrategy_no = {
             "Hele organisasjonen må derfor forstå både big picture og lokale bidrag."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "whole_organization_involvement" },
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "organization_as_network_groups" }
+            "whole_organization_involvement",
+            "organization_as_network_groups"
           ]
         },
         {
@@ -1007,8 +1009,8 @@ export const mockExamDigitalStrategy_no = {
             "Dette passer spesielt når digitale initiativer må samordnes på tvers av organisasjonen."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "cdo_roles" },
-            { moduleId: "strategy", groupId: "digital-strategy", imageId: "cdo_contribution" }
+            "cdo_roles",
+            "cdo_contribution"
           ]
         },
         {

@@ -88,7 +88,12 @@ export const mockExamDragCategorize_en = {
             "Weill & Ross describe decision domains, archetypes and a governance matrix."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "generic_decision_making_process",
+        "double_diamond_model",
+        "it_governance_matrix"
+      ]
     },
     {
       id: 2,
@@ -154,7 +159,15 @@ export const mockExamDragCategorize_en = {
             "APIs and boundary resources are typical mechanisms for ExDP."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "D4D-overview",
+        "OB",
+        "SCI",
+        "DP",
+        "AF",
+        "ExDP"
+      ]
     },
     {
       id: 3,
@@ -220,7 +233,10 @@ export const mockExamDragCategorize_en = {
             "This domain decides which initiatives receive resources."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "Domene_modell_IT_beslutninger_spm"
+      ]
     },
     {
       id: 4,
@@ -290,7 +306,10 @@ export const mockExamDragCategorize_en = {
             "Governance here is about enabling innovation without chaos."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "D4D-overview"
+      ]
     },
     {
       id: 5,
@@ -358,6 +377,9 @@ export const mockExamDragCategorize_en = {
           correctQuadrantId: "low-standardization-high-integration",
           why: "Coordination means high integration but low standardization. Units may have different processes, but must share information and coordinate across units, for example because one unit's transactions affect another."
         }
+      ],
+      whyExtendedImageRefs: [
+        "business_process_matrix_en"
       ]
     },
     {
@@ -455,7 +477,8 @@ export const mockExamDragCategorize_en = {
             "This is the weakest combination. Teams do not know clearly what to achieve, and they also lack freedom to act."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["Hackman_authority_matrix"]
     }
   ]
 };

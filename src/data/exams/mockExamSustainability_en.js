@@ -60,7 +60,8 @@ export const mockExamSustainability_en = {
             "Reducing the topic to communication misses both the innovation and governance dimensions."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 2,
@@ -130,7 +131,8 @@ export const mockExamSustainability_en = {
           whyWrong: "This is not about efficiency. It is about social consequences of digitalization.",
           whyExtended: ["Sustainability is multidimensional: social effects must be assessed together with economy and environment."]
         }
-      }
+      },
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 3,
@@ -204,7 +206,8 @@ export const mockExamSustainability_en = {
           whyWrong: "This is not one emissions category. It is a perspective on simultaneous digital and sustainability transformation.",
           whyExtended: ["The lecture is critical: digital efficiency gains must be weighed against electricity use and rare materials."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 4,
@@ -249,7 +252,7 @@ export const mockExamSustainability_en = {
         "An exam-oriented understanding is being able to apply the model to concrete cases, not only repeat the words."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -290,7 +293,8 @@ export const mockExamSustainability_en = {
           why: "Wrong: this contradicts the sustainability perspective in the lecture.",
           whyExtended: ["The lecture also discusses degrowth and postgrowth as critiques of growth as the only goal.", "Net Zero is linked to climate targets, not to prioritizing growth over emission cuts."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["scope_1_2_3_model"]
     },
     {
       id: 6,
@@ -326,6 +330,10 @@ export const mockExamSustainability_en = {
           why: "Wrong: the lecture emphasizes data, reporting and regulation.",
           whyExtended: ["Circular economy is linked to LCA, MFA, EPD and Digital Product Passport.", "These require documentation, standards and data, not only communication."]
         }
+      ],
+      whyExtendedImageRefs: [
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -348,6 +356,9 @@ export const mockExamSustainability_en = {
         { id: "mfa", description: "Analysis of material flows and material costs in processes or value chains", correctCardId: "mfa", correctLabel: "Material Flow Analysis (MFA)", whyCorrect: "MFA concerns material flows.", whyWrong: "This explanation points to material flow, not life cycle declaration.", whyExtended: ["The lecture mentions ISO 14052:2017 Material flow cost accounting."] },
         { id: "epd", description: "Environmental declaration for a product, made on the basis of LCA", correctCardId: "epd", correctLabel: "Environmental Product Declaration (EPD)", whyCorrect: "EPD is an environmental declaration based on life cycle assessment.", whyWrong: "This is not a general market solution. It is documentation of a product's environmental data.", whyExtended: ["The lecture connects EPD to ISO 14025 Type III Environmental Labels and Declarations."] },
         { id: "dpp", description: "Digital documentation of origin, materials, production process and environmental impact", correctCardId: "dpp", correctLabel: "Digital Product Passport", whyCorrect: "Digital Product Passport makes product data digitally available.", whyWrong: "This is not a manual life cycle assessment. It is digital product documentation.", whyExtended: ["The lecture connects DPP to the EU and coming requirements for several product groups, including ICT and electronics."] }
+      ],
+      whyExtendedImageRefs: [
+        "circular_economy_loop"
       ]
     },
     {
@@ -365,6 +376,10 @@ export const mockExamSustainability_en = {
         { text: "Markets that connect supply and demand for materials.", correct: true, why: "Correct: digital markets can connect actors that have and need materials.", whyExtended: ["This can reduce waste by giving surplus materials new use."] },
         { text: "Sharing platforms and X-as-a-service models.", correct: true, why: "Correct: the lecture mentions both sharing platforms and servitization.", whyExtended: ["Servitization can shift focus from selling new products to access, maintenance and better resource use."] },
         { text: "Removing all data about materials so products become easier to resell.", correct: false, why: "Wrong: circular economy requires more information about materials and products, not less.", whyExtended: ["Without material data, repair, reuse, sorting and documentation become harder."] }
+      ],
+      whyExtendedImageRefs: [
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -506,7 +521,8 @@ export const mockExamSustainability_en = {
         { text: "SOX shows that reporting requirements always reduce the need for IT governance.", correct: false, why: "Wrong: the lecture describes the opposite. Stronger reporting can strengthen governance.", whyExtended: ["Data integrity and internal control become more central when reported data matters."] },
         { text: "Sustainability reporting is completely different from financial reporting because data quality does not matter.", correct: false, why: "Wrong: data veracity, validation and verification are central points in the lecture.", whyExtended: ["When reported sustainability data can lead to benefits or sanctions, data quality becomes critical."] },
         { text: "Enron/SOX is used only as a historical example without relevance for IT management.", correct: false, why: "Wrong: the comparison is explicitly linked to IT governance.", whyExtended: ["The lecture shows that financial reporting drove information systems and governance, and asks whether CSRD can have similar effects."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["double_materiality"]
     },
     {
       id: 15,
@@ -538,7 +554,7 @@ export const mockExamSustainability_en = {
         "This makes reporting a broader governance issue than traditional financial risk alone."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+        "double_materiality"
       ]
     },
     {
@@ -551,7 +567,7 @@ export const mockExamSustainability_en = {
       prompt: "An IT manager maps that extreme weather can make data center operations more expensive and less stable. Which part of double materiality does this describe best?",
       source: "Source: IN5431 Sustainability, slide 72.",
       options: [
-        { text: "Financial materiality, because external climate and environmental conditions affect the company.", correct: true, why: "Correct: this is impact on the company.", whyExtended: ["Extreme weather is an external sustainability issue that can affect costs, risk and operations.", "This is the outside-in direction in double materiality.", "For IT governance, infrastructure, preparedness, costs and supplier risk can become part of sustainability reporting."], whyExtendedImageRefs: [ { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" } ] },
+        { text: "Financial materiality, because external climate and environmental conditions affect the company.", correct: true, why: "Correct: this is impact on the company.", whyExtended: ["Extreme weather is an external sustainability issue that can affect costs, risk and operations.", "This is the outside-in direction in double materiality.", "For IT governance, infrastructure, preparedness, costs and supplier risk can become part of sustainability reporting."], whyExtendedImageRefs: [ "double_materiality" ] },
         { text: "Impact materiality, because the company directly affects environment and people in this example.", correct: false, why: "Wrong: the case primarily describes how environmental conditions affect the company.", whyExtended: ["Impact materiality would for example be the data center's energy use or emissions effects on the outside world."] },
         { text: "Scope 2, because extreme weather is always purchased electricity.", correct: false, why: "Wrong: Scope 2 is an emissions category, not a materiality direction.", whyExtended: ["Extreme weather can affect electricity prices or availability, but the materiality assessment here is financial."] },
         { text: "Degrowth, because all data center operations must stop immediately.", correct: false, why: "Wrong: the case concerns risk assessment and reporting, not a general claim about postgrowth.", whyExtended: ["Degrowth is a broader socio-economic perspective, not the answer to this concrete materiality case."] }
@@ -602,8 +618,8 @@ export const mockExamSustainability_en = {
         "Scope 3 is often hardest because the data lies outside the organization's direct control."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -620,8 +636,8 @@ export const mockExamSustainability_en = {
       whyCorrect: "Scope 3 is defined as all other emissions associated with the company's activities.",
       whyWrong: "Scope 1 is direct emissions from owned or controlled sources, and Scope 2 is indirect emissions from purchased electricity, heat, steam and cooling.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -639,6 +655,11 @@ export const mockExamSustainability_en = {
         { text: "Financial incentives and sanctions can be linked to reported data.", correct: true, why: "Correct: the lecture points to significant financial incentives linked to the data.", whyExtended: ["The shipping case shows this clearly: emissions data can affect costs, financing and regulation.", "This makes data a governance object, not only a reporting exercise."] },
         { text: "IT governance becomes less relevant because sustainability reporting is only done by the communications department.", correct: false, why: "Wrong: the lecture argues that reporting requirements can expand and strengthen IT governance.", whyExtended: ["Communication can be part of reporting, but data capture, system support, verification and control are governance challenges.", "Sustainability reporting can resemble financial reporting by making internal control and data integrity central."] },
         { text: "Reported sustainability data does not need to be traceable back to sources.", correct: false, why: "Wrong: traceability, verification and data quality are central when data has governance and reporting functions.", whyExtended: ["Without traceability, the risk of errors, greenwashing and compliance failure increases."] }
+      ],
+      whyExtendedImageRefs: [
+        "double_materiality",
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -702,6 +723,9 @@ export const mockExamSustainability_en = {
         { text: "Digitalization is always sustainable because it is virtual.", correct: false, why: "Wrong: the lecture emphasizes that ICTs are also material artefacts.", whyExtended: ["Rare earth minerals, e-waste, energy consumption and social disruption show why this claim is too simple."] },
         { text: "Twin transitions can require new data flows, platforms and governance mechanisms.", correct: true, why: "Correct: circular economy, the shipping case and CSRD all point to this.", whyExtended: ["Data becomes necessary for optimization, reporting, verification and incentives."] },
         { text: "When a solution is digital, it does not need to be included in scope or materiality assessments.", correct: false, why: "Wrong: digital solutions can have direct, indirect and value-chain emissions as well as social consequences.", whyExtended: ["Double materiality and Scope 1-3 make digital solutions relevant for reporting and governance."] }
+      ],
+      whyExtendedImageRefs: [
+        "twin_transitions"
       ]
     },
     {
@@ -718,6 +742,10 @@ export const mockExamSustainability_en = {
         { text: "Delete material data when the product is sold to protect the supplier chain from insight.", correct: false, why: "Wrong: DPP concerns making more product information available, not less.", whyExtended: ["Without material data, repair, reuse, recycling and environmental reporting become harder."] },
         { text: "Only register marketing images and sales price because environmental data is not relevant.", correct: false, why: "Wrong: environmental impact, materials and production process are central.", whyExtended: ["A product passport is not only a sales catalog. It is documentation that can support circular value chains."] },
         { text: "Replace LCA and EPD with oral assessments without traceable data.", correct: false, why: "Wrong: the lecture connects circular economy to standardized analyses and documentation.", whyExtended: ["LCA, EPD, MFA and DPP point toward a more structured data basis, not less."] }
+      ],
+      whyExtendedImageRefs: [
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -752,7 +780,8 @@ export const mockExamSustainability_en = {
         { text: "Drive innovation, where new technologies make new solutions possible.", correct: true, why: "Correct: the lecture mentions drive innovation through new technologies.", whyExtended: ["Sustainability transitions can require new technologies, new services and new ways of organizing work.", "This connects sustainability to innovation, not only reporting and compliance."] },
         { text: "Electronic waste, where more digital technology automatically makes waste handling sustainable.", correct: false, why: "Wrong: electronic waste is a negative environmental consequence of ICT, not a support form in the list on slide 3.", whyExtended: ["The lecture points out that digital technology also has negative environmental impacts.", "E-waste shows that ICT is not only virtual, but also consists of material artefacts."] },
         { text: "Energy consumption, where more digital infrastructure by itself creates lower emissions.", correct: false, why: "Wrong: energy consumption is a possible negative effect, not an automatic sustainability contribution.", whyExtended: ["Digital solutions can reduce waste in some contexts.", "But data centers, networks, devices and digital infrastructure also use energy."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 26,
@@ -774,7 +803,8 @@ export const mockExamSustainability_en = {
         { id: "reduce-waste", description: "Digital systems are used to reduce waste through better governance and decisions.", correctCardId: "optimization", correctLabel: "Optimization", whyCorrect: "Optimization concerns reducing waste.", whyWrong: "This explanation is not primarily about measurement or new technologies. It concerns better resource use.", whyExtended: ["Optimization can concern routes, logistics, energy use, inventory management or process flow.", "The sustainability point is that better use of data can reduce unnecessary resource use."] },
         { id: "informing-action", description: "Data is collected and used to inform action.", correctCardId: "monitoring", correctLabel: "Monitoring", whyCorrect: "Monitoring concerns measurement as a basis for action.", whyWrong: "This explanation concerns making conditions visible through data, not replacing physical activity.", whyExtended: ["Monitoring can make emissions, consumption or deviations measurable.", "This can support reporting, governance and practical improvement measures."] },
         { id: "new-technologies", description: "New technologies open up new solutions, services or ways of working.", correctCardId: "drive-innovation", correctLabel: "Drive innovation", whyCorrect: "Drive innovation means that new technologies can enable new solutions.", whyWrong: "This explanation concerns innovation, not only efficiency in existing processes.", whyExtended: ["Sustainability transitions can require new digital solutions and new organizational practices.", "This makes sustainability relevant for IT management, strategy and innovation work."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 27,
@@ -827,7 +857,8 @@ export const mockExamSustainability_en = {
             "IT managers therefore need to understand how sustainability policy is operationalized through reporting."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 28,
@@ -880,8 +911,9 @@ export const mockExamSustainability_en = {
             "When policy relies on data reporting, IT systems and data governance become part of sustainability work."
           ]
         }
-      ]
+      ],
 
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     }
   ]
 };

@@ -23,7 +23,10 @@ export const mockExam2_no = {
       answerKey: "Digitalization / digitalisering",
       source: "Fasit: Forelesning 7, D4D building blocks, slide 'What is the difference between digitization, digitalization and digital transformation?'.",
       whyCorrect: "**Digitalization** er definert som sosioteknisk endring, i motsetning til **digitization** som er ren teknisk konvertering fra **analogt til digitalt**.",
-      whyWrong: "**Digitization** er feil fordi det bare handler om teknisk konvertering (f.eks. papir til PDF). **Digital transformation** er for bredt. Det beskriver en hel **organisasjonsendring** over tid."
+      whyWrong: "**Digitization** er feil fordi det bare handler om teknisk konvertering (f.eks. papir til PDF). **Digital transformation** er for bredt. Det beskriver en hel **organisasjonsendring** over tid.",
+      whyExtendedImageRefs: [
+        "D4D-overview"
+      ]
     },
     {
       id: 102,
@@ -77,6 +80,9 @@ export const mockExam2_no = {
             "**Replication** og **coordination** er motsetninger: **replication** har **høy standardisering** + **lav integrasjon**, **coordination** har **lav standardisering** + **høy integrasjon**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -128,6 +134,9 @@ export const mockExam2_no = {
             "**Diversification** passer for konglomerater med helt ulike forretningsområder og ingen behov for verken datadeling eller prosessstandardisering."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -145,7 +154,11 @@ export const mockExam2_no = {
       answerKey: "digital(e) / digital technologies",
       source: "Fasit: Forelesning 14, slide 'What is a digital transformation'.",
       whyCorrect: "Riktig fordi definisjonen eksplisitt knytter **digital transformation** til extensive use of digital technologies.",
-      whyWrong: "Galt hvis svaret peker på bare 'nye **prosesser**' eller 'ledelse'. **Teknologi** er en sentral driver/enabler i definisjonen."
+      whyWrong: "Galt hvis svaret peker på bare 'nye **prosesser**' eller 'ledelse'. **Teknologi** er en sentral driver/enabler i definisjonen.",
+      whyExtendedImageRefs: [
+        "digital_strategy_model",
+        "D4D-overview"
+      ]
     },
     {
       id: 105,
@@ -206,6 +219,9 @@ export const mockExam2_no = {
             "Forelesning 14 definerer **digital strategy** som 'an organizational **strategy** formulated and executed by leveraging digital resources to create differential value'. Det handler om retning, ikke **prosessdiagrammer**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
       ]
     },
     {
@@ -260,6 +276,9 @@ export const mockExam2_no = {
             "**Weill & Ross**' **governance**-**rammeverk** er utviklet for bruk i alle organisasjonstyper."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "decision_rights_matrix"
       ]
     },
     {
@@ -313,6 +332,9 @@ export const mockExam2_no = {
             "**Weill & Ross** (2005) publiserte nettopp denne matrise-tilnærmingen i MIT Sloan **Management** **Review**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "it_governance_matrix"
       ]
     },
     {
@@ -384,6 +406,9 @@ export const mockExam2_no = {
             "**IT governance** handler om **beslutningsrettigheter** for IT-relaterte spørsmål, ikke om merkevarebygging."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -427,11 +452,7 @@ export const mockExam2_no = {
             "**D4D** sin **dual transformation** skiller mellom architecture (**OB**, **DP**) og **governance** (**SCI**, **AF**). Dette er et sentralt organiseringsprinsipp i boken."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -462,7 +483,11 @@ export const mockExam2_no = {
       answerKey: "sirkulasjon / circulation",
       source: "Fasit: Forelesning 15, slide 'The circular economy'.",
       whyCorrect: "Riktig fordi **sirkulasjon**/**circulation** er kjernen i **circular economy**-definisjonen.",
-      whyWrong: "Galt hvis svaret handler om 'produksjon' eller 'forbruk'. Poenget er at ting holdes i omløp."
+      whyWrong: "Galt hvis svaret handler om 'produksjon' eller 'forbruk'. Poenget er at ting holdes i omløp.",
+      whyExtendedImageRefs: [
+        "what_is_circular_economy",
+        "circular_economy_loop"
+      ]
     },
     {
       id: 111,
@@ -513,6 +538,10 @@ export const mockExam2_no = {
             "Å forveksle **Scope 1** og 2 er en vanlig feil. Husk at '1' = direkte/eget, '2' = indirekte/**innkjøpt energi**."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -564,6 +593,9 @@ export const mockExam2_no = {
             "**Twin transitions** handler om **digital transformasjon** + **bærekraftstransisjon**. To makrotrender som påvirker samfunnet."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "twin_transitions"
       ]
     },
     {
@@ -616,6 +648,9 @@ export const mockExam2_no = {
             "**Design thinking** og **Scrum**/**agile** utfyller hverandre: **design thinking** utforsker problemet, **agile** bygger løsningen iterativt."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "double_diamond_model"
       ]
     },
     {
@@ -633,7 +668,11 @@ export const mockExam2_no = {
       answerKey: "kostnad / cost",
       source: "Fasit: Forelesning 4, slide 'The triple constraint'.",
       whyCorrect: "Riktig fordi **triple constraint** består av **scope**, **time** og **cost**.",
-      whyWrong: "Galt hvis svaret peker på kvalitet, risiko eller ressurser."
+      whyWrong: "Galt hvis svaret peker på kvalitet, risiko eller ressurser.",
+      whyExtendedImageRefs: [
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
+      ]
     },
     {
       id: 115,
@@ -687,6 +726,9 @@ export const mockExam2_no = {
             "I **TOGAF** sin **ADM** er **Technology Architecture** steg D. Det bygger på de øvrige lagene."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -710,11 +752,7 @@ export const mockExam2_no = {
             "Kursoppsummeringen beskriver dette som 'tighter relation between decision making and decision impact'."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -728,11 +766,7 @@ export const mockExam2_no = {
             "Datadrevet styring gir teamene **autonomi** i hvordan de oppnår målene, mens **alignment** sikres gjennom felles målsetninger."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -746,11 +780,7 @@ export const mockExam2_no = {
             "Kursoppsummeringen beskriver **AF** som 'enabling creativity while avoiding chaos'. Tillit balanseres med **alignment**-mekanismer."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -818,6 +848,9 @@ export const mockExam2_no = {
             "**D4D**-oppsummeringen sier også 'choose metrics that inspire people'. Inspirasjon og tydelighet er positivt."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "D4D-overview"
       ]
     },
     {
@@ -834,7 +867,10 @@ export const mockExam2_no = {
       answerKey: "tilstrekkelig / sufficient",
       source: "Fasit: Forelesning 2, slide 16.",
       whyCorrect: "Riktig fordi Porter-forelesningen sier at **OE** er nødvendig men ikke **tilstrekkelig**.",
-      whyWrong: "Galt hvis svaret antyder at **OE** er helt unødvendig eller at **OE** alene er **strategi**."
+      whyWrong: "Galt hvis svaret antyder at **OE** er helt unødvendig eller at **OE** alene er **strategi**.",
+      whyExtendedImageRefs: [
+        "digital_strategy_model"
+      ]
     },
     {
       id: 119,
@@ -865,7 +901,7 @@ export const mockExam2_no = {
             "**API-tilgang** til **data** er en forutsetning for **rask konfigurering** av nye digitale tilbud."
           ],
           whyExtendedImageRefs: [
-              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+              "DP"
             ]
         },
         {
@@ -913,11 +949,7 @@ export const mockExam2_no = {
             "Forelesning 9 sier at 'Building an **OB** is a long-term Commitment'. Det er noe man må starte med tidlig."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -931,11 +963,7 @@ export const mockExam2_no = {
             "Roadmapen anbefaler også å 'synchronize customer insights and **DP** development'. **SCI** og **DP** bør utvikles i takt."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -949,11 +977,7 @@ export const mockExam2_no = {
             "Å åpne en umoden plattform for eksterne utviklere ville skape problemer med kvalitet, sikkerhet og pålitelighet."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -1000,11 +1024,7 @@ export const mockExam2_no = {
             "Uten **boundary resources** har ikke eksterne parter noen strukturert måte å interagere med plattformen på."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1079,6 +1099,9 @@ export const mockExam2_no = {
             "Forelesning 15 bruker det norske begrepet '**dobbel vesentlighet**' som oversettelse. **Vesentlighet**, ikke materialitet."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "double_materiality"
       ]
     },
     {
@@ -1096,7 +1119,10 @@ export const mockExam2_no = {
       answerKey: "umiddelbar / immediate",
       source: "Fasit: Forelesning 4, slide om Cynefin: 'In a chaotic situation, there is typically an emergency which requires immediate action to move into a more stable state.'",
       whyCorrect: "Riktig fordi **chaotic-domenet** kjennetegnes av nødsituasjoner der man må handle umiddelbart.",
-      whyWrong: "Galt hvis svaret handler om '**analyse**' eller '**eksperimentering**'. I kaos er det for sent for grundig **analyse**. Man må stabilisere først."
+      whyWrong: "Galt hvis svaret handler om '**analyse**' eller '**eksperimentering**'. I kaos er det for sent for grundig **analyse**. Man må stabilisere først.",
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
+      ]
     },
     {
       id: 124,
@@ -1118,11 +1144,7 @@ export const mockExam2_no = {
             "Dette krever **integrerte systemer** og **standardiserte prosesser**. Kjernen i **OB**-definisjonen."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1135,11 +1157,7 @@ export const mockExam2_no = {
             "Pålitelige kjernedata er en forutsetning for **Digital Platform**. **Data components** i **DP** bygger på **data** fra **OB**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1152,11 +1170,7 @@ export const mockExam2_no = {
             "**Automatisering** erstatter manuelt, repetitivt arbeid med digitaliserte **prosesser**. Det er 'the essence of **digitization**: produce an **OB** that replaces individual heroes with **digitized processes**'."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1224,6 +1238,9 @@ export const mockExam2_no = {
             "**CIO toolbox-modellen** bruker **management fashion**-konseptet som en advarsel om å ikke adoptere **rammeverk** ukritisk."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "cynefin_theory_of_everything"
       ]
     }
   ]

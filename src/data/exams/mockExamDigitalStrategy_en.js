@@ -40,11 +40,7 @@ export const mockExamDigitalStrategy_en = {
             "Leaders therefore need to understand the characteristics, opportunities, prerequisites and consequences of digital technology."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "digital_strategy_definition"
-            }
+            "digital_strategy_definition"
           ]
         },
         {
@@ -131,11 +127,7 @@ export const mockExamDigitalStrategy_en = {
         }
       ],
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "digital_strategy_model"
-        }
+        "digital_strategy_model"
       ]
     },
     {
@@ -159,11 +151,7 @@ export const mockExamDigitalStrategy_en = {
         "Digital resources can include technology, data, digital components, platforms and competencies used to create new or differentiating value."
       ],
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "digital_strategy_definition"
-        }
+        "digital_strategy_definition"
       ]
     },
     {
@@ -185,11 +173,7 @@ export const mockExamDigitalStrategy_en = {
             "In the Nordic Choice/Strawberry case, this is expressed as the ambition of 'the best digital guest journey in the Nordic market'."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "digital_strategy_content"
-            }
+            "digital_strategy_content"
           ]
         },
         {
@@ -347,11 +331,7 @@ export const mockExamDigitalStrategy_en = {
         }
       },
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "macro_meso_micro_impact"
-        }
+        "macro_meso_micro_impact"
       ]
     },
     {
@@ -404,7 +384,8 @@ export const mockExamDigitalStrategy_en = {
             "The lecture moves the leader perspective from procurement to strategic questions about characteristics, opportunities, prerequisites and consequences."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_strategy_content"]
     },
     {
       "id": 7,
@@ -435,11 +416,7 @@ export const mockExamDigitalStrategy_en = {
             "Kane et al.’s point is that people, culture, structure and tasks must be aligned with the technology."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "digital_transformation_process"
-            }
+            "digital_transformation_process"
           ]
         },
         {
@@ -543,11 +520,7 @@ export const mockExamDigitalStrategy_en = {
         "The point is to connect the need for change, strategic direction, concrete initiatives, resources and organizational responsibility."
       ],
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "digital_transformation_process"
-        }
+        "digital_transformation_process"
       ]
     },
     {
@@ -597,7 +570,8 @@ export const mockExamDigitalStrategy_en = {
             "The lecture later uses culture as a central barrier theme."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_transformation_process"]
     },
     {
       "id": 10,
@@ -617,11 +591,7 @@ export const mockExamDigitalStrategy_en = {
             "Top-down digital strategy can provide direction, prioritization and coordination."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "digital_transformation_process"
-            }
+            "digital_transformation_process"
           ]
         },
         {
@@ -677,11 +647,7 @@ export const mockExamDigitalStrategy_en = {
             "This connects the barriers section directly back to the digital strategy section of the lecture."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "digital_transformation_barriers"
-            }
+            "digital_transformation_barriers"
           ]
         },
         {
@@ -840,16 +806,8 @@ export const mockExamDigitalStrategy_en = {
         }
       },
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "digital_transformation_barriers"
-        },
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "culture_for_digitalization"
-        }
+        "digital_transformation_barriers",
+        "culture_for_digitalization"
       ]
     },
     {
@@ -881,11 +839,7 @@ export const mockExamDigitalStrategy_en = {
             "Culture is therefore an enabler or obstacle for digital maturity."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "culture_for_digitalization"
-            }
+            "culture_for_digitalization"
           ]
         },
         {
@@ -929,11 +883,7 @@ export const mockExamDigitalStrategy_en = {
         "Inertia can be necessary and positive because it provides stability, but it can also become a barrier to digital transformation."
       ],
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "organizational_inertia_definition"
-        }
+        "organizational_inertia_definition"
       ]
     },
     {
@@ -1080,11 +1030,7 @@ export const mockExamDigitalStrategy_en = {
         }
       },
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "organizational_inertia_levels"
-        }
+        "organizational_inertia_levels"
       ]
     },
     {
@@ -1105,11 +1051,7 @@ export const mockExamDigitalStrategy_en = {
             "Inertia must first be made visible and understandable before it can be changed."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "addressing_inertia"
-            }
+            "addressing_inertia"
           ]
         },
         {
@@ -1172,11 +1114,7 @@ export const mockExamDigitalStrategy_en = {
             "Digital transformation happens across functions and levels, so leadership cannot be isolated to the top alone."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "leadership_role_digital_transformation"
-            }
+            "leadership_role_digital_transformation"
           ]
         },
         {
@@ -1287,16 +1225,8 @@ export const mockExamDigitalStrategy_en = {
         }
       ],
       "whyExtendedImageRefs": [
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "cdo_roles"
-        },
-        {
-          "moduleId": "strategy",
-          "groupId": "digital-strategy",
-          "imageId": "cdo_contribution"
-        }
+        "cdo_roles",
+        "cdo_contribution"
       ]
     },
     {
@@ -1319,16 +1249,8 @@ export const mockExamDigitalStrategy_en = {
             "The whole organization must therefore understand both the big picture and local contributions."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "whole_organization_involvement"
-            },
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "organization_as_network_groups"
-            }
+            "whole_organization_involvement",
+            "organization_as_network_groups"
           ]
         },
         {
@@ -1377,16 +1299,8 @@ export const mockExamDigitalStrategy_en = {
             "This fits especially when digital initiatives must be coordinated across the organization."
           ],
           "whyExtendedImageRefs": [
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "cdo_roles"
-            },
-            {
-              "moduleId": "strategy",
-              "groupId": "digital-strategy",
-              "imageId": "cdo_contribution"
-            }
+            "cdo_roles",
+            "cdo_contribution"
           ]
         },
         {

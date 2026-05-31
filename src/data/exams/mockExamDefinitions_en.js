@@ -94,7 +94,8 @@ export const mockExamDefinitions_en = {
           why: "Wrong: this describes organization of the IT function, not necessarily transformation.",
           whyExtended: ["An IT department can support transformation, but it is not digital transformation in itself."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["digital_transformation_process"]
     },
     {
       id: 3,
@@ -150,7 +151,8 @@ export const mockExamDefinitions_en = {
         { id: "togaf-structure", description: "The structure of components, their relationships, and principles/guidelines for design and evolution over time", correctCardId: "togaf-structure", correctLabel: "TOGAF structural definition", whyCorrect: "This is the more structural TOGAF definition of architecture.", whyWrong: "The keywords are components, interrelationships, principles and guidelines.", whyExtended: ["This definition is useful when understanding system structure and development over time."] },
         { id: "fowler", description: "Architecture is 'the important stuff'", correctCardId: "fowler", correctLabel: "Fowler perspective", whyCorrect: "Fowler is known for a pragmatic view: architecture is the important stuff that is hard to change.", whyWrong: "This is not TOGAF's formal definition, but Fowler's more practical perspective.", whyExtended: ["The Fowler perspective is more collaborative and less top-down than classical enterprise architecture."] },
         { id: "enterprise-architecture", description: "Holistic work to integrate fragmented processes/systems so they support strategy and change", correctCardId: "enterprise-architecture", correctLabel: "Enterprise Architecture", whyCorrect: "Enterprise Architecture concerns the whole across the organization.", whyWrong: "This definition concerns portfolio, processes and strategy at enterprise level.", whyExtended: ["TOGAF is one framework for Enterprise Architecture."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 5,
@@ -162,7 +164,8 @@ export const mockExamDefinitions_en = {
       answerKey: "design",
       source: "Answer key: IN5431, IT Architecture.",
       whyCorrect: "Architecture is fundamentally about the design of systems.",
-      whyWrong: "The central word is design. Architecture is not just documentation, code or operations."
+      whyWrong: "The central word is design. Architecture is not just documentation, code or operations.",
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 6,
@@ -178,7 +181,8 @@ export const mockExamDefinitions_en = {
         { text: "Structure of components and their interrelationships.", correct: true, why: "Correct: components and relationships are central in the structural definition.", whyExtended: ["This part points to system structure."] },
         { text: "Only the source code structure of one application.", correct: false, why: "Wrong: TOGAF/EA is broader than source code in one application.", whyExtended: ["Architecture may cover business, data, applications, technology and lifecycle."] },
         { text: "Only project budget and timeline.", correct: false, why: "Wrong: budget and timeline are project management, not the definition of architecture.", whyExtended: ["Project plans may be affected by architecture, but they are not architecture definitions."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 7,
@@ -198,7 +202,8 @@ export const mockExamDefinitions_en = {
         { id: "data-architecture", description: "Logical and physical data assets and data management resources", correctCardId: "data-architecture", correctLabel: "Data Architecture", whyCorrect: "Data Architecture concerns data resources and how they are managed.", whyWrong: "The keyword is data resources, not applications or infrastructure.", whyExtended: ["Data Architecture is important for integration and information flow across the organization."] },
         { id: "application-architecture", description: "Applications, their interactions and their relationship to business processes", correctCardId: "application-architecture", correctLabel: "Application Architecture", whyCorrect: "Application Architecture describes the application portfolio and how applications support processes.", whyWrong: "This explanation concerns applications and their interaction.", whyExtended: ["This is where we see how systems support business needs."] },
         { id: "technology-architecture", description: "Software, hardware, infrastructure, middleware, networks and standards", correctCardId: "technology-architecture", correctLabel: "Technology Architecture", whyCorrect: "Technology Architecture describes the technical infrastructure that applications and data build on.", whyWrong: "The keywords are infrastructure, networks, middleware and technical standards.", whyExtended: ["This layer is the foundation for operations, integration and technical capabilities."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_arkitekturtaksonomi"]
     },
     {
       id: 8,
@@ -212,7 +217,8 @@ export const mockExamDefinitions_en = {
         { text: "Agile Delivery Model — a method for sprint planning.", correct: false, why: "Wrong: this confuses TOGAF with agile delivery.", whyExtended: ["Scrum/SAFe are more relevant to agile delivery."] },
         { text: "Application Data Matrix — a table for data quality.", correct: false, why: "Wrong: ADM does not mean Application Data Matrix in TOGAF.", whyExtended: ["TOGAF has models and artifacts, but ADM means Architecture Development Method."] },
         { text: "Automated Decision Management — a system for automated decisions.", correct: false, why: "Wrong: this is not TOGAF's ADM.", whyExtended: ["TOGAF concerns architecture work, not automated decision management as such."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_adm_en"]
     },
     {
       id: 9,
@@ -228,7 +234,8 @@ export const mockExamDefinitions_en = {
         { text: "The Fowler perspective is more collaborative and decentralized.", correct: true, why: "Correct: the curriculum places Fowler closer to collaboration and decentralized orientation.", whyExtended: ["This may fit better with agile ways of working."] },
         { text: "Fowler is mainly a framework for project governance.", correct: false, why: "Wrong: project governance is more PRINCE2 than Fowler.", whyExtended: ["Fowler is relevant in discussions of software architecture."] },
         { text: "TOGAF is mainly a framework for IT Service Management.", correct: false, why: "Wrong: IT Service Management belongs to ITIL, not TOGAF.", whyExtended: ["TOGAF concerns Enterprise Architecture."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["togaf_levels_model"]
     },
     {
       id: 10,
@@ -248,7 +255,8 @@ export const mockExamDefinitions_en = {
         { id: "management", description: "Makes and implements decisions within the governance structure", correctCardId: "management", correctLabel: "Management", whyCorrect: "Management is about leading and executing work within governance frames.", whyWrong: "This describes execution and leadership, not distribution of decision rights.", whyExtended: ["Governance sets the frames; management acts within the frames."] },
         { id: "accountability", description: "Being answerable for results and consequences", correctCardId: "accountability", correctLabel: "Accountability", whyCorrect: "Accountability means that someone is held responsible for the outcome.", whyWrong: "The keyword is responsibility for outcomes, not just the right to decide.", whyExtended: ["In D4D, the Accountability Framework concerns responsibility for digital offerings and components."] },
         { id: "decision-rights", description: "Authority to make or contribute to specific decisions", correctCardId: "decision-rights", correctLabel: "Decision rights", whyCorrect: "Decision rights describe who has the authority to make or contribute to decisions.", whyWrong: "This is about decision authority, not general accountability or operations.", whyExtended: ["Weill & Ross use decision rights as a core idea in IT governance."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["decision_rights_matrix"]
     },
     {
       id: 11,
@@ -262,7 +270,8 @@ export const mockExamDefinitions_en = {
         { text: "Letting the IT department make all decisions alone.", correct: false, why: "Wrong: this describes one possible archetype, IT monarchy, not governance as a whole.", whyExtended: ["Governance may be business monarchy, federal, duopoly, feudal, anarchy and so on."] },
         { text: "Writing source code faster.", correct: false, why: "Wrong: this is more about development practice than governance.", whyExtended: ["Governance is about decision rights and accountability."] },
         { text: "Choosing programming languages for every project.", correct: false, why: "Wrong: it may be a technical decision, but it is not the definition of IT governance.", whyExtended: ["The governance question is who should have authority to make such decisions."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["it_governance_matrix"]
     },
     {
       id: 12,
@@ -284,7 +293,8 @@ export const mockExamDefinitions_en = {
         { id: "it-infrastructure", description: "Shared technical services, networks, platforms and standards", correctCardId: "it-infrastructure", correctLabel: "IT infrastructure strategies", whyCorrect: "IT infrastructure strategies concern shared technical services and infrastructure.", whyWrong: "This is about technical foundations, not specific business application requests.", whyExtended: ["Infrastructure decisions affect scalability, security and standardization."] },
         { id: "business-application-needs", description: "Business units' needs for applications and functionality", correctCardId: "business-application-needs", correctLabel: "Business application needs", whyCorrect: "Business application needs start from the application needs of business units.", whyWrong: "This is about business demand for application functionality, not infrastructure principles.", whyExtended: ["This domain concerns what applications the business needs to perform its work."] },
         { id: "it-investment", description: "Prioritizing and funding IT initiatives", correctCardId: "it-investment", correctLabel: "IT investment", whyCorrect: "IT investment concerns which IT initiatives receive funding and priority.", whyWrong: "This explanation concerns money and prioritization, not technical architecture.", whyExtended: ["It connects closely to Business case and Alternative analysis."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["Domene_modell_IT_beslutninger_spm"]
     },
     {
       id: 13,
@@ -308,7 +318,8 @@ export const mockExamDefinitions_en = {
         { id: "federal", description: "Corporate leadership and business units share decision-making", correctCardId: "federal", correctLabel: "Federal", whyCorrect: "Federal combines central and local representation.", whyWrong: "The analogy is central government and states.", whyExtended: ["It tries to balance enterprise-wide alignment and local needs."] },
         { id: "it-duopoly", description: "IT leaders and one business group jointly make decisions", correctCardId: "it-duopoly", correctLabel: "IT duopoly", whyCorrect: "IT duopoly combines IT leadership with business representatives.", whyWrong: "The key is a two-party structure involving IT and business.", whyExtended: ["It is often used when IT expertise and business ownership both matter."] },
         { id: "anarchy", description: "Individuals or small groups make their own IT decisions", correctCardId: "anarchy", correctLabel: "Anarchy", whyCorrect: "Anarchy is the most decentralized archetype.", whyWrong: "This is not coordinated governance, but individual/local decision-making.", whyExtended: ["It may allow flexibility, but creates high risk of duplication and fragmentation."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["decision_rights_matrix"]
     },
     {
       id: 14,
@@ -320,7 +331,8 @@ export const mockExamDefinitions_en = {
       answerKey: "activities",
       source: "Answer key: IN5431, Business processes and IT Architecture.",
       whyCorrect: "A business process consists of activities with logical order and dependencies.",
-      whyWrong: "The key term is activities. A process is not just a system, an organization chart or a document."
+      whyWrong: "The key term is activities. A process is not just a system, an organization chart or a document.",
+      whyExtendedImageRefs: ["umbrella_heaven_ordering_process"]
     },
     {
       id: 15,
@@ -344,7 +356,8 @@ export const mockExamDefinitions_en = {
         { id: "sequence-flow", description: "The arrow/flow that shows the order of activities", correctCardId: "sequence-flow", correctLabel: "Sequence flow", whyCorrect: "Sequence flow shows order and dependency between activities.", whyWrong: "This is the flow between steps, not the actor or the task itself.", whyExtended: ["The flow indicates logical order and dependency."] },
         { id: "manual-activity", description: "An activity performed manually by a person", correctCardId: "manual-activity", correctLabel: "Manual activity", whyCorrect: "A manual activity is performed by a human actor.", whyWrong: "The keyword is manual.", whyExtended: ["Process models often distinguish manual and automated activities."] },
         { id: "automatic-activity", description: "An activity performed automatically by a system", correctCardId: "automatic-activity", correctLabel: "Automatic activity", whyCorrect: "An automatic activity is performed by a system.", whyWrong: "The keyword is automatic/system-executed.", whyExtended: ["Automated activities are important for understanding the link between process and IT systems."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["umbrella_heaven_and_process_model"]
     },
     {
       id: 16,
@@ -358,7 +371,8 @@ export const mockExamDefinitions_en = {
         { text: "Because process models replace strategy.", correct: false, why: "Wrong: process models support analysis and change, but do not replace strategy.", whyExtended: ["Strategy says what the organization should achieve; process models help understand how work is performed."] },
         { text: "Because all processes should always be fully automated.", correct: false, why: "Wrong: the curriculum does not say that all processes should be automated.", whyExtended: ["The point is to understand processes and assess appropriate changes."] },
         { text: "Because business processes are only technical workflows.", correct: false, why: "Wrong: business processes include people, roles, activities and organization, not only technology.", whyExtended: ["Process analysis is socio-technical."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["umbrella_heaven_and_process_model"]
     },
     {
       id: 17,
@@ -376,7 +390,8 @@ export const mockExamDefinitions_en = {
         { id: "understand", description: "Analyze the problem, context and why the situation is as it is", correctCardId: "understand", correctLabel: "Understand the situation", whyCorrect: "The first step is to understand the situation and root causes.", whyWrong: "This is the analysis phase before solutions are created.", whyExtended: ["Here you consider internal competence, technical assets and cultural factors."] },
         { id: "synthesize", description: "Develop alternative actions or concepts", correctCardId: "synthesize", correctLabel: "Synthesize options", whyCorrect: "The second step is to create alternative concepts or courses of action.", whyWrong: "This is about creating alternatives, not evaluating them yet.", whyExtended: ["The goal is to ensure that relevant alternatives are actually considered."] },
         { id: "evaluate", description: "Compare alternatives and recommend a choice", correctCardId: "evaluate", correctLabel: "Evaluate and propose", whyCorrect: "The third step is evaluation and recommendation.", whyWrong: "This is the step where business case, plus/minus method or other evaluation methods are used.", whyExtended: ["The level of detail should scale with consequence, uncertainty and trust."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["generic_decision_making_process"]
     },
     {
       id: 18,
@@ -402,6 +417,10 @@ export const mockExamDefinitions_en = {
         { id: "npv", description: "Present value of future cash flows minus investment cost", correctCardId: "npv", correctLabel: "NPV", whyCorrect: "NPV compares the present value of future cash flows with the investment cost.", whyWrong: "This is the quantitative Business case calculation.", whyExtended: ["NPV is used to compare alternatives financially."] },
         { id: "discount-rate", description: "The rate used to discount future cash flows to present value", correctCardId: "discount-rate", correctLabel: "Discount rate", whyCorrect: "The discount rate converts future values into present value.", whyWrong: "This is the rate in the NPV calculation, not the total budget.", whyExtended: ["A higher discount rate makes future benefits worth less today."] },
         { id: "risk-premium", description: "An additional discounting premium used to reflect uncertainty", correctCardId: "risk-premium", correctLabel: "Risk premium", whyCorrect: "Risk premium is a risk adjustment that can increase the discount rate.", whyWrong: "This is risk adjustment, not an ordinary cost item.", whyExtended: ["Lecture examples use different risk premiums for different alternatives."] }
+      ],
+      whyExtendedImageRefs: [
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -416,7 +435,8 @@ export const mockExamDefinitions_en = {
         { text: "It removes all project risk.", correct: false, why: "Wrong: the discount rate can reflect risk, but it does not remove it.", whyExtended: ["Estimates are still uncertain."] },
         { text: "It calculates the total budget directly.", correct: false, why: "Wrong: the budget is a cost estimate; the discount rate is used in present value calculation.", whyExtended: ["Discount rate is not the same as total cost."] },
         { text: "It automatically ranks qualitative benefits.", correct: false, why: "Wrong: qualitative benefits must be assessed separately.", whyExtended: ["Business case is more than NPV; non-quantifiable benefits must also be considered."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["NPV_formula"]
     },
     {
       id: 20,
@@ -452,7 +472,8 @@ export const mockExamDefinitions_en = {
         "security": { whyCorrect: "Security benefits are often important but hard to value precisely.", whyWrong: "Security is not always easily quantifiable in advance.", whyExtended: ["It can reduce risk, but risk reduction is difficult to estimate perfectly."] },
         "safety": { whyCorrect: "Safety may be critical even if it is not easily converted into money.", whyWrong: "Safety is often a non-quantifiable benefit.", whyExtended: ["Safety can outweigh a purely financial NPV calculation."] },
         "reputation": { whyCorrect: "Reputation can matter greatly but is hard to quantify precisely.", whyWrong: "Better reputation is usually not a direct financial number in the Business case.", whyExtended: ["It may later affect revenue or trust."] }
-      }
+      },
+      whyExtendedImageRefs: ["NPV_formula"]
     },
     {
       id: 21,
@@ -476,6 +497,10 @@ export const mockExamDefinitions_en = {
         { id: "time", description: "Schedule or deadline", correctCardId: "time", correctLabel: "Time", whyCorrect: "Time is the schedule/deadline dimension.", whyWrong: "Time is not budget or scope.", whyExtended: ["Time constraints affect planning and risk."] },
         { id: "cost", description: "Budget or resource limitation", correctCardId: "cost", correctLabel: "Cost", whyCorrect: "Cost is the budget/resource dimension.", whyWrong: "Cost is not scope or schedule.", whyExtended: ["If cost is fixed, changes in scope/time become harder."] },
         { id: "triple-constraint", description: "The tension between scope, time and cost", correctCardId: "triple-constraint", correctLabel: "Triple constraint", whyCorrect: "Triple constraint describes the relationship between scope, time and cost.", whyWrong: "The point is the interaction among all three constraints.", whyExtended: ["When all three are fixed, the project becomes vulnerable."] }
+      ],
+      whyExtendedImageRefs: [
+        "triple_constraint_1",
+        "Triple-Constraint-Explained-1080x1080-1"
       ]
     },
     {
@@ -490,7 +515,8 @@ export const mockExamDefinitions_en = {
         { text: "Because fixed scope, time and cost always guarantee quality.", correct: false, why: "Wrong: fixing all constraints can reduce quality or increase risk.", whyExtended: ["Quality often becomes the hidden variable under pressure."] },
         { text: "Because projects should never have budgets.", correct: false, why: "Wrong: projects need budgets, but unrealistic fixed constraints are risky.", whyExtended: ["The issue is not budgeting itself, but rigidity under uncertainty."] },
         { text: "Because PRINCE2 forbids planning.", correct: false, why: "Wrong: PRINCE2 is strongly concerned with planning and governance.", whyExtended: ["The risk is unrealistic planning, not planning as such."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["triple_constraint_1"]
     },
     {
       id: 23,
@@ -546,7 +572,8 @@ export const mockExamDefinitions_en = {
         { id: "togaf", description: "Enterprise Architecture and ADM", correctCardId: "togaf", correctLabel: "TOGAF", whyCorrect: "TOGAF is a framework for Enterprise Architecture.", whyWrong: "This is architecture work, not IT Service Management.", whyExtended: ["TOGAF uses ADM as its architecture development method."] },
         { id: "itil", description: "IT Service Management", correctCardId: "itil", correctLabel: "ITIL", whyCorrect: "ITIL is a framework for IT Service Management.", whyWrong: "This is not TOGAF or PRINCE2.", whyExtended: ["ITIL concerns service management, operations and service delivery."] },
         { id: "prosci-adkar", description: "Change management", correctCardId: "prosci-adkar", correctLabel: "Prosci / ADKAR", whyCorrect: "Prosci/ADKAR are change management models.", whyWrong: "This concerns organizational change, not Enterprise Architecture.", whyExtended: ["Change management is relevant for IT management, but outside the main CIO Toolbox table."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["framewoks_and_best_practices"]
     },
     {
       id: 25,
@@ -588,7 +615,8 @@ export const mockExamDefinitions_en = {
         prince2: { whyCorrect: "PRINCE2 belongs to projects and organizing development.", whyWrong: "PRINCE2 is a project framework.", whyExtended: ["It is used for project governance and management."] },
         scrum: { whyCorrect: "Scrum belongs to agile/product development methods.", whyWrong: "Scrum is not an Enterprise Architecture framework.", whyExtended: ["It organizes work in sprints."] },
         "weill-ross": { whyCorrect: "The Weill & Ross matrix belongs to IT governance.", whyWrong: "It concerns decision domains and governance archetypes.", whyExtended: ["It is used to analyze who should make IT decisions."] }
-      }
+      },
+      whyExtendedImageRefs: ["framewoks_and_best_practices"]
     },
     {
       id: 26,
@@ -610,7 +638,8 @@ export const mockExamDefinitions_en = {
         { id: "digital-platform", description: "A repository of business, data and infrastructure components used to rapidly configure digital offerings", correctCardId: "digital-platform", correctLabel: "Digital Platform", whyCorrect: "Digital Platform is a repository of reusable components for digital offerings.", whyWrong: "This is about internal reusable components, not only core transaction processing.", whyExtended: ["It enables rapid innovation and continuous feature enhancement."] },
         { id: "accountability-framework", description: "Distribution of responsibilities for digital offerings and components that balances autonomy and alignment", correctCardId: "accountability-framework", correctLabel: "Accountability Framework", whyCorrect: "Accountability Framework distributes responsibility and balances autonomy with alignment.", whyWrong: "This concerns roles, responsibility and decision-making, not data components.", whyExtended: ["It should enable innovation without chaos."] },
         { id: "external-developer-platform", description: "A repository of digital components open to external parties", correctCardId: "external-developer-platform", correctLabel: "External Developer Platform", whyCorrect: "External Developer Platform opens digital components to partners or external developers.", whyWrong: "The key is external access through APIs or boundary resources.", whyExtended: ["It can extend the portfolio of digital offerings through ecosystem partners."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["D4D-overview"]
     },
     {
       id: 27,
@@ -632,7 +661,8 @@ export const mockExamDefinitions_en = {
         { id: "digital-value-proposition", description: "Use of IT to create new digital offerings that enable new value creation", correctCardId: "digital-value-proposition", correctLabel: "Digital Value Proposition", whyCorrect: "Digital Value Proposition explains the value the digital offering should create.", whyWrong: "This is the value logic, not the technical platform itself.", whyExtended: ["It connects customer need and digital capability."] },
         { id: "smacit", description: "Social, Mobile, Analytics, Cloud and Internet of Things", correctCardId: "smacit", correctLabel: "SMACIT", whyCorrect: "SMACIT is the acronym for key digital technologies in the book.", whyWrong: "This is a technology acronym, not a governance framework.", whyExtended: ["SMACIT technologies enable many digital offerings."] },
         { id: "silos", description: "Organizational structures that optimize local units but hinder cross-company integration and synchronization", correctCardId: "silos", correctLabel: "Silos", whyCorrect: "Silos can block integration and synchronization across the company.", whyWrong: "This is an organizational problem, not a technology acronym.", whyExtended: ["Breaking silos is important for digital offerings that require cross-functional coordination."] }
-      ]
+      ],
+      whyExtendedImageRefs: ["D4D-overview"]
     },
     {
       id: 28,
@@ -657,7 +687,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "The Double Diamond order is Discover → Define → Develop → Deliver.",
       whyExtended: ["The first diamond explores and defines the problem; the second develops and delivers solutions."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -681,7 +711,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "The order is Understand the situation → Synthesize options → Evaluate and propose.",
       whyExtended: ["The process moves from problem understanding to alternatives and then to recommendation."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
+        "generic_decision_making_process"
       ]
     },
     {
@@ -713,7 +743,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "A simplified PRINCE2 order is Starting up → Directing → Initiating → Controlling a stage → Managing product delivery → Managing stage boundaries → Closing.",
       whyExtended: ["PRINCE2 is a project governance and management framework, so the process order is tied to control and accountability."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     },
     {
@@ -747,7 +777,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "The simplified ADM order is Architecture Vision → Business Architecture → Information Systems Architecture → Technology Architecture → Opportunities and Solutions → Migration Planning → Implementation Governance → Architecture Change Management.",
       whyExtended: ["ADM provides a structured lifecycle for architecture work."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
+        "togaf_adm_en"
       ]
     },
     {
@@ -777,7 +807,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "A reasonable order is define the alternative → estimate benefits → estimate costs → assess timing → assess risk/discount rate → compare and recommend.",
       whyExtended: ["Business case is a structured way of making alternatives transparent, not a guarantee of perfectly rational choice."],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
+        "NPV_formula"
       ]
     },
     {
@@ -805,7 +835,7 @@ export const mockExamDefinitions_en = {
       whyCorrect: "A logical management chain is Strategic goals → Strategy → Action plan → Activities/roadmap/estimates → Implementation.",
       whyExtended: ["Strategy gives direction, but must be translated into concrete action.", "The action plan connects strategic choice to responsibility, timeline and resources."],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     }
   ]

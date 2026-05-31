@@ -54,6 +54,9 @@ export const mockExamDigitalTransformation_no = {
             "Definisjonen peker på organisatorisk endring, ikke bare valg av teknologi eller leverandør."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -114,6 +117,9 @@ export const mockExamDigitalTransformation_no = {
             "Hvis endringen ikke berører organisasjonen, er det vanskelig å kalle det digital transformation i denne definisjonen."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -132,6 +138,9 @@ export const mockExamDigitalTransformation_no = {
       whyExtended: [
         "Legg merke til at definisjonen også krever betydelig organisatorisk endring.",
         "Omfattende teknologibruk alene er derfor ikke nok."
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -206,6 +215,9 @@ export const mockExamDigitalTransformation_no = {
             "Digital vision & strategy kommer etter erkjennelsen av at endring er nødvendig."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -278,7 +290,10 @@ export const mockExamDigitalTransformation_no = {
             "Organizational identity kan endres når digitale teknologier endrer virksomhetens rolle og arbeid."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
+      ]
     },
     {
       id: 6,
@@ -372,6 +387,9 @@ export const mockExamDigitalTransformation_no = {
             "Caset inkluderer process redesign, business model innovation og endringer i structure and tasks."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
       ]
     },
     {
@@ -433,7 +451,10 @@ export const mockExamDigitalTransformation_no = {
             "CDO eller digital unit peker på organisering av digital transformation."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "digital_transformation_process"
+      ]
     }
   ]
 };

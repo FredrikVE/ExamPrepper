@@ -60,7 +60,8 @@ export const mockExamSustainability_no = {
             "Å redusere temaet til kommunikasjon overser både innovasjons- og governance-dimensjonen."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 2,
@@ -130,7 +131,8 @@ export const mockExamSustainability_no = {
           whyWrong: "Dette handler ikke om effektivisering, men om sosiale konsekvenser av digitalisering.",
           whyExtended: ["Bærekraft forstås flerdimensjonalt: sosiale virkninger må vurderes sammen med økonomi og miljø."]
         }
-      }
+      },
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 3,
@@ -204,7 +206,8 @@ export const mockExamSustainability_no = {
           whyWrong: "Dette er ikke en enkelt utslippskategori, men et perspektiv på samtidig digital og bærekraftig transformasjon.",
           whyExtended: ["Forelesningen er kritisk: digitale effektiviseringsgevinster må veies mot strømbruk og sjeldne materialer."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 4,
@@ -277,7 +280,7 @@ export const mockExamSustainability_no = {
         "En eksamensnær forståelse er å kunne bruke modellen på konkrete cases, ikke bare gjengi ordene."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -327,7 +330,8 @@ export const mockExamSustainability_no = {
             "Net Zero er knyttet til klimamål, ikke til å prioritere vekst over utslippskutt."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["scope_1_2_3_model"]
     },
     {
       id: 6,
@@ -376,6 +380,10 @@ export const mockExamSustainability_no = {
             "Disse krever dokumentasjon, standarder og data, ikke bare kommunikasjon."
           ]
         }
+      ],
+      whyExtendedImageRefs: [
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -430,6 +438,9 @@ export const mockExamSustainability_no = {
           whyWrong: "Dette er ikke en manuell livsløpsanalyse, men digital produktdokumentasjon.",
           whyExtended: ["Forelesningen knytter DPP til EU og kommende krav for flere produktgrupper, inkludert ICT og elektronikk."]
         }
+      ],
+      whyExtendedImageRefs: [
+        "circular_economy_loop"
       ]
     },
     {
@@ -472,6 +483,10 @@ export const mockExamSustainability_no = {
           why: "Galt: sirkulærøkonomi krever mer, ikke mindre, informasjon om materialer og produkter.",
           whyExtended: ["Uten materialdata blir reparasjon, gjenbruk, sortering og dokumentasjon vanskeligere."]
         }
+      ],
+      whyExtendedImageRefs: [
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -746,7 +761,8 @@ export const mockExamSustainability_no = {
           why: "Galt: sammenligningen er eksplisitt knyttet til IT governance.",
           whyExtended: ["Forelesningen viser at finansrapportering drev informasjonssystemer og governance, og spør om CSRD kan få lignende effekt."]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["double_materiality"]
     },
     {
       id: 15,
@@ -818,7 +834,7 @@ export const mockExamSustainability_no = {
         "Dette gjør rapportering til et bredere governance-spørsmål enn tradisjonell finansiell risiko alene."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+        "double_materiality"
       ]
     },
     {
@@ -841,7 +857,7 @@ export const mockExamSustainability_no = {
             "For IT governance betyr det at infrastruktur, beredskap, kostnader og leverandørrisiko kan bli del av bærekraftsrapporteringen."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+            "double_materiality"
           ]
         },
         {
@@ -909,8 +925,8 @@ export const mockExamSustainability_no = {
         "Scope 3 er ofte vanskeligst fordi data ligger utenfor virksomhetens direkte kontroll."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -927,8 +943,8 @@ export const mockExamSustainability_no = {
       whyCorrect: "Scope 3 er definert som alle andre utslipp assosiert med selskapets aktiviteter.",
       whyWrong: "Scope 1 er direkte utslipp fra egne/kontrollerte kilder, og Scope 2 er indirekte utslipp fra kjøpt elektrisitet, varme, damp og kjøling.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -983,6 +999,11 @@ export const mockExamSustainability_no = {
           why: "Galt: sporbarhet, verifikasjon og datakvalitet er sentrale når data får styrings- og rapporteringsfunksjon.",
           whyExtended: ["Uten sporbarhet øker risikoen for feil, grønnvasking og sviktende compliance."]
         }
+      ],
+      whyExtendedImageRefs: [
+        "double_materiality",
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -1118,6 +1139,9 @@ export const mockExamSustainability_no = {
           why: "Galt: digitale løsninger kan ha både direkte, indirekte og verdikjedebaserte utslipp samt sosiale konsekvenser.",
           whyExtended: ["Dobbel vesentlighet og scope 1–3 gjør digitale løsninger relevante for rapportering og styring."]
         }
+      ],
+      whyExtendedImageRefs: [
+        "twin_transitions"
       ]
     },
     {
@@ -1158,6 +1182,10 @@ export const mockExamSustainability_no = {
           why: "Galt: forelesningen kobler sirkulærøkonomi til standardiserte analyser og dokumentasjon.",
           whyExtended: ["LCA, EPD, MFA og DPP peker i retning av mer strukturert datagrunnlag, ikke mindre."]
         }
+      ],
+      whyExtendedImageRefs: [
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -1264,7 +1292,8 @@ export const mockExamSustainability_no = {
             "Men datasentre, nettverk, enheter og digital infrastruktur bruker også energi."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 26,
@@ -1330,7 +1359,8 @@ export const mockExamSustainability_no = {
             "Dette gjør bærekraft relevant for IT-ledelse, strategi og innovasjonsarbeid."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["twin_transitions"]
     },
     {
       id: 27,
@@ -1383,7 +1413,8 @@ export const mockExamSustainability_no = {
             "IT-ledere må derfor forstå hvordan bærekraftspolitikk blir operasjonalisert gjennom rapportering."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     },
     {
       id: 28,
@@ -1436,8 +1467,9 @@ export const mockExamSustainability_no = {
             "Når politikk bygger på datarapportering, blir IT-systemer og datastyring del av bærekraftsarbeidet."
           ]
         }
-      ]
+      ],
 
+      whyExtendedImageRefs: ["sustainability_three_dimensions"]
     }
   ]
 };

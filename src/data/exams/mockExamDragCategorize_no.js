@@ -88,7 +88,12 @@ export const mockExamDragCategorize_no = {
             "Weill & Ross beskriver beslutningsdomener, arketyper og en governance matrix."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "generic_decision_making_process_no",
+        "double_diamond_model",
+        "it_governance_matrix"
+      ]
     },
     {
       id: 2,
@@ -154,7 +159,15 @@ export const mockExamDragCategorize_no = {
             "API-er og boundary resources er typiske mekanismer for ExDP."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "D4D-overview",
+        "OB",
+        "SCI",
+        "DP",
+        "AF",
+        "ExDP"
+      ]
     },
     {
       id: 3,
@@ -220,7 +233,10 @@ export const mockExamDragCategorize_no = {
             "Dette domenet avgjør hvilke initiativer som får ressurser."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "Domene_modell_IT_beslutninger_spm"
+      ]
     },
     {
       id: 4,
@@ -290,7 +306,10 @@ export const mockExamDragCategorize_no = {
             "Governance handler her om å muliggjøre innovasjon uten kaos."
           ]
         }
-      }
+      },
+      whyExtendedImageRefs: [
+        "D4D-overview"
+      ]
     },
     {
       id: 5,
@@ -358,6 +377,9 @@ export const mockExamDragCategorize_no = {
           correctQuadrantId: "low-standardization-high-integration",
           why: "Coordination betyr høy integrasjon, men lav standardisering. Enhetene kan ha ulike prosesser, men må dele informasjon og koordinere på tvers, for eksempel fordi én enhets transaksjoner påvirker en annen."
         }
+      ],
+      whyExtendedImageRefs: [
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -455,7 +477,8 @@ export const mockExamDragCategorize_no = {
             "Dette er den svakeste kombinasjonen. Teamene vet ikke tydelig hva de skal oppnå, og har heller ikke frihet til å handle."
           ]
         }
-      ]
+      ],
+      whyExtendedImageRefs: ["Hackman_authority_matrix"]
     }
   ]
 };
