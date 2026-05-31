@@ -2212,6 +2212,271 @@ export const mockExam4_no = {
       ]
     }
 
+    ,{
+      id: 45,
+      type: "drag-categorize",
+      title: "Cynefin: primærplassering av rammeverk",
+      points: 4,
+      prompt: "Sorter hvert rammeverk eller hver praksis til Cynefin-domenet der det primært hører hjemme. Bruk bare primærplasseringen fra forklaringsfiguren.",
+      source: "Kilde: Cynefin-oversiktsfiguren for IN5431, basert på CIO Toolbox-forelesningene om design thinking, prosjekter, produktteam, IT-arkitektur, IT governance og best practice.",
+      moduleId: "cio-tool-box",
+      groupId: "cynefin",
+      items: [
+        { id: "cynefin-design-thinking", label: "Design thinking" },
+        { id: "cynefin-double-diamond", label: "Double diamond" },
+        { id: "cynefin-experimentation", label: "Eksperimentering" },
+        { id: "cynefin-scrum", label: "Scrum" },
+        { id: "cynefin-product-teams", label: "Produktteam" },
+        { id: "cynefin-agile-methods", label: "Agile methods" },
+        { id: "cynefin-safe", label: "SAFe" },
+        { id: "cynefin-business-case", label: "Business case" },
+        { id: "cynefin-alternative-analysis", label: "Alternative analysis" },
+        { id: "cynefin-it-architecture", label: "IT-arkitektur" },
+        { id: "cynefin-togaf", label: "TOGAF" },
+        { id: "cynefin-bpmn", label: "BPMN" },
+        { id: "cynefin-operating-model", label: "Operating model" },
+        { id: "cynefin-prince2-projects", label: "PRINCE2 / prosjekter" },
+        { id: "cynefin-it-governance", label: "IT governance" },
+        { id: "cynefin-immediate-action", label: "Umiddelbar handling" },
+        { id: "cynefin-crisis-stabilization", label: "Krisestabilisering" },
+        { id: "cynefin-procedures", label: "Prosedyrer" },
+        { id: "cynefin-standardization", label: "Standardisering" },
+        { id: "cynefin-best-practice", label: "Beste praksis" },
+        { id: "cynefin-itil", label: "ITIL" }
+      ],
+      categories: [
+        { id: "complex", label: "Kompleks: uklart problem, løsningen læres frem" },
+        { id: "complicated", label: "Komplisert: problemet kan analyseres av eksperter" },
+        { id: "chaotic", label: "Kaotisk: stabiliser før analyse" },
+        { id: "clear", label: "Tydelig / Clear: kjent årsak-virkning" }
+      ],
+      correctAnswer: {
+        complex: [
+          "cynefin-design-thinking",
+          "cynefin-double-diamond",
+          "cynefin-experimentation",
+          "cynefin-scrum",
+          "cynefin-product-teams",
+          "cynefin-agile-methods",
+          "cynefin-safe"
+        ],
+        complicated: [
+          "cynefin-business-case",
+          "cynefin-alternative-analysis",
+          "cynefin-it-architecture",
+          "cynefin-togaf",
+          "cynefin-bpmn",
+          "cynefin-operating-model",
+          "cynefin-prince2-projects",
+          "cynefin-it-governance"
+        ],
+        chaotic: [
+          "cynefin-immediate-action",
+          "cynefin-crisis-stabilization"
+        ],
+        clear: [
+          "cynefin-procedures",
+          "cynefin-standardization",
+          "cynefin-best-practice",
+          "cynefin-itil"
+        ]
+      },
+      itemFeedback: {
+        "cynefin-design-thinking": {
+          whyCorrect: "Riktig. Design thinking er primært plassert i Kompleks fordi problemet er uklart og må utforskes gjennom brukerinnsikt, prototyping og læring.",
+          whyWrong: "Design thinking skal plasseres i Kompleks. Metoden passer når problemet ikke er gitt på forhånd, og løsningen må læres frem.",
+          whyExtended: [
+            "I komplekse situasjoner er årsak-virkning først synlig etter at man har prøvd noe.",
+            "Design thinking bruker utforskning, problem-reframing, co-design og testing i liten skala.",
+            "Dette passer bedre med probe, sense, respond enn med ren ekspertanalyse eller faste prosedyrer."
+          ]
+        },
+        "cynefin-double-diamond": {
+          whyCorrect: "Riktig. Double diamond er primært plassert i Kompleks fordi den strukturerer utforskning av problemrom og løsningsrom.",
+          whyWrong: "Double diamond skal plasseres i Kompleks. Modellen brukes når man må utforske og lære før løsningen kan fastsettes.",
+          whyExtended: [
+            "Discover og Define åpner og avgrenser problemforståelsen.",
+            "Develop og Deliver åpner og tester løsningsrommet.",
+            "Dette passer i situasjoner der man ikke bare kan analysere seg frem til svaret på forhånd."
+          ]
+        },
+        "cynefin-experimentation": {
+          whyCorrect: "Riktig. Eksperimentering er primært plassert i Kompleks fordi læring skjer gjennom forsøk og respons.",
+          whyWrong: "Eksperimentering skal plasseres i Kompleks. Poenget er å prøve, observere og justere når problemet er uklart.",
+          whyExtended: [
+            "Komplekse problemer krever probe, sense, respond.",
+            "Små eksperimenter gjør det mulig å lære uten å låse seg til en tung plan for tidlig.",
+            "Dette skiller seg fra Komplisert, der eksperter kan analysere seg frem til en god løsning."
+          ]
+        },
+        "cynefin-scrum": {
+          whyCorrect: "Riktig. Scrum er primært plassert i Kompleks i denne figuren fordi korte iterasjoner støtter læring og tilpasning.",
+          whyWrong: "Scrum skal plasseres i Kompleks i denne primærsorteringen. Her vektlegges iterativ læring, ikke bare leveranseplanlegging.",
+          whyExtended: [
+            "Scrum kan inneholde planlegging, men hovedpoenget i denne Cynefin-koblingen er læring gjennom iterasjoner.",
+            "Sprintene gir hyppige muligheter til å inspisere og tilpasse arbeidet.",
+            "Derfor plasseres Scrum sammen med design thinking, produktteam og agile methods."
+          ]
+        },
+        "cynefin-product-teams": {
+          whyCorrect: "Riktig. Produktteam er primært plassert i Kompleks fordi varig eierskap støtter kontinuerlig læring om produkt og brukere.",
+          whyWrong: "Produktteam skal plasseres i Kompleks. I denne figuren handler produktteam om læring, tilpasning og outcome over output.",
+          whyExtended: [
+            "Produktteam eier en digital tjeneste over tid.",
+            "De kan lære fra bruk, data og tilbakemeldinger i stedet for å levere en ferdig definert engangsplan.",
+            "Dette passer når løsningen må utvikles frem gjennom erfaring."
+          ]
+        },
+        "cynefin-agile-methods": {
+          whyCorrect: "Riktig. Agile methods er primært plassert i Kompleks fordi de støtter iterasjon, feedback og læring under usikkerhet.",
+          whyWrong: "Agile methods skal plasseres i Kompleks. Den primære logikken er å arbeide iterativt når behov og løsning ikke er helt kjent.",
+          whyExtended: [
+            "Smidige metoder passer godt når kravene endrer seg eller ikke er fullt forstått.",
+            "Feedback brukes til å justere kursen underveis.",
+            "Dette gjør dem nært koblet til probe, sense, respond."
+          ]
+        },
+        "cynefin-safe": {
+          whyCorrect: "Riktig. SAFe er primært plassert i Kompleks i denne figuren fordi det er koblet til agile methods og læring i større organisasjoner.",
+          whyWrong: "SAFe skal plasseres i Kompleks i denne primærsorteringen. Her vurderes det som scaled agile, ikke som ren top-down planlegging.",
+          whyExtended: [
+            "SAFe kan ha sterke planleggingselementer.",
+            "I denne figuren plasseres det likevel primært sammen med agile methods fordi koblingen er smidig læring i større skala.",
+            "Det er derfor en forenklet primærplassering, ikke en påstand om at SAFe aldri kan ha kompliserte trekk."
+          ]
+        },
+        "cynefin-business-case": {
+          whyCorrect: "Riktig. Business case er primært plassert i Komplisert fordi nytte, kostnad, timing og risiko analyseres før beslutning.",
+          whyWrong: "Business case skal plasseres i Komplisert. Det er et analyseverktøy for situasjoner der man kan vurdere alternativer før man responderer.",
+          whyExtended: [
+            "Et business case brukes til å strukturere vurdering av kostnader, gevinster, tid og risiko.",
+            "Dette forutsetter at problemet kan analyseres på en rimelig måte.",
+            "Derfor passer det med sense, analyze, respond."
+          ]
+        },
+        "cynefin-alternative-analysis": {
+          whyCorrect: "Riktig. Alternative analysis er primært plassert i Komplisert fordi alternativer syntetiseres, vurderes og anbefales gjennom analyse.",
+          whyWrong: "Alternative analysis skal plasseres i Komplisert. Metoden passer når flere valg kan undersøkes og sammenlignes før beslutning.",
+          whyExtended: [
+            "Alternative analysis starter med å forstå situasjonen.",
+            "Deretter lager man alternativer og vurderer dem med metoder som business case, pluss/minus eller real options.",
+            "Dette er typisk ekspertanalyse, ikke krisestabilisering eller ren rutineutførelse."
+          ]
+        },
+        "cynefin-it-architecture": {
+          whyCorrect: "Riktig. IT-arkitektur er primært plassert i Komplisert fordi portefølje, prosesser, data og teknologi må analyseres og struktureres.",
+          whyWrong: "IT-arkitektur skal plasseres i Komplisert. Arkitekturarbeid krever analyse av sammenhenger mellom prosesser, systemer og tekniske valg.",
+          whyExtended: [
+            "IT-arkitektur handler om å analysere og strukturere IT-porteføljen.",
+            "Arbeidet kan kreve ekspertise innen business, data, applikasjon og teknologi.",
+            "Dette passer med Komplisert, der eksperter kan finne god praksis."
+          ]
+        },
+        "cynefin-togaf": {
+          whyCorrect: "Riktig. TOGAF er primært plassert i Komplisert fordi det er et formelt rammeverk for enterprise architecture og arkitekturanalyse.",
+          whyWrong: "TOGAF skal plasseres i Komplisert. Det brukes til strukturert arkitekturarbeid, ikke til umiddelbar stabilisering eller enkel rutineutførelse.",
+          whyExtended: [
+            "TOGAF gir et formelt språk og en metode for enterprise architecture.",
+            "I CIO Toolbox hører det hjemme under IT Architecture.",
+            "Det krever analyse og arkitekturfaglig vurdering."
+          ]
+        },
+        "cynefin-bpmn": {
+          whyCorrect: "Riktig. BPMN er primært plassert i Komplisert fordi prosesser modelleres og analyseres før forbedring.",
+          whyWrong: "BPMN skal plasseres i Komplisert. Det er en modelleringsteknikk for å forstå prosesser, roller og avhengigheter.",
+          whyExtended: [
+            "BPMN gjør forretningsprosesser synlige gjennom aktiviteter, roller, flyt og avhengigheter.",
+            "Modellen brukes for analyse og forbedring av prosesser.",
+            "Dette passer med ekspertanalyse i det kompliserte domenet."
+          ]
+        },
+        "cynefin-operating-model": {
+          whyCorrect: "Riktig. Operating model er primært plassert i Komplisert fordi virksomheten vurderes langs integrasjon og standardisering.",
+          whyWrong: "Operating model skal plasseres i Komplisert. Modellen krever analyse av prosessintegrasjon og prosessstandardisering.",
+          whyExtended: [
+            "Operating model brukes til å forstå eller velge ønsket grad av integration og standardization.",
+            "Det handler om å klassifisere prosesslandskapet og ønsket måltilstand.",
+            "Dette krever analyse, ikke bare umiddelbar handling eller enkel rutinebruk."
+          ]
+        },
+        "cynefin-prince2-projects": {
+          whyCorrect: "Riktig. PRINCE2 / prosjekter er primært plassert i Komplisert fordi prosjektstyring bygger på planlegging, roller og kontroll.",
+          whyWrong: "PRINCE2 / prosjekter skal plasseres i Komplisert. Her er primærlogikken ekspertanalyse, planlegging og strukturert gjennomføring.",
+          whyExtended: [
+            "Prosjekter brukes til å levere bestemte resultater innen tid, kostnad og omfang.",
+            "PRINCE2 gir styringsstruktur med roller, prosesser og kontrollpunkter.",
+            "Dette passer best når arbeidet kan planlegges og analyseres før gjennomføring."
+          ]
+        },
+        "cynefin-it-governance": {
+          whyCorrect: "Riktig. IT governance er primært plassert i Komplisert fordi beslutningsrettigheter og ansvar må analyseres og fordeles.",
+          whyWrong: "IT governance skal plasseres i Komplisert i denne primærsorteringen. Det handler om å designe hvem som tar IT-beslutninger og hvem som holdes ansvarlig.",
+          whyExtended: [
+            "IT governance fordeler decision rights og accountability.",
+            "Det krever analyse av organisasjon, prioriteringer, arkitektur og ansvar.",
+            "Derfor passer det primært med sense, analyze, respond."
+          ]
+        },
+        "cynefin-immediate-action": {
+          whyCorrect: "Riktig. Umiddelbar handling er primært plassert i Kaotisk fordi situasjonen må stabiliseres før analyse gir mening.",
+          whyWrong: "Umiddelbar handling skal plasseres i Kaotisk. I kaos er første steg å handle for å skape nok orden til å forstå situasjonen.",
+          whyExtended: [
+            "I kaotiske situasjoner er det ikke tid til lang analyse først.",
+            "Handlingsmønsteret er act, sense, respond.",
+            "Etter stabilisering kan situasjonen eventuelt flyttes over i et annet domene."
+          ]
+        },
+        "cynefin-crisis-stabilization": {
+          whyCorrect: "Riktig. Krisestabilisering er primært plassert i Kaotisk fordi målet først er å skape kontroll.",
+          whyWrong: "Krisestabilisering skal plasseres i Kaotisk. Før eksperter kan analysere, må situasjonen stabiliseres.",
+          whyExtended: [
+            "Kaos betyr at årsak-virkning ikke kan brukes som grunnlag for rolig analyse i starten.",
+            "Første respons er å stoppe skade, skape kontroll og få oversikt.",
+            "Deretter kan man forstå og respondere mer systematisk."
+          ]
+        },
+        "cynefin-procedures": {
+          whyCorrect: "Riktig. Prosedyrer er primært plassert i Tydelig / Clear fordi årsak-virkning er kjent og handlingen kan standardiseres.",
+          whyWrong: "Prosedyrer skal plasseres i Tydelig / Clear. De passer når situasjonen er kjent og riktig respons allerede er etablert.",
+          whyExtended: [
+            "I tydelige situasjoner kan man forstå, kategorisere og respondere.",
+            "Prosedyrer gjør kjent arbeid repeterbart.",
+            "Feilen er å behandle en rutinesituasjon som om den krever tung analyse eller eksperimentering."
+          ]
+        },
+        "cynefin-standardization": {
+          whyCorrect: "Riktig. Standardisering er primært plassert i Tydelig / Clear fordi kjente prosesser kan gjøres likt og repeterbart.",
+          whyWrong: "Standardisering skal plasseres i Tydelig / Clear. Den passer når man allerede vet hva som fungerer og ønsker lik utførelse.",
+          whyExtended: [
+            "Standardisering reduserer variasjon i kjente prosesser.",
+            "Det gir mening når årsak-virkning er forstått og praksis kan følges.",
+            "Når problemet er uklart, kan for tidlig standardisering derimot hemme læring."
+          ]
+        },
+        "cynefin-best-practice": {
+          whyCorrect: "Riktig. Beste praksis er primært plassert i Tydelig / Clear fordi etablert praksis kan følges direkte.",
+          whyWrong: "Beste praksis skal plasseres i Tydelig / Clear. Det passer når riktig respons er kjent fra før.",
+          whyExtended: [
+            "Clear-domenet handler om situasjoner der årsak-virkning er tydelig.",
+            "Da kan man kategorisere situasjonen og følge etablert best practice.",
+            "I komplekse situasjoner finnes ikke beste praksis på samme måte før man har lært mer."
+          ]
+        },
+        "cynefin-itil": {
+          whyCorrect: "Riktig. ITIL er primært plassert i Tydelig / Clear her fordi det representerer etablert praksis for IT Service Management.",
+          whyWrong: "ITIL skal plasseres i Tydelig / Clear i denne sorteringen. Her vektlegges ITIL som prosedyrer og beste praksis for IT-tjenester.",
+          whyExtended: [
+            "ITIL er relevant for styring, drift og leveranse av IT-tjenester.",
+            "I denne Cynefin-koblingen plasseres det som etablert best practice.",
+            "Det betyr ikke at all IT-drift alltid er enkel, men at ITIL primært representerer standardisert praksis."
+          ]
+        }
+      },
+      whyExtendedImageRefs: [
+        "cynefin_model"
+      ]
+    }
+
 
   ]
 };
