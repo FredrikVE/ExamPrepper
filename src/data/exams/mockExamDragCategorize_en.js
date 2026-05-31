@@ -90,9 +90,9 @@ export const mockExamDragCategorize_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" },
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" },
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "generic_decision_making_process",
+        "double_diamond_model",
+        "it_governance_matrix"
       ]
     },
     {
@@ -161,12 +161,12 @@ export const mockExamDragCategorize_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" },
-        { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" },
-        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" },
-        { moduleId: "designed-for-digital", groupId: "digital-platform", imageId: "DP" },
-        { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" },
-        { moduleId: "designed-for-digital", groupId: "external-developer-platform", imageId: "ExDP" }
+        "D4D-overview",
+        "OB",
+        "SCI",
+        "DP",
+        "AF",
+        "ExDP"
       ]
     },
     {
@@ -235,7 +235,7 @@ export const mockExamDragCategorize_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -308,7 +308,7 @@ export const mockExamDragCategorize_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -379,7 +379,7 @@ export const mockExamDragCategorize_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
+        "business_process_matrix_en"
       ]
     },
     {

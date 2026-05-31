@@ -277,7 +277,7 @@ export const mockExamSustainability_no = {
         "En eksamensnær forståelse er å kunne bruke modellen på konkrete cases, ikke bare gjengi ordene."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -378,8 +378,8 @@ export const mockExamSustainability_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -436,7 +436,7 @@ export const mockExamSustainability_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "circular_economy_loop"
       ]
     },
     {
@@ -481,8 +481,8 @@ export const mockExamSustainability_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -829,7 +829,7 @@ export const mockExamSustainability_no = {
         "Dette gjør rapportering til et bredere governance-spørsmål enn tradisjonell finansiell risiko alene."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+        "double_materiality"
       ]
     },
     {
@@ -852,7 +852,7 @@ export const mockExamSustainability_no = {
             "For IT governance betyr det at infrastruktur, beredskap, kostnader og leverandørrisiko kan bli del av bærekraftsrapporteringen."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+            "double_materiality"
           ]
         },
         {
@@ -920,8 +920,8 @@ export const mockExamSustainability_no = {
         "Scope 3 er ofte vanskeligst fordi data ligger utenfor virksomhetens direkte kontroll."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -938,8 +938,8 @@ export const mockExamSustainability_no = {
       whyCorrect: "Scope 3 er definert som alle andre utslipp assosiert med selskapets aktiviteter.",
       whyWrong: "Scope 1 er direkte utslipp fra egne/kontrollerte kilder, og Scope 2 er indirekte utslipp fra kjøpt elektrisitet, varme, damp og kjøling.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -996,9 +996,9 @@ export const mockExamSustainability_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "double_materiality",
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -1136,7 +1136,7 @@ export const mockExamSustainability_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "twin-transitions", imageId: "twin_transitions" }
+        "twin_transitions"
       ]
     },
     {
@@ -1179,8 +1179,8 @@ export const mockExamSustainability_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {

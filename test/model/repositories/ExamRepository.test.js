@@ -122,7 +122,7 @@ describe("ExamRepository", () => {
                         {
                             text: "Operational Backbone",
                             whyExtendedImageRefs: [
-                                { imageId: "operational-backbone" }
+                                "operational-backbone"
                             ]
                         }
                     ]
@@ -153,7 +153,7 @@ describe("ExamRepository", () => {
         const result = await localRepository.getExamQuestions("exam-with-image");
 
         expect(conceptImageDataSource.getConceptImages).toHaveBeenCalledWith(
-            [{ imageId: "operational-backbone" }],
+            ["operational-backbone"],
             {
                 subjectId: "in5431",
                 moduleId: "designed-for-digital",

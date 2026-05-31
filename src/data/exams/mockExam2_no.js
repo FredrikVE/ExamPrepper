@@ -25,7 +25,7 @@ export const mockExam2_no = {
       whyCorrect: "**Digitalization** er definert som sosioteknisk endring, i motsetning til **digitization** som er ren teknisk konvertering fra **analogt til digitalt**.",
       whyWrong: "**Digitization** er feil fordi det bare handler om teknisk konvertering (f.eks. papir til PDF). **Digital transformation** er for bredt. Det beskriver en hel **organisasjonsendring** over tid.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -82,7 +82,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "operating_model_matrix_no" }
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -136,7 +136,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "operating_model_matrix_no" }
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -156,8 +156,8 @@ export const mockExam2_no = {
       whyCorrect: "Riktig fordi definisjonen eksplisitt knytter **digital transformation** til extensive use of digital technologies.",
       whyWrong: "Galt hvis svaret peker på bare 'nye **prosesser**' eller 'ledelse'. **Teknologi** er en sentral driver/enabler i definisjonen.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" },
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "digital_strategy_model",
+        "D4D-overview"
       ]
     },
     {
@@ -221,7 +221,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -278,7 +278,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -334,7 +334,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -408,7 +408,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -452,11 +452,7 @@ export const mockExam2_no = {
             "**D4D** sin **dual transformation** skiller mellom architecture (**OB**, **DP**) og **governance** (**SCI**, **AF**). Dette er et sentralt organiseringsprinsipp i boken."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -489,8 +485,8 @@ export const mockExam2_no = {
       whyCorrect: "Riktig fordi **sirkulasjon**/**circulation** er kjernen i **circular economy**-definisjonen.",
       whyWrong: "Galt hvis svaret handler om 'produksjon' eller 'forbruk'. Poenget er at ting holdes i omløp.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -544,8 +540,8 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -599,7 +595,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "twin-transitions", imageId: "twin_transitions" }
+        "twin_transitions"
       ]
     },
     {
@@ -654,7 +650,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -674,8 +670,8 @@ export const mockExam2_no = {
       whyCorrect: "Riktig fordi **triple constraint** består av **scope**, **time** og **cost**.",
       whyWrong: "Galt hvis svaret peker på kvalitet, risiko eller ressurser.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -732,7 +728,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -756,11 +752,7 @@ export const mockExam2_no = {
             "Kursoppsummeringen beskriver dette som 'tighter relation between decision making and decision impact'."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -774,11 +766,7 @@ export const mockExam2_no = {
             "Datadrevet styring gir teamene **autonomi** i hvordan de oppnår målene, mens **alignment** sikres gjennom felles målsetninger."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -792,11 +780,7 @@ export const mockExam2_no = {
             "Kursoppsummeringen beskriver **AF** som 'enabling creativity while avoiding chaos'. Tillit balanseres med **alignment**-mekanismer."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -866,7 +850,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -885,7 +869,7 @@ export const mockExam2_no = {
       whyCorrect: "Riktig fordi Porter-forelesningen sier at **OE** er nødvendig men ikke **tilstrekkelig**.",
       whyWrong: "Galt hvis svaret antyder at **OE** er helt unødvendig eller at **OE** alene er **strategi**.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -917,7 +901,7 @@ export const mockExam2_no = {
             "**API-tilgang** til **data** er en forutsetning for **rask konfigurering** av nye digitale tilbud."
           ],
           whyExtendedImageRefs: [
-              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+              "DP"
             ]
         },
         {
@@ -965,11 +949,7 @@ export const mockExam2_no = {
             "Forelesning 9 sier at 'Building an **OB** is a long-term Commitment'. Det er noe man må starte med tidlig."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -983,11 +963,7 @@ export const mockExam2_no = {
             "Roadmapen anbefaler også å 'synchronize customer insights and **DP** development'. **SCI** og **DP** bør utvikles i takt."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -1001,11 +977,7 @@ export const mockExam2_no = {
             "Å åpne en umoden plattform for eksterne utviklere ville skape problemer med kvalitet, sikkerhet og pålitelighet."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "overview",
-              imageId: "D4D-overview"
-            }
+            "D4D-overview"
           ]
         },
         {
@@ -1052,11 +1024,7 @@ export const mockExam2_no = {
             "Uten **boundary resources** har ikke eksterne parter noen strukturert måte å interagere med plattformen på."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1133,7 +1101,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+        "double_materiality"
       ]
     },
     {
@@ -1153,7 +1121,7 @@ export const mockExam2_no = {
       whyCorrect: "Riktig fordi **chaotic-domenet** kjennetegnes av nødsituasjoner der man må handle umiddelbart.",
       whyWrong: "Galt hvis svaret handler om '**analyse**' eller '**eksperimentering**'. I kaos er det for sent for grundig **analyse**. Man må stabilisere først.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1176,11 +1144,7 @@ export const mockExam2_no = {
             "Dette krever **integrerte systemer** og **standardiserte prosesser**. Kjernen i **OB**-definisjonen."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1193,11 +1157,7 @@ export const mockExam2_no = {
             "Pålitelige kjernedata er en forutsetning for **Digital Platform**. **Data components** i **DP** bygger på **data** fra **OB**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1210,11 +1170,7 @@ export const mockExam2_no = {
             "**Automatisering** erstatter manuelt, repetitivt arbeid med digitaliserte **prosesser**. Det er 'the essence of **digitization**: produce an **OB** that replaces individual heroes with **digitized processes**'."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1284,7 +1240,7 @@ export const mockExam2_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     }
   ]

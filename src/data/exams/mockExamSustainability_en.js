@@ -249,7 +249,7 @@ export const mockExamSustainability_en = {
         "An exam-oriented understanding is being able to apply the model to concrete cases, not only repeat the words."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -328,8 +328,8 @@ export const mockExamSustainability_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -354,7 +354,7 @@ export const mockExamSustainability_en = {
         { id: "dpp", description: "Digital documentation of origin, materials, production process and environmental impact", correctCardId: "dpp", correctLabel: "Digital Product Passport", whyCorrect: "Digital Product Passport makes product data digitally available.", whyWrong: "This is not a manual life cycle assessment. It is digital product documentation.", whyExtended: ["The lecture connects DPP to the EU and coming requirements for several product groups, including ICT and electronics."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "circular_economy_loop"
       ]
     },
     {
@@ -374,8 +374,8 @@ export const mockExamSustainability_en = {
         { text: "Removing all data about materials so products become easier to resell.", correct: false, why: "Wrong: circular economy requires more information about materials and products, not less.", whyExtended: ["Without material data, repair, reuse, sorting and documentation become harder."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -549,7 +549,7 @@ export const mockExamSustainability_en = {
         "This makes reporting a broader governance issue than traditional financial risk alone."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+        "double_materiality"
       ]
     },
     {
@@ -562,7 +562,7 @@ export const mockExamSustainability_en = {
       prompt: "An IT manager maps that extreme weather can make data center operations more expensive and less stable. Which part of double materiality does this describe best?",
       source: "Source: IN5431 Sustainability, slide 72.",
       options: [
-        { text: "Financial materiality, because external climate and environmental conditions affect the company.", correct: true, why: "Correct: this is impact on the company.", whyExtended: ["Extreme weather is an external sustainability issue that can affect costs, risk and operations.", "This is the outside-in direction in double materiality.", "For IT governance, infrastructure, preparedness, costs and supplier risk can become part of sustainability reporting."], whyExtendedImageRefs: [ { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" } ] },
+        { text: "Financial materiality, because external climate and environmental conditions affect the company.", correct: true, why: "Correct: this is impact on the company.", whyExtended: ["Extreme weather is an external sustainability issue that can affect costs, risk and operations.", "This is the outside-in direction in double materiality.", "For IT governance, infrastructure, preparedness, costs and supplier risk can become part of sustainability reporting."], whyExtendedImageRefs: [ "double_materiality" ] },
         { text: "Impact materiality, because the company directly affects environment and people in this example.", correct: false, why: "Wrong: the case primarily describes how environmental conditions affect the company.", whyExtended: ["Impact materiality would for example be the data center's energy use or emissions effects on the outside world."] },
         { text: "Scope 2, because extreme weather is always purchased electricity.", correct: false, why: "Wrong: Scope 2 is an emissions category, not a materiality direction.", whyExtended: ["Extreme weather can affect electricity prices or availability, but the materiality assessment here is financial."] },
         { text: "Degrowth, because all data center operations must stop immediately.", correct: false, why: "Wrong: the case concerns risk assessment and reporting, not a general claim about postgrowth.", whyExtended: ["Degrowth is a broader socio-economic perspective, not the answer to this concrete materiality case."] }
@@ -613,8 +613,8 @@ export const mockExamSustainability_en = {
         "Scope 3 is often hardest because the data lies outside the organization's direct control."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -631,8 +631,8 @@ export const mockExamSustainability_en = {
       whyCorrect: "Scope 3 is defined as all other emissions associated with the company's activities.",
       whyWrong: "Scope 1 is direct emissions from owned or controlled sources, and Scope 2 is indirect emissions from purchased electricity, heat, steam and cooling.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -652,9 +652,9 @@ export const mockExamSustainability_en = {
         { text: "Reported sustainability data does not need to be traceable back to sources.", correct: false, why: "Wrong: traceability, verification and data quality are central when data has governance and reporting functions.", whyExtended: ["Without traceability, the risk of errors, greenwashing and compliance failure increases."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "double_materiality",
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -720,7 +720,7 @@ export const mockExamSustainability_en = {
         { text: "When a solution is digital, it does not need to be included in scope or materiality assessments.", correct: false, why: "Wrong: digital solutions can have direct, indirect and value-chain emissions as well as social consequences.", whyExtended: ["Double materiality and Scope 1-3 make digital solutions relevant for reporting and governance."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "twin-transitions", imageId: "twin_transitions" }
+        "twin_transitions"
       ]
     },
     {
@@ -739,8 +739,8 @@ export const mockExamSustainability_en = {
         { text: "Replace LCA and EPD with oral assessments without traceable data.", correct: false, why: "Wrong: the lecture connects circular economy to standardized analyses and documentation.", whyExtended: ["LCA, EPD, MFA and DPP point toward a more structured data basis, not less."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {

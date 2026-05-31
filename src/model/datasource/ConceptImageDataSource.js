@@ -1,9 +1,35 @@
 // src/model/datasource/ConceptImageDataSource.js
 export default class ConceptImageDataSource {
-    #index;
+    #indexByFullKey;
+    #indexByImageId;
 
     constructor(conceptImageCatalogsBySubjectId = {}) {
-        this.#index = this.#buildIndex(conceptImageCatalogsBySubjectId);
+        const { byFullKey, byImageId } = this.#buildIndexes(conceptImageCatalogsBySubjectId);
+        this.#indexByFullKey = byFullKey;
+        this.#indexByImageId = byImageId;
+    }
+
+    getConceptImageById(imageId, { subjectId, language } = {}) {
+        if (!subjectId || !imageId) {
+            return null;
+        }
+
+        const key = `${subjectId}/${imageId}`;
+        const entry = this.#indexByImageId.get(key);
+
+        if (!entry) {
+            return null;
+        }
+
+        const ext = entry.ext ?? "svg";
+
+        return {
+            id: imageId,
+            src: this.#buildSrc(subjectId, entry.moduleId, entry.groupId, imageId, ext),
+            alt: this.#getLocalizedText(entry.alt, language, ""),
+            title: this.#getLocalizedText(entry.title, language, undefined),
+            caption: this.#getLocalizedText(entry.caption, language, undefined)
+        };
     }
 
     getConceptImage({ subjectId, moduleId, groupId, imageId, language } = {}) {
@@ -11,8 +37,8 @@ export default class ConceptImageDataSource {
             return null;
         }
 
-        const key = this.#toKey(subjectId, moduleId, groupId, imageId);
-        const entry = this.#index.get(key);
+        const key = this.#toFullKey(subjectId, moduleId, groupId, imageId);
+        const entry = this.#indexByFullKey.get(key);
 
         if (!entry) {
             return null;
@@ -37,13 +63,15 @@ export default class ConceptImageDataSource {
         const results = [];
 
         for (const imageRef of imageRefs) {
-            const image = this.getConceptImage({
-                subjectId: imageRef.subjectId ?? context.subjectId,
-                moduleId: imageRef.moduleId ?? context.moduleId,
-                groupId: imageRef.groupId ?? context.groupId,
-                imageId: imageRef.imageId,
-                language: imageRef.language ?? context.language
-            });
+            const image = typeof imageRef === "string"
+                ? this.getConceptImageById(imageRef, context)
+                : this.getConceptImage({
+                    subjectId: imageRef.subjectId ?? context.subjectId,
+                    moduleId: imageRef.moduleId ?? context.moduleId,
+                    groupId: imageRef.groupId ?? context.groupId,
+                    imageId: imageRef.imageId,
+                    language: imageRef.language ?? context.language
+                });
 
             if (image) {
                 results.push(image);
@@ -53,8 +81,9 @@ export default class ConceptImageDataSource {
         return results;
     }
 
-    #buildIndex(catalogsBySubjectId) {
-        const index = new Map();
+    #buildIndexes(catalogsBySubjectId) {
+        const byFullKey = new Map();
+        const byImageId = new Map();
 
         for (const subjectId of Object.keys(catalogsBySubjectId)) {
             const entries = catalogsBySubjectId[subjectId];
@@ -64,16 +93,18 @@ export default class ConceptImageDataSource {
             }
 
             for (const entry of entries) {
-                const key = this.#toKey(subjectId, entry.moduleId, entry.groupId, entry.imageId);
-
-                index.set(key, entry);
+                byFullKey.set(
+                    this.#toFullKey(subjectId, entry.moduleId, entry.groupId, entry.imageId),
+                    entry
+                );
+                byImageId.set(`${subjectId}/${entry.imageId}`, entry);
             }
         }
 
-        return index;
+        return { byFullKey, byImageId };
     }
 
-    #toKey(subjectId, moduleId, groupId, imageId) {
+    #toFullKey(subjectId, moduleId, groupId, imageId) {
         return `${subjectId}/${moduleId}/${groupId}/${imageId}`;
     }
 

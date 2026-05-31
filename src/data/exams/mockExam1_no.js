@@ -27,7 +27,7 @@ export const mockExam1_no = {
       whyCorrect: "Setningen er definisjonen av **business process**: et sett **aktiviteter** med logisk orden og **avhengigheter** som produserer et **ønsket resultat**.",
       whyWrong: "Andre begreper som project, platform eller architecture passer ikke fordi definisjonen handler om selve **arbeidsflyten** av **aktiviteter** i en virksomhet.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -82,8 +82,8 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -139,7 +139,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
+        "NPV_formula"
       ]
     },
     {
@@ -196,7 +196,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
+        "generic_decision_making_process_no"
       ]
     },
     {
@@ -216,7 +216,7 @@ export const mockExam1_no = {
       whyCorrect: "Riktig fordi **digital business design** beskriver samspillet mellom **people**, **processes** and **technology**, ikke bare IT-systemer isolert.",
       whyWrong: "Galt hvis svaret peker på bare data, **strategi** eller arkitektur. Begrepet er eksplisitt tredelt: **mennesker**, **prosesser** og **teknologi**.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -240,7 +240,7 @@ export const mockExam1_no = {
             "**OB** tilhører architecture transformation i **D4D** sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -254,7 +254,7 @@ export const mockExam1_no = {
             "**SCI** tilhører governance transformation i **D4D** sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+              "SCI"
             ]
         },
         {
@@ -279,7 +279,7 @@ export const mockExam1_no = {
             "**DP** tilhører architecture transformation sammen med **OB**."
           ],
           whyExtendedImageRefs: [
-              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+              "DP"
             ]
         },
         {
@@ -293,7 +293,7 @@ export const mockExam1_no = {
             "**AF** tilhører governance transformation i **D4D** sin dual transformation-teori."
           ],
           whyExtendedImageRefs: [
-              { imageId: "AF", moduleId: "designed-for-digital", groupId: "accountability-framework" }
+              "AF"
             ]
         },
         {
@@ -307,7 +307,7 @@ export const mockExam1_no = {
             "**D4D**-roadmapen anbefaler å ikke forhaste seg med **ExDP** — det krever moden **OB** og **DP** først."
           ],
           whyExtendedImageRefs: [
-              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+              "ExDP"
             ]
         }
       ]
@@ -342,7 +342,7 @@ export const mockExam1_no = {
             "**OB** er fundamentet som muliggjør videre **digital transformasjon** — uten fungerende **OB** mangler man stabil grunn å bygge på."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -401,7 +401,7 @@ export const mockExam1_no = {
             "**DP** skiller seg fra **OB** ved å fokusere på fleksibilitet og gjenbruk fremfor stabilitet og **standardisering**."
           ],
           whyExtendedImageRefs: [
-              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+              "DP"
             ]
         },
         {
@@ -446,7 +446,7 @@ export const mockExam1_no = {
       whyCorrect: "Riktig fordi **Shared Customer Insights** defineres som organisasjonslæring om **hva kunder vil betale for** og hvordan **digital teknologi** kan møte behovene.",
       whyWrong: "Galt hvis svaret bare handler om hva kunder 'liker' eller 'bruker'. Poenget er **betalingsvilje**/verdi og koblingen til digitale løsninger.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
+        "SCI"
       ]
     },
     {
@@ -479,7 +479,7 @@ export const mockExam1_no = {
             "Utfordringen **AF** adresserer er: hvordan frigjøre kreativitet og **innovasjon** (**autonomi**) uten å miste felles retning og **standardisering** (**alignment**)."
           ],
           whyExtendedImageRefs: [
-              { imageId: "AF", moduleId: "designed-for-digital", groupId: "accountability-framework" }
+              "AF"
             ]
         },
         {
@@ -538,7 +538,7 @@ export const mockExam1_no = {
             "Forelesning 12 presiserer at **ExDP** krever 'a very well designed and managed internal platform' — det forutsetter moden **OB** og **DP**."
           ],
           whyExtendedImageRefs: [
-              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+              "ExDP"
             ]
         },
         {
@@ -618,7 +618,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -675,7 +675,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -732,7 +732,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -789,7 +789,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "operating_model_matrix_no" }
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -810,8 +810,8 @@ export const mockExam1_no = {
       whyCorrect: "Riktig fordi prosjektet defineres som en **temporary organization** med spesifisert resultat og tidsperiode.",
       whyWrong: "Galt hvis svaret antyder permanent linjeorganisasjon. Prosjektets særtrekk er nettopp midlertidig organisering.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -868,7 +868,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -925,7 +925,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -982,7 +982,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -1001,7 +1001,7 @@ export const mockExam1_no = {
       whyCorrect: "Riktig: **SMACIT** = **Social**, **Mobile**, **Analytics**, **Cloud**, **Internet of Things**.",
       whyWrong: "Galt hvis siste ledd ikke viser til **IoT**/**Internet of Things**, fordi akronymet i pensum bruker dette som T-en.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -1058,7 +1058,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -1113,7 +1113,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -1157,7 +1157,7 @@ export const mockExam1_no = {
             "Denne tilnærmingen kobler direkte til **design thinking** (utforskning) og **agile** (**iterasjon** og tilpasning) i **CIO toolbox**."
           ],
           whyExtendedImageRefs: [
-              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+              "cynefin_theory_of_everything"
             ]
         },
         {
@@ -1194,7 +1194,7 @@ export const mockExam1_no = {
             "**OB** handler om å gjøre eksisterende kjerneprosesser pålitelige og effektive — det er fundamentet for videre digital suksess."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -1208,11 +1208,7 @@ export const mockExam1_no = {
             "**D4D**-roadmapen anbefaler: 'Fix the backbone' først, deretter 'Don't put off your **digital platform** for long — connect the modules.'"
           ],
           whyExtendedImageRefs: [
-            {
-              imageId: "DP",
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform"
-            }
+            "DP"
           ]
         },
         {
@@ -1237,7 +1233,7 @@ export const mockExam1_no = {
             "Uten stabil **OB** mangler man grunnlaget for **Digital Platform**, og dermed også for **rask innovasjon** og nye **digitale tilbud**."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         }
       ],
@@ -1298,7 +1294,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     }
   ]

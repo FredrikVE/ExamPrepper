@@ -30,11 +30,7 @@ export const mockExam3_no = {
             "Dette knytter strategi til faktisk ledelsesarbeid: prioriterte tiltak må settes i gang for å oppnå ønskede resultater."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -47,11 +43,7 @@ export const mockExam3_no = {
             "Uten ansvarliggjøring blir det vanskelig å vite hvem som skal ta beslutninger, eskalere problemer eller levere."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -64,11 +56,7 @@ export const mockExam3_no = {
             "Dette er særlig viktig når tiltakene er avhengige av hverandre, for eksempel når et operasjonelt fundament må forbedres før nye digitale tilbud kan skaleres."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -81,11 +69,7 @@ export const mockExam3_no = {
             "Dette kobler strategi til CIO toolbox-verktøy som business case, alternative analysis og prosjektplanlegging."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -115,7 +99,7 @@ export const mockExam3_no = {
       whyCorrect: "Riktig: roadmap/veikart beskriver rekkefølge og tidsramme for gjennomføring.",
       whyWrong: "Galt hvis svaret beskriver en beregningsmetode eller governance-arketype. Her spørres det etter planens tids- og rekkefølgedimensjon.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -168,7 +152,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -191,11 +175,7 @@ export const mockExam3_no = {
             "Uten dette risikerer man å løse feil problem eller sammenligne irrelevante alternativer."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process_no"
-            }
+            "generic_decision_making_process_no"
           ]
         },
         {
@@ -208,11 +188,7 @@ export const mockExam3_no = {
             "Dette er særlig viktig ved leverandørvalg, produktvalg og større organisatoriske endringer."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process_no"
-            }
+            "generic_decision_making_process_no"
           ]
         },
         {
@@ -225,11 +201,7 @@ export const mockExam3_no = {
             "Målet er ikke bare analyse, men å gi et beslutningsgrunnlag."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process_no"
-            }
+            "generic_decision_making_process_no"
           ]
         },
         {
@@ -294,7 +266,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
+        "generic_decision_making_process_no"
       ]
     },
     {
@@ -347,7 +319,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
+        "generic_decision_making_process_no"
       ]
     },
     {
@@ -366,7 +338,7 @@ export const mockExam3_no = {
       whyCorrect: "Riktig: 'continued business justification' er et av PRINCE2-prinsippene.",
       whyWrong: "Galt hvis svaret peker på en seremoni eller en governance-arketype. Her spørres det etter PRINCE2-prinsippet om vedvarende begrunnelse.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     },
     {
@@ -387,7 +359,7 @@ export const mockExam3_no = {
             "Det passer med kursets poeng om at rammeverk er hjelpemidler, ikke mål i seg selv."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -400,7 +372,7 @@ export const mockExam3_no = {
             "Prinsippet henger sammen med prosjekt som en midlertidig organisasjon."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -413,7 +385,7 @@ export const mockExam3_no = {
             "Fasevis styring gjør det mulig å justere planene basert på erfaring."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -426,7 +398,7 @@ export const mockExam3_no = {
             "Tilpasning gjør rammeverket mer relevant for faktisk prosjektmiljø."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -461,7 +433,7 @@ export const mockExam3_no = {
             "Risiko er ikke bare en kostnadspost, men en ledelsesoppgave gjennom hele prosjektet."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -548,8 +520,8 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -602,7 +574,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_levels_model"
       ]
     },
     {
@@ -655,7 +627,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -708,7 +680,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -771,8 +743,8 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" },
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "digital_strategy_model",
+        "D4D-overview"
       ]
     },
     {
@@ -793,7 +765,7 @@ export const mockExam3_no = {
       whyCorrect: "Riktig: organizational inertia beskriver motstand/treghet som gjør at organisasjonen fortsetter på samme sti.",
       whyWrong: "Galt hvis svaret beskriver smidighet eller innovasjon. Her spørres det om treghet i sosiotekniske systemer.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -846,7 +818,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -899,7 +871,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
+        "SCI"
       ]
     },
     {
@@ -920,7 +892,7 @@ export const mockExam3_no = {
             "Tilbakemeldingen kan brukes til å forbedre eller forkaste ideen."
           ],
           whyExtendedImageRefs: [
-              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+              "SCI"
             ]
         },
         {
@@ -933,7 +905,7 @@ export const mockExam3_no = {
             "Metoden kontrasteres med å bruke lang tid på en løsning uten validering."
           ],
           whyExtendedImageRefs: [
-              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+              "SCI"
             ]
         },
         {
@@ -946,7 +918,7 @@ export const mockExam3_no = {
             "Tverrfaglige team kan kombinere IT, produkt, drift, marked og risiko."
           ],
           whyExtendedImageRefs: [
-              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+              "SCI"
             ]
         },
         {
@@ -981,7 +953,7 @@ export const mockExam3_no = {
             "Digital business krever ofte sømløse end-to-end-prosesser på tvers av enheter."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -994,7 +966,7 @@ export const mockExam3_no = {
             "Vaner kan være knyttet til funksjoner, praksis og fragmenterte arkitekturer."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -1007,7 +979,7 @@ export const mockExam3_no = {
             "En fungerende OB krever at systemer, prosesser og data henger sammen."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -1044,11 +1016,7 @@ export const mockExam3_no = {
             "Dette er motsatsen til monolittiske systemer som er bygget for ett bestemt produkt og ofte mangler gjenbrukbare APIer."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform",
-              imageId: "DP"
-            }
+            "DP"
           ]
         },
         {
@@ -1101,7 +1069,7 @@ export const mockExam3_no = {
             "ExDP bygger på at interne komponenter er godt designet og forvaltet."
           ],
           whyExtendedImageRefs: [
-              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+              "ExDP"
             ]
         },
         {
@@ -1114,7 +1082,7 @@ export const mockExam3_no = {
             "Uten slike grensesnitt blir ekstern bruk ustrukturert og risikabel."
           ],
           whyExtendedImageRefs: [
-              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+              "ExDP"
             ]
         },
         {
@@ -1127,7 +1095,7 @@ export const mockExam3_no = {
             "Begge variantene øker potensialet for ekstern innovasjon."
           ],
           whyExtendedImageRefs: [
-              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+              "ExDP"
             ]
         },
         {
@@ -1194,7 +1162,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -1247,7 +1215,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "performance_based_IT-governance_model" }
+        "performance_based_IT-governance_model"
       ]
     },
     {
@@ -1300,7 +1268,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1353,7 +1321,7 @@ export const mockExam3_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     }
   ]

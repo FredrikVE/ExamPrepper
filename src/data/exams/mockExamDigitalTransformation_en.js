@@ -56,7 +56,7 @@ export const mockExamDigitalTransformation_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     },
     {
@@ -119,7 +119,7 @@ export const mockExamDigitalTransformation_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     },
     {
@@ -140,7 +140,7 @@ export const mockExamDigitalTransformation_en = {
         "Extensive technology use alone is therefore not enough."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     },
     {
@@ -232,7 +232,7 @@ export const mockExamDigitalTransformation_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     },
     {
@@ -334,7 +334,7 @@ export const mockExamDigitalTransformation_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     },
     {
@@ -431,7 +431,7 @@ export const mockExamDigitalTransformation_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     },
     {
@@ -510,7 +510,7 @@ export const mockExamDigitalTransformation_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_transformation_process" }
+        "digital_transformation_process"
       ]
     }
   ]

@@ -31,11 +31,7 @@ export const mockExam5_no = {
             "Dette kobler PRINCE2 til Business case-verktøyet i CIO Toolbox."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -47,11 +43,7 @@ export const mockExam5_no = {
             "Uten dette risikerer organisasjonen å gjenta de samme feilene fra prosjekt til prosjekt."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -72,11 +64,7 @@ export const mockExam5_no = {
             "Dette gir kontroll uten å gjøre prosjektstyringen unødvendig tung."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -109,11 +97,7 @@ export const mockExam5_no = {
             "Den syv themes er Business case, Organization, Quality, Plans, Risk, Change og Progress."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -125,11 +109,7 @@ export const mockExam5_no = {
             "Dette kobler også til Business case, der risiko er en sentral del av vurderingen."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -150,11 +130,7 @@ export const mockExam5_no = {
             "Dette er ikke det samme som organisatorisk Change management, for eksempel Prosci/ADKAR."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -166,11 +142,7 @@ export const mockExam5_no = {
             "Prosjektet må kunne sammenligne faktisk fremdrift med plan og eskalere avvik."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         }
       ]
@@ -204,11 +176,7 @@ export const mockExam5_no = {
             "Dette er nært koblet til Manage by exception."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -263,11 +231,7 @@ export const mockExam5_no = {
             "Poenget er at prosjektet skal levere konkrete resultater, ikke bare gjennomføre aktiviteter."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -319,11 +283,7 @@ export const mockExam5_no = {
             "Et lite internt prosjekt trenger lettere styring enn en stor enterprise transformation."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -978,11 +938,7 @@ export const mockExam5_no = {
             "Approach er Sense → Categorize → Respond."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1003,11 +959,7 @@ export const mockExam5_no = {
             "Man må prøve noe, observere effekten og tilpasse videre handling."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1019,11 +971,7 @@ export const mockExam5_no = {
             "Novel practice betyr at responsen ofte er ny fordi situasjonen er akutt og uoversiktlig."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         }
       ]
@@ -1048,11 +996,7 @@ export const mockExam5_no = {
             "Med ekstra complexity factors kan situasjonen bevege seg mot Chaotic."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1101,11 +1045,7 @@ export const mockExam5_no = {
             "Dette passer med hovedregelen: Read the room før du velger tool."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {

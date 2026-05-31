@@ -64,7 +64,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
+        "generic_decision_making_process_no"
       ]
     },
     {
@@ -121,8 +121,8 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -144,8 +144,8 @@ export const mockExam4_no = {
       whyCorrect: "Riktig fordi diskonteringsraten (som inkluderer en risikopremie) reduserer nåverdien av fremtidige kontantstrømmer for å reflektere usikkerhet. Høyere risiko betyr høyere diskonteringsrate, som senker NPV.",
       whyWrong: "Galt hvis svaret bare viser til rente uten risikodimensjonen, eller til begreper som konverteringsrate, som er en spesifikk forretningsmetrik og ikke den generelle finansielle justeringsmekanismen.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -169,11 +169,7 @@ export const mockExam4_no = {
             "Trinn 3 bruker evalueringsmetoder som business case (verktøy 1), plus/minus-metoden, kostnadsrangering og real options."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process_no"
-            }
+            "generic_decision_making_process_no"
           ]
         },
         {
@@ -265,8 +261,8 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
+        "generic_decision_making_process_no",
+        "NPV_formula"
       ]
     },
     {
@@ -323,7 +319,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -391,7 +387,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -448,7 +444,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "operating_model_matrix_no" }
+        "operating_model_matrix_no"
       ]
     },
     {
@@ -505,8 +501,8 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -528,8 +524,8 @@ export const mockExam4_no = {
       whyCorrect: "Riktig fordi triple constraint består av scope, kostnad og tid. Når alle tre er faste, finnes det ingen fleksibilitet til justering, noe som gjør prosjektet svært sårbart for skuffelse.",
       whyWrong: "Galt hvis svaret viser til kvalitet, risiko eller ressurser — selv om dette er viktige prosjektforhold, består triple constraint spesifikt av scope, kostnad og tid.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -551,7 +547,7 @@ export const mockExam4_no = {
             "PRINCE2 har 'business case' som ett av sine sju temaer, noe som forsterker koblingen til fortsatt begrunnelse."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -565,7 +561,7 @@ export const mockExam4_no = {
             "Manage by stages balanserer detaljert planlegging på kort sikt med mer overordnet planlegging for senere faser."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -590,7 +586,7 @@ export const mockExam4_no = {
             "Tilpasningsprinsippet kobler også til Cynefin: ledelsestilnærmingen bør passe kompleksiteten i situasjonen."
           ],
           whyExtendedImageRefs: [
-              { imageId: "prince2_framework_model", moduleId: "cio-tool-box", groupId: "prince2" }
+              "prince2_framework_model"
             ]
         },
         {
@@ -662,8 +658,8 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" },
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "prince2_framework_model",
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -720,7 +716,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -797,7 +793,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -854,7 +850,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -876,7 +872,7 @@ export const mockExam4_no = {
             "Cynefin fungerer som et metaverktøy som hjelper til med å avgjøre hvilket av de andre verktøyene som passer best i konteksten."
           ],
           whyExtendedImageRefs: [
-              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+              "cynefin_theory_of_everything"
             ]
         },
         {
@@ -946,7 +942,7 @@ export const mockExam4_no = {
             "Eksempler er ingeniørutfordringer, detaljert planlegging og strukturert beslutningstaking der problemet er forstått, men løsningen krever kompetanse."
           ],
           whyExtendedImageRefs: [
-              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" }
+              "cynefin_theory_of_everything"
             ]
         },
         {
@@ -991,7 +987,7 @@ export const mockExam4_no = {
       whyCorrect: "Riktig fordi Weill og Ross-definisjonen eksplisitt sier at management (ikke governance) tar beslutningene, mens governance avgjør hvem som har rett og ansvar til å ta dem.",
       whyWrong: "Galt hvis svaret er governance, styret eller CIO. Nøkkelskillet er at governance setter strukturen, mens management opererer innenfor den.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -1048,7 +1044,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -1105,7 +1101,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1173,7 +1169,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1230,7 +1226,7 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_levels_model"
       ]
     },
     {
@@ -1252,9 +1248,9 @@ export const mockExam4_no = {
             "Nøkkelinnsikten er at låsing av alle begrensninger fjerner fleksibilitet, mens kompleksitetsfaktorer tilfører ukjente — sammen eskalerer de ledelsesutfordringen."
           ],
           whyExtendedImageRefs: [
-              { imageId: "cynefin_theory_of_everything", moduleId: "cio-tool-box", groupId: "cynefin" },
-              { imageId: "Triple-Constraint-Explained-1080x1080-1", moduleId: "cio-tool-box", groupId: "triple-constraint" },
-              { imageId: "triple_constraint_1", moduleId: "cio-tool-box", groupId: "triple-constraint" }
+              "cynefin_theory_of_everything",
+              "Triple-Constraint-Explained-1080x1080-1",
+              "triple_constraint_1"
             ]
         },
         {
@@ -1313,7 +1309,7 @@ export const mockExam4_no = {
       whyCorrect: "Riktig fordi styringsmatrisen har de fem beslutningsdomenene (IT principles, IT architecture, IT infrastructure, business application needs, IT investment) på én akse og de seks arketypene på den andre.",
       whyWrong: "Galt hvis svaret viser til verktøy, metoder eller arketyper. Matrisen kombinerer domener (hva som besluttes) med arketyper (hvem som bestemmer), ikke med andre strukturelle elementer.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -1368,12 +1364,12 @@ export const mockExam4_no = {
             "IT governance er kategorisert under 'STYRING' i CIO toolbox-modellen."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+            "it_governance_matrix"
           ]
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     }
     ,{
@@ -1534,8 +1530,8 @@ export const mockExam4_no = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "framewoks", imageId: "framewoks_and_best_practices" },
-        { moduleId: "cio-tool-box", groupId: "framewoks", imageId: "ITIL" }
+        "framewoks_and_best_practices",
+        "ITIL"
       ]
     },
     {
@@ -1602,12 +1598,12 @@ export const mockExam4_no = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" },
-        { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" },
-        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" },
-        { moduleId: "designed-for-digital", groupId: "digital-platform", imageId: "DP" },
-        { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" },
-        { moduleId: "designed-for-digital", groupId: "external-developer-platform", imageId: "ExDP" }
+        "D4D-overview",
+        "OB",
+        "SCI",
+        "DP",
+        "AF",
+        "ExDP"
       ]
     },
     {
@@ -1646,7 +1642,7 @@ export const mockExam4_no = {
         "accountability-framework-transform": { whyCorrect: "Accountability Framework hører til Governance Transformation.", whyWrong: "Accountability Framework hører til Governance Transformation fordi det fordeler ownership og decision responsibility.", whyExtended: ["Det balanserer autonomy og alignment."] }
       },
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -1675,7 +1671,7 @@ export const mockExam4_no = {
         { id: "anarchy", description: "Anarchy", correctCardId: "anarchy-desc", correctLabel: "Individuelle brukere eller små grupper følger sin egen IT-agenda", whyCorrect: "Anarchy betyr at individuelle brukere eller små grupper følger sin egen IT-agenda.", whyWrong: "Denne beskrivelsen hører til Anarchy fordi decision rights i praksis overlates til individer eller små grupper.", whyExtended: ["Anarchy er den mest desentraliserte arketypen.", "Den kan skape problemer for standardization, integration og security."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -1702,7 +1698,7 @@ export const mockExam4_no = {
         { id: "it-investment", description: "IT Investment", correctCardId: "investment-domain-desc", correctLabel: "Hvilke IT initiatives som skal finansieres og prioriteres", whyCorrect: "IT Investment handler om finansiering og prioritering av IT initiatives.", whyWrong: "Denne beskrivelsen hører til IT Investment fordi nøkkelsignalet er funding og prioritization.", whyExtended: ["Investment decisions bestemmer hvilke IT initiatives som får ressurser.", "Dette kobler governance til business case og portfolio prioritization."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -1727,7 +1723,7 @@ export const mockExam4_no = {
         { id: "chaotic", description: "Chaotic", correctCardId: "immediate-action", correctLabel: "Handle umiddelbart for å stabilisere situasjonen", whyCorrect: "Chaotic contexts krever umiddelbar handling for å stabilisere situasjonen.", whyWrong: "Immediate action hører til Chaotic contexts, der det ikke er tid til detaljert analyse før handling.", whyExtended: ["Første mål er å etablere nok orden til å flytte situasjonen ut av chaos.", "Lang analyse passer vanligvis dårlig i første respons."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1758,9 +1754,9 @@ export const mockExam4_no = {
         { id: "purpose-distribute-responsibility", description: "Distribute responsibility for IT among organizational units", correctCardId: "tool-it-governance", correctLabel: "IT governance", whyCorrect: "IT governance fordeler responsibility for IT mellom organizational units.", whyWrong: "IT governance hører til distributing responsibility fordi det bestemmer hvem som tar IT decisions og hvem som er accountable.", whyExtended: ["Weill and Ross beskriver decision domains, archetypes og governance matrix.", "Et sentralt dilemma er centralization versus decentralization."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" },
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" },
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "generic_decision_making_process_no",
+        "double_diamond_model",
+        "it_governance_matrix"
       ]
     },
     {
@@ -1797,8 +1793,8 @@ export const mockExam4_no = {
         "outcome-over-output": { whyCorrect: "Outcome over output, pivots og learning er product-team logic.", whyWrong: "Outcome over output hører til Product team / agile methods fordi product teams optimaliserer for value og learning, ikke bare predefined output.", whyExtended: ["Pivots forventes når læring viser at planen var feil."] }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -1823,7 +1819,7 @@ export const mockExam4_no = {
         { id: "deliver", description: "Deliver", correctCardId: "prototype-test", correctLabel: "Prototype, test, reject eller improve solutions", whyCorrect: "Deliver handler om prototyping, testing og forbedring eller forkasting av solutions.", whyWrong: "Prototype og testing hører til Deliver fordi fasen snevrer inn løsninger gjennom small-scale testing.", whyExtended: ["Deliver betyr ikke blind launch; det betyr å teste hvilken løsning som virker."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -1860,8 +1856,8 @@ export const mockExam4_no = {
         "security-safety": { whyCorrect: "Security og safety improvements er non-quantifiable benefits.", whyWrong: "Security eller safety hører til Non-quantifiable benefit fordi verdien kan være vanskelig å uttrykke som cash flow.", whyExtended: ["Avoided incidents, resilience og safety kan være strategisk viktig."] }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -1902,8 +1898,8 @@ export const mockExam4_no = {
         "customer-use": { whyCorrect: "Customer use of products er Scope 3 downstream value-chain emissions.", whyWrong: "Customer use hører til Scope 3 fordi det skjer downstream i value chain.", whyExtended: ["Scope 3 kan inkludere både upstream og downstream emissions."] }
       },
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -1928,7 +1924,7 @@ export const mockExam4_no = {
         { id: "definition-of-responsibility", description: "Definition of responsibility", correctCardId: "responsibility-meaning", correctLabel: "En definisjon av hvem som owns og is accountable for what", whyCorrect: "Definition of responsibility klargjør ownership og accountability.", whyWrong: "Denne betydningen hører til Definition of responsibility fordi den svarer på hvem som eier hva.", whyExtended: ["Uten responsibility kan en digital strategy bli en ønskeliste i stedet for en execution plan."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -2019,8 +2015,8 @@ export const mockExam4_no = {
         { id: "technology-architecture", description: "Beskriver software og hardware capabilities som infrastructure, middleware, networks og standards", correctCardId: "togaf-technology-architecture", correctLabel: "Technology Architecture", whyCorrect: "Technology Architecture beskriver de tekniske capabilities som trengs for å støtte business, data og application services.", whyWrong: "Denne beskrivelsen hører til Technology Architecture fordi den gjelder infrastructure, middleware, networks, processing og standards.", whyExtended: ["Technology Architecture er det mest tekniske laget i TOGAF taxonomy."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -2045,9 +2041,9 @@ export const mockExam4_no = {
         { id: "optimize-fragmented-legacy", description: "Optimalisere fragmenterte processes til et integrert miljø som støtter business strategy", correctCardId: "perspective-enterprise-architecture", correctLabel: "Enterprise Architecture", whyCorrect: "Enterprise Architecture presenteres som en tilnærming for å optimalisere fragmenterte processes og systems til et integrert miljø som støtter strategy.", whyWrong: "Denne beskrivelsen hører til Enterprise Architecture som bredt fagfelt, ikke til ett bestemt framework eller én forfatter.", whyExtended: ["Enterprise Architecture er bredere enn TOGAF, selv om TOGAF er et stort framework for enterprise architecture work."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_no" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model",
+        "togaf_adm_no"
       ]
     },
     {
@@ -2066,8 +2062,8 @@ export const mockExam4_no = {
         { text: "Automated Decision Management — en governance model som erstatter architects med automatiserte rules", correct: false, why: "Galt: ADM handler om strukturert architecture development, ikke om å automatisere bort architectural judgment.", whyExtended: ["Frameworks støtter architecture work, men erstatter ikke leadership, dialogue og contextual judgment."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_no" }
+        "togaf_adm_en",
+        "togaf_adm_no"
       ]
     },
     {
@@ -2087,8 +2083,8 @@ export const mockExam4_no = {
         { text: "Fowler og TOGAF presenteres som identiske syn med ulike navn.", correct: false, why: "Galt: forelesningen kontrasterer TOGAF og Fowler som ulike architecture perspectives.", whyExtended: ["TOGAF er det formelle, ofte sentraliserte perspektivet.", "Fowler representerer et mer meritocratic og decentralized perspektiv knyttet til agile development."] }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_no" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_adm_no"
       ]
     }
 

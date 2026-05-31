@@ -32,11 +32,7 @@ export const mockExam5_en = {
             "PRINCE2 also has 'business case' as one of its seven themes, reinforcing the link between the principle and the theme."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -50,11 +46,7 @@ export const mockExam5_en = {
             "Without learning, organizations repeat mistakes across projects — this principle prevents that."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -79,11 +71,7 @@ export const mockExam5_en = {
             "This principle supports efficiency: managers at each level handle issues within their authority, freeing senior management for exceptional situations."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -120,11 +108,7 @@ export const mockExam5_en = {
             "The seven themes are: business case, organization, quality, plans, risk, change, progress."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -138,11 +122,7 @@ export const mockExam5_en = {
             "Risk connects to the business case tool in the CIO toolbox, where risk is one of the four factors in utility maximisation."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -167,11 +147,7 @@ export const mockExam5_en = {
             "The change theme works together with the risk theme — changes often introduce new risks."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -185,11 +161,7 @@ export const mockExam5_en = {
             "Progress tracking enables informed decision-making about whether to continue, adjust or stop the project."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         }
       ]
@@ -226,11 +198,7 @@ export const mockExam5_en = {
             "The seven processes are: starting up, directing, initiating, controlling a stage, managing product delivery, managing stage boundaries, closing."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -269,7 +237,7 @@ export const mockExam5_en = {
       whyCorrect: "Correct because manage by stages means the project is broken into manageable stages, each planned and authorized separately. This provides regular decision points for the project board.",
       whyWrong: "Wrong if the answer refers to 'sprint by sprint' (that is Scrum), 'year by year' (too coarse), or 'task by task' (too granular). PRINCE2 specifically uses stages as its unit of control.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     },
     {
@@ -293,11 +261,7 @@ export const mockExam5_en = {
             "This principle ensures the project delivers tangible results, not just completed activities."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -356,11 +320,7 @@ export const mockExam5_en = {
             "A small internal project needs lighter governance than a multi-million enterprise transformation — PRINCE2 accommodates both."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -410,7 +370,7 @@ export const mockExam5_en = {
       whyCorrect: "Correct because Lecture 6's framework table explicitly lists PRINCE2 as originating from 'UK government'.",
       whyWrong: "Wrong if the answer mentions US (that is TOGAF's origin), private sector (that is SAFe), or research (that is Scrum). Each framework has a distinct origin.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     },
     // ===== BPMN (questions 8–12) =====
@@ -468,7 +428,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -525,7 +485,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -582,8 +542,8 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" },
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_return_process" }
+        "umbrella_heaven_ordering_process",
+        "umbrella_heaven_return_process"
       ]
     },
     {
@@ -598,7 +558,7 @@ export const mockExam5_en = {
       whyCorrect: "Correct because the definition explicitly uses the word 'activities' — a business process combines a set of activities with a structure of logical order and dependencies to produce a result.",
       whyWrong: "Wrong if the answer says 'systems', 'projects' or 'tools'. The definition is specifically about activities — the work that people and systems perform within the process.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -655,7 +615,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     // ===== DESIGN THINKING & DOUBLE DIAMOND (questions 13–18) =====
@@ -713,7 +673,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -770,7 +730,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -785,7 +745,7 @@ export const mockExam5_en = {
       whyCorrect: "Correct because the Deliver phase definition states: 'Delivery involves testing out different solutions at small-scale, rejecting those that will not work and improving the ones that will.' Small-scale testing is central to design thinking's iterative approach.",
       whyWrong: "Wrong if the answer says 'full' or 'large'. Design thinking explicitly avoids full-scale implementation in the Deliver phase — the point is to learn cheaply through small experiments.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -853,7 +813,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -910,8 +870,8 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" },
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "double_diamond_model",
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -968,7 +928,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     // ===== TOGAF (questions 19–22) =====
@@ -1037,7 +997,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -1094,7 +1054,7 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
+        "togaf_adm_en"
       ]
     },
     {
@@ -1151,8 +1111,8 @@ export const mockExam5_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_adm_en",
+        "togaf_levels_model"
       ]
     },
     {
@@ -1167,7 +1127,7 @@ export const mockExam5_en = {
       whyCorrect: "Correct because Lecture 6's framework table explicitly lists TOGAF's origin as 'US defence'.",
       whyWrong: "Wrong if the answer mentions UK (that is PRINCE2's origin), research (that is Scrum's origin), or private sector (that is SAFe's origin).",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
+        "togaf_adm_en"
       ]
     },
     // ===== CYNEFIN (questions 23–25) =====
@@ -1192,11 +1152,7 @@ export const mockExam5_en = {
             "The CIO toolbox model confirms: 'Clear → procedures, best practice.'"
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1221,11 +1177,7 @@ export const mockExam5_en = {
             "Emergent practice means the right approach is discovered through iteration, not determined in advance."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1239,11 +1191,7 @@ export const mockExam5_en = {
             "The CIO toolbox model confirms: 'Chaotic → immediate action.'"
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         }
       ]
@@ -1269,11 +1217,7 @@ export const mockExam5_en = {
             "With even 1 additional complexity factor (3 fixed + 1+), the situation escalates to Chaotic."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1332,11 +1276,7 @@ export const mockExam5_en = {
             "This makes Cynefin the starting point for contextual decision-making: assess the domain first, then select the appropriate approach."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {

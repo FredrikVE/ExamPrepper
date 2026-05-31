@@ -30,11 +30,7 @@ export const mockExam3_en = {
             "This connects strategy to actual management work: prioritized initiatives must be started to achieve the desired results."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -47,11 +43,7 @@ export const mockExam3_en = {
             "Without accountability, it becomes difficult to know who should make decisions, escalate problems or deliver."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -64,11 +56,7 @@ export const mockExam3_en = {
             "This is especially important when activities depend on one another, for example when an operational backbone must be improved before new digital offerings can be scaled."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -81,11 +69,7 @@ export const mockExam3_en = {
             "This links strategy to CIO toolbox tools such as business case, alternative analysis and project planning."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "strategy",
-              groupId: "action-plan",
-              imageId: "strategy_action_plan_model"
-            }
+            "strategy_action_plan_model"
           ]
         },
         {
@@ -114,7 +98,7 @@ export const mockExam3_en = {
       whyCorrect: "Correct: a roadmap describes the ordering and timeframe for implementation.",
       whyWrong: "Wrong if the answer describes a calculation method or a governance archetype. The question asks for the time and ordering dimension of the plan.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -167,7 +151,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -190,11 +174,7 @@ export const mockExam3_en = {
             "Without this, one risks solving the wrong problem or comparing irrelevant alternatives."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process"
-            }
+            "generic_decision_making_process"
           ]
         },
         {
@@ -207,11 +187,7 @@ export const mockExam3_en = {
             "This is especially important in vendor selection, product choice and larger organizational changes."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process"
-            }
+            "generic_decision_making_process"
           ]
         },
         {
@@ -224,11 +200,7 @@ export const mockExam3_en = {
             "The goal is not just analysis, but to provide a basis for decision-making."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process"
-            }
+            "generic_decision_making_process"
           ]
         },
         {
@@ -293,7 +265,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
+        "generic_decision_making_process"
       ]
     },
     {
@@ -346,7 +318,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
+        "generic_decision_making_process"
       ]
     },
     {
@@ -364,7 +336,7 @@ export const mockExam3_en = {
       whyCorrect: "Correct: 'continued business justification' is one of the PRINCE2 principles.",
       whyWrong: "Wrong if the answer points to a ceremony or governance archetype. The question asks for the PRINCE2 principle about ongoing justification.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     },
     {
@@ -387,11 +359,7 @@ export const mockExam3_en = {
             "It fits with the course's point that frameworks are aids, not goals in themselves."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -404,11 +372,7 @@ export const mockExam3_en = {
             "The principle connects to the project as a temporary organization."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -421,11 +385,7 @@ export const mockExam3_en = {
             "Stage-based governance makes it possible to adjust plans based on experience."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -438,11 +398,7 @@ export const mockExam3_en = {
             "Tailoring makes the framework more relevant to the actual project environment."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -477,11 +433,7 @@ export const mockExam3_en = {
             "Risk is not just a cost item, but a management task throughout the project."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -566,8 +518,8 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -620,7 +572,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_levels_model"
       ]
     },
     {
@@ -673,7 +625,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -726,7 +678,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -789,8 +741,8 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" },
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "digital_strategy_model",
+        "D4D-overview"
       ]
     },
     {
@@ -809,7 +761,7 @@ export const mockExam3_en = {
       whyCorrect: "Correct: organizational inertia describes resistance/slowness that makes the organization continue on the same path.",
       whyWrong: "Wrong if the answer describes agility or innovation. The question asks about inertia in sociotechnical systems.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -862,7 +814,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -915,7 +867,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
+        "SCI"
       ]
     },
     {
@@ -938,11 +890,7 @@ export const mockExam3_en = {
             "Feedback can be used to improve or reject the idea."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "shared-customer-insights",
-              imageId: "SCI"
-            }
+            "SCI"
           ]
         },
         {
@@ -955,11 +903,7 @@ export const mockExam3_en = {
             "The method contrasts with spending a long time on a solution without validation."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "shared-customer-insights",
-              imageId: "SCI"
-            }
+            "SCI"
           ]
         },
         {
@@ -972,11 +916,7 @@ export const mockExam3_en = {
             "Cross-functional teams can combine IT, product, operations, market and risk."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "shared-customer-insights",
-              imageId: "SCI"
-            }
+            "SCI"
           ]
         },
         {
@@ -1011,11 +951,7 @@ export const mockExam3_en = {
             "Digital business often requires seamless end-to-end processes across units."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1028,11 +964,7 @@ export const mockExam3_en = {
             "Habits can be linked to functions, practices and fragmented architectures."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1045,11 +977,7 @@ export const mockExam3_en = {
             "A working OB requires systems, processes and data to fit together."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1084,11 +1012,7 @@ export const mockExam3_en = {
             "This is the opposite of monolithic systems built for one specific product and often lacking reusable APIs."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform",
-              imageId: "DP"
-            }
+            "DP"
           ]
         },
         {
@@ -1143,11 +1067,7 @@ export const mockExam3_en = {
             "ExDP builds on internal components being well designed and managed."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1160,11 +1080,7 @@ export const mockExam3_en = {
             "Without such interfaces, external use becomes unstructured and risky."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1177,11 +1093,7 @@ export const mockExam3_en = {
             "Both variants increase the potential for external innovation."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -1246,7 +1158,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -1299,7 +1211,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "performance_based_IT-governance_model" }
+        "performance_based_IT-governance_model"
       ]
     },
     {
@@ -1352,7 +1264,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1405,7 +1317,7 @@ export const mockExam3_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     }
   ]

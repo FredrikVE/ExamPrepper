@@ -22,7 +22,7 @@ export const mockExam2_en = {
       whyCorrect: "**Digitalization** is defined as sociotechnical change, as opposed to **digitization** which is purely **technical conversion** from **analog to digital**.",
       whyWrong: "**Digitization** is wrong because it only concerns **technical conversion** (e.g. paper to PDF). **Digital transformation** is too broad. It describes an entire organizational change over **time**.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -75,7 +75,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
+        "business_process_matrix_en"
       ]
     },
     {
@@ -125,7 +125,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
+        "business_process_matrix_en"
       ]
     },
     {
@@ -140,8 +140,8 @@ export const mockExam2_en = {
       whyCorrect: "Correct because the definition explicitly links **digital transformation** to the extensive use of **digital technologies**.",
       whyWrong: "Wrong if the answer only points to 'new **processes**' or 'leadership'. Technology is a central driver/enabler in the definition.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" },
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "digital_strategy_model",
+        "D4D-overview"
       ]
     },
     {
@@ -200,7 +200,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -251,7 +251,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -301,7 +301,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -368,7 +368,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -409,7 +409,7 @@ export const mockExam2_en = {
             "**D4D**'s **dual transformation** distinguishes between architecture (**OB**, **DP**) and **governance** (**SCI**, **AF**)."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+            "D4D-overview"
           ]
         },
         {
@@ -435,8 +435,8 @@ export const mockExam2_en = {
       whyCorrect: "Correct because **circulation** is the core of the **circular economy** definition, the opposite of **linear** '**use and discard**'.",
       whyWrong: "Wrong if the answer is about 'production' or 'consumption'. The point is that things are kept in **circulation**, not that more is produced.",
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "what_is_circular_economy" },
-        { moduleId: "sustainability", groupId: "circular-economy", imageId: "circular_economy_loop" }
+        "what_is_circular_economy",
+        "circular_economy_loop"
       ]
     },
     {
@@ -485,8 +485,8 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -536,7 +536,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "twin-transitions", imageId: "twin_transitions" }
+        "twin_transitions"
       ]
     },
     {
@@ -586,7 +586,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -601,8 +601,8 @@ export const mockExam2_en = {
       whyCorrect: "Correct because the **triple constraint** consists of **scope**, **time** and **cost**. All three fixed = **high risk**.",
       whyWrong: "Wrong if the answer points to quality, risk or resources. The model in the lecture explicitly uses **scope**, **time** and **cost**.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -651,7 +651,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -674,7 +674,7 @@ export const mockExam2_en = {
             "The course summary describes this as 'tighter relation between **decision making** and decision impact'."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" }
+            "AF"
           ]
         },
         {
@@ -687,7 +687,7 @@ export const mockExam2_en = {
             "Data-driven **management** gives teams **autonomy** in how they achieve goals, while **alignment** is ensured through shared objectives."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" }
+            "AF"
           ]
         },
         {
@@ -700,7 +700,7 @@ export const mockExam2_en = {
             "The course summary describes **AF** as 'enabling creativity while avoiding chaos'. Trust is balanced with **alignment** mechanisms."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" }
+            "AF"
           ]
         },
         {
@@ -762,7 +762,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -777,7 +777,7 @@ export const mockExam2_en = {
       whyCorrect: "Correct because the Porter lecture says OE is necessary but not **sufficient**. **Strategy** requires **trade-offs** and **unique positioning**.",
       whyWrong: "Wrong if the answer suggests OE is completely unnecessary or that OE alone is **strategy**.",
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -809,7 +809,7 @@ export const mockExam2_en = {
             "**API access** to data is a prerequisite for **rapid configuration** of new **digital offerings**."
           ],
           whyExtendedImageRefs: [
-            { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+            "DP"
           ]
         },
         {
@@ -851,7 +851,7 @@ export const mockExam2_en = {
             "44% of executives identify **OB** as the biggest obstacle to **digital transformation**. That underscores the importance of fixing it first."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+            "D4D-overview"
           ]
         },
         {
@@ -863,7 +863,7 @@ export const mockExam2_en = {
             "Lecture 10 emphasizes that 'An **Operational Backbone** is Not Enough for Digital Success'. **DP** is necessary in addition."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+            "D4D-overview"
           ]
         },
         {
@@ -875,7 +875,7 @@ export const mockExam2_en = {
             "Opening an immature platform to **external developers** would create problems with quality, security and reliability."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+            "D4D-overview"
           ]
         },
         {
@@ -918,7 +918,7 @@ export const mockExam2_en = {
             "Without **boundary resources**, **external parties** have no structured way to interact with the platform."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "external-developer-platform", imageId: "ExDP" }
+            "ExDP"
           ]
         },
         {
@@ -988,7 +988,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "double_materiality" }
+        "double_materiality"
       ]
     },
     {
@@ -1003,7 +1003,7 @@ export const mockExam2_en = {
       whyCorrect: "Correct because the **chaotic domain** is characterized by emergencies where **immediate action** is needed.",
       whyWrong: "Wrong if the answer mentions '**analysis**' or '**experimentation**'. In chaos it is too late for thorough **analysis**. Stabilization comes first.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1025,7 +1025,7 @@ export const mockExam2_en = {
             "This requires **integrated systems** and **standardized processes**. That is the core of the **OB** definition."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" }
+            "OB"
           ]
         },
         {
@@ -1037,7 +1037,7 @@ export const mockExam2_en = {
             "Reliable **master data** is a prerequisite for **Digital Platform**. **Data components** in **DP** build on data from **OB**."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" }
+            "OB"
           ]
         },
         {
@@ -1049,7 +1049,7 @@ export const mockExam2_en = {
             "The course summary describes **OB** as 'the essence of **digitization**: produce an **OB** that replaces individual heroes with digitized **processes**'."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" }
+            "OB"
           ]
         },
         {
@@ -1110,7 +1110,7 @@ export const mockExam2_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     }
   ]

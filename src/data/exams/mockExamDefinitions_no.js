@@ -764,7 +764,7 @@ export const mockExamDefinitions_no = {
         "Modellen veksler mellom å åpne opp for innsikt og muligheter, og å snevre inn mot en tydelig definisjon eller løsning."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -817,7 +817,7 @@ export const mockExamDefinitions_no = {
         "Til slutt evalueres alternativene og en anbefaling foreslås."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process_no" }
+        "generic_decision_making_process_no"
       ]
     },
     {
@@ -910,7 +910,7 @@ export const mockExamDefinitions_no = {
         "Poenget i IN5431 er å forstå prosjekt som styrt, midlertidig organisering for å levere spesifiserte resultater."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     },
     {
@@ -1013,7 +1013,7 @@ export const mockExamDefinitions_no = {
         "Requirements Management ligger sentralt i ADM og påvirker fasene, men er ikke lagt inn som et separat sekvenskort her."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_no" }
+        "togaf_adm_no"
       ]
     },
     {
@@ -1096,8 +1096,8 @@ export const mockExamDefinitions_no = {
         "Poenget er beslutningsstøtte og transparens, ikke perfekt prediksjon."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -1170,7 +1170,7 @@ export const mockExamDefinitions_no = {
         "Gjennomføring kan organiseres som prosjekter, produktteam, reorganisering eller prioriteringer i daglig drift."
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     }
   ]

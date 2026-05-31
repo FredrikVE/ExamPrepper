@@ -381,8 +381,14 @@ Resultatet er at `whyExtendedImages` er et ferdigbygd array på spørsmålet
 når det når ViewModel.
 
 Bildereferanser (`whyExtendedImageRefs`) ligger direkte på spørsmålet,
-svarsalternativet eller targeten i mockdata. Repository løser dem via
-`ConceptImageDataSource` og legger ferdige bildeobjekter på `whyExtendedImages`.
+svarsalternativet eller targeten i mockdata som en array av `imageId`-strenger.
+Repository løser dem via `ConceptImageDataSource` og legger ferdige
+bildeobjekter på `whyExtendedImages`.
+
+```js
+// I mockdata — bare imageId, ingen filbaner eller mappestruktur:
+whyExtendedImageRefs: ["cynefin_theory_of_everything"]
+```
 
 **4. View — komponenter som rendrer bilder**
 
@@ -409,7 +415,7 @@ const src = `/subjects/${subjectId}/${moduleId}/${imageId}.svg`;
 
 1. Legg bildefilen i `public/subjects/{subjectId}/{moduleId}/{groupId}/`
 2. Legg til en oppføring i `src/data/subjects/{subjectId}/conceptImages.js`
-3. Legg til `whyExtendedImageRefs` på spørsmålet eller alternativet i mockdata
+3. Legg til `imageId` i `whyExtendedImageRefs` på spørsmålet eller alternativet
 
 View-laget trenger ingen endringer.
 

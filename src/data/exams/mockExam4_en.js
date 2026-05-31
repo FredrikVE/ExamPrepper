@@ -64,7 +64,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
+        "generic_decision_making_process"
       ]
     },
     {
@@ -121,8 +121,8 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -137,8 +137,8 @@ export const mockExam4_en = {
       whyCorrect: "Correct because the discount rate (which includes a risk premium) reduces the present value of future cash flows to reflect uncertainty. Higher risk means a higher discount rate, which lowers the NPV.",
       whyWrong: "Wrong if the answer refers to interest rate alone without the risk dimension, or to concepts like conversion rate, which is a specific business metric rather than the general financial adjustment mechanism.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -162,11 +162,7 @@ export const mockExam4_en = {
             "Step 3 uses evaluation methods including business case (tool 1), plus/minus method, cost ranking, and real options."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "decision-making",
-              imageId: "generic_decision_making_process"
-            }
+            "generic_decision_making_process"
           ]
         },
         {
@@ -258,8 +254,8 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
+        "generic_decision_making_process",
+        "NPV_formula"
       ]
     },
     {
@@ -316,7 +312,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -384,7 +380,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -441,7 +437,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
+        "business_process_matrix_en"
       ]
     },
     {
@@ -498,8 +494,8 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -514,8 +510,8 @@ export const mockExam4_en = {
       whyCorrect: "Correct because the triple constraint consists of scope, cost and time. When all three are fixed, there is no flexibility to adjust, making the project highly vulnerable to disappointment.",
       whyWrong: "Wrong if the answer refers to quality, risk or resources — while these are important project concerns, the triple constraint specifically consists of scope, cost and time.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -539,11 +535,7 @@ export const mockExam4_en = {
             "PRINCE2 has 'business case' as one of its seven themes, reinforcing the link to continued justification."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -557,11 +549,7 @@ export const mockExam4_en = {
             "Managing by stages balances detailed planning (near-term) with higher-level planning (later stages)."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -586,11 +574,7 @@ export const mockExam4_en = {
             "This tailoring principle connects to Cynefin: the management approach should match the complexity of the situation."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "prince2",
-              imageId: "prince2_framework_model"
-            }
+            "prince2_framework_model"
           ]
         },
         {
@@ -660,8 +644,8 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" },
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "prince2_framework_model",
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -718,7 +702,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -795,7 +779,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -852,7 +836,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -876,11 +860,7 @@ export const mockExam4_en = {
             "Cynefin serves as a meta-tool that helps decide which of the other tools is most appropriate for the given context."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -950,11 +930,7 @@ export const mockExam4_en = {
             "Examples include engineering challenges, detailed planning, and structured decision-making where the problem is understood but the solution requires skill."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -993,7 +969,7 @@ export const mockExam4_en = {
       whyCorrect: "Correct because the Weill and Ross definition explicitly states that management (not governance) makes decisions, while governance determines who has the right and responsibility to make them.",
       whyWrong: "Wrong if the answer is governance, the board, or the CIO. The key distinction is that governance sets the structure while management operates within it.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -1050,7 +1026,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -1107,7 +1083,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1175,7 +1151,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -1232,7 +1208,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_levels_model"
       ]
     },
     {
@@ -1256,11 +1232,7 @@ export const mockExam4_en = {
             "The key insight is that fixing all constraints removes flexibility, while complexity factors add unknowns — together they escalate the management challenge."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1310,7 +1282,7 @@ export const mockExam4_en = {
       whyCorrect: "Correct because the governance matrix (styringsmatrisen) has the five decision domains (IT principles, IT architecture, IT infrastructure, business application needs, IT investment) on one axis and the six archetypes on the other.",
       whyWrong: "Wrong if the answer refers to tools, methods or archetypes. The matrix combines domains (what is being decided) with archetypes (who decides), not with other structural elements.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -1365,12 +1337,12 @@ export const mockExam4_en = {
             "IT governance is categorized under 'STYRING' (governance/steering) in the CIO toolbox model."
           ],
           whyExtendedImageRefs: [
-            { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+            "it_governance_matrix"
           ]
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "prince2", imageId: "prince2_framework_model" }
+        "prince2_framework_model"
       ]
     }
 
@@ -1556,8 +1528,8 @@ export const mockExam4_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "framewoks", imageId: "framewoks_and_best_practices" },
-        { moduleId: "cio-tool-box", groupId: "framewoks", imageId: "ITIL" }
+        "framewoks_and_best_practices",
+        "ITIL"
       ]
     },
     {
@@ -1654,12 +1626,12 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" },
-        { moduleId: "designed-for-digital", groupId: "operational-backbone", imageId: "OB" },
-        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" },
-        { moduleId: "designed-for-digital", groupId: "digital-platform", imageId: "DP" },
-        { moduleId: "designed-for-digital", groupId: "accountability-framework", imageId: "AF" },
-        { moduleId: "designed-for-digital", groupId: "external-developer-platform", imageId: "ExDP" }
+        "D4D-overview",
+        "OB",
+        "SCI",
+        "DP",
+        "AF",
+        "ExDP"
       ]
     },
     {
@@ -1740,7 +1712,7 @@ export const mockExam4_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -1853,7 +1825,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -1950,7 +1922,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "Domene_modell_IT_beslutninger_spm" }
+        "Domene_modell_IT_beslutninger_spm"
       ]
     },
     {
@@ -2031,7 +2003,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -2160,9 +2132,9 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" },
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" },
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "generic_decision_making_process",
+        "double_diamond_model",
+        "it_governance_matrix"
       ]
     },
     {
@@ -2241,8 +2213,8 @@ export const mockExam4_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -2323,7 +2295,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -2402,8 +2374,8 @@ export const mockExam4_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -2493,8 +2465,8 @@ export const mockExam4_en = {
         }
       },
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3_model" },
-        { moduleId: "sustainability", groupId: "reporting", imageId: "scope_1_2_3" }
+        "scope_1_2_3_model",
+        "scope_1_2_3"
       ]
     },
     {
@@ -2575,7 +2547,7 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -2897,8 +2869,8 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model"
       ]
     },
     {
@@ -2983,9 +2955,9 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_levels_model" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_levels_model",
+        "togaf_adm_en"
       ]
     },
     {
@@ -3044,8 +3016,8 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_no" }
+        "togaf_adm_en",
+        "togaf_adm_no"
       ]
     },
     {
@@ -3115,8 +3087,8 @@ export const mockExam4_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" },
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_adm_en" }
+        "togaf_arkitekturtaksonomi",
+        "togaf_adm_en"
       ]
     }
 

@@ -22,7 +22,7 @@ export const mockExam1_en = {
       whyCorrect: "The sentence is the definition of a **business process**: a set of **activities** with **logical order** and **dependencies** that produce a **desired result**.",
       whyWrong: "Other terms like project, platform or architecture don't fit because the definition describes the **workflow** of **activities** within an enterprise.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-process-modeling", imageId: "umbrella_heaven_ordering_process" }
+        "umbrella_heaven_ordering_process"
       ]
     },
     {
@@ -77,8 +77,8 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" },
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "PV_formula" }
+        "NPV_formula",
+        "PV_formula"
       ]
     },
     {
@@ -134,7 +134,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "business-case", imageId: "NPV_formula" }
+        "NPV_formula"
       ]
     },
     {
@@ -191,7 +191,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "decision-making", imageId: "generic_decision_making_process" }
+        "generic_decision_making_process"
       ]
     },
     {
@@ -206,7 +206,7 @@ export const mockExam1_en = {
       whyCorrect: "Correct because **digital business design** describes the interplay between **people**, **processes** and **technology**, not just IT systems in isolation.",
       whyWrong: "Wrong if the answer only points to data, strategy or architecture. The concept is explicitly three-part: **people**, **processes** and **technology**.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -230,7 +230,7 @@ export const mockExam1_en = {
             "**OB** belongs to architecture transformation in **D4D**'s dual transformation theory."
           ],
           whyExtendedImageRefs: [
-              { imageId: "OB", moduleId: "designed-for-digital", groupId: "operational-backbone" }
+              "OB"
             ]
         },
         {
@@ -244,7 +244,7 @@ export const mockExam1_en = {
             "**SCI** belongs to governance transformation in **D4D**'s dual transformation theory."
           ],
           whyExtendedImageRefs: [
-              { imageId: "SCI", moduleId: "designed-for-digital", groupId: "shared-customer-insights" }
+              "SCI"
             ]
         },
         {
@@ -269,7 +269,7 @@ export const mockExam1_en = {
             "**DP** belongs to architecture transformation together with **OB**."
           ],
           whyExtendedImageRefs: [
-              { imageId: "DP", moduleId: "designed-for-digital", groupId: "digital-platform" }
+              "DP"
             ]
         },
         {
@@ -283,7 +283,7 @@ export const mockExam1_en = {
             "**AF** belongs to governance transformation in **D4D**'s dual transformation theory."
           ],
           whyExtendedImageRefs: [
-              { imageId: "AF", moduleId: "designed-for-digital", groupId: "accountability-framework" }
+              "AF"
             ]
         },
         {
@@ -297,7 +297,7 @@ export const mockExam1_en = {
             "The **D4D** roadmap recommends not rushing into an **ExDP** — it requires a mature **OB** and **DP** first."
           ],
           whyExtendedImageRefs: [
-              { imageId: "ExDP", moduleId: "designed-for-digital", groupId: "external-developer-platform" }
+              "ExDP"
             ]
         }
       ]
@@ -334,11 +334,7 @@ export const mockExam1_en = {
             "**OB** is the foundation that enables further **digital transformation** — without a functioning **OB**, you lack a stable base to build on."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -397,11 +393,7 @@ export const mockExam1_en = {
             "**DP** differs from **OB** by focusing on flexibility and reuse rather than stability and **standardization**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform",
-              imageId: "DP"
-            }
+            "DP"
           ]
         },
         {
@@ -440,7 +432,7 @@ export const mockExam1_en = {
       whyCorrect: "Correct because **Shared Customer Insights** is defined as **organizational learning** about **what customers will pay for** and how **digital technology** can meet their needs.",
       whyWrong: "Wrong if the answer only mentions what customers 'like' or 'use'. The point is **willingness to pay**/value and the link to digital solutions.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "shared-customer-insights", imageId: "SCI" }
+        "SCI"
       ]
     },
     {
@@ -475,11 +467,7 @@ export const mockExam1_en = {
             "The challenge **AF** addresses is: how to unleash creativity and **innovation** (**autonomy**) without losing common direction and **standardization** (**alignment**)."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "accountability-framework",
-              imageId: "AF"
-            }
+            "AF"
           ]
         },
         {
@@ -538,11 +526,7 @@ export const mockExam1_en = {
             "Lecture 12 specifies that **ExDP** requires 'a very well designed and managed internal platform' — it presupposes a mature **OB** and **DP**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "external-developer-platform",
-              imageId: "ExDP"
-            }
+            "ExDP"
           ]
         },
         {
@@ -620,7 +604,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "decision_rights_matrix" }
+        "decision_rights_matrix"
       ]
     },
     {
@@ -677,7 +661,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "it-governance", imageId: "it_governance_matrix" }
+        "it_governance_matrix"
       ]
     },
     {
@@ -734,7 +718,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "enterprise-architecture", imageId: "togaf_arkitekturtaksonomi" }
+        "togaf_arkitekturtaksonomi"
       ]
     },
     {
@@ -791,7 +775,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "operating-model", imageId: "business_process_matrix_en" }
+        "business_process_matrix_en"
       ]
     },
     {
@@ -806,8 +790,8 @@ export const mockExam1_en = {
       whyCorrect: "Correct because a project is defined as a **temporary organization** with a specified result and time period.",
       whyWrong: "Wrong if the answer suggests a permanent line organization. The defining feature of a project is precisely its temporary nature.",
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "Triple-Constraint-Explained-1080x1080-1" },
-        { moduleId: "cio-tool-box", groupId: "triple-constraint", imageId: "triple_constraint_1" }
+        "Triple-Constraint-Explained-1080x1080-1",
+        "triple_constraint_1"
       ]
     },
     {
@@ -864,7 +848,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     },
     {
@@ -921,7 +905,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "design-thinking", imageId: "double_diamond_model" }
+        "double_diamond_model"
       ]
     },
     {
@@ -978,7 +962,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "action-plan", imageId: "strategy_action_plan_model" }
+        "strategy_action_plan_model"
       ]
     },
     {
@@ -993,7 +977,7 @@ export const mockExam1_en = {
       whyCorrect: "Correct: **SMACIT** = **Social**, **Mobile**, **Analytics**, **Cloud**, **Internet of Things**.",
       whyWrong: "Wrong if the last part does not refer to **IoT**/**Internet of Things**, because the acronym in the curriculum uses this as the T.",
       whyExtendedImageRefs: [
-        { moduleId: "designed-for-digital", groupId: "overview", imageId: "D4D-overview" }
+        "D4D-overview"
       ]
     },
     {
@@ -1050,7 +1034,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "strategy", groupId: "digital-strategy", imageId: "digital_strategy_model" }
+        "digital_strategy_model"
       ]
     },
     {
@@ -1105,7 +1089,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "sustainability", groupId: "three-dimensions", imageId: "sustainability_three_dimensions" }
+        "sustainability_three_dimensions"
       ]
     },
     {
@@ -1151,11 +1135,7 @@ export const mockExam1_en = {
             "This approach connects directly to **design thinking** (exploration) and **agile** (**iteration** and adaptation) in the **CIO toolbox**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "cio-tool-box",
-              groupId: "cynefin",
-              imageId: "cynefin_theory_of_everything"
-            }
+            "cynefin_theory_of_everything"
           ]
         },
         {
@@ -1192,11 +1172,7 @@ export const mockExam1_en = {
             "**OB** is about making existing core **processes** reliable and efficient — it is the foundation for further digital success."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         },
         {
@@ -1210,11 +1186,7 @@ export const mockExam1_en = {
             "The **D4D** roadmap recommends: 'Fix the backbone' first, then 'Don't put off your **digital platform** for long — connect the modules.'"
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "digital-platform",
-              imageId: "DP"
-            }
+            "DP"
           ]
         },
         {
@@ -1239,11 +1211,7 @@ export const mockExam1_en = {
             "Without a stable **OB**, you lack the foundation for **Digital Platform**, and thereby also for **rapid innovation** and new **digital offerings**."
           ],
           whyExtendedImageRefs: [
-            {
-              moduleId: "designed-for-digital",
-              groupId: "operational-backbone",
-              imageId: "OB"
-            }
+            "OB"
           ]
         }
       ]
@@ -1302,7 +1270,7 @@ export const mockExam1_en = {
         }
       ],
       whyExtendedImageRefs: [
-        { moduleId: "cio-tool-box", groupId: "cynefin", imageId: "cynefin_theory_of_everything" }
+        "cynefin_theory_of_everything"
       ]
     }
   ]
