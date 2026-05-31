@@ -27,7 +27,7 @@ export const in5431ConceptImages = [
         caption: { no: "Hackman-matrisen viser sammenhengen mellom grad av autonomi og alignment i ulike teamstrukturer.", en: "The Hackman matrix shows the relationship between the degree of autonomy and alignment in different team structures." }
     },
 
-    // ── CIO Toolbox: Decision making (forelesning 3) ───────
+    // ── CIO Toolbox: Decision making / Alternative analysis (forelesning 3) ───────
     {
         moduleId: "cio-tool-box",
         groupId: "decision-making",
@@ -44,6 +44,24 @@ export const in5431ConceptImages = [
         title: { no: "Generisk beslutningsprosess", en: "Generic decision making process" },
         alt: { no: "Tre steg i beslutningsprosessen: forstå situasjonen, syntetiser alternativer, evaluer og anbefal", en: "Three steps in the decision process: understand the situation, synthesize options, evaluate and propose" },
         caption: { no: "Beslutningsprosessen brukes i alternativanalyse for å bevege seg fra situasjonsforståelse til anbefaling.", en: "The decision process is used in alternative analysis to move from understanding the situation to a recommendation." }
+    },
+    {
+        moduleId: "cio-tool-box",
+        groupId: "alternative_analyse_aoa",
+        imageId: "alternative_analyse_aoa_analysebehovsmatrise",
+        ext: "png",
+        title: {
+            no: "Alternative analyse (AoA): analysebehovsmatrisen",
+            en: "Alternative analysis (AoA): analysis effort matrix"
+        },
+        alt: {
+            no: "Matrise som viser hvordan impact, kjennskap og tillit påvirker behovet for alternativanalyse",
+            en: "Matrix showing how impact, familiarity and trust affect the need for alternative analysis"
+        },
+        caption: {
+            no: "Behovet for detaljert alternativanalyse øker når beslutningen har høy impact, lav kjennskap og lav tillit mellom beslutningstakere.",
+            en: "The need for detailed alternative analysis increases when the decision has high impact, low familiarity and low trust between decision-makers."
+        }
     },
 
     // ── CIO Toolbox: Triple constraint (forelesning 4) ─────
@@ -323,6 +341,8 @@ export const in5431ConceptImages = [
         alt: { no: "Modell som kobler governance-design med mål som lønnsomhet, ressursutnyttelse og vekst", en: "Model connecting governance design with goals such as profitability, asset utilization and growth" },
         caption: { no: "Governance-design må vurderes opp mot ønskede resultater som lønnsomhet, ressursutnyttelse og vekst.", en: "Governance design must be assessed against desired outcomes such as profitability, asset utilization and growth." }
     },
+
+    // ── Digital strategy and digital transformation ─────────
     {
         moduleId: "strategy",
         groupId: "digital-strategy",
@@ -458,6 +478,8 @@ export const in5431ConceptImages = [
         alt: { no: "Modell av organisasjonen som nettverk av grupper med ulike perspektiver og interesser", en: "Model of the organization as a network of groups with different perspectives and interests" },
         caption: { no: "Modellen forklarer hvorfor digital transformation krever involvering, oversettelse og koordinering på tvers av grupper.", en: "The model explains why digital transformation requires involvement, translation and coordination across groups." }
     },
+
+    // ── Sustainability ──────────────────────────────────────
     {
         moduleId: "sustainability",
         groupId: "three-dimensions",

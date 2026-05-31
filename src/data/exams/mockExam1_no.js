@@ -196,6 +196,7 @@ export const mockExam1_no = {
         }
       ],
       whyExtendedImageRefs: [
+         "alternative_analyse_aoa_analysebehovsmatrise",
         "generic_decision_making_process_no"
       ]
     },
