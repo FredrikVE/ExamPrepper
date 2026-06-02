@@ -1,15 +1,9 @@
 // src/ui/view/components/Footer/QuestionDots.jsx
 import QuestionDot from "./QuestionDot.jsx";
 import { getQuestionDotsClassName } from "./Utils/footerClassNames.js";
-import { getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries, shouldAllowResponsiveCompactDots, shouldUseCompactDotsByQuestionCount } from "./Utils/questionDotPagination.js";
 
 export default function QuestionDots({ viewModel, t }) {
-    const questionCount = viewModel.visibleQuestions.length;
-    const shouldUseCompactDots = shouldUseCompactDotsByQuestionCount(questionCount);
-    const shouldUseResponsiveCompactDots = shouldAllowResponsiveCompactDots(questionCount);
-    const questionDotsClassName = getQuestionDotsClassName(shouldUseCompactDots, shouldUseResponsiveCompactDots);
-    const filledCompactQuestionDotEntries = getFilledCompactQuestionDotEntries(viewModel.visibleQuestions, viewModel.currentQuestionIndex);
-    const minimalCompactQuestionDotEntries = getMinimalCompactQuestionDotEntries(viewModel.visibleQuestions, viewModel.currentQuestionIndex);
+    const questionDotsClassName = getQuestionDotsClassName(viewModel.shouldUseCompactDots, viewModel.shouldUseResponsiveCompactDots);
 
     return (
         <div className={questionDotsClassName} role="navigation" aria-label={t.footerQuestionNavigationLabel}>
@@ -28,17 +22,15 @@ export default function QuestionDots({ viewModel, t }) {
             </div>
 
             <div className="exam-footer-dot-list exam-footer-dot-list-filled-compact">
-                {filledCompactQuestionDotEntries.map((questionDotEntry) => 
+                {viewModel.filledCompactQuestionDotEntries.map((questionDotEntry) =>
                     renderCompactQuestionDotEntry(questionDotEntry, viewModel, t, "filled-compact")
-                    )
-                }
+                )}
             </div>
 
             <div className="exam-footer-dot-list exam-footer-dot-list-compact">
-                {minimalCompactQuestionDotEntries.map((questionDotEntry) => 
+                {viewModel.minimalCompactQuestionDotEntries.map((questionDotEntry) =>
                     renderCompactQuestionDotEntry(questionDotEntry, viewModel, t, "compact")
-                    )
-                }
+                )}
             </div>
         </div>
     );
@@ -71,4 +63,4 @@ const renderCompactQuestionDotEntry = (questionDotEntry, viewModel, t, dotDispla
             dotDisplayMode={dotDisplayMode}
         />
     );
-}
+};

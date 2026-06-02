@@ -10,6 +10,7 @@ import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
 import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
 import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
 import shouldHandleFooterNavigationKeyDown from "./Utils/keyboardNavigation.js";
+import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
@@ -57,6 +58,20 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const canGoPrevious = currentQuestionIndex > 0;
 	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
+
+	const isLastQuestion = !canGoNext;
+	const showSubmitButton = isLastQuestion && !submitted;
+
+	const shouldUseCompactDots = shouldUseCompactDotsByQuestionCount(visibleQuestionCount);
+	const shouldUseResponsiveCompactDots = shouldAllowResponsiveCompactDots(visibleQuestionCount);
+
+	const filledCompactQuestionDotEntries = useMemo(() => {
+		return getFilledCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex);
+	}, [visibleQuestions, currentQuestionIndex]);
+
+	const minimalCompactQuestionDotEntries = useMemo(() => {
+		return getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex);
+	}, [visibleQuestions, currentQuestionIndex]);
 
 	const currentQuestionIsCorrect = getCurrentQuestionIsCorrect(
 		submitted,
@@ -334,6 +349,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 		canGoPrevious,
 		canGoNext,
+		isLastQuestion,
+		showSubmitButton,
+		shouldUseCompactDots,
+		shouldUseResponsiveCompactDots,
+		filledCompactQuestionDotEntries,
+		minimalCompactQuestionDotEntries,
 		previousQuestion,
 		nextQuestion,
 		goToQuestion,
