@@ -1,6 +1,6 @@
 // test/utils/answerUtils.test.js
 import { describe, expect, test } from "@jest/globals";
-import normalizeAnswer from "../../src/utils/answer/normalizeAnswer.js";
+import normalizeAnswer from "../../src/model/domain/utils/normalizeAnswer.js";
 import getOptionLetter from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/Utils/getOptionLetter.js";
 import isOptionSelected from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/Utils/isOptionSelected.js";
 import getAnswerLabel from "../../src/ui/view/components/ExamPage/FeedbackPanel/Utils/getAnswerLabel.js";

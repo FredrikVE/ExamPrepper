@@ -1,5 +1,5 @@
 // src/model/domain/GradeAnswerUseCase.js
-import normalizeAnswer from "../../utils/answer/normalizeAnswer.js";
+import normalizeAnswer from "./utils/normalizeAnswer.js";
 import getCorrectIndexes from "./utils/getCorrectIndexes.js";
 import { isFuzzyMatch } from "./utils/fuzzyMatch.js";
 import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
