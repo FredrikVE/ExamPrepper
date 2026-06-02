@@ -34,15 +34,7 @@ export default function ExamPage({ viewModel }) {
             ref={viewModel.examWorkspaceRef}
             className={viewModel.workspaceClassName}
         >
-            <Header
-                visibleQuestionCount={viewModel.visibleQuestions.length}
-                answeredCount={viewModel.answeredCount}
-                scoreLabel={viewModel.scoreLabel}
-                elapsedTimeLabel={viewModel.elapsedTimeLabel}
-                submitted={viewModel.submitted}
-                onSubmitExam={viewModel.submitExam}
-                onResetExam={viewModel.resetExam}
-            />
+            <Header viewModel={viewModel} />
 
             <ExamProgress
                 visibleQuestions={viewModel.visibleQuestions}
