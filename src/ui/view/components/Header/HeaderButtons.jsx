@@ -3,13 +3,13 @@ import { CheckCircle2 } from "lucide-react";
 import SubmittedActions from "./SubmittedActions.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function HeaderButtons({ viewModel }) {
+export default function HeaderButtons({ submitted, onSubmitExam, onResetExam }) {
     const { t } = useLanguage();
 
-    if (viewModel.submitted) {
+    if (submitted) {
         return (
             <SubmittedActions
-                onResetExam={viewModel.resetExam}
+                onResetExam={onResetExam}
             />
         );
     }
@@ -17,7 +17,7 @@ export default function HeaderButtons({ viewModel }) {
     return (
         <button
             type="button"
-            onClick={viewModel.submitExam}
+            onClick={onSubmitExam}
             className="exam-header-button exam-header-button-primary"
         >
             <CheckCircle2 className="exam-header-icon" />
