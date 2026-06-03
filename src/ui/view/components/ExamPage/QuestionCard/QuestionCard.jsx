@@ -1,7 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionCard.jsx
 import { useLanguage } from "../../../../../i18n/LanguageContext.jsx";
-import { getQuestionViewState } from "./Shared/Utils/questionCardViewState.js";
-import { QUESTION_TYPES } from "../../../../../constants/QuestionTypes.js";
+import { getQuestionViewState } from "../../../../viewmodel/Utils/questionCardViewState.js";
 import FeedbackPanel from "../FeedbackPanel/FeedbackPanel.jsx";
 import FillBlankInputFieldQuestion from "./QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
 import CategorySortQuestion from "./QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
@@ -112,7 +111,7 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                     />
                 ) : null}
 
-                {viewState.shouldShowOptions && question.type === QUESTION_TYPES.MULTI ? (
+                {viewState.shouldShowMultiOptions ? (
                     <MultiCheckboxSelectQuestion
                         question={question}
                         answer={answer}
@@ -123,11 +122,12 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                         onToggleAnswerOptionExpanded={onToggleAnswerOptionExpanded}
                         onSingleAnswer={onSingleAnswer}
                         onToggleMultiAnswer={onToggleMultiAnswer}
+                        inputType={viewState.inputType}
                         t={t}
                     />
                 ) : null}
 
-                {viewState.shouldShowOptions && question.type === QUESTION_TYPES.SINGLE ? (
+                {viewState.shouldShowSingleOptions ? (
                     <SingleRadioButtonChoiceQuestion
                         question={question}
                         answer={answer}
@@ -138,6 +138,7 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                         onToggleAnswerOptionExpanded={onToggleAnswerOptionExpanded}
                         onSingleAnswer={onSingleAnswer}
                         onToggleMultiAnswer={onToggleMultiAnswer}
+                        inputType={viewState.inputType}
                         t={t}
                     />
                 ) : null}

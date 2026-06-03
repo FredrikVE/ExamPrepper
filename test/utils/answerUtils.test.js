@@ -24,13 +24,13 @@ describe("answer utils", () => {
     });
 
     test("isOptionSelected handles single choice", () => {
-        expect(isOptionSelected(QUESTION_TYPES.SINGLE, 2, 2)).toBe(true);
-        expect(isOptionSelected(QUESTION_TYPES.SINGLE, 1, 2)).toBe(false);
+        expect(isOptionSelected("radio", 2, 2)).toBe(true);
+        expect(isOptionSelected("radio", 1, 2)).toBe(false);
     });
 
     test("isOptionSelected handles multi choice", () => {
-        expect(isOptionSelected(QUESTION_TYPES.MULTI, [1, 3], 3)).toBe(true);
-        expect(isOptionSelected(QUESTION_TYPES.MULTI, [1, 3], 2)).toBe(false);
+        expect(isOptionSelected("checkbox", [1, 3], 3)).toBe(true);
+        expect(isOptionSelected("checkbox", [1, 3], 2)).toBe(false);
     });
 
     test("getAnswerLabel returns answerKey for fill question", () => {

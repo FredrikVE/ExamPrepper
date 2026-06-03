@@ -1,8 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/Utils/isOptionSelected.js
-import { QUESTION_TYPES } from "../../../../../../../../constants/QuestionTypes.js";
-
-export default function isOptionSelected(type, answer, index) {
-    if (type === QUESTION_TYPES.SINGLE) {
+export default function isOptionSelected(inputType, answer, index) {
+    if (inputType === "radio") {
         return answer === index;
     }
 

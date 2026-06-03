@@ -3,7 +3,7 @@ import isOptionSelected from "./Utils/isOptionSelected.js";
 import AnswerOptionCard from "../../AnswerCard/AnswerOptionCard.jsx";
 import ChoiceSelectableOption from "./ChoiceSelectableOption.jsx";
 
-export default function ChoiceOptionList({ question, answer, answerOptionOrder, submitted, showAllFeedback, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, t }) {
+export default function ChoiceOptionList({ question, answer, answerOptionOrder, submitted, showAllFeedback, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, inputType, t }) {
     const feedbackMode = submitted && showAllFeedback;
     const optionItems = createOptionDisplayItems(question, answerOptionOrder);
 
@@ -14,7 +14,7 @@ export default function ChoiceOptionList({ question, answer, answerOptionOrder, 
     return (
         <div className={listClassName}>
             {optionItems.map(({ option, optionIndex, displayIndex }) => {
-                const selected = isOptionSelected(question.type, answer, optionIndex);
+                const selected = isOptionSelected(inputType, answer, optionIndex);
 
                 if (feedbackMode) {
                     return (
@@ -41,6 +41,7 @@ export default function ChoiceOptionList({ question, answer, answerOptionOrder, 
                         displayIndex={displayIndex}
                         isSelected={selected}
                         submitted={submitted}
+                        inputType={inputType}
                         onSingleAnswer={onSingleAnswer}
                         onToggleMultiAnswer={onToggleMultiAnswer}
                     />
