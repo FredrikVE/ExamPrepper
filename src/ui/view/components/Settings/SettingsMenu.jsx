@@ -1,80 +1,87 @@
 // src/ui/view/components/Settings/SettingsMenu.jsx
-import { useRef } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef } from "react";
 import { X, Globe, Moon, Shuffle, Sun } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { LANGUAGES, LANGUAGE_LABELS } from "../../../../i18n/translations.js";
 import { useSettings } from "../../../settings/SettingsContext.jsx";
 import { useTheme } from "../../../theme/ThemeContext.jsx";
-import useDialogDismiss from "./useDialogDismiss.js";
 import SettingsSection from "./SettingsSection.jsx";
 import SettingsToggle from "./SettingsToggle.jsx";
 
 export default function SettingsMenu({ isOpen, onOpenChange }) {
-    const panelRef = useRef(null);
+    const dialogRef = useRef(null);
     const { language, setLanguage, t } = useLanguage();
     const { randomizeAnswerOptions, toggleRandomizeAnswerOptions } = useSettings();
     const { isDark, toggleTheme } = useTheme();
-    const closeMenu = useDialogDismiss(isOpen, panelRef, onOpenChange);
 
-    if (!isOpen) return null;
+    useEffect(() => {
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+
+        if (isOpen && !dialog.open) {
+            dialog.showModal();
+        } else if (!isOpen && dialog.open) {
+            dialog.close();
+        }
+    }, [isOpen]);
+
+    const handleClose = () => onOpenChange(false);
+
+    const handleBackdropClick = (event) => {
+        if (event.target === dialogRef.current) {
+            handleClose();
+        }
+    };
 
     const ThemeIcon = isDark ? Moon : Sun;
 
-    return createPortal(
-        <>
-            <div className="settings-overlay" aria-hidden="true" onClick={closeMenu} />
+    return (
+        <dialog
+            ref={dialogRef}
+            className="settings-panel"
+            onClose={handleClose}
+            onClick={handleBackdropClick}
+        >
+            <div className="settings-panel-header">
+                <h2 className="settings-panel-title">
+                    {t.settingsTitle}
+                </h2>
 
-            <div
-                ref={panelRef}
-                id="settings-panel"
-                className="settings-panel settings-panel-open"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="settings-panel-title"
-            >
-                <div className="settings-panel-header">
-                    <h2 id="settings-panel-title" className="settings-panel-title">
-                        {t.settingsTitle}
-                    </h2>
-
-                    <button
-                        type="button"
-                        onClick={closeMenu}
-                        className="settings-panel-close"
-                        aria-label={t.settingsClose}
-                    >
-                        <X className="settings-panel-close-icon" />
-                    </button>
-                </div>
-
-                <div className="settings-panel-content">
-                    <SettingsSection icon={Globe} label={t.settingsLanguage}>
-                        <LanguageOptions
-                            language={language}
-                            onSetLanguage={setLanguage}
-                        />
-                    </SettingsSection>
-
-                    <SettingsSection icon={Shuffle} label={t.settingsRandomizeAnswers} spaced>
-                        <SettingsToggle
-                            checked={randomizeAnswerOptions}
-                            onToggle={toggleRandomizeAnswerOptions}
-                            ariaLabel={t.settingsRandomizeAnswers}
-                        />
-                    </SettingsSection>
-
-                    <SettingsSection icon={ThemeIcon} label={t.settingsDarkMode} spaced>
-                        <SettingsToggle
-                            checked={isDark}
-                            onToggle={toggleTheme}
-                            ariaLabel={t.settingsDarkMode}
-                        />
-                    </SettingsSection>
-                </div>
+                <button
+                    type="button"
+                    onClick={handleClose}
+                    className="settings-panel-close"
+                    aria-label={t.settingsClose}
+                >
+                    <X className="settings-panel-close-icon" />
+                </button>
             </div>
-        </>,
-        document.body
+
+            <div className="settings-panel-content">
+                <SettingsSection icon={Globe} label={t.settingsLanguage}>
+                    <LanguageOptions
+                        language={language}
+                        onSetLanguage={setLanguage}
+                    />
+                </SettingsSection>
+
+                <SettingsSection icon={Shuffle} label={t.settingsRandomizeAnswers} spaced>
+                    <SettingsToggle
+                        checked={randomizeAnswerOptions}
+                        onToggle={toggleRandomizeAnswerOptions}
+                        ariaLabel={t.settingsRandomizeAnswers}
+                    />
+                </SettingsSection>
+
+                <SettingsSection icon={ThemeIcon} label={t.settingsDarkMode} spaced>
+                    <SettingsToggle
+                        checked={isDark}
+                        onToggle={toggleTheme}
+                        ariaLabel={t.settingsDarkMode}
+                    />
+                </SettingsSection>
+            </div>
+        </dialog>
     );
 }
 

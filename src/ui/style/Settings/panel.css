@@ -4,10 +4,13 @@
     top: 22px;
     bottom: 22px;
     left: 22px;
-    z-index: 901;
     display: flex;
     width: min(82vw, 330px);
     height: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
     transform: translateX(calc(-100% - 32px));
     flex-direction: column;
     overflow: hidden;
@@ -22,7 +25,7 @@
     box-shadow: 0 28px 90px rgba(0, 0, 0, 0.52);
 }
 
-.settings-panel-open {
+.settings-panel[open] {
     transform: translateX(0);
 }
 
