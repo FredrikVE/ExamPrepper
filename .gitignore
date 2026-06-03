@@ -27,3 +27,6 @@ dist-ssr
 *.patch
 *.diff
 *.rej
+
+# Plan documents
+*plan
