@@ -3,10 +3,7 @@ import { ChevronRight, Send } from "lucide-react";
 import FooterNavigationButton from "./FooterNavigationButton.jsx";
 
 export default function FooterActionButton({ viewModel, t }) {
-    const isLastQuestion = !viewModel.canGoNext;
-    const showSubmitButton = isLastQuestion && !viewModel.submitted;
-
-    if (showSubmitButton) {
+    if (viewModel.showSubmitButton) {
         return (
             <FooterNavigationButton
                 onClick={viewModel.submitExam}
@@ -22,7 +19,7 @@ export default function FooterActionButton({ viewModel, t }) {
     return (
         <FooterNavigationButton
             onClick={viewModel.nextQuestion}
-            disabled={!viewModel.canGoNext}
+            disabled={viewModel.isLastQuestion}
             variant="next"
             icon={<ChevronRight className="exam-footer-icon" />}
         >

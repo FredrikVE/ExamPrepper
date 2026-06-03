@@ -1,6 +1,7 @@
 // src/model/domain/GradeAnswerUseCase.js
-import normalizeAnswer from "../../utils/answer/normalizeAnswer.js";
+import normalizeAnswer from "./utils/normalizeAnswer.js";
 import getCorrectIndexes from "./utils/getCorrectIndexes.js";
+import { isFuzzyMatch } from "./utils/fuzzyMatch.js";
 import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 export default class GradeAnswerUseCase {
@@ -171,13 +172,37 @@ export default class GradeAnswerUseCase {
     }
 
     #isFillAnswerCorrect(question, answer) {
+        return this.getFillMatchType(question, answer) !== "none";
+    }
+
+    getFillMatchType(question, answer) {
+        if (!question || question.type !== QUESTION_TYPES.FILL) {
+            return "none";
+        }
+
         const normalizedAnswer = normalizeAnswer(answer);
 
-        return question.answers.some((acceptedAnswer) => {
-            const normalizedAcceptedAnswer = normalizeAnswer(acceptedAnswer);
+        if (!normalizedAnswer) {
+            return "none";
+        }
 
-            return normalizedAcceptedAnswer === normalizedAnswer;
+        const hasExactMatch = question.answers.some((acceptedAnswer) => {
+            return normalizeAnswer(acceptedAnswer) === normalizedAnswer;
         });
+
+        if (hasExactMatch) {
+            return "exact";
+        }
+
+        const hasFuzzyMatch = question.answers.some((acceptedAnswer) => {
+            return isFuzzyMatch(normalizedAnswer, normalizeAnswer(acceptedAnswer));
+        });
+
+        if (hasFuzzyMatch) {
+            return "fuzzy";
+        }
+
+        return "none";
     }
 
     #isDragDropAnswerFullyCorrect(question, answer) {

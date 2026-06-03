@@ -1,4 +1,4 @@
-// src/utils/answer/normalizeAnswer.js
+// src/model/domain/utils/normalizeAnswer.js
 export default function normalizeAnswer(value) {
 	const text = String(value || "");
 

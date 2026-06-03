@@ -5,8 +5,10 @@ import { mockExam2_no } from "./exams/mockExam2_no.js";
 import { mockExam2_en } from "./exams/mockExam2_en.js";
 import { mockExam3_no } from "./exams/mockExam3_no.js";
 import { mockExam3_en } from "./exams/mockExam3_en.js";
-import { mockExam4_no } from "./exams/mockExam4_no.js";
-import { mockExam4_en } from "./exams/mockExam4_en.js";
+import { mockExam4a_no } from "./exams/mockExam4a_no.js";
+import { mockExam4a_en } from "./exams/mockExam4a_en.js";
+import { mockExam4b_no } from "./exams/mockExam4b_no.js";
+import { mockExam4b_en } from "./exams/mockExam4b_en.js";
 import { mockExam5_no } from "./exams/mockExam5_no.js";
 import { mockExam5_en } from "./exams/mockExam5_en.js";
 import { mockExamDefinitions_no } from "./exams/mockExamDefinitions_no.js";
@@ -31,8 +33,10 @@ export const EXAMS = [
     mockExam2_en,
     mockExam3_no,
     mockExam3_en,
-    mockExam4_no,
-    mockExam4_en,
+    mockExam4a_no,
+    mockExam4a_en,
+    mockExam4b_no,
+    mockExam4b_en,
     mockExam5_no,
     mockExam5_en,
     mockExamDefinitions_no,

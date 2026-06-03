@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/Shared/QuestionHeader/QuestionHeader.jsx
-import { QUESTION_TYPES } from "../../../../../../../constants/QuestionTypes.js";
+import { getQuestionTypeLabel } from "../../../../../../viewmodel/Utils/questionCardViewState.js";
 import ResultBadge from "../../../ResultBadge/ResultBadge.jsx";
 import FormattedText from "../../../../Shared/FormattedText.jsx";
 
@@ -28,14 +28,4 @@ export default function QuestionHeader({ question, questionNumber, submitted, co
             {submitted ? <ResultBadge correct={correct} /> : null}
         </div>
     );
-}
-
-function getQuestionTypeLabel(type, t) {
-    if (type === QUESTION_TYPES.FILL) return t.questionTypeFill;
-    if (type === QUESTION_TYPES.MULTI) return t.questionTypeMulti;
-    if (type === QUESTION_TYPES.DRAG_DROP) return t.questionTypeDragDrop;
-    if (type === QUESTION_TYPES.DRAG_CATEGORIZE) return t.questionTypeDragCategorize;
-    if (type === QUESTION_TYPES.MATRIX_PLACEMENT) return t.questionTypeMatrixPlacement;
-    if (type === QUESTION_TYPES.SEQUENCE_ORDER) return t.questionTypeSequenceOrder;
-    return t.questionTypeSingle;
 }

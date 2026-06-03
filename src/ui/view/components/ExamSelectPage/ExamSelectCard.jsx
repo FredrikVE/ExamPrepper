@@ -1,5 +1,6 @@
 // src/ui/view/components/ExamSelectPage/ExamSelectCard.jsx
 import { BookOpen, ChevronRight, CircleHelp, Clock3 } from "lucide-react";
+import FormattedText from "../Shared/FormattedText.jsx";
 
 const DEFAULT_ESTIMATED_MINUTES = "45–60";
 
@@ -28,7 +29,7 @@ export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
                     </h2>
 
                     <p className="exam-select-card-description">
-                        {exam.description}
+                        <FormattedText text={exam.description} />
                     </p>
                 </div>
             </div>

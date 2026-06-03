@@ -1,4 +1,4 @@
-// src/ui/view/components/Footer/Utils/questionDotPagination.js
+// src/ui/viewmodel/Utils/questionDotPagination.js
 const COMPACT_DOT_QUESTION_THRESHOLD = 25;
 const RESPONSIVE_COMPACT_DOT_QUESTION_THRESHOLD = 12;
 const FILLED_COMPACT_VISIBLE_DOT_COUNT = 15;

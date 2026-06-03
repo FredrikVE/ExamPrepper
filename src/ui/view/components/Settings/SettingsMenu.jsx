@@ -1,155 +1,109 @@
 // src/ui/view/components/Settings/SettingsMenu.jsx
-import { useCallback, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef } from "react";
 import { X, Globe, Moon, Shuffle, Sun } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { LANGUAGES, LANGUAGE_LABELS } from "../../../../i18n/translations.js";
 import { useSettings } from "../../../settings/SettingsContext.jsx";
 import { useTheme } from "../../../theme/ThemeContext.jsx";
+import SettingsSection from "./SettingsSection.jsx";
+import SettingsToggle from "./SettingsToggle.jsx";
 
 export default function SettingsMenu({ isOpen, onOpenChange }) {
-    const panelRef = useRef(null);
+    const dialogRef = useRef(null);
     const { language, setLanguage, t } = useLanguage();
     const { randomizeAnswerOptions, toggleRandomizeAnswerOptions } = useSettings();
     const { isDark, toggleTheme } = useTheme();
 
-    const closeMenu = useCallback(() => {
-        onOpenChange(false);
-    }, [onOpenChange]);
-
-    // Close on Escape key
     useEffect(() => {
-        if (!isOpen) return;
+        const dialog = dialogRef.current;
+        if (!dialog) return;
 
-        const handleKeyDown = (event) => {
-            if (event.key === "Escape") {
-                closeMenu();
-            }
-        };
+        if (isOpen && !dialog.open) {
+            dialog.showModal();
+        } else if (!isOpen && dialog.open) {
+            dialog.close();
+        }
+    }, [isOpen]);
 
-        document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, closeMenu]);
+    const handleClose = () => onOpenChange(false);
 
-    // Close on click outside the panel
-    useEffect(() => {
-        if (!isOpen) return;
+    const handleBackdropClick = (event) => {
+        if (event.target === dialogRef.current) {
+            handleClose();
+        }
+    };
 
-        const handleClickOutside = (event) => {
-            if (panelRef.current && !panelRef.current.contains(event.target)) {
-                closeMenu();
-            }
-        };
+    const ThemeIcon = isDark ? Moon : Sun;
 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isOpen, closeMenu]);
+    return (
+        <dialog
+            ref={dialogRef}
+            className="settings-panel"
+            onClose={handleClose}
+            onClick={handleBackdropClick}
+        >
+            <div className="settings-panel-header">
+                <h2 className="settings-panel-title">
+                    {t.settingsTitle}
+                </h2>
 
-    if (!isOpen) return null;
-
-    return createPortal(
-        <>
-            <div className="settings-overlay" aria-hidden="true" onClick={closeMenu} />
-
-            <div
-                ref={panelRef}
-                id="settings-panel"
-                className="settings-panel settings-panel-open"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="settings-panel-title"
-            >
-                <div className="settings-panel-header">
-                    <h2 id="settings-panel-title" className="settings-panel-title">
-                        {t.settingsTitle}
-                    </h2>
-
-                    <button
-                        type="button"
-                        onClick={closeMenu}
-                        className="settings-panel-close"
-                        aria-label={t.settingsClose}
-                    >
-                        <X className="settings-panel-close-icon" />
-                    </button>
-                </div>
-
-                <div className="settings-panel-content">
-                    <div className="settings-section">
-                        <div className="settings-section-label">
-                            <Globe className="settings-section-icon" />
-                            {t.settingsLanguage}
-                        </div>
-
-                        <div className="settings-language-options">
-                            {Object.values(LANGUAGES).map((langCode) => (
-                                <button
-                                    key={langCode}
-                                    type="button"
-                                    onClick={() => setLanguage(langCode)}
-                                    className={`settings-language-button ${
-                                        language === langCode
-                                            ? "settings-language-button-active"
-                                            : ""
-                                    }`}
-                                >
-                                    {LANGUAGE_LABELS[langCode]}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="settings-section settings-section-spaced">
-                        <div className="settings-section-label">
-                            <Shuffle className="settings-section-icon" />
-                            {t.settingsRandomizeAnswers}
-                        </div>
-
-                        <SettingsToggle
-                            checked={randomizeAnswerOptions}
-                            onToggle={toggleRandomizeAnswerOptions}
-                            ariaLabel={t.settingsRandomizeAnswers}
-                        />
-                    </div>
-
-                    <div className="settings-section settings-section-spaced">
-                        <div className="settings-section-label">
-                            {isDark ? (
-                                <Moon className="settings-section-icon" />
-                            ) : (
-                                <Sun className="settings-section-icon" />
-                            )}
-                            {t.settingsDarkMode}
-                        </div>
-
-                        <SettingsToggle
-                            checked={isDark}
-                            onToggle={toggleTheme}
-                            ariaLabel={t.settingsDarkMode}
-                        />
-                    </div>
-                </div>
+                <button
+                    type="button"
+                    onClick={handleClose}
+                    className="settings-panel-close"
+                    aria-label={t.settingsClose}
+                >
+                    <X className="settings-panel-close-icon" />
+                </button>
             </div>
-        </>,
-        document.body
+
+            <div className="settings-panel-content">
+                <SettingsSection icon={Globe} label={t.settingsLanguage}>
+                    <LanguageOptions
+                        language={language}
+                        onSetLanguage={setLanguage}
+                    />
+                </SettingsSection>
+
+                <SettingsSection icon={Shuffle} label={t.settingsRandomizeAnswers} spaced>
+                    <SettingsToggle
+                        checked={randomizeAnswerOptions}
+                        onToggle={toggleRandomizeAnswerOptions}
+                        ariaLabel={t.settingsRandomizeAnswers}
+                    />
+                </SettingsSection>
+
+                <SettingsSection icon={ThemeIcon} label={t.settingsDarkMode} spaced>
+                    <SettingsToggle
+                        checked={isDark}
+                        onToggle={toggleTheme}
+                        ariaLabel={t.settingsDarkMode}
+                    />
+                </SettingsSection>
+            </div>
+        </dialog>
     );
 }
 
-function SettingsToggle({ checked, onToggle, ariaLabel }) {
+function LanguageOptions({ language, onSetLanguage }) {
     return (
-        <button
-            type="button"
-            onClick={onToggle}
-            className={`settings-toggle-track ${checked ? "settings-toggle-track-on" : ""}`}
-            role="switch"
-            aria-checked={checked}
-            aria-label={ariaLabel}
-        >
-            <span
-                className={`settings-toggle-thumb ${
-                    checked ? "settings-toggle-thumb-on" : ""
-                }`}
-            />
-        </button>
+        <div className="settings-language-options">
+            {Object.values(LANGUAGES).map((langCode) => {
+                const buttonClassName = language === langCode
+                    ? "settings-language-button settings-language-button-active"
+                    : "settings-language-button";
+
+                return (
+                    <button
+                        key={langCode}
+                        type="button"
+                        onClick={() => onSetLanguage(langCode)}
+                        className={buttonClassName}
+                    >
+                        {LANGUAGE_LABELS[langCode]}
+                    </button>
+                );
+            })}
+        </div>
     );
 }

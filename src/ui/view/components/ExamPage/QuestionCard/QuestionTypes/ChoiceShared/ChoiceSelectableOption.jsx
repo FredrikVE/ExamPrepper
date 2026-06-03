@@ -1,14 +1,11 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/ChoiceShared/ChoiceSelectableOption.jsx
-import { QUESTION_TYPES } from "../../../../../../../constants/QuestionTypes.js";
 import getOptionLetter from "./Utils/getOptionLetter.js";
 import { getSelectableOptionClassName } from "../../Shared/Styling/questionCardClassNames.js";
 import FormattedText from "../../../../Shared/FormattedText.jsx";
 
-export default function ChoiceSelectableOption({ question, option, optionIndex, displayIndex, isSelected, submitted, onSingleAnswer, onToggleMultiAnswer }) {
-    const inputType = question.type === QUESTION_TYPES.SINGLE ? "radio" : "checkbox";
-
+export default function ChoiceSelectableOption({ question, option, optionIndex, displayIndex, isSelected, submitted, inputType, onSingleAnswer, onToggleMultiAnswer }) {
     const handleChange = () => {
-        if (question.type === QUESTION_TYPES.SINGLE) {
+        if (inputType === "radio") {
             onSingleAnswer(question.id, optionIndex);
             return;
         }

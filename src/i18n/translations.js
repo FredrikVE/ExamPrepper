@@ -119,6 +119,7 @@ export const translations = {
         // FeedbackPanel
         feedbackCorrectLabel: "Din besvarelse er riktig",
         feedbackWrongLabel: "Din besvarelse er feil",
+        feedbackFuzzyMatchNote: "Godkjent med skrivefeil — se riktig stavemåte under.",
         feedbackAnswerLabel: "Fasit:",
         feedbackYourAnswerLabel: "Du svarte",
         feedbackCorrectAnswerLabel: "Riktig svar",
@@ -262,6 +263,7 @@ export const translations = {
         // FeedbackPanel
         feedbackCorrectLabel: "Your answer is correct",
         feedbackWrongLabel: "Your answer is incorrect",
+        feedbackFuzzyMatchNote: "Accepted with typo — see correct spelling below.",
         feedbackAnswerLabel: "Answer key:",
         feedbackYourAnswerLabel: "You answered",
         feedbackCorrectAnswerLabel: "Correct answer",
