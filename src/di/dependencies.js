@@ -1,9 +1,4 @@
 // src/di/dependencies.js
-import { conceptImageCatalogsBySubjectId } from "../data/conceptImageCatalogRegistry.js";
-
-import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
-import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
-import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
 import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
 import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
 import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
@@ -21,23 +16,29 @@ import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLan
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
 
+function requiredEnv(name) {
+    const viteEnv = import.meta.env?.[name];
+    const nodeEnv = typeof process !== "undefined" ? process.env?.[name] : undefined;
+    const value = viteEnv ?? nodeEnv;
+
+    if (!value) {
+        throw new Error(`Missing required environment variable: ${name}`);
+    }
+
+    return value;
+}
+
 // Configuration
-const useApi = import.meta.env.VITE_USE_API === "true";
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const imageBaseUrl = import.meta.env.VITE_IMAGE_BASE_URL;
+const apiBaseUrl = requiredEnv("VITE_API_BASE_URL");
+const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
-const conceptImageDataSource = useApi
-    ? new ApiConceptImageDataSource({ baseUrl: apiBaseUrl, imageBaseUrl })
-    : new ConceptImageDataSource(conceptImageCatalogsBySubjectId);
-
-const subjectDataSource = useApi
-    ? new ApiSubjectDataSource({ baseUrl: apiBaseUrl })
-    : new SubjectDataSource();
-
-const examQuestionDataSource = useApi
-    ? new ApiExamQuestionDataSource({ baseUrl: apiBaseUrl })
-    : new ExamQuestionDataSource();
+const subjectDataSource = new ApiSubjectDataSource({ baseUrl: apiBaseUrl });
+const examQuestionDataSource = new ApiExamQuestionDataSource({ baseUrl: apiBaseUrl });
+const conceptImageDataSource = new ApiConceptImageDataSource({
+    baseUrl: apiBaseUrl,
+    imageBaseUrl
+});
 
 // Repositories
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
