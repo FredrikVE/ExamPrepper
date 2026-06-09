@@ -74,6 +74,18 @@ examFlowApiDescribe("exam flow API integration", () => {
 		expect(context.gradeAnswer(singleChoiceQuestion, singleChoiceAnswer)).toBe(true);
 	});
 
+	test("loads explanation text from API", async () => {
+		const questions = await context.loadQuestions("mock-exam-1-en");
+		const fillQuestion = assertions.getQuestionByType(questions, QUESTION_TYPES.FILL);
+		const multipleChoiceQuestion = assertions.getQuestionByType(questions, QUESTION_TYPES.MULTI);
+		const optionWithExtendedExplanation = assertions.getOptionWithExtendedExplanation(multipleChoiceQuestion.options);
+
+		expect(fillQuestion.whyCorrect).toContain("business process");
+		expect(fillQuestion.whyWrong).toContain("workflow");
+		expect(optionWithExtendedExplanation.why).toEqual(expect.any(String));
+		expect(optionWithExtendedExplanation.whyExtended.length).toBeGreaterThan(0);
+	});
+
 	test("grades Autonomy and alignment matrix questions from API", async () => {
 		const examIds = [
 			"mock-exam-drag-categorize-no",

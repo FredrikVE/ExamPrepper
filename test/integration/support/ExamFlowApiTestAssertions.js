@@ -32,6 +32,16 @@ export default class ExamFlowApiTestAssertions {
 		throw new Error(`Could not find question with title: ${questionTitle}`);
 	}
 
+	getOptionWithExtendedExplanation(options) {
+		for (const option of options) {
+			if (Array.isArray(option.whyExtended) && option.whyExtended.length > 0) {
+				return option;
+			}
+		}
+
+		throw new Error("Could not find option with extended explanation.");
+	}
+
 	expectExamIds(exams, expectedExamIds) {
 		const actualExamIds = [];
 

@@ -71,6 +71,9 @@ export default class ApiExamQuestionDataSource extends ApiDataSource {
 		return {
 			...question,
 			answers: this.#getAnswers(question),
+			whyExtended: this.#getArray(question.whyExtended),
+			whyExtendedImageRefs: this.#getArray(question.whyExtendedImageRefs),
+			whyExtendedImages: this.#getArray(question.whyExtendedImages),
 			options: this.#toDomainOptions(question.options)
 		};
 	}
@@ -104,8 +107,32 @@ export default class ApiExamQuestionDataSource extends ApiDataSource {
 	#toDomainOption(option) {
 		return {
 			...option,
-			correct: this.#getCorrectValue(option)
+			correct: this.#getCorrectValue(option),
+			why: this.#getWhy(option),
+			whyExtended: this.#getArray(option.whyExtended),
+			whyExtendedImageRefs: this.#getArray(option.whyExtendedImageRefs),
+			whyExtendedImages: this.#getArray(option.whyExtendedImages)
 		};
+	}
+
+	#getWhy(option) {
+		if (option.why) {
+			return option.why;
+		}
+
+		if (option.feedback) {
+			return option.feedback;
+		}
+
+		return "";
+	}
+
+	#getArray(value) {
+		if (Array.isArray(value)) {
+			return value;
+		}
+
+		return [];
 	}
 
 	#getCorrectValue(option) {
