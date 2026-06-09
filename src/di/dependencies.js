@@ -6,6 +6,7 @@ import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.j
 import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
 import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
 import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
+import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
@@ -23,9 +24,12 @@ import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase
 // Configuration
 const useApi = import.meta.env.VITE_USE_API === "true";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const imageBaseUrl = import.meta.env.VITE_IMAGE_BASE_URL;
 
 // Datasources
-const conceptImageDataSource = new ConceptImageDataSource(conceptImageCatalogsBySubjectId);
+const conceptImageDataSource = useApi
+    ? new ApiConceptImageDataSource({ baseUrl: apiBaseUrl, imageBaseUrl })
+    : new ConceptImageDataSource(conceptImageCatalogsBySubjectId);
 
 const subjectDataSource = useApi
     ? new ApiSubjectDataSource({ baseUrl: apiBaseUrl })
