@@ -4,6 +4,8 @@ import { conceptImageCatalogsBySubjectId } from "../data/conceptImageCatalogRegi
 import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
 import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
 import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
+import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
+import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
@@ -18,10 +20,20 @@ import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLan
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
 
+// Configuration
+const useApi = import.meta.env.VITE_USE_API === "true";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
 // Datasources
 const conceptImageDataSource = new ConceptImageDataSource(conceptImageCatalogsBySubjectId);
-const examQuestionDataSource = new ExamQuestionDataSource();
-const subjectDataSource = new SubjectDataSource();
+
+const subjectDataSource = useApi
+    ? new ApiSubjectDataSource({ baseUrl: apiBaseUrl })
+    : new SubjectDataSource();
+
+const examQuestionDataSource = useApi
+    ? new ApiExamQuestionDataSource({ baseUrl: apiBaseUrl })
+    : new ExamQuestionDataSource();
 
 // Repositories
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);

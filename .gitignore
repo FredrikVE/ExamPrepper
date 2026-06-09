@@ -30,3 +30,7 @@ dist-ssr
 
 # Plan documents
 *plan
+
+# .env-filer
+.env.development
+.env.production
