@@ -96,3 +96,12 @@
     font-size: 18px;
     font-weight: 650;
 }
+.exam-attempt-save-status,
+.exam-attempt-save-error {
+	margin: var(--space-4) auto 0;
+	max-width: var(--exam-page-content-max-width);
+}
+
+.exam-attempt-save-error {
+	color: var(--danger);
+}

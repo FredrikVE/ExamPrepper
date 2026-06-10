@@ -2,8 +2,10 @@
 import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
 import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
 import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
+import ApiExamAttemptDataSource from "../model/datasource/ApiExamAttemptDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
+import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
 
 import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js";
@@ -15,6 +17,8 @@ import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLan
 
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
+import SubmitExamAttemptUseCase from "../model/domain/SubmitExamAttemptUseCase.js";
+import { getActiveAuthToken } from "../auth/AuthTokenProvider.js";
 
 function requiredEnv(name) {
     const viteEnv = import.meta.env?.[name];
@@ -33,15 +37,21 @@ const apiBaseUrl = requiredEnv("VITE_API_BASE_URL");
 const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
-const subjectDataSource = new ApiSubjectDataSource({ baseUrl: apiBaseUrl });
-const examQuestionDataSource = new ApiExamQuestionDataSource({ baseUrl: apiBaseUrl });
+const subjectDataSource = new ApiSubjectDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const examQuestionDataSource = new ApiExamQuestionDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 const conceptImageDataSource = new ApiConceptImageDataSource({
     baseUrl: apiBaseUrl,
-    imageBaseUrl
+    imageBaseUrl,
+    getToken: getActiveAuthToken
+});
+const examAttemptDataSource = new ApiExamAttemptDataSource({
+    baseUrl: apiBaseUrl,
+    getToken: getActiveAuthToken
 });
 
 // Repositories
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
+const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
 
 // Use cases
@@ -53,6 +63,7 @@ const getSubjectByIdUseCase = new GetSubjectByIdUseCase(subjectRepository);
 const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepository);
 const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
+const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
 
 // Export
 export {
@@ -63,5 +74,6 @@ export {
     getExamByIdUseCase,
     getExamByBaseIdAndLangUseCase,
     gradeAnswerUseCase,
-    calculateExamScoreUseCase
+    calculateExamScoreUseCase,
+    submitExamAttemptUseCase
 };

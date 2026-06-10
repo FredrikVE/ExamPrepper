@@ -2,9 +2,10 @@
 export default class ApiDataSource {
 	#baseUrl;
 
-	constructor({ baseUrl }) {
+	constructor({ baseUrl, getToken = null }) {
 		if (!baseUrl) throw new Error("ApiDataSource requires baseUrl");
 		this.#baseUrl = baseUrl.replace(/\/$/, "");
+		this.getToken = getToken;
 	}
 
 	async get(path) {
@@ -20,8 +21,10 @@ export default class ApiDataSource {
 	}
 
 	async #request(path, options) {
+		const authHeaders = await this.#getAuthHeaders();
+
 		const response = await fetch(`${this.#baseUrl}${path}`, {
-			headers: { Accept: "application/json", ...(options.headers ?? {}) },
+			headers: { Accept: "application/json", ...authHeaders, ...(options.headers ?? {}) },
 			...options
 		});
 
@@ -33,5 +36,19 @@ export default class ApiDataSource {
 		}
 
 		return payload;
+	}
+
+	async #getAuthHeaders() {
+		if (!this.getToken) {
+			return {};
+		}
+
+		const token = await this.getToken();
+
+		if (!token) {
+			return {};
+		}
+
+		return { Authorization: `Bearer ${token}` };
 	}
 }

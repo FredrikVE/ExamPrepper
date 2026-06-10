@@ -17,7 +17,7 @@ import SidebarMenuButton from "./ui/view/components/Sidebar/SidebarMenuButton.js
 import SettingsMenu from "./ui/view/components/Settings/SettingsMenu.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, gradeAnswerUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -106,6 +106,7 @@ function ExamPageWrapper({ examId, language }) {
         getExamQuestionsUseCase,
         gradeAnswerUseCase,
         calculateExamScoreUseCase,
+        submitExamAttemptUseCase,
         examId,
         language
     );

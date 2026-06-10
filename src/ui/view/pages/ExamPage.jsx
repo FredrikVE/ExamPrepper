@@ -36,6 +36,14 @@ export default function ExamPage({ viewModel }) {
         >
             <Header viewModel={viewModel} />
 
+            {viewModel.attemptSaving && (
+                <p className="exam-attempt-save-status">Lagrer forsøk...</p>
+            )}
+
+            {viewModel.attemptSaveError && (
+                <p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
+            )}
+
             <ExamProgress
                 visibleQuestions={viewModel.visibleQuestions}
                 currentQuestionIndex={viewModel.currentQuestionIndex}

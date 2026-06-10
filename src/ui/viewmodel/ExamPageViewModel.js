@@ -14,7 +14,7 @@ import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, 
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
 
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, examId, language) {
+export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [questions, setQuestions] = useState([]);
@@ -27,6 +27,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
+	const [savedAttempt, setSavedAttempt] = useState(null);
+	const [attemptSaveError, setAttemptSaveError] = useState(null);
+	const [attemptSaving, setAttemptSaving] = useState(false);
 
 	const examWorkspaceRef = useRef(null);
 
@@ -213,10 +216,26 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		});
 	}, []);
 
-	const submitExam = useCallback(() => {
+	const submitExam = useCallback(async () => {
 		setSubmitted(true);
+		setAttemptSaving(true);
+		setAttemptSaveError(null);
 		scrollExamWorkspaceToTop(examWorkspaceRef);
-	}, [examWorkspaceRef]);
+
+		try {
+			const attempt = await submitExamAttemptUseCase.execute({
+				examId,
+				lang: language,
+				answers
+			});
+
+			setSavedAttempt(attempt);
+		} catch (error) {
+			setAttemptSaveError(error?.message ?? "Kunne ikke lagre forsøket");
+		} finally {
+			setAttemptSaving(false);
+		}
+	}, [answers, examId, examWorkspaceRef, language, submitExamAttemptUseCase]);
 
 	const resetExam = useCallback(() => {
 		setAnswers({});
@@ -226,6 +245,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setElapsedSeconds(0);
 		setExpandedAnswerOptionIndexesByQuestionId({});
 		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questions));
+		setSavedAttempt(null);
+		setAttemptSaveError(null);
+		setAttemptSaving(false);
 
 		scrollExamWorkspaceToTop(examWorkspaceRef);
 	}, [examWorkspaceRef, questions]);
@@ -260,6 +282,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 					setElapsedSeconds(0);
 					setExpandedAnswerOptionIndexesByQuestionId({});
 					setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
+					setSavedAttempt(null);
+					setAttemptSaveError(null);
+					setAttemptSaving(false);
 				}
 			}
 
@@ -336,6 +361,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		score: examScore.score,
 		totalPoints: examScore.totalPoints,
 		percentage: examScore.percentage,
+		savedAttempt,
+		attemptSaving,
+		attemptSaveError,
 		answeredCount,
 		answeredCountLabel,
 		scoreLabel,
