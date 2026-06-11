@@ -9,10 +9,10 @@ export default class ExamAttemptRepository {
 	}
 
 	async getAttemptById(attemptId) {
-		return await this.examAttemptDataSource.getAttemptById(attemptId);
+		return await this.examAttemptDataSource.fetchAttemptById(attemptId);
 	}
 
 	async getMyStatistics() {
-		return await this.examAttemptDataSource.getMyStatistics();
+		return await this.examAttemptDataSource.fetchMyStatistics();
 	}
 }

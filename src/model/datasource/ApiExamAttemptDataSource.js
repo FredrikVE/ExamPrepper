@@ -6,11 +6,11 @@ export default class ApiExamAttemptDataSource extends ApiDataSource {
 		return await this.post("/exam-attempts", { examId, lang, answers });
 	}
 
-	async getAttemptById(attemptId) {
+	async fetchAttemptById(attemptId) {
 		return await this.get(`/exam-attempts/${encodeURIComponent(attemptId)}`);
 	}
 
-	async getMyStatistics() {
+	async fetchMyStatistics() {
 		return await this.get("/my/statistics");
 	}
 }
