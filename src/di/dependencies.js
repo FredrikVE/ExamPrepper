@@ -18,6 +18,7 @@ import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLan
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
 import SubmitExamAttemptUseCase from "../model/domain/SubmitExamAttemptUseCase.js";
+import GetMyStatisticsUseCase from "../model/domain/GetMyStatisticsUseCase.js";
 import { getActiveAuthToken } from "../auth/AuthTokenProvider.js";
 
 function requiredEnv(name) {
@@ -64,6 +65,7 @@ const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepo
 const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
+const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
 
 // Export
 export {
@@ -75,5 +77,6 @@ export {
     getExamByBaseIdAndLangUseCase,
     gradeAnswerUseCase,
     calculateExamScoreUseCase,
-    submitExamAttemptUseCase
+    submitExamAttemptUseCase,
+    getMyStatisticsUseCase
 };

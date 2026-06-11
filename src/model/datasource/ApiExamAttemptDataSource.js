@@ -9,4 +9,8 @@ export default class ApiExamAttemptDataSource extends ApiDataSource {
 	async getAttemptById(attemptId) {
 		return await this.get(`/exam-attempts/${encodeURIComponent(attemptId)}`);
 	}
+
+	async getMyStatistics() {
+		return await this.get("/my/statistics");
+	}
 }

@@ -11,4 +11,8 @@ export default class ExamAttemptRepository {
 	async getAttemptById(attemptId) {
 		return await this.examAttemptDataSource.getAttemptById(attemptId);
 	}
+
+	async getMyStatistics() {
+		return await this.examAttemptDataSource.getMyStatistics();
+	}
 }
