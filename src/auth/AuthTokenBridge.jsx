@@ -4,13 +4,18 @@ import { useAuth } from "@clerk/clerk-react";
 import { setAuthTokenProvider } from "./AuthTokenProvider.js";
 
 export default function AuthTokenBridge() {
-	const { getToken } = useAuth();
+	const { getToken, isLoaded, isSignedIn } = useAuth();
 
 	useEffect(() => {
+		if (!isLoaded || !isSignedIn) {
+			setAuthTokenProvider(null);
+			return;
+		}
+
 		setAuthTokenProvider(async () => await getToken());
 
 		return () => setAuthTokenProvider(null);
-	}, [getToken]);
+	}, [getToken, isLoaded, isSignedIn]);
 
 	return null;
 }
