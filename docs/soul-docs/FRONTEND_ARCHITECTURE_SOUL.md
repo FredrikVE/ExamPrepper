@@ -1,4 +1,4 @@
-# SOUL.md — Arkitekturprinsipper for ExamPrepper
+# SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
 <!-- Sist oppdatert: 2026-05-29 -->
 
