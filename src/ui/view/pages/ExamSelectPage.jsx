@@ -37,6 +37,7 @@ export default function ExamSelectPage({ viewModel }) {
             <ExamSelectTopbar
                 title={viewModel.title}
                 selectedSubject={viewModel.selectedSubject}
+                onShowStatistics={viewModel.showStatistics}
             />
 
             <ExamSelectIntro

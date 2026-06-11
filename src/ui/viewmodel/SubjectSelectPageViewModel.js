@@ -15,7 +15,7 @@ function normalizeSubjectsResult(result) {
 	return [];
 }
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject) {
+export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, onShowStatistics = () => {}) {
 	
 	// Statevariabler for fag-data, loading og error
 	const [subjects, setSubjects] = useState([]);
@@ -106,6 +106,10 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		onSelectSubject(subjectId);
 	}, [onSelectSubject]);
 
+	const showStatistics = useCallback(() => {
+		onShowStatistics();
+	}, [onShowStatistics]);
+
 	return {
 		// Data
 		subjects,
@@ -125,6 +129,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		setFaculty,
 
 		// Handlers
-		selectSubject
+		selectSubject,
+		showStatistics
 	};
 }

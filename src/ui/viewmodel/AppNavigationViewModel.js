@@ -51,6 +51,13 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		setSidebarOpen(false);
 	}, []);
 
+	const showStatistics = useCallback(() => {
+		setSelectedExamId(null);
+		setActiveScreen(NAV_SCREENS.OVERVIEW);
+		setSettingsOpen(false);
+		setSidebarOpen(false);
+	}, []);
+
 	const backToExamList = useCallback(() => {
 		setSelectedExamId(null);
 
@@ -94,7 +101,12 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 			return;
 		}
 
-		if (nextScreen === NAV_SCREENS.OVERVIEW || nextScreen === NAV_SCREENS.NOTES) {
+		if (nextScreen === NAV_SCREENS.OVERVIEW) {
+			showStatistics();
+			return;
+		}
+
+		if (nextScreen === NAV_SCREENS.NOTES) {
 			setSelectedExamId(null);
 			setActiveScreen(nextScreen);
 			return;
@@ -103,7 +115,7 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		if (nextScreen === NAV_SCREENS.SETTINGS) {
 			setSettingsOpen(true);
 		}
-	}, [selectedSubjectId, selectedExamId, showAllSubjects]);
+	}, [selectedSubjectId, selectedExamId, showAllSubjects, showStatistics]);
 
 	const navigateBackToList = useCallback(() => {
 		setSelectedExamId(null);
@@ -178,11 +190,15 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		activeScreen === NAV_SCREENS.SUBJECTS ||
 		activeScreen === NAV_SCREENS.SELECT;
 
-	const pageClassName = isSelectionScreen
+	const usesSelectionLayout =
+		isSelectionScreen ||
+		activeScreen === NAV_SCREENS.OVERVIEW;
+
+	const pageClassName = usesSelectionLayout
 		? "exam-select-page"
 		: "exam-page";
 
-	const shellClassName = isSelectionScreen
+	const shellClassName = usesSelectionLayout
 		? "exam-select-shell"
 		: "exam-shell";
 
@@ -207,6 +223,7 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		changeScreen,
 		selectSubject,
 		showAllSubjects,
+		showStatistics,
 		selectExam,
 		backToExamList
 	};

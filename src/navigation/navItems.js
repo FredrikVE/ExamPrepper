@@ -22,8 +22,8 @@ export const SIDEBAR_NAV_ITEMS = [
         id: "overview",
         section: "secondary",
         screen: NAV_SCREENS.OVERVIEW,
-        labelKey: "sidebarOverview",
-        fallbackLabel: "Oversikt",
+        labelKey: "sidebarStatistics",
+        fallbackLabel: "Din statistikk",
         activeScreens: [NAV_SCREENS.OVERVIEW]
     }
 ];

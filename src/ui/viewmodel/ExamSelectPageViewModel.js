@@ -17,7 +17,7 @@ function normalizeExamResult(result) {
     return [];
 }
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, onShowStatistics = () => {}) {
     const [exams, setExams] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -88,6 +88,10 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         onSelectExam(examId);
     }, [onSelectExam]);
 
+    const showStatistics = useCallback(() => {
+        onShowStatistics();
+    }, [onShowStatistics]);
+
     return {
         // Data
         exams,
@@ -106,6 +110,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         examCount: exams.length,
 
         // Handlers
-        selectExam
+        selectExam,
+        showStatistics
     };
 }

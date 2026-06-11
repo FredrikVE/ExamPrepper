@@ -8,6 +8,7 @@
 @import "./SubjectSelectPage/index.css";
 @import "./ExamSelectPage/index.css";
 @import "./ExamPage/index.css";
+@import "./StatisticsPage/index.css";
 
 /* Shared UI */
 @import "./Header/index.css";
