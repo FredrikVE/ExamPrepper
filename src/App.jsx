@@ -1,4 +1,5 @@
 // src/App.jsx
+import { lazy, Suspense } from "react";
 import { useAuth } from "@clerk/clerk-react";
 
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
@@ -14,7 +15,6 @@ import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.j
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
-import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
 
 import AppSidebar from "./ui/view/components/Sidebar/AppSidebar.jsx";
 import SidebarMenuButton from "./ui/view/components/Sidebar/SidebarMenuButton.jsx";
@@ -24,6 +24,8 @@ import { NAV_SCREENS } from "./navigation/navGraph.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getMyStatisticsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
+
+const StatisticsPage = lazy(() => import("./ui/view/pages/StatisticsPage.jsx"));
 
 export default function App() {
 	return (
@@ -178,6 +180,19 @@ function StatisticsPageWithViewModel({ language, t, onStartNewExam, authState })
 	);
 
 	return (
-		<StatisticsPage viewModel={statisticsPageViewModel} />
+		<Suspense fallback={<StatisticsPageLoadingFallback viewModel={statisticsPageViewModel} />}>
+			<StatisticsPage viewModel={statisticsPageViewModel} />
+		</Suspense>
+	);
+}
+
+function StatisticsPageLoadingFallback({ viewModel }) {
+	return (
+		<main className="statistics-page-workspace">
+			<section className="statistics-state">
+				<h2>{viewModel.loadingTitle}</h2>
+				<p>{viewModel.loadingBody}</p>
+			</section>
+		</main>
 	);
 }
