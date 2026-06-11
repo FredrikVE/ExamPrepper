@@ -24,8 +24,8 @@ export default class ApiDataSource {
 		const authHeaders = await this.#getAuthHeaders();
 
 		const response = await fetch(`${this.#baseUrl}${path}`, {
-			headers: { Accept: "application/json", ...authHeaders, ...(options.headers ?? {}) },
-			...options
+			...options,
+			headers: { Accept: "application/json", ...authHeaders, ...(options.headers ?? {}) }
 		});
 
 		const text = await response.text();
