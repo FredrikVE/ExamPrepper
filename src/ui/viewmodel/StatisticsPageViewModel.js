@@ -2,96 +2,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const EMPTY_LABEL = "—";
-const LOAD_ERROR_MESSAGE = "Kunne ikke laste statistikken din.";
 const DEFAULT_LANGUAGE = "no";
 const isNeverCancelled = () => false;
 
 const LOCALES = {
 	no: "nb-NO",
 	en: "en-GB"
-};
-
-const FALLBACK_TEXT_BY_LANGUAGE = {
-	no: {
-		pageTitle: "Din statistikk",
-		pageSubtitle: "Se hvordan øvingen din utvikler seg over tid.",
-		loadingTitle: "Laster statistikk...",
-		loadingBody: "Vi henter tallene dine fra backend.",
-		signedOutTitle: "Logg inn for å se statistikk",
-		signedOutBody: "Statistikk lagres bare for innloggede brukere i denne iterasjonen.",
-		emptyTitle: "Du har ingen forsøk ennå",
-		emptyBody: "Når du leverer en eksamen, vises fremgangen din her.",
-		errorTitle: "Kunne ikke laste statistikk",
-		retryButton: "Prøv igjen",
-		startNewExamButton: "Start ny eksamen",
-		heroBody: "Flott innsats. Du bygger kunnskap litt for litt.",
-		heroNoTrend: "Lever flere eksamener for å se utviklingen over tid.",
-		heroTitlePrefix: "Du har øvd",
-		heroTitleUnitSingular: "gang",
-		heroTitleUnitPlural: "ganger",
-		kpiAttemptCount: "Antall forsøk",
-		kpiAverageScore: "Snittscore",
-		kpiBestScore: "Beste score",
-		kpiCorrectAnswers: "Riktige svar",
-		kpiUniqueExams: "Eksamener øvd på",
-		attemptUnitSingular: "forsøk",
-		attemptUnitPlural: "forsøk",
-		examUnitSingular: "eksamen",
-		examUnitPlural: "eksamener",
-		questionUnitSingular: "spørsmål",
-		questionUnitPlural: "spørsmål",
-		ofLabel: "av",
-		scoreTrendTitle: "Din læringsreise",
-		scoreTrendSubtitle: "Siste 20 forsøk fra backend.",
-		scoreTrendEmptySummary: "Du trenger minst ett innlevert forsøk før vi kan vise en trend.",
-		recentAttemptsTitle: "Siste forsøk",
-		recentAttemptsSubtitle: "Siste 5 innleverte forsøk.",
-		recentAttemptsEmpty: "Ingen forsøk å vise ennå.",
-		attemptScoreLabel: "Score",
-		attemptFallbackTitlePrefix: "Eksamen",
-		attemptPointUnit: "poeng",
-		trendPointLabel: "Forsøk"
-	},
-	en: {
-		pageTitle: "Your statistics",
-		pageSubtitle: "See how your practice develops over time.",
-		loadingTitle: "Loading statistics...",
-		loadingBody: "We are fetching your numbers from the backend.",
-		signedOutTitle: "Sign in to see statistics",
-		signedOutBody: "Statistics are only saved for signed-in users in this iteration.",
-		emptyTitle: "You do not have any attempts yet",
-		emptyBody: "When you submit an exam, your progress will appear here.",
-		errorTitle: "Could not load statistics",
-		retryButton: "Try again",
-		startNewExamButton: "Start new exam",
-		heroBody: "Good work. You are building knowledge step by step.",
-		heroNoTrend: "Submit more exams to see your progress over time.",
-		heroTitlePrefix: "You have practised",
-		heroTitleUnitSingular: "time",
-		heroTitleUnitPlural: "times",
-		kpiAttemptCount: "Attempts",
-		kpiAverageScore: "Average score",
-		kpiBestScore: "Best score",
-		kpiCorrectAnswers: "Correct answers",
-		kpiUniqueExams: "Exams practised",
-		attemptUnitSingular: "attempt",
-		attemptUnitPlural: "attempts",
-		examUnitSingular: "exam",
-		examUnitPlural: "exams",
-		questionUnitSingular: "question",
-		questionUnitPlural: "questions",
-		ofLabel: "of",
-		scoreTrendTitle: "Your learning journey",
-		scoreTrendSubtitle: "Latest 20 attempts from the backend.",
-		scoreTrendEmptySummary: "You need at least one submitted attempt before we can show a trend.",
-		recentAttemptsTitle: "Latest attempts",
-		recentAttemptsSubtitle: "Latest 5 submitted attempts.",
-		recentAttemptsEmpty: "No attempts to show yet.",
-		attemptScoreLabel: "Score",
-		attemptFallbackTitlePrefix: "Exam",
-		attemptPointUnit: "points",
-		trendPointLabel: "Attempt"
-	}
 };
 
 export default function useStatisticsPageViewModel(
@@ -109,7 +25,7 @@ export default function useStatisticsPageViewModel(
 	const isSignedIn = authState.isSignedIn === true;
 	const hasClerkAuth = authState.hasClerkAuth !== false;
 
-	const copy = useMemo(() => createStatisticsCopy(language, t), [language, t]);
+	const copy = useMemo(() => createStatisticsCopy(t), [t]);
 
 	const loadStatistics = useCallback(async (isCancelled = isNeverCancelled) => {
 		if (!isAuthLoaded || !isSignedIn) {
@@ -133,14 +49,14 @@ export default function useStatisticsPageViewModel(
 
 			if (!isCancelled()) {
 				setStatistics(null);
-				setStatisticsLoadError(error?.message ?? t.statisticsLoadErrorMessage ?? LOAD_ERROR_MESSAGE);
+				setStatisticsLoadError(error?.message ?? copy.loadErrorMessage);
 			}
 		} finally {
 			if (!isCancelled()) {
 				setStatisticsLoading(false);
 			}
 		}
-	}, [getMyStatisticsUseCase, isAuthLoaded, isSignedIn, t]);
+	}, [copy.loadErrorMessage, getMyStatisticsUseCase, isAuthLoaded, isSignedIn]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -152,9 +68,7 @@ export default function useStatisticsPageViewModel(
 		};
 	}, [loadStatistics]);
 
-	const dashboard = useMemo(() => {
-		return createDashboardModel(statistics, language, copy);
-	}, [statistics, language, copy]);
+	const dashboard = useMemo(() => createDashboardModel(statistics, language, copy), [statistics, language, copy]);
 
 	const retryLoadStatistics = useCallback(() => {
 		loadStatistics();
@@ -341,80 +255,61 @@ function buildScoreTrendChart(scoreTrend, copy) {
 	};
 }
 
-function createStatisticsCopy(language = DEFAULT_LANGUAGE, t = {}) {
-	const fallback = FALLBACK_TEXT_BY_LANGUAGE[language] ?? FALLBACK_TEXT_BY_LANGUAGE[DEFAULT_LANGUAGE];
-
-	const text = {
-		...fallback,
-		pageTitle: t.selectStatistics ?? fallback.pageTitle,
-		pageSubtitle: t.statisticsPageSubtitle ?? fallback.pageSubtitle,
-		loadingTitle: t.statisticsLoadingTitle ?? fallback.loadingTitle,
-		loadingBody: t.statisticsLoadingBody ?? fallback.loadingBody,
-		signedOutTitle: t.statisticsSignedOutTitle ?? fallback.signedOutTitle,
-		signedOutBody: t.statisticsSignedOutBody ?? fallback.signedOutBody,
-		emptyTitle: t.statisticsHeroEmptyTitle ?? fallback.emptyTitle,
-		emptyBody: t.statisticsHeroEmptyBody ?? fallback.emptyBody,
-		errorTitle: t.statisticsErrorTitle ?? fallback.errorTitle,
-		retryButton: t.statisticsRetryButton ?? fallback.retryButton,
-		startNewExamButton: t.statisticsStartNewExamButton ?? fallback.startNewExamButton,
-		heroBody: t.statisticsHeroBody ?? fallback.heroBody,
-		heroNoTrend: t.statisticsHeroNoTrend ?? fallback.heroNoTrend,
-		heroTitlePrefix: t.statisticsHeroTitlePrefix ?? fallback.heroTitlePrefix,
-		heroTitleUnitSingular: t.statisticsHeroTitleUnitSingular ?? fallback.heroTitleUnitSingular,
-		heroTitleUnitPlural: t.statisticsHeroTitleUnitPlural ?? fallback.heroTitleUnitPlural,
-		kpiAttemptCount: t.statisticsKpiAttemptCount ?? fallback.kpiAttemptCount,
-		kpiAverageScore: t.statisticsKpiAverageScore ?? fallback.kpiAverageScore,
-		kpiBestScore: t.statisticsKpiBestScore ?? fallback.kpiBestScore,
-		kpiCorrectAnswers: t.statisticsKpiCorrectAnswers ?? fallback.kpiCorrectAnswers,
-		kpiUniqueExams: t.statisticsKpiUniqueExams ?? fallback.kpiUniqueExams,
-		attemptUnitSingular: t.statisticsAttemptUnitSingular ?? fallback.attemptUnitSingular,
-		attemptUnitPlural: t.statisticsAttemptUnitPlural ?? fallback.attemptUnitPlural,
-		examUnitSingular: t.statisticsExamUnitSingular ?? fallback.examUnitSingular,
-		examUnitPlural: t.statisticsExamUnitPlural ?? fallback.examUnitPlural,
-		questionUnitSingular: t.statisticsQuestionUnitSingular ?? fallback.questionUnitSingular,
-		questionUnitPlural: t.statisticsQuestionUnitPlural ?? fallback.questionUnitPlural,
-		ofLabel: t.statisticsOfLabel ?? fallback.ofLabel,
-		scoreTrendTitle: t.statisticsScoreTrendTitle ?? fallback.scoreTrendTitle,
-		scoreTrendSubtitle: t.statisticsScoreTrendSubtitle ?? fallback.scoreTrendSubtitle,
-		scoreTrendEmptySummary: t.statisticsScoreTrendEmptySummary ?? fallback.scoreTrendEmptySummary,
-		recentAttemptsTitle: t.statisticsRecentAttemptsTitle ?? fallback.recentAttemptsTitle,
-		recentAttemptsSubtitle: t.statisticsRecentAttemptsSubtitle ?? fallback.recentAttemptsSubtitle,
-		recentAttemptsEmpty: t.statisticsRecentAttemptsEmpty ?? fallback.recentAttemptsEmpty,
-		attemptScoreLabel: t.statisticsAttemptScoreLabel ?? fallback.attemptScoreLabel,
-		attemptFallbackTitlePrefix: t.statisticsAttemptFallbackTitlePrefix ?? fallback.attemptFallbackTitlePrefix,
-		attemptPointUnit: t.statisticsAttemptPointUnit ?? fallback.attemptPointUnit,
-		trendPointLabel: t.statisticsTrendPointLabel ?? fallback.trendPointLabel
-	};
-
+function createStatisticsCopy(t = {}) {
 	return {
-		...text,
+		pageTitle: t.selectStatistics,
+		pageSubtitle: t.statisticsPageSubtitle,
+		loadingTitle: t.statisticsLoadingTitle,
+		loadingBody: t.statisticsLoadingBody,
+		signedOutTitle: t.statisticsSignedOutTitle,
+		signedOutBody: t.statisticsSignedOutBody,
+		emptyTitle: t.statisticsHeroEmptyTitle,
+		emptyBody: t.statisticsHeroEmptyBody,
+		errorTitle: t.statisticsErrorTitle,
+		retryButton: t.statisticsRetryButton,
+		startNewExamButton: t.statisticsStartNewExamButton,
+		heroBody: t.statisticsHeroBody,
+		heroNoTrend: t.statisticsHeroNoTrend,
+		kpiAttemptCount: t.statisticsKpiAttemptCount,
+		kpiAverageScore: t.statisticsKpiAverageScore,
+		kpiBestScore: t.statisticsKpiBestScore,
+		kpiCorrectAnswers: t.statisticsKpiCorrectAnswers,
+		kpiUniqueExams: t.statisticsKpiUniqueExams,
+		scoreTrendTitle: t.statisticsScoreTrendTitle,
+		scoreTrendSubtitle: t.statisticsScoreTrendSubtitle,
+		scoreTrendEmptySummary: t.statisticsScoreTrendEmptySummary,
+		recentAttemptsTitle: t.statisticsRecentAttemptsTitle,
+		recentAttemptsSubtitle: t.statisticsRecentAttemptsSubtitle,
+		recentAttemptsEmpty: t.statisticsRecentAttemptsEmpty,
+		attemptScoreLabel: t.statisticsAttemptScoreLabel,
+		loadErrorMessage: t.statisticsLoadErrorMessage,
 
 		createHeroTitle(count) {
-			return `${text.heroTitlePrefix} ${count} ${selectUnit(count, text.heroTitleUnitSingular, text.heroTitleUnitPlural)}`;
+			return `${t.statisticsHeroTitlePrefix} ${count} ${selectUnit(count, t.statisticsHeroTitleUnitSingular, t.statisticsHeroTitleUnitPlural)}`;
 		},
 
 		createTrendPointLabel(number) {
-			return `${text.trendPointLabel} ${number}`;
+			return `${t.statisticsTrendPointLabel} ${number}`;
 		},
 
 		createAttemptCountDescription(count) {
-			return `${count} ${selectUnit(count, text.attemptUnitSingular, text.attemptUnitPlural)}`;
+			return `${count} ${selectUnit(count, t.statisticsAttemptUnitSingular, t.statisticsAttemptUnitPlural)}`;
 		},
 
 		createCorrectAnswersDescription(correct, total) {
-			return `${correct} ${text.ofLabel} ${total} ${selectUnit(total, text.questionUnitSingular, text.questionUnitPlural)}`;
+			return `${correct} ${t.statisticsOfLabel} ${total} ${selectUnit(total, t.statisticsQuestionUnitSingular, t.statisticsQuestionUnitPlural)}`;
 		},
 
 		createUniqueExamsDescription(count) {
-			return `${count} ${selectUnit(count, text.examUnitSingular, text.examUnitPlural)}`;
+			return `${count} ${selectUnit(count, t.statisticsExamUnitSingular, t.statisticsExamUnitPlural)}`;
 		},
 
 		createAttemptFallbackTitle(examId) {
-			return `${text.attemptFallbackTitlePrefix} ${examId}`;
+			return `${t.statisticsAttemptFallbackTitlePrefix} ${examId}`;
 		},
 
 		createAttemptPointsLabel(scorePoints, totalPoints) {
-			return `${scorePoints} / ${totalPoints} ${text.attemptPointUnit}`;
+			return `${scorePoints} / ${totalPoints} ${t.statisticsAttemptPointUnit}`;
 		}
 	};
 }
