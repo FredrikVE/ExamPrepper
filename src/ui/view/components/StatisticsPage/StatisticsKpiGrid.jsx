@@ -1,7 +1,7 @@
 // src/ui/view/components/StatisticsPage/StatisticsKpiGrid.jsx
-export default function StatisticsKpiGrid({ cards }) {
+export default function StatisticsKpiGrid({ cards, ariaLabel }) {
 	return (
-		<section className="statistics-kpi-grid" aria-label="Statistikk nøkkeltall">
+		<section className="statistics-kpi-grid" aria-label={ariaLabel}>
 			{cards.map((card) => (
 				<article key={card.id} className="statistics-kpi-card">
 					<div className="statistics-kpi-header">

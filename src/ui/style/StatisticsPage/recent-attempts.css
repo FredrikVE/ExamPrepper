@@ -1,0 +1,40 @@
+/* src/ui/style/StatisticsPage/recent-attempts.css */
+.statistics-attempt-list {
+	display: grid;
+	gap: var(--space-3);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.statistics-attempt-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-5);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	background: var(--panel-strong);
+	padding: var(--space-5);
+}
+
+.statistics-attempt-item div,
+.statistics-attempt-score {
+	display: grid;
+	gap: 4px;
+}
+
+.statistics-attempt-item strong {
+	color: var(--text-main);
+	font-size: 14px;
+}
+
+.statistics-attempt-score {
+	justify-items: end;
+	text-align: right;
+}
+
+.statistics-attempt-score strong {
+	color: var(--accent);
+	font-size: 20px;
+}

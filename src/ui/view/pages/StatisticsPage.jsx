@@ -66,22 +66,15 @@ export default function StatisticsPage({ viewModel }) {
 							className="statistics-progress-bar"
 							value={viewModel.hero.progressPercentage}
 							max={100}
-							aria-label={viewModel.kpiCards[0]?.label}
+							aria-label={viewModel.hero.progressLabel}
 						/>
 					</div>
 				</div>
 
-				{viewModel.hero.improvement ? (
-					<div className={`statistics-hero-meter ${viewModel.hero.improvement.isPositive ? "is-positive" : "is-negative"}`}>
-						<strong>{viewModel.hero.improvement.label}</strong>
-						<span>{viewModel.hero.improvement.suffix}</span>
-					</div>
-				) : (
-					<div className="statistics-hero-meter">
-						<strong>{viewModel.kpiCards[0]?.value}</strong>
-						<span>{viewModel.hero.trendLabel ?? ""}</span>
-					</div>
-				)}
+				<div className={viewModel.hero.meterClassName}>
+					<strong>{viewModel.hero.meterValueLabel}</strong>
+					<span>{viewModel.hero.meterDescription}</span>
+				</div>
 			</section>
 
 			{viewModel.isStatisticsEmpty ? (
@@ -93,7 +86,7 @@ export default function StatisticsPage({ viewModel }) {
 				/>
 			) : (
 				<>
-					<StatisticsKpiGrid cards={viewModel.kpiCards} />
+					<StatisticsKpiGrid cards={viewModel.kpiCards} ariaLabel={viewModel.kpiGridLabel} />
 
 					<div className="statistics-dashboard-grid">
 						<StatisticsScoreTrendChart chart={viewModel.scoreTrendChart} />

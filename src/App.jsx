@@ -171,13 +171,13 @@ function AuthenticatedStatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 }
 
 function StatisticsPageWithViewModel({ formatDate, t, onStartNewExam, authState }) {
-	const statisticsPageViewModel = useStatisticsPageViewModel(
+	const statisticsPageViewModel = useStatisticsPageViewModel({
 		getMyStatisticsUseCase,
 		formatDate,
 		t,
 		authState,
 		onStartNewExam
-	);
+	});
 
 	return (
 		<Suspense fallback={<StatisticsPageLoadingFallback viewModel={statisticsPageViewModel} />}>

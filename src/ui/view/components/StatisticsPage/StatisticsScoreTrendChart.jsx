@@ -56,7 +56,7 @@ function TrendDot({ cx, cy, payload }) {
 		return null;
 	}
 
-	return <circle cx={cx} cy={cy} r={5} fill="var(--accent)" stroke="#fff" strokeWidth={2.5} />;
+	return <circle cx={cx} cy={cy} r={5} fill="var(--accent)" stroke="var(--shell-bg)" strokeWidth={2.5} />;
 }
 
 function TrendLabel({ x, y, value }) {
@@ -77,7 +77,6 @@ function TrendXAxisTick({ x, y, payload }) {
 	}
 
 	const point = payload.value;
-	const index = payload.index ?? 0;
 
 	return (
 		<g transform={`translate(${x},${y})`}>

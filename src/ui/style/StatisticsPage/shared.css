@@ -1,0 +1,56 @@
+/* src/ui/style/StatisticsPage/shared.css */
+.statistics-page-header,
+.statistics-hero,
+.statistics-panel,
+.statistics-state,
+.statistics-kpi-card {
+	border: 1px solid var(--line-strong);
+	background: var(--panel-bg);
+	box-shadow: var(--shadow-card);
+	backdrop-filter: var(--blur-panel);
+}
+
+.statistics-page-header h1,
+.statistics-hero h2,
+.statistics-panel h2,
+.statistics-state h2 {
+	margin: 0;
+	color: var(--text-main);
+}
+
+.statistics-page-header p,
+.statistics-hero p,
+.statistics-panel p,
+.statistics-state p,
+.statistics-kpi-card p,
+.statistics-kpi-card span,
+.statistics-attempt-item span {
+	margin: 0;
+	color: var(--text-muted);
+}
+
+.statistics-panel,
+.statistics-state {
+	border-radius: var(--radius-lg);
+	padding: clamp(20px, 3vw, 28px);
+}
+
+.statistics-panel-header {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--space-5);
+	margin-bottom: var(--space-7);
+}
+
+.statistics-panel h2,
+.statistics-state h2 {
+	font-size: 22px;
+	letter-spacing: -0.03em;
+}
+
+.statistics-panel p,
+.statistics-state p {
+	margin-top: var(--space-2);
+	font-size: 14px;
+	line-height: 1.6;
+}

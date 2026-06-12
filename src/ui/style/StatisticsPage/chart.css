@@ -1,0 +1,22 @@
+/* src/ui/style/StatisticsPage/chart.css */
+.statistics-chart {
+	min-width: 0;
+	height: 280px;
+}
+
+.statistics-chart-tooltip {
+	display: grid;
+	gap: 4px;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-sm);
+	background: var(--panel-strong);
+	box-shadow: var(--shadow-card);
+	padding: var(--space-4);
+	color: var(--text-main);
+}
+
+.statistics-chart-tooltip span {
+	color: var(--text-muted);
+	font-size: 12px;
+	font-weight: 700;
+}
