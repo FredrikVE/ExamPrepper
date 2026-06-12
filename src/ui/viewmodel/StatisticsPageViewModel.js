@@ -2,17 +2,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const EMPTY_LABEL = "—";
-const DEFAULT_LANGUAGE = "no";
 const isNeverCancelled = () => false;
-
-const LOCALES = {
-	no: "nb-NO",
-	en: "en-GB"
-};
 
 export default function useStatisticsPageViewModel(
 	getMyStatisticsUseCase,
-	language,
+	formatDate,
 	t = {},
 	authState = {},
 	onStartNewExam = () => {}
@@ -68,7 +62,7 @@ export default function useStatisticsPageViewModel(
 		};
 	}, [loadStatistics]);
 
-	const dashboard = useMemo(() => createDashboardModel(statistics, language, copy), [statistics, language, copy]);
+	const dashboard = useMemo(() => createDashboardModel(statistics, formatDate, copy), [statistics, formatDate, copy]);
 
 	const retryLoadStatistics = useCallback(() => {
 		loadStatistics();
@@ -113,8 +107,8 @@ export default function useStatisticsPageViewModel(
 	};
 }
 
-function createDashboardModel(statistics, language, copy) {
-	const normalized = normalizeStatistics(statistics, language, copy);
+function createDashboardModel(statistics, formatDate, copy) {
+	const normalized = normalizeStatistics(statistics, formatDate, copy);
 
 	return {
 		isStatisticsEmpty: normalized.attemptCount === 0,
@@ -128,7 +122,7 @@ function createDashboardModel(statistics, language, copy) {
 	};
 }
 
-function normalizeStatistics(statistics, language, copy) {
+function normalizeStatistics(statistics, formatDate, copy) {
 	const attemptCount = normalizeNumber(statistics?.attemptCount);
 	const totalCorrectAnswers = normalizeNumber(statistics?.totalCorrectAnswers);
 	const totalQuestions = normalizeNumber(statistics?.totalQuestions);
@@ -143,12 +137,12 @@ function normalizeStatistics(statistics, language, copy) {
 		totalCorrectAnswers,
 		totalQuestions,
 		uniqueExamCount,
-		scoreTrend: normalizeTrendPoints(statistics?.scoreTrend, language, copy),
-		recentAttempts: normalizeRecentAttempts(statistics?.recentAttempts, language, copy)
+		scoreTrend: normalizeTrendPoints(statistics?.scoreTrend, formatDate, copy),
+		recentAttempts: normalizeRecentAttempts(statistics?.recentAttempts, formatDate, copy)
 	};
 }
 
-function normalizeTrendPoints(scoreTrend, language, copy) {
+function normalizeTrendPoints(scoreTrend, formatDate, copy) {
 	if (!Array.isArray(scoreTrend)) {
 		return [];
 	}
@@ -161,7 +155,7 @@ function normalizeTrendPoints(scoreTrend, language, copy) {
 			return {
 				id: attempt.attemptId ?? `trend-${index + 1}`,
 				name: copy.createTrendPointLabel(index + 1),
-				dateLabel: formatDateLabel(attempt.submittedAt, language),
+				dateLabel: formatDate(attempt.submittedAt) ?? EMPTY_LABEL,
 				percentage,
 				percentageLabel: formatPercentageLabel(percentage),
 				scoreLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, copy)
@@ -169,7 +163,7 @@ function normalizeTrendPoints(scoreTrend, language, copy) {
 		});
 }
 
-function normalizeRecentAttempts(recentAttempts, language, copy) {
+function normalizeRecentAttempts(recentAttempts, formatDate, copy) {
 	if (!Array.isArray(recentAttempts)) {
 		return [];
 	}
@@ -184,7 +178,7 @@ function normalizeRecentAttempts(recentAttempts, language, copy) {
 				id: attempt.attemptId ?? `recent-${index + 1}`,
 				examId,
 				examTitle: examId ? copy.createAttemptFallbackTitle(examId) : copy.createAttemptFallbackTitle(index + 1),
-				submittedAtLabel: formatDateLabel(attempt.submittedAt, language),
+				submittedAtLabel: formatDate(attempt.submittedAt) ?? EMPTY_LABEL,
 				percentage,
 				percentageLabel: formatPercentageLabel(percentage),
 				pointsLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, copy),
@@ -199,46 +193,75 @@ function buildHero(statistics, copy) {
 			title: copy.emptyTitle,
 			body: copy.emptyBody,
 			progressPercentage: 0,
-			trendLabel: copy.heroNoTrend
+			improvement: null
 		};
 	}
+
+	const improvement = computeImprovement(statistics.scoreTrend, copy);
 
 	return {
 		title: copy.createHeroTitle(statistics.attemptCount),
 		body: copy.heroBody,
 		progressPercentage: statistics.averageScorePercentage ?? 0,
-		trendLabel: copy.heroNoTrend
+		improvement
+	};
+}
+
+function computeImprovement(scoreTrend, copy) {
+	if (!Array.isArray(scoreTrend) || scoreTrend.length < 2) {
+		return null;
+	}
+
+	const first = scoreTrend[0];
+	const last = scoreTrend[scoreTrend.length - 1];
+
+	if (first.percentage === null || last.percentage === null) {
+		return null;
+	}
+
+	const diff = Math.round((last.percentage - first.percentage) * 10) / 10;
+
+	if (diff === 0) {
+		return null;
+	}
+
+	const sign = diff > 0 ? "+" : "";
+	const suffix = diff > 0 ? copy.improvementSuffix : copy.lowerSuffix;
+
+	return {
+		value: diff,
+		label: `${sign}${formatNumber(Math.abs(diff))} %`,
+		suffix,
+		isPositive: diff > 0
 	};
 }
 
 function buildKpiCards(statistics, copy) {
 	return [
 		{
-			id: "attempt-count",
-			label: copy.kpiAttemptCount,
-			value: String(statistics.attemptCount),
-			description: copy.createAttemptCountDescription(statistics.attemptCount)
-		},
-		{
 			id: "average-score",
+			iconKey: "chart",
 			label: copy.kpiAverageScore,
 			value: formatPercentageLabel(statistics.averageScorePercentage),
 			description: copy.createAttemptCountDescription(statistics.attemptCount)
 		},
 		{
 			id: "best-score",
+			iconKey: "star",
 			label: copy.kpiBestScore,
 			value: formatPercentageLabel(statistics.bestScorePercentage),
 			description: copy.createAttemptCountDescription(statistics.attemptCount)
 		},
 		{
 			id: "correct-answers",
+			iconKey: "check",
 			label: copy.kpiCorrectAnswers,
 			value: statistics.totalQuestions > 0 ? String(statistics.totalCorrectAnswers) : EMPTY_LABEL,
 			description: copy.createCorrectAnswersDescription(statistics.totalCorrectAnswers, statistics.totalQuestions)
 		},
 		{
 			id: "unique-exams",
+			iconKey: "book",
 			label: copy.kpiUniqueExams,
 			value: statistics.uniqueExamCount > 0 ? String(statistics.uniqueExamCount) : EMPTY_LABEL,
 			description: copy.createUniqueExamsDescription(statistics.uniqueExamCount)
@@ -270,6 +293,8 @@ function createStatisticsCopy(t = {}) {
 		startNewExamButton: t.statisticsStartNewExamButton,
 		heroBody: t.statisticsHeroBody,
 		heroNoTrend: t.statisticsHeroNoTrend,
+		improvementSuffix: t.statisticsHeroImprovementSinceFirstSuffix,
+		lowerSuffix: t.statisticsHeroLowerSinceFirstSuffix,
 		kpiAttemptCount: t.statisticsKpiAttemptCount,
 		kpiAverageScore: t.statisticsKpiAverageScore,
 		kpiBestScore: t.statisticsKpiBestScore,
@@ -359,20 +384,6 @@ function formatNumber(value) {
 	}
 
 	return String(Number(value.toFixed(1)));
-}
-
-function formatDateLabel(value, language) {
-	const timestamp = Date.parse(value);
-
-	if (!Number.isFinite(timestamp)) {
-		return EMPTY_LABEL;
-	}
-
-	return new Intl.DateTimeFormat(LOCALES[language] ?? LOCALES[DEFAULT_LANGUAGE], {
-		day: "2-digit",
-		month: "short",
-		year: "numeric"
-	}).format(new Date(timestamp));
 }
 
 function selectUnit(count, singular, plural) {

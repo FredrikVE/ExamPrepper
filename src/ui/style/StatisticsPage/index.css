@@ -124,11 +124,42 @@
 	letter-spacing: -0.04em;
 }
 
-.statistics-hero-copy > p:last-child {
+.statistics-hero-copy > p:last-of-type {
 	max-width: 62ch;
 	margin-top: var(--space-4);
 	font-size: 16px;
 	line-height: 1.7;
+}
+
+.statistics-hero-progress {
+	margin-top: var(--space-6);
+}
+
+.statistics-progress-bar {
+	display: block;
+	width: 100%;
+	height: 12px;
+	border: 0;
+	border-radius: var(--radius-full);
+	overflow: hidden;
+	appearance: none;
+	background: var(--line);
+}
+
+.statistics-progress-bar::-webkit-progress-bar {
+	background: var(--line);
+	border-radius: var(--radius-full);
+}
+
+.statistics-progress-bar::-webkit-progress-value {
+	background: var(--accent-gradient);
+	border-radius: var(--radius-full);
+	transition: width var(--transition-normal);
+}
+
+.statistics-progress-bar::-moz-progress-bar {
+	background: var(--accent-gradient);
+	border-radius: var(--radius-full);
 }
 
 .statistics-hero-meter {
@@ -156,9 +187,25 @@
 	line-height: 1.5;
 }
 
+.statistics-hero-meter.is-positive strong {
+	color: var(--success-text);
+}
+
+.statistics-hero-meter.is-positive {
+	background: color-mix(in srgb, var(--success) 10%, var(--panel-strong));
+}
+
+.statistics-hero-meter.is-negative strong {
+	color: var(--danger-text);
+}
+
+.statistics-hero-meter.is-negative {
+	background: color-mix(in srgb, var(--danger) 10%, var(--panel-strong));
+}
+
 .statistics-kpi-grid {
 	display: grid;
-	grid-template-columns: repeat(5, minmax(0, 1fr));
+	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: var(--space-5);
 	margin-bottom: var(--space-7);
 }
@@ -169,15 +216,38 @@
 	padding: var(--space-6);
 }
 
+.statistics-kpi-header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+}
+
+.statistics-kpi-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	flex-shrink: 0;
+	border-radius: var(--radius-xs);
+	background: var(--accent-soft);
+	color: var(--accent);
+}
+
+.statistics-kpi-icon svg {
+	width: 16px;
+	height: 16px;
+}
+
 .statistics-kpi-card p {
 	font-size: 13px;
 	font-weight: 800;
 }
 
-.statistics-kpi-card strong {
+.statistics-kpi-value {
 	display: block;
 	margin-top: var(--space-3);
-	color: var(--text-main);
+	color: var(--accent);
 	font-size: clamp(26px, 3vw, 34px);
 	line-height: 1;
 	letter-spacing: -0.04em;
@@ -302,7 +372,7 @@
 
 @media (max-width: 1180px) {
 	.statistics-kpi-grid {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	.statistics-dashboard-grid {

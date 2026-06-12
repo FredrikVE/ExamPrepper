@@ -40,7 +40,7 @@ export default function App() {
 }
 
 function AppContent() {
-	const { language, t } = useLanguage();
+	const { language, t, formatDate } = useLanguage();
 
 	const navigationViewModel = useAppNavigationViewModel(
 		language,
@@ -102,7 +102,7 @@ function AppContent() {
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
 					<StatisticsPageWrapper
-						language={language}
+						formatDate={formatDate}
 						t={t}
 						onStartNewExam={navigationViewModel.showAllSubjects}
 					/>
@@ -134,13 +134,13 @@ function ExamPageWrapper({ examId, language }) {
 	);
 }
 
-function StatisticsPageWrapper({ language, t, onStartNewExam }) {
+function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
 
 	if (!hasClerkAuth) {
 		return (
 			<StatisticsPageWithViewModel
-				language={language}
+				formatDate={formatDate}
 				t={t}
 				onStartNewExam={onStartNewExam}
 				authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false }}
@@ -150,19 +150,19 @@ function StatisticsPageWrapper({ language, t, onStartNewExam }) {
 
 	return (
 		<AuthenticatedStatisticsPageWrapper
-			language={language}
+			formatDate={formatDate}
 			t={t}
 			onStartNewExam={onStartNewExam}
 		/>
 	);
 }
 
-function AuthenticatedStatisticsPageWrapper({ language, t, onStartNewExam }) {
+function AuthenticatedStatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 	const { isLoaded, isSignedIn } = useAuth();
 
 	return (
 		<StatisticsPageWithViewModel
-			language={language}
+			formatDate={formatDate}
 			t={t}
 			onStartNewExam={onStartNewExam}
 			authState={{ hasClerkAuth: true, isLoaded, isSignedIn }}
@@ -170,10 +170,10 @@ function AuthenticatedStatisticsPageWrapper({ language, t, onStartNewExam }) {
 	);
 }
 
-function StatisticsPageWithViewModel({ language, t, onStartNewExam, authState }) {
+function StatisticsPageWithViewModel({ formatDate, t, onStartNewExam, authState }) {
 	const statisticsPageViewModel = useStatisticsPageViewModel(
 		getMyStatisticsUseCase,
-		language,
+		formatDate,
 		t,
 		authState,
 		onStartNewExam

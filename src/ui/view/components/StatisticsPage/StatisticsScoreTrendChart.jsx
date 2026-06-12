@@ -16,13 +16,15 @@ export default function StatisticsScoreTrendChart({ chart }) {
 			) : (
 				<div className="statistics-chart" aria-label={chart.title}>
 					<ResponsiveContainer width="100%" height={280}>
-						<LineChart data={chart.points} margin={{ top: 10, right: 12, bottom: 0, left: -16 }}>
+						<LineChart data={chart.points} margin={{ top: 28, right: 12, bottom: 0, left: -16 }}>
 							<CartesianGrid stroke="var(--line)" strokeDasharray="4 4" />
 							<XAxis
 								dataKey="name"
 								stroke="var(--text-soft)"
 								tickLine={false}
 								axisLine={false}
+								tick={<TrendXAxisTick />}
+								height={44}
 							/>
 							<YAxis
 								domain={[0, 100]}
@@ -37,14 +39,52 @@ export default function StatisticsScoreTrendChart({ chart }) {
 								dataKey="percentage"
 								stroke="var(--accent)"
 								strokeWidth={3}
-								dot={{ r: 4, strokeWidth: 2 }}
+								dot={<TrendDot />}
 								activeDot={{ r: 6 }}
+								label={<TrendLabel />}
 							/>
 						</LineChart>
 					</ResponsiveContainer>
 				</div>
 			)}
 		</section>
+	);
+}
+
+function TrendDot({ cx, cy, payload }) {
+	if (cx == null || cy == null || payload?.percentage == null) {
+		return null;
+	}
+
+	return <circle cx={cx} cy={cy} r={5} fill="var(--accent)" stroke="#fff" strokeWidth={2.5} />;
+}
+
+function TrendLabel({ x, y, value }) {
+	if (x == null || y == null || value == null) {
+		return null;
+	}
+
+	return (
+		<text x={x} y={y - 14} textAnchor="middle" fill="var(--text-main)" fontSize={12} fontWeight={700}>
+			{`${Math.round(value)} %`}
+		</text>
+	);
+}
+
+function TrendXAxisTick({ x, y, payload }) {
+	if (!payload) {
+		return null;
+	}
+
+	const point = payload.value;
+	const index = payload.index ?? 0;
+
+	return (
+		<g transform={`translate(${x},${y})`}>
+			<text x={0} y={0} dy={12} textAnchor="middle" fill="var(--text-muted)" fontSize={12} fontWeight={600}>
+				{point}
+			</text>
+		</g>
 	);
 }
 
