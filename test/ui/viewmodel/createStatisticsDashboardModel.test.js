@@ -64,6 +64,7 @@ describe("createStatisticsDashboardModel", () => {
 			meterDescription: "Snittscore"
 		});
 		expect(result.kpiGridLabel).toBe("Statistikk nøkkeltall");
+		expect(result.kpiCards.map((card) => card.tone)).toEqual(["blue", "green", "purple", "orange"]);
 	});
 
 	test("normalizes backend statistics for the view", () => {
@@ -106,6 +107,7 @@ describe("createStatisticsDashboardModel", () => {
 		expect(result.hero.meterValueLabel).toBe("74.4 %");
 		expect(result.hero.meterClassName).toBe("statistics-hero-meter");
 		expect(result.kpiCards.map((card) => card.value)).toEqual(["74.4 %", "92 %", "12", "1"]);
+		expect(result.kpiCards.map((card) => card.tone)).toEqual(["blue", "green", "purple", "orange"]);
 		expect(result.scoreTrendChart.points).toHaveLength(1);
 		expect(result.scoreTrendChart.points[0]).toMatchObject({
 			id: "a1",

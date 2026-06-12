@@ -5,7 +5,7 @@ export default function StatisticsKpiGrid({ cards, ariaLabel }) {
 	return (
 		<section className="statistics-kpi-grid" aria-label={ariaLabel}>
 			{cards.map((card) => (
-				<article key={card.id} className="statistics-kpi-card">
+				<article key={card.id} className={`statistics-kpi-card statistics-kpi-card--${card.tone}`}>
 					<div className="statistics-kpi-header">
 						<KpiIcon iconKey={card.iconKey} />
 						<p>{card.label}</p>

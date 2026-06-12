@@ -112,6 +112,7 @@ function buildKpiCards(statistics, copy) {
 		{
 			id: "average-score",
 			iconKey: "chart",
+			tone: "blue",
 			label: copy.kpiAverageScore,
 			value: formatPercentageLabel(statistics.averageScorePercentage),
 			description: copy.createAttemptCountDescription(statistics.attemptCount)
@@ -119,6 +120,7 @@ function buildKpiCards(statistics, copy) {
 		{
 			id: "best-score",
 			iconKey: "star",
+			tone: "green",
 			label: copy.kpiBestScore,
 			value: formatPercentageLabel(statistics.bestScorePercentage),
 			description: copy.createAttemptCountDescription(statistics.attemptCount)
@@ -126,6 +128,7 @@ function buildKpiCards(statistics, copy) {
 		{
 			id: "correct-answers",
 			iconKey: "check",
+			tone: "purple",
 			label: copy.kpiCorrectAnswers,
 			value: statistics.totalQuestions > 0 ? String(statistics.totalCorrectAnswers) : EMPTY_LABEL,
 			description: copy.createCorrectAnswersDescription(statistics.totalCorrectAnswers, statistics.totalQuestions)
@@ -133,6 +136,7 @@ function buildKpiCards(statistics, copy) {
 		{
 			id: "unique-exams",
 			iconKey: "book",
+			tone: "orange",
 			label: copy.kpiUniqueExams,
 			value: statistics.uniqueExamCount > 0 ? String(statistics.uniqueExamCount) : EMPTY_LABEL,
 			description: copy.createUniqueExamsDescription(statistics.uniqueExamCount)

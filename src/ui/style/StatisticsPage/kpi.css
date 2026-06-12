@@ -1,4 +1,47 @@
 /* src/ui/style/StatisticsPage/kpi.css */
+
+/* ── Tone palette ─────────────────────────── */
+.statistics-kpi-card--blue {
+	--statistics-kpi-accent: #1067ff;
+	--statistics-kpi-accent-surface: rgba(16, 103, 255, 0.1);
+}
+
+.statistics-kpi-card--green {
+	--statistics-kpi-accent: #12b886;
+	--statistics-kpi-accent-surface: rgba(18, 184, 134, 0.1);
+}
+
+.statistics-kpi-card--purple {
+	--statistics-kpi-accent: #7c3aed;
+	--statistics-kpi-accent-surface: rgba(124, 58, 237, 0.1);
+}
+
+.statistics-kpi-card--orange {
+	--statistics-kpi-accent: #e8590c;
+	--statistics-kpi-accent-surface: rgba(232, 89, 12, 0.1);
+}
+
+.dark .statistics-kpi-card--blue {
+	--statistics-kpi-accent: #6d9eff;
+	--statistics-kpi-accent-surface: rgba(109, 158, 255, 0.14);
+}
+
+.dark .statistics-kpi-card--green {
+	--statistics-kpi-accent: #38d9a9;
+	--statistics-kpi-accent-surface: rgba(56, 217, 169, 0.14);
+}
+
+.dark .statistics-kpi-card--purple {
+	--statistics-kpi-accent: #a78bfa;
+	--statistics-kpi-accent-surface: rgba(167, 139, 250, 0.14);
+}
+
+.dark .statistics-kpi-card--orange {
+	--statistics-kpi-accent: #ff922b;
+	--statistics-kpi-accent-surface: rgba(255, 146, 43, 0.14);
+}
+
+/* ── Grid ─────────────────────────────────── */
 .statistics-kpi-grid {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -6,6 +49,7 @@
 	margin-bottom: var(--space-7);
 }
 
+/* ── Card ─────────────────────────────────── */
 .statistics-kpi-card {
 	min-width: 0;
 	border-radius: var(--radius-md);
@@ -18,37 +62,42 @@
 	gap: var(--space-3);
 }
 
+/* ── Icon badge ───────────────────────────── */
 .statistics-kpi-icon {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 28px;
-	height: 28px;
+	inline-size: 2.25rem;
+	block-size: 2.25rem;
 	flex-shrink: 0;
-	border-radius: var(--radius-xs);
-	background: var(--accent-soft);
-	color: var(--accent);
+	border-radius: 9999px;
+	background: var(--statistics-kpi-accent-surface);
+	color: var(--statistics-kpi-accent);
 }
 
 .statistics-kpi-icon svg {
-	width: 16px;
-	height: 16px;
+	display: block;
+	inline-size: 1.125rem;
+	block-size: 1.125rem;
 }
 
+/* ── Label ────────────────────────────────── */
 .statistics-kpi-card p {
 	font-size: 13px;
 	font-weight: 800;
 }
 
+/* ── Value ────────────────────────────────── */
 .statistics-kpi-value {
 	display: block;
 	margin-top: var(--space-3);
-	color: var(--accent);
+	color: var(--statistics-kpi-accent);
 	font-size: clamp(26px, 3vw, 34px);
 	line-height: 1;
 	letter-spacing: -0.04em;
 }
 
+/* ── Description ──────────────────────────── */
 .statistics-kpi-card span {
 	display: block;
 	margin-top: var(--space-3);
