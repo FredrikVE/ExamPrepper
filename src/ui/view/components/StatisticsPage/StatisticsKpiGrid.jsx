@@ -33,8 +33,8 @@ function KpiIcon({ iconKey }) {
 	}
 
 	return (
-		<span className="statistics-kpi-icon" aria-hidden="true">
-			<Icon size={20} strokeWidth={1.8} />
-		</span>
+		<div className="statistics-kpi-icon" aria-hidden="true">
+			<Icon size={20} />
+		</div>
 	);
 }
