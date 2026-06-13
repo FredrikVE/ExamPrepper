@@ -10,6 +10,7 @@ import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
 import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
 import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
 import shouldHandleFooterNavigationKeyDown from "./Utils/keyboardNavigation.js";
+import transformAnswersForApi from "./Utils/transformAnswersForApi.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
 
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
@@ -226,7 +227,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			const attempt = await submitExamAttemptUseCase.execute({
 				examId,
 				lang: language,
-				answers
+				answers: transformAnswersForApi(questions, answers)
 			});
 
 			setSavedAttempt(attempt);
@@ -235,7 +236,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		} finally {
 			setAttemptSaving(false);
 		}
-	}, [answers, examId, examWorkspaceRef, language, submitExamAttemptUseCase]);
+	}, [answers, examId, examWorkspaceRef, language, questions, submitExamAttemptUseCase]);
 
 	const resetExam = useCallback(() => {
 		setAnswers({});
