@@ -14,6 +14,7 @@ import transformAnswersForApi from "./Utils/transformAnswersForApi.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
+import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
 	const { randomizeAnswerOptions } = useSettings();
@@ -76,14 +77,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const shouldUseCompactDots = shouldUseCompactDotsByQuestionCount(visibleQuestionCount);
 	const shouldUseResponsiveCompactDots = shouldAllowResponsiveCompactDots(visibleQuestionCount);
 
-	const filledCompactQuestionDotEntries = useMemo(() => {
-		return getFilledCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex);
-	}, [visibleQuestions, currentQuestionIndex]);
-
-	const minimalCompactQuestionDotEntries = useMemo(() => {
-		return getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex);
-	}, [visibleQuestions, currentQuestionIndex]);
-
 	const questionCorrectnessByQuestionId = useMemo(() => {
 		if (!submitted) {
 			return {};
@@ -95,6 +88,32 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			gradeAnswerUseCase
 		);
 	}, [submitted, questions, answers, gradeAnswerUseCase]);
+
+	const questionDotEntries = useMemo(() => {
+		return createQuestionDotEntries(
+			visibleQuestions,
+			currentQuestionIndex,
+			questionCorrectnessByQuestionId
+		);
+	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
+
+	const filledCompactQuestionDotEntries = useMemo(() => {
+		return createCompactQuestionDotEntries(
+			getFilledCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex),
+			visibleQuestions,
+			currentQuestionIndex,
+			questionCorrectnessByQuestionId
+		);
+	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
+
+	const minimalCompactQuestionDotEntries = useMemo(() => {
+		return createCompactQuestionDotEntries(
+			getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex),
+			visibleQuestions,
+			currentQuestionIndex,
+			questionCorrectnessByQuestionId
+		);
+	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
 
 	const currentQuestionIsCorrect = currentQuestion
 		? questionCorrectnessByQuestionId[currentQuestion.id] ?? false
@@ -390,7 +409,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		elapsedTimeLabel,
 
 		expandedAnswerOptionIndexes,
-		questionCorrectnessByQuestionId,
+		questionDotEntries,
 		scrollToTopRequestId,
 
 		canGoPrevious,
