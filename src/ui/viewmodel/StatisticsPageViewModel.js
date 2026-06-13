@@ -5,13 +5,7 @@ import createStatisticsDashboardModel from "./StatisticsPage/createStatisticsDas
 
 const isNeverCancelled = () => false;
 
-export default function useStatisticsPageViewModel({
-	getMyStatisticsUseCase,
-	formatDate,
-	t,
-	authState,
-	onStartNewExam
-}) {
+export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, formatDate, t, authState, onStartNewExam }) {
 	const [statistics, setStatistics] = useState(null);
 	const [statisticsLoading, setStatisticsLoading] = useState(false);
 	const [statisticsLoadError, setStatisticsLoadError] = useState(null);

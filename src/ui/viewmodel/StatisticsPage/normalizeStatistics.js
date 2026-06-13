@@ -1,12 +1,5 @@
 // src/ui/viewmodel/StatisticsPage/normalizeStatistics.js
-import {
-	EMPTY_LABEL,
-	normalizeNumber,
-	normalizeNullableNumber,
-	normalizeNullablePercentage,
-	formatPercentageLabel,
-	createPointsLabel
-} from "./statisticsFormatters.js";
+import { EMPTY_LABEL, normalizeNumber, normalizeNullableNumber, normalizeNullablePercentage, formatPercentageLabel, createPointsLabel } from "./statisticsFormatters.js";
 
 export function normalizeStatistics(statistics, formatDate, copy) {
 	const attemptCount = normalizeNumber(statistics?.attemptCount);
