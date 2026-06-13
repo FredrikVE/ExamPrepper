@@ -1,12 +1,20 @@
 // src/ui/view/components/ExamSelectPage/ExamSelectGrid.jsx
 import ExamSelectCard from "./ExamSelectCard.jsx";
 
-export default function ExamSelectGrid({ exams, t, onSelectExam }) {
-    if (!Array.isArray(exams) || exams.length === 0) {
+export default function ExamSelectGrid({
+    exams,
+    emptyTitle,
+    emptyMessage,
+    practiceExamLabel,
+    questionLabel,
+    minuteLabel,
+    onSelectExam
+}) {
+    if (exams.length === 0) {
         return (
             <section className="exam-select-empty">
-                <h2>{t.selectEmptyTitle ?? "Ingen eksamener tilgjengelig"}</h2>
-                <p>{t.selectEmptyMessage ?? "Dette faget har ingen mock-eksamener ennå."}</p>
+                <h2>{emptyTitle}</h2>
+                <p>{emptyMessage}</p>
             </section>
         );
     }
@@ -18,7 +26,9 @@ export default function ExamSelectGrid({ exams, t, onSelectExam }) {
                     key={exam.id}
                     exam={exam}
                     index={index}
-                    t={t}
+                    practiceExamLabel={practiceExamLabel}
+                    questionLabel={questionLabel}
+                    minuteLabel={minuteLabel}
                     onSelectExam={onSelectExam}
                 />
             ))}

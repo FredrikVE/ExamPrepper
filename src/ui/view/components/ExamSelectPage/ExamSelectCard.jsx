@@ -4,8 +4,8 @@ import FormattedText from "../Shared/FormattedText.jsx";
 
 const DEFAULT_ESTIMATED_MINUTES = "45–60";
 
-export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
-    const modeLabel = exam.modeLabel ?? t.selectPracticeExamLabel(index + 1);
+export default function ExamSelectCard({ exam, index, practiceExamLabel, questionLabel, minuteLabel, onSelectExam }) {
+    const modeLabel = exam.modeLabel ?? practiceExamLabel(index + 1);
     const estimatedMinutes = exam.estimatedMinutes ?? DEFAULT_ESTIMATED_MINUTES;
 
     return (
@@ -39,7 +39,7 @@ export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
                     <CircleHelp className="exam-select-card-meta-icon" />
                     <div>
                         <strong>{exam.questionCount}</strong>
-                        <span>{t.selectQuestionLabel}</span>
+                        <span>{questionLabel}</span>
                     </div>
                 </div>
 
@@ -49,7 +49,7 @@ export default function ExamSelectCard({ exam, index, t, onSelectExam }) {
                     <Clock3 className="exam-select-card-meta-icon" />
                     <div>
                         <strong>{estimatedMinutes}</strong>
-                        <span>{t.selectMinuteLabel}</span>
+                        <span>{minuteLabel}</span>
                     </div>
                 </div>
 

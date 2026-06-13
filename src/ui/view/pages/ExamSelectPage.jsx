@@ -4,27 +4,25 @@ import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
 
 export default function ExamSelectPage({ viewModel }) {
-    if (viewModel.loading) {
+    if (viewModel.examsLoading) {
         return (
             <main className="exam-select-workspace">
                 <div className="exam-select-ambient-light" aria-hidden="true" />
 
                 <section className="exam-select-state">
-                    <p>
-                        {viewModel.t.selectLoadingMessage ?? "Laster eksamener..."}
-                    </p>
+                    <p>{viewModel.loadingMessage}</p>
                 </section>
             </main>
         );
     }
 
-    if (viewModel.error) {
+    if (viewModel.examsLoadError) {
         return (
             <main className="exam-select-workspace">
                 <div className="exam-select-ambient-light" aria-hidden="true" />
 
                 <section className="exam-select-state">
-                    <p>{viewModel.error}</p>
+                    <p>{viewModel.examsLoadError}</p>
                 </section>
             </main>
         );
@@ -36,17 +34,22 @@ export default function ExamSelectPage({ viewModel }) {
 
             <ExamSelectTopbar
                 title={viewModel.title}
-                selectedSubject={viewModel.selectedSubject}
+                statisticsLabel={viewModel.statisticsLabel}
                 onShowStatistics={viewModel.showStatistics}
             />
 
             <ExamSelectIntro
                 selectedSubject={viewModel.selectedSubject}
+                subtitle={viewModel.subtitle}
             />
 
             <ExamSelectGrid
                 exams={viewModel.exams}
-                t={viewModel.t}
+                emptyTitle={viewModel.emptyTitle}
+                emptyMessage={viewModel.emptyMessage}
+                practiceExamLabel={viewModel.practiceExamLabel}
+                questionLabel={viewModel.questionLabel}
+                minuteLabel={viewModel.minuteLabel}
                 onSelectExam={viewModel.selectExam}
             />
         </main>

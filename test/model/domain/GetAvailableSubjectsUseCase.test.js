@@ -32,10 +32,8 @@ describe("GetAvailableSubjectsUseCase", () => {
 
         const result = await useCase.execute({ language: "en" });
 
-        expect(result).toEqual({
-            subjects: [
-                { id: "visible", isVisible: true }
-            ]
-        });
+        expect(result).toEqual([
+            { id: "visible", isVisible: true }
+        ]);
     });
 });
