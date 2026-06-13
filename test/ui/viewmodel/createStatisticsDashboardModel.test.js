@@ -109,7 +109,12 @@ describe("createStatisticsDashboardModel", () => {
 		expect(result.hero.meterClassName).toBe("statistics-hero-meter");
 		expect(result.kpiCards.map((card) => card.value)).toEqual(["74.4 %", "92 %", "12", "1"]);
 		expect(result.kpiCards.map((card) => card.tone)).toEqual(["blue", "green", "purple", "orange"]);
-		expect(result.kpiCards.every((card) => card.sparkline === null)).toBe(true);
+		expect(result.kpiCards.map((card) => card.sparkline)).toEqual([
+			null,
+			null,
+			{ type: "bar", points: [14, 0] },
+			null
+		]);
 		expect(result.scoreTrendChart.points).toHaveLength(1);
 		expect(result.scoreTrendChart.points[0]).toMatchObject({
 			id: "a1",
@@ -127,7 +132,7 @@ describe("createStatisticsDashboardModel", () => {
 		});
 	});
 
-	test("builds sparkline data from scoreTrend when at least two valid points exist", () => {
+	test("builds meaningful sparkline data per KPI from scoreTrend", () => {
 		const result = createStatisticsDashboardModel({
 			attemptCount: 3,
 			averageScorePercentage: 60,
@@ -145,9 +150,9 @@ describe("createStatisticsDashboardModel", () => {
 
 		const sparklines = result.kpiCards.map((card) => card.sparkline);
 
-		expect(sparklines[0]).toEqual({ type: "line", points: [40, 60, 80] });
+		expect(sparklines[0]).toEqual({ type: "line", points: [40, 50, 60] });
 		expect(sparklines[1]).toEqual({ type: "line", points: [40, 60, 80] });
-		expect(sparklines[2]).toEqual({ type: "bar", points: [40, 60, 80] });
-		expect(sparklines[3]).toEqual({ type: "bar", points: [40, 60, 80] });
+		expect(sparklines[2]).toEqual({ type: "bar", points: [8, 12, 16] });
+		expect(sparklines[3]).toBe(null);
 	});
 });
