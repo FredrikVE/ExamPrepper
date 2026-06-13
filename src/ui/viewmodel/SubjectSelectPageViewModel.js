@@ -62,7 +62,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 				}
 			}
 			catch (error) {
-				console.error("Feil ved henting av fag:", error);
+				console.error("Feil ved henting av fag:", error);		//kast heller feil på ordentlig måte.
 
 				if (!cancelled) {
 					setSubjects([]);

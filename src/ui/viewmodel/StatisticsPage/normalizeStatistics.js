@@ -1,6 +1,9 @@
 // src/ui/viewmodel/StatisticsPage/normalizeStatistics.js
 import { EMPTY_LABEL, normalizeNumber, normalizeNullableNumber, normalizeNullablePercentage, formatPercentageLabel, createPointsLabel } from "./statisticsFormatters.js";
 
+// Burde ikke denne modulariseres mer??
+// Denne har codesmell..
+
 export function normalizeStatistics(statistics, formatDate, copy) {
 	const attemptCount = normalizeNumber(statistics?.attemptCount);
 	const totalCorrectAnswers = normalizeNumber(statistics?.totalCorrectAnswers);

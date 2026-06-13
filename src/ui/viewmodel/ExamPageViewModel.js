@@ -13,7 +13,7 @@ import shouldHandleFooterNavigationKeyDown from "./Utils/keyboardNavigation.js";
 import transformAnswersForApi from "./Utils/transformAnswersForApi.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
 
-const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";
+const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";		// Mer SSOT på dette med feilhåndteringer.. dette er ikke brå nok
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language) {
 	const { randomizeAnswerOptions } = useSettings();

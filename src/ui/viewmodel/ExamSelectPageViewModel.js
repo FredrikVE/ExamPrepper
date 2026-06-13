@@ -101,7 +101,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
 
         // Tekster
         t,
-        title: t.selectTitle ?? "Eksamens-emulator",
+        title: t.selectTitle ?? "Eksamens-emulator",            // å ha "magic strenger" sånn som dette er jalla. Aldri gjør dette.
         introTitle: t.selectIntroTitle ?? "Velg eksamen",
         subtitle,
 
