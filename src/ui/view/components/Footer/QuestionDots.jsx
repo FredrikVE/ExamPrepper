@@ -14,7 +14,7 @@ export default function QuestionDots({ viewModel, t }) {
                         questionNumber={questionIndex + 1}
                         isActive={questionIndex === viewModel.currentQuestionIndex}
                         submitted={viewModel.submitted}
-                        isCorrect={viewModel.submitted ? viewModel.isAnswerCorrect(question) : false}
+                        isCorrect={viewModel.submitted ? (viewModel.questionCorrectnessByQuestionId[question.id] ?? false) : false}
                         onClick={() => viewModel.goToQuestion(questionIndex)}
                         t={t}
                     />
@@ -57,7 +57,7 @@ const renderCompactQuestionDotEntry = (questionDotEntry, viewModel, t, dotDispla
             questionNumber={questionDotEntry.questionIndex + 1}
             isActive={questionDotEntry.questionIndex === viewModel.currentQuestionIndex}
             submitted={viewModel.submitted}
-            isCorrect={viewModel.submitted && question ? viewModel.isAnswerCorrect(question) : false}
+            isCorrect={viewModel.submitted && question ? (viewModel.questionCorrectnessByQuestionId[question.id] ?? false) : false}
             onClick={() => viewModel.goToQuestion(questionDotEntry.questionIndex)}
             t={t}
             dotDisplayMode={dotDisplayMode}

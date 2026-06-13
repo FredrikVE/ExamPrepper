@@ -1,5 +1,5 @@
 // src/ui/viewmodel/ExamPageViewModel.js
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
 import getScoreLabel from "./Utils/getScoreLabel.js";
@@ -12,10 +12,10 @@ import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
 import shouldHandleFooterNavigationKeyDown from "./Utils/keyboardNavigation.js";
 import transformAnswersForApi from "./Utils/transformAnswersForApi.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
+import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
+import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
 
-const LOAD_ERROR_MESSAGE = "Kunne ikke laste eksamen";		// Mer SSOT på dette med feilhåndteringer.. dette er ikke brå nok
-
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language) {
+export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [questions, setQuestions] = useState([]);
@@ -31,8 +31,15 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [savedAttempt, setSavedAttempt] = useState(null);
 	const [attemptSaveError, setAttemptSaveError] = useState(null);
 	const [attemptSaving, setAttemptSaving] = useState(false);
+	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(0);
 
-	const examWorkspaceRef = useRef(null);
+	const copy = useMemo(() => {
+		return createExamPageCopy(t);
+	}, [t]);
+
+	const requestScrollToTop = useCallback(() => {
+		setScrollToTopRequestId((requestId) => requestId + 1);
+	}, []);
 
 	const examScore = useMemo(() => {
 		return calculateExamScoreUseCase.execute(questions, answers);
@@ -77,12 +84,21 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex);
 	}, [visibleQuestions, currentQuestionIndex]);
 
-	const currentQuestionIsCorrect = getCurrentQuestionIsCorrect(
-		submitted,
-		currentQuestion,
-		answers,
-		gradeAnswerUseCase
-	);
+	const questionCorrectnessByQuestionId = useMemo(() => {
+		if (!submitted) {
+			return {};
+		}
+
+		return createQuestionCorrectnessByQuestionId(
+			questions,
+			answers,
+			gradeAnswerUseCase
+		);
+	}, [submitted, questions, answers, gradeAnswerUseCase]);
+
+	const currentQuestionIsCorrect = currentQuestion
+		? questionCorrectnessByQuestionId[currentQuestion.id] ?? false
+		: false;
 
 	const currentQuestionFillMatchType = getCurrentQuestionFillMatchType(
 		submitted,
@@ -118,8 +134,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			return Math.max(previousIndex - 1, 0);
 		});
 
-		scrollExamWorkspaceToTop(examWorkspaceRef);
-	}, [examWorkspaceRef]);
+		requestScrollToTop();
+	}, [requestScrollToTop]);
 
 	const nextQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
@@ -130,8 +146,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			return Math.min(previousIndex + 1, visibleQuestionCount - 1);
 		});
 
-		scrollExamWorkspaceToTop(examWorkspaceRef);
-	}, [visibleQuestionCount, examWorkspaceRef]);
+		requestScrollToTop();
+	}, [visibleQuestionCount, requestScrollToTop]);
 
 	const handleFooterNavigationKeyDown = useCallback((event) => {
 		if (!shouldHandleFooterNavigationKeyDown(event)) {
@@ -162,8 +178,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setCurrentQuestionIndex(index);
-		scrollExamWorkspaceToTop(examWorkspaceRef);
-	}, [visibleQuestionCount, examWorkspaceRef]);
+		requestScrollToTop();
+	}, [visibleQuestionCount, requestScrollToTop]);
 
 	const setSingleAnswer = useCallback((questionId, selectedValue) => {
 		if (submitted) {
@@ -221,7 +237,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setSubmitted(true);
 		setAttemptSaving(true);
 		setAttemptSaveError(null);
-		scrollExamWorkspaceToTop(examWorkspaceRef);
+		requestScrollToTop();
 
 		try {
 			const attempt = await submitExamAttemptUseCase.execute({
@@ -232,11 +248,11 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 			setSavedAttempt(attempt);
 		} catch (error) {
-			setAttemptSaveError(error?.message ?? "Kunne ikke lagre forsøket");
+			setAttemptSaveError(error?.message ?? copy.attemptSaveErrorMessage);
 		} finally {
 			setAttemptSaving(false);
 		}
-	}, [answers, examId, examWorkspaceRef, language, questions, submitExamAttemptUseCase]);
+	}, [answers, copy.attemptSaveErrorMessage, examId, language, questions, requestScrollToTop, submitExamAttemptUseCase]);
 
 	const resetExam = useCallback(() => {
 		setAnswers({});
@@ -250,16 +266,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setAttemptSaveError(null);
 		setAttemptSaving(false);
 
-		scrollExamWorkspaceToTop(examWorkspaceRef);
-	}, [examWorkspaceRef, questions]);
+		requestScrollToTop();
+	}, [questions, requestScrollToTop]);
 
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
 	}, []);
-
-	const isAnswerCorrect = useCallback((question) => {
-		return gradeAnswerUseCase.execute(question, answers[question.id]);
-	}, [gradeAnswerUseCase, answers]);
 
 	const loadQuestions = useCallback(() => {
 		let cancelled = false;
@@ -291,7 +303,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 			catch (questionsError) {
 				if (!cancelled) {
-					setQuestionsLoadError(questionsError?.message ?? LOAD_ERROR_MESSAGE);
+					setQuestionsLoadError(questionsError?.message ?? copy.questionsLoadErrorMessage);
 				}
 			}
 
@@ -307,7 +319,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return () => {
 			cancelled = true;
 		};
-	}, [getExamQuestionsUseCase, examId, language]);
+	}, [copy.questionsLoadErrorMessage, getExamQuestionsUseCase, examId, language]);
 
 	const clampCurrentQuestionIndex = useCallback(() => {
 		if (visibleQuestionCount === 0) {
@@ -351,6 +363,11 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		currentQuestionFillMatchType,
 		answers,
 
+		loadingMessage: copy.loadingMessage,
+		errorPrefix: copy.errorPrefix,
+		emptyMessage: copy.emptyMessage,
+		attemptSavingMessage: copy.attemptSavingMessage,
+
 		questionsLoading,
 		questionsLoadError,
 		submitted,
@@ -373,8 +390,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		elapsedTimeLabel,
 
 		expandedAnswerOptionIndexes,
-
-		examWorkspaceRef,
+		questionCorrectnessByQuestionId,
+		scrollToTopRequestId,
 
 		canGoPrevious,
 		canGoNext,
@@ -393,20 +410,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		toggleAnswerOptionExpanded,
 		submitExam,
 		resetExam,
-		toggleShowAllFeedback,
-		setShowAllFeedback,
-		isAnswerCorrect
+		toggleShowAllFeedback
 	};
 }
-
-const scrollExamWorkspaceToTop = (examWorkspaceRef) => {
-	window.requestAnimationFrame(() => {
-		examWorkspaceRef.current?.scrollTo({
-			top: 0,
-			behavior: "smooth"
-		});
-	});
-};
 
 const formatElapsedTime = (seconds) => {
 	const safeSeconds = Math.max(seconds, 0);
@@ -414,21 +420,6 @@ const formatElapsedTime = (seconds) => {
 	const remainingSeconds = safeSeconds % 60;
 
 	return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
-};
-
-const getCurrentQuestionIsCorrect = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {
-	if (!submitted) {
-		return false;
-	}
-
-	if (!currentQuestion) {
-		return false;
-	}
-
-	return gradeAnswerUseCase.execute(
-		currentQuestion,
-		answers[currentQuestion.id]
-	);
 };
 
 const getCurrentQuestionFillMatchType = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {

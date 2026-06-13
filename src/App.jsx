@@ -97,6 +97,7 @@ function AppContent() {
 					<ExamPageWrapper
 						examId={navigationViewModel.selectedExamId}
 						language={language}
+						t={t}
 					/>
 				)}
 
@@ -117,14 +118,15 @@ function AppContent() {
 	);
 }
 
-function ExamPageWrapper({ examId, language }) {
+function ExamPageWrapper({ examId, language, t }) {
 	const examPageViewModel = useExamPageViewModel(
 		getExamQuestionsUseCase,
 		gradeAnswerUseCase,
 		calculateExamScoreUseCase,
 		submitExamAttemptUseCase,
 		examId,
-		language
+		language,
+		t
 	);
 
 	return (

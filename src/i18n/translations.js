@@ -54,6 +54,9 @@ export const translations = {
         loadingMessage: "Laster eksamen...",
         errorPrefix: "Feil",
         emptyMessage: "Ingen spørsmål funnet...",
+        examLoadErrorMessage: "Kunne ikke laste eksamen.",
+        examAttemptSavingMessage: "Lagrer forsøk...",
+        examAttemptSaveErrorMessage: "Kunne ikke lagre forsøket.",
 
         // Footer
         footerPrevious: "Forrige",
@@ -250,6 +253,9 @@ export const translations = {
         loadingMessage: "Loading exam...",
         errorPrefix: "Error",
         emptyMessage: "No questions found...",
+        examLoadErrorMessage: "Could not load exam.",
+        examAttemptSavingMessage: "Saving attempt...",
+        examAttemptSaveErrorMessage: "Could not save attempt.",
 
         // Footer
         footerPrevious: "Previous",

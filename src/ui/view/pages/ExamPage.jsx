@@ -1,4 +1,5 @@
 // src/ui/view/pages/ExamPage.jsx
+import { useEffect, useRef } from "react";
 import Header from "../components/Header/Header.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
@@ -8,12 +9,26 @@ import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel }) {
     const { t } = useLanguage();
+    const examWorkspaceRef = useRef(null);
+
+    useEffect(() => {
+        if (viewModel.scrollToTopRequestId === 0) {
+            return;
+        }
+
+        window.requestAnimationFrame(() => {
+            examWorkspaceRef.current?.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    }, [viewModel.scrollToTopRequestId]);
 
     if (viewModel.questionsLoading) {
         return (
             <ExamPageState>
                 <p className="exam-page-loading-message">
-                    {t.loadingMessage}
+                    {viewModel.loadingMessage}
                 </p>
             </ExamPageState>
         );
@@ -23,7 +38,7 @@ export default function ExamPage({ viewModel }) {
         return (
             <ExamPageState>
                 <p className="exam-page-error-message">
-                    {t.errorPrefix}: {viewModel.questionsLoadError}
+                    {viewModel.errorPrefix}: {viewModel.questionsLoadError}
                 </p>
             </ExamPageState>
         );
@@ -31,13 +46,13 @@ export default function ExamPage({ viewModel }) {
 
     return (
         <div
-            ref={viewModel.examWorkspaceRef}
+            ref={examWorkspaceRef}
             className={viewModel.workspaceClassName}
         >
             <Header viewModel={viewModel} />
 
             {viewModel.attemptSaving && (
-                <p className="exam-attempt-save-status">Lagrer forsøk...</p>
+                <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>
             )}
 
             {viewModel.attemptSaveError && (
