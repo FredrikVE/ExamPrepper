@@ -108,6 +108,9 @@ function buildHero(statistics, copy) {
 }
 
 function buildKpiCards(statistics, copy) {
+	const sparklinePoints = buildSparklinePoints(statistics.scoreTrend);
+	const hasSparkline = sparklinePoints.length >= 2;
+
 	return [
 		{
 			id: "average-score",
@@ -115,7 +118,8 @@ function buildKpiCards(statistics, copy) {
 			tone: "blue",
 			label: copy.kpiAverageScore,
 			value: formatPercentageLabel(statistics.averageScorePercentage),
-			description: copy.createAttemptCountDescription(statistics.attemptCount)
+			description: copy.createAttemptCountDescription(statistics.attemptCount),
+			sparkline: hasSparkline ? { type: "line", points: sparklinePoints } : null
 		},
 		{
 			id: "best-score",
@@ -123,7 +127,8 @@ function buildKpiCards(statistics, copy) {
 			tone: "green",
 			label: copy.kpiBestScore,
 			value: formatPercentageLabel(statistics.bestScorePercentage),
-			description: copy.createAttemptCountDescription(statistics.attemptCount)
+			description: copy.createAttemptCountDescription(statistics.attemptCount),
+			sparkline: hasSparkline ? { type: "line", points: sparklinePoints } : null
 		},
 		{
 			id: "correct-answers",
@@ -131,7 +136,8 @@ function buildKpiCards(statistics, copy) {
 			tone: "purple",
 			label: copy.kpiCorrectAnswers,
 			value: statistics.totalQuestions > 0 ? String(statistics.totalCorrectAnswers) : EMPTY_LABEL,
-			description: copy.createCorrectAnswersDescription(statistics.totalCorrectAnswers, statistics.totalQuestions)
+			description: copy.createCorrectAnswersDescription(statistics.totalCorrectAnswers, statistics.totalQuestions),
+			sparkline: hasSparkline ? { type: "bar", points: sparklinePoints } : null
 		},
 		{
 			id: "unique-exams",
@@ -139,9 +145,17 @@ function buildKpiCards(statistics, copy) {
 			tone: "orange",
 			label: copy.kpiUniqueExams,
 			value: statistics.uniqueExamCount > 0 ? String(statistics.uniqueExamCount) : EMPTY_LABEL,
-			description: copy.createUniqueExamsDescription(statistics.uniqueExamCount)
+			description: copy.createUniqueExamsDescription(statistics.uniqueExamCount),
+			sparkline: hasSparkline ? { type: "bar", points: sparklinePoints } : null
 		}
 	];
+}
+
+function buildSparklinePoints(scoreTrend) {
+	return scoreTrend
+		.map((entry) => entry.percentage)
+		.filter((p) => p !== null)
+		.slice(-12);
 }
 
 function buildScoreTrendChart(scoreTrend, copy) {

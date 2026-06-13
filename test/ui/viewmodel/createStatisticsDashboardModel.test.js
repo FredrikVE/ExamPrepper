@@ -65,6 +65,7 @@ describe("createStatisticsDashboardModel", () => {
 		});
 		expect(result.kpiGridLabel).toBe("Statistikk nøkkeltall");
 		expect(result.kpiCards.map((card) => card.tone)).toEqual(["blue", "green", "purple", "orange"]);
+		expect(result.kpiCards.every((card) => card.sparkline === null)).toBe(true);
 	});
 
 	test("normalizes backend statistics for the view", () => {
@@ -108,6 +109,7 @@ describe("createStatisticsDashboardModel", () => {
 		expect(result.hero.meterClassName).toBe("statistics-hero-meter");
 		expect(result.kpiCards.map((card) => card.value)).toEqual(["74.4 %", "92 %", "12", "1"]);
 		expect(result.kpiCards.map((card) => card.tone)).toEqual(["blue", "green", "purple", "orange"]);
+		expect(result.kpiCards.every((card) => card.sparkline === null)).toBe(true);
 		expect(result.scoreTrendChart.points).toHaveLength(1);
 		expect(result.scoreTrendChart.points[0]).toMatchObject({
 			id: "a1",
@@ -123,5 +125,29 @@ describe("createStatisticsDashboardModel", () => {
 			percentageLabel: "74.4 %",
 			pointsLabel: "12 / 16 poeng"
 		});
+	});
+
+	test("builds sparkline data from scoreTrend when at least two valid points exist", () => {
+		const result = createStatisticsDashboardModel({
+			attemptCount: 3,
+			averageScorePercentage: 60,
+			bestScorePercentage: 80,
+			totalCorrectAnswers: 10,
+			totalQuestions: 20,
+			uniqueExamCount: 1,
+			scoreTrend: [
+				{ attemptId: "a1", submittedAt: "2026-06-10", percentage: 40, scorePoints: 8, totalPoints: 20 },
+				{ attemptId: "a2", submittedAt: "2026-06-11", percentage: 60, scorePoints: 12, totalPoints: 20 },
+				{ attemptId: "a3", submittedAt: "2026-06-12", percentage: 80, scorePoints: 16, totalPoints: 20 }
+			],
+			recentAttempts: []
+		}, formatDate, copy);
+
+		const sparklines = result.kpiCards.map((card) => card.sparkline);
+
+		expect(sparklines[0]).toEqual({ type: "line", points: [40, 60, 80] });
+		expect(sparklines[1]).toEqual({ type: "line", points: [40, 60, 80] });
+		expect(sparklines[2]).toEqual({ type: "bar", points: [40, 60, 80] });
+		expect(sparklines[3]).toEqual({ type: "bar", points: [40, 60, 80] });
 	});
 });
