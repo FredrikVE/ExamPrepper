@@ -1,7 +1,25 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+/**
+Må modulariseres mer.
+
+Må ha bedre og mer enhetlig SSOT på feilhåndtering...
+
+Må ha samme stil som de andre Viewmodellene..
+
+Denne må skrives mye mer etter KISS-prinsippet.. for mange unødvendig kompliserte metoder med masse funksjonell progrtammering stil. Dette er ikke bra.
+ 
+Generetl sett er denne koden funn av AI slop kode som er lett for en bot å skrive, men vansekelig å vedlikeholde og forstå..
+
+Den må følge arkitekturprinsippenen MYE mer
+
+ */
+
+
+// Dette vriker som superduper codesmell... man skal ha SSOT så høyt oppe i arkitekturen som mulig for å ha enhetelig feilhåndtering..
 const LOAD_ERROR_MESSAGE = "Kunne ikke laste fag";
+
 
 function normalizeSubjectsResult(result) {
 	if (Array.isArray(result)) {
@@ -75,6 +93,8 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		}) ?? null;
 	}, [subjects, selectedSubjectId]);
 
+	// denne er for komplisert.. må følge KISS prinsippet mer.
+		// Unngå å bruke funksjonell programmeringstil. dette er kode som er lett å skrive, men vanskelig å forstå og derfor også vedlikeholde
 	const faculties = useMemo(() => {
 		const values = subjects
 			.map((subject) => subject.faculty)
@@ -86,10 +106,10 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	const filteredSubjects = useMemo(() => {
 		const normalizedSearchTerm = searchTerm.trim().toLowerCase();
 
+		// denne er for komplisert.. må følge KISS prinsippet mer.
+		// Unngå å bruke funksjonell programmeringstil. dette er kode som er lett å skrive, men vanskelig å forstå og derfor også vedlikeholde
 		return subjects.filter((subject) => {
-			const matchesSearch =
-				normalizedSearchTerm.length === 0 ||
-				[subject.code, subject.name, subject.description]
+			const matchesSearch = normalizedSearchTerm.length === 0 || [subject.code, subject.name, subject.description]
 					.filter(Boolean)
 					.some((value) => {
 						return value.toLowerCase().includes(normalizedSearchTerm);

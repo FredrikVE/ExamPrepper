@@ -57,7 +57,9 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 		};
 	}, [loadStatistics]);
 
-	const dashboard = useMemo(() => createStatisticsDashboardModel(statistics, formatDate, copy), [statistics, formatDate, copy]);
+	const dashboard = useMemo(() => createStatisticsDashboardModel(
+		statistics, formatDate, copy
+	), [statistics, formatDate, copy]);
 
 	const retryLoadStatistics = useCallback(() => {
 		loadStatistics();
