@@ -2,6 +2,7 @@
 import StatisticsKpiGrid from "../components/StatisticsPage/StatisticsKpiGrid.jsx";
 import StatisticsRecentAttempts from "../components/StatisticsPage/StatisticsRecentAttempts.jsx";
 import StatisticsScoreTrendChart from "../components/StatisticsPage/StatisticsScoreTrendChart.jsx";
+import StatisticsWeeklyActivity from "../components/StatisticsPage/StatisticsWeeklyActivity.jsx";
 import StatisticsState from "../components/StatisticsPage/StatisticsState.jsx";
 
 export default function StatisticsPage({ viewModel }) {
@@ -90,6 +91,10 @@ export default function StatisticsPage({ viewModel }) {
 
 					<div className="statistics-dashboard-grid">
 						<StatisticsScoreTrendChart chart={viewModel.scoreTrendChart} />
+
+						<div className="statistics-side-stack">
+							<StatisticsWeeklyActivity activity={viewModel.weeklyActivity} />
+						</div>
 					</div>
 
 					<StatisticsRecentAttempts

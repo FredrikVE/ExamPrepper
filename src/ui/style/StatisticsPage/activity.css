@@ -1,0 +1,129 @@
+/* src/ui/style/StatisticsPage/activity.css */
+.statistics-weekly-activity {
+	min-height: 100%;
+}
+
+.statistics-weekly-activity-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-4);
+	margin-bottom: var(--space-5);
+}
+
+.statistics-weekly-activity-change {
+	border-radius: var(--radius-sm);
+	padding: 8px 12px;
+	font-size: 12px;
+	font-weight: 900;
+	white-space: nowrap;
+}
+
+.statistics-weekly-activity-change--positive {
+	background: rgba(32, 168, 58, 0.12);
+	color: #20a83a;
+}
+
+.statistics-weekly-activity-change--negative {
+	background: rgba(255, 79, 134, 0.12);
+	color: #ff4f86;
+}
+
+.statistics-weekly-activity-change--neutral {
+	background: rgba(96, 112, 143, 0.12);
+	color: var(--text-muted);
+}
+
+.statistics-weekly-activity-total {
+	display: block;
+	color: var(--text-main);
+	font-size: clamp(26px, 3vw, 34px);
+	font-weight: 900;
+	letter-spacing: -0.04em;
+	line-height: 1;
+}
+
+.statistics-weekly-activity-caption {
+	margin: var(--space-2) 0 var(--space-5);
+	color: var(--text-muted);
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.statistics-weekly-activity-bars {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	align-items: end;
+	gap: var(--space-3);
+	min-height: 150px;
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px solid var(--line);
+	list-style: none;
+}
+
+.statistics-weekly-activity-day {
+	display: grid;
+	grid-template-rows: minmax(96px, 1fr) auto;
+	gap: var(--space-3);
+	align-items: end;
+	justify-items: center;
+	min-width: 0;
+}
+
+.statistics-weekly-activity-bar-track {
+	display: flex;
+	align-items: end;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.statistics-weekly-activity-bar {
+	display: block;
+	width: 18px;
+	min-height: 4px;
+	border-radius: 6px 6px 0 0;
+}
+
+.statistics-weekly-activity-bar--blue {
+	background: #1463ff;
+}
+
+.statistics-weekly-activity-bar--teal {
+	background: #12b6aa;
+}
+
+.statistics-weekly-activity-bar--green {
+	background: #4caf2f;
+}
+
+.statistics-weekly-activity-bar--orange {
+	background: #ff8a00;
+}
+
+.statistics-weekly-activity-bar--pink {
+	background: #f0529b;
+}
+
+.statistics-weekly-activity-bar--purple {
+	background: #7c3aed;
+}
+
+.statistics-weekly-activity-bar--neutral {
+	background: #9aa8bd;
+}
+
+.statistics-weekly-activity-day-label {
+	color: var(--text-muted);
+	font-size: 12px;
+	font-weight: 750;
+}
+
+.statistics-weekly-activity-note {
+	margin: var(--space-4) 0 0;
+	color: var(--text-muted);
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 1.45;
+}

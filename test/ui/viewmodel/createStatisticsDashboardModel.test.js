@@ -29,6 +29,21 @@ const translations = {
 	statisticsRecentAttemptsTitle: "Siste forsøk",
 	statisticsRecentAttemptsSubtitle: "Siste 5 forsøk.",
 	statisticsRecentAttemptsEmpty: "Ingen forsøk.",
+	statisticsWeeklyActivityTitle: "Aktivitet denne uken",
+	statisticsWeeklyActivityTotalTimeCaption: "Totalt tid brukt",
+	statisticsWeeklyActivityChangeSuffix: "fra forrige uke",
+	statisticsWeeklyActivityNoComparisonLabel: "Ingen sammenligning ennå",
+	statisticsWeeklyActivityNoChangeLabel: "Ingen endring fra forrige uke",
+	statisticsWeeklyActivityNote: "Øv jevnlig.",
+	statisticsWeekdayMonday: "Man",
+	statisticsWeekdayTuesday: "Tir",
+	statisticsWeekdayWednesday: "Ons",
+	statisticsWeekdayThursday: "Tor",
+	statisticsWeekdayFriday: "Fre",
+	statisticsWeekdaySaturday: "Lør",
+	statisticsWeekdaySunday: "Søn",
+	statisticsActivityHourShort: "t",
+	statisticsActivityMinuteShort: "min",
 	statisticsAttemptScoreLabel: "Score",
 	statisticsLoadErrorMessage: "Kunne ikke laste statistikken din.",
 	statisticsEmptyValueLabel: "—",
@@ -102,7 +117,17 @@ describe("createStatisticsDashboardModel", () => {
 					scorePoints: "12",
 					totalPoints: "16"
 				}
-			]
+			],
+			weeklyActivity: {
+				totalMinutesThisWeek: "165",
+				changePercentageFromPreviousWeek: "35",
+				days: [
+					{ key: "mon", label: "Man", totalMinutes: "35", attemptCount: "1" },
+					{ key: "tue", label: "Tir", totalMinutes: "45", attemptCount: "1" },
+					{ key: "wed", label: "Ons", totalMinutes: "55", attemptCount: "1" },
+					{ key: "thu", label: "Tor", totalMinutes: "30", attemptCount: "1" }
+				]
+			}
 		}, formatDate, copy);
 
 		expect(result.isStatisticsEmpty).toBe(false);

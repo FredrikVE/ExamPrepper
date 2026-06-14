@@ -26,6 +26,21 @@ export default function createStatisticsCopy(t) {
 		recentAttemptsTitle: t.statisticsRecentAttemptsTitle,
 		recentAttemptsSubtitle: t.statisticsRecentAttemptsSubtitle,
 		recentAttemptsEmpty: t.statisticsRecentAttemptsEmpty,
+		weeklyActivityTitle: t.statisticsWeeklyActivityTitle,
+		weeklyActivityTotalTimeCaption: t.statisticsWeeklyActivityTotalTimeCaption,
+		weeklyActivityChangeSuffix: t.statisticsWeeklyActivityChangeSuffix,
+		weeklyActivityNoComparisonLabel: t.statisticsWeeklyActivityNoComparisonLabel,
+		weeklyActivityNoChangeLabel: t.statisticsWeeklyActivityNoChangeLabel,
+		weeklyActivityNote: t.statisticsWeeklyActivityNote,
+		weekdayLabels: {
+			mon: t.statisticsWeekdayMonday,
+			tue: t.statisticsWeekdayTuesday,
+			wed: t.statisticsWeekdayWednesday,
+			thu: t.statisticsWeekdayThursday,
+			fri: t.statisticsWeekdayFriday,
+			sat: t.statisticsWeekdaySaturday,
+			sun: t.statisticsWeekdaySunday
+		},
 		attemptScoreLabel: t.statisticsAttemptScoreLabel,
 		loadErrorMessage: t.statisticsLoadErrorMessage,
 		emptyValueLabel: t.statisticsEmptyValueLabel,
@@ -56,6 +71,21 @@ export default function createStatisticsCopy(t) {
 
 		createAttemptPointsLabel(scorePoints, totalPoints) {
 			return `${scorePoints} / ${totalPoints} ${t.statisticsAttemptPointUnit}`;
+		},
+
+		createDurationLabel(totalMinutes) {
+			const hours = Math.floor(totalMinutes / 60);
+			const minutes = totalMinutes % 60;
+
+			if (hours === 0) {
+				return `${minutes} ${t.statisticsActivityMinuteShort}`;
+			}
+
+			if (minutes === 0) {
+				return `${hours} ${t.statisticsActivityHourShort}`;
+			}
+
+			return `${hours} ${t.statisticsActivityHourShort} ${minutes} ${t.statisticsActivityMinuteShort}`;
 		}
 	};
 }
