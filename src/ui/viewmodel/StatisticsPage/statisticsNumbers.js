@@ -1,17 +1,37 @@
 // src/ui/viewmodel/StatisticsPage/statisticsNumbers.js
 export function normalizeNumber(value) {
 	const numericValue = normalizeNullableNumber(value);
-	return numericValue ?? 0;
+
+	if (numericValue === null) {
+		return 0;
+	}
+
+	return numericValue;
 }
 
 export function normalizeNullableNumber(value) {
-	if (typeof value === "number" && Number.isFinite(value)) {
-		return value;
+	if (typeof value === "number") {
+		if (Number.isFinite(value)) {
+			return value;
+		}
+
+		return null;
 	}
 
-	if (typeof value === "string" && value.trim() !== "") {
-		const parsed = Number(value);
-		return Number.isFinite(parsed) ? parsed : null;
+	if (typeof value === "string") {
+		const trimmedValue = value.trim();
+
+		if (trimmedValue === "") {
+			return null;
+		}
+
+		const parsedValue = Number(trimmedValue);
+
+		if (Number.isFinite(parsedValue)) {
+			return parsedValue;
+		}
+
+		return null;
 	}
 
 	return null;
@@ -36,5 +56,8 @@ export function formatNumber(value) {
 		return String(value);
 	}
 
-	return String(Number(value.toFixed(1)));
+	const roundedValue = value.toFixed(1);
+	const numberValue = Number(roundedValue);
+
+	return String(numberValue);
 }
