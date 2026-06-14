@@ -15,6 +15,7 @@ import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, 
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
 import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
+import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
 	const { randomizeAnswerOptions } = useSettings();
@@ -125,6 +126,14 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		answers,
 		gradeAnswerUseCase
 	);
+
+	const currentAnswerOptionOrder = useMemo(() => {
+		return getCurrentAnswerOptionOrder(
+			currentQuestion,
+			randomizeAnswerOptions,
+			answerOptionOrderByQuestionId
+		);
+	}, [currentQuestion, randomizeAnswerOptions, answerOptionOrderByQuestionId]);
 
 	const answeredCountLabel = getAnsweredCountLabel(
 		answeredCount,
@@ -391,8 +400,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		questionsLoadError,
 		submitted,
 		showAllFeedback,
-		randomizeAnswerOptions,
-		answerOptionOrderByQuestionId,
+		currentAnswerOptionOrder,
 		workspaceClassName,
 
 		score: examScore.score,

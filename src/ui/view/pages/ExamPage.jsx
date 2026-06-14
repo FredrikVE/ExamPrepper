@@ -1,29 +1,12 @@
 // src/ui/view/pages/ExamPage.jsx
-import { useEffect, useRef } from "react";
 import Header from "../components/Header/Header.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
-import { useLanguage } from "../../../i18n/LanguageContext.jsx";
+import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
 
 export default function ExamPage({ viewModel }) {
-    const { t } = useLanguage();
-    const examWorkspaceRef = useRef(null);
-
-    useEffect(() => {
-        if (viewModel.scrollToTopRequestId === 0) {
-            return;
-        }
-
-        window.requestAnimationFrame(() => {
-            examWorkspaceRef.current?.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
-    }, [viewModel.scrollToTopRequestId]);
-
     if (viewModel.questionsLoading) {
         return (
             <ExamPageState>
@@ -45,9 +28,9 @@ export default function ExamPage({ viewModel }) {
     }
 
     return (
-        <div
-            ref={examWorkspaceRef}
+        <ExamWorkspace
             className={viewModel.workspaceClassName}
+            scrollToTopRequestId={viewModel.scrollToTopRequestId}
         >
             <Header viewModel={viewModel} />
 
@@ -67,11 +50,11 @@ export default function ExamPage({ viewModel }) {
 
             <main className="exam-page-main">
                 <div className="exam-page-content">
-                    <ExamPageContent viewModel={viewModel} t={t} />
+                    <ExamPageContent viewModel={viewModel} />
                 </div>
             </main>
 
             <Footer viewModel={viewModel} />
-        </div>
+        </ExamWorkspace>
     );
 }

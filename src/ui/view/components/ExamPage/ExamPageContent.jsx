@@ -1,25 +1,21 @@
 // src/ui/view/components/ExamPage/ExamPageContent.jsx
 import QuestionCard from "./QuestionCard/QuestionCard.jsx";
 
-export default function ExamPageContent({ viewModel, t }) {
+export default function ExamPageContent({ viewModel }) {
     if (!viewModel.currentQuestion) {
         return (
             <div className="exam-page-empty">
-                {t.emptyMessage}
+                {viewModel.emptyMessage}
             </div>
         );
     }
-
-    const answerOptionOrder = viewModel.randomizeAnswerOptions
-        ? viewModel.answerOptionOrderByQuestionId[viewModel.currentQuestion.id]
-        : null;
 
     return (
         <QuestionCard
             question={viewModel.currentQuestion}
             questionNumber={viewModel.currentQuestionNumber}
             answer={viewModel.answers[viewModel.currentQuestion.id]}
-            answerOptionOrder={answerOptionOrder}
+            answerOptionOrder={viewModel.currentAnswerOptionOrder}
             submitted={viewModel.submitted}
             showAllFeedback={viewModel.showAllFeedback}
             correct={viewModel.currentQuestionIsCorrect}
