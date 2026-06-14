@@ -40,10 +40,11 @@ function KpiIcon({ iconKey }) {
 	);
 }
 
-const SPARKLINE_WIDTH = 220;
-const SPARKLINE_HEIGHT = 38;
-const SPARKLINE_PADDING = 4;
-const SPARKLINE_DOT_RADIUS = 2.4;
+const SPARKLINE_WIDTH = 350;
+const SPARKLINE_HEIGHT = 58;
+const SPARKLINE_PADDING = 5;
+const SPARKLINE_DOT_RADIUS = 2.8;
+const SPARKLINE_BAR_WIDTH = 5;
 
 function KpiSparkline({ cardId, sparkline }) {
 	if (!sparkline || sparkline.points.length < 2) {
@@ -98,7 +99,6 @@ function LineSparkline({ points, sparklineId }) {
 }
 
 function BarSparkline({ points }) {
-	const barWidth = 3;
 	const maxHeight = SPARKLINE_HEIGHT - SPARKLINE_PADDING * 2;
 	const gap = (SPARKLINE_WIDTH - SPARKLINE_PADDING * 2) / points.length;
 	const maxVal = Math.max(...points, 1);
@@ -111,7 +111,7 @@ function BarSparkline({ points }) {
 		>
 			{points.map((value, i) => {
 				const barHeight = Math.max(3, (value / maxVal) * maxHeight);
-				const x = SPARKLINE_PADDING + i * gap + (gap - barWidth) / 2;
+				const x = SPARKLINE_PADDING + i * gap + (gap - SPARKLINE_BAR_WIDTH) / 2;
 				const y = SPARKLINE_HEIGHT - SPARKLINE_PADDING - barHeight;
 
 				return (
@@ -120,7 +120,7 @@ function BarSparkline({ points }) {
 						className="statistics-kpi-sparkline-bar"
 						x={x}
 						y={y}
-						width={barWidth}
+						width={SPARKLINE_BAR_WIDTH}
 						height={barHeight}
 						rx="1"
 					/>
