@@ -23,11 +23,7 @@ export default function StatisticsRecommendedExam({ title, recommendation }) {
 				<div className="statistics-recommended-content">
 					<p className="statistics-recommended-title">{recommendation.title}</p>
 					<p className="statistics-recommended-body">{recommendation.body}</p>
-
-					<div className="statistics-recommended-footer">
-						<span className="statistics-recommended-badge">{recommendation.badgeLabel}</span>
-						<span className="statistics-recommended-action">{recommendation.actionLabel}</span>
-					</div>
+					<span className="statistics-recommended-badge">{recommendation.badgeLabel}</span>
 				</div>
 			</div>
 		</article>

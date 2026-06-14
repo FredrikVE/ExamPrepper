@@ -1,4 +1,15 @@
 /* src/ui/style/StatisticsPage/recommended.css */
+.statistics-recommended-panel {
+	--recommended-accent: #ff3d6e;
+	--recommended-accent-soft: #fff0f5;
+	--recommended-card-bg: #fff5f7;
+	--recommended-card-border: #ffe1e9;
+	--recommended-icon-bg: #fff0f4;
+	--recommended-icon-border: #ffdce6;
+	--recommended-badge-bg: #ffeaf0;
+	--recommended-heart-border: #ffd9e5;
+}
+
 .statistics-recommended-heading {
 	display: flex;
 	align-items: center;
@@ -14,9 +25,9 @@
 	width: 30px;
 	height: 30px;
 	border-radius: 8px;
-	color: #ff3d6e;
-	background: #fff0f5;
-	border: 1px solid #ffd9e5;
+	color: var(--recommended-accent);
+	background: var(--recommended-accent-soft);
+	border: 1px solid var(--recommended-heart-border);
 }
 
 .statistics-recommended-card {
@@ -26,8 +37,8 @@
 	align-items: center;
 	padding: var(--space-4);
 	border-radius: var(--radius-md);
-	background: linear-gradient(90deg, #fff5f7, var(--panel-strong));
-	border: 1px solid #ffe1e9;
+	background: linear-gradient(90deg, var(--recommended-card-bg), var(--panel-strong));
+	border: 1px solid var(--recommended-card-border);
 }
 
 .statistics-recommended-icon {
@@ -36,9 +47,9 @@
 	width: 52px;
 	height: 52px;
 	border-radius: 12px;
-	color: #ff3d6e;
-	background: #fff0f4;
-	border: 1px solid #ffdce6;
+	color: var(--recommended-accent);
+	background: var(--recommended-icon-bg);
+	border: 1px solid var(--recommended-icon-border);
 }
 
 .statistics-recommended-content {
@@ -60,25 +71,13 @@
 	line-height: 1.4;
 }
 
-.statistics-recommended-footer {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: var(--space-3);
-	margin-top: var(--space-2);
-}
-
 .statistics-recommended-badge {
-	color: #ff3d6e;
-	background: #ffeaf0;
+	justify-self: start;
+	margin-top: var(--space-2);
+	color: var(--recommended-accent);
+	background: var(--recommended-badge-bg);
 	border-radius: 8px;
 	padding: 5px 10px;
 	font-size: 12px;
 	font-weight: 900;
-}
-
-.statistics-recommended-action {
-	color: var(--accent);
-	font-size: 13px;
-	font-weight: 800;
 }

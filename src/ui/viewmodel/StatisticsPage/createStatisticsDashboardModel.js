@@ -13,7 +13,7 @@ export default function createStatisticsDashboardModel(statistics, formatDate, t
 	const scoreTrend = createScoreTrendPoints(statistics?.scoreTrend, formatDate, text);
 	const recentAttempts = createRecentAttemptCards(statistics?.recentAttempts, formatDate, text);
 	const weeklyActivity = createWeeklyActivityModel(statistics?.weeklyActivity, text);
-	const recommendedExam = createRecommendedExamModel(statistics?.recentAttempts, text);
+	const recommendedExam = createRecommendedExamModel(recentAttempts, text);
 	const dashboardStatistics = {
 		...normalized,
 		scoreTrend

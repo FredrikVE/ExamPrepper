@@ -29,6 +29,9 @@ const translations = {
 	statisticsRecentAttemptsTitle: "Siste forsøk",
 	statisticsRecentAttemptsSubtitle: "Siste 5 forsøk.",
 	statisticsRecentAttemptsEmpty: "Ingen forsøk.",
+	statisticsRecommendedTitle: "Mest å hente nå",
+	statisticsRecommendedBody: "Laveste score blant siste forsøk.",
+	statisticsRecommendedBadge: "Anbefalt",
 	statisticsWeeklyActivityTitle: "Aktivitet denne uken",
 	statisticsWeeklyActivityTotalTimeCaption: "Totalt tid brukt",
 	statisticsWeeklyActivityChangeSuffix: "fra forrige uke",
@@ -156,6 +159,12 @@ describe("createStatisticsDashboardModel", () => {
 			percentageLabel: "74.4 %",
 			pointsLabel: "12 / 16 poeng",
 			tone: "purple"
+		});
+		expect(result.recommendedExam).toEqual({
+			examId: "in5431-exam-1-no",
+			title: "Eksamen in5431-exam-1-no",
+			body: "Laveste score blant siste forsøk.",
+			badgeLabel: "Anbefalt"
 		});
 	});
 

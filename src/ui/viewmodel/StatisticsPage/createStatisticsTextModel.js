@@ -29,7 +29,6 @@ export default function createStatisticsTextModel(t) {
 		recommendedTitle: t.statisticsRecommendedTitle,
 		recommendedBody: t.statisticsRecommendedBody,
 		recommendedBadge: t.statisticsRecommendedBadge,
-		recommendedAction: t.statisticsRecommendedAction,
 		weeklyActivityTitle: t.statisticsWeeklyActivityTitle,
 		weeklyActivityTotalTimeCaption: t.statisticsWeeklyActivityTotalTimeCaption,
 		weeklyActivityChangeSuffix: t.statisticsWeeklyActivityChangeSuffix,

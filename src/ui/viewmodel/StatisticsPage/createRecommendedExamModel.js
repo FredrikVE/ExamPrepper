@@ -1,41 +1,53 @@
 // src/ui/viewmodel/StatisticsPage/createRecommendedExamModel.js
 export function createRecommendedExamModel(recentAttempts, text) {
-	if (!Array.isArray(recentAttempts) || recentAttempts.length === 0) {
+	if (!Array.isArray(recentAttempts)) {
 		return null;
 	}
 
-	const lowest = findLowestScoringAttempt(recentAttempts);
+	if (recentAttempts.length === 0) {
+		return null;
+	}
 
-	if (!lowest) {
+	const lowestScoringAttempt = findLowestScoringAttempt(recentAttempts);
+
+	if (!lowestScoringAttempt) {
 		return null;
 	}
 
 	return {
-		examId: lowest.examId,
-		title: createExamTitle(lowest, text),
+		examId: lowestScoringAttempt.examId,
+		title: createRecommendedExamTitle(lowestScoringAttempt, text),
 		body: text.recommendedBody,
-		badgeLabel: text.recommendedBadge,
-		actionLabel: text.recommendedAction
+		badgeLabel: text.recommendedBadge
 	};
 }
 
 function findLowestScoringAttempt(attempts) {
-	let lowest = null;
+	let lowestScoringAttempt = null;
 
 	for (const attempt of attempts) {
-		if (attempt.percentage == null) {
+		if (!attempt) {
 			continue;
 		}
 
-		if (lowest === null || attempt.percentage < lowest.percentage) {
-			lowest = attempt;
+		if (attempt.percentage === null || attempt.percentage === undefined) {
+			continue;
+		}
+
+		if (lowestScoringAttempt === null) {
+			lowestScoringAttempt = attempt;
+			continue;
+		}
+
+		if (attempt.percentage < lowestScoringAttempt.percentage) {
+			lowestScoringAttempt = attempt;
 		}
 	}
 
-	return lowest;
+	return lowestScoringAttempt;
 }
 
-function createExamTitle(attempt, text) {
+function createRecommendedExamTitle(attempt, text) {
 	if (attempt.examTitle) {
 		return attempt.examTitle;
 	}
