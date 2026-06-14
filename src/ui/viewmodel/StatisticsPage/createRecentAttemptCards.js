@@ -1,5 +1,6 @@
 // src/ui/viewmodel/StatisticsPage/createRecentAttemptCards.js
-import { EMPTY_LABEL, normalizeNullablePercentage, formatPercentageLabel, createPointsLabel } from "./statisticsFormatters.js";
+import { normalizeNullablePercentagePoints } from "./statisticsNumbers.js";
+import { createPercentageLabel, createPointsLabel } from "./statisticsValueLabels.js";
 
 const RECENT_ATTEMPT_TONES = ["purple", "orange", "teal"];
 
@@ -23,16 +24,16 @@ export function createRecentAttemptCards(recentAttempts, formatDate, copy) {
 
 function createRecentAttemptCard(attempt, index, formatDate, copy) {
 	const attemptNumber = index + 1;
-	const percentage = normalizeNullablePercentage(attempt.percentage);
+	const percentage = normalizeNullablePercentagePoints(attempt.percentage);
 	const examId = attempt.examId ?? "";
 
 	return {
 		id: attempt.attemptId ?? `recent-${attemptNumber}`,
 		examId,
 		examTitle: createRecentAttemptTitle(attempt, attemptNumber, copy),
-		submittedAtLabel: formatDate(attempt.submittedAt) ?? EMPTY_LABEL,
+		submittedAtLabel: formatDate(attempt.submittedAt) ?? copy.emptyValueLabel,
 		percentage,
-		percentageLabel: formatPercentageLabel(percentage),
+		percentageLabel: createPercentageLabel(percentage, copy),
 		pointsLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, copy),
 		scoreLabel: copy.attemptScoreLabel,
 		tone: selectRecentAttemptTone(index)

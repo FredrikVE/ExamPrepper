@@ -1,11 +1,11 @@
 // src/ui/viewmodel/StatisticsPage/normalizeStatisticsSummary.js
-import { normalizeNumber, normalizeNullablePercentage } from "./statisticsFormatters.js";
+import { normalizeNumber, normalizeNullablePercentagePoints } from "./statisticsNumbers.js";
 
 export function normalizeStatisticsSummary(statistics) {
 	return {
 		attemptCount: normalizeNumber(statistics?.attemptCount),
-		averageScorePercentage: normalizeNullablePercentage(statistics?.averageScorePercentage),
-		bestScorePercentage: normalizeNullablePercentage(statistics?.bestScorePercentage),
+		averageScorePercentage: normalizeNullablePercentagePoints(statistics?.averageScorePercentage),
+		bestScorePercentage: normalizeNullablePercentagePoints(statistics?.bestScorePercentage),
 		totalCorrectAnswers: normalizeNumber(statistics?.totalCorrectAnswers),
 		totalQuestions: normalizeNumber(statistics?.totalQuestions),
 		uniqueExamCount: normalizeNumber(statistics?.uniqueExamCount)

@@ -31,6 +31,7 @@ const translations = {
 	statisticsRecentAttemptsEmpty: "Ingen forsøk.",
 	statisticsAttemptScoreLabel: "Score",
 	statisticsLoadErrorMessage: "Kunne ikke laste statistikken din.",
+	statisticsEmptyValueLabel: "—",
 	statisticsHeroTitlePrefix: "Du har øvd",
 	statisticsHeroTitleUnitSingular: "gang",
 	statisticsHeroTitleUnitPlural: "ganger",

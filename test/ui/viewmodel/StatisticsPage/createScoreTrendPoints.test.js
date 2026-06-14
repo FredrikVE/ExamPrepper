@@ -5,7 +5,8 @@ import { createScoreTrendPoints } from "../../../../src/ui/viewmodel/StatisticsP
 
 const copy = createStatisticsCopy({
 	statisticsTrendPointLabel: "Forsøk",
-	statisticsAttemptPointUnit: "poeng"
+	statisticsAttemptPointUnit: "poeng",
+	statisticsEmptyValueLabel: "—"
 });
 
 const formatDate = (value) => value ? `dato:${value}` : null;

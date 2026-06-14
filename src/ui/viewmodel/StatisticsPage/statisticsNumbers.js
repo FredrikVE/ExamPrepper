@@ -1,6 +1,4 @@
-// src/ui/viewmodel/StatisticsPage/statisticsFormatters.js
-export const EMPTY_LABEL = "—";
-
+// src/ui/viewmodel/StatisticsPage/statisticsNumbers.js
 export function normalizeNumber(value) {
 	const numericValue = normalizeNullableNumber(value);
 	return numericValue ?? 0;
@@ -19,21 +17,18 @@ export function normalizeNullableNumber(value) {
 	return null;
 }
 
-export function normalizeNullablePercentage(value) {
+export function normalizeNullablePercentagePoints(value) {
 	const numericValue = normalizeNullableNumber(value);
-	return numericValue === null ? null : roundPercentage(numericValue);
+
+	if (numericValue === null) {
+		return null;
+	}
+
+	return roundPercentage(numericValue);
 }
 
 export function roundPercentage(value) {
 	return Math.round(value * 10) / 10;
-}
-
-export function formatPercentageLabel(value) {
-	if (value === null) {
-		return EMPTY_LABEL;
-	}
-
-	return `${formatNumber(value)} %`;
 }
 
 export function formatNumber(value) {
@@ -42,11 +37,4 @@ export function formatNumber(value) {
 	}
 
 	return String(Number(value.toFixed(1)));
-}
-
-export function createPointsLabel(scorePoints, totalPoints, copy) {
-	return copy.createAttemptPointsLabel(
-		formatNumber(normalizeNumber(scorePoints)),
-		formatNumber(normalizeNumber(totalPoints))
-	);
 }

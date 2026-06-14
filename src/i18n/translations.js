@@ -149,6 +149,7 @@ export const translations = {
 
 		// StatisticsPage
 		statisticsLoadErrorMessage: "Kunne ikke laste statistikken din.",
+		statisticsEmptyValueLabel: "—",
 		statisticsPageSubtitle: "Se hvordan øvingen din utvikler seg over tid.",
 		statisticsLoadingTitle: "Laster statistikk...",
 		statisticsLoadingBody: "Vi henter tallene dine fra backend.",
@@ -348,6 +349,7 @@ export const translations = {
 
 		// StatisticsPage
 		statisticsLoadErrorMessage: "Could not load your statistics.",
+		statisticsEmptyValueLabel: "—",
 		statisticsPageSubtitle: "See how your practice develops over time.",
 		statisticsLoadingTitle: "Loading statistics...",
 		statisticsLoadingBody: "We are fetching your numbers from the backend.",

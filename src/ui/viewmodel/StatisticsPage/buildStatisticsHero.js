@@ -1,5 +1,5 @@
 // src/ui/viewmodel/StatisticsPage/buildStatisticsHero.js
-import { EMPTY_LABEL, formatPercentageLabel } from "./statisticsFormatters.js";
+import { createPercentageLabel } from "./statisticsValueLabels.js";
 
 const HERO_METER_CLASS_NAME = "statistics-hero-meter";
 
@@ -11,7 +11,7 @@ export function buildHero(statistics, copy) {
 			progressPercentage: 0,
 			progressLabel: copy.kpiAverageScore,
 			meterClassName: HERO_METER_CLASS_NAME,
-			meterValueLabel: EMPTY_LABEL,
+			meterValueLabel: copy.emptyValueLabel,
 			meterDescription: copy.kpiAverageScore
 		};
 	}
@@ -22,7 +22,7 @@ export function buildHero(statistics, copy) {
 		progressPercentage: statistics.averageScorePercentage ?? 0,
 		progressLabel: copy.kpiAverageScore,
 		meterClassName: HERO_METER_CLASS_NAME,
-		meterValueLabel: formatPercentageLabel(statistics.averageScorePercentage),
+		meterValueLabel: createPercentageLabel(statistics.averageScorePercentage, copy),
 		meterDescription: copy.kpiAverageScore
 	};
 }

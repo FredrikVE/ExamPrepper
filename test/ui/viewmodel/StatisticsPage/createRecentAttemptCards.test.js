@@ -6,7 +6,8 @@ import { createRecentAttemptCards } from "../../../../src/ui/viewmodel/Statistic
 const copy = createStatisticsCopy({
 	statisticsAttemptScoreLabel: "Score",
 	statisticsAttemptFallbackTitlePrefix: "Eksamen",
-	statisticsAttemptPointUnit: "poeng"
+	statisticsAttemptPointUnit: "poeng",
+	statisticsEmptyValueLabel: "—"
 });
 
 const formatDate = (value) => value ? `dato:${value}` : null;

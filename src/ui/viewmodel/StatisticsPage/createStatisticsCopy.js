@@ -28,6 +28,7 @@ export default function createStatisticsCopy(t) {
 		recentAttemptsEmpty: t.statisticsRecentAttemptsEmpty,
 		attemptScoreLabel: t.statisticsAttemptScoreLabel,
 		loadErrorMessage: t.statisticsLoadErrorMessage,
+		emptyValueLabel: t.statisticsEmptyValueLabel,
 
 		createHeroTitle(count) {
 			return `${t.statisticsHeroTitlePrefix} ${count} ${selectUnit(count, t.statisticsHeroTitleUnitSingular, t.statisticsHeroTitleUnitPlural)}`;

@@ -1,5 +1,6 @@
 // src/ui/viewmodel/StatisticsPage/createScoreTrendPoints.js
-import { EMPTY_LABEL, normalizeNullableNumber, normalizeNullablePercentage, formatPercentageLabel, createPointsLabel } from "./statisticsFormatters.js";
+import { normalizeNullableNumber, normalizeNullablePercentagePoints } from "./statisticsNumbers.js";
+import { createPercentageLabel, createPointsLabel } from "./statisticsValueLabels.js";
 
 export function createScoreTrendPoints(scoreTrend, formatDate, copy) {
 	if (!Array.isArray(scoreTrend)) {
@@ -21,16 +22,16 @@ export function createScoreTrendPoints(scoreTrend, formatDate, copy) {
 
 function createScoreTrendPoint(attempt, index, formatDate, copy) {
 	const pointNumber = index + 1;
-	const percentage = normalizeNullablePercentage(attempt.percentage);
+	const percentage = normalizeNullablePercentagePoints(attempt.percentage);
 	const scorePoints = normalizeNullableNumber(attempt.scorePoints);
 
 	return {
 		id: attempt.attemptId ?? `trend-${pointNumber}`,
 		name: copy.createTrendPointLabel(pointNumber),
-		dateLabel: formatDate(attempt.submittedAt) ?? EMPTY_LABEL,
+		dateLabel: formatDate(attempt.submittedAt) ?? copy.emptyValueLabel,
 		percentage,
 		scorePoints,
-		percentageLabel: formatPercentageLabel(percentage),
+		percentageLabel: createPercentageLabel(percentage, copy),
 		scoreLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, copy)
 	};
 }

@@ -1,5 +1,6 @@
 // src/ui/viewmodel/StatisticsPage/buildStatisticsKpiCards.js
-import { EMPTY_LABEL, formatPercentageLabel, roundPercentage } from "./statisticsFormatters.js";
+import { roundPercentage } from "./statisticsNumbers.js";
+import { createPercentageLabel } from "./statisticsValueLabels.js";
 
 const SPARKLINE_MAX_POINTS = 12;
 
@@ -12,7 +13,7 @@ export function buildKpiCards(statistics, copy) {
 			iconKey: "chart",
 			tone: "blue",
 			label: copy.kpiAverageScore,
-			value: formatPercentageLabel(statistics.averageScorePercentage),
+			value: createPercentageLabel(statistics.averageScorePercentage, copy),
 			description: copy.createAttemptCountDescription(statistics.attemptCount),
 			sparkline: sparklineData.averageScore
 		},
@@ -21,7 +22,7 @@ export function buildKpiCards(statistics, copy) {
 			iconKey: "star",
 			tone: "green",
 			label: copy.kpiBestScore,
-			value: formatPercentageLabel(statistics.bestScorePercentage),
+			value: createPercentageLabel(statistics.bestScorePercentage, copy),
 			description: copy.createAttemptCountDescription(statistics.attemptCount),
 			sparkline: sparklineData.bestScore
 		},
@@ -30,7 +31,7 @@ export function buildKpiCards(statistics, copy) {
 			iconKey: "check",
 			tone: "purple",
 			label: copy.kpiCorrectAnswers,
-			value: statistics.totalQuestions > 0 ? String(statistics.totalCorrectAnswers) : EMPTY_LABEL,
+			value: statistics.totalQuestions > 0 ? String(statistics.totalCorrectAnswers) : copy.emptyValueLabel,
 			description: copy.createCorrectAnswersDescription(statistics.totalCorrectAnswers, statistics.totalQuestions),
 			sparkline: sparklineData.correctAnswers
 		},
@@ -39,7 +40,7 @@ export function buildKpiCards(statistics, copy) {
 			iconKey: "book",
 			tone: "orange",
 			label: copy.kpiUniqueExams,
-			value: statistics.uniqueExamCount > 0 ? String(statistics.uniqueExamCount) : EMPTY_LABEL,
+			value: statistics.uniqueExamCount > 0 ? String(statistics.uniqueExamCount) : copy.emptyValueLabel,
 			description: copy.createUniqueExamsDescription(statistics.uniqueExamCount),
 			sparkline: null
 		}
