@@ -2,8 +2,8 @@
 import ApiDataSource from "./ApiDataSource.js";
 
 export default class ApiExamAttemptDataSource extends ApiDataSource {
-	async submitAttempt({ examId, lang, answers }) {
-		return await this.post("/exam-attempts", { examId, lang, answers });
+	async submitAttempt({ examId, lang, durationSeconds, answers }) {
+		return await this.post("/exam-attempts", { examId, lang, durationSeconds, answers });
 	}
 
 	async fetchAttemptById(attemptId) {

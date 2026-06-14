@@ -271,6 +271,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			const attempt = await submitExamAttemptUseCase.execute({
 				examId,
 				lang: language,
+				durationSeconds: elapsedSeconds,
 				answers: transformAnswersForApi(questions, answers)
 			});
 
@@ -280,7 +281,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		} finally {
 			setAttemptSaving(false);
 		}
-	}, [answers, copy.attemptSaveErrorMessage, examId, language, questions, requestScrollToTop, submitExamAttemptUseCase]);
+	}, [answers, copy.attemptSaveErrorMessage, elapsedSeconds, examId, language, questions, requestScrollToTop, submitExamAttemptUseCase]);
 
 	const resetExam = useCallback(() => {
 		setAnswers({});
