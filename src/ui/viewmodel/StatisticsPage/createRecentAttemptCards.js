@@ -4,7 +4,7 @@ import { createPercentageLabel, createPointsLabel } from "./statisticsValueLabel
 
 const RECENT_ATTEMPT_TONES = ["purple", "orange", "teal"];
 
-export function createRecentAttemptCards(recentAttempts, formatDate, copy) {
+export function createRecentAttemptCards(recentAttempts, formatDate, text) {
 	if (!Array.isArray(recentAttempts)) {
 		return [];
 	}
@@ -16,13 +16,13 @@ export function createRecentAttemptCards(recentAttempts, formatDate, copy) {
 			continue;
 		}
 
-		cards.push(createRecentAttemptCard(attempt, cards.length, formatDate, copy));
+		cards.push(createRecentAttemptCard(attempt, cards.length, formatDate, text));
 	}
 
 	return cards;
 }
 
-function createRecentAttemptCard(attempt, index, formatDate, copy) {
+function createRecentAttemptCard(attempt, index, formatDate, text) {
 	const attemptNumber = index + 1;
 	const percentage = normalizeNullablePercentagePoints(attempt.percentage);
 	const examId = attempt.examId ?? "";
@@ -30,26 +30,26 @@ function createRecentAttemptCard(attempt, index, formatDate, copy) {
 	return {
 		id: attempt.attemptId ?? `recent-${attemptNumber}`,
 		examId,
-		examTitle: createRecentAttemptTitle(attempt, attemptNumber, copy),
-		submittedAtLabel: formatDate(attempt.submittedAt) ?? copy.emptyValueLabel,
+		examTitle: createRecentAttemptTitle(attempt, attemptNumber, text),
+		submittedAtLabel: formatDate(attempt.submittedAt) ?? text.emptyValueLabel,
 		percentage,
-		percentageLabel: createPercentageLabel(percentage, copy),
-		pointsLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, copy),
-		scoreLabel: copy.attemptScoreLabel,
+		percentageLabel: createPercentageLabel(percentage, text),
+		pointsLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, text),
+		scoreLabel: text.attemptScoreLabel,
 		tone: selectRecentAttemptTone(index)
 	};
 }
 
-function createRecentAttemptTitle(attempt, attemptNumber, copy) {
+function createRecentAttemptTitle(attempt, attemptNumber, text) {
 	if (attempt.examTitle) {
 		return attempt.examTitle;
 	}
 
 	if (attempt.examId) {
-		return copy.createAttemptFallbackTitle(attempt.examId);
+		return text.createAttemptFallbackTitle(attempt.examId);
 	}
 
-	return copy.createAttemptFallbackTitle(attemptNumber);
+	return text.createAttemptFallbackTitle(attemptNumber);
 }
 
 function selectRecentAttemptTone(index) {

@@ -3,26 +3,26 @@ import { createPercentageLabel } from "./statisticsValueLabels.js";
 
 const HERO_METER_CLASS_NAME = "statistics-hero-meter";
 
-export function buildHero(statistics, copy) {
+export function buildHero(statistics, text) {
 	if (statistics.attemptCount === 0) {
 		return {
-			title: copy.emptyTitle,
-			body: copy.emptyBody,
+			title: text.emptyTitle,
+			body: text.emptyBody,
 			progressPercentage: 0,
-			progressLabel: copy.kpiAverageScore,
+			progressLabel: text.kpiAverageScore,
 			meterClassName: HERO_METER_CLASS_NAME,
-			meterValueLabel: copy.emptyValueLabel,
-			meterDescription: copy.kpiAverageScore
+			meterValueLabel: text.emptyValueLabel,
+			meterDescription: text.kpiAverageScore
 		};
 	}
 
 	return {
-		title: copy.createHeroTitle(statistics.attemptCount),
-		body: copy.heroBody,
+		title: text.createHeroTitle(statistics.attemptCount),
+		body: text.heroBody,
 		progressPercentage: statistics.averageScorePercentage ?? 0,
-		progressLabel: copy.kpiAverageScore,
+		progressLabel: text.kpiAverageScore,
 		meterClassName: HERO_METER_CLASS_NAME,
-		meterValueLabel: createPercentageLabel(statistics.averageScorePercentage, copy),
-		meterDescription: copy.kpiAverageScore
+		meterValueLabel: createPercentageLabel(statistics.averageScorePercentage, text),
+		meterDescription: text.kpiAverageScore
 	};
 }

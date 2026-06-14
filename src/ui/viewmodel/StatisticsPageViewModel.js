@@ -1,6 +1,6 @@
 // src/ui/viewmodel/StatisticsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import createStatisticsCopy from "./StatisticsPage/createStatisticsCopy.js";
+import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
 import createStatisticsDashboardModel from "./StatisticsPage/createStatisticsDashboardModel.js";
 
 const isNeverCancelled = () => false;
@@ -14,7 +14,7 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 	const isSignedIn = authState.isSignedIn === true;
 	const hasClerkAuth = authState.hasClerkAuth === true;
 
-	const copy = useMemo(() => createStatisticsCopy(t), [t]);
+	const text = useMemo(() => createStatisticsTextModel(t), [t]);
 
 	const loadStatistics = useCallback(async (isCancelled = isNeverCancelled) => {
 		if (!isAuthLoaded || !isSignedIn) {
@@ -38,14 +38,14 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 
 			if (!isCancelled()) {
 				setStatistics(null);
-				setStatisticsLoadError(error?.message ?? copy.loadErrorMessage);
+				setStatisticsLoadError(error?.message ?? text.loadErrorMessage);
 			}
 		} finally {
 			if (!isCancelled()) {
 				setStatisticsLoading(false);
 			}
 		}
-	}, [copy.loadErrorMessage, getMyStatisticsUseCase, isAuthLoaded, isSignedIn]);
+	}, [text.loadErrorMessage, getMyStatisticsUseCase, isAuthLoaded, isSignedIn]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -58,8 +58,8 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 	}, [loadStatistics]);
 
 	const dashboard = useMemo(() => createStatisticsDashboardModel(
-		statistics, formatDate, copy
-	), [statistics, formatDate, copy]);
+		statistics, formatDate, text
+	), [statistics, formatDate, text]);
 
 	const retryLoadStatistics = useCallback(() => {
 		loadStatistics();
@@ -86,17 +86,17 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 		statisticsLoadError,
 
 		// Text
-		pageTitle: copy.pageTitle,
-		pageSubtitle: copy.pageSubtitle,
-		loadingTitle: copy.loadingTitle,
-		loadingBody: copy.loadingBody,
-		signedOutTitle: copy.signedOutTitle,
-		signedOutBody: copy.signedOutBody,
-		emptyTitle: copy.emptyTitle,
-		emptyBody: copy.emptyBody,
-		errorTitle: copy.errorTitle,
-		retryButtonLabel: copy.retryButton,
-		startNewExamLabel: copy.startNewExamButton,
+		pageTitle: text.pageTitle,
+		pageSubtitle: text.pageSubtitle,
+		loadingTitle: text.loadingTitle,
+		loadingBody: text.loadingBody,
+		signedOutTitle: text.signedOutTitle,
+		signedOutBody: text.signedOutBody,
+		emptyTitle: text.emptyTitle,
+		emptyBody: text.emptyBody,
+		errorTitle: text.errorTitle,
+		retryButtonLabel: text.retryButton,
+		startNewExamLabel: text.startNewExamButton,
 
 		// Dashboard model
 		...dashboard,

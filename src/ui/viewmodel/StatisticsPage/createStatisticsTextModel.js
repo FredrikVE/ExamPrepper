@@ -1,5 +1,5 @@
-// src/ui/viewmodel/StatisticsPage/createStatisticsCopy.js
-export default function createStatisticsCopy(t) {
+// src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js
+export default function createStatisticsTextModel(t) {
 	return {
 		pageTitle: t.selectStatistics,
 		pageSubtitle: t.statisticsPageSubtitle,
@@ -46,7 +46,7 @@ export default function createStatisticsCopy(t) {
 		emptyValueLabel: t.statisticsEmptyValueLabel,
 
 		createHeroTitle(count) {
-			return `${t.statisticsHeroTitlePrefix} ${count} ${selectUnit(count, t.statisticsHeroTitleUnitSingular, t.statisticsHeroTitleUnitPlural)}`;
+			return `${t.statisticsHeroTitlePrefix} ${count} ${selectSingularOrPlural(count, t.statisticsHeroTitleUnitSingular, t.statisticsHeroTitleUnitPlural)}`;
 		},
 
 		createTrendPointLabel(number) {
@@ -54,15 +54,15 @@ export default function createStatisticsCopy(t) {
 		},
 
 		createAttemptCountDescription(count) {
-			return `${count} ${selectUnit(count, t.statisticsAttemptUnitSingular, t.statisticsAttemptUnitPlural)}`;
+			return `${count} ${selectSingularOrPlural(count, t.statisticsAttemptUnitSingular, t.statisticsAttemptUnitPlural)}`;
 		},
 
 		createCorrectAnswersDescription(correct, total) {
-			return `${correct} ${t.statisticsOfLabel} ${total} ${selectUnit(total, t.statisticsQuestionUnitSingular, t.statisticsQuestionUnitPlural)}`;
+			return `${correct} ${t.statisticsOfLabel} ${total} ${selectSingularOrPlural(total, t.statisticsQuestionUnitSingular, t.statisticsQuestionUnitPlural)}`;
 		},
 
 		createUniqueExamsDescription(count) {
-			return `${count} ${selectUnit(count, t.statisticsExamUnitSingular, t.statisticsExamUnitPlural)}`;
+			return `${count} ${selectSingularOrPlural(count, t.statisticsExamUnitSingular, t.statisticsExamUnitPlural)}`;
 		},
 
 		createAttemptFallbackTitle(examId) {
@@ -90,6 +90,10 @@ export default function createStatisticsCopy(t) {
 	};
 }
 
-function selectUnit(count, singular, plural) {
-	return count === 1 ? singular : plural;
+function selectSingularOrPlural(count, singular, plural) {
+	if (count === 1) {
+		return singular;
+	}
+
+	return plural;
 }

@@ -1,9 +1,9 @@
 // test/ui/viewmodel/StatisticsPage/createWeeklyActivityModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import createStatisticsCopy from "../../../../src/ui/viewmodel/StatisticsPage/createStatisticsCopy.js";
+import createStatisticsTextModel from "../../../../src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js";
 import { createWeeklyActivityModel } from "../../../../src/ui/viewmodel/StatisticsPage/createWeeklyActivityModel.js";
 
-const copy = createStatisticsCopy({
+const text = createStatisticsTextModel({
 	statisticsWeeklyActivityTitle: "Aktivitet denne uken",
 	statisticsWeeklyActivityTotalTimeCaption: "Totalt tid brukt",
 	statisticsWeeklyActivityChangeSuffix: "fra forrige uke",
@@ -33,7 +33,7 @@ describe("createWeeklyActivityModel", () => {
 				{ key: "wed", label: "Ons", totalMinutes: 55, attemptCount: 1 },
 				{ key: "thu", label: "Tor", totalMinutes: 30, attemptCount: 1 }
 			]
-		}, copy);
+		}, text);
 
 		expect(result.title).toBe("Aktivitet denne uken");
 		expect(result.totalTimeLabel).toBe("2 t 45 min");
@@ -61,7 +61,7 @@ describe("createWeeklyActivityModel", () => {
 	});
 
 	test("creates safe empty activity when backend data is missing", () => {
-		const result = createWeeklyActivityModel(null, copy);
+		const result = createWeeklyActivityModel(null, text);
 
 		expect(result.totalTimeLabel).toBe("0 min");
 		expect(result.changeLabel).toBe("Ingen sammenligning ennå");
@@ -75,7 +75,7 @@ describe("createWeeklyActivityModel", () => {
 			totalMinutesThisWeek: 20,
 			changePercentageFromPreviousWeek: -12.5,
 			days: []
-		}, copy);
+		}, text);
 
 		expect(result.changeLabel).toBe("-12.5 % fra forrige uke");
 		expect(result.changeTone).toBe("negative");

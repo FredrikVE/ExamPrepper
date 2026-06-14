@@ -1,6 +1,6 @@
 // test/ui/viewmodel/createStatisticsDashboardModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import createStatisticsCopy from "../../../src/ui/viewmodel/StatisticsPage/createStatisticsCopy.js";
+import createStatisticsTextModel from "../../../src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js";
 import createStatisticsDashboardModel from "../../../src/ui/viewmodel/StatisticsPage/createStatisticsDashboardModel.js";
 
 const translations = {
@@ -62,12 +62,12 @@ const translations = {
 	statisticsAttemptPointUnit: "poeng"
 };
 
-const copy = createStatisticsCopy(translations);
+const text = createStatisticsTextModel(translations);
 const formatDate = (value) => value ? `dato:${value}` : null;
 
 describe("createStatisticsDashboardModel", () => {
 	test("creates empty dashboard state without computing historical improvement", () => {
-		const result = createStatisticsDashboardModel(null, formatDate, copy);
+		const result = createStatisticsDashboardModel(null, formatDate, text);
 
 		expect(result.isStatisticsEmpty).toBe(true);
 		expect(result.hero).toEqual({
@@ -128,7 +128,7 @@ describe("createStatisticsDashboardModel", () => {
 					{ key: "thu", label: "Tor", totalMinutes: "30", attemptCount: "1" }
 				]
 			}
-		}, formatDate, copy);
+		}, formatDate, text);
 
 		expect(result.isStatisticsEmpty).toBe(false);
 		expect(result.hero.meterValueLabel).toBe("74.4 %");
@@ -173,7 +173,7 @@ describe("createStatisticsDashboardModel", () => {
 				{ attemptId: "a3", submittedAt: "2026-06-12", percentage: 80, scorePoints: 16, totalPoints: 20 }
 			],
 			recentAttempts: []
-		}, formatDate, copy);
+		}, formatDate, text);
 
 		const sparklines = result.kpiCards.map((card) => card.sparkline);
 

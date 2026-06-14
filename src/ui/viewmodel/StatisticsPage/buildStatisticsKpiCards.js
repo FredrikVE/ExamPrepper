@@ -4,7 +4,7 @@ import { createPercentageLabel } from "./statisticsValueLabels.js";
 
 const SPARKLINE_MAX_POINTS = 12;
 
-export function buildKpiCards(statistics, copy) {
+export function buildKpiCards(statistics, text) {
 	const sparklineData = buildKpiSparklineData(statistics.scoreTrend);
 
 	return [
@@ -12,36 +12,36 @@ export function buildKpiCards(statistics, copy) {
 			id: "average-score",
 			iconKey: "chart",
 			tone: "blue",
-			label: copy.kpiAverageScore,
-			value: createPercentageLabel(statistics.averageScorePercentage, copy),
-			description: copy.createAttemptCountDescription(statistics.attemptCount),
+			label: text.kpiAverageScore,
+			value: createPercentageLabel(statistics.averageScorePercentage, text),
+			description: text.createAttemptCountDescription(statistics.attemptCount),
 			sparkline: sparklineData.averageScore
 		},
 		{
 			id: "best-score",
 			iconKey: "star",
 			tone: "green",
-			label: copy.kpiBestScore,
-			value: createPercentageLabel(statistics.bestScorePercentage, copy),
-			description: copy.createAttemptCountDescription(statistics.attemptCount),
+			label: text.kpiBestScore,
+			value: createPercentageLabel(statistics.bestScorePercentage, text),
+			description: text.createAttemptCountDescription(statistics.attemptCount),
 			sparkline: sparklineData.bestScore
 		},
 		{
 			id: "correct-answers",
 			iconKey: "check",
 			tone: "purple",
-			label: copy.kpiCorrectAnswers,
-			value: statistics.totalQuestions > 0 ? String(statistics.totalCorrectAnswers) : copy.emptyValueLabel,
-			description: copy.createCorrectAnswersDescription(statistics.totalCorrectAnswers, statistics.totalQuestions),
+			label: text.kpiCorrectAnswers,
+			value: statistics.totalQuestions > 0 ? String(statistics.totalCorrectAnswers) : text.emptyValueLabel,
+			description: text.createCorrectAnswersDescription(statistics.totalCorrectAnswers, statistics.totalQuestions),
 			sparkline: sparklineData.correctAnswers
 		},
 		{
 			id: "unique-exams",
 			iconKey: "book",
 			tone: "orange",
-			label: copy.kpiUniqueExams,
-			value: statistics.uniqueExamCount > 0 ? String(statistics.uniqueExamCount) : copy.emptyValueLabel,
-			description: copy.createUniqueExamsDescription(statistics.uniqueExamCount),
+			label: text.kpiUniqueExams,
+			value: statistics.uniqueExamCount > 0 ? String(statistics.uniqueExamCount) : text.emptyValueLabel,
+			description: text.createUniqueExamsDescription(statistics.uniqueExamCount),
 			sparkline: null
 		}
 	];

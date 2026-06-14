@@ -5,24 +5,24 @@ import { createPercentageLabel } from "./statisticsValueLabels.js";
 const WEEKDAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const ACTIVITY_TONES = ["blue", "teal", "green", "orange", "pink", "purple", "neutral"];
 
-export function createWeeklyActivityModel(weeklyActivity, copy) {
-	const days = createWeeklyActivityDays(weeklyActivity?.days, copy);
+export function createWeeklyActivityModel(weeklyActivity, text) {
+	const days = createWeeklyActivityDays(weeklyActivity?.days, text);
 	const totalMinutes = normalizeNumber(weeklyActivity?.totalMinutesThisWeek);
 	const changePercentage = normalizeNullablePercentagePoints(weeklyActivity?.changePercentageFromPreviousWeek);
 	const maxMinutes = findMaxMinutes(days);
 
 	return {
-		title: copy.weeklyActivityTitle,
-		totalTimeLabel: copy.createDurationLabel(totalMinutes),
-		totalTimeCaption: copy.weeklyActivityTotalTimeCaption,
-		changeLabel: createWeeklyActivityChangeLabel(changePercentage, copy),
+		title: text.weeklyActivityTitle,
+		totalTimeLabel: text.createDurationLabel(totalMinutes),
+		totalTimeCaption: text.weeklyActivityTotalTimeCaption,
+		changeLabel: createWeeklyActivityChangeLabel(changePercentage, text),
 		changeTone: createWeeklyActivityChangeTone(changePercentage),
-		note: copy.weeklyActivityNote,
+		note: text.weeklyActivityNote,
 		days: addBarHeights(days, maxMinutes)
 	};
 }
 
-function createWeeklyActivityDays(rawDays, copy) {
+function createWeeklyActivityDays(rawDays, text) {
 	const daysByKey = createDaysByKey(rawDays);
 	const days = [];
 
@@ -30,7 +30,7 @@ function createWeeklyActivityDays(rawDays, copy) {
 		const key = WEEKDAY_KEYS[index];
 		const rawDay = daysByKey[key];
 
-		days.push(createWeeklyActivityDay(key, rawDay, index, copy));
+		days.push(createWeeklyActivityDay(key, rawDay, index, text));
 	}
 
 	return days;
@@ -54,12 +54,12 @@ function createDaysByKey(rawDays) {
 	return daysByKey;
 }
 
-function createWeeklyActivityDay(key, rawDay, index, copy) {
+function createWeeklyActivityDay(key, rawDay, index, text) {
 	const totalMinutes = normalizeNumber(rawDay?.totalMinutes);
 
 	return {
 		key,
-		label: copy.weekdayLabels[key],
+		label: text.weekdayLabels[key],
 		totalMinutes,
 		attemptCount: normalizeNumber(rawDay?.attemptCount),
 		tone: ACTIVITY_TONES[index]
@@ -105,22 +105,22 @@ function createBarHeight(totalMinutes, maxMinutes) {
 	return `${percentage}%`;
 }
 
-function createWeeklyActivityChangeLabel(changePercentage, copy) {
+function createWeeklyActivityChangeLabel(changePercentage, text) {
 	if (changePercentage === null) {
-		return copy.weeklyActivityNoComparisonLabel;
+		return text.weeklyActivityNoComparisonLabel;
 	}
 
-	const percentageLabel = createPercentageLabel(Math.abs(changePercentage), copy);
+	const percentageLabel = createPercentageLabel(Math.abs(changePercentage), text);
 
 	if (changePercentage > 0) {
-		return `+${percentageLabel} ${copy.weeklyActivityChangeSuffix}`;
+		return `+${percentageLabel} ${text.weeklyActivityChangeSuffix}`;
 	}
 
 	if (changePercentage < 0) {
-		return `-${percentageLabel} ${copy.weeklyActivityChangeSuffix}`;
+		return `-${percentageLabel} ${text.weeklyActivityChangeSuffix}`;
 	}
 
-	return copy.weeklyActivityNoChangeLabel;
+	return text.weeklyActivityNoChangeLabel;
 }
 
 function createWeeklyActivityChangeTone(changePercentage) {

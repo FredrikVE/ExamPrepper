@@ -1,5 +1,5 @@
 // src/ui/viewmodel/StatisticsPage/buildScoreTrendChart.js
-export function buildScoreTrendChart(scoreTrend, copy) {
+export function buildScoreTrendChart(scoreTrend, text) {
 	const points = [];
 
 	for (const point of scoreTrend) {
@@ -9,9 +9,9 @@ export function buildScoreTrendChart(scoreTrend, copy) {
 	}
 
 	return {
-		title: copy.scoreTrendTitle,
-		subtitle: copy.scoreTrendSubtitle,
-		emptySummary: copy.scoreTrendEmptySummary,
+		title: text.scoreTrendTitle,
+		subtitle: text.scoreTrendSubtitle,
+		emptySummary: text.scoreTrendEmptySummary,
 		points
 	};
 }

@@ -7,11 +7,11 @@ import { createScoreTrendPoints } from "./createScoreTrendPoints.js";
 import { normalizeStatisticsSummary } from "./normalizeStatisticsSummary.js";
 import { createWeeklyActivityModel } from "./createWeeklyActivityModel.js";
 
-export default function createStatisticsDashboardModel(statistics, formatDate, copy) {
+export default function createStatisticsDashboardModel(statistics, formatDate, text) {
 	const normalized = normalizeStatisticsSummary(statistics);
-	const scoreTrend = createScoreTrendPoints(statistics?.scoreTrend, formatDate, copy);
-	const recentAttempts = createRecentAttemptCards(statistics?.recentAttempts, formatDate, copy);
-	const weeklyActivity = createWeeklyActivityModel(statistics?.weeklyActivity, copy);
+	const scoreTrend = createScoreTrendPoints(statistics?.scoreTrend, formatDate, text);
+	const recentAttempts = createRecentAttemptCards(statistics?.recentAttempts, formatDate, text);
+	const weeklyActivity = createWeeklyActivityModel(statistics?.weeklyActivity, text);
 	const dashboardStatistics = {
 		...normalized,
 		scoreTrend
@@ -19,14 +19,14 @@ export default function createStatisticsDashboardModel(statistics, formatDate, c
 
 	return {
 		isStatisticsEmpty: dashboardStatistics.attemptCount === 0,
-		hero: buildHero(dashboardStatistics, copy),
-		kpiGridLabel: copy.kpiGridLabel,
-		kpiCards: buildKpiCards(dashboardStatistics, copy),
-		scoreTrendChart: buildScoreTrendChart(scoreTrend, copy),
+		hero: buildHero(dashboardStatistics, text),
+		kpiGridLabel: text.kpiGridLabel,
+		kpiCards: buildKpiCards(dashboardStatistics, text),
+		scoreTrendChart: buildScoreTrendChart(scoreTrend, text),
 		recentAttempts,
 		weeklyActivity,
-		recentAttemptsTitle: copy.recentAttemptsTitle,
-		recentAttemptsSubtitle: copy.recentAttemptsSubtitle,
-		recentAttemptsEmpty: copy.recentAttemptsEmpty
+		recentAttemptsTitle: text.recentAttemptsTitle,
+		recentAttemptsSubtitle: text.recentAttemptsSubtitle,
+		recentAttemptsEmpty: text.recentAttemptsEmpty
 	};
 }

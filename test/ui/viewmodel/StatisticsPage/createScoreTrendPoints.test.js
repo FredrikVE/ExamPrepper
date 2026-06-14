@@ -1,9 +1,9 @@
 // test/ui/viewmodel/StatisticsPage/createScoreTrendPoints.test.js
 import { describe, expect, test } from "@jest/globals";
-import createStatisticsCopy from "../../../../src/ui/viewmodel/StatisticsPage/createStatisticsCopy.js";
+import createStatisticsTextModel from "../../../../src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js";
 import { createScoreTrendPoints } from "../../../../src/ui/viewmodel/StatisticsPage/createScoreTrendPoints.js";
 
-const copy = createStatisticsCopy({
+const text = createStatisticsTextModel({
 	statisticsTrendPointLabel: "Forsøk",
 	statisticsAttemptPointUnit: "poeng",
 	statisticsEmptyValueLabel: "—"
@@ -13,7 +13,7 @@ const formatDate = (value) => value ? `dato:${value}` : null;
 
 describe("createScoreTrendPoints", () => {
 	test("returns empty list when scoreTrend is missing", () => {
-		expect(createScoreTrendPoints(null, formatDate, copy)).toEqual([]);
+		expect(createScoreTrendPoints(null, formatDate, text)).toEqual([]);
 	});
 
 	test("creates chart-ready trend points", () => {
@@ -26,7 +26,7 @@ describe("createScoreTrendPoints", () => {
 				scorePoints: "12",
 				totalPoints: "16"
 			}
-		], formatDate, copy);
+		], formatDate, text);
 
 		expect(result).toEqual([
 			{

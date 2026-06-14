@@ -1,9 +1,9 @@
 // test/ui/viewmodel/StatisticsPage/createRecentAttemptCards.test.js
 import { describe, expect, test } from "@jest/globals";
-import createStatisticsCopy from "../../../../src/ui/viewmodel/StatisticsPage/createStatisticsCopy.js";
+import createStatisticsTextModel from "../../../../src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js";
 import { createRecentAttemptCards } from "../../../../src/ui/viewmodel/StatisticsPage/createRecentAttemptCards.js";
 
-const copy = createStatisticsCopy({
+const text = createStatisticsTextModel({
 	statisticsAttemptScoreLabel: "Score",
 	statisticsAttemptFallbackTitlePrefix: "Eksamen",
 	statisticsAttemptPointUnit: "poeng",
@@ -14,7 +14,7 @@ const formatDate = (value) => value ? `dato:${value}` : null;
 
 describe("createRecentAttemptCards", () => {
 	test("returns empty list when recentAttempts is missing", () => {
-		expect(createRecentAttemptCards(undefined, formatDate, copy)).toEqual([]);
+		expect(createRecentAttemptCards(undefined, formatDate, text)).toEqual([]);
 	});
 
 	test("creates card models for recent attempts", () => {
@@ -36,7 +36,7 @@ describe("createRecentAttemptCards", () => {
 				scorePoints: null,
 				totalPoints: null
 			}
-		], formatDate, copy);
+		], formatDate, text);
 
 		expect(result).toEqual([
 			{

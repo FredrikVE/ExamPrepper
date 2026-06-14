@@ -2,7 +2,7 @@
 import { normalizeNullableNumber, normalizeNullablePercentagePoints } from "./statisticsNumbers.js";
 import { createPercentageLabel, createPointsLabel } from "./statisticsValueLabels.js";
 
-export function createScoreTrendPoints(scoreTrend, formatDate, copy) {
+export function createScoreTrendPoints(scoreTrend, formatDate, text) {
 	if (!Array.isArray(scoreTrend)) {
 		return [];
 	}
@@ -14,24 +14,24 @@ export function createScoreTrendPoints(scoreTrend, formatDate, copy) {
 			continue;
 		}
 
-		trendPoints.push(createScoreTrendPoint(attempt, trendPoints.length, formatDate, copy));
+		trendPoints.push(createScoreTrendPoint(attempt, trendPoints.length, formatDate, text));
 	}
 
 	return trendPoints;
 }
 
-function createScoreTrendPoint(attempt, index, formatDate, copy) {
+function createScoreTrendPoint(attempt, index, formatDate, text) {
 	const pointNumber = index + 1;
 	const percentage = normalizeNullablePercentagePoints(attempt.percentage);
 	const scorePoints = normalizeNullableNumber(attempt.scorePoints);
 
 	return {
 		id: attempt.attemptId ?? `trend-${pointNumber}`,
-		name: copy.createTrendPointLabel(pointNumber),
-		dateLabel: formatDate(attempt.submittedAt) ?? copy.emptyValueLabel,
+		name: text.createTrendPointLabel(pointNumber),
+		dateLabel: formatDate(attempt.submittedAt) ?? text.emptyValueLabel,
 		percentage,
 		scorePoints,
-		percentageLabel: createPercentageLabel(percentage, copy),
-		scoreLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, copy)
+		percentageLabel: createPercentageLabel(percentage, text),
+		scoreLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, text)
 	};
 }
