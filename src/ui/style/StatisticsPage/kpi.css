@@ -105,7 +105,35 @@
 	width: 100%;
 	height: 38px;
 	margin-top: var(--space-2);
-	opacity: 0.7;
+	overflow: visible;
+}
+
+.statistics-kpi-sparkline-area-stop-start {
+	stop-color: var(--statistics-kpi-accent);
+	stop-opacity: 0.24;
+}
+
+.statistics-kpi-sparkline-area-stop-end {
+	stop-color: var(--statistics-kpi-accent);
+	stop-opacity: 0;
+}
+
+.statistics-kpi-sparkline-line {
+	fill: none;
+	stroke: var(--statistics-kpi-accent);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2.2;
+}
+
+.statistics-kpi-sparkline-dot {
+	fill: var(--panel-bg);
+	stroke: var(--statistics-kpi-accent);
+	stroke-width: 2;
+}
+
+.statistics-kpi-sparkline-bar {
+	fill: var(--statistics-kpi-accent);
 }
 
 /* ── Description ──────────────────────────── */

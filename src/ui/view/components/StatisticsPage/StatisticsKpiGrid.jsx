@@ -11,7 +11,7 @@ export default function StatisticsKpiGrid({ cards, ariaLabel }) {
 						<p>{card.label}</p>
 					</div>
 					<strong className="statistics-kpi-value">{card.value}</strong>
-					<KpiSparkline sparkline={card.sparkline} />
+					<KpiSparkline cardId={card.id} sparkline={card.sparkline} />
 					<span>{card.description}</span>
 				</article>
 			))}
@@ -44,21 +44,24 @@ const SPARKLINE_WIDTH = 220;
 const SPARKLINE_HEIGHT = 38;
 const SPARKLINE_PADDING = 4;
 const SPARKLINE_DOT_RADIUS = 2.4;
-const SPARKLINE_STROKE_WIDTH = 2.2;
 
-function KpiSparkline({ sparkline }) {
+function KpiSparkline({ cardId, sparkline }) {
 	if (!sparkline || sparkline.points.length < 2) {
 		return null;
 	}
 
-	return sparkline.type === "line"
-		? <LineSparkline points={sparkline.points} />
-		: <BarSparkline points={sparkline.points} />;
+	if (sparkline.type === "line") {
+		return <LineSparkline points={sparkline.points} sparklineId={cardId} />;
+	}
+
+	return <BarSparkline points={sparkline.points} />;
 }
 
-function LineSparkline({ points }) {
+function LineSparkline({ points, sparklineId }) {
 	const coords = mapToCoordinates(points);
 	const polylinePoints = coords.map((c) => `${c.x},${c.y}`).join(" ");
+	const areaPoints = createLineAreaPoints(coords);
+	const areaGradientId = `statisticsKpiSparklineArea-${sparklineId}`;
 
 	return (
 		<svg
@@ -66,21 +69,28 @@ function LineSparkline({ points }) {
 			viewBox={`0 0 ${SPARKLINE_WIDTH} ${SPARKLINE_HEIGHT}`}
 			aria-hidden="true"
 		>
+			<defs>
+				<linearGradient id={areaGradientId} x1="0" y1="0" x2="0" y2="1">
+					<stop className="statistics-kpi-sparkline-area-stop-start" offset="0%" />
+					<stop className="statistics-kpi-sparkline-area-stop-end" offset="100%" />
+				</linearGradient>
+			</defs>
+			<polygon
+				className="statistics-kpi-sparkline-area"
+				points={areaPoints}
+				fill={`url(#${areaGradientId})`}
+			/>
 			<polyline
+				className="statistics-kpi-sparkline-line"
 				points={polylinePoints}
-				fill="none"
-				stroke="var(--statistics-kpi-accent)"
-				strokeWidth={SPARKLINE_STROKE_WIDTH}
 			/>
 			{coords.map((c, i) => (
 				<circle
 					key={i}
+					className="statistics-kpi-sparkline-dot"
 					cx={c.x}
 					cy={c.y}
 					r={SPARKLINE_DOT_RADIUS}
-					fill="#fff"
-					stroke="var(--statistics-kpi-accent)"
-					strokeWidth="2"
 				/>
 			))}
 		</svg>
@@ -107,17 +117,30 @@ function BarSparkline({ points }) {
 				return (
 					<rect
 						key={i}
+						className="statistics-kpi-sparkline-bar"
 						x={x}
 						y={y}
 						width={barWidth}
 						height={barHeight}
 						rx="1"
-						fill="var(--statistics-kpi-accent)"
 					/>
 				);
 			})}
 		</svg>
 	);
+}
+
+function createLineAreaPoints(coords) {
+	const firstPoint = coords[0];
+	const lastPoint = coords[coords.length - 1];
+	const baselineY = SPARKLINE_HEIGHT - SPARKLINE_PADDING;
+	const linePoints = coords.map((c) => `${c.x},${c.y}`);
+
+	return [
+		`${firstPoint.x},${baselineY}`,
+		...linePoints,
+		`${lastPoint.x},${baselineY}`
+	].join(" ");
 }
 
 function mapToCoordinates(points) {
