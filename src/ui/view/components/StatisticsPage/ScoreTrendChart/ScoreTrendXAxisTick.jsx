@@ -10,7 +10,7 @@ export default function TrendXAxisTick({ x, y, payload }) {
 
 	return (
 		<g transform={`translate(${x},${y})`}>
-			<text x={0} y={0} dy={SCORE_TREND_X_AXIS_TICK_DY} textAnchor="middle" fill="var(--text-muted)" fontSize={12} fontWeight={600}>
+			<text className="statistics-trend-xaxis-label" x={0} y={0} dy={SCORE_TREND_X_AXIS_TICK_DY} textAnchor="middle">
 				{point}
 			</text>
 		</g>
