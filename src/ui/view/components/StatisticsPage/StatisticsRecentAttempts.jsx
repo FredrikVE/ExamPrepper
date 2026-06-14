@@ -1,4 +1,6 @@
 // src/ui/view/components/StatisticsPage/StatisticsRecentAttempts.jsx
+import { BookOpen } from "lucide-react";
+
 export default function StatisticsRecentAttempts(props) {
 	if (props.attempts.length === 0) {
 		return (
@@ -22,7 +24,9 @@ export default function StatisticsRecentAttempts(props) {
 			<ul className="statistics-attempt-list">
 				{props.attempts.map((attempt) => (
 					<li key={attempt.id} className={`statistics-attempt-item statistics-attempt-item--${attempt.tone}`}>
-						<span className="statistics-attempt-icon" aria-hidden="true">▰</span>
+						<span className="statistics-attempt-icon" aria-hidden="true">
+							<BookOpen size={24} />
+						</span>
 
 						<div className="statistics-attempt-copy">
 							<span className="statistics-attempt-meta">{attempt.submittedAtLabel}</span>

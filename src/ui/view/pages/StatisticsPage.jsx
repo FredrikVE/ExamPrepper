@@ -1,6 +1,7 @@
 // src/ui/view/pages/StatisticsPage.jsx
 import StatisticsKpiGrid from "../components/StatisticsPage/StatisticsKpiGrid.jsx";
 import StatisticsRecentAttempts from "../components/StatisticsPage/StatisticsRecentAttempts.jsx";
+import StatisticsRecommendedExam from "../components/StatisticsPage/StatisticsRecommendedExam.jsx";
 import StatisticsScoreTrendChart from "../components/StatisticsPage/StatisticsScoreTrendChart.jsx";
 import StatisticsWeeklyActivity from "../components/StatisticsPage/StatisticsWeeklyActivity.jsx";
 import StatisticsState from "../components/StatisticsPage/StatisticsState.jsx";
@@ -93,6 +94,10 @@ export default function StatisticsPage({ viewModel }) {
 						<StatisticsScoreTrendChart chart={viewModel.scoreTrendChart} />
 
 						<div className="statistics-side-stack">
+							<StatisticsRecommendedExam
+								title={viewModel.recommendedExamTitle}
+								recommendation={viewModel.recommendedExam}
+							/>
 							<StatisticsWeeklyActivity activity={viewModel.weeklyActivity} />
 						</div>
 					</div>

@@ -6,12 +6,14 @@ import { createRecentAttemptCards } from "./createRecentAttemptCards.js";
 import { createScoreTrendPoints } from "./createScoreTrendPoints.js";
 import { normalizeStatisticsSummary } from "./normalizeStatisticsSummary.js";
 import { createWeeklyActivityModel } from "./createWeeklyActivityModel.js";
+import { createRecommendedExamModel } from "./createRecommendedExamModel.js";
 
 export default function createStatisticsDashboardModel(statistics, formatDate, text) {
 	const normalized = normalizeStatisticsSummary(statistics);
 	const scoreTrend = createScoreTrendPoints(statistics?.scoreTrend, formatDate, text);
 	const recentAttempts = createRecentAttemptCards(statistics?.recentAttempts, formatDate, text);
 	const weeklyActivity = createWeeklyActivityModel(statistics?.weeklyActivity, text);
+	const recommendedExam = createRecommendedExamModel(statistics?.recentAttempts, text);
 	const dashboardStatistics = {
 		...normalized,
 		scoreTrend
@@ -23,6 +25,8 @@ export default function createStatisticsDashboardModel(statistics, formatDate, t
 		kpiGridLabel: text.kpiGridLabel,
 		kpiCards: buildKpiCards(dashboardStatistics, text),
 		scoreTrendChart: buildScoreTrendChart(scoreTrend, text),
+		recommendedExam,
+		recommendedExamTitle: text.recommendedTitle,
 		recentAttempts,
 		weeklyActivity,
 		recentAttemptsTitle: text.recentAttemptsTitle,
