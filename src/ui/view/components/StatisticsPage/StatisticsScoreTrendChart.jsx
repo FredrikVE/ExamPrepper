@@ -15,8 +15,8 @@ export default function StatisticsScoreTrendChart({ chart }) {
 				<p className="statistics-empty-text">{chart.emptySummary}</p>
 			) : (
 				<div className="statistics-chart" aria-label={chart.title}>
-					<ResponsiveContainer width="100%" height={280}>
-						<LineChart data={chart.points} margin={{ top: 28, right: 12, bottom: 0, left: -16 }}>
+					<ResponsiveContainer width="100%" height="100%">
+						<LineChart data={chart.points} margin={{ top: 34, right: 28, bottom: 16, left: 12 }}>
 							<defs>
 								<linearGradient id="scoreTrendGradient" x1="0" y1="0" x2="1" y2="0">
 									<stop offset="0%" stopColor="#1463ff" />
@@ -33,10 +33,11 @@ export default function StatisticsScoreTrendChart({ chart }) {
 								tickLine={false}
 								axisLine={false}
 								tick={<TrendXAxisTick />}
-								height={44}
+								height={58}
 							/>
 							<YAxis
 								domain={[0, 100]}
+								width={58}
 								stroke="var(--text-soft)"
 								tickFormatter={(value) => `${value} %`}
 								tickLine={false}
@@ -111,7 +112,7 @@ function TrendXAxisTick({ x, y, payload }) {
 
 	return (
 		<g transform={`translate(${x},${y})`}>
-			<text x={0} y={0} dy={12} textAnchor="middle" fill="var(--text-muted)" fontSize={12} fontWeight={600}>
+			<text x={0} y={0} dy={20} textAnchor="middle" fill="var(--text-muted)" fontSize={12} fontWeight={600}>
 				{point}
 			</text>
 		</g>
