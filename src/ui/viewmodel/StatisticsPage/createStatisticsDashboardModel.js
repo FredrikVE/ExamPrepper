@@ -2,18 +2,26 @@
 import { buildScoreTrendChart } from "./buildScoreTrendChart.js";
 import { buildHero } from "./buildStatisticsHero.js";
 import { buildKpiCards } from "./buildStatisticsKpiCards.js";
-import { normalizeStatistics } from "./normalizeStatistics.js";
+import { createRecentAttemptCards } from "./createRecentAttemptCards.js";
+import { createScoreTrendPoints } from "./createScoreTrendPoints.js";
+import { normalizeStatisticsSummary } from "./normalizeStatisticsSummary.js";
 
 export default function createStatisticsDashboardModel(statistics, formatDate, copy) {
-	const normalized = normalizeStatistics(statistics, formatDate, copy);
+	const normalized = normalizeStatisticsSummary(statistics);
+	const scoreTrend = createScoreTrendPoints(statistics?.scoreTrend, formatDate, copy);
+	const recentAttempts = createRecentAttemptCards(statistics?.recentAttempts, formatDate, copy);
+	const dashboardStatistics = {
+		...normalized,
+		scoreTrend
+	};
 
 	return {
-		isStatisticsEmpty: normalized.attemptCount === 0,
-		hero: buildHero(normalized, copy),
+		isStatisticsEmpty: dashboardStatistics.attemptCount === 0,
+		hero: buildHero(dashboardStatistics, copy),
 		kpiGridLabel: copy.kpiGridLabel,
-		kpiCards: buildKpiCards(normalized, copy),
-		scoreTrendChart: buildScoreTrendChart(normalized.scoreTrend, copy),
-		recentAttempts: normalized.recentAttempts,
+		kpiCards: buildKpiCards(dashboardStatistics, copy),
+		scoreTrendChart: buildScoreTrendChart(scoreTrend, copy),
+		recentAttempts,
 		recentAttemptsTitle: copy.recentAttemptsTitle,
 		recentAttemptsSubtitle: copy.recentAttemptsSubtitle,
 		recentAttemptsEmpty: copy.recentAttemptsEmpty
