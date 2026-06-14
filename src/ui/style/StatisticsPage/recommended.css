@@ -10,6 +10,17 @@
 	--recommended-heart-border: #ffd9e5;
 }
 
+.dark .statistics-recommended-panel {
+	--recommended-accent: #ff7aa2;
+	--recommended-accent-soft: rgba(255, 61, 110, 0.14);
+	--recommended-card-bg: rgba(255, 61, 110, 0.1);
+	--recommended-card-border: rgba(255, 122, 162, 0.28);
+	--recommended-icon-bg: rgba(255, 61, 110, 0.13);
+	--recommended-icon-border: rgba(255, 122, 162, 0.32);
+	--recommended-badge-bg: rgba(255, 61, 110, 0.16);
+	--recommended-heart-border: rgba(255, 122, 162, 0.32);
+}
+
 .statistics-recommended-heading {
 	display: flex;
 	align-items: center;
@@ -67,6 +78,7 @@
 }
 
 .statistics-recommended-body {
+	color: var(--text-muted);
 	font-size: 13px;
 	line-height: 1.4;
 }
