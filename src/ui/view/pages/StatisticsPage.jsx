@@ -90,13 +90,14 @@ export default function StatisticsPage({ viewModel }) {
 
 					<div className="statistics-dashboard-grid">
 						<StatisticsScoreTrendChart chart={viewModel.scoreTrendChart} />
-						<StatisticsRecentAttempts
-							title={viewModel.recentAttemptsTitle}
-							subtitle={viewModel.recentAttemptsSubtitle}
-							emptyMessage={viewModel.recentAttemptsEmpty}
-							attempts={viewModel.recentAttempts}
-						/>
 					</div>
+
+					<StatisticsRecentAttempts
+						title={viewModel.recentAttemptsTitle}
+						subtitle={viewModel.recentAttemptsSubtitle}
+						emptyMessage={viewModel.recentAttemptsEmpty}
+						attempts={viewModel.recentAttempts}
+					/>
 				</>
 			)}
 		</StatisticsShell>

@@ -51,13 +51,13 @@
 }
 
 .statistics-progress-bar::-webkit-progress-value {
-	background: var(--accent-gradient);
+	background: linear-gradient(90deg, #1463ff, #12b6aa, #7c3aed, #ff8a00, #20a83a);
 	border-radius: var(--radius-full);
 	transition: width var(--transition-normal);
 }
 
 .statistics-progress-bar::-moz-progress-bar {
-	background: var(--accent-gradient);
+	background: linear-gradient(90deg, #1463ff, #12b6aa, #7c3aed, #ff8a00, #20a83a);
 	border-radius: var(--radius-full);
 }
 

@@ -128,7 +128,8 @@ describe("createStatisticsDashboardModel", () => {
 			examTitle: "Eksamen in5431-exam-1-no",
 			submittedAtLabel: "dato:2026-06-12T12:00:00.000Z",
 			percentageLabel: "74.4 %",
-			pointsLabel: "12 / 16 poeng"
+			pointsLabel: "12 / 16 poeng",
+			tone: "purple"
 		});
 	});
 

@@ -4,7 +4,8 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
-	.statistics-dashboard-grid {
+	.statistics-dashboard-grid,
+	.statistics-attempt-list {
 		grid-template-columns: 1fr;
 	}
 }
@@ -15,8 +16,7 @@
 	}
 
 	.statistics-page-header,
-	.statistics-hero,
-	.statistics-attempt-item {
+	.statistics-hero {
 		align-items: stretch;
 		flex-direction: column;
 	}
@@ -28,6 +28,17 @@
 	}
 
 	.statistics-kpi-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.statistics-attempt-score {
+		justify-items: start;
+		text-align: left;
+	}
+}
+
+@media (max-width: 640px) {
+	.statistics-attempt-item {
 		grid-template-columns: 1fr;
 	}
 

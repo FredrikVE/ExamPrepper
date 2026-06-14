@@ -89,6 +89,13 @@ function normalizeRecentAttempt(attempt, index, formatDate, copy) {
 		percentage,
 		percentageLabel: formatPercentageLabel(percentage),
 		pointsLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, copy),
-		scoreLabel: copy.attemptScoreLabel
+		scoreLabel: copy.attemptScoreLabel,
+		tone: selectRecentAttemptTone(index)
 	};
+}
+
+function selectRecentAttemptTone(index) {
+	const tones = ["purple", "orange", "teal"];
+
+	return tones[index % tones.length];
 }
