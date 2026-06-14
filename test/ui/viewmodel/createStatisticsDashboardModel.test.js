@@ -62,6 +62,8 @@ const translations = {
 	statisticsExamUnitSingular: "eksamen",
 	statisticsExamUnitPlural: "eksamener",
 	statisticsAttemptFallbackTitlePrefix: "Eksamen",
+	statisticsPracticeExamFallbackTitlePrefix: "Øveeksamen",
+	statisticsDemoExamFallbackTitle: "Demoeksamen",
 	statisticsAttemptPointUnit: "poeng"
 };
 
@@ -114,7 +116,7 @@ describe("createStatisticsDashboardModel", () => {
 			recentAttempts: [
 				{
 					attemptId: "a2",
-					examId: "in5431-exam-1-no",
+					examId: "mock-exam-1-no",
 					submittedAt: "2026-06-12T12:00:00.000Z",
 					percentage: "74.44",
 					scorePoints: "12",
@@ -154,15 +156,16 @@ describe("createStatisticsDashboardModel", () => {
 		});
 		expect(result.recentAttempts[0]).toMatchObject({
 			id: "a2",
-			examTitle: "Eksamen in5431-exam-1-no",
+			examTitle: "Øveeksamen 1",
 			submittedAtLabel: "dato:2026-06-12T12:00:00.000Z",
 			percentageLabel: "74.4 %",
 			pointsLabel: "12 / 16 poeng",
-			tone: "purple"
+			tone: "purple",
+			iconKey: "bookOpen"
 		});
 		expect(result.recommendedExam).toEqual({
-			examId: "in5431-exam-1-no",
-			title: "Eksamen in5431-exam-1-no",
+			examId: "mock-exam-1-no",
+			title: "Øveeksamen 1",
 			body: "Laveste score blant siste forsøk.",
 			badgeLabel: "Anbefalt"
 		});

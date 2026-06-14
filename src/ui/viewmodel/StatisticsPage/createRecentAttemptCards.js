@@ -36,7 +36,8 @@ function createRecentAttemptCard(attempt, index, formatDate, text) {
 		percentageLabel: createPercentageLabel(percentage, text),
 		pointsLabel: createPointsLabel(attempt.scorePoints, attempt.totalPoints, text),
 		scoreLabel: text.attemptScoreLabel,
-		tone: selectRecentAttemptTone(index)
+		tone: selectRecentAttemptTone(index),
+		iconKey: selectRecentAttemptIconKey(index)
 	};
 }
 
@@ -46,7 +47,11 @@ function createRecentAttemptTitle(attempt, attemptNumber, text) {
 	}
 
 	if (attempt.examId) {
-		return text.createAttemptFallbackTitle(attempt.examId);
+		const titleFromExamId = text.createAttemptTitleFromExamId(attempt.examId);
+
+		if (titleFromExamId) {
+			return titleFromExamId;
+		}
 	}
 
 	return text.createAttemptFallbackTitle(attemptNumber);
@@ -54,4 +59,17 @@ function createRecentAttemptTitle(attempt, attemptNumber, text) {
 
 function selectRecentAttemptTone(index) {
 	return RECENT_ATTEMPT_TONES[index % RECENT_ATTEMPT_TONES.length];
+}
+
+
+function selectRecentAttemptIconKey(index) {
+	if (index === 0) {
+		return "bookOpen";
+	}
+
+	if (index === 1) {
+		return "clipboardList";
+	}
+
+	return "fileText";
 }

@@ -6,6 +6,8 @@ import { createRecentAttemptCards } from "../../../../src/ui/viewmodel/Statistic
 const text = createStatisticsTextModel({
 	statisticsAttemptScoreLabel: "Score",
 	statisticsAttemptFallbackTitlePrefix: "Eksamen",
+	statisticsPracticeExamFallbackTitlePrefix: "Øveeksamen",
+	statisticsDemoExamFallbackTitle: "Demoeksamen",
 	statisticsAttemptPointUnit: "poeng",
 	statisticsEmptyValueLabel: "—"
 });
@@ -48,19 +50,40 @@ describe("createRecentAttemptCards", () => {
 				percentageLabel: "81.3 %",
 				pointsLabel: "13 / 16 poeng",
 				scoreLabel: "Score",
-				tone: "purple"
+				tone: "purple",
+				iconKey: "bookOpen"
 			},
 			{
 				id: "a2",
 				examId: "exam-2",
-				examTitle: "Eksamen exam-2",
+				examTitle: "Eksamen 2",
 				submittedAtLabel: "—",
 				percentage: null,
 				percentageLabel: "—",
 				pointsLabel: "0 / 0 poeng",
 				scoreLabel: "Score",
-				tone: "orange"
+				tone: "orange",
+				iconKey: "clipboardList"
 			}
+		]);
+	});
+
+	test("creates readable fallback titles from known exam id patterns", () => {
+		const result = createRecentAttemptCards([
+			{ attemptId: "a1", examId: "mock-exam-1-no", percentage: 80 },
+			{ attemptId: "a2", examId: "in5431-demo-no", percentage: 70 },
+			{ attemptId: "a3", examId: "unknown-file-name-no", percentage: 60 }
+		], formatDate, text);
+
+		expect(result.map((attempt) => attempt.examTitle)).toEqual([
+			"Øveeksamen 1",
+			"Demoeksamen",
+			"Eksamen 3"
+		]);
+		expect(result.map((attempt) => attempt.iconKey)).toEqual([
+			"bookOpen",
+			"clipboardList",
+			"fileText"
 		]);
 	});
 });

@@ -1,5 +1,5 @@
 // src/ui/view/components/StatisticsPage/StatisticsRecentAttempts.jsx
-import { BookOpen } from "lucide-react";
+import { BookOpen, ClipboardList, FileText } from "lucide-react";
 
 export default function StatisticsRecentAttempts(props) {
 	if (props.attempts.length === 0) {
@@ -25,7 +25,7 @@ export default function StatisticsRecentAttempts(props) {
 				{props.attempts.map((attempt) => (
 					<li key={attempt.id} className={`statistics-attempt-item statistics-attempt-item--${attempt.tone}`}>
 						<span className="statistics-attempt-icon" aria-hidden="true">
-							<BookOpen size={24} />
+							<RecentAttemptIcon iconKey={attempt.iconKey} />
 						</span>
 
 						<div className="statistics-attempt-copy">
@@ -43,6 +43,18 @@ export default function StatisticsRecentAttempts(props) {
 			</ul>
 		</section>
 	);
+}
+
+function RecentAttemptIcon(props) {
+	if (props.iconKey === "clipboardList") {
+		return <ClipboardList size={24} />;
+	}
+
+	if (props.iconKey === "fileText") {
+		return <FileText size={24} />;
+	}
+
+	return <BookOpen size={24} />;
 }
 
 function StatisticsRecentAttemptsHeader(props) {

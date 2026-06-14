@@ -68,8 +68,12 @@ export default function createStatisticsTextModel(t) {
 			return `${count} ${selectSingularOrPlural(count, t.statisticsExamUnitSingular, t.statisticsExamUnitPlural)}`;
 		},
 
-		createAttemptFallbackTitle(examId) {
-			return `${t.statisticsAttemptFallbackTitlePrefix} ${examId}`;
+		createAttemptFallbackTitle(value) {
+			return `${t.statisticsAttemptFallbackTitlePrefix} ${value}`;
+		},
+
+		createAttemptTitleFromExamId(examId) {
+			return createAttemptTitleFromExamId(examId, t);
 		},
 
 		createAttemptPointsLabel(scorePoints, totalPoints) {
@@ -91,6 +95,60 @@ export default function createStatisticsTextModel(t) {
 			return `${hours} ${t.statisticsActivityHourShort} ${minutes} ${t.statisticsActivityMinuteShort}`;
 		}
 	};
+}
+
+function createAttemptTitleFromExamId(examId, t) {
+	const examIdText = String(examId).toLowerCase();
+
+	if (examIdText.includes("demo")) {
+		return t.statisticsDemoExamFallbackTitle;
+	}
+
+	const mockExamNumber = findExamNumber(examIdText, "mock-exam");
+
+	if (mockExamNumber !== null) {
+		return `${t.statisticsPracticeExamFallbackTitlePrefix} ${mockExamNumber}`;
+	}
+
+	const examNumber = findExamNumber(examIdText, "exam");
+
+	if (examNumber !== null) {
+		return `${t.statisticsAttemptFallbackTitlePrefix} ${examNumber}`;
+	}
+
+	return null;
+}
+
+function findExamNumber(value, prefix) {
+	const prefixStart = value.indexOf(prefix);
+
+	if (prefixStart === -1) {
+		return null;
+	}
+
+	let numberStart = prefixStart + prefix.length;
+
+	while (value[numberStart] === "-" || value[numberStart] === "_") {
+		numberStart += 1;
+	}
+
+	let numberText = "";
+
+	for (let index = numberStart; index < value.length; index += 1) {
+		const character = value[index];
+
+		if (character < "0" || character > "9") {
+			break;
+		}
+
+		numberText += character;
+	}
+
+	if (numberText === "") {
+		return null;
+	}
+
+	return Number(numberText);
 }
 
 function selectSingularOrPlural(count, singular, plural) {
