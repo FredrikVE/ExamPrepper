@@ -19,6 +19,14 @@ Prosjektet følger et MVVM-inspirert arkitekturmønster med skille mellom `data`
 
 Se full oversikt i [FEATURES.md](./docs/documentation/FEATURES.md).
 
+## Live app
+
+<p align="center">
+  <a href="https://fredrikve.github.io/ExamPrepper/">
+    <img src="./docs/images/live-app-button.svg" alt="Åpne ExamPrepper live">
+  </a>
+</p>
+
 ---
 
 ## Innholdsfortegnelse
