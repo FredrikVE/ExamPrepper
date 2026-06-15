@@ -40,9 +40,7 @@ export default class ExamFlowApiTestContext {
 	async loadSubjects(language) {
 		this.assertLoaded();
 
-		const result = await this.getAvailableSubjectsUseCase.execute({ language });
-
-		return result.subjects;
+		return this.getAvailableSubjectsUseCase.execute({ language });
 	}
 
 	async loadExams(subjectId, language) {
