@@ -1,19 +1,16 @@
 // src/ui/view/components/ExamSelectPage/ExamSelectTopbar.jsx
 import { ChevronRight, Trophy } from "lucide-react";
-import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function ExamSelectTopbar() {
-    const { t } = useLanguage();
-
+export default function ExamSelectTopbar({ title, statisticsLabel, onShowStatistics }) {
     return (
         <div className="exam-select-topbar">
             <h1 className="exam-select-title">
-                {t.selectIntroTitle}
+                {title}
             </h1>
 
-            <button type="button" className="exam-select-statistics-button">
+            <button type="button" className="exam-select-statistics-button" onClick={onShowStatistics}>
                 <Trophy className="exam-select-statistics-icon" />
-                <span>{t.selectStatistics}</span>
+                <span>{statisticsLabel}</span>
                 <ChevronRight className="exam-select-statistics-chevron" />
             </button>
         </div>

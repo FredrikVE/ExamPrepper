@@ -8,14 +8,14 @@ export default function QuestionDots({ viewModel, t }) {
     return (
         <div className={questionDotsClassName} role="navigation" aria-label={t.footerQuestionNavigationLabel}>
             <div className="exam-footer-dot-list exam-footer-dot-list-normal">
-                {viewModel.visibleQuestions.map((question, questionIndex) => (
+                {viewModel.questionDotEntries.map((questionDotEntry) => (
                     <QuestionDot
-                        key={question.id}
-                        questionNumber={questionIndex + 1}
-                        isActive={questionIndex === viewModel.currentQuestionIndex}
+                        key={questionDotEntry.key}
+                        questionNumber={questionDotEntry.questionNumber}
+                        isActive={questionDotEntry.isActive}
                         submitted={viewModel.submitted}
-                        isCorrect={viewModel.submitted ? viewModel.isAnswerCorrect(question) : false}
-                        onClick={() => viewModel.goToQuestion(questionIndex)}
+                        isCorrect={questionDotEntry.isCorrect}
+                        onClick={() => viewModel.goToQuestion(questionDotEntry.questionIndex)}
                         t={t}
                     />
                 ))}
@@ -49,15 +49,13 @@ const renderCompactQuestionDotEntry = (questionDotEntry, viewModel, t, dotDispla
         );
     }
 
-    const question = viewModel.visibleQuestions[questionDotEntry.questionIndex];
-
     return (
         <QuestionDot
             key={questionDotEntry.key}
-            questionNumber={questionDotEntry.questionIndex + 1}
-            isActive={questionDotEntry.questionIndex === viewModel.currentQuestionIndex}
+            questionNumber={questionDotEntry.questionNumber}
+            isActive={questionDotEntry.isActive}
             submitted={viewModel.submitted}
-            isCorrect={viewModel.submitted && question ? viewModel.isAnswerCorrect(question) : false}
+            isCorrect={questionDotEntry.isCorrect}
             onClick={() => viewModel.goToQuestion(questionDotEntry.questionIndex)}
             t={t}
             dotDisplayMode={dotDisplayMode}

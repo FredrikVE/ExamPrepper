@@ -4,16 +4,14 @@ import Footer from "../components/Footer/Footer.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
-import { useLanguage } from "../../../i18n/LanguageContext.jsx";
+import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
 
 export default function ExamPage({ viewModel }) {
-    const { t } = useLanguage();
-
     if (viewModel.questionsLoading) {
         return (
             <ExamPageState>
                 <p className="exam-page-loading-message">
-                    {t.loadingMessage}
+                    {viewModel.loadingMessage}
                 </p>
             </ExamPageState>
         );
@@ -23,18 +21,26 @@ export default function ExamPage({ viewModel }) {
         return (
             <ExamPageState>
                 <p className="exam-page-error-message">
-                    {t.errorPrefix}: {viewModel.questionsLoadError}
+                    {viewModel.errorPrefix}: {viewModel.questionsLoadError}
                 </p>
             </ExamPageState>
         );
     }
 
     return (
-        <div
-            ref={viewModel.examWorkspaceRef}
+        <ExamWorkspace
             className={viewModel.workspaceClassName}
+            scrollToTopRequestId={viewModel.scrollToTopRequestId}
         >
             <Header viewModel={viewModel} />
+
+            {viewModel.attemptSaving && (
+                <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>
+            )}
+
+            {viewModel.attemptSaveError && (
+                <p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
+            )}
 
             <ExamProgress
                 visibleQuestions={viewModel.visibleQuestions}
@@ -44,11 +50,11 @@ export default function ExamPage({ viewModel }) {
 
             <main className="exam-page-main">
                 <div className="exam-page-content">
-                    <ExamPageContent viewModel={viewModel} t={t} />
+                    <ExamPageContent viewModel={viewModel} />
                 </div>
             </main>
 
             <Footer viewModel={viewModel} />
-        </div>
+        </ExamWorkspace>
     );
 }

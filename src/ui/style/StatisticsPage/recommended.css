@@ -1,0 +1,101 @@
+/* src/ui/style/StatisticsPage/recommended.css */
+.statistics-recommended-panel {
+	--recommended-accent: #ff3d6e;
+	--recommended-accent-soft: #fff0f5;
+	--recommended-card-bg: #fff5f7;
+	--recommended-card-border: #ffe1e9;
+	--recommended-icon-bg: #fff0f4;
+	--recommended-icon-border: #ffdce6;
+	--recommended-badge-bg: #ffeaf0;
+	--recommended-heart-border: #ffd9e5;
+
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	row-gap: var(--space-7);
+	align-content: start;
+}
+
+.dark .statistics-recommended-panel {
+	--recommended-accent: #ff7aa2;
+	--recommended-accent-soft: rgba(255, 61, 110, 0.14);
+	--recommended-card-bg: rgba(255, 61, 110, 0.1);
+	--recommended-card-border: rgba(255, 122, 162, 0.28);
+	--recommended-icon-bg: rgba(255, 61, 110, 0.13);
+	--recommended-icon-border: rgba(255, 122, 162, 0.32);
+	--recommended-badge-bg: rgba(255, 61, 110, 0.16);
+	--recommended-heart-border: rgba(255, 122, 162, 0.32);
+}
+
+.statistics-recommended-panel .statistics-recommended-heading {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+	margin: 0;
+	font-size: 18px;
+	letter-spacing: -0.03em;
+}
+
+.statistics-recommended-heart {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 8px;
+	color: var(--recommended-accent);
+	background: var(--recommended-accent-soft);
+	border: 1px solid var(--recommended-heart-border);
+}
+
+.statistics-recommended-card {
+	display: grid;
+	grid-template-columns: 56px minmax(0, 1fr);
+	gap: var(--space-4);
+	align-items: center;
+	padding: var(--space-4);
+	border-radius: var(--radius-md);
+	background: linear-gradient(90deg, var(--recommended-card-bg), var(--panel-strong));
+	border: 1px solid var(--recommended-card-border);
+}
+
+.statistics-recommended-icon {
+	display: grid;
+	place-items: center;
+	width: 52px;
+	height: 52px;
+	border-radius: 12px;
+	color: var(--recommended-accent);
+	background: var(--recommended-icon-bg);
+	border: 1px solid var(--recommended-icon-border);
+}
+
+.statistics-recommended-content {
+	display: grid;
+	gap: 4px;
+	min-width: 0;
+}
+
+.statistics-recommended-title {
+	margin: 0;
+	color: var(--text-main);
+	font-weight: 800;
+	font-size: 15px;
+	line-height: 1.3;
+	letter-spacing: -0.02em;
+}
+
+.statistics-recommended-body {
+	color: var(--text-muted);
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.statistics-recommended-badge {
+	justify-self: start;
+	margin-top: var(--space-2);
+	color: var(--recommended-accent);
+	background: var(--recommended-badge-bg);
+	border-radius: 8px;
+	padding: 5px 10px;
+	font-size: 12px;
+	font-weight: 900;
+}

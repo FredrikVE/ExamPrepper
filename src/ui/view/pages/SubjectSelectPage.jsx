@@ -4,22 +4,22 @@ import SubjectSelectControls from "../components/SubjectSelectPage/SubjectSelect
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
-    if (viewModel.loading) {
+    if (viewModel.subjectsLoading) {
         return (
             <main className="subject-select-workspace">
-                <section className="subject-select-empty" aria-label="Laster fag">
-                    <h2>Laster fag...</h2>
+                <section className="subject-select-empty" aria-label={viewModel.loadingAriaLabel}>
+                    <h2>{viewModel.loadingTitle}</h2>
                 </section>
             </main>
         );
     }
 
-    if (viewModel.error) {
+    if (viewModel.subjectsLoadError) {
         return (
             <main className="subject-select-workspace">
-                <section className="subject-select-empty" aria-label="Feil ved lasting av fag">
-                    <h2>Feil</h2>
-                    <p>{viewModel.error}</p>
+                <section className="subject-select-empty" aria-label={viewModel.errorAriaLabel}>
+                    <h2>{viewModel.errorTitle}</h2>
+                    <p>{viewModel.subjectsLoadError}</p>
                 </section>
             </main>
         );
@@ -29,14 +29,17 @@ export default function SubjectSelectPage({ viewModel }) {
         <main className="subject-select-workspace">
             <div className="subject-select-ambient-light" aria-hidden="true" />
 
-            <SubjectSelectTopbar t={viewModel.t} />
+            <SubjectSelectTopbar
+                t={viewModel.t}
+                onShowStatistics={viewModel.showStatistics}
+            />
 
             <SubjectSelectControls
                 t={viewModel.t}
                 searchTerm={viewModel.searchTerm}
-                onSearchTermChange={viewModel.setSearchTerm}
+                onSearchTermChange={viewModel.changeSearchTerm}
                 faculty={viewModel.faculty}
-                onFacultyChange={viewModel.setFaculty}
+                onFacultyChange={viewModel.changeFaculty}
                 faculties={viewModel.faculties}
             />
 
@@ -44,6 +47,8 @@ export default function SubjectSelectPage({ viewModel }) {
                 t={viewModel.t}
                 subjects={viewModel.filteredSubjects}
                 selectedSubject={viewModel.selectedSubject}
+                emptyTitle={viewModel.emptyTitle}
+                emptyDescription={viewModel.emptyDescription}
                 onSelectSubject={viewModel.selectSubject}
             />
         </main>

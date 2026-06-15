@@ -1,12 +1,12 @@
 // src/ui/view/components/SubjectSelectPage/SubjectSelectGrid.jsx
 import SubjectSelectCard from "./SubjectSelectCard.jsx";
 
-export default function SubjectSelectGrid({ t, subjects, selectedSubject, onSelectSubject }) {
+export default function SubjectSelectGrid({ t, subjects, selectedSubject, emptyTitle, emptyDescription, onSelectSubject }) {
     if (subjects.length === 0) {
         return (
-            <section className="subject-select-empty" aria-label={t.subjectNoMatchesTitle}>
-                <h2>{t.subjectNoMatchesTitle}</h2>
-                <p>{t.subjectNoMatchesDescription}</p>
+            <section className="subject-select-empty" aria-label={emptyTitle}>
+                <h2>{emptyTitle}</h2>
+                {emptyDescription && <p>{emptyDescription}</p>}
             </section>
         );
     }

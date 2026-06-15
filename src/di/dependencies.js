@@ -1,11 +1,11 @@
 // src/di/dependencies.js
-import { conceptImageCatalogsBySubjectId } from "../data/conceptImageCatalogRegistry.js";
-
-import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
-import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
-import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
+import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
+import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
+import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
+import ApiExamAttemptDataSource from "../model/datasource/ApiExamAttemptDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
+import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
 
 import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js";
@@ -17,14 +17,42 @@ import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLan
 
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
+import SubmitExamAttemptUseCase from "../model/domain/SubmitExamAttemptUseCase.js";
+import GetMyStatisticsUseCase from "../model/domain/GetMyStatisticsUseCase.js";
+import { getActiveAuthToken } from "../auth/AuthTokenProvider.js";
+
+function requiredEnv(name) {
+    const viteEnv = import.meta.env?.[name];
+    const nodeEnv = typeof process !== "undefined" ? process.env?.[name] : undefined;
+    const value = viteEnv ?? nodeEnv;
+
+    if (!value) {
+        throw new Error(`Missing required environment variable: ${name}`);
+    }
+
+    return value;
+}
+
+// Configuration
+const apiBaseUrl = requiredEnv("VITE_API_BASE_URL");
+const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
-const conceptImageDataSource = new ConceptImageDataSource(conceptImageCatalogsBySubjectId);
-const examQuestionDataSource = new ExamQuestionDataSource();
-const subjectDataSource = new SubjectDataSource();
+const subjectDataSource = new ApiSubjectDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const examQuestionDataSource = new ApiExamQuestionDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const conceptImageDataSource = new ApiConceptImageDataSource({
+    baseUrl: apiBaseUrl,
+    imageBaseUrl,
+    getToken: getActiveAuthToken
+});
+const examAttemptDataSource = new ApiExamAttemptDataSource({
+    baseUrl: apiBaseUrl,
+    getToken: getActiveAuthToken
+});
 
 // Repositories
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
+const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
 
 // Use cases
@@ -36,6 +64,8 @@ const getSubjectByIdUseCase = new GetSubjectByIdUseCase(subjectRepository);
 const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepository);
 const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
+const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
+const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
 
 // Export
 export {
@@ -46,5 +76,7 @@ export {
     getExamByIdUseCase,
     getExamByBaseIdAndLangUseCase,
     gradeAnswerUseCase,
-    calculateExamScoreUseCase
+    calculateExamScoreUseCase,
+    submitExamAttemptUseCase,
+    getMyStatisticsUseCase
 };

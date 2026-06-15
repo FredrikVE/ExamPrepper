@@ -1,0 +1,12 @@
+/* src/ui/style/StatisticsPage/index.css */
+@import "./shared.css";
+@import "./page.css";
+@import "./hero.css";
+@import "./kpi.css";
+@import "./dashboard.css";
+@import "./chart.css";
+@import "./activity.css";
+@import "./recommended.css";
+@import "./recent-attempts.css";
+@import "./state.css";
+@import "./responsive.css";

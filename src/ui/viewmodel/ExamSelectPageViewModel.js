@@ -1,111 +1,79 @@
 // src/ui/viewmodel/ExamSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
 
-function normalizeExamResult(result) {
-    if (Array.isArray(result)) {
-        return result;
-    }
-
-    if (Array.isArray(result?.exams)) {
-        return result.exams;
-    }
-
-    if (Array.isArray(result?.availableExams)) {
-        return result.availableExams;
-    }
-
-    return [];
-}
-
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, onShowStatistics = () => {}) {
     const [exams, setExams] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [examsLoading, setExamsLoading] = useState(false);
+    const [examsLoadError, setExamsLoadError] = useState(null);
 
     const subjectId = selectedSubject?.id ?? null;
 
     useEffect(() => {
         if (!subjectId) {
             setExams([]);
-            setLoading(false);
-            setError(null);
+            setExamsLoading(false);
+            setExamsLoadError(null);
             return;
         }
 
         let cancelled = false;
 
-        const fetchExams = async () => {
+        async function loadExams() {
             try {
-                setLoading(true);
-                setError(null);
+                setExamsLoading(true);
+                setExamsLoadError(null);
 
-                const result = await getAvailableExamsUseCase.execute({
+                const loadedExams = await getAvailableExamsUseCase.execute({
                     subjectId,
                     language
                 });
 
-                if (cancelled) {
-                    return;
+                if (!cancelled) {
+                    setExams(loadedExams);
                 }
-
-                setExams(normalizeExamResult(result));
-            } 
+            }
             catch (error) {
                 console.error("Feil ved henting av eksamener:", error);
 
                 if (!cancelled) {
                     setExams([]);
-                    setError(t.selectErrorMessage ?? "Kunne ikke laste inn eksamener.");
-                }
-            } 
-            finally {
-                if (!cancelled) {
-                    setLoading(false);
+                    setExamsLoadError(t.selectErrorMessage);
                 }
             }
-        };
+            finally {
+                if (!cancelled) {
+                    setExamsLoading(false);
+                }
+            }
+        }
 
-        fetchExams();
+        loadExams();
 
         return () => {
             cancelled = true;
         };
-    }, [getAvailableExamsUseCase, subjectId, language, t]);
+    }, [getAvailableExamsUseCase, subjectId, language, t.selectErrorMessage]);
 
-    const subtitle = useMemo(() => {
-        if (!selectedSubject?.code) {
-            return t.selectSubtitleFallback ?? "Velg en øvingsprøve for å starte";
-        }
-
-        if (typeof t.selectSubtitle === "function") {
-            return t.selectSubtitle(selectedSubject.code);
-        }
-
-        return `Velg en øvingsprøve for ${selectedSubject.code}`;
-    }, [selectedSubject, t]);
+    const pageCopy = useMemo(() => {
+        return createExamSelectPageCopy(t, selectedSubject);
+    }, [t, selectedSubject]);
 
     const selectExam = useCallback((examId) => {
         onSelectExam(examId);
     }, [onSelectExam]);
 
+    const showStatistics = useCallback(() => {
+        onShowStatistics();
+    }, [onShowStatistics]);
+
     return {
-        // Data
         exams,
         selectedSubject,
-        loading,
-        error,
-
-        // Tekster
-        t,
-        title: t.selectTitle ?? "Eksamens-emulator",
-        introTitle: t.selectIntroTitle ?? "Velg eksamen",
-        subtitle,
-
-        // Derived UI-state
-        hasExams: exams.length > 0,
-        examCount: exams.length,
-
-        // Handlers
-        selectExam
+        examsLoading,
+        examsLoadError,
+        ...pageCopy,
+        selectExam,
+        showStatistics
     };
 }

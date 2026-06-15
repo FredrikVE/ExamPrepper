@@ -1,10 +1,17 @@
 // src/i18n/LanguageContext.jsx
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { LANGUAGES, translations } from "./translations.js";
 
 const LanguageContext = createContext(null);
 
 const STORAGE_KEY = "exam-emulator-language";
+
+const LOCALES = {
+    [LANGUAGES.NO]: "nb-NO",
+    [LANGUAGES.EN]: "en-GB"
+};
+
+const DEFAULT_LOCALE = LOCALES[LANGUAGES.NO];
 
 function getInitialLanguage() {
     try {
@@ -34,9 +41,28 @@ export function LanguageProvider({ children }) {
     }, []);
 
     const t = translations[language];
+    const locale = LOCALES[language] ?? DEFAULT_LOCALE;
+
+    const formatDate = useCallback((isoString) => {
+        const timestamp = Date.parse(isoString);
+
+        if (!Number.isFinite(timestamp)) {
+            return null;
+        }
+
+        return new Intl.DateTimeFormat(locale, {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }).format(new Date(timestamp));
+    }, [locale]);
+
+    const value = useMemo(() => ({
+        language, setLanguage, t, formatDate
+    }), [language, setLanguage, t, formatDate]);
 
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, t }}>
+        <LanguageContext.Provider value={value}>
             {children}
         </LanguageContext.Provider>
     );

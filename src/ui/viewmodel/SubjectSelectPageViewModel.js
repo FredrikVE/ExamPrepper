@@ -1,110 +1,77 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
-const LOAD_ERROR_MESSAGE = "Kunne ikke laste fag";
-
-function normalizeSubjectsResult(result) {
-	if (Array.isArray(result)) {
-		return result;
-	}
-
-	if (Array.isArray(result?.subjects)) {
-		return result.subjects;
-	}
-
-	return [];
-}
-
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject) {
-	
-	// Statevariabler for fag-data, loading og error
+export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, onShowStatistics = () => {}) {
 	const [subjects, setSubjects] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-
-	// Filter-tilstander
+	const [subjectsLoading, setSubjectsLoading] = useState(true);
+	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
 	const [searchTerm, setSearchTerm] = useState("");
-	const [faculty, setFaculty] = useState("all");
+	const [faculty, setFaculty] = useState(ALL_FACULTIES);
 
-	// Henter tilgjengelige fag for aktivt språk
 	useEffect(() => {
 		let cancelled = false;
 
-		const fetchSubjects = async () => {
+		async function loadSubjects() {
 			try {
-				setLoading(true);
-				setError(null);
+				setSubjectsLoading(true);
+				setSubjectsLoadError(null);
 
-				const result = await getAvailableSubjectsUseCase.execute({
+				const loadedSubjects = await getAvailableSubjectsUseCase.execute({
 					language
 				});
 
 				if (!cancelled) {
-					setSubjects(normalizeSubjectsResult(result));
+					setSubjects(loadedSubjects);
 				}
-			}
-			catch (error) {
+			} catch (error) {
 				console.error("Feil ved henting av fag:", error);
 
 				if (!cancelled) {
 					setSubjects([]);
-					setError(error?.message ?? LOAD_ERROR_MESSAGE);
+					setSubjectsLoadError(t.subjectErrorMessage);
 				}
-			}
-			finally {
+			} finally {
 				if (!cancelled) {
-					setLoading(false);
+					setSubjectsLoading(false);
 				}
 			}
-		};
+		}
 
-		fetchSubjects();
+		loadSubjects();
 
 		return () => {
 			cancelled = true;
 		};
-	}, [getAvailableSubjectsUseCase, language]);
+	}, [getAvailableSubjectsUseCase, language, t.subjectErrorMessage]);
 
 	const selectedSubject = useMemo(() => {
-		if (!selectedSubjectId) {
-			return null;
-		}
-
-		return subjects.find((subject) => {
-			return subject.id === selectedSubjectId;
-		}) ?? null;
+		return findSubjectById(subjects, selectedSubjectId);
 	}, [subjects, selectedSubjectId]);
 
 	const faculties = useMemo(() => {
-		const values = subjects
-			.map((subject) => subject.faculty)
-			.filter(Boolean);
-
-		return [...new Set(values)];
+		return buildSubjectFaculties(subjects);
 	}, [subjects]);
 
 	const filteredSubjects = useMemo(() => {
-		const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-
-		return subjects.filter((subject) => {
-			const matchesSearch =
-				normalizedSearchTerm.length === 0 ||
-				[subject.code, subject.name, subject.description]
-					.filter(Boolean)
-					.some((value) => {
-						return value.toLowerCase().includes(normalizedSearchTerm);
-					});
-
-			const matchesFaculty =
-				faculty === "all" || subject.faculty === faculty;
-
-			return matchesSearch && matchesFaculty;
-		});
+		return filterSubjects(subjects, searchTerm, faculty);
 	}, [subjects, searchTerm, faculty]);
+
+	const changeSearchTerm = useCallback((nextSearchTerm) => {
+		setSearchTerm(nextSearchTerm);
+	}, []);
+
+	const changeFaculty = useCallback((nextFaculty) => {
+		setFaculty(nextFaculty);
+	}, []);
 
 	const selectSubject = useCallback((subjectId) => {
 		onSelectSubject(subjectId);
 	}, [onSelectSubject]);
+
+	const showStatistics = useCallback(() => {
+		onShowStatistics();
+	}, [onShowStatistics]);
 
 	return {
 		// Data
@@ -112,19 +79,26 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectedSubject,
 		filteredSubjects,
 		faculties,
-		loading,
-		error,
+		subjectsLoading,
+		subjectsLoadError,
+
+		// Tekster
 		t,
+		loadingTitle: t.subjectLoadingMessage,
+		loadingAriaLabel: t.subjectLoadingMessage,
+		errorTitle: t.errorPrefix,
+		errorAriaLabel: t.subjectErrorMessage,
+		emptyTitle: t.subjectEmptyMessage,
+		emptyDescription: "",
 
 		// Filter-verdier
 		searchTerm,
 		faculty,
 
-		// Setters
-		setSearchTerm,
-		setFaculty,
-
 		// Handlers
-		selectSubject
+		changeSearchTerm,
+		changeFaculty,
+		selectSubject,
+		showStatistics
 	};
 }

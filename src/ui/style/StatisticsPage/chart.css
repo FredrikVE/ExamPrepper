@@ -1,0 +1,109 @@
+/* src/ui/style/StatisticsPage/chart.css */
+.statistics-chart-panel {
+	display: grid;
+	grid-template-rows: auto minmax(360px, 1fr);
+	min-height: 460px;
+}
+
+.statistics-chart {
+	min-width: 0;
+	min-height: 360px;
+	height: 100%;
+}
+
+.statistics-chart-tooltip {
+	display: grid;
+	gap: 4px;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-sm);
+	background: var(--panel-strong);
+	box-shadow: var(--shadow-card);
+	padding: var(--space-4);
+	color: var(--text-main);
+}
+
+.statistics-chart-tooltip span {
+	color: var(--text-muted);
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.statistics-chart {
+	--statistics-score-low: #1463ff;
+	--statistics-score-building: #12b6aa;
+	--statistics-score-mid: #7c3aed;
+	--statistics-score-strong: #ff8a00;
+	--statistics-score-excellent: #20a83a;
+	--statistics-trend-dot-stroke: #fff;
+}
+
+.statistics-score-gradient-stop-low {
+	stop-color: var(--statistics-score-low);
+}
+
+.statistics-score-gradient-stop-building {
+	stop-color: var(--statistics-score-building);
+}
+
+.statistics-score-gradient-stop-mid {
+	stop-color: var(--statistics-score-mid);
+}
+
+.statistics-score-gradient-stop-strong {
+	stop-color: var(--statistics-score-strong);
+}
+
+.statistics-score-gradient-stop-excellent {
+	stop-color: var(--statistics-score-excellent);
+}
+
+.statistics-chart .recharts-cartesian-grid line {
+	stroke: var(--line);
+	stroke-dasharray: 4 4;
+}
+
+.statistics-trend-axis text,
+.statistics-trend-xaxis-label {
+	fill: var(--text-soft);
+}
+
+.statistics-trend-xaxis-label {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.statistics-score-line .recharts-line-curve {
+	stroke: url(#scoreTrendGradient);
+	stroke-width: 3;
+}
+
+.statistics-trend-dot,
+.statistics-trend-active-dot {
+	stroke: var(--statistics-trend-dot-stroke);
+	stroke-width: 2.5;
+}
+
+.statistics-trend-label {
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.statistics-trend-score-low {
+	fill: var(--statistics-score-low);
+}
+
+.statistics-trend-score-building {
+	fill: var(--statistics-score-building);
+}
+
+.statistics-trend-score-mid {
+	fill: var(--statistics-score-mid);
+}
+
+.statistics-trend-score-strong {
+	fill: var(--statistics-score-strong);
+}
+
+.statistics-trend-score-excellent {
+	fill: var(--statistics-score-excellent);
+}

@@ -9,8 +9,6 @@ export default class GetAvailableSubjectsUseCase {
             language
         });
 
-        return {
-            subjects: subjects.filter((subject) => subject.isVisible)
-        };
+        return subjects.filter((subject) => subject.isVisible);
     }
 }

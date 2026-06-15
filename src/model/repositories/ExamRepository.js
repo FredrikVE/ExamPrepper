@@ -34,7 +34,7 @@ export default class ExamRepository {
             return [];
         }
 
-        return this.#enrichQuestionsWithConceptImages(exam.questions ?? [], {
+        return await this.#enrichQuestionsWithConceptImages(exam.questions ?? [], {
             examId: exam.id,
             subjectId: exam.subjectId,
             language: language ?? exam.lang
@@ -48,13 +48,15 @@ export default class ExamRepository {
         );
     }
 
-    #enrichQuestionsWithConceptImages(questions, examContext) {
-        return questions.map((question) => {
-            return this.#enrichQuestionWithConceptImages(question, examContext);
-        });
+    async #enrichQuestionsWithConceptImages(questions, examContext) {
+        return await Promise.all(
+            questions.map((question) => {
+                return this.#enrichQuestionWithConceptImages(question, examContext);
+            })
+        );
     }
 
-    #enrichQuestionWithConceptImages(question, examContext) {
+    async #enrichQuestionWithConceptImages(question, examContext) {
         const questionContext = {
             ...examContext,
             subjectId: question.subjectId ?? examContext.subjectId,
@@ -63,14 +65,14 @@ export default class ExamRepository {
         };
         const questionImageRefs = getQuestionConceptImageRefs(question);
 
-        const enrichedQuestion = this.#enrichFeedbackEntryWithConceptImages(
+        const enrichedQuestion = await this.#enrichFeedbackEntryWithConceptImages(
             question,
             questionContext,
             questionImageRefs
         );
 
         if (Array.isArray(question.options)) {
-            enrichedQuestion.options = this.#enrichAnswerOptionsWithConceptImages(
+            enrichedQuestion.options = await this.#enrichAnswerOptionsWithConceptImages(
                 question.options,
                 questionContext,
                 questionImageRefs
@@ -78,7 +80,7 @@ export default class ExamRepository {
         }
 
         if (Array.isArray(question.targets)) {
-            enrichedQuestion.targets = this.#enrichFeedbackListWithConceptImages(
+            enrichedQuestion.targets = await this.#enrichFeedbackListWithConceptImages(
                 question.targets,
                 questionContext,
                 questionImageRefs
@@ -86,7 +88,7 @@ export default class ExamRepository {
         }
 
         if (isPlainObject(question.itemFeedback)) {
-            enrichedQuestion.itemFeedback = this.#enrichFeedbackMapWithConceptImages(
+            enrichedQuestion.itemFeedback = await this.#enrichFeedbackMapWithConceptImages(
                 question.itemFeedback,
                 questionContext,
                 questionImageRefs
@@ -96,59 +98,65 @@ export default class ExamRepository {
         return enrichedQuestion;
     }
 
-    #enrichAnswerOptionsWithConceptImages(options, context, fallbackImageRefs) {
+    async #enrichAnswerOptionsWithConceptImages(options, context, fallbackImageRefs) {
         if (!Array.isArray(options)) {
             return options;
         }
 
-        return options.map((option) => {
-            return this.#enrichFeedbackEntryWithConceptImages(
-                option,
-                context,
-                fallbackImageRefs
-            );
-        });
+        return await Promise.all(
+            options.map((option) => {
+                return this.#enrichFeedbackEntryWithConceptImages(
+                    option,
+                    context,
+                    fallbackImageRefs
+                );
+            })
+        );
     }
 
-    #enrichFeedbackListWithConceptImages(entries, context, fallbackImageRefs) {
+    async #enrichFeedbackListWithConceptImages(entries, context, fallbackImageRefs) {
         if (!Array.isArray(entries)) {
             return entries;
         }
 
-        return entries.map((entry) => {
-            return this.#enrichFeedbackEntryWithConceptImages(
-                entry,
-                context,
-                fallbackImageRefs
-            );
-        });
+        return await Promise.all(
+            entries.map((entry) => {
+                return this.#enrichFeedbackEntryWithConceptImages(
+                    entry,
+                    context,
+                    fallbackImageRefs
+                );
+            })
+        );
     }
 
-    #enrichFeedbackMapWithConceptImages(feedbackMap, context, fallbackImageRefs) {
+    async #enrichFeedbackMapWithConceptImages(feedbackMap, context, fallbackImageRefs) {
         if (!isPlainObject(feedbackMap)) {
             return feedbackMap;
         }
 
-        return Object.fromEntries(
-            Object.entries(feedbackMap).map(([key, entry]) => [
+        const entries = await Promise.all(
+            Object.entries(feedbackMap).map(async ([key, entry]) => [
                 key,
-                this.#enrichFeedbackEntryWithConceptImages(
+                await this.#enrichFeedbackEntryWithConceptImages(
                     entry,
                     context,
                     fallbackImageRefs
                 )
             ])
         );
+
+        return Object.fromEntries(entries);
     }
 
-    #enrichFeedbackEntryWithConceptImages(entry, context, fallbackImageRefs = []) {
+    async #enrichFeedbackEntryWithConceptImages(entry, context, fallbackImageRefs = []) {
         const imageRefs = getConceptImageRefs(entry, fallbackImageRefs);
 
         if (!this.#conceptImageDataSource || imageRefs.length === 0) {
             return { ...entry };
         }
 
-        const whyExtendedImages = this.#conceptImageDataSource.getConceptImages(
+        const whyExtendedImages = await this.#conceptImageDataSource.getConceptImages(
             imageRefs,
             getImageLookupContext(context)
         );

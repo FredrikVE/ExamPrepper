@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamSelectPage/ExamSelectIntro.jsx
-export default function ExamSelectIntro({ selectedSubject }) {
+export default function ExamSelectIntro({ selectedSubject, subtitle }) {
     if (!selectedSubject) {
         return null;
     }
@@ -7,7 +7,7 @@ export default function ExamSelectIntro({ selectedSubject }) {
     return (
         <section className="exam-select-intro">
             <p className="exam-select-subject-line">
-                {selectedSubject.code} — {selectedSubject.name}
+                {subtitle}
             </p>
         </section>
     );
