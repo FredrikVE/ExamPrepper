@@ -1,8 +1,9 @@
 // src/ui/view/components/AuthButton.jsx
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 
 export default function AuthButton() {
 	const hasClerkKey = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+	const { user } = useUser();
 
 	if (!hasClerkKey) {
 		return (
@@ -36,8 +37,9 @@ export default function AuthButton() {
 				<UserButton />
 
 				<div className="sidebar-user-copy">
-					<p className="sidebar-user-name">Innlogget</p>
-					<p className="sidebar-user-email">Klar for lagring</p>
+					<p className="sidebar-user-name">
+						{user?.firstName ? `Hei, ${user.firstName}!` : "Innlogget"}
+					</p>
 				</div>
 			</SignedIn>
 		</div>
