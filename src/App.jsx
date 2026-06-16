@@ -42,11 +42,7 @@ export default function App() {
 function AppContent() {
 	const { language, t, formatDate } = useLanguage();
 
-	const navigationViewModel = useAppNavigationViewModel(
-		language,
-		getExamByIdUseCase,
-		getExamByBaseIdAndLangUseCase
-	);
+	const navigationViewModel = useAppNavigationViewModel({ language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase });
 
 	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
 		getAvailableSubjectsUseCase,

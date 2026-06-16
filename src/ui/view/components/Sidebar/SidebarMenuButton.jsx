@@ -2,8 +2,8 @@
 import { Menu } from "lucide-react";
 import SidebarBrand from "./SidebarBrand.jsx";
 
-export default function SidebarMenuButton({ isMenuOpen, onToggleMenu, showSubjectSwitcher, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
-    const shouldShowOpenHeaderSubjectSwitcher = isMenuOpen && showSubjectSwitcher;
+export default function SidebarMenuButton(props) {
+    const shouldShowOpenHeaderSubjectSwitcher = props.isMenuOpen && props.showSubjectSwitcher;
 
     const headerClassName = shouldShowOpenHeaderSubjectSwitcher
         ? "mobile-top-header mobile-top-header-open"
@@ -14,10 +14,10 @@ export default function SidebarMenuButton({ isMenuOpen, onToggleMenu, showSubjec
             <button
                 type="button"
                 className="sidebar-menu-button"
-                onClick={onToggleMenu}
-                aria-label={isMenuOpen ? "Lukk navigasjon" : "Åpne navigasjon"}
+                onClick={props.onToggleMenu}
+                aria-label={props.isMenuOpen ? "Lukk navigasjon" : "Åpne navigasjon"}
                 aria-controls="app-navigation-menu"
-                aria-expanded={isMenuOpen}
+                aria-expanded={props.isMenuOpen}
             >
                 <Menu className="sidebar-menu-button-icon" />
             </button>
@@ -25,10 +25,10 @@ export default function SidebarMenuButton({ isMenuOpen, onToggleMenu, showSubjec
             {shouldShowOpenHeaderSubjectSwitcher && (
                 <div className="mobile-top-header-subject-switcher">
                     <SidebarBrand
-                        subjects={subjects}
-                        selectedSubject={selectedSubject}
-                        onSelectSubject={onSelectSubject}
-                        onShowAllSubjects={onShowAllSubjects}
+                        subjects={props.subjects}
+                        selectedSubject={props.selectedSubject}
+                        onSelectSubject={props.onSelectSubject}
+                        onShowAllSubjects={props.onShowAllSubjects}
                     />
                 </div>
             )}

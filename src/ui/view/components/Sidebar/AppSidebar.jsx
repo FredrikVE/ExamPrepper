@@ -6,18 +6,18 @@ import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 
-export default function AppSidebar({ activeScreen, onChangeScreen, settingsOpen, onOpenSettings, isMenuOpen, onCloseMenu, showSubjectSwitcher, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
-	useMobileMenuEscapeKey(isMenuOpen, onCloseMenu);
+export default function AppSidebar(props) {
+	useMobileMenuEscapeKey(props.isMenuOpen, props.onCloseMenu);
 
 	const sidebarClassNames = [
 		"app-sidebar",
-		isMenuOpen ? "app-sidebar-open" : null,
-		showSubjectSwitcher ? "app-sidebar-with-brand" : null
+		props.isMenuOpen ? "app-sidebar-open" : null,
+		props.showSubjectSwitcher ? "app-sidebar-with-brand" : null
 	].filter(Boolean);
 
 	const sidebarClassName = sidebarClassNames.join(" ");
 
-	const backdropClassName = isMenuOpen
+	const backdropClassName = props.isMenuOpen
 		? "app-sidebar-backdrop app-sidebar-backdrop-open"
 		: "app-sidebar-backdrop";
 
@@ -26,10 +26,10 @@ export default function AppSidebar({ activeScreen, onChangeScreen, settingsOpen,
 			<button
 				type="button"
 				className={backdropClassName}
-				onClick={onCloseMenu}
+				onClick={props.onCloseMenu}
 				aria-label="Lukk navigasjon"
-				aria-hidden={!isMenuOpen}
-				tabIndex={isMenuOpen ? 0 : -1}
+				aria-hidden={!props.isMenuOpen}
+				tabIndex={props.isMenuOpen ? 0 : -1}
 			/>
 
 			<aside
@@ -37,13 +37,13 @@ export default function AppSidebar({ activeScreen, onChangeScreen, settingsOpen,
 				className={sidebarClassName}
 				aria-label="Navigasjonsmeny"
 			>
-				{showSubjectSwitcher && (
+				{props.showSubjectSwitcher && (
 					<>
 						<SidebarBrand
-							subjects={subjects}
-							selectedSubject={selectedSubject}
-							onSelectSubject={onSelectSubject}
-							onShowAllSubjects={onShowAllSubjects}
+							subjects={props.subjects}
+							selectedSubject={props.selectedSubject}
+							onSelectSubject={props.onSelectSubject}
+							onShowAllSubjects={props.onShowAllSubjects}
 						/>
 
 						<div className="sidebar-brand-navigation-divider" />
@@ -52,23 +52,23 @@ export default function AppSidebar({ activeScreen, onChangeScreen, settingsOpen,
 
 				<SidebarNavigation
 					section="primary"
-					activeScreen={activeScreen}
-					onChangeScreen={onChangeScreen}
+					activeScreen={props.activeScreen}
+					onChangeScreen={props.onChangeScreen}
 				/>
 
 				<div className="sidebar-spacer" />
 
 				<SidebarNavigation
 					section="secondary"
-					activeScreen={activeScreen}
-					onChangeScreen={onChangeScreen}
+					activeScreen={props.activeScreen}
+					onChangeScreen={props.onChangeScreen}
 				/>
 
-				<SidebarSettingsButton settingsOpen={settingsOpen} onOpenSettings={onOpenSettings} />
+				<SidebarSettingsButton settingsOpen={props.settingsOpen} onOpenSettings={props.onOpenSettings} />
 
 				<SidebarUserCard />
 
-				<SidebarCloseButton onCloseMenu={onCloseMenu} />
+				<SidebarCloseButton onCloseMenu={props.onCloseMenu} />
 			</aside>
 		</>
 	);

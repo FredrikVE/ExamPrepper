@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
-export default function useAppNavigationViewModel(language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase) {
+export default function useAppNavigationViewModel(params) {
 	// Navigasjons-state
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
 	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
@@ -13,7 +13,7 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	const prevLanguageRef = useRef(language);
+	const prevLanguageRef = useRef(params.language);
 
 	const toggleMenu = useCallback(() => {
 		setIsMenuOpen((wasOpen) => !wasOpen);
@@ -132,11 +132,11 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 	}, [selectedSubjectId]);
 
 	const syncSelectedExamWithLanguage = useCallback(() => {
-		if (prevLanguageRef.current === language) {
+		if (prevLanguageRef.current === params.language) {
 			return;
 		}
 
-		prevLanguageRef.current = language;
+		prevLanguageRef.current = params.language;
 
 		if (activeScreen !== NAV_SCREENS.EXAM || !selectedExamId) {
 			return;
@@ -148,9 +148,9 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 			try {
 				const resolved = await resolveTranslatedExamId(
 					selectedExamId,
-					language,
-					getExamByIdUseCase,
-					getExamByBaseIdAndLangUseCase
+					params.language,
+					params.getExamByIdUseCase,
+					params.getExamByBaseIdAndLangUseCase
 				);
 
 				if (cancelled) {
@@ -176,12 +176,12 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 			cancelled = true;
 		};
 	}, [
-		language,
+		params.language,
 		activeScreen,
 		selectedExamId,
 		selectedSubjectId,
-		getExamByIdUseCase,
-		getExamByBaseIdAndLangUseCase,
+		params.getExamByIdUseCase,
+		params.getExamByBaseIdAndLangUseCase,
 		navigateBackToList
 	]);
 
