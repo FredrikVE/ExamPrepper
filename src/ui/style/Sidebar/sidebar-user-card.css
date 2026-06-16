@@ -74,3 +74,29 @@
 		font-size: 13px;
 	}
 }
+
+@media (max-width: 932px) and (orientation: landscape) {
+	.sidebar-user-card {
+		flex: 0 1 168px;
+		min-width: 136px;
+		gap: 10px;
+		margin-top: 0;
+		padding: 0 0 0 12px;
+		border-top: 0;
+		border-left: 1px solid var(--line);
+	}
+
+	.sidebar-user-avatar {
+		width: 34px;
+		height: 34px;
+	}
+
+	.sidebar-user-name {
+		font-size: 15px;
+	}
+
+	.sidebar-user-email,
+	.sidebar-user-chevron {
+		display: none;
+	}
+}

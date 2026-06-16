@@ -142,3 +142,68 @@
 		margin-top: 24px;
 	}
 }
+
+@media (max-width: 932px) and (orientation: landscape) {
+	.app-sidebar {
+		position: fixed;
+		inset: var(--mobile-top-header-height) 0 auto;
+		z-index: 90;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+		width: auto;
+		height: auto;
+		max-height: calc(100svh - var(--mobile-top-header-height) - 8px);
+		min-height: 0;
+		overflow-y: visible;
+		overflow-x: hidden;
+		overscroll-behavior: contain;
+		border-top: 0;
+		border-right: 0;
+		border-left: 0;
+		border-radius: 0 0 22px 22px;
+		padding: 10px 16px 36px;
+		transform: translateY(calc(-100% - 24px));
+		transition: transform var(--transition-normal);
+	}
+
+	.app-sidebar-open {
+		transform: translateY(0);
+	}
+
+	.app-sidebar-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 70;
+		display: block;
+		border: 0;
+		padding: 0;
+		pointer-events: none;
+		background: rgba(15, 23, 42, 0.42);
+		backdrop-filter: blur(6px);
+		opacity: 0;
+		transition: opacity var(--transition-normal);
+	}
+
+	.app-sidebar-backdrop-open {
+		pointer-events: auto;
+		opacity: 1;
+	}
+
+	.app-sidebar ~ .subject-select-workspace,
+	.app-sidebar ~ .exam-select-workspace,
+	.app-sidebar ~ .exam-workspace,
+	.app-sidebar ~ .statistics-page-workspace {
+		transition:
+			transform var(--transition-normal),
+			filter var(--transition-normal),
+			opacity var(--transition-normal);
+		will-change: transform, filter, opacity;
+	}
+
+	.sidebar-brand-navigation-divider,
+	.sidebar-spacer {
+		display: none;
+	}
+}

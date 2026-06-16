@@ -30,3 +30,35 @@
 		background: color-mix(in srgb, var(--accent) 18%, transparent);
 	}
 }
+
+@media (max-width: 932px) and (orientation: landscape) {
+	.sidebar-close-button {
+		position: absolute;
+		right: auto;
+		bottom: 7px;
+		left: 50%;
+		display: grid;
+		place-items: center;
+		width: 64px;
+		height: 28px;
+		margin: 0;
+		border: 0;
+		border-radius: var(--radius-full);
+		color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 12%, transparent);
+		transform: translateX(-50%);
+		transition:
+			transform var(--transition-normal),
+			background var(--transition-normal);
+	}
+
+	.sidebar-close-button:hover {
+		transform: translateX(-50%) translateY(-1px);
+		background: color-mix(in srgb, var(--accent) 18%, transparent);
+	}
+
+	.sidebar-close-button-icon {
+		width: 27px;
+		height: 27px;
+	}
+}
