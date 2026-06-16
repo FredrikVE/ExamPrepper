@@ -1,6 +1,6 @@
 // src/ui/view/components/Settings/SettingsMenu.jsx
 import { useEffect, useRef } from "react";
-import { X, Globe, Moon, Shuffle, Sun } from "lucide-react";
+import { X, ChevronUp, Globe, Moon, Shuffle, Sun } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { LANGUAGES, LANGUAGE_LABELS } from "../../../../i18n/translations.js";
 import { useSettings } from "../../../settings/SettingsContext.jsx";
@@ -38,6 +38,7 @@ export default function SettingsMenu({ isOpen, onOpenChange }) {
     return (
         <dialog
             ref={dialogRef}
+            id="settings-panel"
             className="settings-panel"
             onClose={handleClose}
             onClick={handleBackdropClick}
@@ -81,6 +82,15 @@ export default function SettingsMenu({ isOpen, onOpenChange }) {
                     />
                 </SettingsSection>
             </div>
+
+            <button
+                type="button"
+                className="settings-panel-sheet-close"
+                onClick={handleClose}
+                aria-label={t.settingsClose}
+            >
+                <ChevronUp className="settings-panel-sheet-close-icon" />
+            </button>
         </dialog>
     );
 }

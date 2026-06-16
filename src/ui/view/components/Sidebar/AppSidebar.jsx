@@ -6,20 +6,24 @@ import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 
-export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, onOpenSettings, isMenuOpen, onCloseMenu, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, settingsOpen, onOpenSettings, isMenuOpen, onCloseMenu, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
 	useMobileMenuEscapeKey(isMenuOpen, onCloseMenu);
-
-	const sidebarClassName = isMenuOpen
-		? "app-sidebar app-sidebar-open"
-		: "app-sidebar";
-
-	const backdropClassName = isMenuOpen
-		? "app-sidebar-backdrop app-sidebar-backdrop-open"
-		: "app-sidebar-backdrop";
 
 	const shouldShowSubjectSwitcher =
 		activeScreen === SCREENS.SELECT ||
 		activeScreen === SCREENS.EXAM;
+
+	const sidebarClassNames = [
+		"app-sidebar",
+		isMenuOpen ? "app-sidebar-open" : null,
+		shouldShowSubjectSwitcher ? "app-sidebar-with-brand" : null
+	].filter(Boolean);
+
+	const sidebarClassName = sidebarClassNames.join(" ");
+
+	const backdropClassName = isMenuOpen
+		? "app-sidebar-backdrop app-sidebar-backdrop-open"
+		: "app-sidebar-backdrop";
 
 	return (
 		<>
@@ -64,7 +68,7 @@ export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, onOp
 					onChangeScreen={onChangeScreen}
 				/>
 
-				<SidebarSettingsButton onOpenSettings={onOpenSettings} />
+				<SidebarSettingsButton settingsOpen={settingsOpen} onOpenSettings={onOpenSettings} />
 
 				<SidebarUserCard />
 
