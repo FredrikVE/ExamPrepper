@@ -11,21 +11,21 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 
 	// Layout-state
 	const [settingsOpen, setSettingsOpen] = useState(false);
-	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const prevLanguageRef = useRef(language);
 
-	const openSidebar = useCallback(() => {
-		setSidebarOpen(true);
+	const toggleMenu = useCallback(() => {
+		setIsMenuOpen((wasOpen) => !wasOpen);
 	}, []);
 
-	const closeSidebar = useCallback(() => {
-		setSidebarOpen(false);
+	const closeMenu = useCallback(() => {
+		setIsMenuOpen(false);
 	}, []);
 
 	const openSettings = useCallback(() => {
 		setSettingsOpen(true);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 	}, []);
 
 	const selectSubject = useCallback((subjectId) => {
@@ -33,7 +33,7 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		setSelectedExamId(null);
 		setActiveScreen(NAV_SCREENS.SELECT);
 		setSettingsOpen(false);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 	}, []);
 
 	const showAllSubjects = useCallback(() => {
@@ -41,21 +41,21 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		setSelectedExamId(null);
 		setActiveScreen(NAV_SCREENS.SUBJECTS);
 		setSettingsOpen(false);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 	}, []);
 
 	const selectExam = useCallback((examId) => {
 		setSelectedExamId(examId);
 		setActiveScreen(NAV_SCREENS.EXAM);
 		setSettingsOpen(false);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 	}, []);
 
 	const showStatistics = useCallback(() => {
 		setSelectedExamId(null);
 		setActiveScreen(NAV_SCREENS.OVERVIEW);
 		setSettingsOpen(false);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 	}, []);
 
 	const backToExamList = useCallback(() => {
@@ -68,12 +68,12 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		}
 
 		setSettingsOpen(false);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 	}, [selectedSubjectId]);
 
 	const changeScreen = useCallback((nextScreen) => {
 		setSettingsOpen(false);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 
 		if (nextScreen === NAV_SCREENS.SUBJECTS) {
 			showAllSubjects();
@@ -127,7 +127,7 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		}
 
 		setSettingsOpen(false);
-		setSidebarOpen(false);
+		setIsMenuOpen(false);
 	}, [selectedSubjectId]);
 
 	const syncSelectedExamWithLanguage = useCallback(() => {
@@ -213,12 +213,12 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 
 		// Layout
 		settingsOpen,
-		sidebarOpen,
+		isMenuOpen,
 
 		// Handlers
 		setSettingsOpen,
-		openSidebar,
-		closeSidebar,
+		toggleMenu,
+		closeMenu,
 		openSettings,
 		changeScreen,
 		selectSubject,

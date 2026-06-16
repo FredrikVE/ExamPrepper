@@ -42,3 +42,22 @@
     height: 30px;
     color: var(--accent);
 }
+@media (max-width: 767px) {
+	.sidebar-settings-button {
+		min-height: 48px;
+		gap: 14px;
+		padding: 0 14px;
+		border-radius: 10px;
+		font-size: 17px;
+		font-weight: 720;
+	}
+
+	.sidebar-settings-button:hover {
+		transform: none;
+	}
+
+	.sidebar-settings-button-icon {
+		width: 25px;
+		height: 25px;
+	}
+}

@@ -1,31 +1,32 @@
 /* src/ui/style/Sidebar/sidebar-close-button.css */
 .sidebar-close-button {
-    display: none;
+	display: none;
 }
 
 .sidebar-close-button-icon {
-    width: 34px;
-    height: 34px;
+	width: 30px;
+	height: 30px;
 }
 
-@media (max-width: 980px) {
-    .sidebar-close-button {
-        display: grid;
-        place-items: center;
-        width: 58px;
-        height: 58px;
-        margin-bottom: 28px;
-        border: 0;
-        border-radius: var(--radius-full);
-        color: #ffffff;
-        background: var(--accent-gradient);
-        box-shadow: var(--shadow-button);
-        transition:
-            transform var(--transition-normal),
-            box-shadow var(--transition-normal);
-    }
+@media (max-width: 767px) {
+	.sidebar-close-button {
+		display: grid;
+		place-items: center;
+		align-self: center;
+		width: 58px;
+		height: 34px;
+		margin: 10px auto 0;
+		border: 0;
+		border-radius: var(--radius-full);
+		color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 12%, transparent);
+		transition:
+			transform var(--transition-normal),
+			background var(--transition-normal);
+	}
 
-    .sidebar-close-button:hover {
-        transform: translateX(-3px);
-    }
+	.sidebar-close-button:hover {
+		transform: translateY(-2px);
+		background: color-mix(in srgb, var(--accent) 18%, transparent);
+	}
 }
