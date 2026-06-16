@@ -6,17 +6,13 @@ import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 
-export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, settingsOpen, onOpenSettings, isMenuOpen, onCloseMenu, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+export default function AppSidebar({ activeScreen, onChangeScreen, settingsOpen, onOpenSettings, isMenuOpen, onCloseMenu, showSubjectSwitcher, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
 	useMobileMenuEscapeKey(isMenuOpen, onCloseMenu);
-
-	const shouldShowSubjectSwitcher =
-		activeScreen === SCREENS.SELECT ||
-		activeScreen === SCREENS.EXAM;
 
 	const sidebarClassNames = [
 		"app-sidebar",
 		isMenuOpen ? "app-sidebar-open" : null,
-		shouldShowSubjectSwitcher ? "app-sidebar-with-brand" : null
+		showSubjectSwitcher ? "app-sidebar-with-brand" : null
 	].filter(Boolean);
 
 	const sidebarClassName = sidebarClassNames.join(" ");
@@ -41,7 +37,7 @@ export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, sett
 				className={sidebarClassName}
 				aria-label="Navigasjonsmeny"
 			>
-				{shouldShowSubjectSwitcher && (
+				{showSubjectSwitcher && (
 					<>
 						<SidebarBrand
 							subjects={subjects}

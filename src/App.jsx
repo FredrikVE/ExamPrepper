@@ -73,16 +73,21 @@ function AppContent() {
 				<SidebarMenuButton
 					isMenuOpen={navigationViewModel.isMenuOpen}
 					onToggleMenu={navigationViewModel.toggleMenu}
+					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
+					subjects={subjectSelectPageViewModel.subjects}
+					selectedSubject={subjectSelectPageViewModel.selectedSubject}
+					onSelectSubject={navigationViewModel.selectSubject}
+					onShowAllSubjects={navigationViewModel.showAllSubjects}
 				/>
 
 				<AppSidebar
 					activeScreen={navigationViewModel.activeScreen}
 					onChangeScreen={navigationViewModel.changeScreen}
-					SCREENS={NAV_SCREENS}
 					settingsOpen={navigationViewModel.settingsOpen}
 					onOpenSettings={navigationViewModel.openSettings}
 					isMenuOpen={navigationViewModel.isMenuOpen}
 					onCloseMenu={navigationViewModel.closeMenu}
+					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
 					onSelectSubject={navigationViewModel.selectSubject}

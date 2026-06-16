@@ -191,6 +191,10 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		activeScreen === NAV_SCREENS.SUBJECTS ||
 		activeScreen === NAV_SCREENS.SELECT;
 
+	const shouldShowSubjectSwitcher =
+		activeScreen === NAV_SCREENS.SELECT ||
+		activeScreen === NAV_SCREENS.EXAM;
+
 	const usesSelectionLayout =
 		isSelectionScreen ||
 		activeScreen === NAV_SCREENS.OVERVIEW;
@@ -209,6 +213,7 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		selectedSubjectId,
 		selectedExamId,
 		isSelectionScreen,
+		shouldShowSubjectSwitcher,
 		pageClassName,
 		shellClassName,
 
