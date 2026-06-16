@@ -24,17 +24,17 @@
         min-height: 100vh;
         border-inline: 0;
         border-radius: 0;
-        padding: 32px 20px 44px;
+        padding: calc(var(--mobile-top-header-height) + 24px) 20px 44px;
     }
 
     .exam-select-topbar {
         align-items: center;
-        padding-left: 76px;
+        padding-left: 0;
         margin-bottom: 16px;
     }
 
     .exam-select-intro {
-        padding-left: 76px;
+        padding-left: 0;
         margin-bottom: 34px;
     }
 

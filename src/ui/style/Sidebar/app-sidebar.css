@@ -46,11 +46,11 @@
 @media (max-width: 767px) {
 	.app-sidebar {
 		position: fixed;
-		inset: 0 0 auto;
+		inset: var(--mobile-top-header-height) 0 auto;
 		z-index: 90;
 		width: auto;
 		height: auto;
-		max-height: min(88vh, calc(100vh - 20px));
+		max-height: calc(100vh - var(--mobile-top-header-height) - 12px);
 		min-height: 0;
 		overflow-y: auto;
 		overflow-x: hidden;
@@ -58,8 +58,8 @@
 		border-top: 0;
 		border-right: 0;
 		border-left: 0;
-		border-radius: 0 0 22px 22px;
-		padding: 82px 18px 12px;
+		border-radius: 0 0 24px 24px;
+		padding: 18px 18px 12px;
 		transform: translateY(calc(-100% - 24px));
 		transition: transform var(--transition-normal);
 	}
@@ -76,7 +76,7 @@
 		border: 0;
 		padding: 0;
 		pointer-events: none;
-		background: rgba(15, 23, 42, 0.6);
+		background: rgba(15, 23, 42, 0.52);
 		backdrop-filter: blur(7px);
 		opacity: 0;
 		transition: opacity var(--transition-normal);
@@ -85,6 +85,14 @@
 	.app-sidebar-backdrop-open {
 		pointer-events: auto;
 		opacity: 1;
+	}
+
+	.app-sidebar ~ .subject-select-workspace,
+	.app-sidebar ~ .exam-select-workspace,
+	.app-sidebar ~ .exam-workspace,
+	.app-sidebar ~ .statistics-page-workspace {
+		transition: transform var(--transition-normal);
+		will-change: transform;
 	}
 
 	.sidebar-brand-navigation-divider {

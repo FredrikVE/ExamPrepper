@@ -16,17 +16,17 @@
         min-height: 100vh;
         border-inline: 0;
         border-radius: 0;
-        padding: 32px 20px 44px;
+        padding: calc(var(--mobile-top-header-height) + 24px) 20px 44px;
     }
 
     .subject-select-topbar {
         align-items: center;
-        padding-left: 76px;
+        padding-left: 0;
         margin-bottom: 32px;
     }
 
     .subject-select-controls {
-        padding-left: 76px;
+        padding-left: 0;
     }
 
     .subject-select-statistics-button span {
@@ -45,7 +45,7 @@
     }
 
     .subject-select-topbar {
-        padding-top: 62px;
+        padding-top: 0;
         align-items: flex-start;
     }
 
