@@ -11,7 +11,7 @@
     }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767px) {
     .subject-select-workspace {
         min-height: 100vh;
         border-inline: 0;

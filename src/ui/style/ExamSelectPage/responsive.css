@@ -10,7 +10,7 @@
     }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767px) {
     .exam-select-page {
         padding: 0;
     }

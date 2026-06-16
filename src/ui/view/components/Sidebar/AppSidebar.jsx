@@ -4,50 +4,72 @@ import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
+import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 
-export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, onOpenSettings, sidebarOpen, onCloseSidebar, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
-    const className = sidebarOpen
-        ? "app-sidebar app-sidebar-open"
-        : "app-sidebar";
+export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, onOpenSettings, isMenuOpen, onCloseMenu, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+	useMobileMenuEscapeKey(isMenuOpen, onCloseMenu);
 
-    const shouldShowSubjectSwitcher =
-        activeScreen === SCREENS.SELECT ||
-        activeScreen === SCREENS.EXAM;
+	const sidebarClassName = isMenuOpen
+		? "app-sidebar app-sidebar-open"
+		: "app-sidebar";
 
-    return (
-        <aside className={className}>
-            <SidebarCloseButton onCloseSidebar={onCloseSidebar} />
+	const backdropClassName = isMenuOpen
+		? "app-sidebar-backdrop app-sidebar-backdrop-open"
+		: "app-sidebar-backdrop";
 
-            {shouldShowSubjectSwitcher && (
-                <>
-                    <SidebarBrand
-                        subjects={subjects}
-                        selectedSubject={selectedSubject}
-                        onSelectSubject={onSelectSubject}
-                        onShowAllSubjects={onShowAllSubjects}
-                    />
+	const shouldShowSubjectSwitcher =
+		activeScreen === SCREENS.SELECT ||
+		activeScreen === SCREENS.EXAM;
 
-                    <div className="sidebar-brand-navigation-divider" />
-                </>
-            )}
+	return (
+		<>
+			<button
+				type="button"
+				className={backdropClassName}
+				onClick={onCloseMenu}
+				aria-label="Lukk navigasjon"
+				aria-hidden={!isMenuOpen}
+				tabIndex={isMenuOpen ? 0 : -1}
+			/>
 
-            <SidebarNavigation
-                section="primary"
-                activeScreen={activeScreen}
-                onChangeScreen={onChangeScreen}
-            />
+			<aside
+				id="app-navigation-menu"
+				className={sidebarClassName}
+				aria-label="Navigasjonsmeny"
+			>
+				{shouldShowSubjectSwitcher && (
+					<>
+						<SidebarBrand
+							subjects={subjects}
+							selectedSubject={selectedSubject}
+							onSelectSubject={onSelectSubject}
+							onShowAllSubjects={onShowAllSubjects}
+						/>
 
-            <div className="sidebar-spacer" />
+						<div className="sidebar-brand-navigation-divider" />
+					</>
+				)}
 
-            <SidebarNavigation
-                section="secondary"
-                activeScreen={activeScreen}
-                onChangeScreen={onChangeScreen}
-            />
+				<SidebarNavigation
+					section="primary"
+					activeScreen={activeScreen}
+					onChangeScreen={onChangeScreen}
+				/>
 
-            <SidebarSettingsButton onOpenSettings={onOpenSettings} />
+				<div className="sidebar-spacer" />
 
-            <SidebarUserCard />
-        </aside>
-    );
+				<SidebarNavigation
+					section="secondary"
+					activeScreen={activeScreen}
+					onChangeScreen={onChangeScreen}
+				/>
+
+				<SidebarSettingsButton onOpenSettings={onOpenSettings} />
+
+				<SidebarUserCard />
+
+				<SidebarCloseButton onCloseMenu={onCloseMenu} />
+			</aside>
+		</>
+	);
 }

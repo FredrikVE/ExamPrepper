@@ -7,7 +7,7 @@
     }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767px) {
     .exam-page {
         padding: 0;
     }
@@ -62,7 +62,7 @@
     }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767px) {
     .exam-page {
         --exam-content-width: calc(100% - 32px);
         --exam-content-max-width: 880px;
@@ -152,7 +152,7 @@
     }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 767px) {
     .exam-workspace-feedback-mode {
         --exam-content-width: calc(100% - 28px);
         --exam-content-max-width: 880px;

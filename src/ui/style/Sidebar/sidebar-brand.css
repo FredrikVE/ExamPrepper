@@ -206,3 +206,39 @@
 .sidebar-subject-see-all:hover {
     background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
+@media (max-width: 767px) {
+	.sidebar-brand {
+		min-height: 64px;
+		gap: 12px;
+		padding: 10px 12px;
+		border-radius: 14px;
+	}
+
+	.sidebar-brand-icon {
+		width: 42px;
+		height: 42px;
+		border-radius: 12px;
+	}
+
+	.sidebar-brand-icon .subject-icon {
+		width: 24px;
+		height: 24px;
+	}
+
+	.sidebar-brand-title {
+		font-size: 18px;
+	}
+
+	.sidebar-brand-subtitle {
+		font-size: 13px;
+	}
+
+	.sidebar-subject-menu {
+		padding: 12px;
+		border-radius: 14px;
+	}
+
+	.sidebar-subject-item {
+		min-height: 54px;
+	}
+}

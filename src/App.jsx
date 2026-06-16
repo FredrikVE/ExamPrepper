@@ -69,7 +69,10 @@ function AppContent() {
 	return (
 		<div className={navigationViewModel.pageClassName}>
 			<div className={navigationViewModel.shellClassName}>
-				<SidebarMenuButton onOpenSidebar={navigationViewModel.openSidebar} />
+				<SidebarMenuButton
+					isMenuOpen={navigationViewModel.isMenuOpen}
+					onToggleMenu={navigationViewModel.toggleMenu}
+				/>
 
 				<AppSidebar
 					activeScreen={navigationViewModel.activeScreen}
@@ -77,8 +80,8 @@ function AppContent() {
 					SCREENS={NAV_SCREENS}
 					settingsOpen={navigationViewModel.settingsOpen}
 					onOpenSettings={navigationViewModel.openSettings}
-					sidebarOpen={navigationViewModel.sidebarOpen}
-					onCloseSidebar={navigationViewModel.closeSidebar}
+					isMenuOpen={navigationViewModel.isMenuOpen}
+					onCloseMenu={navigationViewModel.closeMenu}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
 					onSelectSubject={navigationViewModel.selectSubject}
