@@ -1,4 +1,5 @@
 // src/ui/view/components/Sidebar/AppSidebar.jsx
+import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import SidebarBrand from "./SidebarBrand.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
@@ -7,6 +8,8 @@ import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 
 export default function AppSidebar(props) {
+	const { t } = useLanguage();
+
 	useMobileMenuEscapeKey(props.isMenuOpen, props.onCloseMenu);
 
 	const sidebarClassNames = [
@@ -27,7 +30,7 @@ export default function AppSidebar(props) {
 				type="button"
 				className={backdropClassName}
 				onClick={props.onCloseMenu}
-				aria-label="Lukk navigasjon"
+				aria-label={t.sidebarCloseNavigation}
 				aria-hidden={!props.isMenuOpen}
 				tabIndex={props.isMenuOpen ? 0 : -1}
 			/>
@@ -35,7 +38,7 @@ export default function AppSidebar(props) {
 			<aside
 				id="app-navigation-menu"
 				className={sidebarClassName}
-				aria-label="Navigasjonsmeny"
+				aria-label={t.sidebarNavigationMenu}
 			>
 				{props.showSubjectSwitcher && (
 					<>

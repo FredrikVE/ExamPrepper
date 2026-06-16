@@ -122,19 +122,6 @@ export default function useAppNavigationViewModel(params) {
 		}
 	}, [selectedSubjectId, selectedExamId, showAllSubjects, showStatistics]);
 
-	const navigateBackToList = useCallback(() => {
-		setSelectedExamId(null);
-
-		if (selectedSubjectId) {
-			setActiveScreen(NAV_SCREENS.SELECT);
-		} else {
-			setActiveScreen(NAV_SCREENS.SUBJECTS);
-		}
-
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
-	}, [selectedSubjectId]);
-
 	const syncSelectedExamWithLanguage = useCallback(() => {
 		if (prevLanguageRef.current === params.language) {
 			return;
@@ -165,11 +152,11 @@ export default function useAppNavigationViewModel(params) {
 					setSelectedExamId(resolved.examId);
 					setSelectedSubjectId(resolved.subjectId ?? selectedSubjectId);
 				} else {
-					navigateBackToList();
+					backToExamList();
 				}
 			} catch {
 				if (!cancelled) {
-					navigateBackToList();
+					backToExamList();
 				}
 			}
 		};
@@ -186,7 +173,7 @@ export default function useAppNavigationViewModel(params) {
 		selectedSubjectId,
 		params.getExamByIdUseCase,
 		params.getExamByBaseIdAndLangUseCase,
-		navigateBackToList
+		backToExamList
 	]);
 
 	useEffect(syncSelectedExamWithLanguage, [syncSelectedExamWithLanguage]);

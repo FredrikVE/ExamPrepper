@@ -227,7 +227,13 @@ export const translations = {
         sidebarOverview: "Oversikt",
         sidebarStatistics: "Din statistikk",
         sidebarNotes: "Notater",
-        sidebarSettings: "Innstillinger"
+        sidebarSettings: "Innstillinger",
+        sidebarSubjectMenuLabel: "Velg emne",
+        sidebarSeeAllSubjects: "Se alle emner",
+        sidebarOpenNavigation: "Åpne navigasjon",
+        sidebarCloseNavigation: "Lukk navigasjon",
+        sidebarNavigationMenu: "Navigasjonsmeny",
+        sidebarMobileNavigation: "Mobilnavigasjon"
     },
 
     [LANGUAGES.EN]: {
@@ -447,6 +453,12 @@ export const translations = {
         sidebarOverview: "Overview",
         sidebarStatistics: "Your statistics",
         sidebarNotes: "Notes",
-        sidebarSettings: "Settings"
+        sidebarSettings: "Settings",
+        sidebarSubjectMenuLabel: "Choose subject",
+        sidebarSeeAllSubjects: "See all subjects",
+        sidebarOpenNavigation: "Open navigation",
+        sidebarCloseNavigation: "Close navigation",
+        sidebarNavigationMenu: "Navigation menu",
+        sidebarMobileNavigation: "Mobile navigation"
     }
 };
