@@ -29,10 +29,7 @@ export default function SubjectSelectPage({ viewModel }) {
         <main className="subject-select-workspace">
             <div className="subject-select-ambient-light" aria-hidden="true" />
 
-            <SubjectSelectTopbar
-                t={viewModel.t}
-                onShowStatistics={viewModel.showStatistics}
-            />
+            <SubjectSelectTopbar t={viewModel.t} />
 
             <SubjectSelectControls
                 t={viewModel.t}

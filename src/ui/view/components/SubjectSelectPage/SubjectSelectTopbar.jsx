@@ -1,7 +1,5 @@
 // src/ui/view/components/SubjectSelectPage/SubjectSelectTopbar.jsx
-import { ChevronRight, Trophy } from "lucide-react";
-
-export default function SubjectSelectTopbar({ t, onShowStatistics }) {
+export default function SubjectSelectTopbar({ t }) {
     return (
         <div className="subject-select-topbar">
             <div>
@@ -13,12 +11,6 @@ export default function SubjectSelectTopbar({ t, onShowStatistics }) {
                     {t.subjectSelectSubtitle}
                 </p>
             </div>
-
-            <button type="button" className="subject-select-statistics-button" onClick={onShowStatistics}>
-                <Trophy className="subject-select-statistics-icon" />
-                <span>{t.selectStatistics}</span>
-                <ChevronRight className="subject-select-statistics-chevron" />
-            </button>
         </div>
     );
 }

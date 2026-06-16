@@ -11,7 +11,6 @@ export default function createExamSelectPageCopy(t, selectedSubject) {
     return {
         title: t.selectIntroTitle,
         subtitle: createExamSelectSubtitle(t, selectedSubject),
-        statisticsLabel: t.selectStatistics,
         loadingMessage: t.selectLoadingMessage,
         emptyTitle: t.selectEmptyTitle,
         emptyMessage: t.selectEmptyMessage,

@@ -7,7 +7,6 @@ function createTranslations() {
         selectIntroTitle: "Velg eksamen",
         selectSubtitle: jest.fn((subjectCode) => `Velg en øvingsprøve for ${subjectCode}`),
         selectSubtitleFallback: "Velg en øvingsprøve for å starte",
-        selectStatistics: "Din statistikk",
         selectLoadingMessage: "Laster eksamener...",
         selectEmptyTitle: "Ingen eksamener tilgjengelig",
         selectEmptyMessage: "Dette faget har ingen mock-eksamener ennå.",
@@ -25,7 +24,6 @@ describe("createExamSelectPageCopy", () => {
         expect(copy).toEqual({
             title: "Velg eksamen",
             subtitle: "Velg en øvingsprøve for IN5431",
-            statisticsLabel: "Din statistikk",
             loadingMessage: "Laster eksamener...",
             emptyTitle: "Ingen eksamener tilgjengelig",
             emptyMessage: "Dette faget har ingen mock-eksamener ennå.",

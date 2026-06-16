@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, onShowStatistics = () => {}) {
+export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject) {
 	const [subjects, setSubjects] = useState([]);
 	const [subjectsLoading, setSubjectsLoading] = useState(true);
 	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
@@ -69,10 +69,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		onSelectSubject(subjectId);
 	}, [onSelectSubject]);
 
-	const showStatistics = useCallback(() => {
-		onShowStatistics();
-	}, [onShowStatistics]);
-
 	return {
 		// Data
 		subjects,
@@ -98,7 +94,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		// Handlers
 		changeSearchTerm,
 		changeFaculty,
-		selectSubject,
-		showStatistics
+		selectSubject
 	};
 }

@@ -32,11 +32,7 @@ export default function ExamSelectPage({ viewModel }) {
         <main className="exam-select-workspace">
             <div className="exam-select-ambient-light" aria-hidden="true" />
 
-            <ExamSelectTopbar
-                title={viewModel.title}
-                statisticsLabel={viewModel.statisticsLabel}
-                onShowStatistics={viewModel.showStatistics}
-            />
+            <ExamSelectTopbar title={viewModel.title} />
 
             <ExamSelectIntro
                 selectedSubject={viewModel.selectedSubject}

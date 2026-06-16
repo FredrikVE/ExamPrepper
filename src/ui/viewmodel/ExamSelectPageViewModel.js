@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, onShowStatistics = () => {}) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
     const [examsLoadError, setExamsLoadError] = useState(null);
@@ -63,17 +63,12 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         onSelectExam(examId);
     }, [onSelectExam]);
 
-    const showStatistics = useCallback(() => {
-        onShowStatistics();
-    }, [onShowStatistics]);
-
     return {
         exams,
         selectedSubject,
         examsLoading,
         examsLoadError,
         ...pageCopy,
-        selectExam,
-        showStatistics
+        selectExam
     };
 }

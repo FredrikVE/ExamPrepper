@@ -49,8 +49,7 @@ function AppContent() {
 		language,
 		t,
 		navigationViewModel.selectedSubjectId,
-		navigationViewModel.selectSubject,
-		navigationViewModel.showStatistics
+		navigationViewModel.selectSubject
 	);
 
 	const examSelectPageViewModel = useExamSelectPageViewModel(
@@ -58,8 +57,7 @@ function AppContent() {
 		language,
 		t,
 		subjectSelectPageViewModel.selectedSubject,
-		navigationViewModel.selectExam,
-		navigationViewModel.showStatistics
+		navigationViewModel.selectExam
 	);
 
 

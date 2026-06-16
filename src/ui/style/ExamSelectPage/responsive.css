@@ -38,9 +38,6 @@
         margin-bottom: 34px;
     }
 
-    .exam-select-statistics-button span {
-        display: none;
-    }
 }
 
 @media (max-width: 720px) {
@@ -66,10 +63,6 @@
     .exam-select-topbar {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .exam-select-statistics-button {
-        align-self: flex-start;
     }
 
     .exam-select-card-description {
@@ -105,22 +98,6 @@
 
     .exam-select-subject-line {
         font-size: 15px;
-    }
-
-    .exam-select-statistics-button {
-        min-height: 46px;
-        padding: 0 16px;
-        border-radius: 14px;
-    }
-
-    .exam-select-statistics-icon {
-        width: 22px;
-        height: 22px;
-    }
-
-    .exam-select-statistics-chevron {
-        width: 22px;
-        height: 22px;
     }
 
     .exam-select-grid {
@@ -352,10 +329,6 @@
 
 .exam-select-card-footer {
     min-width: 0;
-}
-
-.exam-select-statistics-button {
-    max-width: 100%;
 }
 
 .exam-select-ambient-light {
