@@ -8,7 +8,7 @@ import { useTheme } from "../../../theme/ThemeContext.jsx";
 import SettingsSection from "./SettingsSection.jsx";
 import SettingsToggle from "./SettingsToggle.jsx";
 
-export default function SettingsMenu({ isOpen, onOpenChange }) {
+export default function SettingsMenu({ isOpen, onClose }) {
     const dialogRef = useRef(null);
     const { language, setLanguage, t } = useLanguage();
     const { randomizeAnswerOptions, toggleRandomizeAnswerOptions } = useSettings();
@@ -25,7 +25,7 @@ export default function SettingsMenu({ isOpen, onOpenChange }) {
         }
     }, [isOpen]);
 
-    const handleClose = () => onOpenChange(false);
+    const handleClose = () => onClose();
 
     const handleBackdropClick = (event) => {
         if (event.target === dialogRef.current) {

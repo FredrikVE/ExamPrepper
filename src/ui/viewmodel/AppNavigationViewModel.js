@@ -23,6 +23,10 @@ export default function useAppNavigationViewModel(params) {
 		setIsMenuOpen(false);
 	}, []);
 
+	const closeSettings = useCallback(() => {
+		setSettingsOpen(false);
+	}, []);
+
 
 	const openSettings = useCallback(() => {
 		setSettingsOpen(true);
@@ -222,7 +226,7 @@ export default function useAppNavigationViewModel(params) {
 		isMenuOpen,
 
 		// Handlers
-		setSettingsOpen,
+		closeSettings,
 		toggleMenu,
 		closeMenu,
 		openSettings,

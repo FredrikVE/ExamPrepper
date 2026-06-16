@@ -114,7 +114,7 @@ function AppContent() {
 
 				<SettingsMenu
 					isOpen={navigationViewModel.settingsOpen}
-					onOpenChange={navigationViewModel.setSettingsOpen}
+					onClose={navigationViewModel.closeSettings}
 				/>
 			</div>
 		</div>
