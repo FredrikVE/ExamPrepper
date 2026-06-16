@@ -24,7 +24,7 @@
 
 @media (max-width: 767px) {
     :root {
-        --mobile-top-header-height: calc(102px + env(safe-area-inset-top));
+        --mobile-top-header-height: calc(82px + env(safe-area-inset-top));
         --mobile-menu-offset: clamp(0px, calc(76vh - var(--mobile-top-header-height)), 330px);
         --mobile-menu-offset-with-brand: clamp(0px, calc(86vh - var(--mobile-top-header-height)), 450px);
     }
@@ -37,7 +37,7 @@
         left: 0;
         display: grid;
         min-height: var(--mobile-top-header-height);
-        grid-template-columns: 52px minmax(0, 1fr) auto;
+        grid-template-columns: 52px minmax(0, 1fr);
         align-items: end;
         gap: 14px;
         border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line-strong));
@@ -79,35 +79,6 @@
         border-radius: 16px;
     }
 
-    .mobile-top-header-copy {
-        position: relative;
-        z-index: 1;
-        min-width: 0;
-    }
-
-    .mobile-top-header-copy strong {
-        display: block;
-        overflow: hidden;
-        color: var(--text-main);
-        font-size: 21px;
-        font-weight: 850;
-        line-height: 1;
-        letter-spacing: -0.055em;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .mobile-top-header-copy span {
-        display: block;
-        overflow: hidden;
-        margin-top: 5px;
-        color: var(--text-muted);
-        font-size: 13px;
-        font-weight: 620;
-        letter-spacing: -0.025em;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
 
     .mobile-top-header-pill {
         position: relative;
@@ -116,6 +87,7 @@
         min-height: 34px;
         align-items: center;
         justify-content: center;
+        justify-self: end;
         border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
         border-radius: var(--radius-full);
         color: var(--accent);
@@ -142,8 +114,6 @@
 
 @media (max-width: 430px) {
     .mobile-top-header {
-        grid-template-columns: 48px minmax(0, 1fr);
-        align-items: end;
         padding-inline: 16px;
     }
 

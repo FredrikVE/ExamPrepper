@@ -69,7 +69,6 @@ function AppContent() {
 
 	const mobileHeaderModel = createMobileHeaderModel(
 		navigationViewModel.activeScreen,
-		subjectSelectPageViewModel.selectedSubject,
 		t
 	);
 

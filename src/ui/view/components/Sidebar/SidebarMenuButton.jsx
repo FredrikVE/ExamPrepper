@@ -3,8 +3,6 @@ import { Menu } from "lucide-react";
 
 export default function SidebarMenuButton({ isMenuOpen, mobileHeaderModel, onToggleMenu }) {
     const headerModel = mobileHeaderModel ?? {
-        title: "ExamPrepper",
-        subtitle: "Exam Emulator",
         activeLabel: "Meny"
     };
 
@@ -20,11 +18,6 @@ export default function SidebarMenuButton({ isMenuOpen, mobileHeaderModel, onTog
             >
                 <Menu className="sidebar-menu-button-icon" />
             </button>
-
-            <div className="mobile-top-header-copy">
-                <strong>{headerModel.title}</strong>
-                <span>{headerModel.subtitle}</span>
-            </div>
 
             <div className="mobile-top-header-pill">
                 {headerModel.activeLabel}
