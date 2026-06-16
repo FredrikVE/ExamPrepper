@@ -6,23 +6,64 @@ import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
+import useCloseMobileMenuOnDesktopBreakpoint from "./useCloseMobileMenuOnDesktopBreakpoint.js";
+
+function SidebarContent(props) {
+	return (
+		<>
+			{props.showSubjectSwitcher && (
+				<>
+					<SidebarBrand
+						subjects={props.subjects}
+						selectedSubject={props.selectedSubject}
+						onSelectSubject={props.onSelectSubject}
+						onShowAllSubjects={props.onShowAllSubjects}
+					/>
+
+					<div className="sidebar-brand-navigation-divider" />
+				</>
+			)}
+
+			<SidebarNavigation
+				section="primary"
+				activeScreen={props.activeScreen}
+				onChangeScreen={props.onChangeScreen}
+			/>
+
+			<div className="sidebar-spacer" />
+
+			<SidebarNavigation
+				section="secondary"
+				activeScreen={props.activeScreen}
+				onChangeScreen={props.onChangeScreen}
+			/>
+
+			<SidebarSettingsButton settingsOpen={props.settingsOpen} onOpenSettings={props.onOpenSettings} />
+
+			<SidebarUserCard />
+
+			<SidebarCloseButton onCloseMenu={props.onCloseMenu} />
+		</>
+	);
+}
 
 export default function AppSidebar(props) {
 	const { t } = useLanguage();
 
 	useMobileMenuEscapeKey(props.isMenuOpen, props.onCloseMenu);
+	useCloseMobileMenuOnDesktopBreakpoint(props.isMenuOpen, props.onCloseMenu);
 
-	const sidebarClassNames = [
-		"app-sidebar",
-		props.isMenuOpen ? "app-sidebar-open" : null,
-		props.showSubjectSwitcher ? "app-sidebar-with-brand" : null
+	const mobileTopsheetClassNames = [
+		"mobile-topsheet",
+		props.isMenuOpen ? "mobile-topsheet-open" : null,
+		props.showSubjectSwitcher ? "mobile-topsheet-with-brand" : null
 	].filter(Boolean);
 
-	const sidebarClassName = sidebarClassNames.join(" ");
+	const mobileTopsheetClassName = mobileTopsheetClassNames.join(" ");
 
 	const backdropClassName = props.isMenuOpen
-		? "app-sidebar-backdrop app-sidebar-backdrop-open"
-		: "app-sidebar-backdrop";
+		? "mobile-topsheet-backdrop mobile-topsheet-backdrop-visible"
+		: "mobile-topsheet-backdrop";
 
 	return (
 		<>
@@ -36,42 +77,18 @@ export default function AppSidebar(props) {
 			/>
 
 			<aside
-				id="app-navigation-menu"
-				className={sidebarClassName}
+				className="desktop-sidebar"
 				aria-label={t.sidebarNavigationMenu}
 			>
-				{props.showSubjectSwitcher && (
-					<>
-						<SidebarBrand
-							subjects={props.subjects}
-							selectedSubject={props.selectedSubject}
-							onSelectSubject={props.onSelectSubject}
-							onShowAllSubjects={props.onShowAllSubjects}
-						/>
+				<SidebarContent {...props} />
+			</aside>
 
-						<div className="sidebar-brand-navigation-divider" />
-					</>
-				)}
-
-				<SidebarNavigation
-					section="primary"
-					activeScreen={props.activeScreen}
-					onChangeScreen={props.onChangeScreen}
-				/>
-
-				<div className="sidebar-spacer" />
-
-				<SidebarNavigation
-					section="secondary"
-					activeScreen={props.activeScreen}
-					onChangeScreen={props.onChangeScreen}
-				/>
-
-				<SidebarSettingsButton settingsOpen={props.settingsOpen} onOpenSettings={props.onOpenSettings} />
-
-				<SidebarUserCard />
-
-				<SidebarCloseButton onCloseMenu={props.onCloseMenu} />
+			<aside
+				id="app-navigation-menu"
+				className={mobileTopsheetClassName}
+				aria-label={t.sidebarNavigationMenu}
+			>
+				<SidebarContent {...props} />
 			</aside>
 		</>
 	);
