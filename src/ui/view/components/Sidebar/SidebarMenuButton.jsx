@@ -1,11 +1,7 @@
 // src/ui/view/components/Sidebar/SidebarMenuButton.jsx
 import { Menu } from "lucide-react";
 
-export default function SidebarMenuButton({ isMenuOpen, mobileHeaderModel, onToggleMenu }) {
-    const headerModel = mobileHeaderModel ?? {
-        activeLabel: "Meny"
-    };
-
+export default function SidebarMenuButton({ isMenuOpen, onToggleMenu }) {
     return (
         <header className="mobile-top-header" aria-label="Mobilnavigasjon">
             <button
@@ -18,10 +14,6 @@ export default function SidebarMenuButton({ isMenuOpen, mobileHeaderModel, onTog
             >
                 <Menu className="sidebar-menu-button-icon" />
             </button>
-
-            <div className="mobile-top-header-pill">
-                {headerModel.activeLabel}
-            </div>
         </header>
     );
 }

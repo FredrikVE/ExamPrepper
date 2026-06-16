@@ -37,9 +37,8 @@
         left: 0;
         display: grid;
         min-height: var(--mobile-top-header-height);
-        grid-template-columns: 52px minmax(0, 1fr);
+        grid-template-columns: 52px;
         align-items: end;
-        gap: 14px;
         border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line-strong));
         background:
             radial-gradient(
@@ -80,25 +79,6 @@
     }
 
 
-    .mobile-top-header-pill {
-        position: relative;
-        z-index: 1;
-        display: inline-flex;
-        min-height: 34px;
-        align-items: center;
-        justify-content: center;
-        justify-self: end;
-        border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
-        border-radius: var(--radius-full);
-        color: var(--accent);
-        background: color-mix(in srgb, var(--accent) 12%, transparent);
-        padding: 0 12px;
-        font-size: 12px;
-        font-weight: 850;
-        letter-spacing: -0.02em;
-        white-space: nowrap;
-    }
-
     .app-sidebar-open ~ .subject-select-workspace,
     .app-sidebar-open ~ .exam-select-workspace,
     .app-sidebar-open ~ .exam-workspace,
@@ -121,9 +101,5 @@
         width: 48px;
         height: 48px;
         border-radius: 15px;
-    }
-
-    .mobile-top-header-pill {
-        display: none;
     }
 }

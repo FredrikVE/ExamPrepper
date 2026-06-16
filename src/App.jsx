@@ -11,7 +11,6 @@ import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewM
 import useExamSelectPageViewModel from "./ui/viewmodel/ExamSelectPageViewModel.js";
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
 import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.js";
-import createMobileHeaderModel from "./ui/viewmodel/Utils/createMobileHeaderModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
@@ -67,17 +66,12 @@ function AppContent() {
 		navigationViewModel.showStatistics
 	);
 
-	const mobileHeaderModel = createMobileHeaderModel(
-		navigationViewModel.activeScreen,
-		t
-	);
 
 	return (
 		<div className={navigationViewModel.pageClassName}>
 			<div className={navigationViewModel.shellClassName}>
 				<SidebarMenuButton
 					isMenuOpen={navigationViewModel.isMenuOpen}
-					mobileHeaderModel={mobileHeaderModel}
 					onToggleMenu={navigationViewModel.toggleMenu}
 				/>
 
