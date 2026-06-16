@@ -33,6 +33,25 @@
     }
 }
 
+@media (max-width: 932px) and (orientation: landscape) {
+	.exam-page {
+		padding: 0;
+	}
+
+	.exam-shell {
+		display: block;
+		height: 100svh;
+	}
+
+	.exam-workspace {
+		height: 100svh;
+		border-radius: 0;
+		border-inline: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+}
+
 /* ── Laptop-first exam layout ─────────────
    Keeps the widescreen 70% layout, but gives 14–17" laptops
    a wider and shorter working area so the footer stays reachable. */

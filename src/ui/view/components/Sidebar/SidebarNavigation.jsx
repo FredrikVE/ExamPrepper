@@ -52,8 +52,10 @@ export default function SidebarNavigation({ activeScreen, onChangeScreen, sectio
     );
 }
 
-function getNavigationItemClassName() {
-    return CLASS_NAMES.item;
+function getNavigationItemClassName(active) {
+	return active
+		? `${CLASS_NAMES.item} ${CLASS_NAMES.itemActive}`
+		: CLASS_NAMES.item;
 }
 
 const SidebarNavigationIcon = ({ Icon }) => {

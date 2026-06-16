@@ -61,11 +61,11 @@
 		border-radius: 0 0 24px 24px;
 		padding: 18px 18px 12px;
 		transform: translateY(calc(-100% - 24px));
-		transition: transform var(--transition-normal);
 	}
 
 	.app-sidebar-open {
 		transform: translateY(0);
+		transition: transform var(--transition-normal);
 	}
 
 	.app-sidebar-backdrop {
@@ -79,12 +79,12 @@
 		background: rgba(15, 23, 42, 0.52);
 		backdrop-filter: blur(7px);
 		opacity: 0;
-		transition: opacity var(--transition-normal);
 	}
 
 	.app-sidebar-backdrop-open {
 		pointer-events: auto;
 		opacity: 1;
+		transition: opacity var(--transition-normal);
 	}
 
 	.app-sidebar ~ .subject-select-workspace,
@@ -165,11 +165,11 @@
 		border-radius: 0 0 22px 22px;
 		padding: 10px 16px 36px;
 		transform: translateY(calc(-100% - 24px));
-		transition: transform var(--transition-normal);
 	}
 
 	.app-sidebar-open {
 		transform: translateY(0);
+		transition: transform var(--transition-normal);
 	}
 
 	.app-sidebar-backdrop {
@@ -183,12 +183,12 @@
 		background: rgba(15, 23, 42, 0.42);
 		backdrop-filter: blur(6px);
 		opacity: 0;
-		transition: opacity var(--transition-normal);
 	}
 
 	.app-sidebar-backdrop-open {
 		pointer-events: auto;
 		opacity: 1;
+		transition: opacity var(--transition-normal);
 	}
 
 	.app-sidebar ~ .subject-select-workspace,
