@@ -23,6 +23,7 @@ export default function useAppNavigationViewModel(language, getExamByIdUseCase, 
 		setIsMenuOpen(false);
 	}, []);
 
+
 	const openSettings = useCallback(() => {
 		setSettingsOpen(true);
 		setIsMenuOpen(false);

@@ -4,8 +4,11 @@ import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
+import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 
 export default function AppSidebar({ activeScreen, onChangeScreen, SCREENS, onOpenSettings, isMenuOpen, onCloseMenu, subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+	useMobileMenuEscapeKey(isMenuOpen, onCloseMenu);
+
 	const sidebarClassName = isMenuOpen
 		? "app-sidebar app-sidebar-open"
 		: "app-sidebar";
