@@ -119,3 +119,29 @@
 		height: 20px;
 	}
 }
+
+/* Mobile landscape equal-width navigation corrective override */
+@media (max-width: 932px) and (orientation: landscape) {
+	.sidebar-navigation {
+		flex: 1 1 0;
+		align-items: stretch;
+		gap: 8px;
+	}
+
+	.sidebar-navigation-item {
+		width: 100%;
+		min-height: 36px;
+		flex: 1 1 100%;
+		gap: 8px;
+		padding: 5px 10px;
+		border-radius: 12px;
+		font-size: clamp(12px, 1.35vw, 13px);
+		line-height: 1;
+		letter-spacing: -0.02em;
+	}
+
+	.sidebar-navigation-icon {
+		width: 18px;
+		height: 18px;
+	}
+}

@@ -86,3 +86,24 @@
 		height: 20px;
 	}
 }
+
+/* Mobile landscape equal-width settings corrective override */
+@media (max-width: 932px) and (orientation: landscape) {
+	.sidebar-settings-button {
+		flex: 1 1 0;
+		align-self: stretch;
+		min-height: 36px;
+		min-width: 0;
+		gap: 8px;
+		padding: 5px 10px;
+		border-radius: 12px;
+		font-size: clamp(12px, 1.35vw, 13px);
+		line-height: 1;
+		letter-spacing: -0.02em;
+	}
+
+	.sidebar-settings-button-icon {
+		width: 18px;
+		height: 18px;
+	}
+}

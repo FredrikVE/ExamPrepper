@@ -209,3 +209,58 @@
 		display: none;
 	}
 }
+
+/* Mobile landscape compact topsheet corrective override */
+@media (max-width: 932px) and (orientation: landscape) {
+	.app-sidebar {
+		align-items: center;
+		gap: 8px;
+		max-height: calc(100svh - var(--mobile-top-header-height) - 6px);
+		padding: 8px 12px 24px;
+		border-radius: 0 0 18px 18px;
+		transform: translateY(calc(-100% - 12px));
+		transition: none;
+	}
+
+	.app-sidebar-open {
+		transform: translateY(0);
+		transition: none;
+	}
+
+	.app-sidebar-backdrop,
+	.app-sidebar-backdrop-open {
+		transition: none;
+	}
+
+	.app-sidebar-divider {
+		display: none;
+	}
+
+	.app-sidebar ~ .subject-select-workspace,
+	.app-sidebar ~ .exam-select-workspace,
+	.app-sidebar ~ .exam-workspace,
+	.app-sidebar ~ .statistics-page-workspace {
+		transition: none;
+		will-change: auto;
+	}
+}
+
+@media (max-width: 767px) {
+	.app-sidebar,
+	.app-sidebar-open {
+		transition: none;
+	}
+
+	.app-sidebar-backdrop,
+	.app-sidebar-backdrop-open {
+		transition: none;
+	}
+
+	.app-sidebar ~ .subject-select-workspace,
+	.app-sidebar ~ .exam-select-workspace,
+	.app-sidebar ~ .exam-workspace,
+	.app-sidebar ~ .statistics-page-workspace {
+		transition: none;
+		will-change: auto;
+	}
+}

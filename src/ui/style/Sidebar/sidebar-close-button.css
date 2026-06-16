@@ -60,3 +60,17 @@
 		height: 22px;
 	}
 }
+
+/* Mobile landscape compact close corrective override */
+@media (max-width: 932px) and (orientation: landscape) {
+	.sidebar-close-button {
+		bottom: 3px;
+		width: 44px;
+		height: 20px;
+	}
+
+	.sidebar-close-button-icon {
+		width: 18px;
+		height: 18px;
+	}
+}
