@@ -20,8 +20,7 @@
 		border-radius: var(--radius-full);
 		color: var(--accent);
 		background: color-mix(in srgb, var(--accent) 12%, transparent);
-		transition:
-			transform var(--transition-normal),
+		transition: transform var(--transition-normal),
 			background var(--transition-normal);
 	}
 
@@ -35,20 +34,19 @@
 	.sidebar-close-button {
 		position: absolute;
 		right: auto;
-		bottom: 7px;
+		bottom: 5px;
 		left: 50%;
 		display: grid;
 		place-items: center;
-		width: 64px;
-		height: 28px;
+		width: 52px;
+		height: 24px;
 		margin: 0;
 		border: 0;
 		border-radius: var(--radius-full);
 		color: var(--accent);
 		background: color-mix(in srgb, var(--accent) 12%, transparent);
 		transform: translateX(-50%);
-		transition:
-			transform var(--transition-normal),
+		transition: transform var(--transition-normal),
 			background var(--transition-normal);
 	}
 
@@ -58,7 +56,7 @@
 	}
 
 	.sidebar-close-button-icon {
-		width: 27px;
-		height: 27px;
+		width: 22px;
+		height: 22px;
 	}
 }

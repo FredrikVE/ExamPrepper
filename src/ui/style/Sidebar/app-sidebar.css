@@ -106,8 +106,11 @@
 }
 
 .dark .app-sidebar-backdrop {
-	background:
-		radial-gradient(circle at 50% 8%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 36%),
+	background: radial-gradient(
+			circle at 50% 8%,
+			color-mix(in srgb, var(--accent) 26%, transparent),
+			transparent 36%
+		),
 		rgba(1, 3, 12, 0.68);
 }
 
@@ -150,20 +153,21 @@
 		z-index: 90;
 		display: flex;
 		flex-direction: row;
-		align-items: center;
-		gap: 10px;
+		align-items: stretch;
+		flex-wrap: wrap;
+		gap: 8px;
 		width: auto;
 		height: auto;
 		max-height: calc(100svh - var(--mobile-top-header-height) - 8px);
 		min-height: 0;
-		overflow-y: visible;
+		overflow-y: auto;
 		overflow-x: hidden;
 		overscroll-behavior: contain;
 		border-top: 0;
 		border-right: 0;
 		border-left: 0;
 		border-radius: 0 0 22px 22px;
-		padding: 10px 16px 36px;
+		padding: 8px 12px 32px;
 		transform: translateY(calc(-100% - 24px));
 	}
 
@@ -195,10 +199,8 @@
 	.app-sidebar ~ .exam-select-workspace,
 	.app-sidebar ~ .exam-workspace,
 	.app-sidebar ~ .statistics-page-workspace {
-		transition:
-			transform var(--transition-normal),
-			filter var(--transition-normal),
-			opacity var(--transition-normal);
+		transition: transform var(--transition-normal),
+			filter var(--transition-normal), opacity var(--transition-normal);
 		will-change: transform, filter, opacity;
 	}
 

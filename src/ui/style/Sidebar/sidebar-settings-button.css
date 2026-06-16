@@ -1,46 +1,43 @@
 /* src/ui/style/Sidebar/sidebar-settings-button.css */
 .sidebar-settings-button {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    min-height: 78px;
-    gap: 18px;
-    padding: 0 22px;
-    border: 1px solid transparent;
-    border-radius: 15px;
-    color: var(--text-muted);
-    background: transparent;
-    font-size: 19px;
-    text-align: left;
-    transition:
-        transform var(--transition-normal),
-        border-color var(--transition-normal),
-        background var(--transition-normal),
-        color var(--transition-normal);
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: 78px;
+	gap: 18px;
+	padding: 0 22px;
+	border: 1px solid transparent;
+	border-radius: 15px;
+	color: var(--text-muted);
+	background: transparent;
+	font-size: 19px;
+	text-align: left;
+	transition: transform var(--transition-normal),
+		border-color var(--transition-normal),
+		background var(--transition-normal), color var(--transition-normal);
 }
 
 .sidebar-settings-button:hover,
 .sidebar-settings-button-active {
-    color: var(--text-main);
-    border-color: color-mix(in srgb, var(--accent) 28%, transparent);
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--accent) 14%, transparent),
-            color-mix(in srgb, var(--accent) 8%, transparent)
-        );
+	color: var(--text-main);
+	border-color: color-mix(in srgb, var(--accent) 28%, transparent);
+	background: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--accent) 14%, transparent),
+		color-mix(in srgb, var(--accent) 8%, transparent)
+	);
 }
 
 .sidebar-settings-button:hover {
-    transform: translateX(2px);
+	transform: translateX(2px);
 }
 
 .sidebar-settings-button-icon {
-    width: 30px;
-    height: 30px;
-    color: var(--accent);
+	width: 30px;
+	height: 30px;
+	color: var(--accent);
 }
 @media (max-width: 767px) {
 	.sidebar-settings-button {
@@ -64,15 +61,16 @@
 
 @media (max-width: 932px) and (orientation: landscape) {
 	.sidebar-settings-button {
-		flex: 1 1 0;
-		min-height: 56px;
+		flex: 0 1 150px;
+		min-height: 42px;
 		min-width: 0;
-		gap: 9px;
-		padding: 8px 10px;
+		width: auto;
+		gap: 6px;
+		padding: 6px 8px;
 		border-color: color-mix(in srgb, var(--line-strong) 76%, transparent);
-		border-radius: 15px;
+		border-radius: 12px;
 		background: color-mix(in srgb, var(--panel-bg) 58%, transparent);
-		font-size: clamp(13px, 1.6vw, 15px);
+		font-size: clamp(12px, 1.55vw, 14px);
 		font-weight: 760;
 		line-height: 1.08;
 		letter-spacing: -0.03em;
@@ -84,7 +82,7 @@
 
 	.sidebar-settings-button-icon {
 		flex: 0 0 auto;
-		width: 23px;
-		height: 23px;
+		width: 20px;
+		height: 20px;
 	}
 }
