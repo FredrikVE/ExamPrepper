@@ -3,7 +3,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
-const MOBILE_SETTINGS_QUERY = "(max-width: 767px)";
+// Speiler navigasjonens breakpoint (mobil/topbar ≤ 932px, desktop ≥ 933px),
+// slik at Settings alltid er sheet når nav er topbar og sidebar når nav er sidebar.
+const MOBILE_SETTINGS_QUERY = "(max-width: 932px)";
 
 function getInitialSettingsPresentationMode() {
 	if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
