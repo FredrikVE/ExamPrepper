@@ -74,6 +74,7 @@ const SidebarNavigationItem = ({ Icon, label, active, onClick }) => {
             type="button"
             className={getNavigationItemClassName(active)}
             onClick={onClick}
+            aria-current={active ? "page" : undefined}
         >
             <SidebarNavigationIcon Icon={Icon} />
             <span>{label}</span>

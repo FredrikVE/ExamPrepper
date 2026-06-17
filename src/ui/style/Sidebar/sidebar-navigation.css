@@ -38,7 +38,10 @@
 	);
 }
 
-.sidebar-navigation-item-active {
+.sidebar-navigation-item-active,
+.sidebar-navigation-item-active:hover,
+.sidebar-navigation-item-active:active {
+	transform: none;
 	color: var(--text-main);
 	border-color: color-mix(in srgb, var(--accent) 32%, transparent);
 	background: linear-gradient(
@@ -46,10 +49,6 @@
 		color-mix(in srgb, var(--accent) 16%, transparent),
 		color-mix(in srgb, var(--accent) 9%, transparent)
 	);
-}
-
-.sidebar-navigation-item-active:hover {
-	transform: none;
 }
 
 .sidebar-navigation-icon {
@@ -76,7 +75,9 @@
 		transform: none;
 	}
 
-	.sidebar-navigation-item-active {
+	.sidebar-navigation-item-active,
+	.sidebar-navigation-item-active:hover,
+	.sidebar-navigation-item-active:active {
 		border-color: color-mix(in srgb, var(--accent) 24%, transparent);
 		background: color-mix(in srgb, var(--accent) 11%, transparent);
 	}
