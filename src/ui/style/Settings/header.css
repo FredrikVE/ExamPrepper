@@ -35,3 +35,36 @@
     width: 20px;
     height: 20px;
 }
+
+.settings-panel-header-with-back {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    gap: 10px;
+}
+
+.settings-panel-header-with-back .settings-panel-title {
+    justify-self: center;
+    text-align: center;
+}
+
+.settings-panel-back {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--accent);
+}
+
+.settings-panel-back:hover {
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
+}
+
+.settings-panel-back-icon {
+    width: 20px;
+    height: 20px;
+}

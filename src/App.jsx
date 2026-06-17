@@ -106,6 +106,7 @@ function AppContent() {
 					mode={navigationViewModel.settingsPresentationMode}
 					isOpen={navigationViewModel.settingsOpen}
 					onClose={navigationViewModel.closeSettings}
+					onBackToMenu={navigationViewModel.backFromSettingsToMenu}
 				/>
 			</div>
 		</div>

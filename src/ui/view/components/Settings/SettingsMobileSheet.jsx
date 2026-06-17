@@ -5,7 +5,7 @@ import SettingsPanelHeader from "./SettingsPanelHeader.jsx";
 import SettingsPanelSheetCloseButton from "./SettingsPanelSheetCloseButton.jsx";
 import useSettingsDialog from "./useSettingsDialog.js";
 
-export default function SettingsMobileSheet({ isOpen, onClose }) {
+export default function SettingsMobileSheet({ isOpen, onClose, onBackToMenu }) {
     const { t } = useLanguage();
     const { dialogRef, handleClose, handleBackdropClick } = useSettingsDialog(isOpen, onClose);
 
@@ -20,6 +20,8 @@ export default function SettingsMobileSheet({ isOpen, onClose }) {
             <SettingsPanelHeader
                 title={t.settingsTitle}
                 closeLabel={t.settingsClose}
+                backLabel={t.settingsBackToMenu}
+                onBack={onBackToMenu}
                 onClose={handleClose}
             />
 

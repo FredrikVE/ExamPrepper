@@ -46,6 +46,14 @@ export default function useAppNavigationViewModel(params) {
 		setIsMenuOpen(false);
 	}, []);
 
+	const backFromSettingsToMenu = useCallback(() => {
+		setSettingsOpen(false);
+
+		if (settingsPresentationMode === "sheet") {
+			setIsMenuOpen(true);
+		}
+	}, [settingsPresentationMode]);
+
 	// Settings skal ikke overleve et layout-mode-bytte. Når breakpointet krysses
 	// settes presentasjonsmodus og settingsOpen i samme handler, slik at React
 	// batcher dem til én commit: den nye varianten mountes lukket og rekker aldri
@@ -254,6 +262,7 @@ export default function useAppNavigationViewModel(params) {
 		toggleMenu,
 		closeMenu,
 		openSettings,
+		backFromSettingsToMenu,
 		changeScreen,
 		selectSubject,
 		showAllSubjects,

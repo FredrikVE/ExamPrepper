@@ -2,12 +2,13 @@
 import SettingsMobileSheet from "./SettingsMobileSheet.jsx";
 import SettingsSidebarPanel from "./SettingsSidebarPanel.jsx";
 
-export default function SettingsPresentation({ mode, isOpen, onClose }) {
+export default function SettingsPresentation({ mode, isOpen, onClose, onBackToMenu }) {
     if (mode === "sheet") {
         return (
             <SettingsMobileSheet
                 isOpen={isOpen}
                 onClose={onClose}
+                onBackToMenu={onBackToMenu}
             />
         );
     }
