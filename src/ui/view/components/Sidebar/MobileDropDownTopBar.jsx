@@ -44,9 +44,13 @@ export default function MobileDropDownTopBar(props) {
 
 	const shouldShowHeaderBrand = props.isMenuOpen && props.showSubjectSwitcher;
 
-	const topbarClassName = shouldShowHeaderBrand
-		? "mobile-topbar mobile-topbar-open"
-		: "mobile-topbar";
+	const topbarClassNames = [
+		"mobile-topbar",
+		shouldShowHeaderBrand ? "mobile-topbar-open" : null,
+		props.isMenuOpen ? "mobile-topbar-menu-open" : null
+	].filter(Boolean);
+
+	const topbarClassName = topbarClassNames.join(" ");
 
 	const dropdownClassNames = [
 		"mobile-dropdown",

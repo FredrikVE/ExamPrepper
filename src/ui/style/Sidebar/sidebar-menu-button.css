@@ -70,6 +70,14 @@
 		);
 	}
 
+	.mobile-topbar.mobile-topbar-menu-open {
+		border-bottom-color: transparent;
+	}
+
+	.mobile-topbar.mobile-topbar-menu-open::after {
+		display: none;
+	}
+
 	.mobile-topbar-subject-switcher {
 		position: relative;
 		z-index: 2;
