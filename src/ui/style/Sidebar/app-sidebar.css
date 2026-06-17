@@ -33,8 +33,16 @@
 	border-top: 0;
 	border-inline: 0;
 	border-radius: 0 0 24px 24px;
-	background: var(--shell-bg);
-	box-shadow: var(--shadow-heavy);
+	background:
+		radial-gradient(
+			circle at 12% calc(-1 * var(--mobile-topbar-height)),
+			color-mix(in srgb, var(--accent) 18%, transparent),
+			transparent 36%
+		),
+		color-mix(in srgb, var(--panel-strong) 96%, transparent);
+	box-shadow:
+		0 30px 82px color-mix(in srgb, #000 30%, transparent),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
 	backdrop-filter: var(--blur-panel);
 	padding: 18px 18px 12px;
 	transform: translateY(calc(-100% - 24px));
