@@ -25,6 +25,9 @@ export default function AppNavigation(props) {
 				isMenuOpen={props.isMenuOpen}
 				onToggleMenu={props.onToggleMenu}
 				onCloseMenu={props.onCloseMenu}
+				isSubjectPickerOpen={props.isSubjectPickerOpen}
+				onToggleSubjectPicker={props.onToggleSubjectPicker}
+				onCloseSubjectPicker={props.onCloseSubjectPicker}
 				showSubjectSwitcher={props.showSubjectSwitcher}
 				subjects={props.subjects}
 				selectedSubject={props.selectedSubject}

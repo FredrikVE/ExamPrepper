@@ -71,6 +71,9 @@ function AppContent() {
 					isMenuOpen={navigationViewModel.isMenuOpen}
 					onToggleMenu={navigationViewModel.toggleMenu}
 					onCloseMenu={navigationViewModel.closeMenu}
+					isSubjectPickerOpen={navigationViewModel.isSubjectPickerOpen}
+					onToggleSubjectPicker={navigationViewModel.toggleSubjectPicker}
+					onCloseSubjectPicker={navigationViewModel.closeSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}

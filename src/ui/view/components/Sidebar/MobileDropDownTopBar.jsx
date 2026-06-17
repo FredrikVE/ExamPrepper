@@ -1,7 +1,7 @@
 // src/ui/view/components/Sidebar/MobileDropDownTopBar.jsx
 import { Menu } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-import SidebarBrand from "./SidebarBrand.jsx";
+import MobileSubjectPicker from "./MobileSubjectPicker.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
@@ -11,6 +11,18 @@ import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 function MobileDropdownContent(props) {
 	return (
 		<>
+			{props.showSubjectSwitcher && (
+				<MobileSubjectPicker
+					subjects={props.subjects}
+					selectedSubject={props.selectedSubject}
+					isOpen={props.isSubjectPickerOpen}
+					onToggle={props.onToggleSubjectPicker}
+					onClose={props.onCloseSubjectPicker}
+					onSelectSubject={props.onSelectSubject}
+					onShowAllSubjects={props.onShowAllSubjects}
+				/>
+			)}
+
 			<SidebarNavigation
 				section="primary"
 				activeScreen={props.activeScreen}
@@ -40,25 +52,20 @@ function MobileDropdownContent(props) {
 export default function MobileDropDownTopBar(props) {
 	const { t } = useLanguage();
 
-	useMobileMenuEscapeKey(props.isMenuOpen, props.onCloseMenu);
+	useMobileMenuEscapeKey(
+		props.isMenuOpen,
+		props.onCloseMenu,
+		props.isSubjectPickerOpen,
+		props.onCloseSubjectPicker
+	);
 
-	const shouldShowHeaderBrand = props.isMenuOpen && props.showSubjectSwitcher;
+	const topbarClassName = props.isMenuOpen
+		? "mobile-topbar mobile-topbar-menu-open"
+		: "mobile-topbar";
 
-	const topbarClassNames = [
-		"mobile-topbar",
-		shouldShowHeaderBrand ? "mobile-topbar-open" : null,
-		props.isMenuOpen ? "mobile-topbar-menu-open" : null
-	].filter(Boolean);
-
-	const topbarClassName = topbarClassNames.join(" ");
-
-	const dropdownClassNames = [
-		"mobile-dropdown",
-		props.isMenuOpen ? "mobile-dropdown-open" : null,
-		props.showSubjectSwitcher ? "mobile-dropdown-with-brand" : null
-	].filter(Boolean);
-
-	const dropdownClassName = dropdownClassNames.join(" ");
+	const dropdownClassName = props.isMenuOpen
+		? "mobile-dropdown mobile-dropdown-open"
+		: "mobile-dropdown";
 
 	const backdropClassName = props.isMenuOpen
 		? "mobile-dropdown-backdrop mobile-dropdown-backdrop-visible"
@@ -81,17 +88,6 @@ export default function MobileDropDownTopBar(props) {
 				>
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
-
-				{shouldShowHeaderBrand && (
-					<div className="mobile-topbar-subject-switcher">
-						<SidebarBrand
-							subjects={props.subjects}
-							selectedSubject={props.selectedSubject}
-							onSelectSubject={props.onSelectSubject}
-							onShowAllSubjects={props.onShowAllSubjects}
-						/>
-					</div>
-				)}
 			</header>
 
 			<button
@@ -115,6 +111,14 @@ export default function MobileDropDownTopBar(props) {
 					settingsOpen={props.settingsOpen}
 					onOpenSettings={props.onOpenSettings}
 					onCloseMenu={props.onCloseMenu}
+					showSubjectSwitcher={props.showSubjectSwitcher}
+					subjects={props.subjects}
+					selectedSubject={props.selectedSubject}
+					isSubjectPickerOpen={props.isSubjectPickerOpen}
+					onToggleSubjectPicker={props.onToggleSubjectPicker}
+					onCloseSubjectPicker={props.onCloseSubjectPicker}
+					onSelectSubject={props.onSelectSubject}
+					onShowAllSubjects={props.onShowAllSubjects}
 				/>
 			</aside>
 		</>

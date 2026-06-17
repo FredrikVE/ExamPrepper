@@ -24,6 +24,7 @@ export default function useAppNavigationViewModel(params) {
 	// Layout-state
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isSubjectPickerOpen, setIsSubjectPickerOpen] = useState(false);
 	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getInitialSettingsPresentationMode);
 
 	const prevLanguageRef = useRef(params.language);
@@ -34,6 +35,15 @@ export default function useAppNavigationViewModel(params) {
 
 	const closeMenu = useCallback(() => {
 		setIsMenuOpen(false);
+		setIsSubjectPickerOpen(false);
+	}, []);
+
+	const toggleSubjectPicker = useCallback(() => {
+		setIsSubjectPickerOpen((wasOpen) => !wasOpen);
+	}, []);
+
+	const closeSubjectPicker = useCallback(() => {
+		setIsSubjectPickerOpen(false);
 	}, []);
 
 	const closeSettings = useCallback(() => {
@@ -83,6 +93,7 @@ export default function useAppNavigationViewModel(params) {
 		setActiveScreen(NAV_SCREENS.SELECT);
 		setSettingsOpen(false);
 		setIsMenuOpen(false);
+		setIsSubjectPickerOpen(false);
 	}, []);
 
 	const showAllSubjects = useCallback(() => {
@@ -255,6 +266,7 @@ export default function useAppNavigationViewModel(params) {
 		// Layout
 		settingsOpen,
 		isMenuOpen,
+		isSubjectPickerOpen,
 		settingsPresentationMode,
 
 		// Handlers
@@ -263,6 +275,8 @@ export default function useAppNavigationViewModel(params) {
 		closeMenu,
 		openSettings,
 		backFromSettingsToMenu,
+		toggleSubjectPicker,
+		closeSubjectPicker,
 		changeScreen,
 		selectSubject,
 		showAllSubjects,

@@ -81,39 +81,6 @@
 		display: none;
 	}
 
-	.mobile-topbar-subject-switcher {
-		position: relative;
-		z-index: 2;
-		grid-column: 2;
-		min-width: 0;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-wrapper {
-		width: 100%;
-		height: 100%;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand {
-		height: 64px;
-		min-height: 64px;
-		padding: 8px 12px;
-		border-radius: 18px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-icon {
-		width: 44px;
-		height: 44px;
-		border-radius: 14px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-title {
-		font-size: 18px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-subtitle {
-		font-size: 13px;
-	}
-
 	.mobile-topbar-menu-button {
 		position: relative;
 		z-index: 1;
@@ -121,11 +88,6 @@
 		width: 64px;
 		height: 64px;
 		border-radius: 18px;
-	}
-
-	.mobile-dropdown-with-brand .sidebar-brand-wrapper,
-	.mobile-dropdown-with-brand .desktop-sidebar-divider {
-		display: none;
 	}
 }
 
@@ -145,34 +107,6 @@
 		height: 16px;
 	}
 
-	.mobile-topbar-subject-switcher .sidebar-brand {
-		height: 48px;
-		min-height: 48px;
-		gap: 8px;
-		padding: 6px 10px;
-		border-radius: 14px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-icon {
-		width: 34px;
-		height: 34px;
-		border-radius: 10px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-icon .subject-icon {
-		width: 20px;
-		height: 20px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-title {
-		font-size: 15px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-subtitle {
-		margin-top: 2px;
-		font-size: 11px;
-	}
-
 	.mobile-topbar-menu-button {
 		width: 48px;
 		height: 48px;
@@ -190,34 +124,6 @@
 		grid-template-columns: 56px minmax(0, 1fr);
 		column-gap: 12px;
 		padding-inline: 16px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand {
-		height: 56px;
-		min-height: 56px;
-		gap: 10px;
-		padding: 8px 10px;
-		border-radius: 16px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-icon {
-		width: 38px;
-		height: 38px;
-		border-radius: 12px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-icon .subject-icon {
-		width: 22px;
-		height: 22px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-title {
-		font-size: 17px;
-	}
-
-	.mobile-topbar-subject-switcher .sidebar-brand-subtitle {
-		margin-top: 3px;
-		font-size: 12px;
 	}
 
 	.mobile-topbar-menu-button {
