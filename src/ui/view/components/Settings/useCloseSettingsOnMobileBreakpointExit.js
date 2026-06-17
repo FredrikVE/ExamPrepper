@@ -1,14 +1,11 @@
 // src/ui/view/components/Settings/useCloseSettingsOnMobileBreakpointExit.js
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 const MOBILE_SETTINGS_QUERY = "(max-width: 767px)";
 
 export default function useCloseSettingsOnMobileBreakpointExit(isOpen, onClose) {
-    const wasOpenedInMobileModeRef = useRef(false);
-
     useEffect(() => {
         if (!isOpen) {
-            wasOpenedInMobileModeRef.current = false;
             return undefined;
         }
 
@@ -17,16 +14,9 @@ export default function useCloseSettingsOnMobileBreakpointExit(isOpen, onClose) 
         }
 
         const mediaQuery = window.matchMedia(MOBILE_SETTINGS_QUERY);
-        wasOpenedInMobileModeRef.current = mediaQuery.matches;
 
-        if (!mediaQuery.matches) {
-            return undefined;
-        }
-
-        const handleChange = (event) => {
-            if (!event.matches && wasOpenedInMobileModeRef.current) {
-                onClose();
-            }
+        const handleChange = () => {
+            onClose();
         };
 
         mediaQuery.addEventListener("change", handleChange);
