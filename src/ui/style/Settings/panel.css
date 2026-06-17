@@ -1,33 +1,68 @@
 /* src/ui/style/Settings/panel.css */
-.settings-panel {
+.settings-sidebar,
+.settings-sheet {
     position: fixed;
+    z-index: 130;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    max-height: none;
+    overflow: hidden;
+    border: 1px solid var(--line);
+}
+
+.settings-sidebar {
     top: 22px;
     bottom: 22px;
     left: 22px;
-    z-index: 130;
-    display: flex;
     width: min(82vw, 330px);
     height: auto;
-    max-width: none;
-    max-height: none;
-    margin: 0;
-    padding: 0;
     transform: translateX(calc(-100% - 32px));
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid var(--line);
     border-radius: var(--radius-xl);
     background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
     box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
     transition: transform 200ms ease-in-out;
 }
 
-.dark .settings-panel {
+.dark .settings-sidebar {
     box-shadow: 0 28px 90px rgba(0, 0, 0, 0.52);
 }
 
-.settings-panel[open] {
+.settings-sidebar[open] {
     transform: translateX(0);
+}
+
+.settings-sheet {
+    top: 0;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: min(82vh, 680px);
+    transform: translateY(calc(-100% - 28px));
+    border-top: 0;
+    border-radius: 0 0 28px 28px;
+    background:
+        radial-gradient(
+            circle at 12% 0%,
+            color-mix(in srgb, var(--accent) 18%, transparent),
+            transparent 36%
+        ),
+        color-mix(in srgb, var(--panel-strong) 96%, transparent);
+    box-shadow:
+        0 30px 82px color-mix(in srgb, #000 30%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: var(--blur-panel);
+    transition: transform 200ms ease-in-out;
+}
+
+.settings-sheet[open] {
+    transform: translateY(0);
+}
+
+.settings-sheet .settings-panel-header {
+    padding: calc(env(safe-area-inset-top) + 18px) 20px 18px;
 }
 
 .settings-panel-content {
@@ -36,65 +71,32 @@
     padding: 22px 20px;
 }
 
-.settings-panel-sheet-close {
-    display: none;
+.settings-sheet .settings-panel-content {
+    padding: 22px 20px 8px;
 }
 
-@media (max-width: 767px) {
-    .settings-panel {
-        top: 0;
-        right: 12px;
-        bottom: auto;
-        left: 12px;
-        width: auto;
-        max-height: min(82vh, 680px);
-        transform: translateY(calc(-100% - 28px));
-        border-top: 0;
-        border-radius: 0 0 28px 28px;
-        background:
-            radial-gradient(
-                circle at 12% 0%,
-                color-mix(in srgb, var(--accent) 18%, transparent),
-                transparent 36%
-            ),
-            color-mix(in srgb, var(--panel-strong) 96%, transparent);
-        box-shadow:
-            0 30px 82px color-mix(in srgb, #000 30%, transparent),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        backdrop-filter: var(--blur-panel);
-    }
+.settings-panel-sheet-close {
+    display: grid;
+    place-items: center;
+    align-self: center;
+    width: 58px;
+    height: 34px;
+    margin: 12px auto 14px;
+    border: 0;
+    border-radius: var(--radius-full);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    transition:
+        transform var(--transition-normal),
+        background var(--transition-normal);
+}
 
-    .settings-panel[open] {
-        transform: translateY(0);
-    }
+.settings-panel-sheet-close:hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
 
-    .settings-panel-content {
-        padding: 22px 20px 8px;
-    }
-
-    .settings-panel-sheet-close {
-        display: grid;
-        place-items: center;
-        align-self: center;
-        width: 58px;
-        height: 34px;
-        margin: 12px auto 14px;
-        border: 0;
-        border-radius: var(--radius-full);
-        color: var(--accent);
-        background: color-mix(in srgb, var(--accent) 12%, transparent);
-        transition:
-            transform var(--transition-normal),
-            background var(--transition-normal);
-    }
-
-    .settings-panel-sheet-close:hover {
-        transform: translateY(-2px);
-        background: color-mix(in srgb, var(--accent) 18%, transparent);
-    }
-
-    .settings-panel-sheet-close-icon {
-        width: 30px;
-        height: 30px;
-    }
+.settings-panel-sheet-close-icon {
+    width: 30px;
+    height: 30px;
 }

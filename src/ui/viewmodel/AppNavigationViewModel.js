@@ -3,6 +3,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
+const MOBILE_SETTINGS_QUERY = "(max-width: 767px)";
+
+function getInitialSettingsPresentationMode() {
+	if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+		return "sidebar";
+	}
+
+	return window.matchMedia(MOBILE_SETTINGS_QUERY).matches ? "sheet" : "sidebar";
+}
+
 export default function useAppNavigationViewModel(params) {
 	// Navigasjons-state
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
@@ -12,6 +22,7 @@ export default function useAppNavigationViewModel(params) {
 	// Layout-state
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getInitialSettingsPresentationMode);
 
 	const prevLanguageRef = useRef(params.language);
 
@@ -31,6 +42,29 @@ export default function useAppNavigationViewModel(params) {
 	const openSettings = useCallback(() => {
 		setSettingsOpen(true);
 		setIsMenuOpen(false);
+	}, []);
+
+	// Settings skal ikke overleve et layout-mode-bytte. Når breakpointet krysses
+	// settes presentasjonsmodus og settingsOpen i samme handler, slik at React
+	// batcher dem til én commit: den nye varianten mountes lukket og rekker aldri
+	// å vises i feil geometri.
+	useEffect(() => {
+		if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+			return undefined;
+		}
+
+		const mediaQuery = window.matchMedia(MOBILE_SETTINGS_QUERY);
+
+		const handleChange = (event) => {
+			setSettingsPresentationMode(event.matches ? "sheet" : "sidebar");
+			setSettingsOpen(false);
+		};
+
+		mediaQuery.addEventListener("change", handleChange);
+
+		return () => {
+			mediaQuery.removeEventListener("change", handleChange);
+		};
 	}, []);
 
 	const selectSubject = useCallback((subjectId) => {
@@ -211,6 +245,7 @@ export default function useAppNavigationViewModel(params) {
 		// Layout
 		settingsOpen,
 		isMenuOpen,
+		settingsPresentationMode,
 
 		// Handlers
 		closeSettings,

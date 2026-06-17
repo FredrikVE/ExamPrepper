@@ -17,7 +17,7 @@ import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
-import SettingsMenu from "./ui/view/components/Settings/SettingsMenu.jsx";
+import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getMyStatisticsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
@@ -102,7 +102,8 @@ function AppContent() {
 					/>
 				)}
 
-				<SettingsMenu
+				<SettingsPresentation
+					mode={navigationViewModel.settingsPresentationMode}
 					isOpen={navigationViewModel.settingsOpen}
 					onClose={navigationViewModel.closeSettings}
 				/>
