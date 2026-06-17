@@ -18,6 +18,7 @@ import ExamPage from "./ui/view/pages/ExamPage.jsx";
 
 import AppSidebar from "./ui/view/components/Sidebar/AppSidebar.jsx";
 import SidebarMenuButton from "./ui/view/components/Sidebar/SidebarMenuButton.jsx";
+import useMobileNavigationAnimation from "./ui/view/components/Sidebar/useMobileNavigationAnimation.js";
 import SettingsMenu from "./ui/view/components/Settings/SettingsMenu.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
@@ -44,6 +45,12 @@ function AppContent() {
 
 	const navigationViewModel = useAppNavigationViewModel({ language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase });
 
+	const mobileNavAnimation = useMobileNavigationAnimation({
+		isMenuOpen: navigationViewModel.isMenuOpen,
+		onToggleMenu: navigationViewModel.toggleMenu,
+		onCloseMenu: navigationViewModel.closeMenu,
+	});
+
 	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
 		getAvailableSubjectsUseCase,
 		language,
@@ -66,7 +73,7 @@ function AppContent() {
 			<div className={navigationViewModel.shellClassName}>
 				<SidebarMenuButton
 					isMenuOpen={navigationViewModel.isMenuOpen}
-					onToggleMenu={navigationViewModel.toggleMenu}
+					onToggleMenu={mobileNavAnimation.handleToggleMenu}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
@@ -80,7 +87,8 @@ function AppContent() {
 					settingsOpen={navigationViewModel.settingsOpen}
 					onOpenSettings={navigationViewModel.openSettings}
 					isMenuOpen={navigationViewModel.isMenuOpen}
-					onCloseMenu={navigationViewModel.closeMenu}
+					onCloseMenu={mobileNavAnimation.handleCloseMenu}
+					allowAnimation={mobileNavAnimation.allowAnimation}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}

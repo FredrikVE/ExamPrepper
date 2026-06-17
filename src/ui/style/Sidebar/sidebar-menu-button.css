@@ -129,19 +129,6 @@
 		border-radius: 18px;
 	}
 
-	.mobile-topsheet-open ~ .subject-select-workspace,
-	.mobile-topsheet-open ~ .exam-select-workspace,
-	.mobile-topsheet-open ~ .exam-workspace,
-	.mobile-topsheet-open ~ .statistics-page-workspace {
-		transform: translateY(var(--mobile-menu-offset));
-		transition: transform var(--transition-normal);
-	}
-
-	.mobile-topsheet-with-brand.mobile-topsheet-open ~ .exam-select-workspace,
-	.mobile-topsheet-with-brand.mobile-topsheet-open ~ .exam-workspace {
-		transform: translateY(var(--mobile-menu-offset-with-brand));
-	}
-
 	.mobile-topsheet-with-brand .sidebar-brand-wrapper,
 	.mobile-topsheet-with-brand .sidebar-brand-navigation-divider {
 		display: none;
@@ -311,7 +298,6 @@
 	.mobile-topsheet-open ~ .statistics-page-workspace {
 		filter: blur(6px);
 		opacity: 0.48;
-		transition: filter var(--transition-normal), opacity var(--transition-normal);
 	}
 
 	.mobile-topsheet-with-brand .sidebar-brand-wrapper,

@@ -6,7 +6,6 @@ import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
-import useCloseMobileMenuOnDesktopBreakpoint from "./useCloseMobileMenuOnDesktopBreakpoint.js";
 
 function SidebarContent(props) {
 	return (
@@ -51,11 +50,11 @@ export default function AppSidebar(props) {
 	const { t } = useLanguage();
 
 	useMobileMenuEscapeKey(props.isMenuOpen, props.onCloseMenu);
-	useCloseMobileMenuOnDesktopBreakpoint(props.isMenuOpen, props.onCloseMenu);
 
 	const mobileTopsheetClassNames = [
 		"mobile-topsheet",
 		props.isMenuOpen ? "mobile-topsheet-open" : null,
+		props.allowAnimation ? "mobile-topsheet-animate" : null,
 		props.showSubjectSwitcher ? "mobile-topsheet-with-brand" : null
 	].filter(Boolean);
 
