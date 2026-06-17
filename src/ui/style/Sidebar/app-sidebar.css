@@ -22,10 +22,10 @@
 
 .mobile-dropdown {
 	position: fixed;
-	inset: var(--mobile-topbar-height) 0 auto;
+	inset: 0 0 auto;
 	z-index: 90;
 	flex-direction: column;
-	max-height: calc(100svh - var(--mobile-topbar-height) - 12px);
+	max-height: calc(100svh - 12px);
 	overflow-y: auto;
 	overflow-x: hidden;
 	overscroll-behavior: contain;
@@ -35,7 +35,7 @@
 	border-radius: 0 0 24px 24px;
 	background:
 		radial-gradient(
-			circle at 12% calc(-1 * var(--mobile-topbar-height)),
+			circle at 12% 0%,
 			color-mix(in srgb, var(--accent) 18%, transparent),
 			transparent 36%
 		),
@@ -44,7 +44,7 @@
 		0 30px 82px color-mix(in srgb, #000 30%, transparent),
 		inset 0 1px 0 rgba(255, 255, 255, 0.05);
 	backdrop-filter: var(--blur-panel);
-	padding: 18px 18px 12px;
+	padding: calc(var(--mobile-topbar-height) + 18px) 18px 12px;
 	transform: translateY(calc(-100% - 24px));
 	opacity: 0;
 	visibility: hidden;

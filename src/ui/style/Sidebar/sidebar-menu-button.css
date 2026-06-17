@@ -72,17 +72,9 @@
 
 	.mobile-topbar.mobile-topbar-menu-open {
 		border-bottom-color: transparent;
-		background: radial-gradient(
-				circle at 18% 0%,
-				color-mix(in srgb, var(--accent) 24%, transparent),
-				transparent 42%
-			),
-			linear-gradient(
-				180deg,
-				color-mix(in srgb, var(--panel-strong) 96%, transparent) 0%,
-				var(--shell-bg) 100%
-			);
+		background: transparent;
 		box-shadow: none;
+		backdrop-filter: none;
 	}
 
 	.mobile-topbar.mobile-topbar-menu-open::after {
