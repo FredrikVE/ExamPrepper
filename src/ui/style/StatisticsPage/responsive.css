@@ -37,12 +37,12 @@
 	}
 }
 
-@media (max-width: 767px) {
+@media (max-width: 932px) {
 	.statistics-page-workspace {
 		min-height: 100vh;
 		border-inline: 0;
 		border-radius: 0;
-		padding: calc(var(--mobile-top-header-height) + 24px) var(--space-6) var(--space-10);
+		padding: calc(var(--mobile-topbar-height) + 24px) var(--space-6) var(--space-10);
 	}
 }
 

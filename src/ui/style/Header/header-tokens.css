@@ -2,8 +2,8 @@
 
 :root {
     --header-padding-desktop: var(--space-9) var(--space-10) var(--space-8);
-    --header-padding-tablet: calc(var(--mobile-top-header-height, var(--space-11)) + var(--space-4)) var(--space-6) var(--space-5);
-    --header-padding-mobile: calc(var(--mobile-top-header-height, var(--space-11)) + var(--space-4)) var(--space-6) var(--space-7);
+    --header-padding-tablet: calc(var(--mobile-topbar-height, var(--space-11)) + var(--space-4)) var(--space-6) var(--space-5);
+    --header-padding-mobile: calc(var(--mobile-topbar-height, var(--space-11)) + var(--space-4)) var(--space-6) var(--space-7);
 
     --header-layout-gap: var(--space-8);
     --header-actions-gap: var(--space-3);

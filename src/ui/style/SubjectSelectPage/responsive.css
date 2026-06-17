@@ -11,12 +11,12 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 932px) {
     .subject-select-workspace {
         min-height: 100vh;
         border-inline: 0;
         border-radius: 0;
-        padding: calc(var(--mobile-top-header-height) + 24px) 20px 44px;
+        padding: calc(var(--mobile-topbar-height) + 24px) 20px 44px;
     }
 
     .subject-select-topbar {
@@ -55,7 +55,7 @@
 /* ── Very short viewport fallback ─────────
    Når viewport-høyden blir ekstremt lav, bytter subject cards
    fra store grid-kort til en kompakt listevisning. */
-@media (max-height: 700px) and (min-width: 981px) {
+@media (max-height: 700px) and (min-width: 933px) {
     .subject-select-workspace {
         padding: clamp(18px, 3vw, 30px);
         overflow-y: auto;
@@ -211,7 +211,7 @@
 }
 
 /* Ekstremt lav høyde: enda mer kompakt liste. */
-@media (max-height: 540px) and (min-width: 981px) {
+@media (max-height: 540px) and (min-width: 933px) {
     .subject-select-topbar {
         margin-bottom: 10px;
     }

@@ -1,13 +1,13 @@
 /* src/ui/style/Sidebar/sidebar-menu-button.css */
 :root {
-	--mobile-top-header-height: 0px;
+	--mobile-topbar-height: 0px;
 }
 
-.mobile-top-header {
+.mobile-topbar {
 	display: none;
 }
 
-.sidebar-menu-button {
+.mobile-topbar-menu-button {
 	display: none;
 	place-items: center;
 	border: 1px solid var(--line-strong);
@@ -17,36 +17,28 @@
 	backdrop-filter: var(--blur-panel);
 }
 
-.sidebar-menu-button-icon {
+.mobile-topbar-menu-icon {
 	width: 26px;
 	height: 26px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 932px) {
 	:root {
-		--mobile-top-header-height: calc(96px + env(safe-area-inset-top));
-		--mobile-open-header-height: var(--mobile-top-header-height);
-		--mobile-menu-offset: clamp(
-			0px,
-			calc(76vh - var(--mobile-top-header-height)),
-			330px
-		);
-		--mobile-menu-offset-with-brand: var(--mobile-menu-offset);
+		--mobile-topbar-height: calc(96px + env(safe-area-inset-top));
 	}
 
-	.mobile-top-header {
+	.mobile-topbar {
 		position: fixed;
-		z-index: 110;
+		z-index: 100;
 		top: 0;
 		right: 0;
 		left: 0;
 		display: grid;
-		min-height: var(--mobile-top-header-height);
+		height: var(--mobile-topbar-height);
 		grid-template-columns: 64px minmax(0, 1fr);
 		align-items: stretch;
 		column-gap: 14px;
-		border-bottom: 1px solid
-			color-mix(in srgb, var(--accent) 20%, var(--line-strong));
+		border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line-strong));
 		background: radial-gradient(
 				circle at 18% 0%,
 				color-mix(in srgb, var(--accent) 24%, transparent),
@@ -63,7 +55,7 @@
 		backdrop-filter: var(--blur-panel);
 	}
 
-	.mobile-top-header::after {
+	.mobile-topbar::after {
 		content: "";
 		position: absolute;
 		right: 0;
@@ -78,49 +70,40 @@
 		);
 	}
 
-	.mobile-top-header-open {
-		min-height: var(--mobile-open-header-height);
-	}
-
-	.mobile-top-header-open ~ .mobile-topsheet {
-		inset: var(--mobile-open-header-height) 0 auto;
-		max-height: calc(100vh - var(--mobile-open-header-height) - 12px);
-	}
-
-	.mobile-top-header-subject-switcher {
+	.mobile-topbar-subject-switcher {
 		position: relative;
 		z-index: 2;
 		grid-column: 2;
 		min-width: 0;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-wrapper {
+	.mobile-topbar-subject-switcher .sidebar-brand-wrapper {
 		width: 100%;
 		height: 100%;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand {
+	.mobile-topbar-subject-switcher .sidebar-brand {
 		height: 64px;
 		min-height: 64px;
 		padding: 8px 12px;
 		border-radius: 18px;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-icon {
+	.mobile-topbar-subject-switcher .sidebar-brand-icon {
 		width: 44px;
 		height: 44px;
 		border-radius: 14px;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-title {
+	.mobile-topbar-subject-switcher .sidebar-brand-title {
 		font-size: 18px;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-subtitle {
+	.mobile-topbar-subject-switcher .sidebar-brand-subtitle {
 		font-size: 13px;
 	}
 
-	.sidebar-menu-button {
+	.mobile-topbar-menu-button {
 		position: relative;
 		z-index: 1;
 		display: grid;
@@ -129,128 +112,29 @@
 		border-radius: 18px;
 	}
 
-	.mobile-topsheet-with-brand .sidebar-brand-wrapper,
-	.mobile-topsheet-with-brand .sidebar-brand-navigation-divider {
+	.mobile-dropdown-with-brand .sidebar-brand-wrapper,
+	.mobile-dropdown-with-brand .desktop-sidebar-divider {
 		display: none;
 	}
 }
 
-@media (max-width: 430px) {
-	.mobile-top-header {
-		grid-template-columns: 56px minmax(0, 1fr);
-		column-gap: 12px;
-		padding-inline: 16px;
-	}
-
-	.mobile-top-header-subject-switcher .sidebar-brand {
-		height: 56px;
-		min-height: 56px;
-		gap: 10px;
-		padding: 8px 10px;
-		border-radius: 16px;
-	}
-
-	.mobile-top-header-subject-switcher .sidebar-brand-icon {
-		width: 38px;
-		height: 38px;
-		border-radius: 12px;
-	}
-
-	.mobile-top-header-subject-switcher .sidebar-brand-icon .subject-icon {
-		width: 22px;
-		height: 22px;
-	}
-
-	.mobile-top-header-subject-switcher .sidebar-brand-title {
-		font-size: 17px;
-	}
-
-	.mobile-top-header-subject-switcher .sidebar-brand-subtitle {
-		margin-top: 3px;
-		font-size: 12px;
-	}
-
-	.sidebar-menu-button {
-		width: 56px;
-		height: 56px;
-		border-radius: 16px;
-	}
-}
-
-@media (max-width: 932px) and (orientation: landscape) {
+@media (max-width: 932px) and (max-height: 500px) {
 	:root {
-		--mobile-top-header-height: calc(58px + env(safe-area-inset-top));
-		--mobile-open-header-height: var(--mobile-top-header-height);
-		--mobile-menu-offset: 0px;
-		--mobile-menu-offset-with-brand: 0px;
+		--mobile-topbar-height: calc(64px + env(safe-area-inset-top));
 	}
 
-	.mobile-top-header {
-		position: fixed;
-		z-index: 110;
-		top: 0;
-		right: 0;
-		left: 0;
-		display: grid;
-		min-height: var(--mobile-top-header-height);
+	.mobile-topbar {
 		grid-template-columns: 48px minmax(0, 1fr);
-		align-items: stretch;
 		column-gap: 8px;
-		border-bottom: 1px solid
-			color-mix(in srgb, var(--accent) 18%, var(--line-strong));
-		background: radial-gradient(
-				circle at 18% 0%,
-				color-mix(in srgb, var(--accent) 18%, transparent),
-				transparent 38%
-			),
-			linear-gradient(
-				180deg,
-				color-mix(in srgb, var(--panel-strong) 94%, transparent) 0%,
-				color-mix(in srgb, var(--shell-bg) 88%, transparent) 100%
-			);
-		box-shadow: 0 14px 36px color-mix(in srgb, #000 18%, transparent),
-			inset 0 -1px 0 rgba(255, 255, 255, 0.04);
 		padding: calc(env(safe-area-inset-top) + 6px) 12px 6px;
-		backdrop-filter: var(--blur-panel);
 	}
 
-	.mobile-top-header::after {
-		content: "";
-		position: absolute;
-		right: 0;
+	.mobile-topbar::after {
 		bottom: -16px;
-		left: 0;
 		height: 16px;
-		pointer-events: none;
-		background: linear-gradient(
-			180deg,
-			color-mix(in srgb, var(--app-bg) 34%, transparent),
-			transparent
-		);
 	}
 
-	.mobile-top-header-open {
-		min-height: var(--mobile-open-header-height);
-	}
-
-	.mobile-top-header-open ~ .mobile-topsheet {
-		inset: var(--mobile-open-header-height) 0 auto;
-		max-height: calc(100svh - var(--mobile-open-header-height) - 8px);
-	}
-
-	.mobile-top-header-subject-switcher {
-		position: relative;
-		z-index: 2;
-		grid-column: 2;
-		min-width: 0;
-	}
-
-	.mobile-top-header-subject-switcher .sidebar-brand-wrapper {
-		width: 100%;
-		height: 100%;
-	}
-
-	.mobile-top-header-subject-switcher .sidebar-brand {
+	.mobile-topbar-subject-switcher .sidebar-brand {
 		height: 48px;
 		min-height: 48px;
 		gap: 8px;
@@ -258,50 +142,76 @@
 		border-radius: 14px;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-icon {
+	.mobile-topbar-subject-switcher .sidebar-brand-icon {
 		width: 34px;
 		height: 34px;
 		border-radius: 10px;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-icon .subject-icon {
+	.mobile-topbar-subject-switcher .sidebar-brand-icon .subject-icon {
 		width: 20px;
 		height: 20px;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-title {
+	.mobile-topbar-subject-switcher .sidebar-brand-title {
 		font-size: 15px;
 	}
 
-	.mobile-top-header-subject-switcher .sidebar-brand-subtitle {
+	.mobile-topbar-subject-switcher .sidebar-brand-subtitle {
 		margin-top: 2px;
 		font-size: 11px;
 	}
 
-	.sidebar-menu-button {
-		position: relative;
-		z-index: 1;
-		display: grid;
+	.mobile-topbar-menu-button {
 		width: 48px;
 		height: 48px;
 		border-radius: 14px;
 	}
 
-	.sidebar-menu-button-icon {
+	.mobile-topbar-menu-icon {
+		width: 22px;
+		height: 22px;
+	}
+}
+
+@media (max-width: 430px) {
+	.mobile-topbar {
+		grid-template-columns: 56px minmax(0, 1fr);
+		column-gap: 12px;
+		padding-inline: 16px;
+	}
+
+	.mobile-topbar-subject-switcher .sidebar-brand {
+		height: 56px;
+		min-height: 56px;
+		gap: 10px;
+		padding: 8px 10px;
+		border-radius: 16px;
+	}
+
+	.mobile-topbar-subject-switcher .sidebar-brand-icon {
+		width: 38px;
+		height: 38px;
+		border-radius: 12px;
+	}
+
+	.mobile-topbar-subject-switcher .sidebar-brand-icon .subject-icon {
 		width: 22px;
 		height: 22px;
 	}
 
-	.mobile-topsheet-open ~ .subject-select-workspace,
-	.mobile-topsheet-open ~ .exam-select-workspace,
-	.mobile-topsheet-open ~ .exam-workspace,
-	.mobile-topsheet-open ~ .statistics-page-workspace {
-		filter: blur(6px);
-		opacity: 0.48;
+	.mobile-topbar-subject-switcher .sidebar-brand-title {
+		font-size: 17px;
 	}
 
-	.mobile-topsheet-with-brand .sidebar-brand-wrapper,
-	.mobile-topsheet-with-brand .sidebar-brand-navigation-divider {
-		display: none;
+	.mobile-topbar-subject-switcher .sidebar-brand-subtitle {
+		margin-top: 3px;
+		font-size: 12px;
+	}
+
+	.mobile-topbar-menu-button {
+		width: 56px;
+		height: 56px;
+		border-radius: 16px;
 	}
 }

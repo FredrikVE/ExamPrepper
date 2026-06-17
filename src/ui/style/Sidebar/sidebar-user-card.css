@@ -54,7 +54,8 @@
 	height: 22px;
 	color: var(--text-soft);
 }
-@media (max-width: 767px) {
+
+@media (max-width: 932px) {
 	.sidebar-user-card {
 		gap: 12px;
 		margin-top: 16px;
@@ -72,25 +73,5 @@
 
 	.sidebar-user-email {
 		font-size: 13px;
-	}
-}
-
-@media (max-width: 932px) and (orientation: landscape) {
-	.sidebar-user-card {
-		display: none;
-	}
-
-	.sidebar-user-avatar {
-		width: 34px;
-		height: 34px;
-	}
-
-	.sidebar-user-name {
-		font-size: 15px;
-	}
-
-	.sidebar-user-email,
-	.sidebar-user-chevron {
-		display: none;
 	}
 }

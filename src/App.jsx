@@ -16,9 +16,7 @@ import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 
-import AppSidebar from "./ui/view/components/Sidebar/AppSidebar.jsx";
-import SidebarMenuButton from "./ui/view/components/Sidebar/SidebarMenuButton.jsx";
-import useMobileNavigationAnimation from "./ui/view/components/Sidebar/useMobileNavigationAnimation.js";
+import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsMenu from "./ui/view/components/Settings/SettingsMenu.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
@@ -45,12 +43,6 @@ function AppContent() {
 
 	const navigationViewModel = useAppNavigationViewModel({ language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase });
 
-	const mobileNavAnimation = useMobileNavigationAnimation({
-		isMenuOpen: navigationViewModel.isMenuOpen,
-		onToggleMenu: navigationViewModel.toggleMenu,
-		onCloseMenu: navigationViewModel.closeMenu,
-	});
-
 	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
 		getAvailableSubjectsUseCase,
 		language,
@@ -71,24 +63,14 @@ function AppContent() {
 	return (
 		<div className={navigationViewModel.pageClassName}>
 			<div className={navigationViewModel.shellClassName}>
-				<SidebarMenuButton
-					isMenuOpen={navigationViewModel.isMenuOpen}
-					onToggleMenu={mobileNavAnimation.handleToggleMenu}
-					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
-					subjects={subjectSelectPageViewModel.subjects}
-					selectedSubject={subjectSelectPageViewModel.selectedSubject}
-					onSelectSubject={navigationViewModel.selectSubject}
-					onShowAllSubjects={navigationViewModel.showAllSubjects}
-				/>
-
-				<AppSidebar
+				<AppNavigation
 					activeScreen={navigationViewModel.activeScreen}
 					onChangeScreen={navigationViewModel.changeScreen}
 					settingsOpen={navigationViewModel.settingsOpen}
 					onOpenSettings={navigationViewModel.openSettings}
 					isMenuOpen={navigationViewModel.isMenuOpen}
-					onCloseMenu={mobileNavAnimation.handleCloseMenu}
-					allowAnimation={mobileNavAnimation.allowAnimation}
+					onToggleMenu={navigationViewModel.toggleMenu}
+					onCloseMenu={navigationViewModel.closeMenu}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}

@@ -206,7 +206,7 @@
 .sidebar-subject-see-all:hover {
     background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
-@media (max-width: 767px) {
+@media (max-width: 932px) {
 	.sidebar-brand {
 		min-height: 64px;
 		gap: 12px;

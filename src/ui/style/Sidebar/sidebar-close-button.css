@@ -8,7 +8,7 @@
 	height: 30px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 932px) {
 	.sidebar-close-button {
 		display: grid;
 		place-items: center;
@@ -20,57 +20,13 @@
 		border-radius: var(--radius-full);
 		color: var(--accent);
 		background: color-mix(in srgb, var(--accent) 12%, transparent);
-		transition: transform var(--transition-normal),
+		transition:
+			transform var(--transition-normal),
 			background var(--transition-normal);
 	}
 
 	.sidebar-close-button:hover {
 		transform: translateY(-2px);
 		background: color-mix(in srgb, var(--accent) 18%, transparent);
-	}
-}
-
-@media (max-width: 932px) and (orientation: landscape) {
-	.sidebar-close-button {
-		position: absolute;
-		right: auto;
-		bottom: 5px;
-		left: 50%;
-		display: grid;
-		place-items: center;
-		width: 52px;
-		height: 24px;
-		margin: 0;
-		border: 0;
-		border-radius: var(--radius-full);
-		color: var(--accent);
-		background: color-mix(in srgb, var(--accent) 12%, transparent);
-		transform: translateX(-50%);
-		transition: transform var(--transition-normal),
-			background var(--transition-normal);
-	}
-
-	.sidebar-close-button:hover {
-		transform: translateX(-50%) translateY(-1px);
-		background: color-mix(in srgb, var(--accent) 18%, transparent);
-	}
-
-	.sidebar-close-button-icon {
-		width: 22px;
-		height: 22px;
-	}
-}
-
-/* Mobile landscape compact close corrective override */
-@media (max-width: 932px) and (orientation: landscape) {
-	.sidebar-close-button {
-		bottom: 3px;
-		width: 44px;
-		height: 20px;
-	}
-
-	.sidebar-close-button-icon {
-		width: 18px;
-		height: 18px;
 	}
 }
