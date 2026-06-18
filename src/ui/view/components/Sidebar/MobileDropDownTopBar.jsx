@@ -100,16 +100,18 @@ function MobileDropdownContent(props) {
 export default function MobileDropDownTopBar(props) {
 	const { t } = useLanguage();
 
-	useMobileMenuEscapeKey(
-		props.isMenuOpen,
-		props.onCloseMenu,
-		props.isSubjectPickerOpen,
-		props.onCloseSubjectPicker
-	);
-
 	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher;
 	const showExamWorkStatus = props.isExamWorkMode && !props.isMenuOpen && Boolean(props.examWorkStatusLabel);
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
+
+	useMobileMenuEscapeKey({
+		isMenuOpen: props.isMenuOpen,
+		onCloseMenu: props.onCloseMenu,
+		isSubmitConfirmOpen: showExamSubmitConfirm,
+		onCloseSubmitConfirm: props.onCloseExamSubmitConfirm,
+		isSubjectPickerOpen: props.isSubjectPickerOpen,
+		onCloseSubjectPicker: props.onCloseSubjectPicker
+	});
 
 	const topbarClassNames = [
 		"mobile-topbar",

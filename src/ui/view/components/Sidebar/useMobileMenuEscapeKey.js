@@ -1,7 +1,14 @@
 // src/ui/view/components/Sidebar/useMobileMenuEscapeKey.js
 import { useEffect } from "react";
 
-export default function useMobileMenuEscapeKey(isMenuOpen, onCloseMenu, isSubjectPickerOpen, onCloseSubjectPicker) {
+export default function useMobileMenuEscapeKey({
+	isMenuOpen,
+	onCloseMenu,
+	isSubmitConfirmOpen,
+	onCloseSubmitConfirm,
+	isSubjectPickerOpen,
+	onCloseSubjectPicker
+}) {
 	useEffect(() => {
 		if (!isMenuOpen || typeof window === "undefined") {
 			return undefined;
@@ -12,11 +19,17 @@ export default function useMobileMenuEscapeKey(isMenuOpen, onCloseMenu, isSubjec
 				return;
 			}
 
-			if (isSubjectPickerOpen && onCloseSubjectPicker) {
-				onCloseSubjectPicker();
-			} else {
-				onCloseMenu();
+			if (isSubmitConfirmOpen) {
+				onCloseSubmitConfirm?.();
+				return;
 			}
+
+			if (isSubjectPickerOpen) {
+				onCloseSubjectPicker?.();
+				return;
+			}
+
+			onCloseMenu();
 		};
 
 		window.addEventListener("keydown", handleEscape);
@@ -24,5 +37,12 @@ export default function useMobileMenuEscapeKey(isMenuOpen, onCloseMenu, isSubjec
 		return () => {
 			window.removeEventListener("keydown", handleEscape);
 		};
-	}, [isMenuOpen, onCloseMenu, isSubjectPickerOpen, onCloseSubjectPicker]);
+	}, [
+		isMenuOpen,
+		onCloseMenu,
+		isSubmitConfirmOpen,
+		onCloseSubmitConfirm,
+		isSubjectPickerOpen,
+		onCloseSubjectPicker
+	]);
 }
