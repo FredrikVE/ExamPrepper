@@ -15,7 +15,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [faculty, setFaculty] = useState(ALL_FACULTIES);
-	const [isSearchFocused, setIsSearchFocused] = useState(false);
 	const [isSearchSheetOpen, setIsSearchSheetOpen] = useState(false);
 	const [searchSheetMode, setSearchSheetMode] = useState(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 
@@ -98,39 +97,31 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	}, [faculty, t.filterAllLabel]);
 
 	const closeSubjectSearchSheet = useCallback(() => {
-		setIsSearchFocused(false);
 		setIsSearchSheetOpen(false);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);
 
-	const closeSearch = closeSubjectSearchSheet;
-
 	useEffect(() => {
 		if (!isActive) {
-			closeSearch();
+			closeSubjectSearchSheet();
 		}
-	}, [isActive, closeSearch]);
+	}, [isActive, closeSubjectSearchSheet]);
 
 	const openSubjectSearchSuggestions = useCallback(() => {
-		setIsSearchFocused(true);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);
 
 	const openSubjectFacultyOptions = useCallback(() => {
-		setIsSearchFocused(false);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.FILTER_OPTIONS);
 	}, []);
 
 	const changeSubjectSearchTerm = useCallback((nextSearchTerm) => {
 		setSearchTerm(nextSearchTerm);
-		setIsSearchFocused(true);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);
-
-	const changeSearchTerm = changeSubjectSearchTerm;
 
 	const changeFaculty = useCallback((nextFaculty) => {
 		closeSubjectSearchSheet();
@@ -138,15 +129,10 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	}, [closeSubjectSearchSheet]);
 
 	const selectFacultyFilterOption = useCallback((nextFaculty) => {
-		setIsSearchFocused(false);
 		setFaculty(nextFaculty);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);
-
-	const focusSearch = openSubjectSearchSuggestions;
-
-	const blurSearch = closeSubjectSearchSheet;
 
 	const selectSubject = useCallback((subjectId) => {
 		closeSubjectSearchSheet();
@@ -176,7 +162,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		searchTerm,
 		faculty,
 		facultyLabel,
-		isSearchFocused,
 		isSearchSheetOpen,
 		isSearchSuggestionsMode,
 		isFilterOptionsMode,
@@ -184,15 +169,11 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		facultyFilterOptions,
 
 		// Handlers
-		changeSearchTerm,
 		changeSubjectSearchTerm,
 		changeFaculty,
 		selectFacultyFilterOption,
-		focusSearch,
 		openSubjectSearchSuggestions,
 		openSubjectFacultyOptions,
-		blurSearch,
-		closeSearch,
 		closeSubjectSearchSheet,
 		selectSubject
 	};

@@ -4,10 +4,6 @@ import { ChevronDown, Funnel, Search } from "lucide-react";
 
 export default function SubjectSelectControls(props) {
 	const searchInputRef = useRef(null);
-	const changeSearchTerm = props.onSubjectSearchTermChange ?? props.onSearchTermChange;
-	const openSearchSuggestions = props.onOpenSubjectSearchSuggestions ?? props.onSearchFocus;
-	const closeSearchSheet = props.onCloseSubjectSearchSheet ?? props.onCloseSearch;
-
 	return (
 		<div className="subject-select-controls" aria-label={props.t.subjectSelectControlsLabel}>
 			<div className="mobile-search-shell">
@@ -18,12 +14,12 @@ export default function SubjectSelectControls(props) {
 						className="mobile-search-input"
 						type="search"
 						value={props.searchTerm}
-						onChange={(event) => changeSearchTerm(event.target.value)}
-						onFocus={openSearchSuggestions}
+						onChange={(event) => props.onSubjectSearchTermChange(event.target.value)}
+						onFocus={props.onOpenSubjectSearchSuggestions}
 						onKeyDown={(event) => {
 							if (event.key === "Escape") {
 								event.preventDefault();
-								closeSearchSheet();
+								props.onCloseSubjectSearchSheet();
 								event.currentTarget.blur();
 							}
 						}}
@@ -42,11 +38,11 @@ export default function SubjectSelectControls(props) {
 					<select
 						className="mobile-filter-select"
 						value={props.faculty}
-						onPointerDown={closeSearchSheet}
-						onFocus={closeSearchSheet}
+						onPointerDown={props.onCloseSubjectSearchSheet}
+						onFocus={props.onCloseSubjectSearchSheet}
 						onKeyDown={(event) => {
 							if (event.key === "Escape") {
-								closeSearchSheet();
+								props.onCloseSubjectSearchSheet();
 							}
 						}}
 						onChange={(event) => props.onFacultyChange(event.target.value)}

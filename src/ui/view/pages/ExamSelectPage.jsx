@@ -90,11 +90,8 @@ export default function ExamSelectPage({ viewModel }) {
 
                 <ExamSelectControls
                     searchTerm={viewModel.searchTerm}
-                    onSearchTermChange={viewModel.changeSearchTerm}
                     onExamSearchTermChange={viewModel.changeExamSearchTerm}
-                    onSearchFocus={viewModel.focusSearch}
                     onOpenExamSearchSuggestions={viewModel.openExamSearchSuggestions}
-                    onCloseSearch={viewModel.closeSearch}
                     onCloseExamSearchSheet={viewModel.closeExamSearchSheet}
                     onOpenExamCategoryOptions={viewModel.openExamCategoryOptions}
                     isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}

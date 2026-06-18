@@ -81,11 +81,8 @@ export default function SubjectSelectPage({ viewModel }) {
 				<SubjectSelectControls
 					t={viewModel.t}
 					searchTerm={viewModel.searchTerm}
-					onSearchTermChange={viewModel.changeSearchTerm}
 					onSubjectSearchTermChange={viewModel.changeSubjectSearchTerm}
-					onSearchFocus={viewModel.focusSearch}
 					onOpenSubjectSearchSuggestions={viewModel.openSubjectSearchSuggestions}
-					onCloseSearch={viewModel.closeSearch}
 					onCloseSubjectSearchSheet={viewModel.closeSubjectSearchSheet}
 					onOpenSubjectFacultyOptions={viewModel.openSubjectFacultyOptions}
 					isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}

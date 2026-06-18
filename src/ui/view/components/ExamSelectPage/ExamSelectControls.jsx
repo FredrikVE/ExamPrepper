@@ -4,10 +4,6 @@ import { ChevronDown, Funnel, Search } from "lucide-react";
 
 export default function ExamSelectControls(props) {
 	const searchInputRef = useRef(null);
-	const changeSearchTerm = props.onExamSearchTermChange ?? props.onSearchTermChange;
-	const openSearchSuggestions = props.onOpenExamSearchSuggestions ?? props.onSearchFocus;
-	const closeSearchSheet = props.onCloseExamSearchSheet ?? props.onCloseSearch;
-
 	return (
 		<div className="exam-select-controls">
 			<div className="mobile-search-shell">
@@ -18,12 +14,12 @@ export default function ExamSelectControls(props) {
 						className="mobile-search-input"
 						type="search"
 						value={props.searchTerm}
-						onChange={(event) => changeSearchTerm(event.target.value)}
-						onFocus={openSearchSuggestions}
+						onChange={(event) => props.onExamSearchTermChange(event.target.value)}
+						onFocus={props.onOpenExamSearchSuggestions}
 						onKeyDown={(event) => {
 							if (event.key === "Escape") {
 								event.preventDefault();
-								closeSearchSheet();
+								props.onCloseExamSearchSheet();
 								event.currentTarget.blur();
 							}
 						}}
@@ -42,11 +38,11 @@ export default function ExamSelectControls(props) {
 					<select
 						className="mobile-filter-select"
 						value={props.category}
-						onPointerDown={closeSearchSheet}
-						onFocus={closeSearchSheet}
+						onPointerDown={props.onCloseExamSearchSheet}
+						onFocus={props.onCloseExamSearchSheet}
 						onKeyDown={(event) => {
 							if (event.key === "Escape") {
-								closeSearchSheet();
+								props.onCloseExamSearchSheet();
 							}
 						}}
 						onChange={(event) => props.onCategoryChange(event.target.value)}
