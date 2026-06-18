@@ -58,6 +58,18 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		return filterSubjects(subjects, searchTerm, faculty);
 	}, [subjects, searchTerm, faculty]);
 
+	const searchSuggestions = useMemo(() => {
+		if (!searchTerm.trim()) {
+			return [];
+		}
+
+		return filteredSubjects.map((subject) => ({
+			id: subject.id,
+			label: subject.name,
+			code: subject.code
+		}));
+	}, [filteredSubjects, searchTerm]);
+
 	const changeSearchTerm = useCallback((nextSearchTerm) => {
 		setSearchTerm(nextSearchTerm);
 	}, []);
@@ -100,6 +112,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		searchTerm,
 		faculty,
 		isSearchFocused,
+		searchSuggestions,
 
 		// Handlers
 		changeSearchTerm,

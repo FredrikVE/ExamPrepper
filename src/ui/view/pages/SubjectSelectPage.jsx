@@ -2,6 +2,7 @@
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectControls from "../components/SubjectSelectPage/SubjectSelectControls.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
+import SearchSuggestionList from "../components/SubjectSelectPage/SearchSuggestionList.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
     if (viewModel.subjectsLoading) {
@@ -29,6 +30,10 @@ export default function SubjectSelectPage({ viewModel }) {
         ? "search-backdrop search-backdrop-visible"
         : "search-backdrop";
 
+    const showSuggestions =
+        viewModel.isSearchFocused &&
+        viewModel.searchSuggestions.length > 0;
+
     return (
         <main className="subject-select-workspace">
             <div className="subject-select-ambient-light" aria-hidden="true" />
@@ -46,16 +51,25 @@ export default function SubjectSelectPage({ viewModel }) {
 
             <div className={backdropClassName} aria-hidden="true" />
 
-            <SubjectSelectControls
-                t={viewModel.t}
-                searchTerm={viewModel.searchTerm}
-                onSearchTermChange={viewModel.changeSearchTerm}
-                onSearchFocus={viewModel.focusSearch}
-                onSearchBlur={viewModel.blurSearch}
-                faculty={viewModel.faculty}
-                onFacultyChange={viewModel.changeFaculty}
-                faculties={viewModel.faculties}
-            />
+            <div className="subject-search-footer">
+                {showSuggestions && (
+                    <SearchSuggestionList
+                        suggestions={viewModel.searchSuggestions}
+                        onSelect={viewModel.selectSubject}
+                    />
+                )}
+
+                <SubjectSelectControls
+                    t={viewModel.t}
+                    searchTerm={viewModel.searchTerm}
+                    onSearchTermChange={viewModel.changeSearchTerm}
+                    onSearchFocus={viewModel.focusSearch}
+                    onSearchBlur={viewModel.blurSearch}
+                    faculty={viewModel.faculty}
+                    onFacultyChange={viewModel.changeFaculty}
+                    faculties={viewModel.faculties}
+                />
+            </div>
         </main>
     );
 }
