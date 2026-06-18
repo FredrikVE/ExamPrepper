@@ -2,91 +2,99 @@
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectControls from "../components/SubjectSelectPage/SubjectSelectControls.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
-import SearchSuggestionList from "../components/Shared/SearchSuggestionList.jsx";
+import SearchSheetContent from "../components/Shared/SearchSheetContent.jsx";
+import useSearchSheetEscapeKey from "../components/Shared/useSearchSheetEscapeKey.js";
 
 export default function SubjectSelectPage({ viewModel }) {
-    if (viewModel.subjectsLoading) {
-        return (
-            <main className="subject-select-workspace">
-                <section className="subject-select-empty" aria-label={viewModel.loadingAriaLabel}>
-                    <h2>{viewModel.loadingTitle}</h2>
-                </section>
-            </main>
-        );
-    }
+	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
 
-    if (viewModel.subjectsLoadError) {
-        return (
-            <main className="subject-select-workspace">
-                <section className="subject-select-empty" aria-label={viewModel.errorAriaLabel}>
-                    <h2>{viewModel.errorTitle}</h2>
-                    <p>{viewModel.subjectsLoadError}</p>
-                </section>
-            </main>
-        );
-    }
+	if (viewModel.subjectsLoading) {
+		return (
+			<main className="subject-select-workspace">
+				<section className="subject-select-empty" aria-label={viewModel.loadingAriaLabel}>
+					<h2>{viewModel.loadingTitle}</h2>
+				</section>
+			</main>
+		);
+	}
 
-    const backdropClassName = viewModel.isSearchFocused
-        ? "search-backdrop search-backdrop-visible"
-        : "search-backdrop";
+	if (viewModel.subjectsLoadError) {
+		return (
+			<main className="subject-select-workspace">
+				<section className="subject-select-empty" aria-label={viewModel.errorAriaLabel}>
+					<h2>{viewModel.errorTitle}</h2>
+					<p>{viewModel.subjectsLoadError}</p>
+				</section>
+			</main>
+		);
+	}
 
-    const showSuggestions =
-        viewModel.isSearchFocused &&
-        viewModel.searchSuggestions.length > 0;
+	const backdropClassName = viewModel.isSearchSheetOpen
+		? "search-backdrop search-backdrop-visible"
+		: "search-backdrop";
 
-    return (
-        <div className="subject-select-layout">
-            <main className="subject-select-workspace">
-                <div className="subject-select-ambient-light" aria-hidden="true" />
+	return (
+		<div className="subject-select-layout">
+			<main className="subject-select-workspace">
+				<div className="subject-select-ambient-light" aria-hidden="true" />
 
-                <SubjectSelectTopbar t={viewModel.t} />
+				<SubjectSelectTopbar t={viewModel.t} />
 
-                <SubjectSelectGrid
-                    t={viewModel.t}
-                    subjects={viewModel.filteredSubjects}
-                    selectedSubject={viewModel.selectedSubject}
-                    emptyTitle={viewModel.emptyTitle}
-                    emptyDescription={viewModel.emptyDescription}
-                    onSelectSubject={viewModel.selectSubject}
-                />
-            </main>
+				<SubjectSelectGrid
+					t={viewModel.t}
+					subjects={viewModel.filteredSubjects}
+					selectedSubject={viewModel.selectedSubject}
+					emptyTitle={viewModel.emptyTitle}
+					emptyDescription={viewModel.emptyDescription}
+					onSelectSubject={viewModel.selectSubject}
+				/>
+			</main>
 
-            <button
-                type="button"
-                className={backdropClassName}
-                onClick={viewModel.closeSearch}
-                aria-label={viewModel.searchCloseLabel}
-                aria-hidden={!viewModel.isSearchFocused}
-                tabIndex={viewModel.isSearchFocused ? 0 : -1}
-            />
+			<button
+				type="button"
+				className={backdropClassName}
+				onClick={viewModel.closeSubjectSearchSheet}
+				aria-label={viewModel.searchCloseLabel}
+				aria-hidden={!viewModel.isSearchSheetOpen}
+				tabIndex={viewModel.isSearchSheetOpen ? 0 : -1}
+			/>
 
-            <div
-                className="subject-search-footer"
-                onBlur={(event) => {
-                    if (!event.currentTarget.contains(event.relatedTarget)) {
-                        viewModel.closeSearch();
-                    }
-                }}
-            >
-                {showSuggestions && (
-                    <SearchSuggestionList
-                        suggestions={viewModel.searchSuggestions}
-                        onSelect={viewModel.selectSubject}
-                    />
-                )}
+			<div
+				className="subject-search-footer"
+				onBlur={(event) => {
+					if (!event.currentTarget.contains(event.relatedTarget)) {
+						viewModel.closeSubjectSearchSheet();
+					}
+				}}
+			>
+				{viewModel.isSearchSheetOpen && (
+					<SearchSheetContent
+						isFilterOptionsMode={viewModel.isFilterOptionsMode}
+						searchSuggestions={viewModel.searchSuggestions}
+						filterOptions={viewModel.facultyFilterOptions}
+						selectedFilterValue={viewModel.faculty}
+						onSelectSearchSuggestion={viewModel.selectSubject}
+						onSelectFilterOption={viewModel.selectFacultyFilterOption}
+					/>
+				)}
 
-                <SubjectSelectControls
-                    t={viewModel.t}
-                    searchTerm={viewModel.searchTerm}
-                    onSearchTermChange={viewModel.changeSearchTerm}
-                    onSearchFocus={viewModel.focusSearch}
-                    onCloseSearch={viewModel.closeSearch}
-                    faculty={viewModel.faculty}
-                    facultyLabel={viewModel.facultyLabel}
-                    onFacultyChange={viewModel.changeFaculty}
-                    faculties={viewModel.faculties}
-                />
-            </div>
-        </div>
-    );
+				<SubjectSelectControls
+					t={viewModel.t}
+					searchTerm={viewModel.searchTerm}
+					onSearchTermChange={viewModel.changeSearchTerm}
+					onSubjectSearchTermChange={viewModel.changeSubjectSearchTerm}
+					onSearchFocus={viewModel.focusSearch}
+					onOpenSubjectSearchSuggestions={viewModel.openSubjectSearchSuggestions}
+					onCloseSearch={viewModel.closeSearch}
+					onCloseSubjectSearchSheet={viewModel.closeSubjectSearchSheet}
+					onOpenSubjectFacultyOptions={viewModel.openSubjectFacultyOptions}
+					isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
+					faculty={viewModel.faculty}
+					facultyLabel={viewModel.facultyLabel}
+					onFacultyChange={viewModel.changeFaculty}
+					faculties={viewModel.faculties}
+				/>
+			</div>
+		</div>
+	);
 }

@@ -119,6 +119,10 @@
     cursor: pointer;
 }
 
+.subject-select-controls .mobile-filter-button {
+    display: none;
+}
+
 .mobile-filter-chevron {
     position: absolute;
     right: 16px;
