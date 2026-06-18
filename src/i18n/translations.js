@@ -68,6 +68,7 @@ export const translations = {
         // Footer
         footerPrevious: "Forrige",
         footerNext: "Neste",
+        footerSubmit: "Lever nå",
         footerQuestionNavigationLabel: "Hopp direkte til spørsmål",
         footerGoToQuestion: (number) => `Gå til spørsmål ${number}`,
 
@@ -303,6 +304,7 @@ export const translations = {
         // Footer
         footerPrevious: "Previous",
         footerNext: "Next",
+        footerSubmit: "Submit",
         footerQuestionNavigationLabel: "Jump directly to a question",
         footerGoToQuestion: (number) => `Go to question ${number}`,
 
