@@ -1,0 +1,37 @@
+/* src/ui/style/Sidebar/mobile-exam-work-status.css */
+.mobile-topbar-exam-work-status {
+	display: none;
+}
+
+@media (max-width: 932px) {
+	.mobile-topbar-exam-work-status {
+		position: relative;
+		z-index: 1;
+		grid-column: 2;
+		grid-row: 1;
+		align-self: center;
+		justify-self: center;
+		max-width: 100%;
+		margin: 0;
+		overflow: hidden;
+		color: var(--text-main);
+		font-size: 17px;
+		font-weight: 760;
+		line-height: 1.2;
+		text-align: center;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+
+@media (max-width: 932px) and (max-height: 500px) {
+	.mobile-topbar-exam-work-status {
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 430px) {
+	.mobile-topbar-exam-work-status {
+		font-size: 15px;
+	}
+}

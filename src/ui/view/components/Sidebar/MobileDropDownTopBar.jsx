@@ -68,6 +68,7 @@ export default function MobileDropDownTopBar(props) {
 	);
 
 	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher;
+	const showExamWorkStatus = props.isExamWorkMode && !props.isMenuOpen && Boolean(props.examWorkStatusLabel);
 
 	const topbarClassNames = [
 		"mobile-topbar",
@@ -120,6 +121,12 @@ export default function MobileDropDownTopBar(props) {
 				>
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
+
+				{showExamWorkStatus && (
+					<p className="mobile-topbar-exam-work-status">
+						{props.examWorkStatusLabel}
+					</p>
+				)}
 
 				{showPickerButton && (
 					<div className="mobile-topbar-subject-picker">
