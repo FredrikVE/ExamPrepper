@@ -19,6 +19,11 @@ export default function useMobileMenuEscapeKey({
 				return;
 			}
 
+			if (isSettingsOpen && onCloseSettings) {
+				onCloseSettings();
+				return;
+			}
+
 			if (isSubmitConfirmOpen) {
 				onCloseSubmitConfirm?.();
 				return;

@@ -39,6 +39,7 @@
 .exam-shell {
     position: relative;
     display: grid;
+    align-items: stretch;
     grid-template-columns: 320px minmax(0, 1fr);
     gap: 14px;
     height: calc(100vh - 32px);

@@ -54,9 +54,9 @@ function AppContent() {
 		examWorkModeActionsRef.current?.closeConfirm();
 	}, []);
 
-	const confirmExamSubmit = useCallback(async () => {
-		await examWorkModeActionsRef.current?.confirmSubmit();
+	const confirmExamSubmit = useCallback(() => {
 		navigationViewModel.closeMenu();
+		examWorkModeActionsRef.current?.confirmSubmit();
 	}, [navigationViewModel.closeMenu]);
 
 	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
@@ -86,6 +86,8 @@ function AppContent() {
 					onChangeScreen={navigationViewModel.changeScreen}
 					settingsOpen={navigationViewModel.settingsOpen}
 					onOpenSettings={navigationViewModel.openSettings}
+					onCloseSettings={navigationViewModel.closeSettings}
+					onBackFromSettings={navigationViewModel.backFromSettingsToMenu}
 					isMenuOpen={navigationViewModel.isMenuOpen}
 					onToggleMenu={navigationViewModel.toggleMenu}
 					onCloseMenu={navigationViewModel.closeMenu}

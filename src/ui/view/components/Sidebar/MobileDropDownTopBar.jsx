@@ -8,6 +8,8 @@ import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import MobileExamSubmitAction from "./MobileExamSubmitAction.jsx";
 import MobileExamSubmitConfirmation from "./MobileExamSubmitConfirmation.jsx";
+import SettingsPanelContent from "../Settings/SettingsPanelContent.jsx";
+import SettingsPanelHeader from "../Settings/SettingsPanelHeader.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 import useSubmitConfirmFocus from "./useSubmitConfirmFocus.js";
 
@@ -22,12 +24,30 @@ function resolveCurrentSubject(subjects, selectedSubject) {
 }
 
 function MobileDropdownContent(props) {
+	const { t } = useLanguage();
+
 	const {
 		submitActionButtonRef,
 		submitConfirmCancelButtonRef
 	} = useSubmitConfirmFocus(props.isExamSubmitConfirmOpen);
 
 	const showExamSubmitAction = props.isExamWorkMode && props.showExamSubmitAction;
+
+	if (props.settingsOpen) {
+		return (
+			<div className="mobile-dropdown-settings-content">
+				<SettingsPanelHeader
+					title={t.settingsTitle}
+					closeLabel={t.settingsClose}
+					backLabel={t.settingsBackToMenu}
+					onBack={props.onBackFromSettings}
+					onClose={props.onCloseMenu}
+				/>
+
+				<SettingsPanelContent />
+			</div>
+		);
+	}
 
 	const contentClassNames = [
 		"mobile-dropdown-content",

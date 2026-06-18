@@ -5,6 +5,7 @@
 
 @media (max-width: 932px) {
 	.mobile-topbar-exam-work-status {
+		display: block;
 		position: relative;
 		z-index: 1;
 		grid-column: 2;

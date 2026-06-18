@@ -77,7 +77,12 @@
         --exam-content-max-width: 880px;
     }
 
+    .exam-workspace {
+        padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+    }
+
     .exam-page-main {
+        flex: 0 0 auto;
         padding: 12px 0 18px;
     }
 }
