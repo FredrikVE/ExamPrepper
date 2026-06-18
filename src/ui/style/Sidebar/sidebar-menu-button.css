@@ -97,12 +97,12 @@
 	}
 
 	.mobile-topbar-menu-button {
-		grid-column: 1;
+		grid-column: 3;
+		justify-self: end;
 	}
 
 	.mobile-topbar-back-button {
-		grid-column: 3;
-		justify-self: end;
+		grid-column: 1;
 	}
 
 	.mobile-topbar-subject-picker {

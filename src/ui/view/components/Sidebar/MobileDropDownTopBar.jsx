@@ -145,17 +145,6 @@ export default function MobileDropDownTopBar(props) {
 				className={topbarClassNames.join(" ")}
 				aria-label={t.sidebarMobileNavigation}
 			>
-				<button
-					type="button"
-					className="mobile-topbar-menu-button"
-					onClick={props.onToggleMenu}
-					aria-label={menuButtonLabel}
-					aria-controls="app-navigation-menu"
-					aria-expanded={props.isMenuOpen}
-				>
-					<Menu className="mobile-topbar-menu-icon" />
-				</button>
-
 				{props.showBackButton && (
 					<button
 						type="button"
@@ -166,6 +155,17 @@ export default function MobileDropDownTopBar(props) {
 						<ChevronLeft className="mobile-topbar-back-icon" />
 					</button>
 				)}
+
+				<button
+					type="button"
+					className="mobile-topbar-menu-button"
+					onClick={props.onToggleMenu}
+					aria-label={menuButtonLabel}
+					aria-controls="app-navigation-menu"
+					aria-expanded={props.isMenuOpen}
+				>
+					<Menu className="mobile-topbar-menu-icon" />
+				</button>
 
 				{shouldShowExamWorkStatus && (
 					<p className="mobile-topbar-exam-work-status">
