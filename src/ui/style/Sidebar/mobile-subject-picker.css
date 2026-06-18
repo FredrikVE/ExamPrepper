@@ -79,6 +79,41 @@
 	color: var(--accent);
 }
 
+
+@media (max-width: 932px) and (max-height: 500px) {
+	.mobile-subject-picker-button {
+		height: 48px;
+		gap: 8px;
+		padding: 6px 10px;
+		border-radius: 12px;
+	}
+
+	.mobile-subject-picker-icon {
+		width: 36px;
+		height: 36px;
+		border-radius: 10px;
+	}
+
+	.mobile-subject-picker-icon .subject-icon {
+		width: 21px;
+		height: 21px;
+	}
+
+	.mobile-subject-picker-code {
+		font-size: 16px;
+	}
+
+	.mobile-subject-picker-name {
+		margin-top: 2px;
+		font-size: 12px;
+	}
+
+	.mobile-subject-picker-chevron {
+		width: 18px;
+		height: 18px;
+	}
+}
+
 .mobile-subject-picker-scrim {
 	position: absolute;
 	inset: 0;
