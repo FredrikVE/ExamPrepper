@@ -58,23 +58,13 @@
     }
 
     .exam-footer-container {
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-        gap: 8px;
+        gap: 10px;
         padding: 10px;
     }
 
     .exam-footer-counter {
-        grid-column: auto;
-        grid-row: auto;
-        width: auto;
-        min-width: max-content;
-        justify-items: center;
-        gap: 0;
+        gap: 4px;
         font-size: 0.78rem;
-    }
-
-    .exam-footer-dots {
-        display: none;
     }
 
     .exam-footer-button {
