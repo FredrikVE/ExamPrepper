@@ -1,4 +1,4 @@
-// src/ui/view/components/SubjectSelectPage/SearchSuggestionList.jsx
+// src/ui/view/components/Shared/SearchSuggestionList.jsx
 import { Search } from "lucide-react";
 
 export default function SearchSuggestionList({ suggestions, onSelect }) {

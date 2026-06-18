@@ -2,7 +2,7 @@
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectControls from "../components/SubjectSelectPage/SubjectSelectControls.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
-import SearchSuggestionList from "../components/SubjectSelectPage/SearchSuggestionList.jsx";
+import SearchSuggestionList from "../components/Shared/SearchSuggestionList.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
     if (viewModel.subjectsLoading) {
