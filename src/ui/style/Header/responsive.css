@@ -1,4 +1,10 @@
 /* src/ui/style/Header/responsive.css */
+@media (max-width: 932px) {
+    .exam-header {
+        display: none;
+    }
+}
+
 @media (max-width: 767px) {
     .exam-header-container {
         padding: var(--header-padding-tablet);

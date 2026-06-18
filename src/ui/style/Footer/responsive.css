@@ -48,6 +48,57 @@
     }
 }
 
+@media (max-width: 932px) {
+    .exam-footer {
+        width: var(--exam-content-width);
+        max-width: var(--exam-content-max-width);
+        margin-top: 10px;
+        margin-bottom: 14px;
+        border-radius: 16px;
+    }
+
+    .exam-footer-container {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .exam-footer-counter {
+        grid-column: auto;
+        grid-row: auto;
+        width: auto;
+        min-width: max-content;
+        justify-items: center;
+        gap: 0;
+        font-size: 0.78rem;
+    }
+
+    .exam-footer-dots {
+        display: none;
+    }
+
+    .exam-footer-button {
+        min-width: 0;
+        width: 100%;
+        min-height: 42px;
+        padding: 0 12px;
+        font-size: 0.84rem;
+    }
+
+    .exam-footer-button-desktop-submit {
+        display: none;
+    }
+
+    .exam-footer-button-mobile-next {
+        display: inline-flex;
+    }
+
+    .exam-footer-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
 /* Laptop footer: keep navigation reachable without forcing a scroll
    on common 14–17" laptop viewports. */
 @media (min-width: 981px) and (max-width: 1760px), (min-width: 981px) and (max-height: 960px) {

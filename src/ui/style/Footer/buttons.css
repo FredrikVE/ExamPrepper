@@ -24,6 +24,10 @@
     opacity: 0.42;
 }
 
+.exam-footer-button-mobile-next {
+    display: none;
+}
+
 .exam-footer-button-previous {
     border: 1px solid var(--line);
     color: var(--text-main);
