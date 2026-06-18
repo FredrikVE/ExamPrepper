@@ -114,9 +114,14 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	}, []);
 
 	const openSubjectFacultyOptions = useCallback(() => {
+		if (isSearchSheetOpen && isFilterOptionsMode) {
+			closeSubjectSearchSheet();
+			return;
+		}
+
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.FILTER_OPTIONS);
-	}, []);
+	}, [closeSubjectSearchSheet, isFilterOptionsMode, isSearchSheetOpen]);
 
 	const changeSubjectSearchTerm = useCallback((nextSearchTerm) => {
 		setSearchTerm(nextSearchTerm);

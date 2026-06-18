@@ -126,9 +126,14 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
     }, []);
 
     const openExamCategoryOptions = useCallback(() => {
+        if (isSearchSheetOpen && isFilterOptionsMode) {
+            closeExamSearchSheet();
+            return;
+        }
+
         setIsSearchSheetOpen(true);
         setSearchSheetMode(SEARCH_SHEET_MODES.FILTER_OPTIONS);
-    }, []);
+    }, [closeExamSearchSheet, isFilterOptionsMode, isSearchSheetOpen]);
 
     const changeExamSearchTerm = useCallback((nextSearchTerm) => {
         setSearchTerm(nextSearchTerm);
