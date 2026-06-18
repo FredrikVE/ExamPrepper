@@ -97,6 +97,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	}, [faculty, t.filterAllLabel]);
 
 	const closeSubjectSearchSheet = useCallback(() => {
+		setSearchTerm("");
 		setIsSearchSheetOpen(false);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);

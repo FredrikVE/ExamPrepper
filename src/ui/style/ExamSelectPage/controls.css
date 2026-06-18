@@ -71,10 +71,17 @@
     border: 0;
     padding: 0 18px 0 12px;
     color: var(--text-main);
+    caret-color: var(--text-main);
     background: transparent;
     font: inherit;
     font-size: 17px;
     outline: none;
+    appearance: none;
+}
+
+.mobile-search-input::-webkit-search-decoration,
+.mobile-search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
 }
 
 .mobile-search-input::placeholder {
@@ -85,7 +92,7 @@
     flex: 0 0 auto;
     width: 1px;
     height: 32px;
-    background: var(--line);
+    background: color-mix(in srgb, var(--text-soft) 18%, transparent);
 }
 
 .mobile-search-filter {

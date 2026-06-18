@@ -109,6 +109,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
     }, [category, t.filterAllLabel]);
 
     const closeExamSearchSheet = useCallback(() => {
+        setSearchTerm("");
         setIsSearchSheetOpen(false);
         setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
     }, []);
