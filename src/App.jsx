@@ -102,7 +102,12 @@ function AppContent() {
 					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
 					examWorkStatusLabel={examWorkMode?.statusLabel ?? ""}
 					showExamSubmitAction={Boolean(examWorkMode?.canSubmit)}
+					examSubmitLabel={t.examSubmitLabel}
 					isExamSubmitConfirmOpen={Boolean(examWorkMode?.isConfirmOpen)}
+					examSubmitConfirmTitle={t.examSubmitConfirmTitle}
+					examSubmitConfirmBody={t.examSubmitConfirmBody}
+					examSubmitConfirmCancelLabel={t.examSubmitConfirmCancelLabel}
+					examSubmitConfirmConfirmLabel={t.examSubmitConfirmConfirmLabel}
 					onOpenExamSubmitConfirm={openExamSubmitConfirm}
 					onCloseExamSubmitConfirm={closeExamSubmitConfirm}
 					onConfirmExamSubmit={confirmExamSubmit}
