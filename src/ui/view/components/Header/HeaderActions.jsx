@@ -6,13 +6,11 @@ import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
 export default function ExamHeaderActions({ viewModel }) {
     const { t } = useLanguage();
-    const total = Math.max(viewModel.visibleQuestions.length, 1);
-    const answeredPercent = Math.round((viewModel.answeredCount / total) * 100);
 
     return (
         <div className="exam-header-actions">
             <StatCard
-                value={`${answeredPercent}%`}
+                value={viewModel.answeredPercentLabel}
                 label={t.headerStatAnswered}
                 icon={<CheckCircle2 />}
             />

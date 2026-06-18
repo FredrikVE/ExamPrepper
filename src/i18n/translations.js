@@ -64,6 +64,12 @@ export const translations = {
         examLoadErrorMessage: "Kunne ikke laste eksamen.",
         examAttemptSavingMessage: "Lagrer forsøk...",
         examAttemptSaveErrorMessage: "Kunne ikke lagre forsøket.",
+        examAnsweredLabel: "besvart",
+        examSubmitLabel: "Lever nå",
+        examSubmitConfirmTitle: "Er du sikker?",
+        examSubmitConfirmBody: "Når du leverer, kan du ikke endre svarene dine.",
+        examSubmitConfirmCancelLabel: "Nei, vent",
+        examSubmitConfirmConfirmLabel: "Ja, lever nå",
 
         // Footer
         footerPrevious: "Forrige",
@@ -300,6 +306,12 @@ export const translations = {
         examLoadErrorMessage: "Could not load exam.",
         examAttemptSavingMessage: "Saving attempt...",
         examAttemptSaveErrorMessage: "Could not save attempt.",
+        examAnsweredLabel: "answered",
+        examSubmitLabel: "Submit",
+        examSubmitConfirmTitle: "Are you sure?",
+        examSubmitConfirmBody: "Once you submit, you cannot change your answers.",
+        examSubmitConfirmCancelLabel: "No, wait",
+        examSubmitConfirmConfirmLabel: "Yes, submit now",
 
         // Footer
         footerPrevious: "Previous",

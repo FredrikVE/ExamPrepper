@@ -35,6 +35,13 @@ export default function AppNavigation(props) {
 				selectedSubject={props.selectedSubject}
 				onSelectSubject={props.onSelectSubject}
 				onShowAllSubjects={props.onShowAllSubjects}
+				isExamWorkMode={props.isExamWorkMode}
+				examWorkStatusLabel={props.examWorkStatusLabel}
+				showExamSubmitAction={props.showExamSubmitAction}
+				isExamSubmitConfirmOpen={props.isExamSubmitConfirmOpen}
+				onOpenExamSubmitConfirm={props.onOpenExamSubmitConfirm}
+				onCloseExamSubmitConfirm={props.onCloseExamSubmitConfirm}
+				onConfirmExamSubmit={props.onConfirmExamSubmit}
 			/>
 		</>
 	);

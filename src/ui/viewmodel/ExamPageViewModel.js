@@ -34,6 +34,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [attemptSaveError, setAttemptSaveError] = useState(null);
 	const [attemptSaving, setAttemptSaving] = useState(false);
 	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(0);
+	const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
 
 	const copy = useMemo(() => {
 		return createExamPageCopy(t);
@@ -156,6 +157,15 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const elapsedTimeLabel = useMemo(() => {
 		return formatElapsedTime(elapsedSeconds);
 	}, [elapsedSeconds]);
+
+	const answeredPercent = useMemo(() => {
+		const total = Math.max(visibleQuestions.length, 1);
+		return Math.round((answeredCount / total) * 100);
+	}, [answeredCount, visibleQuestions.length]);
+
+	const answeredPercentLabel = `${answeredPercent}%`;
+	const mobileWorkStatusLabel = `${elapsedTimeLabel} · ${answeredPercentLabel} ${copy.answeredLabel}`;
+	const canSubmitExam = !submitted && questions.length > 0;
 
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
@@ -283,6 +293,19 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 	}, [answers, copy.attemptSaveErrorMessage, elapsedSeconds, examId, language, questions, requestScrollToTop, submitExamAttemptUseCase]);
 
+	const openSubmitConfirmation = useCallback(() => {
+		setIsSubmitConfirmOpen(true);
+	}, []);
+
+	const closeSubmitConfirmation = useCallback(() => {
+		setIsSubmitConfirmOpen(false);
+	}, []);
+
+	const confirmSubmitExam = useCallback(async () => {
+		setIsSubmitConfirmOpen(false);
+		await submitExam();
+	}, [submitExam]);
+
 	const resetExam = useCallback(() => {
 		setAnswers({});
 		setSubmitted(false);
@@ -294,6 +317,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setSavedAttempt(null);
 		setAttemptSaveError(null);
 		setAttemptSaving(false);
+		setIsSubmitConfirmOpen(false);
 
 		requestScrollToTop();
 	}, [questions, requestScrollToTop]);
@@ -327,6 +351,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 					setSavedAttempt(null);
 					setAttemptSaveError(null);
 					setAttemptSaving(false);
+					setIsSubmitConfirmOpen(false);
 				}
 			}
 
@@ -382,6 +407,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return () => window.clearInterval(intervalId);
 	}, [submitted]);
 
+	useEffect(() => {
+		if (submitted) {
+			setIsSubmitConfirmOpen(false);
+		}
+	}, [submitted]);
+
 	return {
 		questions,
 		visibleQuestions,
@@ -412,10 +443,14 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		attemptSaveError,
 		answeredCount,
 		answeredCountLabel,
+		answeredPercentLabel,
 		scoreLabel,
 		questionProgressLabel,
 		feedbackToggleLabel,
 		elapsedTimeLabel,
+		mobileWorkStatusLabel,
+		canSubmitExam,
+		isSubmitConfirmOpen,
 
 		expandedAnswerOptionIndexes,
 		questionDotEntries,
@@ -437,6 +472,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		toggleMultiAnswer,
 		toggleAnswerOptionExpanded,
 		submitExam,
+		openSubmitConfirmation,
+		closeSubmitConfirmation,
+		confirmSubmitExam,
 		resetExam,
 		toggleShowAllFeedback
 	};

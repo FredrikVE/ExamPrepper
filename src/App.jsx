@@ -1,5 +1,5 @@
 // src/App.jsx
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
@@ -41,7 +41,23 @@ export default function App() {
 function AppContent() {
 	const { language, t, formatDate } = useLanguage();
 
+	const [examWorkMode, setExamWorkMode] = useState(null);
+	const examWorkModeActionsRef = useRef(null);
+
 	const navigationViewModel = useAppNavigationViewModel({ language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase });
+
+	const openExamSubmitConfirm = useCallback(() => {
+		examWorkModeActionsRef.current?.openConfirm();
+	}, []);
+
+	const closeExamSubmitConfirm = useCallback(() => {
+		examWorkModeActionsRef.current?.closeConfirm();
+	}, []);
+
+	const confirmExamSubmit = useCallback(async () => {
+		await examWorkModeActionsRef.current?.confirmSubmit();
+		navigationViewModel.closeMenu();
+	}, [navigationViewModel.closeMenu]);
 
 	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
 		getAvailableSubjectsUseCase,
@@ -83,6 +99,13 @@ function AppContent() {
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
 					onSelectSubject={navigationViewModel.selectSubject}
 					onShowAllSubjects={navigationViewModel.showAllSubjects}
+					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
+					examWorkStatusLabel={examWorkMode?.statusLabel ?? ""}
+					showExamSubmitAction={Boolean(examWorkMode?.canSubmit)}
+					isExamSubmitConfirmOpen={Boolean(examWorkMode?.isConfirmOpen)}
+					onOpenExamSubmitConfirm={openExamSubmitConfirm}
+					onCloseExamSubmitConfirm={closeExamSubmitConfirm}
+					onConfirmExamSubmit={confirmExamSubmit}
 				/>
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS && (
@@ -98,6 +121,8 @@ function AppContent() {
 						examId={navigationViewModel.selectedExamId}
 						language={language}
 						t={t}
+						onExamWorkModeChange={setExamWorkMode}
+						examWorkModeActionsRef={examWorkModeActionsRef}
 					/>
 				)}
 
@@ -120,7 +145,7 @@ function AppContent() {
 	);
 }
 
-function ExamPageWrapper({ examId, language, t }) {
+function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkModeActionsRef }) {
 	const examPageViewModel = useExamPageViewModel(
 		getExamQuestionsUseCase,
 		gradeAnswerUseCase,
@@ -130,6 +155,39 @@ function ExamPageWrapper({ examId, language, t }) {
 		language,
 		t
 	);
+
+	useEffect(() => {
+		examWorkModeActionsRef.current = {
+			openConfirm: examPageViewModel.openSubmitConfirmation,
+			closeConfirm: examPageViewModel.closeSubmitConfirmation,
+			confirmSubmit: examPageViewModel.confirmSubmitExam
+		};
+	}, [
+		examPageViewModel.openSubmitConfirmation,
+		examPageViewModel.closeSubmitConfirmation,
+		examPageViewModel.confirmSubmitExam,
+		examWorkModeActionsRef
+	]);
+
+	useEffect(() => {
+		onExamWorkModeChange({
+			statusLabel: examPageViewModel.mobileWorkStatusLabel,
+			canSubmit: examPageViewModel.canSubmitExam,
+			isConfirmOpen: examPageViewModel.isSubmitConfirmOpen
+		});
+	}, [
+		examPageViewModel.mobileWorkStatusLabel,
+		examPageViewModel.canSubmitExam,
+		examPageViewModel.isSubmitConfirmOpen,
+		onExamWorkModeChange
+	]);
+
+	useEffect(() => {
+		return () => {
+			examWorkModeActionsRef.current = null;
+			onExamWorkModeChange(null);
+		};
+	}, [examWorkModeActionsRef, onExamWorkModeChange]);
 
 	return (
 		<ExamPage

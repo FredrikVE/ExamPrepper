@@ -6,6 +6,7 @@ export default function createExamPageCopy(t) {
 		emptyMessage: t.emptyMessage,
 		questionsLoadErrorMessage: t.examLoadErrorMessage,
 		attemptSavingMessage: t.examAttemptSavingMessage,
-		attemptSaveErrorMessage: t.examAttemptSaveErrorMessage
+		attemptSaveErrorMessage: t.examAttemptSaveErrorMessage,
+		answeredLabel: t.examAnsweredLabel
 	};
 }
