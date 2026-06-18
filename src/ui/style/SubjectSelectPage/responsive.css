@@ -117,6 +117,173 @@
     }
 }
 
+
+/* ── Mobile landscape fallback ─────────
+   På smale, lave mobilvisninger må subject-kortene oppføre seg
+   som en kompakt liste, ikke som store portrait-kort. Både bredde
+   og høyde brukes for å unngå at desktop-layouten påvirkes. */
+@media (max-width: 932px) and (max-height: 560px) and (orientation: landscape) {
+    .subject-select-workspace {
+        min-height: 100svh;
+        padding: calc(var(--mobile-topbar-height) + 10px) 18px calc(116px + env(safe-area-inset-bottom));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .subject-select-topbar {
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .subject-select-title {
+        font-size: clamp(32px, 8vh, 46px);
+        line-height: 0.95;
+    }
+
+    .subject-select-subtitle {
+        display: none;
+    }
+
+    .subject-select-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .subject-card {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        grid-template-rows: auto auto auto;
+        align-items: center;
+        column-gap: 14px;
+        min-height: 88px;
+        padding: 12px 14px;
+        border-radius: 16px;
+    }
+
+    .subject-card:hover {
+        transform: none;
+    }
+
+    .subject-card-badge {
+        display: none;
+    }
+
+    .subject-card-icon-wrap {
+        grid-column: 1;
+        grid-row: 1 / span 3;
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    .subject-card-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .subject-card-code {
+        grid-column: 2;
+        grid-row: 1;
+        margin-top: 0;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    .subject-card-title {
+        grid-column: 2;
+        grid-row: 2;
+        margin-top: 4px;
+        font-size: clamp(19px, 4.7vh, 24px);
+        line-height: 1.05;
+    }
+
+    .subject-card-description {
+        grid-column: 2;
+        grid-row: 3;
+        display: -webkit-box;
+        max-width: none;
+        margin-top: 5px;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        font-size: 13px;
+        line-height: 1.25;
+    }
+
+    .subject-card-footer {
+        grid-column: 3;
+        grid-row: 1 / span 3;
+        align-self: center;
+        gap: 10px;
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+    .subject-card-meta {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .subject-card-meta-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .subject-card-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+    .subject-card-arrow-icon {
+        width: 23px;
+        height: 23px;
+    }
+}
+
+@media (max-width: 932px) and (max-height: 430px) and (orientation: landscape) {
+    .subject-select-workspace {
+        padding-top: calc(var(--mobile-topbar-height) + 6px);
+    }
+
+    .subject-select-topbar {
+        margin-bottom: 10px;
+    }
+
+    .subject-select-title {
+        font-size: clamp(28px, 7.3vh, 38px);
+    }
+
+    .subject-card {
+        grid-template-rows: auto auto;
+        min-height: 72px;
+        padding-block: 9px;
+    }
+
+    .subject-card-icon-wrap {
+        grid-row: 1 / span 2;
+        width: 46px;
+        height: 46px;
+    }
+
+    .subject-card-description {
+        display: none;
+    }
+
+    .subject-card-footer {
+        grid-row: 1 / span 2;
+    }
+
+    .subject-card-meta {
+        display: none;
+    }
+
+    .subject-card-arrow {
+        width: 38px;
+        height: 38px;
+    }
+}
+
 /* ── Very short viewport fallback ─────────
    Når viewport-høyden blir ekstremt lav, bytter subject cards
    fra store grid-kort til en kompakt listevisning. */
