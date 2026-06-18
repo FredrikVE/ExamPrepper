@@ -35,23 +35,39 @@ export default function SubjectSelectPage({ viewModel }) {
         viewModel.searchSuggestions.length > 0;
 
     return (
-        <main className="subject-select-workspace">
-            <div className="subject-select-ambient-light" aria-hidden="true" />
+        <div className="subject-select-layout">
+            <main className="subject-select-workspace">
+                <div className="subject-select-ambient-light" aria-hidden="true" />
 
-            <SubjectSelectTopbar t={viewModel.t} />
+                <SubjectSelectTopbar t={viewModel.t} />
 
-            <SubjectSelectGrid
-                t={viewModel.t}
-                subjects={viewModel.filteredSubjects}
-                selectedSubject={viewModel.selectedSubject}
-                emptyTitle={viewModel.emptyTitle}
-                emptyDescription={viewModel.emptyDescription}
-                onSelectSubject={viewModel.selectSubject}
+                <SubjectSelectGrid
+                    t={viewModel.t}
+                    subjects={viewModel.filteredSubjects}
+                    selectedSubject={viewModel.selectedSubject}
+                    emptyTitle={viewModel.emptyTitle}
+                    emptyDescription={viewModel.emptyDescription}
+                    onSelectSubject={viewModel.selectSubject}
+                />
+            </main>
+
+            <button
+                type="button"
+                className={backdropClassName}
+                onClick={viewModel.closeSearch}
+                aria-label={viewModel.searchCloseLabel}
+                aria-hidden={!viewModel.isSearchFocused}
+                tabIndex={viewModel.isSearchFocused ? 0 : -1}
             />
 
-            <div className={backdropClassName} aria-hidden="true" />
-
-            <div className="subject-search-footer">
+            <div
+                className="subject-search-footer"
+                onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                        viewModel.closeSearch();
+                    }
+                }}
+            >
                 {showSuggestions && (
                     <SearchSuggestionList
                         suggestions={viewModel.searchSuggestions}
@@ -64,12 +80,13 @@ export default function SubjectSelectPage({ viewModel }) {
                     searchTerm={viewModel.searchTerm}
                     onSearchTermChange={viewModel.changeSearchTerm}
                     onSearchFocus={viewModel.focusSearch}
-                    onSearchBlur={viewModel.blurSearch}
+                    onCloseSearch={viewModel.closeSearch}
                     faculty={viewModel.faculty}
+                    facultyLabel={viewModel.facultyLabel}
                     onFacultyChange={viewModel.changeFaculty}
                     faculties={viewModel.faculties}
                 />
             </div>
-        </main>
+        </div>
     );
 }

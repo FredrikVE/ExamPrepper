@@ -1,4 +1,10 @@
 /* src/ui/style/SubjectSelectPage/workspace.css */
+.subject-select-layout {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+}
+
 .subject-select-workspace {
     position: relative;
     box-sizing: border-box;

@@ -1,5 +1,5 @@
 // src/ui/view/components/Sidebar/MobileDropDownTopBar.jsx
-import { Menu } from "lucide-react";
+import { ChevronLeft, Menu } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { SubjectPickerButton, SubjectPickerDropdown } from "./MobileSubjectPicker.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
@@ -71,6 +71,7 @@ export default function MobileDropDownTopBar(props) {
 
 	const topbarClassNames = [
 		"mobile-topbar",
+		props.showBackButton ? "mobile-topbar-with-back" : null,
 		props.isMenuOpen ? "mobile-topbar-menu-open" : null
 	].filter(Boolean);
 
@@ -98,6 +99,17 @@ export default function MobileDropDownTopBar(props) {
 				className={topbarClassNames.join(" ")}
 				aria-label={t.sidebarMobileNavigation}
 			>
+				{props.showBackButton && (
+					<button
+						type="button"
+						className="mobile-topbar-back-button"
+						onClick={props.onBack}
+						aria-label={t.sidebarBack}
+					>
+						<ChevronLeft className="mobile-topbar-back-icon" />
+					</button>
+				)}
+
 				<button
 					type="button"
 					className="mobile-topbar-menu-button"

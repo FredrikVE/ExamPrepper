@@ -131,6 +131,47 @@ export default function useAppNavigationViewModel(params) {
 		setIsMenuOpen(false);
 	}, [selectedSubjectId]);
 
+	const goBack = useCallback(() => {
+		setSettingsOpen(false);
+		setIsMenuOpen(false);
+		setIsSubjectPickerOpen(false);
+
+		if (activeScreen === NAV_SCREENS.SELECT) {
+			setSelectedSubjectId(null);
+			setSelectedExamId(null);
+			setActiveScreen(NAV_SCREENS.SUBJECTS);
+			return;
+		}
+
+		if (activeScreen === NAV_SCREENS.EXAM) {
+			setSelectedExamId(null);
+
+			if (selectedSubjectId) {
+				setActiveScreen(NAV_SCREENS.SELECT);
+			} else {
+				setActiveScreen(NAV_SCREENS.SUBJECTS);
+			}
+
+			return;
+		}
+
+		if (activeScreen === NAV_SCREENS.OVERVIEW) {
+			setSelectedExamId(null);
+
+			if (selectedSubjectId) {
+				setActiveScreen(NAV_SCREENS.SELECT);
+			} else {
+				setActiveScreen(NAV_SCREENS.SUBJECTS);
+			}
+
+			return;
+		}
+
+		setSelectedSubjectId(null);
+		setSelectedExamId(null);
+		setActiveScreen(NAV_SCREENS.SUBJECTS);
+	}, [activeScreen, selectedSubjectId]);
+
 	const changeScreen = useCallback((nextScreen) => {
 		setSettingsOpen(false);
 		setIsMenuOpen(false);
@@ -241,6 +282,8 @@ export default function useAppNavigationViewModel(params) {
 		activeScreen === NAV_SCREENS.SELECT ||
 		activeScreen === NAV_SCREENS.EXAM;
 
+	const showBackButton = activeScreen !== NAV_SCREENS.SUBJECTS;
+
 	const usesSelectionLayout =
 		isSelectionScreen ||
 		activeScreen === NAV_SCREENS.OVERVIEW;
@@ -260,6 +303,7 @@ export default function useAppNavigationViewModel(params) {
 		selectedExamId,
 		isSelectionScreen,
 		shouldShowSubjectSwitcher,
+		showBackButton,
 		pageClassName,
 		shellClassName,
 
@@ -282,6 +326,7 @@ export default function useAppNavigationViewModel(params) {
 		showAllSubjects,
 		showStatistics,
 		selectExam,
-		backToExamList
+		backToExamList,
+		goBack
 	};
 }

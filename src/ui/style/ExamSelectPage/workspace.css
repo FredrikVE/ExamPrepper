@@ -1,4 +1,10 @@
 /* src/ui/style/ExamSelectPage/workspace.css */
+.exam-select-layout {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+}
+
 .exam-select-workspace {
     position: relative;
     min-width: 0;

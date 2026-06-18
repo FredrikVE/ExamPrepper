@@ -7,7 +7,8 @@
 	display: none;
 }
 
-.mobile-topbar-menu-button {
+.mobile-topbar-menu-button,
+.mobile-topbar-back-button {
 	display: none;
 	place-items: center;
 	border: 1px solid var(--line-strong);
@@ -17,7 +18,8 @@
 	backdrop-filter: var(--blur-panel);
 }
 
-.mobile-topbar-menu-icon {
+.mobile-topbar-menu-icon,
+.mobile-topbar-back-icon {
 	width: 26px;
 	height: 26px;
 }
@@ -35,7 +37,7 @@
 		left: 0;
 		display: grid;
 		height: var(--mobile-topbar-height);
-		grid-template-columns: 64px minmax(0, 1fr);
+		grid-template-columns: 64px minmax(0, 1fr) 64px;
 		align-items: stretch;
 		column-gap: 14px;
 		border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line-strong));
@@ -81,13 +83,26 @@
 		display: none;
 	}
 
-	.mobile-topbar-menu-button {
+	.mobile-topbar-menu-button,
+	.mobile-topbar-back-button {
 		position: relative;
 		z-index: 1;
 		display: grid;
 		width: 64px;
 		height: 64px;
 		border-radius: 18px;
+	}
+
+	.mobile-topbar-menu-button {
+		grid-column: 1;
+	}
+
+	.mobile-topbar-back-button {
+		grid-column: 1;
+	}
+
+	.mobile-topbar-with-back .mobile-topbar-menu-button {
+		grid-column: 3;
 	}
 
 	.mobile-topbar-subject-picker {
@@ -106,7 +121,7 @@
 	}
 
 	.mobile-topbar {
-		grid-template-columns: 48px minmax(0, 1fr);
+		grid-template-columns: 48px minmax(0, 1fr) 48px;
 		column-gap: 8px;
 		padding: calc(env(safe-area-inset-top) + 6px) 12px 6px;
 	}
@@ -116,13 +131,15 @@
 		height: 16px;
 	}
 
-	.mobile-topbar-menu-button {
+	.mobile-topbar-menu-button,
+	.mobile-topbar-back-button {
 		width: 48px;
 		height: 48px;
 		border-radius: 14px;
 	}
 
-	.mobile-topbar-menu-icon {
+	.mobile-topbar-menu-icon,
+	.mobile-topbar-back-icon {
 		width: 22px;
 		height: 22px;
 	}
@@ -130,12 +147,13 @@
 
 @media (max-width: 430px) {
 	.mobile-topbar {
-		grid-template-columns: 56px minmax(0, 1fr);
+		grid-template-columns: 56px minmax(0, 1fr) 56px;
 		column-gap: 12px;
 		padding-inline: 16px;
 	}
 
-	.mobile-topbar-menu-button {
+	.mobile-topbar-menu-button,
+	.mobile-topbar-back-button {
 		width: 56px;
 		height: 56px;
 		border-radius: 16px;

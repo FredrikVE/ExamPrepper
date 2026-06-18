@@ -39,29 +39,45 @@ export default function ExamSelectPage({ viewModel }) {
         viewModel.searchSuggestions.length > 0;
 
     return (
-        <main className="exam-select-workspace">
-            <div className="exam-select-ambient-light" aria-hidden="true" />
+        <div className="exam-select-layout">
+            <main className="exam-select-workspace">
+                <div className="exam-select-ambient-light" aria-hidden="true" />
 
-            <ExamSelectTopbar title={viewModel.title} />
+                <ExamSelectTopbar title={viewModel.title} />
 
-            <ExamSelectIntro
-                selectedSubject={viewModel.selectedSubject}
-                subtitle={viewModel.subtitle}
+                <ExamSelectIntro
+                    selectedSubject={viewModel.selectedSubject}
+                    subtitle={viewModel.subtitle}
+                />
+
+                <ExamSelectGrid
+                    exams={viewModel.exams}
+                    emptyTitle={viewModel.emptyTitle}
+                    emptyMessage={viewModel.emptyMessage}
+                    practiceExamLabel={viewModel.practiceExamLabel}
+                    questionLabel={viewModel.questionLabel}
+                    minuteLabel={viewModel.minuteLabel}
+                    onSelectExam={viewModel.selectExam}
+                />
+            </main>
+
+            <button
+                type="button"
+                className={backdropClassName}
+                onClick={viewModel.closeSearch}
+                aria-label={viewModel.searchCloseLabel}
+                aria-hidden={!viewModel.isSearchFocused}
+                tabIndex={viewModel.isSearchFocused ? 0 : -1}
             />
 
-            <ExamSelectGrid
-                exams={viewModel.exams}
-                emptyTitle={viewModel.emptyTitle}
-                emptyMessage={viewModel.emptyMessage}
-                practiceExamLabel={viewModel.practiceExamLabel}
-                questionLabel={viewModel.questionLabel}
-                minuteLabel={viewModel.minuteLabel}
-                onSelectExam={viewModel.selectExam}
-            />
-
-            <div className={backdropClassName} aria-hidden="true" />
-
-            <div className="exam-search-footer">
+            <div
+                className="exam-search-footer"
+                onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                        viewModel.closeSearch();
+                    }
+                }}
+            >
                 {showSuggestions && (
                     <SearchSuggestionList
                         suggestions={viewModel.searchSuggestions}
@@ -73,14 +89,17 @@ export default function ExamSelectPage({ viewModel }) {
                     searchTerm={viewModel.searchTerm}
                     onSearchTermChange={viewModel.changeSearchTerm}
                     onSearchFocus={viewModel.focusSearch}
-                    onSearchBlur={viewModel.blurSearch}
+                    onCloseSearch={viewModel.closeSearch}
                     category={viewModel.category}
+                    categoryLabel={viewModel.categoryLabel}
                     onCategoryChange={viewModel.changeCategory}
                     categories={viewModel.categories}
-                    searchPlaceholder="Søk etter eksamen..."
-                    allCategoriesLabel="Alle"
+                    searchPlaceholder={viewModel.searchPlaceholder}
+                    searchLabel={viewModel.searchLabel}
+                    categoryAriaLabel={viewModel.categoryAriaLabel}
+                    allCategoriesLabel={viewModel.allCategoriesLabel}
                 />
             </div>
-        </main>
+        </div>
     );
 }

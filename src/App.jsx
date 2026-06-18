@@ -48,7 +48,8 @@ function AppContent() {
 		language,
 		t,
 		navigationViewModel.selectedSubjectId,
-		navigationViewModel.selectSubject
+		navigationViewModel.selectSubject,
+		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS
 	);
 
 	const examSelectPageViewModel = useExamSelectPageViewModel(
@@ -56,7 +57,8 @@ function AppContent() {
 		language,
 		t,
 		subjectSelectPageViewModel.selectedSubject,
-		navigationViewModel.selectExam
+		navigationViewModel.selectExam,
+		navigationViewModel.activeScreen === NAV_SCREENS.SELECT
 	);
 
 
@@ -75,6 +77,8 @@ function AppContent() {
 					onToggleSubjectPicker={navigationViewModel.toggleSubjectPicker}
 					onCloseSubjectPicker={navigationViewModel.closeSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
+					showBackButton={navigationViewModel.showBackButton}
+					onBack={navigationViewModel.goBack}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
 					onSelectSubject={navigationViewModel.selectSubject}

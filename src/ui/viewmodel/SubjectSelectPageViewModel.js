@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject) {
+export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive) {
 	const [subjects, setSubjects] = useState([]);
 	const [subjectsLoading, setSubjectsLoading] = useState(true);
 	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
@@ -70,25 +70,39 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		}));
 	}, [filteredSubjects, searchTerm]);
 
+	const facultyLabel = useMemo(() => {
+		return faculty === ALL_FACULTIES ? t.filterAllLabel : faculty;
+	}, [faculty, t.filterAllLabel]);
+
+	const closeSearch = useCallback(() => {
+		setIsSearchFocused(false);
+	}, []);
+
+	useEffect(() => {
+		if (!isActive) {
+			closeSearch();
+		}
+	}, [isActive, closeSearch]);
+
 	const changeSearchTerm = useCallback((nextSearchTerm) => {
 		setSearchTerm(nextSearchTerm);
 	}, []);
 
 	const changeFaculty = useCallback((nextFaculty) => {
+		closeSearch();
 		setFaculty(nextFaculty);
-	}, []);
+	}, [closeSearch]);
 
 	const focusSearch = useCallback(() => {
 		setIsSearchFocused(true);
 	}, []);
 
-	const blurSearch = useCallback(() => {
-		setIsSearchFocused(false);
-	}, []);
+	const blurSearch = closeSearch;
 
 	const selectSubject = useCallback((subjectId) => {
+		closeSearch();
 		onSelectSubject(subjectId);
-	}, [onSelectSubject]);
+	}, [closeSearch, onSelectSubject]);
 
 	return {
 		// Data
@@ -107,10 +121,12 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		errorAriaLabel: t.subjectErrorMessage,
 		emptyTitle: t.subjectEmptyMessage,
 		emptyDescription: "",
+		searchCloseLabel: t.searchCloseLabel,
 
 		// Filter-verdier
 		searchTerm,
 		faculty,
+		facultyLabel,
 		isSearchFocused,
 		searchSuggestions,
 
@@ -119,6 +135,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		changeFaculty,
 		focusSearch,
 		blurSearch,
+		closeSearch,
 		selectSubject
 	};
 }

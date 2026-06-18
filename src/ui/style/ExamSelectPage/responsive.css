@@ -20,6 +20,10 @@
         min-height: 100vh;
     }
 
+    .exam-select-layout {
+        min-height: 100vh;
+    }
+
     .exam-select-workspace {
         min-height: 100vh;
         border-inline: 0;
@@ -54,57 +58,45 @@
     }
 
     .exam-select-controls {
-        flex-wrap: nowrap;
-        gap: 0;
-        margin-bottom: 0;
+        width: 100%;
         padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     }
 
-    .exam-select-search,
-    .exam-select-filter {
-        min-height: 50px;
-        border-radius: 0;
-        box-shadow: none;
+    .mobile-search-shell {
+        min-height: 58px;
+        border-radius: 16px;
+        background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
     }
 
-    .exam-select-search {
-        flex: 1 1 0;
-        width: auto;
-        min-width: 0;
-        border-right: 0;
-        border-radius: 14px 0 0 14px;
+    .mobile-search-icon,
+    .mobile-filter-icon {
+        width: 21px;
+        height: 21px;
     }
 
-    .exam-select-filter {
-        flex: 0 0 auto;
-        width: auto;
-        min-width: 0;
-        border-left: 1px solid var(--line);
-        border-radius: 0 14px 14px 0;
+    .mobile-search-icon {
+        margin-left: 16px;
     }
 
-    .exam-select-search input,
-    .exam-select-filter select {
-        min-height: 48px;
+    .mobile-search-input {
+        min-height: 56px;
+        padding: 0 12px 0 10px;
         font-size: 16px;
     }
 
-    .exam-select-search-icon,
-    .exam-select-filter-icon {
-        margin-left: 14px;
-        width: 20px;
-        height: 20px;
+    .mobile-search-filter {
+        min-width: 124px;
+        min-height: 56px;
+        gap: 9px;
+        padding: 0 38px 0 14px;
     }
 
-    .exam-select-search input {
-        padding: 0 14px 0 10px;
+    .mobile-filter-label {
+        max-width: 92px;
+        font-size: 16px;
     }
 
-    .exam-select-filter select {
-        padding: 0 38px 0 8px;
-    }
-
-    .exam-select-filter-chevron {
+    .mobile-filter-chevron {
         right: 12px;
         width: 18px;
         height: 18px;

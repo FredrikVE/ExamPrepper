@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
 import { ALL_CATEGORIES, buildExamCategories, filterExams } from "./ExamSelectPage/examSelectPageFilters.js";
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
     const [examsLoadError, setExamsLoadError] = useState(null);
@@ -82,25 +82,39 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         }));
     }, [filteredExams, searchTerm]);
 
+    const categoryLabel = useMemo(() => {
+        return category === ALL_CATEGORIES ? t.filterAllLabel : category;
+    }, [category, t.filterAllLabel]);
+
+    const closeSearch = useCallback(() => {
+        setIsSearchFocused(false);
+    }, []);
+
+    useEffect(() => {
+        if (!isActive) {
+            closeSearch();
+        }
+    }, [isActive, closeSearch]);
+
     const changeSearchTerm = useCallback((nextSearchTerm) => {
         setSearchTerm(nextSearchTerm);
     }, []);
 
     const changeCategory = useCallback((nextCategory) => {
+        closeSearch();
         setCategory(nextCategory);
-    }, []);
+    }, [closeSearch]);
 
     const focusSearch = useCallback(() => {
         setIsSearchFocused(true);
     }, []);
 
-    const blurSearch = useCallback(() => {
-        setIsSearchFocused(false);
-    }, []);
+    const blurSearch = closeSearch;
 
     const selectExam = useCallback((examId) => {
+        closeSearch();
         onSelectExam(examId);
-    }, [onSelectExam]);
+    }, [closeSearch, onSelectExam]);
 
     return {
         // Data
@@ -114,14 +128,21 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         // Søk og filter
         searchTerm,
         category,
+        categoryLabel,
         isSearchFocused,
         searchSuggestions,
+        searchCloseLabel: t.searchCloseLabel,
+        searchLabel: t.examSearchLabel,
+        searchPlaceholder: t.examSearchPlaceholder,
+        categoryAriaLabel: t.examCategoryLabel,
+        allCategoriesLabel: t.examAllCategories,
 
         // Handlers
         changeSearchTerm,
         changeCategory,
         focusSearch,
         blurSearch,
+        closeSearch,
         selectExam
     };
 }
