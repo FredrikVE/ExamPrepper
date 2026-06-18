@@ -71,20 +71,23 @@
 	z-index: 80;
 	border: 0;
 	padding: 0;
-	background: rgba(0, 0, 0, 0.28);
+	background: rgba(0, 0, 0, 0.48);
 	opacity: 0;
 	pointer-events: none;
-	transition: opacity var(--transition-normal);
+	transition:
+		backdrop-filter var(--transition-normal),
+		opacity var(--transition-normal);
 }
 
 .mobile-dropdown-backdrop-visible {
 	opacity: 1;
 	pointer-events: auto;
+	backdrop-filter: blur(8px);
 }
 
 .mobile-dropdown-backdrop-picker-open {
-	background: rgba(0, 0, 0, 0.46);
-	backdrop-filter: blur(6px);
+	background: rgba(0, 0, 0, 0.58);
+	backdrop-filter: blur(10px);
 }
 
 .desktop-sidebar-divider {

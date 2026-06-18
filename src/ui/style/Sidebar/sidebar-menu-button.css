@@ -101,10 +101,6 @@
 	}
 
 	.mobile-topbar-back-button {
-		grid-column: 1;
-	}
-
-	.mobile-topbar-with-back .mobile-topbar-menu-button {
 		grid-column: 3;
 		justify-self: end;
 	}

@@ -101,7 +101,7 @@ export default function MobileDropDownTopBar(props) {
 	const { t } = useLanguage();
 
 	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher;
-	const showExamWorkStatus = props.isExamWorkMode && !props.isMenuOpen && Boolean(props.examWorkStatusLabel);
+	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMenuOpen;
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
 
 	useMobileMenuEscapeKey({
@@ -145,17 +145,6 @@ export default function MobileDropDownTopBar(props) {
 				className={topbarClassNames.join(" ")}
 				aria-label={t.sidebarMobileNavigation}
 			>
-				{props.showBackButton && (
-					<button
-						type="button"
-						className="mobile-topbar-back-button"
-						onClick={props.onBack}
-						aria-label={t.sidebarBack}
-					>
-						<ChevronLeft className="mobile-topbar-back-icon" />
-					</button>
-				)}
-
 				<button
 					type="button"
 					className="mobile-topbar-menu-button"
@@ -167,7 +156,18 @@ export default function MobileDropDownTopBar(props) {
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
 
-				{showExamWorkStatus && (
+				{props.showBackButton && (
+					<button
+						type="button"
+						className="mobile-topbar-back-button"
+						onClick={props.onBack}
+						aria-label={t.sidebarBack}
+					>
+						<ChevronLeft className="mobile-topbar-back-icon" />
+					</button>
+				)}
+
+				{shouldShowExamWorkStatus && (
 					<p className="mobile-topbar-exam-work-status">
 						{props.examWorkStatusLabel}
 					</p>
