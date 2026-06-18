@@ -25,20 +25,15 @@ export default function SubjectSelectPage({ viewModel }) {
         );
     }
 
+    const backdropClassName = viewModel.isSearchFocused
+        ? "search-backdrop search-backdrop-visible"
+        : "search-backdrop";
+
     return (
         <main className="subject-select-workspace">
             <div className="subject-select-ambient-light" aria-hidden="true" />
 
             <SubjectSelectTopbar t={viewModel.t} />
-
-            <SubjectSelectControls
-                t={viewModel.t}
-                searchTerm={viewModel.searchTerm}
-                onSearchTermChange={viewModel.changeSearchTerm}
-                faculty={viewModel.faculty}
-                onFacultyChange={viewModel.changeFaculty}
-                faculties={viewModel.faculties}
-            />
 
             <SubjectSelectGrid
                 t={viewModel.t}
@@ -47,6 +42,19 @@ export default function SubjectSelectPage({ viewModel }) {
                 emptyTitle={viewModel.emptyTitle}
                 emptyDescription={viewModel.emptyDescription}
                 onSelectSubject={viewModel.selectSubject}
+            />
+
+            <div className={backdropClassName} aria-hidden="true" />
+
+            <SubjectSelectControls
+                t={viewModel.t}
+                searchTerm={viewModel.searchTerm}
+                onSearchTermChange={viewModel.changeSearchTerm}
+                onSearchFocus={viewModel.focusSearch}
+                onSearchBlur={viewModel.blurSearch}
+                faculty={viewModel.faculty}
+                onFacultyChange={viewModel.changeFaculty}
+                faculties={viewModel.faculties}
             />
         </main>
     );

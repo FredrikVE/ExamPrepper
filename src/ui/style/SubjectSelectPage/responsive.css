@@ -16,7 +16,7 @@
         min-height: 100vh;
         border-inline: 0;
         border-radius: 0;
-        padding: calc(var(--mobile-topbar-height) + 24px) 20px 44px;
+        padding: calc(var(--mobile-topbar-height) + 24px) 20px calc(90px + env(safe-area-inset-bottom));
     }
 
     .subject-select-topbar {
@@ -26,7 +26,64 @@
     }
 
     .subject-select-controls {
-        padding-left: 0;
+        position: fixed;
+        z-index: 50;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        flex-wrap: nowrap;
+        gap: 0;
+        margin-bottom: 0;
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        border-top: 1px solid var(--line);
+        background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
+        backdrop-filter: var(--blur-panel);
+        box-shadow: 0 -8px 24px color-mix(in srgb, #000 12%, transparent);
+    }
+
+    .subject-select-search,
+    .subject-select-filter {
+        min-height: 50px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .subject-select-search {
+        border-right: 0;
+        border-radius: 14px 0 0 14px;
+    }
+
+    .subject-select-filter {
+        border-left: 1px solid var(--line);
+        border-radius: 0 14px 14px 0;
+        min-width: 0;
+    }
+
+    .subject-select-search input,
+    .subject-select-filter select {
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .subject-select-search-icon,
+    .subject-select-filter-icon {
+        margin-left: 14px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .subject-select-search input {
+        padding: 0 14px 0 10px;
+    }
+
+    .subject-select-filter select {
+        padding: 0 38px 0 8px;
+    }
+
+    .subject-select-filter-chevron {
+        right: 12px;
+        width: 18px;
+        height: 18px;
     }
 
 }
@@ -36,19 +93,22 @@
         grid-template-columns: 1fr;
     }
 
-    .subject-select-topbar,
-    .subject-select-controls {
-        padding-left: 0;
-    }
-
     .subject-select-topbar {
         padding-top: 0;
+        padding-left: 0;
         align-items: flex-start;
     }
 
-    .subject-select-search,
+    .subject-select-search {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+    }
+
     .subject-select-filter {
-        width: 100%;
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 0;
     }
 }
 

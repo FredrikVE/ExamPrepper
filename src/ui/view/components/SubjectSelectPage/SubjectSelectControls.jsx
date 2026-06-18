@@ -1,7 +1,7 @@
 // src/ui/view/components/SubjectSelectPage/SubjectSelectControls.jsx
 import { ChevronDown, Funnel, Search } from "lucide-react";
 
-export default function SubjectSelectControls({ t, searchTerm, onSearchTermChange, faculty, onFacultyChange, faculties }) {
+export default function SubjectSelectControls({ t, searchTerm, onSearchTermChange, onSearchFocus, onSearchBlur, faculty, onFacultyChange, faculties }) {
     return (
         <div className="subject-select-controls" aria-label={t.subjectSelectControlsLabel}>
             <label className="subject-select-search">
@@ -11,6 +11,8 @@ export default function SubjectSelectControls({ t, searchTerm, onSearchTermChang
                     type="search"
                     value={searchTerm}
                     onChange={(event) => onSearchTermChange(event.target.value)}
+                    onFocus={onSearchFocus}
+                    onBlur={onSearchBlur}
                     placeholder={t.subjectSearchPlaceholder}
                 />
             </label>

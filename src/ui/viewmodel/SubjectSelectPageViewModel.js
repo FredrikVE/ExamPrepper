@@ -8,6 +8,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [faculty, setFaculty] = useState(ALL_FACULTIES);
+	const [isSearchFocused, setIsSearchFocused] = useState(false);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -65,6 +66,14 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		setFaculty(nextFaculty);
 	}, []);
 
+	const focusSearch = useCallback(() => {
+		setIsSearchFocused(true);
+	}, []);
+
+	const blurSearch = useCallback(() => {
+		setIsSearchFocused(false);
+	}, []);
+
 	const selectSubject = useCallback((subjectId) => {
 		onSelectSubject(subjectId);
 	}, [onSelectSubject]);
@@ -90,10 +99,13 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		// Filter-verdier
 		searchTerm,
 		faculty,
+		isSearchFocused,
 
 		// Handlers
 		changeSearchTerm,
 		changeFaculty,
+		focusSearch,
+		blurSearch,
 		selectSubject
 	};
 }
