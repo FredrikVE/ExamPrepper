@@ -3,7 +3,7 @@ import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx"
 import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
 import ExamSelectControls from "../components/ExamSelectPage/ExamSelectControls.jsx";
-import SearchSuggestionList from "../components/Shared/SearchSuggestionList.jsx";
+import ExamSearchSheetContent from "../components/ExamSelectPage/ExamSearchSheetContent.jsx";
 
 export default function ExamSelectPage({ viewModel }) {
     if (viewModel.examsLoading) {
@@ -30,13 +30,9 @@ export default function ExamSelectPage({ viewModel }) {
         );
     }
 
-    const backdropClassName = viewModel.isSearchFocused
+    const backdropClassName = viewModel.isSearchSheetOpen
         ? "search-backdrop search-backdrop-visible"
         : "search-backdrop";
-
-    const showSuggestions =
-        viewModel.isSearchFocused &&
-        viewModel.searchSuggestions.length > 0;
 
     return (
         <div className="exam-select-layout">
@@ -64,32 +60,41 @@ export default function ExamSelectPage({ viewModel }) {
             <button
                 type="button"
                 className={backdropClassName}
-                onClick={viewModel.closeSearch}
+                onClick={viewModel.closeExamSearchSheet}
                 aria-label={viewModel.searchCloseLabel}
-                aria-hidden={!viewModel.isSearchFocused}
-                tabIndex={viewModel.isSearchFocused ? 0 : -1}
+                aria-hidden={!viewModel.isSearchSheetOpen}
+                tabIndex={viewModel.isSearchSheetOpen ? 0 : -1}
             />
 
             <div
                 className="exam-search-footer"
                 onBlur={(event) => {
                     if (!event.currentTarget.contains(event.relatedTarget)) {
-                        viewModel.closeSearch();
+                        viewModel.closeExamSearchSheet();
                     }
                 }}
             >
-                {showSuggestions && (
-                    <SearchSuggestionList
-                        suggestions={viewModel.searchSuggestions}
-                        onSelect={viewModel.selectExam}
+                {viewModel.isSearchSheetOpen && (
+                    <ExamSearchSheetContent
+                        isFilterOptionsMode={viewModel.isFilterOptionsMode}
+                        searchSuggestions={viewModel.searchSuggestions}
+                        filterOptions={viewModel.categoryFilterOptions}
+                        selectedFilterValue={viewModel.category}
+                        onSelectSearchSuggestion={viewModel.selectExam}
+                        onSelectFilterOption={viewModel.selectCategoryFilterOption}
                     />
                 )}
 
                 <ExamSelectControls
                     searchTerm={viewModel.searchTerm}
                     onSearchTermChange={viewModel.changeSearchTerm}
+                    onExamSearchTermChange={viewModel.changeExamSearchTerm}
                     onSearchFocus={viewModel.focusSearch}
+                    onOpenExamSearchSuggestions={viewModel.openExamSearchSuggestions}
                     onCloseSearch={viewModel.closeSearch}
+                    onCloseExamSearchSheet={viewModel.closeExamSearchSheet}
+                    onOpenExamCategoryOptions={viewModel.openExamCategoryOptions}
+                    isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
                     category={viewModel.category}
                     categoryLabel={viewModel.categoryLabel}
                     onCategoryChange={viewModel.changeCategory}

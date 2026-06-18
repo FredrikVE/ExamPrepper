@@ -3,6 +3,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
 import { ALL_CATEGORIES, buildExamCategories, filterExams } from "./ExamSelectPage/examSelectPageFilters.js";
 
+const SEARCH_SHEET_MODES = {
+    SEARCH_SUGGESTIONS: "searchSuggestions",
+    FILTER_OPTIONS: "filterOptions"
+};
+
+const SEARCH_SUGGESTION_LIMIT = 6;
+
 export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
@@ -10,6 +17,8 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState(ALL_CATEGORIES);
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const [isSearchSheetOpen, setIsSearchSheetOpen] = useState(false);
+    const [searchSheetMode, setSearchSheetMode] = useState(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 
     const subjectId = selectedSubject?.id ?? null;
 
@@ -72,23 +81,41 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
     }, [exams, searchTerm, category]);
 
     const searchSuggestions = useMemo(() => {
-        if (!searchTerm.trim()) {
-            return [];
-        }
-
-        return filteredExams.map((exam) => ({
+        return filteredExams.slice(0, SEARCH_SUGGESTION_LIMIT).map((exam) => ({
             id: exam.id,
             label: exam.title
         }));
-    }, [filteredExams, searchTerm]);
+    }, [filteredExams]);
+
+    const categoryFilterOptions = useMemo(() => {
+        return [
+            {
+                id: ALL_CATEGORIES,
+                value: ALL_CATEGORIES,
+                label: t.examAllCategoriesSheetOption ?? t.examAllCategories
+            },
+            ...categories.map((categoryOption) => ({
+                id: categoryOption,
+                value: categoryOption,
+                label: categoryOption
+            }))
+        ];
+    }, [categories, t.examAllCategories, t.examAllCategoriesSheetOption]);
+
+    const isSearchSuggestionsMode = searchSheetMode === SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS;
+    const isFilterOptionsMode = searchSheetMode === SEARCH_SHEET_MODES.FILTER_OPTIONS;
 
     const categoryLabel = useMemo(() => {
         return category === ALL_CATEGORIES ? t.filterAllLabel : category;
     }, [category, t.filterAllLabel]);
 
-    const closeSearch = useCallback(() => {
+    const closeExamSearchSheet = useCallback(() => {
         setIsSearchFocused(false);
+        setIsSearchSheetOpen(false);
+        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
     }, []);
+
+    const closeSearch = closeExamSearchSheet;
 
     useEffect(() => {
         if (!isActive) {
@@ -96,25 +123,47 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         }
     }, [isActive, closeSearch]);
 
-    const changeSearchTerm = useCallback((nextSearchTerm) => {
-        setSearchTerm(nextSearchTerm);
+    const openExamSearchSuggestions = useCallback(() => {
+        setIsSearchFocused(true);
+        setIsSearchSheetOpen(true);
+        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
     }, []);
+
+    const openExamCategoryOptions = useCallback(() => {
+        setIsSearchFocused(false);
+        setIsSearchSheetOpen(true);
+        setSearchSheetMode(SEARCH_SHEET_MODES.FILTER_OPTIONS);
+    }, []);
+
+    const changeExamSearchTerm = useCallback((nextSearchTerm) => {
+        setSearchTerm(nextSearchTerm);
+        setIsSearchFocused(true);
+        setIsSearchSheetOpen(true);
+        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
+    }, []);
+
+    const changeSearchTerm = changeExamSearchTerm;
 
     const changeCategory = useCallback((nextCategory) => {
-        closeSearch();
+        closeExamSearchSheet();
         setCategory(nextCategory);
-    }, [closeSearch]);
+    }, [closeExamSearchSheet]);
 
-    const focusSearch = useCallback(() => {
-        setIsSearchFocused(true);
+    const selectCategoryFilterOption = useCallback((nextCategory) => {
+        setIsSearchFocused(false);
+        setCategory(nextCategory);
+        setIsSearchSheetOpen(true);
+        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
     }, []);
 
-    const blurSearch = closeSearch;
+    const focusSearch = openExamSearchSuggestions;
+
+    const blurSearch = closeExamSearchSheet;
 
     const selectExam = useCallback((examId) => {
-        closeSearch();
+        closeExamSearchSheet();
         onSelectExam(examId);
-    }, [closeSearch, onSelectExam]);
+    }, [closeExamSearchSheet, onSelectExam]);
 
     return {
         // Data
@@ -130,7 +179,11 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         category,
         categoryLabel,
         isSearchFocused,
+        isSearchSheetOpen,
+        isSearchSuggestionsMode,
+        isFilterOptionsMode,
         searchSuggestions,
+        categoryFilterOptions,
         searchCloseLabel: t.searchCloseLabel,
         searchLabel: t.examSearchLabel,
         searchPlaceholder: t.examSearchPlaceholder,
@@ -139,10 +192,15 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
 
         // Handlers
         changeSearchTerm,
+        changeExamSearchTerm,
         changeCategory,
+        selectCategoryFilterOption,
         focusSearch,
+        openExamSearchSuggestions,
+        openExamCategoryOptions,
         blurSearch,
         closeSearch,
+        closeExamSearchSheet,
         selectExam
     };
 }
