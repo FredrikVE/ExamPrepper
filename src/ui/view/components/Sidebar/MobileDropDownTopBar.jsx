@@ -1,25 +1,33 @@
 // src/ui/view/components/Sidebar/MobileDropDownTopBar.jsx
 import { Menu } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-import MobileSubjectPicker from "./MobileSubjectPicker.jsx";
+import { SubjectPickerButton, SubjectPickerDropdown } from "./MobileSubjectPicker.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
 import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 
+function resolveCurrentSubject(subjects, selectedSubject) {
+	return selectedSubject ??
+		subjects[0] ?? {
+			id: "in5431",
+			code: "IN5431",
+			name: "Exam Emulator",
+			icon: "clipboard",
+		};
+}
+
 function MobileDropdownContent(props) {
 	return (
 		<>
-			{props.showSubjectSwitcher && (
-				<MobileSubjectPicker
+			{props.isSubjectPickerOpen && (
+				<SubjectPickerDropdown
 					subjects={props.subjects}
-					selectedSubject={props.selectedSubject}
-					isOpen={props.isSubjectPickerOpen}
-					onToggle={props.onToggleSubjectPicker}
-					onClose={props.onCloseSubjectPicker}
+					currentSubjectId={props.currentSubject.id}
 					onSelectSubject={props.onSelectSubject}
 					onShowAllSubjects={props.onShowAllSubjects}
+					onClose={props.onCloseSubjectPicker}
 				/>
 			)}
 
@@ -59,17 +67,26 @@ export default function MobileDropDownTopBar(props) {
 		props.onCloseSubjectPicker
 	);
 
-	const topbarClassName = props.isMenuOpen
-		? "mobile-topbar mobile-topbar-menu-open"
-		: "mobile-topbar";
+	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher;
 
-	const dropdownClassName = props.isMenuOpen
-		? "mobile-dropdown mobile-dropdown-open"
-		: "mobile-dropdown";
+	const topbarClassNames = [
+		"mobile-topbar",
+		props.isMenuOpen ? "mobile-topbar-menu-open" : null
+	].filter(Boolean);
 
-	const backdropClassName = props.isMenuOpen
-		? "mobile-dropdown-backdrop mobile-dropdown-backdrop-visible"
-		: "mobile-dropdown-backdrop";
+	const dropdownClassNames = [
+		"mobile-dropdown",
+		props.isMenuOpen ? "mobile-dropdown-open" : null,
+		showPickerButton ? "mobile-dropdown-with-picker" : null
+	].filter(Boolean);
+
+	const backdropClassNames = [
+		"mobile-dropdown-backdrop",
+		props.isMenuOpen ? "mobile-dropdown-backdrop-visible" : null,
+		props.isSubjectPickerOpen ? "mobile-dropdown-backdrop-picker-open" : null
+	].filter(Boolean);
+
+	const currentSubject = resolveCurrentSubject(props.subjects, props.selectedSubject);
 
 	const menuButtonLabel = props.isMenuOpen
 		? t.sidebarCloseNavigation
@@ -77,7 +94,10 @@ export default function MobileDropDownTopBar(props) {
 
 	return (
 		<>
-			<header className={topbarClassName} aria-label={t.sidebarMobileNavigation}>
+			<header
+				className={topbarClassNames.join(" ")}
+				aria-label={t.sidebarMobileNavigation}
+			>
 				<button
 					type="button"
 					className="mobile-topbar-menu-button"
@@ -88,11 +108,21 @@ export default function MobileDropDownTopBar(props) {
 				>
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
+
+				{showPickerButton && (
+					<div className="mobile-topbar-subject-picker">
+						<SubjectPickerButton
+							currentSubject={currentSubject}
+							isOpen={props.isSubjectPickerOpen}
+							onToggle={props.onToggleSubjectPicker}
+						/>
+					</div>
+				)}
 			</header>
 
 			<button
 				type="button"
-				className={backdropClassName}
+				className={backdropClassNames.join(" ")}
 				onClick={props.onCloseMenu}
 				aria-label={t.sidebarCloseNavigation}
 				aria-hidden={!props.isMenuOpen}
@@ -101,7 +131,7 @@ export default function MobileDropDownTopBar(props) {
 
 			<aside
 				id="app-navigation-menu"
-				className={dropdownClassName}
+				className={dropdownClassNames.join(" ")}
 				aria-label={t.sidebarNavigationMenu}
 				aria-hidden={!props.isMenuOpen}
 			>
@@ -111,11 +141,9 @@ export default function MobileDropDownTopBar(props) {
 					settingsOpen={props.settingsOpen}
 					onOpenSettings={props.onOpenSettings}
 					onCloseMenu={props.onCloseMenu}
-					showSubjectSwitcher={props.showSubjectSwitcher}
 					subjects={props.subjects}
-					selectedSubject={props.selectedSubject}
+					currentSubject={currentSubject}
 					isSubjectPickerOpen={props.isSubjectPickerOpen}
-					onToggleSubjectPicker={props.onToggleSubjectPicker}
 					onCloseSubjectPicker={props.onCloseSubjectPicker}
 					onSelectSubject={props.onSelectSubject}
 					onShowAllSubjects={props.onShowAllSubjects}

@@ -89,6 +89,15 @@
 		height: 64px;
 		border-radius: 18px;
 	}
+
+	.mobile-topbar-subject-picker {
+		position: relative;
+		z-index: 2;
+		grid-column: 2;
+		display: flex;
+		align-items: center;
+		min-width: 0;
+	}
 }
 
 @media (max-width: 932px) and (max-height: 500px) {

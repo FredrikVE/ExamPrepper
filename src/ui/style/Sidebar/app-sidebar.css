@@ -82,6 +82,11 @@
 	pointer-events: auto;
 }
 
+.mobile-dropdown-backdrop-picker-open {
+	background: rgba(0, 0, 0, 0.46);
+	backdrop-filter: blur(6px);
+}
+
 .desktop-sidebar-divider {
 	width: 100%;
 	height: 1px;
