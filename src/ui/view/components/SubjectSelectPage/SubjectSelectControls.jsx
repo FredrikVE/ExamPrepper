@@ -35,26 +35,6 @@ export default function SubjectSelectControls(props) {
 					<span className="mobile-filter-label" aria-hidden="true">
 						{props.facultyLabel}
 					</span>
-					<select
-						className="mobile-filter-select"
-						value={props.faculty}
-						onPointerDown={props.onCloseSubjectSearchSheet}
-						onFocus={props.onCloseSubjectSearchSheet}
-						onKeyDown={(event) => {
-							if (event.key === "Escape") {
-								props.onCloseSubjectSearchSheet();
-							}
-						}}
-						onChange={(event) => props.onFacultyChange(event.target.value)}
-						aria-label={props.t.subjectFacultyLabel}
-					>
-						<option value="all">{props.t.subjectAllFaculties}</option>
-						{props.faculties.map((facultyOption) => (
-							<option key={facultyOption} value={facultyOption}>
-								{facultyOption}
-							</option>
-						))}
-					</select>
 					<button
 						type="button"
 						className="mobile-filter-button"

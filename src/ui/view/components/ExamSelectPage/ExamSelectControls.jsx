@@ -35,26 +35,6 @@ export default function ExamSelectControls(props) {
 					<span className="mobile-filter-label" aria-hidden="true">
 						{props.categoryLabel}
 					</span>
-					<select
-						className="mobile-filter-select"
-						value={props.category}
-						onPointerDown={props.onCloseExamSearchSheet}
-						onFocus={props.onCloseExamSearchSheet}
-						onKeyDown={(event) => {
-							if (event.key === "Escape") {
-								props.onCloseExamSearchSheet();
-							}
-						}}
-						onChange={(event) => props.onCategoryChange(event.target.value)}
-						aria-label={props.categoryAriaLabel}
-					>
-						<option value="all">{props.allCategoriesLabel}</option>
-						{props.categories.map((cat) => (
-							<option key={cat} value={cat}>
-								{cat}
-							</option>
-						))}
-					</select>
 					<button
 						type="button"
 						className="mobile-filter-button"

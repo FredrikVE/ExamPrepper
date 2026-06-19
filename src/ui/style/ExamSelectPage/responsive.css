@@ -104,19 +104,6 @@
         height: 18px;
     }
 
-    .exam-select-controls .mobile-filter-select {
-        display: none;
-    }
-
-    .exam-select-controls .mobile-filter-button {
-        position: absolute;
-        inset: 0;
-        display: block;
-        border: 0;
-        padding: 0;
-        background: transparent;
-        cursor: pointer;
-    }
 
 }
 
