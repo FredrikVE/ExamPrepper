@@ -20,11 +20,10 @@
     pointer-events: auto;
 }
 
-.subject-search-footer-open,
-.exam-search-footer-open {
-    z-index: 45;
-}
-
+/* ── Desktop: search shell lift when sheet is open ──
+   Footerens bakgrunn dimmes sammen med resten (z-index: auto).
+   Kontrollene flyter allerede over backdrop via
+   .subject-search-footer > * { z-index: 60 }. */
 .subject-search-footer-open .mobile-search-shell,
 .exam-search-footer-open .mobile-search-shell {
     border-color: color-mix(in srgb, var(--accent) 60%, transparent);
@@ -45,12 +44,8 @@
     background: color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
+/* ── Mobile: skip the lift on ≤932px (footer has its own sheet styling) ── */
 @media (max-width: 932px) {
-    .subject-search-footer-open,
-    .exam-search-footer-open {
-        z-index: 50;
-    }
-
     .subject-search-footer-open .mobile-search-shell,
     .exam-search-footer-open .mobile-search-shell {
         border-color: var(--line-strong);
