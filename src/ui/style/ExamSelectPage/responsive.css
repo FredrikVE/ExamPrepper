@@ -62,10 +62,6 @@
         box-shadow: 0 -8px 24px color-mix(in srgb, #000 12%, transparent);
     }
 
-    .exam-search-footer::before {
-        content: none;
-    }
-
     .exam-select-controls {
         width: 100%;
         padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
