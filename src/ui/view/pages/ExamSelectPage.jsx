@@ -11,31 +11,38 @@ export default function ExamSelectPage({ viewModel }) {
 
     if (viewModel.examsLoading) {
         return (
-            <main className="exam-select-workspace">
-                <div className="exam-select-ambient-light" aria-hidden="true" />
+            <div className="exam-select-layout">
+                <main className="exam-select-workspace">
+                    <div className="exam-select-ambient-light" aria-hidden="true" />
 
-                <section className="exam-select-state">
-                    <p>{viewModel.loadingMessage}</p>
-                </section>
-            </main>
+                    <section className="exam-select-state">
+                        <p>{viewModel.loadingMessage}</p>
+                    </section>
+                </main>
+            </div>
         );
     }
 
     if (viewModel.examsLoadError) {
         return (
-            <main className="exam-select-workspace">
-                <div className="exam-select-ambient-light" aria-hidden="true" />
+            <div className="exam-select-layout">
+                <main className="exam-select-workspace">
+                    <div className="exam-select-ambient-light" aria-hidden="true" />
 
-                <section className="exam-select-state">
-                    <p>{viewModel.examsLoadError}</p>
-                </section>
-            </main>
+                    <section className="exam-select-state">
+                        <p>{viewModel.examsLoadError}</p>
+                    </section>
+                </main>
+            </div>
         );
     }
 
     const backdropClassName = viewModel.isSearchSheetOpen
         ? "search-backdrop search-backdrop-visible"
         : "search-backdrop";
+    const searchFooterClassName = viewModel.isSearchSheetOpen
+        ? "exam-search-footer exam-search-footer-open"
+        : "exam-search-footer";
 
     return (
         <div className="exam-select-layout">
@@ -70,7 +77,7 @@ export default function ExamSelectPage({ viewModel }) {
             />
 
             <div
-                className="exam-search-footer"
+                className={searchFooterClassName}
                 onBlur={(event) => {
                     if (!event.currentTarget.contains(event.relatedTarget)) {
                         viewModel.closeExamSearchSheet();

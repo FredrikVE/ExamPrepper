@@ -10,28 +10,35 @@ export default function SubjectSelectPage({ viewModel }) {
 
 	if (viewModel.subjectsLoading) {
 		return (
-			<main className="subject-select-workspace">
-				<section className="subject-select-empty" aria-label={viewModel.loadingAriaLabel}>
-					<h2>{viewModel.loadingTitle}</h2>
-				</section>
-			</main>
+			<div className="subject-select-layout">
+				<main className="subject-select-workspace">
+					<section className="subject-select-empty" aria-label={viewModel.loadingAriaLabel}>
+						<h2>{viewModel.loadingTitle}</h2>
+					</section>
+				</main>
+			</div>
 		);
 	}
 
 	if (viewModel.subjectsLoadError) {
 		return (
-			<main className="subject-select-workspace">
-				<section className="subject-select-empty" aria-label={viewModel.errorAriaLabel}>
-					<h2>{viewModel.errorTitle}</h2>
-					<p>{viewModel.subjectsLoadError}</p>
-				</section>
-			</main>
+			<div className="subject-select-layout">
+				<main className="subject-select-workspace">
+					<section className="subject-select-empty" aria-label={viewModel.errorAriaLabel}>
+						<h2>{viewModel.errorTitle}</h2>
+						<p>{viewModel.subjectsLoadError}</p>
+					</section>
+				</main>
+			</div>
 		);
 	}
 
 	const backdropClassName = viewModel.isSearchSheetOpen
 		? "search-backdrop search-backdrop-visible"
 		: "search-backdrop";
+	const searchFooterClassName = viewModel.isSearchSheetOpen
+		? "subject-search-footer subject-search-footer-open"
+		: "subject-search-footer";
 
 	return (
 		<div className="subject-select-layout">
@@ -60,7 +67,7 @@ export default function SubjectSelectPage({ viewModel }) {
 			/>
 
 			<div
-				className="subject-search-footer"
+				className={searchFooterClassName}
 				onBlur={(event) => {
 					if (!event.currentTarget.contains(event.relatedTarget)) {
 						viewModel.closeSubjectSearchSheet();

@@ -2,19 +2,23 @@
 .exam-search-footer {
     position: absolute;
     z-index: 60;
-    right: clamp(36px, 4vw, 64px);
+    right: 0;
     bottom: 0;
-    left: clamp(36px, 4vw, 64px);
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 18px 0 clamp(24px, 3vw, 42px);
+    padding: 18px clamp(36px, 4vw, 64px) clamp(24px, 3vw, 42px);
     pointer-events: none;
     background: var(--shell-bg);
 }
 
 .exam-search-footer > * {
     pointer-events: auto;
+}
+
+.exam-search-footer-open {
+    background: transparent;
 }
 
 .exam-select-controls {

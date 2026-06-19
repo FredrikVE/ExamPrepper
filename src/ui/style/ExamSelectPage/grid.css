@@ -35,3 +35,23 @@
     font-size: 17px;
     line-height: 1.55;
 }
+
+.exam-select-state {
+    position: relative;
+    z-index: 1;
+    width: min(760px, 100%);
+    max-width: 760px;
+    margin-inline: auto;
+    padding: 42px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 34%, var(--line-strong));
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--accent) 6%, var(--panel-bg));
+}
+
+.exam-select-state p {
+    margin: 0;
+    color: var(--text-main);
+    font-size: clamp(28px, 2.4vw, 38px);
+    font-weight: 780;
+    letter-spacing: -0.04em;
+}
