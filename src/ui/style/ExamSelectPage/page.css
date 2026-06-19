@@ -1,6 +1,9 @@
 /* src/ui/style/ExamSelectPage/page.css */
 .exam-select-page {
+    min-height: 0;
     height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
     padding: var(--space-6);
     overflow: hidden;
     color: var(--text-main);

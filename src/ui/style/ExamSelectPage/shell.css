@@ -3,6 +3,8 @@
     display: grid;
     grid-template-columns: 320px minmax(0, 1fr);
     align-items: stretch;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
     gap: var(--space-5);
-    height: calc(100vh - 32px);
 }
