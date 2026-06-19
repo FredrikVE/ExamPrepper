@@ -1,2 +1,3 @@
 /* src/ui/style/Shared/index.css */
+@import "./search-backdrop.css";
 @import "./search-sheet.css";

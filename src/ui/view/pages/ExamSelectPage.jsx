@@ -37,9 +37,6 @@ export default function ExamSelectPage({ viewModel }) {
         );
     }
 
-    const backdropClassName = viewModel.isSearchSheetOpen
-        ? "search-backdrop search-backdrop-visible"
-        : "search-backdrop";
     const searchFooterClassName = viewModel.isSearchSheetOpen
         ? "exam-search-footer exam-search-footer-open"
         : "exam-search-footer";
@@ -67,14 +64,18 @@ export default function ExamSelectPage({ viewModel }) {
                 />
             </main>
 
-            <button
-                type="button"
-                className={backdropClassName}
-                onClick={viewModel.closeExamSearchSheet}
-                aria-label={viewModel.searchCloseLabel}
-                aria-hidden={!viewModel.isSearchSheetOpen}
-                tabIndex={viewModel.isSearchSheetOpen ? 0 : -1}
-            />
+            {viewModel.isSearchSheetOpen && (
+                <button
+                    type="button"
+                    className="search-backdrop search-backdrop-visible"
+                    onMouseDown={(event) => {
+                        event.preventDefault();
+                    }}
+                    onClick={viewModel.closeExamSearchSheet}
+                    aria-label={viewModel.searchCloseLabel}
+                    tabIndex={-1}
+                />
+            )}
 
             <div
                 className={searchFooterClassName}
