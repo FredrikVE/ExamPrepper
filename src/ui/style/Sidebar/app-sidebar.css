@@ -17,6 +17,13 @@
 	padding: 36px 30px 28px;
 }
 
+.exam-select-shell .desktop-sidebar {
+	position: relative;
+	top: auto;
+	height: 100%;
+	max-height: none;
+}
+
 .mobile-dropdown,
 .mobile-dropdown-backdrop {
 	display: none;
