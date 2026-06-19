@@ -5,14 +5,15 @@
     z-index: 40;
     border: 0;
     padding: 0;
-    background: rgba(7, 18, 38, 0.18);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(7, 18, 38, 0.32);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     opacity: 0;
     pointer-events: none;
     transition:
         opacity 200ms ease,
-        backdrop-filter 200ms ease;
+        backdrop-filter 200ms ease,
+        -webkit-backdrop-filter 200ms ease;
 }
 
 .search-backdrop-visible {
