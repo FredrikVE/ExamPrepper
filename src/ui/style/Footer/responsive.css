@@ -235,3 +235,41 @@
         padding: 8px 10px;
     }
 }
+
+/* Extra-narrow mobile footer: preserve tap targets without clipping the
+   navigation buttons on iPhone SE / 375px-class screens. */
+@media (max-width: 480px) {
+    .exam-footer {
+        width: calc(100% - 24px);
+        margin-top: 8px;
+        margin-bottom: calc(env(safe-area-inset-bottom) + 12px);
+        border-radius: 14px;
+    }
+
+    .exam-footer-container {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .exam-footer-counter {
+        min-width: 0;
+    }
+
+    .exam-footer-counter-label {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        text-align: center;
+    }
+
+    .exam-footer-button {
+        min-height: 40px;
+        padding-inline: 8px;
+        font-size: 0.8rem;
+    }
+
+    .exam-footer-icon {
+        width: 15px;
+        height: 15px;
+    }
+}
