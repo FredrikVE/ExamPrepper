@@ -1,11 +1,16 @@
 /* src/ui/style/ExamSelectPage/controls.css */
 .exam-search-footer {
     position: absolute;
-    z-index: 5;
+    z-index: 60;
     right: clamp(36px, 4vw, 64px);
-    bottom: clamp(24px, 3vw, 42px);
+    bottom: 0;
     left: clamp(36px, 4vw, 64px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 0 clamp(24px, 3vw, 42px);
     pointer-events: none;
+    background: var(--shell-bg);
 }
 
 .exam-search-footer > * {
@@ -16,7 +21,7 @@
     position: relative;
     z-index: 1;
     display: flex;
-    width: min(720px, 100%);
+    width: min(860px, 100%);
     max-width: 100%;
     margin-bottom: 0;
 }

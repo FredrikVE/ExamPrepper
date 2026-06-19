@@ -1,5 +1,7 @@
 /* src/ui/style/SubjectSelectPage/workspace.css */
 .subject-select-layout {
+    --subject-search-footer-space: clamp(112px, 13vh, 148px);
+
     position: relative;
     min-width: 0;
     min-height: 0;
@@ -25,7 +27,10 @@
     background: var(--shell-bg);
     box-shadow: var(--shadow-heavy);
     backdrop-filter: var(--blur-panel);
-    padding: clamp(42px, 5vw, 72px);
+    padding:
+        clamp(42px, 5vw, 72px)
+        clamp(42px, 5vw, 72px)
+        calc(clamp(42px, 5vw, 72px) + var(--subject-search-footer-space));
 }
 
 .subject-select-ambient-light {

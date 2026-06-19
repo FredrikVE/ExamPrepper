@@ -1,5 +1,7 @@
 /* src/ui/style/ExamSelectPage/workspace.css */
 .exam-select-layout {
+    --exam-search-footer-space: clamp(112px, 12vh, 146px);
+
     position: relative;
     min-width: 0;
     min-height: 0;
@@ -20,7 +22,10 @@
     background: var(--shell-bg);
     box-shadow: var(--shadow-heavy);
     backdrop-filter: var(--blur-panel);
-    padding: clamp(36px, 4vw, 64px);
+    padding:
+        clamp(36px, 4vw, 64px)
+        clamp(36px, 4vw, 64px)
+        calc(clamp(36px, 4vw, 64px) + var(--exam-search-footer-space));
 }
 
 .exam-select-ambient-light {
