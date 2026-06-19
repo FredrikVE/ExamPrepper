@@ -22,6 +22,8 @@ export default function AppNavigation(props) {
 				onChangeScreen={props.onChangeScreen}
 				settingsOpen={props.settingsOpen}
 				onOpenSettings={props.onOpenSettings}
+				onCloseSettings={props.onCloseSettings}
+				onBackFromSettings={props.onBackFromSettings}
 				isMenuOpen={props.isMenuOpen}
 				onToggleMenu={props.onToggleMenu}
 				onCloseMenu={props.onCloseMenu}

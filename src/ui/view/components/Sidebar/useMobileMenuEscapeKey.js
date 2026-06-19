@@ -4,6 +4,8 @@ import { useEffect } from "react";
 export default function useMobileMenuEscapeKey({
 	isMenuOpen,
 	onCloseMenu,
+	isSettingsOpen,
+	onCloseSettings,
 	isSubmitConfirmOpen,
 	onCloseSubmitConfirm,
 	isSubjectPickerOpen,
@@ -45,6 +47,8 @@ export default function useMobileMenuEscapeKey({
 	}, [
 		isMenuOpen,
 		onCloseMenu,
+		isSettingsOpen,
+		onCloseSettings,
 		isSubmitConfirmOpen,
 		onCloseSubmitConfirm,
 		isSubjectPickerOpen,

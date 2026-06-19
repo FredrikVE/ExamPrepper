@@ -127,6 +127,8 @@ export default function MobileDropDownTopBar(props) {
 	useMobileMenuEscapeKey({
 		isMenuOpen: props.isMenuOpen,
 		onCloseMenu: props.onCloseMenu,
+		isSettingsOpen: props.settingsOpen,
+		onCloseSettings: props.onCloseSettings,
 		isSubmitConfirmOpen: showExamSubmitConfirm,
 		onCloseSubmitConfirm: props.onCloseExamSubmitConfirm,
 		isSubjectPickerOpen: props.isSubjectPickerOpen,
@@ -225,6 +227,7 @@ export default function MobileDropDownTopBar(props) {
 					settingsOpen={props.settingsOpen}
 					onOpenSettings={props.onOpenSettings}
 					onCloseMenu={props.onCloseMenu}
+					onBackFromSettings={props.onBackFromSettings}
 					subjects={props.subjects}
 					currentSubject={currentSubject}
 					isSubjectPickerOpen={props.isSubjectPickerOpen}
