@@ -11,6 +11,7 @@
 	.exam-page {
 		min-height: 0;
 		height: 100svh;
+		max-height: 100svh;
 		padding: 0;
 		overflow: hidden;
 	}
@@ -19,6 +20,7 @@
 		display: block;
 		min-height: 0;
 		height: 100svh;
+		max-height: 100svh;
 		overflow: hidden;
 	}
 
@@ -30,21 +32,26 @@
 		border-radius: 0;
 		border-inline: 0;
 		padding-top: var(--mobile-topbar-height);
+		padding-bottom: 0;
+		overflow: hidden;
+		overscroll-behavior: contain;
+	}
+
+	.exam-page-main {
+		min-height: 0;
+		flex: 1 1 auto;
 		overflow-x: hidden;
 		overflow-y: auto;
+		padding: 18px 0;
 		overscroll-behavior: contain;
 		touch-action: pan-y;
 		-webkit-overflow-scrolling: touch;
 	}
 
-    .exam-page-main {
-        padding: 18px 0;
-    }
-
-    .exam-page-content {
-        width: var(--exam-content-width);
-        max-width: var(--exam-content-max-width);
-    }
+	.exam-page-content {
+		width: var(--exam-content-width);
+		max-width: var(--exam-content-max-width);
+	}
 }
 
 /* ── Laptop-first exam layout ─────────────
@@ -77,19 +84,26 @@
 }
 
 @media (max-width: 932px) {
-    .exam-page {
-        --exam-content-width: calc(100% - 32px);
-        --exam-content-max-width: 880px;
-    }
+	.exam-page {
+		--exam-content-width: calc(100% - 32px);
+		--exam-content-max-width: 880px;
+	}
 
-    .exam-workspace {
-        padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-    }
+	.exam-page-main {
+		flex: 1 1 auto;
+		min-height: 0;
+		padding: 12px 0 18px;
+	}
 
-    .exam-page-main {
-        flex: 0 0 auto;
-        padding: 12px 0 18px;
-    }
+	.exam-workspace .exam-footer,
+	.exam-workspace.exam-workspace-feedback-mode .exam-footer,
+	.exam-workspace.exam-workspace-scroll-footer-mode .exam-footer {
+		position: relative;
+		bottom: auto;
+		flex: 0 0 auto;
+		margin-top: 10px;
+		margin-bottom: calc(env(safe-area-inset-bottom) + 12px);
+	}
 }
 
 @media (max-height: 820px) and (min-width: 933px) {
@@ -172,10 +186,16 @@
 }
 
 @media (max-width: 932px) {
-    .exam-workspace-feedback-mode {
-        --exam-content-width: calc(100% - 28px);
-        --exam-content-max-width: 880px;
-    }
+	.exam-workspace-feedback-mode {
+		--exam-content-width: calc(100% - 28px);
+		--exam-content-max-width: 880px;
+	}
+
+	.exam-workspace-feedback-mode .exam-page-main {
+		flex: 1 1 auto;
+		min-height: 0;
+		padding-bottom: 18px;
+	}
 }
 
 /* ── Long active questions ──────────────
@@ -197,6 +217,14 @@
         --exam-content-width: calc(100% - clamp(32px, 4vw, 72px));
         --exam-content-max-width: 980px;
     }
+}
+
+@media (max-width: 932px) {
+	.exam-workspace-scroll-footer-mode .exam-page-main {
+		flex: 1 1 auto;
+		min-height: 0;
+		padding-bottom: 18px;
+	}
 }
 
 /* ── Wide question mode ──────────────

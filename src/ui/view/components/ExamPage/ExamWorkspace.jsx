@@ -21,7 +21,14 @@ export default function ExamWorkspace({ className, scrollToTopRequestId, childre
 
 const scrollExamWorkspaceToTop = (examWorkspaceRef) => {
 	window.requestAnimationFrame(() => {
-		examWorkspaceRef.current?.scrollTo({
+		const examWorkspace = examWorkspaceRef.current;
+
+		examWorkspace?.scrollTo({
+			top: 0,
+			behavior: "smooth"
+		});
+
+		examWorkspace?.querySelector(".exam-page-main")?.scrollTo({
 			top: 0,
 			behavior: "smooth"
 		});
