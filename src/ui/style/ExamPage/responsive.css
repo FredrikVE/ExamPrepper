@@ -8,29 +8,34 @@
 }
 
 @media (max-width: 932px) {
-    .exam-page {
-        min-height: 100svh;
-        height: auto;
-        padding: 0;
-        overflow: auto;
-    }
+	.exam-page {
+		min-height: 0;
+		height: 100svh;
+		padding: 0;
+		overflow: hidden;
+	}
 
-    .exam-shell {
-        display: block;
-        min-height: 100svh;
-        height: auto;
-    }
+	.exam-shell {
+		display: block;
+		min-height: 0;
+		height: 100svh;
+		overflow: hidden;
+	}
 
-    .exam-workspace {
-        box-sizing: border-box;
-        min-height: 100svh;
-        height: auto;
-        border-radius: 0;
-        border-inline: 0;
-        padding-top: var(--mobile-topbar-height);
-        overflow-y: auto;
-        overscroll-behavior: contain;
-    }
+	.exam-workspace {
+		box-sizing: border-box;
+		min-height: 0;
+		height: 100svh;
+		max-height: 100svh;
+		border-radius: 0;
+		border-inline: 0;
+		padding-top: var(--mobile-topbar-height);
+		overflow-x: hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		touch-action: pan-y;
+		-webkit-overflow-scrolling: touch;
+	}
 
     .exam-page-main {
         padding: 18px 0;
