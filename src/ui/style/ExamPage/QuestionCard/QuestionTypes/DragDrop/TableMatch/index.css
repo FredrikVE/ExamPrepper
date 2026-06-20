@@ -1,2 +1,3 @@
 /* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/index.css */
 @import "./table-match.css";
+@import "./table-match-mobile.css";

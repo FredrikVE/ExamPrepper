@@ -2,6 +2,7 @@
 import TableMatchAnswerTable from "../AnswerTable/TableMatchAnswerTable.jsx";
 import TableMatchCardBank from "../CardBank/TableMatchCardBank.jsx";
 import TableMatchScoreSummary from "../Feedback/TableMatchScoreSummary.jsx";
+import TableMatchMobileBoard from "../Mobile/TableMatchMobileBoard.jsx";
 import { useTableMatchQuestion } from "./useTableMatchQuestion.js";
 
 export { getTableMatchStats } from "../Utils/tableMatchFeedbackStats.js";
@@ -16,7 +17,7 @@ export default function TableMatchQuestion(props) {
                 <TableMatchScoreSummary stats={tableMatch.stats} t={t} />
             ) : null}
 
-            <div className="drag-drop-layout">
+            <div className="drag-drop-layout table-match-desktop-board">
                 {!tableMatch.feedbackMode ? (
                     <TableMatchCardBank
                         cards={tableMatch.availableCards}
@@ -44,6 +45,20 @@ export default function TableMatchQuestion(props) {
                     t={t}
                 />
             </div>
+
+            {!tableMatch.feedbackMode ? (
+                <TableMatchMobileBoard
+                    question={question}
+                    cards={tableMatch.availableCards}
+                    safeAnswer={tableMatch.safeAnswer}
+                    cardsById={tableMatch.cardsById}
+                    selectedCardId={tableMatch.selectedCardId}
+                    onCardSelect={tableMatch.handleCardSelect}
+                    onTargetClick={tableMatch.handleTargetClick}
+                    onClearTarget={tableMatch.clearTarget}
+                    t={t}
+                />
+            ) : null}
         </div>
     );
 }
