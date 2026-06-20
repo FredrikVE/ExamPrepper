@@ -9,7 +9,6 @@ import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import MobileExamSubmitAction from "./MobileExamSubmitAction.jsx";
 import MobileExamSubmitConfirmation from "./MobileExamSubmitConfirmation.jsx";
 import SettingsPanelContent from "../Settings/SettingsPanelContent.jsx";
-import SettingsPanelHeader from "../Settings/SettingsPanelHeader.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 import useSubmitConfirmFocus from "./useSubmitConfirmFocus.js";
 
@@ -24,8 +23,6 @@ function resolveCurrentSubject(subjects, selectedSubject) {
 }
 
 function MobileDropdownContent(props) {
-	const { t } = useLanguage();
-
 	const {
 		submitActionButtonRef,
 		submitConfirmCancelButtonRef
@@ -36,14 +33,6 @@ function MobileDropdownContent(props) {
 	if (props.settingsOpen) {
 		return (
 			<div className="mobile-dropdown-settings-content">
-				<SettingsPanelHeader
-					title={t.settingsTitle}
-					closeLabel={t.settingsClose}
-					backLabel={t.settingsBackToMenu}
-					onBack={props.onBackFromSettings}
-					onClose={props.onCloseMenu}
-				/>
-
 				<SettingsPanelContent />
 			</div>
 		);
@@ -120,9 +109,11 @@ function MobileDropdownContent(props) {
 export default function MobileDropDownTopBar(props) {
 	const { t } = useLanguage();
 
-	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher;
+	const shouldShowSettingsTopbar = props.isMenuOpen && props.settingsOpen;
+	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
 	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMenuOpen;
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
+	const showTopbarBackButton = props.showBackButton || shouldShowSettingsTopbar;
 
 	useMobileMenuEscapeKey({
 		isMenuOpen: props.isMenuOpen,
@@ -137,8 +128,9 @@ export default function MobileDropDownTopBar(props) {
 
 	const topbarClassNames = [
 		"mobile-topbar",
-		props.showBackButton ? "mobile-topbar-with-back" : null,
-		props.isMenuOpen ? "mobile-topbar-menu-open" : null
+		showTopbarBackButton ? "mobile-topbar-with-back" : null,
+		props.isMenuOpen ? "mobile-topbar-menu-open" : null,
+		shouldShowSettingsTopbar ? "mobile-topbar-settings-open" : null
 	].filter(Boolean);
 
 	const dropdownClassNames = [
@@ -156,6 +148,16 @@ export default function MobileDropDownTopBar(props) {
 	].filter(Boolean);
 
 	const currentSubject = resolveCurrentSubject(props.subjects, props.selectedSubject);
+	const topbarBackLabel = shouldShowSettingsTopbar
+		? t.settingsBackToMenu
+		: t.sidebarBack;
+	const handleTopbarBack = shouldShowSettingsTopbar
+		? props.onBackFromSettings
+		: props.onBack;
+
+	const handleMenuButtonClick = shouldShowSettingsTopbar
+		? props.onCloseMenu
+		: props.onToggleMenu;
 
 	const menuButtonLabel = props.isMenuOpen
 		? t.sidebarCloseNavigation
@@ -167,12 +169,12 @@ export default function MobileDropDownTopBar(props) {
 				className={topbarClassNames.join(" ")}
 				aria-label={t.sidebarMobileNavigation}
 			>
-				{props.showBackButton && (
+				{showTopbarBackButton && (
 					<button
 						type="button"
 						className="mobile-topbar-back-button"
-						onClick={props.onBack}
-						aria-label={t.sidebarBack}
+						onClick={handleTopbarBack}
+						aria-label={topbarBackLabel}
 					>
 						<ChevronLeft className="mobile-topbar-back-icon" />
 					</button>
@@ -181,13 +183,19 @@ export default function MobileDropDownTopBar(props) {
 				<button
 					type="button"
 					className="mobile-topbar-menu-button"
-					onClick={props.onToggleMenu}
+					onClick={handleMenuButtonClick}
 					aria-label={menuButtonLabel}
 					aria-controls="app-navigation-menu"
 					aria-expanded={props.isMenuOpen}
 				>
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
+
+				{shouldShowSettingsTopbar && (
+					<h2 className="mobile-topbar-settings-title">
+						{t.settingsTitle}
+					</h2>
+				)}
 
 				{shouldShowExamWorkStatus && (
 					<p className="mobile-topbar-exam-work-status">
