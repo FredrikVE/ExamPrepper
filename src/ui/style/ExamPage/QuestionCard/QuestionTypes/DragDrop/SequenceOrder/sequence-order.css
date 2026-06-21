@@ -44,6 +44,12 @@
     gap: var(--space-4);
 }
 
+.sequence-order-item-list-over {
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent-soft) 44%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
 .sequence-order-item-card,
 .sequence-order-placed-card,
 .sequence-order-readonly-slot {
@@ -79,8 +85,10 @@
 
 .sequence-order-item-card:hover,
 .sequence-order-item-card:focus-visible,
+.sequence-order-item-card-dragging,
 .sequence-order-placed-card:hover,
-.sequence-order-placed-card:focus-visible {
+.sequence-order-placed-card:focus-visible,
+.sequence-order-placed-card-dragging {
     transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
     outline: none;
@@ -89,6 +97,11 @@
 .sequence-order-item-card:active,
 .sequence-order-placed-card:active {
     cursor: grabbing;
+}
+
+.sequence-order-item-card-dragging,
+.sequence-order-placed-card-dragging {
+    opacity: 0.45;
 }
 
 .sequence-order-item-card-selected {
@@ -204,6 +217,14 @@
     justify-content: flex-start;
     text-align: left;
     padding-right: 38px;
+}
+
+.sequence-order-drag-overlay-card {
+    min-width: 180px;
+    border-color: var(--accent);
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 68%, #7c3aed));
+    color: #fff;
+    box-shadow: 0 12px 24px color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
 .sequence-order-remove-button {

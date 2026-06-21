@@ -16,14 +16,11 @@ export default function SequenceOrderBoard(props) {
                         index={index}
                         selectedSequenceItem={props.sequenceItemsById[sequenceItemId]}
                         selectedSequenceItemId={props.selectedSequenceItemId}
-                        isDragOver={props.dragOverIndex === index}
                         feedbackMode={props.feedbackMode}
                         isLastSlot={index === props.safeAnswer.length - 1}
+                        acceptedDragSourceType={props.acceptedDragSourceType}
+                        slotDropTargetIdPrefix={props.slotDropTargetIdPrefix}
                         onDropZoneClick={props.onDropZoneClick}
-                        onDropZoneDragOver={props.onDropZoneDragOver}
-                        onDropZoneDragLeave={props.onDropZoneDragLeave}
-                        onDropZoneDrop={props.onDropZoneDrop}
-                        onSequenceItemDragStart={props.onSequenceItemDragStart}
                         onSequenceItemRemove={props.onSequenceItemRemove}
                         t={props.t}
                     />
@@ -40,13 +37,10 @@ function SequenceOrderSlotGroup(props) {
                 index={props.index}
                 selectedSequenceItem={props.selectedSequenceItem}
                 selectedSequenceItemId={props.selectedSequenceItemId}
-                isDragOver={props.isDragOver}
                 feedbackMode={props.feedbackMode}
+                acceptedDragSourceType={props.acceptedDragSourceType}
+                slotDropTargetIdPrefix={props.slotDropTargetIdPrefix}
                 onDropZoneClick={props.onDropZoneClick}
-                onDropZoneDragOver={props.onDropZoneDragOver}
-                onDropZoneDragLeave={props.onDropZoneDragLeave}
-                onDropZoneDrop={props.onDropZoneDrop}
-                onSequenceItemDragStart={props.onSequenceItemDragStart}
                 onSequenceItemRemove={props.onSequenceItemRemove}
                 t={props.t}
             />

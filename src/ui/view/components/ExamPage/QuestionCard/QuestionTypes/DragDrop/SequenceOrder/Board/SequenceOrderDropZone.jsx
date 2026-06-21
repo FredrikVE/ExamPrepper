@@ -1,10 +1,29 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderDropZone.jsx
+import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
 import SequenceOrderPlacedItemCard from "./SequenceOrderPlacedItemCard.jsx";
 
 export default function SequenceOrderDropZone(props) {
+    return (
+        <MobileDroppable
+            dropTargetId={`${props.slotDropTargetIdPrefix}${props.index}`}
+            acceptedDragSourceType={props.acceptedDragSourceType}
+            dropTargetContext={{ targetIndex: props.index }}
+        >
+            {({ droppableRef, isDropTarget }) => (
+                <SequenceOrderDropZoneContent
+                    {...props}
+                    droppableRef={droppableRef}
+                    isDropTarget={isDropTarget}
+                />
+            )}
+        </MobileDroppable>
+    );
+}
+
+function SequenceOrderDropZoneContent(props) {
     const className = getDropZoneClassName({
         hasSelectedSequenceItem: Boolean(props.selectedSequenceItem),
-        isDragOver: props.isDragOver,
+        isDropTarget: props.isDropTarget,
         canReceiveSelectedItem: Boolean(props.selectedSequenceItemId)
     });
 
@@ -26,21 +45,20 @@ export default function SequenceOrderDropZone(props) {
 
     return (
         <div
+            ref={props.droppableRef}
             className={className}
             role="button"
             tabIndex={0}
             onClick={selectDropZone}
             onKeyDown={activateDropZoneWithKeyboard}
-            onDragOver={(event) => props.onDropZoneDragOver(event, props.index)}
-            onDragLeave={props.onDropZoneDragLeave}
-            onDrop={(event) => props.onDropZoneDrop(event, props.index)}
             aria-label={`${props.t.dragDropDropHere} ${props.index + 1}`}
         >
             {props.selectedSequenceItem ? (
                 <SequenceOrderPlacedItemCard
                     sequenceItem={props.selectedSequenceItem}
+                    sourceIndex={props.index}
                     disabled={props.feedbackMode}
-                    onSequenceItemDragStart={props.onSequenceItemDragStart}
+                    dragSourceType={props.acceptedDragSourceType}
                     onSequenceItemRemove={props.onSequenceItemRemove}
                     t={props.t}
                 />
@@ -53,14 +71,14 @@ export default function SequenceOrderDropZone(props) {
     );
 }
 
-function getDropZoneClassName({ hasSelectedSequenceItem, isDragOver, canReceiveSelectedItem }) {
+function getDropZoneClassName({ hasSelectedSequenceItem, isDropTarget, canReceiveSelectedItem }) {
     let className = "sequence-order-drop-zone";
 
     if (hasSelectedSequenceItem) {
         className += " sequence-order-drop-zone-filled";
     }
 
-    if (isDragOver) {
+    if (isDropTarget) {
         className += " sequence-order-drop-zone-over";
     }
 

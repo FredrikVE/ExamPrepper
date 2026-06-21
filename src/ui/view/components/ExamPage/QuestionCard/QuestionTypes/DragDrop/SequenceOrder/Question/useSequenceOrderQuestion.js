@@ -8,7 +8,6 @@ export function useSequenceOrderQuestion(params) {
     const feedbackMode = params.submitted && params.showAllFeedback;
 
     const [selectedSequenceItemId, setSelectedSequenceItemId] = useState(null);
-    const [dragOverIndex, setDragOverIndex] = useState(null);
     const [expandedSlotIndex, setExpandedSlotIndex] = useState(null);
     const [questionExplanationExpanded, setQuestionExplanationExpanded] = useState(true);
 
@@ -58,50 +57,17 @@ export function useSequenceOrderQuestion(params) {
         }
     };
 
+    const clearSelectedSequenceItem = () => {
+        setSelectedSequenceItemId(null);
+    };
+
     const selectDropZone = (targetIndex) => {
         if (params.submitted || !selectedSequenceItemId) {
             return;
         }
 
         assignSequenceItem(targetIndex, selectedSequenceItemId);
-        setSelectedSequenceItemId(null);
-    };
-
-    const startSequenceItemDrag = (event, sequenceItemId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.dataTransfer.setData("text/plain", sequenceItemId);
-        event.dataTransfer.effectAllowed = "move";
-    };
-
-    const markDropZoneOver = (event, targetIndex) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-        event.dataTransfer.dropEffect = "move";
-        setDragOverIndex(targetIndex);
-    };
-
-    const clearDragOverIndex = () => {
-        setDragOverIndex(null);
-    };
-
-    const dropSequenceItemInZone = (event, targetIndex) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const sequenceItemId = event.dataTransfer.getData("text/plain");
-
-        assignSequenceItem(targetIndex, sequenceItemId);
-        setDragOverIndex(null);
-        setSelectedSequenceItemId(null);
+        clearSelectedSequenceItem();
     };
 
     const toggleSlotExpanded = (index) => {
@@ -122,7 +88,6 @@ export function useSequenceOrderQuestion(params) {
         feedbackMode,
 
         selectedSequenceItemId,
-        dragOverIndex,
         expandedSlotIndex,
         questionExplanationExpanded,
 
@@ -134,11 +99,8 @@ export function useSequenceOrderQuestion(params) {
         assignSequenceItem,
         removeSequenceItemFromAnswer,
         selectSequenceItem,
+        clearSelectedSequenceItem,
         selectDropZone,
-        startSequenceItemDrag,
-        markDropZoneOver,
-        clearDragOverIndex,
-        dropSequenceItemInZone,
         toggleSlotExpanded,
         toggleQuestionExplanation
     };

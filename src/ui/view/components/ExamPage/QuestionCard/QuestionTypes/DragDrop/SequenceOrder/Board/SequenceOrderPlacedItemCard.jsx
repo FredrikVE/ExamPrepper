@@ -1,38 +1,52 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderPlacedItemCard.jsx
 import { GripVertical, X } from "lucide-react";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
+import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function SequenceOrderPlacedItemCard(props) {
-    const startItemDrag = (event) => {
-        props.onSequenceItemDragStart(event, props.sequenceItem.id);
-    };
+    return (
+        <MobileDraggable
+            dragSourceId={props.sequenceItem.id}
+            dragSourceType={props.dragSourceType}
+            dragSourceContext={{ sequenceItem: props.sequenceItem, sourceIndex: props.sourceIndex }}
+            disabled={props.disabled}
+        >
+            {({ draggableRef, isDragging }) => (
+                <div ref={draggableRef} className={getPlacedCardClassName(isDragging)}>
+                    <GripVertical className="sequence-order-placed-card-grip" aria-hidden="true" />
 
-    const removeItem = (event) => {
+                    <span><FormattedText text={getSequenceItemLabel(props.sequenceItem)} /></span>
+
+                    {!props.disabled ? (
+                        <button
+                            type="button"
+                            className="sequence-order-remove-button"
+                            onClick={removeItem(props)}
+                            aria-label={props.t.sequenceOrderRemoveAnswer}
+                        >
+                            <X aria-hidden="true" />
+                        </button>
+                    ) : null}
+                </div>
+            )}
+        </MobileDraggable>
+    );
+}
+
+const removeItem = (props) => {
+    return (event) => {
         event.stopPropagation();
         props.onSequenceItemRemove(props.sequenceItem.id);
     };
+};
 
-    return (
-        <div
-            className="sequence-order-placed-card"
-            draggable={!props.disabled}
-            onDragStart={startItemDrag}
-        >
-            <GripVertical className="sequence-order-placed-card-grip" aria-hidden="true" />
+function getPlacedCardClassName(isDragging) {
+    let className = "sequence-order-placed-card";
 
-            <span><FormattedText text={getSequenceItemLabel(props.sequenceItem)} /></span>
+    if (isDragging) {
+        className += " sequence-order-placed-card-dragging";
+    }
 
-            {!props.disabled ? (
-                <button
-                    type="button"
-                    className="sequence-order-remove-button"
-                    onClick={removeItem}
-                    aria-label={props.t.sequenceOrderRemoveAnswer}
-                >
-                    <X aria-hidden="true" />
-                </button>
-            ) : null}
-        </div>
-    );
+    return className;
 }
