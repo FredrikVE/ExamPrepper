@@ -28,7 +28,8 @@ export default function SequenceOrderQuestion(props) {
                 {!sequenceOrder.feedbackMode ? (
                     <>
                         <SequenceOrderItemBank
-                            sequenceItems={sequenceOrder.availableSequenceItems}
+                            sequenceItems={sequenceOrder.sequenceItems}
+                            placedSequenceItemIds={sequenceOrder.safeAnswer}
                             feedbackMode={sequenceOrder.feedbackMode}
                             selectedSequenceItemId={sequenceOrder.selectedSequenceItemId}
                             disabled={sequenceOrder.feedbackMode}

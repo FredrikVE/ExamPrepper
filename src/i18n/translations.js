@@ -128,6 +128,7 @@ export const translations = {
 
         sequenceOrderAlternativeBankTitle: "Alternativbank",
         sequenceOrderAlternativeBankHint: "Dra et alternativ inn i riktig rekkefølge, eller klikk alternativet og deretter feltet.",
+        sequenceOrderReturnPlaceholder: "Trekk tilbake for å angre",
         sequenceOrderCorrectSequenceTitle: "Riktig rekkefølge",
         sequenceOrderCorrectOrderTitle: "Riktig rekkefølge",
         sequenceOrderSubmittedSequenceTitle: "Din rekkefølge",
@@ -370,6 +371,7 @@ export const translations = {
 
         sequenceOrderAlternativeBankTitle: "Alternative bank",
         sequenceOrderAlternativeBankHint: "Drag an alternative into the correct order, or click an alternative and then click a slot.",
+        sequenceOrderReturnPlaceholder: "Drag back to undo",
         sequenceOrderCorrectSequenceTitle: "Correct sequence",
         sequenceOrderCorrectOrderTitle: "Correct order",
         sequenceOrderSubmittedSequenceTitle: "Your sequence",

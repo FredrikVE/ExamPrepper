@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Question/useSequenceOrderQuestion.js
 import { useState } from "react";
-import { createSequenceItemsById, getAvailableSequenceItems, getCorrectSequenceOrder, getSequenceItems, normalizeSequenceOrderAnswer, placeSequenceItemAtIndex, removeSequenceItem } from "../Utils/sequenceOrderAnswerLogic.js";
+import { createSequenceItemsById, getCorrectSequenceOrder, getSequenceItems, normalizeSequenceOrderAnswer, placeSequenceItemAtIndex, removeSequenceItem } from "../Utils/sequenceOrderAnswerLogic.js";
 import { getSequenceOrderStats } from "../Utils/sequenceOrderFeedbackStats.js";
 
 export function useSequenceOrderQuestion(params) {
@@ -13,7 +13,6 @@ export function useSequenceOrderQuestion(params) {
 
     const sequenceItems = getSequenceItems(params.question);
     const sequenceItemsById = createSequenceItemsById(sequenceItems);
-    const availableSequenceItems = getAvailableSequenceItems(params.question, safeAnswer);
     const correctOrder = getCorrectSequenceOrder(params.question);
     const stats = getSequenceOrderStats(params.question, safeAnswer);
 
@@ -95,8 +94,8 @@ export function useSequenceOrderQuestion(params) {
         expandedSlotIndex,
         questionExplanationExpanded,
 
+        sequenceItems,
         sequenceItemsById,
-        availableSequenceItems,
         correctOrder,
         stats,
 

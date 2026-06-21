@@ -4,6 +4,8 @@ import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
 import SequenceOrderItemCard from "./SequenceOrderItemCard.jsx";
 
 export default function SequenceOrderItemBank(props) {
+    const placedSequenceItemIdSet = new Set(props.placedSequenceItemIds.filter(Boolean));
+
     if (props.feedbackMode) {
         return null;
     }
@@ -24,16 +26,29 @@ export default function SequenceOrderItemBank(props) {
             >
                 {({ droppableRef, isDropTarget }) => (
                     <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
-                        {props.sequenceItems.map((sequenceItem) => (
-                            <SequenceOrderItemCard
-                                key={sequenceItem.id}
-                                sequenceItem={sequenceItem}
-                                selected={props.selectedSequenceItemId === sequenceItem.id}
-                                disabled={props.disabled}
-                                dragSourceType={props.acceptedDragSourceType}
-                                onSequenceItemSelect={props.onSequenceItemSelect}
-                            />
-                        ))}
+                        {props.sequenceItems.map((sequenceItem) => {
+                            const sequenceItemIsPlaced = placedSequenceItemIdSet.has(sequenceItem.id);
+
+                            if (sequenceItemIsPlaced) {
+                                return (
+                                    <SequenceOrderItemBankPlaceholder
+                                        key={sequenceItem.id}
+                                        label={props.t.sequenceOrderReturnPlaceholder}
+                                    />
+                                );
+                            }
+
+                            return (
+                                <SequenceOrderItemCard
+                                    key={sequenceItem.id}
+                                    sequenceItem={sequenceItem}
+                                    selected={props.selectedSequenceItemId === sequenceItem.id}
+                                    disabled={props.disabled}
+                                    dragSourceType={props.acceptedDragSourceType}
+                                    onSequenceItemSelect={props.onSequenceItemSelect}
+                                />
+                            );
+                        })}
                     </div>
                 )}
             </MobileDroppable>
@@ -53,4 +68,12 @@ function getItemListClassName(isDropTarget) {
     }
 
     return className;
+}
+
+function SequenceOrderItemBankPlaceholder(props) {
+    return (
+        <div className="sequence-order-item-bank-placeholder">
+            <span>{props.label}</span>
+        </div>
+    );
 }
