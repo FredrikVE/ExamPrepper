@@ -4,6 +4,7 @@ import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
 
 export default function TableMatchMobileTargetCard(props) {
+	const cardClassName = getCardClassName(props.isDragOver);
 	const targetClassName = getTargetClassName({
 		hasSelectedCard: Boolean(props.selectedCard),
 		hasActiveCard: props.hasActiveCard,
@@ -23,20 +24,20 @@ export default function TableMatchMobileTargetCard(props) {
 	};
 
 	return (
-		<article className="table-match-mobile-target-card">
+		<article
+			className={cardClassName}
+			role="button"
+			tabIndex={0}
+			onClick={props.onTargetClick}
+			onKeyDown={handleKeyDown}
+			data-table-match-mobile-target-id={props.target.id}
+			aria-label={`${props.t.dragDropDropHere}: ${props.target.description}`}
+		>
 			<div className="table-match-mobile-target-description">
 				<FormattedText text={props.target.description} />
 			</div>
 
-			<div
-				className={targetClassName}
-				role="button"
-				tabIndex={0}
-				onClick={props.onTargetClick}
-				onKeyDown={handleKeyDown}
-				data-table-match-mobile-target-id={props.target.id}
-				aria-label={`${props.t.dragDropDropHere}: ${props.target.description}`}
-			>
+			<div className={targetClassName}>
 				{props.selectedCard ? (
 					<div className="table-match-mobile-filled-target">
 						<TableMatchMobilePlacedCard
@@ -68,6 +69,16 @@ const handleClearClick = (onClear) => {
 		event.stopPropagation();
 		onClear();
 	};
+};
+
+const getCardClassName = (isDragOver) => {
+	let className = "table-match-mobile-target-card";
+
+	if (isDragOver) {
+		className += " table-match-mobile-target-card-over";
+	}
+
+	return className;
 };
 
 const getTargetClassName = ({ hasSelectedCard, hasActiveCard, isDragOver }) => {
