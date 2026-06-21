@@ -30,6 +30,20 @@
 		--table-match-mobile-drop-border: color-mix(in srgb, var(--accent) 72%, var(--line));
 		--table-match-mobile-drop-bg: color-mix(in srgb, var(--accent-soft) 54%, var(--panel-strong));
 		--table-match-mobile-drop-hover-bg: color-mix(in srgb, var(--accent-soft) 76%, var(--panel-strong));
+		--table-match-mobile-filled-border: color-mix(in srgb, var(--accent) 78%, #7c3aed);
+		--table-match-mobile-filled-bg: transparent;
+		--table-match-mobile-filled-card-bg:
+			linear-gradient(135deg,
+				color-mix(in srgb, var(--accent) 92%, #2563eb),
+				#6d28d9);
+		--table-match-mobile-filled-card-color: #ffffff;
+		--table-match-mobile-filled-shadow:
+			0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent),
+			0 14px 30px rgba(37, 99, 235, 0.28);
+		--table-match-mobile-filled-card-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+		--table-match-mobile-filled-grip-bg: rgba(255, 255, 255, 0.86);
+		--table-match-mobile-filled-clear-bg: rgba(255, 255, 255, 0.16);
+		--table-match-mobile-filled-clear-color: #ffffff;
 		--table-match-mobile-clear-bg: color-mix(in srgb, var(--panel-bg) 92%, white);
 
 		position: relative;
@@ -59,6 +73,20 @@
 		--table-match-mobile-drop-border: color-mix(in srgb, var(--accent) 78%, rgba(155, 101, 255, 0.8));
 		--table-match-mobile-drop-bg: transparent;
 		--table-match-mobile-drop-hover-bg: color-mix(in srgb, var(--accent-soft) 46%, transparent);
+		--table-match-mobile-filled-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
+		--table-match-mobile-filled-bg: transparent;
+		--table-match-mobile-filled-card-bg:
+			linear-gradient(135deg,
+				color-mix(in srgb, var(--accent) 72%, #2563eb),
+				#7c3aed);
+		--table-match-mobile-filled-card-color: #ffffff;
+		--table-match-mobile-filled-shadow:
+			0 0 0 3px color-mix(in srgb, var(--accent) 34%, transparent),
+			0 16px 36px rgba(0, 0, 0, 0.44);
+		--table-match-mobile-filled-card-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+		--table-match-mobile-filled-grip-bg: rgba(255, 255, 255, 0.86);
+		--table-match-mobile-filled-clear-bg: rgba(255, 255, 255, 0.14);
+		--table-match-mobile-filled-clear-color: #ffffff;
 		--table-match-mobile-clear-bg: color-mix(in srgb, var(--panel-strong) 72%, transparent);
 	}
 
@@ -230,33 +258,62 @@
 	}
 
 	.table-match-mobile-drop-zone-filled {
-		display: block;
-		border-style: solid;
+		display: flex;
+		align-items: stretch;
+		min-height: 72px;
+		border: 0;
+		background: var(--table-match-mobile-filled-bg);
+		box-shadow: none;
 		padding: 0;
 		text-align: left;
 	}
 
 	.table-match-mobile-filled-target {
 		position: relative;
+		display: flex;
+		align-items: stretch;
+		width: 100%;
+		min-height: inherit;
 	}
 
 	.table-match-mobile-filled-target .table-match-mobile-card {
-		min-height: 58px;
-		border: 0;
-		border-radius: 9px;
-		box-shadow: none;
-		padding: 14px 76px 14px 16px;
+		width: 100%;
+		min-height: inherit;
+		border: 2px solid var(--table-match-mobile-filled-border);
+		border-radius: 11px;
+		background: var(--table-match-mobile-filled-card-bg);
+		box-shadow:
+			var(--table-match-mobile-filled-card-inset),
+			var(--table-match-mobile-filled-shadow);
+		color: var(--table-match-mobile-filled-card-color);
+		padding: 16px 78px 16px 16px;
 		font-size: 0.94rem;
+		font-weight: 950;
 	}
 
 	.table-match-mobile-filled-target .table-match-mobile-card:hover,
 	.table-match-mobile-filled-target .table-match-mobile-card:focus-visible {
-		box-shadow: none;
+		border-color: color-mix(in srgb, var(--table-match-mobile-filled-border) 82%, white);
+		background: var(--table-match-mobile-filled-card-bg);
+		box-shadow:
+			var(--table-match-mobile-filled-card-inset),
+			0 0 0 4px color-mix(in srgb, var(--accent) 26%, transparent),
+			var(--table-match-mobile-filled-shadow);
 		transform: none;
 	}
 
 	.table-match-mobile-filled-target .table-match-mobile-card-grip {
 		right: 46px;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card-grip span {
+		background: var(--table-match-mobile-filled-grip-bg);
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-clear-button {
+		border: 1px solid rgba(255, 255, 255, 0.22);
+		background: var(--table-match-mobile-filled-clear-bg);
+		color: var(--table-match-mobile-filled-clear-color);
 	}
 
 	.table-match-mobile-clear-button {
@@ -340,6 +397,15 @@
 		padding: 7px 9px;
 	}
 
+	.table-match-mobile-drop-zone-filled {
+		min-height: 66px;
+		padding: 0;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card {
+		min-height: inherit;
+	}
+
 	.table-match-mobile-drop-label {
 		font-size: 0.82rem;
 	}
@@ -361,7 +427,13 @@
 		font-size: 0.76rem;
 	}
 
+	.table-match-mobile-drop-zone-filled {
+		min-height: 58px;
+		padding: 0;
+	}
+
 	.table-match-mobile-filled-target .table-match-mobile-card {
+		min-height: inherit;
 		padding-right: 52px;
 	}
 
