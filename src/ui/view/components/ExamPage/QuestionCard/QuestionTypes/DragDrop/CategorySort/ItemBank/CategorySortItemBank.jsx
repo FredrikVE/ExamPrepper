@@ -1,4 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/ItemBank/CategorySortItemBank.jsx
+import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
 import CategorySortFeedbackCard from "../Feedback/CategorySortFeedbackCard.jsx";
 import CategorySortItemCard from "./CategorySortItemCard.jsx";
 
@@ -12,9 +13,22 @@ export default function CategorySortItemBank(props) {
             className={getItemBankClassName(props.feedbackMode)}
             aria-label={props.t.dragCategorizeItemBankTitle}
         >
-            <div className="drag-categorize-item-list">
-                {props.items.map((item) => renderItem(props, item))}
-            </div>
+            {props.feedbackMode ? (
+                <div className="drag-categorize-item-list">
+                    {props.items.map((item) => renderItem(props, item))}
+                </div>
+            ) : (
+                <MobileDroppable
+                    dropTargetId={props.itemBankDropTargetId}
+                    acceptedDragSourceType={props.acceptedDragSourceType}
+                >
+                    {({ droppableRef, isDropTarget }) => (
+                        <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
+                            {props.items.map((item) => renderItem(props, item))}
+                        </div>
+                    )}
+                </MobileDroppable>
+            )}
         </aside>
     );
 }
@@ -40,8 +54,8 @@ function renderItem(props, item) {
             item={item}
             selected={props.selectedItemId === item.id}
             disabled={props.disabled}
+            dragSourceType={props.acceptedDragSourceType}
             onSelect={() => props.onItemSelect(item.id)}
-            onDragStart={(event) => props.onItemDragStart(event, item.id)}
             t={props.t}
         />
     );
@@ -56,3 +70,13 @@ const getItemBankClassName = (feedbackMode) => {
 
     return className;
 };
+
+function getItemListClassName(isDropTarget) {
+    let className = "drag-categorize-item-list";
+
+    if (isDropTarget) {
+        className += " drag-categorize-item-list-over";
+    }
+
+    return className;
+}

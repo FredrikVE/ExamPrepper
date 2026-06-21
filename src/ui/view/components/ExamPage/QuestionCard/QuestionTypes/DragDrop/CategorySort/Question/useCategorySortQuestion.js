@@ -9,7 +9,6 @@ export function useCategorySortQuestion(params) {
     const feedbackMode = params.submitted && params.showAllFeedback;
 
     const [selectedItemId, setSelectedItemId] = useState(null);
-    const [dragOverCategoryId, setDragOverCategoryId] = useState(null);
     const [expandedItemId, setExpandedItemId] = useState(null);
 
     const itemsById = createItemsById(params.question?.items);
@@ -62,50 +61,17 @@ export function useCategorySortQuestion(params) {
         }
     };
 
+    const clearSelectedItem = () => {
+        setSelectedItemId(null);
+    };
+
     const handleCategoryClick = (categoryId) => {
         if (params.submitted || !selectedItemId) {
             return;
         }
 
         assignItem(categoryId, selectedItemId);
-        setSelectedItemId(null);
-    };
-
-    const handleItemDragStart = (event, itemId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.dataTransfer.setData("text/plain", itemId);
-        event.dataTransfer.effectAllowed = "move";
-    };
-
-    const handleCategoryDragOver = (event, categoryId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-        event.dataTransfer.dropEffect = "move";
-        setDragOverCategoryId(categoryId);
-    };
-
-    const handleCategoryDragLeave = () => {
-        setDragOverCategoryId(null);
-    };
-
-    const handleCategoryDrop = (event, categoryId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const itemId = event.dataTransfer.getData("text/plain");
-
-        assignItem(categoryId, itemId);
-        setDragOverCategoryId(null);
-        setSelectedItemId(null);
+        clearSelectedItem();
     };
 
     const toggleExpanded = (itemId) => {
@@ -122,7 +88,6 @@ export function useCategorySortQuestion(params) {
         feedbackMode,
 
         selectedItemId,
-        dragOverCategoryId,
         expandedItemId,
 
         itemsById,
@@ -132,11 +97,8 @@ export function useCategorySortQuestion(params) {
         assignItem,
         removeItem,
         handleItemSelect,
+        clearSelectedItem,
         handleCategoryClick,
-        handleItemDragStart,
-        handleCategoryDragOver,
-        handleCategoryDragLeave,
-        handleCategoryDrop,
         toggleExpanded
     };
 }

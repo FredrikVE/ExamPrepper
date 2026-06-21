@@ -1,31 +1,44 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/ItemBank/CategorySortItemCard.jsx
-import { GripVertical } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
+import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function CategorySortItemCard(props) {
     const label = getItemLabel(props.item);
-    const className = getCardClassName({
-        label,
-        selected: props.selected,
-        disabled: props.disabled
-    });
 
     return (
-        <button
-            type="button"
-            className={className}
-            draggable={!props.disabled}
-            onClick={props.disabled ? undefined : props.onSelect}
-            onDragStart={props.disabled ? undefined : props.onDragStart}
+        <MobileDraggable
+            dragSourceId={props.item.id}
+            dragSourceType={props.dragSourceType}
+            dragSourceContext={{ item: props.item, sourceCategoryId: null }}
+            disabled={props.disabled}
         >
-            <GripVertical className="drag-categorize-item-card-grip" aria-hidden="true" />
-            <span><FormattedText text={label} /></span>
-        </button>
+            {({ draggableRef, isDragging }) => {
+                const className = getCardClassName({
+                    label,
+                    selected: props.selected,
+                    disabled: props.disabled,
+                    isDragging
+                });
+
+                return (
+                    <button
+                        ref={draggableRef}
+                        type="button"
+                        className={className}
+                        onClick={props.disabled ? undefined : props.onSelect}
+                    >
+                        <CategorySortItemCardGrip />
+
+                        <span className="drag-categorize-item-card-text"><FormattedText text={label} /></span>
+                    </button>
+                );
+            }}
+        </MobileDraggable>
     );
 }
 
-const getCardClassName = ({ label, selected, disabled }) => {
+const getCardClassName = ({ label, selected, disabled, isDragging }) => {
     let className = `drag-categorize-item-card ${getLabelLengthClassName(label)}`;
 
     if (selected) {
@@ -36,8 +49,25 @@ const getCardClassName = ({ label, selected, disabled }) => {
         className += " drag-categorize-item-card-disabled";
     }
 
+    if (isDragging) {
+        className += " drag-categorize-item-card-dragging";
+    }
+
     return className;
 };
+
+function CategorySortItemCardGrip() {
+    return (
+        <span className="drag-categorize-item-card-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
+    );
+}
 
 const getLabelLengthClassName = (label) => {
     const length = String(label ?? "").trim().length;

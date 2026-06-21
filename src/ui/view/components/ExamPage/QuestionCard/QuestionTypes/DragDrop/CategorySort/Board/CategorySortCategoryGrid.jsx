@@ -31,15 +31,12 @@ export default function CategorySortCategoryGrid(props) {
                     })}
                     itemsById={props.itemsById}
                     feedbackMode={props.feedbackMode}
-                    isDragOver={props.dragOverCategoryId === category.id}
                     selectedItemId={props.selectedItemId}
                     expandedItemId={props.expandedItemId}
+                    acceptedDragSourceType={props.acceptedDragSourceType}
+                    categoryDropTargetIdPrefix={props.categoryDropTargetIdPrefix}
                     onCategoryClick={() => props.onCategoryClick(category.id)}
-                    onCategoryDragOver={(event) => props.onCategoryDragOver(event, category.id)}
-                    onCategoryDragLeave={props.onCategoryDragLeave}
-                    onCategoryDrop={(event) => props.onCategoryDrop(event, category.id)}
                     onItemSelect={props.onItemSelect}
-                    onItemDragStart={props.onItemDragStart}
                     onItemRemove={props.onItemRemove}
                     onToggleExpanded={props.onToggleExpanded}
                     t={props.t}
@@ -58,7 +55,6 @@ function getUnansweredSlotCount({ categoryId, correctAnswer, placedItemIds, feed
 
     return expectedItemIds.filter((itemId) => !placedItemIds.has(itemId)).length;
 }
-
 
 function getCategoryGridClassName(categoryCount) {
     let className = "drag-categorize-category-grid";

@@ -72,8 +72,8 @@
         transform var(--transition-fast);
 }
 
-.drag-categorize-item-card > span,
-.drag-categorize-placed-card > span {
+.drag-categorize-item-card-text,
+.drag-categorize-placed-card-text {
     min-width: 0;
     flex: 1 1 auto;
     overflow-wrap: break-word;
@@ -130,6 +130,26 @@
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
+.drag-categorize-item-card-dragging,
+.drag-categorize-placed-card-dragging {
+    opacity: 0.46;
+    transform: scale(0.985);
+}
+
+.drag-categorize-drag-overlay-card {
+    inline-size: max-content;
+    max-inline-size: min(280px, 82vw);
+    opacity: 0.96;
+    pointer-events: none;
+    transform: rotate(-1deg);
+}
+
+.drag-categorize-item-list-over {
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--accent-soft) 32%, transparent);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
 .drag-categorize-item-card-disabled {
     cursor: default;
 }
@@ -143,10 +163,22 @@
 
 .drag-categorize-item-card-grip,
 .drag-categorize-placed-card-grip {
-    width: 17px;
-    height: 17px;
+    display: grid;
+    grid-template-columns: repeat(2, 3px);
+    grid-auto-rows: 3px;
+    gap: 3px;
+    width: 9px;
+    height: 15px;
     flex: 0 0 auto;
-    color: var(--text-soft);
+    opacity: 0.72;
+}
+
+.drag-categorize-item-card-grip span,
+.drag-categorize-placed-card-grip span {
+    width: 3px;
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: currentColor;
 }
 
 .drag-categorize-placed-card-grip {
