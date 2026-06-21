@@ -9,16 +9,16 @@
     --sequence-order-card-shadow: 0 10px 24px rgba(18, 38, 63, 0.08);
     --sequence-order-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
     --sequence-order-grip-bg: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
-    --sequence-order-placed-border: color-mix(in srgb, var(--accent) 78%, #7c3aed);
+    --sequence-order-placed-border: color-mix(in srgb, var(--accent) 88%, #1d4ed8);
     --sequence-order-placed-bg:
         linear-gradient(135deg,
-            color-mix(in srgb, var(--accent) 92%, #2563eb),
-            #6d28d9);
+            color-mix(in srgb, var(--accent) 94%, #3b82f6),
+            color-mix(in srgb, var(--accent) 88%, #1d4ed8));
     --sequence-order-placed-color: #ffffff;
     --sequence-order-placed-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-        0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent),
-        0 14px 30px rgba(37, 99, 235, 0.28);
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+        0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent),
+        0 12px 24px color-mix(in srgb, var(--accent) 20%, transparent);
     --sequence-order-placed-number-bg: rgba(255, 255, 255, 0.18);
     --sequence-order-placed-grip-bg: rgba(255, 255, 255, 0.86);
 
@@ -190,7 +190,7 @@
 }
 
 .sequence-order-item-list-over .sequence-order-item-bank-placeholder {
-    border-color: color-mix(in srgb, var(--accent) 88%, #a855f7);
+    border-color: color-mix(in srgb, var(--accent) 88%, #2563eb);
     background: color-mix(in srgb, var(--accent-soft) 64%, transparent);
     color: var(--accent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent);
@@ -688,7 +688,7 @@
     .sequence-order-drop-zone:focus-visible,
     .sequence-order-drop-zone-over,
     .sequence-order-drop-zone-selectable {
-        border-color: color-mix(in srgb, var(--accent) 82%, #a855f7);
+        border-color: color-mix(in srgb, var(--accent) 82%, #2563eb);
         background: color-mix(in srgb, var(--accent-soft) 42%, transparent);
         box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
     }
