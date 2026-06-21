@@ -30,17 +30,18 @@
 		--table-match-mobile-drop-border: color-mix(in srgb, var(--accent) 72%, var(--line));
 		--table-match-mobile-drop-bg: color-mix(in srgb, var(--accent-soft) 54%, var(--panel-strong));
 		--table-match-mobile-drop-hover-bg: color-mix(in srgb, var(--accent-soft) 76%, var(--panel-strong));
-		--table-match-mobile-filled-border: color-mix(in srgb, var(--accent) 78%, #7c3aed);
+		--table-match-mobile-filled-border: #2563eb;
 		--table-match-mobile-filled-bg: transparent;
 		--table-match-mobile-filled-card-bg:
 			linear-gradient(135deg,
-				color-mix(in srgb, var(--accent) 92%, #2563eb),
-				#6d28d9);
+				#2f6df6 0%,
+				#2563eb 58%,
+				#1d4ed8 100%);
 		--table-match-mobile-filled-card-color: #ffffff;
 		--table-match-mobile-filled-shadow:
-			0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent),
+			0 0 0 4px rgba(147, 197, 253, 0.72),
 			0 14px 30px rgba(37, 99, 235, 0.28);
-		--table-match-mobile-filled-card-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+		--table-match-mobile-filled-card-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
 		--table-match-mobile-filled-grip-bg: rgba(255, 255, 255, 0.86);
 		--table-match-mobile-filled-clear-bg: rgba(255, 255, 255, 0.16);
 		--table-match-mobile-filled-clear-color: #ffffff;

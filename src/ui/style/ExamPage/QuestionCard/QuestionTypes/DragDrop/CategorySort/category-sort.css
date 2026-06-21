@@ -587,19 +587,20 @@
             color-mix(in srgb, var(--panel-bg) 90%, white));
     --drag-categorize-card-shadow: 0 10px 24px rgba(18, 38, 63, 0.08);
     --drag-categorize-grip-bg: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
-    --drag-categorize-drop-border: color-mix(in srgb, var(--accent) 72%, var(--line));
-    --drag-categorize-drop-over-border: color-mix(in srgb, var(--accent) 88%, #3b82f6);
-    --drag-categorize-drop-bg: color-mix(in srgb, var(--accent-soft) 42%, transparent);
-    --drag-categorize-placed-border: color-mix(in srgb, var(--accent) 88%, #1d4ed8);
+    --drag-categorize-drop-border: color-mix(in srgb, #2563eb 68%, var(--line));
+    --drag-categorize-drop-over-border: color-mix(in srgb, #2563eb 86%, #60a5fa);
+    --drag-categorize-drop-bg: rgba(37, 99, 235, 0.08);
+    --drag-categorize-placed-border: #2563eb;
     --drag-categorize-placed-bg:
         linear-gradient(135deg,
-            color-mix(in srgb, var(--accent) 94%, #3b82f6),
-            color-mix(in srgb, var(--accent) 88%, #1d4ed8));
+            #2563eb,
+            #1d4ed8);
     --drag-categorize-placed-color: #ffffff;
     --drag-categorize-placed-shadow:
         inset 0 0 0 1px rgba(255, 255, 255, 0.2),
-        0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent),
-        0 12px 24px color-mix(in srgb, var(--accent) 20%, transparent);
+        0 0 0 3px rgba(37, 99, 235, 0.18),
+        0 12px 24px rgba(37, 99, 235, 0.22);
+    --drag-categorize-placed-hover-ring: rgba(37, 99, 235, 0.24);
     --drag-categorize-placed-grip-bg: rgba(255, 255, 255, 0.86);
 }
 
@@ -623,6 +624,7 @@
         inset 0 0 0 1px rgba(255, 255, 255, 0.18),
         0 0 0 3px color-mix(in srgb, var(--accent) 34%, transparent),
         0 16px 36px rgba(0, 0, 0, 0.44);
+    --drag-categorize-placed-hover-ring: color-mix(in srgb, var(--accent) 26%, transparent);
     --drag-categorize-placed-grip-bg: rgba(255, 255, 255, 0.86);
 }
 
@@ -666,7 +668,7 @@
     background: var(--drag-categorize-placed-bg);
     box-shadow:
         inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-        0 0 0 4px color-mix(in srgb, var(--accent) 26%, transparent),
+        0 0 0 4px var(--drag-categorize-placed-hover-ring),
         var(--drag-categorize-placed-shadow);
     color: var(--drag-categorize-placed-color);
 }
@@ -717,6 +719,8 @@
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank,
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-grid {
         min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
         border: 1px solid var(--drag-categorize-board-border);
         border-radius: 17px;
         background: var(--drag-categorize-board-bg);
@@ -775,7 +779,9 @@
 
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-list {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        min-width: 0;
+        max-width: 100%;
         gap: 12px;
     }
 
@@ -785,18 +791,34 @@
         min-inline-size: 0;
         max-inline-size: 100%;
         min-height: 78px;
+        box-sizing: border-box;
         border-radius: 13px;
+        overflow: hidden;
     }
 
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card {
-        padding: 16px 14px 16px 44px;
-        font-size: 0.86rem;
-        line-height: 1.38;
+        display: grid;
+        grid-template-columns: 10px minmax(0, 1fr);
+        align-items: center;
+        gap: 8px;
+        padding: 14px 12px;
+        font-size: 0.84rem;
+        line-height: 1.3;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card-text {
+        min-width: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: normal;
+        hyphens: auto;
+        text-wrap: pretty;
     }
 
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card-grip {
-        position: absolute;
-        left: 16px;
+        position: static;
+        width: 10px;
+        height: 15px;
     }
 
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card {
@@ -817,7 +839,7 @@
 
 @media (max-width: 680px) {
     .drag-categorize-question:not(.drag-categorize-question-feedback) {
-        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.32fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.22fr);
         gap: 12px;
     }
 
@@ -841,6 +863,12 @@
         font-size: 0.76rem;
     }
 
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card {
+        grid-template-columns: 9px minmax(0, 1fr);
+        gap: 7px;
+        padding-inline: 10px;
+    }
+
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank-hint {
         font-size: 0.68rem;
     }
@@ -848,6 +876,7 @@
 
 @media (max-width: 420px) {
     .drag-categorize-question:not(.drag-categorize-question-feedback) {
+        grid-template-columns: minmax(0, 1.04fr) minmax(0, 1.18fr);
         gap: 10px;
     }
 
@@ -860,4 +889,75 @@
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank-placeholder {
         min-height: 64px;
     }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card {
+        grid-template-columns: 8px minmax(0, 1fr);
+        gap: 6px;
+        padding-inline: 9px;
+        font-size: 0.72rem;
+        line-height: 1.28;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card-grip {
+        width: 8px;
+    }
+}
+
+/* Light-mode placed cards: keep CategorySort in the same blue family as SequenceOrder. */
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card {
+    border-color: #2563eb;
+    background-color: #2563eb;
+    background-image:
+        linear-gradient(135deg,
+            #2f6df0 0%,
+            #2563eb 58%,
+            #1d4ed8 100%);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+        0 0 0 4px rgba(96, 165, 250, 0.42),
+        0 0 0 10px rgba(191, 219, 254, 0.72),
+        0 14px 28px rgba(37, 99, 235, 0.24);
+}
+
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card:hover,
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card:focus-visible,
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-selected {
+    border-color: #60a5fa;
+    background-color: #2563eb;
+    background-image:
+        linear-gradient(135deg,
+            #2f6df0 0%,
+            #2563eb 58%,
+            #1d4ed8 100%);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.24),
+        0 0 0 5px rgba(96, 165, 250, 0.48),
+        0 0 0 11px rgba(191, 219, 254, 0.76),
+        0 14px 28px rgba(37, 99, 235, 0.26);
+}
+
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-remove {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-grip span {
+    background: rgba(255, 255, 255, 0.86);
+}
+
+.dark .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card {
+    border-color: var(--drag-categorize-placed-border);
+    background: var(--drag-categorize-placed-bg);
+    box-shadow: var(--drag-categorize-placed-shadow);
+}
+
+.dark .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card:hover,
+.dark .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card:focus-visible,
+.dark .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-selected {
+    border-color: color-mix(in srgb, var(--drag-categorize-placed-border) 82%, white);
+    background: var(--drag-categorize-placed-bg);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+        0 0 0 4px var(--drag-categorize-placed-hover-ring),
+        var(--drag-categorize-placed-shadow);
 }
