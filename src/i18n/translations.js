@@ -115,6 +115,7 @@ export const translations = {
         dragCategorizeItemBankHint: "Dra et kort til riktig kategori, eller klikk kortet og deretter kategorien.",
         dragCategorizeFeedbackBankHint: "Kortene over viser oppgavens mulige svar.",
         dragCategorizeDropHere: "Slipp her",
+        dragCategorizeReturnToBank: "Trekk tilbake for å angre",
         dragCategorizeRemoveAnswer: "Fjern svar",
 
         matrixPlacementItemBankTitle: "Svar-kort",
@@ -358,6 +359,7 @@ export const translations = {
         dragCategorizeItemBankHint: "Drag a card into the correct category, or click a card and then click the category.",
         dragCategorizeFeedbackBankHint: "The cards above show the possible answers for this task.",
         dragCategorizeDropHere: "Drop here",
+        dragCategorizeReturnToBank: "Drag back to undo",
         dragCategorizeRemoveAnswer: "Remove answer",
 
         matrixPlacementItemBankTitle: "Answer cards",

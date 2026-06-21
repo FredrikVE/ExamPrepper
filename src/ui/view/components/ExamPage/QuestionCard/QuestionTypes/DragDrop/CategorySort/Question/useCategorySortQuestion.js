@@ -1,7 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Question/useCategorySortQuestion.js
 import { useState } from "react";
 import orderItemsByIndexOrder from "../../Shared/Utils/orderItemsByIndexOrder.js";
-import { clearItemFromAllCategories, createItemsById, getSafeArray, getUnplacedItems, normalizeCategoryAnswer } from "../Utils/categorySortAnswerLogic.js";
+import { clearItemFromAllCategories, createItemsById, getPlacedItemIds, getSafeArray, getUnplacedItems, normalizeCategoryAnswer } from "../Utils/categorySortAnswerLogic.js";
 import { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";
 
 export function useCategorySortQuestion(params) {
@@ -12,11 +12,17 @@ export function useCategorySortQuestion(params) {
     const [expandedItemId, setExpandedItemId] = useState(null);
 
     const itemsById = createItemsById(params.question?.items);
+    const placedItemIds = getPlacedItemIds(safeAnswer);
     const availableItems = orderItemsByIndexOrder(
         getUnplacedItems(params.question, safeAnswer),
         params.answerOptionOrder,
         params.question.items
     );
+    const itemBankItems = orderItemsByIndexOrder(
+        getSafeArray(params.question?.items),
+        params.answerOptionOrder,
+        params.question.items
+    ).map((item) => ({ item, placed: placedItemIds.has(item.id) }));
     const stats = getCategorySortStats(params.question, safeAnswer);
 
     let rootClassName = "drag-categorize-question";
@@ -92,6 +98,7 @@ export function useCategorySortQuestion(params) {
 
         itemsById,
         availableItems,
+        itemBankItems,
         stats,
 
         assignItem,

@@ -22,6 +22,7 @@ export default function CategorySortQuestion(props) {
                 <CategorySortItemBank
                     question={props.question}
                     items={categorySort.availableItems}
+                    itemBankItems={categorySort.itemBankItems}
                     feedbackMode={categorySort.feedbackMode}
                     selectedItemId={categorySort.selectedItemId}
                     expandedItemId={categorySort.expandedItemId}

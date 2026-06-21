@@ -13,6 +13,10 @@ export default function CategorySortItemBank(props) {
             className={getItemBankClassName(props.feedbackMode)}
             aria-label={props.t.dragCategorizeItemBankTitle}
         >
+            <div className="drag-categorize-item-bank-title-row">
+                <h2 className="drag-categorize-item-bank-title">{props.t.dragCategorizeItemBankTitle}</h2>
+            </div>
+
             {props.feedbackMode ? (
                 <div className="drag-categorize-item-list">
                     {props.items.map((item) => renderItem(props, item))}
@@ -24,13 +28,30 @@ export default function CategorySortItemBank(props) {
                 >
                     {({ droppableRef, isDropTarget }) => (
                         <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
-                            {props.items.map((item) => renderItem(props, item))}
+                            {props.itemBankItems.map((itemBankEntry) => renderItemBankEntry(props, itemBankEntry))}
                         </div>
                     )}
                 </MobileDroppable>
             )}
+
+            <p className="drag-categorize-item-bank-hint">
+                {props.feedbackMode ? props.t.dragCategorizeFeedbackBankHint : props.t.dragCategorizeItemBankHint}
+            </p>
         </aside>
     );
+}
+
+function renderItemBankEntry(props, itemBankEntry) {
+    if (itemBankEntry.placed) {
+        return (
+            <CategorySortItemBankPlaceholder
+                key={itemBankEntry.item.id}
+                label={props.t.dragCategorizeReturnToBank}
+            />
+        );
+    }
+
+    return renderItem(props, itemBankEntry.item);
 }
 
 function renderItem(props, item) {
@@ -58,6 +79,14 @@ function renderItem(props, item) {
             onSelect={() => props.onItemSelect(item.id)}
             t={props.t}
         />
+    );
+}
+
+function CategorySortItemBankPlaceholder(props) {
+    return (
+        <div className="drag-categorize-item-bank-placeholder" aria-hidden="true">
+            {props.label}
+        </div>
     );
 }
 
