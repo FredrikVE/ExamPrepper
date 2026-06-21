@@ -46,7 +46,6 @@ export default function SequenceOrderQuestion(props) {
                             acceptedDragSourceType={SEQUENCE_ORDER_ITEM_TYPE}
                             slotDropTargetIdPrefix={SEQUENCE_ORDER_SLOT_DROP_TARGET_ID_PREFIX}
                             onDropZoneClick={sequenceOrder.selectDropZone}
-                            onSequenceItemRemove={sequenceOrder.removeSequenceItemFromAnswer}
                             t={props.t}
                         />
 

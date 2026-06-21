@@ -60,8 +60,6 @@ function SequenceOrderDropZoneContent(props) {
                     sequencePositionNumber={props.positionNumber}
                     disabled={props.feedbackMode}
                     dragSourceType={props.acceptedDragSourceType}
-                    onSequenceItemRemove={props.onSequenceItemRemove}
-                    t={props.t}
                 />
             ) : (
                 <>

@@ -6,6 +6,7 @@ export default function deriveWorkspaceClassName(question, submitted) {
 	const shouldUseWideQuestionLayout = shouldQuestionUseWideLayout(question);
 	const shouldUseExtraWideQuestionLayout = shouldQuestionUseExtraWideLayout(question);
 	const shouldUseDenseDragCategorizeLayout = shouldQuestionUseDenseDragCategorizeLayout(question);
+	const isSequenceOrderQuestion = question?.type === QUESTION_TYPES.SEQUENCE_ORDER;
 	const isMatrixPlacementQuestion = question?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
 
 	return [
@@ -15,6 +16,7 @@ export default function deriveWorkspaceClassName(question, submitted) {
 		shouldUseWideQuestionLayout ? "exam-workspace-wide-question-mode" : "",
 		shouldUseExtraWideQuestionLayout ? "exam-workspace-extra-wide-question-mode" : "",
 		shouldUseDenseDragCategorizeLayout ? "exam-workspace-dense-drag-categorize-mode" : "",
+		isSequenceOrderQuestion ? "exam-workspace-sequence-order-mode" : "",
 		isMatrixPlacementQuestion ? "exam-workspace-matrix-placement-mode" : ""
 	].filter(Boolean).join(" ");
 }
@@ -52,6 +54,10 @@ const shouldQuestionUseWideLayout = (question) => {
 		return getMatrixPlacementQuadrantCount(question) >= 4 || getLongestMatrixPlacementTextLength(question) >= 34;
 	}
 
+	if (question?.type === QUESTION_TYPES.SEQUENCE_ORDER) {
+		return getSequenceOrderItemCount(question) >= 5 || getLongestSequenceOrderTextLength(question) >= 34;
+	}
+
 	return false;
 };
 
@@ -76,6 +82,34 @@ const shouldQuestionUseDenseDragCategorizeLayout = (question) => {
 	}
 
 	return question.categories?.length >= 5 || getLongestDragCategorizeTextLength(question) >= 44;
+};
+
+const getSequenceOrderItemCount = (question) => {
+	return getSequenceOrderItems(question).length;
+};
+
+const getLongestSequenceOrderTextLength = (question) => {
+	const sequenceItemLengths = getSequenceOrderItems(question).map((sequenceItem) => {
+		return String(sequenceItem?.label ?? sequenceItem?.text ?? sequenceItem?.title ?? "").length;
+	});
+
+	return Math.max(0, ...sequenceItemLengths);
+};
+
+const getSequenceOrderItems = (question) => {
+	if (Array.isArray(question?.items)) {
+		return question.items;
+	}
+
+	if (Array.isArray(question?.alternatives)) {
+		return question.alternatives;
+	}
+
+	if (Array.isArray(question?.cards)) {
+		return question.cards;
+	}
+
+	return [];
 };
 
 const getMatrixPlacementQuadrantCount = (question) => {

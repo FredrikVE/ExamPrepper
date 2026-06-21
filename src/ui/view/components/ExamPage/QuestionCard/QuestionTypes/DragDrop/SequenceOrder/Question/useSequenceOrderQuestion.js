@@ -23,6 +23,10 @@ export function useSequenceOrderQuestion(params) {
         rootClassName += " sequence-order-question-feedback";
     }
 
+    if (safeAnswer.length >= 5) {
+        rootClassName += " sequence-order-question-long-sequence";
+    }
+
     const assignSequenceItem = (targetIndex, sequenceItemId) => {
         if (params.submitted || !sequenceItemId) {
             return;
