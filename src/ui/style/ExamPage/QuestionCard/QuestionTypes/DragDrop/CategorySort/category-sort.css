@@ -10,7 +10,7 @@
 
 .drag-categorize-item-bank {
     --drag-categorize-bank-card-min-width: 180px;
-    --drag-categorize-bank-card-max-width: 360px;
+    --drag-categorize-bank-card-max-width: 300px;
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--panel-strong) 76%, transparent);
@@ -91,22 +91,22 @@
 
 .drag-categorize-item-card-short {
     --drag-categorize-bank-card-min-width: 170px;
-    --drag-categorize-bank-card-max-width: 240px;
+    --drag-categorize-bank-card-max-width: 220px;
 }
 
 .drag-categorize-item-card-medium {
     --drag-categorize-bank-card-min-width: 210px;
-    --drag-categorize-bank-card-max-width: 340px;
+    --drag-categorize-bank-card-max-width: 280px;
 }
 
 .drag-categorize-item-card-long {
     --drag-categorize-bank-card-min-width: 260px;
-    --drag-categorize-bank-card-max-width: 480px;
+    --drag-categorize-bank-card-max-width: 320px;
 }
 
 .drag-categorize-item-card-extra-long {
     --drag-categorize-bank-card-min-width: 300px;
-    --drag-categorize-bank-card-max-width: 560px;
+    --drag-categorize-bank-card-max-width: 360px;
 }
 
 .drag-categorize-item-card:hover,
@@ -329,11 +329,11 @@
 }
 
 .exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-long {
-    --drag-categorize-bank-card-max-width: 520px;
+    --drag-categorize-bank-card-max-width: 340px;
 }
 
 .exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-extra-long {
-    --drag-categorize-bank-card-max-width: 620px;
+    --drag-categorize-bank-card-max-width: 380px;
 }
 
 .exam-workspace-dense-drag-categorize-mode .drag-categorize-category-grid {
@@ -346,7 +346,7 @@
 }
 
 .exam-workspace-extra-wide-question-mode .drag-categorize-item-card-extra-long {
-    --drag-categorize-bank-card-max-width: 660px;
+    --drag-categorize-bank-card-max-width: 420px;
 }
 
 .exam-workspace-extra-wide-question-mode .drag-categorize-category-grid {
@@ -564,6 +564,18 @@
     }
 }
 
+
+@media (min-width: 933px) {
+    .drag-categorize-item-card {
+        inline-size: fit-content(var(--drag-categorize-bank-card-max-width));
+    }
+
+    .drag-categorize-item-bank-placeholder {
+        inline-size: min(100%, 220px);
+        flex: 0 1 220px;
+    }
+}
+
 /* CategorySort SSOT card language and mobile board layout */
 .drag-categorize-question {
     --drag-categorize-board-border: color-mix(in srgb, var(--accent) 18%, var(--line));
@@ -576,17 +588,18 @@
     --drag-categorize-card-shadow: 0 10px 24px rgba(18, 38, 63, 0.08);
     --drag-categorize-grip-bg: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
     --drag-categorize-drop-border: color-mix(in srgb, var(--accent) 72%, var(--line));
+    --drag-categorize-drop-over-border: color-mix(in srgb, var(--accent) 88%, #3b82f6);
     --drag-categorize-drop-bg: color-mix(in srgb, var(--accent-soft) 42%, transparent);
-    --drag-categorize-placed-border: color-mix(in srgb, var(--accent) 78%, #7c3aed);
+    --drag-categorize-placed-border: color-mix(in srgb, var(--accent) 88%, #1d4ed8);
     --drag-categorize-placed-bg:
         linear-gradient(135deg,
-            color-mix(in srgb, var(--accent) 92%, #2563eb),
-            #6d28d9);
+            color-mix(in srgb, var(--accent) 94%, #3b82f6),
+            color-mix(in srgb, var(--accent) 88%, #1d4ed8));
     --drag-categorize-placed-color: #ffffff;
     --drag-categorize-placed-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-        0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent),
-        0 14px 30px rgba(37, 99, 235, 0.28);
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+        0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent),
+        0 12px 24px color-mix(in srgb, var(--accent) 20%, transparent);
     --drag-categorize-placed-grip-bg: rgba(255, 255, 255, 0.86);
 }
 
@@ -599,6 +612,7 @@
     --drag-categorize-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
     --drag-categorize-grip-bg: #aab2c4;
     --drag-categorize-drop-border: color-mix(in srgb, var(--accent) 78%, rgba(155, 101, 255, 0.8));
+    --drag-categorize-drop-over-border: color-mix(in srgb, var(--accent) 88%, #c29cff);
     --drag-categorize-drop-bg: rgba(124, 77, 255, 0.035);
     --drag-categorize-placed-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
     --drag-categorize-placed-bg:
@@ -688,7 +702,7 @@
 }
 
 .drag-categorize-item-list-over .drag-categorize-item-bank-placeholder {
-    border-color: color-mix(in srgb, var(--accent) 86%, #c29cff);
+    border-color: var(--drag-categorize-drop-over-border);
     background: color-mix(in srgb, var(--accent-soft) 56%, transparent);
     color: var(--accent);
 }
@@ -754,7 +768,7 @@
 
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-drop-zone-over .drag-categorize-empty-slot,
     .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-drop-zone:focus-visible .drag-categorize-empty-slot {
-        border-color: color-mix(in srgb, var(--accent) 88%, #c29cff);
+        border-color: var(--drag-categorize-drop-over-border);
         background: color-mix(in srgb, var(--accent-soft) 48%, transparent);
         box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
     }
