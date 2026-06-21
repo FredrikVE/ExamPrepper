@@ -80,9 +80,26 @@ export default function SequenceOrderQuestion(props) {
 
 function SequenceOrderDragOverlayCard(props) {
     return (
-        <div className="sequence-order-placed-card sequence-order-drag-overlay-card">
-            <span><FormattedText text={getSequenceItemLabel(props.sequenceItem)} /></span>
+        <div className="sequence-order-item-card sequence-order-drag-overlay-card">
+            <span className="sequence-order-item-card-text">
+                <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
+            </span>
+
+            <SequenceOrderDragOverlayGrip />
         </div>
+    );
+}
+
+function SequenceOrderDragOverlayGrip() {
+    return (
+        <span className="sequence-order-item-card-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
     );
 }
 

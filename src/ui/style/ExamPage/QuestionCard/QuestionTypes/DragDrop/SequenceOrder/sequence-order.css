@@ -1,7 +1,55 @@
 /* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/sequence-order.css */
 .sequence-order-question {
+    --sequence-order-card-border: color-mix(in srgb, var(--accent) 20%, var(--line));
+    --sequence-order-card-bg:
+        linear-gradient(180deg,
+            color-mix(in srgb, var(--panel-strong) 94%, var(--accent-soft)),
+            color-mix(in srgb, var(--panel-bg) 90%, white));
+    --sequence-order-card-hover-bg: color-mix(in srgb, var(--accent-soft) 72%, var(--panel-strong));
+    --sequence-order-card-shadow: 0 10px 24px rgba(18, 38, 63, 0.08);
+    --sequence-order-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+    --sequence-order-grip-bg: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
+    --sequence-order-placed-border: color-mix(in srgb, var(--accent) 78%, #7c3aed);
+    --sequence-order-placed-bg:
+        linear-gradient(135deg,
+            color-mix(in srgb, var(--accent) 92%, #2563eb),
+            #6d28d9);
+    --sequence-order-placed-color: #ffffff;
+    --sequence-order-placed-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+        0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent),
+        0 14px 30px rgba(37, 99, 235, 0.28);
+    --sequence-order-placed-number-bg: rgba(255, 255, 255, 0.18);
+    --sequence-order-placed-grip-bg: rgba(255, 255, 255, 0.86);
+    --sequence-order-placed-clear-bg: rgba(255, 255, 255, 0.16);
+    --sequence-order-placed-clear-color: #ffffff;
+
     display: grid;
     gap: var(--space-8);
+}
+
+.dark .sequence-order-question {
+    --sequence-order-card-border: rgba(136, 160, 190, 0.38);
+    --sequence-order-card-bg:
+        linear-gradient(180deg,
+            rgba(8, 27, 48, 0.72),
+            rgba(5, 18, 34, 0.56));
+    --sequence-order-card-hover-bg: color-mix(in srgb, var(--accent-soft) 60%, rgba(5, 18, 34, 0.56));
+    --sequence-order-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    --sequence-order-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+    --sequence-order-grip-bg: #aab2c4;
+    --sequence-order-placed-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
+    --sequence-order-placed-bg:
+        linear-gradient(135deg,
+            color-mix(in srgb, var(--accent) 72%, #2563eb),
+            #7c3aed);
+    --sequence-order-placed-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+        0 0 0 3px color-mix(in srgb, var(--accent) 34%, transparent),
+        0 16px 36px rgba(0, 0, 0, 0.44);
+    --sequence-order-placed-number-bg: rgba(255, 255, 255, 0.16);
+    --sequence-order-placed-grip-bg: rgba(255, 255, 255, 0.86);
+    --sequence-order-placed-clear-bg: rgba(255, 255, 255, 0.14);
 }
 
 .sequence-order-question-feedback {
@@ -121,21 +169,44 @@
     box-shadow: none;
 }
 
-.sequence-order-item-card-grip,
-.sequence-order-placed-card-grip {
-    width: 17px;
-    height: 17px;
-    flex: 0 0 auto;
-    color: var(--text-soft);
-}
-
-.sequence-order-item-card span,
-.sequence-order-placed-card span,
+.sequence-order-item-card-text,
+.sequence-order-placed-card-text,
 .sequence-order-readonly-slot {
-    overflow-wrap: break-word;
+    min-width: 0;
+    overflow-wrap: normal;
     word-break: normal;
     hyphens: auto;
     text-wrap: balance;
+}
+
+.sequence-order-placed-card-text {
+    flex: 1 1 auto;
+}
+
+.sequence-order-item-card-grip,
+.sequence-order-placed-card-grip {
+    display: grid;
+    grid-template-columns: repeat(2, 4px);
+    flex: 0 0 auto;
+    gap: 4px 6px;
+    width: 16px;
+    height: 28px;
+    opacity: 0.78;
+}
+
+.sequence-order-item-card-grip span,
+.sequence-order-placed-card-grip span {
+    width: 4px;
+    height: 4px;
+    border-radius: var(--radius-full);
+}
+
+.sequence-order-item-card-grip span {
+    background: var(--sequence-order-grip-bg);
+}
+
+.sequence-order-placed-card-grip span {
+    background: var(--sequence-order-placed-grip-bg);
 }
 
 .sequence-order-item-bank-hint {
@@ -174,10 +245,10 @@
 
 .sequence-order-drop-zone {
     display: grid;
+    place-items: center;
     min-width: 150px;
     flex: 1 0 150px;
     min-height: 88px;
-    place-items: center;
     border: 1px dashed color-mix(in srgb, var(--accent) 58%, var(--line));
     border-radius: var(--radius-sm);
     background: color-mix(in srgb, var(--accent-soft) 34%, transparent);
@@ -206,6 +277,10 @@
     outline: none;
 }
 
+.sequence-order-slot-number {
+    display: none;
+}
+
 .sequence-order-drop-placeholder {
     font-size: 0.92rem;
     font-weight: 950;
@@ -213,16 +288,25 @@
 
 .sequence-order-placed-card {
     position: relative;
-    width: 100%;
     justify-content: flex-start;
+    width: 100%;
     text-align: left;
     padding-right: 38px;
+}
+
+.sequence-order-item-card-grip,
+.sequence-order-placed-card-grip {
+    order: -1;
+}
+
+.sequence-order-placed-card-number {
+    display: none;
 }
 
 .sequence-order-drag-overlay-card {
     min-width: 180px;
     border-color: var(--accent);
-    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 68%, #7c3aed));
+    background: var(--sequence-order-placed-bg);
     color: #fff;
     box-shadow: 0 12px 24px color-mix(in srgb, var(--accent) 24%, transparent);
 }
@@ -253,6 +337,221 @@
 .sequence-order-remove-button svg {
     width: 16px;
     height: 16px;
+}
+
+@media (max-width: 900px) {
+    .sequence-order-item-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .sequence-order-question {
+        gap: var(--space-6);
+    }
+
+    .sequence-order-board {
+        order: 1;
+    }
+
+    .sequence-order-item-bank {
+        order: 2;
+        padding: 12px;
+        border-radius: 13px;
+        background: color-mix(in srgb, var(--panel-strong) 58%, transparent);
+    }
+
+    .sequence-order-item-bank-title-row {
+        margin-bottom: 12px;
+    }
+
+    .sequence-order-item-bank-icon {
+        display: none;
+    }
+
+    .sequence-order-item-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .sequence-order-item-card {
+        justify-content: space-between;
+        min-height: 54px;
+        border-radius: 10px;
+        padding: 13px 14px;
+        text-align: left;
+        font-size: 0.92rem;
+        font-weight: 850;
+    }
+
+    .sequence-order-item-card-grip,
+    .sequence-order-placed-card-grip {
+        order: initial;
+    }
+
+    .sequence-order-item-card-text,
+    .sequence-order-placed-card-text {
+        overflow-wrap: break-word;
+    }
+
+    .sequence-order-slots {
+        flex-direction: column;
+        gap: 9px;
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+
+    .sequence-order-arrow {
+        width: 24px;
+        height: 24px;
+        margin: -3px auto;
+        color: var(--text-muted);
+        transform: rotate(90deg);
+    }
+
+    .sequence-order-drop-zone {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        min-width: 0;
+        width: 100%;
+        min-height: 74px;
+        flex: none;
+        border: 1.3px dashed color-mix(in srgb, var(--text-muted) 48%, transparent);
+        border-radius: 13px;
+        background: color-mix(in srgb, var(--panel-bg) 78%, transparent);
+        padding: 16px;
+        color: var(--accent);
+        text-align: left;
+    }
+
+    .sequence-order-drop-zone-filled {
+        min-height: 74px;
+        border: 0;
+        background: transparent;
+        padding: 0;
+    }
+
+    .sequence-order-drop-zone:hover,
+    .sequence-order-drop-zone:focus-visible,
+    .sequence-order-drop-zone-over,
+    .sequence-order-drop-zone-selectable {
+        border-color: color-mix(in srgb, var(--accent) 82%, #a855f7);
+        background: color-mix(in srgb, var(--accent-soft) 42%, transparent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .sequence-order-slot-number,
+    .sequence-order-placed-card-number {
+        display: inline-grid;
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        place-items: center;
+        border-radius: var(--radius-full);
+        font-size: 1.05rem;
+        font-weight: 950;
+    }
+
+    .sequence-order-slot-number {
+        margin-right: 20px;
+        border: 1px solid color-mix(in srgb, var(--text-muted) 34%, transparent);
+        background: color-mix(in srgb, var(--panel-bg) 88%, transparent);
+        color: var(--text-muted);
+    }
+
+    .sequence-order-drop-placeholder {
+        color: var(--accent);
+        font-size: 0.98rem;
+        font-weight: 850;
+    }
+
+    .sequence-order-placed-card {
+        min-height: 74px;
+        border: 2px solid var(--sequence-order-placed-border);
+        border-radius: 13px;
+        background: var(--sequence-order-placed-bg);
+        box-shadow: var(--sequence-order-placed-shadow);
+        color: var(--sequence-order-placed-color);
+        padding: 14px 76px 14px 16px;
+        font-size: 0.98rem;
+        font-weight: 950;
+    }
+
+    .sequence-order-placed-card:hover,
+    .sequence-order-placed-card:focus-visible {
+        border-color: color-mix(in srgb, var(--sequence-order-placed-border) 82%, white);
+        background: var(--sequence-order-placed-bg);
+        box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+            0 0 0 4px color-mix(in srgb, var(--accent) 26%, transparent),
+            var(--sequence-order-placed-shadow);
+        transform: none;
+    }
+
+    .sequence-order-placed-card-number {
+        margin-right: 20px;
+        background: var(--sequence-order-placed-number-bg);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+        color: #ffffff;
+    }
+
+    .sequence-order-placed-card-grip {
+        position: absolute;
+        right: 46px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .sequence-order-remove-button {
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: var(--sequence-order-placed-clear-bg);
+        color: var(--sequence-order-placed-clear-color);
+    }
+
+    .sequence-order-item-bank-hint {
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .sequence-order-item-card {
+        min-height: 50px;
+        padding: 12px 12px;
+        font-size: 0.86rem;
+    }
+
+    .sequence-order-drop-zone,
+    .sequence-order-placed-card {
+        min-height: 68px;
+    }
+
+    .sequence-order-slot-number,
+    .sequence-order-placed-card-number {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+        margin-right: 16px;
+        font-size: 0.98rem;
+    }
+
+    .sequence-order-placed-card {
+        padding: 13px 68px 13px 14px;
+        font-size: 0.92rem;
+    }
+
+    .sequence-order-placed-card-grip {
+        right: 40px;
+    }
+
+    .sequence-order-remove-button {
+        right: 8px;
+        width: 28px;
+        height: 28px;
+    }
 }
 
 .sequence-order-feedback-panel {
@@ -356,16 +655,4 @@
 .sequence-order-extended-panel .drag-drop-feedback-explanation {
     border-top-color: var(--warning-border);
     background: color-mix(in srgb, var(--warning-soft) 60%, var(--panel-strong));
-}
-
-@media (max-width: 900px) {
-    .sequence-order-item-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 680px) {
-    .sequence-order-item-list {
-        grid-template-columns: 1fr;
-    }
 }

@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderPlacedItemCard.jsx
-import { GripVertical, X } from "lucide-react";
+import { X } from "lucide-react";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
 import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
@@ -14,9 +14,15 @@ export default function SequenceOrderPlacedItemCard(props) {
         >
             {({ draggableRef, isDragging }) => (
                 <div ref={draggableRef} className={getPlacedCardClassName(isDragging)}>
-                    <GripVertical className="sequence-order-placed-card-grip" aria-hidden="true" />
+                    <span className="sequence-order-placed-card-number" aria-hidden="true">
+                        {props.sequencePositionNumber}
+                    </span>
 
-                    <span><FormattedText text={getSequenceItemLabel(props.sequenceItem)} /></span>
+                    <span className="sequence-order-placed-card-text">
+                        <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
+                    </span>
+
+                    <SequenceOrderPlacedCardGrip />
 
                     {!props.disabled ? (
                         <button
@@ -49,4 +55,17 @@ function getPlacedCardClassName(isDragging) {
     }
 
     return className;
+}
+
+function SequenceOrderPlacedCardGrip() {
+    return (
+        <span className="sequence-order-placed-card-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
+    );
 }

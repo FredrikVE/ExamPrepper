@@ -14,6 +14,7 @@ export default function SequenceOrderBoard(props) {
                     <SequenceOrderSlotGroup
                         key={index}
                         index={index}
+                        positionNumber={index + 1}
                         selectedSequenceItem={props.sequenceItemsById[sequenceItemId]}
                         selectedSequenceItemId={props.selectedSequenceItemId}
                         feedbackMode={props.feedbackMode}
@@ -35,6 +36,7 @@ function SequenceOrderSlotGroup(props) {
         <>
             <SequenceOrderDropZone
                 index={props.index}
+                positionNumber={props.positionNumber}
                 selectedSequenceItem={props.selectedSequenceItem}
                 selectedSequenceItemId={props.selectedSequenceItemId}
                 feedbackMode={props.feedbackMode}

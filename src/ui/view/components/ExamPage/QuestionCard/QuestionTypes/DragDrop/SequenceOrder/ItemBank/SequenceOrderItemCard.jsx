@@ -1,5 +1,4 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/ItemBank/SequenceOrderItemCard.jsx
-import { GripVertical } from "lucide-react";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
 import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
@@ -27,8 +26,11 @@ export default function SequenceOrderItemCard(props) {
                         onClick={selectItem(props)}
                         disabled={props.disabled}
                     >
-                        <GripVertical className="sequence-order-item-card-grip" aria-hidden="true" />
-                        <span><FormattedText text={getSequenceItemLabel(props.sequenceItem)} /></span>
+                        <span className="sequence-order-item-card-text">
+                            <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
+                        </span>
+
+                        <SequenceOrderItemCardGrip />
                     </button>
                 );
             }}
@@ -62,4 +64,17 @@ function getItemCardClassName({ selected, disabled, isDragging }) {
     }
 
     return className;
+}
+
+function SequenceOrderItemCardGrip() {
+    return (
+        <span className="sequence-order-item-card-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
+    );
 }

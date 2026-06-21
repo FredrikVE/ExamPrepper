@@ -51,21 +51,27 @@ function SequenceOrderDropZoneContent(props) {
             tabIndex={0}
             onClick={selectDropZone}
             onKeyDown={activateDropZoneWithKeyboard}
-            aria-label={`${props.t.dragDropDropHere} ${props.index + 1}`}
+            aria-label={`${props.t.dragDropDropHere} ${props.positionNumber}`}
         >
             {props.selectedSequenceItem ? (
                 <SequenceOrderPlacedItemCard
                     sequenceItem={props.selectedSequenceItem}
                     sourceIndex={props.index}
+                    sequencePositionNumber={props.positionNumber}
                     disabled={props.feedbackMode}
                     dragSourceType={props.acceptedDragSourceType}
                     onSequenceItemRemove={props.onSequenceItemRemove}
                     t={props.t}
                 />
             ) : (
-                <span className="sequence-order-drop-placeholder">
-                    {props.t.dragDropDropHere}
-                </span>
+                <>
+                    <span className="sequence-order-slot-number" aria-hidden="true">
+                        {props.positionNumber}
+                    </span>
+                    <span className="sequence-order-drop-placeholder">
+                        {props.t.dragDropDropHere}
+                    </span>
+                </>
             )}
         </div>
     );
