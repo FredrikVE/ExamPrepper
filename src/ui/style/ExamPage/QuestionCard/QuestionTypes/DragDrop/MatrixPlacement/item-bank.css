@@ -58,15 +58,17 @@
     min-height: 48px;
     border: 1px solid var(--line);
     border-radius: var(--radius-xs);
-    background: color-mix(in srgb, var(--panel-strong) 94%, transparent);
+    background: var(--matrix-placement-card-bg);
     color: var(--text-main);
     cursor: grab;
-    box-shadow: 0 8px 18px rgba(18, 38, 63, 0.06);
+    box-shadow: var(--matrix-placement-card-shadow);
     padding: 10px 12px;
     text-align: left;
     font-size: 0.84rem;
     font-weight: 850;
     line-height: 1.22;
+    touch-action: none;
+    user-select: none;
     transition:
         border-color var(--transition-fast),
         background var(--transition-fast),
@@ -107,6 +109,8 @@
 
 .matrix-placement-item-card-disabled {
     cursor: default;
+    touch-action: auto;
+    user-select: auto;
 }
 
 .matrix-placement-item-card-disabled:hover,
@@ -118,10 +122,50 @@
 
 .matrix-placement-item-card-grip,
 .matrix-placement-placed-card-grip {
-    width: 17px;
-    height: 17px;
+    order: -1;
+    display: grid;
+    grid-template-columns: repeat(2, 2px);
     flex: 0 0 auto;
-    color: var(--text-soft);
+    gap: 2px 4px;
+    width: 10px;
+    height: 19px;
+    opacity: 0.74;
+}
+
+.matrix-placement-item-card-grip span,
+.matrix-placement-placed-card-grip span {
+    width: 3px;
+    height: 3px;
+    border-radius: var(--radius-full);
+}
+
+.matrix-placement-item-card-grip span {
+    background: var(--matrix-placement-grip-bg);
+}
+
+.matrix-placement-placed-card-grip span {
+    background: var(--matrix-placement-placed-grip-bg);
+}
+
+.matrix-placement-item-list-over {
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent-soft) 44%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.matrix-placement-item-bank-placeholder {
+    display: grid;
+    min-height: 58px;
+    place-items: center;
+    border: 1px dashed var(--matrix-placement-placeholder-border);
+    border-radius: var(--radius-xs);
+    background: var(--matrix-placement-placeholder-bg);
+    color: var(--text-muted);
+    padding: 10px 12px;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 850;
+    line-height: 1.3;
 }
 
 .matrix-placement-placed-card-remove {
@@ -159,7 +203,31 @@
 
 .matrix-placement-placed-card {
     position: relative;
+    border-color: var(--matrix-placement-placed-border);
+    background: var(--matrix-placement-placed-bg);
+    box-shadow: var(--matrix-placement-placed-shadow);
+    color: var(--matrix-placement-placed-color);
     padding-right: 38px;
+}
+
+.matrix-placement-placed-card:hover,
+.matrix-placement-placed-card:focus-visible {
+    border-color: color-mix(in srgb, var(--matrix-placement-placed-border) 84%, white);
+    background: var(--matrix-placement-placed-bg);
+    box-shadow: var(--matrix-placement-placed-shadow);
+}
+
+.matrix-placement-placed-card-dragging,
+.matrix-placement-item-card-dragging {
+    opacity: 0.45;
+}
+
+.matrix-placement-drag-overlay-card {
+    min-width: 180px;
+    border-color: var(--matrix-placement-placed-border);
+    background: var(--matrix-placement-placed-bg);
+    color: var(--matrix-placement-placed-color);
+    box-shadow: 0 12px 24px color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
 .matrix-placement-item-bank-hint {

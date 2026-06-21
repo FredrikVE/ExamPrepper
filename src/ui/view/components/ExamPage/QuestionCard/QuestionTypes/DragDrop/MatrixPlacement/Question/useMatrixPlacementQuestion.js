@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Question/useMatrixPlacementQuestion.js
 import { useState } from "react";
-import { createItemsById, getUnplacedItems, normalizeMatrixPlacementAnswer, placeItemInQuadrant, removeItemFromMatrix } from "../Utils/matrixPlacementAnswerLogic.js";
+import orderItemsByIndexOrder from "../../Shared/Utils/orderItemsByIndexOrder.js";
+import { createItemsById, getPlacedItemIds, getUnplacedItems, normalizeMatrixPlacementAnswer, placeItemInQuadrant, removeItemFromMatrix } from "../Utils/matrixPlacementAnswerLogic.js";
 import { getMatrixPlacementStats } from "../Utils/matrixPlacementFeedbackStats.js";
 
 export function useMatrixPlacementQuestion(params) {
@@ -8,11 +9,20 @@ export function useMatrixPlacementQuestion(params) {
     const feedbackMode = params.submitted && params.showAllFeedback;
 
     const [selectedItemId, setSelectedItemId] = useState(null);
-    const [dragOverQuadrantId, setDragOverQuadrantId] = useState(null);
     const [expandedItemId, setExpandedItemId] = useState(null);
 
     const itemsById = createItemsById(params.question?.items);
-    const availableItems = getUnplacedItems(params.question, safeAnswer);
+    const placedItemIds = getPlacedItemIds(safeAnswer);
+    const availableItems = orderItemsByIndexOrder(
+        getUnplacedItems(params.question, safeAnswer),
+        params.answerOptionOrder,
+        params.question?.items
+    );
+    const itemBankItems = orderItemsByIndexOrder(
+        params.question?.items ?? [],
+        params.answerOptionOrder,
+        params.question?.items
+    ).map((item) => ({ item, placed: placedItemIds.has(item.id) }));
     const stats = getMatrixPlacementStats(params.question, safeAnswer);
 
     let rootClassName = "matrix-placement-question";
@@ -55,50 +65,17 @@ export function useMatrixPlacementQuestion(params) {
         }
     };
 
+    const clearSelectedItem = () => {
+        setSelectedItemId(null);
+    };
+
     const handleQuadrantClick = (quadrantId) => {
         if (params.submitted || !selectedItemId) {
             return;
         }
 
         assignItem(quadrantId, selectedItemId);
-        setSelectedItemId(null);
-    };
-
-    const handleItemDragStart = (event, itemId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.dataTransfer.setData("text/plain", itemId);
-        event.dataTransfer.effectAllowed = "move";
-    };
-
-    const handleQuadrantDragOver = (event, quadrantId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-        event.dataTransfer.dropEffect = "move";
-        setDragOverQuadrantId(quadrantId);
-    };
-
-    const handleQuadrantDragLeave = () => {
-        setDragOverQuadrantId(null);
-    };
-
-    const handleQuadrantDrop = (event, quadrantId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const itemId = event.dataTransfer.getData("text/plain");
-
-        assignItem(quadrantId, itemId);
-        setDragOverQuadrantId(null);
-        setSelectedItemId(null);
+        clearSelectedItem();
     };
 
     const toggleExpanded = (itemId) => {
@@ -115,21 +92,18 @@ export function useMatrixPlacementQuestion(params) {
         feedbackMode,
 
         selectedItemId,
-        dragOverQuadrantId,
         expandedItemId,
 
         itemsById,
         availableItems,
+        itemBankItems,
         stats,
 
         assignItem,
         removeItem,
         handleItemSelect,
+        clearSelectedItem,
         handleQuadrantClick,
-        handleItemDragStart,
-        handleQuadrantDragOver,
-        handleQuadrantDragLeave,
-        handleQuadrantDrop,
         toggleExpanded
     };
 }

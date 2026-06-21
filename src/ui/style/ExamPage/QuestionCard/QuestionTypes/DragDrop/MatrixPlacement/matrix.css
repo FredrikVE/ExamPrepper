@@ -257,3 +257,7 @@
 .matrix-placement-x-axis span:last-child {
     justify-self: end;
 }
+
+.matrix-placement-empty-slot-arrow {
+    display: none;
+}

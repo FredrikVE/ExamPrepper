@@ -28,15 +28,12 @@ export default function MatrixPlacementGrid(props) {
                         quadrant={quadrant}
                         safeAnswer={props.safeAnswer}
                         feedbackMode={props.feedbackMode}
-                        isDragOver={props.dragOverQuadrantId === quadrant.id}
                         selectedItemId={props.selectedItemId}
                         expandedItemId={props.expandedItemId}
+                        acceptedDragSourceType={props.acceptedDragSourceType}
+                        quadrantDropTargetIdPrefix={props.quadrantDropTargetIdPrefix}
                         onQuadrantClick={() => props.onQuadrantClick(quadrant.id)}
-                        onQuadrantDragOver={(event) => props.onQuadrantDragOver(event, quadrant.id)}
-                        onQuadrantDragLeave={props.onQuadrantDragLeave}
-                        onQuadrantDrop={(event) => props.onQuadrantDrop(event, quadrant.id)}
                         onItemSelect={props.onItemSelect}
-                        onItemDragStart={props.onItemDragStart}
                         onItemRemove={props.onItemRemove}
                         onToggleExpanded={props.onToggleExpanded}
                         t={props.t}

@@ -18,15 +18,12 @@ export default function MatrixPlacementQuadrant(props) {
                 quadrant={props.quadrant}
                 safeAnswer={props.safeAnswer}
                 feedbackMode={props.feedbackMode}
-                isDragOver={props.isDragOver}
                 selectedItemId={props.selectedItemId}
                 expandedItemId={props.expandedItemId}
+                acceptedDragSourceType={props.acceptedDragSourceType}
+                quadrantDropTargetIdPrefix={props.quadrantDropTargetIdPrefix}
                 onClick={props.onQuadrantClick}
-                onDragOver={props.onQuadrantDragOver}
-                onDragLeave={props.onQuadrantDragLeave}
-                onDrop={props.onQuadrantDrop}
                 onItemSelect={props.onItemSelect}
-                onItemDragStart={props.onItemDragStart}
                 onItemRemove={props.onItemRemove}
                 onToggleExpanded={props.onToggleExpanded}
                 t={props.t}

@@ -1,18 +1,41 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementDropZone.jsx
 import { CheckCircle2 } from "lucide-react";
+import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
 import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard.jsx";
 import { getItemLabel, getItemsInQuadrant, getMissingCorrectItemsInQuadrant } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementPlacedItemCard from "./MatrixPlacementPlacedItemCard.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function MatrixPlacementDropZone(props) {
+    if (props.feedbackMode) {
+        return <MatrixPlacementDropZoneContent {...props} isDropTarget={false} />;
+    }
+
+    return (
+        <MobileDroppable
+            dropTargetId={`${props.quadrantDropTargetIdPrefix}${props.quadrant.id}`}
+            acceptedDragSourceType={props.acceptedDragSourceType}
+            dropTargetContext={{ quadrantId: props.quadrant.id }}
+        >
+            {({ droppableRef, isDropTarget }) => (
+                <MatrixPlacementDropZoneContent
+                    {...props}
+                    droppableRef={droppableRef}
+                    isDropTarget={isDropTarget}
+                />
+            )}
+        </MobileDroppable>
+    );
+}
+
+function MatrixPlacementDropZoneContent(props) {
     const items = getItemsInQuadrant(props.question, props.safeAnswer, props.quadrant.id);
     const answerKeyItems = props.feedbackMode
         ? getMissingCorrectItemsInQuadrant(props.question, props.safeAnswer, props.quadrant.id)
         : [];
     const hasVisibleItems = items.length > 0 || answerKeyItems.length > 0;
     const className = getDropZoneClassName({
-        isDragOver: props.isDragOver,
+        isDropTarget: props.isDropTarget,
         empty: !hasVisibleItems,
         selectable: Boolean(props.selectedItemId) && !props.feedbackMode,
         feedbackMode: props.feedbackMode
@@ -32,14 +55,12 @@ export default function MatrixPlacementDropZone(props) {
 
     return (
         <div
+            ref={props.droppableRef}
             className={className}
             role="button"
             tabIndex={props.feedbackMode ? -1 : 0}
             onClick={props.feedbackMode ? undefined : props.onClick}
             onKeyDown={props.feedbackMode ? undefined : handleKeyDown}
-            onDragOver={props.feedbackMode ? undefined : props.onDragOver}
-            onDragLeave={props.feedbackMode ? undefined : props.onDragLeave}
-            onDrop={props.feedbackMode ? undefined : props.onDrop}
             aria-label={`${props.t.matrixPlacementDropHere}: ${props.quadrant.title ?? props.quadrant.label}`}
         >
             {items.map((item) => renderItem(props, item))}
@@ -47,7 +68,8 @@ export default function MatrixPlacementDropZone(props) {
 
             {!hasVisibleItems && !props.feedbackMode ? (
                 <div className="matrix-placement-empty-slot">
-                    {props.t.matrixPlacementDropHere}
+                    <span className="matrix-placement-empty-slot-arrow" aria-hidden="true">↓</span>
+                    <span>{props.t.matrixPlacementDropHere}</span>
                 </div>
             ) : null}
 
@@ -102,18 +124,19 @@ function renderItem(props, item) {
             key={item.id}
             item={item}
             selected={props.selectedItemId === item.id}
+            sourceQuadrantId={props.quadrant.id}
+            dragSourceType={props.acceptedDragSourceType}
             onSelect={() => props.onItemSelect(item.id)}
-            onDragStart={(event) => props.onItemDragStart(event, item.id)}
             onRemove={() => props.onItemRemove(item.id)}
             t={props.t}
         />
     );
 }
 
-function getDropZoneClassName({ isDragOver, empty, selectable, feedbackMode }) {
+function getDropZoneClassName({ isDropTarget, empty, selectable, feedbackMode }) {
     let className = "matrix-placement-drop-zone";
 
-    if (isDragOver) {
+    if (isDropTarget) {
         className += " matrix-placement-drop-zone-over";
     }
 

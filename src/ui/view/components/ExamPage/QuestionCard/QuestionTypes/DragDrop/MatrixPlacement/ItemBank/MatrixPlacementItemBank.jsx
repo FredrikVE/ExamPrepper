@@ -1,4 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/ItemBank/MatrixPlacementItemBank.jsx
+import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
 import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard.jsx";
 import MatrixPlacementItemCard from "./MatrixPlacementItemCard.jsx";
 
@@ -32,9 +33,22 @@ export default function MatrixPlacementItemBank(props) {
                 </p>
             ) : null}
 
-            <div className="matrix-placement-item-list">
-                {props.items.map((item) => renderItem(props, item))}
-            </div>
+            {props.feedbackMode ? (
+                <div className="matrix-placement-item-list">
+                    {props.items.map((item) => renderItem(props, item))}
+                </div>
+            ) : (
+                <MobileDroppable
+                    dropTargetId={props.itemBankDropTargetId}
+                    acceptedDragSourceType={props.acceptedDragSourceType}
+                >
+                    {({ droppableRef, isDropTarget }) => (
+                        <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
+                            {props.itemBankItems.map((itemBankEntry) => renderItemBankEntry(props, itemBankEntry))}
+                        </div>
+                    )}
+                </MobileDroppable>
+            )}
 
             {!props.feedbackMode ? (
                 <p className="matrix-placement-item-bank-hint">
@@ -43,6 +57,19 @@ export default function MatrixPlacementItemBank(props) {
             ) : null}
         </aside>
     );
+}
+
+function renderItemBankEntry(props, itemBankEntry) {
+    if (itemBankEntry.placed) {
+        return (
+            <MatrixPlacementItemBankPlaceholder
+                key={itemBankEntry.item.id}
+                label={props.t.matrixPlacementReturnToBank}
+            />
+        );
+    }
+
+    return renderItem(props, itemBankEntry.item);
 }
 
 function renderItem(props, item) {
@@ -66,10 +93,18 @@ function renderItem(props, item) {
             item={item}
             selected={props.selectedItemId === item.id}
             disabled={props.disabled}
+            dragSourceType={props.acceptedDragSourceType}
             onSelect={() => props.onItemSelect(item.id)}
-            onDragStart={(event) => props.onItemDragStart(event, item.id)}
             t={props.t}
         />
+    );
+}
+
+function MatrixPlacementItemBankPlaceholder(props) {
+    return (
+        <div className="matrix-placement-item-bank-placeholder" aria-hidden="true">
+            {props.label}
+        </div>
     );
 }
 
@@ -78,6 +113,16 @@ function getItemBankClassName(feedbackMode) {
 
     if (feedbackMode) {
         className += " matrix-placement-item-bank-feedback";
+    }
+
+    return className;
+}
+
+function getItemListClassName(isDropTarget) {
+    let className = "matrix-placement-item-list";
+
+    if (isDropTarget) {
+        className += " matrix-placement-item-list-over";
     }
 
     return className;
