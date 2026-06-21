@@ -3,7 +3,10 @@ import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function TableMatchMobilePlacedCard(props) {
 	return (
-		<div className="table-match-mobile-card table-match-mobile-placed-card">
+		<div
+			className="table-match-mobile-card table-match-mobile-placed-card"
+			onPointerDown={props.onPointerDown}
+		>
 			<span className="table-match-mobile-card-text">
 				<FormattedText text={props.card.text} />
 			</span>

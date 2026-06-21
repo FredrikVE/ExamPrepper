@@ -2,15 +2,17 @@
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function TableMatchMobileCard(props) {
-	const className = props.isSelected
-		? "table-match-mobile-card table-match-mobile-card-selected"
-		: "table-match-mobile-card";
+	const className = getClassName({
+		isDragging: props.isDragging,
+		isSelected: props.isSelected
+	});
 
 	return (
 		<button
 			type="button"
 			className={className}
-			onClick={props.onSelect}
+			onClick={props.onClick}
+			onPointerDown={props.onPointerDown}
 		>
 			<span className="table-match-mobile-card-text">
 				<FormattedText text={props.card.text} />
@@ -20,6 +22,20 @@ export default function TableMatchMobileCard(props) {
 		</button>
 	);
 }
+
+const getClassName = ({ isDragging, isSelected }) => {
+	let className = "table-match-mobile-card";
+
+	if (isSelected) {
+		className += " table-match-mobile-card-selected";
+	}
+
+	if (isDragging) {
+		className += " table-match-mobile-card-dragging";
+	}
+
+	return className;
+};
 
 const MobileGripHandle = () => {
 	return (

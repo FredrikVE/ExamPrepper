@@ -6,7 +6,8 @@ import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
 export default function TableMatchMobileTargetCard(props) {
 	const targetClassName = getTargetClassName({
 		hasSelectedCard: Boolean(props.selectedCard),
-		hasActiveCard: props.hasActiveCard
+		hasActiveCard: props.hasActiveCard,
+		isDragOver: props.isDragOver
 	});
 
 	const handleKeyDown = (event) => {
@@ -33,11 +34,15 @@ export default function TableMatchMobileTargetCard(props) {
 				tabIndex={0}
 				onClick={props.onTargetClick}
 				onKeyDown={handleKeyDown}
+				data-table-match-mobile-target-id={props.target.id}
 				aria-label={`${props.t.dragDropDropHere}: ${props.target.description}`}
 			>
 				{props.selectedCard ? (
 					<div className="table-match-mobile-filled-target">
-						<TableMatchMobilePlacedCard card={props.selectedCard} />
+						<TableMatchMobilePlacedCard
+							card={props.selectedCard}
+							onPointerDown={props.onPlacedCardPointerDown}
+						/>
 
 						<button
 							type="button"
@@ -65,7 +70,7 @@ const handleClearClick = (onClear) => {
 	};
 };
 
-const getTargetClassName = ({ hasSelectedCard, hasActiveCard }) => {
+const getTargetClassName = ({ hasSelectedCard, hasActiveCard, isDragOver }) => {
 	let className = "table-match-mobile-drop-zone";
 
 	if (hasSelectedCard) {
@@ -74,6 +79,10 @@ const getTargetClassName = ({ hasSelectedCard, hasActiveCard }) => {
 
 	if (hasActiveCard) {
 		className += " table-match-mobile-drop-zone-armed";
+	}
+
+	if (isDragOver) {
+		className += " table-match-mobile-drop-zone-over";
 	}
 
 	return className;

@@ -55,6 +55,7 @@ export default function TableMatchQuestion(props) {
                     selectedCardId={tableMatch.selectedCardId}
                     onCardSelect={tableMatch.handleCardSelect}
                     onTargetClick={tableMatch.handleTargetClick}
+                    onCardDrop={tableMatch.assignCard}
                     onClearTarget={tableMatch.clearTarget}
                     t={t}
                 />
