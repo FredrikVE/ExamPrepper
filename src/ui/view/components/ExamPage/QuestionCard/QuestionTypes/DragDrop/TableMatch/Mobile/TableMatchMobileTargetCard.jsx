@@ -1,14 +1,34 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobileTargetCard.jsx
 import { X } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
+import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
 import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
 
 export default function TableMatchMobileTargetCard(props) {
-	const cardClassName = getCardClassName(props.isDragOver);
+	return (
+		<MobileDroppable
+			dropTargetId={props.target.id}
+			acceptedDragSourceType={props.acceptedDragSourceType}
+			dropTargetContext={{ target: props.target }}
+		>
+			{({ droppableRef, isDropTarget }) => (
+				<TableMatchMobileTargetCardContent
+					{...props}
+					droppableRef={droppableRef}
+					isDropTarget={isDropTarget}
+				/>
+			)}
+		</MobileDroppable>
+	);
+}
+
+function TableMatchMobileTargetCardContent(props) {
+	const cardClassName = getCardClassName(props.isDropTarget);
 	const targetClassName = getTargetClassName({
 		hasSelectedCard: Boolean(props.selectedCard),
 		hasActiveCard: props.hasActiveCard,
-		isDragOver: props.isDragOver
+		isDropTarget: props.isDropTarget
 	});
 
 	const handleKeyDown = (event) => {
@@ -25,6 +45,7 @@ export default function TableMatchMobileTargetCard(props) {
 
 	return (
 		<article
+			ref={props.droppableRef}
 			className={cardClassName}
 			role="button"
 			tabIndex={0}
@@ -40,10 +61,19 @@ export default function TableMatchMobileTargetCard(props) {
 			<div className={targetClassName}>
 				{props.selectedCard ? (
 					<div className="table-match-mobile-filled-target">
-						<TableMatchMobilePlacedCard
-							card={props.selectedCard}
-							onPointerDown={props.onPlacedCardPointerDown}
-						/>
+						<MobileDraggable
+							dragSourceId={props.selectedCard.id}
+							dragSourceType={props.acceptedDragSourceType}
+							dragSourceContext={{ card: props.selectedCard, sourceTargetId: props.target.id }}
+						>
+							{({ draggableRef, isDragging }) => (
+								<TableMatchMobilePlacedCard
+									card={props.selectedCard}
+									draggableRef={draggableRef}
+									isDragging={isDragging}
+								/>
+							)}
+						</MobileDraggable>
 
 						<button
 							type="button"
@@ -71,17 +101,17 @@ const handleClearClick = (onClear) => {
 	};
 };
 
-const getCardClassName = (isDragOver) => {
+const getCardClassName = (isDropTarget) => {
 	let className = "table-match-mobile-target-card";
 
-	if (isDragOver) {
+	if (isDropTarget) {
 		className += " table-match-mobile-target-card-over";
 	}
 
 	return className;
 };
 
-const getTargetClassName = ({ hasSelectedCard, hasActiveCard, isDragOver }) => {
+const getTargetClassName = ({ hasSelectedCard, hasActiveCard, isDropTarget }) => {
 	let className = "table-match-mobile-drop-zone";
 
 	if (hasSelectedCard) {
@@ -92,7 +122,7 @@ const getTargetClassName = ({ hasSelectedCard, hasActiveCard, isDragOver }) => {
 		className += " table-match-mobile-drop-zone-armed";
 	}
 
-	if (isDragOver) {
+	if (isDropTarget) {
 		className += " table-match-mobile-drop-zone-over";
 	}
 

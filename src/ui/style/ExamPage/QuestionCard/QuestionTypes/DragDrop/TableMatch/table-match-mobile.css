@@ -40,6 +40,11 @@
 		gap: 12px;
 	}
 
+	.table-match-mobile-card-list-over {
+		border-radius: 13px;
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+	}
+
 	.table-match-mobile-card {
 		position: relative;
 		-webkit-user-select: none;
@@ -89,13 +94,7 @@
 		transform: none;
 	}
 
-	.table-match-mobile-drag-layer {
-		position: fixed;
-		z-index: 10000;
-		pointer-events: none;
-	}
-
-	.table-match-mobile-drag-layer .table-match-mobile-card {
+	.mobile-dnd-drag-overlay .table-match-mobile-card {
 		width: 100%;
 		min-height: inherit;
 		box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);

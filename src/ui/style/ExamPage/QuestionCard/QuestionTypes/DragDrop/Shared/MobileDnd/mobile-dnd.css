@@ -1,0 +1,5 @@
+/* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/MobileDnd/mobile-dnd.css */
+.mobile-dnd-drag-overlay {
+	pointer-events: none;
+	z-index: 10000;
+}
