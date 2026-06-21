@@ -263,8 +263,8 @@
 
 .sequence-order-drop-zone-filled {
     border-style: solid;
-    border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
-    background: color-mix(in srgb, var(--accent-soft) 52%, transparent);
+    border-color: var(--sequence-order-placed-border);
+    background: color-mix(in srgb, var(--accent-soft) 42%, transparent);
 }
 
 .sequence-order-drop-zone:hover,
@@ -290,8 +290,19 @@
     position: relative;
     justify-content: flex-start;
     width: 100%;
+    border-color: var(--sequence-order-placed-border);
+    background: var(--sequence-order-placed-bg);
+    box-shadow: var(--sequence-order-placed-shadow);
+    color: var(--sequence-order-placed-color);
     text-align: left;
     padding-right: 38px;
+}
+
+.sequence-order-placed-card:hover,
+.sequence-order-placed-card:focus-visible {
+    border-color: color-mix(in srgb, var(--sequence-order-placed-border) 84%, white);
+    background: var(--sequence-order-placed-bg);
+    box-shadow: var(--sequence-order-placed-shadow);
 }
 
 .sequence-order-item-card-grip,
@@ -337,6 +348,38 @@
 .sequence-order-remove-button svg {
     width: 16px;
     height: 16px;
+}
+
+.sequence-order-placed-card .sequence-order-remove-button {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: var(--sequence-order-placed-clear-bg);
+    color: var(--sequence-order-placed-clear-color);
+}
+
+.sequence-order-placed-card .sequence-order-remove-button:hover,
+.sequence-order-placed-card .sequence-order-remove-button:focus-visible {
+    background: rgba(255, 255, 255, 0.24);
+    color: #ffffff;
+    outline: none;
+}
+
+@media (min-width: 681px) {
+    .sequence-order-item-card-text,
+    .sequence-order-placed-card-text {
+        font-size: clamp(0.68rem, 0.6rem + 0.24vw, 0.86rem);
+        line-height: 1.16;
+        overflow-wrap: anywhere;
+        text-wrap: pretty;
+    }
+
+    .sequence-order-placed-card {
+        min-height: 64px;
+        padding: var(--space-3) 38px var(--space-3) var(--space-4);
+    }
+
+    .sequence-order-drop-zone {
+        min-height: 96px;
+    }
 }
 
 @media (max-width: 900px) {
