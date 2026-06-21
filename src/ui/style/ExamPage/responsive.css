@@ -260,6 +260,34 @@
     }
 }
 
+/* ── SequenceOrder workspace width ──────────────
+   SequenceOrder needs more reading room than the default card,
+   but it should not change the mobile shell breakpoint. */
+@media (min-width: 933px) {
+    .exam-workspace-sequence-order-mode {
+        --exam-content-width: calc(100% - clamp(32px, 4vw, 72px));
+        --exam-content-max-width: 1180px;
+    }
+
+    .exam-workspace-sequence-order-mode .question-card-body {
+        padding-inline: clamp(var(--space-7), 2.8vw, 40px);
+    }
+}
+
+@media (min-width: 1440px) {
+    .exam-workspace-sequence-order-mode {
+        --exam-content-width: 80%;
+        --exam-content-max-width: 1220px;
+    }
+}
+
+@media (max-width: 1280px) and (min-width: 933px) {
+    .exam-workspace-sequence-order-mode {
+        --exam-content-width: calc(100% - clamp(24px, 3.5vw, 56px));
+        --exam-content-max-width: 1080px;
+    }
+}
+
 /* ── Very short viewport fallback ─────────
    Når viewport-høyden blir ekstremt lav, må innholdet få vokse
    naturlig i stedet for at footer/header presser QuestionCard. */

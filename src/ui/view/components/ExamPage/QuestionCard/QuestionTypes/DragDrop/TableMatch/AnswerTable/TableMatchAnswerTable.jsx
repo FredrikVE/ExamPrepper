@@ -40,6 +40,7 @@ export default function TableMatchAnswerTable(props) {
                                 onTargetDragOver={props.onTargetDragOver}
                                 onTargetDragLeave={props.onTargetDragLeave}
                                 onTargetDrop={props.onTargetDrop}
+                                onCardDragStart={props.onCardDragStart}
                                 onClearTarget={props.onClearTarget}
                                 onSelectChange={props.onSelectChange}
                                 onToggleExpanded={props.onToggleExpanded}

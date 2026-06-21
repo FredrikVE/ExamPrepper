@@ -1,14 +1,29 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementPlacedItemCard.jsx
-import { GripVertical, X } from "lucide-react";
+import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
+import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function MatrixPlacementPlacedItemCard(props) {
-    let className = "matrix-placement-placed-card";
+    return (
+        <MobileDraggable
+            dragSourceId={props.item.id}
+            dragSourceType={props.dragSourceType}
+            dragSourceContext={{ item: props.item, sourceQuadrantId: props.sourceQuadrantId }}
+        >
+            {({ draggableRef, isDragging }) => (
+                <MatrixPlacementPlacedItemCardContent
+                    {...props}
+                    draggableRef={draggableRef}
+                    isDragging={isDragging}
+                />
+            )}
+        </MobileDraggable>
+    );
+}
 
-    if (props.selected) {
-        className += " matrix-placement-placed-card-selected";
-    }
+function MatrixPlacementPlacedItemCardContent(props) {
+    const className = getPlacedCardClassName({ selected: props.selected, isDragging: props.isDragging });
 
     const handleCardClick = (event) => {
         event.stopPropagation();
@@ -35,15 +50,14 @@ export default function MatrixPlacementPlacedItemCard(props) {
 
     return (
         <div
+            ref={props.draggableRef}
             className={className}
-            draggable
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
-            onDragStart={props.onDragStart}
         >
-            <GripVertical className="matrix-placement-placed-card-grip" aria-hidden="true" />
+            <MatrixPlacementPlacedItemCardGrip />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
 
@@ -57,4 +71,31 @@ export default function MatrixPlacementPlacedItemCard(props) {
             </button>
         </div>
     );
+}
+
+function MatrixPlacementPlacedItemCardGrip() {
+    return (
+        <span className="matrix-placement-placed-card-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
+    );
+}
+
+function getPlacedCardClassName({ selected, isDragging }) {
+    let className = "matrix-placement-placed-card";
+
+    if (selected) {
+        className += " matrix-placement-placed-card-selected";
+    }
+
+    if (isDragging) {
+        className += " matrix-placement-placed-card-dragging";
+    }
+
+    return className;
 }

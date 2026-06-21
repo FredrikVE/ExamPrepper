@@ -1,7 +1,35 @@
 /* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/table-match.css */
 .drag-drop-question {
+    --table-match-desktop-card-border: color-mix(in srgb, var(--accent) 20%, var(--line));
+    --table-match-desktop-card-bg: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 94%, var(--accent-soft)), color-mix(in srgb, var(--panel-bg) 90%, white));
+    --table-match-desktop-card-hover-bg: color-mix(in srgb, var(--accent-soft) 72%, var(--panel-strong));
+    --table-match-desktop-card-shadow: 0 10px 24px rgba(18, 38, 63, 0.08);
+    --table-match-desktop-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+    --table-match-desktop-grip-bg: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
+    --table-match-desktop-placed-border: color-mix(in srgb, var(--accent) 78%, #7c3aed);
+    --table-match-desktop-placed-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 92%, #2563eb), #6d28d9);
+    --table-match-desktop-placed-color: #ffffff;
+    --table-match-desktop-placed-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent), 0 14px 30px rgba(37, 99, 235, 0.28);
+    --table-match-desktop-placed-grip-bg: rgba(255, 255, 255, 0.86);
+    --table-match-desktop-placed-clear-bg: rgba(255, 255, 255, 0.16);
+    --table-match-desktop-placed-clear-color: #ffffff;
+
     display: grid;
     gap: 22px;
+}
+
+.dark .drag-drop-question {
+    --table-match-desktop-card-border: rgba(136, 160, 190, 0.38);
+    --table-match-desktop-card-bg: linear-gradient(180deg, rgba(8, 27, 48, 0.72), rgba(5, 18, 34, 0.56));
+    --table-match-desktop-card-hover-bg: color-mix(in srgb, var(--accent-soft) 60%, rgba(5, 18, 34, 0.56));
+    --table-match-desktop-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    --table-match-desktop-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+    --table-match-desktop-grip-bg: #aab2c4;
+    --table-match-desktop-placed-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
+    --table-match-desktop-placed-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 72%, #2563eb), #7c3aed);
+    --table-match-desktop-placed-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 0 0 3px color-mix(in srgb, var(--accent) 34%, transparent), 0 16px 36px rgba(0, 0, 0, 0.44);
+    --table-match-desktop-placed-grip-bg: rgba(255, 255, 255, 0.86);
+    --table-match-desktop-placed-clear-bg: rgba(255, 255, 255, 0.14);
 }
 
 .drag-drop-layout {
@@ -49,20 +77,23 @@
 }
 
 .drag-drop-card {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: flex-start;
     width: 100%;
-    min-height: 50px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-xs);
-    background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
+    min-height: 52px;
+    border: 1px solid var(--table-match-desktop-card-border);
+    border-radius: 13px;
+    background: var(--table-match-desktop-card-bg);
+    box-shadow: var(--table-match-desktop-card-shadow);
     color: var(--text-main);
     cursor: grab;
-    padding: 0 14px;
+    padding: 10px 46px 10px 14px;
     text-align: left;
     font-size: 0.95rem;
     font-weight: 850;
+    line-height: 1.35;
     transition:
         border-color var(--transition-fast),
         background var(--transition-fast),
@@ -73,7 +104,9 @@
 .drag-drop-card:hover,
 .drag-drop-card:focus-visible {
     transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+    border-color: color-mix(in srgb, var(--accent) 78%, rgba(155, 101, 255, 0.8));
+    background: var(--table-match-desktop-card-hover-bg);
+    box-shadow: var(--table-match-desktop-card-hover-shadow);
     outline: none;
 }
 
@@ -82,16 +115,42 @@
 }
 
 .drag-drop-card-selected {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 78%, rgba(155, 101, 255, 0.8));
+    background: var(--table-match-desktop-card-hover-bg);
+    box-shadow: var(--table-match-desktop-card-hover-shadow);
+}
+
+.drag-drop-card-text,
+.drag-drop-selected-pill-text {
+    min-width: 0;
+}
+
+.drag-drop-card-grip,
+.drag-drop-selected-pill-grip {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    grid-template-columns: repeat(2, 4px);
+    gap: 4px 6px;
+    width: 16px;
+    height: 28px;
+    opacity: 0.78;
+    transform: translateY(-50%);
 }
 
 .drag-drop-card-grip {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 auto;
-    color: var(--text-soft);
+    right: 14px;
+}
+
+.drag-drop-card-grip span,
+.drag-drop-selected-pill-grip span {
+    width: 4px;
+    height: 4px;
+    border-radius: var(--radius-full);
+}
+
+.drag-drop-card-grip span {
+    background: var(--table-match-desktop-grip-bg);
 }
 
 .drag-drop-card-bank-hint {
@@ -189,9 +248,9 @@
 
 .drag-drop-target-filled {
     justify-content: stretch;
-    border-style: solid;
-    border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
-    background: color-mix(in srgb, var(--accent-soft) 54%, transparent);
+    border: 0;
+    background: transparent;
+    padding: 0;
 }
 
 .drag-drop-placeholder {
@@ -200,18 +259,43 @@
 }
 
 .drag-drop-selected-pill {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
     width: 100%;
-    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
-    color: var(--accent);
-    padding: 8px 10px 8px 14px;
+    min-height: 52px;
+    border: 2px solid var(--table-match-desktop-placed-border);
+    border-radius: 13px;
+    background: var(--table-match-desktop-placed-bg);
+    box-shadow: var(--table-match-desktop-placed-shadow);
+    color: var(--table-match-desktop-placed-color);
+    cursor: grab;
+    padding: 10px 78px 10px 14px;
     font-size: 0.94rem;
-    font-weight: 900;
+    font-weight: 950;
+    line-height: 1.35;
+}
+
+.drag-drop-selected-pill:active {
+    cursor: grabbing;
+}
+
+.drag-drop-selected-pill-grip {
+    right: 46px;
+}
+
+.drag-drop-selected-pill-grip span {
+    background: var(--table-match-desktop-placed-grip-bg);
+}
+
+.drag-drop-selected-pill .drag-drop-clear-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: var(--table-match-desktop-placed-clear-bg);
+    color: var(--table-match-desktop-placed-clear-color);
+    transform: translateY(-50%);
 }
 
 .drag-drop-clear-button {

@@ -1,7 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Question/useCategorySortQuestion.js
 import { useState } from "react";
 import orderItemsByIndexOrder from "../../Shared/Utils/orderItemsByIndexOrder.js";
-import { clearItemFromAllCategories, createItemsById, getSafeArray, getUnplacedItems, normalizeCategoryAnswer } from "../Utils/categorySortAnswerLogic.js";
+import { clearItemFromAllCategories, createItemsById, getPlacedItemIds, getSafeArray, getUnplacedItems, normalizeCategoryAnswer } from "../Utils/categorySortAnswerLogic.js";
 import { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";
 
 export function useCategorySortQuestion(params) {
@@ -9,15 +9,20 @@ export function useCategorySortQuestion(params) {
     const feedbackMode = params.submitted && params.showAllFeedback;
 
     const [selectedItemId, setSelectedItemId] = useState(null);
-    const [dragOverCategoryId, setDragOverCategoryId] = useState(null);
     const [expandedItemId, setExpandedItemId] = useState(null);
 
     const itemsById = createItemsById(params.question?.items);
+    const placedItemIds = getPlacedItemIds(safeAnswer);
     const availableItems = orderItemsByIndexOrder(
         getUnplacedItems(params.question, safeAnswer),
         params.answerOptionOrder,
         params.question.items
     );
+    const itemBankItems = orderItemsByIndexOrder(
+        getSafeArray(params.question?.items),
+        params.answerOptionOrder,
+        params.question.items
+    ).map((item) => ({ item, placed: placedItemIds.has(item.id) }));
     const stats = getCategorySortStats(params.question, safeAnswer);
 
     let rootClassName = "drag-categorize-question";
@@ -62,50 +67,17 @@ export function useCategorySortQuestion(params) {
         }
     };
 
+    const clearSelectedItem = () => {
+        setSelectedItemId(null);
+    };
+
     const handleCategoryClick = (categoryId) => {
         if (params.submitted || !selectedItemId) {
             return;
         }
 
         assignItem(categoryId, selectedItemId);
-        setSelectedItemId(null);
-    };
-
-    const handleItemDragStart = (event, itemId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.dataTransfer.setData("text/plain", itemId);
-        event.dataTransfer.effectAllowed = "move";
-    };
-
-    const handleCategoryDragOver = (event, categoryId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-        event.dataTransfer.dropEffect = "move";
-        setDragOverCategoryId(categoryId);
-    };
-
-    const handleCategoryDragLeave = () => {
-        setDragOverCategoryId(null);
-    };
-
-    const handleCategoryDrop = (event, categoryId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const itemId = event.dataTransfer.getData("text/plain");
-
-        assignItem(categoryId, itemId);
-        setDragOverCategoryId(null);
-        setSelectedItemId(null);
+        clearSelectedItem();
     };
 
     const toggleExpanded = (itemId) => {
@@ -122,21 +94,18 @@ export function useCategorySortQuestion(params) {
         feedbackMode,
 
         selectedItemId,
-        dragOverCategoryId,
         expandedItemId,
 
         itemsById,
         availableItems,
+        itemBankItems,
         stats,
 
         assignItem,
         removeItem,
         handleItemSelect,
+        clearSelectedItem,
         handleCategoryClick,
-        handleItemDragStart,
-        handleCategoryDragOver,
-        handleCategoryDragLeave,
-        handleCategoryDrop,
         toggleExpanded
     };
 }

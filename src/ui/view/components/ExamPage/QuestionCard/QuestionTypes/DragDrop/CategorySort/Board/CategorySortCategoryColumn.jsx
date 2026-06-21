@@ -17,15 +17,12 @@ export default function CategorySortCategoryColumn(props) {
                 unansweredSlotCount={props.unansweredSlotCount}
                 itemsById={props.itemsById}
                 feedbackMode={props.feedbackMode}
-                isDragOver={props.isDragOver}
                 selectedItemId={props.selectedItemId}
                 expandedItemId={props.expandedItemId}
+                acceptedDragSourceType={props.acceptedDragSourceType}
+                categoryDropTargetIdPrefix={props.categoryDropTargetIdPrefix}
                 onClick={props.onCategoryClick}
-                onDragOver={props.onCategoryDragOver}
-                onDragLeave={props.onCategoryDragLeave}
-                onDrop={props.onCategoryDrop}
                 onItemSelect={props.onItemSelect}
-                onItemDragStart={props.onItemDragStart}
                 onItemRemove={props.onItemRemove}
                 onToggleExpanded={props.onToggleExpanded}
                 t={props.t}

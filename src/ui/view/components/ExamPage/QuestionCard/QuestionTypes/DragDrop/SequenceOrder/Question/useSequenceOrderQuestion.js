@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Question/useSequenceOrderQuestion.js
 import { useState } from "react";
-import { createSequenceItemsById, getAvailableSequenceItems, getCorrectSequenceOrder, getSequenceItems, normalizeSequenceOrderAnswer, placeSequenceItemAtIndex, removeSequenceItem } from "../Utils/sequenceOrderAnswerLogic.js";
+import { createSequenceItemsById, getCorrectSequenceOrder, getSequenceItems, normalizeSequenceOrderAnswer, placeSequenceItemAtIndex, removeSequenceItem } from "../Utils/sequenceOrderAnswerLogic.js";
 import { getSequenceOrderStats } from "../Utils/sequenceOrderFeedbackStats.js";
 
 export function useSequenceOrderQuestion(params) {
@@ -8,13 +8,11 @@ export function useSequenceOrderQuestion(params) {
     const feedbackMode = params.submitted && params.showAllFeedback;
 
     const [selectedSequenceItemId, setSelectedSequenceItemId] = useState(null);
-    const [dragOverIndex, setDragOverIndex] = useState(null);
     const [expandedSlotIndex, setExpandedSlotIndex] = useState(null);
     const [questionExplanationExpanded, setQuestionExplanationExpanded] = useState(true);
 
     const sequenceItems = getSequenceItems(params.question);
     const sequenceItemsById = createSequenceItemsById(sequenceItems);
-    const availableSequenceItems = getAvailableSequenceItems(params.question, safeAnswer);
     const correctOrder = getCorrectSequenceOrder(params.question);
     const stats = getSequenceOrderStats(params.question, safeAnswer);
 
@@ -22,6 +20,10 @@ export function useSequenceOrderQuestion(params) {
 
     if (feedbackMode) {
         rootClassName += " sequence-order-question-feedback";
+    }
+
+    if (safeAnswer.length >= 5) {
+        rootClassName += " sequence-order-question-long-sequence";
     }
 
     const assignSequenceItem = (targetIndex, sequenceItemId) => {
@@ -58,50 +60,17 @@ export function useSequenceOrderQuestion(params) {
         }
     };
 
+    const clearSelectedSequenceItem = () => {
+        setSelectedSequenceItemId(null);
+    };
+
     const selectDropZone = (targetIndex) => {
         if (params.submitted || !selectedSequenceItemId) {
             return;
         }
 
         assignSequenceItem(targetIndex, selectedSequenceItemId);
-        setSelectedSequenceItemId(null);
-    };
-
-    const startSequenceItemDrag = (event, sequenceItemId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.dataTransfer.setData("text/plain", sequenceItemId);
-        event.dataTransfer.effectAllowed = "move";
-    };
-
-    const markDropZoneOver = (event, targetIndex) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-        event.dataTransfer.dropEffect = "move";
-        setDragOverIndex(targetIndex);
-    };
-
-    const clearDragOverIndex = () => {
-        setDragOverIndex(null);
-    };
-
-    const dropSequenceItemInZone = (event, targetIndex) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const sequenceItemId = event.dataTransfer.getData("text/plain");
-
-        assignSequenceItem(targetIndex, sequenceItemId);
-        setDragOverIndex(null);
-        setSelectedSequenceItemId(null);
+        clearSelectedSequenceItem();
     };
 
     const toggleSlotExpanded = (index) => {
@@ -122,23 +91,19 @@ export function useSequenceOrderQuestion(params) {
         feedbackMode,
 
         selectedSequenceItemId,
-        dragOverIndex,
         expandedSlotIndex,
         questionExplanationExpanded,
 
+        sequenceItems,
         sequenceItemsById,
-        availableSequenceItems,
         correctOrder,
         stats,
 
         assignSequenceItem,
         removeSequenceItemFromAnswer,
         selectSequenceItem,
+        clearSelectedSequenceItem,
         selectDropZone,
-        startSequenceItemDrag,
-        markDropZoneOver,
-        clearDragOverIndex,
-        dropSequenceItemInZone,
         toggleSlotExpanded,
         toggleQuestionExplanation
     };

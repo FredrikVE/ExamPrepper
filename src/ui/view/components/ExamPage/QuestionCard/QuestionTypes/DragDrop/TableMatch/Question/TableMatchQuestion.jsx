@@ -39,6 +39,7 @@ export default function TableMatchQuestion(props) {
                     onTargetDragOver={tableMatch.handleTargetDragOver}
                     onTargetDragLeave={tableMatch.handleTargetDragLeave}
                     onTargetDrop={tableMatch.handleTargetDrop}
+                    onCardDragStart={tableMatch.handleCardDragStart}
                     onClearTarget={tableMatch.clearTarget}
                     onSelectChange={tableMatch.handleSelectChange}
                     onToggleExpanded={tableMatch.toggleExpanded}

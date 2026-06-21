@@ -37,6 +37,7 @@ export default function TableMatchAnswerRow(props) {
                 onDragOver={(event) => props.onTargetDragOver(event, props.target.id)}
                 onDragLeave={props.onTargetDragLeave}
                 onDrop={(event) => props.onTargetDrop(event, props.target.id)}
+                onSelectedCardDragStart={(event) => props.onCardDragStart(event, props.selectedCardId)}
                 onClear={() => props.onClearTarget(props.target.id)}
                 onSelectChange={(value) => props.onSelectChange(props.target.id, value)}
                 cards={props.cards}

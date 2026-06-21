@@ -1,25 +1,36 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobileCard.jsx
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 
 export default function TableMatchMobileCard(props) {
-	const className = getClassName({
-		isDragging: props.isDragging,
-		isSelected: props.isSelected
-	});
-
 	return (
-		<button
-			type="button"
-			className={className}
-			onClick={props.onClick}
-			onPointerDown={props.onPointerDown}
+		<MobileDraggable
+			dragSourceId={props.card.id}
+			dragSourceType={props.dragSourceType}
+			dragSourceContext={props.dragSourceContext}
 		>
-			<span className="table-match-mobile-card-text">
-				<FormattedText text={props.card.text} />
-			</span>
+			{({ draggableRef, isDragging }) => {
+				const className = getClassName({
+					isDragging,
+					isSelected: props.isSelected
+				});
 
-			<MobileGripHandle />
-		</button>
+				return (
+					<button
+						ref={draggableRef}
+						type="button"
+						className={className}
+						onClick={props.onClick}
+					>
+						<span className="table-match-mobile-card-text">
+							<FormattedText text={props.card.text} />
+						</span>
+
+						<MobileGripHandle />
+					</button>
+				);
+			}}
+		</MobileDraggable>
 	);
 }
 

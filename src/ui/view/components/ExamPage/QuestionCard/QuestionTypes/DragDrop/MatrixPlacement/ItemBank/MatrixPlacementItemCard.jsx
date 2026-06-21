@@ -1,27 +1,38 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/ItemBank/MatrixPlacementItemCard.jsx
-import { GripVertical } from "lucide-react";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
+import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function MatrixPlacementItemCard(props) {
     const label = getItemLabel(props.item);
-    const className = getCardClassName({ selected: props.selected, disabled: props.disabled });
 
     return (
-        <button
-            type="button"
-            className={className}
-            draggable={!props.disabled}
-            onClick={props.disabled ? undefined : props.onSelect}
-            onDragStart={props.disabled ? undefined : props.onDragStart}
+        <MobileDraggable
+            dragSourceId={props.item.id}
+            dragSourceType={props.dragSourceType}
+            dragSourceContext={{ item: props.item, sourceQuadrantId: null }}
+            disabled={props.disabled}
         >
-            <GripVertical className="matrix-placement-item-card-grip" aria-hidden="true" />
-            <span><FormattedText text={label} /></span>
-        </button>
+            {({ draggableRef, isDragging }) => {
+                const className = getCardClassName({ selected: props.selected, disabled: props.disabled, isDragging });
+
+                return (
+                    <button
+                        ref={draggableRef}
+                        type="button"
+                        className={className}
+                        onClick={props.disabled ? undefined : props.onSelect}
+                    >
+                        <MatrixPlacementItemCardGrip />
+                        <span><FormattedText text={label} /></span>
+                    </button>
+                );
+            }}
+        </MobileDraggable>
     );
 }
 
-function getCardClassName({ selected, disabled }) {
+function getCardClassName({ selected, disabled, isDragging }) {
     let className = "matrix-placement-item-card";
 
     if (selected) {
@@ -32,5 +43,22 @@ function getCardClassName({ selected, disabled }) {
         className += " matrix-placement-item-card-disabled";
     }
 
+    if (isDragging) {
+        className += " matrix-placement-item-card-dragging";
+    }
+
     return className;
+}
+
+function MatrixPlacementItemCardGrip() {
+    return (
+        <span className="matrix-placement-item-card-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
+    );
 }

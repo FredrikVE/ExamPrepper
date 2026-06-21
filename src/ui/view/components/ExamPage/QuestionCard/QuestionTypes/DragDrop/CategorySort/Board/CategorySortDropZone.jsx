@@ -1,10 +1,33 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortDropZone.jsx
+import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
 import CategorySortFeedbackCard from "../Feedback/CategorySortFeedbackCard.jsx";
 import CategorySortPlacedItemCard from "./CategorySortPlacedItemCard.jsx";
 
 export default function CategorySortDropZone(props) {
+    if (props.feedbackMode) {
+        return <CategorySortDropZoneContent {...props} isDropTarget={false} />;
+    }
+
+    return (
+        <MobileDroppable
+            dropTargetId={`${props.categoryDropTargetIdPrefix}${props.category.id}`}
+            acceptedDragSourceType={props.acceptedDragSourceType}
+            dropTargetContext={{ categoryId: props.category.id }}
+        >
+            {({ droppableRef, isDropTarget }) => (
+                <CategorySortDropZoneContent
+                    {...props}
+                    droppableRef={droppableRef}
+                    isDropTarget={isDropTarget}
+                />
+            )}
+        </MobileDroppable>
+    );
+}
+
+function CategorySortDropZoneContent(props) {
     const className = getDropZoneClassName({
-        isDragOver: props.isDragOver,
+        isDropTarget: props.isDropTarget,
         empty: props.itemIds.length === 0
     });
 
@@ -22,14 +45,12 @@ export default function CategorySortDropZone(props) {
 
     return (
         <div
+            ref={props.droppableRef}
             className={className}
             role="button"
             tabIndex={0}
             onClick={props.onClick}
             onKeyDown={handleKeyDown}
-            onDragOver={props.onDragOver}
-            onDragLeave={props.onDragLeave}
-            onDrop={props.onDrop}
             aria-label={`${props.t.dragCategorizeDropHere}: ${props.category.label}`}
         >
             {props.itemIds.map((itemId) => {
@@ -58,8 +79,9 @@ export default function CategorySortDropZone(props) {
                         key={itemId}
                         item={item}
                         selected={props.selectedItemId === itemId}
+                        sourceCategoryId={props.category.id}
+                        dragSourceType={props.acceptedDragSourceType}
                         onSelect={() => props.onItemSelect(itemId)}
-                        onDragStart={(event) => props.onItemDragStart(event, itemId)}
                         onRemove={() => props.onItemRemove(itemId)}
                         t={props.t}
                     />
@@ -90,10 +112,10 @@ function renderEmptySlots(props) {
     );
 }
 
-const getDropZoneClassName = ({ isDragOver, empty }) => {
+const getDropZoneClassName = ({ isDropTarget, empty }) => {
     let className = "drag-categorize-drop-zone";
 
-    if (isDragOver) {
+    if (isDropTarget) {
         className += " drag-categorize-drop-zone-over";
     }
 

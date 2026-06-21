@@ -42,6 +42,7 @@ export default function TableMatchAnswerSlot(props) {
         answerContent = (
             <SelectedAnswerPill
                 selectedCard={props.selectedCard}
+                onCardDragStart={props.onSelectedCardDragStart}
                 onClearClick={handleClearClick}
                 clearLabel={props.t.dragDropClearAnswer}
             />
@@ -78,10 +79,18 @@ export default function TableMatchAnswerSlot(props) {
     );
 }
 
-const SelectedAnswerPill = ({ selectedCard, onClearClick, clearLabel }) => {
+const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearClick, clearLabel }) => {
     return (
-        <div className="drag-drop-selected-pill">
-            <span><FormattedText text={selectedCard.text} /></span>
+        <div
+            className="drag-drop-selected-pill"
+            draggable
+            onDragStart={onCardDragStart}
+        >
+            <span className="drag-drop-selected-pill-text">
+                <FormattedText text={selectedCard.text} />
+            </span>
+
+            <SelectedAnswerGrip />
 
             <button
                 type="button"
@@ -92,6 +101,19 @@ const SelectedAnswerPill = ({ selectedCard, onClearClick, clearLabel }) => {
                 <X aria-hidden="true" />
             </button>
         </div>
+    );
+};
+
+const SelectedAnswerGrip = () => {
+    return (
+        <span className="drag-drop-selected-pill-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
     );
 };
 

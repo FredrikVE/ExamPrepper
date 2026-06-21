@@ -1,14 +1,32 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortPlacedItemCard.jsx
-import { GripVertical, X } from "lucide-react";
+import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
+import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 
 export default function CategorySortPlacedItemCard(props) {
-    let className = "drag-categorize-placed-card";
+    return (
+        <MobileDraggable
+            dragSourceId={props.item.id}
+            dragSourceType={props.dragSourceType}
+            dragSourceContext={{ item: props.item, sourceCategoryId: props.sourceCategoryId }}
+        >
+            {({ draggableRef, isDragging }) => (
+                <CategorySortPlacedItemCardContent
+                    {...props}
+                    draggableRef={draggableRef}
+                    isDragging={isDragging}
+                />
+            )}
+        </MobileDraggable>
+    );
+}
 
-    if (props.selected) {
-        className += " drag-categorize-placed-card-selected";
-    }
+function CategorySortPlacedItemCardContent(props) {
+    const className = getPlacedCardClassName({
+        selected: props.selected,
+        isDragging: props.isDragging
+    });
 
     const handleCardClick = (event) => {
         event.stopPropagation();
@@ -35,17 +53,16 @@ export default function CategorySortPlacedItemCard(props) {
 
     return (
         <div
+            ref={props.draggableRef}
             className={className}
-            draggable
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
-            onDragStart={props.onDragStart}
         >
-            <GripVertical className="drag-categorize-placed-card-grip" aria-hidden="true" />
+            <CategorySortPlacedItemCardGrip />
 
-            <span><FormattedText text={getItemLabel(props.item)} /></span>
+            <span className="drag-categorize-placed-card-text"><FormattedText text={getItemLabel(props.item)} /></span>
 
             <button
                 type="button"
@@ -56,5 +73,32 @@ export default function CategorySortPlacedItemCard(props) {
                 <X aria-hidden="true" />
             </button>
         </div>
+    );
+}
+
+function getPlacedCardClassName({ selected, isDragging }) {
+    let className = "drag-categorize-placed-card";
+
+    if (selected) {
+        className += " drag-categorize-placed-card-selected";
+    }
+
+    if (isDragging) {
+        className += " drag-categorize-placed-card-dragging";
+    }
+
+    return className;
+}
+
+function CategorySortPlacedItemCardGrip() {
+    return (
+        <span className="drag-categorize-placed-card-grip" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+        </span>
     );
 }

@@ -82,6 +82,13 @@ describe("deriveWorkspaceClassName", () => {
         expect(result).toContain("exam-workspace-scroll-footer-mode");
     });
 
+    test("adds sequence-order-mode for SequenceOrder question", () => {
+        const question = { type: "SequenceOrder", items: [] };
+        const result = deriveWorkspaceClassName(question, false);
+
+        expect(result).toContain("exam-workspace-sequence-order-mode");
+    });
+
     test("adds matrix-placement-mode for matrix-placement question", () => {
         const question = { type: "matrix-placement", items: [], matrix: { quadrants: [] } };
         const result = deriveWorkspaceClassName(question, false);
@@ -153,6 +160,29 @@ describe("deriveWorkspaceClassName", () => {
                 xAxis: { label: "" },
                 yAxis: { label: "" }
             }
+        };
+        const result = deriveWorkspaceClassName(question, false);
+
+        expect(result).toContain("exam-workspace-wide-question-mode");
+    });
+
+    test("adds wide-question-mode for SequenceOrder with 5 or more items", () => {
+        const question = {
+            type: "SequenceOrder",
+            items: Array.from({ length: 5 }, (_, itemIndex) => ({
+                id: `item-${itemIndex}`,
+                label: "Phase"
+            }))
+        };
+        const result = deriveWorkspaceClassName(question, false);
+
+        expect(result).toContain("exam-workspace-wide-question-mode");
+    });
+
+    test("adds wide-question-mode for SequenceOrder with long item text", () => {
+        const question = {
+            type: "SequenceOrder",
+            items: [{ id: "item-1", label: "A".repeat(34) }]
         };
         const result = deriveWorkspaceClassName(question, false);
 
