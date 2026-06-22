@@ -1,9 +1,15 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx
+import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
 import TableMatchAnswerTable from "../AnswerTable/TableMatchAnswerTable.jsx";
 import TableMatchCardBank from "../CardBank/TableMatchCardBank.jsx";
 import TableMatchScoreSummary from "../Feedback/TableMatchScoreSummary.jsx";
 import TableMatchMobileBoard from "../Mobile/TableMatchMobileBoard.jsx";
 import { useTableMatchQuestion } from "./useTableMatchQuestion.js";
+
+const TABLE_MATCH_DESKTOP_CARD_TYPE = "table-match-desktop-card";
 
 export { getTableMatchStats } from "../Utils/tableMatchFeedbackStats.js";
 
@@ -17,35 +23,43 @@ export default function TableMatchQuestion(props) {
                 <TableMatchScoreSummary stats={tableMatch.stats} t={t} />
             ) : null}
 
-            <div className="drag-drop-layout table-match-desktop-board">
-                {!tableMatch.feedbackMode ? (
-                    <TableMatchCardBank
-                        cards={tableMatch.availableCards}
-                        selectedCardId={tableMatch.selectedCardId}
-                        onCardSelect={tableMatch.handleCardSelect}
-                        onCardDragStart={tableMatch.handleCardDragStart}
+            <DndProvider onDrop={tableMatch.handleDndDrop}>
+                <div className="drag-drop-layout table-match-desktop-board">
+                    {!tableMatch.feedbackMode ? (
+                        <TableMatchCardBank
+                            cards={tableMatch.availableCards}
+                            dndType={TABLE_MATCH_DESKTOP_CARD_TYPE}
+                            selectedCardId={tableMatch.selectedCardId}
+                            onCardSelect={tableMatch.handleCardSelect}
+                            t={t}
+                        />
+                    ) : null}
+
+                    <TableMatchAnswerTable
+                        question={question}
+                        dndType={TABLE_MATCH_DESKTOP_CARD_TYPE}
+                        safeAnswer={tableMatch.safeAnswer}
+                        cardsById={tableMatch.cardsById}
+                        feedbackMode={tableMatch.feedbackMode}
+                        expandedTargetId={tableMatch.expandedTargetId}
+                        onTargetClick={tableMatch.handleTargetClick}
+                        onClearTarget={tableMatch.clearTarget}
+                        onSelectChange={tableMatch.handleSelectChange}
+                        onToggleExpanded={tableMatch.toggleExpanded}
                         t={t}
                     />
-                ) : null}
+                </div>
 
-                <TableMatchAnswerTable
-                    question={question}
-                    safeAnswer={tableMatch.safeAnswer}
-                    cardsById={tableMatch.cardsById}
-                    feedbackMode={tableMatch.feedbackMode}
-                    dragOverTargetId={tableMatch.dragOverTargetId}
-                    expandedTargetId={tableMatch.expandedTargetId}
-                    onTargetClick={tableMatch.handleTargetClick}
-                    onTargetDragOver={tableMatch.handleTargetDragOver}
-                    onTargetDragLeave={tableMatch.handleTargetDragLeave}
-                    onTargetDrop={tableMatch.handleTargetDrop}
-                    onCardDragStart={tableMatch.handleCardDragStart}
-                    onClearTarget={tableMatch.clearTarget}
-                    onSelectChange={tableMatch.handleSelectChange}
-                    onToggleExpanded={tableMatch.toggleExpanded}
-                    t={t}
-                />
-            </div>
+                <DragOverlay>
+                    {({ sourceData }) => {
+                        if (!sourceData?.card) {
+                            return null;
+                        }
+
+                        return <TableMatchDesktopDragOverlayCard card={sourceData.card} />;
+                    }}
+                </DragOverlay>
+            </DndProvider>
 
             {!tableMatch.feedbackMode ? (
                 <TableMatchMobileBoard
@@ -64,3 +78,15 @@ export default function TableMatchQuestion(props) {
         </div>
     );
 }
+
+const TableMatchDesktopDragOverlayCard = ({ card }) => {
+    return (
+        <div className="drag-drop-card drag-drop-card-overlay">
+            <span className="drag-drop-card-text">
+                <FormattedText text={card.text} />
+            </span>
+
+            <DragGrip className="drag-drop-card-grip" />
+        </div>
+    );
+};

@@ -1,13 +1,33 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/AnswerTable/TableMatchAnswerSlot.jsx
 import { ChevronDown } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 
 export default function TableMatchAnswerSlot(props) {
+    return (
+        <Droppable
+            id={props.target.id}
+            accept={props.dndType}
+            data={{ target: props.target }}
+        >
+            {({ ref: dndRef, isDropTarget }) => (
+                <TableMatchAnswerSlotContent
+                    {...props}
+                    dndRef={dndRef}
+                    isDropTarget={isDropTarget}
+                />
+            )}
+        </Droppable>
+    );
+}
+
+function TableMatchAnswerSlotContent(props) {
     const className = getAnswerSlotClassName({
         hasSelectedCard: Boolean(props.selectedCard),
-        isDragOver: props.isDragOver
+        isDragOver: props.isDropTarget
     });
 
     const selectedValue = props.selectedCardId ?? "";
@@ -39,7 +59,8 @@ export default function TableMatchAnswerSlot(props) {
         answerContent = (
             <SelectedAnswerPill
                 selectedCard={props.selectedCard}
-                onCardDragStart={props.onSelectedCardDragStart}
+                dndType={props.dndType}
+                sourceTargetId={props.target.id}
                 onClear={props.onClear}
                 clearLabel={props.t.dragDropClearAnswer}
             />
@@ -52,14 +73,12 @@ export default function TableMatchAnswerSlot(props) {
 
     return (
         <div
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}
             onClick={props.onClick}
             onKeyDown={handleKeyDown}
-            onDragOver={props.onDragOver}
-            onDragLeave={props.onDragLeave}
-            onDrop={props.onDrop}
             aria-label={ariaLabel}
         >
             {answerContent}
@@ -76,25 +95,32 @@ export default function TableMatchAnswerSlot(props) {
     );
 }
 
-const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClear, clearLabel }) => {
+const SelectedAnswerPill = ({ selectedCard, dndType, sourceTargetId, onClear, clearLabel }) => {
     return (
-        <div
-            className="drag-drop-selected-pill"
-            draggable
-            onDragStart={onCardDragStart}
+        <Draggable
+            id={selectedCard.id}
+            type={dndType}
+            data={{ card: selectedCard, sourceTargetId }}
         >
-            <span className="drag-drop-selected-pill-text">
-                <FormattedText text={selectedCard.text} />
-            </span>
+            {({ ref: dndRef }) => (
+                <div
+                    ref={dndRef}
+                    className="drag-drop-selected-pill"
+                >
+                    <span className="drag-drop-selected-pill-text">
+                        <FormattedText text={selectedCard.text} />
+                    </span>
 
-            <DragGrip className="drag-drop-selected-pill-grip" />
+                    <DragGrip className="drag-drop-selected-pill-grip" />
 
-            <ClearButton
-                className="drag-drop-clear-button"
-                label={clearLabel}
-                onClear={onClear}
-            />
-        </div>
+                    <ClearButton
+                        className="drag-drop-clear-button"
+                        label={clearLabel}
+                        onClear={onClear}
+                    />
+                </div>
+            )}
+        </Draggable>
     );
 };
 

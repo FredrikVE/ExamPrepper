@@ -8,7 +8,7 @@ export default function TableMatchMobileCard(props) {
 		<Draggable
 			id={props.card.id}
 			type={props.type}
-			data={props.sourceData}
+			data={props.data}
 		>
 			{({ ref: dndRef, isDragging }) => {
 				const className = getClassName({

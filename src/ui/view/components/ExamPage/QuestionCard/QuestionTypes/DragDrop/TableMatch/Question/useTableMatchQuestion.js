@@ -9,7 +9,6 @@ export function useTableMatchQuestion(params) {
     const feedbackMode = params.submitted && params.showAllFeedback;
 
     const [selectedCardId, setSelectedCardId] = useState(null);
-    const [dragOverTargetId, setDragOverTargetId] = useState(null);
     const [expandedTargetId, setExpandedTargetId] = useState(null);
 
     const cardsById = createCardsById(params.question.cards);
@@ -89,42 +88,8 @@ export function useTableMatchQuestion(params) {
         setSelectedCardId(null);
     };
 
-    const handleCardDragStart = (event, cardId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.dataTransfer.setData("text/plain", cardId);
-        event.dataTransfer.effectAllowed = "move";
-    };
-
-    const handleTargetDragOver = (event, targetId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-
-        event.dataTransfer.dropEffect = "move";
-        setDragOverTargetId(targetId);
-    };
-
-    const handleTargetDragLeave = () => {
-        setDragOverTargetId(null);
-    };
-
-    const handleTargetDrop = (event, targetId) => {
-        if (params.submitted) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const cardId = event.dataTransfer.getData("text/plain");
-
-        assignCard(targetId, cardId);
-
-        setDragOverTargetId(null);
+    const handleDndDrop = ({ sourceId, targetId }) => {
+        assignCard(targetId, sourceId);
         setSelectedCardId(null);
     };
 
@@ -151,7 +116,6 @@ export function useTableMatchQuestion(params) {
         feedbackMode,
 
         selectedCardId,
-        dragOverTargetId,
         expandedTargetId,
 
         cardsById,
@@ -162,10 +126,7 @@ export function useTableMatchQuestion(params) {
         clearTarget,
         handleCardSelect,
         handleTargetClick,
-        handleCardDragStart,
-        handleTargetDragOver,
-        handleTargetDragLeave,
-        handleTargetDrop,
+        handleDndDrop,
         handleSelectChange,
         toggleExpanded
     };

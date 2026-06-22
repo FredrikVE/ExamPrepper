@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/CardBank/TableMatchCardBank.jsx
 import { Info } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export default function TableMatchCardBank(props) {
@@ -9,27 +10,36 @@ export default function TableMatchCardBank(props) {
     for (const card of props.cards) {
         const isSelected = props.selectedCardId === card.id;
 
-        let className = "drag-drop-card";
-
-        if (isSelected) {
-            className += " drag-drop-card-selected";
-        }
-
         cardButtons.push(
-            <button
+            <Draggable
                 key={card.id}
-                type="button"
-                className={className}
-                draggable
-                onClick={() => props.onCardSelect(card.id)}
-                onDragStart={(event) => props.onCardDragStart(event, card.id)}
+                id={card.id}
+                type={props.dndType}
+                data={{ card, sourceTargetId: null }}
             >
-                <span className="drag-drop-card-text">
-                    <FormattedText text={card.text} />
-                </span>
+                {({ ref: dndRef }) => {
+                    let className = "drag-drop-card";
 
-                <DragGrip className="drag-drop-card-grip" />
-            </button>
+                    if (isSelected) {
+                        className += " drag-drop-card-selected";
+                    }
+
+                    return (
+                        <button
+                            ref={dndRef}
+                            type="button"
+                            className={className}
+                            onClick={() => props.onCardSelect(card.id)}
+                        >
+                            <span className="drag-drop-card-text">
+                                <FormattedText text={card.text} />
+                            </span>
+
+                            <DragGrip className="drag-drop-card-grip" />
+                        </button>
+                    );
+                }}
+            </Draggable>
         );
     }
 
