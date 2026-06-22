@@ -1,5 +1,5 @@
 // src/ui/view/components/Sidebar/MobileSubjectPicker.jsx
-import { ChevronDown, ChevronUp, Check, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronUp, Check } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import SubjectIcon from "../SubjectIcon.jsx";
 
@@ -34,7 +34,7 @@ export function SubjectPickerButton({ currentSubject, isOpen, onToggle }) {
 	);
 }
 
-export function SubjectPickerDropdown({subjects, currentSubjectId, onSelectSubject, onShowAllSubjects, onClose }) {
+export function SubjectPickerDropdown({ subjects, currentSubjectId, onSelectSubject, onClose }) {
 	const { t } = useLanguage();
 
 	return (
@@ -93,11 +93,11 @@ export function SubjectPickerDropdown({subjects, currentSubjectId, onSelectSubje
 
 				<button
 					type="button"
-					className="mobile-subject-picker-see-all"
-					onClick={onShowAllSubjects}
+					className="mobile-subject-picker-collapse"
+					onClick={onClose}
+					aria-label={t.sidebarCloseSubjectMenu}
 				>
-					<span>{t.sidebarSeeAllSubjects}</span>
-					<ChevronRight size={18} />
+					<ChevronUp size={20} aria-hidden="true" focusable="false" />
 				</button>
 			</div>
 		</>

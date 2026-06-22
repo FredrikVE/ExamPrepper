@@ -1,6 +1,6 @@
 // test/ui/QuestionCard/matrixPlacementAnswerLogic.test.js
 import { describe, expect, test } from "@jest/globals";
-import { getMatrixQuadrantsForDisplay, normalizeMatrixPlacementAnswer } from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Utils/matrixPlacementAnswerLogic.js";
+import { getMatrixQuadrantsForDisplay, normalizeMatrixPlacementAnswer, placeItemInQuadrant } from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Utils/matrixPlacementAnswerLogic.js";
 
 describe("matrixPlacementAnswerLogic", () => {
     test("supports directional axis labels for non low/high matrices", () => {
@@ -85,6 +85,55 @@ describe("matrixPlacementAnswerLogic", () => {
             }
         })).toEqual({
             "item-a": "top-left"
+        });
+    });
+
+    test("keeps only one item per quadrant when normalizing answers", () => {
+        const question = {
+            matrix: {
+                quadrants: [
+                    { id: "top-left" },
+                    { id: "top-right" }
+                ]
+            },
+            items: [
+                { id: "item-a" },
+                { id: "item-b" },
+                { id: "item-c" }
+            ]
+        };
+
+        expect(normalizeMatrixPlacementAnswer(question, {
+            "item-a": "top-left",
+            "item-b": "top-left",
+            "item-c": "top-right"
+        })).toEqual({
+            "item-b": "top-left",
+            "item-c": "top-right"
+        });
+    });
+
+    test("moves the previous occupant back to the bank when placing into an occupied quadrant", () => {
+        const question = {
+            matrix: {
+                quadrants: [
+                    { id: "top-left" },
+                    { id: "top-right" }
+                ]
+            },
+            items: [
+                { id: "item-a" },
+                { id: "item-b" },
+                { id: "item-c" }
+            ]
+        };
+
+        expect(placeItemInQuadrant(question, {
+            "item-a": "top-left",
+            "item-b": "top-right"
+        }, "item-c", "top-left")).toEqual({
+            "item-b": "top-right",
+            "item-c": "top-left"
         });
     });
 });

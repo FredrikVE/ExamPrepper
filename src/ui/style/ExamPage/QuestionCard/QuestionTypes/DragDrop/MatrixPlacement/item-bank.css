@@ -123,28 +123,18 @@
 .matrix-placement-item-card-grip,
 .matrix-placement-placed-card-grip {
     order: -1;
-    display: grid;
-    grid-template-columns: repeat(2, 2px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: 0 0 auto;
-    gap: 2px 4px;
-    width: 10px;
-    height: 19px;
+    width: 16px;
+    height: 20px;
+    color: var(--matrix-placement-grip-bg);
     opacity: 0.74;
 }
 
-.matrix-placement-item-card-grip span,
-.matrix-placement-placed-card-grip span {
-    width: 3px;
-    height: 3px;
-    border-radius: var(--radius-full);
-}
-
-.matrix-placement-item-card-grip span {
-    background: var(--matrix-placement-grip-bg);
-}
-
-.matrix-placement-placed-card-grip span {
-    background: var(--matrix-placement-placed-grip-bg);
+.matrix-placement-placed-card-grip {
+    color: var(--matrix-placement-placed-grip-bg);
 }
 
 .matrix-placement-item-list-over {
@@ -172,16 +162,13 @@
     position: absolute;
     top: 50%;
     right: 8px;
-    display: inline-grid;
     width: 24px;
     height: 24px;
-    place-items: center;
     transform: translateY(-50%);
     border: 0;
-    border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
     color: var(--text-muted);
-    cursor: pointer;
+    --dnd-clear-button-icon-size: 14px;
     transition:
         color var(--transition-fast),
         background var(--transition-fast),
@@ -194,11 +181,6 @@
     color: var(--danger-text);
     outline: none;
     transform: translateY(-50%) scale(1.04);
-}
-
-.matrix-placement-placed-card-remove svg {
-    width: 14px;
-    height: 14px;
 }
 
 .matrix-placement-placed-card {

@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/ItemBank/SequenceOrderItemBank.jsx
 import { ListOrdered } from "lucide-react";
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import SequenceOrderItemCard from "./SequenceOrderItemCard.jsx";
 
 export default function SequenceOrderItemBank(props) {
@@ -20,12 +20,12 @@ export default function SequenceOrderItemBank(props) {
                 <ListOrdered className="sequence-order-item-bank-icon" aria-hidden="true" />
             </div>
 
-            <MobileDroppable
-                dropTargetId={props.cardBankDropTargetId}
-                acceptedDragSourceType={props.acceptedDragSourceType}
+            <Droppable
+                id={props.cardBankDropTargetId}
+                accept={props.accept}
             >
-                {({ droppableRef, isDropTarget }) => (
-                    <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
+                {({ ref: dndRef, isDropTarget }) => (
+                    <div ref={dndRef} className={getItemListClassName(isDropTarget)}>
                         {props.sequenceItems.map((sequenceItem) => {
                             const sequenceItemIsPlaced = placedSequenceItemIdSet.has(sequenceItem.id);
 
@@ -44,14 +44,14 @@ export default function SequenceOrderItemBank(props) {
                                     sequenceItem={sequenceItem}
                                     selected={props.selectedSequenceItemId === sequenceItem.id}
                                     disabled={props.disabled}
-                                    dragSourceType={props.acceptedDragSourceType}
+                                    type={props.accept}
                                     onSequenceItemSelect={props.onSequenceItemSelect}
                                 />
                             );
                         })}
                     </div>
                 )}
-            </MobileDroppable>
+            </Droppable>
 
             <p className="sequence-order-item-bank-hint">
                 {props.t.sequenceOrderAlternativeBankHint}

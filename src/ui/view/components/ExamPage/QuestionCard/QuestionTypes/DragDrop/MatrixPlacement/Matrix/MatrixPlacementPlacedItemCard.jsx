@@ -1,25 +1,25 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementPlacedItemCard.jsx
-import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function MatrixPlacementPlacedItemCard(props) {
     return (
-        <MobileDraggable
-            dragSourceId={props.item.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ item: props.item, sourceQuadrantId: props.sourceQuadrantId }}
+        <Draggable
+            id={props.item.id}
+            type={props.type}
+            data={{ item: props.item, sourceQuadrantId: props.sourceQuadrantId }}
         >
-            {({ draggableRef, isDragging }) => (
+            {({ ref: dndRef, isDragging }) => (
                 <MatrixPlacementPlacedItemCardContent
                     {...props}
-                    draggableRef={draggableRef}
+                    dndRef={dndRef}
                     isDragging={isDragging}
                 />
             )}
-        </MobileDraggable>
+        </Draggable>
     );
 }
 
@@ -44,32 +44,24 @@ function MatrixPlacementPlacedItemCardContent(props) {
         props.onSelect();
     };
 
-    const handleRemoveClick = (event) => {
-        event.stopPropagation();
-        props.onRemove();
-    };
-
     return (
         <div
-            ref={props.draggableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <MobileDragGrip className="matrix-placement-placed-card-grip" />
+            <DragGrip className="matrix-placement-placed-card-grip" />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
 
-            <button
-                type="button"
+            <ClearButton
                 className="matrix-placement-placed-card-remove"
-                onClick={handleRemoveClick}
-                aria-label={props.t.matrixPlacementRemoveAnswer}
-            >
-                <X aria-hidden="true" />
-            </button>
+                label={props.t.matrixPlacementRemoveAnswer}
+                onClear={props.onRemove}
+            />
         </div>
     );
 }

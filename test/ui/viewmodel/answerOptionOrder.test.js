@@ -58,6 +58,29 @@ describe("createAnswerOptionOrderByQuestionId", () => {
         expect([...result.q1].sort()).toEqual([0, 1]);
     });
 
+
+    test("uses items array for matrix-placement questions", () => {
+        const questions = [
+            { id: "q1", type: "matrix-placement", items: [{ id: "i1" }, { id: "i2" }, { id: "i3" }, { id: "i4" }] }
+        ];
+
+        const result = createAnswerOptionOrderByQuestionId(questions);
+
+        expect(result.q1).toHaveLength(4);
+        expect([...result.q1].sort()).toEqual([0, 1, 2, 3]);
+    });
+
+    test("uses sequence source arrays for sequence-order questions", () => {
+        const questions = [
+            { id: "q1", type: "SequenceOrder", alternatives: [{ id: "a1" }, { id: "a2" }, { id: "a3" }] }
+        ];
+
+        const result = createAnswerOptionOrderByQuestionId(questions);
+
+        expect(result.q1).toHaveLength(3);
+        expect([...result.q1].sort()).toEqual([0, 1, 2]);
+    });
+
     test("returns empty object for empty questions array", () => {
         const result = createAnswerOptionOrderByQuestionId([]);
 

@@ -17,31 +17,25 @@
 		--table-match-mobile-card-hover-bg: var(--dnd-card-hover-bg);
 		--table-match-mobile-card-hover-shadow: var(--dnd-card-hover-shadow);
 		--table-match-mobile-overlay-shadow: 0 18px 45px rgba(18, 38, 63, 0.18);
-		--table-match-mobile-grip-bg: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
+		--table-match-mobile-grip-bg: var(--dnd-grip);
 		--table-match-mobile-target-border: color-mix(in srgb, var(--accent) 20%, var(--line));
 		--table-match-mobile-target-bg:
 			linear-gradient(180deg,
 				color-mix(in srgb, var(--panel-strong) 96%, var(--accent-soft)),
 				color-mix(in srgb, var(--panel-bg) 92%, white));
 		--table-match-mobile-target-hover-bg: color-mix(in srgb, var(--accent-soft) 48%, var(--panel-strong));
-		--table-match-mobile-drop-border: color-mix(in srgb, var(--accent) 72%, var(--line));
+		--table-match-mobile-drop-border: var(--dnd-drop-border);
 		--table-match-mobile-drop-bg: color-mix(in srgb, var(--accent-soft) 54%, var(--panel-strong));
 		--table-match-mobile-drop-hover-bg: color-mix(in srgb, var(--accent-soft) 76%, var(--panel-strong));
-		--table-match-mobile-filled-border: #2563eb;
+		--table-match-mobile-filled-border: var(--dnd-active-border);
 		--table-match-mobile-filled-bg: transparent;
-		--table-match-mobile-filled-card-bg:
-			linear-gradient(135deg,
-				#2f6df6 0%,
-				#2563eb 58%,
-				#1d4ed8 100%);
-		--table-match-mobile-filled-card-color: #ffffff;
-		--table-match-mobile-filled-shadow:
-			0 0 0 4px rgba(147, 197, 253, 0.72),
-			0 14px 30px rgba(37, 99, 235, 0.28);
-		--table-match-mobile-filled-card-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
-		--table-match-mobile-filled-grip-bg: rgba(255, 255, 255, 0.86);
-		--table-match-mobile-filled-clear-bg: rgba(255, 255, 255, 0.16);
-		--table-match-mobile-filled-clear-color: #ffffff;
+		--table-match-mobile-filled-card-bg: var(--dnd-active-bg);
+		--table-match-mobile-filled-card-color: var(--dnd-on-active);
+		--table-match-mobile-filled-shadow: var(--dnd-active-shadow);
+		--table-match-mobile-filled-card-inset: var(--dnd-active-inset);
+		--table-match-mobile-filled-grip-bg: var(--dnd-on-active-muted);
+		--table-match-mobile-filled-clear-bg: var(--dnd-active-clear-bg);
+		--table-match-mobile-filled-clear-color: var(--dnd-on-active);
 		--table-match-mobile-clear-bg: color-mix(in srgb, var(--panel-bg) 92%, white);
 
 		position: relative;
@@ -57,7 +51,7 @@
 		--table-match-mobile-column-border: rgba(136, 160, 190, 0.24);
 		--table-match-mobile-column-bg: rgba(5, 17, 31, 0.58);
 		--table-match-mobile-overlay-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
-		--table-match-mobile-grip-bg: #aab2c4;
+		--table-match-mobile-grip-bg: var(--dnd-grip);
 		--table-match-mobile-target-border: rgba(136, 160, 190, 0.38);
 		--table-match-mobile-target-bg:
 			linear-gradient(180deg, rgba(8, 27, 48, 0.72), rgba(5, 18, 34, 0.56));
@@ -65,20 +59,15 @@
 		--table-match-mobile-drop-border: color-mix(in srgb, var(--accent) 78%, rgba(155, 101, 255, 0.8));
 		--table-match-mobile-drop-bg: transparent;
 		--table-match-mobile-drop-hover-bg: color-mix(in srgb, var(--accent-soft) 46%, transparent);
-		--table-match-mobile-filled-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
+		--table-match-mobile-filled-border: var(--dnd-active-border);
 		--table-match-mobile-filled-bg: transparent;
-		--table-match-mobile-filled-card-bg:
-			linear-gradient(135deg,
-				color-mix(in srgb, var(--accent) 72%, #2563eb),
-				#7c3aed);
-		--table-match-mobile-filled-card-color: #ffffff;
-		--table-match-mobile-filled-shadow:
-			0 0 0 3px color-mix(in srgb, var(--accent) 34%, transparent),
-			0 16px 36px rgba(0, 0, 0, 0.44);
-		--table-match-mobile-filled-card-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
-		--table-match-mobile-filled-grip-bg: rgba(255, 255, 255, 0.86);
-		--table-match-mobile-filled-clear-bg: rgba(255, 255, 255, 0.14);
-		--table-match-mobile-filled-clear-color: #ffffff;
+		--table-match-mobile-filled-card-bg: var(--dnd-active-bg);
+		--table-match-mobile-filled-card-color: var(--dnd-on-active);
+		--table-match-mobile-filled-shadow: var(--dnd-active-shadow);
+		--table-match-mobile-filled-card-inset: var(--dnd-active-inset);
+		--table-match-mobile-filled-grip-bg: var(--dnd-on-active-muted);
+		--table-match-mobile-filled-clear-bg: var(--dnd-active-clear-bg);
+		--table-match-mobile-filled-clear-color: var(--dnd-on-active);
 		--table-match-mobile-clear-bg: color-mix(in srgb, var(--panel-strong) 72%, transparent);
 	}
 
@@ -157,7 +146,7 @@
 		transform: none;
 	}
 
-	.mobile-dnd-drag-overlay .table-match-mobile-card {
+	.dnd-drag-overlay .table-match-mobile-card {
 		width: 100%;
 		min-height: inherit;
 		box-shadow: var(--table-match-mobile-overlay-shadow);
@@ -174,20 +163,14 @@
 		position: absolute;
 		right: 16px;
 		top: 50%;
-		display: grid;
-		grid-template-columns: repeat(2, 5px);
-		gap: 5px 7px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		width: 20px;
 		height: 34px;
+		color: var(--table-match-mobile-grip-bg);
 		opacity: 0.78;
 		transform: translateY(-50%);
-	}
-
-	.table-match-mobile-card-grip span {
-		width: 5px;
-		height: 5px;
-		border-radius: var(--radius-full);
-		background: var(--table-match-mobile-grip-bg);
 	}
 
 	.table-match-mobile-target-card {
@@ -206,7 +189,7 @@
 	.table-match-mobile-target-card:hover,
 	.table-match-mobile-target-card:focus-visible,
 	.table-match-mobile-target-card-over {
-		border-color: color-mix(in srgb, var(--accent) 88%, #c29cff);
+		border-color: var(--dnd-drop-over-border);
 		background: var(--table-match-mobile-target-hover-bg);
 		box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
 		outline: none;
@@ -243,7 +226,7 @@
 	.table-match-mobile-drop-zone:focus-visible,
 	.table-match-mobile-drop-zone-armed,
 	.table-match-mobile-drop-zone-over {
-		border-color: color-mix(in srgb, var(--accent) 88%, #c29cff);
+		border-color: var(--dnd-drop-over-border);
 		background: var(--table-match-mobile-drop-hover-bg);
 		box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
 		outline: none;
@@ -298,8 +281,8 @@
 		right: 46px;
 	}
 
-	.table-match-mobile-filled-target .table-match-mobile-card-grip span {
-		background: var(--table-match-mobile-filled-grip-bg);
+	.table-match-mobile-filled-target .table-match-mobile-card-grip {
+		color: var(--table-match-mobile-filled-grip-bg);
 	}
 
 	.table-match-mobile-filled-target .table-match-mobile-clear-button {
@@ -312,15 +295,11 @@
 		position: absolute;
 		right: 10px;
 		top: 50%;
-		display: inline-grid;
 		width: 30px;
 		height: 30px;
-		place-items: center;
 		border: 0;
-		border-radius: var(--radius-full);
 		background: var(--table-match-mobile-clear-bg);
 		color: var(--text-muted);
-		cursor: pointer;
 		transform: translateY(-50%);
 	}
 
@@ -331,10 +310,6 @@
 		outline: none;
 	}
 
-	.table-match-mobile-clear-button svg {
-		width: 16px;
-		height: 16px;
-	}
 
 	.table-match-mobile-drop-label {
 		font-size: 0.94rem;
@@ -365,15 +340,8 @@
 
 	.table-match-mobile-card-grip {
 		right: 10px;
-		grid-template-columns: repeat(2, 4px);
-		gap: 4px 6px;
-		width: 16px;
+		width: 18px;
 		height: 28px;
-	}
-
-	.table-match-mobile-card-grip span {
-		width: 4px;
-		height: 4px;
 	}
 
 	.table-match-mobile-target-card {

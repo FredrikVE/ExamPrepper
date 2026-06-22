@@ -20,7 +20,7 @@ export default function MatrixPlacementQuadrant(props) {
                 feedbackMode={props.feedbackMode}
                 selectedItemId={props.selectedItemId}
                 expandedItemId={props.expandedItemId}
-                acceptedDragSourceType={props.acceptedDragSourceType}
+                accept={props.accept}
                 quadrantDropTargetIdPrefix={props.quadrantDropTargetIdPrefix}
                 onClick={props.onQuadrantClick}
                 onItemSelect={props.onItemSelect}

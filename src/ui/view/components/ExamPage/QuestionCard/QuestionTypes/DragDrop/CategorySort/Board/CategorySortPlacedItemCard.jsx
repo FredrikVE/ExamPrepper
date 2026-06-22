@@ -1,25 +1,25 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortPlacedItemCard.jsx
-import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function CategorySortPlacedItemCard(props) {
     return (
-        <MobileDraggable
-            dragSourceId={props.item.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ item: props.item, sourceCategoryId: props.sourceCategoryId }}
+        <Draggable
+            id={props.item.id}
+            type={props.type}
+            data={{ item: props.item, sourceCategoryId: props.sourceCategoryId }}
         >
-            {({ draggableRef, isDragging }) => (
+            {({ ref: dndRef, isDragging }) => (
                 <CategorySortPlacedItemCardContent
                     {...props}
-                    draggableRef={draggableRef}
+                    dndRef={dndRef}
                     isDragging={isDragging}
                 />
             )}
-        </MobileDraggable>
+        </Draggable>
     );
 }
 
@@ -47,32 +47,24 @@ function CategorySortPlacedItemCardContent(props) {
         props.onSelect();
     };
 
-    const handleRemoveClick = (event) => {
-        event.stopPropagation();
-        props.onRemove();
-    };
-
     return (
         <div
-            ref={props.draggableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <MobileDragGrip className="drag-categorize-placed-card-grip" />
+            <DragGrip className="drag-categorize-placed-card-grip" />
 
             <span className="drag-categorize-placed-card-text"><FormattedText text={getItemLabel(props.item)} /></span>
 
-            <button
-                type="button"
+            <ClearButton
                 className="drag-categorize-placed-card-remove"
-                onClick={handleRemoveClick}
-                aria-label={props.t.dragCategorizeRemoveAnswer}
-            >
-                <X aria-hidden="true" />
-            </button>
+                label={props.t.dragCategorizeRemoveAnswer}
+                onClear={props.onRemove}
+            />
         </div>
     );
 }

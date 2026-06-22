@@ -19,9 +19,10 @@ export default function SequenceOrderBoard(props) {
                         selectedSequenceItemId={props.selectedSequenceItemId}
                         feedbackMode={props.feedbackMode}
                         isLastSlot={index === props.safeAnswer.length - 1}
-                        acceptedDragSourceType={props.acceptedDragSourceType}
+                        accept={props.accept}
                         slotDropTargetIdPrefix={props.slotDropTargetIdPrefix}
                         onDropZoneClick={props.onDropZoneClick}
+                        onSequenceItemRemove={props.onSequenceItemRemove}
                         t={props.t}
                     />
                 ))}
@@ -39,9 +40,10 @@ function SequenceOrderSlotGroup(props) {
                 selectedSequenceItem={props.selectedSequenceItem}
                 selectedSequenceItemId={props.selectedSequenceItemId}
                 feedbackMode={props.feedbackMode}
-                acceptedDragSourceType={props.acceptedDragSourceType}
+                accept={props.accept}
                 slotDropTargetIdPrefix={props.slotDropTargetIdPrefix}
                 onDropZoneClick={props.onDropZoneClick}
+                onSequenceItemRemove={props.onSequenceItemRemove}
                 t={props.t}
             />
 

@@ -1,20 +1,27 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobilePlacedCard.jsx
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function TableMatchMobilePlacedCard(props) {
 	const className = getClassName(props.isDragging);
 
 	return (
 		<div
-			ref={props.draggableRef}
+			ref={props.dndRef}
 			className={className}
 		>
 			<span className="table-match-mobile-card-text">
 				<FormattedText text={props.card.text} />
 			</span>
 
-			<MobileDragGrip className="table-match-mobile-card-grip" />
+			<DragGrip className="table-match-mobile-card-grip" />
+
+			<ClearButton
+				className="table-match-mobile-clear-button"
+				label={props.clearLabel}
+				onClear={props.onClear}
+			/>
 		</div>
 	);
 }

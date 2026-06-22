@@ -32,14 +32,9 @@
 
 .sidebar-brand:hover,
 .sidebar-brand-open {
-    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--accent) 14%, var(--panel-bg)),
-            color-mix(in srgb, var(--panel-bg) 88%, transparent)
-        );
-    box-shadow: 0 16px 36px color-mix(in srgb, var(--accent) 14%, transparent);
+    border-color: var(--sidebar-select-hover-border);
+    background: var(--sidebar-select-hover-bg);
+    box-shadow: var(--sidebar-select-hover-shadow);
 }
 
 .sidebar-brand-icon {
@@ -142,8 +137,8 @@
 
 .sidebar-subject-item:hover,
 .sidebar-subject-item-selected {
-    border-color: color-mix(in srgb, var(--accent) 18%, transparent);
-    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    border-color: var(--sidebar-subtle-hover-border);
+    background: var(--sidebar-subtle-hover-bg);
 }
 
 .sidebar-subject-item-icon {
@@ -186,25 +181,33 @@
     background: var(--accent);
 }
 
-.sidebar-subject-see-all {
+.sidebar-subject-collapse {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content: center;
     width: 100%;
+    min-height: 38px;
     margin-top: 12px;
-    padding: 10px;
+    padding: 0;
     border: 0;
     border-radius: 10px;
-    color: var(--text-main);
+    color: var(--accent);
     background: transparent;
-    font-size: 14px;
-    font-weight: 650;
-    text-align: left;
+    transition:
+        background var(--transition-normal),
+        color var(--transition-normal),
+        box-shadow var(--transition-normal);
 }
 
-.sidebar-subject-see-all:hover {
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
+.sidebar-subject-collapse:hover,
+.sidebar-subject-collapse:focus-visible {
+    color: var(--text-main);
+    background: var(--sidebar-plain-hover-bg);
+}
+
+.sidebar-subject-collapse:focus-visible {
+    outline: 2px solid var(--sidebar-control-focus-outline);
+    outline-offset: 2px;
 }
 @media (max-width: 932px) {
 	.sidebar-brand {

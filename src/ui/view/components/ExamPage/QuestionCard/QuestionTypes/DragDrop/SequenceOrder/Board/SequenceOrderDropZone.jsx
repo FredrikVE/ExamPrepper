@@ -1,22 +1,22 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderDropZone.jsx
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import SequenceOrderPlacedItemCard from "./SequenceOrderPlacedItemCard.jsx";
 
 export default function SequenceOrderDropZone(props) {
     return (
-        <MobileDroppable
-            dropTargetId={`${props.slotDropTargetIdPrefix}${props.index}`}
-            acceptedDragSourceType={props.acceptedDragSourceType}
-            dropTargetContext={{ targetIndex: props.index }}
+        <Droppable
+            id={`${props.slotDropTargetIdPrefix}${props.index}`}
+            accept={props.accept}
+            data={{ targetIndex: props.index }}
         >
-            {({ droppableRef, isDropTarget }) => (
+            {({ ref: dndRef, isDropTarget }) => (
                 <SequenceOrderDropZoneContent
                     {...props}
-                    droppableRef={droppableRef}
+                    dndRef={dndRef}
                     isDropTarget={isDropTarget}
                 />
             )}
-        </MobileDroppable>
+        </Droppable>
     );
 }
 
@@ -45,7 +45,7 @@ function SequenceOrderDropZoneContent(props) {
 
     return (
         <div
-            ref={props.droppableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}
@@ -59,7 +59,9 @@ function SequenceOrderDropZoneContent(props) {
                     sourceIndex={props.index}
                     sequencePositionNumber={props.positionNumber}
                     disabled={props.feedbackMode}
-                    dragSourceType={props.acceptedDragSourceType}
+                    type={props.accept}
+                    onRemove={() => props.onSequenceItemRemove(props.selectedSequenceItem.id)}
+                    removeLabel={props.t.sequenceOrderRemoveAnswer}
                 />
             ) : (
                 <>

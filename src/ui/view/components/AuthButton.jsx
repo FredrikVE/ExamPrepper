@@ -1,9 +1,25 @@
 // src/ui/view/components/AuthButton.jsx
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 
+function UserAvatar(props) {
+	if (props.imageUrl) {
+		return (
+			<div className="sidebar-user-avatar sidebar-user-avatar-image">
+				<img src={props.imageUrl} alt="" referrerPolicy="no-referrer" />
+			</div>
+		);
+	}
+
+	return <div className="sidebar-user-avatar">{props.fallback}</div>;
+}
+
 export default function AuthButton() {
 	const hasClerkKey = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
 	const { user } = useUser();
+	const userInitial = user?.firstName?.[0]
+		?? user?.username?.[0]
+		?? user?.primaryEmailAddress?.emailAddress?.[0]
+		?? "?";
 
 	if (!hasClerkKey) {
 		return (
@@ -19,29 +35,35 @@ export default function AuthButton() {
 	}
 
 	return (
-		<div className="sidebar-user-card">
+		<>
 			<SignedOut>
-				<div className="sidebar-user-avatar">?</div>
+				<SignInButton mode="modal">
+					<button type="button" className="sidebar-user-card sidebar-user-card-button">
+						<div className="sidebar-user-avatar">?</div>
 
-				<div className="sidebar-user-copy">
-					<p className="sidebar-user-name">Ikke innlogget</p>
-					<SignInButton mode="modal">
-						<button type="button" className="sidebar-user-email">
-							Logg inn
-						</button>
-					</SignInButton>
-				</div>
+						<div className="sidebar-user-copy">
+							<p className="sidebar-user-name">Ikke innlogget</p>
+							<p className="sidebar-user-email">Logg inn</p>
+						</div>
+					</button>
+				</SignInButton>
 			</SignedOut>
 
 			<SignedIn>
-				<UserButton />
+				<div className="sidebar-user-card sidebar-user-card-click-target">
+					<UserAvatar imageUrl={user?.imageUrl} fallback={userInitial.toUpperCase()} />
 
-				<div className="sidebar-user-copy">
-					<p className="sidebar-user-name">
-						{user?.firstName ? `Hei, ${user.firstName}!` : "Innlogget"}
-					</p>
+					<div className="sidebar-user-copy">
+						<p className="sidebar-user-name">
+							{user?.firstName ? `Hei, ${user.firstName}!` : "Innlogget"}
+						</p>
+					</div>
+
+					<div className="sidebar-user-clerk-menu-trigger">
+						<UserButton />
+					</div>
 				</div>
 			</SignedIn>
-		</div>
+		</>
 	);
 }

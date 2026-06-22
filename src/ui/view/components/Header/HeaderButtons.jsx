@@ -17,7 +17,7 @@ export default function HeaderButtons({ viewModel }) {
     return (
         <button
             type="button"
-            onClick={viewModel.submitExam}
+            onClick={viewModel.openSubmitConfirmation}
             className="exam-header-button exam-header-button-primary"
         >
             <CheckCircle2 className="exam-header-icon" />

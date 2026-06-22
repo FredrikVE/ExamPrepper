@@ -6,25 +6,18 @@
     --table-match-desktop-card-shadow: var(--dnd-card-shadow);
     --table-match-desktop-card-hover-shadow: var(--dnd-card-hover-shadow);
     --table-match-desktop-grip-bg: var(--dnd-grip);
-    --table-match-desktop-placed-border: #2563eb;
-    --table-match-desktop-placed-bg: linear-gradient(135deg, #2f6df6 0%, #2563eb 58%, #1d4ed8 100%);
-    --table-match-desktop-placed-color: #ffffff;
-    --table-match-desktop-placed-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24), 0 0 0 4px rgba(147, 197, 253, 0.72), 0 14px 30px rgba(37, 99, 235, 0.28);
-    --table-match-desktop-placed-grip-bg: rgba(255, 255, 255, 0.86);
-    --table-match-desktop-placed-clear-bg: rgba(255, 255, 255, 0.16);
-    --table-match-desktop-placed-clear-color: #ffffff;
+    --table-match-desktop-placed-border: var(--dnd-active-border);
+    --table-match-desktop-placed-bg: var(--dnd-active-bg);
+    --table-match-desktop-placed-color: var(--dnd-on-active);
+    --table-match-desktop-placed-shadow: var(--dnd-active-shadow);
+    --table-match-desktop-placed-grip-bg: var(--dnd-on-active-muted);
+    --table-match-desktop-placed-clear-bg: var(--dnd-active-clear-bg);
+    --table-match-desktop-placed-clear-color: var(--dnd-on-active);
 
     display: grid;
     gap: 22px;
 }
 
-.dark .drag-drop-question {
-    --table-match-desktop-placed-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
-    --table-match-desktop-placed-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 72%, #2563eb), #7c3aed);
-    --table-match-desktop-placed-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 0 0 3px color-mix(in srgb, var(--accent) 34%, transparent), 0 16px 36px rgba(0, 0, 0, 0.44);
-    --table-match-desktop-placed-grip-bg: rgba(255, 255, 255, 0.86);
-    --table-match-desktop-placed-clear-bg: rgba(255, 255, 255, 0.14);
-}
 
 .drag-drop-layout {
     display: grid;
@@ -123,11 +116,12 @@
 .drag-drop-selected-pill-grip {
     position: absolute;
     top: 50%;
-    display: grid;
-    grid-template-columns: repeat(2, 4px);
-    gap: 4px 6px;
-    width: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
     height: 28px;
+    color: var(--table-match-desktop-grip-bg);
     opacity: 0.78;
     transform: translateY(-50%);
 }
@@ -136,16 +130,6 @@
     right: 14px;
 }
 
-.drag-drop-card-grip span,
-.drag-drop-selected-pill-grip span {
-    width: 4px;
-    height: 4px;
-    border-radius: var(--radius-full);
-}
-
-.drag-drop-card-grip span {
-    background: var(--table-match-desktop-grip-bg);
-}
 
 .drag-drop-card-bank-hint {
     margin: 14px 0 0;
@@ -278,8 +262,8 @@
     right: 46px;
 }
 
-.drag-drop-selected-pill-grip span {
-    background: var(--table-match-desktop-placed-grip-bg);
+.drag-drop-selected-pill-grip {
+    color: var(--table-match-desktop-placed-grip-bg);
 }
 
 .drag-drop-selected-pill .drag-drop-clear-button {
@@ -293,15 +277,11 @@
 }
 
 .drag-drop-clear-button {
-    display: inline-grid;
     width: 26px;
     height: 26px;
-    place-items: center;
     border: 0;
-    border-radius: var(--radius-full);
     background: transparent;
     color: var(--text-muted);
-    cursor: pointer;
 }
 
 .drag-drop-clear-button:hover,
@@ -309,11 +289,6 @@
     background: var(--danger-soft);
     color: var(--danger-text);
     outline: none;
-}
-
-.drag-drop-clear-button svg {
-    width: 16px;
-    height: 16px;
 }
 
 .drag-drop-select-label {

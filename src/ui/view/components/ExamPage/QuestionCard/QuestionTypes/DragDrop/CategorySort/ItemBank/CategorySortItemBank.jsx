@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/ItemBank/CategorySortItemBank.jsx
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import CategorySortFeedbackCard from "../Feedback/CategorySortFeedbackCard.jsx";
 import CategorySortItemCard from "./CategorySortItemCard.jsx";
 
@@ -22,16 +22,16 @@ export default function CategorySortItemBank(props) {
                     {props.items.map((item) => renderItem(props, item))}
                 </div>
             ) : (
-                <MobileDroppable
-                    dropTargetId={props.itemBankDropTargetId}
-                    acceptedDragSourceType={props.acceptedDragSourceType}
+                <Droppable
+                    id={props.itemBankDropTargetId}
+                    accept={props.accept}
                 >
-                    {({ droppableRef, isDropTarget }) => (
-                        <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
+                    {({ ref: dndRef, isDropTarget }) => (
+                        <div ref={dndRef} className={getItemListClassName(isDropTarget)}>
                             {props.itemBankItems.map((itemBankEntry) => renderItemBankEntry(props, itemBankEntry))}
                         </div>
                     )}
-                </MobileDroppable>
+                </Droppable>
             )}
 
             <p className="drag-categorize-item-bank-hint">
@@ -75,7 +75,7 @@ function renderItem(props, item) {
             item={item}
             selected={props.selectedItemId === item.id}
             disabled={props.disabled}
-            dragSourceType={props.acceptedDragSourceType}
+            type={props.accept}
             onSelect={() => props.onItemSelect(item.id)}
             t={props.t}
         />

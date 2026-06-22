@@ -30,14 +30,10 @@ export default function TableMatchAnswerRow(props) {
         answerCellContent = (
             <TableMatchAnswerSlot
                 target={props.target}
+                dndType={props.dndType}
                 selectedCard={props.selectedCard}
                 selectedCardId={props.selectedCardId}
-                isDragOver={props.isDragOver}
                 onClick={() => props.onTargetClick(props.target.id)}
-                onDragOver={(event) => props.onTargetDragOver(event, props.target.id)}
-                onDragLeave={props.onTargetDragLeave}
-                onDrop={(event) => props.onTargetDrop(event, props.target.id)}
-                onSelectedCardDragStart={(event) => props.onCardDragStart(event, props.selectedCardId)}
                 onClear={() => props.onClearTarget(props.target.id)}
                 onSelectChange={(value) => props.onSelectChange(props.target.id, value)}
                 cards={props.cards}

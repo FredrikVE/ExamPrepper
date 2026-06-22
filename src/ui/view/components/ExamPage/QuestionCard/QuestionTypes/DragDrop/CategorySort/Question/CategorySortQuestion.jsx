@@ -2,11 +2,11 @@
 import CategorySortCategoryGrid from "../Board/CategorySortCategoryGrid.jsx";
 import CategorySortItemBank from "../ItemBank/CategorySortItemBank.jsx";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
-import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
-import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useCategorySortQuestion } from "./useCategorySortQuestion.js";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";
 
@@ -18,7 +18,7 @@ export default function CategorySortQuestion(props) {
     const categorySort = useCategorySortQuestion(props);
 
     return (
-        <MobileDndProvider onMobileDndDrop={handleCategorySortDndDrop(categorySort)}>
+        <DndProvider onDndDrop={handleCategorySortDndDrop(categorySort)}>
             <div className={categorySort.rootClassName}>
                 <CategorySortItemBank
                     question={props.question}
@@ -29,7 +29,7 @@ export default function CategorySortQuestion(props) {
                     expandedItemId={categorySort.expandedItemId}
                     disabled={categorySort.feedbackMode}
                     itemBankDropTargetId={CATEGORY_SORT_ITEM_BANK_DROP_TARGET_ID}
-                    acceptedDragSourceType={CATEGORY_SORT_ITEM_TYPE}
+                    accept={CATEGORY_SORT_ITEM_TYPE}
                     onItemSelect={categorySort.handleItemSelect}
                     onToggleExpanded={categorySort.toggleExpanded}
                     t={props.t}
@@ -42,7 +42,7 @@ export default function CategorySortQuestion(props) {
                     feedbackMode={categorySort.feedbackMode}
                     selectedItemId={categorySort.selectedItemId}
                     expandedItemId={categorySort.expandedItemId}
-                    acceptedDragSourceType={CATEGORY_SORT_ITEM_TYPE}
+                    accept={CATEGORY_SORT_ITEM_TYPE}
                     categoryDropTargetIdPrefix={CATEGORY_SORT_CATEGORY_DROP_TARGET_ID_PREFIX}
                     onCategoryClick={categorySort.handleCategoryClick}
                     onItemSelect={categorySort.handleItemSelect}
@@ -52,25 +52,25 @@ export default function CategorySortQuestion(props) {
                 />
 
                 {!categorySort.feedbackMode ? (
-                    <MobileDragOverlay>
-                        {({ dragSourceContext }) => {
-                            if (!dragSourceContext?.item) {
+                    <DragOverlay>
+                        {({ sourceData }) => {
+                            if (!sourceData?.item) {
                                 return null;
                             }
 
-                            return <CategorySortDragOverlayCard item={dragSourceContext.item} />;
+                            return <CategorySortDragOverlayCard item={sourceData.item} />;
                         }}
-                    </MobileDragOverlay>
+                    </DragOverlay>
                 ) : null}
             </div>
-        </MobileDndProvider>
+        </DndProvider>
     );
 }
 
 function CategorySortDragOverlayCard(props) {
     return (
         <div className="drag-categorize-item-card drag-categorize-drag-overlay-card">
-            <MobileDragGrip className="drag-categorize-item-card-grip" />
+            <DragGrip className="drag-categorize-item-card-grip" />
 
             <span className="drag-categorize-item-card-text">
                 <FormattedText text={getItemLabel(props.item)} />
@@ -80,15 +80,15 @@ function CategorySortDragOverlayCard(props) {
 }
 
 const handleCategorySortDndDrop = (categorySort) => {
-    return ({ dragSourceId, dropTargetId, dragSourceContext, dropTargetContext }) => {
-        const itemId = dragSourceContext?.item?.id ?? dragSourceId;
+    return ({ sourceId, targetId, sourceData, targetData }) => {
+        const itemId = sourceData?.item?.id ?? sourceId;
 
         if (!itemId) {
             return;
         }
 
-        if (dropTargetId === CATEGORY_SORT_ITEM_BANK_DROP_TARGET_ID) {
-            if (dragSourceContext?.sourceCategoryId) {
+        if (targetId === CATEGORY_SORT_ITEM_BANK_DROP_TARGET_ID) {
+            if (sourceData?.sourceCategoryId) {
                 categorySort.removeItem(itemId);
             }
 
@@ -96,11 +96,11 @@ const handleCategorySortDndDrop = (categorySort) => {
             return;
         }
 
-        if (!dropTargetContext?.categoryId) {
+        if (!targetData?.categoryId) {
             return;
         }
 
-        categorySort.assignItem(dropTargetContext.categoryId, itemId);
+        categorySort.assignItem(targetData.categoryId, itemId);
         categorySort.clearSelectedItem();
     };
 };

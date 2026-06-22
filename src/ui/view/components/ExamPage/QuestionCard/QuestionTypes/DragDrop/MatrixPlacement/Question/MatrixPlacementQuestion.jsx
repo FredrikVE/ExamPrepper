@@ -2,11 +2,11 @@
 import MatrixPlacementGrid from "../Matrix/MatrixPlacementGrid.jsx";
 import MatrixPlacementItemBank from "../ItemBank/MatrixPlacementItemBank.jsx";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
-import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
-import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useMatrixPlacementQuestion } from "./useMatrixPlacementQuestion.js";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export { getMatrixPlacementStats } from "../Utils/matrixPlacementFeedbackStats.js";
 
@@ -18,7 +18,7 @@ export default function MatrixPlacementQuestion(props) {
     const matrixPlacement = useMatrixPlacementQuestion(props);
 
     return (
-        <MobileDndProvider onMobileDndDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
+        <DndProvider onDndDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
             <div className={matrixPlacement.rootClassName}>
                 <div className={getLayoutClassName(matrixPlacement.feedbackMode, matrixPlacement.availableItems.length)}>
                     <MatrixPlacementItemBank
@@ -31,7 +31,7 @@ export default function MatrixPlacementQuestion(props) {
                         expandedItemId={matrixPlacement.expandedItemId}
                         disabled={matrixPlacement.feedbackMode}
                         itemBankDropTargetId={MATRIX_PLACEMENT_ITEM_BANK_DROP_TARGET_ID}
-                        acceptedDragSourceType={MATRIX_PLACEMENT_ITEM_TYPE}
+                        accept={MATRIX_PLACEMENT_ITEM_TYPE}
                         onItemSelect={matrixPlacement.handleItemSelect}
                         onToggleExpanded={matrixPlacement.toggleExpanded}
                         t={props.t}
@@ -44,7 +44,7 @@ export default function MatrixPlacementQuestion(props) {
                         feedbackMode={matrixPlacement.feedbackMode}
                         selectedItemId={matrixPlacement.selectedItemId}
                         expandedItemId={matrixPlacement.expandedItemId}
-                        acceptedDragSourceType={MATRIX_PLACEMENT_ITEM_TYPE}
+                        accept={MATRIX_PLACEMENT_ITEM_TYPE}
                         quadrantDropTargetIdPrefix={MATRIX_PLACEMENT_QUADRANT_DROP_TARGET_ID_PREFIX}
                         onQuadrantClick={matrixPlacement.handleQuadrantClick}
                         onItemSelect={matrixPlacement.handleItemSelect}
@@ -55,25 +55,25 @@ export default function MatrixPlacementQuestion(props) {
                 </div>
 
                 {!matrixPlacement.feedbackMode ? (
-                    <MobileDragOverlay>
-                        {({ dragSourceContext }) => {
-                            if (!dragSourceContext?.item) {
+                    <DragOverlay>
+                        {({ sourceData }) => {
+                            if (!sourceData?.item) {
                                 return null;
                             }
 
-                            return <MatrixPlacementDragOverlayCard item={dragSourceContext.item} />;
+                            return <MatrixPlacementDragOverlayCard item={sourceData.item} />;
                         }}
-                    </MobileDragOverlay>
+                    </DragOverlay>
                 ) : null}
             </div>
-        </MobileDndProvider>
+        </DndProvider>
     );
 }
 
 function MatrixPlacementDragOverlayCard(props) {
     return (
         <div className="matrix-placement-item-card matrix-placement-drag-overlay-card">
-            <MobileDragGrip className="matrix-placement-item-card-grip" />
+            <DragGrip className="matrix-placement-item-card-grip" />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
         </div>
@@ -81,15 +81,15 @@ function MatrixPlacementDragOverlayCard(props) {
 }
 
 const handleMatrixPlacementDndDrop = (matrixPlacement) => {
-    return ({ dragSourceId, dropTargetId, dragSourceContext, dropTargetContext }) => {
-        const itemId = dragSourceContext?.item?.id ?? dragSourceId;
+    return ({ sourceId, targetId, sourceData, targetData }) => {
+        const itemId = sourceData?.item?.id ?? sourceId;
 
         if (!itemId) {
             return;
         }
 
-        if (dropTargetId === MATRIX_PLACEMENT_ITEM_BANK_DROP_TARGET_ID) {
-            if (dragSourceContext?.sourceQuadrantId) {
+        if (targetId === MATRIX_PLACEMENT_ITEM_BANK_DROP_TARGET_ID) {
+            if (sourceData?.sourceQuadrantId) {
                 matrixPlacement.removeItem(itemId);
             }
 
@@ -97,11 +97,11 @@ const handleMatrixPlacementDndDrop = (matrixPlacement) => {
             return;
         }
 
-        if (!dropTargetContext?.quadrantId) {
+        if (!targetData?.quadrantId) {
             return;
         }
 
-        matrixPlacement.assignItem(dropTargetContext.quadrantId, itemId);
+        matrixPlacement.assignItem(targetData.quadrantId, itemId);
         matrixPlacement.clearSelectedItem();
     };
 };

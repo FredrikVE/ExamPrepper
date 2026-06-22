@@ -28,14 +28,10 @@
 }
 
 .sidebar-navigation-item:hover {
-	transform: translateX(2px);
+	transform: var(--sidebar-control-hover-transform);
 	color: var(--text-main);
-	border-color: color-mix(in srgb, var(--accent) 28%, transparent);
-	background: linear-gradient(
-		135deg,
-		color-mix(in srgb, var(--accent) 14%, transparent),
-		color-mix(in srgb, var(--accent) 8%, transparent)
-	);
+	border-color: var(--sidebar-control-hover-border);
+	background: var(--sidebar-control-hover-bg);
 }
 
 .sidebar-navigation-icon {
@@ -56,10 +52,6 @@
 		border-radius: 10px;
 		font-size: 17px;
 		font-weight: 720;
-	}
-
-	.sidebar-navigation-item:hover {
-		transform: none;
 	}
 
 	.sidebar-navigation-icon {

@@ -1,0 +1,36 @@
+/* src/ui/style/Sidebar/sidebar-interaction.css */
+.desktop-sidebar,
+.mobile-dropdown,
+.mobile-topbar {
+	--sidebar-control-hover-border: color-mix(in srgb, var(--accent) 28%, transparent);
+	--sidebar-control-hover-bg: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--accent) 14%, transparent),
+		color-mix(in srgb, var(--accent) 8%, transparent)
+	);
+	--sidebar-control-hover-transform: translateX(2px);
+	--sidebar-control-focus-outline: color-mix(in srgb, var(--accent) 70%, transparent);
+	--sidebar-control-hover-ring: inset 0 0 0 1px color-mix(in srgb, var(--accent) 44%, transparent);
+	--sidebar-control-avatar-ring: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
+
+	--sidebar-subtle-hover-border: color-mix(in srgb, var(--accent) 18%, transparent);
+	--sidebar-subtle-hover-bg: color-mix(in srgb, var(--accent) 9%, transparent);
+	--sidebar-plain-hover-bg: color-mix(in srgb, var(--accent) 8%, transparent);
+
+	--sidebar-select-hover-border: color-mix(in srgb, var(--accent) 42%, var(--line));
+	--sidebar-select-hover-bg: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--accent) 14%, var(--panel-bg)),
+		color-mix(in srgb, var(--panel-bg) 88%, transparent)
+	);
+	--sidebar-select-hover-shadow: 0 16px 36px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+@media (max-width: 932px) {
+	.desktop-sidebar,
+	.mobile-dropdown,
+	.mobile-topbar {
+		--sidebar-control-hover-transform: none;
+		--sidebar-select-hover-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 14%, transparent);
+	}
+}

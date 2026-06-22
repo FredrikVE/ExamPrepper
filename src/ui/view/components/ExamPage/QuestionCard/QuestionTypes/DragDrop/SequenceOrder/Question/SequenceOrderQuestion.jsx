@@ -4,11 +4,11 @@ import SequenceOrderFeedbackPanel from "../Feedback/SequenceOrderFeedbackPanel.j
 import SequenceOrderItemBank from "../ItemBank/SequenceOrderItemBank.jsx";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
 import TableMatchScoreSummary from "../../TableMatch/Feedback/TableMatchScoreSummary.jsx";
-import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
-import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useSequenceOrderQuestion } from "./useSequenceOrderQuestion.js";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export { getSequenceOrderStats } from "../Utils/sequenceOrderFeedbackStats.js";
 
@@ -20,7 +20,7 @@ export default function SequenceOrderQuestion(props) {
     const sequenceOrder = useSequenceOrderQuestion(props);
 
     return (
-        <MobileDndProvider onMobileDndDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
+        <DndProvider onDndDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
             <div className={sequenceOrder.rootClassName}>
                 {sequenceOrder.feedbackMode ? (
                     <TableMatchScoreSummary stats={sequenceOrder.stats} t={props.t} />
@@ -35,7 +35,7 @@ export default function SequenceOrderQuestion(props) {
                             selectedSequenceItemId={sequenceOrder.selectedSequenceItemId}
                             disabled={sequenceOrder.feedbackMode}
                             cardBankDropTargetId={SEQUENCE_ORDER_ITEM_BANK_DROP_TARGET_ID}
-                            acceptedDragSourceType={SEQUENCE_ORDER_ITEM_TYPE}
+                            accept={SEQUENCE_ORDER_ITEM_TYPE}
                             onSequenceItemSelect={sequenceOrder.selectSequenceItem}
                             t={props.t}
                         />
@@ -45,21 +45,22 @@ export default function SequenceOrderQuestion(props) {
                             sequenceItemsById={sequenceOrder.sequenceItemsById}
                             feedbackMode={sequenceOrder.feedbackMode}
                             selectedSequenceItemId={sequenceOrder.selectedSequenceItemId}
-                            acceptedDragSourceType={SEQUENCE_ORDER_ITEM_TYPE}
+                            accept={SEQUENCE_ORDER_ITEM_TYPE}
                             slotDropTargetIdPrefix={SEQUENCE_ORDER_SLOT_DROP_TARGET_ID_PREFIX}
                             onDropZoneClick={sequenceOrder.selectDropZone}
+                            onSequenceItemRemove={sequenceOrder.removeSequenceItemFromAnswer}
                             t={props.t}
                         />
 
-                        <MobileDragOverlay>
-                            {({ dragSourceContext }) => {
-                                if (!dragSourceContext?.sequenceItem) {
+                        <DragOverlay>
+                            {({ sourceData }) => {
+                                if (!sourceData?.sequenceItem) {
                                     return null;
                                 }
 
-                                return <SequenceOrderDragOverlayCard sequenceItem={dragSourceContext.sequenceItem} />;
+                                return <SequenceOrderDragOverlayCard sequenceItem={sourceData.sequenceItem} />;
                             }}
-                        </MobileDragOverlay>
+                        </DragOverlay>
                     </>
                 ) : (
                     <SequenceOrderFeedbackPanel
@@ -75,7 +76,7 @@ export default function SequenceOrderQuestion(props) {
                     />
                 )}
             </div>
-        </MobileDndProvider>
+        </DndProvider>
     );
 }
 
@@ -86,21 +87,21 @@ function SequenceOrderDragOverlayCard(props) {
                 <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
             </span>
 
-            <MobileDragGrip className="sequence-order-item-card-grip" />
+            <DragGrip className="sequence-order-item-card-grip" />
         </div>
     );
 }
 
 const handleSequenceOrderDndDrop = (sequenceOrder) => {
-    return ({ dragSourceId, dropTargetId, dragSourceContext, dropTargetContext }) => {
-        const sequenceItemId = dragSourceContext?.sequenceItem?.id ?? dragSourceId;
+    return ({ sourceId, targetId, sourceData, targetData }) => {
+        const sequenceItemId = sourceData?.sequenceItem?.id ?? sourceId;
 
         if (!sequenceItemId) {
             return;
         }
 
-        if (dropTargetId === SEQUENCE_ORDER_ITEM_BANK_DROP_TARGET_ID) {
-            if (Number.isInteger(dragSourceContext?.sourceIndex)) {
+        if (targetId === SEQUENCE_ORDER_ITEM_BANK_DROP_TARGET_ID) {
+            if (Number.isInteger(sourceData?.sourceIndex)) {
                 sequenceOrder.removeSequenceItemFromAnswer(sequenceItemId);
             }
 
@@ -108,11 +109,11 @@ const handleSequenceOrderDndDrop = (sequenceOrder) => {
             return;
         }
 
-        if (!Number.isInteger(dropTargetContext?.targetIndex)) {
+        if (!Number.isInteger(targetData?.targetIndex)) {
             return;
         }
 
-        sequenceOrder.assignSequenceItem(dropTargetContext.targetIndex, sequenceItemId);
+        sequenceOrder.assignSequenceItem(targetData.targetIndex, sequenceItemId);
         sequenceOrder.clearSelectedSequenceItem();
     };
 };

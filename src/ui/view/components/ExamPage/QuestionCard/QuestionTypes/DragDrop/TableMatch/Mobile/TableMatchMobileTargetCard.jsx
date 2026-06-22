@@ -1,25 +1,24 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobileTargetCard.jsx
-import { X } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
 
 export default function TableMatchMobileTargetCard(props) {
 	return (
-		<MobileDroppable
-			dropTargetId={props.target.id}
-			acceptedDragSourceType={props.acceptedDragSourceType}
-			dropTargetContext={{ target: props.target }}
+		<Droppable
+			id={props.target.id}
+			accept={props.accept}
+			data={{ target: props.target }}
 		>
-			{({ droppableRef, isDropTarget }) => (
+			{({ ref: dndRef, isDropTarget }) => (
 				<TableMatchMobileTargetCardContent
 					{...props}
-					droppableRef={droppableRef}
+					dndRef={dndRef}
 					isDropTarget={isDropTarget}
 				/>
 			)}
-		</MobileDroppable>
+		</Droppable>
 	);
 }
 
@@ -45,7 +44,7 @@ function TableMatchMobileTargetCardContent(props) {
 
 	return (
 		<article
-			ref={props.droppableRef}
+			ref={props.dndRef}
 			className={cardClassName}
 			role="button"
 			tabIndex={0}
@@ -61,28 +60,21 @@ function TableMatchMobileTargetCardContent(props) {
 			<div className={targetClassName}>
 				{props.selectedCard ? (
 					<div className="table-match-mobile-filled-target">
-						<MobileDraggable
-							dragSourceId={props.selectedCard.id}
-							dragSourceType={props.acceptedDragSourceType}
-							dragSourceContext={{ card: props.selectedCard, sourceTargetId: props.target.id }}
+						<Draggable
+							id={props.selectedCard.id}
+							type={props.accept}
+							data={{ card: props.selectedCard, sourceTargetId: props.target.id }}
 						>
-							{({ draggableRef, isDragging }) => (
+							{({ ref: dndRef, isDragging }) => (
 								<TableMatchMobilePlacedCard
 									card={props.selectedCard}
-									draggableRef={draggableRef}
+									dndRef={dndRef}
 									isDragging={isDragging}
+									onClear={props.onClear}
+									clearLabel={props.t.dragDropClearAnswer}
 								/>
 							)}
-						</MobileDraggable>
-
-						<button
-							type="button"
-							className="table-match-mobile-clear-button"
-							onClick={handleClearClick(props.onClear)}
-							aria-label={props.t.dragDropClearAnswer}
-						>
-							<X aria-hidden="true" />
-						</button>
+						</Draggable>
 					</div>
 				) : (
 					<span className="table-match-mobile-drop-label">
@@ -94,12 +86,6 @@ function TableMatchMobileTargetCardContent(props) {
 	);
 }
 
-const handleClearClick = (onClear) => {
-	return (event) => {
-		event.stopPropagation();
-		onClear();
-	};
-};
 
 const getCardClassName = (isDropTarget) => {
 	let className = "table-match-mobile-target-card";

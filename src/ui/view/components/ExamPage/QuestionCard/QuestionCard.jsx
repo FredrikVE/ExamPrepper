@@ -81,6 +81,7 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                     <MatrixPlacementQuestion
                         question={question}
                         answer={answer}
+                        answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
                         onSingleAnswer={onSingleAnswer}
@@ -92,6 +93,7 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                     <SequenceOrderQuestion
                         question={question}
                         answer={answer}
+                        answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
                         onSingleAnswer={onSingleAnswer}

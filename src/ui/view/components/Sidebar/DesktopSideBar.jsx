@@ -16,7 +16,6 @@ export default function DesktopSideBar(props) {
 						subjects={props.subjects}
 						selectedSubject={props.selectedSubject}
 						onSelectSubject={props.onSelectSubject}
-						onShowAllSubjects={props.onShowAllSubjects}
 					/>
 
 					<div className="desktop-sidebar-divider" />

@@ -33,7 +33,7 @@ export default function CategorySortCategoryGrid(props) {
                     feedbackMode={props.feedbackMode}
                     selectedItemId={props.selectedItemId}
                     expandedItemId={props.expandedItemId}
-                    acceptedDragSourceType={props.acceptedDragSourceType}
+                    accept={props.accept}
                     categoryDropTargetIdPrefix={props.categoryDropTargetIdPrefix}
                     onCategoryClick={() => props.onCategoryClick(category.id)}
                     onItemSelect={props.onItemSelect}

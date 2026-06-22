@@ -32,15 +32,11 @@ export default function TableMatchAnswerTable(props) {
                                 index={index}
                                 selectedCardId={selectedCardId}
                                 selectedCard={props.cardsById[selectedCardId]}
-                                isDragOver={props.dragOverTargetId === target.id}
                                 isExpanded={props.expandedTargetId === target.id}
                                 feedbackMode={props.feedbackMode}
                                 cards={cards}
+                                dndType={props.dndType}
                                 onTargetClick={props.onTargetClick}
-                                onTargetDragOver={props.onTargetDragOver}
-                                onTargetDragLeave={props.onTargetDragLeave}
-                                onTargetDrop={props.onTargetDrop}
-                                onCardDragStart={props.onCardDragStart}
                                 onClearTarget={props.onClearTarget}
                                 onSelectChange={props.onSelectChange}
                                 onToggleExpanded={props.onToggleExpanded}

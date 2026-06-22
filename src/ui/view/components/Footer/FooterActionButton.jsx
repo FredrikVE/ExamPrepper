@@ -7,7 +7,7 @@ export default function FooterActionButton({ viewModel, t }) {
         return (
             <>
                 <FooterNavigationButton
-                    onClick={viewModel.submitExam}
+                    onClick={viewModel.openSubmitConfirmation}
                     disabled={false}
                     variant="submit"
                     icon={<Send className="exam-footer-icon" />}

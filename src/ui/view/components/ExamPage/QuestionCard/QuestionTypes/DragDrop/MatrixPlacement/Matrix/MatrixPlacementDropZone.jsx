@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementDropZone.jsx
 import { CheckCircle2 } from "lucide-react";
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard.jsx";
 import { getItemLabel, getItemsInQuadrant, getMissingCorrectItemsInQuadrant } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementPlacedItemCard from "./MatrixPlacementPlacedItemCard.jsx";
@@ -12,19 +12,19 @@ export default function MatrixPlacementDropZone(props) {
     }
 
     return (
-        <MobileDroppable
-            dropTargetId={`${props.quadrantDropTargetIdPrefix}${props.quadrant.id}`}
-            acceptedDragSourceType={props.acceptedDragSourceType}
-            dropTargetContext={{ quadrantId: props.quadrant.id }}
+        <Droppable
+            id={`${props.quadrantDropTargetIdPrefix}${props.quadrant.id}`}
+            accept={props.accept}
+            data={{ quadrantId: props.quadrant.id }}
         >
-            {({ droppableRef, isDropTarget }) => (
+            {({ ref: dndRef, isDropTarget }) => (
                 <MatrixPlacementDropZoneContent
                     {...props}
-                    droppableRef={droppableRef}
+                    dndRef={dndRef}
                     isDropTarget={isDropTarget}
                 />
             )}
-        </MobileDroppable>
+        </Droppable>
     );
 }
 
@@ -55,7 +55,7 @@ function MatrixPlacementDropZoneContent(props) {
 
     return (
         <div
-            ref={props.droppableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={props.feedbackMode ? -1 : 0}
@@ -125,7 +125,7 @@ function renderItem(props, item) {
             item={item}
             selected={props.selectedItemId === item.id}
             sourceQuadrantId={props.quadrant.id}
-            dragSourceType={props.acceptedDragSourceType}
+            type={props.accept}
             onSelect={() => props.onItemSelect(item.id)}
             onRemove={() => props.onItemRemove(item.id)}
             t={props.t}

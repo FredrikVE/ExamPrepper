@@ -7,8 +7,12 @@
 	align-items: center;
 	gap: 14px;
 	margin-top: auto;
-	padding-top: 24px;
+	padding: 16px 8px;
 	border-top: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	transition:
+		background 0.16s ease,
+		box-shadow 0.16s ease;
 }
 
 .sidebar-user-avatar {
@@ -21,6 +25,80 @@
 	color: var(--text-main);
 	font-weight: 650;
 	background: var(--panel-bg);
+}
+
+.sidebar-user-card-button {
+	width: 100%;
+	border-right: 0;
+	border-bottom: 0;
+	border-left: 0;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	background: transparent;
+	cursor: pointer;
+}
+
+.sidebar-user-card-click-target {
+	cursor: pointer;
+}
+
+.sidebar-user-card-button:hover,
+.sidebar-user-card-click-target:hover,
+.sidebar-user-card-button:focus-visible,
+.sidebar-user-card-click-target:focus-within {
+	background: var(--sidebar-control-hover-bg);
+	box-shadow: var(--sidebar-control-hover-ring);
+}
+
+.sidebar-user-card-button:hover .sidebar-user-avatar,
+.sidebar-user-card-click-target:hover .sidebar-user-avatar,
+.sidebar-user-card-button:focus-visible .sidebar-user-avatar,
+.sidebar-user-card-click-target:focus-within .sidebar-user-avatar {
+	border-color: var(--accent);
+	box-shadow: var(--sidebar-control-avatar-ring);
+}
+
+.sidebar-user-card-button:focus-visible,
+.sidebar-user-card-click-target:focus-within {
+	outline: 2px solid var(--sidebar-control-focus-outline);
+	outline-offset: 4px;
+}
+
+.sidebar-user-card-button .sidebar-user-avatar,
+.sidebar-user-card-button .sidebar-user-copy,
+.sidebar-user-card-click-target .sidebar-user-avatar,
+.sidebar-user-card-click-target .sidebar-user-copy {
+	pointer-events: none;
+}
+
+.sidebar-user-avatar-image {
+	overflow: hidden;
+}
+
+.sidebar-user-avatar-image img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.sidebar-user-clerk-menu-trigger {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+}
+
+.sidebar-user-clerk-menu-trigger :where(.cl-rootBox, .cl-userButtonBox, .cl-userButtonTrigger) {
+	width: 100%;
+	height: 100%;
+}
+
+.sidebar-user-clerk-menu-trigger :where(.cl-userButtonTrigger) {
+	display: block;
+	border-radius: var(--radius-lg);
+	opacity: 0;
+	cursor: pointer;
 }
 
 .sidebar-user-copy {
@@ -59,7 +137,7 @@
 	.sidebar-user-card {
 		gap: 12px;
 		margin-top: 16px;
-		padding: 16px 8px 0;
+		padding: 16px 8px;
 	}
 
 	.sidebar-user-avatar {

@@ -1,6 +1,9 @@
 /* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/matrix.css */
 .matrix-placement-board {
     --matrix-placement-axis-color: color-mix(in srgb, var(--text-muted) 58%, var(--panel-strong));
+    --matrix-placement-quadrant-border: color-mix(in srgb, var(--text-muted) 32%, transparent);
+    --matrix-placement-quadrant-bg: color-mix(in srgb, var(--panel-strong) 58%, transparent);
+    --matrix-placement-quadrant-shadow: inset 0 0 21px rgba(3, 8, 18, 0.12);
 
     position: relative;
     display: grid;
@@ -90,10 +93,11 @@
     grid-row: 1;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
-    border-radius: var(--radius-md);
-    background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
-    overflow: hidden;
+    gap: 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
     min-width: 0;
 }
 
@@ -102,58 +106,50 @@
     flex-direction: column;
     min-width: 0;
     min-height: 210px;
-    border-right: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
-    border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
-    background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
+    overflow: hidden;
+    border: 1px solid var(--matrix-placement-quadrant-border);
+    border-radius: 10px;
+    background: var(--matrix-placement-quadrant-bg);
+    box-shadow: var(--matrix-placement-quadrant-shadow);
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast);
 }
 
-.matrix-placement-quadrant:nth-child(2n) {
-    border-right: 0;
-}
-
-.matrix-placement-quadrant:nth-last-child(-n + 2) {
-    border-bottom: 0;
+.matrix-placement-quadrant:has(.matrix-placement-drop-zone-over) {
+    border-color: color-mix(in srgb, var(--accent) 78%, white 10%);
+    background: color-mix(in srgb, var(--accent) 8%, var(--panel-strong));
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--accent) 42%, transparent),
+        0 0 26px color-mix(in srgb, var(--accent) 20%, transparent),
+        inset 0 0 0 2px color-mix(in srgb, var(--accent) 38%, transparent),
+        var(--matrix-placement-quadrant-shadow);
 }
 
 .matrix-placement-quadrant-header {
     display: grid;
     gap: 6px;
-    min-height: 76px;
+    min-height: 74px;
     place-items: center;
-    border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
-    background:
-        linear-gradient(180deg,
-        color-mix(in srgb, var(--accent) 8%, var(--panel-strong)),
-        color-mix(in srgb, var(--accent) 5%, var(--panel-bg)));
-    padding: 12px 14px;
+    border-bottom: 0;
+    background: transparent;
+    padding: 20px 14px 10px;
     text-align: center;
-}
-
-.dark .matrix-placement-quadrant-header {
-    background:
-        linear-gradient(180deg,
-        color-mix(in srgb, var(--accent) 16%, var(--panel-strong)),
-        color-mix(in srgb, var(--accent) 10%, var(--panel-bg)));
 }
 
 .matrix-placement-quadrant-header h4 {
     margin: 0;
     color: var(--text-main);
-    font-size: 0.82rem;
-    font-weight: 950;
-    line-height: 1.18;
+    font-size: 0.9rem;
+    font-weight: 850;
+    line-height: 1.45;
     overflow-wrap: break-word;
     text-wrap: balance;
 }
 
 .matrix-placement-quadrant-header p {
-    margin: 0;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    font-weight: 650;
-    line-height: 1.3;
-    overflow-wrap: break-word;
-    text-wrap: balance;
+    display: none;
 }
 
 .matrix-placement-drop-zone {
@@ -162,7 +158,7 @@
     flex-direction: column;
     gap: 10px;
     min-height: 126px;
-    padding: 12px;
+    padding: 0 13px 13px;
     cursor: pointer;
     transition:
         background var(--transition-fast),
@@ -171,10 +167,15 @@
 }
 
 .matrix-placement-drop-zone-empty {
-    justify-content: center;
+    justify-content: flex-start;
 }
 
-.matrix-placement-drop-zone-over,
+.matrix-placement-drop-zone-over {
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+}
+
 .matrix-placement-drop-zone-selectable:hover,
 .matrix-placement-drop-zone:focus-visible {
     background: color-mix(in srgb, var(--accent) 7%, var(--panel-strong));
@@ -193,16 +194,17 @@
 
 .matrix-placement-empty-slot {
     display: grid;
-    min-height: 58px;
+    min-height: 88px;
     place-items: center;
-    border: 1px dashed color-mix(in srgb, var(--accent) 42%, var(--line));
-    border-radius: var(--radius-xs);
-    background: color-mix(in srgb, var(--panel-strong) 68%, transparent);
-    color: var(--accent);
+    border: 1.2px dashed var(--matrix-placement-placeholder-border);
+    border-radius: 8px;
+    background: var(--matrix-placement-placeholder-bg);
+    color: var(--text-muted);
     padding: 12px;
     text-align: center;
-    font-size: 0.82rem;
+    font-size: 0.86rem;
     font-weight: 900;
+    line-height: 1.2;
 }
 
 .matrix-placement-empty-slot-feedback {
@@ -259,5 +261,9 @@
 }
 
 .matrix-placement-empty-slot-arrow {
-    display: none;
+    display: block;
+    color: var(--accent);
+    font-size: 1.7rem;
+    line-height: 1;
+    margin-bottom: 8px;
 }
