@@ -162,10 +162,13 @@
     position: absolute;
     top: 50%;
     right: 8px;
-    display: inline-grid;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
-    place-items: center;
+    padding: 0;
+    line-height: 0;
     transform: translateY(-50%);
     border: 0;
     border-radius: var(--radius-full);
@@ -187,6 +190,7 @@
 }
 
 .matrix-placement-placed-card-remove svg {
+    display: block;
     width: 14px;
     height: 14px;
 }

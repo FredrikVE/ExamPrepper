@@ -49,6 +49,10 @@ function MatrixPlacementPlacedItemCardContent(props) {
         props.onRemove();
     };
 
+    const stopRemovePointerDown = (event) => {
+        event.stopPropagation();
+    };
+
     return (
         <div
             ref={props.dndRef}
@@ -65,6 +69,7 @@ function MatrixPlacementPlacedItemCardContent(props) {
             <button
                 type="button"
                 className="matrix-placement-placed-card-remove"
+                onPointerDown={stopRemovePointerDown}
                 onClick={handleRemoveClick}
                 aria-label={props.t.matrixPlacementRemoveAnswer}
             >

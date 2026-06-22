@@ -52,6 +52,10 @@ function CategorySortPlacedItemCardContent(props) {
         props.onRemove();
     };
 
+    const stopRemovePointerDown = (event) => {
+        event.stopPropagation();
+    };
+
     return (
         <div
             ref={props.dndRef}
@@ -68,6 +72,7 @@ function CategorySortPlacedItemCardContent(props) {
             <button
                 type="button"
                 className="drag-categorize-placed-card-remove"
+                onPointerDown={stopRemovePointerDown}
                 onClick={handleRemoveClick}
                 aria-label={props.t.dragCategorizeRemoveAnswer}
             >

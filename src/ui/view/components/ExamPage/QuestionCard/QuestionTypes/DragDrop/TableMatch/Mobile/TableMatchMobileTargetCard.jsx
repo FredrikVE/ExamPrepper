@@ -1,5 +1,4 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobileTargetCard.jsx
-import { X } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import Droppable from "../../Shared/Dnd/Droppable.jsx";
@@ -71,18 +70,11 @@ function TableMatchMobileTargetCardContent(props) {
 									card={props.selectedCard}
 									dndRef={dndRef}
 									isDragging={isDragging}
+									onClear={props.onClear}
+									clearLabel={props.t.dragDropClearAnswer}
 								/>
 							)}
 						</Draggable>
-
-						<button
-							type="button"
-							className="table-match-mobile-clear-button"
-							onClick={handleClearClick(props.onClear)}
-							aria-label={props.t.dragDropClearAnswer}
-						>
-							<X aria-hidden="true" />
-						</button>
 					</div>
 				) : (
 					<span className="table-match-mobile-drop-label">
@@ -94,12 +86,6 @@ function TableMatchMobileTargetCardContent(props) {
 	);
 }
 
-const handleClearClick = (onClear) => {
-	return (event) => {
-		event.stopPropagation();
-		onClear();
-	};
-};
 
 const getCardClassName = (isDropTarget) => {
 	let className = "table-match-mobile-target-card";

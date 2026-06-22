@@ -29,6 +29,10 @@ export default function TableMatchAnswerSlot(props) {
         props.onClear();
     };
 
+    const stopClearPointerDown = (event) => {
+        event.stopPropagation();
+    };
+
     const handleSelectClick = (event) => {
         event.stopPropagation();
     };
@@ -44,6 +48,7 @@ export default function TableMatchAnswerSlot(props) {
             <SelectedAnswerPill
                 selectedCard={props.selectedCard}
                 onCardDragStart={props.onSelectedCardDragStart}
+                onClearPointerDown={stopClearPointerDown}
                 onClearClick={handleClearClick}
                 clearLabel={props.t.dragDropClearAnswer}
             />
@@ -80,7 +85,7 @@ export default function TableMatchAnswerSlot(props) {
     );
 }
 
-const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearClick, clearLabel }) => {
+const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearPointerDown, onClearClick, clearLabel }) => {
     return (
         <div
             className="drag-drop-selected-pill"
@@ -96,6 +101,7 @@ const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearClick, clear
             <button
                 type="button"
                 className="drag-drop-clear-button"
+                onPointerDown={onClearPointerDown}
                 onClick={onClearClick}
                 aria-label={clearLabel}
             >

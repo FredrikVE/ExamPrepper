@@ -22,6 +22,7 @@ export default function SequenceOrderBoard(props) {
                         accept={props.accept}
                         slotDropTargetIdPrefix={props.slotDropTargetIdPrefix}
                         onDropZoneClick={props.onDropZoneClick}
+                        onSequenceItemRemove={props.onSequenceItemRemove}
                         t={props.t}
                     />
                 ))}
@@ -42,6 +43,7 @@ function SequenceOrderSlotGroup(props) {
                 accept={props.accept}
                 slotDropTargetIdPrefix={props.slotDropTargetIdPrefix}
                 onDropZoneClick={props.onDropZoneClick}
+                onSequenceItemRemove={props.onSequenceItemRemove}
                 t={props.t}
             />
 

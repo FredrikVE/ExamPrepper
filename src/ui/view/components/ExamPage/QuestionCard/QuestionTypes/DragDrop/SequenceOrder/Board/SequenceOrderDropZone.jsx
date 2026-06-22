@@ -60,6 +60,8 @@ function SequenceOrderDropZoneContent(props) {
                     sequencePositionNumber={props.positionNumber}
                     disabled={props.feedbackMode}
                     type={props.accept}
+                    onRemove={() => props.onSequenceItemRemove(props.selectedSequenceItem.id)}
+                    removeLabel={props.t.sequenceOrderRemoveAnswer}
                 />
             ) : (
                 <>
