@@ -12,7 +12,7 @@ export default function SequenceOrderPlacedItemCard(props) {
             data={{ sequenceItem: props.sequenceItem, sourceIndex: props.sourceIndex }}
             disabled={props.disabled}
         >
-            {({ ref: dndRef, isDragging }) => (
+            {({ ref: dndRef, handleRef, isDragging }) => (
                 <div ref={dndRef} className={getPlacedCardClassName(isDragging)}>
                     <span className="sequence-order-placed-card-number" aria-hidden="true">
                         {props.sequencePositionNumber}
@@ -22,7 +22,7 @@ export default function SequenceOrderPlacedItemCard(props) {
                         <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
                     </span>
 
-                    <DragGrip className="sequence-order-placed-card-grip" />
+                    <DragGrip handleRef={handleRef} className="sequence-order-placed-card-grip" />
                 </div>
             )}
         </Draggable>

@@ -12,10 +12,11 @@ export default function CategorySortPlacedItemCard(props) {
             type={props.type}
             data={{ item: props.item, sourceCategoryId: props.sourceCategoryId }}
         >
-            {({ ref: dndRef, isDragging }) => (
+            {({ ref: dndRef, handleRef, isDragging }) => (
                 <CategorySortPlacedItemCardContent
                     {...props}
                     dndRef={dndRef}
+                    dndHandleRef={handleRef}
                     isDragging={isDragging}
                 />
             )}
@@ -61,7 +62,7 @@ function CategorySortPlacedItemCardContent(props) {
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <DragGrip className="drag-categorize-placed-card-grip" />
+            <DragGrip handleRef={props.dndHandleRef} className="drag-categorize-placed-card-grip" />
 
             <span className="drag-categorize-placed-card-text"><FormattedText text={getItemLabel(props.item)} /></span>
 

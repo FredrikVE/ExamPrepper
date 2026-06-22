@@ -66,10 +66,11 @@ function TableMatchMobileTargetCardContent(props) {
 							type={props.accept}
 							data={{ card: props.selectedCard, sourceTargetId: props.target.id }}
 						>
-							{({ ref: dndRef, isDragging }) => (
+							{({ ref: dndRef, handleRef, isDragging }) => (
 								<TableMatchMobilePlacedCard
 									card={props.selectedCard}
 									dndRef={dndRef}
+									dndHandleRef={handleRef}
 									isDragging={isDragging}
 								/>
 							)}

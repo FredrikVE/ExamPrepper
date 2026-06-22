@@ -14,7 +14,7 @@ export default function TableMatchMobilePlacedCard(props) {
 				<FormattedText text={props.card.text} />
 			</span>
 
-			<DragGrip className="table-match-mobile-card-grip" />
+			<DragGrip handleRef={props.dndHandleRef} className="table-match-mobile-card-grip" />
 		</div>
 	);
 }

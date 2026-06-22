@@ -12,10 +12,11 @@ export default function MatrixPlacementPlacedItemCard(props) {
             type={props.type}
             data={{ item: props.item, sourceQuadrantId: props.sourceQuadrantId }}
         >
-            {({ ref: dndRef, isDragging }) => (
+            {({ ref: dndRef, handleRef, isDragging }) => (
                 <MatrixPlacementPlacedItemCardContent
                     {...props}
                     dndRef={dndRef}
+                    dndHandleRef={handleRef}
                     isDragging={isDragging}
                 />
             )}
@@ -58,7 +59,7 @@ function MatrixPlacementPlacedItemCardContent(props) {
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <DragGrip className="matrix-placement-placed-card-grip" />
+            <DragGrip handleRef={props.dndHandleRef} className="matrix-placement-placed-card-grip" />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
 
