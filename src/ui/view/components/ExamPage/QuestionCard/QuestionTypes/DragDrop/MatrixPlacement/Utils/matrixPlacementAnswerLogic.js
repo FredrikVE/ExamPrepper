@@ -97,6 +97,7 @@ export function normalizeMatrixPlacementAnswer(question, answer) {
             continue;
         }
 
+        removeExistingItemInQuadrant(normalizedAnswer, quadrantId);
         normalizedAnswer[itemId] = quadrantId;
     }
 
@@ -110,10 +111,19 @@ export function placeItemInQuadrant(question, answer, itemId, quadrantId) {
         return safeAnswer;
     }
 
-    return normalizeMatrixPlacementAnswer(question, {
-        ...safeAnswer,
-        [itemId]: quadrantId
-    });
+    const nextAnswer = {};
+
+    for (const [placedItemId, selectedQuadrantId] of Object.entries(safeAnswer)) {
+        if (placedItemId === itemId || selectedQuadrantId === quadrantId) {
+            continue;
+        }
+
+        nextAnswer[placedItemId] = selectedQuadrantId;
+    }
+
+    nextAnswer[itemId] = quadrantId;
+
+    return normalizeMatrixPlacementAnswer(question, nextAnswer);
 }
 
 export function removeItemFromMatrix(question, answer, itemId) {
@@ -234,6 +244,15 @@ export function isPlainObject(value) {
     }
 
     return true;
+}
+
+function removeExistingItemInQuadrant(answer, quadrantId) {
+    for (const itemId in answer) {
+        if (answer[itemId] === quadrantId) {
+            delete answer[itemId];
+            return;
+        }
+    }
 }
 
 function getAxisRank({ quadrant, axis, axisName, highRank, lowRank }) {
