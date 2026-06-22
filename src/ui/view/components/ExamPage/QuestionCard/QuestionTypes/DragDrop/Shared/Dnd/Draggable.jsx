@@ -1,7 +1,7 @@
-// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/MobileDnd/MobileDraggable.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/Dnd/Draggable.jsx
 import { useDraggable } from "@dnd-kit/react";
 
-export default function MobileDraggable(props) {
+export default function Draggable(props) {
 	const {
 		draggable,
 		isDragging,

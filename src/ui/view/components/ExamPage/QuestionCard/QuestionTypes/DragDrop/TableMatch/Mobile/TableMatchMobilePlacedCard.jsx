@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobilePlacedCard.jsx
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export default function TableMatchMobilePlacedCard(props) {
 	const className = getClassName(props.isDragging);
@@ -14,7 +14,7 @@ export default function TableMatchMobilePlacedCard(props) {
 				<FormattedText text={props.card.text} />
 			</span>
 
-			<MobileDragGrip className="table-match-mobile-card-grip" />
+			<DragGrip className="table-match-mobile-card-grip" />
 		</div>
 	);
 }

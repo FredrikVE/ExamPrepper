@@ -157,7 +157,7 @@
 		transform: none;
 	}
 
-	.mobile-dnd-drag-overlay .table-match-mobile-card {
+	.dnd-drag-overlay .table-match-mobile-card {
 		width: 100%;
 		min-height: inherit;
 		box-shadow: var(--table-match-mobile-overlay-shadow);

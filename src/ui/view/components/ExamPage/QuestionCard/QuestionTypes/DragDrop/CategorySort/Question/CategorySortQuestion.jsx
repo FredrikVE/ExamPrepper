@@ -2,11 +2,11 @@
 import CategorySortCategoryGrid from "../Board/CategorySortCategoryGrid.jsx";
 import CategorySortItemBank from "../ItemBank/CategorySortItemBank.jsx";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
-import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
-import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useCategorySortQuestion } from "./useCategorySortQuestion.js";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";
 
@@ -18,7 +18,7 @@ export default function CategorySortQuestion(props) {
     const categorySort = useCategorySortQuestion(props);
 
     return (
-        <MobileDndProvider onMobileDndDrop={handleCategorySortDndDrop(categorySort)}>
+        <DndProvider onDndDrop={handleCategorySortDndDrop(categorySort)}>
             <div className={categorySort.rootClassName}>
                 <CategorySortItemBank
                     question={props.question}
@@ -52,7 +52,7 @@ export default function CategorySortQuestion(props) {
                 />
 
                 {!categorySort.feedbackMode ? (
-                    <MobileDragOverlay>
+                    <DragOverlay>
                         {({ dragSourceContext }) => {
                             if (!dragSourceContext?.item) {
                                 return null;
@@ -60,17 +60,17 @@ export default function CategorySortQuestion(props) {
 
                             return <CategorySortDragOverlayCard item={dragSourceContext.item} />;
                         }}
-                    </MobileDragOverlay>
+                    </DragOverlay>
                 ) : null}
             </div>
-        </MobileDndProvider>
+        </DndProvider>
     );
 }
 
 function CategorySortDragOverlayCard(props) {
     return (
         <div className="drag-categorize-item-card drag-categorize-drag-overlay-card">
-            <MobileDragGrip className="drag-categorize-item-card-grip" />
+            <DragGrip className="drag-categorize-item-card-grip" />
 
             <span className="drag-categorize-item-card-text">
                 <FormattedText text={getItemLabel(props.item)} />

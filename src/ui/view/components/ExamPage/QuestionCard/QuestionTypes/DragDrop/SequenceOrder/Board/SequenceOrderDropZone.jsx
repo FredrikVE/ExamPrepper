@@ -1,10 +1,10 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderDropZone.jsx
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import SequenceOrderPlacedItemCard from "./SequenceOrderPlacedItemCard.jsx";
 
 export default function SequenceOrderDropZone(props) {
     return (
-        <MobileDroppable
+        <Droppable
             dropTargetId={`${props.slotDropTargetIdPrefix}${props.index}`}
             acceptedDragSourceType={props.acceptedDragSourceType}
             dropTargetContext={{ targetIndex: props.index }}
@@ -16,7 +16,7 @@ export default function SequenceOrderDropZone(props) {
                     isDropTarget={isDropTarget}
                 />
             )}
-        </MobileDroppable>
+        </Droppable>
     );
 }
 

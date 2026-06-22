@@ -1,7 +1,7 @@
-// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/MobileDnd/useMobileDndOperation.js
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/Dnd/useDndOperation.js
 import { useDragOperation } from "@dnd-kit/react";
 
-export default function useMobileDndOperation() {
+export default function useDndOperation() {
 	const dragOperation = useDragOperation();
 	const dragSource = dragOperation.source;
 	const dropTarget = dragOperation.target;

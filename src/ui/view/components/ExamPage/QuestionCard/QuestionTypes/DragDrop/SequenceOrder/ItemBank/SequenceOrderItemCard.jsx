@@ -1,12 +1,12 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/ItemBank/SequenceOrderItemCard.jsx
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export default function SequenceOrderItemCard(props) {
     return (
-        <MobileDraggable
+        <Draggable
             dragSourceId={props.sequenceItem.id}
             dragSourceType={props.dragSourceType}
             dragSourceContext={{ sequenceItem: props.sequenceItem, sourceIndex: null }}
@@ -31,11 +31,11 @@ export default function SequenceOrderItemCard(props) {
                             <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
                         </span>
 
-                        <MobileDragGrip className="sequence-order-item-card-grip" />
+                        <DragGrip className="sequence-order-item-card-grip" />
                     </button>
                 );
             }}
-        </MobileDraggable>
+        </Draggable>
     );
 }
 

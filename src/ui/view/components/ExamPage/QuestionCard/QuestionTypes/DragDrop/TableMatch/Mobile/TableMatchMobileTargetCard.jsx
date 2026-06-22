@@ -1,13 +1,13 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobileTargetCard.jsx
 import { X } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
 
 export default function TableMatchMobileTargetCard(props) {
 	return (
-		<MobileDroppable
+		<Droppable
 			dropTargetId={props.target.id}
 			acceptedDragSourceType={props.acceptedDragSourceType}
 			dropTargetContext={{ target: props.target }}
@@ -19,7 +19,7 @@ export default function TableMatchMobileTargetCard(props) {
 					isDropTarget={isDropTarget}
 				/>
 			)}
-		</MobileDroppable>
+		</Droppable>
 	);
 }
 
@@ -61,7 +61,7 @@ function TableMatchMobileTargetCardContent(props) {
 			<div className={targetClassName}>
 				{props.selectedCard ? (
 					<div className="table-match-mobile-filled-target">
-						<MobileDraggable
+						<Draggable
 							dragSourceId={props.selectedCard.id}
 							dragSourceType={props.acceptedDragSourceType}
 							dragSourceContext={{ card: props.selectedCard, sourceTargetId: props.target.id }}
@@ -73,7 +73,7 @@ function TableMatchMobileTargetCardContent(props) {
 									isDragging={isDragging}
 								/>
 							)}
-						</MobileDraggable>
+						</Draggable>
 
 						<button
 							type="button"

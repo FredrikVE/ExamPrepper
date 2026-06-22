@@ -1,7 +1,7 @@
-// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/MobileDnd/MobileDndProvider.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/Dnd/DndProvider.jsx
 import { DragDropProvider } from "@dnd-kit/react";
 
-export default function MobileDndProvider(props) {
+export default function DndProvider(props) {
 	const handleDragEnd = (event) => {
 		if (event.canceled) {
 			return;
@@ -14,7 +14,7 @@ export default function MobileDndProvider(props) {
 			return;
 		}
 
-		props.onMobileDndDrop({
+		props.onDndDrop({
 			dragSourceId: dragSource.id,
 			dropTargetId: dropTarget.id,
 			dragSourceContext: dragSource.data,

@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/ItemBank/MatrixPlacementItemBank.jsx
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard.jsx";
 import MatrixPlacementItemCard from "./MatrixPlacementItemCard.jsx";
 
@@ -38,7 +38,7 @@ export default function MatrixPlacementItemBank(props) {
                     {props.items.map((item) => renderItem(props, item))}
                 </div>
             ) : (
-                <MobileDroppable
+                <Droppable
                     dropTargetId={props.itemBankDropTargetId}
                     acceptedDragSourceType={props.acceptedDragSourceType}
                 >
@@ -47,7 +47,7 @@ export default function MatrixPlacementItemBank(props) {
                             {props.itemBankItems.map((itemBankEntry) => renderItemBankEntry(props, itemBankEntry))}
                         </div>
                     )}
-                </MobileDroppable>
+                </Droppable>
             )}
 
             {!props.feedbackMode ? (

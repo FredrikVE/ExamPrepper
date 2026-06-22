@@ -1,13 +1,13 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortPlacedItemCard.jsx
 import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export default function CategorySortPlacedItemCard(props) {
     return (
-        <MobileDraggable
+        <Draggable
             dragSourceId={props.item.id}
             dragSourceType={props.dragSourceType}
             dragSourceContext={{ item: props.item, sourceCategoryId: props.sourceCategoryId }}
@@ -19,7 +19,7 @@ export default function CategorySortPlacedItemCard(props) {
                     isDragging={isDragging}
                 />
             )}
-        </MobileDraggable>
+        </Draggable>
     );
 }
 
@@ -61,7 +61,7 @@ function CategorySortPlacedItemCardContent(props) {
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <MobileDragGrip className="drag-categorize-placed-card-grip" />
+            <DragGrip className="drag-categorize-placed-card-grip" />
 
             <span className="drag-categorize-placed-card-text"><FormattedText text={getItemLabel(props.item)} /></span>
 

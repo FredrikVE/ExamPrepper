@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/ItemBank/SequenceOrderItemBank.jsx
 import { ListOrdered } from "lucide-react";
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import SequenceOrderItemCard from "./SequenceOrderItemCard.jsx";
 
 export default function SequenceOrderItemBank(props) {
@@ -20,7 +20,7 @@ export default function SequenceOrderItemBank(props) {
                 <ListOrdered className="sequence-order-item-bank-icon" aria-hidden="true" />
             </div>
 
-            <MobileDroppable
+            <Droppable
                 dropTargetId={props.cardBankDropTargetId}
                 acceptedDragSourceType={props.acceptedDragSourceType}
             >
@@ -51,7 +51,7 @@ export default function SequenceOrderItemBank(props) {
                         })}
                     </div>
                 )}
-            </MobileDroppable>
+            </Droppable>
 
             <p className="sequence-order-item-bank-hint">
                 {props.t.sequenceOrderAlternativeBankHint}

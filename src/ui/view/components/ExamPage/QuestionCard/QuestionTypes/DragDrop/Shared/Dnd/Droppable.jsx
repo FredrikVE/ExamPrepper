@@ -1,7 +1,7 @@
-// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/MobileDnd/MobileDroppable.jsx
+// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/Dnd/Droppable.jsx
 import { useDroppable } from "@dnd-kit/react";
 
-export default function MobileDroppable(props) {
+export default function Droppable(props) {
 	const { droppable, isDropTarget, ref } = useDroppable({
 		id: props.dropTargetId,
 		accept: props.acceptedDragSourceType,

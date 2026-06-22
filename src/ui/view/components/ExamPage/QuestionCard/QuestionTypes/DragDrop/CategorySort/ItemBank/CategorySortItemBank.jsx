@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/ItemBank/CategorySortItemBank.jsx
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import CategorySortFeedbackCard from "../Feedback/CategorySortFeedbackCard.jsx";
 import CategorySortItemCard from "./CategorySortItemCard.jsx";
 
@@ -22,7 +22,7 @@ export default function CategorySortItemBank(props) {
                     {props.items.map((item) => renderItem(props, item))}
                 </div>
             ) : (
-                <MobileDroppable
+                <Droppable
                     dropTargetId={props.itemBankDropTargetId}
                     acceptedDragSourceType={props.acceptedDragSourceType}
                 >
@@ -31,7 +31,7 @@ export default function CategorySortItemBank(props) {
                             {props.itemBankItems.map((itemBankEntry) => renderItemBankEntry(props, itemBankEntry))}
                         </div>
                     )}
-                </MobileDroppable>
+                </Droppable>
             )}
 
             <p className="drag-categorize-item-bank-hint">

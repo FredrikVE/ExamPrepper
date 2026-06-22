@@ -4,11 +4,11 @@ import SequenceOrderFeedbackPanel from "../Feedback/SequenceOrderFeedbackPanel.j
 import SequenceOrderItemBank from "../ItemBank/SequenceOrderItemBank.jsx";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
 import TableMatchScoreSummary from "../../TableMatch/Feedback/TableMatchScoreSummary.jsx";
-import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
-import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useSequenceOrderQuestion } from "./useSequenceOrderQuestion.js";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export { getSequenceOrderStats } from "../Utils/sequenceOrderFeedbackStats.js";
 
@@ -20,7 +20,7 @@ export default function SequenceOrderQuestion(props) {
     const sequenceOrder = useSequenceOrderQuestion(props);
 
     return (
-        <MobileDndProvider onMobileDndDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
+        <DndProvider onDndDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
             <div className={sequenceOrder.rootClassName}>
                 {sequenceOrder.feedbackMode ? (
                     <TableMatchScoreSummary stats={sequenceOrder.stats} t={props.t} />
@@ -51,7 +51,7 @@ export default function SequenceOrderQuestion(props) {
                             t={props.t}
                         />
 
-                        <MobileDragOverlay>
+                        <DragOverlay>
                             {({ dragSourceContext }) => {
                                 if (!dragSourceContext?.sequenceItem) {
                                     return null;
@@ -59,7 +59,7 @@ export default function SequenceOrderQuestion(props) {
 
                                 return <SequenceOrderDragOverlayCard sequenceItem={dragSourceContext.sequenceItem} />;
                             }}
-                        </MobileDragOverlay>
+                        </DragOverlay>
                     </>
                 ) : (
                     <SequenceOrderFeedbackPanel
@@ -75,7 +75,7 @@ export default function SequenceOrderQuestion(props) {
                     />
                 )}
             </div>
-        </MobileDndProvider>
+        </DndProvider>
     );
 }
 
@@ -86,7 +86,7 @@ function SequenceOrderDragOverlayCard(props) {
                 <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
             </span>
 
-            <MobileDragGrip className="sequence-order-item-card-grip" />
+            <DragGrip className="sequence-order-item-card-grip" />
         </div>
     );
 }

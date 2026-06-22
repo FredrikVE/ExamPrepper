@@ -1,8 +1,8 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobileBoard.jsx
-import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
-import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
-import useMobileDndOperation from "../../Shared/MobileDnd/useMobileDndOperation.js";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
+import useDndOperation from "../../Shared/Dnd/useDndOperation.js";
 import TableMatchMobileCard from "./TableMatchMobileCard.jsx";
 import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
 import TableMatchMobileTargetCard from "./TableMatchMobileTargetCard.jsx";
@@ -12,14 +12,14 @@ const TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID = "table-match-mobile-card-ban
 
 export default function TableMatchMobileBoard(props) {
 	return (
-		<MobileDndProvider onMobileDndDrop={handleMobileDndDrop(props)}>
+		<DndProvider onDndDrop={handleDndDrop(props)}>
 			<TableMatchMobileBoardContent {...props} />
-		</MobileDndProvider>
+		</DndProvider>
 	);
 }
 
 function TableMatchMobileBoardContent(props) {
-	const mobileDndOperation = useMobileDndOperation();
+	const dndOperation = useDndOperation();
 	const targets = Array.isArray(props.question?.targets)
 		? props.question.targets
 		: [];
@@ -31,7 +31,7 @@ function TableMatchMobileBoardContent(props) {
 					{props.t.dragDropCardBankTitle}
 				</h4>
 
-				<MobileDroppable
+				<Droppable
 					dropTargetId={TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID}
 					acceptedDragSourceType={TABLE_MATCH_MOBILE_CARD_TYPE}
 				>
@@ -53,7 +53,7 @@ function TableMatchMobileBoardContent(props) {
 							))}
 						</div>
 					)}
-				</MobileDroppable>
+				</Droppable>
 			</div>
 
 			<div className="table-match-mobile-column table-match-mobile-targets-column">
@@ -71,7 +71,7 @@ function TableMatchMobileBoardContent(props) {
 								key={target.id}
 								target={target}
 								selectedCard={selectedCard}
-								hasActiveCard={Boolean(props.selectedCardId) || mobileDndOperation.hasDragSource}
+								hasActiveCard={Boolean(props.selectedCardId) || dndOperation.hasDragSource}
 								acceptedDragSourceType={TABLE_MATCH_MOBILE_CARD_TYPE}
 								onTargetClick={() => props.onTargetClick(target.id)}
 								onClear={() => props.onClearTarget(target.id)}
@@ -82,7 +82,7 @@ function TableMatchMobileBoardContent(props) {
 				</div>
 			</div>
 
-			<MobileDragOverlay>
+			<DragOverlay>
 				{({ dragSourceContext }) => {
 					if (!dragSourceContext?.card) {
 						return null;
@@ -90,12 +90,12 @@ function TableMatchMobileBoardContent(props) {
 
 					return <TableMatchMobilePlacedCard card={dragSourceContext.card} />;
 				}}
-			</MobileDragOverlay>
+			</DragOverlay>
 		</section>
 	);
 }
 
-const handleMobileDndDrop = (props) => {
+const handleDndDrop = (props) => {
 	return ({ dragSourceId, dropTargetId, dragSourceContext }) => {
 		if (dropTargetId === TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID) {
 			if (dragSourceContext?.sourceTargetId) {

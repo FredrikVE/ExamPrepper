@@ -1,11 +1,11 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobileCard.jsx
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export default function TableMatchMobileCard(props) {
 	return (
-		<MobileDraggable
+		<Draggable
 			dragSourceId={props.card.id}
 			dragSourceType={props.dragSourceType}
 			dragSourceContext={props.dragSourceContext}
@@ -27,11 +27,11 @@ export default function TableMatchMobileCard(props) {
 							<FormattedText text={props.card.text} />
 						</span>
 
-						<MobileDragGrip className="table-match-mobile-card-grip" />
+						<DragGrip className="table-match-mobile-card-grip" />
 					</button>
 				);
 			}}
-		</MobileDraggable>
+		</Draggable>
 	);
 }
 

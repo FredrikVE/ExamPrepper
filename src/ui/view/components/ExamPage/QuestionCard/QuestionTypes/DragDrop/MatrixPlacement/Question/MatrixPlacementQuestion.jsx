@@ -2,11 +2,11 @@
 import MatrixPlacementGrid from "../Matrix/MatrixPlacementGrid.jsx";
 import MatrixPlacementItemBank from "../ItemBank/MatrixPlacementItemBank.jsx";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
-import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
-import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
+import DndProvider from "../../Shared/Dnd/DndProvider.jsx";
+import DragOverlay from "../../Shared/Dnd/DragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useMatrixPlacementQuestion } from "./useMatrixPlacementQuestion.js";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export { getMatrixPlacementStats } from "../Utils/matrixPlacementFeedbackStats.js";
 
@@ -18,7 +18,7 @@ export default function MatrixPlacementQuestion(props) {
     const matrixPlacement = useMatrixPlacementQuestion(props);
 
     return (
-        <MobileDndProvider onMobileDndDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
+        <DndProvider onDndDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
             <div className={matrixPlacement.rootClassName}>
                 <div className={getLayoutClassName(matrixPlacement.feedbackMode, matrixPlacement.availableItems.length)}>
                     <MatrixPlacementItemBank
@@ -55,7 +55,7 @@ export default function MatrixPlacementQuestion(props) {
                 </div>
 
                 {!matrixPlacement.feedbackMode ? (
-                    <MobileDragOverlay>
+                    <DragOverlay>
                         {({ dragSourceContext }) => {
                             if (!dragSourceContext?.item) {
                                 return null;
@@ -63,17 +63,17 @@ export default function MatrixPlacementQuestion(props) {
 
                             return <MatrixPlacementDragOverlayCard item={dragSourceContext.item} />;
                         }}
-                    </MobileDragOverlay>
+                    </DragOverlay>
                 ) : null}
             </div>
-        </MobileDndProvider>
+        </DndProvider>
     );
 }
 
 function MatrixPlacementDragOverlayCard(props) {
     return (
         <div className="matrix-placement-item-card matrix-placement-drag-overlay-card">
-            <MobileDragGrip className="matrix-placement-item-card-grip" />
+            <DragGrip className="matrix-placement-item-card-grip" />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
         </div>

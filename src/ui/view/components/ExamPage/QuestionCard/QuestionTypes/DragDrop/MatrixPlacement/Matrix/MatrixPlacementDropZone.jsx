@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementDropZone.jsx
 import { CheckCircle2 } from "lucide-react";
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard.jsx";
 import { getItemLabel, getItemsInQuadrant, getMissingCorrectItemsInQuadrant } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementPlacedItemCard from "./MatrixPlacementPlacedItemCard.jsx";
@@ -12,7 +12,7 @@ export default function MatrixPlacementDropZone(props) {
     }
 
     return (
-        <MobileDroppable
+        <Droppable
             dropTargetId={`${props.quadrantDropTargetIdPrefix}${props.quadrant.id}`}
             acceptedDragSourceType={props.acceptedDragSourceType}
             dropTargetContext={{ quadrantId: props.quadrant.id }}
@@ -24,7 +24,7 @@ export default function MatrixPlacementDropZone(props) {
                     isDropTarget={isDropTarget}
                 />
             )}
-        </MobileDroppable>
+        </Droppable>
     );
 }
 

@@ -1,13 +1,13 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementPlacedItemCard.jsx
 import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export default function MatrixPlacementPlacedItemCard(props) {
     return (
-        <MobileDraggable
+        <Draggable
             dragSourceId={props.item.id}
             dragSourceType={props.dragSourceType}
             dragSourceContext={{ item: props.item, sourceQuadrantId: props.sourceQuadrantId }}
@@ -19,7 +19,7 @@ export default function MatrixPlacementPlacedItemCard(props) {
                     isDragging={isDragging}
                 />
             )}
-        </MobileDraggable>
+        </Draggable>
     );
 }
 
@@ -58,7 +58,7 @@ function MatrixPlacementPlacedItemCardContent(props) {
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <MobileDragGrip className="matrix-placement-placed-card-grip" />
+            <DragGrip className="matrix-placement-placed-card-grip" />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
 

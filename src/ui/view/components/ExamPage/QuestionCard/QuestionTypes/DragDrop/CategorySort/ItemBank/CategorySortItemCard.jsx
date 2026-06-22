@@ -1,14 +1,14 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/ItemBank/CategorySortItemCard.jsx
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
-import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
+import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
-import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
+import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 
 export default function CategorySortItemCard(props) {
     const label = getItemLabel(props.item);
 
     return (
-        <MobileDraggable
+        <Draggable
             dragSourceId={props.item.id}
             dragSourceType={props.dragSourceType}
             dragSourceContext={{ item: props.item, sourceCategoryId: null }}
@@ -29,13 +29,13 @@ export default function CategorySortItemCard(props) {
                         className={className}
                         onClick={props.disabled ? undefined : props.onSelect}
                     >
-                        <MobileDragGrip className="drag-categorize-item-card-grip" />
+                        <DragGrip className="drag-categorize-item-card-grip" />
 
                         <span className="drag-categorize-item-card-text"><FormattedText text={label} /></span>
                     </button>
                 );
             }}
-        </MobileDraggable>
+        </Draggable>
     );
 }
 

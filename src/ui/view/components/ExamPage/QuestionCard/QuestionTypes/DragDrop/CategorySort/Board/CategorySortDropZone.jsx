@@ -1,5 +1,5 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortDropZone.jsx
-import MobileDroppable from "../../Shared/MobileDnd/MobileDroppable.jsx";
+import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import CategorySortFeedbackCard from "../Feedback/CategorySortFeedbackCard.jsx";
 import CategorySortPlacedItemCard from "./CategorySortPlacedItemCard.jsx";
 
@@ -9,7 +9,7 @@ export default function CategorySortDropZone(props) {
     }
 
     return (
-        <MobileDroppable
+        <Droppable
             dropTargetId={`${props.categoryDropTargetIdPrefix}${props.category.id}`}
             acceptedDragSourceType={props.acceptedDragSourceType}
             dropTargetContext={{ categoryId: props.category.id }}
@@ -21,7 +21,7 @@ export default function CategorySortDropZone(props) {
                     isDropTarget={isDropTarget}
                 />
             )}
-        </MobileDroppable>
+        </Droppable>
     );
 }
 
