@@ -23,7 +23,7 @@ describe("SubjectRepository", () => {
             code: "IN2000",
             name: "Software Engineering",
             faculty: "Informatikk",
-            icon: "code",
+            iconKey: "shield",
             isVisible: false
         }
     ];
@@ -56,6 +56,7 @@ describe("SubjectRepository", () => {
         });
         expect(result[1]).toMatchObject({
             id: "in2000",
+            icon: "shield",
             recommended: false,
             isVisible: false
         });
