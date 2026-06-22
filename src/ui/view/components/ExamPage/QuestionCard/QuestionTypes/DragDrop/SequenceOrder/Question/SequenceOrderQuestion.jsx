@@ -20,7 +20,7 @@ export default function SequenceOrderQuestion(props) {
     const sequenceOrder = useSequenceOrderQuestion(props);
 
     return (
-        <DndProvider onDndDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
+        <DndProvider onDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
             <div className={sequenceOrder.rootClassName}>
                 {sequenceOrder.feedbackMode ? (
                     <TableMatchScoreSummary stats={sequenceOrder.stats} t={props.t} />
@@ -35,7 +35,7 @@ export default function SequenceOrderQuestion(props) {
                             selectedSequenceItemId={sequenceOrder.selectedSequenceItemId}
                             disabled={sequenceOrder.feedbackMode}
                             cardBankDropTargetId={SEQUENCE_ORDER_ITEM_BANK_DROP_TARGET_ID}
-                            acceptedDragSourceType={SEQUENCE_ORDER_ITEM_TYPE}
+                            accept={SEQUENCE_ORDER_ITEM_TYPE}
                             onSequenceItemSelect={sequenceOrder.selectSequenceItem}
                             t={props.t}
                         />
@@ -45,19 +45,19 @@ export default function SequenceOrderQuestion(props) {
                             sequenceItemsById={sequenceOrder.sequenceItemsById}
                             feedbackMode={sequenceOrder.feedbackMode}
                             selectedSequenceItemId={sequenceOrder.selectedSequenceItemId}
-                            acceptedDragSourceType={SEQUENCE_ORDER_ITEM_TYPE}
+                            accept={SEQUENCE_ORDER_ITEM_TYPE}
                             slotDropTargetIdPrefix={SEQUENCE_ORDER_SLOT_DROP_TARGET_ID_PREFIX}
                             onDropZoneClick={sequenceOrder.selectDropZone}
                             t={props.t}
                         />
 
                         <DragOverlay>
-                            {({ dragSourceContext }) => {
-                                if (!dragSourceContext?.sequenceItem) {
+                            {({ sourceData }) => {
+                                if (!sourceData?.sequenceItem) {
                                     return null;
                                 }
 
-                                return <SequenceOrderDragOverlayCard sequenceItem={dragSourceContext.sequenceItem} />;
+                                return <SequenceOrderDragOverlayCard sequenceItem={sourceData.sequenceItem} />;
                             }}
                         </DragOverlay>
                     </>
@@ -92,15 +92,15 @@ function SequenceOrderDragOverlayCard(props) {
 }
 
 const handleSequenceOrderDndDrop = (sequenceOrder) => {
-    return ({ dragSourceId, dropTargetId, dragSourceContext, dropTargetContext }) => {
-        const sequenceItemId = dragSourceContext?.sequenceItem?.id ?? dragSourceId;
+    return ({ sourceId, targetId, sourceData, targetData }) => {
+        const sequenceItemId = sourceData?.sequenceItem?.id ?? sourceId;
 
         if (!sequenceItemId) {
             return;
         }
 
-        if (dropTargetId === SEQUENCE_ORDER_ITEM_BANK_DROP_TARGET_ID) {
-            if (Number.isInteger(dragSourceContext?.sourceIndex)) {
+        if (targetId === SEQUENCE_ORDER_ITEM_BANK_DROP_TARGET_ID) {
+            if (Number.isInteger(sourceData?.sourceIndex)) {
                 sequenceOrder.removeSequenceItemFromAnswer(sequenceItemId);
             }
 
@@ -108,11 +108,11 @@ const handleSequenceOrderDndDrop = (sequenceOrder) => {
             return;
         }
 
-        if (!Number.isInteger(dropTargetContext?.targetIndex)) {
+        if (!Number.isInteger(targetData?.targetIndex)) {
             return;
         }
 
-        sequenceOrder.assignSequenceItem(dropTargetContext.targetIndex, sequenceItemId);
+        sequenceOrder.assignSequenceItem(targetData.targetIndex, sequenceItemId);
         sequenceOrder.clearSelectedSequenceItem();
     };
 };

@@ -8,14 +8,14 @@ import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 export default function MatrixPlacementPlacedItemCard(props) {
     return (
         <Draggable
-            dragSourceId={props.item.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ item: props.item, sourceQuadrantId: props.sourceQuadrantId }}
+            id={props.item.id}
+            type={props.type}
+            data={{ item: props.item, sourceQuadrantId: props.sourceQuadrantId }}
         >
-            {({ draggableRef, isDragging }) => (
+            {({ ref: dndRef, isDragging }) => (
                 <MatrixPlacementPlacedItemCardContent
                     {...props}
-                    draggableRef={draggableRef}
+                    dndRef={dndRef}
                     isDragging={isDragging}
                 />
             )}
@@ -51,7 +51,7 @@ function MatrixPlacementPlacedItemCardContent(props) {
 
     return (
         <div
-            ref={props.draggableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}

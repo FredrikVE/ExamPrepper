@@ -7,18 +7,18 @@ export default function DndProvider(props) {
 			return;
 		}
 
-		const dragSource = event.operation.source;
-		const dropTarget = event.operation.target;
+		const source = event.operation.source;
+		const target = event.operation.target;
 
-		if (!dragSource || !dropTarget) {
+		if (!source || !target) {
 			return;
 		}
 
-		props.onDndDrop({
-			dragSourceId: dragSource.id,
-			dropTargetId: dropTarget.id,
-			dragSourceContext: dragSource.data,
-			dropTargetContext: dropTarget.data
+		props.onDrop({
+			sourceId: source.id,
+			targetId: target.id,
+			sourceData: source.data,
+			targetData: target.data
 		});
 	};
 

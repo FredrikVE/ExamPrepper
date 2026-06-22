@@ -9,12 +9,12 @@ export default function CategorySortItemCard(props) {
 
     return (
         <Draggable
-            dragSourceId={props.item.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ item: props.item, sourceCategoryId: null }}
+            id={props.item.id}
+            type={props.type}
+            data={{ item: props.item, sourceCategoryId: null }}
             disabled={props.disabled}
         >
-            {({ draggableRef, isDragging }) => {
+            {({ ref: dndRef, isDragging }) => {
                 const className = getCardClassName({
                     label,
                     selected: props.selected,
@@ -24,7 +24,7 @@ export default function CategorySortItemCard(props) {
 
                 return (
                     <button
-                        ref={draggableRef}
+                        ref={dndRef}
                         type="button"
                         className={className}
                         onClick={props.disabled ? undefined : props.onSelect}

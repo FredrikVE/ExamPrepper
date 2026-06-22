@@ -18,7 +18,7 @@ export default function CategorySortQuestion(props) {
     const categorySort = useCategorySortQuestion(props);
 
     return (
-        <DndProvider onDndDrop={handleCategorySortDndDrop(categorySort)}>
+        <DndProvider onDrop={handleCategorySortDndDrop(categorySort)}>
             <div className={categorySort.rootClassName}>
                 <CategorySortItemBank
                     question={props.question}
@@ -29,7 +29,7 @@ export default function CategorySortQuestion(props) {
                     expandedItemId={categorySort.expandedItemId}
                     disabled={categorySort.feedbackMode}
                     itemBankDropTargetId={CATEGORY_SORT_ITEM_BANK_DROP_TARGET_ID}
-                    acceptedDragSourceType={CATEGORY_SORT_ITEM_TYPE}
+                    accept={CATEGORY_SORT_ITEM_TYPE}
                     onItemSelect={categorySort.handleItemSelect}
                     onToggleExpanded={categorySort.toggleExpanded}
                     t={props.t}
@@ -42,7 +42,7 @@ export default function CategorySortQuestion(props) {
                     feedbackMode={categorySort.feedbackMode}
                     selectedItemId={categorySort.selectedItemId}
                     expandedItemId={categorySort.expandedItemId}
-                    acceptedDragSourceType={CATEGORY_SORT_ITEM_TYPE}
+                    accept={CATEGORY_SORT_ITEM_TYPE}
                     categoryDropTargetIdPrefix={CATEGORY_SORT_CATEGORY_DROP_TARGET_ID_PREFIX}
                     onCategoryClick={categorySort.handleCategoryClick}
                     onItemSelect={categorySort.handleItemSelect}
@@ -53,12 +53,12 @@ export default function CategorySortQuestion(props) {
 
                 {!categorySort.feedbackMode ? (
                     <DragOverlay>
-                        {({ dragSourceContext }) => {
-                            if (!dragSourceContext?.item) {
+                        {({ sourceData }) => {
+                            if (!sourceData?.item) {
                                 return null;
                             }
 
-                            return <CategorySortDragOverlayCard item={dragSourceContext.item} />;
+                            return <CategorySortDragOverlayCard item={sourceData.item} />;
                         }}
                     </DragOverlay>
                 ) : null}
@@ -80,15 +80,15 @@ function CategorySortDragOverlayCard(props) {
 }
 
 const handleCategorySortDndDrop = (categorySort) => {
-    return ({ dragSourceId, dropTargetId, dragSourceContext, dropTargetContext }) => {
-        const itemId = dragSourceContext?.item?.id ?? dragSourceId;
+    return ({ sourceId, targetId, sourceData, targetData }) => {
+        const itemId = sourceData?.item?.id ?? sourceId;
 
         if (!itemId) {
             return;
         }
 
-        if (dropTargetId === CATEGORY_SORT_ITEM_BANK_DROP_TARGET_ID) {
-            if (dragSourceContext?.sourceCategoryId) {
+        if (targetId === CATEGORY_SORT_ITEM_BANK_DROP_TARGET_ID) {
+            if (sourceData?.sourceCategoryId) {
                 categorySort.removeItem(itemId);
             }
 
@@ -96,11 +96,11 @@ const handleCategorySortDndDrop = (categorySort) => {
             return;
         }
 
-        if (!dropTargetContext?.categoryId) {
+        if (!targetData?.categoryId) {
             return;
         }
 
-        categorySort.assignItem(dropTargetContext.categoryId, itemId);
+        categorySort.assignItem(targetData.categoryId, itemId);
         categorySort.clearSelectedItem();
     };
 };

@@ -8,14 +8,14 @@ import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
 export default function TableMatchMobileTargetCard(props) {
 	return (
 		<Droppable
-			dropTargetId={props.target.id}
-			acceptedDragSourceType={props.acceptedDragSourceType}
-			dropTargetContext={{ target: props.target }}
+			id={props.target.id}
+			accept={props.accept}
+			data={{ target: props.target }}
 		>
-			{({ droppableRef, isDropTarget }) => (
+			{({ ref: dndRef, isDropTarget }) => (
 				<TableMatchMobileTargetCardContent
 					{...props}
-					droppableRef={droppableRef}
+					dndRef={dndRef}
 					isDropTarget={isDropTarget}
 				/>
 			)}
@@ -45,7 +45,7 @@ function TableMatchMobileTargetCardContent(props) {
 
 	return (
 		<article
-			ref={props.droppableRef}
+			ref={props.dndRef}
 			className={cardClassName}
 			role="button"
 			tabIndex={0}
@@ -62,14 +62,14 @@ function TableMatchMobileTargetCardContent(props) {
 				{props.selectedCard ? (
 					<div className="table-match-mobile-filled-target">
 						<Draggable
-							dragSourceId={props.selectedCard.id}
-							dragSourceType={props.acceptedDragSourceType}
-							dragSourceContext={{ card: props.selectedCard, sourceTargetId: props.target.id }}
+							id={props.selectedCard.id}
+							type={props.accept}
+							data={{ card: props.selectedCard, sourceTargetId: props.target.id }}
 						>
-							{({ draggableRef, isDragging }) => (
+							{({ ref: dndRef, isDragging }) => (
 								<TableMatchMobilePlacedCard
 									card={props.selectedCard}
-									draggableRef={draggableRef}
+									dndRef={dndRef}
 									isDragging={isDragging}
 								/>
 							)}

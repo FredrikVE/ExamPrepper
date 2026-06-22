@@ -2,16 +2,15 @@
 import { useDroppable } from "@dnd-kit/react";
 
 export default function Droppable(props) {
-	const { droppable, isDropTarget, ref } = useDroppable({
-		id: props.dropTargetId,
-		accept: props.acceptedDragSourceType,
-		data: props.dropTargetContext,
+	const { isDropTarget, ref } = useDroppable({
+		id: props.id,
+		accept: props.accept,
+		data: props.data,
 		disabled: props.disabled
 	});
 
 	return props.children({
-		dropTarget: droppable,
-		droppableRef: ref,
+		ref,
 		isDropTarget
 	});
 }

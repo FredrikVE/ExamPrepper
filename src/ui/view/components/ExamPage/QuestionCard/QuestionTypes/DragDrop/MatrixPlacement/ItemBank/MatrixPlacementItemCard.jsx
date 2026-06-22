@@ -9,17 +9,17 @@ export default function MatrixPlacementItemCard(props) {
 
     return (
         <Draggable
-            dragSourceId={props.item.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ item: props.item, sourceQuadrantId: null }}
+            id={props.item.id}
+            type={props.type}
+            data={{ item: props.item, sourceQuadrantId: null }}
             disabled={props.disabled}
         >
-            {({ draggableRef, isDragging }) => {
+            {({ ref: dndRef, isDragging }) => {
                 const className = getCardClassName({ selected: props.selected, disabled: props.disabled, isDragging });
 
                 return (
                     <button
-                        ref={draggableRef}
+                        ref={dndRef}
                         type="button"
                         className={className}
                         onClick={props.disabled ? undefined : props.onSelect}

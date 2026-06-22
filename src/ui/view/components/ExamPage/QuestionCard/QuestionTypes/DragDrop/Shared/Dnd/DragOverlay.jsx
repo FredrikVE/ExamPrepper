@@ -4,9 +4,9 @@ import { DragOverlay as DndKitDragOverlay } from "@dnd-kit/react";
 export default function DragOverlay(props) {
 	return (
 		<DndKitDragOverlay className="dnd-drag-overlay" dropAnimation={null}>
-			{(dragSource) => props.children({
-				dragSourceId: dragSource.id,
-				dragSourceContext: dragSource.data
+			{(source) => props.children({
+				sourceId: source.id,
+				sourceData: source.data
 			})}
 		</DndKitDragOverlay>
 	);

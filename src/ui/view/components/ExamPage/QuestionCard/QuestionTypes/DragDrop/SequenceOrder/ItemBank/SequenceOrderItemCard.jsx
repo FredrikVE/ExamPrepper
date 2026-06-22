@@ -7,12 +7,12 @@ import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 export default function SequenceOrderItemCard(props) {
     return (
         <Draggable
-            dragSourceId={props.sequenceItem.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ sequenceItem: props.sequenceItem, sourceIndex: null }}
+            id={props.sequenceItem.id}
+            type={props.type}
+            data={{ sequenceItem: props.sequenceItem, sourceIndex: null }}
             disabled={props.disabled}
         >
-            {({ draggableRef, isDragging }) => {
+            {({ ref: dndRef, isDragging }) => {
                 const className = getItemCardClassName({
                     selected: props.selected,
                     disabled: props.disabled,
@@ -21,7 +21,7 @@ export default function SequenceOrderItemCard(props) {
 
                 return (
                     <button
-                        ref={draggableRef}
+                        ref={dndRef}
                         type="button"
                         className={className}
                         onClick={selectItem(props)}

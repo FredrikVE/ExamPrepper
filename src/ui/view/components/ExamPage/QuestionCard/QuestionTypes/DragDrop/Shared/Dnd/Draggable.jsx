@@ -3,25 +3,19 @@ import { useDraggable } from "@dnd-kit/react";
 
 export default function Draggable(props) {
 	const {
-		draggable,
 		isDragging,
-		isDropping,
-		isDragSource,
 		handleRef,
 		ref
 	} = useDraggable({
-		id: props.dragSourceId,
-		type: props.dragSourceType,
-		data: props.dragSourceContext,
+		id: props.id,
+		type: props.type,
+		data: props.data,
 		disabled: props.disabled
 	});
 
 	return props.children({
-		dragSource: draggable,
-		draggableRef: ref,
-		dragHandleRef: handleRef,
-		isDragging,
-		isDropping,
-		isDragSource
+		ref,
+		handleRef,
+		isDragging
 	});
 }

@@ -5,14 +5,14 @@ import SequenceOrderPlacedItemCard from "./SequenceOrderPlacedItemCard.jsx";
 export default function SequenceOrderDropZone(props) {
     return (
         <Droppable
-            dropTargetId={`${props.slotDropTargetIdPrefix}${props.index}`}
-            acceptedDragSourceType={props.acceptedDragSourceType}
-            dropTargetContext={{ targetIndex: props.index }}
+            id={`${props.slotDropTargetIdPrefix}${props.index}`}
+            accept={props.accept}
+            data={{ targetIndex: props.index }}
         >
-            {({ droppableRef, isDropTarget }) => (
+            {({ ref: dndRef, isDropTarget }) => (
                 <SequenceOrderDropZoneContent
                     {...props}
-                    droppableRef={droppableRef}
+                    dndRef={dndRef}
                     isDropTarget={isDropTarget}
                 />
             )}
@@ -45,7 +45,7 @@ function SequenceOrderDropZoneContent(props) {
 
     return (
         <div
-            ref={props.droppableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}
@@ -59,7 +59,7 @@ function SequenceOrderDropZoneContent(props) {
                     sourceIndex={props.index}
                     sequencePositionNumber={props.positionNumber}
                     disabled={props.feedbackMode}
-                    dragSourceType={props.acceptedDragSourceType}
+                    type={props.accept}
                 />
             ) : (
                 <>

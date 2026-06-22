@@ -10,14 +10,14 @@ export default function CategorySortDropZone(props) {
 
     return (
         <Droppable
-            dropTargetId={`${props.categoryDropTargetIdPrefix}${props.category.id}`}
-            acceptedDragSourceType={props.acceptedDragSourceType}
-            dropTargetContext={{ categoryId: props.category.id }}
+            id={`${props.categoryDropTargetIdPrefix}${props.category.id}`}
+            accept={props.accept}
+            data={{ categoryId: props.category.id }}
         >
-            {({ droppableRef, isDropTarget }) => (
+            {({ ref: dndRef, isDropTarget }) => (
                 <CategorySortDropZoneContent
                     {...props}
-                    droppableRef={droppableRef}
+                    dndRef={dndRef}
                     isDropTarget={isDropTarget}
                 />
             )}
@@ -45,7 +45,7 @@ function CategorySortDropZoneContent(props) {
 
     return (
         <div
-            ref={props.droppableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}
@@ -80,7 +80,7 @@ function CategorySortDropZoneContent(props) {
                         item={item}
                         selected={props.selectedItemId === itemId}
                         sourceCategoryId={props.category.id}
-                        dragSourceType={props.acceptedDragSourceType}
+                        type={props.accept}
                         onSelect={() => props.onItemSelect(itemId)}
                         onRemove={() => props.onItemRemove(itemId)}
                         t={props.t}

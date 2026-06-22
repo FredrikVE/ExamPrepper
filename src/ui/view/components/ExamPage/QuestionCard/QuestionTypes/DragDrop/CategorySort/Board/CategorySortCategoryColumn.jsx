@@ -19,7 +19,7 @@ export default function CategorySortCategoryColumn(props) {
                 feedbackMode={props.feedbackMode}
                 selectedItemId={props.selectedItemId}
                 expandedItemId={props.expandedItemId}
-                acceptedDragSourceType={props.acceptedDragSourceType}
+                accept={props.accept}
                 categoryDropTargetIdPrefix={props.categoryDropTargetIdPrefix}
                 onClick={props.onCategoryClick}
                 onItemSelect={props.onItemSelect}

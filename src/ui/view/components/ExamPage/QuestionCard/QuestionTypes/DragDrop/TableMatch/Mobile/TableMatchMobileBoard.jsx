@@ -12,7 +12,7 @@ const TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID = "table-match-mobile-card-ban
 
 export default function TableMatchMobileBoard(props) {
 	return (
-		<DndProvider onDndDrop={handleDndDrop(props)}>
+		<DndProvider onDrop={handleDndDrop(props)}>
 			<TableMatchMobileBoardContent {...props} />
 		</DndProvider>
 	);
@@ -32,12 +32,12 @@ function TableMatchMobileBoardContent(props) {
 				</h4>
 
 				<Droppable
-					dropTargetId={TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID}
-					acceptedDragSourceType={TABLE_MATCH_MOBILE_CARD_TYPE}
+					id={TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID}
+					accept={TABLE_MATCH_MOBILE_CARD_TYPE}
 				>
-					{({ droppableRef, isDropTarget }) => (
+					{({ ref: dndRef, isDropTarget }) => (
 						<div
-							ref={droppableRef}
+							ref={dndRef}
 							className={getCardListClassName(isDropTarget)}
 							data-table-match-mobile-terms-list="true"
 						>
@@ -45,8 +45,8 @@ function TableMatchMobileBoardContent(props) {
 								<TableMatchMobileCard
 									key={card.id}
 									card={card}
-									dragSourceType={TABLE_MATCH_MOBILE_CARD_TYPE}
-									dragSourceContext={{ card, sourceTargetId: null }}
+									type={TABLE_MATCH_MOBILE_CARD_TYPE}
+									data={{ card, sourceTargetId: null }}
 									isSelected={props.selectedCardId === card.id}
 									onClick={() => props.onCardSelect(card.id)}
 								/>
@@ -71,8 +71,8 @@ function TableMatchMobileBoardContent(props) {
 								key={target.id}
 								target={target}
 								selectedCard={selectedCard}
-								hasActiveCard={Boolean(props.selectedCardId) || dndOperation.hasDragSource}
-								acceptedDragSourceType={TABLE_MATCH_MOBILE_CARD_TYPE}
+								hasActiveCard={Boolean(props.selectedCardId) || dndOperation.hasSource}
+								accept={TABLE_MATCH_MOBILE_CARD_TYPE}
 								onTargetClick={() => props.onTargetClick(target.id)}
 								onClear={() => props.onClearTarget(target.id)}
 								t={props.t}
@@ -83,12 +83,12 @@ function TableMatchMobileBoardContent(props) {
 			</div>
 
 			<DragOverlay>
-				{({ dragSourceContext }) => {
-					if (!dragSourceContext?.card) {
+				{({ sourceData }) => {
+					if (!sourceData?.card) {
 						return null;
 					}
 
-					return <TableMatchMobilePlacedCard card={dragSourceContext.card} />;
+					return <TableMatchMobilePlacedCard card={sourceData.card} />;
 				}}
 			</DragOverlay>
 		</section>
@@ -96,16 +96,16 @@ function TableMatchMobileBoardContent(props) {
 }
 
 const handleDndDrop = (props) => {
-	return ({ dragSourceId, dropTargetId, dragSourceContext }) => {
-		if (dropTargetId === TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID) {
-			if (dragSourceContext?.sourceTargetId) {
-				props.onClearTarget(dragSourceContext.sourceTargetId);
+	return ({ sourceId, targetId, sourceData }) => {
+		if (targetId === TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID) {
+			if (sourceData?.sourceTargetId) {
+				props.onClearTarget(sourceData.sourceTargetId);
 			}
 
 			return;
 		}
 
-		props.onCardDrop(dropTargetId, dragSourceId);
+		props.onCardDrop(targetId, sourceId);
 
 		if (props.selectedCardId) {
 			props.onCardSelect(props.selectedCardId);

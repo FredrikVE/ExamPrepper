@@ -6,11 +6,11 @@ import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 export default function TableMatchMobileCard(props) {
 	return (
 		<Draggable
-			dragSourceId={props.card.id}
-			dragSourceType={props.dragSourceType}
-			dragSourceContext={props.dragSourceContext}
+			id={props.card.id}
+			type={props.type}
+			data={props.sourceData}
 		>
-			{({ draggableRef, isDragging }) => {
+			{({ ref: dndRef, isDragging }) => {
 				const className = getClassName({
 					isDragging,
 					isSelected: props.isSelected
@@ -18,7 +18,7 @@ export default function TableMatchMobileCard(props) {
 
 				return (
 					<button
-						ref={draggableRef}
+						ref={dndRef}
 						type="button"
 						className={className}
 						onClick={props.onClick}

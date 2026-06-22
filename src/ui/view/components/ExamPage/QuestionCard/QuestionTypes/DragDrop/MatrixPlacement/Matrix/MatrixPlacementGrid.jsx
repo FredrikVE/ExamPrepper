@@ -30,7 +30,7 @@ export default function MatrixPlacementGrid(props) {
                         feedbackMode={props.feedbackMode}
                         selectedItemId={props.selectedItemId}
                         expandedItemId={props.expandedItemId}
-                        acceptedDragSourceType={props.acceptedDragSourceType}
+                        accept={props.accept}
                         quadrantDropTargetIdPrefix={props.quadrantDropTargetIdPrefix}
                         onQuadrantClick={() => props.onQuadrantClick(quadrant.id)}
                         onItemSelect={props.onItemSelect}

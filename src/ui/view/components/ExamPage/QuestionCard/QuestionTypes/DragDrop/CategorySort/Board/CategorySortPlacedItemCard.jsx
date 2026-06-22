@@ -8,14 +8,14 @@ import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 export default function CategorySortPlacedItemCard(props) {
     return (
         <Draggable
-            dragSourceId={props.item.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ item: props.item, sourceCategoryId: props.sourceCategoryId }}
+            id={props.item.id}
+            type={props.type}
+            data={{ item: props.item, sourceCategoryId: props.sourceCategoryId }}
         >
-            {({ draggableRef, isDragging }) => (
+            {({ ref: dndRef, isDragging }) => (
                 <CategorySortPlacedItemCardContent
                     {...props}
-                    draggableRef={draggableRef}
+                    dndRef={dndRef}
                     isDragging={isDragging}
                 />
             )}
@@ -54,7 +54,7 @@ function CategorySortPlacedItemCardContent(props) {
 
     return (
         <div
-            ref={props.draggableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={0}

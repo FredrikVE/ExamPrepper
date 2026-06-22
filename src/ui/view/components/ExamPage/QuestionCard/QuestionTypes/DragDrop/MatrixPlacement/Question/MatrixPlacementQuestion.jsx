@@ -18,7 +18,7 @@ export default function MatrixPlacementQuestion(props) {
     const matrixPlacement = useMatrixPlacementQuestion(props);
 
     return (
-        <DndProvider onDndDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
+        <DndProvider onDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
             <div className={matrixPlacement.rootClassName}>
                 <div className={getLayoutClassName(matrixPlacement.feedbackMode, matrixPlacement.availableItems.length)}>
                     <MatrixPlacementItemBank
@@ -31,7 +31,7 @@ export default function MatrixPlacementQuestion(props) {
                         expandedItemId={matrixPlacement.expandedItemId}
                         disabled={matrixPlacement.feedbackMode}
                         itemBankDropTargetId={MATRIX_PLACEMENT_ITEM_BANK_DROP_TARGET_ID}
-                        acceptedDragSourceType={MATRIX_PLACEMENT_ITEM_TYPE}
+                        accept={MATRIX_PLACEMENT_ITEM_TYPE}
                         onItemSelect={matrixPlacement.handleItemSelect}
                         onToggleExpanded={matrixPlacement.toggleExpanded}
                         t={props.t}
@@ -44,7 +44,7 @@ export default function MatrixPlacementQuestion(props) {
                         feedbackMode={matrixPlacement.feedbackMode}
                         selectedItemId={matrixPlacement.selectedItemId}
                         expandedItemId={matrixPlacement.expandedItemId}
-                        acceptedDragSourceType={MATRIX_PLACEMENT_ITEM_TYPE}
+                        accept={MATRIX_PLACEMENT_ITEM_TYPE}
                         quadrantDropTargetIdPrefix={MATRIX_PLACEMENT_QUADRANT_DROP_TARGET_ID_PREFIX}
                         onQuadrantClick={matrixPlacement.handleQuadrantClick}
                         onItemSelect={matrixPlacement.handleItemSelect}
@@ -56,12 +56,12 @@ export default function MatrixPlacementQuestion(props) {
 
                 {!matrixPlacement.feedbackMode ? (
                     <DragOverlay>
-                        {({ dragSourceContext }) => {
-                            if (!dragSourceContext?.item) {
+                        {({ sourceData }) => {
+                            if (!sourceData?.item) {
                                 return null;
                             }
 
-                            return <MatrixPlacementDragOverlayCard item={dragSourceContext.item} />;
+                            return <MatrixPlacementDragOverlayCard item={sourceData.item} />;
                         }}
                     </DragOverlay>
                 ) : null}
@@ -81,15 +81,15 @@ function MatrixPlacementDragOverlayCard(props) {
 }
 
 const handleMatrixPlacementDndDrop = (matrixPlacement) => {
-    return ({ dragSourceId, dropTargetId, dragSourceContext, dropTargetContext }) => {
-        const itemId = dragSourceContext?.item?.id ?? dragSourceId;
+    return ({ sourceId, targetId, sourceData, targetData }) => {
+        const itemId = sourceData?.item?.id ?? sourceId;
 
         if (!itemId) {
             return;
         }
 
-        if (dropTargetId === MATRIX_PLACEMENT_ITEM_BANK_DROP_TARGET_ID) {
-            if (dragSourceContext?.sourceQuadrantId) {
+        if (targetId === MATRIX_PLACEMENT_ITEM_BANK_DROP_TARGET_ID) {
+            if (sourceData?.sourceQuadrantId) {
                 matrixPlacement.removeItem(itemId);
             }
 
@@ -97,11 +97,11 @@ const handleMatrixPlacementDndDrop = (matrixPlacement) => {
             return;
         }
 
-        if (!dropTargetContext?.quadrantId) {
+        if (!targetData?.quadrantId) {
             return;
         }
 
-        matrixPlacement.assignItem(dropTargetContext.quadrantId, itemId);
+        matrixPlacement.assignItem(targetData.quadrantId, itemId);
         matrixPlacement.clearSelectedItem();
     };
 };

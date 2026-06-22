@@ -7,7 +7,7 @@ export default function TableMatchMobilePlacedCard(props) {
 
 	return (
 		<div
-			ref={props.draggableRef}
+			ref={props.dndRef}
 			className={className}
 		>
 			<span className="table-match-mobile-card-text">

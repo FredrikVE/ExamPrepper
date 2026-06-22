@@ -3,14 +3,14 @@ import { useDragOperation } from "@dnd-kit/react";
 
 export default function useDndOperation() {
 	const dragOperation = useDragOperation();
-	const dragSource = dragOperation.source;
-	const dropTarget = dragOperation.target;
+	const source = dragOperation.source;
+	const target = dragOperation.target;
 
 	return {
-		dragSourceId: dragSource?.id ?? null,
-		dropTargetId: dropTarget?.id ?? null,
-		dragSourceContext: dragSource?.data ?? null,
-		dropTargetContext: dropTarget?.data ?? null,
-		hasDragSource: Boolean(dragSource)
+		sourceId: source?.id ?? null,
+		targetId: target?.id ?? null,
+		sourceData: source?.data ?? null,
+		targetData: target?.data ?? null,
+		hasSource: Boolean(source)
 	};
 }

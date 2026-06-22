@@ -13,14 +13,14 @@ export default function MatrixPlacementDropZone(props) {
 
     return (
         <Droppable
-            dropTargetId={`${props.quadrantDropTargetIdPrefix}${props.quadrant.id}`}
-            acceptedDragSourceType={props.acceptedDragSourceType}
-            dropTargetContext={{ quadrantId: props.quadrant.id }}
+            id={`${props.quadrantDropTargetIdPrefix}${props.quadrant.id}`}
+            accept={props.accept}
+            data={{ quadrantId: props.quadrant.id }}
         >
-            {({ droppableRef, isDropTarget }) => (
+            {({ ref: dndRef, isDropTarget }) => (
                 <MatrixPlacementDropZoneContent
                     {...props}
-                    droppableRef={droppableRef}
+                    dndRef={dndRef}
                     isDropTarget={isDropTarget}
                 />
             )}
@@ -55,7 +55,7 @@ function MatrixPlacementDropZoneContent(props) {
 
     return (
         <div
-            ref={props.droppableRef}
+            ref={props.dndRef}
             className={className}
             role="button"
             tabIndex={props.feedbackMode ? -1 : 0}
@@ -125,7 +125,7 @@ function renderItem(props, item) {
             item={item}
             selected={props.selectedItemId === item.id}
             sourceQuadrantId={props.quadrant.id}
-            dragSourceType={props.acceptedDragSourceType}
+            type={props.accept}
             onSelect={() => props.onItemSelect(item.id)}
             onRemove={() => props.onItemRemove(item.id)}
             t={props.t}

@@ -7,13 +7,13 @@ import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 export default function SequenceOrderPlacedItemCard(props) {
     return (
         <Draggable
-            dragSourceId={props.sequenceItem.id}
-            dragSourceType={props.dragSourceType}
-            dragSourceContext={{ sequenceItem: props.sequenceItem, sourceIndex: props.sourceIndex }}
+            id={props.sequenceItem.id}
+            type={props.type}
+            data={{ sequenceItem: props.sequenceItem, sourceIndex: props.sourceIndex }}
             disabled={props.disabled}
         >
-            {({ draggableRef, isDragging }) => (
-                <div ref={draggableRef} className={getPlacedCardClassName(isDragging)}>
+            {({ ref: dndRef, isDragging }) => (
+                <div ref={dndRef} className={getPlacedCardClassName(isDragging)}>
                     <span className="sequence-order-placed-card-number" aria-hidden="true">
                         {props.sequencePositionNumber}
                     </span>

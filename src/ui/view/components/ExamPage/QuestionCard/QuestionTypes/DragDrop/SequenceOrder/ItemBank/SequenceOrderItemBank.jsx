@@ -21,11 +21,11 @@ export default function SequenceOrderItemBank(props) {
             </div>
 
             <Droppable
-                dropTargetId={props.cardBankDropTargetId}
-                acceptedDragSourceType={props.acceptedDragSourceType}
+                id={props.cardBankDropTargetId}
+                accept={props.accept}
             >
-                {({ droppableRef, isDropTarget }) => (
-                    <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
+                {({ ref: dndRef, isDropTarget }) => (
+                    <div ref={dndRef} className={getItemListClassName(isDropTarget)}>
                         {props.sequenceItems.map((sequenceItem) => {
                             const sequenceItemIsPlaced = placedSequenceItemIdSet.has(sequenceItem.id);
 
@@ -44,7 +44,7 @@ export default function SequenceOrderItemBank(props) {
                                     sequenceItem={sequenceItem}
                                     selected={props.selectedSequenceItemId === sequenceItem.id}
                                     disabled={props.disabled}
-                                    dragSourceType={props.acceptedDragSourceType}
+                                    type={props.accept}
                                     onSequenceItemSelect={props.onSequenceItemSelect}
                                 />
                             );

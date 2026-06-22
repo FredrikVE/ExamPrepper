@@ -23,11 +23,11 @@ export default function CategorySortItemBank(props) {
                 </div>
             ) : (
                 <Droppable
-                    dropTargetId={props.itemBankDropTargetId}
-                    acceptedDragSourceType={props.acceptedDragSourceType}
+                    id={props.itemBankDropTargetId}
+                    accept={props.accept}
                 >
-                    {({ droppableRef, isDropTarget }) => (
-                        <div ref={droppableRef} className={getItemListClassName(isDropTarget)}>
+                    {({ ref: dndRef, isDropTarget }) => (
+                        <div ref={dndRef} className={getItemListClassName(isDropTarget)}>
                             {props.itemBankItems.map((itemBankEntry) => renderItemBankEntry(props, itemBankEntry))}
                         </div>
                     )}
@@ -75,7 +75,7 @@ function renderItem(props, item) {
             item={item}
             selected={props.selectedItemId === item.id}
             disabled={props.disabled}
-            dragSourceType={props.acceptedDragSourceType}
+            type={props.accept}
             onSelect={() => props.onItemSelect(item.id)}
             t={props.t}
         />
