@@ -12,7 +12,7 @@ export default function SequenceOrderItemCard(props) {
             data={{ sequenceItem: props.sequenceItem, sourceIndex: null }}
             disabled={props.disabled}
         >
-            {({ ref: dndRef, handleRef, isDragging }) => {
+            {({ ref: dndRef, isDragging }) => {
                 const className = getItemCardClassName({
                     selected: props.selected,
                     disabled: props.disabled,
@@ -31,7 +31,7 @@ export default function SequenceOrderItemCard(props) {
                             <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
                         </span>
 
-                        <DragGrip handleRef={handleRef} className="sequence-order-item-card-grip" />
+                        <DragGrip className="sequence-order-item-card-grip" />
                     </button>
                 );
             }}

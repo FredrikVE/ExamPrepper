@@ -123,28 +123,18 @@
 .matrix-placement-item-card-grip,
 .matrix-placement-placed-card-grip {
     order: -1;
-    display: grid;
-    grid-template-columns: repeat(2, 2px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: 0 0 auto;
-    gap: 2px 4px;
-    width: 10px;
-    height: 19px;
+    width: 16px;
+    height: 20px;
+    color: var(--matrix-placement-grip-bg);
     opacity: 0.74;
 }
 
-.matrix-placement-item-card-grip span,
-.matrix-placement-placed-card-grip span {
-    width: 3px;
-    height: 3px;
-    border-radius: var(--radius-full);
-}
-
-.matrix-placement-item-card-grip span {
-    background: var(--matrix-placement-grip-bg);
-}
-
-.matrix-placement-placed-card-grip span {
-    background: var(--matrix-placement-placed-grip-bg);
+.matrix-placement-placed-card-grip {
+    color: var(--matrix-placement-placed-grip-bg);
 }
 
 .matrix-placement-item-list-over {

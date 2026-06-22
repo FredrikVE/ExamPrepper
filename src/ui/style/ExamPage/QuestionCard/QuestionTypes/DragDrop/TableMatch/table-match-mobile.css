@@ -163,20 +163,14 @@
 		position: absolute;
 		right: 16px;
 		top: 50%;
-		display: grid;
-		grid-template-columns: repeat(2, 5px);
-		gap: 5px 7px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		width: 20px;
 		height: 34px;
+		color: var(--table-match-mobile-grip-bg);
 		opacity: 0.78;
 		transform: translateY(-50%);
-	}
-
-	.table-match-mobile-card-grip span {
-		width: 5px;
-		height: 5px;
-		border-radius: var(--radius-full);
-		background: var(--table-match-mobile-grip-bg);
 	}
 
 	.table-match-mobile-target-card {
@@ -287,8 +281,8 @@
 		right: 46px;
 	}
 
-	.table-match-mobile-filled-target .table-match-mobile-card-grip span {
-		background: var(--table-match-mobile-filled-grip-bg);
+	.table-match-mobile-filled-target .table-match-mobile-card-grip {
+		color: var(--table-match-mobile-filled-grip-bg);
 	}
 
 	.table-match-mobile-filled-target .table-match-mobile-clear-button {
@@ -354,15 +348,8 @@
 
 	.table-match-mobile-card-grip {
 		right: 10px;
-		grid-template-columns: repeat(2, 4px);
-		gap: 4px 6px;
-		width: 16px;
+		width: 18px;
 		height: 28px;
-	}
-
-	.table-match-mobile-card-grip span {
-		width: 4px;
-		height: 4px;
 	}
 
 	.table-match-mobile-target-card {

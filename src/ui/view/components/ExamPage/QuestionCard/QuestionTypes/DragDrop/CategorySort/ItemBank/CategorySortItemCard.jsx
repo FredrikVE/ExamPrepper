@@ -14,7 +14,7 @@ export default function CategorySortItemCard(props) {
             data={{ item: props.item, sourceCategoryId: null }}
             disabled={props.disabled}
         >
-            {({ ref: dndRef, handleRef, isDragging }) => {
+            {({ ref: dndRef, isDragging }) => {
                 const className = getCardClassName({
                     label,
                     selected: props.selected,
@@ -29,7 +29,7 @@ export default function CategorySortItemCard(props) {
                         className={className}
                         onClick={props.disabled ? undefined : props.onSelect}
                     >
-                        <DragGrip handleRef={handleRef} className="drag-categorize-item-card-grip" />
+                        <DragGrip className="drag-categorize-item-card-grip" />
 
                         <span className="drag-categorize-item-card-text"><FormattedText text={label} /></span>
                     </button>

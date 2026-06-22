@@ -163,22 +163,14 @@
 
 .drag-categorize-item-card-grip,
 .drag-categorize-placed-card-grip {
-    display: grid;
-    grid-template-columns: repeat(2, 3px);
-    grid-auto-rows: 3px;
-    gap: 3px;
-    width: 9px;
-    height: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 18px;
     flex: 0 0 auto;
+    color: var(--drag-categorize-grip-bg);
     opacity: 0.72;
-}
-
-.drag-categorize-item-card-grip span,
-.drag-categorize-placed-card-grip span {
-    width: 3px;
-    height: 3px;
-    border-radius: var(--radius-full);
-    background: currentColor;
 }
 
 .drag-categorize-placed-card-grip {
@@ -627,10 +619,6 @@
     box-shadow: var(--drag-categorize-card-shadow);
 }
 
-.drag-categorize-item-card-grip span,
-.drag-categorize-placed-card-grip span {
-    background: var(--drag-categorize-grip-bg);
-}
 
 .drag-categorize-placed-card {
     border: 2px solid var(--drag-categorize-placed-border);
@@ -653,8 +641,8 @@
     color: var(--drag-categorize-placed-color);
 }
 
-.drag-categorize-placed-card-grip span {
-    background: var(--drag-categorize-placed-grip-bg);
+.drag-categorize-placed-card-grip {
+    color: var(--drag-categorize-placed-grip-bg);
 }
 
 .drag-categorize-placed-card-remove {
@@ -921,8 +909,8 @@
     color: var(--dnd-on-active);
 }
 
-.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-grip span {
-    background: var(--dnd-on-active-muted);
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-grip {
+    color: var(--dnd-on-active-muted);
 }
 
 .dark .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card {

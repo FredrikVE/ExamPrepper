@@ -2,3 +2,11 @@
 .dnd-drag-overlay {
 	pointer-events: none;
 }
+
+.dnd-drag-grip-icon {
+	display: block;
+	width: 20px;
+	height: 20px;
+	color: currentColor;
+	stroke: currentColor;
+}

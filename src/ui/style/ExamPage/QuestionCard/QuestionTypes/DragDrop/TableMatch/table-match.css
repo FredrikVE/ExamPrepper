@@ -116,11 +116,12 @@
 .drag-drop-selected-pill-grip {
     position: absolute;
     top: 50%;
-    display: grid;
-    grid-template-columns: repeat(2, 4px);
-    gap: 4px 6px;
-    width: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
     height: 28px;
+    color: var(--table-match-desktop-grip-bg);
     opacity: 0.78;
     transform: translateY(-50%);
 }
@@ -129,16 +130,6 @@
     right: 14px;
 }
 
-.drag-drop-card-grip span,
-.drag-drop-selected-pill-grip span {
-    width: 4px;
-    height: 4px;
-    border-radius: var(--radius-full);
-}
-
-.drag-drop-card-grip span {
-    background: var(--table-match-desktop-grip-bg);
-}
 
 .drag-drop-card-bank-hint {
     margin: 14px 0 0;
@@ -271,8 +262,8 @@
     right: 46px;
 }
 
-.drag-drop-selected-pill-grip span {
-    background: var(--table-match-desktop-placed-grip-bg);
+.drag-drop-selected-pill-grip {
+    color: var(--table-match-desktop-placed-grip-bg);
 }
 
 .drag-drop-selected-pill .drag-drop-clear-button {

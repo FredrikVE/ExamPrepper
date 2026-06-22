@@ -14,7 +14,7 @@ export default function MatrixPlacementItemCard(props) {
             data={{ item: props.item, sourceQuadrantId: null }}
             disabled={props.disabled}
         >
-            {({ ref: dndRef, handleRef, isDragging }) => {
+            {({ ref: dndRef, isDragging }) => {
                 const className = getCardClassName({ selected: props.selected, disabled: props.disabled, isDragging });
 
                 return (
@@ -24,7 +24,7 @@ export default function MatrixPlacementItemCard(props) {
                         className={className}
                         onClick={props.disabled ? undefined : props.onSelect}
                     >
-                        <DragGrip handleRef={handleRef} className="matrix-placement-item-card-grip" />
+                        <DragGrip className="matrix-placement-item-card-grip" />
                         <span><FormattedText text={label} /></span>
                     </button>
                 );

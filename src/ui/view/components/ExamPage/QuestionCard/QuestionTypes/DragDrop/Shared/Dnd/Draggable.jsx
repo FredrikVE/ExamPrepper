@@ -4,7 +4,6 @@ import { useDraggable } from "@dnd-kit/react";
 export default function Draggable(props) {
 	const {
 		isDragging,
-		handleRef,
 		ref
 	} = useDraggable({
 		id: props.id,
@@ -15,7 +14,6 @@ export default function Draggable(props) {
 
 	return props.children({
 		ref,
-		handleRef,
 		isDragging
 	});
 }

@@ -10,7 +10,7 @@ export default function TableMatchMobileCard(props) {
 			type={props.type}
 			data={props.sourceData}
 		>
-			{({ ref: dndRef, handleRef, isDragging }) => {
+			{({ ref: dndRef, isDragging }) => {
 				const className = getClassName({
 					isDragging,
 					isSelected: props.isSelected
@@ -27,7 +27,7 @@ export default function TableMatchMobileCard(props) {
 							<FormattedText text={props.card.text} />
 						</span>
 
-						<DragGrip handleRef={handleRef} className="table-match-mobile-card-grip" />
+						<DragGrip className="table-match-mobile-card-grip" />
 					</button>
 				);
 			}}

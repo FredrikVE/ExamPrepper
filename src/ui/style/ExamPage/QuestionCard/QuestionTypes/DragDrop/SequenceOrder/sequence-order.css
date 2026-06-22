@@ -205,28 +205,18 @@
 
 .sequence-order-item-card-grip,
 .sequence-order-placed-card-grip {
-    display: grid;
-    grid-template-columns: repeat(2, 2px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: 0 0 auto;
-    gap: 2px 4px;
-    width: 10px;
-    height: 19px;
+    width: 16px;
+    height: 20px;
+    color: var(--sequence-order-grip-bg);
     opacity: 0.74;
 }
 
-.sequence-order-item-card-grip span,
-.sequence-order-placed-card-grip span {
-    width: 3px;
-    height: 3px;
-    border-radius: var(--radius-full);
-}
-
-.sequence-order-item-card-grip span {
-    background: var(--sequence-order-grip-bg);
-}
-
-.sequence-order-placed-card-grip span {
-    background: var(--sequence-order-placed-grip-bg);
+.sequence-order-placed-card-grip {
+    color: var(--sequence-order-placed-grip-bg);
 }
 
 .sequence-order-item-bank-hint {
