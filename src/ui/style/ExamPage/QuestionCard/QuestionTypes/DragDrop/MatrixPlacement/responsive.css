@@ -342,23 +342,34 @@
     }
 
     .matrix-placement-placed-card {
+        align-items: flex-start;
         min-height: 88px;
         border-radius: 8px;
-        padding: 14px 72px 14px 18px;
+        padding: 14px 44px 38px 18px;
         font-size: 0.94rem;
         line-height: 1.25;
     }
 
-    .matrix-placement-placed-card-grip {
+    .matrix-placement-placed-card .matrix-placement-placed-card-grip {
         order: initial;
         position: absolute;
-        right: 42px;
-        top: 50%;
-        transform: translateY(-50%);
+        right: 12px;
+        bottom: 12px;
+        width: 20px;
+        height: 20px;
+        transform: none;
+        opacity: 0.86;
     }
 
     .matrix-placement-placed-card-remove {
+        top: 10px;
         right: 10px;
+        transform: none;
+    }
+
+    .matrix-placement-placed-card-remove:hover,
+    .matrix-placement-placed-card-remove:focus-visible {
+        transform: scale(1.04);
     }
 
     .matrix-placement-x-axis {
