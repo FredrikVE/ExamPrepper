@@ -2,6 +2,7 @@
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
 import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export default function SequenceOrderItemCard(props) {
     return (
@@ -30,7 +31,7 @@ export default function SequenceOrderItemCard(props) {
                             <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
                         </span>
 
-                        <SequenceOrderItemCardGrip />
+                        <MobileDragGrip className="sequence-order-item-card-grip" />
                     </button>
                 );
             }}
@@ -66,15 +67,3 @@ function getItemCardClassName({ selected, disabled, isDragging }) {
     return className;
 }
 
-function SequenceOrderItemCardGrip() {
-    return (
-        <span className="sequence-order-item-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
-    );
-}

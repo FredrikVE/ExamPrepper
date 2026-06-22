@@ -2,6 +2,7 @@
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
 import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export default function MatrixPlacementItemCard(props) {
     const label = getItemLabel(props.item);
@@ -23,7 +24,7 @@ export default function MatrixPlacementItemCard(props) {
                         className={className}
                         onClick={props.disabled ? undefined : props.onSelect}
                     >
-                        <MatrixPlacementItemCardGrip />
+                        <MobileDragGrip className="matrix-placement-item-card-grip" />
                         <span><FormattedText text={label} /></span>
                     </button>
                 );
@@ -50,15 +51,3 @@ function getCardClassName({ selected, disabled, isDragging }) {
     return className;
 }
 
-function MatrixPlacementItemCardGrip() {
-    return (
-        <span className="matrix-placement-item-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
-    );
-}

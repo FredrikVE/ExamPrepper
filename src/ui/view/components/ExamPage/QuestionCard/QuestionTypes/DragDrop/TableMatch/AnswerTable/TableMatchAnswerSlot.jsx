@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/AnswerTable/TableMatchAnswerSlot.jsx
 import { ChevronDown, X } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export default function TableMatchAnswerSlot(props) {
     const className = getAnswerSlotClassName({
@@ -90,7 +91,7 @@ const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearClick, clear
                 <FormattedText text={selectedCard.text} />
             </span>
 
-            <SelectedAnswerGrip />
+            <MobileDragGrip className="drag-drop-selected-pill-grip" />
 
             <button
                 type="button"
@@ -101,19 +102,6 @@ const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearClick, clear
                 <X aria-hidden="true" />
             </button>
         </div>
-    );
-};
-
-const SelectedAnswerGrip = () => {
-    return (
-        <span className="drag-drop-selected-pill-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
     );
 };
 

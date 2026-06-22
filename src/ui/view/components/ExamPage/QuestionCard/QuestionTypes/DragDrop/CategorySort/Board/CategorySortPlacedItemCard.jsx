@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
 import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export default function CategorySortPlacedItemCard(props) {
     return (
@@ -60,7 +61,7 @@ function CategorySortPlacedItemCardContent(props) {
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <CategorySortPlacedItemCardGrip />
+            <MobileDragGrip className="drag-categorize-placed-card-grip" />
 
             <span className="drag-categorize-placed-card-text"><FormattedText text={getItemLabel(props.item)} /></span>
 
@@ -90,15 +91,3 @@ function getPlacedCardClassName({ selected, isDragging }) {
     return className;
 }
 
-function CategorySortPlacedItemCardGrip() {
-    return (
-        <span className="drag-categorize-placed-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
-    );
-}

@@ -8,6 +8,7 @@ import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
 import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useSequenceOrderQuestion } from "./useSequenceOrderQuestion.js";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export { getSequenceOrderStats } from "../Utils/sequenceOrderFeedbackStats.js";
 
@@ -85,21 +86,8 @@ function SequenceOrderDragOverlayCard(props) {
                 <FormattedText text={getSequenceItemLabel(props.sequenceItem)} />
             </span>
 
-            <SequenceOrderDragOverlayGrip />
+            <MobileDragGrip className="sequence-order-item-card-grip" />
         </div>
-    );
-}
-
-function SequenceOrderDragOverlayGrip() {
-    return (
-        <span className="sequence-order-item-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
     );
 }
 

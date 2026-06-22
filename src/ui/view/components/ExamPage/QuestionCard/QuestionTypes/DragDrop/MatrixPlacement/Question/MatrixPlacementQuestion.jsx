@@ -6,6 +6,7 @@ import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
 import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useMatrixPlacementQuestion } from "./useMatrixPlacementQuestion.js";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export { getMatrixPlacementStats } from "../Utils/matrixPlacementFeedbackStats.js";
 
@@ -72,23 +73,10 @@ export default function MatrixPlacementQuestion(props) {
 function MatrixPlacementDragOverlayCard(props) {
     return (
         <div className="matrix-placement-item-card matrix-placement-drag-overlay-card">
-            <MatrixPlacementDragOverlayGrip />
+            <MobileDragGrip className="matrix-placement-item-card-grip" />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
         </div>
-    );
-}
-
-function MatrixPlacementDragOverlayGrip() {
-    return (
-        <span className="matrix-placement-item-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
     );
 }
 

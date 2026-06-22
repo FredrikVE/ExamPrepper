@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
 import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export default function MatrixPlacementPlacedItemCard(props) {
     return (
@@ -57,7 +58,7 @@ function MatrixPlacementPlacedItemCardContent(props) {
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
         >
-            <MatrixPlacementPlacedItemCardGrip />
+            <MobileDragGrip className="matrix-placement-placed-card-grip" />
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
 
@@ -70,19 +71,6 @@ function MatrixPlacementPlacedItemCardContent(props) {
                 <X aria-hidden="true" />
             </button>
         </div>
-    );
-}
-
-function MatrixPlacementPlacedItemCardGrip() {
-    return (
-        <span className="matrix-placement-placed-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
     );
 }
 

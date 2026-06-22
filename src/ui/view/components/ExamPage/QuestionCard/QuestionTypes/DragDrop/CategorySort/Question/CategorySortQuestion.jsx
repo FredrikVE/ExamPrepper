@@ -6,6 +6,7 @@ import MobileDndProvider from "../../Shared/MobileDnd/MobileDndProvider.jsx";
 import MobileDragOverlay from "../../Shared/MobileDnd/MobileDragOverlay.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import { useCategorySortQuestion } from "./useCategorySortQuestion.js";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export { getCategorySortStats } from "../Utils/categorySortFeedbackStats.js";
 
@@ -69,25 +70,12 @@ export default function CategorySortQuestion(props) {
 function CategorySortDragOverlayCard(props) {
     return (
         <div className="drag-categorize-item-card drag-categorize-drag-overlay-card">
-            <CategorySortDragOverlayGrip />
+            <MobileDragGrip className="drag-categorize-item-card-grip" />
 
             <span className="drag-categorize-item-card-text">
                 <FormattedText text={getItemLabel(props.item)} />
             </span>
         </div>
-    );
-}
-
-function CategorySortDragOverlayGrip() {
-    return (
-        <span className="drag-categorize-item-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
     );
 }
 

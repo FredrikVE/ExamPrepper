@@ -2,6 +2,7 @@
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
 import MobileDraggable from "../../Shared/MobileDnd/MobileDraggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export default function CategorySortItemCard(props) {
     const label = getItemLabel(props.item);
@@ -28,7 +29,7 @@ export default function CategorySortItemCard(props) {
                         className={className}
                         onClick={props.disabled ? undefined : props.onSelect}
                     >
-                        <CategorySortItemCardGrip />
+                        <MobileDragGrip className="drag-categorize-item-card-grip" />
 
                         <span className="drag-categorize-item-card-text"><FormattedText text={label} /></span>
                     </button>
@@ -55,19 +56,6 @@ const getCardClassName = ({ label, selected, disabled, isDragging }) => {
 
     return className;
 };
-
-function CategorySortItemCardGrip() {
-    return (
-        <span className="drag-categorize-item-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
-    );
-}
 
 const getLabelLengthClassName = (label) => {
     const length = String(label ?? "").trim().length;

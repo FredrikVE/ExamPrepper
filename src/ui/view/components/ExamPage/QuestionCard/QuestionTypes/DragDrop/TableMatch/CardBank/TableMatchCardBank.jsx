@@ -1,6 +1,7 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/CardBank/TableMatchCardBank.jsx
 import { Info } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
+import MobileDragGrip from "../../Shared/MobileDnd/MobileDragGrip.jsx";
 
 export default function TableMatchCardBank(props) {
     const cardButtons = [];
@@ -27,7 +28,7 @@ export default function TableMatchCardBank(props) {
                     <FormattedText text={card.text} />
                 </span>
 
-                <DesktopGripHandle />
+                <MobileDragGrip className="drag-drop-card-grip" />
             </button>
         );
     }
@@ -55,15 +56,3 @@ export default function TableMatchCardBank(props) {
         </aside>
     );
 }
-const DesktopGripHandle = () => {
-    return (
-        <span className="drag-drop-card-grip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </span>
-    );
-};
