@@ -1,14 +1,11 @@
 /* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/sequence-order.css */
 .sequence-order-question {
-    --sequence-order-card-border: color-mix(in srgb, var(--accent) 20%, var(--line));
-    --sequence-order-card-bg:
-        linear-gradient(180deg,
-            color-mix(in srgb, var(--panel-strong) 94%, var(--accent-soft)),
-            color-mix(in srgb, var(--panel-bg) 90%, white));
-    --sequence-order-card-hover-bg: color-mix(in srgb, var(--accent-soft) 72%, var(--panel-strong));
-    --sequence-order-card-shadow: 0 10px 24px rgba(18, 38, 63, 0.08);
-    --sequence-order-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
-    --sequence-order-grip-bg: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
+    --sequence-order-card-border: var(--dnd-card-border);
+    --sequence-order-card-bg: var(--dnd-card-bg);
+    --sequence-order-card-hover-bg: var(--dnd-card-hover-bg);
+    --sequence-order-card-shadow: var(--dnd-card-shadow);
+    --sequence-order-card-hover-shadow: var(--dnd-card-hover-shadow);
+    --sequence-order-grip-bg: var(--dnd-grip);
     --sequence-order-placed-border: color-mix(in srgb, var(--accent) 88%, #1d4ed8);
     --sequence-order-placed-bg:
         linear-gradient(135deg,
@@ -27,15 +24,6 @@
 }
 
 .dark .sequence-order-question {
-    --sequence-order-card-border: rgba(136, 160, 190, 0.38);
-    --sequence-order-card-bg:
-        linear-gradient(180deg,
-            rgba(8, 27, 48, 0.72),
-            rgba(5, 18, 34, 0.56));
-    --sequence-order-card-hover-bg: color-mix(in srgb, var(--accent-soft) 60%, rgba(5, 18, 34, 0.56));
-    --sequence-order-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-    --sequence-order-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
-    --sequence-order-grip-bg: #aab2c4;
     --sequence-order-placed-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
     --sequence-order-placed-bg:
         linear-gradient(135deg,

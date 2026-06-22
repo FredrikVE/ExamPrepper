@@ -1,9 +1,9 @@
 /* src/ui/style/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/question.css */
 .matrix-placement-question {
-    --matrix-placement-card-border: color-mix(in srgb, var(--accent) 22%, var(--line));
-    --matrix-placement-card-bg: color-mix(in srgb, var(--panel-strong) 94%, transparent);
-    --matrix-placement-card-shadow: 0 8px 18px rgba(18, 38, 63, 0.06);
-    --matrix-placement-grip-bg: color-mix(in srgb, var(--text-muted) 74%, var(--panel-bg));
+    --matrix-placement-card-border: var(--dnd-card-border);
+    --matrix-placement-card-bg: var(--dnd-card-bg);
+    --matrix-placement-card-shadow: var(--dnd-card-shadow);
+    --matrix-placement-grip-bg: var(--dnd-grip);
     --matrix-placement-placed-border: color-mix(in srgb, var(--accent) 78%, #2563eb);
     --matrix-placement-placed-bg:
         linear-gradient(135deg,
@@ -24,13 +24,6 @@
 }
 
 .dark .matrix-placement-question {
-    --matrix-placement-card-border: rgba(136, 160, 190, 0.38);
-    --matrix-placement-card-bg:
-        linear-gradient(180deg,
-            rgba(8, 27, 48, 0.72),
-            rgba(5, 18, 34, 0.56));
-    --matrix-placement-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-    --matrix-placement-grip-bg: #aab2c4;
     --matrix-placement-placed-border: color-mix(in srgb, var(--accent) 82%, #a855f7);
     --matrix-placement-placed-bg:
         radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.18), transparent 28%),
