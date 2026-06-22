@@ -28,8 +28,10 @@ const ExamProgressPoint = ({ point, currentQuestionNumber, onGoToQuestion }) => 
             style={{ left: `${point.left}%` }}
             onClick={() => onGoToQuestion(point.question - 1)}
         >
-            <ExamProgressPointIcon isFlag={point.isFlag} />
-            <span>{point.label}</span>
+            <span className="exam-progress-icon-slot">
+                <ExamProgressPointIcon isFlag={point.isFlag} />
+            </span>
+            <span className="exam-progress-label">{point.label}</span>
         </button>
     );
 };

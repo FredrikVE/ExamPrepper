@@ -109,23 +109,18 @@
 /* Compact progress rail for laptop heights. */
 @media (min-width: 933px) and (max-width: 1760px), (min-width: 933px) and (max-height: 960px) {
     .exam-progress {
+        --exam-progress-track-height: 54px;
+        --exam-progress-line-top: 22px;
+        --exam-progress-line-height: 3px;
+        --exam-progress-icon-slot-height: 16px;
+        --exam-progress-label-offset: 12px;
+
         margin-bottom: 0;
         padding-top: 0;
     }
 
-    .exam-progress-track {
-        height: 44px;
-    }
-
-    .exam-progress-line,
-    .exam-progress-fill {
-        top: 13px;
-        height: 3px;
-    }
-
     .exam-progress-point {
         min-width: 58px;
-        gap: 6px;
         font-size: 0.76rem;
     }
 
@@ -142,12 +137,10 @@
 }
 
 @media (max-height: 820px) and (min-width: 933px) {
-    .exam-progress-track {
-        height: 36px;
-    }
-
-    .exam-progress-point {
-        gap: 4px;
+    .exam-progress {
+        --exam-progress-track-height: 46px;
+        --exam-progress-line-top: 20px;
+        --exam-progress-label-offset: 10px;
     }
 }
 

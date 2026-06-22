@@ -1,5 +1,11 @@
 /* src/ui/style/ExamPage/progress.css */
 .exam-progress {
+    --exam-progress-track-height: 68px;
+    --exam-progress-line-top: 26px;
+    --exam-progress-line-height: 4px;
+    --exam-progress-icon-slot-height: 18px;
+    --exam-progress-label-offset: 16px;
+
     width: var(--exam-content-width);
     max-width: var(--exam-content-max-width);
     min-width: 0;
@@ -9,24 +15,24 @@
 
 .exam-progress-track {
     position: relative;
-    height: 58px;
+    height: var(--exam-progress-track-height);
 }
 
 .exam-progress-line {
     position: absolute;
-    top: 16px;
+    top: var(--exam-progress-line-top);
     left: 8px;
     right: 8px;
-    height: 4px;
+    height: var(--exam-progress-line-height);
     border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--text-soft) 22%, transparent);
 }
 
 .exam-progress-fill {
     position: absolute;
-    top: 16px;
+    top: var(--exam-progress-line-top);
     left: 8px;
-    height: 4px;
+    height: var(--exam-progress-line-height);
     border-radius: var(--radius-full);
     background: var(--accent);
     box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 36%, transparent);
@@ -41,7 +47,7 @@
     min-width: 68px;
     flex-direction: column;
     align-items: center;
-    gap: 9px;
+    gap: 0;
     border: 0;
     background: transparent;
     color: var(--text-muted);
@@ -57,6 +63,18 @@
 .exam-progress-point:last-of-type {
     align-items: flex-end;
     transform: translateX(-100%);
+}
+
+.exam-progress-icon-slot {
+    display: flex;
+    min-height: var(--exam-progress-icon-slot-height);
+    align-items: center;
+    justify-content: center;
+}
+
+.exam-progress-label {
+    margin-top: var(--exam-progress-label-offset);
+    line-height: 1;
 }
 
 .exam-progress-dot {
