@@ -12,7 +12,7 @@ const TABLE_MATCH_MOBILE_CARD_BANK_DROP_TARGET_ID = "table-match-mobile-card-ban
 
 export default function TableMatchMobileBoard(props) {
 	return (
-		<DndProvider onDrop={handleDndDrop(props)}>
+		<DndProvider onDndDrop={handleDndDrop(props)}>
 			<TableMatchMobileBoardContent {...props} />
 		</DndProvider>
 	);

@@ -23,7 +23,7 @@ export default function TableMatchQuestion(props) {
                 <TableMatchScoreSummary stats={tableMatch.stats} t={t} />
             ) : null}
 
-            <DndProvider onDrop={tableMatch.handleDndDrop}>
+            <DndProvider onDndDrop={tableMatch.handleDndDrop}>
                 <div className="drag-drop-layout table-match-desktop-board">
                     {!tableMatch.feedbackMode ? (
                         <TableMatchCardBank

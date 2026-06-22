@@ -20,7 +20,7 @@ export default function SequenceOrderQuestion(props) {
     const sequenceOrder = useSequenceOrderQuestion(props);
 
     return (
-        <DndProvider onDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
+        <DndProvider onDndDrop={handleSequenceOrderDndDrop(sequenceOrder)}>
             <div className={sequenceOrder.rootClassName}>
                 {sequenceOrder.feedbackMode ? (
                     <TableMatchScoreSummary stats={sequenceOrder.stats} t={props.t} />

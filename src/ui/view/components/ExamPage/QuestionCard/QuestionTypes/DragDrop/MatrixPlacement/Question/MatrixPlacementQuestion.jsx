@@ -18,7 +18,7 @@ export default function MatrixPlacementQuestion(props) {
     const matrixPlacement = useMatrixPlacementQuestion(props);
 
     return (
-        <DndProvider onDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
+        <DndProvider onDndDrop={handleMatrixPlacementDndDrop(matrixPlacement)}>
             <div className={matrixPlacement.rootClassName}>
                 <div className={getLayoutClassName(matrixPlacement.feedbackMode, matrixPlacement.availableItems.length)}>
                     <MatrixPlacementItemBank

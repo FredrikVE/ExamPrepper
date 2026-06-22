@@ -14,7 +14,7 @@ export default function DndProvider(props) {
 			return;
 		}
 
-		props.onDrop({
+		props.onDndDrop({
 			sourceId: source.id,
 			targetId: target.id,
 			sourceData: source.data,

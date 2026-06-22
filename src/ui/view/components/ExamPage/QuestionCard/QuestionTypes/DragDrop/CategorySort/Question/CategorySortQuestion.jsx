@@ -18,7 +18,7 @@ export default function CategorySortQuestion(props) {
     const categorySort = useCategorySortQuestion(props);
 
     return (
-        <DndProvider onDrop={handleCategorySortDndDrop(categorySort)}>
+        <DndProvider onDndDrop={handleCategorySortDndDrop(categorySort)}>
             <div className={categorySort.rootClassName}>
                 <CategorySortItemBank
                     question={props.question}
