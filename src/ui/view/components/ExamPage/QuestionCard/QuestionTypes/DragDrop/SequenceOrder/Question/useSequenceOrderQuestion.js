@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { createSequenceItemsById, getCorrectSequenceOrder, getSequenceItems, normalizeSequenceOrderAnswer, placeSequenceItemAtIndex, removeSequenceItem } from "../Utils/sequenceOrderAnswerLogic.js";
 import { getSequenceOrderStats } from "../Utils/sequenceOrderFeedbackStats.js";
+import orderItemsByIndexOrder from "../../Shared/Utils/orderItemsByIndexOrder.js";
 
 export function useSequenceOrderQuestion(params) {
     const safeAnswer = normalizeSequenceOrderAnswer(params.question, params.answer);
@@ -11,8 +12,13 @@ export function useSequenceOrderQuestion(params) {
     const [expandedSlotIndex, setExpandedSlotIndex] = useState(null);
     const [questionExplanationExpanded, setQuestionExplanationExpanded] = useState(true);
 
-    const sequenceItems = getSequenceItems(params.question);
-    const sequenceItemsById = createSequenceItemsById(sequenceItems);
+    const sourceSequenceItems = getSequenceItems(params.question);
+    const sequenceItems = orderItemsByIndexOrder(
+        sourceSequenceItems,
+        params.answerOptionOrder,
+        sourceSequenceItems
+    );
+    const sequenceItemsById = createSequenceItemsById(sourceSequenceItems);
     const correctOrder = getCorrectSequenceOrder(params.question);
     const stats = getSequenceOrderStats(params.question, safeAnswer);
 

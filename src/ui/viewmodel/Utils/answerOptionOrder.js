@@ -20,11 +20,36 @@ const getAnswerOptionCount = (question) => {
 		return question.options.length;
 	}
 
-	if (question.type === QUESTION_TYPES.DRAG_CATEGORIZE && Array.isArray(question.items)) {
+	if (shouldRandomizeItemBank(question) && Array.isArray(question.items)) {
 		return question.items.length;
 	}
 
+	if (question.type === QUESTION_TYPES.SEQUENCE_ORDER) {
+		return getSequenceOrderItemCount(question);
+	}
+
 	if (question.type === QUESTION_TYPES.DRAG_DROP && Array.isArray(question.cards)) {
+		return question.cards.length;
+	}
+
+	return 0;
+};
+
+const shouldRandomizeItemBank = (question) => {
+	return question.type === QUESTION_TYPES.DRAG_CATEGORIZE
+		|| question.type === QUESTION_TYPES.MATRIX_PLACEMENT;
+};
+
+const getSequenceOrderItemCount = (question) => {
+	if (Array.isArray(question.items)) {
+		return question.items.length;
+	}
+
+	if (Array.isArray(question.alternatives)) {
+		return question.alternatives.length;
+	}
+
+	if (Array.isArray(question.cards)) {
 		return question.cards.length;
 	}
 
