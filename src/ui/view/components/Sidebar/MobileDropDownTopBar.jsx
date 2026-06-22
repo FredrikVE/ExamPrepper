@@ -54,7 +54,6 @@ function MobileDropdownContent(props) {
 						subjects={props.subjects}
 						currentSubjectId={props.currentSubject.id}
 						onSelectSubject={props.onSelectSubject}
-						onShowAllSubjects={props.onShowAllSubjects}
 						onClose={props.onCloseSubjectPicker}
 					/>
 				)}
