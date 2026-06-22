@@ -24,16 +24,12 @@
 .sidebar-settings-button:hover,
 .sidebar-settings-button-active {
 	color: var(--text-main);
-	border-color: color-mix(in srgb, var(--accent) 28%, transparent);
-	background: linear-gradient(
-		135deg,
-		color-mix(in srgb, var(--accent) 14%, transparent),
-		color-mix(in srgb, var(--accent) 8%, transparent)
-	);
+	border-color: var(--sidebar-control-hover-border);
+	background: var(--sidebar-control-hover-bg);
 }
 
 .sidebar-settings-button:hover {
-	transform: translateX(2px);
+	transform: var(--sidebar-control-hover-transform);
 }
 
 .sidebar-settings-button-icon {
@@ -50,10 +46,6 @@
 		border-radius: 10px;
 		font-size: 17px;
 		font-weight: 720;
-	}
-
-	.sidebar-settings-button:hover {
-		transform: none;
 	}
 
 	.sidebar-settings-button-icon {
