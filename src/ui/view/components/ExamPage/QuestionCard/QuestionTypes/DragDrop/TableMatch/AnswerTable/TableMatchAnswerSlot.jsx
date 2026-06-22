@@ -1,7 +1,8 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/AnswerTable/TableMatchAnswerSlot.jsx
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function TableMatchAnswerSlot(props) {
     const className = getAnswerSlotClassName({
@@ -24,15 +25,6 @@ export default function TableMatchAnswerSlot(props) {
         props.onClick();
     };
 
-    const handleClearClick = (event) => {
-        event.stopPropagation();
-        props.onClear();
-    };
-
-    const stopClearPointerDown = (event) => {
-        event.stopPropagation();
-    };
-
     const handleSelectClick = (event) => {
         event.stopPropagation();
     };
@@ -48,8 +40,7 @@ export default function TableMatchAnswerSlot(props) {
             <SelectedAnswerPill
                 selectedCard={props.selectedCard}
                 onCardDragStart={props.onSelectedCardDragStart}
-                onClearPointerDown={stopClearPointerDown}
-                onClearClick={handleClearClick}
+                onClear={props.onClear}
                 clearLabel={props.t.dragDropClearAnswer}
             />
         );
@@ -85,7 +76,7 @@ export default function TableMatchAnswerSlot(props) {
     );
 }
 
-const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearPointerDown, onClearClick, clearLabel }) => {
+const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClear, clearLabel }) => {
     return (
         <div
             className="drag-drop-selected-pill"
@@ -98,15 +89,11 @@ const SelectedAnswerPill = ({ selectedCard, onCardDragStart, onClearPointerDown,
 
             <DragGrip className="drag-drop-selected-pill-grip" />
 
-            <button
-                type="button"
+            <ClearButton
                 className="drag-drop-clear-button"
-                onPointerDown={onClearPointerDown}
-                onClick={onClearClick}
-                aria-label={clearLabel}
-            >
-                <X aria-hidden="true" />
-            </button>
+                label={clearLabel}
+                onClear={onClear}
+            />
         </div>
     );
 };

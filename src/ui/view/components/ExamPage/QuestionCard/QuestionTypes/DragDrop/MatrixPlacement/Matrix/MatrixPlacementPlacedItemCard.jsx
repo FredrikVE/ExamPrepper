@@ -1,9 +1,9 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Matrix/MatrixPlacementPlacedItemCard.jsx
-import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/matrixPlacementAnswerLogic.js";
 import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function MatrixPlacementPlacedItemCard(props) {
     return (
@@ -44,15 +44,6 @@ function MatrixPlacementPlacedItemCardContent(props) {
         props.onSelect();
     };
 
-    const handleRemoveClick = (event) => {
-        event.stopPropagation();
-        props.onRemove();
-    };
-
-    const stopRemovePointerDown = (event) => {
-        event.stopPropagation();
-    };
-
     return (
         <div
             ref={props.dndRef}
@@ -66,15 +57,11 @@ function MatrixPlacementPlacedItemCardContent(props) {
 
             <span><FormattedText text={getItemLabel(props.item)} /></span>
 
-            <button
-                type="button"
+            <ClearButton
                 className="matrix-placement-placed-card-remove"
-                onPointerDown={stopRemovePointerDown}
-                onClick={handleRemoveClick}
-                aria-label={props.t.matrixPlacementRemoveAnswer}
-            >
-                <X aria-hidden="true" />
-            </button>
+                label={props.t.matrixPlacementRemoveAnswer}
+                onClear={props.onRemove}
+            />
         </div>
     );
 }

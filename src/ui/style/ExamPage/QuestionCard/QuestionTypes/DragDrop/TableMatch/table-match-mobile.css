@@ -295,18 +295,11 @@
 		position: absolute;
 		right: 10px;
 		top: 50%;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
 		width: 30px;
 		height: 30px;
-		padding: 0;
-		line-height: 0;
 		border: 0;
-		border-radius: var(--radius-full);
 		background: var(--table-match-mobile-clear-bg);
 		color: var(--text-muted);
-		cursor: pointer;
 		transform: translateY(-50%);
 	}
 
@@ -317,11 +310,6 @@
 		outline: none;
 	}
 
-	.table-match-mobile-clear-button svg {
-		display: block;
-		width: 16px;
-		height: 16px;
-	}
 
 	.table-match-mobile-drop-label {
 		font-size: 0.94rem;

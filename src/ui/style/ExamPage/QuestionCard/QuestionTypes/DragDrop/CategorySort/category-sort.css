@@ -280,18 +280,11 @@
     top: 50%;
     right: 6px;
     transform: translateY(-50%);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 24px;
     height: 24px;
-    padding: 0;
-    line-height: 0;
     border: 0;
-    border-radius: var(--radius-full);
     background: transparent;
     color: var(--text-muted);
-    cursor: pointer;
 }
 
 .drag-categorize-placed-card-remove:hover,
@@ -299,12 +292,6 @@
     background: var(--danger-soft);
     color: var(--danger-text);
     outline: none;
-}
-
-.drag-categorize-placed-card-remove svg {
-    display: block;
-    width: 16px;
-    height: 16px;
 }
 
 .drag-categorize-empty-slot {
@@ -374,11 +361,7 @@
     right: 5px;
     width: 21px;
     height: 21px;
-}
-
-.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-remove svg {
-    width: 14px;
-    height: 14px;
+    --dnd-clear-button-icon-size: 14px;
 }
 
 .exam-workspace-dense-drag-categorize-mode .drag-categorize-empty-slot {

@@ -1,20 +1,11 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderPlacedItemCard.jsx
-import { X } from "lucide-react";
 import { getSequenceItemLabel } from "../Utils/sequenceOrderAnswerLogic.js";
 import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function SequenceOrderPlacedItemCard(props) {
-    const handleRemoveClick = (event) => {
-        event.stopPropagation();
-        props.onRemove();
-    };
-
-    const stopRemovePointerDown = (event) => {
-        event.stopPropagation();
-    };
-
     return (
         <Draggable
             id={props.sequenceItem.id}
@@ -34,15 +25,11 @@ export default function SequenceOrderPlacedItemCard(props) {
 
                     <DragGrip className="sequence-order-placed-card-grip" />
 
-                    <button
-                        type="button"
+                    <ClearButton
                         className="sequence-order-placed-card-remove"
-                        onPointerDown={stopRemovePointerDown}
-                        onClick={handleRemoveClick}
-                        aria-label={props.removeLabel}
-                    >
-                        <X aria-hidden="true" />
-                    </button>
+                        label={props.removeLabel}
+                        onClear={props.onRemove}
+                    />
                 </div>
             )}
         </Draggable>

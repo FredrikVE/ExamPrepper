@@ -344,7 +344,7 @@
     .matrix-placement-placed-card {
         min-height: 88px;
         border-radius: 8px;
-        padding: 14px 36px 14px 18px;
+        padding: 14px 72px 14px 18px;
         font-size: 0.94rem;
         line-height: 1.25;
     }
@@ -352,13 +352,13 @@
     .matrix-placement-placed-card-grip {
         order: initial;
         position: absolute;
-        right: 12px;
+        right: 42px;
         top: 50%;
         transform: translateY(-50%);
     }
 
     .matrix-placement-placed-card-remove {
-        display: none;
+        right: 10px;
     }
 
     .matrix-placement-x-axis {

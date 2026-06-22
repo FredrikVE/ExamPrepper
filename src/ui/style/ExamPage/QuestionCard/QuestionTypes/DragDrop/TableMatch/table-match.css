@@ -277,18 +277,11 @@
 }
 
 .drag-drop-clear-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 26px;
     height: 26px;
-    padding: 0;
-    line-height: 0;
     border: 0;
-    border-radius: var(--radius-full);
     background: transparent;
     color: var(--text-muted);
-    cursor: pointer;
 }
 
 .drag-drop-clear-button:hover,
@@ -296,12 +289,6 @@
     background: var(--danger-soft);
     color: var(--danger-text);
     outline: none;
-}
-
-.drag-drop-clear-button svg {
-    display: block;
-    width: 16px;
-    height: 16px;
 }
 
 .drag-drop-select-label {

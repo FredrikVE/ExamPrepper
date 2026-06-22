@@ -223,18 +223,11 @@
     position: absolute;
     top: 50%;
     right: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 28px;
     height: 28px;
-    padding: 0;
     border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--dnd-on-active) 18%, transparent);
     color: var(--dnd-on-active);
-    cursor: pointer;
-    line-height: 0;
     transform: translateY(-50%);
     transition:
         background var(--transition-fast),
@@ -247,12 +240,6 @@
     color: var(--dnd-on-active);
     outline: none;
     transform: translateY(-50%) scale(1.04);
-}
-
-.sequence-order-placed-card-remove svg {
-    display: block;
-    width: 16px;
-    height: 16px;
 }
 
 .sequence-order-item-bank-hint {

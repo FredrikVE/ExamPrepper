@@ -1,9 +1,9 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortPlacedItemCard.jsx
-import { X } from "lucide-react";
 import { getItemLabel } from "../Utils/categorySortAnswerLogic.js";
 import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function CategorySortPlacedItemCard(props) {
     return (
@@ -47,15 +47,6 @@ function CategorySortPlacedItemCardContent(props) {
         props.onSelect();
     };
 
-    const handleRemoveClick = (event) => {
-        event.stopPropagation();
-        props.onRemove();
-    };
-
-    const stopRemovePointerDown = (event) => {
-        event.stopPropagation();
-    };
-
     return (
         <div
             ref={props.dndRef}
@@ -69,15 +60,11 @@ function CategorySortPlacedItemCardContent(props) {
 
             <span className="drag-categorize-placed-card-text"><FormattedText text={getItemLabel(props.item)} /></span>
 
-            <button
-                type="button"
+            <ClearButton
                 className="drag-categorize-placed-card-remove"
-                onPointerDown={stopRemovePointerDown}
-                onClick={handleRemoveClick}
-                aria-label={props.t.dragCategorizeRemoveAnswer}
-            >
-                <X aria-hidden="true" />
-            </button>
+                label={props.t.dragCategorizeRemoveAnswer}
+                onClear={props.onRemove}
+            />
         </div>
     );
 }

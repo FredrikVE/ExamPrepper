@@ -1,19 +1,10 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Mobile/TableMatchMobilePlacedCard.jsx
-import { X } from "lucide-react";
 import FormattedText from "../../../../../../Shared/FormattedText.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
+import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 
 export default function TableMatchMobilePlacedCard(props) {
 	const className = getClassName(props.isDragging);
-
-	const handleClearClick = (event) => {
-		event.stopPropagation();
-		props.onClear();
-	};
-
-	const stopClearPointerDown = (event) => {
-		event.stopPropagation();
-	};
 
 	return (
 		<div
@@ -26,15 +17,11 @@ export default function TableMatchMobilePlacedCard(props) {
 
 			<DragGrip className="table-match-mobile-card-grip" />
 
-			<button
-				type="button"
+			<ClearButton
 				className="table-match-mobile-clear-button"
-				onPointerDown={stopClearPointerDown}
-				onClick={handleClearClick}
-				aria-label={props.clearLabel}
-			>
-				<X aria-hidden="true" />
-			</button>
+				label={props.clearLabel}
+				onClear={props.onClear}
+			/>
 		</div>
 	);
 }
