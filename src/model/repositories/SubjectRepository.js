@@ -82,7 +82,7 @@ export default class SubjectRepository {
             appName: subject.appName,
             description: subject.description,
             faculty: subject.faculty,
-            icon: subject.icon,
+            icon: subject.icon ?? subject.iconKey,
             recommended: subject.recommended ?? false,
             isVisible: subject.isVisible ?? true
         };
