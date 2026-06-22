@@ -1,6 +1,7 @@
 /* src/ui/style/ExamPage/index.css */
 @import "./page.css";
 @import "./progress.css";
+@import "./submit-confirmation.css";
 @import "./responsive.css";
 @import "./FeedbackPanel/index.css";
 @import "./ResultBadge/index.css";

@@ -5,8 +5,12 @@ import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
 import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
+import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
+import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel }) {
+    const { t } = useLanguage();
+
     if (viewModel.questionsLoading) {
         return (
             <ExamPageState>
@@ -55,6 +59,17 @@ export default function ExamPage({ viewModel }) {
             </main>
 
             <Footer viewModel={viewModel} />
+
+            {viewModel.isSubmitConfirmOpen && (
+                <ExamSubmitConfirmation
+                    title={t.examSubmitConfirmTitle}
+                    body={t.examSubmitConfirmBody}
+                    cancelLabel={t.examSubmitConfirmCancelLabel}
+                    confirmLabel={t.examSubmitConfirmConfirmLabel}
+                    onCancel={viewModel.closeSubmitConfirmation}
+                    onConfirm={viewModel.confirmSubmitExam}
+                />
+            )}
         </ExamWorkspace>
     );
 }
