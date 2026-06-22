@@ -1,10 +1,10 @@
 // src/ui/view/components/Sidebar/SidebarBrand.jsx
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Check } from "lucide-react";
+import { ChevronDown, ChevronUp, Check } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import SubjectIcon from "../SubjectIcon.jsx";
 
-export default function SidebarBrand({ subjects, selectedSubject, onSelectSubject, onShowAllSubjects }) {
+export default function SidebarBrand({ subjects, selectedSubject, onSelectSubject }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const { t } = useLanguage();
 
@@ -22,11 +22,6 @@ export default function SidebarBrand({ subjects, selectedSubject, onSelectSubjec
 
 	const handleSelectSubject = (subjectId) => {
 		onSelectSubject(subjectId);
-		setIsOpen(false);
-	};
-
-	const handleShowAllSubjects = () => {
-		onShowAllSubjects();
 		setIsOpen(false);
 	};
 
@@ -104,11 +99,11 @@ export default function SidebarBrand({ subjects, selectedSubject, onSelectSubjec
 
 					<button
 						type="button"
-						className="sidebar-subject-see-all"
-						onClick={handleShowAllSubjects}
+						className="sidebar-subject-collapse"
+						onClick={() => setIsOpen(false)}
+						aria-label={t.sidebarCloseSubjectMenu}
 					>
-						<span>{t.sidebarSeeAllSubjects}</span>
-						<ChevronRight size={18} />
+						<ChevronUp size={20} aria-hidden="true" focusable="false" />
 					</button>
 				</div>
 			)}
