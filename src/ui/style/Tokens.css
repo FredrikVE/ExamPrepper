@@ -53,6 +53,7 @@
     --dnd-card-hover-bg: color-mix(in srgb, var(--accent-soft) 72%, var(--panel-strong));
     --dnd-card-shadow: 0 10px 24px rgba(18, 38, 63, 0.08);
     --dnd-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+    --dnd-touch-press-ring: color-mix(in srgb, var(--accent) 58%, transparent);
     --dnd-grip: color-mix(in srgb, var(--text-muted) 76%, var(--panel-bg));
     --dnd-blue: #2563eb;
     --dnd-blue-strong: #1d4ed8;
@@ -160,6 +161,7 @@
     --dnd-card-hover-bg: color-mix(in srgb, var(--accent-soft) 60%, rgba(5, 18, 34, 0.56));
     --dnd-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
     --dnd-card-hover-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+    --dnd-touch-press-ring: color-mix(in srgb, var(--accent) 68%, transparent);
     --dnd-grip: #aab2c4;
     --dnd-active-border: color-mix(in srgb, var(--accent) 82%, var(--dnd-purple-soft));
     --dnd-active-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 72%, var(--dnd-blue)), var(--dnd-purple));

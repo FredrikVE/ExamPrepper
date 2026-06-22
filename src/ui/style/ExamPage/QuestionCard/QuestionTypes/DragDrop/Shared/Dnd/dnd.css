@@ -28,3 +28,38 @@
 	flex: 0 0 auto;
 	pointer-events: none;
 }
+
+:where(
+	.drag-drop-card,
+	.drag-drop-selected-pill,
+	.table-match-mobile-card,
+	.drag-categorize-item-card,
+	.drag-categorize-placed-card,
+	.matrix-placement-item-card,
+	.matrix-placement-placed-card,
+	.sequence-order-item-card,
+	.sequence-order-placed-card
+):not(:disabled) {
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+@media (pointer: coarse) {
+	:where(
+		.drag-drop-card,
+		.drag-drop-selected-pill,
+		.table-match-mobile-card,
+		.drag-categorize-item-card,
+		.drag-categorize-placed-card,
+		.matrix-placement-item-card,
+		.matrix-placement-placed-card,
+		.sequence-order-item-card,
+		.sequence-order-placed-card
+	):not(:disabled):active {
+		outline: 2px solid var(--dnd-touch-press-ring);
+		outline-offset: 2px;
+		filter: saturate(1.05) brightness(1.03);
+	}
+}
