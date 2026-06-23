@@ -24,6 +24,7 @@ export default function ExamPageContent({ viewModel }) {
             onToggleAnswerOptionExpanded={viewModel.toggleAnswerOptionExpanded}
             onSingleAnswer={viewModel.setSingleAnswer}
             onToggleMultiAnswer={viewModel.toggleMultiAnswer}
+            onDropdownFillAnswer={viewModel.selectDropdownFillAnswer}
         />
     );
 }

@@ -24,6 +24,22 @@ export default function isQuestionAnswered(question, answer) {
 		return answerHasAtLeastOneObjectValue(answer?.placements ?? answer);
 	}
 
+
+	if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+		const items = Array.isArray(question.items) ? question.items : [];
+
+		if (items.length === 0) {
+			return false;
+		}
+
+		return Boolean(
+			answer &&
+			typeof answer === "object" &&
+			!Array.isArray(answer) &&
+			items.every((item) => Boolean(answer[item.id]))
+		);
+	}
+
 	return answer !== undefined && String(answer).trim() !== "";
 }
 

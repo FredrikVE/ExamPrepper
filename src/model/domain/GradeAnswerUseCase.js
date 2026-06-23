@@ -39,6 +39,10 @@ export default class GradeAnswerUseCase {
             return this.#isSequenceOrderAnswerFullyCorrect(question, answer);
         }
 
+        if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+            return this.#isDropdownFillAnswerFullyCorrect(question, answer);
+        }
+
         return false;
     }
 
@@ -61,6 +65,10 @@ export default class GradeAnswerUseCase {
 
         if (question.type === QUESTION_TYPES.SEQUENCE_ORDER) {
             return this.#getSequenceOrderQuestionScore(question, answer);
+        }
+
+        if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+            return this.#getDropdownFillQuestionScore(question, answer);
         }
 
         return this.execute(question, answer) ? question.points : 0;
@@ -145,6 +153,30 @@ export default class GradeAnswerUseCase {
             }
 
             if (selectedItemId === correctItemId) {
+                stats.correct += 1;
+                return stats;
+            }
+
+            stats.wrong += 1;
+            return stats;
+        }, { correct: 0, wrong: 0, unanswered: 0 });
+    }
+
+
+
+    getDropdownFillStats(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+        const safeAnswer = this.#normalizeDropdownFillAnswer(question, answer);
+
+        return items.reduce((stats, item) => {
+            const selectedOptionId = safeAnswer[item.id];
+
+            if (!selectedOptionId) {
+                stats.unanswered += 1;
+                return stats;
+            }
+
+            if (selectedOptionId === item.correctOptionId) {
                 stats.correct += 1;
                 return stats;
             }
@@ -308,6 +340,33 @@ export default class GradeAnswerUseCase {
 
         const stats = this.getSequenceOrderStats(question, answer);
         const rawScore = question.points * (stats.correct / correctOrder.length);
+
+        return Number(rawScore.toFixed(2));
+    }
+
+
+    #isDropdownFillAnswerFullyCorrect(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+        const safeAnswer = this.#normalizeDropdownFillAnswer(question, answer);
+
+        if (items.length === 0) {
+            return false;
+        }
+
+        return items.every((item) => {
+            return safeAnswer[item.id] === item.correctOptionId;
+        });
+    }
+
+    #getDropdownFillQuestionScore(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+
+        if (items.length === 0) {
+            return 0;
+        }
+
+        const stats = this.getDropdownFillStats(question, answer);
+        const rawScore = question.points * (stats.correct / items.length);
 
         return Number(rawScore.toFixed(2));
     }
@@ -552,6 +611,29 @@ export default class GradeAnswerUseCase {
         }
 
         return [];
+    }
+
+
+    #normalizeDropdownFillAnswer(question, answer) {
+        if (!this.#isPlainObject(answer)) {
+            return {};
+        }
+
+        const itemIds = new Set((question?.items ?? []).map((item) => item.id));
+        const optionIds = new Set((question?.options ?? []).map((option) => option.id));
+        const normalizedAnswer = {};
+
+        for (const itemId in answer) {
+            const optionId = answer[itemId];
+
+            if (!itemIds.has(itemId) || !optionIds.has(optionId)) {
+                continue;
+            }
+
+            normalizedAnswer[itemId] = optionId;
+        }
+
+        return normalizedAnswer;
     }
 
     #getSortedSelectedIndexes(answer) {

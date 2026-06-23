@@ -3,6 +3,7 @@ import { useLanguage } from "../../../../../i18n/LanguageContext.jsx";
 import { getQuestionViewState } from "../../../../viewmodel/Utils/questionCardViewState.js";
 import FeedbackPanel from "../FeedbackPanel/FeedbackPanel.jsx";
 import FillBlankInputFieldQuestion from "./QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
+import DropdownFillQuestion from "./QuestionTypes/DropdownFill/DropdownFillQuestion.jsx";
 import CategorySortQuestion from "./QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
 import TableMatchQuestion from "./QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";
 import MatrixPlacementQuestion from "./QuestionTypes/DragDrop/MatrixPlacement/Question/MatrixPlacementQuestion.jsx";
@@ -14,7 +15,7 @@ import QuestionFeedback from "./Shared/Feedback/QuestionFeedback.jsx";
 import QuestionHeader from "./Shared/QuestionHeader/QuestionHeader.jsx";
 
 
-export default function QuestionCard({ question, questionNumber, answer, answerOptionOrder, submitted, showAllFeedback, correct, fillMatchType, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer }) {
+export default function QuestionCard({ question, questionNumber, answer, answerOptionOrder, submitted, showAllFeedback, correct, fillMatchType, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, onDropdownFillAnswer }) {
     const { t } = useLanguage();
     const answerText = String(answer ?? "");
 
@@ -61,6 +62,18 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                         submitted={submitted}
                         correct={correct}
                         onSingleAnswer={onSingleAnswer}
+                        t={t}
+                    />
+                ) : null}
+
+
+                {viewState.shouldShowDropdownFill ? (
+                    <DropdownFillQuestion
+                        question={question}
+                        answer={answer}
+                        submitted={submitted}
+                        showAllFeedback={showAllFeedback}
+                        onDropdownFillAnswer={onDropdownFillAnswer}
                         t={t}
                     />
                 ) : null}

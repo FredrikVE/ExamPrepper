@@ -87,6 +87,7 @@ export const translations = {
         questionTypeDragCategorize: "Dra til kategori",
         questionTypeMatrixPlacement: "Matriseplassering",
         questionTypeSequenceOrder: "Rekkefølge",
+        questionTypeDropdownFill: "Dropdown i setning",
         questionInputPlaceholder: "Skriv begrep her...",
         questionAnswerLabel: "Ditt svar",
         questionInputRule: "Skriv kun ett begrep. Ingen mellomrom før eller etter.",
@@ -135,6 +136,17 @@ export const translations = {
         sequenceOrderCorrectOrderTitle: "Riktig rekkefølge",
         sequenceOrderSubmittedSequenceTitle: "Din rekkefølge",
         sequenceOrderRemoveAnswer: "Fjern alternativ",
+
+        dropdownFillSelectPlaceholder: "Velg alternativ",
+        dropdownFillProgressLabel: "Oppsummering av dropdown-svar",
+        dropdownFillAnswered: "Besvart",
+        dropdownFillCorrect: "Riktig",
+        dropdownFillWrong: "Feil",
+        dropdownFillUnanswered: "Ubesvart",
+        dropdownFillCorrectAnswer: "Riktig svar",
+        dropdownFillCorrectShort: "riktig",
+        dropdownFillWrongShort: "feil",
+        dropdownFillUnansweredShort: "ubesvart",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Din besvarelse er riktig",
@@ -333,6 +345,7 @@ export const translations = {
         questionTypeDragCategorize: "Category sort",
         questionTypeMatrixPlacement: "Matrix placement",
         questionTypeSequenceOrder: "Sequence order",
+        questionTypeDropdownFill: "Dropdown sentence",
         questionInputPlaceholder: "Type term here...",
         questionAnswerLabel: "Your answer",
         questionInputRule: "Write one term only. No leading or trailing spaces.",
@@ -381,6 +394,17 @@ export const translations = {
         sequenceOrderCorrectOrderTitle: "Correct order",
         sequenceOrderSubmittedSequenceTitle: "Your sequence",
         sequenceOrderRemoveAnswer: "Remove alternative",
+
+        dropdownFillSelectPlaceholder: "Choose option",
+        dropdownFillProgressLabel: "Dropdown answer summary",
+        dropdownFillAnswered: "Answered",
+        dropdownFillCorrect: "Correct",
+        dropdownFillWrong: "Wrong",
+        dropdownFillUnanswered: "Unanswered",
+        dropdownFillCorrectAnswer: "Correct answer",
+        dropdownFillCorrectShort: "correct",
+        dropdownFillWrongShort: "wrong",
+        dropdownFillUnansweredShort: "unanswered",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Your answer is correct",

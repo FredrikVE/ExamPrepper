@@ -6,5 +6,6 @@ export const QUESTION_TYPES = {
 	DRAG_DROP: "dragDrop",
 	DRAG_CATEGORIZE: "drag-categorize",
 	MATRIX_PLACEMENT: "matrix-placement",
-	SEQUENCE_ORDER: "SequenceOrder"
+	SEQUENCE_ORDER: "SequenceOrder",
+	DROPDOWN_FILL: "dropdownFill"
 };

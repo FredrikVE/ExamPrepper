@@ -82,6 +82,25 @@ describe("transformAnswersForApi", () => {
 		expect(result).toEqual({ q5: ["item-b", "item-a"] });
 	});
 
+
+	test("passes dropdown fill answers through unchanged", () => {
+		const questions = [
+			{
+				id: "q6",
+				type: "dropdownFill",
+				options: [
+					{ id: "confidentiality", label: "Confidentiality" },
+					{ id: "availability", label: "Availability" }
+				]
+			}
+		];
+
+		const answer = { "before-exam": "confidentiality", "during-exam": "availability" };
+		const result = transformAnswersForApi(questions, { q6: answer });
+
+		expect(result).toEqual({ q6: answer });
+	});
+
 	test("handles mixed question types in one submission", () => {
 		const questions = [
 			{

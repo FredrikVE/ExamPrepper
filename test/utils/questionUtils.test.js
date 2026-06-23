@@ -2,7 +2,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { isInlineBlankPart, splitPromptByInlineBlank } from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/FillBlankInputField/Utils/fillBlankPromptUtils.js";
 import { getExtendedExplanationImages, getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/ExamPage/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";
-import { getQuestionViewState, isFillQuestion, isMatrixPlacementQuestion, hasInlineFillBlank } from "../../src/ui/viewmodel/Utils/questionCardViewState.js";
+import { getQuestionViewState, isDropdownFillQuestion, isFillQuestion, isMatrixPlacementQuestion, hasInlineFillBlank } from "../../src/ui/viewmodel/Utils/questionCardViewState.js";
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";
 
 describe("question utils", () => {
@@ -69,6 +69,23 @@ describe("question utils", () => {
             shouldShowPrompt: false,
             shouldShowDragDrop: true,
             shouldShowMatrixPlacement: true
+        });
+    });
+
+
+    test("builds view state for dropdown fill questions", () => {
+        const state = getQuestionViewState({
+            question: { type: QUESTION_TYPES.DROPDOWN_FILL, source: "Lecture" },
+            submitted: false,
+            showAllFeedback: true,
+            correct: false
+        });
+
+        expect(isDropdownFillQuestion({ type: QUESTION_TYPES.DROPDOWN_FILL })).toBe(true);
+        expect(state).toMatchObject({
+            shouldShowOptions: false,
+            shouldShowDropdownFill: true,
+            shouldShowPrompt: true
         });
     });
 
