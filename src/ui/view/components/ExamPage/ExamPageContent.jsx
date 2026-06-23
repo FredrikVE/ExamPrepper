@@ -25,6 +25,7 @@ export default function ExamPageContent({ viewModel }) {
             onSingleAnswer={viewModel.setSingleAnswer}
             onToggleMultiAnswer={viewModel.toggleMultiAnswer}
             onDropdownFillAnswer={viewModel.selectDropdownFillAnswer}
+            onRadioButtonGridAnswer={viewModel.selectRadioButtonGridAnswer}
         />
     );
 }

@@ -40,6 +40,22 @@ export default function isQuestionAnswered(question, answer) {
 		);
 	}
 
+
+	if (question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
+		const rows = Array.isArray(question.rows) ? question.rows : [];
+
+		if (rows.length === 0) {
+			return false;
+		}
+
+		return Boolean(
+			answer &&
+			typeof answer === "object" &&
+			!Array.isArray(answer) &&
+			rows.every((row) => Boolean(answer[row.id]))
+		);
+	}
+
 	return answer !== undefined && String(answer).trim() !== "";
 }
 

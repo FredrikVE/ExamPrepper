@@ -88,6 +88,7 @@ export const translations = {
         questionTypeMatrixPlacement: "Matriseplassering",
         questionTypeSequenceOrder: "Rekkefølge",
         questionTypeDropdownFill: "Dropdown i setning",
+        questionTypeRadioButtonGrid: "Radioknapper i rutenett",
         questionInputPlaceholder: "Skriv begrep her...",
         questionAnswerLabel: "Ditt svar",
         questionInputRule: "Skriv kun ett begrep. Ingen mellomrom før eller etter.",
@@ -147,6 +148,10 @@ export const translations = {
         dropdownFillCorrectShort: "riktig",
         dropdownFillWrongShort: "feil",
         dropdownFillUnansweredShort: "ubesvart",
+
+        radioButtonGridTableLabel: "Radioknapp-rutenett",
+        radioButtonGridStatementHeader: "Utsagn",
+        radioButtonGridCorrectAnswer: "Riktig svar",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Din besvarelse er riktig",
@@ -346,6 +351,7 @@ export const translations = {
         questionTypeMatrixPlacement: "Matrix placement",
         questionTypeSequenceOrder: "Sequence order",
         questionTypeDropdownFill: "Dropdown sentence",
+        questionTypeRadioButtonGrid: "Radio button grid",
         questionInputPlaceholder: "Type term here...",
         questionAnswerLabel: "Your answer",
         questionInputRule: "Write one term only. No leading or trailing spaces.",
@@ -405,6 +411,10 @@ export const translations = {
         dropdownFillCorrectShort: "correct",
         dropdownFillWrongShort: "wrong",
         dropdownFillUnansweredShort: "unanswered",
+
+        radioButtonGridTableLabel: "Radio button grid",
+        radioButtonGridStatementHeader: "Statement",
+        radioButtonGridCorrectAnswer: "Correct answer",
 
         // FeedbackPanel
         feedbackCorrectLabel: "Your answer is correct",

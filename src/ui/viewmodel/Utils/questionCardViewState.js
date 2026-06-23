@@ -30,6 +30,10 @@ export function isDropdownFillQuestion(question) {
     return question?.type === QUESTION_TYPES.DROPDOWN_FILL;
 }
 
+export function isRadioButtonGridQuestion(question) {
+    return question?.type === QUESTION_TYPES.RADIO_BUTTON_GRID;
+}
+
 export function hasInlineFillBlank(question) {
     return question?.type === QUESTION_TYPES.FILL && INLINE_FILL_BLANK_PATTERN.test(question?.prompt ?? "");
 }
@@ -42,6 +46,7 @@ export function getQuestionTypeLabel(type, t) {
     if (type === QUESTION_TYPES.MATRIX_PLACEMENT) return t.questionTypeMatrixPlacement;
     if (type === QUESTION_TYPES.SEQUENCE_ORDER) return t.questionTypeSequenceOrder;
     if (type === QUESTION_TYPES.DROPDOWN_FILL) return t.questionTypeDropdownFill;
+    if (type === QUESTION_TYPES.RADIO_BUTTON_GRID) return t.questionTypeRadioButtonGrid;
     return t.questionTypeSingle;
 }
 
@@ -49,9 +54,10 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
     const fillQuestion = isFillQuestion(question);
     const dragDropQuestion = isDragDropQuestion(question);
     const dropdownFillQuestion = isDropdownFillQuestion(question);
+    const radioButtonGridQuestion = isRadioButtonGridQuestion(question);
     const inlineFillBlank = hasInlineFillBlank(question);
     const feedbackMode = Boolean(submitted && showAllFeedback);
-    const shouldShowOptions = !fillQuestion && !dragDropQuestion && !dropdownFillQuestion;
+    const shouldShowOptions = !fillQuestion && !dragDropQuestion && !dropdownFillQuestion && !radioButtonGridQuestion;
     const isSingleChoice = question?.type === QUESTION_TYPES.SINGLE;
 
     return {
@@ -66,6 +72,7 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
         shouldShowMatrixPlacement: isMatrixPlacementQuestion(question),
         shouldShowSequenceOrder: isSequenceOrderQuestion(question),
         shouldShowDropdownFill: dropdownFillQuestion,
+        shouldShowRadioButtonGrid: radioButtonGridQuestion,
         shouldShowWarning: Boolean(submitted && !showAllFeedback && !correct),
         shouldShowFillInput: fillQuestion && !inlineFillBlank,
         shouldShowFillFeedback: feedbackMode && fillQuestion,

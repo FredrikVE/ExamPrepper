@@ -101,6 +101,25 @@ describe("transformAnswersForApi", () => {
 		expect(result).toEqual({ q6: answer });
 	});
 
+
+    test("passes radio button grid answers through unchanged", () => {
+        const questions = [
+            {
+                id: "q7",
+                type: "radioButtonGrid",
+                columns: [
+                    { id: "symmetric", label: "Symmetric" },
+                    { id: "hash", label: "Hash" }
+                ]
+            }
+        ];
+
+        const answer = { "shared-secret": "symmetric", "one-way": "hash" };
+        const result = transformAnswersForApi(questions, { q7: answer });
+
+        expect(result).toEqual({ q7: answer });
+    });
+
 	test("handles mixed question types in one submission", () => {
 		const questions = [
 			{

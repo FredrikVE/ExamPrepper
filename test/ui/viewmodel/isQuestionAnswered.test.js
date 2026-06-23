@@ -164,6 +164,34 @@ describe("isQuestionAnswered", () => {
         });
     });
 
+
+    describe("radioButtonGrid", () => {
+        const question = {
+            type: "radioButtonGrid",
+            rows: [
+                { id: "shared-secret" },
+                { id: "one-way" }
+            ]
+        };
+
+        test("returns true when every row has a selected column", () => {
+            expect(isQuestionAnswered(question, {
+                "shared-secret": "symmetric",
+                "one-way": "hash"
+            })).toBe(true);
+        });
+
+        test("returns false when one row is unanswered", () => {
+            expect(isQuestionAnswered(question, {
+                "shared-secret": "symmetric"
+            })).toBe(false);
+        });
+
+        test("returns false when answer is not an object", () => {
+            expect(isQuestionAnswered(question, "symmetric")).toBe(false);
+        });
+    });
+
     describe("matrix-placement", () => {
         const question = { type: "matrix-placement" };
 

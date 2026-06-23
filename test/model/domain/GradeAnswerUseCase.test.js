@@ -469,6 +469,64 @@ describe("GradeAnswerUseCase", () => {
         });
     });
 
+
+    describe("radio button grid", () => {
+        const question = {
+            type: QUESTION_TYPES.RADIO_BUTTON_GRID,
+            points: 2,
+            columns: [
+                { id: "symmetric", label: "Symmetric" },
+                { id: "asymmetric", label: "Asymmetric" },
+                { id: "hash", label: "Hash" }
+            ],
+            rows: [
+                { id: "shared-secret", text: "Uses one shared secret.", correctColumnId: "symmetric" },
+                { id: "one-way", text: "One-way integrity check.", correctColumnId: "hash" }
+            ]
+        };
+
+        test("returns true only when every row has the correct column", () => {
+            expect(useCase.execute(question, {
+                "shared-secret": "symmetric",
+                "one-way": "hash"
+            })).toBe(true);
+
+            expect(useCase.execute(question, {
+                "shared-secret": "symmetric",
+                "one-way": "asymmetric"
+            })).toBe(false);
+        });
+
+        test("calculates equal partial score per row", () => {
+            expect(useCase.getQuestionScore(question, {
+                "shared-secret": "symmetric",
+                "one-way": "asymmetric"
+            })).toBe(1);
+        });
+
+        test("returns radio button grid stats", () => {
+            expect(useCase.getRadioButtonGridStats(question, {
+                "shared-secret": "symmetric",
+                "one-way": "asymmetric"
+            })).toEqual({
+                correct: 1,
+                wrong: 1,
+                unanswered: 0
+            });
+        });
+
+        test("ignores unknown row ids and column ids", () => {
+            expect(useCase.getRadioButtonGridStats(question, {
+                "shared-secret": "missing-column",
+                unknown: "hash"
+            })).toEqual({
+                correct: 0,
+                wrong: 0,
+                unanswered: 2
+            });
+        });
+    });
+
     test("returns false when question is missing", () => {
         expect(useCase.execute(null, 0)).toBe(false);
     });

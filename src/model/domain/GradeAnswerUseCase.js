@@ -43,6 +43,10 @@ export default class GradeAnswerUseCase {
             return this.#isDropdownFillAnswerFullyCorrect(question, answer);
         }
 
+        if (question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
+            return this.#isRadioButtonGridAnswerFullyCorrect(question, answer);
+        }
+
         return false;
     }
 
@@ -69,6 +73,10 @@ export default class GradeAnswerUseCase {
 
         if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
             return this.#getDropdownFillQuestionScore(question, answer);
+        }
+
+        if (question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
+            return this.#getRadioButtonGridQuestionScore(question, answer);
         }
 
         return this.execute(question, answer) ? question.points : 0;
@@ -177,6 +185,28 @@ export default class GradeAnswerUseCase {
             }
 
             if (selectedOptionId === item.correctOptionId) {
+                stats.correct += 1;
+                return stats;
+            }
+
+            stats.wrong += 1;
+            return stats;
+        }, { correct: 0, wrong: 0, unanswered: 0 });
+    }
+
+    getRadioButtonGridStats(question, answer) {
+        const rows = Array.isArray(question?.rows) ? question.rows : [];
+        const safeAnswer = this.#normalizeRadioButtonGridAnswer(question, answer);
+
+        return rows.reduce((stats, row) => {
+            const selectedColumnId = safeAnswer[row.id];
+
+            if (!selectedColumnId) {
+                stats.unanswered += 1;
+                return stats;
+            }
+
+            if (selectedColumnId === row.correctColumnId) {
                 stats.correct += 1;
                 return stats;
             }
@@ -367,6 +397,32 @@ export default class GradeAnswerUseCase {
 
         const stats = this.getDropdownFillStats(question, answer);
         const rawScore = question.points * (stats.correct / items.length);
+
+        return Number(rawScore.toFixed(2));
+    }
+
+    #isRadioButtonGridAnswerFullyCorrect(question, answer) {
+        const rows = Array.isArray(question?.rows) ? question.rows : [];
+        const safeAnswer = this.#normalizeRadioButtonGridAnswer(question, answer);
+
+        if (rows.length === 0) {
+            return false;
+        }
+
+        return rows.every((row) => {
+            return safeAnswer[row.id] === row.correctColumnId;
+        });
+    }
+
+    #getRadioButtonGridQuestionScore(question, answer) {
+        const rows = Array.isArray(question?.rows) ? question.rows : [];
+
+        if (rows.length === 0) {
+            return 0;
+        }
+
+        const stats = this.getRadioButtonGridStats(question, answer);
+        const rawScore = question.points * (stats.correct / rows.length);
 
         return Number(rawScore.toFixed(2));
     }
@@ -631,6 +687,28 @@ export default class GradeAnswerUseCase {
             }
 
             normalizedAnswer[itemId] = optionId;
+        }
+
+        return normalizedAnswer;
+    }
+
+    #normalizeRadioButtonGridAnswer(question, answer) {
+        if (!this.#isPlainObject(answer)) {
+            return {};
+        }
+
+        const rowIds = new Set((question?.rows ?? []).map((row) => row.id));
+        const columnIds = new Set((question?.columns ?? []).map((column) => column.id));
+        const normalizedAnswer = {};
+
+        for (const rowId in answer) {
+            const columnId = answer[rowId];
+
+            if (!rowIds.has(rowId) || !columnIds.has(columnId)) {
+                continue;
+            }
+
+            normalizedAnswer[rowId] = columnId;
         }
 
         return normalizedAnswer;

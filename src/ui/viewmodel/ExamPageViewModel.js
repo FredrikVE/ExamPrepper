@@ -278,6 +278,31 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		});
 	}, [submitted]);
 
+
+	const selectRadioButtonGridAnswer = useCallback((questionId, rowId, columnId) => {
+		if (submitted) {
+			return;
+		}
+
+		setAnswers((previousAnswers) => {
+			const currentQuestionAnswer = isPlainObject(previousAnswers[questionId])
+				? previousAnswers[questionId]
+				: {};
+			const nextQuestionAnswer = { ...currentQuestionAnswer };
+
+			if (columnId) {
+				nextQuestionAnswer[rowId] = columnId;
+			} else {
+				delete nextQuestionAnswer[rowId];
+			}
+
+			return {
+				...previousAnswers,
+				[questionId]: nextQuestionAnswer
+			};
+		});
+	}, [submitted]);
+
 	const toggleAnswerOptionExpanded = useCallback((questionId, optionIndex) => {
 		setExpandedAnswerOptionIndexesByQuestionId((previousExpandedIndexesByQuestionId) => {
 			const nextExpandedIndexes = toggleExpandedAnswerOptionIndexes(
@@ -496,6 +521,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setSingleAnswer,
 		toggleMultiAnswer,
 		selectDropdownFillAnswer,
+		selectRadioButtonGridAnswer,
 		toggleAnswerOptionExpanded,
 		submitExam,
 		openSubmitConfirmation,

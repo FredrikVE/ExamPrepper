@@ -8,3 +8,4 @@
 @import "./QuestionTypes/DragDrop/Shared/index.css";
 @import "./Shared/responsive.css";
 @import "./QuestionTypes/DropdownFill/index.css";
+@import "./QuestionTypes/RadioButtonGrid/index.css";

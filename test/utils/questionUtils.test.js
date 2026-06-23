@@ -2,7 +2,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { isInlineBlankPart, splitPromptByInlineBlank } from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/FillBlankInputField/Utils/fillBlankPromptUtils.js";
 import { getExtendedExplanationImages, getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/ExamPage/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";
-import { getQuestionViewState, isDropdownFillQuestion, isFillQuestion, isMatrixPlacementQuestion, hasInlineFillBlank } from "../../src/ui/viewmodel/Utils/questionCardViewState.js";
+import { getQuestionViewState, isDropdownFillQuestion, isFillQuestion, isMatrixPlacementQuestion, isRadioButtonGridQuestion, hasInlineFillBlank } from "../../src/ui/viewmodel/Utils/questionCardViewState.js";
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";
 
 describe("question utils", () => {
@@ -85,6 +85,23 @@ describe("question utils", () => {
         expect(state).toMatchObject({
             shouldShowOptions: false,
             shouldShowDropdownFill: true,
+            shouldShowPrompt: true
+        });
+    });
+
+
+    test("builds view state for radio button grid questions", () => {
+        const state = getQuestionViewState({
+            question: { type: QUESTION_TYPES.RADIO_BUTTON_GRID, source: "Lecture" },
+            submitted: false,
+            showAllFeedback: true,
+            correct: false
+        });
+
+        expect(isRadioButtonGridQuestion({ type: QUESTION_TYPES.RADIO_BUTTON_GRID })).toBe(true);
+        expect(state).toMatchObject({
+            shouldShowOptions: false,
+            shouldShowRadioButtonGrid: true,
             shouldShowPrompt: true
         });
     });

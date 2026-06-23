@@ -16,7 +16,7 @@ export default function createAnswerOptionOrderByQuestionId(questions) {
 }
 
 const getAnswerOptionCount = (question) => {
-	if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+	if (question.type === QUESTION_TYPES.DROPDOWN_FILL || question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
 		return 0;
 	}
 

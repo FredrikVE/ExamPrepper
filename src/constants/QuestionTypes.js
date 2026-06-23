@@ -7,5 +7,6 @@ export const QUESTION_TYPES = {
 	DRAG_CATEGORIZE: "drag-categorize",
 	MATRIX_PLACEMENT: "matrix-placement",
 	SEQUENCE_ORDER: "SequenceOrder",
-	DROPDOWN_FILL: "dropdownFill"
+	DROPDOWN_FILL: "dropdownFill",
+	RADIO_BUTTON_GRID: "radioButtonGrid"
 };
