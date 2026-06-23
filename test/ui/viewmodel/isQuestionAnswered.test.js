@@ -136,6 +136,34 @@ describe("isQuestionAnswered", () => {
         });
     });
 
+
+    describe("dropdownFill", () => {
+        const question = {
+            type: "dropdownFill",
+            items: [
+                { id: "before-exam" },
+                { id: "during-exam" }
+            ]
+        };
+
+        test("returns true when every item has an option", () => {
+            expect(isQuestionAnswered(question, {
+                "before-exam": "confidentiality",
+                "during-exam": "availability"
+            })).toBe(true);
+        });
+
+        test("returns false when one item is unanswered", () => {
+            expect(isQuestionAnswered(question, {
+                "before-exam": "confidentiality"
+            })).toBe(false);
+        });
+
+        test("returns false when answer is not an object", () => {
+            expect(isQuestionAnswered(question, "confidentiality")).toBe(false);
+        });
+    });
+
     describe("matrix-placement", () => {
         const question = { type: "matrix-placement" };
 

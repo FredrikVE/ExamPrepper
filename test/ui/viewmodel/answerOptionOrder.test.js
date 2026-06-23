@@ -36,6 +36,17 @@ describe("createAnswerOptionOrderByQuestionId", () => {
         expect(result.q1).toBeUndefined();
     });
 
+
+    test("skips dropdownFill options because their order is part of the question contract", () => {
+        const questions = [
+            { id: "q1", type: "dropdownFill", options: [{ id: "a" }, { id: "b" }] }
+        ];
+
+        const result = createAnswerOptionOrderByQuestionId(questions);
+
+        expect(result.q1).toBeUndefined();
+    });
+
     test("uses items array for drag-categorize questions", () => {
         const questions = [
             { id: "q1", type: "drag-categorize", items: [{ id: "i1" }, { id: "i2" }, { id: "i3" }] }

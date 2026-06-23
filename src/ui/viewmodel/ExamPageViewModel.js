@@ -253,6 +253,31 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		});
 	}, [submitted]);
 
+
+	const selectDropdownFillAnswer = useCallback((questionId, itemId, optionId) => {
+		if (submitted) {
+			return;
+		}
+
+		setAnswers((previousAnswers) => {
+			const currentQuestionAnswer = isPlainObject(previousAnswers[questionId])
+				? previousAnswers[questionId]
+				: {};
+			const nextQuestionAnswer = { ...currentQuestionAnswer };
+
+			if (optionId) {
+				nextQuestionAnswer[itemId] = optionId;
+			} else {
+				delete nextQuestionAnswer[itemId];
+			}
+
+			return {
+				...previousAnswers,
+				[questionId]: nextQuestionAnswer
+			};
+		});
+	}, [submitted]);
+
 	const toggleAnswerOptionExpanded = useCallback((questionId, optionIndex) => {
 		setExpandedAnswerOptionIndexesByQuestionId((previousExpandedIndexesByQuestionId) => {
 			const nextExpandedIndexes = toggleExpandedAnswerOptionIndexes(
@@ -470,6 +495,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 		setSingleAnswer,
 		toggleMultiAnswer,
+		selectDropdownFillAnswer,
 		toggleAnswerOptionExpanded,
 		submitExam,
 		openSubmitConfirmation,
@@ -497,4 +523,9 @@ const getCurrentQuestionFillMatchType = (submitted, currentQuestion, answers, gr
 		currentQuestion,
 		answers[currentQuestion.id]
 	);
+};
+
+
+const isPlainObject = (value) => {
+	return Boolean(value && typeof value === "object" && !Array.isArray(value));
 };

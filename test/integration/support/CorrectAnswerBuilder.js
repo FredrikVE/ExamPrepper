@@ -23,6 +23,10 @@ export default class CorrectAnswerBuilder {
 			return this.buildMatrixPlacementAnswer(question);
 		}
 
+		if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+			return this.buildDropdownFillAnswer(question);
+		}
+
 		throw new Error(`Unsupported question type in API integration test: ${question.type}`);
 	}
 

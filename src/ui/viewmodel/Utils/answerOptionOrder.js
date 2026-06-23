@@ -16,6 +16,10 @@ export default function createAnswerOptionOrderByQuestionId(questions) {
 }
 
 const getAnswerOptionCount = (question) => {
+	if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+		return 0;
+	}
+
 	if (Array.isArray(question.options)) {
 		return question.options.length;
 	}

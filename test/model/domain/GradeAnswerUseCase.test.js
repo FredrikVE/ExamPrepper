@@ -398,6 +398,77 @@ describe("GradeAnswerUseCase", () => {
         });
     });
 
+
+    describe("dropdown fill", () => {
+        const question = {
+            type: QUESTION_TYPES.DROPDOWN_FILL,
+            points: 2,
+            options: [
+                { id: "confidentiality", label: "Confidentiality" },
+                { id: "integrity", label: "Integrity" },
+                { id: "availability", label: "Availability" }
+            ],
+            items: [
+                { id: "before-exam", beforeText: "Before", afterText: "matters", correctOptionId: "confidentiality" },
+                { id: "during-exam", beforeText: "During", afterText: "matters", correctOptionId: "availability" }
+            ]
+        };
+
+        test("returns true only when every item has the correct option", () => {
+            expect(useCase.execute(question, {
+                "before-exam": "confidentiality",
+                "during-exam": "availability"
+            })).toBe(true);
+
+            expect(useCase.execute(question, {
+                "before-exam": "confidentiality",
+                "during-exam": "integrity"
+            })).toBe(false);
+        });
+
+        test("calculates equal partial score per item", () => {
+            expect(useCase.getQuestionScore(question, {
+                "before-exam": "confidentiality",
+                "during-exam": "integrity"
+            })).toBe(1);
+        });
+
+        test("supports decimal partial score", () => {
+            const decimalQuestion = {
+                ...question,
+                items: [
+                    { id: "one", correctOptionId: "confidentiality" },
+                    { id: "two", correctOptionId: "integrity" },
+                    { id: "three", correctOptionId: "availability" }
+                ]
+            };
+
+            expect(useCase.getQuestionScore(decimalQuestion, { one: "confidentiality" })).toBe(0.67);
+        });
+
+        test("returns dropdown fill stats", () => {
+            expect(useCase.getDropdownFillStats(question, {
+                "before-exam": "confidentiality",
+                "during-exam": "integrity"
+            })).toEqual({
+                correct: 1,
+                wrong: 1,
+                unanswered: 0
+            });
+        });
+
+        test("ignores unknown item ids and option ids", () => {
+            expect(useCase.getDropdownFillStats(question, {
+                "before-exam": "missing-option",
+                unknown: "availability"
+            })).toEqual({
+                correct: 0,
+                wrong: 0,
+                unanswered: 2
+            });
+        });
+    });
+
     test("returns false when question is missing", () => {
         expect(useCase.execute(null, 0)).toBe(false);
     });
