@@ -7,10 +7,14 @@ export default function DropdownFillSelect({ questionId, item, options, selected
 		onDropdownFillAnswer(questionId, item.id, event.target.value);
 	};
 
+	const selectClassName = selectedOptionId
+		? "dropdown-fill-select dropdown-fill-select-selected"
+		: "dropdown-fill-select";
+
 	return (
 		<select
 			id={selectId}
-			className="dropdown-fill-select"
+			className={selectClassName}
 			value={selectedOptionId}
 			disabled={submitted}
 			aria-label={item.ariaLabel ?? t.dropdownFillSelectPlaceholder}

@@ -12,10 +12,6 @@ export default function DropdownFillItem({ question, item, options, answer, subm
 
 	return (
 		<div className={itemClassName}>
-			{item.groupLabel ? (
-				<div className="dropdown-fill-group-label">{item.groupLabel}</div>
-			) : null}
-
 			<div className="dropdown-fill-sentence">
 				<span><FormattedText text={item.beforeText} /></span>
 				<DropdownFillSelect
