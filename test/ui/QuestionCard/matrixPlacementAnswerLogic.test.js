@@ -1,8 +1,36 @@
 // test/ui/QuestionCard/matrixPlacementAnswerLogic.test.js
 import { describe, expect, test } from "@jest/globals";
-import { getMatrixQuadrantsForDisplay, normalizeMatrixPlacementAnswer, placeItemInQuadrant } from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Utils/matrixPlacementAnswerLogic.js";
+import { getMatrixAxis, getMatrixQuadrantsForDisplay, normalizeMatrixPlacementAnswer, placeItemInQuadrant } from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Utils/matrixPlacementAnswerLogic.js";
 
 describe("matrixPlacementAnswerLogic", () => {
+
+    test("infers Norwegian low/high axes from persisted quadrant labels", () => {
+        const question = {
+            quadrants: [
+                { id: "lav-lav", label: "Lav sannsynlighet / Lav konsekvens" },
+                { id: "hoy-lav", label: "Høy sannsynlighet / Lav konsekvens" },
+                { id: "lav-hoy", label: "Lav sannsynlighet / Høy konsekvens" },
+                { id: "hoy-hoy", label: "Høy sannsynlighet / Høy konsekvens" }
+            ]
+        };
+
+        expect(getMatrixAxis(question, "xAxis")).toEqual({
+            label: "Sannsynlighet",
+            lowLabel: "Lav",
+            highLabel: "Høy"
+        });
+        expect(getMatrixAxis(question, "yAxis")).toEqual({
+            label: "Konsekvens",
+            lowLabel: "Lav",
+            highLabel: "Høy"
+        });
+        expect(getMatrixQuadrantsForDisplay(question).map((quadrant) => quadrant.id)).toEqual([
+            "lav-hoy",
+            "hoy-hoy",
+            "lav-lav",
+            "hoy-lav"
+        ]);
+    });
     test("supports directional axis labels for non low/high matrices", () => {
         const question = {
             matrix: {

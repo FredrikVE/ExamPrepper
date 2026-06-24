@@ -34,7 +34,13 @@ export function getMatrixQuadrants(question) {
 }
 
 export function getMatrixAxis(question, axisName) {
-    return question?.matrix?.[axisName] ?? {};
+    const explicitAxis = question?.matrix?.[axisName];
+
+    if (isPlainObject(explicitAxis) && Object.keys(explicitAxis).length > 0) {
+        return explicitAxis;
+    }
+
+    return inferMatrixAxis(question, axisName);
 }
 
 export function getMatrixQuadrantsForDisplay(question) {
@@ -244,6 +250,117 @@ export function isPlainObject(value) {
     }
 
     return true;
+}
+
+
+function inferMatrixAxis(question, axisName) {
+    const segmentIndex = axisName === "xAxis" ? 0 : 1;
+    const segments = getMatrixQuadrants(question)
+        .map((quadrant) => splitQuadrantAxisSegments(quadrant)[segmentIndex])
+        .map(parseAxisSegment)
+        .filter(Boolean);
+
+    if (segments.length === 0) {
+        return {};
+    }
+
+    const lowSegment = segments.find((segment) => segment.rank === "low");
+    const highSegment = segments.find((segment) => segment.rank === "high");
+    const labelSegment = segments.find((segment) => segment.label);
+
+    return {
+        label: labelSegment?.label,
+        lowLabel: lowSegment?.valueLabel ?? "Low",
+        highLabel: highSegment?.valueLabel ?? "High"
+    };
+}
+
+function splitQuadrantAxisSegments(quadrant) {
+    const text = quadrant?.title ?? quadrant?.label ?? quadrant?.id ?? "";
+
+    return String(text)
+        .split(/\s*[\/|]\s*/u)
+        .map((segment) => segment.trim())
+        .filter(Boolean);
+}
+
+function parseAxisSegment(segment) {
+    const normalizedSegment = normalizeForSearch(segment);
+    const rank = getSegmentRank(normalizedSegment);
+
+    if (!rank) {
+        return null;
+    }
+
+    const words = String(segment)
+        .trim()
+        .split(/\s+/u)
+        .filter(Boolean);
+    const valueWordIndex = words.findIndex((word) => getRankWordType(word) === rank);
+    const valueLabel = valueWordIndex >= 0
+        ? stripTrailingPunctuation(words[valueWordIndex])
+        : rank;
+    const labelWords = words.filter((word, index) => {
+        if (index === valueWordIndex) {
+            return false;
+        }
+
+        return !getRankWordType(word);
+    });
+
+    return {
+        rank,
+        valueLabel,
+        label: formatAxisLabel(labelWords.join(" "))
+    };
+}
+
+function getSegmentRank(segment) {
+    if (hasRankWord(segment, ["high", "hoy", "høy"])) {
+        return "high";
+    }
+
+    if (hasRankWord(segment, ["low", "lav"])) {
+        return "low";
+    }
+
+    return null;
+}
+
+function hasRankWord(segment, words) {
+    return words.some((word) => new RegExp(`(^|\\s)${escapeRegExp(word)}($|\\s)`, "u").test(segment));
+}
+
+function getRankWordType(word) {
+    const normalizedWord = normalizeForSearch(stripTrailingPunctuation(word));
+
+    if (["high", "hoy", "høy"].includes(normalizedWord)) {
+        return "high";
+    }
+
+    if (["low", "lav"].includes(normalizedWord)) {
+        return "low";
+    }
+
+    return null;
+}
+
+function stripTrailingPunctuation(value) {
+    return String(value ?? "").replace(/[,:;.!?]+$/u, "");
+}
+
+function formatAxisLabel(value) {
+    const text = String(value ?? "").trim();
+
+    if (!text) {
+        return undefined;
+    }
+
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function removeExistingItemInQuadrant(answer, quadrantId) {
