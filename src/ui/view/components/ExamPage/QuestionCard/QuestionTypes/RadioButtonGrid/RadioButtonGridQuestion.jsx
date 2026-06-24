@@ -2,9 +2,9 @@
 import FormattedText from "../../../../Shared/FormattedText.jsx";
 import { getColumnLabel, getRadioButtonGridColumns, getRadioButtonGridRowResult, getRadioButtonGridRows, getSelectedColumnId } from "./radioButtonGridUtils.js";
 
-export default function RadioButtonGridQuestion({ question, answer, submitted, showAllFeedback, onRadioButtonGridAnswer, t }) {
+export default function RadioButtonGridQuestion({ question, answer, answerOptionOrder, submitted, showAllFeedback, onRadioButtonGridAnswer, t }) {
 	const columns = getRadioButtonGridColumns(question);
-	const rows = getRadioButtonGridRows(question);
+	const rows = getRadioButtonGridRows(question, answerOptionOrder);
 	const feedbackMode = submitted && showAllFeedback;
 
 	return (

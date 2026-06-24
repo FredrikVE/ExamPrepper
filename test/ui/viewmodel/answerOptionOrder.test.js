@@ -37,25 +37,37 @@ describe("createAnswerOptionOrderByQuestionId", () => {
     });
 
 
-    test("skips dropdownFill options because their order is part of the question contract", () => {
+    test("uses dropdownFill items and keeps options out of the shuffle count", () => {
         const questions = [
-            { id: "q1", type: "dropdownFill", options: [{ id: "a" }, { id: "b" }] }
+            {
+                id: "q1",
+                type: "dropdownFill",
+                options: [{ id: "a" }, { id: "b" }],
+                items: [{ id: "i1" }, { id: "i2" }, { id: "i3" }]
+            }
         ];
 
         const result = createAnswerOptionOrderByQuestionId(questions);
 
-        expect(result.q1).toBeUndefined();
+        expect(result.q1).toHaveLength(3);
+        expect([...result.q1].sort()).toEqual([0, 1, 2]);
     });
 
 
-    test("skips radioButtonGrid columns because their order is part of the question contract", () => {
+    test("uses radioButtonGrid rows and keeps columns out of the shuffle count", () => {
         const questions = [
-            { id: "q1", type: "radioButtonGrid", columns: [{ id: "a" }, { id: "b" }] }
+            {
+                id: "q1",
+                type: "radioButtonGrid",
+                columns: [{ id: "a" }, { id: "b" }],
+                rows: [{ id: "r1" }, { id: "r2" }, { id: "r3" }, { id: "r4" }]
+            }
         ];
 
         const result = createAnswerOptionOrderByQuestionId(questions);
 
-        expect(result.q1).toBeUndefined();
+        expect(result.q1).toHaveLength(4);
+        expect([...result.q1].sort()).toEqual([0, 1, 2, 3]);
     });
 
     test("uses items array for drag-categorize questions", () => {

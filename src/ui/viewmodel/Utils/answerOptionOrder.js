@@ -16,8 +16,12 @@ export default function createAnswerOptionOrderByQuestionId(questions) {
 }
 
 const getAnswerOptionCount = (question) => {
-	if (question.type === QUESTION_TYPES.DROPDOWN_FILL || question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
-		return 0;
+	if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+		return Array.isArray(question.items) ? question.items.length : 0;
+	}
+
+	if (question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
+		return Array.isArray(question.rows) ? question.rows.length : 0;
 	}
 
 	if (Array.isArray(question.options)) {

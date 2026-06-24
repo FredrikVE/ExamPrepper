@@ -72,6 +72,7 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                     <DropdownFillQuestion
                         question={question}
                         answer={answer}
+                        answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
                         onDropdownFillAnswer={onDropdownFillAnswer}
@@ -83,6 +84,7 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                     <RadioButtonGridQuestion
                         question={question}
                         answer={answer}
+                        answerOptionOrder={answerOptionOrder}
                         submitted={submitted}
                         showAllFeedback={showAllFeedback}
                         onRadioButtonGridAnswer={onRadioButtonGridAnswer}

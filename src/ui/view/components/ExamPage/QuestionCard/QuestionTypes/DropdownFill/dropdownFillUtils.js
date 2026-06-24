@@ -4,8 +4,11 @@ export function getDropdownFillOptions(question) {
 	return sortByPosition(Array.isArray(question?.options) ? question.options : []);
 }
 
-export function getDropdownFillItems(question) {
-	return sortByPosition(Array.isArray(question?.items) ? question.items : []);
+export function getDropdownFillItems(question, answerOptionOrder = null) {
+	return orderItemsByIndexOrder(
+		sortByPosition(Array.isArray(question?.items) ? question.items : []),
+		answerOptionOrder
+	);
 }
 
 export function getDropdownFillAnswer(answer) {
@@ -64,6 +67,26 @@ export function getDropdownFillStats(question, answer) {
 		stats.wrong += 1;
 		return stats;
 	}, { correct: 0, wrong: 0, unanswered: 0 });
+}
+
+function orderItemsByIndexOrder(items, indexOrder) {
+	if (!isValidIndexOrder(indexOrder, items.length)) {
+		return items;
+	}
+
+	return indexOrder.map((index) => items[index]);
+}
+
+function isValidIndexOrder(indexOrder, itemCount) {
+	if (!Array.isArray(indexOrder) || indexOrder.length !== itemCount) {
+		return false;
+	}
+
+	const uniqueIndexes = new Set(indexOrder);
+
+	return indexOrder.every((index) => {
+		return Number.isInteger(index) && index >= 0 && index < itemCount;
+	}) && uniqueIndexes.size === itemCount;
 }
 
 function sortByPosition(items) {

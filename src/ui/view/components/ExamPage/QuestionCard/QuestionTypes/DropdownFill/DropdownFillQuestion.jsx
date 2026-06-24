@@ -3,9 +3,9 @@ import DropdownFillItem from "./DropdownFillItem.jsx";
 import DropdownFillProgress from "./DropdownFillProgress.jsx";
 import { getDropdownFillItems, getDropdownFillOptions } from "./dropdownFillUtils.js";
 
-export default function DropdownFillQuestion({ question, answer, submitted, showAllFeedback, onDropdownFillAnswer, t }) {
+export default function DropdownFillQuestion({ question, answer, answerOptionOrder, submitted, showAllFeedback, onDropdownFillAnswer, t }) {
 	const options = getDropdownFillOptions(question);
-	const items = getDropdownFillItems(question);
+	const items = getDropdownFillItems(question, answerOptionOrder);
 
 	return (
 		<div className="dropdown-fill-question">
