@@ -26,7 +26,11 @@ export function getCorrectCategoryId(question, itemId) {
         }
     }
 
-    return null;
+    const item = getSafeArray(question?.items).find((candidate) => {
+        return candidate?.id === itemId;
+    });
+
+    return item?.correctCategoryId ?? null;
 }
 
 export function getCategoryLabelById(question, categoryId) {

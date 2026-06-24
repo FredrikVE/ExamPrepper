@@ -505,7 +505,11 @@ export default class GradeAnswerUseCase {
             }
         }
 
-        return null;
+        const item = Array.isArray(question?.items)
+            ? question.items.find((candidate) => candidate?.id === itemId)
+            : null;
+
+        return item?.correctCategoryId ?? null;
     }
 
     #getCorrectMatrixQuadrantId(question, itemId) {

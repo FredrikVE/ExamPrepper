@@ -230,6 +230,37 @@ describe("GradeAnswerUseCase", () => {
                 unanswered: 1
             });
         });
+
+        test("supports persisted item correctCategoryId without correctAnswer map", () => {
+            const persistedQuestion = {
+                ...question,
+                correctAnswer: undefined,
+                items: question.items.map((item) => ({
+                    ...item,
+                    correctCategoryId: {
+                        "business-case": "choice",
+                        "design-thinking": "innovation",
+                        "it-governance": "governance",
+                        projects: "organizing"
+                    }[item.id]
+                }))
+            };
+
+            const answer = {
+                choice: ["business-case"],
+                innovation: ["design-thinking"],
+                governance: ["it-governance"],
+                organizing: ["projects"]
+            };
+
+            expect(useCase.execute(persistedQuestion, answer)).toBe(true);
+            expect(useCase.getQuestionScore(persistedQuestion, answer)).toBe(4);
+            expect(useCase.getDragCategorizeStats(persistedQuestion, answer)).toEqual({
+                correct: 4,
+                wrong: 0,
+                unanswered: 0
+            });
+        });
     });
 
 
