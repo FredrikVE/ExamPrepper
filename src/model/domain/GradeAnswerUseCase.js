@@ -491,20 +491,6 @@ export default class GradeAnswerUseCase {
     }
 
     #getCorrectCategoryId(question, itemId) {
-        const correctAnswer = this.#isPlainObject(question?.correctAnswer)
-            ? question.correctAnswer
-            : {};
-
-        for (const categoryId in correctAnswer) {
-            const categoryItemIds = Array.isArray(correctAnswer[categoryId])
-                ? correctAnswer[categoryId]
-                : [];
-
-            if (categoryItemIds.includes(itemId)) {
-                return categoryId;
-            }
-        }
-
         const item = Array.isArray(question?.items)
             ? question.items.find((candidate) => candidate?.id === itemId)
             : null;

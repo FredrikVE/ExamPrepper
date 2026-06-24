@@ -179,23 +179,17 @@ describe("GradeAnswerUseCase", () => {
             type: QUESTION_TYPES.DRAG_CATEGORIZE,
             points: 4,
             items: [
-                { id: "business-case", label: "Business case" },
-                { id: "design-thinking", label: "Design thinking" },
-                { id: "it-governance", label: "IT governance" },
-                { id: "projects", label: "Projects" }
+                { id: "business-case", label: "Business case", correctCategoryId: "choice" },
+                { id: "design-thinking", label: "Design thinking", correctCategoryId: "innovation" },
+                { id: "it-governance", label: "IT governance", correctCategoryId: "governance" },
+                { id: "projects", label: "Projects", correctCategoryId: "organizing" }
             ],
             categories: [
                 { id: "choice", label: "VALG" },
                 { id: "innovation", label: "UTFORSKNING" },
                 { id: "governance", label: "STYRING" },
                 { id: "organizing", label: "ORGANISERING" }
-            ],
-            correctAnswer: {
-                choice: ["business-case"],
-                innovation: ["design-thinking"],
-                governance: ["it-governance"],
-                organizing: ["projects"]
-            }
+            ]
         };
 
         test("returns true only when all items are placed in the correct categories", () => {
@@ -231,19 +225,19 @@ describe("GradeAnswerUseCase", () => {
             });
         });
 
-        test("supports persisted item correctCategoryId without correctAnswer map", () => {
-            const persistedQuestion = {
+        test("does not use legacy correctAnswer map for drag categorize grading", () => {
+            const legacyOnlyQuestion = {
                 ...question,
-                correctAnswer: undefined,
                 items: question.items.map((item) => ({
-                    ...item,
-                    correctCategoryId: {
-                        "business-case": "choice",
-                        "design-thinking": "innovation",
-                        "it-governance": "governance",
-                        projects: "organizing"
-                    }[item.id]
-                }))
+                    id: item.id,
+                    label: item.label
+                })),
+                correctAnswer: {
+                    choice: ["business-case"],
+                    innovation: ["design-thinking"],
+                    governance: ["it-governance"],
+                    organizing: ["projects"]
+                }
             };
 
             const answer = {
@@ -253,11 +247,11 @@ describe("GradeAnswerUseCase", () => {
                 organizing: ["projects"]
             };
 
-            expect(useCase.execute(persistedQuestion, answer)).toBe(true);
-            expect(useCase.getQuestionScore(persistedQuestion, answer)).toBe(4);
-            expect(useCase.getDragCategorizeStats(persistedQuestion, answer)).toEqual({
-                correct: 4,
-                wrong: 0,
+            expect(useCase.execute(legacyOnlyQuestion, answer)).toBe(false);
+            expect(useCase.getQuestionScore(legacyOnlyQuestion, answer)).toBe(0);
+            expect(useCase.getDragCategorizeStats(legacyOnlyQuestion, answer)).toEqual({
+                correct: 0,
+                wrong: 4,
                 unanswered: 0
             });
         });

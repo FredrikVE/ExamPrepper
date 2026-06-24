@@ -14,23 +14,22 @@ export function getItemLabel(item) {
 }
 
 export function getCorrectCategoryId(question, itemId) {
-    const correctAnswer = isPlainObject(question?.correctAnswer)
-        ? question.correctAnswer
-        : {};
-
-    for (const categoryId in correctAnswer) {
-        const itemIds = getSafeArray(correctAnswer[categoryId]);
-
-        if (itemIds.includes(itemId)) {
-            return categoryId;
-        }
-    }
-
     const item = getSafeArray(question?.items).find((candidate) => {
         return candidate?.id === itemId;
     });
 
     return item?.correctCategoryId ?? null;
+}
+
+export function getExpectedCategoryItemIds(question, categoryId) {
+    if (!categoryId) {
+        return [];
+    }
+
+    return getSafeArray(question?.items)
+        .filter((item) => item?.correctCategoryId === categoryId)
+        .map((item) => item.id)
+        .filter(Boolean);
 }
 
 export function getCategoryLabelById(question, categoryId) {

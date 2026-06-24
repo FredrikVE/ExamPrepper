@@ -1,15 +1,11 @@
 // src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortCategoryGrid.jsx
-import { getPlacedItemIds, getSafeArray, isPlainObject } from "../Utils/categorySortAnswerLogic.js";
+import { getExpectedCategoryItemIds, getPlacedItemIds, getSafeArray } from "../Utils/categorySortAnswerLogic.js";
 import CategorySortCategoryColumn from "./CategorySortCategoryColumn.jsx";
 
 export default function CategorySortCategoryGrid(props) {
     const categories = getSafeArray(props.question?.categories);
     const categoryCount = Math.max(categories.length, 1);
     const placedItemIds = getPlacedItemIds(props.safeAnswer);
-    const correctAnswer = isPlainObject(props.question?.correctAnswer)
-        ? props.question.correctAnswer
-        : {};
-
     const className = getCategoryGridClassName(categoryCount);
 
     return (
@@ -25,7 +21,7 @@ export default function CategorySortCategoryGrid(props) {
                     itemIds={props.safeAnswer[category.id]}
                     unansweredSlotCount={getUnansweredSlotCount({
                         categoryId: category.id,
-                        correctAnswer,
+                        question: props.question,
                         placedItemIds,
                         feedbackMode: props.feedbackMode
                     })}
@@ -46,14 +42,13 @@ export default function CategorySortCategoryGrid(props) {
     );
 }
 
-function getUnansweredSlotCount({ categoryId, correctAnswer, placedItemIds, feedbackMode }) {
+function getUnansweredSlotCount({ categoryId, question, placedItemIds, feedbackMode }) {
     if (!feedbackMode) {
         return 0;
     }
 
-    const expectedItemIds = getSafeArray(correctAnswer[categoryId]);
-
-    return expectedItemIds.filter((itemId) => !placedItemIds.has(itemId)).length;
+    return getExpectedCategoryItemIds(question, categoryId)
+        .filter((itemId) => !placedItemIds.has(itemId)).length;
 }
 
 function getCategoryGridClassName(categoryCount) {
