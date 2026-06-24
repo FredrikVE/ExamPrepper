@@ -1,7 +1,7 @@
 // src/ui/viewmodel/Utils/deriveWorkspaceClassName.js
 import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
 
-export default function deriveWorkspaceClassName(question, submitted, isSubmitConfirmOpen = false) {
+export default function deriveWorkspaceClassName(question, submitted, isSubmitConfirmOpen) {
 	const shouldUseScrollFooter = shouldQuestionUseScrollFooter(question, submitted);
 	const shouldUseWideQuestionLayout = shouldQuestionUseWideLayout(question);
 	const shouldUseExtraWideQuestionLayout = shouldQuestionUseExtraWideLayout(question);
