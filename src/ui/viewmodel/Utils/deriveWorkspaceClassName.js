@@ -1,7 +1,7 @@
 // src/ui/viewmodel/Utils/deriveWorkspaceClassName.js
 import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
 
-export default function deriveWorkspaceClassName(question, submitted) {
+export default function deriveWorkspaceClassName(question, submitted, isSubmitConfirmOpen = false) {
 	const shouldUseScrollFooter = shouldQuestionUseScrollFooter(question, submitted);
 	const shouldUseWideQuestionLayout = shouldQuestionUseWideLayout(question);
 	const shouldUseExtraWideQuestionLayout = shouldQuestionUseExtraWideLayout(question);
@@ -17,7 +17,8 @@ export default function deriveWorkspaceClassName(question, submitted) {
 		shouldUseExtraWideQuestionLayout ? "exam-workspace-extra-wide-question-mode" : "",
 		shouldUseDenseDragCategorizeLayout ? "exam-workspace-dense-drag-categorize-mode" : "",
 		isSequenceOrderQuestion ? "exam-workspace-sequence-order-mode" : "",
-		isMatrixPlacementQuestion ? "exam-workspace-matrix-placement-mode" : ""
+		isMatrixPlacementQuestion ? "exam-workspace-matrix-placement-mode" : "",
+		isSubmitConfirmOpen ? "exam-workspace-submit-confirm-open" : ""
 	].filter(Boolean).join(" ");
 }
 

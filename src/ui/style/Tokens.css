@@ -129,6 +129,13 @@
     /* ── Backdrop ───────────────────────────── */
     --blur-panel: blur(24px);
     --blur-overlay: blur(4px);
+
+    /* ── Layering ─────────────────────────────
+       Named layers keep stacking order centralized and intentional. */
+    --z-exam-submit-confirmation: 110;
+
+    /* ── Mobile exam confirmation ───────────── */
+    --exam-submit-confirmation-mobile-footer-clearance: calc(var(--space-12) + env(safe-area-inset-bottom));
 }
 
 .dark {

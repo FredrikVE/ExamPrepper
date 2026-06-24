@@ -61,8 +61,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
 
 	const workspaceClassName = useMemo(() => {
-		return deriveWorkspaceClassName(currentQuestion, submitted);
-	}, [currentQuestion, submitted]);
+		return deriveWorkspaceClassName(currentQuestion, submitted, isSubmitConfirmOpen);
+	}, [currentQuestion, submitted, isSubmitConfirmOpen]);
 
 	const expandedAnswerOptionIndexes = currentQuestion
 		? expandedAnswerOptionIndexesByQuestionId[currentQuestion.id] ?? []

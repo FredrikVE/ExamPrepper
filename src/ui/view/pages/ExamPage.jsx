@@ -32,33 +32,35 @@ export default function ExamPage({ viewModel }) {
     }
 
     return (
-        <ExamWorkspace
-            className={viewModel.workspaceClassName}
-            scrollToTopRequestId={viewModel.scrollToTopRequestId}
-        >
-            <Header viewModel={viewModel} />
+        <>
+            <ExamWorkspace
+                className={viewModel.workspaceClassName}
+                scrollToTopRequestId={viewModel.scrollToTopRequestId}
+            >
+                <Header viewModel={viewModel} />
 
-            {viewModel.attemptSaving && (
-                <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>
-            )}
+                {viewModel.attemptSaving && (
+                    <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>
+                )}
 
-            {viewModel.attemptSaveError && (
-                <p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
-            )}
+                {viewModel.attemptSaveError && (
+                    <p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
+                )}
 
-            <ExamProgress
-                visibleQuestions={viewModel.visibleQuestions}
-                currentQuestionIndex={viewModel.currentQuestionIndex}
-                onGoToQuestion={viewModel.goToQuestion}
-            />
+                <ExamProgress
+                    visibleQuestions={viewModel.visibleQuestions}
+                    currentQuestionIndex={viewModel.currentQuestionIndex}
+                    onGoToQuestion={viewModel.goToQuestion}
+                />
 
-            <main className="exam-page-main">
-                <div className="exam-page-content">
-                    <ExamPageContent viewModel={viewModel} />
-                </div>
-            </main>
+                <main className="exam-page-main">
+                    <div className="exam-page-content">
+                        <ExamPageContent viewModel={viewModel} />
+                    </div>
+                </main>
 
-            <Footer viewModel={viewModel} />
+                <Footer viewModel={viewModel} />
+            </ExamWorkspace>
 
             {viewModel.isSubmitConfirmOpen && (
                 <ExamSubmitConfirmation
@@ -70,6 +72,6 @@ export default function ExamPage({ viewModel }) {
                     onConfirm={viewModel.confirmSubmitExam}
                 />
             )}
-        </ExamWorkspace>
+        </>
     );
 }

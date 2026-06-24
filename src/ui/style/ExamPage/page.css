@@ -71,6 +71,15 @@
         radial-gradient(circle at 46% 4%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 18rem);
 }
 
+.exam-workspace-submit-confirm-open > * {
+    filter: blur(8px);
+    opacity: 0.45;
+    pointer-events: none;
+    transition:
+        filter var(--transition-normal),
+        opacity var(--transition-normal);
+}
+
 /* ── Main content ─────────────────────── */
 .exam-page-main {
     display: flex;
