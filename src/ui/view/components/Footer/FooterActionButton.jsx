@@ -17,13 +17,13 @@ export default function FooterActionButton({ viewModel, t }) {
                 </FooterNavigationButton>
 
                 <FooterNavigationButton
-                    onClick={viewModel.nextQuestion}
-                    disabled={true}
-                    variant="next"
-                    icon={<ChevronRight className="exam-footer-icon" />}
+                    onClick={viewModel.openSubmitConfirmation}
+                    disabled={false}
+                    variant="submit"
+                    icon={<Send className="exam-footer-icon" />}
                     className="exam-footer-button-mobile-next"
                 >
-                    {t.footerNext}
+                    {t.footerSubmit}
                 </FooterNavigationButton>
             </>
         );

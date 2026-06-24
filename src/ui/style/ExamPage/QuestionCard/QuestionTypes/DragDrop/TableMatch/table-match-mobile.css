@@ -46,6 +46,7 @@
 
 
 	.table-match-mobile-column {
+		box-sizing: border-box;
 		min-width: 0;
 		border: 1px solid var(--table-match-mobile-column-border);
 		border-radius: 17px;
@@ -73,7 +74,10 @@
 	}
 
 	.table-match-mobile-card {
+		box-sizing: border-box;
 		position: relative;
+		min-width: 0;
+		max-width: 100%;
 		-webkit-user-select: none;
 		user-select: none;
 		touch-action: none;
@@ -131,6 +135,8 @@
 
 	.table-match-mobile-card-text {
 		min-width: 0;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 
 	.table-match-mobile-card-grip {
@@ -148,6 +154,8 @@
 	}
 
 	.table-match-mobile-target-card {
+		box-sizing: border-box;
+		min-width: 0;
 		border: 1px solid var(--table-match-mobile-target-border);
 		border-radius: 13px;
 		background: var(--table-match-mobile-target-bg);
@@ -170,6 +178,9 @@
 	}
 
 	.table-match-mobile-target-description {
+		min-width: 0;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 		color: var(--text-main);
 		font-size: 1rem;
 		font-weight: 700;
@@ -177,7 +188,10 @@
 	}
 
 	.table-match-mobile-drop-zone {
+		box-sizing: border-box;
 		display: grid;
+		min-width: 0;
+		max-width: 100%;
 		-webkit-user-select: none;
 		user-select: none;
 		place-items: center;
