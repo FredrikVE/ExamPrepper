@@ -120,6 +120,47 @@
         0 14px 30px color-mix(in srgb, var(--accent) 26%, transparent);
 }
 
+.radio-grid-mobile-option[data-state="selected"],
+.radio-grid-mobile-option[data-state="selected-correct"] {
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--dnd-active-border);
+    background: var(--dnd-active-bg);
+    color: var(--dnd-on-active);
+    box-shadow:
+        var(--dnd-active-inset),
+        var(--dnd-active-shadow),
+        0 0 0 4px var(--dnd-active-hover-ring);
+}
+
+.radio-grid-mobile-option[data-state="selected"] span,
+.radio-grid-mobile-option[data-state="selected-correct"] span {
+    color: var(--dnd-on-active);
+}
+
+.radio-grid-mobile-option[data-state="selected-wrong"] {
+    border-width: 2px;
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--danger) 68%, var(--line));
+    background: color-mix(in srgb, var(--danger) 16%, var(--panel-strong));
+    color: var(--danger-text);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--danger) 24%, transparent),
+        0 0 0 4px color-mix(in srgb, var(--danger) 12%, transparent),
+        0 10px 22px color-mix(in srgb, var(--danger) 14%, transparent);
+}
+
+.radio-grid-mobile-option[data-state="correct-answer-hint"] {
+    border-width: 2px;
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--accent) 92%, var(--line));
+    background: color-mix(in srgb, var(--accent) 18%, var(--panel-strong));
+    color: var(--text-main);
+    box-shadow:
+        0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent),
+        0 0 26px color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
 .radio-grid-cell-selected .radio-grid-choice-dot,
 .radio-grid-mobile-option-selected .radio-grid-choice-dot {
     display: none;
@@ -178,20 +219,6 @@
         0 0 26px color-mix(in srgb, var(--accent) 34%, transparent);
 }
 
-.radio-grid-mobile-option-selected.radio-grid-mobile-option-correct-answer {
-    border-style: solid;
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--accent) 92%, var(--panel-strong)),
-            color-mix(in srgb, var(--accent) 72%, var(--panel-strong))
-        );
-    color: var(--dnd-on-active);
-    box-shadow:
-        var(--dnd-active-inset),
-        0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent),
-        0 14px 30px color-mix(in srgb, var(--accent) 26%, transparent);
-}
 
 .radio-grid-row-correct {
     background: color-mix(in srgb, var(--success) 8%, transparent);
@@ -287,24 +314,6 @@
     filter: none;
 }
 
-.radio-grid-mobile-card.radio-grid-row-wrong .radio-grid-mobile-option-selected:not(.radio-grid-mobile-option-correct-answer) {
-    border-width: 2px;
-    border-color: color-mix(in srgb, var(--danger) 64%, var(--line));
-    background: color-mix(in srgb, var(--danger) 16%, var(--panel-strong));
-    color: var(--danger-text);
-    box-shadow:
-        inset 0 0 0 1px color-mix(in srgb, var(--danger) 24%, transparent),
-        0 0 0 4px color-mix(in srgb, var(--danger) 12%, transparent),
-        0 10px 22px color-mix(in srgb, var(--danger) 14%, transparent);
-}
-
-.radio-grid-mobile-card.radio-grid-row-wrong .radio-grid-mobile-option-correct-answer {
-    border-color: color-mix(in srgb, var(--accent) 92%, var(--line));
-    background: color-mix(in srgb, var(--accent) 18%, var(--panel-strong));
-    box-shadow:
-        0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent),
-        0 0 26px color-mix(in srgb, var(--accent) 32%, transparent);
-}
 
 @media (max-width: 760px) {
     .radio-grid-desktop {
