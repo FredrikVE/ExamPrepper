@@ -42,7 +42,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: min(100%, 560px);
+    width: 100%;
     height: auto;
     max-height: min(86dvh, 760px);
     margin-bottom: calc(-1 * var(--mobile-flipcard-sheet-bleed));
@@ -89,7 +89,6 @@
     flex: 0 1 auto;
     min-height: 0;
     width: 100%;
-    max-width: 480px;
     margin: 0 auto;
     overflow-y: auto;
     scrollbar-width: none;
