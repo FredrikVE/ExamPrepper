@@ -1,0 +1,5 @@
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/tokens.css */
+.flipcard-tool-menu {
+    --flipcard-tool-width: minmax(280px, 340px);
+    --flipcard-tool-card-min-height: 108px;
+}

@@ -1,0 +1,7 @@
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/index.css */
+@import "./tokens.css";
+@import "./shared.css";
+@import "./tool-pager.css";
+@import "./tool-grid.css";
+@import "./tool-card.css";
+@import "./responsive.css";

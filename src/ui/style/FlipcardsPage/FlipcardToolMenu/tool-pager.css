@@ -1,0 +1,57 @@
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/tool-pager.css */
+.flipcard-tool-pager {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    align-items: center;
+    gap: var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--panel-bg) 82%, transparent);
+    padding: var(--space-3);
+}
+
+.flipcard-tool-pager-button {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--panel-strong) 84%, transparent);
+    color: var(--text-main);
+    transition:
+        transform var(--transition-fast),
+        border-color var(--transition-fast),
+        opacity var(--transition-fast);
+}
+
+.flipcard-tool-pager-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+}
+
+.flipcard-tool-pager-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+}
+
+.flipcard-tool-pager-button svg {
+    width: 19px;
+    height: 19px;
+    stroke-width: 2.5;
+}
+
+.flipcard-tool-pager-status {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-1);
+    min-width: 0;
+    text-align: center;
+}
+
+.flipcard-tool-pager-status strong {
+    color: var(--text-main);
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}

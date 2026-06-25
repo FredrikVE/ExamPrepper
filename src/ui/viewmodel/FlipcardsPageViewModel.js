@@ -134,7 +134,17 @@ export default function useFlipcardsPageViewModel(
         completePositionLabel: t.flipcardsCompletePositionLabel,
         completeBody: t.flipcardsCompleteBody,
         deckPositionLabel: t.flipcardsDeckPositionLabel,
-        activeCardLabel: t.flipcardsActiveCardLabel
+        activeCardLabel: t.flipcardsActiveCardLabel,
+        toolMenuLabel: t.flipcardsToolMenuLabel,
+        toolMenuTitle: t.flipcardsToolMenuTitle,
+        toolMenuSubtitle: t.flipcardsToolMenuSubtitle,
+        toolMenuPagerLabel: t.flipcardsToolMenuPagerLabel,
+        toolMenuCurrentCardLabel: t.flipcardsToolMenuCurrentCardLabel,
+        toolMenuActionsLabel: t.flipcardsToolMenuActionsLabel,
+        toolMenuStatsLabel: t.flipcardsToolMenuStatsLabel,
+        toolMenuPracticeDescription: t.flipcardsToolMenuPracticeDescription,
+        toolMenuFlipDescription: t.flipcardsToolMenuFlipDescription,
+        toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription
     }), [t]);
 
     return {

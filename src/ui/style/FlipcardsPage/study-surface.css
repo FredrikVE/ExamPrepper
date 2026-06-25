@@ -68,3 +68,14 @@
     line-height: 1.7;
     text-align: right;
 }
+
+.flipcards-study-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--flipcard-tool-width);
+    align-items: center;
+    gap: var(--space-8);
+    min-height: 0;
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+}

@@ -43,3 +43,12 @@
         text-align: left;
     }
 }
+
+@media (max-width: 932px) {
+    .flipcards-study-body {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: var(--space-6);
+        padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+    }
+}

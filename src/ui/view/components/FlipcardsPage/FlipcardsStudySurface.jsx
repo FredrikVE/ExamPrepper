@@ -1,6 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
+import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
 
 export default function FlipcardsStudySurface({
     cards,
@@ -55,15 +56,33 @@ export default function FlipcardsStudySurface({
                 </div>
             </div>
 
-            <FlipcardDeck
-                cards={cards}
-                deck={deck}
-                labels={labels}
-                progressModel={progressModel}
-                onPractice={completeForPractice}
-                onMastered={completeAsMastered}
-                onRestart={restartSession}
-            />
+            <div className="flipcards-study-body">
+                <FlipcardDeck
+                    cards={cards}
+                    deck={deck}
+                    labels={labels}
+                    progressModel={progressModel}
+                    onPractice={completeForPractice}
+                    onMastered={completeAsMastered}
+                    onRestart={restartSession}
+                />
+
+                <FlipcardToolMenu
+                    cardCount={cards.length}
+                    activeIndex={deck.activeIndex}
+                    hasPrevious={deck.hasPrevious}
+                    hasNext={deck.hasNext}
+                    isComplete={deck.isComplete}
+                    isSwipeCommandActive={deck.isSwipeCommandActive}
+                    progressModel={progressModel}
+                    labels={labels}
+                    onPrevious={deck.goToPrevious}
+                    onNext={deck.goToNext}
+                    onPractice={deck.requestSwipeLeft}
+                    onFlip={deck.flipActiveCard}
+                    onMastered={deck.requestSwipeRight}
+                />
+            </div>
         </section>
     );
 }

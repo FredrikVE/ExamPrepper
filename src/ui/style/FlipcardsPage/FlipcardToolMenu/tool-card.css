@@ -1,0 +1,76 @@
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/tool-card.css */
+.flipcard-tool-card {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-4);
+    min-height: var(--flipcard-tool-card-min-height);
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--panel-bg) 80%, transparent);
+    color: var(--text-main);
+    padding: var(--space-4);
+    text-align: left;
+    transition:
+        transform var(--transition-fast),
+        border-color var(--transition-fast),
+        background var(--transition-fast),
+        opacity var(--transition-fast);
+}
+
+.flipcard-tool-card:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+    background: color-mix(in srgb, var(--accent-soft) 44%, var(--panel-bg));
+}
+
+.flipcard-tool-card:disabled {
+    cursor: not-allowed;
+    opacity: 0.44;
+}
+
+.flipcard-tool-card-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.flipcard-tool-card-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+}
+
+.flipcard-tool-card-copy {
+    display: grid;
+    gap: var(--space-1);
+    min-width: 0;
+}
+
+.flipcard-tool-card-copy strong {
+    color: var(--text-main);
+    font-size: 15px;
+    line-height: 1.1;
+}
+
+.flipcard-tool-card-copy span {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.35;
+}
+
+.flipcard-tool-card-practice {
+    color: var(--warning-text);
+}
+
+.flipcard-tool-card-flip {
+    color: var(--accent);
+}
+
+.flipcard-tool-card-mastered {
+    color: var(--success-text);
+}
