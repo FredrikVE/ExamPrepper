@@ -1,0 +1,70 @@
+/* src/ui/style/FlipcardsPage/study-surface.css */
+.flipcards-study-surface {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: var(--space-9);
+    min-height: min(720px, 76vh);
+}
+
+.flipcards-study-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-8);
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.flipcards-study-kicker {
+    margin: 0 0 var(--space-2);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.flipcards-study-header h1 {
+    max-width: 720px;
+    margin: 0;
+    color: var(--text-main);
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+}
+
+.flipcards-study-progress {
+    display: grid;
+    justify-items: end;
+    gap: var(--space-2);
+    min-width: 220px;
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--panel-strong) 86%, transparent);
+    padding: var(--space-5) var(--space-6);
+    box-shadow: var(--shadow-card);
+}
+
+.flipcards-study-progress span {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.flipcards-study-progress strong {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 850;
+}
+
+.flipcards-page-lead {
+    max-width: 42ch;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.7;
+    text-align: right;
+}

@@ -16,3 +16,30 @@
         padding: var(--space-8);
     }
 }
+
+@media (max-width: 932px) {
+    .flipcards-study-surface {
+        min-height: calc(100dvh - var(--space-12) - var(--space-10));
+        gap: var(--space-8);
+    }
+
+    .flipcards-study-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: var(--space-5);
+    }
+
+    .flipcards-study-header h1 {
+        font-size: clamp(32px, 10vw, 46px);
+    }
+
+    .flipcards-study-progress {
+        justify-items: start;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .flipcards-page-lead {
+        text-align: left;
+    }
+}

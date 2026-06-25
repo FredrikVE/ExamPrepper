@@ -1,0 +1,59 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/quick-actions.css */
+.quick-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    max-width: 100%;
+}
+
+.quick-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    min-height: 48px;
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
+    color: var(--text-main);
+    box-shadow: var(--shadow-card);
+    font-size: 14px;
+    font-weight: 850;
+    padding: 0 var(--space-6);
+    transition:
+        transform var(--transition-fast),
+        border-color var(--transition-fast),
+        background var(--transition-fast),
+        opacity var(--transition-fast);
+}
+
+.quick-action:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+    background: color-mix(in srgb, var(--accent-soft) 54%, var(--panel-strong));
+}
+
+.quick-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.44;
+}
+
+.quick-action svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.4;
+}
+
+.quick-action-practice {
+    color: var(--warning-text);
+}
+
+.quick-action-flip {
+    color: var(--accent);
+}
+
+.quick-action-mastered {
+    color: var(--success-text);
+}

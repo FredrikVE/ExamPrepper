@@ -85,12 +85,46 @@ export default function useFlipcardsPageViewModel(
         return `${masteredCardIds.length} mastered · ${practiceCardIds.length} practice`;
     }, [masteredCardIds.length, practiceCardIds.length, t]);
 
+    const deckKey = useMemo(() => {
+        return flashcards.map((flashcard) => flashcard.id).join("|");
+    }, [flashcards]);
+
+    const labels = useMemo(() => ({
+        pageEyebrow: t.flipcardsEyebrow,
+        pageTitle: t.flipcardsTitle,
+        pageIntro: t.flipcardsIntro,
+        loadingTitle: t.flipcardsLoadingTitle,
+        errorTitle: t.flipcardsErrorTitle,
+        emptyTitle: t.flipcardsEmptyTitle,
+        emptyBody: t.flipcardsEmptyBody,
+        summaryLabel: t.flipcardsSummaryLabel,
+        cardCountLabel: t.flipcardsCardCountLabel,
+        studySurfaceLabel: t.flipcardsStudySurfaceLabel,
+        studyKicker: t.flipcardsStudyKicker,
+        studyTitle: t.flipcardsStudyTitle,
+        progressSummaryLabel: t.flipcardsProgressSummaryLabel,
+        deckLabel: t.flipcardsDeckLabel,
+        emptyDeckTitle: t.flipcardsEmptyDeckTitle,
+        completeTitle: t.flipcardsCompleteTitle,
+        previousCardLabel: t.flipcardsPreviousCardLabel,
+        nextCardLabel: t.flipcardsNextCardLabel,
+        practiceCardLabel: t.flipcardsPracticeCardLabel,
+        flipCardLabel: t.flipcardsFlipCardLabel,
+        masteredCardLabel: t.flipcardsMasteredCardLabel,
+        quickActionsLabel: t.flipcardsQuickActionsLabel,
+        completePositionLabel: t.flipcardsCompletePositionLabel,
+        completeBody: t.flipcardsCompleteBody,
+        deckPositionLabel: t.flipcardsDeckPositionLabel,
+        activeCardLabel: t.flipcardsActiveCardLabel
+    }), [t]);
+
     return {
-        t,
+        labels,
         flashcards,
         flashcardsLoading,
         flashcardsLoadError,
         progressLabel,
+        deckKey,
         masteredCardIds,
         practiceCardIds,
         markCardAsMastered,

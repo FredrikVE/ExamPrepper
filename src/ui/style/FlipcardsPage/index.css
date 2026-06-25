@@ -1,3 +1,5 @@
 /* src/ui/style/FlipcardsPage/index.css */
 @import "./page.css";
+@import "./study-surface.css";
+@import "./FlipcardDeck/index.css";
 @import "./responsive.css";

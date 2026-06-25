@@ -1,0 +1,6 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/flipcard.css */
+.flipcard {
+    width: 100%;
+    height: var(--flipcard-stage-height);
+    margin: 0;
+}

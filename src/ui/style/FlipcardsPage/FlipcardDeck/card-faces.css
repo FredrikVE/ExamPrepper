@@ -1,0 +1,65 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/card-faces.css */
+.card-faces {
+    width: 100%;
+    height: 100%;
+    perspective: var(--flipcard-perspective);
+}
+
+.card-faces-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform var(--flipcard-flip-duration) ease;
+}
+
+.card-faces-inner-flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    border-radius: var(--radius-xl);
+    background:
+        radial-gradient(circle at 84% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34%),
+        var(--panel-strong);
+    box-shadow: var(--shadow-heavy);
+    padding: var(--flipcard-face-padding);
+    text-align: center;
+    backface-visibility: hidden;
+}
+
+.card-face-back {
+    transform: rotateY(180deg);
+}
+
+.flip-title {
+    max-width: 12ch;
+    color: var(--text-main);
+    font-size: clamp(44px, 8vw, 88px);
+    font-weight: 950;
+    line-height: 0.94;
+    letter-spacing: -0.07em;
+}
+
+.flip-definition {
+    max-width: 22ch;
+    color: var(--text-main);
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 850;
+    line-height: 1.12;
+    letter-spacing: -0.045em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card-faces-inner {
+        transition-duration: 1ms;
+    }
+}

@@ -1,10 +1,12 @@
 // src/ui/view/pages/FlipcardsPage.jsx
+import FlipcardsStudySurface from "../components/FlipcardsPage/FlipcardsStudySurface.jsx";
+
 export default function FlipcardsPage({ viewModel }) {
     if (viewModel.flashcardsLoading) {
         return (
-            <FlipcardsShell viewModel={viewModel}>
+            <FlipcardsShell labels={viewModel.labels}>
                 <FlipcardsState
-                    title={viewModel.t.flipcardsLoadingTitle}
+                    title={viewModel.labels.loadingTitle}
                 />
             </FlipcardsShell>
         );
@@ -12,9 +14,9 @@ export default function FlipcardsPage({ viewModel }) {
 
     if (viewModel.flashcardsLoadError) {
         return (
-            <FlipcardsShell viewModel={viewModel}>
+            <FlipcardsShell labels={viewModel.labels}>
                 <FlipcardsState
-                    title={viewModel.t.flipcardsErrorTitle}
+                    title={viewModel.labels.errorTitle}
                     body={viewModel.flashcardsLoadError}
                 />
             </FlipcardsShell>
@@ -23,43 +25,41 @@ export default function FlipcardsPage({ viewModel }) {
 
     if (viewModel.flashcards.length === 0) {
         return (
-            <FlipcardsShell viewModel={viewModel}>
+            <FlipcardsShell labels={viewModel.labels}>
                 <FlipcardsState
-                    title={viewModel.t.flipcardsEmptyTitle}
-                    body={viewModel.t.flipcardsEmptyBody}
+                    title={viewModel.labels.emptyTitle}
+                    body={viewModel.labels.emptyBody}
                 />
             </FlipcardsShell>
         );
     }
 
     return (
-        <FlipcardsShell viewModel={viewModel}>
-            <section className="flipcards-page-placeholder" aria-labelledby="flipcards-page-title">
-                <p className="flipcards-page-eyebrow">{viewModel.t.flipcardsEyebrow}</p>
-                <h1 id="flipcards-page-title">{viewModel.t.flipcardsTitle}</h1>
-                <p>{viewModel.t.flipcardsIntro}</p>
-
-                <div className="flipcards-page-summary" aria-label={viewModel.t.flipcardsSummaryLabel}>
-                    <strong>{viewModel.flashcards.length}</strong>
-                    <span>{viewModel.t.flipcardsCardCountLabel}</span>
-                </div>
-
-                <p className="flipcards-page-progress">{viewModel.progressLabel}</p>
-                <p className="flipcards-page-next-step">{viewModel.t.flipcardsUiPendingMessage}</p>
-            </section>
+        <FlipcardsShell labels={viewModel.labels}>
+            <FlipcardsStudySurface
+                cards={viewModel.flashcards}
+                deckKey={viewModel.deckKey}
+                progressLabel={viewModel.progressLabel}
+                masteredCardIds={viewModel.masteredCardIds}
+                practiceCardIds={viewModel.practiceCardIds}
+                labels={viewModel.labels}
+                onCardMastered={viewModel.markCardAsMastered}
+                onCardForPractice={viewModel.markCardForPractice}
+            />
         </FlipcardsShell>
     );
 }
 
-function FlipcardsShell({ viewModel, children }) {
+function FlipcardsShell({ labels, children }) {
     return (
         <main className="flipcards-workspace">
             <div className="flipcards-ambient-light" aria-hidden="true" />
             <header className="flipcards-page-header">
                 <div>
-                    <p>{viewModel.t.flipcardsEyebrow}</p>
-                    <h2>{viewModel.t.flipcardsTitle}</h2>
+                    <p>{labels.pageEyebrow}</p>
+                    <h2>{labels.pageTitle}</h2>
                 </div>
+                <p className="flipcards-page-lead">{labels.pageIntro}</p>
             </header>
             {children}
         </main>

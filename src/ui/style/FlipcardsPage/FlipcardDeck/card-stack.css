@@ -1,0 +1,33 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/card-stack.css */
+.card-stack,
+.card-stack-card {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-xl);
+}
+
+.card-stack {
+    pointer-events: none;
+    z-index: -1;
+}
+
+.card-stack-card {
+    border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--line));
+    background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
+    box-shadow: var(--shadow-card);
+}
+
+.card-stack-card-1 {
+    transform: translateY(14px) scale(0.96);
+    opacity: 0.68;
+}
+
+.card-stack-card-2 {
+    transform: translateY(28px) scale(0.92);
+    opacity: 0.42;
+}
+
+.card-stack-card-3 {
+    transform: translateY(42px) scale(0.88);
+    opacity: 0.24;
+}

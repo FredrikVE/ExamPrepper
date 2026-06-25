@@ -1,0 +1,74 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/layout.css */
+.flipcard-deck {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: var(--space-8);
+    min-height: 0;
+}
+
+.flipcard-deck-state {
+    align-content: center;
+    width: min(640px, 100%);
+    min-height: 420px;
+    margin: 0 auto;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--panel-strong) 84%, transparent);
+    box-shadow: var(--shadow-card);
+    padding: clamp(30px, 5vw, 56px);
+    text-align: center;
+}
+
+.flipcard-deck-state h2 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.045em;
+}
+
+.flipcard-deck-state p {
+    max-width: 42ch;
+    margin: var(--space-5) auto 0;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.flipcard-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--flipcard-stage-width);
+    min-height: var(--flipcard-stage-height);
+    isolation: isolate;
+}
+
+.flipcard-stage-glow {
+    position: absolute;
+    inset: 10% 8%;
+    z-index: -2;
+    border-radius: var(--radius-full);
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 20%, transparent), transparent 68%);
+    filter: blur(18px);
+}
+
+.flipcards-secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    margin: var(--space-7) auto 0;
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+    border-radius: var(--radius-full);
+    background: var(--panel-bg);
+    color: var(--text-main);
+    font-weight: 850;
+    padding: 0 var(--space-8);
+}
+
+.flipcards-secondary-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.48;
+}

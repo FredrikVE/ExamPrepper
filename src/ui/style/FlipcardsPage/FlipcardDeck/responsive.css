@@ -1,0 +1,29 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/responsive.css */
+@media (max-width: 932px) {
+    .flipcard-deck {
+        --flipcard-stage-height: min(56vh, 500px);
+        gap: var(--space-7);
+    }
+
+    .flipcard-stage {
+        width: min(100%, 420px);
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .quick-action {
+        min-width: 0;
+        min-height: 52px;
+        padding: 0 var(--space-3);
+    }
+
+    .quick-action span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
