@@ -1,8 +1,13 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/Flipcard.jsx
+import { useCallback, useEffect, useRef } from "react";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import CardFaces from "./CardFaces.jsx";
 import SwipeIndicators from "./SwipeIndicators.jsx";
-import { FLIPCARD_SWIPE_RESULT, resolveFlipcardSwipeResult } from "./flipcardSwipe.js";
+import {
+    FLIPCARD_SWIPE_RESULT,
+    resolveFlipcardSwipeResult,
+    resolveFlipcardSwipeResultFromCommand
+} from "./flipcardSwipe.js";
 
 const EXIT_DISTANCE = 720;
 const EXIT_DURATION_SECONDS = 0.22;
@@ -26,6 +31,7 @@ export default function Flipcard({
     isFlipped,
     label,
     labels,
+    swipeCommand,
     onSwipePractice,
     onSwipeMastered
 }) {
@@ -33,17 +39,50 @@ export default function Flipcard({
     const rotate = useTransform(x, [-240, 0, 240], [-11, 0, 11]);
     const practiceOpacity = useTransform(x, [-160, -64, 0], [1, 0.35, 0]);
     const masteredOpacity = useTransform(x, [0, 64, 160], [0, 0.35, 1]);
+    const handledSwipeCommandIdRef = useRef(null);
+    const isCompletingSwipeRef = useRef(false);
 
-    const completeSwipe = (swipeResult) => {
+    const completeSwipe = useCallback((swipeResult) => {
         if (swipeResult === FLIPCARD_SWIPE_RESULT.PRACTICE) {
             onSwipePractice();
             return;
         }
 
         onSwipeMastered();
-    };
+    }, [onSwipeMastered, onSwipePractice]);
+
+    const animateSwipeExit = useCallback((swipeResult) => {
+        if (!swipeResult || isCompletingSwipeRef.current) {
+            return;
+        }
+
+        isCompletingSwipeRef.current = true;
+
+        animate(x, resolveExitX(swipeResult), {
+            duration: EXIT_DURATION_SECONDS,
+            ease: "easeOut",
+            onComplete: () => {
+                completeSwipe(swipeResult);
+                isCompletingSwipeRef.current = false;
+            }
+        });
+    }, [completeSwipe, x]);
+
+    useEffect(() => {
+        if (!swipeCommand || handledSwipeCommandIdRef.current === swipeCommand.id) {
+            return;
+        }
+
+        handledSwipeCommandIdRef.current = swipeCommand.id;
+        const swipeResult = resolveFlipcardSwipeResultFromCommand(swipeCommand.direction);
+        animateSwipeExit(swipeResult);
+    }, [animateSwipeExit, swipeCommand]);
 
     const handleDragEnd = (_event, info) => {
+        if (isCompletingSwipeRef.current) {
+            return;
+        }
+
         const swipeResult = resolveFlipcardSwipeResult({
             offsetX: info.offset.x,
             velocityX: info.velocity.x
@@ -54,11 +93,7 @@ export default function Flipcard({
             return;
         }
 
-        animate(x, resolveExitX(swipeResult), {
-            duration: EXIT_DURATION_SECONDS,
-            ease: "easeOut",
-            onComplete: () => completeSwipe(swipeResult)
-        });
+        animateSwipeExit(swipeResult);
     };
 
     return (

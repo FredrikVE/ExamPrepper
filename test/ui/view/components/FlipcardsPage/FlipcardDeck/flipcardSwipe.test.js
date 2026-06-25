@@ -1,5 +1,10 @@
 import { describe, expect, test } from "@jest/globals";
-import { FLIPCARD_SWIPE_RESULT, resolveFlipcardSwipeResult } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/flipcardSwipe.js";
+import {
+    FLIPCARD_SWIPE_COMMAND_DIRECTION,
+    FLIPCARD_SWIPE_RESULT,
+    resolveFlipcardSwipeResult,
+    resolveFlipcardSwipeResultFromCommand
+} from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/flipcardSwipe.js";
 
 describe("resolveFlipcardSwipeResult", () => {
     test("returns practice when swiped far enough left", () => {
@@ -22,5 +27,21 @@ describe("resolveFlipcardSwipeResult", () => {
 
         expect(resolveFlipcardSwipeResult({ offsetX: -150, velocityX: 850 }))
             .toBe(FLIPCARD_SWIPE_RESULT.MASTERED);
+    });
+});
+
+describe("resolveFlipcardSwipeResultFromCommand", () => {
+    test("maps left command to practice", () => {
+        expect(resolveFlipcardSwipeResultFromCommand(FLIPCARD_SWIPE_COMMAND_DIRECTION.LEFT))
+            .toBe(FLIPCARD_SWIPE_RESULT.PRACTICE);
+    });
+
+    test("maps right command to mastered", () => {
+        expect(resolveFlipcardSwipeResultFromCommand(FLIPCARD_SWIPE_COMMAND_DIRECTION.RIGHT))
+            .toBe(FLIPCARD_SWIPE_RESULT.MASTERED);
+    });
+
+    test("returns null for unknown commands", () => {
+        expect(resolveFlipcardSwipeResultFromCommand("up")).toBeNull();
     });
 });

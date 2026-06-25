@@ -4,6 +4,7 @@ import { Check, ChevronLeft, ChevronRight, RotateCcw, Repeat } from "lucide-reac
 export default function QuickActions({
     hasPrevious,
     hasNext,
+    isSwipeCommandActive,
     labels,
     onPrevious,
     onNext,
@@ -17,7 +18,7 @@ export default function QuickActions({
                 type="button"
                 className="quick-action quick-action-secondary"
                 onClick={onPrevious}
-                disabled={!hasPrevious}
+                disabled={!hasPrevious || isSwipeCommandActive}
             >
                 <ChevronLeft aria-hidden="true" focusable="false" />
                 <span>{labels.previousCardLabel}</span>
@@ -27,6 +28,7 @@ export default function QuickActions({
                 type="button"
                 className="quick-action quick-action-practice"
                 onClick={onPractice}
+                disabled={isSwipeCommandActive}
             >
                 <Repeat aria-hidden="true" focusable="false" />
                 <span>{labels.practiceCardLabel}</span>
@@ -36,6 +38,7 @@ export default function QuickActions({
                 type="button"
                 className="quick-action quick-action-flip"
                 onClick={onFlip}
+                disabled={isSwipeCommandActive}
             >
                 <RotateCcw aria-hidden="true" focusable="false" />
                 <span>{labels.flipCardLabel}</span>
@@ -45,6 +48,7 @@ export default function QuickActions({
                 type="button"
                 className="quick-action quick-action-mastered"
                 onClick={onMastered}
+                disabled={isSwipeCommandActive}
             >
                 <Check aria-hidden="true" focusable="false" />
                 <span>{labels.masteredCardLabel}</span>
@@ -54,7 +58,7 @@ export default function QuickActions({
                 type="button"
                 className="quick-action quick-action-secondary"
                 onClick={onNext}
-                disabled={!hasNext}
+                disabled={!hasNext || isSwipeCommandActive}
             >
                 <span>{labels.nextCardLabel}</span>
                 <ChevronRight aria-hidden="true" focusable="false" />

@@ -56,6 +56,7 @@ export default function FlipcardDeck({
                     isFlipped={deck.isFlipped}
                     label={labels.activeCardLabel(deck.activeIndex + 1, cards.length)}
                     labels={labels}
+                    swipeCommand={deck.swipeCommand}
                     onSwipePractice={onPractice}
                     onSwipeMastered={onMastered}
                 />
@@ -64,12 +65,13 @@ export default function FlipcardDeck({
             <QuickActions
                 hasPrevious={deck.hasPrevious}
                 hasNext={deck.hasNext}
+                isSwipeCommandActive={deck.isSwipeCommandActive}
                 labels={labels}
                 onPrevious={deck.goToPrevious}
                 onNext={deck.goToNext}
-                onPractice={onPractice}
+                onPractice={deck.requestSwipeLeft}
                 onFlip={deck.flipActiveCard}
-                onMastered={onMastered}
+                onMastered={deck.requestSwipeRight}
             />
         </section>
     );
