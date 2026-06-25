@@ -11,12 +11,14 @@
     align-items: center;
     gap: var(--space-3);
     border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
-    border-radius: var(--radius-lg);
+    border-radius: 17px;
     background:
         radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%),
-        color-mix(in srgb, var(--panel-strong) 90%, transparent);
+        color-mix(in srgb, var(--panel-bg) 82%, transparent);
     color: var(--text-main);
-    box-shadow: var(--shadow-card);
+    box-shadow:
+        var(--shadow-card),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
     font-size: 14px;
     font-weight: 900;
     padding: var(--space-3) var(--space-4);
@@ -35,7 +37,7 @@
 .flipcard-popout-toggle svg {
     width: 18px;
     height: 18px;
-    color: var(--accent);
+    color: var(--flipcards-purple-soft);
     stroke-width: 2.5;
 }
 

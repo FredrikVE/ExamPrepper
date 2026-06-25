@@ -9,12 +9,15 @@
 
 .flipcard-deck-state {
     align-content: center;
-    width: min(640px, 100%);
+    width: min(660px, 100%);
     min-height: 420px;
     margin: 0 auto;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, var(--panel-strong) 84%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+    border-radius: 30px;
+    background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.055), transparent 28%),
+        radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 36%),
+        color-mix(in srgb, var(--panel-strong) 92%, transparent);
     box-shadow: var(--shadow-card);
     padding: clamp(30px, 5vw, 56px);
     text-align: center;
@@ -25,7 +28,7 @@
     color: var(--text-main);
     font-size: clamp(32px, 5vw, 52px);
     line-height: 1;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.055em;
 }
 
 .flipcard-deck-state p {
@@ -47,11 +50,14 @@
 
 .flipcard-stage-glow {
     position: absolute;
-    inset: 10% 8%;
+    inset: 9% 6%;
     z-index: -2;
     border-radius: var(--radius-full);
-    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 20%, transparent), transparent 68%);
-    filter: blur(18px);
+    background:
+        radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 22%, transparent), transparent 64%),
+        radial-gradient(circle at 22% 82%, rgba(47, 128, 255, 0.12), transparent 48%);
+    filter: blur(20px);
+    opacity: 0.86;
 }
 
 .flipcards-secondary-action {
@@ -62,7 +68,7 @@
     margin: var(--space-7) auto 0;
     border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
     border-radius: var(--radius-full);
-    background: var(--panel-bg);
+    background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
     color: var(--text-main);
     font-weight: 850;
     padding: 0 var(--space-8);

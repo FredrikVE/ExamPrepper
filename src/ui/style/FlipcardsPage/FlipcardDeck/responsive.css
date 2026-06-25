@@ -1,15 +1,47 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/responsive.css */
 @media (max-width: 932px) {
     .flipcard-deck {
-        --flipcard-stage-height: min(56vh, 500px);
+        --flipcard-stage-height: min(50dvh, 430px);
+        --flipcard-face-padding: 42px clamp(46px, 13vw, 72px);
+        --flipcard-radius: 36px;
         gap: var(--space-7);
     }
 
     .flipcard-stage {
-        width: min(100%, 420px);
+        width: min(100%, 430px);
+    }
+
+    .flip-title {
+        max-width: 100%;
+        font-size: clamp(32px, 9.4vw, 44px);
+        line-height: 1;
+        letter-spacing: -0.055em;
+    }
+
+    .flip-definition {
+        max-width: 100%;
+        font-size: clamp(22px, 6.4vw, 32px);
+        line-height: 1.14;
     }
 
     .quick-actions {
         display: none;
+    }
+}
+
+@media (max-height: 780px) and (max-width: 932px) {
+    .flipcard-deck {
+        --flipcard-stage-height: min(46dvh, 380px);
+    }
+}
+
+@media (max-width: 380px) {
+    .flipcard-deck {
+        --flipcard-stage-height: min(48dvh, 390px);
+        --flipcard-face-padding: 38px 48px;
+    }
+
+    .flip-title {
+        font-size: clamp(30px, 9.1vw, 38px);
     }
 }

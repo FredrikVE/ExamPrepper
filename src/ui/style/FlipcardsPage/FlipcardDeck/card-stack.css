@@ -3,7 +3,7 @@
 .card-stack-card {
     position: absolute;
     inset: 0;
-    border-radius: var(--radius-xl);
+    border-radius: var(--flipcard-radius);
 }
 
 .card-stack {
@@ -13,21 +13,26 @@
 
 .card-stack-card {
     border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--line));
-    background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
-    box-shadow: var(--shadow-card);
+    background:
+        radial-gradient(circle at 74% 8%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 36%),
+        linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 72%, transparent), color-mix(in srgb, var(--panel-bg) 82%, transparent));
+    box-shadow: var(--flipcards-soft-shadow);
+    transform-origin: center bottom;
 }
 
 .card-stack-card-1 {
-    transform: translateY(14px) scale(0.96);
-    opacity: 0.68;
+    transform: translateY(10px) scale(0.95) rotate(-2deg);
+    opacity: 0.55;
 }
 
 .card-stack-card-2 {
-    transform: translateY(28px) scale(0.92);
-    opacity: 0.42;
+    transform: translateY(21px) scale(0.90) rotate(4deg);
+    opacity: 0.36;
+    filter: blur(0.5px);
 }
 
 .card-stack-card-3 {
-    transform: translateY(42px) scale(0.88);
+    transform: translateY(32px) scale(0.84) rotate(-5deg);
     opacity: 0.24;
+    filter: blur(1px);
 }

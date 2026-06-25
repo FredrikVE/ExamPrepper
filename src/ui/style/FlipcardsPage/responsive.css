@@ -52,3 +52,13 @@
         padding-bottom: calc(128px + env(safe-area-inset-bottom));
     }
 }
+
+@media (max-height: 780px) and (max-width: 932px) {
+    .flipcards-workspace {
+        padding-top: calc(var(--space-10) + env(safe-area-inset-top));
+    }
+
+    .flipcards-study-surface {
+        gap: var(--space-6);
+    }
+}

@@ -9,11 +9,14 @@
     gap: var(--space-3);
     border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
     border-bottom: 0;
-    border-radius: 26px 26px 0 0;
+    border-radius: 30px 30px 0 0;
     background:
-        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 56%),
-        color-mix(in srgb, var(--panel-strong) 94%, transparent);
-    box-shadow: 0 -18px 50px color-mix(in srgb, #000 30%, transparent);
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
+        radial-gradient(circle at 18% 94%, rgba(47, 128, 255, 0.08), transparent 32%),
+        linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 96%, transparent), color-mix(in srgb, var(--panel-bg) 98%, transparent));
+    box-shadow:
+        0 -24px 70px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
     padding: var(--space-2) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
     backdrop-filter: var(--blur-panel);
     -webkit-backdrop-filter: var(--blur-panel);
@@ -85,7 +88,7 @@
     min-height: 48px;
     border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
     border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--panel-bg) 78%, transparent);
+    background: color-mix(in srgb, var(--panel-bg) 68%, transparent);
     color: var(--text-main);
     transition:
         transform var(--transition-fast),
@@ -112,15 +115,15 @@
 }
 
 .mobile-flipcard-toolbar-action-practice {
-    color: var(--warning-text);
+    color: var(--flipcards-red);
 }
 
 .mobile-flipcard-toolbar-action-flip {
-    color: var(--accent);
+    color: var(--flipcards-amber);
 }
 
 .mobile-flipcard-toolbar-action-mastered {
-    color: var(--success-text);
+    color: var(--flipcards-green);
 }
 
 @media (max-width: 932px) {

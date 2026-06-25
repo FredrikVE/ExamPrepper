@@ -1,0 +1,33 @@
+/* src/ui/style/FlipcardsPage/tokens.css */
+.flipcards-workspace {
+    --flipcards-bg: #030711;
+    --flipcards-bg-elevated: #071426;
+    --flipcards-line-strong: rgba(145, 112, 255, 0.52);
+    --flipcards-purple-soft: #a48bff;
+    --flipcards-green: #22d3a6;
+    --flipcards-green-soft: rgba(34, 211, 166, 0.12);
+    --flipcards-red: #ff607d;
+    --flipcards-red-soft: rgba(255, 96, 125, 0.12);
+    --flipcards-amber: #ffb45f;
+    --flipcards-amber-soft: rgba(255, 180, 95, 0.12);
+    --flipcards-glass-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+    --flipcards-soft-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+
+    --shell-bg: rgba(3, 7, 17, 0.96);
+    --panel-bg: rgba(5, 16, 31, 0.74);
+    --panel-strong: rgba(8, 22, 40, 0.92);
+    --text-main: #f6f8ff;
+    --text-muted: #9aa7c7;
+    --text-soft: #687696;
+    --line: rgba(151, 165, 210, 0.18);
+    --line-strong: var(--flipcards-line-strong);
+    --accent: #7d63ff;
+    --accent-soft: rgba(125, 99, 255, 0.16);
+    --accent-strong: #5746ff;
+    --success-text: var(--flipcards-green);
+    --warning-text: var(--flipcards-amber);
+    --danger-text: var(--flipcards-red);
+    --shadow-card: var(--flipcards-soft-shadow);
+    --shadow-heavy: var(--flipcards-glass-shadow);
+    --blur-panel: blur(24px);
+}

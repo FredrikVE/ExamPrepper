@@ -25,15 +25,49 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-6);
-    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
-    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent) 46%, var(--line));
+    border-radius: var(--flipcard-radius);
     background:
-        radial-gradient(circle at 84% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34%),
-        var(--panel-strong);
-    box-shadow: var(--shadow-heavy);
+        linear-gradient(120deg, rgba(255, 255, 255, 0.055), transparent 28%),
+        radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 34%),
+        radial-gradient(circle at 22% 82%, rgba(47, 128, 255, 0.13), transparent 34%),
+        radial-gradient(circle at 12% 16%, rgba(34, 211, 166, 0.07), transparent 28%),
+        linear-gradient(180deg, rgba(12, 27, 56, 0.98), rgba(6, 15, 32, 0.99));
+    box-shadow:
+        var(--flipcards-glass-shadow),
+        0 0 0 1px rgba(255, 255, 255, 0.025),
+        0 0 78px color-mix(in srgb, var(--accent) 16%, transparent);
     padding: var(--flipcard-face-padding);
     text-align: center;
     backface-visibility: hidden;
+    isolation: isolate;
+}
+
+.card-face::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.055), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.025)),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 12px);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.25));
+    opacity: 0.48;
+}
+
+.card-face::after {
+    content: "";
+    position: absolute;
+    top: -110px;
+    right: -120px;
+    z-index: -1;
+    width: 270px;
+    height: 270px;
+    border-radius: var(--radius-full);
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 24%, transparent), transparent 68%);
 }
 
 .card-face-back {
@@ -43,16 +77,17 @@
 .flip-title {
     max-width: 12ch;
     color: var(--text-main);
-    font-size: clamp(44px, 8vw, 88px);
+    font-size: clamp(48px, 8.4vw, 92px);
     font-weight: 950;
     line-height: 0.94;
-    letter-spacing: -0.07em;
+    letter-spacing: -0.075em;
+    text-shadow: 0 3px 0 rgba(255, 255, 255, 0.08);
 }
 
 .flip-definition {
-    max-width: 22ch;
+    max-width: 24ch;
     color: var(--text-main);
-    font-size: clamp(28px, 4vw, 46px);
+    font-size: clamp(28px, 4vw, 48px);
     font-weight: 850;
     line-height: 1.12;
     letter-spacing: -0.045em;
