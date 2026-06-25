@@ -4,6 +4,8 @@
 @import "./desktop-popout.css";
 @import "./mobile-collapsed-toolbar.css";
 @import "./mobile-bottom-sheet.css";
+@import "./footer-pager.css";
+@import "./mobile-tool-grid.css";
 @import "./tool-pager.css";
 @import "./tool-grid.css";
 @import "./tool-card.css";

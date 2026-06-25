@@ -71,6 +71,10 @@ export default function FlipcardDeck({
                     label={labels.activeCardLabel(deck.activeIndex + 1, cards.length)}
                     labels={labels}
                     swipeCommand={deck.swipeCommand}
+                    hasPrevious={deck.hasPrevious}
+                    hasNext={deck.hasNext}
+                    onPrevious={deck.goToPrevious}
+                    onNext={deck.goToNext}
                     onSwipePractice={onPractice}
                     onSwipeMastered={onMastered}
                 />

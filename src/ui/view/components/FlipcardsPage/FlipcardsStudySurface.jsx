@@ -38,24 +38,8 @@ export default function FlipcardsStudySurface({
         deck.goToNext();
     };
 
-    const deckPositionLabel = deck.isComplete
-        ? labels.completePositionLabel
-        : labels.deckPositionLabel(deck.activeIndex + 1, cards.length);
-
     return (
         <section className="flipcards-study-surface" aria-label={labels.studySurfaceLabel}>
-            <div className="flipcards-study-header">
-                <div>
-                    <p className="flipcards-study-kicker">{labels.studyKicker}</p>
-                    <h1>{labels.studyTitle}</h1>
-                </div>
-
-                <div className="flipcards-study-progress" aria-label={labels.progressSummaryLabel}>
-                    <span>{deckPositionLabel}</span>
-                    <strong>{progressModel.progressLabel}</strong>
-                </div>
-            </div>
-
             <div className="flipcards-study-body">
                 <FlipcardDeck
                     cards={cards}
@@ -78,6 +62,7 @@ export default function FlipcardsStudySurface({
                     labels={labels}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
+                    onGoToCard={deck.goToCard}
                     onPractice={deck.requestSwipeLeft}
                     onFlip={deck.flipActiveCard}
                     onMastered={deck.requestSwipeRight}

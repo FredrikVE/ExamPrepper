@@ -25,13 +25,54 @@
     }
 
     .quick-actions {
+        display: flex;
+        gap: clamp(20px, 9vw, 42px);
+        margin-top: -4px;
+    }
+
+    .quick-action {
+        width: 64px;
+        min-width: 64px;
+        height: 64px;
+        min-height: 64px;
+        padding: 0;
+        border-radius: var(--radius-full);
+    }
+
+    .quick-action-secondary {
         display: none;
+    }
+
+    .quick-action span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+
+    .quick-action svg {
+        width: 24px;
+        height: 24px;
     }
 }
 
 @media (max-height: 780px) and (max-width: 932px) {
     .flipcard-deck {
         --flipcard-stage-height: min(46dvh, 380px);
+        gap: var(--space-5);
+    }
+
+    .quick-actions {
+        margin-top: -8px;
+    }
+
+    .quick-action {
+        width: 58px;
+        min-width: 58px;
+        height: 58px;
+        min-height: 58px;
     }
 }
 

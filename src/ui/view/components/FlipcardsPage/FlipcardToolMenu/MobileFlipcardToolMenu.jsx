@@ -11,15 +11,11 @@ export default function MobileFlipcardToolMenu({
     activeIndex,
     hasPrevious,
     hasNext,
-    isComplete,
     isSwipeCommandActive,
-    progressModel,
     labels,
     onPrevious,
     onNext,
-    onPractice,
-    onFlip,
-    onMastered
+    onGoToCard
 }) {
     const expandButtonRef = useRef(null);
 
@@ -33,15 +29,11 @@ export default function MobileFlipcardToolMenu({
                 activeIndex={activeIndex}
                 hasPrevious={hasPrevious}
                 hasNext={hasNext}
-                isComplete={isComplete}
                 isSwipeCommandActive={isSwipeCommandActive}
-                progressModel={progressModel}
                 labels={labels}
                 onPrevious={onPrevious}
                 onNext={onNext}
-                onPractice={onPractice}
-                onFlip={onFlip}
-                onMastered={onMastered}
+                onGoToCard={onGoToCard}
             />
 
             <MobileFlipcardBottomSheet
@@ -52,15 +44,11 @@ export default function MobileFlipcardToolMenu({
                 activeIndex={activeIndex}
                 hasPrevious={hasPrevious}
                 hasNext={hasNext}
-                isComplete={isComplete}
                 isSwipeCommandActive={isSwipeCommandActive}
-                progressModel={progressModel}
                 labels={labels}
                 onPrevious={onPrevious}
                 onNext={onNext}
-                onPractice={onPractice}
-                onFlip={onFlip}
-                onMastered={onMastered}
+                onGoToCard={onGoToCard}
             />
         </>
     );

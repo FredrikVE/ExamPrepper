@@ -4,7 +4,7 @@ import FlipcardsStudySurface from "../components/FlipcardsPage/FlipcardsStudySur
 export default function FlipcardsPage({ viewModel }) {
     if (viewModel.flashcardsLoading) {
         return (
-            <FlipcardsShell labels={viewModel.labels}>
+            <FlipcardsShell>
                 <FlipcardsState
                     title={viewModel.labels.loadingTitle}
                 />
@@ -14,7 +14,7 @@ export default function FlipcardsPage({ viewModel }) {
 
     if (viewModel.flashcardsLoadError) {
         return (
-            <FlipcardsShell labels={viewModel.labels}>
+            <FlipcardsShell>
                 <FlipcardsState
                     title={viewModel.labels.errorTitle}
                     body={viewModel.flashcardsLoadError}
@@ -25,7 +25,7 @@ export default function FlipcardsPage({ viewModel }) {
 
     if (viewModel.flashcards.length === 0) {
         return (
-            <FlipcardsShell labels={viewModel.labels}>
+            <FlipcardsShell>
                 <FlipcardsState
                     title={viewModel.labels.emptyTitle}
                     body={viewModel.labels.emptyBody}
@@ -35,7 +35,7 @@ export default function FlipcardsPage({ viewModel }) {
     }
 
     return (
-        <FlipcardsShell labels={viewModel.labels}>
+        <FlipcardsShell>
             <FlipcardsStudySurface
                 cards={viewModel.flashcards}
                 deckKey={viewModel.deckKey}
@@ -49,17 +49,10 @@ export default function FlipcardsPage({ viewModel }) {
     );
 }
 
-function FlipcardsShell({ labels, children }) {
+function FlipcardsShell({ children }) {
     return (
         <main className="flipcards-workspace">
             <div className="flipcards-ambient-light" aria-hidden="true" />
-            <header className="flipcards-page-header">
-                <div>
-                    <p>{labels.pageEyebrow}</p>
-                    <h2>{labels.pageTitle}</h2>
-                </div>
-                <p className="flipcards-page-lead">{labels.pageIntro}</p>
-            </header>
             {children}
         </main>
     );

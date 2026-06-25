@@ -1,5 +1,5 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/QuickActions.jsx
-import { Check, ChevronLeft, ChevronRight, RotateCcw, Repeat } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, RotateCcw, X } from "lucide-react";
 
 export default function QuickActions({
     hasPrevious,
@@ -30,7 +30,7 @@ export default function QuickActions({
                 onClick={onPractice}
                 disabled={isSwipeCommandActive}
             >
-                <Repeat aria-hidden="true" focusable="false" />
+                <X aria-hidden="true" focusable="false" />
                 <span>{labels.practiceCardLabel}</span>
             </button>
 

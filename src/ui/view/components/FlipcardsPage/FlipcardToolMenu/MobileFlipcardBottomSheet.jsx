@@ -1,6 +1,8 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/MobileFlipcardBottomSheet.jsx
 import { Drawer } from "@base-ui/react/drawer";
-import FlipcardToolMenuContent from "./FlipcardToolMenuContent.jsx";
+import FlipcardFooterPager from "./FlipcardFooterPager.jsx";
+import MobileFlipcardDeckToolGrid from "./MobileFlipcardDeckToolGrid.jsx";
+import MobileFlipcardSheetGrip from "./MobileFlipcardSheetGrip.jsx";
 
 export default function MobileFlipcardBottomSheet({
     isOpen,
@@ -10,15 +12,11 @@ export default function MobileFlipcardBottomSheet({
     activeIndex,
     hasPrevious,
     hasNext,
-    isComplete,
     isSwipeCommandActive,
-    progressModel,
     labels,
     onPrevious,
     onNext,
-    onPractice,
-    onFlip,
-    onMastered
+    onGoToCard
 }) {
     const closeSheet = () => {
         onOpenChange(false);
@@ -37,8 +35,6 @@ export default function MobileFlipcardBottomSheet({
                         className="mobile-flipcard-sheet-popup"
                         finalFocus={finalFocusRef}
                     >
-                        <div className="mobile-flipcard-sheet-grip" aria-hidden="true" />
-
                         <Drawer.Content className="mobile-flipcard-sheet-content">
                             <Drawer.Title className="sr-only">
                                 {labels.toolMenuTitle}
@@ -47,24 +43,25 @@ export default function MobileFlipcardBottomSheet({
                                 {labels.toolMenuSubtitle}
                             </Drawer.Description>
 
-                            <FlipcardToolMenuContent
-                                variant="mobile-drawer"
-                                closeComponent={Drawer.Close}
+                            <MobileFlipcardSheetGrip
+                                isExpanded={isOpen}
+                                onClick={closeSheet}
+                                label={labels.closeToolMenuLabel}
+                            />
+
+                            <FlipcardFooterPager
                                 cardCount={cardCount}
                                 activeIndex={activeIndex}
                                 hasPrevious={hasPrevious}
                                 hasNext={hasNext}
-                                isComplete={isComplete}
                                 isSwipeCommandActive={isSwipeCommandActive}
-                                progressModel={progressModel}
                                 labels={labels}
                                 onPrevious={onPrevious}
                                 onNext={onNext}
-                                onPractice={onPractice}
-                                onFlip={onFlip}
-                                onMastered={onMastered}
-                                onClose={closeSheet}
+                                onGoToCard={onGoToCard}
                             />
+
+                            <MobileFlipcardDeckToolGrid labels={labels} />
                         </Drawer.Content>
                     </Drawer.Popup>
                 </Drawer.Viewport>

@@ -35,6 +35,12 @@ export function useFlipcardDeck(cardCount, deckKey) {
         setActiveIndex((index) => Math.min(index + 1, cardCount));
     }, [cardCount]);
 
+    const goToCard = useCallback((cardIndex) => {
+        setIsFlipped(false);
+        setSwipeCommand(null);
+        setActiveIndex(Math.min(Math.max(cardIndex, 0), Math.max(cardCount - 1, 0)));
+    }, [cardCount]);
+
     const restartDeck = useCallback(() => {
         setActiveIndex(0);
         setIsFlipped(false);
@@ -70,6 +76,7 @@ export function useFlipcardDeck(cardCount, deckKey) {
         flipActiveCard,
         goToPrevious,
         goToNext,
+        goToCard,
         restartDeck,
         requestSwipeLeft,
         requestSwipeRight

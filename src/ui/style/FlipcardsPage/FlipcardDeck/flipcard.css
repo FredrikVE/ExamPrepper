@@ -12,3 +12,50 @@
 .flipcard:active {
     cursor: grabbing;
 }
+
+.flipcard-nav {
+    position: absolute;
+    top: 50%;
+    z-index: 8;
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 64px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--flipcards-purple-soft);
+    opacity: 0.9;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
+    transform: translateY(-50%);
+    transition:
+        color var(--transition-fast),
+        opacity var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.flipcard-nav:hover:not(:disabled),
+.flipcard-nav:focus-visible:not(:disabled) {
+    color: var(--text-main);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.04);
+}
+
+.flipcard-nav:disabled {
+    cursor: not-allowed;
+    opacity: 0.32;
+}
+
+.flipcard-nav svg {
+    width: 30px;
+    height: 30px;
+    stroke-width: 2.5;
+}
+
+.flipcard-nav-previous {
+    left: 12px;
+}
+
+.flipcard-nav-next {
+    right: 12px;
+}

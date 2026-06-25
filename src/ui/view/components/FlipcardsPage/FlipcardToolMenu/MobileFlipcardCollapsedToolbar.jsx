@@ -1,5 +1,6 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/MobileFlipcardCollapsedToolbar.jsx
-import { Check, ChevronLeft, ChevronRight, RotateCcw, Repeat } from "lucide-react";
+import FlipcardFooterPager from "./FlipcardFooterPager.jsx";
+import MobileFlipcardSheetGrip from "./MobileFlipcardSheetGrip.jsx";
 
 export default function MobileFlipcardCollapsedToolbar({
     expandButtonRef,
@@ -9,92 +10,32 @@ export default function MobileFlipcardCollapsedToolbar({
     activeIndex,
     hasPrevious,
     hasNext,
-    isComplete,
     isSwipeCommandActive,
-    progressModel,
     labels,
     onPrevious,
     onNext,
-    onPractice,
-    onFlip,
-    onMastered
+    onGoToCard
 }) {
-    const currentPosition = Math.min(activeIndex + 1, cardCount);
-    const positionLabel = isComplete
-        ? labels.completePositionLabel
-        : labels.deckPositionLabel(currentPosition, cardCount);
-    const cardActionsDisabled = isComplete || isSwipeCommandActive || cardCount === 0;
-
     return (
         <footer className="mobile-flipcard-toolbar" aria-label={labels.toolMenuLabel}>
-            <button
-                type="button"
+            <MobileFlipcardSheetGrip
                 ref={expandButtonRef}
-                className="mobile-flipcard-toolbar-expand"
-                aria-label={labels.openToolMenuLabel}
-                aria-expanded={isExpanded}
+                isExpanded={isExpanded}
                 onClick={onOpenExpandedMenu}
-            >
-                <span className="mobile-flipcard-toolbar-grip" aria-hidden="true" />
-                <span className="sr-only">{labels.openToolMenuLabel}</span>
-            </button>
+                label={labels.openToolMenuLabel}
+            />
 
-            <div className="mobile-flipcard-toolbar-summary">
-                <span>{positionLabel}</span>
-                <strong>{progressModel.progressLabel}</strong>
-            </div>
-
-            <div className="mobile-flipcard-toolbar-actions">
-                <button
-                    type="button"
-                    className="mobile-flipcard-toolbar-action mobile-flipcard-toolbar-action-secondary"
-                    aria-label={labels.previousCardLabel}
-                    onClick={onPrevious}
-                    disabled={!hasPrevious || isSwipeCommandActive}
-                >
-                    <ChevronLeft aria-hidden="true" focusable="false" />
-                </button>
-
-                <button
-                    type="button"
-                    className="mobile-flipcard-toolbar-action mobile-flipcard-toolbar-action-practice"
-                    aria-label={labels.practiceCardLabel}
-                    onClick={onPractice}
-                    disabled={cardActionsDisabled}
-                >
-                    <Repeat aria-hidden="true" focusable="false" />
-                </button>
-
-                <button
-                    type="button"
-                    className="mobile-flipcard-toolbar-action mobile-flipcard-toolbar-action-flip"
-                    aria-label={labels.flipCardLabel}
-                    onClick={onFlip}
-                    disabled={cardActionsDisabled}
-                >
-                    <RotateCcw aria-hidden="true" focusable="false" />
-                </button>
-
-                <button
-                    type="button"
-                    className="mobile-flipcard-toolbar-action mobile-flipcard-toolbar-action-mastered"
-                    aria-label={labels.masteredCardLabel}
-                    onClick={onMastered}
-                    disabled={cardActionsDisabled}
-                >
-                    <Check aria-hidden="true" focusable="false" />
-                </button>
-
-                <button
-                    type="button"
-                    className="mobile-flipcard-toolbar-action mobile-flipcard-toolbar-action-secondary"
-                    aria-label={labels.nextCardLabel}
-                    onClick={onNext}
-                    disabled={!hasNext || isSwipeCommandActive}
-                >
-                    <ChevronRight aria-hidden="true" focusable="false" />
-                </button>
-            </div>
+            <FlipcardFooterPager
+                cardCount={cardCount}
+                activeIndex={activeIndex}
+                hasPrevious={hasPrevious}
+                hasNext={hasNext}
+                isSwipeCommandActive={isSwipeCommandActive}
+                labels={labels}
+                onPrevious={onPrevious}
+                onNext={onNext}
+                onGoToCard={onGoToCard}
+            />
         </footer>
     );
 }

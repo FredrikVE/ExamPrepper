@@ -1,5 +1,6 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/Flipcard.jsx
 import { useCallback, useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import CardFaces from "./CardFaces.jsx";
 import SwipeIndicators from "./SwipeIndicators.jsx";
@@ -32,6 +33,10 @@ export default function Flipcard({
     label,
     labels,
     swipeCommand,
+    hasPrevious,
+    hasNext,
+    onPrevious,
+    onNext,
     onSwipePractice,
     onSwipeMastered
 }) {
@@ -122,6 +127,28 @@ export default function Flipcard({
                 style={{ opacity: masteredOpacity }}
                 aria-hidden="true"
             />
+            <button
+                type="button"
+                className="flipcard-nav flipcard-nav-previous"
+                onClick={onPrevious}
+                onPointerDown={(event) => event.stopPropagation()}
+                disabled={!hasPrevious || isCompletingSwipeRef.current}
+                aria-label={labels.previousCardLabel}
+            >
+                <ChevronLeft aria-hidden="true" focusable="false" />
+            </button>
+
+            <button
+                type="button"
+                className="flipcard-nav flipcard-nav-next"
+                onClick={onNext}
+                onPointerDown={(event) => event.stopPropagation()}
+                disabled={!hasNext || isCompletingSwipeRef.current}
+                aria-label={labels.nextCardLabel}
+            >
+                <ChevronRight aria-hidden="true" focusable="false" />
+            </button>
+
             <CardFaces
                 term={term}
                 definition={definition}

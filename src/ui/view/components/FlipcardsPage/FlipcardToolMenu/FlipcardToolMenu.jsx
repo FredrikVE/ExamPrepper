@@ -16,6 +16,7 @@ export default function FlipcardToolMenu({
     labels,
     onPrevious,
     onNext,
+    onGoToCard,
     onPractice,
     onFlip,
     onMastered
@@ -57,6 +58,7 @@ export default function FlipcardToolMenu({
                 labels={labels}
                 onPrevious={onPrevious}
                 onNext={onNext}
+                onGoToCard={onGoToCard}
                 onPractice={onPractice}
                 onFlip={onFlip}
                 onMastered={onMastered}
@@ -79,6 +81,7 @@ export default function FlipcardToolMenu({
             labels={labels}
             onPrevious={onPrevious}
             onNext={onNext}
+            onGoToCard={onGoToCard}
             onPractice={onPractice}
             onFlip={onFlip}
             onMastered={onMastered}

@@ -144,6 +144,11 @@ export default function useFlipcardsPageViewModel(
         toolMenuCurrentCardLabel: t.flipcardsToolMenuCurrentCardLabel,
         toolMenuActionsLabel: t.flipcardsToolMenuActionsLabel,
         toolMenuStatsLabel: t.flipcardsToolMenuStatsLabel,
+        goToCardLabel: t.flipcardsGoToCardLabel,
+        toolMenuAllCardsLabel: t.flipcardsToolMenuAllCardsLabel,
+        toolMenuShuffleLabel: t.flipcardsToolMenuShuffleLabel,
+        toolMenuFavoritesLabel: t.flipcardsToolMenuFavoritesLabel,
+        toolMenuRepeatDifficultLabel: t.flipcardsToolMenuRepeatDifficultLabel,
         toolMenuPracticeDescription: t.flipcardsToolMenuPracticeDescription,
         toolMenuFlipDescription: t.flipcardsToolMenuFlipDescription,
         toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription
