@@ -1,7 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx
 import { useEffect } from "react";
 import usePresentationMode from "../../../hooks/usePresentationMode.js";
-import DesktopFlipcardPopOutMenu from "./DesktopFlipcardPopOutMenu.jsx";
+import DesktopFlipcardToolsPanel from "./DesktopFlipcardToolsPanel.jsx";
 import MobileFlipcardToolMenu from "./MobileFlipcardToolMenu.jsx";
 import useFlipcardToolMenu from "./useFlipcardToolMenu.js";
 
@@ -50,7 +50,7 @@ export default function FlipcardToolMenu({
 
     if (presentationMode === "desktop") {
         return (
-            <DesktopFlipcardPopOutMenu
+            <DesktopFlipcardToolsPanel
                 isOpen={isDesktopMenuOpen}
                 onToggle={toggleDesktopMenu}
                 onClose={closeDesktopMenu}

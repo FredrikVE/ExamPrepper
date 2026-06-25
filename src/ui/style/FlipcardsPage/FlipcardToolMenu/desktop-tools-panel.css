@@ -1,12 +1,12 @@
-/* src/ui/style/FlipcardsPage/FlipcardToolMenu/desktop-popout.css */
-.flipcard-popout-shell {
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/desktop-tools-panel.css */
+.flipcard-desktop-tools-shell {
     position: fixed;
     inset: 0;
     z-index: 80;
     pointer-events: none;
 }
 
-.flipcard-popout-toggle {
+.flipcard-desktop-tools-toggle {
     position: fixed;
     top: 30px;
     right: 30px;
@@ -32,7 +32,7 @@
         background var(--transition-fast);
 }
 
-.flipcard-popout-toggle:hover {
+.flipcard-desktop-tools-toggle:hover {
     transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
     background:
@@ -40,14 +40,14 @@
         color-mix(in srgb, var(--panel-strong) 90%, transparent);
 }
 
-.flipcard-popout-shell[data-open="true"] .flipcard-popout-toggle {
+.flipcard-desktop-tools-shell[data-open="true"] .flipcard-desktop-tools-toggle {
     border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
     background:
         radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 60%),
         color-mix(in srgb, var(--panel-strong) 72%, transparent);
 }
 
-.flipcard-popout-toggle svg {
+.flipcard-desktop-tools-toggle svg {
     width: 25px;
     height: 25px;
     color: var(--text-main);
@@ -222,14 +222,14 @@
         animation: none;
     }
 
-    .flipcard-popout-toggle,
+    .flipcard-desktop-tools-toggle,
     .flipcard-desktop-tools-card {
         transition: none;
     }
 }
 
 @media (max-width: 932px) {
-    .flipcard-popout-shell {
+    .flipcard-desktop-tools-shell {
         display: none;
     }
 }

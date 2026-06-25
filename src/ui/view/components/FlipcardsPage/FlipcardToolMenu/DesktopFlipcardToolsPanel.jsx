@@ -1,4 +1,4 @@
-// src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardPopOutMenu.jsx
+// src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardToolsPanel.jsx
 import { useCallback, useEffect, useRef } from "react";
 import {
     BarChart3,
@@ -75,7 +75,7 @@ function DesktopToolsCard({ entry }) {
     );
 }
 
-export default function DesktopFlipcardPopOutMenu({
+export default function DesktopFlipcardToolsPanel({
     isOpen,
     onToggle,
     onClose,
@@ -113,11 +113,11 @@ export default function DesktopFlipcardPopOutMenu({
     const desktopToolEntries = createDesktopToolEntries(labels);
 
     return (
-        <div className="flipcard-popout-shell" data-open={isOpen ? "true" : "false"}>
+        <div className="flipcard-desktop-tools-shell" data-open={isOpen ? "true" : "false"}>
             <button
                 type="button"
                 ref={toggleRef}
-                className="flipcard-popout-toggle"
+                className="flipcard-desktop-tools-toggle"
                 aria-controls={DESKTOP_TOOLS_PANEL_ID}
                 aria-expanded={isOpen}
                 aria-label={isOpen ? labels.closeToolMenuLabel : labels.openToolMenuLabel}
