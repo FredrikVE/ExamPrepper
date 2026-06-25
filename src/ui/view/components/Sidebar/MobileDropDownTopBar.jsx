@@ -62,6 +62,7 @@ function MobileDropdownContent(props) {
 					section="primary"
 					activeScreen={props.activeScreen}
 					onChangeScreen={props.onChangeScreen}
+					hasSelectedSubject={props.hasSelectedSubject}
 				/>
 
 				<div className="mobile-dropdown-spacer" />
@@ -70,6 +71,7 @@ function MobileDropdownContent(props) {
 					section="secondary"
 					activeScreen={props.activeScreen}
 					onChangeScreen={props.onChangeScreen}
+					hasSelectedSubject={props.hasSelectedSubject}
 				/>
 
 				<SidebarSettingsButton
@@ -237,6 +239,7 @@ export default function MobileDropDownTopBar(props) {
 					onBackFromSettings={props.onBackFromSettings}
 					subjects={props.subjects}
 					currentSubject={currentSubject}
+					hasSelectedSubject={props.hasSelectedSubject}
 					isSubjectPickerOpen={props.isSubjectPickerOpen}
 					onCloseSubjectPicker={props.onCloseSubjectPicker}
 					onSelectSubject={props.onSelectSubject}

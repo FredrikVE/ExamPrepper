@@ -11,6 +11,7 @@ export default function AppNavigation(props) {
 				settingsOpen={props.settingsOpen}
 				onOpenSettings={props.onOpenSettings}
 				showSubjectSwitcher={props.showSubjectSwitcher}
+				hasSelectedSubject={props.hasSelectedSubject}
 				subjects={props.subjects}
 				selectedSubject={props.selectedSubject}
 				onSelectSubject={props.onSelectSubject}
@@ -31,6 +32,7 @@ export default function AppNavigation(props) {
 				onToggleSubjectPicker={props.onToggleSubjectPicker}
 				onCloseSubjectPicker={props.onCloseSubjectPicker}
 				showSubjectSwitcher={props.showSubjectSwitcher}
+				hasSelectedSubject={props.hasSelectedSubject}
 				showBackButton={props.showBackButton}
 				onBack={props.onBack}
 				subjects={props.subjects}

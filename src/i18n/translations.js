@@ -254,10 +254,25 @@ export const translations = {
 		statisticsPercentagePointSingular: "prosentpoeng",
 		statisticsPercentagePointPlural: "prosentpoeng",
 
+        // FlipcardsPage
+        flipcardsTitle: "Flipcards",
+        flipcardsEyebrow: "Øv med kort",
+        flipcardsIntro: "Flipcards bruker kortdata for valgt fag. Selve kortstokken og verktøymenyen kommer i neste UI-patch.",
+        flipcardsLoadingTitle: "Laster flipcards...",
+        flipcardsErrorTitle: "Kunne ikke laste flipcards",
+        flipcardsErrorMessage: "Prøv igjen senere, eller velg et annet fag.",
+        flipcardsEmptyTitle: "Ingen flipcards ennå",
+        flipcardsEmptyBody: "Dette faget har ikke registrerte flipcards i denne datakilden ennå.",
+        flipcardsSummaryLabel: "Oppsummering av flipcards",
+        flipcardsCardCountLabel: "kort klare",
+        flipcardsUiPendingMessage: "Kortstokk, swipe og verktøymeny implementeres i senere patcher.",
+        flipcardsProgressLabel: (masteredCount, practiceCount) => `${masteredCount} mestret · ${practiceCount} til repetisjon`,
+
         // Sidebar
         sidebarLabel: "Eksamensnavigasjon",
         sidebarSubjects: "Velg fag fra hjemskjerm",
         sidebarExams: "Velg eksamen",
+        sidebarFlipcards: "Flipcards",
         sidebarHome: "Velg fag fra hjemskjerm",
         sidebarOverview: "Oversikt",
         sidebarStatistics: "Din statistikk",
@@ -517,10 +532,25 @@ export const translations = {
 		statisticsPercentagePointSingular: "percentage point",
 		statisticsPercentagePointPlural: "percentage points",
 
+        // FlipcardsPage
+        flipcardsTitle: "Flipcards",
+        flipcardsEyebrow: "Practice with cards",
+        flipcardsIntro: "Flipcards uses card data for the selected subject. The deck and tool menu will arrive in the next UI patch.",
+        flipcardsLoadingTitle: "Loading flipcards...",
+        flipcardsErrorTitle: "Could not load flipcards",
+        flipcardsErrorMessage: "Try again later, or choose another subject.",
+        flipcardsEmptyTitle: "No flipcards yet",
+        flipcardsEmptyBody: "This subject does not have registered flipcards in this data source yet.",
+        flipcardsSummaryLabel: "Flipcards summary",
+        flipcardsCardCountLabel: "cards ready",
+        flipcardsUiPendingMessage: "Deck, swipe and tool menu are implemented in later patches.",
+        flipcardsProgressLabel: (masteredCount, practiceCount) => `${masteredCount} mastered · ${practiceCount} for practice`,
+
         // Sidebar
         sidebarLabel: "Exam navigation",
         sidebarSubjects: "Choose subject from home",
         sidebarExams: "Choose exam",
+        sidebarFlipcards: "Flipcards",
         sidebarHome: "Choose subject from home",
         sidebarOverview: "Overview",
         sidebarStatistics: "Your statistics",

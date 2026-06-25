@@ -19,6 +19,15 @@ export const SIDEBAR_NAV_ITEMS = [
         activeScreens: [NAV_SCREENS.SELECT, NAV_SCREENS.EXAM]
     },
     {
+        id: "flipcards",
+        section: "primary",
+        screen: NAV_SCREENS.FLIPCARDS,
+        labelKey: "sidebarFlipcards",
+        fallbackLabel: "Flipcards",
+        activeScreens: [NAV_SCREENS.FLIPCARDS],
+        requiresSubject: true
+    },
+    {
         id: "overview",
         section: "secondary",
         screen: NAV_SCREENS.OVERVIEW,

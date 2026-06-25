@@ -1,5 +1,5 @@
 // src/ui/view/components/Sidebar/SidebarNavigation.jsx
-import { BookOpen, BarChart3, Home } from "lucide-react";
+import { BookOpen, BarChart3, Home, PanelsTopLeft } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { SIDEBAR_NAV_ITEMS } from "../../../../navigation/navItems.js";
 import { NAV_SCREENS } from "../../../../navigation/navGraph.js";
@@ -7,6 +7,7 @@ import { NAV_SCREENS } from "../../../../navigation/navGraph.js";
 const SIDEBAR_ICONS = {
     subjects: Home,
     exams: BookOpen,
+    flipcards: PanelsTopLeft,
     overview: BarChart3
 };
 
@@ -17,11 +18,11 @@ const CLASS_NAMES = {
     icon: "sidebar-navigation-icon"
 };
 
-export default function SidebarNavigation({ activeScreen, onChangeScreen, section}) {
+export default function SidebarNavigation({ activeScreen, onChangeScreen, section, hasSelectedSubject }) {
     const { t } = useLanguage();
 
     const visibleItems = SIDEBAR_NAV_ITEMS.filter((item) => {
-        return item.section === section && shouldShowNavigationItem(item, activeScreen);
+        return item.section === section && shouldShowNavigationItem(item, activeScreen, hasSelectedSubject);
     });
 
     if (visibleItems.length === 0) {
@@ -82,9 +83,13 @@ const SidebarNavigationItem = ({ Icon, label, active, onClick }) => {
     );
 };
 
-const shouldShowNavigationItem = (item, activeScreen) => {
+const shouldShowNavigationItem = (item, activeScreen, hasSelectedSubject) => {
     const isSubjectHomeButton = item.screen === NAV_SCREENS.SUBJECTS;
     const isExamSelectButton = item.screen === NAV_SCREENS.SELECT;
+
+    if (item.requiresSubject && !hasSelectedSubject) {
+        return false;
+    }
 
     if (activeScreen === NAV_SCREENS.SUBJECTS) {
         return !isSubjectHomeButton && !isExamSelectButton;

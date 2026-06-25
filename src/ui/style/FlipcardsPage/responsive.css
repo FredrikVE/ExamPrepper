@@ -1,0 +1,18 @@
+/* src/ui/style/FlipcardsPage/responsive.css */
+@media (max-width: 932px) {
+    .flipcards-workspace {
+        min-height: calc(100dvh - var(--space-6) * 2);
+        border-radius: var(--radius-lg);
+        padding: calc(var(--space-12) + env(safe-area-inset-top)) var(--space-5) var(--space-7);
+    }
+
+    .flipcards-page-header {
+        display: none;
+    }
+
+    .flipcards-page-placeholder,
+    .flipcards-state {
+        min-height: min(540px, 68vh);
+        padding: var(--space-8);
+    }
+}

@@ -9,6 +9,7 @@
 @import "./ExamSelectPage/index.css";
 @import "./ExamPage/index.css";
 @import "./StatisticsPage/index.css";
+@import "./FlipcardsPage/index.css";
 
 /* Shared UI */
 @import "./Shared/index.css";

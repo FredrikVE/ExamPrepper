@@ -153,7 +153,7 @@ export default function useAppNavigationViewModel(params) {
 			return;
 		}
 
-		if (activeScreen === NAV_SCREENS.OVERVIEW) {
+		if (activeScreen === NAV_SCREENS.FLIPCARDS || activeScreen === NAV_SCREENS.OVERVIEW) {
 			setSelectedExamId(null);
 
 			if (selectedSubjectId) {
@@ -197,6 +197,18 @@ export default function useAppNavigationViewModel(params) {
 			}
 
 			setActiveScreen(NAV_SCREENS.EXAM);
+			return;
+		}
+
+		if (nextScreen === NAV_SCREENS.FLIPCARDS) {
+			setSelectedExamId(null);
+
+			if (selectedSubjectId) {
+				setActiveScreen(NAV_SCREENS.FLIPCARDS);
+			} else {
+				setActiveScreen(NAV_SCREENS.SUBJECTS);
+			}
+
 			return;
 		}
 
@@ -278,7 +290,8 @@ export default function useAppNavigationViewModel(params) {
 
 	const shouldShowSubjectSwitcher =
 		activeScreen === NAV_SCREENS.SELECT ||
-		activeScreen === NAV_SCREENS.EXAM;
+		activeScreen === NAV_SCREENS.EXAM ||
+		activeScreen === NAV_SCREENS.FLIPCARDS;
 
 	const showBackButton = activeScreen !== NAV_SCREENS.SUBJECTS;
 
