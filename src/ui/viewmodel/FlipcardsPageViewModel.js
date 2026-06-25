@@ -136,6 +136,8 @@ export default function useFlipcardsPageViewModel(
         deckPositionLabel: t.flipcardsDeckPositionLabel,
         activeCardLabel: t.flipcardsActiveCardLabel,
         toolMenuLabel: t.flipcardsToolMenuLabel,
+        openToolMenuLabel: t.flipcardsOpenToolMenuLabel,
+        closeToolMenuLabel: t.flipcardsCloseToolMenuLabel,
         toolMenuTitle: t.flipcardsToolMenuTitle,
         toolMenuSubtitle: t.flipcardsToolMenuSubtitle,
         toolMenuPagerLabel: t.flipcardsToolMenuPagerLabel,

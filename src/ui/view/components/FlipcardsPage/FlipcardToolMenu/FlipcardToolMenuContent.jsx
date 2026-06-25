@@ -18,7 +18,8 @@ export default function FlipcardToolMenuContent({
     onNext,
     onPractice,
     onFlip,
-    onMastered
+    onMastered,
+    onClose
 }) {
     return (
         <div className="flipcard-tool-menu-content" data-variant={variant}>
@@ -26,6 +27,8 @@ export default function FlipcardToolMenuContent({
                 title={labels.toolMenuTitle}
                 subtitle={labels.toolMenuSubtitle}
                 progressLabel={progressModel.progressLabel}
+                closeLabel={labels.closeToolMenuLabel}
+                onClose={onClose}
             />
 
             <FlipcardToolPager
