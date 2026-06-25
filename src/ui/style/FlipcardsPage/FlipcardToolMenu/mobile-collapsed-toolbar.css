@@ -1,0 +1,118 @@
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/mobile-collapsed-toolbar.css */
+.mobile-flipcard-toolbar {
+    position: fixed;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: 0;
+    left: max(12px, env(safe-area-inset-left));
+    z-index: 55;
+    display: none;
+    gap: var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
+    border-bottom: 0;
+    border-radius: 26px 26px 0 0;
+    background:
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 56%),
+        color-mix(in srgb, var(--panel-strong) 94%, transparent);
+    box-shadow: 0 -18px 50px color-mix(in srgb, #000 30%, transparent);
+    padding: var(--space-2) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+    backdrop-filter: var(--blur-panel);
+    -webkit-backdrop-filter: var(--blur-panel);
+}
+
+.mobile-flipcard-toolbar-handle {
+    display: grid;
+    place-items: center;
+    min-height: 14px;
+}
+
+.mobile-flipcard-toolbar-grip {
+    width: 52px;
+    height: 5px;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-muted) 38%, transparent);
+}
+
+.mobile-flipcard-toolbar-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.mobile-flipcard-toolbar-summary span {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.mobile-flipcard-toolbar-summary strong {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 850;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mobile-flipcard-toolbar-actions {
+    display: grid;
+    grid-template-columns: 44px repeat(3, minmax(0, 1fr)) 44px;
+    gap: var(--space-2);
+}
+
+.mobile-flipcard-toolbar-action {
+    display: inline-grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 48px;
+    border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--panel-bg) 78%, transparent);
+    color: var(--text-main);
+    transition:
+        transform var(--transition-fast),
+        border-color var(--transition-fast),
+        background var(--transition-fast),
+        opacity var(--transition-fast);
+}
+
+.mobile-flipcard-toolbar-action:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+    background: color-mix(in srgb, var(--accent-soft) 48%, var(--panel-bg));
+}
+
+.mobile-flipcard-toolbar-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+}
+
+.mobile-flipcard-toolbar-action svg {
+    width: 19px;
+    height: 19px;
+    stroke-width: 2.5;
+}
+
+.mobile-flipcard-toolbar-action-practice {
+    color: var(--warning-text);
+}
+
+.mobile-flipcard-toolbar-action-flip {
+    color: var(--accent);
+}
+
+.mobile-flipcard-toolbar-action-mastered {
+    color: var(--success-text);
+}
+
+@media (max-width: 932px) {
+    .mobile-flipcard-toolbar {
+        display: grid;
+    }
+}

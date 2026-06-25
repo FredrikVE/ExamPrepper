@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import usePresentationMode from "../../../hooks/usePresentationMode.js";
 import DesktopFlipcardPopOutMenu from "./DesktopFlipcardPopOutMenu.jsx";
-import FlipcardToolMenuContent from "./FlipcardToolMenuContent.jsx";
+import MobileFlipcardToolMenu from "./MobileFlipcardToolMenu.jsx";
 import useFlipcardToolMenu from "./useFlipcardToolMenu.js";
 
 export default function FlipcardToolMenu({
@@ -57,23 +57,20 @@ export default function FlipcardToolMenu({
     }
 
     return (
-        <aside className="flipcard-tool-menu flipcard-tool-menu-mobile-inline" aria-label={labels.toolMenuLabel}>
-            <FlipcardToolMenuContent
-                variant="inline"
-                cardCount={cardCount}
-                activeIndex={activeIndex}
-                hasPrevious={hasPrevious}
-                hasNext={hasNext}
-                isComplete={isComplete}
-                isSwipeCommandActive={isSwipeCommandActive}
-                progressModel={progressModel}
-                labels={labels}
-                onPrevious={onPrevious}
-                onNext={onNext}
-                onPractice={onPractice}
-                onFlip={onFlip}
-                onMastered={onMastered}
-            />
-        </aside>
+        <MobileFlipcardToolMenu
+            cardCount={cardCount}
+            activeIndex={activeIndex}
+            hasPrevious={hasPrevious}
+            hasNext={hasNext}
+            isComplete={isComplete}
+            isSwipeCommandActive={isSwipeCommandActive}
+            progressModel={progressModel}
+            labels={labels}
+            onPrevious={onPrevious}
+            onNext={onNext}
+            onPractice={onPractice}
+            onFlip={onFlip}
+            onMastered={onMastered}
+        />
     );
 }
