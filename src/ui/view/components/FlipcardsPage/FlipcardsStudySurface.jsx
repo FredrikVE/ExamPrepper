@@ -5,15 +5,19 @@ import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 export default function FlipcardsStudySurface({
     cards,
     deckKey,
-    progressLabel,
-    masteredCardIds,
-    practiceCardIds,
+    progressModel,
     labels,
     onCardMastered,
-    onCardForPractice
+    onCardForPractice,
+    onResetProgress
 }) {
     const deck = useFlipcardDeck(cards.length, deckKey);
     const activeCard = cards[deck.activeIndex] ?? null;
+
+    const restartSession = () => {
+        onResetProgress();
+        deck.restartDeck();
+    };
 
     const completeAsMastered = () => {
         if (!activeCard) {
@@ -47,7 +51,7 @@ export default function FlipcardsStudySurface({
 
                 <div className="flipcards-study-progress" aria-label={labels.progressSummaryLabel}>
                     <span>{deckPositionLabel}</span>
-                    <strong>{progressLabel}</strong>
+                    <strong>{progressModel.progressLabel}</strong>
                 </div>
             </div>
 
@@ -55,10 +59,10 @@ export default function FlipcardsStudySurface({
                 cards={cards}
                 deck={deck}
                 labels={labels}
-                masteredCount={masteredCardIds.length}
-                practiceCount={practiceCardIds.length}
+                progressModel={progressModel}
                 onPractice={completeForPractice}
                 onMastered={completeAsMastered}
+                onRestart={restartSession}
             />
         </section>
     );

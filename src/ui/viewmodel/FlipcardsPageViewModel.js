@@ -1,5 +1,10 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+    createFlipcardsProgressModel,
+    FLIPCARD_PROGRESS_STATUS,
+    resolveUpdatedFlipcardProgress
+} from "./FlipcardsPage/flipcardsProgressModel.js";
 
 export default function useFlipcardsPageViewModel(
     getFlashcardsUseCase,
@@ -57,33 +62,42 @@ export default function useFlipcardsPageViewModel(
         };
     }, [getFlashcardsUseCase, subjectId, language, t.flipcardsErrorMessage, isActive]);
 
-    const markCardAsMastered = useCallback((cardId) => {
-        setMasteredCardIds((cardIds) => {
-            if (cardIds.includes(cardId)) {
-                return cardIds;
-            }
-
-            return [...cardIds, cardId];
+    const updateCardProgress = useCallback((cardId, status) => {
+        const progressUpdate = resolveUpdatedFlipcardProgress({
+            masteredCardIds,
+            practiceCardIds,
+            cardId,
+            status
         });
-    }, []);
+
+        setMasteredCardIds(progressUpdate.masteredCardIds);
+        setPracticeCardIds(progressUpdate.practiceCardIds);
+    }, [masteredCardIds, practiceCardIds]);
+
+    const markCardAsMastered = useCallback((cardId) => {
+        updateCardProgress(cardId, FLIPCARD_PROGRESS_STATUS.MASTERED);
+    }, [updateCardProgress]);
 
     const markCardForPractice = useCallback((cardId) => {
-        setPracticeCardIds((cardIds) => {
-            if (cardIds.includes(cardId)) {
-                return cardIds;
-            }
+        updateCardProgress(cardId, FLIPCARD_PROGRESS_STATUS.PRACTICE);
+    }, [updateCardProgress]);
 
-            return [...cardIds, cardId];
-        });
+    const resetFlipcardsProgress = useCallback(() => {
+        setMasteredCardIds([]);
+        setPracticeCardIds([]);
     }, []);
 
-    const progressLabel = useMemo(() => {
-        if (typeof t.flipcardsProgressLabel === "function") {
-            return t.flipcardsProgressLabel(masteredCardIds.length, practiceCardIds.length);
-        }
-
-        return `${masteredCardIds.length} mastered · ${practiceCardIds.length} practice`;
-    }, [masteredCardIds.length, practiceCardIds.length, t]);
+    const progressModel = useMemo(() => {
+        return createFlipcardsProgressModel({
+            totalCardCount: flashcards.length,
+            masteredCardIds,
+            practiceCardIds,
+            labels: {
+                progressLabel: t.flipcardsProgressLabel,
+                completeBody: t.flipcardsCompleteBody
+            }
+        });
+    }, [flashcards.length, masteredCardIds, practiceCardIds, t.flipcardsCompleteBody, t.flipcardsProgressLabel]);
 
     const deckKey = useMemo(() => {
         return flashcards.map((flashcard) => flashcard.id).join("|");
@@ -106,6 +120,11 @@ export default function useFlipcardsPageViewModel(
         deckLabel: t.flipcardsDeckLabel,
         emptyDeckTitle: t.flipcardsEmptyDeckTitle,
         completeTitle: t.flipcardsCompleteTitle,
+        completeStatsLabel: t.flipcardsCompleteStatsLabel,
+        completedCardsLabel: t.flipcardsCompletedCardsLabel,
+        masteredCardsLabel: t.flipcardsMasteredCardsLabel,
+        practiceCardsLabel: t.flipcardsPracticeCardsLabel,
+        restartDeckLabel: t.flipcardsRestartDeckLabel,
         previousCardLabel: t.flipcardsPreviousCardLabel,
         nextCardLabel: t.flipcardsNextCardLabel,
         practiceCardLabel: t.flipcardsPracticeCardLabel,
@@ -123,11 +142,13 @@ export default function useFlipcardsPageViewModel(
         flashcards,
         flashcardsLoading,
         flashcardsLoadError,
-        progressLabel,
+        progressLabel: progressModel.progressLabel,
+        progressModel,
         deckKey,
         masteredCardIds,
         practiceCardIds,
         markCardAsMastered,
-        markCardForPractice
+        markCardForPractice,
+        resetFlipcardsProgress
     };
 }

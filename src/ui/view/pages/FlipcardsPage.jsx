@@ -39,12 +39,11 @@ export default function FlipcardsPage({ viewModel }) {
             <FlipcardsStudySurface
                 cards={viewModel.flashcards}
                 deckKey={viewModel.deckKey}
-                progressLabel={viewModel.progressLabel}
-                masteredCardIds={viewModel.masteredCardIds}
-                practiceCardIds={viewModel.practiceCardIds}
+                progressModel={viewModel.progressModel}
                 labels={viewModel.labels}
                 onCardMastered={viewModel.markCardAsMastered}
                 onCardForPractice={viewModel.markCardForPractice}
+                onResetProgress={viewModel.resetFlipcardsProgress}
             />
         </FlipcardsShell>
     );

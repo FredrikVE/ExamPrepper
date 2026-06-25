@@ -7,10 +7,10 @@ export default function FlipcardDeck({
     cards,
     deck,
     labels,
-    masteredCount,
-    practiceCount,
+    progressModel,
     onPractice,
-    onMastered
+    onMastered,
+    onRestart
 }) {
     if (cards.length === 0) {
         return (
@@ -24,15 +24,29 @@ export default function FlipcardDeck({
         return (
             <section className="flipcard-deck flipcard-deck-state" aria-label={labels.deckLabel}>
                 <h2>{labels.completeTitle}</h2>
-                <p>{labels.completeBody(masteredCount, practiceCount)}</p>
-                <button
-                    type="button"
-                    className="flipcards-secondary-action"
-                    onClick={deck.goToPrevious}
-                    disabled={!deck.hasPrevious}
-                >
-                    {labels.previousCardLabel}
-                </button>
+                <p>{progressModel.completeBody}</p>
+                <div className="flipcard-complete-stats" aria-label={labels.completeStatsLabel}>
+                    <span>{labels.completedCardsLabel(progressModel.completedCount, progressModel.totalCardCount)}</span>
+                    <span>{labels.masteredCardsLabel(progressModel.masteredCount)}</span>
+                    <span>{labels.practiceCardsLabel(progressModel.practiceCount)}</span>
+                </div>
+                <div className="flipcard-deck-state-actions">
+                    <button
+                        type="button"
+                        className="flipcards-secondary-action"
+                        onClick={deck.goToPrevious}
+                        disabled={!deck.hasPrevious}
+                    >
+                        {labels.previousCardLabel}
+                    </button>
+                    <button
+                        type="button"
+                        className="flipcards-primary-action"
+                        onClick={onRestart}
+                    >
+                        {labels.restartDeckLabel}
+                    </button>
+                </div>
             </section>
         );
     }
