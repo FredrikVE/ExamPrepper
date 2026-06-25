@@ -24,14 +24,22 @@ export default function FlipcardToolMenu({
     const {
         isDesktopMenuOpen,
         closeDesktopMenu,
-        toggleDesktopMenu
+        toggleDesktopMenu,
+        isMobileSheetOpen,
+        openMobileSheet,
+        closeMobileSheet,
+        setMobileSheetOpen
     } = useFlipcardToolMenu();
 
     useEffect(() => {
         if (presentationMode !== "desktop") {
             closeDesktopMenu();
         }
-    }, [closeDesktopMenu, presentationMode]);
+
+        if (presentationMode !== "mobile") {
+            closeMobileSheet();
+        }
+    }, [closeDesktopMenu, closeMobileSheet, presentationMode]);
 
     if (presentationMode === "desktop") {
         return (
@@ -58,6 +66,9 @@ export default function FlipcardToolMenu({
 
     return (
         <MobileFlipcardToolMenu
+            isExpanded={isMobileSheetOpen}
+            onExpandedChange={setMobileSheetOpen}
+            onOpenExpandedMenu={openMobileSheet}
             cardCount={cardCount}
             activeIndex={activeIndex}
             hasPrevious={hasPrevious}

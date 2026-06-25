@@ -1,7 +1,14 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenuHeader.jsx
 import { X } from "lucide-react";
 
-export default function FlipcardToolMenuHeader({ title, subtitle, progressLabel, closeLabel, onClose }) {
+export default function FlipcardToolMenuHeader({
+    title,
+    subtitle,
+    progressLabel,
+    closeLabel,
+    onClose,
+    closeComponent: CloseComponent = "button"
+}) {
     return (
         <header className="flipcard-tool-menu-header">
             <div className="flipcard-tool-menu-heading-row">
@@ -11,14 +18,14 @@ export default function FlipcardToolMenuHeader({ title, subtitle, progressLabel,
                 </div>
 
                 {onClose && (
-                    <button
+                    <CloseComponent
                         type="button"
                         className="flipcard-tool-menu-close"
                         aria-label={closeLabel}
                         onClick={onClose}
                     >
                         <X aria-hidden="true" focusable="false" />
-                    </button>
+                    </CloseComponent>
                 )}
             </div>
             <strong>{progressLabel}</strong>

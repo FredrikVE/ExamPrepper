@@ -2,6 +2,9 @@
 import { Check, ChevronLeft, ChevronRight, RotateCcw, Repeat } from "lucide-react";
 
 export default function MobileFlipcardCollapsedToolbar({
+    expandButtonRef,
+    isExpanded,
+    onOpenExpandedMenu,
     cardCount,
     activeIndex,
     hasPrevious,
@@ -24,9 +27,17 @@ export default function MobileFlipcardCollapsedToolbar({
 
     return (
         <footer className="mobile-flipcard-toolbar" aria-label={labels.toolMenuLabel}>
-            <div className="mobile-flipcard-toolbar-handle" aria-hidden="true">
-                <span className="mobile-flipcard-toolbar-grip" />
-            </div>
+            <button
+                type="button"
+                ref={expandButtonRef}
+                className="mobile-flipcard-toolbar-expand"
+                aria-label={labels.openToolMenuLabel}
+                aria-expanded={isExpanded}
+                onClick={onOpenExpandedMenu}
+            >
+                <span className="mobile-flipcard-toolbar-grip" aria-hidden="true" />
+                <span className="sr-only">{labels.openToolMenuLabel}</span>
+            </button>
 
             <div className="mobile-flipcard-toolbar-summary">
                 <span>{positionLabel}</span>

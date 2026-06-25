@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 
 export default function useFlipcardToolMenu() {
     const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
+    const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
 
     const openDesktopMenu = useCallback(() => {
         setIsDesktopMenuOpen(true);
@@ -16,10 +17,26 @@ export default function useFlipcardToolMenu() {
         setIsDesktopMenuOpen((currentValue) => !currentValue);
     }, []);
 
+    const openMobileSheet = useCallback(() => {
+        setIsMobileSheetOpen(true);
+    }, []);
+
+    const closeMobileSheet = useCallback(() => {
+        setIsMobileSheetOpen(false);
+    }, []);
+
+    const setMobileSheetOpen = useCallback((open) => {
+        setIsMobileSheetOpen(open);
+    }, []);
+
     return {
         isDesktopMenuOpen,
         openDesktopMenu,
         closeDesktopMenu,
-        toggleDesktopMenu
+        toggleDesktopMenu,
+        isMobileSheetOpen,
+        openMobileSheet,
+        closeMobileSheet,
+        setMobileSheetOpen
     };
 }

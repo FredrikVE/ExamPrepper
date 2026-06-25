@@ -19,10 +19,21 @@
     -webkit-backdrop-filter: var(--blur-panel);
 }
 
-.mobile-flipcard-toolbar-handle {
+.mobile-flipcard-toolbar-expand {
     display: grid;
     place-items: center;
-    min-height: 14px;
+    min-height: 18px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    padding: var(--space-1) 0;
+}
+
+.mobile-flipcard-toolbar-expand:hover .mobile-flipcard-toolbar-grip,
+.mobile-flipcard-toolbar-expand:focus-visible .mobile-flipcard-toolbar-grip {
+    background: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .mobile-flipcard-toolbar-grip {
@@ -30,6 +41,7 @@
     height: 5px;
     border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--text-muted) 38%, transparent);
+    transition: background var(--transition-fast);
 }
 
 .mobile-flipcard-toolbar-summary {
