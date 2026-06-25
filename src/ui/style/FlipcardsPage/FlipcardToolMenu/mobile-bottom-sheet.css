@@ -40,8 +40,11 @@
     --mobile-flipcard-sheet-bleed: 24px;
 
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     width: min(100%, 560px);
-    height: min(86dvh, 760px);
+    height: auto;
+    max-height: min(86dvh, 760px);
     margin-bottom: calc(-1 * var(--mobile-flipcard-sheet-bleed));
     border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
     border-bottom: 0;
@@ -81,10 +84,12 @@
 
 .mobile-flipcard-sheet-content {
     display: grid;
+    align-content: start;
     gap: var(--space-3);
+    flex: 0 1 auto;
+    min-height: 0;
     width: 100%;
     max-width: 480px;
-    height: 100%;
     margin: 0 auto;
     overflow-y: auto;
     scrollbar-width: none;
