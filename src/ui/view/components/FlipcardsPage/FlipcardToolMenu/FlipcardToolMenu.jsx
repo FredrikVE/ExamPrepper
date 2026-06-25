@@ -48,20 +48,7 @@ export default function FlipcardToolMenu({
                 isOpen={isDesktopMenuOpen}
                 onToggle={toggleDesktopMenu}
                 onClose={closeDesktopMenu}
-                cardCount={cardCount}
-                activeIndex={activeIndex}
-                hasPrevious={hasPrevious}
-                hasNext={hasNext}
-                isComplete={isComplete}
-                isSwipeCommandActive={isSwipeCommandActive}
-                progressModel={progressModel}
                 labels={labels}
-                onPrevious={onPrevious}
-                onNext={onNext}
-                onGoToCard={onGoToCard}
-                onPractice={onPractice}
-                onFlip={onFlip}
-                onMastered={onMastered}
             />
         );
     }

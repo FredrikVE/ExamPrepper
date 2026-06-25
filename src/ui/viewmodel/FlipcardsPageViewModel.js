@@ -151,7 +151,19 @@ export default function useFlipcardsPageViewModel(
         toolMenuRepeatDifficultLabel: t.flipcardsToolMenuRepeatDifficultLabel,
         toolMenuPracticeDescription: t.flipcardsToolMenuPracticeDescription,
         toolMenuFlipDescription: t.flipcardsToolMenuFlipDescription,
-        toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription
+        toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription,
+        desktopToolsPanelLabel: t.flipcardsDesktopToolsPanelLabel,
+        desktopToolsGridLabel: t.flipcardsDesktopToolsGridLabel,
+        desktopToolsTitle: t.flipcardsDesktopToolsTitle,
+        desktopToolsSubtitle: t.flipcardsDesktopToolsSubtitle,
+        desktopToolsExamsLabel: t.flipcardsDesktopToolsExamsLabel,
+        desktopToolsPracticeTestsLabel: t.flipcardsDesktopToolsPracticeTestsLabel,
+        desktopToolsFlipcardsLabel: t.flipcardsDesktopToolsFlipcardsLabel,
+        desktopToolsCreateExamLabel: t.flipcardsDesktopToolsCreateExamLabel,
+        desktopToolsConceptListLabel: t.flipcardsDesktopToolsConceptListLabel,
+        desktopToolsCurriculumGraphsLabel: t.flipcardsDesktopToolsCurriculumGraphsLabel,
+        desktopToolsCurriculumFigureLabel: t.flipcardsDesktopToolsCurriculumFigureLabel,
+        desktopToolsAiExamLabel: t.flipcardsDesktopToolsAiExamLabel
     }), [t]);
 
     return {
