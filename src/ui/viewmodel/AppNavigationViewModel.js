@@ -1,18 +1,20 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import { APP_MOBILE_QUERY, resolvePresentationModeFromMatches } from "../presentation/presentationMode.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
-// Speiler navigasjonens breakpoint (mobil/topbar ≤ 932px, desktop ≥ 933px),
-// slik at Settings alltid er sheet når nav er topbar og sidebar når nav er sidebar.
-const MOBILE_SETTINGS_QUERY = "(max-width: 932px)";
+
+function resolveSettingsPresentationMode(matches) {
+	return resolvePresentationModeFromMatches(matches) === "mobile" ? "sheet" : "sidebar";
+}
 
 function getInitialSettingsPresentationMode() {
 	if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
 		return "sidebar";
 	}
 
-	return window.matchMedia(MOBILE_SETTINGS_QUERY).matches ? "sheet" : "sidebar";
+	return resolveSettingsPresentationMode(window.matchMedia(APP_MOBILE_QUERY).matches);
 }
 
 export default function useAppNavigationViewModel(params) {
@@ -69,10 +71,10 @@ export default function useAppNavigationViewModel(params) {
 			return undefined;
 		}
 
-		const mediaQuery = window.matchMedia(MOBILE_SETTINGS_QUERY);
+		const mediaQuery = window.matchMedia(APP_MOBILE_QUERY);
 
 		const handleChange = (event) => {
-			setSettingsPresentationMode(event.matches ? "sheet" : "sidebar");
+			setSettingsPresentationMode(resolveSettingsPresentationMode(event.matches));
 			setSettingsOpen(false);
 		};
 
