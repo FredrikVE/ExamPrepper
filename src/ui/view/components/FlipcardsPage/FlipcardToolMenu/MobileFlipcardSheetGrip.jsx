@@ -17,11 +17,6 @@ const MobileFlipcardSheetGrip = forwardRef(function MobileFlipcardSheetGrip({ is
             aria-expanded={isExpanded}
         >
             <ChevronUp className="mobile-flipcard-sheet-grip-chevron" aria-hidden="true" focusable="false" />
-            <span className="mobile-flipcard-sheet-grip-dots" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-            </span>
         </button>
     );
 });

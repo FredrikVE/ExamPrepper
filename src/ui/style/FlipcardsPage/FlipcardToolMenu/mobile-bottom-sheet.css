@@ -57,7 +57,7 @@
     outline: none;
     overflow: hidden;
     overscroll-behavior: contain;
-    padding: var(--space-3) var(--space-4) calc(var(--space-5) + env(safe-area-inset-bottom) + var(--mobile-flipcard-sheet-bleed));
+    padding: var(--space-2) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom) + var(--mobile-flipcard-sheet-bleed));
     pointer-events: auto;
     touch-action: auto;
     transform: translateY(var(--drawer-swipe-movement-y));
@@ -81,7 +81,7 @@
 
 .mobile-flipcard-sheet-content {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-3);
     width: 100%;
     max-width: 480px;
     height: 100%;
