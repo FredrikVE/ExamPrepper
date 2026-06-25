@@ -1,4 +1,5 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
+import { useState } from "react";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
@@ -13,6 +14,7 @@ export default function FlipcardsStudySurface({
     onResetProgress
 }) {
     const deck = useFlipcardDeck(cards.length, deckKey);
+    const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
     const activeCard = cards[deck.activeIndex] ?? null;
 
     const restartSession = () => {
@@ -38,8 +40,12 @@ export default function FlipcardsStudySurface({
         deck.goToNext();
     };
 
+    const studySurfaceClassName = isDesktopToolsPanelOpen
+        ? "flipcards-study-surface flipcards-study-surface-desktop-tools-open"
+        : "flipcards-study-surface";
+
     return (
-        <section className="flipcards-study-surface" aria-label={labels.studySurfaceLabel}>
+        <section className={studySurfaceClassName} aria-label={labels.studySurfaceLabel}>
             <div className="flipcards-study-body">
                 <FlipcardDeck
                     cards={cards}
@@ -66,6 +72,7 @@ export default function FlipcardsStudySurface({
                     onPractice={deck.requestSwipeLeft}
                     onFlip={deck.flipActiveCard}
                     onMastered={deck.requestSwipeRight}
+                    onDesktopToolsOpenChange={setIsDesktopToolsPanelOpen}
                 />
             </div>
         </section>

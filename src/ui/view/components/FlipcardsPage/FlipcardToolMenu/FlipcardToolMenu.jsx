@@ -19,7 +19,8 @@ export default function FlipcardToolMenu({
     onGoToCard,
     onPractice,
     onFlip,
-    onMastered
+    onMastered,
+    onDesktopToolsOpenChange
 }) {
     const presentationMode = usePresentationMode();
     const {
@@ -41,6 +42,11 @@ export default function FlipcardToolMenu({
             closeMobileSheet();
         }
     }, [closeDesktopMenu, closeMobileSheet, presentationMode]);
+
+
+    useEffect(() => {
+        onDesktopToolsOpenChange?.(presentationMode === "desktop" && isDesktopMenuOpen);
+    }, [isDesktopMenuOpen, onDesktopToolsOpenChange, presentationMode]);
 
     if (presentationMode === "desktop") {
         return (
