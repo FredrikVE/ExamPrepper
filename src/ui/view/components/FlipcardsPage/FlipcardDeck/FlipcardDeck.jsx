@@ -50,10 +50,14 @@ export default function FlipcardDeck({
                 />
 
                 <Flipcard
+                    key={activeCard.id}
                     term={activeCard.term}
                     definition={activeCard.definition}
                     isFlipped={deck.isFlipped}
                     label={labels.activeCardLabel(deck.activeIndex + 1, cards.length)}
+                    labels={labels}
+                    onSwipePractice={onPractice}
+                    onSwipeMastered={onMastered}
                 />
             </div>
 

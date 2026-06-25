@@ -1,0 +1,49 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/swipe-indicators.css */
+.swipe-indicators {
+    position: absolute;
+    inset: 24px;
+    z-index: 3;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.swipe-indicator {
+    border: 1px solid currentColor;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--panel-bg) 84%, transparent);
+    box-shadow: var(--shadow-card);
+    font-size: 13px;
+    font-weight: 950;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    padding: 11px 14px;
+    text-transform: uppercase;
+}
+
+.swipe-indicator-practice {
+    color: #ff607d;
+    transform: rotate(-10deg);
+}
+
+.swipe-indicator-mastered {
+    color: #22d3a6;
+    transform: rotate(10deg);
+}
+
+.swipe-indicator-proxy {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: var(--radius-xl);
+    pointer-events: none;
+}
+
+.swipe-indicator-proxy-practice {
+    background: linear-gradient(90deg, rgba(255, 96, 125, 0.16), transparent 52%);
+}
+
+.swipe-indicator-proxy-mastered {
+    background: linear-gradient(270deg, rgba(34, 211, 166, 0.16), transparent 52%);
+}

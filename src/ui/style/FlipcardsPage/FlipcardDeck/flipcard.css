@@ -1,6 +1,14 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/flipcard.css */
 .flipcard {
+    position: relative;
     width: 100%;
     height: var(--flipcard-stage-height);
     margin: 0;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+}
+
+.flipcard:active {
+    cursor: grabbing;
 }
