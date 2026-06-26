@@ -14,24 +14,37 @@ import {
 } from "lucide-react";
 
 const DESKTOP_TOOLS_PANEL_ID = "flipcard-desktop-tools-panel";
+const DESKTOP_TOOLS_TITLE_ID = "flipcard-desktop-tools-title";
+const DESKTOP_TOOLS_SUBTITLE_ID = "flipcard-desktop-tools-subtitle";
+const FOCUSABLE_PANEL_SELECTOR = [
+    "button:not([disabled])",
+    "[href]",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    "[tabindex]:not([tabindex='-1'])"
+].join(",");
 
-function createDesktopToolEntries(labels) {
+function createDesktopToolEntries(labels, desktopToolActions) {
     return [
         {
             key: "exams",
             icon: FileText,
             label: labels.desktopToolsExamsLabel,
+            onSelect: desktopToolActions?.onShowExams,
             isFeatured: true
         },
         {
             key: "practice-tests",
             icon: Clock3,
-            label: labels.desktopToolsPracticeTestsLabel
+            label: labels.desktopToolsPracticeTestsLabel,
+            onSelect: desktopToolActions?.onShowPracticeTests
         },
         {
             key: "flipcards",
             icon: PanelsTopLeft,
-            label: labels.desktopToolsFlipcardsLabel
+            label: labels.desktopToolsFlipcardsLabel,
+            onSelect: desktopToolActions?.onShowFlipcards
         },
         {
             key: "create-exam",
@@ -61,16 +74,35 @@ function createDesktopToolEntries(labels) {
     ];
 }
 
-function DesktopToolsCard({ entry }) {
+function DesktopToolsCard({ entry, unavailableLabel, onSelect }) {
     const Icon = entry.icon;
-    const className = entry.isFeatured
-        ? "flipcard-desktop-tools-card flipcard-desktop-tools-card-featured"
-        : "flipcard-desktop-tools-card";
+    const isUnavailable = typeof entry.onSelect !== "function";
+    const className = [
+        "flipcard-desktop-tools-card",
+        entry.isFeatured ? "flipcard-desktop-tools-card-featured" : null,
+        isUnavailable ? "flipcard-desktop-tools-card-unavailable" : null
+    ].filter(Boolean).join(" ");
+
+    const handleClick = () => {
+        if (isUnavailable) {
+            return;
+        }
+
+        onSelect(entry);
+    };
 
     return (
-        <button type="button" className={className}>
+        <button
+            type="button"
+            className={className}
+            aria-disabled={isUnavailable ? "true" : undefined}
+            aria-label={isUnavailable ? `${entry.label} · ${unavailableLabel}` : entry.label}
+            title={isUnavailable ? unavailableLabel : undefined}
+            onClick={handleClick}
+        >
             <Icon aria-hidden="true" focusable="false" />
             <span>{entry.label}</span>
+            {isUnavailable && <small>{unavailableLabel}</small>}
         </button>
     );
 }
@@ -79,7 +111,8 @@ export default function DesktopFlipcardToolsPanel({
     isOpen,
     onToggle,
     onClose,
-    labels
+    labels,
+    desktopToolActions
 }) {
     const toggleRef = useRef(null);
     const panelRef = useRef(null);
@@ -96,10 +129,48 @@ export default function DesktopFlipcardToolsPanel({
             return undefined;
         }
 
+        window.setTimeout(() => {
+            const firstAction = panelRef.current?.querySelector(
+                ".flipcard-desktop-tools-card:not(.flipcard-desktop-tools-card-unavailable)"
+            );
+
+            firstAction?.focus();
+        }, 0);
+
         const handleKeyDown = (event) => {
             if (event.key === "Escape") {
                 event.preventDefault();
                 closeAndRestoreFocus();
+                return;
+            }
+
+            if (event.key !== "Tab" || !panelRef.current) {
+                return;
+            }
+
+            const focusableElements = Array.from(
+                panelRef.current.querySelectorAll(FOCUSABLE_PANEL_SELECTOR)
+            ).filter((element) => element.getAttribute("aria-disabled") !== "true");
+
+            if (focusableElements.length === 0) {
+                event.preventDefault();
+                panelRef.current.focus();
+                return;
+            }
+
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            const activeElement = document.activeElement;
+
+            if (event.shiftKey && (!panelRef.current.contains(activeElement) || activeElement === firstElement)) {
+                event.preventDefault();
+                lastElement.focus();
+                return;
+            }
+
+            if (!event.shiftKey && activeElement === lastElement) {
+                event.preventDefault();
+                firstElement.focus();
             }
         };
 
@@ -110,7 +181,16 @@ export default function DesktopFlipcardToolsPanel({
         };
     }, [closeAndRestoreFocus, isOpen]);
 
-    const desktopToolEntries = createDesktopToolEntries(labels);
+    const handleToolSelect = useCallback((entry) => {
+        entry.onSelect();
+        onClose();
+
+        window.setTimeout(() => {
+            toggleRef.current?.focus();
+        }, 0);
+    }, [onClose]);
+
+    const desktopToolEntries = createDesktopToolEntries(labels, desktopToolActions);
 
     return (
         <div className="flipcard-desktop-tools-shell" data-open={isOpen ? "true" : "false"}>
@@ -139,16 +219,23 @@ export default function DesktopFlipcardToolsPanel({
                         id={DESKTOP_TOOLS_PANEL_ID}
                         ref={panelRef}
                         className="flipcard-desktop-tools-panel"
-                        aria-label={labels.desktopToolsPanelLabel}
+                        aria-labelledby={DESKTOP_TOOLS_TITLE_ID}
+                        aria-describedby={DESKTOP_TOOLS_SUBTITLE_ID}
+                        tabIndex={-1}
                     >
                         <header className="flipcard-desktop-tools-header">
-                            <h2>{labels.desktopToolsTitle}</h2>
-                            <p>{labels.desktopToolsSubtitle}</p>
+                            <h2 id={DESKTOP_TOOLS_TITLE_ID}>{labels.desktopToolsTitle}</h2>
+                            <p id={DESKTOP_TOOLS_SUBTITLE_ID}>{labels.desktopToolsSubtitle}</p>
                         </header>
 
                         <div className="flipcard-desktop-tools-grid" aria-label={labels.desktopToolsGridLabel}>
                             {desktopToolEntries.map((entry) => (
-                                <DesktopToolsCard key={entry.key} entry={entry} />
+                                <DesktopToolsCard
+                                    key={entry.key}
+                                    entry={entry}
+                                    unavailableLabel={labels.desktopToolsUnavailableLabel}
+                                    onSelect={handleToolSelect}
+                                />
                             ))}
                         </div>
                     </aside>

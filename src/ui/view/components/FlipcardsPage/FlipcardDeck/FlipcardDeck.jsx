@@ -2,6 +2,7 @@
 import CardStack from "./CardStack.jsx";
 import Flipcard from "./Flipcard.jsx";
 import QuickActions from "./QuickActions.jsx";
+import FlipcardFooterPager from "../FlipcardToolMenu/FlipcardFooterPager.jsx";
 
 export default function FlipcardDeck({
     cards,
@@ -81,16 +82,26 @@ export default function FlipcardDeck({
             </div>
 
             <QuickActions
-                hasPrevious={deck.hasPrevious}
-                hasNext={deck.hasNext}
                 isSwipeCommandActive={deck.isSwipeCommandActive}
                 labels={labels}
-                onPrevious={deck.goToPrevious}
-                onNext={deck.goToNext}
                 onPractice={deck.requestSwipeLeft}
                 onFlip={deck.flipActiveCard}
                 onMastered={deck.requestSwipeRight}
             />
+
+            <div className="flipcard-deck-footer-pager">
+                <FlipcardFooterPager
+                    cardCount={cards.length}
+                    activeIndex={deck.activeIndex}
+                    hasPrevious={deck.hasPrevious}
+                    hasNext={deck.hasNext}
+                    isSwipeCommandActive={deck.isSwipeCommandActive}
+                    labels={labels}
+                    onPrevious={deck.goToPrevious}
+                    onNext={deck.goToNext}
+                    onGoToCard={deck.goToCard}
+                />
+            </div>
         </section>
     );
 }

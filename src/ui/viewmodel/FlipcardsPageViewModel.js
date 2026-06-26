@@ -11,7 +11,8 @@ export default function useFlipcardsPageViewModel(
     subjectId,
     language,
     t,
-    isActive
+    isActive,
+    desktopToolActions = {}
 ) {
     const [flashcards, setFlashcards] = useState([]);
     const [flashcardsLoading, setFlashcardsLoading] = useState(true);
@@ -163,7 +164,8 @@ export default function useFlipcardsPageViewModel(
         desktopToolsConceptListLabel: t.flipcardsDesktopToolsConceptListLabel,
         desktopToolsCurriculumGraphsLabel: t.flipcardsDesktopToolsCurriculumGraphsLabel,
         desktopToolsCurriculumFigureLabel: t.flipcardsDesktopToolsCurriculumFigureLabel,
-        desktopToolsAiExamLabel: t.flipcardsDesktopToolsAiExamLabel
+        desktopToolsAiExamLabel: t.flipcardsDesktopToolsAiExamLabel,
+        desktopToolsUnavailableLabel: t.flipcardsDesktopToolsUnavailableLabel
     }), [t]);
 
     return {
@@ -176,6 +178,7 @@ export default function useFlipcardsPageViewModel(
         deckKey,
         masteredCardIds,
         practiceCardIds,
+        desktopToolActions,
         markCardAsMastered,
         markCardForPractice,
         resetFlipcardsProgress

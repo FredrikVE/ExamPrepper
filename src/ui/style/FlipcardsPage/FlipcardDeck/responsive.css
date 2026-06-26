@@ -39,6 +39,10 @@
         border-radius: var(--radius-full);
     }
 
+    .flipcard-deck-footer-pager {
+        display: none;
+    }
+
     .quick-action-secondary {
         display: none;
     }

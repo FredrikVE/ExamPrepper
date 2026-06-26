@@ -14,6 +14,7 @@ export default function FlipcardToolMenu({
     isSwipeCommandActive,
     progressModel,
     labels,
+    desktopToolActions,
     onPrevious,
     onNext,
     onGoToCard,
@@ -55,6 +56,7 @@ export default function FlipcardToolMenu({
                 onToggle={toggleDesktopMenu}
                 onClose={closeDesktopMenu}
                 labels={labels}
+                desktopToolActions={desktopToolActions}
             />
         );
     }

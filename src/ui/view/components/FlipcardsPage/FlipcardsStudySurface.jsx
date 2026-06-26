@@ -9,6 +9,7 @@ export default function FlipcardsStudySurface({
     deckKey,
     progressModel,
     labels,
+    desktopToolActions,
     onCardMastered,
     onCardForPractice,
     onResetProgress
@@ -66,6 +67,7 @@ export default function FlipcardsStudySurface({
                     isSwipeCommandActive={deck.isSwipeCommandActive}
                     progressModel={progressModel}
                     labels={labels}
+                    desktopToolActions={desktopToolActions}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
                     onGoToCard={deck.goToCard}

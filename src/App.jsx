@@ -141,6 +141,11 @@ function AppContent() {
 						subjectId={navigationViewModel.selectedSubjectId}
 						language={language}
 						t={t}
+						desktopToolActions={{
+							onShowExams: () => navigationViewModel.changeScreen(NAV_SCREENS.SELECT),
+							onShowPracticeTests: () => navigationViewModel.changeScreen(NAV_SCREENS.SELECT),
+							onShowFlipcards: () => navigationViewModel.changeScreen(NAV_SCREENS.FLIPCARDS)
+						}}
 					/>
 				)}
 
@@ -214,13 +219,14 @@ function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkMo
 	);
 }
 
-function FlipcardsPageWrapper({ subjectId, language, t }) {
+function FlipcardsPageWrapper({ subjectId, language, t, desktopToolActions }) {
 	const flipcardsPageViewModel = useFlipcardsPageViewModel(
 		getFlashcardsUseCase,
 		subjectId,
 		language,
 		t,
-		true
+		true,
+		desktopToolActions
 	);
 
 	return (
