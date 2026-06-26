@@ -254,6 +254,26 @@ export const translations = {
 		statisticsPercentagePointSingular: "prosentpoeng",
 		statisticsPercentagePointPlural: "prosentpoeng",
 
+        // Page tools
+        pageToolsWorkspaceTitle: "Verktøy og handlinger",
+        pageToolsWorkspaceSubtitle: "Alt du trenger for å lære smartere",
+        pageToolsWorkspaceActionsLabel: "Sideverktøy",
+        pageToolsExamTitle: "Eksamen-verktøy",
+        pageToolsExamSubtitle: "Handlinger for aktiv øving",
+        pageToolsExamActionsLabel: "Eksamen-handlinger",
+        pageToolsStatisticsTitle: "Statistikk-verktøy",
+        pageToolsStatisticsSubtitle: "Handlinger for innsikt og progresjon",
+        pageToolsStatisticsActionsLabel: "Statistikk-handlinger",
+        pageToolsExamsLabel: "Eksamner",
+        pageToolsPracticeTestsLabel: "Øveprøver",
+        pageToolsFlipcardsLabel: "Flipcards",
+        pageToolsCreateExamLabel: "Opprett en ny eksamen",
+        pageToolsConceptListLabel: "Lag begrepsliste",
+        pageToolsCurriculumGraphsLabel: "Lag pensumgrafer",
+        pageToolsCurriculumFigureLabel: "Lag pensum-oversiktsfigur",
+        pageToolsAiExamLabel: "Lag AI-generert øve-eksamen",
+        pageToolsUnavailableLabel: "Kommer senere",
+
         // FlipcardsPage
         flipcardsTitle: "Flipcards",
         flipcardsEyebrow: "Øv med kort",
@@ -576,6 +596,26 @@ export const translations = {
 		statisticsOfLabel: "of",
 		statisticsPercentagePointSingular: "percentage point",
 		statisticsPercentagePointPlural: "percentage points",
+
+        // Page tools
+        pageToolsWorkspaceTitle: "Tools and actions",
+        pageToolsWorkspaceSubtitle: "Everything you need to study smarter",
+        pageToolsWorkspaceActionsLabel: "Page tools",
+        pageToolsExamTitle: "Exam tools",
+        pageToolsExamSubtitle: "Actions for active practice",
+        pageToolsExamActionsLabel: "Exam actions",
+        pageToolsStatisticsTitle: "Statistics tools",
+        pageToolsStatisticsSubtitle: "Actions for insight and progress",
+        pageToolsStatisticsActionsLabel: "Statistics actions",
+        pageToolsExamsLabel: "Exams",
+        pageToolsPracticeTestsLabel: "Practice tests",
+        pageToolsFlipcardsLabel: "Flipcards",
+        pageToolsCreateExamLabel: "Create a new exam",
+        pageToolsConceptListLabel: "Create concept list",
+        pageToolsCurriculumGraphsLabel: "Create curriculum graphs",
+        pageToolsCurriculumFigureLabel: "Create curriculum overview figure",
+        pageToolsAiExamLabel: "Create AI-generated practice exam",
+        pageToolsUnavailableLabel: "Coming soon",
 
         // FlipcardsPage
         flipcardsTitle: "Flipcards",

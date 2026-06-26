@@ -1,0 +1,84 @@
+import { describe, expect, test } from "@jest/globals";
+import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
+import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getPageToolGroup, getPageToolItems } from "../../src/navigation/pageTools.js";
+import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js";
+
+const appDiscoveryToolIds = [
+    PAGE_TOOL_ITEM_IDS.APP_EXAMS,
+    PAGE_TOOL_ITEM_IDS.APP_PRACTICE_TESTS,
+    PAGE_TOOL_ITEM_IDS.APP_FLIPCARDS,
+    PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
+    PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
+    PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,
+    PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE,
+    PAGE_TOOL_ITEM_IDS.APP_AI_EXAM
+];
+
+describe("pageTools", () => {
+    test("defines search-first tools for subject and exam select pages", () => {
+        const subjectTools = getPageToolGroup(NAV_SCREENS.SUBJECTS);
+        const examSelectTools = getPageToolGroup(NAV_SCREENS.SELECT);
+
+        expect(subjectTools).toEqual(expect.objectContaining({
+            id: PAGE_TOOL_GROUP_IDS.SUBJECT_SELECT,
+            desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
+            mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
+            mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH
+        }));
+
+        expect(examSelectTools).toEqual(expect.objectContaining({
+            id: PAGE_TOOL_GROUP_IDS.EXAM_SELECT,
+            desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
+            mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
+            mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH
+        }));
+
+        expect(subjectTools.items.map((toolCard) => toolCard.id)).toEqual(appDiscoveryToolIds);
+        expect(examSelectTools.items.map((toolCard) => toolCard.id)).toEqual(appDiscoveryToolIds);
+    });
+
+    test("keeps flipcards tools in the shared page tools model", () => {
+        const flipcardsTools = getPageToolGroup(NAV_SCREENS.FLIPCARDS);
+
+        expect(flipcardsTools).toEqual(expect.objectContaining({
+            id: PAGE_TOOL_GROUP_IDS.FLIPCARDS,
+            titleKey: "flipcardsToolMenuTitle",
+            subtitleKey: "flipcardsToolMenuSubtitle",
+            actionsLabelKey: "flipcardsToolMenuActionsLabel",
+            mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.FOOTER_PAGER
+        }));
+
+        expect(flipcardsTools.items.map((toolCard) => toolCard.id)).toEqual([
+            PAGE_TOOL_ITEM_IDS.FLIPCARDS_ALL_CARDS,
+            PAGE_TOOL_ITEM_IDS.FLIPCARDS_SHUFFLE,
+            PAGE_TOOL_ITEM_IDS.FLIPCARDS_REPEAT_DIFFICULT,
+            PAGE_TOOL_ITEM_IDS.FLIPCARDS_ADD_CARD
+        ]);
+
+        expect(flipcardsTools.items.find((toolCard) => toolCard.id === PAGE_TOOL_ITEM_IDS.FLIPCARDS_ADD_CARD)).toEqual(expect.objectContaining({
+            actionId: PAGE_TOOL_ACTION_IDS.FLIPCARDS_ADD_CARD,
+            availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+        }));
+    });
+
+    test("keeps the existing Flipcards deck tool adapter stable", () => {
+        expect(FLIPCARD_DECK_TOOL_KEYS).toEqual({
+            ALL_CARDS: PAGE_TOOL_ITEM_IDS.FLIPCARDS_ALL_CARDS,
+            SHUFFLE: PAGE_TOOL_ITEM_IDS.FLIPCARDS_SHUFFLE,
+            REPEAT_DIFFICULT: PAGE_TOOL_ITEM_IDS.FLIPCARDS_REPEAT_DIFFICULT,
+            ADD_CARD: PAGE_TOOL_ITEM_IDS.FLIPCARDS_ADD_CARD
+        });
+
+        expect(FLIPCARD_DECK_TOOLS.map((toolCard) => toolCard.key)).toEqual([
+            FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS,
+            FLIPCARD_DECK_TOOL_KEYS.SHUFFLE,
+            FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT,
+            FLIPCARD_DECK_TOOL_KEYS.ADD_CARD
+        ]);
+    });
+
+    test("returns an empty item list for screens without a page tools group", () => {
+        expect(getPageToolGroup(NAV_SCREENS.NOTES)).toBeNull();
+        expect(getPageToolItems(NAV_SCREENS.NOTES)).toEqual([]);
+    });
+});
