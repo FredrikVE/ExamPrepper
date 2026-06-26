@@ -1,10 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import {
-    FLIPCARD_SWIPE_COMMAND_DIRECTION,
-    FLIPCARD_SWIPE_RESULT,
-    resolveFlipcardSwipeResult,
-    resolveFlipcardSwipeResultFromCommand
-} from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/flipcardSwipe.js";
+import { FLIPCARD_SWIPE_COMMAND_DIRECTION, FLIPCARD_SWIPE_RESULT, resolveFlipcardSwipeResult, resolveFlipcardSwipeResultFromCommand } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/flipcardSwipe.js";
 
 describe("resolveFlipcardSwipeResult", () => {
     test("returns practice when swiped far enough left", () => {

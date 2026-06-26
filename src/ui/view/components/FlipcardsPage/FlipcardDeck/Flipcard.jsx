@@ -4,11 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import CardFaces from "./CardFaces.jsx";
 import SwipeIndicators from "./SwipeIndicators.jsx";
-import {
-    FLIPCARD_SWIPE_RESULT,
-    resolveFlipcardSwipeResult,
-    resolveFlipcardSwipeResultFromCommand
-} from "./flipcardSwipe.js";
+import { FLIPCARD_SWIPE_RESULT, resolveFlipcardSwipeResult, resolveFlipcardSwipeResultFromCommand } from "./flipcardSwipe.js";
 
 const EXIT_DISTANCE = 720;
 const EXIT_DURATION_SECONDS = 0.22;

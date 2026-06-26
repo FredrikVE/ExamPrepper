@@ -4,14 +4,7 @@ import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardToolMenu/flipcardDeckTools.js";
-import {
-    createDeckToolItems,
-    createDeckToolStatusLabels,
-    createDisabledDeckToolKeys,
-    createRepeatDifficultCardIds,
-    createShuffledFlipcardIds,
-    createVisibleFlipcards
-} from "./FlipcardToolMenu/flipcardDeckToolState.js";
+import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardToolMenu/flipcardDeckToolState.js";
 
 export default function FlipcardsStudySurface(props) {
     const [activeDeckToolKey, setActiveDeckToolKey] = useState(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);

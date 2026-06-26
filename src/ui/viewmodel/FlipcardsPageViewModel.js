@@ -1,10 +1,6 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-    createFlipcardsProgressModel,
-    FLIPCARD_PROGRESS_STATUS,
-    resolveUpdatedFlipcardProgress
-} from "./FlipcardsPage/flipcardsProgressModel.js";
+import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 
 export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectId, language, t, isActive) {
     const [flashcards, setFlashcards] = useState([]);
