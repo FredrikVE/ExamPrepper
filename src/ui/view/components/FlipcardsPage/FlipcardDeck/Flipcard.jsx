@@ -149,11 +149,7 @@ export default function Flipcard({
                 <ChevronRight aria-hidden="true" focusable="false" />
             </button>
 
-            <CardFaces
-                term={term}
-                definition={definition}
-                isFlipped={isFlipped}
-            />
+            <CardFaces term={term} definition={definition} isFlipped={isFlipped} />
         </motion.article>
     );
 }

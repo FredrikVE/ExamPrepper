@@ -62,8 +62,8 @@
 
 .flipcard-deck-footer-pager {
     display: block;
-    width: min(900px, 88%);
-    max-width: 100%;
+    width: var(--flipcard-stage-width);
+    max-width: 88%;
     margin: calc(-1 * var(--space-2)) auto 0;
 }
 

@@ -93,6 +93,54 @@
     letter-spacing: -0.045em;
 }
 
+
+
+@media (min-width: 933px) {
+    .card-face {
+        gap: 0;
+        padding-inline: clamp(60px, 6vw, 84px);
+    }
+
+    .flip-title {
+        display: block;
+        max-width: min(100%, 12ch);
+        overflow-wrap: normal;
+        color: var(--text-main);
+        font-size: clamp(54px, 5.2vw, 88px);
+        font-weight: 860;
+        line-height: 0.96;
+        letter-spacing: -0.064em;
+        text-shadow: 0 2px 0 rgba(255, 255, 255, 0.055);
+    }
+
+    .flip-title-long {
+        max-width: min(100%, 14ch);
+        font-size: clamp(44px, 4.2vw, 68px);
+        font-weight: 840;
+        line-height: 0.98;
+        letter-spacing: -0.052em;
+    }
+
+    .flip-title-extra-long {
+        max-width: min(100%, 16ch);
+        overflow-wrap: anywhere;
+        font-size: clamp(38px, 3.7vw, 60px);
+        font-weight: 820;
+        line-height: 1.02;
+        letter-spacing: -0.038em;
+    }
+
+
+    .flip-definition {
+        max-width: min(620px, 100%);
+        overflow-wrap: anywhere;
+        font-size: clamp(26px, 3vw, 40px);
+        font-weight: 740;
+        line-height: 1.18;
+        letter-spacing: -0.032em;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .card-faces-inner {
         transition-duration: 1ms;

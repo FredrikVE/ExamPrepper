@@ -1,9 +1,9 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/tokens.css */
 .flipcard-deck {
-    --flipcard-stage-width: min(660px, 100%);
-    --flipcard-stage-height: clamp(440px, 56vh, 640px);
+    --flipcard-stage-width: min(760px, 100%);
+    --flipcard-stage-height: clamp(400px, 50vh, 540px);
     --flipcard-perspective: 1600px;
     --flipcard-flip-duration: 460ms;
-    --flipcard-face-padding: clamp(38px, 6vw, 78px);
-    --flipcard-radius: 36px;
+    --flipcard-face-padding: clamp(38px, 5vw, 66px);
+    --flipcard-radius: 38px;
 }
