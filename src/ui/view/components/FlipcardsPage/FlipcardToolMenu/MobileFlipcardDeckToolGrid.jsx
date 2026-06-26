@@ -1,34 +1,10 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/MobileFlipcardDeckToolGrid.jsx
-import { Heart, List, RefreshCw, Shuffle } from "lucide-react";
-
-const TOOL_CARDS = [
-    {
-        key: "all-cards",
-        labelKey: "toolMenuAllCardsLabel",
-        icon: List,
-        selected: true
-    },
-    {
-        key: "shuffle",
-        labelKey: "toolMenuShuffleLabel",
-        icon: Shuffle
-    },
-    {
-        key: "favorites",
-        labelKey: "toolMenuFavoritesLabel",
-        icon: Heart
-    },
-    {
-        key: "repeat-difficult",
-        labelKey: "toolMenuRepeatDifficultLabel",
-        icon: RefreshCw
-    }
-];
+import { FLIPCARD_DECK_TOOLS } from "./flipcardDeckTools.js";
 
 export default function MobileFlipcardDeckToolGrid({ labels }) {
     return (
         <div className="mobile-flipcard-tool-grid" aria-label={labels.toolMenuActionsLabel}>
-            {TOOL_CARDS.map((toolCard) => {
+            {FLIPCARD_DECK_TOOLS.map((toolCard) => {
                 const Icon = toolCard.icon;
                 const className = toolCard.selected
                     ? "mobile-flipcard-tool-card mobile-flipcard-tool-card-selected"

@@ -1,17 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardToolsPanel.jsx
 import { useCallback, useEffect, useRef } from "react";
-import {
-    BarChart3,
-    BookOpen,
-    Clock3,
-    FileText,
-    List,
-    Menu,
-    PanelsTopLeft,
-    PieChart,
-    Plus,
-    Sparkles
-} from "lucide-react";
+import { Menu } from "lucide-react";
+import { FLIPCARD_DECK_TOOLS } from "./flipcardDeckTools.js";
 
 const DESKTOP_TOOLS_PANEL_ID = "flipcard-desktop-tools-panel";
 const DESKTOP_TOOLS_TITLE_ID = "flipcard-desktop-tools-title";
@@ -25,114 +15,42 @@ const FOCUSABLE_PANEL_SELECTOR = [
     "[tabindex]:not([tabindex='-1'])"
 ].join(",");
 
-function createDesktopToolEntries(labels, desktopToolActions) {
-    return [
-        {
-            key: "exams",
-            icon: FileText,
-            label: labels.desktopToolsExamsLabel,
-            onSelect: desktopToolActions?.onShowExams,
-            isFeatured: true
-        },
-        {
-            key: "practice-tests",
-            icon: Clock3,
-            label: labels.desktopToolsPracticeTestsLabel,
-            onSelect: desktopToolActions?.onShowPracticeTests
-        },
-        {
-            key: "flipcards",
-            icon: PanelsTopLeft,
-            label: labels.desktopToolsFlipcardsLabel,
-            onSelect: desktopToolActions?.onShowFlipcards
-        },
-        {
-            key: "create-exam",
-            icon: Plus,
-            label: labels.desktopToolsCreateExamLabel
-        },
-        {
-            key: "concept-list",
-            icon: List,
-            label: labels.desktopToolsConceptListLabel
-        },
-        {
-            key: "curriculum-graphs",
-            icon: BarChart3,
-            label: labels.desktopToolsCurriculumGraphsLabel
-        },
-        {
-            key: "curriculum-figure",
-            icon: PieChart,
-            label: labels.desktopToolsCurriculumFigureLabel
-        },
-        {
-            key: "ai-exam",
-            icon: Sparkles,
-            label: labels.desktopToolsAiExamLabel
-        }
-    ];
-}
-
-function DesktopToolsCard({ entry, unavailableLabel, onSelect }) {
-    const Icon = entry.icon;
-    const isUnavailable = typeof entry.onSelect !== "function";
-    const className = [
-        "flipcard-desktop-tools-card",
-        entry.isFeatured ? "flipcard-desktop-tools-card-featured" : null,
-        isUnavailable ? "flipcard-desktop-tools-card-unavailable" : null
-    ].filter(Boolean).join(" ");
-
-    const handleClick = () => {
-        if (isUnavailable) {
-            return;
-        }
-
-        onSelect(entry);
-    };
+function DesktopDeckToolCard({ toolCard, labels }) {
+    const Icon = toolCard.icon;
+    const className = toolCard.selected
+        ? "flipcard-desktop-tools-card flipcard-desktop-tools-card-selected"
+        : "flipcard-desktop-tools-card";
 
     return (
         <button
             type="button"
             className={className}
-            aria-disabled={isUnavailable ? "true" : undefined}
-            aria-label={isUnavailable ? `${entry.label} · ${unavailableLabel}` : entry.label}
-            title={isUnavailable ? unavailableLabel : undefined}
-            onClick={handleClick}
+            aria-current={toolCard.selected ? "true" : undefined}
         >
             <Icon aria-hidden="true" focusable="false" />
-            <span>{entry.label}</span>
-            {isUnavailable && <small>{unavailableLabel}</small>}
+            <span>{labels[toolCard.labelKey]}</span>
         </button>
     );
 }
 
-export default function DesktopFlipcardToolsPanel({
-    isOpen,
-    onToggle,
-    onClose,
-    labels,
-    desktopToolActions
-}) {
+export default function DesktopFlipcardToolsPanel(props) {
     const toggleRef = useRef(null);
     const panelRef = useRef(null);
 
     const closeAndRestoreFocus = useCallback(() => {
-        onClose();
+        props.onClose();
         window.setTimeout(() => {
             toggleRef.current?.focus();
         }, 0);
-    }, [onClose]);
+    }, [props.onClose]);
 
     useEffect(() => {
-        if (!isOpen) {
+        if (!props.isOpen) {
             return undefined;
         }
 
         window.setTimeout(() => {
-            const firstAction = panelRef.current?.querySelector(
-                ".flipcard-desktop-tools-card:not(.flipcard-desktop-tools-card-unavailable)"
-            );
+            const firstAction = panelRef.current?.querySelector(".flipcard-desktop-tools-card");
 
             firstAction?.focus();
         }, 0);
@@ -148,9 +66,7 @@ export default function DesktopFlipcardToolsPanel({
                 return;
             }
 
-            const focusableElements = Array.from(
-                panelRef.current.querySelectorAll(FOCUSABLE_PANEL_SELECTOR)
-            ).filter((element) => element.getAttribute("aria-disabled") !== "true");
+            const focusableElements = Array.from(panelRef.current.querySelectorAll(FOCUSABLE_PANEL_SELECTOR));
 
             if (focusableElements.length === 0) {
                 event.preventDefault();
@@ -179,39 +95,28 @@ export default function DesktopFlipcardToolsPanel({
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [closeAndRestoreFocus, isOpen]);
-
-    const handleToolSelect = useCallback((entry) => {
-        entry.onSelect();
-        onClose();
-
-        window.setTimeout(() => {
-            toggleRef.current?.focus();
-        }, 0);
-    }, [onClose]);
-
-    const desktopToolEntries = createDesktopToolEntries(labels, desktopToolActions);
+    }, [closeAndRestoreFocus, props.isOpen]);
 
     return (
-        <div className="flipcard-desktop-tools-shell" data-open={isOpen ? "true" : "false"}>
+        <div className="flipcard-desktop-tools-shell" data-open={props.isOpen ? "true" : "false"}>
             <button
                 type="button"
                 ref={toggleRef}
                 className="flipcard-desktop-tools-toggle"
                 aria-controls={DESKTOP_TOOLS_PANEL_ID}
-                aria-expanded={isOpen}
-                aria-label={isOpen ? labels.closeToolMenuLabel : labels.openToolMenuLabel}
-                onClick={onToggle}
+                aria-expanded={props.isOpen}
+                aria-label={props.isOpen ? props.labels.closeToolMenuLabel : props.labels.openToolMenuLabel}
+                onClick={props.onToggle}
             >
                 <Menu aria-hidden="true" focusable="false" />
             </button>
 
-            {isOpen && (
+            {props.isOpen && (
                 <>
                     <button
                         type="button"
                         className="flipcard-desktop-tools-backdrop"
-                        aria-label={labels.closeToolMenuLabel}
+                        aria-label={props.labels.closeToolMenuLabel}
                         onClick={closeAndRestoreFocus}
                     />
 
@@ -224,17 +129,16 @@ export default function DesktopFlipcardToolsPanel({
                         tabIndex={-1}
                     >
                         <header className="flipcard-desktop-tools-header">
-                            <h2 id={DESKTOP_TOOLS_TITLE_ID}>{labels.desktopToolsTitle}</h2>
-                            <p id={DESKTOP_TOOLS_SUBTITLE_ID}>{labels.desktopToolsSubtitle}</p>
+                            <h2 id={DESKTOP_TOOLS_TITLE_ID}>{props.labels.toolMenuTitle}</h2>
+                            <p id={DESKTOP_TOOLS_SUBTITLE_ID}>{props.labels.toolMenuSubtitle}</p>
                         </header>
 
-                        <div className="flipcard-desktop-tools-grid" aria-label={labels.desktopToolsGridLabel}>
-                            {desktopToolEntries.map((entry) => (
-                                <DesktopToolsCard
-                                    key={entry.key}
-                                    entry={entry}
-                                    unavailableLabel={labels.desktopToolsUnavailableLabel}
-                                    onSelect={handleToolSelect}
+                        <div className="flipcard-desktop-tools-grid" aria-label={props.labels.toolMenuActionsLabel}>
+                            {FLIPCARD_DECK_TOOLS.map((toolCard) => (
+                                <DesktopDeckToolCard
+                                    key={toolCard.key}
+                                    toolCard={toolCard}
+                                    labels={props.labels}
                                 />
                             ))}
                         </div>

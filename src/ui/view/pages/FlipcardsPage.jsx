@@ -41,7 +41,6 @@ export default function FlipcardsPage({ viewModel }) {
                 deckKey={viewModel.deckKey}
                 progressModel={viewModel.progressModel}
                 labels={viewModel.labels}
-                desktopToolActions={viewModel.desktopToolActions}
                 onCardMastered={viewModel.markCardAsMastered}
                 onCardForPractice={viewModel.markCardForPractice}
                 onResetProgress={viewModel.resetFlipcardsProgress}
