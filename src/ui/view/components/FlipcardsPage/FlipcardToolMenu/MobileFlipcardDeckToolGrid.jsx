@@ -1,39 +1,28 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/MobileFlipcardDeckToolGrid.jsx
-import { FLIPCARD_DECK_TOOLS } from "./flipcardDeckTools.js";
-
 export default function MobileFlipcardDeckToolGrid(props) {
     return (
         <div className="mobile-flipcard-tool-grid" aria-label={props.labels.toolMenuActionsLabel}>
-            {FLIPCARD_DECK_TOOLS.map((toolCard) => {
-                const Icon = toolCard.icon;
-                const label = props.labels[toolCard.labelKey];
-                const statusLabel = props.deckToolStatusLabels[toolCard.key];
-                const isSelected = props.activeDeckToolKey === toolCard.key;
-                const isDisabled = toolCard.unavailable || props.disabledDeckToolKeys.includes(toolCard.key);
+            {props.deckToolItems.map((deckToolItem) => {
+                const Icon = deckToolItem.icon;
                 const className = [
                     "mobile-flipcard-tool-card",
-                    isSelected ? "mobile-flipcard-tool-card-selected" : null,
-                    isDisabled ? "mobile-flipcard-tool-card-disabled" : null
+                    deckToolItem.isSelected ? "mobile-flipcard-tool-card-selected" : null,
+                    deckToolItem.isDisabled ? "mobile-flipcard-tool-card-disabled" : null
                 ].filter(Boolean).join(" ");
-                const ariaLabel = [
-                    label,
-                    statusLabel,
-                    isSelected ? props.labels.toolMenuSelectedLabel : null
-                ].filter(Boolean).join(" · ");
 
                 return (
                     <button
-                        key={toolCard.key}
+                        key={deckToolItem.key}
                         type="button"
                         className={className}
-                        aria-current={isSelected ? "true" : undefined}
-                        aria-label={ariaLabel}
-                        disabled={isDisabled}
-                        onClick={() => props.onDeckToolSelect(toolCard.key)}
+                        aria-current={deckToolItem.isSelected ? "true" : undefined}
+                        aria-label={deckToolItem.ariaLabel}
+                        disabled={deckToolItem.isDisabled}
+                        onClick={() => props.onDeckToolSelect(deckToolItem.key)}
                     >
                         <Icon aria-hidden="true" focusable="false" />
-                        <span>{label}</span>
-                        <small>{statusLabel}</small>
+                        <span>{deckToolItem.label}</span>
+                        <small>{deckToolItem.statusLabel}</small>
                     </button>
                 );
             })}

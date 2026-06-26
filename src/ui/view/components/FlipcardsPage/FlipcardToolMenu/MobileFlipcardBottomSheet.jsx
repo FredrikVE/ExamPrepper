@@ -55,9 +55,7 @@ export default function MobileFlipcardBottomSheet(props) {
 
                             <MobileFlipcardDeckToolGrid
                                 labels={props.labels}
-                                activeDeckToolKey={props.activeDeckToolKey}
-                                disabledDeckToolKeys={props.disabledDeckToolKeys}
-                                deckToolStatusLabels={props.deckToolStatusLabels}
+                                deckToolItems={props.deckToolItems}
                                 onDeckToolSelect={selectDeckTool}
                             />
                         </Drawer.Content>

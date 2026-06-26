@@ -5,6 +5,7 @@ import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardToolMenu/flipcardDeckTools.js";
 import {
+    createDeckToolItems,
     createDeckToolStatusLabels,
     createDisabledDeckToolKeys,
     createRepeatDifficultCardIds,
@@ -41,6 +42,10 @@ export default function FlipcardsStudySurface(props) {
     const deckToolStatusLabels = useMemo(() => {
         return createDeckToolStatusLabels(props.labels, props.cards.length, repeatDifficultCardIds.length);
     }, [props.cards.length, props.labels, repeatDifficultCardIds.length]);
+
+    const deckToolItems = useMemo(() => {
+        return createDeckToolItems(props.labels, activeDeckToolKey, disabledDeckToolKeys, deckToolStatusLabels);
+    }, [activeDeckToolKey, deckToolStatusLabels, disabledDeckToolKeys, props.labels]);
 
     const deck = useFlipcardDeck(visibleCards.length, visibleDeckKey);
     const activeCard = visibleCards[deck.activeIndex] ?? null;
@@ -138,9 +143,7 @@ export default function FlipcardsStudySurface(props) {
                     isSwipeCommandActive={deck.isSwipeCommandActive}
                     progressModel={props.progressModel}
                     labels={props.labels}
-                    activeDeckToolKey={activeDeckToolKey}
-                    disabledDeckToolKeys={disabledDeckToolKeys}
-                    deckToolStatusLabels={deckToolStatusLabels}
+                    deckToolItems={deckToolItems}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
                     onGoToCard={deck.goToCard}

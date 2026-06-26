@@ -1,5 +1,8 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckToolState.js
-import { FLIPCARD_DECK_TOOL_KEYS } from "./flipcardDeckTools.js";
+import {
+    FLIPCARD_DECK_TOOL_KEYS,
+    FLIPCARD_DECK_TOOLS
+} from "./flipcardDeckTools.js";
 
 function rotateCardIds(cardIds) {
     if (cardIds.length < 2) {
@@ -12,6 +15,14 @@ function rotateCardIds(cardIds) {
 function haveSameOrder(firstCardIds, secondCardIds) {
     return firstCardIds.length === secondCardIds.length
         && firstCardIds.every((cardId, index) => cardId === secondCardIds[index]);
+}
+
+function createDeckToolAriaLabel(label, statusLabel, isSelected, selectedLabel) {
+    return [
+        label,
+        statusLabel,
+        isSelected ? selectedLabel : null
+    ].filter(Boolean).join(" · ");
 }
 
 export function createShuffledFlipcardIds(cards) {
@@ -48,23 +59,44 @@ export function createRepeatDifficultCardIds(cards, practiceCardIds) {
         .map((card) => card.id);
 }
 
-export function createDisabledDeckToolKeys(practiceCardIds) {
-    const disabledDeckToolKeys = [];
+export function createDisabledDeckToolKeys(repeatDifficultCardIds) {
+    const disabledDeckToolKeys = FLIPCARD_DECK_TOOLS
+        .filter((toolCard) => toolCard.unavailable)
+        .map((toolCard) => toolCard.key);
 
-    if (practiceCardIds.length === 0) {
+    if (repeatDifficultCardIds.length === 0) {
         disabledDeckToolKeys.push(FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT);
     }
 
     return disabledDeckToolKeys;
 }
 
-export function createDeckToolStatusLabels(labels, totalCardCount, practiceCardCount) {
+export function createDeckToolStatusLabels(labels, totalCardCount, repeatDifficultCardCount) {
     return {
         [FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS]: labels.toolMenuAllCardsStatusLabel(totalCardCount),
         [FLIPCARD_DECK_TOOL_KEYS.SHUFFLE]: labels.toolMenuShuffleStatusLabel,
-        [FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT]: practiceCardCount > 0
-            ? labels.toolMenuRepeatDifficultCountLabel(practiceCardCount)
+        [FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT]: repeatDifficultCardCount > 0
+            ? labels.toolMenuRepeatDifficultCountLabel(repeatDifficultCardCount)
             : labels.toolMenuNoPracticeCardsLabel,
         [FLIPCARD_DECK_TOOL_KEYS.ADD_CARD]: labels.toolMenuUnavailableLabel
     };
+}
+
+export function createDeckToolItems(labels, activeDeckToolKey, disabledDeckToolKeys, deckToolStatusLabels) {
+    return FLIPCARD_DECK_TOOLS.map((toolCard) => {
+        const label = labels[toolCard.labelKey];
+        const statusLabel = deckToolStatusLabels[toolCard.key];
+        const isSelected = activeDeckToolKey === toolCard.key;
+        const isDisabled = disabledDeckToolKeys.includes(toolCard.key);
+
+        return {
+            key: toolCard.key,
+            icon: toolCard.icon,
+            label,
+            statusLabel,
+            ariaLabel: createDeckToolAriaLabel(label, statusLabel, isSelected, labels.toolMenuSelectedLabel),
+            isSelected,
+            isDisabled
+        };
+    });
 }

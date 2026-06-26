@@ -1,7 +1,6 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardToolsPanel.jsx
 import { useCallback, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
-import { FLIPCARD_DECK_TOOLS } from "./flipcardDeckTools.js";
 
 const DESKTOP_TOOLS_PANEL_ID = "flipcard-desktop-tools-panel";
 const DESKTOP_TOOLS_TITLE_ID = "flipcard-desktop-tools-title";
@@ -16,34 +15,25 @@ const FOCUSABLE_PANEL_SELECTOR = [
 ].join(",");
 
 function DesktopDeckToolCard(props) {
-    const Icon = props.toolCard.icon;
-    const label = props.labels[props.toolCard.labelKey];
-    const statusLabel = props.deckToolStatusLabels[props.toolCard.key];
-    const isSelected = props.activeDeckToolKey === props.toolCard.key;
-    const isDisabled = props.toolCard.unavailable || props.disabledDeckToolKeys.includes(props.toolCard.key);
+    const Icon = props.deckToolItem.icon;
     const className = [
         "flipcard-desktop-tools-card",
-        isSelected ? "flipcard-desktop-tools-card-selected" : null,
-        isDisabled ? "flipcard-desktop-tools-card-unavailable" : null
+        props.deckToolItem.isSelected ? "flipcard-desktop-tools-card-selected" : null,
+        props.deckToolItem.isDisabled ? "flipcard-desktop-tools-card-unavailable" : null
     ].filter(Boolean).join(" ");
-    const ariaLabel = [
-        label,
-        statusLabel,
-        isSelected ? props.labels.toolMenuSelectedLabel : null
-    ].filter(Boolean).join(" · ");
 
     return (
         <button
             type="button"
             className={className}
-            aria-current={isSelected ? "true" : undefined}
-            aria-label={ariaLabel}
-            disabled={isDisabled}
-            onClick={() => props.onSelect(props.toolCard.key)}
+            aria-current={props.deckToolItem.isSelected ? "true" : undefined}
+            aria-label={props.deckToolItem.ariaLabel}
+            disabled={props.deckToolItem.isDisabled}
+            onClick={() => props.onSelect(props.deckToolItem.key)}
         >
             <Icon aria-hidden="true" focusable="false" />
-            <span>{label}</span>
-            <small>{statusLabel}</small>
+            <span>{props.deckToolItem.label}</span>
+            <small>{props.deckToolItem.statusLabel}</small>
         </button>
     );
 }
@@ -154,14 +144,10 @@ export default function DesktopFlipcardToolsPanel(props) {
                         </header>
 
                         <div className="flipcard-desktop-tools-grid" aria-label={props.labels.toolMenuActionsLabel}>
-                            {FLIPCARD_DECK_TOOLS.map((toolCard) => (
+                            {props.deckToolItems.map((deckToolItem) => (
                                 <DesktopDeckToolCard
-                                    key={toolCard.key}
-                                    toolCard={toolCard}
-                                    labels={props.labels}
-                                    activeDeckToolKey={props.activeDeckToolKey}
-                                    disabledDeckToolKeys={props.disabledDeckToolKeys}
-                                    deckToolStatusLabels={props.deckToolStatusLabels}
+                                    key={deckToolItem.key}
+                                    deckToolItem={deckToolItem}
                                     onSelect={selectDeckTool}
                                 />
                             ))}

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import {
+    createDeckToolItems,
     createDeckToolStatusLabels,
     createDisabledDeckToolKeys,
     createRepeatDifficultCardIds,
@@ -18,11 +19,16 @@ const cards = [
 ];
 
 const labels = {
+    toolMenuAllCardsLabel: "Se alle kort",
+    toolMenuShuffleLabel: "Bland kortstokk",
+    toolMenuRepeatDifficultLabel: "Repeter vanskelige",
+    toolMenuAddCardLabel: "Legg til kort",
     toolMenuAllCardsStatusLabel: (cardCount) => `${cardCount} kort`,
     toolMenuShuffleStatusLabel: "Ny rekkefølge",
     toolMenuRepeatDifficultCountLabel: (practiceCount) => `${practiceCount} vanskelige kort`,
     toolMenuNoPracticeCardsLabel: "Ingen vanskelige ennå",
-    toolMenuUnavailableLabel: "Ikke tilgjengelig ennå"
+    toolMenuUnavailableLabel: "Ikke tilgjengelig ennå",
+    toolMenuSelectedLabel: "Aktiv"
 };
 
 describe("flipcardDeckToolState", () => {
@@ -45,14 +51,27 @@ describe("flipcardDeckToolState", () => {
         expect(createRepeatDifficultCardIds(cards, ["card-2", "missing-card"])).toEqual(["card-2"]);
     });
 
-    test("disables repeat difficult when the practice list is empty", () => {
+    test("disables unavailable tools and repeat difficult when the practice list is empty", () => {
         expect(createDisabledDeckToolKeys([])).toEqual([
+            FLIPCARD_DECK_TOOL_KEYS.ADD_CARD,
             FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT
         ]);
     });
 
-    test("enables repeat difficult when practice cards exist", () => {
-        expect(createDisabledDeckToolKeys(["card-1"])).toEqual([]);
+    test("keeps only unavailable tools disabled when practice cards exist", () => {
+        expect(createDisabledDeckToolKeys(["card-1"])).toEqual([
+            FLIPCARD_DECK_TOOL_KEYS.ADD_CARD
+        ]);
+    });
+
+
+    test("keeps the shared deck tool list focused on the current learning loop", () => {
+        expect(FLIPCARD_DECK_TOOLS.map((toolCard) => toolCard.key)).toEqual([
+            FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS,
+            FLIPCARD_DECK_TOOL_KEYS.SHUFFLE,
+            FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT,
+            FLIPCARD_DECK_TOOL_KEYS.ADD_CARD
+        ]);
     });
 
     test("includes add card as an unavailable shared deck tool", () => {
@@ -76,6 +95,41 @@ describe("flipcardDeckToolState", () => {
         expect(createDeckToolStatusLabels(labels, 3, 0)).toEqual(expect.objectContaining({
             [FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT]: "Ingen vanskelige ennå"
         }));
+    });
+
+    test("creates shared deck tool items for desktop and mobile rendering", () => {
+        const deckToolStatusLabels = createDeckToolStatusLabels(labels, 3, 0);
+        const deckToolItems = createDeckToolItems(
+            labels,
+            FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS,
+            createDisabledDeckToolKeys([]),
+            deckToolStatusLabels
+        );
+
+        expect(deckToolItems).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                key: FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS,
+                label: "Se alle kort",
+                statusLabel: "3 kort",
+                ariaLabel: "Se alle kort · 3 kort · Aktiv",
+                isSelected: true,
+                isDisabled: false
+            }),
+            expect.objectContaining({
+                key: FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT,
+                label: "Repeter vanskelige",
+                statusLabel: "Ingen vanskelige ennå",
+                isSelected: false,
+                isDisabled: true
+            }),
+            expect.objectContaining({
+                key: FLIPCARD_DECK_TOOL_KEYS.ADD_CARD,
+                label: "Legg til kort",
+                statusLabel: "Ikke tilgjengelig ennå",
+                isSelected: false,
+                isDisabled: true
+            })
+        ]));
     });
 
 });

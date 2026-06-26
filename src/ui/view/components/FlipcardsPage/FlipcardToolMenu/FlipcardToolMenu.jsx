@@ -38,9 +38,7 @@ export default function FlipcardToolMenu(props) {
                 onToggle={toggleDesktopMenu}
                 onClose={closeDesktopMenu}
                 labels={props.labels}
-                activeDeckToolKey={props.activeDeckToolKey}
-                disabledDeckToolKeys={props.disabledDeckToolKeys}
-                deckToolStatusLabels={props.deckToolStatusLabels}
+                deckToolItems={props.deckToolItems}
                 onDeckToolSelect={props.onDeckToolSelect}
             />
         );
@@ -59,9 +57,7 @@ export default function FlipcardToolMenu(props) {
             isSwipeCommandActive={props.isSwipeCommandActive}
             progressModel={props.progressModel}
             labels={props.labels}
-            activeDeckToolKey={props.activeDeckToolKey}
-            disabledDeckToolKeys={props.disabledDeckToolKeys}
-            deckToolStatusLabels={props.deckToolStatusLabels}
+            deckToolItems={props.deckToolItems}
             onPrevious={props.onPrevious}
             onNext={props.onNext}
             onGoToCard={props.onGoToCard}
