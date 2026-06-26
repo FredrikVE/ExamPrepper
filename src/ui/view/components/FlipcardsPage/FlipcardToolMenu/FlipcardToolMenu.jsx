@@ -5,23 +5,7 @@ import DesktopFlipcardToolsPanel from "./DesktopFlipcardToolsPanel.jsx";
 import MobileFlipcardToolMenu from "./MobileFlipcardToolMenu.jsx";
 import useFlipcardToolMenu from "./useFlipcardToolMenu.js";
 
-export default function FlipcardToolMenu({
-    cardCount,
-    activeIndex,
-    hasPrevious,
-    hasNext,
-    isComplete,
-    isSwipeCommandActive,
-    progressModel,
-    labels,
-    onPrevious,
-    onNext,
-    onGoToCard,
-    onPractice,
-    onFlip,
-    onMastered,
-    onDesktopToolsOpenChange
-}) {
+export default function FlipcardToolMenu(props) {
     const presentationMode = usePresentationMode();
     const {
         isDesktopMenuOpen,
@@ -43,10 +27,9 @@ export default function FlipcardToolMenu({
         }
     }, [closeDesktopMenu, closeMobileSheet, presentationMode]);
 
-
     useEffect(() => {
-        onDesktopToolsOpenChange?.(presentationMode === "desktop" && isDesktopMenuOpen);
-    }, [isDesktopMenuOpen, onDesktopToolsOpenChange, presentationMode]);
+        props.onDesktopToolsOpenChange(presentationMode === "desktop" && isDesktopMenuOpen);
+    }, [isDesktopMenuOpen, presentationMode, props.onDesktopToolsOpenChange]);
 
     if (presentationMode === "desktop") {
         return (
@@ -54,7 +37,10 @@ export default function FlipcardToolMenu({
                 isOpen={isDesktopMenuOpen}
                 onToggle={toggleDesktopMenu}
                 onClose={closeDesktopMenu}
-                labels={labels}
+                labels={props.labels}
+                activeDeckToolKey={props.activeDeckToolKey}
+                disabledDeckToolKeys={props.disabledDeckToolKeys}
+                onDeckToolSelect={props.onDeckToolSelect}
             />
         );
     }
@@ -64,20 +50,23 @@ export default function FlipcardToolMenu({
             isExpanded={isMobileSheetOpen}
             onExpandedChange={setMobileSheetOpen}
             onOpenExpandedMenu={openMobileSheet}
-            cardCount={cardCount}
-            activeIndex={activeIndex}
-            hasPrevious={hasPrevious}
-            hasNext={hasNext}
-            isComplete={isComplete}
-            isSwipeCommandActive={isSwipeCommandActive}
-            progressModel={progressModel}
-            labels={labels}
-            onPrevious={onPrevious}
-            onNext={onNext}
-            onGoToCard={onGoToCard}
-            onPractice={onPractice}
-            onFlip={onFlip}
-            onMastered={onMastered}
+            cardCount={props.cardCount}
+            activeIndex={props.activeIndex}
+            hasPrevious={props.hasPrevious}
+            hasNext={props.hasNext}
+            isComplete={props.isComplete}
+            isSwipeCommandActive={props.isSwipeCommandActive}
+            progressModel={props.progressModel}
+            labels={props.labels}
+            activeDeckToolKey={props.activeDeckToolKey}
+            disabledDeckToolKeys={props.disabledDeckToolKeys}
+            onPrevious={props.onPrevious}
+            onNext={props.onNext}
+            onGoToCard={props.onGoToCard}
+            onPractice={props.onPractice}
+            onFlip={props.onFlip}
+            onMastered={props.onMastered}
+            onDeckToolSelect={props.onDeckToolSelect}
         />
     );
 }

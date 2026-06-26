@@ -1,25 +1,90 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
+import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardToolMenu/flipcardDeckTools.js";
+import {
+    createDisabledDeckToolKeys,
+    createRepeatDifficultCardIds,
+    createShuffledFlipcardIds,
+    createVisibleFlipcards
+} from "./FlipcardToolMenu/flipcardDeckToolState.js";
 
-export default function FlipcardsStudySurface({
-    cards,
-    deckKey,
-    progressModel,
-    labels,
-    onCardMastered,
-    onCardForPractice,
-    onResetProgress
-}) {
-    const deck = useFlipcardDeck(cards.length, deckKey);
+export default function FlipcardsStudySurface(props) {
+    const [activeDeckToolKey, setActiveDeckToolKey] = useState(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+    const [selectedDeckCardIds, setSelectedDeckCardIds] = useState([]);
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
-    const activeCard = cards[deck.activeIndex] ?? null;
+
+    useEffect(() => {
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+        setSelectedDeckCardIds([]);
+    }, [props.deckKey]);
+
+    const visibleCards = useMemo(() => {
+        return createVisibleFlipcards(props.cards, selectedDeckCardIds);
+    }, [props.cards, selectedDeckCardIds]);
+
+    const visibleDeckKey = useMemo(() => {
+        return [props.deckKey, activeDeckToolKey, visibleCards.map((card) => card.id).join("|")].join("::");
+    }, [activeDeckToolKey, props.deckKey, visibleCards]);
+
+    const disabledDeckToolKeys = useMemo(() => {
+        return createDisabledDeckToolKeys(props.practiceCardIds);
+    }, [props.practiceCardIds]);
+
+    const deck = useFlipcardDeck(visibleCards.length, visibleDeckKey);
+    const activeCard = visibleCards[deck.activeIndex] ?? null;
 
     const restartSession = () => {
-        onResetProgress();
+        props.onResetProgress();
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+        setSelectedDeckCardIds([]);
         deck.restartDeck();
+    };
+
+    const showAllCards = () => {
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+        setSelectedDeckCardIds([]);
+        deck.restartDeck();
+    };
+
+    const shuffleCards = () => {
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.SHUFFLE);
+        setSelectedDeckCardIds(createShuffledFlipcardIds(props.cards));
+        deck.restartDeck();
+    };
+
+    const repeatDifficultCards = () => {
+        const difficultCardIds = createRepeatDifficultCardIds(props.cards, props.practiceCardIds);
+
+        if (difficultCardIds.length === 0) {
+            return;
+        }
+
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT);
+        setSelectedDeckCardIds(difficultCardIds);
+        deck.restartDeck();
+    };
+
+    const selectDeckTool = (deckToolKey) => {
+        if (disabledDeckToolKeys.includes(deckToolKey)) {
+            return;
+        }
+
+        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS) {
+            showAllCards();
+            return;
+        }
+
+        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.SHUFFLE) {
+            shuffleCards();
+            return;
+        }
+
+        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT) {
+            repeatDifficultCards();
+        }
     };
 
     const completeAsMastered = () => {
@@ -27,7 +92,7 @@ export default function FlipcardsStudySurface({
             return;
         }
 
-        onCardMastered(activeCard.id);
+        props.onCardMastered(activeCard.id);
         deck.goToNext();
     };
 
@@ -36,7 +101,7 @@ export default function FlipcardsStudySurface({
             return;
         }
 
-        onCardForPractice(activeCard.id);
+        props.onCardForPractice(activeCard.id);
         deck.goToNext();
     };
 
@@ -45,33 +110,36 @@ export default function FlipcardsStudySurface({
         : "flipcards-study-surface";
 
     return (
-        <section className={studySurfaceClassName} aria-label={labels.studySurfaceLabel}>
+        <section className={studySurfaceClassName} aria-label={props.labels.studySurfaceLabel}>
             <div className="flipcards-study-body">
                 <FlipcardDeck
-                    cards={cards}
+                    cards={visibleCards}
                     deck={deck}
-                    labels={labels}
-                    progressModel={progressModel}
+                    labels={props.labels}
+                    progressModel={props.progressModel}
                     onPractice={completeForPractice}
                     onMastered={completeAsMastered}
                     onRestart={restartSession}
                 />
 
                 <FlipcardToolMenu
-                    cardCount={cards.length}
+                    cardCount={visibleCards.length}
                     activeIndex={deck.activeIndex}
                     hasPrevious={deck.hasPrevious}
                     hasNext={deck.hasNext}
                     isComplete={deck.isComplete}
                     isSwipeCommandActive={deck.isSwipeCommandActive}
-                    progressModel={progressModel}
-                    labels={labels}
+                    progressModel={props.progressModel}
+                    labels={props.labels}
+                    activeDeckToolKey={activeDeckToolKey}
+                    disabledDeckToolKeys={disabledDeckToolKeys}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
                     onGoToCard={deck.goToCard}
                     onPractice={deck.requestSwipeLeft}
                     onFlip={deck.flipActiveCard}
                     onMastered={deck.requestSwipeRight}
+                    onDeckToolSelect={selectDeckTool}
                     onDesktopToolsOpenChange={setIsDesktopToolsPanelOpen}
                 />
             </div>

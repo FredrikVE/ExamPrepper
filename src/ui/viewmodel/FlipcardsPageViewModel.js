@@ -143,6 +143,7 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         toolMenuShuffleLabel: t.flipcardsToolMenuShuffleLabel,
         toolMenuFavoritesLabel: t.flipcardsToolMenuFavoritesLabel,
         toolMenuRepeatDifficultLabel: t.flipcardsToolMenuRepeatDifficultLabel,
+        toolMenuUnavailableLabel: t.flipcardsToolMenuUnavailableLabel,
         toolMenuPracticeDescription: t.flipcardsToolMenuPracticeDescription,
         toolMenuFlipDescription: t.flipcardsToolMenuFlipDescription,
         toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription,

@@ -15,20 +15,29 @@ const FOCUSABLE_PANEL_SELECTOR = [
     "[tabindex]:not([tabindex='-1'])"
 ].join(",");
 
-function DesktopDeckToolCard({ toolCard, labels }) {
-    const Icon = toolCard.icon;
-    const className = toolCard.selected
-        ? "flipcard-desktop-tools-card flipcard-desktop-tools-card-selected"
-        : "flipcard-desktop-tools-card";
+function DesktopDeckToolCard(props) {
+    const Icon = props.toolCard.icon;
+    const isSelected = props.activeDeckToolKey === props.toolCard.key;
+    const isDisabled = props.toolCard.unavailable || props.disabledDeckToolKeys.includes(props.toolCard.key);
+    const className = [
+        "flipcard-desktop-tools-card",
+        isSelected ? "flipcard-desktop-tools-card-selected" : null,
+        isDisabled ? "flipcard-desktop-tools-card-unavailable" : null
+    ].filter(Boolean).join(" ");
 
     return (
         <button
             type="button"
             className={className}
-            aria-current={toolCard.selected ? "true" : undefined}
+            aria-current={isSelected ? "true" : undefined}
+            aria-label={isDisabled
+                ? `${props.labels[props.toolCard.labelKey]} · ${props.labels.toolMenuUnavailableLabel}`
+                : props.labels[props.toolCard.labelKey]}
+            disabled={isDisabled}
+            onClick={() => props.onSelect(props.toolCard.key)}
         >
             <Icon aria-hidden="true" focusable="false" />
-            <span>{labels[toolCard.labelKey]}</span>
+            <span>{props.labels[props.toolCard.labelKey]}</span>
         </button>
     );
 }
@@ -44,13 +53,18 @@ export default function DesktopFlipcardToolsPanel(props) {
         }, 0);
     }, [props.onClose]);
 
+    const selectDeckTool = (deckToolKey) => {
+        props.onDeckToolSelect(deckToolKey);
+        closeAndRestoreFocus();
+    };
+
     useEffect(() => {
         if (!props.isOpen) {
             return undefined;
         }
 
         window.setTimeout(() => {
-            const firstAction = panelRef.current?.querySelector(".flipcard-desktop-tools-card");
+            const firstAction = panelRef.current?.querySelector(".flipcard-desktop-tools-card:not(:disabled)");
 
             firstAction?.focus();
         }, 0);
@@ -139,6 +153,9 @@ export default function DesktopFlipcardToolsPanel(props) {
                                     key={toolCard.key}
                                     toolCard={toolCard}
                                     labels={props.labels}
+                                    activeDeckToolKey={props.activeDeckToolKey}
+                                    disabledDeckToolKeys={props.disabledDeckToolKeys}
+                                    onSelect={selectDeckTool}
                                 />
                             ))}
                         </div>

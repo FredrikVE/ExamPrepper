@@ -4,28 +4,20 @@ import FlipcardFooterPager from "./FlipcardFooterPager.jsx";
 import MobileFlipcardDeckToolGrid from "./MobileFlipcardDeckToolGrid.jsx";
 import MobileFlipcardSheetGrip from "./MobileFlipcardSheetGrip.jsx";
 
-export default function MobileFlipcardBottomSheet({
-    isOpen,
-    onOpenChange,
-    finalFocusRef,
-    cardCount,
-    activeIndex,
-    hasPrevious,
-    hasNext,
-    isSwipeCommandActive,
-    labels,
-    onPrevious,
-    onNext,
-    onGoToCard
-}) {
+export default function MobileFlipcardBottomSheet(props) {
     const closeSheet = () => {
-        onOpenChange(false);
+        props.onOpenChange(false);
+    };
+
+    const selectDeckTool = (deckToolKey) => {
+        props.onDeckToolSelect(deckToolKey);
+        closeSheet();
     };
 
     return (
         <Drawer.Root
-            open={isOpen}
-            onOpenChange={onOpenChange}
+            open={props.isOpen}
+            onOpenChange={props.onOpenChange}
             swipeDirection="down"
         >
             <Drawer.Portal>
@@ -33,35 +25,40 @@ export default function MobileFlipcardBottomSheet({
                 <Drawer.Viewport className="mobile-flipcard-sheet-viewport">
                     <Drawer.Popup
                         className="mobile-flipcard-sheet-popup"
-                        finalFocus={finalFocusRef}
+                        finalFocus={props.finalFocusRef}
                     >
                         <Drawer.Content className="mobile-flipcard-sheet-content">
                             <Drawer.Title className="sr-only">
-                                {labels.toolMenuTitle}
+                                {props.labels.toolMenuTitle}
                             </Drawer.Title>
                             <Drawer.Description className="sr-only">
-                                {labels.toolMenuSubtitle}
+                                {props.labels.toolMenuSubtitle}
                             </Drawer.Description>
 
                             <MobileFlipcardSheetGrip
-                                isExpanded={isOpen}
+                                isExpanded={props.isOpen}
                                 onClick={closeSheet}
-                                label={labels.closeToolMenuLabel}
+                                label={props.labels.closeToolMenuLabel}
                             />
 
                             <FlipcardFooterPager
-                                cardCount={cardCount}
-                                activeIndex={activeIndex}
-                                hasPrevious={hasPrevious}
-                                hasNext={hasNext}
-                                isSwipeCommandActive={isSwipeCommandActive}
-                                labels={labels}
-                                onPrevious={onPrevious}
-                                onNext={onNext}
-                                onGoToCard={onGoToCard}
+                                cardCount={props.cardCount}
+                                activeIndex={props.activeIndex}
+                                hasPrevious={props.hasPrevious}
+                                hasNext={props.hasNext}
+                                isSwipeCommandActive={props.isSwipeCommandActive}
+                                labels={props.labels}
+                                onPrevious={props.onPrevious}
+                                onNext={props.onNext}
+                                onGoToCard={props.onGoToCard}
                             />
 
-                            <MobileFlipcardDeckToolGrid labels={labels} />
+                            <MobileFlipcardDeckToolGrid
+                                labels={props.labels}
+                                activeDeckToolKey={props.activeDeckToolKey}
+                                disabledDeckToolKeys={props.disabledDeckToolKeys}
+                                onDeckToolSelect={selectDeckTool}
+                            />
                         </Drawer.Content>
                     </Drawer.Popup>
                 </Drawer.Viewport>

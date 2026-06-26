@@ -3,52 +3,42 @@ import { useRef } from "react";
 import MobileFlipcardBottomSheet from "./MobileFlipcardBottomSheet.jsx";
 import MobileFlipcardCollapsedToolbar from "./MobileFlipcardCollapsedToolbar.jsx";
 
-export default function MobileFlipcardToolMenu({
-    isExpanded,
-    onExpandedChange,
-    onOpenExpandedMenu,
-    cardCount,
-    activeIndex,
-    hasPrevious,
-    hasNext,
-    isSwipeCommandActive,
-    labels,
-    onPrevious,
-    onNext,
-    onGoToCard
-}) {
+export default function MobileFlipcardToolMenu(props) {
     const expandButtonRef = useRef(null);
 
     return (
         <>
             <MobileFlipcardCollapsedToolbar
                 expandButtonRef={expandButtonRef}
-                isExpanded={isExpanded}
-                onOpenExpandedMenu={onOpenExpandedMenu}
-                cardCount={cardCount}
-                activeIndex={activeIndex}
-                hasPrevious={hasPrevious}
-                hasNext={hasNext}
-                isSwipeCommandActive={isSwipeCommandActive}
-                labels={labels}
-                onPrevious={onPrevious}
-                onNext={onNext}
-                onGoToCard={onGoToCard}
+                isExpanded={props.isExpanded}
+                onOpenExpandedMenu={props.onOpenExpandedMenu}
+                cardCount={props.cardCount}
+                activeIndex={props.activeIndex}
+                hasPrevious={props.hasPrevious}
+                hasNext={props.hasNext}
+                isSwipeCommandActive={props.isSwipeCommandActive}
+                labels={props.labels}
+                onPrevious={props.onPrevious}
+                onNext={props.onNext}
+                onGoToCard={props.onGoToCard}
             />
 
             <MobileFlipcardBottomSheet
-                isOpen={isExpanded}
-                onOpenChange={onExpandedChange}
+                isOpen={props.isExpanded}
+                onOpenChange={props.onExpandedChange}
                 finalFocusRef={expandButtonRef}
-                cardCount={cardCount}
-                activeIndex={activeIndex}
-                hasPrevious={hasPrevious}
-                hasNext={hasNext}
-                isSwipeCommandActive={isSwipeCommandActive}
-                labels={labels}
-                onPrevious={onPrevious}
-                onNext={onNext}
-                onGoToCard={onGoToCard}
+                cardCount={props.cardCount}
+                activeIndex={props.activeIndex}
+                hasPrevious={props.hasPrevious}
+                hasNext={props.hasNext}
+                isSwipeCommandActive={props.isSwipeCommandActive}
+                labels={props.labels}
+                activeDeckToolKey={props.activeDeckToolKey}
+                disabledDeckToolKeys={props.disabledDeckToolKeys}
+                onPrevious={props.onPrevious}
+                onNext={props.onNext}
+                onGoToCard={props.onGoToCard}
+                onDeckToolSelect={props.onDeckToolSelect}
             />
         </>
     );

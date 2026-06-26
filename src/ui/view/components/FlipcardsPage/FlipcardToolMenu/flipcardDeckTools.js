@@ -1,25 +1,32 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js
 import { Heart, List, RefreshCw, Shuffle } from "lucide-react";
 
+export const FLIPCARD_DECK_TOOL_KEYS = {
+    ALL_CARDS: "all-cards",
+    SHUFFLE: "shuffle",
+    FAVORITES: "favorites",
+    REPEAT_DIFFICULT: "repeat-difficult"
+};
+
 export const FLIPCARD_DECK_TOOLS = [
     {
-        key: "all-cards",
+        key: FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS,
         labelKey: "toolMenuAllCardsLabel",
-        icon: List,
-        selected: true
+        icon: List
     },
     {
-        key: "shuffle",
+        key: FLIPCARD_DECK_TOOL_KEYS.SHUFFLE,
         labelKey: "toolMenuShuffleLabel",
         icon: Shuffle
     },
     {
-        key: "favorites",
+        key: FLIPCARD_DECK_TOOL_KEYS.FAVORITES,
         labelKey: "toolMenuFavoritesLabel",
-        icon: Heart
+        icon: Heart,
+        unavailable: true
     },
     {
-        key: "repeat-difficult",
+        key: FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT,
         labelKey: "toolMenuRepeatDifficultLabel",
         icon: RefreshCw
     }
