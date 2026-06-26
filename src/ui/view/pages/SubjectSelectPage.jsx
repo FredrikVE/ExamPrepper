@@ -4,6 +4,7 @@ import SubjectSelectControls from "../components/SubjectSelectPage/SubjectSelect
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
 import SearchSheetContent from "../components/Shared/SearchSheetContent.jsx";
 import useSearchSheetEscapeKey from "../components/Shared/useSearchSheetEscapeKey.js";
+import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
@@ -39,6 +40,8 @@ export default function SubjectSelectPage({ viewModel }) {
 
 	return (
 		<div className="subject-select-layout">
+			<PageToolsDesktopPanel tools={viewModel.pageTools} />
+
 			<main className="subject-select-workspace">
 				<div className="subject-select-ambient-light" aria-hidden="true" />
 

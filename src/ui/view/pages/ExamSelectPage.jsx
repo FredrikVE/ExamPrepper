@@ -5,6 +5,7 @@ import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
 import ExamSelectControls from "../components/ExamSelectPage/ExamSelectControls.jsx";
 import SearchSheetContent from "../components/Shared/SearchSheetContent.jsx";
 import useSearchSheetEscapeKey from "../components/Shared/useSearchSheetEscapeKey.js";
+import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
 
 export default function ExamSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
@@ -43,6 +44,8 @@ export default function ExamSelectPage({ viewModel }) {
 
     return (
         <div className="exam-select-layout">
+            <PageToolsDesktopPanel tools={viewModel.pageTools} />
+
             <main className="exam-select-workspace">
                 <div className="exam-select-ambient-light" aria-hidden="true" />
 
