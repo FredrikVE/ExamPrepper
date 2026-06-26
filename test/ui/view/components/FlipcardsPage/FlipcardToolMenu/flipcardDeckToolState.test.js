@@ -5,7 +5,10 @@ import {
     createShuffledFlipcardIds,
     createVisibleFlipcards
 } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckToolState.js";
-import { FLIPCARD_DECK_TOOL_KEYS } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js";
+import {
+    FLIPCARD_DECK_TOOL_KEYS,
+    FLIPCARD_DECK_TOOLS
+} from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js";
 
 const cards = [
     { id: "card-1", term: "One" },
@@ -38,5 +41,15 @@ describe("flipcardDeckToolState", () => {
             FLIPCARD_DECK_TOOL_KEYS.FAVORITES,
             FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT
         ]);
+    });
+
+    test("includes add card as an unavailable shared deck tool", () => {
+        expect(FLIPCARD_DECK_TOOLS).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                key: FLIPCARD_DECK_TOOL_KEYS.ADD_CARD,
+                labelKey: "toolMenuAddCardLabel",
+                unavailable: true
+            })
+        ]));
     });
 });

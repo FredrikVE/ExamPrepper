@@ -57,6 +57,15 @@
     letter-spacing: -0.025em;
 }
 
+.mobile-flipcard-tool-card small {
+    max-width: 14ch;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 780;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+
 .mobile-flipcard-tool-card-disabled {
     cursor: not-allowed;
     opacity: 0.52;

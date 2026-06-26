@@ -38,6 +38,7 @@ function DesktopDeckToolCard(props) {
         >
             <Icon aria-hidden="true" focusable="false" />
             <span>{props.labels[props.toolCard.labelKey]}</span>
+            {isDisabled && <small>{props.labels.toolMenuUnavailableLabel}</small>}
         </button>
     );
 }

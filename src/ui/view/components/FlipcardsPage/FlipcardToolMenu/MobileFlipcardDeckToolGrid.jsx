@@ -28,6 +28,7 @@ export default function MobileFlipcardDeckToolGrid(props) {
                     >
                         <Icon aria-hidden="true" focusable="false" />
                         <span>{props.labels[toolCard.labelKey]}</span>
+                        {isDisabled && <small>{props.labels.toolMenuUnavailableLabel}</small>}
                     </button>
                 );
             })}
