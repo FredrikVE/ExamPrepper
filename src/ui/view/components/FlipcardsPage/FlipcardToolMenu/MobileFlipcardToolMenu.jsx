@@ -35,6 +35,7 @@ export default function MobileFlipcardToolMenu(props) {
                 labels={props.labels}
                 activeDeckToolKey={props.activeDeckToolKey}
                 disabledDeckToolKeys={props.disabledDeckToolKeys}
+                deckToolStatusLabels={props.deckToolStatusLabels}
                 onPrevious={props.onPrevious}
                 onNext={props.onNext}
                 onGoToCard={props.onGoToCard}

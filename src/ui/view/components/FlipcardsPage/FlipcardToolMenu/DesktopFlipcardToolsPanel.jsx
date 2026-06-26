@@ -17,6 +17,8 @@ const FOCUSABLE_PANEL_SELECTOR = [
 
 function DesktopDeckToolCard(props) {
     const Icon = props.toolCard.icon;
+    const label = props.labels[props.toolCard.labelKey];
+    const statusLabel = props.deckToolStatusLabels[props.toolCard.key];
     const isSelected = props.activeDeckToolKey === props.toolCard.key;
     const isDisabled = props.toolCard.unavailable || props.disabledDeckToolKeys.includes(props.toolCard.key);
     const className = [
@@ -24,21 +26,24 @@ function DesktopDeckToolCard(props) {
         isSelected ? "flipcard-desktop-tools-card-selected" : null,
         isDisabled ? "flipcard-desktop-tools-card-unavailable" : null
     ].filter(Boolean).join(" ");
+    const ariaLabel = [
+        label,
+        statusLabel,
+        isSelected ? props.labels.toolMenuSelectedLabel : null
+    ].filter(Boolean).join(" · ");
 
     return (
         <button
             type="button"
             className={className}
             aria-current={isSelected ? "true" : undefined}
-            aria-label={isDisabled
-                ? `${props.labels[props.toolCard.labelKey]} · ${props.labels.toolMenuUnavailableLabel}`
-                : props.labels[props.toolCard.labelKey]}
+            aria-label={ariaLabel}
             disabled={isDisabled}
             onClick={() => props.onSelect(props.toolCard.key)}
         >
             <Icon aria-hidden="true" focusable="false" />
-            <span>{props.labels[props.toolCard.labelKey]}</span>
-            {isDisabled && <small>{props.labels.toolMenuUnavailableLabel}</small>}
+            <span>{label}</span>
+            <small>{statusLabel}</small>
         </button>
     );
 }
@@ -156,6 +161,7 @@ export default function DesktopFlipcardToolsPanel(props) {
                                     labels={props.labels}
                                     activeDeckToolKey={props.activeDeckToolKey}
                                     disabledDeckToolKeys={props.disabledDeckToolKeys}
+                                    deckToolStatusLabels={props.deckToolStatusLabels}
                                     onSelect={selectDeckTool}
                                 />
                             ))}

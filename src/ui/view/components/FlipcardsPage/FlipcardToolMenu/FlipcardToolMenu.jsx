@@ -40,6 +40,7 @@ export default function FlipcardToolMenu(props) {
                 labels={props.labels}
                 activeDeckToolKey={props.activeDeckToolKey}
                 disabledDeckToolKeys={props.disabledDeckToolKeys}
+                deckToolStatusLabels={props.deckToolStatusLabels}
                 onDeckToolSelect={props.onDeckToolSelect}
             />
         );
@@ -60,6 +61,7 @@ export default function FlipcardToolMenu(props) {
             labels={props.labels}
             activeDeckToolKey={props.activeDeckToolKey}
             disabledDeckToolKeys={props.disabledDeckToolKeys}
+            deckToolStatusLabels={props.deckToolStatusLabels}
             onPrevious={props.onPrevious}
             onNext={props.onNext}
             onGoToCard={props.onGoToCard}

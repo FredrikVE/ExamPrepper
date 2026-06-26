@@ -58,12 +58,16 @@
 }
 
 .mobile-flipcard-tool-card small {
-    max-width: 14ch;
+    max-width: 15ch;
     color: var(--text-muted);
     font-size: 10px;
     font-weight: 780;
     line-height: 1.1;
     letter-spacing: -0.01em;
+}
+
+.mobile-flipcard-tool-card-selected small {
+    color: color-mix(in srgb, var(--accent) 72%, var(--text-main));
 }
 
 .mobile-flipcard-tool-card-disabled {

@@ -5,9 +5,8 @@ import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardToolMenu/flipcardDeckTools.js";
 import {
+    createDeckToolStatusLabels,
     createDisabledDeckToolKeys,
-    createFavoriteCardIds,
-    createNextFavoriteCardIds,
     createRepeatDifficultCardIds,
     createShuffledFlipcardIds,
     createVisibleFlipcards
@@ -16,13 +15,11 @@ import {
 export default function FlipcardsStudySurface(props) {
     const [activeDeckToolKey, setActiveDeckToolKey] = useState(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
     const [selectedDeckCardIds, setSelectedDeckCardIds] = useState([]);
-    const [favoriteCardIds, setFavoriteCardIds] = useState([]);
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
 
     useEffect(() => {
         setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
         setSelectedDeckCardIds([]);
-        setFavoriteCardIds([]);
     }, [props.deckKey]);
 
     const visibleCards = useMemo(() => {
@@ -33,31 +30,20 @@ export default function FlipcardsStudySurface(props) {
         return [props.deckKey, activeDeckToolKey, visibleCards.map((card) => card.id).join("|")].join("::");
     }, [activeDeckToolKey, props.deckKey, visibleCards]);
 
+    const repeatDifficultCardIds = useMemo(() => {
+        return createRepeatDifficultCardIds(props.cards, props.practiceCardIds);
+    }, [props.cards, props.practiceCardIds]);
+
     const disabledDeckToolKeys = useMemo(() => {
-        return createDisabledDeckToolKeys(props.practiceCardIds, favoriteCardIds);
-    }, [favoriteCardIds, props.practiceCardIds]);
+        return createDisabledDeckToolKeys(repeatDifficultCardIds);
+    }, [repeatDifficultCardIds]);
+
+    const deckToolStatusLabels = useMemo(() => {
+        return createDeckToolStatusLabels(props.labels, props.cards.length, repeatDifficultCardIds.length);
+    }, [props.cards.length, props.labels, repeatDifficultCardIds.length]);
 
     const deck = useFlipcardDeck(visibleCards.length, visibleDeckKey);
     const activeCard = visibleCards[deck.activeIndex] ?? null;
-    const isActiveCardFavorite = activeCard ? favoriteCardIds.includes(activeCard.id) : false;
-
-    useEffect(() => {
-        if (activeDeckToolKey !== FLIPCARD_DECK_TOOL_KEYS.FAVORITES) {
-            return;
-        }
-
-        const favoriteIds = createFavoriteCardIds(props.cards, favoriteCardIds);
-
-        if (favoriteIds.length === 0) {
-            setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
-            setSelectedDeckCardIds([]);
-            deck.restartDeck();
-            return;
-        }
-
-        setSelectedDeckCardIds(favoriteIds);
-        deck.restartDeck();
-    }, [activeDeckToolKey, deck.restartDeck, favoriteCardIds, props.cards]);
 
     const restartSession = () => {
         props.onResetProgress();
@@ -78,36 +64,14 @@ export default function FlipcardsStudySurface(props) {
         deck.restartDeck();
     };
 
-    const showFavoriteCards = () => {
-        const favoriteIds = createFavoriteCardIds(props.cards, favoriteCardIds);
-
-        if (favoriteIds.length === 0) {
-            return;
-        }
-
-        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.FAVORITES);
-        setSelectedDeckCardIds(favoriteIds);
-        deck.restartDeck();
-    };
-
     const repeatDifficultCards = () => {
-        const difficultCardIds = createRepeatDifficultCardIds(props.cards, props.practiceCardIds);
-
-        if (difficultCardIds.length === 0) {
+        if (repeatDifficultCardIds.length === 0) {
             return;
         }
 
         setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT);
-        setSelectedDeckCardIds(difficultCardIds);
+        setSelectedDeckCardIds(repeatDifficultCardIds);
         deck.restartDeck();
-    };
-
-    const toggleActiveCardFavorite = () => {
-        if (!activeCard) {
-            return;
-        }
-
-        setFavoriteCardIds((currentFavoriteCardIds) => createNextFavoriteCardIds(currentFavoriteCardIds, activeCard.id));
     };
 
     const selectDeckTool = (deckToolKey) => {
@@ -122,11 +86,6 @@ export default function FlipcardsStudySurface(props) {
 
         if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.SHUFFLE) {
             shuffleCards();
-            return;
-        }
-
-        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.FAVORITES) {
-            showFavoriteCards();
             return;
         }
 
@@ -165,11 +124,9 @@ export default function FlipcardsStudySurface(props) {
                     deck={deck}
                     labels={props.labels}
                     progressModel={props.progressModel}
-                    isActiveCardFavorite={isActiveCardFavorite}
                     onPractice={completeForPractice}
                     onMastered={completeAsMastered}
                     onRestart={restartSession}
-                    onToggleFavorite={toggleActiveCardFavorite}
                 />
 
                 <FlipcardToolMenu
@@ -183,6 +140,7 @@ export default function FlipcardsStudySurface(props) {
                     labels={props.labels}
                     activeDeckToolKey={activeDeckToolKey}
                     disabledDeckToolKeys={disabledDeckToolKeys}
+                    deckToolStatusLabels={deckToolStatusLabels}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
                     onGoToCard={deck.goToCard}

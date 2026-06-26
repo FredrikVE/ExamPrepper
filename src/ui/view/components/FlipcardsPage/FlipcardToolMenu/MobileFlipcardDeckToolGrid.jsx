@@ -6,6 +6,8 @@ export default function MobileFlipcardDeckToolGrid(props) {
         <div className="mobile-flipcard-tool-grid" aria-label={props.labels.toolMenuActionsLabel}>
             {FLIPCARD_DECK_TOOLS.map((toolCard) => {
                 const Icon = toolCard.icon;
+                const label = props.labels[toolCard.labelKey];
+                const statusLabel = props.deckToolStatusLabels[toolCard.key];
                 const isSelected = props.activeDeckToolKey === toolCard.key;
                 const isDisabled = toolCard.unavailable || props.disabledDeckToolKeys.includes(toolCard.key);
                 const className = [
@@ -13,6 +15,11 @@ export default function MobileFlipcardDeckToolGrid(props) {
                     isSelected ? "mobile-flipcard-tool-card-selected" : null,
                     isDisabled ? "mobile-flipcard-tool-card-disabled" : null
                 ].filter(Boolean).join(" ");
+                const ariaLabel = [
+                    label,
+                    statusLabel,
+                    isSelected ? props.labels.toolMenuSelectedLabel : null
+                ].filter(Boolean).join(" · ");
 
                 return (
                     <button
@@ -20,15 +27,13 @@ export default function MobileFlipcardDeckToolGrid(props) {
                         type="button"
                         className={className}
                         aria-current={isSelected ? "true" : undefined}
-                        aria-label={isDisabled
-                            ? `${props.labels[toolCard.labelKey]} · ${props.labels.toolMenuUnavailableLabel}`
-                            : props.labels[toolCard.labelKey]}
+                        aria-label={ariaLabel}
                         disabled={isDisabled}
                         onClick={() => props.onDeckToolSelect(toolCard.key)}
                     >
                         <Icon aria-hidden="true" focusable="false" />
-                        <span>{props.labels[toolCard.labelKey]}</span>
-                        {isDisabled && <small>{props.labels.toolMenuUnavailableLabel}</small>}
+                        <span>{label}</span>
+                        <small>{statusLabel}</small>
                     </button>
                 );
             })}

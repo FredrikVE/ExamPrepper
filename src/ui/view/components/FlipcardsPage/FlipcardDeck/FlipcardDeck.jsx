@@ -72,8 +72,6 @@ export default function FlipcardDeck(props) {
                     hasNext={deck.hasNext}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
-                    isFavorite={props.isActiveCardFavorite}
-                    onToggleFavorite={props.onToggleFavorite}
                     onSwipePractice={props.onPractice}
                     onSwipeMastered={props.onMastered}
                 />

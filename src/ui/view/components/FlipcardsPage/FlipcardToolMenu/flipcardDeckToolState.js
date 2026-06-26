@@ -48,30 +48,23 @@ export function createRepeatDifficultCardIds(cards, practiceCardIds) {
         .map((card) => card.id);
 }
 
-export function createFavoriteCardIds(cards, favoriteCardIds) {
-    return cards
-        .filter((card) => favoriteCardIds.includes(card.id))
-        .map((card) => card.id);
-}
-
-export function createNextFavoriteCardIds(favoriteCardIds, cardId) {
-    if (favoriteCardIds.includes(cardId)) {
-        return favoriteCardIds.filter((favoriteCardId) => favoriteCardId !== cardId);
-    }
-
-    return [...favoriteCardIds, cardId];
-}
-
-export function createDisabledDeckToolKeys(practiceCardIds, favoriteCardIds) {
+export function createDisabledDeckToolKeys(practiceCardIds) {
     const disabledDeckToolKeys = [];
-
-    if (favoriteCardIds.length === 0) {
-        disabledDeckToolKeys.push(FLIPCARD_DECK_TOOL_KEYS.FAVORITES);
-    }
 
     if (practiceCardIds.length === 0) {
         disabledDeckToolKeys.push(FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT);
     }
 
     return disabledDeckToolKeys;
+}
+
+export function createDeckToolStatusLabels(labels, totalCardCount, practiceCardCount) {
+    return {
+        [FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS]: labels.toolMenuAllCardsStatusLabel(totalCardCount),
+        [FLIPCARD_DECK_TOOL_KEYS.SHUFFLE]: labels.toolMenuShuffleStatusLabel,
+        [FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT]: practiceCardCount > 0
+            ? labels.toolMenuRepeatDifficultCountLabel(practiceCardCount)
+            : labels.toolMenuNoPracticeCardsLabel,
+        [FLIPCARD_DECK_TOOL_KEYS.ADD_CARD]: labels.toolMenuUnavailableLabel
+    };
 }

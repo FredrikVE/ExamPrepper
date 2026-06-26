@@ -1,8 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import {
+    createDeckToolStatusLabels,
     createDisabledDeckToolKeys,
-    createFavoriteCardIds,
-    createNextFavoriteCardIds,
     createRepeatDifficultCardIds,
     createShuffledFlipcardIds,
     createVisibleFlipcards
@@ -17,6 +16,14 @@ const cards = [
     { id: "card-2", term: "Two" },
     { id: "card-3", term: "Three" }
 ];
+
+const labels = {
+    toolMenuAllCardsStatusLabel: (cardCount) => `${cardCount} kort`,
+    toolMenuShuffleStatusLabel: "Ny rekkefølge",
+    toolMenuRepeatDifficultCountLabel: (practiceCount) => `${practiceCount} vanskelige kort`,
+    toolMenuNoPracticeCardsLabel: "Ingen vanskelige ennå",
+    toolMenuUnavailableLabel: "Ikke tilgjengelig ennå"
+};
 
 describe("flipcardDeckToolState", () => {
     test("creates a shuffled id list with the same card ids", () => {
@@ -38,26 +45,14 @@ describe("flipcardDeckToolState", () => {
         expect(createRepeatDifficultCardIds(cards, ["card-2", "missing-card"])).toEqual(["card-2"]);
     });
 
-    test("creates favorite card ids from favorite ids", () => {
-        expect(createFavoriteCardIds(cards, ["card-3", "missing-card", "card-1"])).toEqual(["card-1", "card-3"]);
-    });
-
-    test("toggles favorite card ids", () => {
-        expect(createNextFavoriteCardIds(["card-1"], "card-2")).toEqual(["card-1", "card-2"]);
-        expect(createNextFavoriteCardIds(["card-1", "card-2"], "card-1")).toEqual(["card-2"]);
-    });
-
-    test("disables favorites and repeat difficult when both lists are empty", () => {
-        expect(createDisabledDeckToolKeys([], [])).toEqual([
-            FLIPCARD_DECK_TOOL_KEYS.FAVORITES,
+    test("disables repeat difficult when the practice list is empty", () => {
+        expect(createDisabledDeckToolKeys([])).toEqual([
             FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT
         ]);
     });
 
-    test("enables favorites when favorite cards exist", () => {
-        expect(createDisabledDeckToolKeys([], ["card-1"])).toEqual([
-            FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT
-        ]);
+    test("enables repeat difficult when practice cards exist", () => {
+        expect(createDisabledDeckToolKeys(["card-1"])).toEqual([]);
     });
 
     test("includes add card as an unavailable shared deck tool", () => {
@@ -69,4 +64,18 @@ describe("flipcardDeckToolState", () => {
             })
         ]));
     });
+
+    test("creates deck tool status labels with counts and empty states", () => {
+        expect(createDeckToolStatusLabels(labels, 3, 1)).toEqual({
+            [FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS]: "3 kort",
+            [FLIPCARD_DECK_TOOL_KEYS.SHUFFLE]: "Ny rekkefølge",
+            [FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT]: "1 vanskelige kort",
+            [FLIPCARD_DECK_TOOL_KEYS.ADD_CARD]: "Ikke tilgjengelig ennå"
+        });
+
+        expect(createDeckToolStatusLabels(labels, 3, 0)).toEqual(expect.objectContaining({
+            [FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT]: "Ingen vanskelige ennå"
+        }));
+    });
+
 });
