@@ -67,3 +67,48 @@
     background: var(--flipcards-green-soft);
     color: var(--flipcards-green);
 }
+
+@media (min-width: 933px) {
+    .quick-actions {
+        gap: 38px;
+        margin-top: -2px;
+    }
+
+    .quick-action {
+        position: relative;
+        width: 72px;
+        min-width: 72px;
+        height: 72px;
+        min-height: 72px;
+        gap: 0;
+        border-radius: var(--radius-full);
+        padding: 0;
+        box-shadow:
+            0 22px 46px rgba(0, 0, 0, 0.28),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .quick-action:hover:not(:disabled) {
+        transform: translateY(-3px);
+    }
+
+    .quick-action span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+
+    .quick-action svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 933px) {
+    .quick-action:hover:not(:disabled) {
+        transform: none;
+    }
+}
