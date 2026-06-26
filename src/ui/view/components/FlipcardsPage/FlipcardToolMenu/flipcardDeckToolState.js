@@ -48,8 +48,26 @@ export function createRepeatDifficultCardIds(cards, practiceCardIds) {
         .map((card) => card.id);
 }
 
-export function createDisabledDeckToolKeys(practiceCardIds) {
-    const disabledDeckToolKeys = [FLIPCARD_DECK_TOOL_KEYS.FAVORITES];
+export function createFavoriteCardIds(cards, favoriteCardIds) {
+    return cards
+        .filter((card) => favoriteCardIds.includes(card.id))
+        .map((card) => card.id);
+}
+
+export function createNextFavoriteCardIds(favoriteCardIds, cardId) {
+    if (favoriteCardIds.includes(cardId)) {
+        return favoriteCardIds.filter((favoriteCardId) => favoriteCardId !== cardId);
+    }
+
+    return [...favoriteCardIds, cardId];
+}
+
+export function createDisabledDeckToolKeys(practiceCardIds, favoriteCardIds) {
+    const disabledDeckToolKeys = [];
+
+    if (favoriteCardIds.length === 0) {
+        disabledDeckToolKeys.push(FLIPCARD_DECK_TOOL_KEYS.FAVORITES);
+    }
 
     if (practiceCardIds.length === 0) {
         disabledDeckToolKeys.push(FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT);

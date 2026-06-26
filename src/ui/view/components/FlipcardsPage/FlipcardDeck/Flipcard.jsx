@@ -1,6 +1,6 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/Flipcard.jsx
 import { useCallback, useEffect, useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import CardFaces from "./CardFaces.jsx";
 import SwipeIndicators from "./SwipeIndicators.jsx";
@@ -35,8 +35,10 @@ export default function Flipcard({
     swipeCommand,
     hasPrevious,
     hasNext,
+    isFavorite,
     onPrevious,
     onNext,
+    onToggleFavorite,
     onSwipePractice,
     onSwipeMastered
 }) {
@@ -147,6 +149,26 @@ export default function Flipcard({
                 aria-label={labels.nextCardLabel}
             >
                 <ChevronRight aria-hidden="true" focusable="false" />
+            </button>
+
+            <button
+                type="button"
+                className={isFavorite ? "flipcard-favorite-toggle flipcard-favorite-toggle-active" : "flipcard-favorite-toggle"}
+                aria-label={isFavorite ? labels.unfavoriteCardLabel : labels.favoriteCardLabel}
+                aria-pressed={isFavorite}
+                onClick={onToggleFavorite}
+                onPointerDown={(event) => event.stopPropagation()}
+                disabled={isCompletingSwipeRef.current}
+            >
+                <Heart
+                    className="flipcard-favorite-toggle-icon"
+                    aria-hidden="true"
+                    focusable="false"
+                    fill={isFavorite ? "currentColor" : "none"}
+                />
+                <span className="flipcard-favorite-toggle-feedback" aria-hidden="true">
+                    {isFavorite ? labels.unfavoriteCardLabel : labels.favoriteCardLabel}
+                </span>
             </button>
 
             <CardFaces term={term} definition={definition} isFlipped={isFlipped} />

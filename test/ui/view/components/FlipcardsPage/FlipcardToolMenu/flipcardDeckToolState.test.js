@@ -1,6 +1,8 @@
 import { describe, expect, test } from "@jest/globals";
 import {
     createDisabledDeckToolKeys,
+    createFavoriteCardIds,
+    createNextFavoriteCardIds,
     createRepeatDifficultCardIds,
     createShuffledFlipcardIds,
     createVisibleFlipcards
@@ -36,9 +38,24 @@ describe("flipcardDeckToolState", () => {
         expect(createRepeatDifficultCardIds(cards, ["card-2", "missing-card"])).toEqual(["card-2"]);
     });
 
-    test("disables favorites and repeat difficult when no practice cards exist", () => {
-        expect(createDisabledDeckToolKeys([])).toEqual([
+    test("creates favorite card ids from favorite ids", () => {
+        expect(createFavoriteCardIds(cards, ["card-3", "missing-card", "card-1"])).toEqual(["card-1", "card-3"]);
+    });
+
+    test("toggles favorite card ids", () => {
+        expect(createNextFavoriteCardIds(["card-1"], "card-2")).toEqual(["card-1", "card-2"]);
+        expect(createNextFavoriteCardIds(["card-1", "card-2"], "card-1")).toEqual(["card-2"]);
+    });
+
+    test("disables favorites and repeat difficult when both lists are empty", () => {
+        expect(createDisabledDeckToolKeys([], [])).toEqual([
             FLIPCARD_DECK_TOOL_KEYS.FAVORITES,
+            FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT
+        ]);
+    });
+
+    test("enables favorites when favorite cards exist", () => {
+        expect(createDisabledDeckToolKeys([], ["card-1"])).toEqual([
             FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT
         ]);
     });

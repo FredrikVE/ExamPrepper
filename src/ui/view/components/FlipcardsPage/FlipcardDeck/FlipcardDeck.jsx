@@ -4,15 +4,11 @@ import Flipcard from "./Flipcard.jsx";
 import QuickActions from "./QuickActions.jsx";
 import FlipcardFooterPager from "../FlipcardToolMenu/FlipcardFooterPager.jsx";
 
-export default function FlipcardDeck({
-    cards,
-    deck,
-    labels,
-    progressModel,
-    onPractice,
-    onMastered,
-    onRestart
-}) {
+export default function FlipcardDeck(props) {
+    const cards = props.cards;
+    const deck = props.deck;
+    const labels = props.labels;
+    const progressModel = props.progressModel;
     if (cards.length === 0) {
         return (
             <section className="flipcard-deck flipcard-deck-state" aria-label={labels.deckLabel}>
@@ -43,7 +39,7 @@ export default function FlipcardDeck({
                     <button
                         type="button"
                         className="flipcards-primary-action"
-                        onClick={onRestart}
+                        onClick={props.onRestart}
                     >
                         {labels.restartDeckLabel}
                     </button>
@@ -76,8 +72,10 @@ export default function FlipcardDeck({
                     hasNext={deck.hasNext}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
-                    onSwipePractice={onPractice}
-                    onSwipeMastered={onMastered}
+                    isFavorite={props.isActiveCardFavorite}
+                    onToggleFavorite={props.onToggleFavorite}
+                    onSwipePractice={props.onPractice}
+                    onSwipeMastered={props.onMastered}
                 />
             </div>
 

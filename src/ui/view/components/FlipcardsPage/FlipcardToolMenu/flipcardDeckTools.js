@@ -23,8 +23,7 @@ export const FLIPCARD_DECK_TOOLS = [
     {
         key: FLIPCARD_DECK_TOOL_KEYS.FAVORITES,
         labelKey: "toolMenuFavoritesLabel",
-        icon: Heart,
-        unavailable: true
+        icon: Heart
     },
     {
         key: FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT,
