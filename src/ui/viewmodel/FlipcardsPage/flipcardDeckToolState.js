@@ -88,7 +88,7 @@ export function createDeckToolItems(labels, activeDeckToolKey, disabledDeckToolK
 
         return {
             key: toolCard.key,
-            icon: toolCard.icon,
+            iconKey: toolCard.iconKey,
             label,
             statusLabel,
             ariaLabel: createDeckToolAriaLabel(label, statusLabel, isSelected, labels.toolMenuSelectedLabel),

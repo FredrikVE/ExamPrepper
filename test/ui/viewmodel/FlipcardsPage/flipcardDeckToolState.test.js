@@ -1,6 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "../../../../src/ui/viewmodel/FlipcardsPage/flipcardDeckToolState.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
+import { PAGE_TOOL_ICON_KEYS } from "../../../../src/navigation/pageTools.js";
 
 const cards = [
     { id: "card-1", term: "One" },
@@ -69,6 +70,7 @@ describe("flipcardDeckToolState", () => {
             expect.objectContaining({
                 key: FLIPCARD_DECK_TOOL_KEYS.ADD_CARD,
                 labelKey: "toolMenuAddCardLabel",
+                iconKey: PAGE_TOOL_ICON_KEYS.PLUS,
                 unavailable: true
             })
         ]));
@@ -99,6 +101,7 @@ describe("flipcardDeckToolState", () => {
         expect(deckToolItems).toEqual(expect.arrayContaining([
             expect.objectContaining({
                 key: FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS,
+                iconKey: PAGE_TOOL_ICON_KEYS.LIST,
                 label: "Se alle kort",
                 statusLabel: "3 kort",
                 ariaLabel: "Se alle kort · 3 kort · Aktiv",

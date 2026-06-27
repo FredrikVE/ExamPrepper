@@ -1,9 +1,11 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/MobileFlipcardDeckToolGrid.jsx
+import { getFlipcardDeckToolIcon } from "./flipcardDeckToolIcons.js";
+
 export default function MobileFlipcardDeckToolGrid(props) {
     return (
         <div className="mobile-flipcard-tool-grid" aria-label={props.labels.toolMenuActionsLabel}>
             {props.deckToolItems.map((deckToolItem) => {
-                const Icon = deckToolItem.icon;
+                const Icon = getFlipcardDeckToolIcon(deckToolItem.iconKey);
                 const className = [
                     "mobile-flipcard-tool-card",
                     deckToolItem.isSelected ? "mobile-flipcard-tool-card-selected" : null,

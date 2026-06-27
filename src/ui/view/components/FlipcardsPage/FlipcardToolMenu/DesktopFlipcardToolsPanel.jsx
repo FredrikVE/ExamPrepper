@@ -1,6 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardToolsPanel.jsx
 import { useCallback, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
+import { getFlipcardDeckToolIcon } from "./flipcardDeckToolIcons.js";
 
 const DESKTOP_TOOLS_PANEL_ID = "flipcard-desktop-tools-panel";
 const DESKTOP_TOOLS_TITLE_ID = "flipcard-desktop-tools-title";
@@ -15,7 +16,7 @@ const FOCUSABLE_PANEL_SELECTOR = [
 ].join(",");
 
 function DesktopDeckToolCard(props) {
-    const Icon = props.deckToolItem.icon;
+    const Icon = getFlipcardDeckToolIcon(props.deckToolItem.iconKey);
     const className = [
         "flipcard-desktop-tools-card",
         props.deckToolItem.isSelected ? "flipcard-desktop-tools-card-selected" : null,

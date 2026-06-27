@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
-import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getPageToolGroup, getPageToolItems, getWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
+import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getPageToolGroup, getPageToolItems, getWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
 
 const workspaceActionToolIds = [
@@ -97,6 +97,13 @@ describe("pageTools", () => {
             FLIPCARD_DECK_TOOL_KEYS.SHUFFLE,
             FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT,
             FLIPCARD_DECK_TOOL_KEYS.ADD_CARD
+        ]);
+
+        expect(FLIPCARD_DECK_TOOLS.map((toolCard) => toolCard.iconKey)).toEqual([
+            PAGE_TOOL_ICON_KEYS.LIST,
+            PAGE_TOOL_ICON_KEYS.SHUFFLE,
+            PAGE_TOOL_ICON_KEYS.REFRESH_CW,
+            PAGE_TOOL_ICON_KEYS.PLUS
         ]);
     });
 
