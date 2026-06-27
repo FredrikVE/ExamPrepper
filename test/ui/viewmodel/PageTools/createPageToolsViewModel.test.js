@@ -42,7 +42,7 @@ describe("createPageToolsViewModel", () => {
             actionHandlers: {
                 [PAGE_TOOL_ACTION_IDS.SHOW_EXAMS]: showExams
             },
-            disabledLabelsByActionId: {}
+            disabledLabelKeysByActionId: {}
         });
 
         const examsTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.APP_EXAMS);
@@ -72,8 +72,8 @@ describe("createPageToolsViewModel", () => {
             actionHandlers: {
                 [PAGE_TOOL_ACTION_IDS.SHOW_FLIPCARDS]: jest.fn()
             },
-            disabledLabelsByActionId: {
-                [PAGE_TOOL_ACTION_IDS.SHOW_FLIPCARDS]: t.pageToolsSelectSubjectFirstLabel
+            disabledLabelKeysByActionId: {
+                [PAGE_TOOL_ACTION_IDS.SHOW_FLIPCARDS]: "pageToolsSelectSubjectFirstLabel"
             }
         });
 
@@ -104,9 +104,9 @@ describe("createPageToolsViewModel", () => {
                 [PAGE_TOOL_ACTION_IDS.EXAM_SUBMIT]: submitExam,
                 [PAGE_TOOL_ACTION_IDS.EXAM_RESET]: resetExam
             },
-            disabledLabelsByActionId: {
-                [PAGE_TOOL_ACTION_IDS.EXAM_PREVIOUS_QUESTION]: t.pageToolsFirstQuestionLabel,
-                [PAGE_TOOL_ACTION_IDS.EXAM_RESET]: t.pageToolsSubmitFirstLabel
+            disabledLabelKeysByActionId: {
+                [PAGE_TOOL_ACTION_IDS.EXAM_PREVIOUS_QUESTION]: "pageToolsFirstQuestionLabel",
+                [PAGE_TOOL_ACTION_IDS.EXAM_RESET]: "pageToolsSubmitFirstLabel"
             }
         });
 
@@ -140,7 +140,7 @@ describe("createPageToolsViewModel", () => {
             pageToolGroup: null,
             t,
             actionHandlers: {},
-            disabledLabelsByActionId: {}
+            disabledLabelKeysByActionId: {}
         });
 
         expect(tools).toBeNull();

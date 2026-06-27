@@ -38,7 +38,7 @@ describe("pageTools", () => {
     });
 
 
-    test("defines exam tools for the desktop work-mode popout", () => {
+    test("keeps exam tools modeled for later work-mode tools", () => {
         const examTools = getPageToolGroup(NAV_SCREENS.EXAM);
 
         expect(examTools).toEqual(expect.objectContaining({

@@ -23,7 +23,8 @@ import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { PAGE_TOOL_ACTION_IDS, getPageToolGroup } from "./navigation/pageTools.js";
+import { getPageToolGroup } from "./navigation/pageTools.js";
+import { createPageToolContextDisabledLabelKeys, createPageToolNavigationActionHandlers } from "./navigation/pageToolNavigation.js";
 import createPageToolsViewModel from "./ui/viewmodel/PageTools/createPageToolsViewModel.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlashcardsUseCase, getMyStatisticsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
@@ -81,31 +82,25 @@ function AppContent() {
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT
 	);
 
-	const pageToolActionHandlers = useMemo(() => ({
-		[PAGE_TOOL_ACTION_IDS.SHOW_EXAMS]: () => navigationViewModel.changeScreen(NAV_SCREENS.SELECT),
-		[PAGE_TOOL_ACTION_IDS.SHOW_PRACTICE_TESTS]: () => navigationViewModel.changeScreen(NAV_SCREENS.SELECT),
-		[PAGE_TOOL_ACTION_IDS.SHOW_FLIPCARDS]: () => navigationViewModel.changeScreen(NAV_SCREENS.FLIPCARDS)
-	}), [navigationViewModel.changeScreen]);
+	const pageToolNavigationActionHandlers = useMemo(() => createPageToolNavigationActionHandlers(navigationViewModel.changeScreen), [navigationViewModel.changeScreen]);
 
-	const selectSubjectFirstLabels = useMemo(() => ({
-		[PAGE_TOOL_ACTION_IDS.SHOW_EXAMS]: t.pageToolsSelectSubjectFirstLabel,
-		[PAGE_TOOL_ACTION_IDS.SHOW_PRACTICE_TESTS]: t.pageToolsSelectSubjectFirstLabel,
-		[PAGE_TOOL_ACTION_IDS.SHOW_FLIPCARDS]: t.pageToolsSelectSubjectFirstLabel
-	}), [t.pageToolsSelectSubjectFirstLabel]);
+	const subjectSelectPageToolDisabledLabelKeys = useMemo(() => createPageToolContextDisabledLabelKeys(NAV_SCREENS.SUBJECTS, Boolean(navigationViewModel.selectedSubjectId)), [navigationViewModel.selectedSubjectId]);
+
+	const examSelectPageToolDisabledLabelKeys = useMemo(() => createPageToolContextDisabledLabelKeys(NAV_SCREENS.SELECT, Boolean(navigationViewModel.selectedSubjectId)), [navigationViewModel.selectedSubjectId]);
 
 	const subjectSelectPageTools = useMemo(() => createPageToolsViewModel({
 		pageToolGroup: getPageToolGroup(NAV_SCREENS.SUBJECTS),
 		t,
-		actionHandlers: pageToolActionHandlers,
-		disabledLabelsByActionId: selectSubjectFirstLabels
-	}), [pageToolActionHandlers, selectSubjectFirstLabels, t]);
+		actionHandlers: pageToolNavigationActionHandlers,
+		disabledLabelKeysByActionId: subjectSelectPageToolDisabledLabelKeys
+	}), [pageToolNavigationActionHandlers, subjectSelectPageToolDisabledLabelKeys, t]);
 
 	const examSelectPageTools = useMemo(() => createPageToolsViewModel({
 		pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
 		t,
-		actionHandlers: pageToolActionHandlers,
-		disabledLabelsByActionId: {}
-	}), [pageToolActionHandlers, t]);
+		actionHandlers: pageToolNavigationActionHandlers,
+		disabledLabelKeysByActionId: examSelectPageToolDisabledLabelKeys
+	}), [examSelectPageToolDisabledLabelKeys, pageToolNavigationActionHandlers, t]);
 
 
 	return (

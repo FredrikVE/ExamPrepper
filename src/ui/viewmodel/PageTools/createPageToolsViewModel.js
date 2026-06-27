@@ -14,14 +14,15 @@ export default function createPageToolsViewModel(params) {
         openLabel: params.t.pageToolsOpenLabel,
         closeLabel: params.t.pageToolsCloseLabel,
         mobileHandleLabel: params.t.pageToolsMobileHandleLabel,
-        items: params.pageToolGroup.items.map((toolItem) => createPageToolItemViewModel({ toolItem, t: params.t, actionHandlers: params.actionHandlers, disabledLabelsByActionId: params.disabledLabelsByActionId }))
+        items: params.pageToolGroup.items.map((toolItem) => createPageToolItemViewModel({ toolItem, t: params.t, actionHandlers: params.actionHandlers, disabledLabelKeysByActionId: params.disabledLabelKeysByActionId }))
     };
 }
 
 function createPageToolItemViewModel(params) {
     const label = params.t[params.toolItem.labelKey];
     const actionHandler = params.actionHandlers[params.toolItem.actionId];
-    const disabledReason = params.disabledLabelsByActionId[params.toolItem.actionId];
+    const disabledLabelKey = params.disabledLabelKeysByActionId[params.toolItem.actionId];
+    const disabledReason = disabledLabelKey ? params.t[disabledLabelKey] : "";
     const isStaticallyUnavailable = params.toolItem.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE;
     const isDisabled = isStaticallyUnavailable || Boolean(disabledReason) || typeof actionHandler !== "function";
     const statusLabel = resolveStatusLabel({ isStaticallyUnavailable, disabledReason, isDisabled, t: params.t });
