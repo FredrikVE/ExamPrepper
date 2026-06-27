@@ -1,12 +1,9 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
-import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getPageToolGroup, getPageToolItems } from "../../src/navigation/pageTools.js";
+import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getPageToolGroup, getPageToolItems, getWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js";
 
-const appDiscoveryToolIds = [
-    PAGE_TOOL_ITEM_IDS.APP_EXAMS,
-    PAGE_TOOL_ITEM_IDS.APP_PRACTICE_TESTS,
-    PAGE_TOOL_ITEM_IDS.APP_FLIPCARDS,
+const workspaceActionToolIds = [
     PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
     PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
     PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,
@@ -15,7 +12,7 @@ const appDiscoveryToolIds = [
 ];
 
 describe("pageTools", () => {
-    test("defines search-first tools for subject and exam select pages", () => {
+    test("defines search-first tools metadata for subject and exam select pages", () => {
         const subjectTools = getPageToolGroup(NAV_SCREENS.SUBJECTS);
         const examSelectTools = getPageToolGroup(NAV_SCREENS.SELECT);
 
@@ -33,10 +30,10 @@ describe("pageTools", () => {
             mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH
         }));
 
-        expect(subjectTools.items.map((toolCard) => toolCard.id)).toEqual(appDiscoveryToolIds);
-        expect(examSelectTools.items.map((toolCard) => toolCard.id)).toEqual(appDiscoveryToolIds);
+        expect(subjectTools.items.map((toolCard) => toolCard.id)).toEqual(workspaceActionToolIds);
+        expect(examSelectTools.items.map((toolCard) => toolCard.id)).toEqual(workspaceActionToolIds);
+        expect(getWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual(workspaceActionToolIds);
     });
-
 
     test("keeps exam tools modeled for later work-mode tools", () => {
         const examTools = getPageToolGroup(NAV_SCREENS.EXAM);

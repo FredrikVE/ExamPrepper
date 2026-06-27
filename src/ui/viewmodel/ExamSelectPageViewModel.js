@@ -1,6 +1,10 @@
 // src/ui/viewmodel/ExamSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { PAGE_NAV_TOOL_ITEMS } from "../../navigation/navItems.js";
+import { getPageToolGroup, getWorkspaceActionToolItems } from "../../navigation/pageTools.js";
+import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
+import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import { ALL_CATEGORIES, buildExamCategories, filterExams } from "./ExamSelectPage/examSelectPageFilters.js";
 
 const SEARCH_SHEET_MODES = {
@@ -10,7 +14,7 @@ const SEARCH_SHEET_MODES = {
 
 const SEARCH_SUGGESTION_LIMIT = 6;
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive, onChangeScreen) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
     const [examsLoadError, setExamsLoadError] = useState(null);
@@ -157,6 +161,17 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         onSelectExam(examId);
     }, [closeExamSearchSheet, onSelectExam]);
 
+    const pageTools = useMemo(() => {
+        return createWorkspaceToolsModel({
+            pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
+            t,
+            navToolItems: PAGE_NAV_TOOL_ITEMS,
+            workspaceActionToolItems: getWorkspaceActionToolItems(),
+            hasSelectedSubject: Boolean(subjectId),
+            onChangeScreen
+        });
+    }, [onChangeScreen, subjectId, t]);
+
     return {
         // Data
         exams: filteredExams,
@@ -164,6 +179,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         examsLoading,
         examsLoadError,
         categories,
+        pageTools,
         ...pageCopy,
 
         // Søk og filter

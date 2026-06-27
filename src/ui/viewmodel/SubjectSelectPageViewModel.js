@@ -1,5 +1,9 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { PAGE_NAV_TOOL_ITEMS } from "../../navigation/navItems.js";
+import { getPageToolGroup, getWorkspaceActionToolItems } from "../../navigation/pageTools.js";
+import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
 const SEARCH_SHEET_MODES = {
@@ -9,7 +13,7 @@ const SEARCH_SHEET_MODES = {
 
 const SEARCH_SUGGESTION_LIMIT = 6;
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive) {
+export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, onChangeScreen) {
 	const [subjects, setSubjects] = useState([]);
 	const [subjectsLoading, setSubjectsLoading] = useState(true);
 	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
@@ -145,6 +149,17 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		onSelectSubject(subjectId);
 	}, [closeSubjectSearchSheet, onSelectSubject]);
 
+	const pageTools = useMemo(() => {
+		return createWorkspaceToolsModel({
+			pageToolGroup: getPageToolGroup(NAV_SCREENS.SUBJECTS),
+			t,
+			navToolItems: PAGE_NAV_TOOL_ITEMS,
+			workspaceActionToolItems: getWorkspaceActionToolItems(),
+			hasSelectedSubject: Boolean(selectedSubjectId),
+			onChangeScreen
+		});
+	}, [onChangeScreen, selectedSubjectId, t]);
+
 	return {
 		// Data
 		subjects,
@@ -153,6 +168,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		faculties,
 		subjectsLoading,
 		subjectsLoadError,
+		pageTools,
 
 		// Tekster
 		t,

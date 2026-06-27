@@ -1,5 +1,5 @@
 // src/App.jsx
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
@@ -23,9 +23,6 @@ import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { getPageToolGroup } from "./navigation/pageTools.js";
-import { createPageToolContextDisabledLabelKeys, createPageToolNavigationActionHandlers } from "./navigation/pageToolNavigation.js";
-import createPageToolsViewModel from "./ui/viewmodel/PageTools/createPageToolsViewModel.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlashcardsUseCase, getMyStatisticsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
@@ -70,7 +67,8 @@ function AppContent() {
 		t,
 		navigationViewModel.selectedSubjectId,
 		navigationViewModel.selectSubject,
-		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS
+		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS,
+		navigationViewModel.changeScreen
 	);
 
 	const examSelectPageViewModel = useExamSelectPageViewModel(
@@ -79,28 +77,9 @@ function AppContent() {
 		t,
 		subjectSelectPageViewModel.selectedSubject,
 		navigationViewModel.selectExam,
-		navigationViewModel.activeScreen === NAV_SCREENS.SELECT
+		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
+		navigationViewModel.changeScreen
 	);
-
-	const pageToolNavigationActionHandlers = useMemo(() => createPageToolNavigationActionHandlers(navigationViewModel.changeScreen), [navigationViewModel.changeScreen]);
-
-	const subjectSelectPageToolDisabledLabelKeys = useMemo(() => createPageToolContextDisabledLabelKeys(NAV_SCREENS.SUBJECTS, Boolean(navigationViewModel.selectedSubjectId)), [navigationViewModel.selectedSubjectId]);
-
-	const examSelectPageToolDisabledLabelKeys = useMemo(() => createPageToolContextDisabledLabelKeys(NAV_SCREENS.SELECT, Boolean(navigationViewModel.selectedSubjectId)), [navigationViewModel.selectedSubjectId]);
-
-	const subjectSelectPageTools = useMemo(() => createPageToolsViewModel({
-		pageToolGroup: getPageToolGroup(NAV_SCREENS.SUBJECTS),
-		t,
-		actionHandlers: pageToolNavigationActionHandlers,
-		disabledLabelKeysByActionId: subjectSelectPageToolDisabledLabelKeys
-	}), [pageToolNavigationActionHandlers, subjectSelectPageToolDisabledLabelKeys, t]);
-
-	const examSelectPageTools = useMemo(() => createPageToolsViewModel({
-		pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
-		t,
-		actionHandlers: pageToolNavigationActionHandlers,
-		disabledLabelKeysByActionId: examSelectPageToolDisabledLabelKeys
-	}), [examSelectPageToolDisabledLabelKeys, pageToolNavigationActionHandlers, t]);
 
 
 	return (
@@ -142,11 +121,11 @@ function AppContent() {
 				/>
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS && (
-					<SubjectSelectPage viewModel={{ ...subjectSelectPageViewModel, pageTools: subjectSelectPageTools }} />
+					<SubjectSelectPage viewModel={subjectSelectPageViewModel} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.SELECT && (
-					<ExamSelectPage viewModel={{ ...examSelectPageViewModel, pageTools: examSelectPageTools }} />
+					<ExamSelectPage viewModel={examSelectPageViewModel} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (

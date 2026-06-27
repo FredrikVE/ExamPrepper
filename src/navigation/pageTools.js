@@ -44,9 +44,6 @@ export const PAGE_TOOL_AVAILABILITY = {
 };
 
 export const PAGE_TOOL_ACTION_IDS = {
-    SHOW_EXAMS: "navigation.showExams",
-    SHOW_PRACTICE_TESTS: "navigation.showPracticeTests",
-    SHOW_FLIPCARDS: "navigation.showFlipcards",
     CREATE_EXAM: "exam.create",
     CREATE_CONCEPT_LIST: "curriculum.createConceptList",
     CREATE_CURRICULUM_GRAPHS: "curriculum.createGraphs",
@@ -63,9 +60,6 @@ export const PAGE_TOOL_ACTION_IDS = {
 };
 
 export const PAGE_TOOL_ITEM_IDS = {
-    APP_EXAMS: "app-exams",
-    APP_PRACTICE_TESTS: "app-practice-tests",
-    APP_FLIPCARDS: "app-flipcards",
     APP_CREATE_EXAM: "app-create-exam",
     APP_CONCEPT_LIST: "app-concept-list",
     APP_CURRICULUM_GRAPHS: "app-curriculum-graphs",
@@ -81,28 +75,7 @@ export const PAGE_TOOL_ITEM_IDS = {
     FLIPCARDS_ADD_CARD: "add-card"
 };
 
-const APP_DISCOVERY_TOOL_ITEMS = [
-    {
-        id: PAGE_TOOL_ITEM_IDS.APP_EXAMS,
-        actionId: PAGE_TOOL_ACTION_IDS.SHOW_EXAMS,
-        labelKey: "pageToolsExamsLabel",
-        iconKey: PAGE_TOOL_ICON_KEYS.FILE_TEXT,
-        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
-    },
-    {
-        id: PAGE_TOOL_ITEM_IDS.APP_PRACTICE_TESTS,
-        actionId: PAGE_TOOL_ACTION_IDS.SHOW_PRACTICE_TESTS,
-        labelKey: "pageToolsPracticeTestsLabel",
-        iconKey: PAGE_TOOL_ICON_KEYS.CLOCK_3,
-        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
-    },
-    {
-        id: PAGE_TOOL_ITEM_IDS.APP_FLIPCARDS,
-        actionId: PAGE_TOOL_ACTION_IDS.SHOW_FLIPCARDS,
-        labelKey: "pageToolsFlipcardsLabel",
-        iconKey: PAGE_TOOL_ICON_KEYS.PANELS_TOP_LEFT,
-        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
-    },
+const WORKSPACE_ACTION_TOOL_ITEMS = [
     {
         id: PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
         actionId: PAGE_TOOL_ACTION_IDS.CREATE_EXAM,
@@ -216,7 +189,7 @@ export const PAGE_TOOL_GROUPS_BY_SCREEN = {
         desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
         mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
         mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH,
-        items: APP_DISCOVERY_TOOL_ITEMS
+        items: WORKSPACE_ACTION_TOOL_ITEMS
     },
     [NAV_SCREENS.SELECT]: {
         id: PAGE_TOOL_GROUP_IDS.EXAM_SELECT,
@@ -227,7 +200,7 @@ export const PAGE_TOOL_GROUPS_BY_SCREEN = {
         desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
         mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
         mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH,
-        items: APP_DISCOVERY_TOOL_ITEMS
+        items: WORKSPACE_ACTION_TOOL_ITEMS
     },
     [NAV_SCREENS.EXAM]: {
         id: PAGE_TOOL_GROUP_IDS.EXAM,
@@ -263,6 +236,9 @@ export const PAGE_TOOL_GROUPS_BY_SCREEN = {
         items: []
     }
 };
+export function getWorkspaceActionToolItems() {
+    return WORKSPACE_ACTION_TOOL_ITEMS;
+}
 
 export function getPageToolGroup(screen) {
     return PAGE_TOOL_GROUPS_BY_SCREEN[screen] ?? null;
