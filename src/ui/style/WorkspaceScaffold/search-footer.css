@@ -1,0 +1,8 @@
+/* src/ui/style/WorkspaceScaffold/search-footer.css */
+.workspace-scaffold-search-footer {
+    isolation: isolate;
+}
+
+.workspace-scaffold-search-footer-open {
+    z-index: 50;
+}

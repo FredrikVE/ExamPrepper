@@ -1,5 +1,6 @@
 /* src/ui/style/SubjectSelectPage/workspace.css */
 .subject-select-layout {
+    --workspace-scaffold-inset: clamp(42px, 5vw, 72px);
     --subject-search-footer-space: clamp(112px, 13vh, 148px);
 
     position: relative;

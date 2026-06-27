@@ -1,5 +1,6 @@
 /* src/ui/style/ExamSelectPage/workspace.css */
 .exam-select-layout {
+    --workspace-scaffold-inset: clamp(36px, 4vw, 64px);
     --exam-search-footer-space: clamp(112px, 12vh, 146px);
 
     position: relative;

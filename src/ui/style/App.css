@@ -13,6 +13,7 @@
 
 /* Shared UI */
 @import "./Shared/index.css";
+@import "./WorkspaceScaffold/index.css";
 @import "./PageTools/index.css";
 @import "./Header/index.css";
 @import "./Footer/index.css";
