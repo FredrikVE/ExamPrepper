@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
 import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getPageToolGroup, getPageToolItems, getWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
-import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js";
+import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
 
 const workspaceActionToolIds = [
     PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,

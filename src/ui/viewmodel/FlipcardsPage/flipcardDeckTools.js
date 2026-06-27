@@ -1,7 +1,7 @@
-// src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js
+// src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js
 import { List, Plus, RefreshCw, Shuffle } from "lucide-react";
-import { NAV_SCREENS } from "../../../../../navigation/navGraph.js";
-import { PAGE_TOOL_AVAILABILITY, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, getPageToolItems } from "../../../../../navigation/pageTools.js";
+import { NAV_SCREENS } from "../../../navigation/navGraph.js";
+import { PAGE_TOOL_AVAILABILITY, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, getPageToolItems } from "../../../navigation/pageTools.js";
 
 export const FLIPCARD_DECK_TOOL_KEYS = {
     ALL_CARDS: PAGE_TOOL_ITEM_IDS.FLIPCARDS_ALL_CARDS,

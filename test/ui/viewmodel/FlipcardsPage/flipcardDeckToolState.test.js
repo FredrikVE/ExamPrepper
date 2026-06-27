@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckToolState.js";
-import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckTools.js";
+import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "../../../../src/ui/viewmodel/FlipcardsPage/flipcardDeckToolState.js";
+import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
 
 const cards = [
     { id: "card-1", term: "One" },

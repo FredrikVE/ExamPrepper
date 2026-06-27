@@ -1,95 +1,23 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
-import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardToolMenu/flipcardDeckTools.js";
-import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardToolMenu/flipcardDeckToolState.js";
 
 export default function FlipcardsStudySurface(props) {
-    const [activeDeckToolKey, setActiveDeckToolKey] = useState(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
-    const [selectedDeckCardIds, setSelectedDeckCardIds] = useState([]);
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
 
-    useEffect(() => {
-        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
-        setSelectedDeckCardIds([]);
-    }, [props.deckKey]);
-
-    const visibleCards = useMemo(() => {
-        return createVisibleFlipcards(props.cards, selectedDeckCardIds);
-    }, [props.cards, selectedDeckCardIds]);
-
-    const visibleDeckKey = useMemo(() => {
-        return [props.deckKey, activeDeckToolKey, visibleCards.map((card) => card.id).join("|")].join("::");
-    }, [activeDeckToolKey, props.deckKey, visibleCards]);
-
-    const repeatDifficultCardIds = useMemo(() => {
-        return createRepeatDifficultCardIds(props.cards, props.practiceCardIds);
-    }, [props.cards, props.practiceCardIds]);
-
-    const disabledDeckToolKeys = useMemo(() => {
-        return createDisabledDeckToolKeys(repeatDifficultCardIds);
-    }, [repeatDifficultCardIds]);
-
-    const deckToolStatusLabels = useMemo(() => {
-        return createDeckToolStatusLabels(props.labels, props.cards.length, repeatDifficultCardIds.length);
-    }, [props.cards.length, props.labels, repeatDifficultCardIds.length]);
-
-    const deckToolItems = useMemo(() => {
-        return createDeckToolItems(props.labels, activeDeckToolKey, disabledDeckToolKeys, deckToolStatusLabels);
-    }, [activeDeckToolKey, deckToolStatusLabels, disabledDeckToolKeys, props.labels]);
-
-    const deck = useFlipcardDeck(visibleCards.length, visibleDeckKey);
-    const activeCard = visibleCards[deck.activeIndex] ?? null;
+    const deck = useFlipcardDeck(props.cards.length, props.visibleDeckKey);
+    const activeCard = props.cards[deck.activeIndex] ?? null;
 
     const restartSession = () => {
         props.onResetProgress();
-        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
-        setSelectedDeckCardIds([]);
-        deck.restartDeck();
-    };
-
-    const showAllCards = () => {
-        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
-        setSelectedDeckCardIds([]);
-        deck.restartDeck();
-    };
-
-    const shuffleCards = () => {
-        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.SHUFFLE);
-        setSelectedDeckCardIds(createShuffledFlipcardIds(props.cards));
-        deck.restartDeck();
-    };
-
-    const repeatDifficultCards = () => {
-        if (repeatDifficultCardIds.length === 0) {
-            return;
-        }
-
-        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT);
-        setSelectedDeckCardIds(repeatDifficultCardIds);
         deck.restartDeck();
     };
 
     const selectDeckTool = (deckToolKey) => {
-        if (disabledDeckToolKeys.includes(deckToolKey)) {
-            return;
-        }
-
-        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS) {
-            showAllCards();
-            return;
-        }
-
-        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.SHUFFLE) {
-            shuffleCards();
-            return;
-        }
-
-        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT) {
-            repeatDifficultCards();
-        }
+        props.onSelectDeckTool(deckToolKey);
+        deck.restartDeck();
     };
 
     const completeAsMastered = () => {
@@ -118,7 +46,7 @@ export default function FlipcardsStudySurface(props) {
         <section className={studySurfaceClassName} aria-label={props.labels.studySurfaceLabel}>
             <div className="flipcards-study-body">
                 <FlipcardDeck
-                    cards={visibleCards}
+                    cards={props.cards}
                     deck={deck}
                     labels={props.labels}
                     progressModel={props.progressModel}
@@ -128,7 +56,7 @@ export default function FlipcardsStudySurface(props) {
                 />
 
                 <FlipcardToolMenu
-                    cardCount={visibleCards.length}
+                    cardCount={props.cards.length}
                     activeIndex={deck.activeIndex}
                     hasPrevious={deck.hasPrevious}
                     hasNext={deck.hasNext}
@@ -136,7 +64,7 @@ export default function FlipcardsStudySurface(props) {
                     isSwipeCommandActive={deck.isSwipeCommandActive}
                     progressModel={props.progressModel}
                     labels={props.labels}
-                    deckToolItems={deckToolItems}
+                    deckToolItems={props.deckToolItems}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
                     onGoToCard={deck.goToCard}

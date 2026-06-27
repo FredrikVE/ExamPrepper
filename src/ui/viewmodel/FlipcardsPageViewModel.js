@@ -1,6 +1,8 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
+import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
+import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 
 export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectId, language, t, isActive) {
     const [flashcards, setFlashcards] = useState([]);
@@ -8,6 +10,8 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
     const [flashcardsLoadError, setFlashcardsLoadError] = useState(null);
     const [masteredCardIds, setMasteredCardIds] = useState([]);
     const [practiceCardIds, setPracticeCardIds] = useState([]);
+    const [activeDeckToolKey, setActiveDeckToolKey] = useState(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+    const [selectedDeckCardIds, setSelectedDeckCardIds] = useState([]);
 
     useEffect(() => {
         if (!isActive) {
@@ -75,6 +79,8 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
     const resetFlipcardsProgress = useCallback(() => {
         setMasteredCardIds([]);
         setPracticeCardIds([]);
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+        setSelectedDeckCardIds([]);
     }, []);
 
     const progressModel = useMemo(() => {
@@ -92,6 +98,11 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
     const deckKey = useMemo(() => {
         return flashcards.map((flashcard) => flashcard.id).join("|");
     }, [flashcards]);
+
+    useEffect(() => {
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+        setSelectedDeckCardIds([]);
+    }, [deckKey]);
 
     const labels = useMemo(() => ({
         pageEyebrow: t.flipcardsEyebrow,
@@ -150,6 +161,69 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription,
     }), [t]);
 
+    const visibleCards = useMemo(() => {
+        return createVisibleFlipcards(flashcards, selectedDeckCardIds);
+    }, [flashcards, selectedDeckCardIds]);
+
+    const visibleDeckKey = useMemo(() => {
+        return [deckKey, activeDeckToolKey, visibleCards.map((card) => card.id).join("|")].join("::");
+    }, [activeDeckToolKey, deckKey, visibleCards]);
+
+    const repeatDifficultCardIds = useMemo(() => {
+        return createRepeatDifficultCardIds(flashcards, practiceCardIds);
+    }, [flashcards, practiceCardIds]);
+
+    const disabledDeckToolKeys = useMemo(() => {
+        return createDisabledDeckToolKeys(repeatDifficultCardIds);
+    }, [repeatDifficultCardIds]);
+
+    const deckToolStatusLabels = useMemo(() => {
+        return createDeckToolStatusLabels(labels, flashcards.length, repeatDifficultCardIds.length);
+    }, [flashcards.length, labels, repeatDifficultCardIds.length]);
+
+    const deckToolItems = useMemo(() => {
+        return createDeckToolItems(labels, activeDeckToolKey, disabledDeckToolKeys, deckToolStatusLabels);
+    }, [activeDeckToolKey, deckToolStatusLabels, disabledDeckToolKeys, labels]);
+
+    const showAllCards = useCallback(() => {
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+        setSelectedDeckCardIds([]);
+    }, []);
+
+    const shuffleDeck = useCallback(() => {
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.SHUFFLE);
+        setSelectedDeckCardIds(createShuffledFlipcardIds(flashcards));
+    }, [flashcards]);
+
+    const repeatDifficultCards = useCallback(() => {
+        if (repeatDifficultCardIds.length === 0) {
+            return;
+        }
+
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT);
+        setSelectedDeckCardIds(repeatDifficultCardIds);
+    }, [repeatDifficultCardIds]);
+
+    const selectDeckTool = useCallback((deckToolKey) => {
+        if (disabledDeckToolKeys.includes(deckToolKey)) {
+            return;
+        }
+
+        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS) {
+            showAllCards();
+            return;
+        }
+
+        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.SHUFFLE) {
+            shuffleDeck();
+            return;
+        }
+
+        if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT) {
+            repeatDifficultCards();
+        }
+    }, [disabledDeckToolKeys, repeatDifficultCards, showAllCards, shuffleDeck]);
+
     return {
         labels,
         flashcards,
@@ -158,10 +232,15 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         progressLabel: progressModel.progressLabel,
         progressModel,
         deckKey,
+        visibleCards,
+        visibleDeckKey,
+        activeDeckToolKey,
+        deckToolItems,
         masteredCardIds,
         practiceCardIds,
         markCardAsMastered,
         markCardForPractice,
-        resetFlipcardsProgress
+        resetFlipcardsProgress,
+        onSelectDeckTool: selectDeckTool
     };
 }

@@ -1,4 +1,4 @@
-// src/ui/view/components/FlipcardsPage/FlipcardToolMenu/flipcardDeckToolState.js
+// src/ui/viewmodel/FlipcardsPage/flipcardDeckToolState.js
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "./flipcardDeckTools.js";
 
 function rotateCardIds(cardIds) {
