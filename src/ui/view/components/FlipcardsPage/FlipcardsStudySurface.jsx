@@ -60,17 +60,12 @@ export default function FlipcardsStudySurface(props) {
                     activeIndex={deck.activeIndex}
                     hasPrevious={deck.hasPrevious}
                     hasNext={deck.hasNext}
-                    isComplete={deck.isComplete}
                     isSwipeCommandActive={deck.isSwipeCommandActive}
-                    progressModel={props.progressModel}
                     labels={props.labels}
                     deckToolItems={props.deckToolItems}
                     onPrevious={deck.goToPrevious}
                     onNext={deck.goToNext}
                     onGoToCard={deck.goToCard}
-                    onPractice={deck.requestSwipeLeft}
-                    onFlip={deck.flipActiveCard}
-                    onMastered={deck.requestSwipeRight}
                     onDeckToolSelect={selectDeckTool}
                     onDesktopToolsOpenChange={setIsDesktopToolsPanelOpen}
                 />

@@ -5,10 +5,6 @@ export default function useFlipcardToolMenu() {
     const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
     const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
 
-    const openDesktopMenu = useCallback(() => {
-        setIsDesktopMenuOpen(true);
-    }, []);
-
     const closeDesktopMenu = useCallback(() => {
         setIsDesktopMenuOpen(false);
     }, []);
@@ -31,7 +27,6 @@ export default function useFlipcardToolMenu() {
 
     return {
         isDesktopMenuOpen,
-        openDesktopMenu,
         closeDesktopMenu,
         toggleDesktopMenu,
         isMobileSheetOpen,

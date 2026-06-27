@@ -53,17 +53,12 @@ export default function FlipcardToolMenu(props) {
             activeIndex={props.activeIndex}
             hasPrevious={props.hasPrevious}
             hasNext={props.hasNext}
-            isComplete={props.isComplete}
             isSwipeCommandActive={props.isSwipeCommandActive}
-            progressModel={props.progressModel}
             labels={props.labels}
             deckToolItems={props.deckToolItems}
             onPrevious={props.onPrevious}
             onNext={props.onNext}
             onGoToCard={props.onGoToCard}
-            onPractice={props.onPractice}
-            onFlip={props.onFlip}
-            onMastered={props.onMastered}
             onDeckToolSelect={props.onDeckToolSelect}
         />
     );
