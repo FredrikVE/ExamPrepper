@@ -1,5 +1,0 @@
-/* src/ui/style/FlipcardsPage/FlipcardToolMenu/tool-grid.css */
-.flipcard-tool-grid {
-    display: grid;
-    gap: var(--space-3);
-}

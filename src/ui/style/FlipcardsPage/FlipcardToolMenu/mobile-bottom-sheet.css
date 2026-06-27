@@ -98,12 +98,6 @@
     display: none;
 }
 
-.flipcard-tool-menu-content[data-variant="mobile-drawer"] {
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    padding: 0;
-}
 
 @media (min-width: 933px) {
     .mobile-flipcard-sheet-backdrop,
