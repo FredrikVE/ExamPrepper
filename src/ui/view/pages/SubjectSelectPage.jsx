@@ -5,6 +5,7 @@ import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid
 import SearchSheetContent from "../components/Shared/SearchSheetContent.jsx";
 import useSearchSheetEscapeKey from "../components/Shared/useSearchSheetEscapeKey.js";
 import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
+import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
@@ -89,19 +90,21 @@ export default function SubjectSelectPage({ viewModel }) {
 					/>
 				)}
 
-				<SubjectSelectControls
-					t={viewModel.t}
-					searchTerm={viewModel.searchTerm}
-					onSubjectSearchTermChange={viewModel.changeSubjectSearchTerm}
-					onOpenSubjectSearchSuggestions={viewModel.openSubjectSearchSuggestions}
-					onCloseSubjectSearchSheet={viewModel.closeSubjectSearchSheet}
-					onOpenSubjectFacultyOptions={viewModel.openSubjectFacultyOptions}
-					isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
-					faculty={viewModel.faculty}
-					facultyLabel={viewModel.facultyLabel}
-					onFacultyChange={viewModel.changeFaculty}
-					faculties={viewModel.faculties}
-				/>
+				<PageToolsMobileFooterSheet tools={viewModel.pageTools}>
+					<SubjectSelectControls
+						t={viewModel.t}
+						searchTerm={viewModel.searchTerm}
+						onSubjectSearchTermChange={viewModel.changeSubjectSearchTerm}
+						onOpenSubjectSearchSuggestions={viewModel.openSubjectSearchSuggestions}
+						onCloseSubjectSearchSheet={viewModel.closeSubjectSearchSheet}
+						onOpenSubjectFacultyOptions={viewModel.openSubjectFacultyOptions}
+						isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
+						faculty={viewModel.faculty}
+						facultyLabel={viewModel.facultyLabel}
+						onFacultyChange={viewModel.changeFaculty}
+						faculties={viewModel.faculties}
+					/>
+				</PageToolsMobileFooterSheet>
 			</div>
 		</div>
 	);

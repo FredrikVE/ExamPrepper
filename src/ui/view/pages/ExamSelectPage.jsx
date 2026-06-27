@@ -6,6 +6,7 @@ import ExamSelectControls from "../components/ExamSelectPage/ExamSelectControls.
 import SearchSheetContent from "../components/Shared/SearchSheetContent.jsx";
 import useSearchSheetEscapeKey from "../components/Shared/useSearchSheetEscapeKey.js";
 import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
+import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 
 export default function ExamSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
@@ -99,22 +100,24 @@ export default function ExamSelectPage({ viewModel }) {
                     />
                 )}
 
-                <ExamSelectControls
-                    searchTerm={viewModel.searchTerm}
-                    onExamSearchTermChange={viewModel.changeExamSearchTerm}
-                    onOpenExamSearchSuggestions={viewModel.openExamSearchSuggestions}
-                    onCloseExamSearchSheet={viewModel.closeExamSearchSheet}
-                    onOpenExamCategoryOptions={viewModel.openExamCategoryOptions}
-                    isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
-                    category={viewModel.category}
-                    categoryLabel={viewModel.categoryLabel}
-                    onCategoryChange={viewModel.changeCategory}
-                    categories={viewModel.categories}
-                    searchPlaceholder={viewModel.searchPlaceholder}
-                    searchLabel={viewModel.searchLabel}
-                    categoryAriaLabel={viewModel.categoryAriaLabel}
-                    allCategoriesLabel={viewModel.allCategoriesLabel}
-                />
+                <PageToolsMobileFooterSheet tools={viewModel.pageTools}>
+                    <ExamSelectControls
+                        searchTerm={viewModel.searchTerm}
+                        onExamSearchTermChange={viewModel.changeExamSearchTerm}
+                        onOpenExamSearchSuggestions={viewModel.openExamSearchSuggestions}
+                        onCloseExamSearchSheet={viewModel.closeExamSearchSheet}
+                        onOpenExamCategoryOptions={viewModel.openExamCategoryOptions}
+                        isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
+                        category={viewModel.category}
+                        categoryLabel={viewModel.categoryLabel}
+                        onCategoryChange={viewModel.changeCategory}
+                        categories={viewModel.categories}
+                        searchPlaceholder={viewModel.searchPlaceholder}
+                        searchLabel={viewModel.searchLabel}
+                        categoryAriaLabel={viewModel.categoryAriaLabel}
+                        allCategoriesLabel={viewModel.allCategoriesLabel}
+                    />
+                </PageToolsMobileFooterSheet>
             </div>
         </div>
     );

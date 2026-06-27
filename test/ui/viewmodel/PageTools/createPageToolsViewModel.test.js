@@ -9,6 +9,7 @@ const t = {
     pageToolsWorkspaceActionsLabel: "Sideverktøy",
     pageToolsOpenLabel: "Åpne verktøymeny",
     pageToolsCloseLabel: "Lukk verktøymeny",
+    pageToolsMobileHandleLabel: "Verktøy",
     pageToolsUnavailableLabel: "Kommer senere",
     pageToolsSelectSubjectFirstLabel: "Velg fag først",
     pageToolsExamsLabel: "Eksamner",
@@ -38,6 +39,7 @@ describe("createPageToolsViewModel", () => {
 
         expect(tools.title).toBe("Verktøy og handlinger");
         expect(tools.openLabel).toBe("Åpne verktøymeny");
+        expect(tools.mobileHandleLabel).toBe("Verktøy");
         expect(examsTool).toEqual(expect.objectContaining({
             label: "Eksamner",
             ariaLabel: "Eksamner",

@@ -13,6 +13,7 @@ export default function createPageToolsViewModel(params) {
         actionsLabel: params.t[params.pageToolGroup.actionsLabelKey],
         openLabel: params.t.pageToolsOpenLabel,
         closeLabel: params.t.pageToolsCloseLabel,
+        mobileHandleLabel: params.t.pageToolsMobileHandleLabel,
         items: params.pageToolGroup.items.map((toolItem) => createPageToolItemViewModel({ toolItem, t: params.t, actionHandlers: params.actionHandlers, disabledLabelsByActionId: params.disabledLabelsByActionId }))
     };
 }
