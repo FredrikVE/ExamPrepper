@@ -12,6 +12,17 @@ const t = {
     pageToolsMobileHandleLabel: "Verktøy",
     pageToolsUnavailableLabel: "Kommer senere",
     pageToolsSelectSubjectFirstLabel: "Velg fag først",
+    pageToolsExamTitle: "Eksamen-verktøy",
+    pageToolsExamSubtitle: "Handlinger for aktiv øving",
+    pageToolsExamActionsLabel: "Eksamen-handlinger",
+    pageToolsExamPreviousQuestionLabel: "Forrige spørsmål",
+    pageToolsExamNextQuestionLabel: "Neste spørsmål",
+    pageToolsExamSubmitLabel: "Lever eksamen",
+    pageToolsExamResetLabel: "Start på nytt",
+    pageToolsFirstQuestionLabel: "Første spørsmål",
+    pageToolsLastQuestionLabel: "Siste spørsmål",
+    pageToolsAlreadySubmittedLabel: "Allerede levert",
+    pageToolsSubmitFirstLabel: "Lever først",
     pageToolsExamsLabel: "Eksamner",
     pageToolsPracticeTestsLabel: "Øveprøver",
     pageToolsFlipcardsLabel: "Flipcards",
@@ -74,6 +85,53 @@ describe("createPageToolsViewModel", () => {
             ariaLabel: "Flipcards · Velg fag først",
             isDisabled: true,
             onSelect: null
+        }));
+    });
+
+
+    test("creates exam tools with question navigation disabled state", () => {
+        const previousQuestion = jest.fn();
+        const nextQuestion = jest.fn();
+        const submitExam = jest.fn();
+        const resetExam = jest.fn();
+
+        const tools = createPageToolsViewModel({
+            pageToolGroup: getPageToolGroup(NAV_SCREENS.EXAM),
+            t,
+            actionHandlers: {
+                [PAGE_TOOL_ACTION_IDS.EXAM_PREVIOUS_QUESTION]: previousQuestion,
+                [PAGE_TOOL_ACTION_IDS.EXAM_NEXT_QUESTION]: nextQuestion,
+                [PAGE_TOOL_ACTION_IDS.EXAM_SUBMIT]: submitExam,
+                [PAGE_TOOL_ACTION_IDS.EXAM_RESET]: resetExam
+            },
+            disabledLabelsByActionId: {
+                [PAGE_TOOL_ACTION_IDS.EXAM_PREVIOUS_QUESTION]: t.pageToolsFirstQuestionLabel,
+                [PAGE_TOOL_ACTION_IDS.EXAM_RESET]: t.pageToolsSubmitFirstLabel
+            }
+        });
+
+        const previousTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.EXAM_PREVIOUS_QUESTION);
+        const nextTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.EXAM_NEXT_QUESTION);
+        const resetTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.EXAM_RESET);
+
+        expect(tools.title).toBe("Eksamen-verktøy");
+        expect(previousTool).toEqual(expect.objectContaining({
+            label: "Forrige spørsmål",
+            statusLabel: "Første spørsmål",
+            ariaLabel: "Forrige spørsmål · Første spørsmål",
+            isDisabled: true,
+            onSelect: null
+        }));
+        expect(nextTool).toEqual(expect.objectContaining({
+            label: "Neste spørsmål",
+            ariaLabel: "Neste spørsmål",
+            isDisabled: false,
+            onSelect: nextQuestion
+        }));
+        expect(resetTool).toEqual(expect.objectContaining({
+            label: "Start på nytt",
+            statusLabel: "Lever først",
+            isDisabled: true
         }));
     });
 

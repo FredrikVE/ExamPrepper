@@ -23,6 +23,8 @@ export const PAGE_TOOL_GROUP_IDS = {
 export const PAGE_TOOL_ICON_KEYS = {
     BAR_CHART_3: "bar-chart-3",
     BOOK_OPEN: "book-open",
+    CHEVRON_LEFT: "chevron-left",
+    CHEVRON_RIGHT: "chevron-right",
     CLOCK_3: "clock-3",
     FILE_TEXT: "file-text",
     LIST: "list",
@@ -30,6 +32,8 @@ export const PAGE_TOOL_ICON_KEYS = {
     PIE_CHART: "pie-chart",
     PLUS: "plus",
     REFRESH_CW: "refresh-cw",
+    ROTATE_CCW: "rotate-ccw",
+    SEND: "send",
     SHUFFLE: "shuffle",
     SPARKLES: "sparkles"
 };
@@ -48,6 +52,10 @@ export const PAGE_TOOL_ACTION_IDS = {
     CREATE_CURRICULUM_GRAPHS: "curriculum.createGraphs",
     CREATE_CURRICULUM_FIGURE: "curriculum.createFigure",
     CREATE_AI_EXAM: "exam.createAiExam",
+    EXAM_PREVIOUS_QUESTION: "exam.previousQuestion",
+    EXAM_NEXT_QUESTION: "exam.nextQuestion",
+    EXAM_SUBMIT: "exam.submit",
+    EXAM_RESET: "exam.reset",
     FLIPCARDS_SHOW_ALL_CARDS: "flipcards.showAllCards",
     FLIPCARDS_SHUFFLE: "flipcards.shuffle",
     FLIPCARDS_REPEAT_DIFFICULT: "flipcards.repeatDifficult",
@@ -63,6 +71,10 @@ export const PAGE_TOOL_ITEM_IDS = {
     APP_CURRICULUM_GRAPHS: "app-curriculum-graphs",
     APP_CURRICULUM_FIGURE: "app-curriculum-figure",
     APP_AI_EXAM: "app-ai-exam",
+    EXAM_PREVIOUS_QUESTION: "exam-previous-question",
+    EXAM_NEXT_QUESTION: "exam-next-question",
+    EXAM_SUBMIT: "exam-submit",
+    EXAM_RESET: "exam-reset",
     FLIPCARDS_ALL_CARDS: "all-cards",
     FLIPCARDS_SHUFFLE: "shuffle",
     FLIPCARDS_REPEAT_DIFFICULT: "repeat-difficult",
@@ -125,6 +137,37 @@ const APP_DISCOVERY_TOOL_ITEMS = [
         labelKey: "pageToolsAiExamLabel",
         iconKey: PAGE_TOOL_ICON_KEYS.SPARKLES,
         availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    }
+];
+
+const EXAM_TOOL_ITEMS = [
+    {
+        id: PAGE_TOOL_ITEM_IDS.EXAM_PREVIOUS_QUESTION,
+        actionId: PAGE_TOOL_ACTION_IDS.EXAM_PREVIOUS_QUESTION,
+        labelKey: "pageToolsExamPreviousQuestionLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.CHEVRON_LEFT,
+        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
+    },
+    {
+        id: PAGE_TOOL_ITEM_IDS.EXAM_NEXT_QUESTION,
+        actionId: PAGE_TOOL_ACTION_IDS.EXAM_NEXT_QUESTION,
+        labelKey: "pageToolsExamNextQuestionLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.CHEVRON_RIGHT,
+        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
+    },
+    {
+        id: PAGE_TOOL_ITEM_IDS.EXAM_SUBMIT,
+        actionId: PAGE_TOOL_ACTION_IDS.EXAM_SUBMIT,
+        labelKey: "pageToolsExamSubmitLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.SEND,
+        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
+    },
+    {
+        id: PAGE_TOOL_ITEM_IDS.EXAM_RESET,
+        actionId: PAGE_TOOL_ACTION_IDS.EXAM_RESET,
+        labelKey: "pageToolsExamResetLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.ROTATE_CCW,
+        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
     }
 ];
 
@@ -195,7 +238,7 @@ export const PAGE_TOOL_GROUPS_BY_SCREEN = {
         desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
         mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
         mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.FOOTER_PAGER,
-        items: []
+        items: EXAM_TOOL_ITEMS
     },
     [NAV_SCREENS.FLIPCARDS]: {
         id: PAGE_TOOL_GROUP_IDS.FLIPCARDS,

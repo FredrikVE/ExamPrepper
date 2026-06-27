@@ -236,9 +236,7 @@ function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkMo
 	}, [examWorkModeActionsRef, onExamWorkModeChange]);
 
 	return (
-		<ExamPage
-			viewModel={examPageViewModel}
-		/>
+		<ExamPage viewModel={examPageViewModel} />
 	);
 }
 

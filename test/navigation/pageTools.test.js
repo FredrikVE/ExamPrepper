@@ -37,6 +37,32 @@ describe("pageTools", () => {
         expect(examSelectTools.items.map((toolCard) => toolCard.id)).toEqual(appDiscoveryToolIds);
     });
 
+
+    test("defines exam tools for the desktop work-mode popout", () => {
+        const examTools = getPageToolGroup(NAV_SCREENS.EXAM);
+
+        expect(examTools).toEqual(expect.objectContaining({
+            id: PAGE_TOOL_GROUP_IDS.EXAM,
+            desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
+            mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
+            mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.FOOTER_PAGER
+        }));
+
+        expect(examTools.items.map((toolCard) => toolCard.id)).toEqual([
+            PAGE_TOOL_ITEM_IDS.EXAM_PREVIOUS_QUESTION,
+            PAGE_TOOL_ITEM_IDS.EXAM_NEXT_QUESTION,
+            PAGE_TOOL_ITEM_IDS.EXAM_SUBMIT,
+            PAGE_TOOL_ITEM_IDS.EXAM_RESET
+        ]);
+
+        expect(examTools.items.map((toolCard) => toolCard.actionId)).toEqual([
+            PAGE_TOOL_ACTION_IDS.EXAM_PREVIOUS_QUESTION,
+            PAGE_TOOL_ACTION_IDS.EXAM_NEXT_QUESTION,
+            PAGE_TOOL_ACTION_IDS.EXAM_SUBMIT,
+            PAGE_TOOL_ACTION_IDS.EXAM_RESET
+        ]);
+    });
+
     test("keeps flipcards tools in the shared page tools model", () => {
         const flipcardsTools = getPageToolGroup(NAV_SCREENS.FLIPCARDS);
 
