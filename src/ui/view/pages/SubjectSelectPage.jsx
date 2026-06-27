@@ -4,8 +4,9 @@ import SubjectSelectControls from "../components/SubjectSelectPage/SubjectSelect
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
 import SearchSheetContent from "../components/Shared/SearchSheetContent.jsx";
 import useSearchSheetEscapeKey from "../components/Shared/useSearchSheetEscapeKey.js";
-import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
+import WorkspaceScaffoldHeader from "../components/WorkspaceScaffold/WorkspaceScaffoldHeader.jsx";
+import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
@@ -35,16 +36,18 @@ export default function SubjectSelectPage({ viewModel }) {
 		);
 	}
 
-	const searchFooterClassName = viewModel.isSearchSheetOpen
-		? "subject-search-footer subject-search-footer-open"
-		: "subject-search-footer";
-
 	return (
 		<div className="subject-select-layout">
-			<PageToolsDesktopPanel tools={viewModel.pageTools} />
-
 			<main className="subject-select-workspace">
 				<div className="subject-select-ambient-light" aria-hidden="true" />
+
+				<WorkspaceScaffoldHeader
+					showBackButton={viewModel.showBackButton}
+					backLabel={viewModel.backLabel}
+					navigationLabel={viewModel.navigationLabel}
+					onBack={viewModel.onBack}
+					tools={viewModel.pageTools}
+				/>
 
 				<SubjectSelectTopbar t={viewModel.t} />
 
@@ -71,8 +74,10 @@ export default function SubjectSelectPage({ viewModel }) {
 				/>
 			)}
 
-			<div
-				className={searchFooterClassName}
+			<WorkspaceScaffoldSearchFooter
+				isOpen={viewModel.isSearchSheetOpen}
+				className="subject-search-footer"
+				openClassName="subject-search-footer-open"
 				onBlur={(event) => {
 					if (!event.currentTarget.contains(event.relatedTarget)) {
 						viewModel.closeSubjectSearchSheet();
@@ -105,7 +110,7 @@ export default function SubjectSelectPage({ viewModel }) {
 						faculties={viewModel.faculties}
 					/>
 				</PageToolsMobileFooterSheet>
-			</div>
+			</WorkspaceScaffoldSearchFooter>
 		</div>
 	);
 }
