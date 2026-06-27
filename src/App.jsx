@@ -78,7 +78,9 @@ function AppContent() {
 		subjectSelectPageViewModel.selectedSubject,
 		navigationViewModel.selectExam,
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
-		navigationViewModel.changeScreen
+		navigationViewModel.changeScreen,
+		navigationViewModel.showBackButton,
+		navigationViewModel.goBack
 	);
 
 

@@ -170,6 +170,12 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		subjectsLoadError,
 		pageTools,
 
+		// Navigasjon
+		showBackButton: false,
+		backLabel: t.sidebarBack,
+		navigationLabel: t.sidebarMobileNavigation,
+		onBack: null,
+
 		// Tekster
 		t,
 		loadingTitle: t.subjectLoadingMessage,

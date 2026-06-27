@@ -14,7 +14,7 @@ const SEARCH_SHEET_MODES = {
 
 const SEARCH_SUGGESTION_LIMIT = 6;
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive, onChangeScreen) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive, onChangeScreen, showBackButton, onBack) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
     const [examsLoadError, setExamsLoadError] = useState(null);
@@ -26,7 +26,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
     const subjectId = selectedSubject?.id ?? null;
 
     useEffect(() => {
-        if (!subjectId) {
+        if (!isActive || !subjectId) {
             setExams([]);
             setExamsLoading(false);
             setExamsLoadError(null);
@@ -69,7 +69,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         return () => {
             cancelled = true;
         };
-    }, [getAvailableExamsUseCase, subjectId, language, t.selectErrorMessage]);
+    }, [getAvailableExamsUseCase, isActive, subjectId, language, t.selectErrorMessage]);
 
     const pageCopy = useMemo(() => {
         return createExamSelectPageCopy(t, selectedSubject);
@@ -181,6 +181,12 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         categories,
         pageTools,
         ...pageCopy,
+
+        // Navigasjon
+        showBackButton,
+        backLabel: t.sidebarBack,
+        navigationLabel: t.sidebarMobileNavigation,
+        onBack,
 
         // Søk og filter
         searchTerm,
