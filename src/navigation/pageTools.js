@@ -240,6 +240,12 @@ export function getWorkspaceActionToolItems() {
     return WORKSPACE_ACTION_TOOL_ITEMS;
 }
 
+export function getSelectionWorkspaceActionToolItems() {
+    return WORKSPACE_ACTION_TOOL_ITEMS.filter((toolItem) => (
+        toolItem.id !== PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE
+    ));
+}
+
 export function getPageToolGroup(screen) {
     return PAGE_TOOL_GROUPS_BY_SCREEN[screen] ?? null;
 }

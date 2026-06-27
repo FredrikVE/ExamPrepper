@@ -111,6 +111,7 @@ export default function PageToolsDesktopPanel(props) {
     const panelId = getPanelId(props.tools);
     const titleId = getTitleId(props.tools);
     const subtitleId = getSubtitleId(props.tools);
+    const hasSubtitle = Boolean(props.tools.subtitle);
 
     return (
         <div className="page-tools-desktop-shell" data-open={isOpen ? "true" : "false"}>
@@ -140,12 +141,12 @@ export default function PageToolsDesktopPanel(props) {
                         ref={panelRef}
                         className="page-tools-desktop-panel"
                         aria-labelledby={titleId}
-                        aria-describedby={subtitleId}
+                        aria-describedby={hasSubtitle ? subtitleId : undefined}
                         tabIndex={-1}
                     >
                         <header className="page-tools-desktop-header">
                             <h2 id={titleId}>{props.tools.title}</h2>
-                            <p id={subtitleId}>{props.tools.subtitle}</p>
+                            {hasSubtitle && <p id={subtitleId}>{props.tools.subtitle}</p>}
                         </header>
 
                         <div className="page-tools-desktop-grid" aria-label={props.tools.actionsLabel}>

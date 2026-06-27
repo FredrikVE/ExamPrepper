@@ -69,3 +69,10 @@ export const PAGE_NAV_TOOL_ITEMS = [
         requiresSubject: true
     }
 ];
+
+export function getSelectionPageNavToolItems() {
+    return PAGE_NAV_TOOL_ITEMS.filter((navItem) => (
+        navItem.id !== PAGE_NAV_TOOL_IDS.PRACTICE_TESTS
+        && navItem.id !== PAGE_NAV_TOOL_IDS.FLIPCARDS
+    ));
+}

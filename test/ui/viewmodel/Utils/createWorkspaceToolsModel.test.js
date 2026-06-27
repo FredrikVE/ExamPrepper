@@ -1,13 +1,13 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, PAGE_NAV_TOOL_ITEMS } from "../../../../src/navigation/navItems.js";
-import { PAGE_TOOL_ITEM_IDS, getPageToolGroup, getWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
+import { PAGE_NAV_TOOL_IDS, getSelectionPageNavToolItems } from "../../../../src/navigation/navItems.js";
+import { PAGE_TOOL_ITEM_IDS, getPageToolGroup, getSelectionWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
 
 const t = {
-    pageToolsWorkspaceTitle: "Verktøy og handlinger",
-    pageToolsWorkspaceSubtitle: "Alt du trenger for å lære smartere",
-    pageToolsWorkspaceActionsLabel: "Sideverktøy",
+    pageToolsWorkspaceTitle: "Velg læringsverktøy",
+    pageToolsWorkspaceSubtitle: "",
+    pageToolsWorkspaceActionsLabel: "Læringsverktøy",
     pageToolsOpenLabel: "Åpne verktøymeny",
     pageToolsCloseLabel: "Lukk verktøymeny",
     pageToolsMobileHandleLabel: "Verktøy",
@@ -27,8 +27,8 @@ function createTools(params) {
     return createWorkspaceToolsModel({
         pageToolGroup: getPageToolGroup(params.screen),
         t,
-        navToolItems: PAGE_NAV_TOOL_ITEMS,
-        workspaceActionToolItems: getWorkspaceActionToolItems(),
+        navToolItems: getSelectionPageNavToolItems(),
+        workspaceActionToolItems: getSelectionWorkspaceActionToolItems(),
         hasSelectedSubject: params.hasSelectedSubject,
         onChangeScreen: params.onChangeScreen
     });
@@ -46,7 +46,9 @@ describe("createWorkspaceToolsModel", () => {
         const examsTool = tools.items.find((toolItem) => toolItem.id === PAGE_NAV_TOOL_IDS.EXAMS);
         const createExamTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM);
 
-        expect(tools.title).toBe("Verktøy og handlinger");
+        expect(tools.title).toBe("Velg læringsverktøy");
+        expect(tools.subtitle).toBe("");
+        expect(tools.actionsLabel).toBe("Læringsverktøy");
         expect(tools.openLabel).toBe("Åpne verktøymeny");
         expect(tools.mobileHandleLabel).toBe("Verktøy");
         expect(examsTool).toEqual(expect.objectContaining({
@@ -67,30 +69,24 @@ describe("createWorkspaceToolsModel", () => {
         expect(onChangeScreen).toHaveBeenCalledWith(NAV_SCREENS.SELECT);
     });
 
-    test("uses requiresSubject from navItems for select-subject-first disabled state", () => {
+    test("keeps unwanted select page tools out of the renderable workspace model", () => {
         const tools = createTools({
             screen: NAV_SCREENS.SUBJECTS,
             hasSelectedSubject: false,
             onChangeScreen: jest.fn()
         });
 
-        const flipcardsTool = tools.items.find((toolItem) => toolItem.id === PAGE_NAV_TOOL_IDS.FLIPCARDS);
-
-        expect(flipcardsTool).toEqual(expect.objectContaining({
-            label: "Flipcards",
-            statusLabel: "Velg fag først",
-            ariaLabel: "Flipcards · Velg fag først",
-            isDisabled: true,
-            onSelect: null
-        }));
+        expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_NAV_TOOL_IDS.PRACTICE_TESTS);
+        expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_NAV_TOOL_IDS.FLIPCARDS);
+        expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE);
     });
 
     test("returns null when no group is available", () => {
         const tools = createWorkspaceToolsModel({
             pageToolGroup: null,
             t,
-            navToolItems: PAGE_NAV_TOOL_ITEMS,
-            workspaceActionToolItems: getWorkspaceActionToolItems(),
+            navToolItems: getSelectionPageNavToolItems(),
+            workspaceActionToolItems: getSelectionWorkspaceActionToolItems(),
             hasSelectedSubject: true,
             onChangeScreen: jest.fn()
         });

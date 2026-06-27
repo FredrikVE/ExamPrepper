@@ -27,6 +27,8 @@ export default function PageToolsMobileFooterSheet(props) {
         return props.children;
     }
 
+    const hasSubtitle = Boolean(props.tools.subtitle);
+
     return (
         <div className="page-tools-mobile-footer-shell" data-open={isOpen ? "true" : "false"}>
             <button
@@ -49,7 +51,7 @@ export default function PageToolsMobileFooterSheet(props) {
             >
                 <header className="page-tools-mobile-header">
                     <h2>{props.tools.title}</h2>
-                    <p>{props.tools.subtitle}</p>
+                    {hasSubtitle && <p>{props.tools.subtitle}</p>}
                 </header>
 
                 <div className="page-tools-mobile-grid">

@@ -255,9 +255,9 @@ export const translations = {
 		statisticsPercentagePointPlural: "prosentpoeng",
 
         // Page tools
-        pageToolsWorkspaceTitle: "Verktøy og handlinger",
-        pageToolsWorkspaceSubtitle: "Alt du trenger for å lære smartere",
-        pageToolsWorkspaceActionsLabel: "Sideverktøy",
+        pageToolsWorkspaceTitle: "Velg læringsverktøy",
+        pageToolsWorkspaceSubtitle: "",
+        pageToolsWorkspaceActionsLabel: "Læringsverktøy",
         pageToolsOpenLabel: "Åpne verktøymeny",
         pageToolsCloseLabel: "Lukk verktøymeny",
         pageToolsMobileHandleLabel: "Verktøy",
@@ -610,9 +610,9 @@ export const translations = {
 		statisticsPercentagePointPlural: "percentage points",
 
         // Page tools
-        pageToolsWorkspaceTitle: "Tools and actions",
-        pageToolsWorkspaceSubtitle: "Everything you need to study smarter",
-        pageToolsWorkspaceActionsLabel: "Page tools",
+        pageToolsWorkspaceTitle: "Choose learning tools",
+        pageToolsWorkspaceSubtitle: "",
+        pageToolsWorkspaceActionsLabel: "Learning tools",
         pageToolsOpenLabel: "Open tools menu",
         pageToolsCloseLabel: "Close tools menu",
         pageToolsMobileHandleLabel: "Tools",
