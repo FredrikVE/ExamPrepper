@@ -1,7 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardToolsPanel.jsx
 import { useCallback, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
-import { getFlipcardDeckToolIcon } from "./flipcardDeckToolIcons.js";
+import FlipcardDeckToolButton from "./FlipcardDeckToolButton.jsx";
 
 const DESKTOP_TOOLS_PANEL_ID = "flipcard-desktop-tools-panel";
 const DESKTOP_TOOLS_TITLE_ID = "flipcard-desktop-tools-title";
@@ -14,30 +14,6 @@ const FOCUSABLE_PANEL_SELECTOR = [
     "textarea:not([disabled])",
     "[tabindex]:not([tabindex='-1'])"
 ].join(",");
-
-function DesktopDeckToolCard(props) {
-    const Icon = getFlipcardDeckToolIcon(props.deckToolItem.iconKey);
-    const className = [
-        "flipcard-desktop-tools-card",
-        props.deckToolItem.isSelected ? "flipcard-desktop-tools-card-selected" : null,
-        props.deckToolItem.isDisabled ? "flipcard-desktop-tools-card-unavailable" : null
-    ].filter(Boolean).join(" ");
-
-    return (
-        <button
-            type="button"
-            className={className}
-            aria-current={props.deckToolItem.isSelected ? "true" : undefined}
-            aria-label={props.deckToolItem.ariaLabel}
-            disabled={props.deckToolItem.isDisabled}
-            onClick={() => props.onSelect(props.deckToolItem.key)}
-        >
-            <Icon aria-hidden="true" focusable="false" />
-            <span>{props.deckToolItem.label}</span>
-            <small>{props.deckToolItem.statusLabel}</small>
-        </button>
-    );
-}
 
 export default function DesktopFlipcardToolsPanel(props) {
     const toggleRef = useRef(null);
@@ -146,8 +122,9 @@ export default function DesktopFlipcardToolsPanel(props) {
 
                         <div className="flipcard-desktop-tools-grid" aria-label={props.labels.toolMenuActionsLabel}>
                             {props.deckToolItems.map((deckToolItem) => (
-                                <DesktopDeckToolCard
+                                <FlipcardDeckToolButton
                                     key={deckToolItem.key}
+                                    variant="desktop"
                                     deckToolItem={deckToolItem}
                                     onSelect={selectDeckTool}
                                 />
