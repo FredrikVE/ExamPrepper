@@ -1,11 +1,12 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, getSelectionPageNavToolItems } from "../../../../src/navigation/navItems.js";
-import { PAGE_TOOL_ITEM_IDS, getPageToolGroup, getSelectionWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
+import { PAGE_NAV_TOOL_IDS, getExamSelectPageNavToolItems, getSubjectSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
+import { PAGE_TOOL_ITEM_IDS, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
 
 const t = {
     pageToolsWorkspaceTitle: "Velg læringsverktøy",
+    pageToolsSubjectWorkspaceTitle: "",
     pageToolsWorkspaceSubtitle: "",
     pageToolsWorkspaceActionsLabel: "Læringsverktøy",
     pageToolsOpenLabel: "Åpne verktøymeny",
@@ -16,19 +17,21 @@ const t = {
     pageToolsExamsLabel: "Eksamner",
     pageToolsPracticeTestsLabel: "Øveprøver",
     pageToolsFlipcardsLabel: "Flipcards",
-    pageToolsCreateExamLabel: "Opprett en ny eksamen",
-    pageToolsConceptListLabel: "Lag begrepsliste",
-    pageToolsCurriculumGraphsLabel: "Lag pensumgrafer",
+    pageToolsCreateExamLabel: "Opprett ny eksamen",
+    pageToolsCreateSubjectLabel: "Opprett nytt fag",
+    pageToolsImportSubjectMaterialsLabel: "Legg inn notater eller forelesningsslides",
+    pageToolsConceptListLabel: "Begrepslister",
+    pageToolsCurriculumGraphsLabel: "Pensumoversikt",
     pageToolsCurriculumFigureLabel: "Lag pensum-oversiktsfigur",
-    pageToolsAiExamLabel: "Lag AI-generert øve-eksamen"
+    pageToolsAiExamLabel: "Lag AI-generert øveeksamen"
 };
 
 function createTools(params) {
     return createWorkspaceToolsModel({
         pageToolGroup: getPageToolGroup(params.screen),
         t,
-        navToolItems: getSelectionPageNavToolItems(),
-        workspaceActionToolItems: getSelectionWorkspaceActionToolItems(),
+        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectPageNavToolItems() : getExamSelectPageNavToolItems(),
+        workspaceActionToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectWorkspaceActionToolItems() : getExamSelectWorkspaceActionToolItems(),
         hasSelectedSubject: params.hasSelectedSubject,
         onChangeScreen: params.onChangeScreen
     });
@@ -59,7 +62,7 @@ describe("createWorkspaceToolsModel", () => {
         }));
         expect(createExamTool).toEqual(expect.objectContaining({
             statusLabel: "Kommer senere",
-            ariaLabel: "Opprett en ny eksamen · Kommer senere",
+            ariaLabel: "Opprett ny eksamen · Kommer senere",
             isDisabled: true,
             onSelect: null
         }));
@@ -76,6 +79,11 @@ describe("createWorkspaceToolsModel", () => {
             onChangeScreen: jest.fn()
         });
 
+        expect(tools.title).toBe("");
+        expect(tools.items.map((toolItem) => toolItem.id)).toEqual([
+            PAGE_TOOL_ITEM_IDS.APP_CREATE_SUBJECT,
+            PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
+        ]);
         expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_NAV_TOOL_IDS.PRACTICE_TESTS);
         expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_NAV_TOOL_IDS.FLIPCARDS);
         expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE);
@@ -85,8 +93,8 @@ describe("createWorkspaceToolsModel", () => {
         const tools = createWorkspaceToolsModel({
             pageToolGroup: null,
             t,
-            navToolItems: getSelectionPageNavToolItems(),
-            workspaceActionToolItems: getSelectionWorkspaceActionToolItems(),
+            navToolItems: getExamSelectPageNavToolItems(),
+            workspaceActionToolItems: getExamSelectWorkspaceActionToolItems(),
             hasSelectedSubject: true,
             onChangeScreen: jest.fn()
         });

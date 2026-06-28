@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, PAGE_NAV_TOOL_ITEMS, getSelectionPageNavToolItems } from "../../src/navigation/navItems.js";
+import { PAGE_NAV_TOOL_IDS, PAGE_NAV_TOOL_ITEMS, getExamSelectPageNavToolItems, getSubjectSelectPageNavToolItems } from "../../src/navigation/navItems.js";
 
 describe("navItems", () => {
     test("keeps page navigation tools in the navigation model", () => {
@@ -19,9 +19,11 @@ describe("navItems", () => {
         expect(PAGE_NAV_TOOL_ITEMS.every((navItem) => navItem.requiresSubject)).toBe(true);
     });
 
-    test("returns only selection-safe navigation tools for select page tools", () => {
-        expect(getSelectionPageNavToolItems().map((navItem) => navItem.id)).toEqual([
-            PAGE_NAV_TOOL_IDS.EXAMS
+    test("returns page-specific navigation tools for select page tools", () => {
+        expect(getSubjectSelectPageNavToolItems()).toEqual([]);
+        expect(getExamSelectPageNavToolItems().map((navItem) => navItem.id)).toEqual([
+            PAGE_NAV_TOOL_IDS.EXAMS,
+            PAGE_NAV_TOOL_IDS.FLIPCARDS
         ]);
     });
 });

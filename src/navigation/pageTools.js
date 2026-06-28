@@ -49,6 +49,8 @@ export const PAGE_TOOL_ACTION_IDS = {
     CREATE_CURRICULUM_GRAPHS: "curriculum.createGraphs",
     CREATE_CURRICULUM_FIGURE: "curriculum.createFigure",
     CREATE_AI_EXAM: "exam.createAiExam",
+    CREATE_SUBJECT: "subject.create",
+    IMPORT_SUBJECT_MATERIALS: "subject.importMaterials",
     EXAM_PREVIOUS_QUESTION: "exam.previousQuestion",
     EXAM_NEXT_QUESTION: "exam.nextQuestion",
     EXAM_SUBMIT: "exam.submit",
@@ -65,6 +67,8 @@ export const PAGE_TOOL_ITEM_IDS = {
     APP_CURRICULUM_GRAPHS: "app-curriculum-graphs",
     APP_CURRICULUM_FIGURE: "app-curriculum-figure",
     APP_AI_EXAM: "app-ai-exam",
+    APP_CREATE_SUBJECT: "app-create-subject",
+    APP_IMPORT_SUBJECT_MATERIALS: "app-import-subject-materials",
     EXAM_PREVIOUS_QUESTION: "exam-previous-question",
     EXAM_NEXT_QUESTION: "exam-next-question",
     EXAM_SUBMIT: "exam-submit",
@@ -74,6 +78,23 @@ export const PAGE_TOOL_ITEM_IDS = {
     FLIPCARDS_REPEAT_DIFFICULT: "repeat-difficult",
     FLIPCARDS_ADD_CARD: "add-card"
 };
+
+const SUBJECT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS = [
+    {
+        id: PAGE_TOOL_ITEM_IDS.APP_CREATE_SUBJECT,
+        actionId: PAGE_TOOL_ACTION_IDS.CREATE_SUBJECT,
+        labelKey: "pageToolsCreateSubjectLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.PLUS,
+        availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    },
+    {
+        id: PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS,
+        actionId: PAGE_TOOL_ACTION_IDS.IMPORT_SUBJECT_MATERIALS,
+        labelKey: "pageToolsImportSubjectMaterialsLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.FILE_TEXT,
+        availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    }
+];
 
 const WORKSPACE_ACTION_TOOL_ITEMS = [
     {
@@ -112,6 +133,10 @@ const WORKSPACE_ACTION_TOOL_ITEMS = [
         availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
     }
 ];
+
+const EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS = WORKSPACE_ACTION_TOOL_ITEMS.filter((toolItem) => (
+    toolItem.id !== PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE
+));
 
 const EXAM_TOOL_ITEMS = [
     {
@@ -183,13 +208,13 @@ export const PAGE_TOOL_GROUPS_BY_SCREEN = {
     [NAV_SCREENS.SUBJECTS]: {
         id: PAGE_TOOL_GROUP_IDS.SUBJECT_SELECT,
         screen: NAV_SCREENS.SUBJECTS,
-        titleKey: "pageToolsWorkspaceTitle",
+        titleKey: "pageToolsSubjectWorkspaceTitle",
         subtitleKey: "pageToolsWorkspaceSubtitle",
         actionsLabelKey: "pageToolsWorkspaceActionsLabel",
         desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
         mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
         mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH,
-        items: WORKSPACE_ACTION_TOOL_ITEMS
+        items: SUBJECT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS
     },
     [NAV_SCREENS.SELECT]: {
         id: PAGE_TOOL_GROUP_IDS.EXAM_SELECT,
@@ -200,7 +225,7 @@ export const PAGE_TOOL_GROUPS_BY_SCREEN = {
         desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
         mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
         mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH,
-        items: WORKSPACE_ACTION_TOOL_ITEMS
+        items: EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS
     },
     [NAV_SCREENS.EXAM]: {
         id: PAGE_TOOL_GROUP_IDS.EXAM,
@@ -240,10 +265,16 @@ export function getWorkspaceActionToolItems() {
     return WORKSPACE_ACTION_TOOL_ITEMS;
 }
 
+export function getSubjectSelectWorkspaceActionToolItems() {
+    return SUBJECT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS;
+}
+
+export function getExamSelectWorkspaceActionToolItems() {
+    return EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS;
+}
+
 export function getSelectionWorkspaceActionToolItems() {
-    return WORKSPACE_ACTION_TOOL_ITEMS.filter((toolItem) => (
-        toolItem.id !== PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE
-    ));
+    return getExamSelectWorkspaceActionToolItems();
 }
 
 export function getPageToolGroup(screen) {

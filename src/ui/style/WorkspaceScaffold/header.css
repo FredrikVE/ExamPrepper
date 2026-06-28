@@ -11,7 +11,13 @@
     min-height: var(--workspace-scaffold-header-height, 112px);
     padding: 24px var(--workspace-scaffold-inset, clamp(42px, 5vw, 72px)) 18px;
     pointer-events: none;
-    isolation: isolate;
+}
+
+.workspace-scaffold-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
     background:
         radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 48%),
         linear-gradient(

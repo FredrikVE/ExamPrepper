@@ -8,6 +8,9 @@
         min-height: var(--mobile-topbar-height);
         margin: 0;
         padding: 18px 24px;
+    }
+
+    .workspace-scaffold-header::before {
         background:
             radial-gradient(circle at 58% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 46%),
             linear-gradient(

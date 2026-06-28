@@ -264,6 +264,7 @@ export const translations = {
 
         // Page tools
         pageToolsWorkspaceTitle: "Velg læringsverktøy",
+        pageToolsSubjectWorkspaceTitle: "",
         pageToolsWorkspaceSubtitle: "",
         pageToolsWorkspaceActionsLabel: "Læringsverktøy",
         pageToolsOpenLabel: "Åpne verktøymeny",
@@ -287,11 +288,13 @@ export const translations = {
         pageToolsExamsLabel: "Eksamner",
         pageToolsPracticeTestsLabel: "Øveprøver",
         pageToolsFlipcardsLabel: "Flipcards",
-        pageToolsCreateExamLabel: "Opprett en ny eksamen",
-        pageToolsConceptListLabel: "Lag begrepsliste",
-        pageToolsCurriculumGraphsLabel: "Lag pensumgrafer",
+        pageToolsCreateExamLabel: "Opprett ny eksamen",
+        pageToolsCreateSubjectLabel: "Opprett nytt fag",
+        pageToolsImportSubjectMaterialsLabel: "Legg inn notater eller forelesningsslides",
+        pageToolsConceptListLabel: "Begrepslister",
+        pageToolsCurriculumGraphsLabel: "Pensumoversikt",
         pageToolsCurriculumFigureLabel: "Lag pensum-oversiktsfigur",
-        pageToolsAiExamLabel: "Lag AI-generert øve-eksamen",
+        pageToolsAiExamLabel: "Lag AI-generert øveeksamen",
         pageToolsUnavailableLabel: "Kommer senere",
 
         // FlipcardsPage
@@ -627,6 +630,7 @@ export const translations = {
 
         // Page tools
         pageToolsWorkspaceTitle: "Choose learning tools",
+        pageToolsSubjectWorkspaceTitle: "",
         pageToolsWorkspaceSubtitle: "",
         pageToolsWorkspaceActionsLabel: "Learning tools",
         pageToolsOpenLabel: "Open tools menu",
@@ -650,9 +654,11 @@ export const translations = {
         pageToolsExamsLabel: "Exams",
         pageToolsPracticeTestsLabel: "Practice tests",
         pageToolsFlipcardsLabel: "Flipcards",
-        pageToolsCreateExamLabel: "Create a new exam",
-        pageToolsConceptListLabel: "Create concept list",
-        pageToolsCurriculumGraphsLabel: "Create curriculum graphs",
+        pageToolsCreateExamLabel: "Create new exam",
+        pageToolsCreateSubjectLabel: "Create new subject",
+        pageToolsImportSubjectMaterialsLabel: "Add notes or lecture slides",
+        pageToolsConceptListLabel: "Concept lists",
+        pageToolsCurriculumGraphsLabel: "Curriculum overview",
         pageToolsCurriculumFigureLabel: "Create curriculum overview figure",
         pageToolsAiExamLabel: "Create AI-generated practice exam",
         pageToolsUnavailableLabel: "Coming soon",

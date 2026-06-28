@@ -8,8 +8,8 @@ export default function createWorkspaceToolsModel(params) {
 
 	return {
 		id: params.pageToolGroup.id,
-		title: params.t[params.pageToolGroup.titleKey],
-		subtitle: params.t[params.pageToolGroup.subtitleKey],
+		title: params.pageToolGroup.titleKey ? params.t[params.pageToolGroup.titleKey] : "",
+		subtitle: params.pageToolGroup.subtitleKey ? params.t[params.pageToolGroup.subtitleKey] : "",
 		actionsLabel: params.t[params.pageToolGroup.actionsLabelKey],
 		openLabel: params.t.pageToolsOpenLabel,
 		closeLabel: params.t.pageToolsCloseLabel,

@@ -111,7 +111,13 @@ export default function PageToolsDesktopPanel(props) {
     const panelId = getPanelId(props.tools);
     const titleId = getTitleId(props.tools);
     const subtitleId = getSubtitleId(props.tools);
+    const hasTitle = Boolean(props.tools.title);
     const hasSubtitle = Boolean(props.tools.subtitle);
+    const hasHeader = hasTitle || hasSubtitle;
+    const panelClassName = [
+        "page-tools-desktop-panel",
+        hasHeader ? null : "page-tools-desktop-panel-no-header"
+    ].filter(Boolean).join(" ");
 
     return (
         <div className="page-tools-desktop-shell" data-open={isOpen ? "true" : "false"}>
@@ -139,15 +145,18 @@ export default function PageToolsDesktopPanel(props) {
                     <aside
                         id={panelId}
                         ref={panelRef}
-                        className="page-tools-desktop-panel"
-                        aria-labelledby={titleId}
+                        className={panelClassName}
+                        aria-labelledby={hasTitle ? titleId : undefined}
                         aria-describedby={hasSubtitle ? subtitleId : undefined}
+                        aria-label={hasTitle ? undefined : props.tools.actionsLabel}
                         tabIndex={-1}
                     >
-                        <header className="page-tools-desktop-header">
-                            <h2 id={titleId}>{props.tools.title}</h2>
-                            {hasSubtitle && <p id={subtitleId}>{props.tools.subtitle}</p>}
-                        </header>
+                        {hasHeader && (
+                            <header className="page-tools-desktop-header">
+                                {hasTitle && <h2 id={titleId}>{props.tools.title}</h2>}
+                                {hasSubtitle && <p id={subtitleId}>{props.tools.subtitle}</p>}
+                            </header>
+                        )}
 
                         <div className="page-tools-desktop-grid" aria-label={props.tools.actionsLabel}>
                             {props.tools.items.map((toolItem) => (

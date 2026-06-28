@@ -49,6 +49,7 @@ function createT() {
         examSearchPlaceholder: "Søk etter eksamen",
         examCategoryLabel: "Kategori",
         pageToolsWorkspaceTitle: "Velg læringsverktøy",
+        pageToolsSubjectWorkspaceTitle: "",
         pageToolsWorkspaceSubtitle: "",
         pageToolsWorkspaceActionsLabel: "Læringsverktøy",
         pageToolsOpenLabel: "Åpne verktøymeny",
@@ -59,11 +60,13 @@ function createT() {
         pageToolsExamsLabel: "Eksamener",
         pageToolsPracticeTestsLabel: "Øveprøver",
         pageToolsFlipcardsLabel: "Flipcards",
-        pageToolsCreateExamLabel: "Opprett en ny eksamen",
-        pageToolsConceptListLabel: "Lag begrepsliste",
-        pageToolsCurriculumGraphsLabel: "Lag pensumgrafer",
+        pageToolsCreateExamLabel: "Opprett ny eksamen",
+        pageToolsCreateSubjectLabel: "Opprett nytt fag",
+        pageToolsImportSubjectMaterialsLabel: "Legg inn notater eller forelesningsslides",
+        pageToolsConceptListLabel: "Begrepslister",
+        pageToolsCurriculumGraphsLabel: "Pensumoversikt",
         pageToolsCurriculumFigureLabel: "Lag pensum-oversiktsfigur",
-        pageToolsAiExamLabel: "Lag AI-generert øve-eksamen"
+        pageToolsAiExamLabel: "Lag AI-generert øveeksamen"
     };
 }
 

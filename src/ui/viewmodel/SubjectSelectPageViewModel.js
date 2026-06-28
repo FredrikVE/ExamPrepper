@@ -1,7 +1,7 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getSelectionPageNavToolItems } from "../../navigation/navItems.js";
-import { getPageToolGroup, getSelectionWorkspaceActionToolItems } from "../../navigation/pageTools.js";
+import { getSubjectSelectPageNavToolItems } from "../../navigation/navItems.js";
+import { getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
@@ -153,8 +153,8 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		return createWorkspaceToolsModel({
 			pageToolGroup: getPageToolGroup(NAV_SCREENS.SUBJECTS),
 			t,
-			navToolItems: getSelectionPageNavToolItems(),
-			workspaceActionToolItems: getSelectionWorkspaceActionToolItems(),
+			navToolItems: getSubjectSelectPageNavToolItems(),
+			workspaceActionToolItems: getSubjectSelectWorkspaceActionToolItems(),
 			hasSelectedSubject: Boolean(selectedSubjectId),
 			onChangeScreen
 		});

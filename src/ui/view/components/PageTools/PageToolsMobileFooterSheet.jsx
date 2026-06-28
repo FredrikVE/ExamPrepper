@@ -6,10 +6,6 @@ import PageToolsCard from "./PageToolsCard.jsx";
 export default function PageToolsMobileFooterSheet(props) {
     const [isOpen, setIsOpen] = useState(false);
 
-    const closeSheet = useCallback(() => {
-        setIsOpen(false);
-    }, []);
-
     const toggleSheet = useCallback(() => {
         setIsOpen((wasOpen) => !wasOpen);
     }, []);
@@ -26,8 +22,6 @@ export default function PageToolsMobileFooterSheet(props) {
     if (!props.tools) {
         return props.children;
     }
-
-    const hasSubtitle = Boolean(props.tools.subtitle);
 
     return (
         <div className="page-tools-mobile-footer-shell" data-open={isOpen ? "true" : "false"}>
@@ -49,11 +43,6 @@ export default function PageToolsMobileFooterSheet(props) {
                 aria-label={props.tools.actionsLabel}
                 hidden={!isOpen}
             >
-                <header className="page-tools-mobile-header">
-                    <h2>{props.tools.title}</h2>
-                    {hasSubtitle && <p>{props.tools.subtitle}</p>}
-                </header>
-
                 <div className="page-tools-mobile-grid">
                     {props.tools.items.map((toolItem) => (
                         <PageToolsCard
@@ -64,14 +53,6 @@ export default function PageToolsMobileFooterSheet(props) {
                         />
                     ))}
                 </div>
-
-                <button
-                    type="button"
-                    className="page-tools-mobile-close"
-                    onClick={closeSheet}
-                >
-                    {props.tools.closeLabel}
-                </button>
             </section>
 
             {props.children}

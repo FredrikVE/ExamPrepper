@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
-import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getPageToolGroup, getPageToolItems, getSelectionWorkspaceActionToolItems, getWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
+import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getPageToolItems, getSubjectSelectWorkspaceActionToolItems, getWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
 
 const workspaceActionToolIds = [
@@ -30,14 +30,26 @@ describe("pageTools", () => {
             mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH
         }));
 
-        expect(subjectTools.items.map((toolCard) => toolCard.id)).toEqual(workspaceActionToolIds);
-        expect(examSelectTools.items.map((toolCard) => toolCard.id)).toEqual(workspaceActionToolIds);
+        expect(subjectTools.items.map((toolCard) => toolCard.id)).toEqual([
+            PAGE_TOOL_ITEM_IDS.APP_CREATE_SUBJECT,
+            PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
+        ]);
+        expect(examSelectTools.items.map((toolCard) => toolCard.id)).toEqual([
+            PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
+            PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
+            PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,
+            PAGE_TOOL_ITEM_IDS.APP_AI_EXAM
+        ]);
         expect(getWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual(workspaceActionToolIds);
     });
 
 
-    test("returns selection-safe workspace actions without the curriculum figure tool", () => {
-        expect(getSelectionWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual([
+    test("returns page-specific workspace actions for select pages", () => {
+        expect(getSubjectSelectWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual([
+            PAGE_TOOL_ITEM_IDS.APP_CREATE_SUBJECT,
+            PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
+        ]);
+        expect(getExamSelectWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual([
             PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
             PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
             PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,

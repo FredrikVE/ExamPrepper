@@ -80,6 +80,10 @@
     pointer-events: auto;
 }
 
+.page-tools-desktop-panel-no-header .page-tools-desktop-grid {
+    padding-top: 70px;
+}
+
 .page-tools-desktop-header {
     max-width: calc(100% - 70px);
     margin-bottom: 24px;

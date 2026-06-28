@@ -1,7 +1,7 @@
 // src/ui/viewmodel/ExamSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getSelectionPageNavToolItems } from "../../navigation/navItems.js";
-import { getPageToolGroup, getSelectionWorkspaceActionToolItems } from "../../navigation/pageTools.js";
+import { getExamSelectPageNavToolItems } from "../../navigation/navItems.js";
+import { getExamSelectWorkspaceActionToolItems, getPageToolGroup } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
@@ -165,8 +165,8 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         return createWorkspaceToolsModel({
             pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
             t,
-            navToolItems: getSelectionPageNavToolItems(),
-            workspaceActionToolItems: getSelectionWorkspaceActionToolItems(),
+            navToolItems: getExamSelectPageNavToolItems(),
+            workspaceActionToolItems: getExamSelectWorkspaceActionToolItems(),
             hasSelectedSubject: Boolean(subjectId),
             onChangeScreen
         });

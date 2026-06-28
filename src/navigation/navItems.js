@@ -70,9 +70,17 @@ export const PAGE_NAV_TOOL_ITEMS = [
     }
 ];
 
-export function getSelectionPageNavToolItems() {
+export function getSubjectSelectPageNavToolItems() {
+    return [];
+}
+
+export function getExamSelectPageNavToolItems() {
     return PAGE_NAV_TOOL_ITEMS.filter((navItem) => (
-        navItem.id !== PAGE_NAV_TOOL_IDS.PRACTICE_TESTS
-        && navItem.id !== PAGE_NAV_TOOL_IDS.FLIPCARDS
+        navItem.id === PAGE_NAV_TOOL_IDS.EXAMS
+        || navItem.id === PAGE_NAV_TOOL_IDS.FLIPCARDS
     ));
+}
+
+export function getSelectionPageNavToolItems() {
+    return getExamSelectPageNavToolItems();
 }
