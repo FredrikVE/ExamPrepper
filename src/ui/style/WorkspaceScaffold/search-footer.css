@@ -6,3 +6,18 @@
 .workspace-scaffold-search-footer-open {
     z-index: 50;
 }
+
+@media (min-width: 933px) {
+    .workspace-scaffold-search-footer {
+        border-right: 1px solid var(--line-strong);
+        border-bottom: 1px solid var(--line-strong);
+        border-left: 1px solid var(--line-strong);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    .workspace-scaffold-search-footer-open {
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+}
