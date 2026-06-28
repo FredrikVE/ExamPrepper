@@ -106,47 +106,6 @@
         padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     }
 
-    .mobile-search-shell {
-        min-height: 58px;
-        border-radius: 16px;
-        background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
-    }
-
-    .mobile-search-icon,
-    .mobile-filter-icon {
-        width: 21px;
-        height: 21px;
-    }
-
-    .mobile-search-icon {
-        margin-left: 16px;
-    }
-
-    .mobile-search-input {
-        min-height: 56px;
-        padding: 0 12px 0 10px;
-        font-size: 16px;
-    }
-
-    .mobile-search-filter {
-        min-width: 124px;
-        min-height: 56px;
-        gap: 9px;
-        padding: 0 38px 0 14px;
-    }
-
-    .mobile-filter-label {
-        max-width: 92px;
-        font-size: 16px;
-    }
-
-
-    .mobile-filter-chevron {
-        right: 12px;
-        width: 18px;
-        height: 18px;
-    }
-
     .subject-card-placeholder-note {
         align-items: center;
         max-width: 230px;
@@ -369,33 +328,6 @@
         width: min(620px, 100%);
     }
 
-    .mobile-search-shell {
-        min-height: 46px;
-        border-radius: 12px;
-    }
-
-    .mobile-search-input,
-    .mobile-search-filter {
-        min-height: 44px;
-        font-size: 15px;
-    }
-
-    .mobile-search-icon,
-    .mobile-filter-icon {
-        width: 19px;
-        height: 19px;
-    }
-
-    .mobile-search-icon {
-        margin-left: 16px;
-    }
-
-    .mobile-filter-chevron {
-        right: 14px;
-        width: 18px;
-        height: 18px;
-    }
-
     .subject-select-grid {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -578,12 +510,6 @@
 .subject-select-controls {
     flex-wrap: wrap;
 }
-
-.mobile-search-shell {
-    max-width: 100%;
-    min-width: 0;
-}
-
 .subject-select-grid {
     width: min(987px, 100%);
     overflow: visible;

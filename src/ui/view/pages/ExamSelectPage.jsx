@@ -2,8 +2,8 @@
 import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx";
 import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
-import ExamSelectControls from "../components/ExamSelectPage/ExamSelectControls.jsx";
 import SearchSheetContent from "../components/Shared/Search/SearchSheetContent.jsx";
+import SearchFilterField from "../components/Shared/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Shared/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 import WorkspaceScaffoldHeader from "../components/WorkspaceScaffold/WorkspaceScaffoldHeader.jsx";
@@ -112,22 +112,20 @@ export default function ExamSelectPage({ viewModel }) {
                 )}
 
                 <PageToolsMobileFooterSheet tools={viewModel.pageTools}>
-                    <ExamSelectControls
-                        searchTerm={viewModel.searchTerm}
-                        onExamSearchTermChange={viewModel.changeExamSearchTerm}
-                        onOpenExamSearchSuggestions={viewModel.openExamSearchSuggestions}
-                        onCloseExamSearchSheet={viewModel.closeExamSearchSheet}
-                        onOpenExamCategoryOptions={viewModel.openExamCategoryOptions}
-                        isFilterOptionsVisible={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
-                        category={viewModel.category}
-                        categoryLabel={viewModel.categoryLabel}
-                        onCategoryChange={viewModel.changeCategory}
-                        categories={viewModel.categories}
-                        searchPlaceholder={viewModel.searchPlaceholder}
-                        searchLabel={viewModel.searchLabel}
-                        categoryAriaLabel={viewModel.categoryAriaLabel}
-                        allCategoriesLabel={viewModel.allCategoriesLabel}
-                    />
+                    <div className="exam-select-controls">
+                        <SearchFilterField
+                            searchTerm={viewModel.searchTerm}
+                            searchPlaceholder={viewModel.searchPlaceholder}
+                            searchLabel={viewModel.searchLabel}
+                            onSearchTermChange={viewModel.changeExamSearchTerm}
+                            onFocusSearch={viewModel.openExamSearchSuggestions}
+                            onRequestClose={viewModel.closeExamSearchSheet}
+                            filterButtonLabel={viewModel.categoryLabel}
+                            filterButtonAriaLabel={viewModel.categoryAriaLabel}
+                            isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
+                            onOpenFilterOptions={viewModel.openExamCategoryOptions}
+                        />
+                    </div>
                 </PageToolsMobileFooterSheet>
             </WorkspaceScaffoldSearchFooter>
         </div>
