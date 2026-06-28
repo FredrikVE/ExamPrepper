@@ -1,11 +1,4 @@
 /* src/ui/style/PageTools/desktop-page-tools.css */
-.page-tools-desktop-shell {
-    position: fixed;
-    inset: 0;
-    z-index: 80;
-    pointer-events: none;
-}
-
 .page-tools-desktop-toggle {
     position: fixed;
     top: 30px;
@@ -32,7 +25,7 @@
 
 .page-tools-desktop-toggle:hover,
 .page-tools-desktop-toggle:focus-visible,
-.page-tools-desktop-shell[data-open="true"] .page-tools-desktop-toggle {
+.page-tools-desktop-toggle[data-popup-open] {
     transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--accent) 42%, var(--line-strong));
     background:
@@ -80,7 +73,7 @@
     pointer-events: auto;
 }
 
-.page-tools-desktop-panel-no-header .page-tools-desktop-grid {
+.page-tools-desktop-panel:not(:has(.page-tools-desktop-header)) .page-tools-desktop-grid {
     padding-top: 70px;
 }
 
@@ -180,7 +173,9 @@
 }
 
 @media (max-width: 932px) {
-    .page-tools-desktop-shell {
+    .page-tools-desktop-toggle,
+    .page-tools-desktop-backdrop,
+    .page-tools-desktop-panel {
         display: none;
     }
 }
@@ -193,7 +188,7 @@
 
     .page-tools-desktop-toggle:hover,
     .page-tools-desktop-toggle:focus-visible,
-    .page-tools-desktop-shell[data-open="true"] .page-tools-desktop-toggle,
+    .page-tools-desktop-toggle[data-popup-open],
     .page-tools-desktop-card:not(:disabled):hover,
     .page-tools-desktop-card:not(:disabled):focus-visible {
         transform: none;
