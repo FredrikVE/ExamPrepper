@@ -1,5 +1,6 @@
 // src/ui/view/components/PageTools/PageToolsDesktopPanel.jsx
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Menu } from "lucide-react";
 import PageToolsCard from "./PageToolsCard.jsx";
 
@@ -133,7 +134,7 @@ export default function PageToolsDesktopPanel(props) {
                 <Menu aria-hidden="true" focusable="false" />
             </button>
 
-            {isOpen && (
+            {isOpen && createPortal(
                 <>
                     <button
                         type="button"
@@ -169,7 +170,8 @@ export default function PageToolsDesktopPanel(props) {
                             ))}
                         </div>
                     </aside>
-                </>
+                </>,
+                document.body
             )}
         </div>
     );
