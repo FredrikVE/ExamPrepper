@@ -2,7 +2,7 @@
 
 @media (max-width: 1280px) {
     .exam-select-layout {
-        --workspace-scaffold-inset: 34px;
+        --workspace-scaffold-inset: var(--space-10);
         --workspace-scaffold-content-top: 108px;
     }
 
@@ -447,7 +447,9 @@
 .exam-select-card-title,
 .exam-select-card-description {
     max-width: 100%;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
 }
 
 .exam-select-card-description {

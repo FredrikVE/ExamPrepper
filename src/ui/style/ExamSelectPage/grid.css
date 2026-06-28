@@ -3,9 +3,9 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
     align-items: stretch;
-    gap: 20px;
+    gap: clamp(var(--space-4), 1.45vw, var(--space-8));
     width: min(1312px, 100%);
     padding-bottom: 26px;
 }
