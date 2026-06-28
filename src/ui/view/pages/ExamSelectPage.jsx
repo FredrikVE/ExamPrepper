@@ -3,8 +3,8 @@ import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx"
 import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
 import ExamSelectControls from "../components/ExamSelectPage/ExamSelectControls.jsx";
-import SearchSheetContent from "../components/Shared/SearchSheetContent.jsx";
-import useSearchSheetEscapeKey from "../components/Shared/useSearchSheetEscapeKey.js";
+import SearchSheetContent from "../components/Shared/Search/SearchSheetContent.jsx";
+import useSearchSheetEscapeKey from "../components/Shared/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 import WorkspaceScaffoldHeader from "../components/WorkspaceScaffold/WorkspaceScaffoldHeader.jsx";
 import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx";

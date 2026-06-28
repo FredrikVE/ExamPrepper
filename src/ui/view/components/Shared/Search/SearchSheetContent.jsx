@@ -1,4 +1,4 @@
-// src/ui/view/components/Shared/SearchSheetContent.jsx
+// src/ui/view/components/Shared/Search/SearchSheetContent.jsx
 import FilterOptionList from "./FilterOptionList.jsx";
 import SearchSuggestionList from "./SearchSuggestionList.jsx";
 
