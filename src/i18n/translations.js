@@ -26,6 +26,10 @@ export const translations = {
         subjectLoadingMessage: "Laster fag...",
         subjectErrorMessage: "Kunne ikke laste inn fag.",
         subjectMockExamCount: (count) => `${count} mock-eksamen${count === 1 ? "" : "er"}`,
+        subjectAddPlaceholderCode: "OPPRETT FAG",
+        subjectAddPlaceholderTitle: "Legg til nytt fag",
+        subjectAddPlaceholderDescription: "Sett opp et nytt fag med egne mock-eksamener, notater og forelesningsslides.",
+        subjectAddPlaceholderNote: "Ingen begrensning på antall fag",
 
         // ExamSelectPage
         selectTitle: "Eksamens-emulator",
@@ -381,6 +385,10 @@ export const translations = {
         subjectLoadingMessage: "Loading subjects...",
         subjectErrorMessage: "Could not load subjects.",
         subjectMockExamCount: (count) => `${count} mock exam${count === 1 ? "" : "s"}`,
+        subjectAddPlaceholderCode: "CREATE SUBJECT",
+        subjectAddPlaceholderTitle: "Add new subject",
+        subjectAddPlaceholderDescription: "Set up a new subject with your own mock exams, notes and lecture slides.",
+        subjectAddPlaceholderNote: "No limit on subject count",
 
         // ExamSelectPage
         selectTitle: "Exam Emulator",

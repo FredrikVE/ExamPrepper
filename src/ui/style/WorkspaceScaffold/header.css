@@ -1,16 +1,14 @@
 /* src/ui/style/WorkspaceScaffold/header.css */
 .workspace-scaffold-header {
-    position: sticky;
+    position: absolute;
     top: 0;
+    right: 0;
+    left: 0;
     z-index: 30;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     min-height: var(--workspace-scaffold-header-height, 76px);
-    margin:
-        calc(var(--workspace-scaffold-inset, clamp(42px, 5vw, 72px)) * -1)
-        calc(var(--workspace-scaffold-inset, clamp(42px, 5vw, 72px)) * -1)
-        0;
     padding: 24px var(--workspace-scaffold-inset, clamp(42px, 5vw, 72px)) 18px;
     pointer-events: none;
     background:
@@ -29,8 +27,14 @@
     background: linear-gradient(180deg, color-mix(in srgb, var(--shell-bg) 42%, transparent), transparent);
 }
 
-.workspace-scaffold-header-button,
 .workspace-scaffold-header .page-tools-desktop-shell {
+    pointer-events: none;
+}
+
+.workspace-scaffold-header-button,
+.workspace-scaffold-header .page-tools-desktop-toggle,
+.workspace-scaffold-header .page-tools-desktop-backdrop,
+.workspace-scaffold-header .page-tools-desktop-panel {
     pointer-events: auto;
 }
 

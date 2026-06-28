@@ -1,5 +1,6 @@
 // src/ui/view/components/SubjectSelectPage/SubjectSelectGrid.jsx
 import SubjectSelectCard from "./SubjectSelectCard.jsx";
+import SubjectSelectPlaceholderCard from "./SubjectSelectPlaceholderCard.jsx";
 
 export default function SubjectSelectGrid({ t, subjects, selectedSubject, emptyTitle, emptyDescription, onSelectSubject }) {
     if (subjects.length === 0) {
@@ -23,6 +24,8 @@ export default function SubjectSelectGrid({ t, subjects, selectedSubject, emptyT
                     onSelectSubject={onSelectSubject}
                 />
             ))}
+
+            <SubjectSelectPlaceholderCard t={t} />
         </section>
     );
 }

@@ -53,22 +53,24 @@ export default function ExamSelectPage({ viewModel }) {
                     tools={viewModel.pageTools}
                 />
 
-                <ExamSelectTopbar title={viewModel.title} />
+                <div className="exam-select-scroll">
+                    <ExamSelectTopbar title={viewModel.title} />
 
-                <ExamSelectIntro
-                    selectedSubject={viewModel.selectedSubject}
-                    subtitle={viewModel.subtitle}
-                />
+                    <ExamSelectIntro
+                        selectedSubject={viewModel.selectedSubject}
+                        subtitle={viewModel.subtitle}
+                    />
 
-                <ExamSelectGrid
-                    exams={viewModel.exams}
-                    emptyTitle={viewModel.emptyTitle}
-                    emptyMessage={viewModel.emptyMessage}
-                    practiceExamLabel={viewModel.practiceExamLabel}
-                    questionLabel={viewModel.questionLabel}
-                    minuteLabel={viewModel.minuteLabel}
-                    onSelectExam={viewModel.selectExam}
-                />
+                    <ExamSelectGrid
+                        exams={viewModel.exams}
+                        emptyTitle={viewModel.emptyTitle}
+                        emptyMessage={viewModel.emptyMessage}
+                        practiceExamLabel={viewModel.practiceExamLabel}
+                        questionLabel={viewModel.questionLabel}
+                        minuteLabel={viewModel.minuteLabel}
+                        onSelectExam={viewModel.selectExam}
+                    />
+                </div>
             </main>
 
             {viewModel.isSearchSheetOpen && (

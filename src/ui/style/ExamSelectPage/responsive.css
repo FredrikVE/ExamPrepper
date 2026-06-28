@@ -1,16 +1,13 @@
 /* src/ui/style/ExamSelectPage/responsive.css */
 
 @media (max-width: 1280px) {
-    .exam-select-workspace {
+    .exam-select-layout {
         --workspace-scaffold-inset: 34px;
+        --workspace-scaffold-content-top: 108px;
     }
 
     .exam-select-shell {
         grid-template-columns: 270px minmax(0, 1fr);
-    }
-
-    .exam-select-workspace {
-        padding: 40px 34px;
     }
 }
 
@@ -32,6 +29,9 @@
         min-height: 100vh;
         border-inline: 0;
         border-radius: 0;
+    }
+
+    .exam-select-scroll {
         padding: calc(var(--mobile-topbar-height) + 24px) 20px calc(90px + env(safe-area-inset-bottom));
     }
 
@@ -149,10 +149,8 @@
    Når viewport-høyden blir ekstremt lav, bytter exam cards
    fra store grid-kort til en kompakt listevisning. */
 @media (max-height: 700px) and (min-width: 933px) {
-    .exam-select-workspace {
+    .exam-select-scroll {
         padding: clamp(18px, 3vw, 30px);
-        overflow-y: auto;
-        overscroll-behavior: contain;
     }
 
     .exam-select-topbar {
@@ -427,9 +425,10 @@
         min-height: 100svh;
         border-inline: 0;
         border-radius: 0;
+    }
+
+    .exam-select-scroll {
         padding: calc(var(--mobile-topbar-height) + 14px) 16px 28px;
-        overflow-y: auto;
-        overscroll-behavior: contain;
     }
 
     .exam-select-topbar {

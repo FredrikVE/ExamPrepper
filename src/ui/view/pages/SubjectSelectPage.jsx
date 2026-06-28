@@ -49,16 +49,18 @@ export default function SubjectSelectPage({ viewModel }) {
 					tools={viewModel.pageTools}
 				/>
 
-				<SubjectSelectTopbar t={viewModel.t} />
+				<div className="subject-select-scroll">
+					<SubjectSelectTopbar t={viewModel.t} />
 
-				<SubjectSelectGrid
-					t={viewModel.t}
-					subjects={viewModel.filteredSubjects}
-					selectedSubject={viewModel.selectedSubject}
-					emptyTitle={viewModel.emptyTitle}
-					emptyDescription={viewModel.emptyDescription}
-					onSelectSubject={viewModel.selectSubject}
-				/>
+					<SubjectSelectGrid
+						t={viewModel.t}
+						subjects={viewModel.filteredSubjects}
+						selectedSubject={viewModel.selectedSubject}
+						emptyTitle={viewModel.emptyTitle}
+						emptyDescription={viewModel.emptyDescription}
+						onSelectSubject={viewModel.selectSubject}
+					/>
+				</div>
 			</main>
 
 			{viewModel.isSearchSheetOpen && (
