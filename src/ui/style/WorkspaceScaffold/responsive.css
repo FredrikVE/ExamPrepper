@@ -9,14 +9,30 @@
         margin: 0;
         padding: 18px 24px;
         background:
-            radial-gradient(circle at 58% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 42%),
-            linear-gradient(180deg, color-mix(in srgb, var(--shell-bg) 98%, transparent), color-mix(in srgb, var(--shell-bg) 86%, transparent));
-        box-shadow: 0 16px 28px color-mix(in srgb, #000 22%, transparent);
+            radial-gradient(circle at 58% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 46%),
+            linear-gradient(
+                180deg,
+                var(--shell-bg) 0%,
+                color-mix(in srgb, var(--shell-bg) 96%, #000 4%) 62%,
+                color-mix(in srgb, var(--shell-bg) 78%, transparent) 100%
+            );
+        box-shadow:
+            0 16px 34px color-mix(in srgb, #000 28%, transparent),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.025);
+        backdrop-filter: blur(22px) saturate(132%);
+        -webkit-backdrop-filter: blur(22px) saturate(132%);
     }
 
     .workspace-scaffold-header::after {
-        bottom: -26px;
-        height: 26px;
+        bottom: -28px;
+        height: 28px;
+        background:
+            linear-gradient(
+                180deg,
+                color-mix(in srgb, var(--shell-bg) 28%, transparent) 0%,
+                color-mix(in srgb, var(--shell-bg) 12%, transparent) 58%,
+                transparent 100%
+            );
     }
 
     .workspace-scaffold-header-button {
