@@ -7,12 +7,13 @@ const DEFAULT_ESTIMATED_MINUTES = "45–60";
 export default function ExamSelectCard({ exam, index, practiceExamLabel, questionLabel, minuteLabel, onSelectExam }) {
     const modeLabel = exam.modeLabel ?? practiceExamLabel(index + 1);
     const estimatedMinutes = exam.estimatedMinutes ?? DEFAULT_ESTIMATED_MINUTES;
+    const accentIndex = index % 6 + 1;
 
     return (
         <button
             type="button"
             onClick={() => onSelectExam(exam.id)}
-            className="exam-select-card"
+            className={`exam-select-card exam-select-card-${accentIndex}`}
         >
             <div className="exam-select-card-main-row">
                 <div className="exam-select-card-icon-wrapper">

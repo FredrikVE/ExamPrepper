@@ -1,14 +1,14 @@
 /* src/ui/style/ExamSelectPage/intro.css */
 .exam-select-intro {
     position: relative;
-    margin-top: 10px;
-    margin-bottom: 58px;
+    margin-top: 22px;
+    margin-bottom: 30px;
 }
 
 .exam-select-subject-line {
     margin: 0;
     color: var(--text-muted);
-    font-size: clamp(15px, 1.05vw, 18px);
-    font-weight: 700;
-    letter-spacing: 0.01em;
+    font-size: clamp(15px, 1vw, 16px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }

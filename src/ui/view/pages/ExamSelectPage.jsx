@@ -68,6 +68,10 @@ export default function ExamSelectPage({ viewModel }) {
                         practiceExamLabel={viewModel.practiceExamLabel}
                         questionLabel={viewModel.questionLabel}
                         minuteLabel={viewModel.minuteLabel}
+                        addPlaceholderCode={viewModel.addPlaceholderCode}
+                        addPlaceholderTitle={viewModel.addPlaceholderTitle}
+                        addPlaceholderDescription={viewModel.addPlaceholderDescription}
+                        addPlaceholderNote={viewModel.addPlaceholderNote}
                         onSelectExam={viewModel.selectExam}
                     />
                 </div>

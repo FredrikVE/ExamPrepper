@@ -182,6 +182,11 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         pageTools,
         ...pageCopy,
 
+        addPlaceholderCode: t.examAddPlaceholderCode,
+        addPlaceholderTitle: t.examAddPlaceholderTitle,
+        addPlaceholderDescription: t.examAddPlaceholderDescription,
+        addPlaceholderNote: t.examAddPlaceholderNote,
+
         // Navigasjon
         showBackButton,
         backLabel: t.sidebarBack,

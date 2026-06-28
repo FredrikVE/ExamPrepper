@@ -3,12 +3,11 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(min(100%, clamp(330px, 28vw, 380px)), 1fr)
-    );
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     align-items: stretch;
-    gap: clamp(18px, 2vw, var(--space-9));
+    gap: 20px;
+    width: min(1312px, 100%);
+    padding-bottom: 26px;
 }
 
 .exam-select-empty {
