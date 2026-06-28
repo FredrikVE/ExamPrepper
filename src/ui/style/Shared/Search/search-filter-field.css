@@ -41,7 +41,7 @@
 }
 
 .search-filter-field-icon {
-    margin-left: 20px;
+    margin-left: var(--space-8);
 }
 
 .search-filter-field-input {
@@ -49,7 +49,7 @@
     min-width: 0;
     min-height: 56px;
     border: 0;
-    padding: 0 18px 0 12px;
+    padding: 0 var(--space-7) 0 var(--space-4);
     color: var(--text-main);
     caret-color: var(--text-main);
     background: transparent;
@@ -71,7 +71,7 @@
 .search-filter-field-divider {
     flex: 0 0 auto;
     width: 1px;
-    height: 32px;
+    height: var(--space-10);
     background: color-mix(in srgb, var(--text-soft) 18%, transparent);
 }
 
@@ -80,10 +80,10 @@
     display: flex;
     align-items: center;
     flex: 0 0 auto;
-    gap: 10px;
+    gap: var(--space-3);
     min-width: 128px;
     min-height: 56px;
-    padding: 0 42px 0 18px;
+    padding: 0 42px 0 var(--space-7);
     color: var(--text-main);
 }
 
@@ -113,7 +113,7 @@
 
 .search-filter-field-filter-chevron {
     position: absolute;
-    right: 16px;
+    right: var(--space-6);
     width: 20px;
     height: 20px;
     pointer-events: none;
@@ -123,7 +123,7 @@
 @media (max-width: 932px) {
     .search-filter-field {
         min-height: 58px;
-        border-radius: 16px;
+        border-radius: var(--radius-md);
         background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
     }
 
@@ -134,12 +134,12 @@
     }
 
     .search-filter-field-icon {
-        margin-left: 16px;
+        margin-left: var(--space-6);
     }
 
     .search-filter-field-input {
         min-height: 56px;
-        padding: 0 12px 0 10px;
+        padding: 0 var(--space-4) 0 var(--space-3);
         font-size: 16px;
     }
 
@@ -147,7 +147,7 @@
         min-width: 124px;
         min-height: 56px;
         gap: 9px;
-        padding: 0 38px 0 14px;
+        padding: 0 38px 0 var(--space-5);
     }
 
     .search-filter-field-filter-label {
@@ -156,7 +156,7 @@
     }
 
     .search-filter-field-filter-chevron {
-        right: 12px;
+        right: var(--space-4);
         width: 18px;
         height: 18px;
     }
@@ -165,7 +165,7 @@
 @media (max-height: 700px) and (min-width: 933px) {
     .search-filter-field {
         min-height: 46px;
-        border-radius: 12px;
+        border-radius: var(--radius-sm);
     }
 
     .search-filter-field-input,
@@ -181,11 +181,11 @@
     }
 
     .search-filter-field-icon {
-        margin-left: 16px;
+        margin-left: var(--space-6);
     }
 
     .search-filter-field-filter-chevron {
-        right: 14px;
+        right: var(--space-5);
         width: 18px;
         height: 18px;
     }
