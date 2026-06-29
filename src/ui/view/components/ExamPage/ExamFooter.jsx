@@ -39,14 +39,15 @@ export default function ExamFooter({
             counter={(
                 <>
                     <ProgressDots
-                        questionDotEntries={questionDotEntries}
-                        filledCompactQuestionDotEntries={filledCompactQuestionDotEntries}
-                        minimalCompactQuestionDotEntries={minimalCompactQuestionDotEntries}
+                        entries={questionDotEntries}
+                        compactEntries={filledCompactQuestionDotEntries}
+                        minimalCompactEntries={minimalCompactQuestionDotEntries}
                         shouldUseCompactDots={shouldUseCompactDots}
                         shouldUseResponsiveCompactDots={shouldUseResponsiveCompactDots}
                         submitted={submitted}
-                        onGoToQuestion={onGoToQuestion}
-                        labels={t}
+                        onSelectEntry={onGoToQuestion}
+                        dotsLabel={t.footerQuestionNavigationLabel}
+                        goToEntryLabel={t.footerGoToQuestion}
                     />
                     <span className="progress-pager-counter-label">
                         {questionProgressLabel}

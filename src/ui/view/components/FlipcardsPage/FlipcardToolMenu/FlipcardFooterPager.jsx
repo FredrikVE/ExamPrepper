@@ -28,11 +28,7 @@ export default function FlipcardFooterPager({
 }) {
     const currentPosition = Math.min(activeIndex + 1, cardCount);
     const progressLabel = labels.deckPositionLabel(currentPosition, cardCount);
-    const questionDotEntries = createQuestionDotEntries(cardCount, activeIndex);
-    const footerPagerLabels = {
-        footerQuestionNavigationLabel: labels.toolMenuPagerLabel,
-        footerGoToQuestion: labels.goToCardLabel
-    };
+    const progressEntries = createQuestionDotEntries(cardCount, activeIndex);
 
     return (
         <div className="flipcard-footer-pager" aria-label={labels.toolMenuPagerLabel}>
@@ -48,14 +44,15 @@ export default function FlipcardFooterPager({
 
             <div className="flipcard-footer-pager-counter">
                 <ProgressDots
-                    questionDotEntries={questionDotEntries}
-                    filledCompactQuestionDotEntries={questionDotEntries}
-                    minimalCompactQuestionDotEntries={questionDotEntries}
+                    entries={progressEntries}
+                    compactEntries={progressEntries}
+                    minimalCompactEntries={progressEntries}
                     shouldUseCompactDots={cardCount > 9}
                     shouldUseResponsiveCompactDots={true}
                     submitted={false}
-                    onGoToQuestion={onGoToCard}
-                    labels={footerPagerLabels}
+                    onSelectEntry={onGoToCard}
+                    dotsLabel={labels.toolMenuPagerLabel}
+                    goToEntryLabel={labels.goToCardLabel}
                 />
                 <span className="flipcard-footer-pager-label">{progressLabel}</span>
             </div>

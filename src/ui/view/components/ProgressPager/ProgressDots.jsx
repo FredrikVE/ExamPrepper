@@ -3,52 +3,53 @@ import ProgressDot from "./ProgressDot.jsx";
 import { getProgressDotsClassName } from "./Utils/progressPagerClassNames.js";
 
 export default function ProgressDots({
-    questionDotEntries,
-    filledCompactQuestionDotEntries,
-    minimalCompactQuestionDotEntries,
+    entries,
+    compactEntries,
+    minimalCompactEntries,
     shouldUseCompactDots,
     shouldUseResponsiveCompactDots,
     submitted,
-    onGoToQuestion,
-    labels
+    onSelectEntry,
+    dotsLabel,
+    goToEntryLabel
 }) {
     const progressDotsClassName = getProgressDotsClassName(shouldUseCompactDots, shouldUseResponsiveCompactDots);
 
     return (
-        <div className={progressDotsClassName} role="navigation" aria-label={labels.footerQuestionNavigationLabel}>
+        <div className={progressDotsClassName} role="navigation" aria-label={dotsLabel}>
             <div className="progress-pager-dot-list progress-pager-dot-list-normal">
-                {questionDotEntries.map((questionDotEntry) => (
+                {entries.map((entry) => (
                     <ProgressDot
-                        key={questionDotEntry.key}
-                        questionNumber={questionDotEntry.questionNumber}
-                        isActive={questionDotEntry.isActive}
+                        key={entry.key}
+                        entryNumber={entry.questionNumber}
+                        isActive={entry.isActive}
                         submitted={submitted}
-                        isCorrect={questionDotEntry.isCorrect}
-                        onClick={() => onGoToQuestion(questionDotEntry.questionIndex)}
-                        t={labels}
+                        isCorrect={entry.isCorrect}
+                        onClick={() => onSelectEntry(entry.questionIndex)}
+                        goToEntryLabel={goToEntryLabel}
                     />
                 ))}
             </div>
 
             <div className="progress-pager-dot-list progress-pager-dot-list-filled-compact">
-                {filledCompactQuestionDotEntries.map((questionDotEntry) =>
-                    renderCompactQuestionDotEntry({
-                        questionDotEntry,
+                {compactEntries.map((entry) =>
+                    renderCompactProgressEntry({
+                        entry,
                         submitted,
-                        onGoToQuestion,
-                        labels,
+                        onSelectEntry,
+                        goToEntryLabel,
                         dotDisplayMode: "filled-compact"
                     })
                 )}
             </div>
 
             <div className="progress-pager-dot-list progress-pager-dot-list-compact">
-                {minimalCompactQuestionDotEntries.map((questionDotEntry) =>
-                    renderCompactQuestionDotEntry({
-                        questionDotEntry,
+                {minimalCompactEntries.map((entry) =>
+                    renderCompactProgressEntry({
+                        entry,
                         submitted,
-                        onGoToQuestion,
-                        labels,
+                        onSelectEntry,
+                        goToEntryLabel,
                         dotDisplayMode: "compact"
                     })
                 )}
@@ -57,17 +58,17 @@ export default function ProgressDots({
     );
 }
 
-const renderCompactQuestionDotEntry = ({
-    questionDotEntry,
+const renderCompactProgressEntry = ({
+    entry,
     submitted,
-    onGoToQuestion,
-    labels,
+    onSelectEntry,
+    goToEntryLabel,
     dotDisplayMode
 }) => {
-    if (questionDotEntry.type === "ellipsis") {
+    if (entry.type === "ellipsis") {
         return (
             <span
-                key={questionDotEntry.key}
+                key={entry.key}
                 className={`progress-pager-dot-ellipsis progress-pager-dot-ellipsis-${dotDisplayMode}`}
                 aria-hidden="true"
             >
@@ -78,13 +79,13 @@ const renderCompactQuestionDotEntry = ({
 
     return (
         <ProgressDot
-            key={questionDotEntry.key}
-            questionNumber={questionDotEntry.questionNumber}
-            isActive={questionDotEntry.isActive}
+            key={entry.key}
+            entryNumber={entry.questionNumber}
+            isActive={entry.isActive}
             submitted={submitted}
-            isCorrect={questionDotEntry.isCorrect}
-            onClick={() => onGoToQuestion(questionDotEntry.questionIndex)}
-            t={labels}
+            isCorrect={entry.isCorrect}
+            onClick={() => onSelectEntry(entry.questionIndex)}
+            goToEntryLabel={goToEntryLabel}
             dotDisplayMode={dotDisplayMode}
         />
     );
