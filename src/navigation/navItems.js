@@ -65,7 +65,7 @@ export const PAGE_NAV_TOOL_ITEMS = [
         screen: NAV_SCREENS.FLIPCARDS,
         labelKey: "pageToolsFlipcardsLabel",
         fallbackLabel: "Flipcards",
-        iconKey: "panels-top-left",
+        iconKey: "gallery-horizontal-end",
         requiresSubject: true
     }
 ];

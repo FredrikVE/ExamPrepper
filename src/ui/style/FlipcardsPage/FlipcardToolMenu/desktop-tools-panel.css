@@ -13,17 +13,14 @@
     z-index: 83;
     display: inline-grid;
     place-items: center;
-    width: 48px;
-    height: 48px;
-    border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
-    border-radius: 14px;
-    background:
-        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
-        color-mix(in srgb, var(--panel-bg) 86%, transparent);
-    color: var(--text-main);
-    box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    width: 64px;
+    height: 64px;
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    background: var(--panel-strong);
+    color: var(--accent);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: var(--blur-panel);
     padding: 0;
     pointer-events: auto;
     transition:
@@ -34,23 +31,19 @@
 
 .flipcard-desktop-tools-toggle:hover {
     transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
-    background:
-        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-        color-mix(in srgb, var(--panel-strong) 90%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--line-strong));
+    background: color-mix(in srgb, var(--accent) 8%, var(--panel-strong));
 }
 
 .flipcard-desktop-tools-shell[data-open="true"] .flipcard-desktop-tools-toggle {
-    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
-    background:
-        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 60%),
-        color-mix(in srgb, var(--panel-strong) 72%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--line-strong));
+    background: color-mix(in srgb, var(--accent) 12%, var(--panel-strong));
 }
 
 .flipcard-desktop-tools-toggle svg {
-    width: 25px;
-    height: 25px;
-    color: var(--text-main);
+    width: 26px;
+    height: 26px;
+    color: var(--accent);
     stroke-width: 2.4;
 }
 

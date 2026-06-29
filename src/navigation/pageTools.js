@@ -27,6 +27,7 @@ export const PAGE_TOOL_ICON_KEYS = {
     CHEVRON_RIGHT: "chevron-right",
     CLOCK_3: "clock-3",
     FILE_TEXT: "file-text",
+    GALLERY_HORIZONTAL_END: "gallery-horizontal-end",
     LIST: "list",
     PANELS_TOP_LEFT: "panels-top-left",
     PIE_CHART: "pie-chart",

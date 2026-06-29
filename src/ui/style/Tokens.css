@@ -162,6 +162,11 @@
     --accent-strong: #745cff;
     --accent-gradient: linear-gradient(135deg, #7b61ff 0%, #4d46ff 100%);
 
+    /* Solid, lysere accent for ikoner på verktøykort. Avledet fra --accent
+       slik at den følger temaet. --accent-soft er en gjennomsiktig fyllfarge
+       og gir nesten usynlige ikoner. */
+    --tool-card-icon: color-mix(in srgb, var(--accent) 76%, #fff);
+
     /* ── Drag & drop kortflate ──────── */
     --dnd-card-border: rgba(136, 160, 190, 0.38);
     --dnd-card-bg: linear-gradient(180deg, rgba(8, 27, 48, 0.72), rgba(5, 18, 34, 0.56));

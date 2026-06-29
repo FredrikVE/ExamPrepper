@@ -60,18 +60,15 @@
     position: relative;
     z-index: 2;
     display: grid;
-    width: 50px;
-    height: 50px;
+    width: 64px;
+    height: 64px;
     place-items: center;
-    border: 1px solid color-mix(in srgb, var(--line-strong) 72%, transparent);
-    border-radius: 15px;
-    color: var(--text-main);
-    background:
-        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 62%),
-        color-mix(in srgb, var(--panel-strong) 88%, transparent);
-    box-shadow:
-        0 18px 42px color-mix(in srgb, #000 24%, transparent),
-        inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    color: var(--accent);
+    background: var(--panel-strong);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: var(--blur-panel);
     cursor: pointer;
     transition:
         transform var(--transition-normal),
@@ -84,12 +81,8 @@
 .workspace-scaffold-header-button:focus-visible {
     transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--accent) 42%, var(--line-strong));
-    background:
-        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 62%),
-        color-mix(in srgb, var(--panel-strong) 94%, transparent);
-    box-shadow:
-        0 20px 46px color-mix(in srgb, #000 28%, transparent),
-        0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, var(--panel-strong));
+    box-shadow: var(--shadow-card), 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .workspace-scaffold-header-button:focus-visible {
@@ -98,6 +91,6 @@
 }
 
 .workspace-scaffold-header-button svg {
-    width: 25px;
-    height: 25px;
+    width: 26px;
+    height: 26px;
 }
