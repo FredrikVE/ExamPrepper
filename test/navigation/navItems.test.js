@@ -1,8 +1,18 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, PAGE_NAV_TOOL_ITEMS, getExamSelectPageNavToolItems, getSubjectSelectPageNavToolItems } from "../../src/navigation/navItems.js";
+import { PAGE_NAV_TOOL_IDS, PAGE_NAV_TOOL_ITEMS, SIDEBAR_NAV_ITEMS, getExamSelectPageNavToolItems, getSubjectSelectPageNavToolItems } from "../../src/navigation/navItems.js";
 
 describe("navItems", () => {
+    test("keeps Flipcards out of the left sidebar navigation", () => {
+        expect(SIDEBAR_NAV_ITEMS.map((navItem) => navItem.id)).toEqual([
+            "subjects",
+            "exams",
+            "overview"
+        ]);
+
+        expect(SIDEBAR_NAV_ITEMS.some((navItem) => navItem.screen === NAV_SCREENS.FLIPCARDS)).toBe(false);
+    });
+
     test("keeps page navigation tools in the navigation model", () => {
         expect(PAGE_NAV_TOOL_ITEMS.map((navItem) => navItem.id)).toEqual([
             PAGE_NAV_TOOL_IDS.EXAMS,
