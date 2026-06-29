@@ -1,12 +1,12 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
-import { APP_MOBILE_QUERY, resolvePresentationModeFromMatches } from "../presentation/presentationMode.js";
+import { APP_MOBILE_QUERY, PRESENTATION_MODE, resolvePresentationModeFromMatches } from "../presentation/presentationMode.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
 
 function resolveSettingsPresentationMode(matches) {
-	return resolvePresentationModeFromMatches(matches) === "mobile" ? "sheet" : "sidebar";
+	return resolvePresentationModeFromMatches(matches) === PRESENTATION_MODE.MOBILE ? "sheet" : "sidebar";
 }
 
 function getInitialSettingsPresentationMode() {

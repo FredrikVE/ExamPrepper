@@ -1,6 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
 import { useEffect, useRef, useState } from "react";
-import usePresentationMode from "../../hooks/usePresentationMode.js";
+import usePresentationMode from "../../../presentation/usePresentationMode.js";
+import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardsProgressPager from "./FlipcardsProgressPager.jsx";
@@ -26,17 +27,17 @@ export default function FlipcardsStudySurface(props) {
     const activeCard = props.cards[deck.activeIndex] ?? null;
 
     useEffect(() => {
-        if (presentationMode !== "desktop") {
+        if (presentationMode !== PRESENTATION_MODE.DESKTOP) {
             closeDesktopMenu();
         }
 
-        if (presentationMode !== "mobile") {
+        if (presentationMode !== PRESENTATION_MODE.MOBILE) {
             closeMobileSheet();
         }
     }, [closeDesktopMenu, closeMobileSheet, presentationMode]);
 
     useEffect(() => {
-        setIsDesktopToolsPanelOpen(presentationMode === "desktop" && isDesktopMenuOpen);
+        setIsDesktopToolsPanelOpen(presentationMode === PRESENTATION_MODE.DESKTOP && isDesktopMenuOpen);
     }, [isDesktopMenuOpen, presentationMode]);
 
     const restartSession = () => {
