@@ -1,20 +1,16 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
-import { APP_MOBILE_QUERY, PRESENTATION_MODE, resolvePresentationModeFromMatches } from "../presentation/presentationMode.js";
+import { getPresentationMode, PRESENTATION_MODE, subscribeToPresentationMode } from "../presentation/presentationMode.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
 
-function resolveSettingsPresentationMode(matches) {
-	return resolvePresentationModeFromMatches(matches) === PRESENTATION_MODE.MOBILE ? "sheet" : "sidebar";
+function resolveSettingsPresentationMode(presentationMode) {
+	return presentationMode === PRESENTATION_MODE.MOBILE ? "sheet" : "sidebar";
 }
 
-function getInitialSettingsPresentationMode() {
-	if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-		return "sidebar";
-	}
-
-	return resolveSettingsPresentationMode(window.matchMedia(APP_MOBILE_QUERY).matches);
+function getSettingsPresentationMode() {
+	return resolveSettingsPresentationMode(getPresentationMode());
 }
 
 export default function useAppNavigationViewModel(params) {
@@ -27,7 +23,7 @@ export default function useAppNavigationViewModel(params) {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isSubjectPickerOpen, setIsSubjectPickerOpen] = useState(false);
-	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getInitialSettingsPresentationMode);
+	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getSettingsPresentationMode);
 
 	const prevLanguageRef = useRef(params.language);
 
@@ -67,22 +63,12 @@ export default function useAppNavigationViewModel(params) {
 	// batcher dem til én commit: den nye varianten mountes lukket og rekker aldri
 	// å vises i feil geometri.
 	useEffect(() => {
-		if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-			return undefined;
-		}
-
-		const mediaQuery = window.matchMedia(APP_MOBILE_QUERY);
-
-		const handleChange = (event) => {
-			setSettingsPresentationMode(resolveSettingsPresentationMode(event.matches));
+		const handlePresentationModeChange = () => {
+			setSettingsPresentationMode(getSettingsPresentationMode());
 			setSettingsOpen(false);
 		};
 
-		mediaQuery.addEventListener("change", handleChange);
-
-		return () => {
-			mediaQuery.removeEventListener("change", handleChange);
-		};
+		return subscribeToPresentationMode(handlePresentationModeChange);
 	}, []);
 
 	const selectSubject = useCallback((subjectId) => {
