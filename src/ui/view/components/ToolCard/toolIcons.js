@@ -1,4 +1,4 @@
-// src/ui/view/components/Shared/toolIcons.js
+// src/ui/view/components/ToolCard/toolIcons.js
 import { BarChart3, BookOpen, ChevronLeft, ChevronRight, Clock3, FileText, GalleryHorizontalEnd, List, PanelsTopLeft, PieChart, Plus, RefreshCw, RotateCcw, Send, Shuffle, Sparkles } from "lucide-react";
 import { PAGE_TOOL_ICON_KEYS } from "../../../../navigation/pageTools.js";
 

@@ -1,4 +1,4 @@
-// src/ui/view/components/Shared/ToolCard/ToolCardGrid.jsx
+// src/ui/view/components/ToolCard/ToolCardGrid.jsx
 import ToolCard from "./ToolCard.jsx";
 import { TOOL_CARD_SURFACES } from "./toolCardSurfaces.js";
 

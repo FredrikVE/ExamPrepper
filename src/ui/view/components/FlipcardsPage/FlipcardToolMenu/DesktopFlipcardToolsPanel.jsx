@@ -1,7 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardToolsPanel.jsx
 import DesktopPopOutMenu, { DESKTOP_POP_OUT_MENU_VARIANTS } from "../../DesktopPopOutMenu/DesktopPopOutMenu.jsx";
-import ToolCardGrid from "../../Shared/ToolCard/ToolCardGrid.jsx";
-import { TOOL_CARD_SURFACES } from "../../Shared/ToolCard/toolCardSurfaces.js";
+import ToolCardGrid from "../../ToolCard/ToolCardGrid.jsx";
+import { TOOL_CARD_SURFACES } from "../../ToolCard/toolCardSurfaces.js";
 
 export default function DesktopFlipcardToolsPanel(props) {
     const selectDeckTool = (deckToolItem) => {

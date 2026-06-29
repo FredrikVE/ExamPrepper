@@ -1,5 +1,5 @@
-// src/ui/view/components/Shared/ToolCard/ToolCard.jsx
-import { getToolIcon } from "../toolIcons.js";
+// src/ui/view/components/ToolCard/ToolCard.jsx
+import { getToolIcon } from "./toolIcons.js";
 import { TOOL_CARD_SURFACES } from "./toolCardSurfaces.js";
 
 const TOOL_CARD_CLASS_NAMES_BY_SURFACE = {
