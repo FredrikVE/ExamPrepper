@@ -1,5 +1,5 @@
-/* src/ui/style/FlipcardsPage/FlipcardToolMenu/mobile-bottom-sheet.css */
-.mobile-flipcard-sheet-backdrop {
+/* src/ui/style/MobileBottomSheet/mobile-bottom-sheet.css */
+.mobile-bottom-sheet-backdrop {
     position: fixed;
     inset: 0;
     z-index: 70;
@@ -11,22 +11,22 @@
     -webkit-backdrop-filter: blur(2px);
 }
 
-.mobile-flipcard-sheet-backdrop[data-starting-style],
-.mobile-flipcard-sheet-backdrop[data-ending-style] {
+.mobile-bottom-sheet-backdrop[data-starting-style],
+.mobile-bottom-sheet-backdrop[data-ending-style] {
     opacity: 0;
     backdrop-filter: blur(0);
     -webkit-backdrop-filter: blur(0);
 }
 
-.mobile-flipcard-sheet-backdrop[data-swiping] {
+.mobile-bottom-sheet-backdrop[data-swiping] {
     transition-duration: 0ms;
 }
 
-.mobile-flipcard-sheet-backdrop[data-ending-style] {
+.mobile-bottom-sheet-backdrop[data-ending-style] {
     transition-duration: calc(var(--drawer-swipe-strength) * 360ms);
 }
 
-.mobile-flipcard-sheet-viewport {
+.mobile-bottom-sheet-viewport {
     position: fixed;
     inset: 0;
     z-index: 71;
@@ -36,8 +36,8 @@
     pointer-events: none;
 }
 
-.mobile-flipcard-sheet-popup {
-    --mobile-flipcard-sheet-bleed: 24px;
+.mobile-bottom-sheet-popup {
+    --mobile-bottom-sheet-bleed: 24px;
 
     box-sizing: border-box;
     display: flex;
@@ -45,7 +45,7 @@
     width: 100%;
     height: auto;
     max-height: min(86dvh, 760px);
-    margin-bottom: calc(-1 * var(--mobile-flipcard-sheet-bleed));
+    margin-bottom: calc(-1 * var(--mobile-bottom-sheet-bleed));
     border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
     border-bottom: 0;
     border-radius: 30px 30px 0 0;
@@ -60,7 +60,7 @@
     outline: none;
     overflow: hidden;
     overscroll-behavior: contain;
-    padding: var(--space-2) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom) + var(--mobile-flipcard-sheet-bleed));
+    padding: var(--space-2) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom) + var(--mobile-bottom-sheet-bleed));
     pointer-events: auto;
     touch-action: auto;
     transform: translateY(var(--drawer-swipe-movement-y));
@@ -68,21 +68,21 @@
     will-change: transform;
 }
 
-.mobile-flipcard-sheet-popup[data-starting-style],
-.mobile-flipcard-sheet-popup[data-ending-style] {
-    transform: translateY(calc(100% - var(--mobile-flipcard-sheet-bleed) + 2px));
+.mobile-bottom-sheet-popup[data-starting-style],
+.mobile-bottom-sheet-popup[data-ending-style] {
+    transform: translateY(calc(100% - var(--mobile-bottom-sheet-bleed) + 2px));
 }
 
-.mobile-flipcard-sheet-popup[data-swiping] {
+.mobile-bottom-sheet-popup[data-swiping] {
     transition-duration: 0ms;
     user-select: none;
 }
 
-.mobile-flipcard-sheet-popup[data-ending-style] {
+.mobile-bottom-sheet-popup[data-ending-style] {
     transition-duration: calc(var(--drawer-swipe-strength) * 400ms);
 }
 
-.mobile-flipcard-sheet-content {
+.mobile-bottom-sheet-content {
     display: grid;
     align-content: start;
     gap: var(--space-3);
@@ -94,14 +94,45 @@
     scrollbar-width: none;
 }
 
-.mobile-flipcard-sheet-content::-webkit-scrollbar {
+.mobile-bottom-sheet-content::-webkit-scrollbar {
     display: none;
 }
 
+.mobile-bottom-sheet-grip-control {
+    display: grid;
+    justify-items: center;
+    min-height: 30px;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.mobile-bottom-sheet-grip-control:hover .mobile-bottom-sheet-grip-chevron,
+.mobile-bottom-sheet-grip-control:focus-visible .mobile-bottom-sheet-grip-chevron {
+    color: var(--text-main);
+}
+
+.mobile-bottom-sheet-grip-chevron {
+    width: 52px;
+    height: 24px;
+    color: color-mix(in srgb, var(--text-muted) 66%, transparent);
+    filter: drop-shadow(0 0 14px rgba(150, 160, 190, 0.24));
+    stroke-width: 3.8;
+    transition:
+        color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.mobile-bottom-sheet-grip-control-expanded .mobile-bottom-sheet-grip-chevron {
+    transform: rotate(180deg);
+}
 
 @media (min-width: 933px) {
-    .mobile-flipcard-sheet-backdrop,
-    .mobile-flipcard-sheet-viewport {
+    .mobile-bottom-sheet-backdrop,
+    .mobile-bottom-sheet-viewport {
         display: none;
     }
 }
