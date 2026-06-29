@@ -1,26 +1,18 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx
 import { PRESENTATION_MODE } from "../../../../presentation/presentationMode.js";
 import DesktopFlipcardToolsPanel from "./DesktopFlipcardToolsPanel.jsx";
-import MobileFlipcardBottomSheet from "./MobileFlipcardBottomSheet.jsx";
 
+// Desktop-popout for flipcards-verktøyene. Mobil håndteres av det dokkede
+// FlipcardsMobileFooterSheet, ikke her.
 export default function FlipcardToolMenu(props) {
-    if (props.presentationMode === PRESENTATION_MODE.DESKTOP) {
-        return (
-            <DesktopFlipcardToolsPanel
-                isOpen={props.isDesktopMenuOpen}
-                onOpenChange={props.onDesktopMenuOpenChange}
-                labels={props.labels}
-                deckToolItems={props.deckToolItems}
-                onDeckToolSelect={props.onDeckToolSelect}
-            />
-        );
+    if (props.presentationMode !== PRESENTATION_MODE.DESKTOP) {
+        return null;
     }
 
     return (
-        <MobileFlipcardBottomSheet
-            isOpen={props.isMobileSheetOpen}
-            onOpenChange={props.onMobileSheetOpenChange}
-            finalFocusRef={props.mobileSheetFinalFocusRef}
+        <DesktopFlipcardToolsPanel
+            isOpen={props.isDesktopMenuOpen}
+            onOpenChange={props.onDesktopMenuOpenChange}
             labels={props.labels}
             deckToolItems={props.deckToolItems}
             onDeckToolSelect={props.onDeckToolSelect}

@@ -1,26 +1,17 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardsProgressPager from "./FlipcardsProgressPager.jsx";
-import MobileFlipcardsFooter from "./MobileFlipcardsFooter.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
+import FlipcardsMobileFooterSheet from "./FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx";
 import useFlipcardToolMenu from "./FlipcardToolMenu/useFlipcardToolMenu.js";
 
 export default function FlipcardsStudySurface(props) {
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
-    const mobileToolsTriggerRef = useRef(null);
     const presentationMode = props.presentationMode;
-    const {
-        isDesktopMenuOpen,
-        closeDesktopMenu,
-        setDesktopMenuOpen,
-        isMobileSheetOpen,
-        openMobileSheet,
-        closeMobileSheet,
-        setMobileSheetOpen
-    } = useFlipcardToolMenu();
+    const { isDesktopMenuOpen, closeDesktopMenu, setDesktopMenuOpen } = useFlipcardToolMenu();
 
     const deck = useFlipcardDeck(props.cards.length, props.visibleDeckKey);
     const activeCard = props.cards[deck.activeIndex] ?? null;
@@ -29,11 +20,7 @@ export default function FlipcardsStudySurface(props) {
         if (presentationMode !== PRESENTATION_MODE.DESKTOP) {
             closeDesktopMenu();
         }
-
-        if (presentationMode !== PRESENTATION_MODE.MOBILE) {
-            closeMobileSheet();
-        }
-    }, [closeDesktopMenu, closeMobileSheet, presentationMode]);
+    }, [closeDesktopMenu, presentationMode]);
 
     useEffect(() => {
         setIsDesktopToolsPanelOpen(presentationMode === PRESENTATION_MODE.DESKTOP && isDesktopMenuOpen);
@@ -104,28 +91,24 @@ export default function FlipcardsStudySurface(props) {
                     presentationMode={presentationMode}
                     isDesktopMenuOpen={isDesktopMenuOpen}
                     onDesktopMenuOpenChange={setDesktopMenuOpen}
-                    isMobileSheetOpen={isMobileSheetOpen}
-                    onMobileSheetOpenChange={setMobileSheetOpen}
-                    mobileSheetFinalFocusRef={mobileToolsTriggerRef}
                     labels={props.labels}
                     deckToolItems={props.deckToolItems}
                     onDeckToolSelect={selectDeckTool}
                 />
             </div>
 
-            <MobileFlipcardsFooter
-                expandButtonRef={mobileToolsTriggerRef}
-                isExpanded={isMobileSheetOpen}
-                onOpenExpandedMenu={openMobileSheet}
+            <FlipcardsMobileFooterSheet
                 cardCount={props.cards.length}
                 activeIndex={deck.activeIndex}
                 hasPrevious={deck.hasPrevious}
                 hasNext={deck.hasNext}
                 isSwipeCommandActive={deck.isSwipeCommandActive}
+                deckToolItems={props.deckToolItems}
                 labels={props.labels}
                 onPrevious={deck.goToPrevious}
                 onNext={deck.goToNext}
                 onGoToCard={deck.goToCard}
+                onDeckToolSelect={selectDeckTool}
             />
         </section>
     );

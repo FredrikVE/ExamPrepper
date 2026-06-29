@@ -1,0 +1,22 @@
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/flipcards-footer-sheet.css */
+.flipcards-footer-sheet {
+    display: contents;
+}
+
+.flipcards-mobile-bottom-sheet-content {
+    gap: var(--space-3);
+}
+
+@media (max-width: 932px) {
+    .flipcards-footer-sheet {
+        --mobile-bottom-sheet-collapsed-visible-height: 138px;
+
+        position: fixed;
+        z-index: 55;
+        right: max(0px, env(safe-area-inset-right));
+        bottom: 0;
+        left: max(0px, env(safe-area-inset-left));
+        display: block;
+        overflow: visible;
+    }
+}
