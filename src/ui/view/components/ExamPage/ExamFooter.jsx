@@ -26,12 +26,16 @@ export default function ExamFooter({
 
     return (
         <ProgressPager
+            className="exam-progress-pager"
+            containerClassName="exam-progress-pager-container"
+            ariaLabel={t.footerQuestionNavigationLabel}
             previousButton={(
                 <PagerButton
                     onClick={previousQuestion}
                     disabled={!canGoPrevious}
                     variant="previous"
                     icon={<ChevronLeft className="progress-pager-icon" />}
+                    className="exam-progress-pager-button"
                 >
                     {t.footerPrevious}
                 </PagerButton>

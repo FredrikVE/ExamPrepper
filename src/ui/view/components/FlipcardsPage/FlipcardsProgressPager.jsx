@@ -23,7 +23,7 @@ export default function FlipcardsProgressPager({
     hasNext,
     isSwipeCommandActive,
     labels,
-    className = "",
+    className,
     onPrevious,
     onNext,
     onGoToCard
@@ -36,6 +36,7 @@ export default function FlipcardsProgressPager({
     return (
         <ProgressPager
             className={flipcardsProgressPagerClassName}
+            containerClassName="flipcards-progress-pager-container"
             ariaLabel={labels.toolMenuPagerLabel}
             previousButton={(
                 <PagerButton

@@ -1,5 +1,5 @@
 // src/ui/view/components/ProgressPager/PagerButton.jsx
-export default function PagerButton({ onClick, disabled, variant, icon, children, className = "" }) {
+export default function PagerButton({ onClick, disabled, variant, icon, children, className }) {
     const variantClassName = getPagerButtonVariantClassName(variant);
     const showIconLeft = variant === "previous";
     const showIconRight = variant === "next";

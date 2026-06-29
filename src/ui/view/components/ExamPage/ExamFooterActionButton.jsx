@@ -40,6 +40,7 @@ export default function ExamFooterActionButton({
             disabled={isNextDisabled}
             variant="next"
             icon={<ChevronRight className="progress-pager-icon" />}
+            className="exam-progress-pager-button"
         >
             {nextLabel}
         </PagerButton>

@@ -79,6 +79,7 @@ export default function FlipcardsStudySurface(props) {
             hasNext={deck.hasNext}
             isSwipeCommandActive={deck.isSwipeCommandActive}
             labels={props.labels}
+            className="flipcards-progress-pager-deck"
             onPrevious={deck.goToPrevious}
             onNext={deck.goToNext}
             onGoToCard={deck.goToCard}

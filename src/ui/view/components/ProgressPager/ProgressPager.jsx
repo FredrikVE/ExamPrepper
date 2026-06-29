@@ -1,12 +1,5 @@
 // src/ui/view/components/ProgressPager/ProgressPager.jsx
-export default function ProgressPager({
-    previousButton,
-    counter,
-    actionButton,
-    className = "",
-    containerClassName = "",
-    ariaLabel
-}) {
+export default function ProgressPager({ previousButton, counter, actionButton, className, containerClassName, ariaLabel }) {
     const pagerClassName = `progress-pager ${className}`.trim();
     const progressPagerContainerClassName = `progress-pager-container ${containerClassName}`.trim();
 
