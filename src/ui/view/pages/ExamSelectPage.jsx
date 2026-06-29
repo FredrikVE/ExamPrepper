@@ -2,7 +2,7 @@
 import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx";
 import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
-import SearchSheetContent from "../components/Search/SearchSheetContent.jsx";
+import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
@@ -18,7 +18,7 @@ export default function ExamSelectPage({ viewModel }) {
         }
 
         return (
-            <SearchSheetContent
+            <SearchSheetBody
                 isFilterOptionsMode={viewModel.isFilterOptionsMode}
                 searchSuggestions={viewModel.searchSuggestions}
                 filterOptions={viewModel.categoryFilterOptions}

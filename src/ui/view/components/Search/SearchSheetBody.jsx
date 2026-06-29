@@ -1,8 +1,8 @@
-// src/ui/view/components/Search/SearchSheetContent.jsx
+// src/ui/view/components/Search/SearchSheetBody.jsx
 import FilterOptionList from "./FilterOptionList.jsx";
 import SearchSuggestionList from "./SearchSuggestionList.jsx";
 
-export default function SearchSheetContent({
+export default function SearchSheetBody({
 	isFilterOptionsMode,
 	searchSuggestions,
 	filterOptions,
