@@ -44,9 +44,3 @@
     }
 
 }
-
-@media (prefers-reduced-motion: reduce) and (max-width: 932px) {
-    .mobile-bottom-sheet-grip-control-peek {
-        transition: none;
-    }
-}

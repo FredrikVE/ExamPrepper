@@ -20,7 +20,6 @@ export default function MobileFlipcardBottomSheet(props) {
             closeLabel={props.labels.closeToolMenuLabel}
             peekLabel={props.labels.toolMenuLabel}
             hasPeek={false}
-            peekContent={null}
             popupClassName=""
             contentClassName=""
         >

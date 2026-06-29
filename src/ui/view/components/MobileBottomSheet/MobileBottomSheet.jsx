@@ -3,47 +3,56 @@ import { useRef } from "react";
 import { Drawer } from "@base-ui/react/drawer";
 import { ChevronUp } from "lucide-react";
 
-export default function MobileBottomSheet({ isOpen, onOpenChange, finalFocusRef, contentId, title, subtitle, openLabel, closeLabel, peekLabel, hasPeek, peekContent, popupClassName, contentClassName, children }) {
+export default function MobileBottomSheet({ isOpen, onOpenChange, finalFocusRef, contentId, title, subtitle, openLabel, closeLabel, peekLabel, hasPeek, popupClassName, contentClassName, children }) {
     const peekTriggerRef = useRef(null);
     const popupClass = `mobile-bottom-sheet-popup ${popupClassName}`.trim();
     const contentClass = `mobile-bottom-sheet-content ${contentClassName}`.trim();
-    const popupFinalFocusRef = hasPeek ? peekTriggerRef : finalFocusRef;
-
-    const openSheet = () => {
-        onOpenChange(true);
-    };
-
     const closeSheet = () => {
         onOpenChange(false);
     };
 
-    return (
-        <Drawer.Root open={isOpen} onOpenChange={onOpenChange} swipeDirection="down">
-            <div className="mobile-bottom-sheet-root" data-open={isOpen ? "true" : "false"} data-has-peek={hasPeek ? "true" : "false"}>
-                {hasPeek && (
-                    <section className="mobile-bottom-sheet-peek" aria-label={peekLabel} aria-hidden={isOpen}>
+    const toggleSheet = () => {
+        onOpenChange(!isOpen);
+    };
+
+    if (hasPeek) {
+        return (
+            <div className="mobile-bottom-sheet-root" data-open={isOpen ? "true" : "false"} data-has-peek="true">
+                <section id={contentId} className={popupClass} aria-label={peekLabel} role="region">
+                    <div className={contentClass}>
+                        <h2 className="sr-only">
+                            {title}
+                        </h2>
+                        <p className="sr-only">
+                            {subtitle}
+                        </p>
+
                         <button
                             type="button"
                             ref={peekTriggerRef}
-                            className="mobile-bottom-sheet-grip-control mobile-bottom-sheet-grip-control-peek"
-                            onClick={openSheet}
-                            aria-label={openLabel}
+                            className="mobile-bottom-sheet-grip-control mobile-bottom-sheet-grip-control-docked"
+                            onClick={toggleSheet}
+                            aria-label={isOpen ? closeLabel : openLabel}
                             aria-expanded={isOpen}
                             aria-controls={contentId}
                         >
                             <ChevronUp className="mobile-bottom-sheet-grip-chevron" aria-hidden="true" focusable="false" />
                         </button>
 
-                        <div className="mobile-bottom-sheet-peek-content" onFocusCapture={openSheet} onPointerDownCapture={openSheet}>
-                            {peekContent}
-                        </div>
-                    </section>
-                )}
+                        {children}
+                    </div>
+                </section>
+            </div>
+        );
+    }
 
+    return (
+        <Drawer.Root open={isOpen} onOpenChange={onOpenChange} swipeDirection="down">
+            <div className="mobile-bottom-sheet-root" data-open={isOpen ? "true" : "false"} data-has-peek="false">
                 <Drawer.Portal>
                     <Drawer.Backdrop className="mobile-bottom-sheet-backdrop" />
                     <Drawer.Viewport className="mobile-bottom-sheet-viewport">
-                        <Drawer.Popup id={contentId} className={popupClass} finalFocus={popupFinalFocusRef}>
+                        <Drawer.Popup id={contentId} className={popupClass} finalFocus={finalFocusRef}>
                             <Drawer.Content className={contentClass}>
                                 <Drawer.Title className="sr-only">
                                     {title}

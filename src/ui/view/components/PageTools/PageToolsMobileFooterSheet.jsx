@@ -7,6 +7,10 @@ import { TOOL_CARD_SURFACES } from "../ToolCard/toolCardSurfaces.js";
 export default function PageToolsMobileFooterSheet({ tools, renderControls, renderSearchContent, onCloseSheet }) {
     const [isOpen, setIsOpen] = useState(false);
 
+    const openSheet = useCallback(() => {
+        setIsOpen(true);
+    }, []);
+
     const closeSheet = useCallback(() => {
         setIsOpen(false);
         onCloseSheet();
@@ -39,11 +43,7 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
     }
 
     const sheetId = `page-tools-mobile-bottom-sheet-${tools.id}`;
-    const peekContent = (
-        <div className="page-tools-mobile-sheet-controls">
-            {renderControls()}
-        </div>
-    );
+    const searchContent = renderSearchContent();
 
     return (
         <div className="page-tools-mobile-footer-shell" data-open={isOpen ? "true" : "false"}>
@@ -63,16 +63,15 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
                 closeLabel={tools.closeLabel}
                 peekLabel={tools.mobileHandleLabel}
                 hasPeek={true}
-                peekContent={peekContent}
                 popupClassName=""
                 contentClassName="page-tools-mobile-bottom-sheet-content"
             >
-                <div className="page-tools-mobile-sheet-controls">
+                <div className="page-tools-mobile-sheet-controls" onFocusCapture={openSheet} onPointerDownCapture={openSheet}>
                     {renderControls()}
                 </div>
 
                 <div className="page-tools-mobile-sheet-search-content">
-                    {renderSearchContent()}
+                    {searchContent}
                 </div>
 
                 <ToolCardGrid
