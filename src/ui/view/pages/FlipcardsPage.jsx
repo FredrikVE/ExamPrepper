@@ -42,6 +42,7 @@ export default function FlipcardsPage({ viewModel }) {
                 deckToolItems={viewModel.deckToolItems}
                 onSelectDeckTool={viewModel.onSelectDeckTool}
                 progressModel={viewModel.progressModel}
+                presentationMode={viewModel.presentationMode}
                 labels={viewModel.labels}
                 onCardMastered={viewModel.markCardAsMastered}
                 onCardForPractice={viewModel.markCardForPractice}

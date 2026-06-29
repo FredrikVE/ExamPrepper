@@ -1,9 +1,10 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx
+import { PRESENTATION_MODE } from "../../../../presentation/presentationMode.js";
 import DesktopFlipcardToolsPanel from "./DesktopFlipcardToolsPanel.jsx";
 import MobileFlipcardBottomSheet from "./MobileFlipcardBottomSheet.jsx";
 
 export default function FlipcardToolMenu(props) {
-    if (props.presentationMode === "desktop") {
+    if (props.presentationMode === PRESENTATION_MODE.DESKTOP) {
         return (
             <DesktopFlipcardToolsPanel
                 isOpen={props.isDesktopMenuOpen}

@@ -1,6 +1,5 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
 import { useEffect, useRef, useState } from "react";
-import usePresentationMode from "../../../presentation/usePresentationMode.js";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
@@ -12,7 +11,7 @@ import useFlipcardToolMenu from "./FlipcardToolMenu/useFlipcardToolMenu.js";
 export default function FlipcardsStudySurface(props) {
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
     const mobileToolsTriggerRef = useRef(null);
-    const presentationMode = usePresentationMode();
+    const presentationMode = props.presentationMode;
     const {
         isDesktopMenuOpen,
         closeDesktopMenu,

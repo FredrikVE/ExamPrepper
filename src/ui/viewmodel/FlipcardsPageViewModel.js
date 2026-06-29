@@ -1,10 +1,12 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 
 export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectId, language, t, isActive) {
+    const presentationMode = usePresentationMode();
     const [flashcards, setFlashcards] = useState([]);
     const [flashcardsLoading, setFlashcardsLoading] = useState(true);
     const [flashcardsLoadError, setFlashcardsLoadError] = useState(null);
@@ -231,6 +233,7 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         flashcardsLoadError,
         progressLabel: progressModel.progressLabel,
         progressModel,
+        presentationMode,
         deckKey,
         visibleCards,
         visibleDeckKey,
