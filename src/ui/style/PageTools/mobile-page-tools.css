@@ -7,6 +7,18 @@
     display: none;
 }
 
+
+.page-tools-mobile-inline-content {
+    display: contents;
+}
+
+.page-tools-mobile-sheet-controls,
+.page-tools-mobile-sheet-search-content {
+    display: grid;
+    gap: var(--space-2);
+    width: 100%;
+}
+
 @media (max-width: 932px) {
     .page-tools-mobile-footer-shell {
         display: grid;
@@ -61,6 +73,24 @@
         color: var(--text-main);
         background: color-mix(in srgb, var(--accent) 10%, transparent);
         box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+
+    .page-tools-mobile-inline-content {
+        display: none;
+    }
+
+    .page-tools-mobile-bottom-sheet-content {
+        gap: var(--space-3);
+    }
+
+    .page-tools-mobile-sheet-controls > * {
+        width: 100%;
+        padding: 0;
+    }
+
+    .page-tools-mobile-sheet-search-content:empty {
+        display: none;
     }
 
     .page-tools-mobile-grid {

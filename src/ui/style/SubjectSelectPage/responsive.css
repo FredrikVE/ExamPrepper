@@ -94,11 +94,11 @@
         height: auto;
         overflow: visible;
         padding: 0;
-        border-top: 1px solid var(--line);
-        border-radius: 24px 24px 0 0;
-        background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
-        backdrop-filter: var(--blur-panel);
-        box-shadow: 0 -8px 24px color-mix(in srgb, #000 12%, transparent);
+        border-top: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
     }
 
     .subject-select-controls {

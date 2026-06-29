@@ -12,6 +12,40 @@ import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/Works
 export default function ExamSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
 
+    const renderSearchContent = () => {
+        if (!viewModel.isSearchSheetOpen) {
+            return null;
+        }
+
+        return (
+            <SearchSheetContent
+                isFilterOptionsMode={viewModel.isFilterOptionsMode}
+                searchSuggestions={viewModel.searchSuggestions}
+                filterOptions={viewModel.categoryFilterOptions}
+                selectedFilterValue={viewModel.category}
+                onSelectSearchSuggestion={viewModel.selectExam}
+                onSelectFilterOption={viewModel.selectCategoryFilterOption}
+            />
+        );
+    };
+
+    const renderSearchControls = () => (
+        <div className="exam-select-controls">
+            <SearchFilterField
+                searchTerm={viewModel.searchTerm}
+                searchPlaceholder={viewModel.searchPlaceholder}
+                searchLabel={viewModel.searchLabel}
+                onSearchTermChange={viewModel.changeExamSearchTerm}
+                onFocusSearch={viewModel.openExamSearchSuggestions}
+                onRequestClose={viewModel.closeExamSearchSheet}
+                filterButtonLabel={viewModel.categoryLabel}
+                filterButtonAriaLabel={viewModel.categoryAriaLabel}
+                isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
+                onOpenFilterOptions={viewModel.openExamCategoryOptions}
+            />
+        </div>
+    );
+
     if (viewModel.examsLoading) {
         return (
             <div className="exam-select-layout">
@@ -100,33 +134,12 @@ export default function ExamSelectPage({ viewModel }) {
                     }
                 }}
             >
-                {viewModel.isSearchSheetOpen && (
-                    <SearchSheetContent
-                        isFilterOptionsMode={viewModel.isFilterOptionsMode}
-                        searchSuggestions={viewModel.searchSuggestions}
-                        filterOptions={viewModel.categoryFilterOptions}
-                        selectedFilterValue={viewModel.category}
-                        onSelectSearchSuggestion={viewModel.selectExam}
-                        onSelectFilterOption={viewModel.selectCategoryFilterOption}
-                    />
-                )}
-
-                <PageToolsMobileFooterSheet tools={viewModel.pageTools}>
-                    <div className="exam-select-controls">
-                        <SearchFilterField
-                            searchTerm={viewModel.searchTerm}
-                            searchPlaceholder={viewModel.searchPlaceholder}
-                            searchLabel={viewModel.searchLabel}
-                            onSearchTermChange={viewModel.changeExamSearchTerm}
-                            onFocusSearch={viewModel.openExamSearchSuggestions}
-                            onRequestClose={viewModel.closeExamSearchSheet}
-                            filterButtonLabel={viewModel.categoryLabel}
-                            filterButtonAriaLabel={viewModel.categoryAriaLabel}
-                            isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
-                            onOpenFilterOptions={viewModel.openExamCategoryOptions}
-                        />
-                    </div>
-                </PageToolsMobileFooterSheet>
+                <PageToolsMobileFooterSheet
+                    tools={viewModel.pageTools}
+                    renderControls={renderSearchControls}
+                    renderSearchContent={renderSearchContent}
+                    onCloseSheet={viewModel.closeExamSearchSheet}
+                />
             </WorkspaceScaffoldSearchFooter>
         </div>
     );

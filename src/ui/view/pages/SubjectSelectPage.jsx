@@ -11,6 +11,40 @@ import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/Works
 export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
 
+	const renderSearchContent = () => {
+		if (!viewModel.isSearchSheetOpen) {
+			return null;
+		}
+
+		return (
+			<SearchSheetContent
+				isFilterOptionsMode={viewModel.isFilterOptionsMode}
+				searchSuggestions={viewModel.searchSuggestions}
+				filterOptions={viewModel.facultyFilterOptions}
+				selectedFilterValue={viewModel.faculty}
+				onSelectSearchSuggestion={viewModel.selectSubject}
+				onSelectFilterOption={viewModel.selectFacultyFilterOption}
+			/>
+		);
+	};
+
+	const renderSearchControls = () => (
+		<div className="subject-select-controls" aria-label={viewModel.t.subjectSelectControlsLabel}>
+			<SearchFilterField
+				searchTerm={viewModel.searchTerm}
+				searchPlaceholder={viewModel.t.subjectSearchPlaceholder}
+				searchLabel={viewModel.t.subjectSearchLabel}
+				onSearchTermChange={viewModel.changeSubjectSearchTerm}
+				onFocusSearch={viewModel.openSubjectSearchSuggestions}
+				onRequestClose={viewModel.closeSubjectSearchSheet}
+				filterButtonLabel={viewModel.facultyLabel}
+				filterButtonAriaLabel={viewModel.t.subjectFacultyLabel}
+				isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
+				onOpenFilterOptions={viewModel.openSubjectFacultyOptions}
+			/>
+		</div>
+	);
+
 	if (viewModel.subjectsLoading) {
 		return (
 			<div className="subject-select-layout">
@@ -86,33 +120,12 @@ export default function SubjectSelectPage({ viewModel }) {
 					}
 				}}
 			>
-				{viewModel.isSearchSheetOpen && (
-					<SearchSheetContent
-						isFilterOptionsMode={viewModel.isFilterOptionsMode}
-						searchSuggestions={viewModel.searchSuggestions}
-						filterOptions={viewModel.facultyFilterOptions}
-						selectedFilterValue={viewModel.faculty}
-						onSelectSearchSuggestion={viewModel.selectSubject}
-						onSelectFilterOption={viewModel.selectFacultyFilterOption}
-					/>
-				)}
-
-				<PageToolsMobileFooterSheet tools={viewModel.pageTools}>
-					<div className="subject-select-controls" aria-label={viewModel.t.subjectSelectControlsLabel}>
-						<SearchFilterField
-							searchTerm={viewModel.searchTerm}
-							searchPlaceholder={viewModel.t.subjectSearchPlaceholder}
-							searchLabel={viewModel.t.subjectSearchLabel}
-							onSearchTermChange={viewModel.changeSubjectSearchTerm}
-							onFocusSearch={viewModel.openSubjectSearchSuggestions}
-							onRequestClose={viewModel.closeSubjectSearchSheet}
-							filterButtonLabel={viewModel.facultyLabel}
-							filterButtonAriaLabel={viewModel.t.subjectFacultyLabel}
-							isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
-							onOpenFilterOptions={viewModel.openSubjectFacultyOptions}
-						/>
-					</div>
-				</PageToolsMobileFooterSheet>
+				<PageToolsMobileFooterSheet
+					tools={viewModel.pageTools}
+					renderControls={renderSearchControls}
+					renderSearchContent={renderSearchContent}
+					onCloseSheet={viewModel.closeSubjectSearchSheet}
+				/>
 			</WorkspaceScaffoldSearchFooter>
 		</div>
 	);
