@@ -16,7 +16,11 @@ export default function MobileFlipcardBottomSheet(props) {
             contentId="flipcards-mobile-bottom-sheet"
             title={props.labels.toolMenuTitle}
             subtitle={props.labels.toolMenuSubtitle}
+            openLabel={props.labels.openToolMenuLabel}
             closeLabel={props.labels.closeToolMenuLabel}
+            peekLabel={props.labels.toolMenuLabel}
+            hasPeek={false}
+            peekContent={null}
             popupClassName=""
             contentClassName=""
         >

@@ -3,11 +3,6 @@
     display: contents;
 }
 
-.page-tools-mobile-trigger {
-    display: none;
-}
-
-
 .page-tools-mobile-inline-content {
     display: contents;
 }
@@ -23,61 +18,16 @@
     .page-tools-mobile-footer-shell {
         display: grid;
         width: 100%;
-        gap: var(--space-1);
     }
-
-    .page-tools-mobile-footer-shell > :not(.page-tools-mobile-trigger) {
-        order: 2;
-    }
-
-    .page-tools-mobile-trigger {
-        order: 1;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 64px;
-        min-height: 18px;
-        margin: var(--space-1) auto 0;
-        border: 0;
-        border-radius: 999px;
-        color: var(--accent);
-        background: transparent;
-        box-shadow: none;
-        transition:
-            color var(--transition-normal),
-            background var(--transition-normal),
-            box-shadow var(--transition-normal);
-    }
-
-    .page-tools-mobile-trigger svg {
-        width: 18px;
-        height: 18px;
-        color: currentColor;
-        opacity: 1;
-        stroke-width: 2.7;
-    }
-
-    .page-tools-mobile-trigger span {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        white-space: nowrap;
-    }
-
-    .page-tools-mobile-trigger:hover,
-    .page-tools-mobile-trigger:focus-visible,
-    .page-tools-mobile-footer-shell[data-open="true"] .page-tools-mobile-trigger {
-        color: var(--text-main);
-        background: color-mix(in srgb, var(--accent) 10%, transparent);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent);
-    }
-
 
     .page-tools-mobile-inline-content {
         display: none;
+    }
+
+    .page-tools-mobile-sheet-controls {
+        display: grid;
+        gap: var(--space-2);
+        width: 100%;
     }
 
     .page-tools-mobile-bottom-sheet-content {
@@ -157,7 +107,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) and (max-width: 932px) {
-    .page-tools-mobile-trigger {
+    .mobile-bottom-sheet-grip-control-peek {
         transition: none;
     }
 }
