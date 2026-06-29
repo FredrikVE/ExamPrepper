@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
-import FlipcardsProgressPager from "./FlipcardsProgressPager.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
 import FlipcardsMobileFooterSheet from "./FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx";
 import useFlipcardToolMenu from "./FlipcardToolMenu/useFlipcardToolMenu.js";
+import ProgressPager from "../ProgressPager/ProgressPager.jsx";
+import createProgressPagerEntries from "../ProgressPager/createProgressPagerEntries.js";
+
+const resolveFlipcardProgressCorrectness = () => false;
 
 export default function FlipcardsStudySurface(props) {
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
@@ -15,6 +18,14 @@ export default function FlipcardsStudySurface(props) {
 
     const deck = useFlipcardDeck(props.cards.length, props.visibleDeckKey);
     const activeCard = props.cards[deck.activeIndex] ?? null;
+    const currentPosition = Math.min(deck.activeIndex + 1, props.cards.length);
+    const progressLabel = props.labels.deckPositionLabel(currentPosition, props.cards.length);
+    const progressEntries = createProgressPagerEntries({
+        count: props.cards.length,
+        activeIndex: deck.activeIndex,
+        keyPrefix: "flipcard-dot",
+        resolveIsCorrect: resolveFlipcardProgressCorrectness
+    });
 
     useEffect(() => {
         if (presentationMode !== PRESENTATION_MODE.DESKTOP) {
@@ -59,17 +70,32 @@ export default function FlipcardsStudySurface(props) {
         : "flipcards-study-surface";
 
     const progressPager = (
-        <FlipcardsProgressPager
-            cardCount={props.cards.length}
-            activeIndex={deck.activeIndex}
-            hasPrevious={deck.hasPrevious}
-            hasNext={deck.hasNext}
-            isSwipeCommandActive={deck.isSwipeCommandActive}
-            labels={props.labels}
-            className="flipcards-progress-pager-deck"
+        <ProgressPager
+            className="flipcards-progress-pager flipcards-progress-pager-deck"
+            containerClassName="flipcards-progress-pager-container"
+            ariaLabel={props.labels.toolMenuPagerLabel}
+            previousLabel={props.labels.previousCardLabel}
+            previousDisabled={!deck.hasPrevious || deck.isSwipeCommandActive}
+            previousButtonClassName="flipcards-progress-pager-button"
             onPrevious={deck.goToPrevious}
+            entries={progressEntries}
+            compactEntries={progressEntries}
+            minimalCompactEntries={progressEntries}
+            shouldUseCompactDots={props.cards.length > 9}
+            shouldUseResponsiveCompactDots={true}
+            submitted={false}
+            onSelectEntry={deck.goToCard}
+            dotsLabel={props.labels.toolMenuPagerLabel}
+            goToEntryLabel={props.labels.goToCardLabel}
+            counterLabel={progressLabel}
+            counterClassName="flipcards-progress-pager-counter"
+            counterLabelClassName="flipcards-progress-pager-label"
+            nextLabel={props.labels.nextCardLabel}
+            nextDisabled={!deck.hasNext || deck.isSwipeCommandActive}
+            nextButtonClassName="flipcards-progress-pager-button"
             onNext={deck.goToNext}
-            onGoToCard={deck.goToCard}
+            hasActionButton={false}
+            actionButton={null}
         />
     );
 
@@ -98,8 +124,8 @@ export default function FlipcardsStudySurface(props) {
             </div>
 
             <FlipcardsMobileFooterSheet
-                cardCount={props.cards.length}
-                activeIndex={deck.activeIndex}
+                progressEntries={progressEntries}
+                progressLabel={progressLabel}
                 hasPrevious={deck.hasPrevious}
                 hasNext={deck.hasNext}
                 isSwipeCommandActive={deck.isSwipeCommandActive}

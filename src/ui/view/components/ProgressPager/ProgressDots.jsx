@@ -27,6 +27,7 @@ export default function ProgressDots({
                         isCorrect={entry.isCorrect}
                         onClick={() => onSelectEntry(entry.questionIndex)}
                         goToEntryLabel={goToEntryLabel}
+                        dotDisplayMode="normal"
                     />
                 ))}
             </div>
