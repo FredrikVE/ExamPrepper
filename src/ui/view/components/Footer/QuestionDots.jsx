@@ -2,41 +2,68 @@
 import QuestionDot from "./QuestionDot.jsx";
 import { getQuestionDotsClassName } from "./Utils/footerClassNames.js";
 
-export default function QuestionDots({ viewModel, t }) {
-    const questionDotsClassName = getQuestionDotsClassName(viewModel.shouldUseCompactDots, viewModel.shouldUseResponsiveCompactDots);
+export default function QuestionDots({
+    questionDotEntries,
+    filledCompactQuestionDotEntries,
+    minimalCompactQuestionDotEntries,
+    shouldUseCompactDots,
+    shouldUseResponsiveCompactDots,
+    submitted,
+    onGoToQuestion,
+    labels
+}) {
+    const questionDotsClassName = getQuestionDotsClassName(shouldUseCompactDots, shouldUseResponsiveCompactDots);
 
     return (
-        <div className={questionDotsClassName} role="navigation" aria-label={t.footerQuestionNavigationLabel}>
+        <div className={questionDotsClassName} role="navigation" aria-label={labels.footerQuestionNavigationLabel}>
             <div className="exam-footer-dot-list exam-footer-dot-list-normal">
-                {viewModel.questionDotEntries.map((questionDotEntry) => (
+                {questionDotEntries.map((questionDotEntry) => (
                     <QuestionDot
                         key={questionDotEntry.key}
                         questionNumber={questionDotEntry.questionNumber}
                         isActive={questionDotEntry.isActive}
-                        submitted={viewModel.submitted}
+                        submitted={submitted}
                         isCorrect={questionDotEntry.isCorrect}
-                        onClick={() => viewModel.goToQuestion(questionDotEntry.questionIndex)}
-                        t={t}
+                        onClick={() => onGoToQuestion(questionDotEntry.questionIndex)}
+                        t={labels}
                     />
                 ))}
             </div>
 
             <div className="exam-footer-dot-list exam-footer-dot-list-filled-compact">
-                {viewModel.filledCompactQuestionDotEntries.map((questionDotEntry) =>
-                    renderCompactQuestionDotEntry(questionDotEntry, viewModel, t, "filled-compact")
+                {filledCompactQuestionDotEntries.map((questionDotEntry) =>
+                    renderCompactQuestionDotEntry({
+                        questionDotEntry,
+                        submitted,
+                        onGoToQuestion,
+                        labels,
+                        dotDisplayMode: "filled-compact"
+                    })
                 )}
             </div>
 
             <div className="exam-footer-dot-list exam-footer-dot-list-compact">
-                {viewModel.minimalCompactQuestionDotEntries.map((questionDotEntry) =>
-                    renderCompactQuestionDotEntry(questionDotEntry, viewModel, t, "compact")
+                {minimalCompactQuestionDotEntries.map((questionDotEntry) =>
+                    renderCompactQuestionDotEntry({
+                        questionDotEntry,
+                        submitted,
+                        onGoToQuestion,
+                        labels,
+                        dotDisplayMode: "compact"
+                    })
                 )}
             </div>
         </div>
     );
 }
 
-const renderCompactQuestionDotEntry = (questionDotEntry, viewModel, t, dotDisplayMode) => {
+const renderCompactQuestionDotEntry = ({
+    questionDotEntry,
+    submitted,
+    onGoToQuestion,
+    labels,
+    dotDisplayMode
+}) => {
     if (questionDotEntry.type === "ellipsis") {
         return (
             <span
@@ -54,10 +81,10 @@ const renderCompactQuestionDotEntry = (questionDotEntry, viewModel, t, dotDispla
             key={questionDotEntry.key}
             questionNumber={questionDotEntry.questionNumber}
             isActive={questionDotEntry.isActive}
-            submitted={viewModel.submitted}
+            submitted={submitted}
             isCorrect={questionDotEntry.isCorrect}
-            onClick={() => viewModel.goToQuestion(questionDotEntry.questionIndex)}
-            t={t}
+            onClick={() => onGoToQuestion(questionDotEntry.questionIndex)}
+            t={labels}
             dotDisplayMode={dotDisplayMode}
         />
     );

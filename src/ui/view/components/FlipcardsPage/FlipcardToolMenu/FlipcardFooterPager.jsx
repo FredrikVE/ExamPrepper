@@ -15,20 +15,6 @@ function createQuestionDotEntries(cardCount, activeIndex) {
     }));
 }
 
-function createFooterPagerViewModel({ cardCount, activeIndex, onGoToCard }) {
-    const questionDotEntries = createQuestionDotEntries(cardCount, activeIndex);
-
-    return {
-        questionDotEntries,
-        filledCompactQuestionDotEntries: questionDotEntries,
-        minimalCompactQuestionDotEntries: questionDotEntries,
-        shouldUseCompactDots: cardCount > 9,
-        shouldUseResponsiveCompactDots: true,
-        submitted: false,
-        goToQuestion: onGoToCard
-    };
-}
-
 export default function FlipcardFooterPager({
     cardCount,
     activeIndex,
@@ -42,11 +28,7 @@ export default function FlipcardFooterPager({
 }) {
     const currentPosition = Math.min(activeIndex + 1, cardCount);
     const progressLabel = labels.deckPositionLabel(currentPosition, cardCount);
-    const footerPagerViewModel = createFooterPagerViewModel({
-        cardCount,
-        activeIndex,
-        onGoToCard
-    });
+    const questionDotEntries = createQuestionDotEntries(cardCount, activeIndex);
     const footerPagerLabels = {
         footerQuestionNavigationLabel: labels.toolMenuPagerLabel,
         footerGoToQuestion: labels.goToCardLabel
@@ -66,8 +48,14 @@ export default function FlipcardFooterPager({
 
             <div className="flipcard-footer-pager-counter">
                 <QuestionDots
-                    viewModel={footerPagerViewModel}
-                    t={footerPagerLabels}
+                    questionDotEntries={questionDotEntries}
+                    filledCompactQuestionDotEntries={questionDotEntries}
+                    minimalCompactQuestionDotEntries={questionDotEntries}
+                    shouldUseCompactDots={cardCount > 9}
+                    shouldUseResponsiveCompactDots={true}
+                    submitted={false}
+                    onGoToQuestion={onGoToCard}
+                    labels={footerPagerLabels}
                 />
                 <span className="flipcard-footer-pager-label">{progressLabel}</span>
             </div>

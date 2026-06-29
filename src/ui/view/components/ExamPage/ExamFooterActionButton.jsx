@@ -1,29 +1,36 @@
-// src/ui/view/components/Footer/FooterActionButton.jsx
+// src/ui/view/components/ExamPage/ExamFooterActionButton.jsx
 import { ChevronRight, Send } from "lucide-react";
-import FooterNavigationButton from "./FooterNavigationButton.jsx";
+import FooterNavigationButton from "../Footer/FooterNavigationButton.jsx";
 
-export default function FooterActionButton({ viewModel, t }) {
-    if (viewModel.showSubmitButton) {
+export default function ExamFooterActionButton({
+    showSubmitButton,
+    submitLabel,
+    nextLabel,
+    onSubmit,
+    onNext,
+    isNextDisabled
+}) {
+    if (showSubmitButton) {
         return (
             <>
                 <FooterNavigationButton
-                    onClick={viewModel.openSubmitConfirmation}
+                    onClick={onSubmit}
                     disabled={false}
                     variant="submit"
                     icon={<Send className="exam-footer-icon" />}
                     className="exam-footer-button-desktop-submit"
                 >
-                    {t.footerSubmit}
+                    {submitLabel}
                 </FooterNavigationButton>
 
                 <FooterNavigationButton
-                    onClick={viewModel.openSubmitConfirmation}
+                    onClick={onSubmit}
                     disabled={false}
                     variant="submit"
                     icon={<Send className="exam-footer-icon" />}
                     className="exam-footer-button-mobile-next"
                 >
-                    {t.footerSubmit}
+                    {submitLabel}
                 </FooterNavigationButton>
             </>
         );
@@ -31,12 +38,12 @@ export default function FooterActionButton({ viewModel, t }) {
 
     return (
         <FooterNavigationButton
-            onClick={viewModel.nextQuestion}
-            disabled={viewModel.isLastQuestion}
+            onClick={onNext}
+            disabled={isNextDisabled}
             variant="next"
             icon={<ChevronRight className="exam-footer-icon" />}
         >
-            {t.footerNext}
+            {nextLabel}
         </FooterNavigationButton>
     );
 }
