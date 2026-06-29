@@ -1,7 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardFooterPager.jsx
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import FooterNavigationButton from "../../Footer/FooterNavigationButton.jsx";
-import QuestionDots from "../../Footer/QuestionDots.jsx";
+import PagerButton from "../../ProgressPager/PagerButton.jsx";
+import ProgressDots from "../../ProgressPager/ProgressDots.jsx";
 
 function createQuestionDotEntries(cardCount, activeIndex) {
     const safeActiveIndex = Math.min(Math.max(activeIndex, 0), Math.max(cardCount - 1, 0));
@@ -36,18 +36,18 @@ export default function FlipcardFooterPager({
 
     return (
         <div className="flipcard-footer-pager" aria-label={labels.toolMenuPagerLabel}>
-            <FooterNavigationButton
+            <PagerButton
                 onClick={onPrevious}
                 disabled={!hasPrevious || isSwipeCommandActive}
                 variant="previous"
-                icon={<ChevronLeft className="exam-footer-icon" aria-hidden="true" focusable="false" />}
+                icon={<ChevronLeft className="progress-pager-icon" aria-hidden="true" focusable="false" />}
                 className="flipcard-footer-pager-button"
             >
                 {labels.previousCardLabel}
-            </FooterNavigationButton>
+            </PagerButton>
 
             <div className="flipcard-footer-pager-counter">
-                <QuestionDots
+                <ProgressDots
                     questionDotEntries={questionDotEntries}
                     filledCompactQuestionDotEntries={questionDotEntries}
                     minimalCompactQuestionDotEntries={questionDotEntries}
@@ -60,15 +60,15 @@ export default function FlipcardFooterPager({
                 <span className="flipcard-footer-pager-label">{progressLabel}</span>
             </div>
 
-            <FooterNavigationButton
+            <PagerButton
                 onClick={onNext}
                 disabled={!hasNext || isSwipeCommandActive}
                 variant="next"
-                icon={<ChevronRight className="exam-footer-icon" aria-hidden="true" focusable="false" />}
+                icon={<ChevronRight className="progress-pager-icon" aria-hidden="true" focusable="false" />}
                 className="flipcard-footer-pager-button"
             >
                 {labels.nextCardLabel}
-            </FooterNavigationButton>
+            </PagerButton>
         </div>
     );
 }

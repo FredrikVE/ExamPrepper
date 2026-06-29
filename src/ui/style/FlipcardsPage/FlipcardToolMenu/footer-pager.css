@@ -15,7 +15,7 @@
     padding: var(--space-2);
 }
 
-.flipcard-footer-pager-button.exam-footer-button {
+.flipcard-footer-pager-button.progress-pager-button {
     min-width: 76px;
     min-height: 42px;
     border-radius: 14px;
@@ -24,13 +24,13 @@
     padding-inline: var(--space-3);
 }
 
-.flipcard-footer-pager-button.exam-footer-button-previous {
+.flipcard-footer-pager-button.progress-pager-button-previous {
     border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
     background: color-mix(in srgb, var(--panel-strong) 64%, transparent);
     color: var(--text-muted);
 }
 
-.flipcard-footer-pager-button.exam-footer-button-next {
+.flipcard-footer-pager-button.progress-pager-button-next {
     border: 1px solid color-mix(in srgb, var(--accent) 44%, var(--line));
     background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 86%, #ffffff), var(--accent-strong));
     color: #ffffff;
@@ -46,28 +46,28 @@
     container-type: inline-size;
 }
 
-.flipcard-footer-pager-counter .exam-footer-dots {
+.flipcard-footer-pager-counter .progress-pager-dots {
     width: 100%;
 }
 
-.flipcard-footer-pager-counter .exam-footer-dot-list {
+.flipcard-footer-pager-counter .progress-pager-dot-list {
     justify-content: center;
     gap: 8px;
 }
 
-.flipcard-footer-pager-counter .exam-footer-dot {
+.flipcard-footer-pager-counter .progress-pager-dot {
     flex: 0 0 14px;
     width: 14px;
     height: 14px;
 }
 
-.flipcard-footer-pager-counter .exam-footer-dot::before {
+.flipcard-footer-pager-counter .progress-pager-dot::before {
     width: 5px;
     height: 5px;
     background: color-mix(in srgb, var(--text-soft) 42%, transparent);
 }
 
-.flipcard-footer-pager-counter .exam-footer-dot-active::before {
+.flipcard-footer-pager-counter .progress-pager-dot-active::before {
     width: 9px;
     height: 9px;
     background: var(--accent);
@@ -89,7 +89,7 @@
         padding: 10px;
     }
 
-    .flipcard-footer-pager-button.exam-footer-button {
+    .flipcard-footer-pager-button.progress-pager-button {
         min-width: 72px;
         min-height: 40px;
         padding-inline: var(--space-2);
@@ -112,7 +112,7 @@
         padding: 8px 12px;
     }
 
-    .flipcard-deck-footer-pager .flipcard-footer-pager-button.exam-footer-button {
+    .flipcard-deck-footer-pager .flipcard-footer-pager-button.progress-pager-button {
         min-width: 126px;
         min-height: 48px;
         border-radius: 15px;
@@ -124,17 +124,17 @@
         gap: 3px;
     }
 
-    .flipcard-deck-footer-pager .flipcard-footer-pager-counter .exam-footer-dot-list {
+    .flipcard-deck-footer-pager .flipcard-footer-pager-counter .progress-pager-dot-list {
         gap: clamp(12px, 2.4vw, 31px);
     }
 
-    .flipcard-deck-footer-pager .flipcard-footer-pager-counter .exam-footer-dot {
+    .flipcard-deck-footer-pager .flipcard-footer-pager-counter .progress-pager-dot {
         flex-basis: 7px;
         width: 7px;
         height: 7px;
     }
 
-    .flipcard-deck-footer-pager .flipcard-footer-pager-counter .exam-footer-dot-active {
+    .flipcard-deck-footer-pager .flipcard-footer-pager-counter .progress-pager-dot-active {
         flex-basis: 12px;
         width: 12px;
         height: 12px;

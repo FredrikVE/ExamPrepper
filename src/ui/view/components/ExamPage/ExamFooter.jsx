@@ -1,9 +1,9 @@
 // src/ui/view/components/ExamPage/ExamFooter.jsx
 import { ChevronLeft } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-import Footer from "../Footer/Footer.jsx";
-import FooterNavigationButton from "../Footer/FooterNavigationButton.jsx";
-import QuestionDots from "../Footer/QuestionDots.jsx";
+import ProgressPager from "../ProgressPager/ProgressPager.jsx";
+import PagerButton from "../ProgressPager/PagerButton.jsx";
+import ProgressDots from "../ProgressPager/ProgressDots.jsx";
 import ExamFooterActionButton from "./ExamFooterActionButton.jsx";
 
 export default function ExamFooter({
@@ -25,20 +25,20 @@ export default function ExamFooter({
     const { t } = useLanguage();
 
     return (
-        <Footer
+        <ProgressPager
             previousButton={(
-                <FooterNavigationButton
+                <PagerButton
                     onClick={previousQuestion}
                     disabled={!canGoPrevious}
                     variant="previous"
-                    icon={<ChevronLeft className="exam-footer-icon" />}
+                    icon={<ChevronLeft className="progress-pager-icon" />}
                 >
                     {t.footerPrevious}
-                </FooterNavigationButton>
+                </PagerButton>
             )}
             counter={(
                 <>
-                    <QuestionDots
+                    <ProgressDots
                         questionDotEntries={questionDotEntries}
                         filledCompactQuestionDotEntries={filledCompactQuestionDotEntries}
                         minimalCompactQuestionDotEntries={minimalCompactQuestionDotEntries}
@@ -48,7 +48,7 @@ export default function ExamFooter({
                         onGoToQuestion={onGoToQuestion}
                         labels={t}
                     />
-                    <span className="exam-footer-counter-label">
+                    <span className="progress-pager-counter-label">
                         {questionProgressLabel}
                     </span>
                 </>

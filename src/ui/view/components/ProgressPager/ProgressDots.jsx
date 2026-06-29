@@ -1,8 +1,8 @@
-// src/ui/view/components/Footer/QuestionDots.jsx
-import QuestionDot from "./QuestionDot.jsx";
-import { getQuestionDotsClassName } from "./Utils/footerClassNames.js";
+// src/ui/view/components/ProgressPager/ProgressDots.jsx
+import ProgressDot from "./ProgressDot.jsx";
+import { getProgressDotsClassName } from "./Utils/progressPagerClassNames.js";
 
-export default function QuestionDots({
+export default function ProgressDots({
     questionDotEntries,
     filledCompactQuestionDotEntries,
     minimalCompactQuestionDotEntries,
@@ -12,13 +12,13 @@ export default function QuestionDots({
     onGoToQuestion,
     labels
 }) {
-    const questionDotsClassName = getQuestionDotsClassName(shouldUseCompactDots, shouldUseResponsiveCompactDots);
+    const progressDotsClassName = getProgressDotsClassName(shouldUseCompactDots, shouldUseResponsiveCompactDots);
 
     return (
-        <div className={questionDotsClassName} role="navigation" aria-label={labels.footerQuestionNavigationLabel}>
-            <div className="exam-footer-dot-list exam-footer-dot-list-normal">
+        <div className={progressDotsClassName} role="navigation" aria-label={labels.footerQuestionNavigationLabel}>
+            <div className="progress-pager-dot-list progress-pager-dot-list-normal">
                 {questionDotEntries.map((questionDotEntry) => (
-                    <QuestionDot
+                    <ProgressDot
                         key={questionDotEntry.key}
                         questionNumber={questionDotEntry.questionNumber}
                         isActive={questionDotEntry.isActive}
@@ -30,7 +30,7 @@ export default function QuestionDots({
                 ))}
             </div>
 
-            <div className="exam-footer-dot-list exam-footer-dot-list-filled-compact">
+            <div className="progress-pager-dot-list progress-pager-dot-list-filled-compact">
                 {filledCompactQuestionDotEntries.map((questionDotEntry) =>
                     renderCompactQuestionDotEntry({
                         questionDotEntry,
@@ -42,7 +42,7 @@ export default function QuestionDots({
                 )}
             </div>
 
-            <div className="exam-footer-dot-list exam-footer-dot-list-compact">
+            <div className="progress-pager-dot-list progress-pager-dot-list-compact">
                 {minimalCompactQuestionDotEntries.map((questionDotEntry) =>
                     renderCompactQuestionDotEntry({
                         questionDotEntry,
@@ -68,7 +68,7 @@ const renderCompactQuestionDotEntry = ({
         return (
             <span
                 key={questionDotEntry.key}
-                className={`exam-footer-dot-ellipsis exam-footer-dot-ellipsis-${dotDisplayMode}`}
+                className={`progress-pager-dot-ellipsis progress-pager-dot-ellipsis-${dotDisplayMode}`}
                 aria-hidden="true"
             >
                 …
@@ -77,7 +77,7 @@ const renderCompactQuestionDotEntry = ({
     }
 
     return (
-        <QuestionDot
+        <ProgressDot
             key={questionDotEntry.key}
             questionNumber={questionDotEntry.questionNumber}
             isActive={questionDotEntry.isActive}

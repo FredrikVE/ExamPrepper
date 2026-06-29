@@ -1,5 +1,5 @@
-/* src/ui/style/Footer/layout.css */
-.exam-footer {
+/* src/ui/style/ProgressPager/layout.css */
+.progress-pager {
     position: relative;
     z-index: 4;
     width: var(--exam-content-width);
@@ -13,11 +13,11 @@
     backdrop-filter: blur(18px);
 }
 
-.dark .exam-footer {
+.dark .progress-pager {
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
 }
 
-.exam-footer-container {
+.progress-pager-container {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;

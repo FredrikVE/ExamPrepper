@@ -1,27 +1,27 @@
-/* src/ui/style/Footer/responsive.css */
-/* Når 70%-footeren blir for smal, flytt prikkene til egen rad */
+/* src/ui/style/ProgressPager/responsive.css */
+/* Når 70%-progress pageren blir for smal, flytt prikkene til egen rad */
 @media (max-width: 1180px) {
-    .exam-footer-container {
+    .progress-pager-container {
         grid-template-columns: 1fr 1fr;
     }
 
-    .exam-footer-counter {
+    .progress-pager-counter {
         grid-column: 1 / -1;
         grid-row: 1;
     }
 
-    .exam-footer-button {
+    .progress-pager-button {
         min-width: 0;
         width: 100%;
     }
 
-    .exam-footer-dots {
+    .progress-pager-dots {
         width: 100%;
     }
 }
 
 @media (max-width: 920px) {
-    .exam-footer {
+    .progress-pager {
         width: var(--exam-content-width);
         max-width: var(--exam-content-max-width);
         margin-bottom: 18px;
@@ -29,27 +29,27 @@
 }
 
 @media (max-width: 700px) {
-    .exam-footer-container {
+    .progress-pager-container {
         gap: 12px;
         padding: 12px;
     }
 
-    .exam-footer-dots {
+    .progress-pager-dots {
         width: 100%;
     }
 
-    .exam-footer-dot-list {
+    .progress-pager-dot-list {
         gap: 5px;
     }
 
-    .exam-footer-button {
+    .progress-pager-button {
         min-height: 44px;
         padding: 0 14px;
     }
 }
 
 @media (max-width: 932px) {
-    .exam-footer {
+    .progress-pager {
         width: var(--exam-content-width);
         max-width: var(--exam-content-max-width);
         margin-top: 10px;
@@ -57,17 +57,17 @@
         border-radius: 16px;
     }
 
-    .exam-footer-container {
+    .progress-pager-container {
         gap: 10px;
         padding: 10px;
     }
 
-    .exam-footer-counter {
+    .progress-pager-counter {
         gap: 4px;
         font-size: 0.78rem;
     }
 
-    .exam-footer-button {
+    .progress-pager-button {
         min-width: 0;
         width: 100%;
         min-height: 42px;
@@ -75,24 +75,17 @@
         font-size: 0.84rem;
     }
 
-    .exam-footer-button-desktop-submit {
-        display: none;
-    }
 
-    .exam-footer-button-mobile-next {
-        display: inline-flex;
-    }
-
-    .exam-footer-icon {
+    .progress-pager-icon {
         width: 16px;
         height: 16px;
     }
 }
 
-/* Laptop footer: keep navigation reachable without forcing a scroll
+/* Laptop progress pager: keep navigation reachable without forcing a scroll
    on common 14–17" laptop viewports. */
 @media (min-width: 981px) and (max-width: 1760px), (min-width: 981px) and (max-height: 960px) {
-    .exam-footer {
+    .progress-pager {
         position: sticky;
         flex: 0 0 auto;
         bottom: clamp(10px, 1.8vh, 18px);
@@ -100,100 +93,100 @@
         border-radius: 16px;
     }
 
-    .exam-footer-container {
+    .progress-pager-container {
         gap: clamp(10px, 1.2vw, 16px);
         padding: 10px 12px;
     }
 
-    .exam-footer-button {
+    .progress-pager-button {
         min-width: 108px;
         min-height: 42px;
         padding: 0 14px;
         font-size: 0.86rem;
     }
 
-    .exam-footer-icon {
+    .progress-pager-icon {
         width: 16px;
         height: 16px;
     }
 
-    .exam-footer-counter {
+    .progress-pager-counter {
         gap: 4px;
         font-size: 0.78rem;
     }
 
-    .exam-footer-dot-list {
+    .progress-pager-dot-list {
         gap: clamp(1px, 0.25vw, 5px);
     }
 
-    .exam-footer-dot {
+    .progress-pager-dot {
         flex-basis: clamp(13px, 1.15vw, 18px);
         width: clamp(13px, 1.15vw, 18px);
         height: clamp(13px, 1.15vw, 18px);
     }
 
-    .exam-footer-dot::before {
+    .progress-pager-dot::before {
         width: clamp(5px, 0.4vw, 7px);
         height: clamp(5px, 0.4vw, 7px);
     }
 
-    .exam-footer-dot-list-filled-compact {
+    .progress-pager-dot-list-filled-compact {
         gap: clamp(3px, 0.45vw, 8px);
     }
 
-    .exam-footer-dot-filled-compact {
+    .progress-pager-dot-filled-compact {
         flex-basis: clamp(14px, 1vw, 18px);
         width: clamp(14px, 1vw, 18px);
         height: clamp(14px, 1vw, 18px);
     }
 
-    .exam-footer-dot-filled-compact::before {
+    .progress-pager-dot-filled-compact::before {
         width: clamp(7px, 0.62vw, 10px);
         height: clamp(7px, 0.62vw, 10px);
     }
 
-    .exam-footer-dot-list-compact {
+    .progress-pager-dot-list-compact {
         gap: clamp(10px, 1.8vw, 22px);
     }
 
-    .exam-footer-dot-compact {
+    .progress-pager-dot-compact {
         flex-basis: clamp(20px, 1.6vw, 24px);
         width: clamp(20px, 1.6vw, 24px);
         height: clamp(20px, 1.6vw, 24px);
     }
 
-    .exam-footer-dot-compact::before {
+    .progress-pager-dot-compact::before {
         width: clamp(12px, 1vw, 16px);
         height: clamp(12px, 1vw, 16px);
     }
 }
 
 @media (max-width: 1280px) and (min-width: 981px) {
-    .exam-footer-button {
+    .progress-pager-button {
         min-width: 96px;
         padding-inline: 12px;
     }
 }
 
 @media (max-height: 820px) and (min-width: 981px) {
-    .exam-footer {
+    .progress-pager {
         bottom: 10px;
         margin-top: 6px;
         margin-bottom: 10px;
     }
 
-    .exam-footer-container {
+    .progress-pager-container {
         padding: 8px 10px;
     }
 
-    .exam-footer-button {
+    .progress-pager-button {
         min-height: 38px;
     }
 }
 
 /* In feedback mode the answer explanations make the card taller.
-   The footer should be part of the scroll flow, not a sticky overlay. */
-.exam-workspace-feedback-mode .exam-footer {
+   The progress pager should be part of the scroll flow, not a sticky overlay. */
+.exam-workspace-feedback-mode .progress-pager {
     position: relative;
     bottom: auto;
     z-index: 1;
@@ -201,13 +194,13 @@
     margin-bottom: clamp(20px, 3vh, 34px);
 }
 
-.exam-workspace-feedback-mode .exam-footer-container {
+.exam-workspace-feedback-mode .progress-pager-container {
     padding-block: 10px;
 }
 
-/* Long active questions use the same footer behavior as feedback mode:
-   the footer becomes part of the scroll flow so it cannot cover answers. */
-.exam-workspace-scroll-footer-mode .exam-footer {
+/* Long active questions use the same progress pager behavior as feedback mode:
+   the progress pager becomes part of the scroll flow so it cannot cover answers. */
+.exam-workspace-scroll-footer-mode .progress-pager {
     position: relative;
     bottom: auto;
     z-index: 1;
@@ -215,15 +208,15 @@
     margin-bottom: clamp(20px, 3vh, 34px);
 }
 
-.exam-workspace-scroll-footer-mode .exam-footer-container {
+.exam-workspace-scroll-footer-mode .progress-pager-container {
     padding-block: 10px;
 }
 
 /* ── Very short viewport fallback ─────────
-   Footeren skal ikke være sticky når høyden er for lav,
+   ProgressPageren skal ikke være sticky når høyden er for lav,
    fordi den ellers legger seg oppå QuestionCard. */
 @media (max-height: 700px) and (min-width: 981px) {
-    .exam-footer {
+    .progress-pager {
         position: relative;
         bottom: auto;
         z-index: 1;
@@ -231,44 +224,44 @@
         margin-bottom: 16px;
     }
 
-    .exam-footer-container {
+    .progress-pager-container {
         padding: 8px 10px;
     }
 }
 
-/* Extra-narrow mobile footer: preserve tap targets without clipping the
+/* Extra-narrow mobile progress pager: preserve tap targets without clipping the
    navigation buttons on iPhone SE / 375px-class screens. */
 @media (max-width: 480px) {
-    .exam-footer {
+    .progress-pager {
         width: calc(100% - 24px);
         margin-top: 8px;
         margin-bottom: calc(env(safe-area-inset-bottom) + 12px);
         border-radius: 14px;
     }
 
-    .exam-footer-container {
+    .progress-pager-container {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: 8px;
         padding: 8px;
     }
 
-    .exam-footer-counter {
+    .progress-pager-counter {
         min-width: 0;
     }
 
-    .exam-footer-counter-label {
+    .progress-pager-counter-label {
         max-width: 100%;
         overflow-wrap: anywhere;
         text-align: center;
     }
 
-    .exam-footer-button {
+    .progress-pager-button {
         min-height: 40px;
         padding-inline: 8px;
         font-size: 0.8rem;
     }
 
-    .exam-footer-icon {
+    .progress-pager-icon {
         width: 15px;
         height: 15px;
     }

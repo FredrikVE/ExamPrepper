@@ -1,5 +1,5 @@
-/* src/ui/style/Footer/progress.css */
-.exam-footer-counter {
+/* src/ui/style/ProgressPager/progress.css */
+.progress-pager-counter {
     display: grid;
     width: 100%;
     min-width: 0;
@@ -12,7 +12,7 @@
     container-type: inline-size;
 }
 
-.exam-footer-counter-label {
+.progress-pager-counter-label {
     justify-self: center;
     line-height: 1;
 }

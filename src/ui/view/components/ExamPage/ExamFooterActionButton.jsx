@@ -1,6 +1,6 @@
 // src/ui/view/components/ExamPage/ExamFooterActionButton.jsx
 import { ChevronRight, Send } from "lucide-react";
-import FooterNavigationButton from "../Footer/FooterNavigationButton.jsx";
+import PagerButton from "../ProgressPager/PagerButton.jsx";
 
 export default function ExamFooterActionButton({
     showSubmitButton,
@@ -13,37 +13,35 @@ export default function ExamFooterActionButton({
     if (showSubmitButton) {
         return (
             <>
-                <FooterNavigationButton
+                <button
+                    type="button"
                     onClick={onSubmit}
-                    disabled={false}
-                    variant="submit"
-                    icon={<Send className="exam-footer-icon" />}
-                    className="exam-footer-button-desktop-submit"
+                    className="progress-pager-button exam-footer-submit-button exam-footer-submit-button-desktop"
                 >
                     {submitLabel}
-                </FooterNavigationButton>
+                    <Send className="exam-footer-submit-icon" />
+                </button>
 
-                <FooterNavigationButton
+                <button
+                    type="button"
                     onClick={onSubmit}
-                    disabled={false}
-                    variant="submit"
-                    icon={<Send className="exam-footer-icon" />}
-                    className="exam-footer-button-mobile-next"
+                    className="progress-pager-button exam-footer-submit-button exam-footer-submit-button-mobile"
                 >
                     {submitLabel}
-                </FooterNavigationButton>
+                    <Send className="exam-footer-submit-icon" />
+                </button>
             </>
         );
     }
 
     return (
-        <FooterNavigationButton
+        <PagerButton
             onClick={onNext}
             disabled={isNextDisabled}
             variant="next"
-            icon={<ChevronRight className="exam-footer-icon" />}
+            icon={<ChevronRight className="progress-pager-icon" />}
         >
             {nextLabel}
-        </FooterNavigationButton>
+        </PagerButton>
     );
 }
