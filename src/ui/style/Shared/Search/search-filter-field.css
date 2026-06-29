@@ -64,6 +64,13 @@
     -webkit-appearance: none;
 }
 
+/* Fokusfeedback ligger på containeren (.search-filter-field:focus-within).
+   Den globale input:focus-visible-outlinen ville ellers tegne en ramme rundt
+   selve input-et, som overflow: hidden klipper til streker inne i feltet. */
+.search-filter-field-input:focus-visible {
+    outline: none;
+}
+
 .search-filter-field-input::placeholder {
     color: var(--text-soft);
 }
