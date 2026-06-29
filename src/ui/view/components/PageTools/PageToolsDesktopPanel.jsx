@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { Dialog } from "@base-ui/react/dialog";
 import { Menu } from "lucide-react";
-import PageToolsCard from "./PageToolsCard.jsx";
+import ToolCardGrid from "../Shared/ToolCard/ToolCardGrid.jsx";
+import { TOOL_CARD_SURFACES } from "../Shared/ToolCard/toolCardSurfaces.js";
 
 export default function PageToolsDesktopPanel({ tools }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -45,16 +46,12 @@ export default function PageToolsDesktopPanel({ tools }) {
                         </header>
                     )}
 
-                    <div className="page-tools-desktop-grid" aria-label={tools.actionsLabel}>
-                        {tools.items.map((toolItem) => (
-                            <PageToolsCard
-                                key={toolItem.id}
-                                surface="desktop"
-                                toolItem={toolItem}
-                                onSelect={selectTool}
-                            />
-                        ))}
-                    </div>
+                    <ToolCardGrid
+                        surface={TOOL_CARD_SURFACES.PAGE_TOOLS_DESKTOP}
+                        items={tools.items}
+                        ariaLabel={tools.actionsLabel}
+                        onSelectItem={selectTool}
+                    />
                 </Dialog.Popup>
             </Dialog.Portal>
         </Dialog.Root>

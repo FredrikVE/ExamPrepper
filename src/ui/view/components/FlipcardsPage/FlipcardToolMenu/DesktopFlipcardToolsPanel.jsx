@@ -1,11 +1,12 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/DesktopFlipcardToolsPanel.jsx
 import { Dialog } from "@base-ui/react/dialog";
 import { Menu } from "lucide-react";
-import FlipcardDeckToolButton from "./FlipcardDeckToolButton.jsx";
+import ToolCardGrid from "../../Shared/ToolCard/ToolCardGrid.jsx";
+import { TOOL_CARD_SURFACES } from "../../Shared/ToolCard/toolCardSurfaces.js";
 
 export default function DesktopFlipcardToolsPanel(props) {
-    const selectDeckTool = (deckToolKey) => {
-        props.onDeckToolSelect(deckToolKey);
+    const selectDeckTool = (deckToolItem) => {
+        props.onDeckToolSelect(deckToolItem.key);
         props.onOpenChange(false);
     };
 
@@ -27,16 +28,12 @@ export default function DesktopFlipcardToolsPanel(props) {
                         <Dialog.Description>{props.labels.toolMenuSubtitle}</Dialog.Description>
                     </header>
 
-                    <div className="flipcard-desktop-tools-grid" aria-label={props.labels.toolMenuActionsLabel}>
-                        {props.deckToolItems.map((deckToolItem) => (
-                            <FlipcardDeckToolButton
-                                key={deckToolItem.key}
-                                variant="desktop"
-                                deckToolItem={deckToolItem}
-                                onSelect={selectDeckTool}
-                            />
-                        ))}
-                    </div>
+                    <ToolCardGrid
+                        surface={TOOL_CARD_SURFACES.FLIPCARDS_DESKTOP}
+                        items={props.deckToolItems}
+                        ariaLabel={props.labels.toolMenuActionsLabel}
+                        onSelectItem={selectDeckTool}
+                    />
                 </Dialog.Popup>
             </Dialog.Portal>
         </Dialog.Root>

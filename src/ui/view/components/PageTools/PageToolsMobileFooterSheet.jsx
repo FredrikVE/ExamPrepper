@@ -1,7 +1,8 @@
 // src/ui/view/components/PageTools/PageToolsMobileFooterSheet.jsx
 import { useCallback, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import PageToolsCard from "./PageToolsCard.jsx";
+import ToolCardGrid from "../Shared/ToolCard/ToolCardGrid.jsx";
+import { TOOL_CARD_SURFACES } from "../Shared/ToolCard/toolCardSurfaces.js";
 
 export default function PageToolsMobileFooterSheet(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -43,16 +44,11 @@ export default function PageToolsMobileFooterSheet(props) {
                 aria-label={props.tools.actionsLabel}
                 hidden={!isOpen}
             >
-                <div className="page-tools-mobile-grid">
-                    {props.tools.items.map((toolItem) => (
-                        <PageToolsCard
-                            key={toolItem.id}
-                            surface="mobile"
-                            toolItem={toolItem}
-                            onSelect={selectTool}
-                        />
-                    ))}
-                </div>
+                <ToolCardGrid
+                    surface={TOOL_CARD_SURFACES.PAGE_TOOLS_MOBILE}
+                    items={props.tools.items}
+                    onSelectItem={selectTool}
+                />
             </section>
 
             {props.children}
