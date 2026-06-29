@@ -1,5 +1,5 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardDeckToolButton.jsx
-import { getFlipcardDeckToolIcon } from "./flipcardDeckToolIcons.js";
+import { getToolIcon } from "../../Shared/toolIcons.js";
 
 const FLIPCARD_DECK_TOOL_BUTTON_CLASS_NAMES_BY_VARIANT = {
     desktop: {
@@ -25,7 +25,7 @@ function createDeckToolButtonClassName(variant, deckToolItem) {
 }
 
 export default function FlipcardDeckToolButton(props) {
-    const Icon = getFlipcardDeckToolIcon(props.deckToolItem.iconKey);
+    const Icon = getToolIcon(props.deckToolItem.iconKey);
 
     return (
         <button
