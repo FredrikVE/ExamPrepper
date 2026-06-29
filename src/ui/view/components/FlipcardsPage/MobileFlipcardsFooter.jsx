@@ -1,8 +1,8 @@
-// src/ui/view/components/FlipcardsPage/FlipcardToolMenu/MobileFlipcardCollapsedToolbar.jsx
-import FlipcardFooterPager from "./FlipcardFooterPager.jsx";
-import MobileFlipcardSheetGrip from "./MobileFlipcardSheetGrip.jsx";
+// src/ui/view/components/FlipcardsPage/MobileFlipcardsFooter.jsx
+import FlipcardsProgressPager from "./FlipcardsProgressPager.jsx";
+import MobileFlipcardSheetGrip from "./FlipcardToolMenu/MobileFlipcardSheetGrip.jsx";
 
-export default function MobileFlipcardCollapsedToolbar({
+export default function MobileFlipcardsFooter({
     expandButtonRef,
     isExpanded,
     onOpenExpandedMenu,
@@ -17,7 +17,7 @@ export default function MobileFlipcardCollapsedToolbar({
     onGoToCard
 }) {
     return (
-        <footer className="mobile-flipcard-toolbar" aria-label={labels.toolMenuLabel}>
+        <div className="flipcards-mobile-footer" role="region" aria-label={labels.toolMenuLabel}>
             <MobileFlipcardSheetGrip
                 ref={expandButtonRef}
                 isExpanded={isExpanded}
@@ -25,17 +25,18 @@ export default function MobileFlipcardCollapsedToolbar({
                 label={labels.openToolMenuLabel}
             />
 
-            <FlipcardFooterPager
+            <FlipcardsProgressPager
                 cardCount={cardCount}
                 activeIndex={activeIndex}
                 hasPrevious={hasPrevious}
                 hasNext={hasNext}
                 isSwipeCommandActive={isSwipeCommandActive}
                 labels={labels}
+                className="flipcards-progress-pager-mobile"
                 onPrevious={onPrevious}
                 onNext={onNext}
                 onGoToCard={onGoToCard}
             />
-        </footer>
+        </div>
     );
 }

@@ -60,7 +60,7 @@
     opacity: 0.86;
 }
 
-.flipcard-deck-footer-pager {
+.flipcard-deck-progress-pager {
     display: block;
     width: var(--flipcard-stage-width);
     max-width: 88%;

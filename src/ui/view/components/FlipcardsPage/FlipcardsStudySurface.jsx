@@ -1,14 +1,43 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import usePresentationMode from "../../hooks/usePresentationMode.js";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
+import FlipcardsProgressPager from "./FlipcardsProgressPager.jsx";
+import MobileFlipcardsFooter from "./MobileFlipcardsFooter.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
+import useFlipcardToolMenu from "./FlipcardToolMenu/useFlipcardToolMenu.js";
 
 export default function FlipcardsStudySurface(props) {
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
+    const mobileToolsTriggerRef = useRef(null);
+    const presentationMode = usePresentationMode();
+    const {
+        isDesktopMenuOpen,
+        closeDesktopMenu,
+        setDesktopMenuOpen,
+        isMobileSheetOpen,
+        openMobileSheet,
+        closeMobileSheet,
+        setMobileSheetOpen
+    } = useFlipcardToolMenu();
 
     const deck = useFlipcardDeck(props.cards.length, props.visibleDeckKey);
     const activeCard = props.cards[deck.activeIndex] ?? null;
+
+    useEffect(() => {
+        if (presentationMode !== "desktop") {
+            closeDesktopMenu();
+        }
+
+        if (presentationMode !== "mobile") {
+            closeMobileSheet();
+        }
+    }, [closeDesktopMenu, closeMobileSheet, presentationMode]);
+
+    useEffect(() => {
+        setIsDesktopToolsPanelOpen(presentationMode === "desktop" && isDesktopMenuOpen);
+    }, [isDesktopMenuOpen, presentationMode]);
 
     const restartSession = () => {
         props.onResetProgress();
@@ -42,6 +71,20 @@ export default function FlipcardsStudySurface(props) {
         ? "flipcards-study-surface flipcards-study-surface-desktop-tools-open"
         : "flipcards-study-surface";
 
+    const progressPager = (
+        <FlipcardsProgressPager
+            cardCount={props.cards.length}
+            activeIndex={deck.activeIndex}
+            hasPrevious={deck.hasPrevious}
+            hasNext={deck.hasNext}
+            isSwipeCommandActive={deck.isSwipeCommandActive}
+            labels={props.labels}
+            onPrevious={deck.goToPrevious}
+            onNext={deck.goToNext}
+            onGoToCard={deck.goToCard}
+        />
+    );
+
     return (
         <section className={studySurfaceClassName} aria-label={props.labels.studySurfaceLabel}>
             <div className="flipcards-study-body">
@@ -50,26 +93,39 @@ export default function FlipcardsStudySurface(props) {
                     deck={deck}
                     labels={props.labels}
                     progressModel={props.progressModel}
+                    footerPager={progressPager}
                     onPractice={completeForPractice}
                     onMastered={completeAsMastered}
                     onRestart={restartSession}
                 />
 
                 <FlipcardToolMenu
-                    cardCount={props.cards.length}
-                    activeIndex={deck.activeIndex}
-                    hasPrevious={deck.hasPrevious}
-                    hasNext={deck.hasNext}
-                    isSwipeCommandActive={deck.isSwipeCommandActive}
+                    presentationMode={presentationMode}
+                    isDesktopMenuOpen={isDesktopMenuOpen}
+                    onDesktopMenuOpenChange={setDesktopMenuOpen}
+                    isMobileSheetOpen={isMobileSheetOpen}
+                    onMobileSheetOpenChange={setMobileSheetOpen}
+                    mobileSheetFinalFocusRef={mobileToolsTriggerRef}
                     labels={props.labels}
                     deckToolItems={props.deckToolItems}
-                    onPrevious={deck.goToPrevious}
-                    onNext={deck.goToNext}
-                    onGoToCard={deck.goToCard}
                     onDeckToolSelect={selectDeckTool}
-                    onDesktopToolsOpenChange={setIsDesktopToolsPanelOpen}
                 />
             </div>
+
+            <MobileFlipcardsFooter
+                expandButtonRef={mobileToolsTriggerRef}
+                isExpanded={isMobileSheetOpen}
+                onOpenExpandedMenu={openMobileSheet}
+                cardCount={props.cards.length}
+                activeIndex={deck.activeIndex}
+                hasPrevious={deck.hasPrevious}
+                hasNext={deck.hasNext}
+                isSwipeCommandActive={deck.isSwipeCommandActive}
+                labels={props.labels}
+                onPrevious={deck.goToPrevious}
+                onNext={deck.goToNext}
+                onGoToCard={deck.goToCard}
+            />
         </section>
     );
 }

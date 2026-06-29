@@ -1,41 +1,13 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx
-import { useEffect } from "react";
-import usePresentationMode from "../../../hooks/usePresentationMode.js";
 import DesktopFlipcardToolsPanel from "./DesktopFlipcardToolsPanel.jsx";
-import MobileFlipcardToolMenu from "./MobileFlipcardToolMenu.jsx";
-import useFlipcardToolMenu from "./useFlipcardToolMenu.js";
+import MobileFlipcardBottomSheet from "./MobileFlipcardBottomSheet.jsx";
 
 export default function FlipcardToolMenu(props) {
-    const presentationMode = usePresentationMode();
-    const {
-        isDesktopMenuOpen,
-        closeDesktopMenu,
-        setDesktopMenuOpen,
-        isMobileSheetOpen,
-        openMobileSheet,
-        closeMobileSheet,
-        setMobileSheetOpen
-    } = useFlipcardToolMenu();
-
-    useEffect(() => {
-        if (presentationMode !== "desktop") {
-            closeDesktopMenu();
-        }
-
-        if (presentationMode !== "mobile") {
-            closeMobileSheet();
-        }
-    }, [closeDesktopMenu, closeMobileSheet, presentationMode]);
-
-    useEffect(() => {
-        props.onDesktopToolsOpenChange(presentationMode === "desktop" && isDesktopMenuOpen);
-    }, [isDesktopMenuOpen, presentationMode, props.onDesktopToolsOpenChange]);
-
-    if (presentationMode === "desktop") {
+    if (props.presentationMode === "desktop") {
         return (
             <DesktopFlipcardToolsPanel
-                isOpen={isDesktopMenuOpen}
-                onOpenChange={setDesktopMenuOpen}
+                isOpen={props.isDesktopMenuOpen}
+                onOpenChange={props.onDesktopMenuOpenChange}
                 labels={props.labels}
                 deckToolItems={props.deckToolItems}
                 onDeckToolSelect={props.onDeckToolSelect}
@@ -44,20 +16,12 @@ export default function FlipcardToolMenu(props) {
     }
 
     return (
-        <MobileFlipcardToolMenu
-            isExpanded={isMobileSheetOpen}
-            onExpandedChange={setMobileSheetOpen}
-            onOpenExpandedMenu={openMobileSheet}
-            cardCount={props.cardCount}
-            activeIndex={props.activeIndex}
-            hasPrevious={props.hasPrevious}
-            hasNext={props.hasNext}
-            isSwipeCommandActive={props.isSwipeCommandActive}
+        <MobileFlipcardBottomSheet
+            isOpen={props.isMobileSheetOpen}
+            onOpenChange={props.onMobileSheetOpenChange}
+            finalFocusRef={props.mobileSheetFinalFocusRef}
             labels={props.labels}
             deckToolItems={props.deckToolItems}
-            onPrevious={props.onPrevious}
-            onNext={props.onNext}
-            onGoToCard={props.onGoToCard}
             onDeckToolSelect={props.onDeckToolSelect}
         />
     );

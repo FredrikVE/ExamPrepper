@@ -2,6 +2,7 @@
 @import "./tokens.css";
 @import "./page.css";
 @import "./study-surface.css";
+@import "./progress-pager.css";
 @import "./FlipcardDeck/index.css";
 @import "./FlipcardToolMenu/index.css";
 @import "./responsive.css";

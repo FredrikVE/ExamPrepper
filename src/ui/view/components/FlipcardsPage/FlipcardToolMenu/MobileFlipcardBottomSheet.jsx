@@ -1,6 +1,5 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/MobileFlipcardBottomSheet.jsx
 import { Drawer } from "@base-ui/react/drawer";
-import FlipcardFooterPager from "./FlipcardFooterPager.jsx";
 import MobileFlipcardDeckToolGrid from "./MobileFlipcardDeckToolGrid.jsx";
 import MobileFlipcardSheetGrip from "./MobileFlipcardSheetGrip.jsx";
 
@@ -39,18 +38,6 @@ export default function MobileFlipcardBottomSheet(props) {
                                 isExpanded={props.isOpen}
                                 onClick={closeSheet}
                                 label={props.labels.closeToolMenuLabel}
-                            />
-
-                            <FlipcardFooterPager
-                                cardCount={props.cardCount}
-                                activeIndex={props.activeIndex}
-                                hasPrevious={props.hasPrevious}
-                                hasNext={props.hasNext}
-                                isSwipeCommandActive={props.isSwipeCommandActive}
-                                labels={props.labels}
-                                onPrevious={props.onPrevious}
-                                onNext={props.onNext}
-                                onGoToCard={props.onGoToCard}
                             />
 
                             <MobileFlipcardDeckToolGrid
