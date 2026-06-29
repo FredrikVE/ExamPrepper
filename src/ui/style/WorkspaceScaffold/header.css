@@ -52,7 +52,7 @@
 }
 
 .workspace-scaffold-header-button,
-.workspace-scaffold-header .page-tools-desktop-toggle {
+.workspace-scaffold-header .desktop-pop-out-menu__trigger {
     pointer-events: auto;
 }
 
