@@ -1,4 +1,4 @@
-// src/ui/view/components/Shared/Search/FilterOptionList.jsx
+// src/ui/view/components/Search/FilterOptionList.jsx
 import { Check } from "lucide-react";
 
 export default function FilterOptionList({ filterOptions, selectedFilterValue, onSelectFilterOption }) {

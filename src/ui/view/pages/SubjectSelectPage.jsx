@@ -1,9 +1,9 @@
 // src/ui/view/pages/SubjectSelectPage.jsx
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
-import SearchSheetContent from "../components/Shared/Search/SearchSheetContent.jsx";
-import SearchFilterField from "../components/Shared/Search/SearchFilterField.jsx";
-import useSearchSheetEscapeKey from "../components/Shared/Search/useSearchSheetEscapeKey.js";
+import SearchSheetContent from "../components/Search/SearchSheetContent.jsx";
+import SearchFilterField from "../components/Search/SearchFilterField.jsx";
+import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 import WorkspaceScaffoldHeader from "../components/WorkspaceScaffold/WorkspaceScaffoldHeader.jsx";
 import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx";

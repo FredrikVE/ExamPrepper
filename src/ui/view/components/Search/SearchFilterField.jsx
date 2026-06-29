@@ -1,4 +1,4 @@
-// src/ui/view/components/Shared/Search/SearchFilterField.jsx
+// src/ui/view/components/Search/SearchFilterField.jsx
 import { useRef } from "react";
 import { ChevronDown, Funnel, Search } from "lucide-react";
 

@@ -1,4 +1,4 @@
-// src/ui/view/components/Shared/Search/useSearchSheetEscapeKey.js
+// src/ui/view/components/Search/useSearchSheetEscapeKey.js
 import { useEffect } from "react";
 
 export default function useSearchSheetEscapeKey(isSearchSheetOpen, onCloseSearchSheet) {
