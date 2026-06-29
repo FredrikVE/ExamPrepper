@@ -1,11 +1,4 @@
 /* src/ui/style/FlipcardsPage/FlipcardToolMenu/desktop-tools-panel.css */
-.flipcard-desktop-tools-shell {
-    position: fixed;
-    inset: 0;
-    z-index: 80;
-    pointer-events: none;
-}
-
 .flipcard-desktop-tools-toggle {
     position: fixed;
     top: 30px;
@@ -35,7 +28,7 @@
     background: color-mix(in srgb, var(--accent) 8%, var(--panel-strong));
 }
 
-.flipcard-desktop-tools-shell[data-open="true"] .flipcard-desktop-tools-toggle {
+.flipcard-desktop-tools-toggle[data-popup-open] {
     border-color: color-mix(in srgb, var(--accent) 42%, var(--line-strong));
     background: color-mix(in srgb, var(--accent) 12%, var(--panel-strong));
 }
@@ -258,7 +251,9 @@
 }
 
 @media (max-width: 932px) {
-    .flipcard-desktop-tools-shell {
+    .flipcard-desktop-tools-toggle,
+    .flipcard-desktop-tools-backdrop,
+    .flipcard-desktop-tools-panel {
         display: none;
     }
 }

@@ -10,7 +10,7 @@ export default function FlipcardToolMenu(props) {
     const {
         isDesktopMenuOpen,
         closeDesktopMenu,
-        toggleDesktopMenu,
+        setDesktopMenuOpen,
         isMobileSheetOpen,
         openMobileSheet,
         closeMobileSheet,
@@ -35,8 +35,7 @@ export default function FlipcardToolMenu(props) {
         return (
             <DesktopFlipcardToolsPanel
                 isOpen={isDesktopMenuOpen}
-                onToggle={toggleDesktopMenu}
-                onClose={closeDesktopMenu}
+                onOpenChange={setDesktopMenuOpen}
                 labels={props.labels}
                 deckToolItems={props.deckToolItems}
                 onDeckToolSelect={props.onDeckToolSelect}
