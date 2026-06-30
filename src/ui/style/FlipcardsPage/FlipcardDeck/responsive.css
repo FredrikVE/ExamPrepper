@@ -1,5 +1,6 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/responsive.css */
 @media (max-width: 1100px) {
+	.flipcard-deck-column,
 	.flipcard-deck {
 		--flipcard-stage-width: min(620px, 100%);
 		--flipcard-stage-height: clamp(410px, 54vh, 460px);
@@ -11,12 +12,34 @@
 }
 
 @media (max-width: 932px) {
+	.flipcard-deck-column,
 	.flipcard-deck {
 		--flipcard-stage-width: min(100%, 430px);
-		--flipcard-stage-height: min(58dvh, 430px);
+		--flipcard-stage-height: clamp(380px, 58dvh, 430px);
 		--flipcard-face-padding: 42px clamp(42px, 12vw, 68px);
 		--flipcard-radius: 28px;
-		gap: var(--space-7);
+	}
+
+	.flipcard-deck-column {
+		gap: var(--space-6);
+	}
+
+	.flipcard-deck {
+		gap: var(--space-6);
+		width: min(100%, var(--flipcard-stage-width));
+	}
+
+	.flipcard-stage {
+		height: var(--flipcard-stage-height);
+	}
+
+	.flipcard {
+		transform-origin: 50% 94%;
+	}
+
+	.flipcard::before {
+		inset: -4px;
+		border-radius: calc(var(--flipcard-radius) + 6px);
 	}
 
 	.flip-title {
@@ -48,80 +71,215 @@
 		font-size: clamp(32px, 9vw, 48px);
 	}
 
-	.quick-actions {
-		display: flex;
-		gap: clamp(20px, 9vw, 42px);
-		margin-top: -4px;
+	.card-edge-action {
+		width: 84px;
+		height: 176px;
+		opacity: 0.84;
 	}
 
-	.quick-action {
-		width: 64px;
-		min-width: 64px;
-		height: 64px;
-		min-height: 64px;
-		padding: 0;
-		border-radius: var(--radius-full);
+	.card-edge-action span {
+		width: 48px;
+		height: 48px;
+		background: rgba(255, 255, 255, 0.035);
+		font-size: 26px;
+	}
+
+	.swipe-badge {
+		top: 34px;
+		padding: 9px 13px;
+		font-size: 11px;
+	}
+
+	.swipe-badge-practice {
+		left: 32px;
+	}
+
+	.swipe-badge-mastered {
+		right: 32px;
+	}
+
+	.flipcard-feedback-toast {
+		bottom: 70px;
+		max-width: calc(100% - 40px);
+		padding: 9px 15px;
+		font-size: 13px;
 	}
 
 	.flipcard-deck-progress-pager {
 		display: none;
 	}
-
-	.quick-action-secondary {
-		display: none;
-	}
-
-	.quick-action span {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-	}
-
-	.quick-action svg {
-		width: 24px;
-		height: 24px;
-	}
 }
 
 @media (max-height: 780px) and (max-width: 932px) {
+	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-height: min(52dvh, 390px);
+		--flipcard-stage-height: clamp(340px, 52dvh, 390px);
+	}
+
+	.flipcard-deck {
 		gap: var(--space-5);
 	}
 
-	.quick-actions {
-		margin-top: -8px;
-	}
-
-	.quick-action {
-		width: 58px;
-		min-width: 58px;
-		height: 58px;
-		min-height: 58px;
+	.card-edge-action {
+		height: 160px;
 	}
 }
 
 @media (max-width: 480px) {
+	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-height: min(56dvh, 380px);
+		--flipcard-stage-width: 100%;
+		--flipcard-stage-height: clamp(350px, 56dvh, 380px);
 		--flipcard-face-padding: 38px 34px;
 	}
 
 	.card-stack-card {
 		inset: 16px 14px -14px;
 	}
+
+	.card-edge-action {
+		width: 72px;
+		height: 154px;
+	}
+
+	.card-edge-action span {
+		width: 44px;
+		height: 44px;
+		font-size: 25px;
+	}
+
+	.swipe-badge {
+		top: 28px;
+	}
+
+	.swipe-badge-practice {
+		left: 24px;
+	}
+
+	.swipe-badge-mastered {
+		right: 24px;
+	}
+
+	.flipcard-feedback-toast {
+		bottom: 62px;
+		max-width: calc(100% - 36px);
+	}
 }
 
 @media (max-width: 380px) {
+	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-height: min(54dvh, 360px);
+		--flipcard-stage-height: clamp(330px, 54dvh, 360px);
 		--flipcard-face-padding: 34px 30px;
 	}
 
 	.flip-title {
 		font-size: clamp(28px, 9.1vw, 36px);
+	}
+
+	.flip-title-long {
+		font-size: clamp(26px, 8.4vw, 34px);
+	}
+
+	.flip-title-extra-long {
+		font-size: clamp(24px, 7.8vw, 31px);
+	}
+
+	.card-edge-action {
+		width: 66px;
+	}
+
+	.swipe-badge {
+		font-size: 10px;
+		letter-spacing: 0.1em;
+	}
+
+	.swipe-badge-practice {
+		left: 20px;
+	}
+
+	.swipe-badge-mastered {
+		right: 20px;
+	}
+}
+
+@media (max-width: 932px) {
+	.flipcard-complete-stage {
+		min-height: var(--flipcard-stage-height);
+	}
+
+	.flipcard-complete-card {
+		min-height: var(--flipcard-stage-height);
+		padding: 38px 30px;
+		border-radius: var(--flipcard-radius);
+	}
+
+	.flipcard-complete-orb {
+		width: 76px;
+		height: 76px;
+		font-size: 38px;
+	}
+
+	.flipcard-complete-card h2 {
+		font-size: clamp(38px, 11vw, 54px);
+	}
+
+	.flipcard-complete-body {
+		font-size: 15px;
+		line-height: 1.5;
+	}
+}
+
+@media (max-width: 480px) {
+	.flipcard-complete-card {
+		padding: 34px 24px;
+	}
+
+	.flipcard-complete-stats {
+		gap: 10px;
+	}
+
+	.flipcard-complete-actions {
+		width: 100%;
+		gap: 10px;
+	}
+
+	.flipcard-complete-actions .flipcards-secondary-action,
+	.flipcard-complete-actions .flipcards-primary-action {
+		min-width: min(132px, calc(50% - 5px));
+		padding-inline: var(--space-4);
+	}
+}
+
+@media (max-height: 700px) and (max-width: 480px) {
+	.flipcard-deck-column,
+	.flipcard-deck {
+		--flipcard-stage-height: clamp(310px, 50dvh, 340px);
+		--flipcard-face-padding: 30px 26px;
+	}
+
+	.flip-definition {
+		font-size: clamp(19px, 5.8vw, 26px);
+	}
+
+	.flipcard-complete-orb {
+		width: 62px;
+		height: 62px;
+		margin-bottom: var(--space-3);
+		font-size: 32px;
+	}
+
+	.flipcard-complete-card h2 {
+		font-size: clamp(32px, 10vw, 42px);
+	}
+
+	.flipcard-complete-body {
+		margin-top: var(--space-3);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.flipcard-complete-card::before {
+		animation: none !important;
 	}
 }

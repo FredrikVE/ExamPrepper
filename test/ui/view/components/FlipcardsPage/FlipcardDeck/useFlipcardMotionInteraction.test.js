@@ -79,7 +79,7 @@ jest.unstable_mockModule("motion/react", () => ({
 	useTransform
 }));
 
-const { FLIPCARD_SWIPE_COMMAND_DIRECTION } = await import(
+const { FLIPCARD_SWIPE_COMMAND_DIRECTION, FLIPCARD_SWIPE_RESULT } = await import(
 	"../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/flipcardSwipe.js"
 );
 const { useFlipcardMotionInteraction } = await import(
@@ -90,12 +90,13 @@ function createHook(params) {
 	return useFlipcardMotionInteraction(params);
 }
 
-function createParams(swipeCommand, onSwipePractice, onSwipeMastered) {
+function createParams(swipeCommand, onSwipePractice, onSwipeMastered, onSwipeFeedback) {
 	return {
 		cardId: "card-a",
 		swipeCommand,
 		onSwipePractice,
-		onSwipeMastered
+		onSwipeMastered,
+		onSwipeFeedback
 	};
 }
 
@@ -115,7 +116,7 @@ describe("useFlipcardMotionInteraction", () => {
 	});
 
 	test("returns motion values used by the card renderer", () => {
-		const motionInteraction = createHook(createParams(null, jest.fn(), jest.fn()));
+		const motionInteraction = createHook(createParams(null, jest.fn(), jest.fn(), jest.fn()));
 
 		expect(motionInteraction.x).toBe(xMotionValue);
 		expect(motionInteraction.rotate).toBe(rotateTransform);
@@ -135,7 +136,7 @@ describe("useFlipcardMotionInteraction", () => {
 	});
 
 	test("maps drag x to prototype-like surface effects", () => {
-		createHook(createParams(null, jest.fn(), jest.fn()));
+		createHook(createParams(null, jest.fn(), jest.fn(), jest.fn()));
 
 		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, 0, 180], ["18%", "50%", "82%"]);
 		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -32, 0, 32, 180], [0.52, 0.34, 0.26, 0.34, 0.52]);
@@ -148,16 +149,18 @@ describe("useFlipcardMotionInteraction", () => {
 	test("completes command swipes with the card id after the exit animation", () => {
 		const onSwipePractice = jest.fn();
 		const onSwipeMastered = jest.fn();
+		const onSwipeFeedback = jest.fn();
 
 		createHook(createParams({
 			id: 7,
 			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.LEFT
-		}, onSwipePractice, onSwipeMastered));
+		}, onSwipePractice, onSwipeMastered, onSwipeFeedback));
 
 		expect(animate).toHaveBeenCalledWith(xMotionValue, -720, expect.objectContaining({
 			duration: 0.22,
 			ease: "easeOut"
 		}));
+		expect(onSwipeFeedback).toHaveBeenCalledWith(FLIPCARD_SWIPE_RESULT.PRACTICE);
 		expect(onSwipePractice).not.toHaveBeenCalled();
 
 		animate.mock.calls[0][2].onComplete();
@@ -167,7 +170,7 @@ describe("useFlipcardMotionInteraction", () => {
 	});
 
 	test("snaps the card back when drag does not pass the swipe threshold", () => {
-		const motionInteraction = createHook(createParams(null, jest.fn(), jest.fn()));
+		const motionInteraction = createHook(createParams(null, jest.fn(), jest.fn(), jest.fn()));
 
 		motionInteraction.handleDragEnd(null, {
 			offset: { x: 72 },

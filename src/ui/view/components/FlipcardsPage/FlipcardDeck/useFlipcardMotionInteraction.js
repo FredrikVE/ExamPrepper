@@ -62,6 +62,7 @@ export function useFlipcardMotionInteraction(params) {
 			return;
 		}
 
+		params.onSwipeFeedback(swipeResult);
 		stopActiveAnimation();
 		isCompletingSwipeRef.current = true;
 		setIsCompletingSwipe(true);
@@ -76,7 +77,7 @@ export function useFlipcardMotionInteraction(params) {
 				setIsCompletingSwipe(false);
 			}
 		});
-	}, [completeSwipe, stopActiveAnimation, x]);
+	}, [completeSwipe, params.onSwipeFeedback, stopActiveAnimation, x]);
 
 	useEffect(() => {
 		if (!params.swipeCommand || handledSwipeCommandIdRef.current === params.swipeCommand.id) {

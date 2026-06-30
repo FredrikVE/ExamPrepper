@@ -6,5 +6,6 @@
 @import "./card-faces.css";
 @import "./swipe-indicators.css";
 @import "./hover-preview.css";
+@import "./feedback-toast.css";
 @import "./quick-actions.css";
 @import "./responsive.css";

@@ -1,6 +1,8 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/FlipcardDeck.jsx
 import CardStack from "./CardStack.jsx";
+import CompleteState from "./CompleteState.jsx";
 import Flipcard from "./Flipcard.jsx";
+import FeedbackToast from "./FeedbackToast.jsx";
 import QuickActions from "./QuickActions.jsx";
 import { useFlipcardHoverPreviewInteraction } from "./useFlipcardHoverPreviewInteraction.js";
 
@@ -19,32 +21,13 @@ export default function FlipcardDeck(props) {
 
 	if (props.isDeckComplete) {
 		return (
-			<section className="flipcard-deck flipcard-deck-state" aria-label={props.labels.deckLabel}>
-				<h2>{props.labels.completeTitle}</h2>
-				<p>{props.progressModel.completeBody}</p>
-				<div className="flipcard-complete-stats" aria-label={props.labels.completeStatsLabel}>
-					<span>{props.labels.completedCardsLabel(props.progressModel.completedCount, props.progressModel.totalCardCount)}</span>
-					<span>{props.labels.masteredCardsLabel(props.progressModel.masteredCount)}</span>
-					<span>{props.labels.practiceCardsLabel(props.progressModel.practiceCount)}</span>
-				</div>
-				<div className="flipcard-deck-state-actions">
-					<button
-						type="button"
-						className="flipcards-secondary-action"
-						onClick={props.onGoToPreviousCard}
-						disabled={!props.hasPreviousCard}
-					>
-						{props.labels.previousCardLabel}
-					</button>
-					<button
-						type="button"
-						className="flipcards-primary-action"
-						onClick={props.onRestart}
-					>
-						{props.labels.restartDeckLabel}
-					</button>
-				</div>
-			</section>
+			<CompleteState
+				labels={props.labels}
+				progressModel={props.progressModel}
+				hasPreviousCard={props.hasPreviousCard}
+				onGoToPreviousCard={props.onGoToPreviousCard}
+				onRestart={props.onRestart}
+			/>
 		);
 	}
 
@@ -77,6 +60,12 @@ export default function FlipcardDeck(props) {
 					onRequestMasteredSwipe={props.onRequestMasteredSwipe}
 					onSwipePractice={props.onPractice}
 					onSwipeMastered={props.onMastered}
+					onSwipeFeedback={props.onSwipeFeedback}
+				/>
+
+				<FeedbackToast
+					message={props.feedbackToastMessage}
+					isVisible={props.isFeedbackToastVisible}
 				/>
 			</div>
 

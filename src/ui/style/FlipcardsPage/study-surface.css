@@ -76,3 +76,30 @@
 		transform: none;
 	}
 }
+
+@media (max-width: 932px) {
+	.flipcards-study-surface {
+		min-height: min(720px, calc(100dvh - 128px));
+	}
+
+	.flipcards-study-body {
+		align-content: center;
+		gap: var(--space-6);
+	}
+
+	.flipcard-deck-column {
+		--flipcard-stage-width: min(100%, 430px);
+		gap: var(--space-6);
+	}
+}
+
+@media (max-width: 480px) {
+	.flipcards-study-surface {
+		min-height: min(680px, calc(100dvh - 116px));
+	}
+
+	.flipcard-deck-column {
+		--flipcard-stage-width: 100%;
+		gap: var(--space-5);
+	}
+}

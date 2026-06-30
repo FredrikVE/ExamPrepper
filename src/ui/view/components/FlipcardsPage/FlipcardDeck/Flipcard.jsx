@@ -47,7 +47,8 @@ export default function Flipcard(props) {
 		cardId: props.cardId,
 		swipeCommand: props.swipeCommand,
 		onSwipePractice: props.onSwipePractice,
-		onSwipeMastered: props.onSwipeMastered
+		onSwipeMastered: props.onSwipeMastered,
+		onSwipeFeedback: props.onSwipeFeedback
 	});
 	const isInteractionDisabled = props.isSwipeCommandActive || motionInteraction.isCompletingSwipe;
 	const className = getFlipcardClassName({

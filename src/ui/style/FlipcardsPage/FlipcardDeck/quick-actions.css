@@ -1,114 +1,186 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/quick-actions.css */
 .quick-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: clamp(18px, 3vw, 34px);
-    max-width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: clamp(18px, 3vw, 34px);
+	max-width: 100%;
 }
 
 .quick-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-3);
-    min-height: 54px;
-    border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
-    border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--panel-bg) 68%, transparent);
-    color: var(--text-main);
-    box-shadow:
-        var(--flipcards-soft-shadow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    font-size: 14px;
-    font-weight: 850;
-    padding: 0 var(--space-6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    transition:
-        transform var(--transition-fast),
-        border-color var(--transition-fast),
-        background var(--transition-fast),
-        opacity var(--transition-fast);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-3);
+	min-height: 54px;
+	border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--panel-bg) 68%, transparent);
+	box-shadow:
+		var(--flipcards-soft-shadow),
+		inset 0 1px 0 rgba(255, 255, 255, 0.04);
+	color: var(--text-main);
+	font-size: 14px;
+	font-weight: 850;
+	padding: 0 var(--space-6);
+	transition:
+		transform var(--transition-fast),
+		border-color var(--transition-fast),
+		background var(--transition-fast),
+		opacity var(--transition-fast);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
 }
 
 .quick-action:hover:not(:disabled) {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
-    background: color-mix(in srgb, var(--accent-soft) 50%, var(--panel-bg));
+	border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+	background: color-mix(in srgb, var(--accent-soft) 50%, var(--panel-bg));
+	transform: translateY(-2px);
 }
 
 .quick-action:disabled {
-    cursor: not-allowed;
-    opacity: 0.44;
+	cursor: not-allowed;
+	opacity: 0.44;
 }
 
 .quick-action svg {
-    width: 18px;
-    height: 18px;
-    stroke-width: 2.4;
+	width: 18px;
+	height: 18px;
+	stroke-width: 2.4;
 }
 
 .quick-action-practice {
-    border-color: color-mix(in srgb, var(--flipcards-red) 22%, var(--line));
-    background: var(--flipcards-red-soft);
-    color: var(--flipcards-red);
+	border-color: color-mix(in srgb, var(--flipcards-red) 22%, var(--line));
+	background: var(--flipcards-red-soft);
+	color: var(--flipcards-red);
 }
 
 .quick-action-flip {
-    border-color: color-mix(in srgb, var(--flipcards-amber) 22%, var(--line));
-    background: var(--flipcards-amber-soft);
-    color: var(--flipcards-amber);
+	border-color: color-mix(in srgb, var(--flipcards-amber) 22%, var(--line));
+	background: var(--flipcards-amber-soft);
+	color: var(--flipcards-amber);
 }
 
 .quick-action-mastered {
-    border-color: color-mix(in srgb, var(--flipcards-green) 22%, var(--line));
-    background: var(--flipcards-green-soft);
-    color: var(--flipcards-green);
+	border-color: color-mix(in srgb, var(--flipcards-green) 22%, var(--line));
+	background: var(--flipcards-green-soft);
+	color: var(--flipcards-green);
 }
 
 @media (min-width: 933px) {
-    .quick-actions {
-        gap: 38px;
-        margin-top: -2px;
-    }
+	.quick-actions {
+		gap: 38px;
+		margin-top: -2px;
+	}
 
-    .quick-action {
-        position: relative;
-        width: 72px;
-        min-width: 72px;
-        height: 72px;
-        min-height: 72px;
-        gap: 0;
-        border-radius: var(--radius-full);
-        padding: 0;
-        box-shadow:
-            0 22px 46px rgba(0, 0, 0, 0.28),
-            inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    }
+	.quick-action {
+		position: relative;
+		width: 72px;
+		min-width: 72px;
+		height: 72px;
+		min-height: 72px;
+		gap: 0;
+		border-radius: var(--radius-full);
+		padding: 0;
+		box-shadow:
+			0 22px 46px rgba(0, 0, 0, 0.28),
+			inset 0 1px 0 rgba(255, 255, 255, 0.04);
+	}
 
-    .quick-action:hover:not(:disabled) {
-        transform: translateY(-3px);
-    }
+	.quick-action:hover:not(:disabled) {
+		transform: translateY(-3px);
+	}
 
-    .quick-action span {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-    }
+	.quick-action span {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+	}
 
-    .quick-action svg {
-        width: 24px;
-        height: 24px;
-    }
+	.quick-action svg {
+		width: 24px;
+		height: 24px;
+	}
 }
 
-@media (prefers-reduced-motion: reduce) and (min-width: 933px) {
-    .quick-action:hover:not(:disabled) {
-        transform: none;
-    }
+@media (max-width: 932px) {
+	.quick-actions {
+		gap: clamp(20px, 8vw, 36px);
+		margin-top: -6px;
+		padding-bottom: max(0px, env(safe-area-inset-bottom));
+	}
+
+	.quick-action {
+		position: relative;
+		width: 64px;
+		min-width: 64px;
+		height: 64px;
+		min-height: 64px;
+		gap: 0;
+		border-radius: var(--radius-full);
+		padding: 0;
+	}
+
+	.quick-action span {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+	}
+
+	.quick-action svg {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+@media (max-height: 780px) and (max-width: 932px) {
+	.quick-actions {
+		gap: clamp(18px, 7vw, 32px);
+		margin-top: -10px;
+	}
+
+	.quick-action {
+		width: 58px;
+		min-width: 58px;
+		height: 58px;
+		min-height: 58px;
+	}
+
+	.quick-action svg {
+		width: 22px;
+		height: 22px;
+	}
+}
+
+@media (max-width: 380px) {
+	.quick-actions {
+		gap: clamp(14px, 6vw, 24px);
+	}
+
+	.quick-action {
+		width: 54px;
+		min-width: 54px;
+		height: 54px;
+		min-height: 54px;
+	}
+
+	.quick-action svg {
+		width: 21px;
+		height: 21px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.quick-action,
+	.quick-action:hover:not(:disabled) {
+		transition: none;
+		transform: none;
+	}
 }

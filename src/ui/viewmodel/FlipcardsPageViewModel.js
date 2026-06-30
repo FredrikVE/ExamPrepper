@@ -135,6 +135,8 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         practiceCardLabel: t.flipcardsPracticeCardLabel,
         flipCardLabel: t.flipcardsFlipCardLabel,
         masteredCardLabel: t.flipcardsMasteredCardLabel,
+        practiceFeedbackLabel: t.flipcardsPracticeFeedbackLabel,
+        masteredFeedbackLabel: t.flipcardsMasteredFeedbackLabel,
         quickActionsLabel: t.flipcardsQuickActionsLabel,
         completePositionLabel: t.flipcardsCompletePositionLabel,
         completeBody: t.flipcardsCompleteBody,

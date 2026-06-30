@@ -1,6 +1,8 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
+import { FLIPCARD_SWIPE_RESULT } from "./FlipcardDeck/flipcardSwipe.js";
+import { useFlipcardFeedbackToast } from "./FlipcardDeck/useFlipcardFeedbackToast.js";
 import { useFlipcardSwipeInteraction } from "./FlipcardDeck/useFlipcardSwipeInteraction.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
@@ -23,6 +25,13 @@ export default function FlipcardsStudySurface(props) {
 		requestMasteredSwipe,
 		clearActiveSwipeCommand
 	} = useFlipcardSwipeInteraction(props.visibleDeckKey);
+	const {
+		message: feedbackToastMessage,
+		isVisible: isFeedbackToastVisible,
+		showFeedbackToast
+	} = useFlipcardFeedbackToast({
+		resetKey: props.visibleDeckKey
+	});
 
 	const progressEntries = useMemo(() => {
 		return createProgressPagerEntries({
@@ -63,6 +72,17 @@ export default function FlipcardsStudySurface(props) {
 		props.onCompleteForPractice(cardId);
 	}, [clearActiveSwipeCommand, props.onCompleteForPractice]);
 
+	const showSwipeFeedback = useCallback((swipeResult) => {
+		if (swipeResult === FLIPCARD_SWIPE_RESULT.PRACTICE) {
+			showFeedbackToast(props.labels.practiceFeedbackLabel);
+			return;
+		}
+
+		if (swipeResult === FLIPCARD_SWIPE_RESULT.MASTERED) {
+			showFeedbackToast(props.labels.masteredFeedbackLabel);
+		}
+	}, [props.labels.masteredFeedbackLabel, props.labels.practiceFeedbackLabel, showFeedbackToast]);
+
 	const handleFlipcardKeyboardShortcut = useCallback((event) => {
 		if (!shouldHandleFlipcardKeyboardShortcut(event)) {
 			return;
@@ -72,31 +92,29 @@ export default function FlipcardsStudySurface(props) {
 			return;
 		}
 
-		if (event.key === "ArrowLeft" && props.hasPreviousCard) {
+		if (event.key === "ArrowLeft") {
 			event.preventDefault();
-			props.onGoToPreviousCard();
+			requestPracticeSwipe();
 			return;
 		}
 
-		if (event.key === "ArrowRight" && props.hasNextCard) {
+		if (event.key === "ArrowRight") {
 			event.preventDefault();
-			props.onGoToNextCard();
+			requestMasteredSwipe();
 			return;
 		}
 
-		if (event.key === "Enter") {
+		if (event.key === "Enter" || event.key === " ") {
 			event.preventDefault();
 			props.onToggleActiveCard();
 		}
 	}, [
 		isSwipeCommandActive,
 		props.cards.length,
-		props.hasNextCard,
-		props.hasPreviousCard,
 		props.isDeckComplete,
-		props.onGoToNextCard,
-		props.onGoToPreviousCard,
-		props.onToggleActiveCard
+		props.onToggleActiveCard,
+		requestMasteredSwipe,
+		requestPracticeSwipe
 	]);
 
 	useEffect(() => {
@@ -163,6 +181,9 @@ export default function FlipcardsStudySurface(props) {
 						onRequestMasteredSwipe={requestMasteredSwipe}
 						onPractice={completeForPractice}
 						onMastered={completeAsMastered}
+						onSwipeFeedback={showSwipeFeedback}
+						feedbackToastMessage={feedbackToastMessage}
+						isFeedbackToastVisible={isFeedbackToastVisible}
 						onRestart={restartSession}
 					/>
 
