@@ -5,77 +5,71 @@ import ProgressPager from "../../ProgressPager/ProgressPager.jsx";
 import MobileFlipcardDeckToolGrid from "./MobileFlipcardDeckToolGrid.jsx";
 
 // Flipcards bruker samme dokkede MobileBottomSheet som select-sidene. Den delte
-// ProgressPageren er peeken, verktøyrutenettet avdekkes når arket utvides.
-export default function FlipcardsMobileFooterSheet({
-    progressEntries,
-    progressLabel,
-    hasPrevious,
-    hasNext,
-    isSwipeCommandActive,
-    deckToolItems,
-    labels,
-    onPrevious,
-    onNext,
-    onGoToCard,
-    onDeckToolSelect
-}) {
-    const [isOpen, setIsOpen] = useState(false);
+// ProgressPageren er peeken, verktøyrutenettet avdekkes først når arket utvides.
+export default function FlipcardsMobileFooterSheet(props) {
+	const [isOpen, setIsOpen] = useState(false);
 
-    const selectDeckTool = useCallback((deckToolKey) => {
-        onDeckToolSelect(deckToolKey);
-        setIsOpen(false);
-    }, [onDeckToolSelect]);
+	const changeSheetOpen = useCallback((nextIsOpen) => {
+		setIsOpen(nextIsOpen);
+	}, []);
 
-    return (
-        <div className="flipcards-footer-sheet">
-            <MobileBottomSheet
-                isOpen={isOpen}
-                onOpenChange={setIsOpen}
-                finalFocusRef={null}
-                contentId="flipcards-mobile-bottom-sheet"
-                title={labels.toolMenuTitle}
-                subtitle={labels.toolMenuSubtitle}
-                openLabel={labels.openToolMenuLabel}
-                closeLabel={labels.closeToolMenuLabel}
-                peekLabel={labels.toolMenuLabel}
-                hasPeek={true}
-                popupClassName=""
-                contentClassName="flipcards-mobile-bottom-sheet-content"
-            >
-                <ProgressPager
-                    className="flipcards-progress-pager flipcards-progress-pager-mobile"
-                    containerClassName="flipcards-progress-pager-container"
-                    ariaLabel={labels.toolMenuPagerLabel}
-                    previousLabel={labels.previousCardLabel}
-                    previousDisabled={!hasPrevious || isSwipeCommandActive}
-                    previousButtonClassName="flipcards-progress-pager-button"
-                    onPrevious={onPrevious}
-                    entries={progressEntries}
-                    compactEntries={progressEntries}
-                    minimalCompactEntries={progressEntries}
-                    shouldUseCompactDots={progressEntries.length > 9}
-                    shouldUseResponsiveCompactDots={true}
-                    submitted={false}
-                    onSelectEntry={onGoToCard}
-                    dotsLabel={labels.toolMenuPagerLabel}
-                    goToEntryLabel={labels.goToCardLabel}
-                    counterLabel={progressLabel}
-                    counterClassName="flipcards-progress-pager-counter"
-                    counterLabelClassName="flipcards-progress-pager-label"
-                    nextLabel={labels.nextCardLabel}
-                    nextDisabled={!hasNext || isSwipeCommandActive}
-                    nextButtonClassName="flipcards-progress-pager-button"
-                    onNext={onNext}
-                    hasActionButton={false}
-                    actionButton={null}
-                />
+	const selectDeckTool = useCallback((deckToolKey) => {
+		props.onDeckToolSelect(deckToolKey);
+		setIsOpen(false);
+	}, [props.onDeckToolSelect]);
 
-                <MobileFlipcardDeckToolGrid
-                    labels={labels}
-                    deckToolItems={deckToolItems}
-                    onDeckToolSelect={selectDeckTool}
-                />
-            </MobileBottomSheet>
-        </div>
-    );
+	return (
+		<div className="flipcards-footer-sheet" data-open={isOpen ? "true" : "false"}>
+			<MobileBottomSheet
+				isOpen={isOpen}
+				onOpenChange={changeSheetOpen}
+				finalFocusRef={null}
+				contentId="flipcards-mobile-bottom-sheet"
+				title={props.labels.toolMenuTitle}
+				subtitle={props.labels.toolMenuSubtitle}
+				openLabel={props.labels.openToolMenuLabel}
+				closeLabel={props.labels.closeToolMenuLabel}
+				peekLabel={props.labels.toolMenuLabel}
+				hasPeek={true}
+				popupClassName=""
+				contentClassName="flipcards-mobile-bottom-sheet-content"
+			>
+				<ProgressPager
+					className="flipcards-progress-pager flipcards-progress-pager-mobile"
+					containerClassName="flipcards-progress-pager-container"
+					ariaLabel={props.labels.toolMenuPagerLabel}
+					previousLabel={props.labels.previousCardLabel}
+					previousDisabled={!props.hasPrevious || props.isSwipeCommandActive}
+					previousButtonClassName="flipcards-progress-pager-button"
+					onPrevious={props.onPrevious}
+					entries={props.progressEntries}
+					compactEntries={props.progressEntries}
+					minimalCompactEntries={props.progressEntries}
+					shouldUseCompactDots={props.progressEntries.length > 9}
+					shouldUseResponsiveCompactDots={true}
+					submitted={false}
+					onSelectEntry={props.onGoToCard}
+					dotsLabel={props.labels.toolMenuPagerLabel}
+					goToEntryLabel={props.labels.goToCardLabel}
+					counterLabel={props.progressLabel}
+					counterClassName="flipcards-progress-pager-counter"
+					counterLabelClassName="flipcards-progress-pager-label"
+					nextLabel={props.labels.nextCardLabel}
+					nextDisabled={!props.hasNext || props.isSwipeCommandActive}
+					nextButtonClassName="flipcards-progress-pager-button"
+					onNext={props.onNext}
+					hasActionButton={false}
+					actionButton={null}
+				/>
+
+				{isOpen && (
+					<MobileFlipcardDeckToolGrid
+						labels={props.labels}
+						deckToolItems={props.deckToolItems}
+						onDeckToolSelect={selectDeckTool}
+					/>
+				)}
+			</MobileBottomSheet>
+		</div>
+	);
 }
