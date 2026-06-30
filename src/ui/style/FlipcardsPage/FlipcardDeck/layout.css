@@ -1,132 +1,128 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/layout.css */
 .flipcard-deck {
-    display: grid;
-    justify-items: center;
-    align-content: center;
-    gap: var(--space-8);
-    min-height: 0;
+	display: grid;
+	justify-items: center;
+	align-content: center;
+	gap: var(--space-8);
+	width: var(--flipcard-stage-width);
+	max-width: 100%;
+	min-height: 0;
 }
 
 .flipcard-deck-state {
-    align-content: center;
-    width: min(660px, 100%);
-    min-height: 420px;
-    margin: 0 auto;
-    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
-    border-radius: 30px;
-    background:
-        linear-gradient(120deg, rgba(255, 255, 255, 0.055), transparent 28%),
-        radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 36%),
-        color-mix(in srgb, var(--panel-strong) 92%, transparent);
-    box-shadow: var(--shadow-card);
-    padding: clamp(30px, 5vw, 56px);
-    text-align: center;
+	align-content: center;
+	width: min(660px, 100%);
+	min-height: 420px;
+	margin: 0 auto;
+	border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+	border-radius: 30px;
+	background:
+		linear-gradient(120deg, rgba(255, 255, 255, 0.055), transparent 28%),
+		radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 36%),
+		color-mix(in srgb, var(--panel-strong) 92%, transparent);
+	box-shadow: var(--shadow-card);
+	padding: clamp(30px, 5vw, 56px);
+	text-align: center;
 }
 
 .flipcard-deck-state h2 {
-    margin: 0;
-    color: var(--text-main);
-    font-size: clamp(32px, 5vw, 52px);
-    line-height: 1;
-    letter-spacing: -0.055em;
+	margin: 0;
+	color: var(--text-main);
+	font-size: clamp(32px, 5vw, 52px);
+	line-height: 1;
+	letter-spacing: -0.055em;
 }
 
 .flipcard-deck-state p {
-    max-width: 42ch;
-    margin: var(--space-5) auto 0;
-    color: var(--text-muted);
-    font-size: 16px;
-    line-height: 1.7;
+	max-width: 42ch;
+	margin: var(--space-5) auto 0;
+	color: var(--text-muted);
+	font-size: 16px;
+	line-height: 1.7;
 }
 
 .flipcard-stage {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: var(--flipcard-stage-width);
-    min-height: var(--flipcard-stage-height);
-    isolation: isolate;
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 100%;
+	height: var(--flipcard-stage-height);
+	isolation: isolate;
+	perspective: var(--flipcard-perspective);
 }
 
 .flipcard-stage-glow {
-    position: absolute;
-    inset: 9% 6%;
-    z-index: -2;
-    border-radius: var(--radius-full);
-    background:
-        radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 22%, transparent), transparent 64%),
-        radial-gradient(circle at 22% 82%, rgba(47, 128, 255, 0.12), transparent 48%);
-    filter: blur(20px);
-    opacity: 0.86;
-}
-
-.flipcard-deck-progress-pager {
-    display: block;
-    width: var(--flipcard-stage-width);
-    max-width: 88%;
-    margin: calc(-1 * var(--space-2)) auto 0;
+	position: absolute;
+	inset: 12% 11% -8%;
+	z-index: -2;
+	border-radius: var(--radius-full);
+	background:
+		radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 24%, transparent), transparent 64%),
+		radial-gradient(circle at 22% 82%, rgba(47, 128, 255, 0.12), transparent 48%);
+	filter: blur(22px);
+	opacity: 0.88;
 }
 
 .flipcards-secondary-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 46px;
-    margin: var(--space-7) auto 0;
-    border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
-    border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
-    color: var(--text-main);
-    font-weight: 850;
-    padding: 0 var(--space-8);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 46px;
+	margin: var(--space-7) auto 0;
+	border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+	color: var(--text-main);
+	font-weight: 850;
+	padding: 0 var(--space-8);
 }
 
 .flipcards-secondary-action:disabled {
-    cursor: not-allowed;
-    opacity: 0.48;
+	cursor: not-allowed;
+	opacity: 0.48;
 }
 
 .flipcard-complete-stats {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3);
-    margin-top: var(--space-6);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--space-3);
+	margin-top: var(--space-6);
 }
 
 .flipcard-complete-stats span {
-    border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
-    border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--panel-bg) 78%, transparent);
-    color: var(--text-main);
-    font-size: 13px;
-    font-weight: 850;
-    padding: var(--space-2) var(--space-4);
+	border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--panel-bg) 78%, transparent);
+	color: var(--text-main);
+	font-size: 13px;
+	font-weight: 850;
+	padding: var(--space-2) var(--space-4);
 }
 
 .flipcard-deck-state-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-4);
-    margin-top: var(--space-7);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--space-4);
+	margin-top: var(--space-7);
 }
 
 .flipcard-deck-state-actions .flipcards-secondary-action,
 .flipcard-deck-state-actions .flipcards-primary-action {
-    margin: 0;
+	margin: 0;
 }
 
 .flipcards-primary-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 46px;
-    border: 1px solid color-mix(in srgb, var(--accent) 72%, var(--line));
-    border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-strong) 74%, var(--accent)));
-    color: #ffffff;
-    font-weight: 900;
-    padding: 0 var(--space-8);
-    box-shadow: 0 18px 36px color-mix(in srgb, var(--accent) 22%, transparent);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 46px;
+	border: 1px solid color-mix(in srgb, var(--accent) 72%, var(--line));
+	border-radius: var(--radius-full);
+	background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-strong) 74%, var(--accent)));
+	color: #ffffff;
+	font-weight: 900;
+	padding: 0 var(--space-8);
+	box-shadow: 0 18px 36px color-mix(in srgb, var(--accent) 22%, transparent);
 }

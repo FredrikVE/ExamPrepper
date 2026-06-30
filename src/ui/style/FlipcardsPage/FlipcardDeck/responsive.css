@@ -1,92 +1,127 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/responsive.css */
+@media (max-width: 1100px) {
+	.flipcard-deck {
+		--flipcard-stage-width: min(620px, 100%);
+		--flipcard-stage-height: clamp(410px, 54vh, 460px);
+	}
+
+	.card-stack-title {
+		font-size: clamp(40px, 7vw, 52px);
+	}
+}
+
 @media (max-width: 932px) {
-    .flipcard-deck {
-        --flipcard-stage-height: min(50dvh, 430px);
-        --flipcard-face-padding: 42px clamp(46px, 13vw, 72px);
-        --flipcard-radius: 36px;
-        gap: var(--space-7);
-    }
+	.flipcard-deck {
+		--flipcard-stage-width: min(100%, 430px);
+		--flipcard-stage-height: min(58dvh, 430px);
+		--flipcard-face-padding: 42px clamp(42px, 12vw, 68px);
+		--flipcard-radius: 28px;
+		gap: var(--space-7);
+	}
 
-    .flipcard-stage {
-        width: min(100%, 430px);
-    }
+	.flip-title {
+		max-width: 90%;
+		font-size: clamp(34px, 10vw, 48px);
+		line-height: 1;
+		letter-spacing: -0.05em;
+	}
 
-    .flip-title {
-        max-width: 100%;
-        font-size: clamp(32px, 9.4vw, 44px);
-        line-height: 1;
-        letter-spacing: -0.055em;
-    }
+	.flip-title-long {
+		font-size: clamp(30px, 8.6vw, 42px);
+	}
 
-    .flip-definition {
-        max-width: 100%;
-        font-size: clamp(22px, 6.4vw, 32px);
-        line-height: 1.14;
-    }
+	.flip-title-extra-long {
+		font-size: clamp(26px, 7.4vw, 36px);
+	}
 
-    .quick-actions {
-        display: flex;
-        gap: clamp(20px, 9vw, 42px);
-        margin-top: -4px;
-    }
+	.flip-definition {
+		max-width: 90%;
+		font-size: clamp(22px, 6.4vw, 32px);
+		line-height: 1.14;
+	}
 
-    .quick-action {
-        width: 64px;
-        min-width: 64px;
-        height: 64px;
-        min-height: 64px;
-        padding: 0;
-        border-radius: var(--radius-full);
-    }
+	.card-stack-card {
+		inset: 18px 18px -16px;
+	}
 
-    .flipcard-deck-progress-pager {
-        display: none;
-    }
+	.card-stack-title {
+		font-size: clamp(32px, 9vw, 48px);
+	}
 
-    .quick-action-secondary {
-        display: none;
-    }
+	.quick-actions {
+		display: flex;
+		gap: clamp(20px, 9vw, 42px);
+		margin-top: -4px;
+	}
 
-    .quick-action span {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-    }
+	.quick-action {
+		width: 64px;
+		min-width: 64px;
+		height: 64px;
+		min-height: 64px;
+		padding: 0;
+		border-radius: var(--radius-full);
+	}
 
-    .quick-action svg {
-        width: 24px;
-        height: 24px;
-    }
+	.flipcard-deck-progress-pager {
+		display: none;
+	}
+
+	.quick-action-secondary {
+		display: none;
+	}
+
+	.quick-action span {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+	}
+
+	.quick-action svg {
+		width: 24px;
+		height: 24px;
+	}
 }
 
 @media (max-height: 780px) and (max-width: 932px) {
-    .flipcard-deck {
-        --flipcard-stage-height: min(46dvh, 380px);
-        gap: var(--space-5);
-    }
+	.flipcard-deck {
+		--flipcard-stage-height: min(52dvh, 390px);
+		gap: var(--space-5);
+	}
 
-    .quick-actions {
-        margin-top: -8px;
-    }
+	.quick-actions {
+		margin-top: -8px;
+	}
 
-    .quick-action {
-        width: 58px;
-        min-width: 58px;
-        height: 58px;
-        min-height: 58px;
-    }
+	.quick-action {
+		width: 58px;
+		min-width: 58px;
+		height: 58px;
+		min-height: 58px;
+	}
+}
+
+@media (max-width: 480px) {
+	.flipcard-deck {
+		--flipcard-stage-height: min(56dvh, 380px);
+		--flipcard-face-padding: 38px 34px;
+	}
+
+	.card-stack-card {
+		inset: 16px 14px -14px;
+	}
 }
 
 @media (max-width: 380px) {
-    .flipcard-deck {
-        --flipcard-stage-height: min(48dvh, 390px);
-        --flipcard-face-padding: 38px 48px;
-    }
+	.flipcard-deck {
+		--flipcard-stage-height: min(54dvh, 360px);
+		--flipcard-face-padding: 34px 30px;
+	}
 
-    .flip-title {
-        font-size: clamp(30px, 9.1vw, 38px);
-    }
+	.flip-title {
+		font-size: clamp(28px, 9.1vw, 36px);
+	}
 }

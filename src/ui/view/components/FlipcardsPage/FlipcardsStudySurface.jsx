@@ -135,7 +135,7 @@ export default function FlipcardsStudySurface(props) {
 			onSelectEntry={props.onGoToCard}
 			dotsLabel={props.labels.toolMenuPagerLabel}
 			goToEntryLabel={props.labels.goToCardLabel}
-			counterLabel={props.activeCardPositionLabel}
+			counterLabel=""
 			counterClassName="flipcards-progress-pager-counter"
 			counterLabelClassName="flipcards-progress-pager-label"
 			nextLabel={props.labels.nextCardLabel}
@@ -150,28 +150,36 @@ export default function FlipcardsStudySurface(props) {
 	return (
 		<section className={studySurfaceClassName} aria-label={props.labels.studySurfaceLabel}>
 			<div className="flipcards-study-body">
-				<FlipcardDeck
-					cards={props.cards}
-					activeCard={props.activeCard}
-					activeCardIndex={props.activeCardIndex}
-					isActiveCardFlipped={props.isActiveCardFlipped}
-					isDeckComplete={props.isDeckComplete}
-					hasPreviousCard={props.hasPreviousCard}
-					hasNextCard={props.hasNextCard}
-					activeSwipeCommand={activeSwipeCommand}
-					isSwipeCommandActive={isSwipeCommandActive}
-					labels={props.labels}
-					progressModel={props.progressModel}
-					footerPager={progressPager}
-					onGoToPreviousCard={props.onGoToPreviousCard}
-					onGoToNextCard={props.onGoToNextCard}
-					onToggleActiveCard={props.onToggleActiveCard}
-					onRequestPracticeSwipe={requestPracticeSwipe}
-					onRequestMasteredSwipe={requestMasteredSwipe}
-					onPractice={completeForPractice}
-					onMastered={completeAsMastered}
-					onRestart={restartSession}
-				/>
+				<div className="flipcard-deck-column">
+					<FlipcardDeck
+						cards={props.cards}
+						activeCard={props.activeCard}
+						nextCard={props.nextCard}
+						activeCardIndex={props.activeCardIndex}
+						isActiveCardFlipped={props.isActiveCardFlipped}
+						isDeckComplete={props.isDeckComplete}
+						hasPreviousCard={props.hasPreviousCard}
+						hasNextCard={props.hasNextCard}
+						activeSwipeCommand={activeSwipeCommand}
+						isSwipeCommandActive={isSwipeCommandActive}
+						labels={props.labels}
+						progressModel={props.progressModel}
+						onGoToPreviousCard={props.onGoToPreviousCard}
+						onGoToNextCard={props.onGoToNextCard}
+						onToggleActiveCard={props.onToggleActiveCard}
+						onRequestPracticeSwipe={requestPracticeSwipe}
+						onRequestMasteredSwipe={requestMasteredSwipe}
+						onPractice={completeForPractice}
+						onMastered={completeAsMastered}
+						onRestart={restartSession}
+					/>
+
+					{!props.isDeckComplete && (
+						<div className="flipcard-deck-progress-pager">
+							{progressPager}
+						</div>
+					)}
+				</div>
 
 				<FlipcardToolMenu
 					presentationMode={presentationMode}

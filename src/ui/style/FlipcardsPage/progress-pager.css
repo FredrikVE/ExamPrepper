@@ -199,7 +199,7 @@
     }
 
     .flipcard-deck-progress-pager .flipcards-progress-pager .progress-pager-container {
-        grid-template-columns: minmax(126px, auto) minmax(0, 1fr) minmax(126px, auto);
+		grid-template-columns: minmax(126px, auto) minmax(180px, 1fr) minmax(126px, auto);
         gap: 14px;
         padding: 8px 12px;
     }
@@ -212,9 +212,15 @@
         padding-inline: var(--space-4);
     }
 
-    .flipcard-deck-progress-pager .flipcards-progress-pager-counter {
-        gap: 3px;
-    }
+	.flipcard-deck-progress-pager .flipcards-progress-pager-counter {
+		width: 100%;
+		min-width: 0;
+		gap: 0;
+	}
+
+	.flipcard-deck-progress-pager .flipcards-progress-pager-label {
+		display: none;
+	}
 
     .flipcard-deck-progress-pager .flipcards-progress-pager-counter .progress-pager-dot-list {
         gap: clamp(12px, 2.4vw, 31px);

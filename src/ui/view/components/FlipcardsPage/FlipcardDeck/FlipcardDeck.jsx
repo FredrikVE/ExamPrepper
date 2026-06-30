@@ -53,8 +53,7 @@ export default function FlipcardDeck(props) {
 				<div className="flipcard-stage-glow" aria-hidden="true" />
 
 				<CardStack
-					cardCount={props.cards.length}
-					activeIndex={props.activeCardIndex}
+					nextCard={props.nextCard}
 				/>
 
 				<Flipcard
@@ -82,9 +81,6 @@ export default function FlipcardDeck(props) {
 				onMastered={props.onRequestMasteredSwipe}
 			/>
 
-			<div className="flipcard-deck-progress-pager">
-				{props.footerPager}
-			</div>
 		</section>
 	);
 }
