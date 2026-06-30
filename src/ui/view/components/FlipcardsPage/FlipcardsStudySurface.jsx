@@ -53,23 +53,15 @@ export default function FlipcardsStudySurface(props) {
 		props.onSelectDeckTool(deckToolKey);
 	}, [clearActiveSwipeCommand, props]);
 
-	const completeAsMastered = useCallback(() => {
-		if (!props.activeCard) {
-			return;
-		}
-
+	const completeAsMastered = useCallback((cardId) => {
 		clearActiveSwipeCommand();
-		props.onCompleteAsMastered(props.activeCard.id);
-	}, [clearActiveSwipeCommand, props]);
+		props.onCompleteAsMastered(cardId);
+	}, [clearActiveSwipeCommand, props.onCompleteAsMastered]);
 
-	const completeForPractice = useCallback(() => {
-		if (!props.activeCard) {
-			return;
-		}
-
+	const completeForPractice = useCallback((cardId) => {
 		clearActiveSwipeCommand();
-		props.onCompleteForPractice(props.activeCard.id);
-	}, [clearActiveSwipeCommand, props]);
+		props.onCompleteForPractice(cardId);
+	}, [clearActiveSwipeCommand, props.onCompleteForPractice]);
 
 	const handleFlipcardKeyboardShortcut = useCallback((event) => {
 		if (!shouldHandleFlipcardKeyboardShortcut(event)) {
