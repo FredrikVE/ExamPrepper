@@ -21,11 +21,11 @@
 	}
 
 	.flipcard-deck-column {
-		gap: var(--space-6);
+		gap: var(--space-7);
 	}
 
 	.flipcard-deck {
-		gap: var(--space-6);
+		gap: var(--space-7);
 		width: min(100%, var(--flipcard-stage-width));
 	}
 
@@ -117,7 +117,7 @@
 	}
 
 	.flipcard-deck {
-		gap: var(--space-5);
+		gap: var(--space-6);
 	}
 
 	.card-edge-action {

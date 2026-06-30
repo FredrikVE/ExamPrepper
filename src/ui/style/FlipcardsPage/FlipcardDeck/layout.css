@@ -3,7 +3,7 @@
 	display: grid;
 	justify-items: center;
 	align-content: center;
-	gap: var(--space-8);
+	gap: clamp(34px, 4.2vh, 48px);
 	width: var(--flipcard-stage-width);
 	max-width: 100%;
 	min-height: 0;

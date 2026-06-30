@@ -1,35 +1,21 @@
 /* src/ui/style/FlipcardsPage/page.css */
 .flipcards-workspace {
-    position: relative;
-    box-sizing: border-box;
-    min-width: 0;
-    min-height: 0;
-    height: 100%;
-    overflow: hidden auto;
-    isolation: isolate;
-    border: 1px solid color-mix(in srgb, var(--flipcards-line-strong) 72%, transparent);
-    border-radius: 22px;
-    background:
-        radial-gradient(circle at 56% 0%, rgba(125, 99, 255, 0.24), transparent 36%),
-        radial-gradient(circle at 16% 10%, rgba(47, 128, 255, 0.12), transparent 34%),
-        radial-gradient(circle at 86% 88%, rgba(34, 211, 166, 0.06), transparent 34%),
-        linear-gradient(180deg, var(--flipcards-bg-elevated) 0%, var(--flipcards-bg) 100%);
-    box-shadow: var(--shadow-heavy);
-    color: var(--text-main);
-    padding: clamp(34px, 4vw, 58px);
-    scrollbar-color: color-mix(in srgb, var(--accent) 26%, transparent) transparent;
-    scrollbar-width: thin;
-}
-
-.flipcards-workspace::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background:
-        linear-gradient(90deg, rgba(47, 128, 255, 0.07), transparent 18%, transparent 82%, rgba(125, 99, 255, 0.08)),
-        radial-gradient(circle at 50% 36%, rgba(255, 255, 255, 0.035), transparent 28%);
+	position: relative;
+	box-sizing: border-box;
+	min-width: 0;
+	min-height: 0;
+	height: 100%;
+	overflow: hidden auto;
+	isolation: isolate;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-lg);
+	background: var(--shell-bg);
+	box-shadow: var(--shadow-heavy);
+	color: var(--text-main);
+	padding: clamp(34px, 4vw, 58px);
+	backdrop-filter: var(--blur-panel);
+	scrollbar-color: color-mix(in srgb, var(--accent) 26%, transparent) transparent;
+	scrollbar-width: thin;
 }
 
 .flipcards-workspace::-webkit-scrollbar {
