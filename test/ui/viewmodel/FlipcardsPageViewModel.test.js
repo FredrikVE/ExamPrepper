@@ -104,16 +104,20 @@ function createViewModel(params) {
 		execute: jest.fn()
 	};
 
+	const onBack = jest.fn();
 	const viewModel = useFlipcardsPageViewModel(
 		getFlashcardsUseCase,
 		"in2120",
 		"no",
 		createTranslations(),
-		false
+		false,
+		true,
+		onBack
 	);
 
 	return {
 		getFlashcardsUseCase,
+		onBack,
 		viewModel
 	};
 }
@@ -157,6 +161,18 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 
 		expect(stateSetters[7]).toHaveBeenCalledWith(0);
 		expect(stateSetters[8]).toHaveBeenCalledWith(false);
+	});
+
+
+	test("exposes workspace back navigation contract", () => {
+		const { onBack, viewModel } = createViewModel(createViewModelParams({
+			activeCardIndex: 0
+		}));
+
+		expect(viewModel.showBackButton).toBe(true);
+		expect(viewModel.backLabel).toBe("sidebarBack");
+		expect(viewModel.navigationLabel).toBe("sidebarMobileNavigation");
+		expect(viewModel.onBack).toBe(onBack);
 	});
 
 	test("exposes navigation and flip handlers for the active card", () => {
