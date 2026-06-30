@@ -1,0 +1,7 @@
+/* src/ui/style/ProgressPager/index.css */
+@import "./layout.css";
+@import "./buttons.css";
+@import "./progress.css";
+@import "./progress-dots.css";
+@import "./progress-dot-variants.css";
+@import "./responsive.css";

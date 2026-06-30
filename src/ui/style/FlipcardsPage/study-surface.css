@@ -1,0 +1,109 @@
+/* src/ui/style/FlipcardsPage/study-surface.css */
+.flipcards-study-surface {
+	position: relative;
+	box-sizing: border-box;
+	display: grid;
+	grid-template-rows: minmax(0, 1fr);
+	gap: 0;
+	min-height: min(720px, 76vh);
+	padding-top: clamp(72px, 8vh, 104px);
+}
+
+.flipcards-study-body {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	align-items: center;
+	gap: var(--space-8);
+	width: 100%;
+	max-width: 1180px;
+	min-height: 0;
+	margin: 0 auto;
+}
+
+.flipcard-deck-column {
+	--flipcard-stage-width: min(700px, 100%);
+
+	display: grid;
+	justify-items: center;
+	align-content: center;
+	gap: clamp(10px, 1.4vh, 16px);
+	width: 100%;
+	min-width: 0;
+	min-height: 0;
+}
+
+.flipcard-deck-progress-pager {
+	display: block;
+	width: var(--flipcard-stage-width);
+	max-width: 100%;
+	justify-self: center;
+	margin: 0 auto;
+}
+
+@media (min-width: 933px) {
+	.flipcards-study-body {
+		box-sizing: border-box;
+		transition:
+			padding-right 240ms ease,
+			max-width 240ms ease;
+	}
+
+	.flipcard-deck {
+		transition:
+			filter 220ms ease,
+			opacity 220ms ease,
+			transform 240ms ease;
+	}
+
+	.flipcards-study-surface-desktop-tools-open .flipcards-study-body {
+		max-width: 100%;
+		padding-right: min(432px, 32vw);
+	}
+
+	.flipcards-study-surface-desktop-tools-open .flipcard-deck {
+		opacity: 0.58;
+		filter: saturate(0.72);
+		transform: translateX(clamp(-72px, -4vw, -28px)) scale(0.985);
+		pointer-events: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 933px) {
+	.flipcards-study-body,
+	.flipcard-deck {
+		transition: none;
+	}
+
+	.flipcards-study-surface-desktop-tools-open .flipcard-deck {
+		transform: none;
+	}
+}
+
+@media (max-width: 932px) {
+	.flipcards-study-surface {
+		min-height: min(720px, calc(100dvh - 128px));
+		padding-top: clamp(58px, 8dvh, 78px);
+	}
+
+	.flipcards-study-body {
+		align-content: center;
+		gap: var(--space-4);
+	}
+
+	.flipcard-deck-column {
+		--flipcard-stage-width: min(100%, 430px);
+		gap: var(--space-2);
+	}
+}
+
+@media (max-width: 480px) {
+	.flipcards-study-surface {
+		min-height: min(680px, calc(100dvh - 116px));
+		padding-top: clamp(48px, 7dvh, 66px);
+	}
+
+	.flipcard-deck-column {
+		--flipcard-stage-width: 100%;
+		gap: var(--space-1);
+	}
+}

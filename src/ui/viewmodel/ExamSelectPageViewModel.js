@@ -1,6 +1,10 @@
 // src/ui/viewmodel/ExamSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { getExamSelectPageNavToolItems } from "../../navigation/navItems.js";
+import { getExamSelectWorkspaceActionToolItems, getPageToolGroup } from "../../navigation/pageTools.js";
+import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
+import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import { ALL_CATEGORIES, buildExamCategories, filterExams } from "./ExamSelectPage/examSelectPageFilters.js";
 
 const SEARCH_SHEET_MODES = {
@@ -10,7 +14,7 @@ const SEARCH_SHEET_MODES = {
 
 const SEARCH_SUGGESTION_LIMIT = 6;
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive, onChangeScreen, showBackButton, onBack) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
     const [examsLoadError, setExamsLoadError] = useState(null);
@@ -22,7 +26,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
     const subjectId = selectedSubject?.id ?? null;
 
     useEffect(() => {
-        if (!subjectId) {
+        if (!isActive || !subjectId) {
             setExams([]);
             setExamsLoading(false);
             setExamsLoadError(null);
@@ -65,7 +69,7 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         return () => {
             cancelled = true;
         };
-    }, [getAvailableExamsUseCase, subjectId, language, t.selectErrorMessage]);
+    }, [getAvailableExamsUseCase, isActive, subjectId, language, t.selectErrorMessage]);
 
     const pageCopy = useMemo(() => {
         return createExamSelectPageCopy(t, selectedSubject);
@@ -157,6 +161,17 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         onSelectExam(examId);
     }, [closeExamSearchSheet, onSelectExam]);
 
+    const pageTools = useMemo(() => {
+        return createWorkspaceToolsModel({
+            pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
+            t,
+            navToolItems: getExamSelectPageNavToolItems(),
+            workspaceActionToolItems: getExamSelectWorkspaceActionToolItems(),
+            hasSelectedSubject: Boolean(subjectId),
+            onChangeScreen
+        });
+    }, [onChangeScreen, subjectId, t]);
+
     return {
         // Data
         exams: filteredExams,
@@ -164,7 +179,19 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         examsLoading,
         examsLoadError,
         categories,
+        pageTools,
         ...pageCopy,
+
+        addPlaceholderCode: t.examAddPlaceholderCode,
+        addPlaceholderTitle: t.examAddPlaceholderTitle,
+        addPlaceholderDescription: t.examAddPlaceholderDescription,
+        addPlaceholderNote: t.examAddPlaceholderNote,
+
+        // Navigasjon
+        showBackButton,
+        backLabel: t.sidebarBack,
+        navigationLabel: t.sidebarMobileNavigation,
+        onBack,
 
         // Søk og filter
         searchTerm,

@@ -1,0 +1,51 @@
+/* src/ui/style/WorkspaceScaffold/responsive.css */
+@media (max-width: 932px) {
+    .workspace-scaffold-header {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        min-height: var(--mobile-topbar-height);
+        margin: 0;
+        padding: 18px 24px;
+    }
+
+    .workspace-scaffold-header::before {
+        background:
+            radial-gradient(circle at 58% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 46%),
+            linear-gradient(
+                180deg,
+                var(--shell-bg) 0%,
+                color-mix(in srgb, var(--shell-bg) 96%, #000 4%) 62%,
+                color-mix(in srgb, var(--shell-bg) 78%, transparent) 100%
+            );
+        box-shadow:
+            0 16px 34px color-mix(in srgb, #000 28%, transparent),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.025);
+        backdrop-filter: blur(22px) saturate(132%);
+        -webkit-backdrop-filter: blur(22px) saturate(132%);
+    }
+
+    .workspace-scaffold-header::after {
+        bottom: -28px;
+        height: 28px;
+        background:
+            linear-gradient(
+                180deg,
+                color-mix(in srgb, var(--shell-bg) 28%, transparent) 0%,
+                color-mix(in srgb, var(--shell-bg) 12%, transparent) 58%,
+                transparent 100%
+            );
+    }
+
+    .workspace-scaffold-header-button {
+        width: 64px;
+        height: 64px;
+        border-radius: 22px;
+    }
+
+    .workspace-scaffold-header-button svg {
+        width: 30px;
+        height: 30px;
+    }
+}

@@ -1,0 +1,18 @@
+/* src/ui/style/ProgressPager/progress.css */
+.progress-pager-counter {
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    justify-items: stretch;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    overflow: hidden;
+    container-type: inline-size;
+}
+
+.progress-pager-counter-label {
+    justify-self: center;
+    line-height: 1;
+}

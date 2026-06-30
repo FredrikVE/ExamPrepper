@@ -1,4 +1,5 @@
 import ExamSelectCard from "./ExamSelectCard.jsx";
+import ExamSelectPlaceholderCard from "./ExamSelectPlaceholderCard.jsx";
 
 export default function ExamSelectGrid(props) {
 	if (props.exams.length === 0) {
@@ -23,6 +24,13 @@ export default function ExamSelectGrid(props) {
 					onSelectExam={props.onSelectExam}
 				/>
 			))}
+
+			<ExamSelectPlaceholderCard
+				code={props.addPlaceholderCode}
+				title={props.addPlaceholderTitle}
+				description={props.addPlaceholderDescription}
+				note={props.addPlaceholderNote}
+			/>
 		</section>
 	);
 }

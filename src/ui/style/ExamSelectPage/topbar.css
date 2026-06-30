@@ -5,14 +5,14 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-6);
-    margin-bottom: var(--space-7);
+    margin-bottom: 0;
 }
 
 .exam-select-title {
     margin: 0;
     color: var(--text-main);
-    font-size: clamp(48px, 5vw, 66px);
-    font-weight: 820;
-    line-height: 0.98;
+    font-size: clamp(52px, 4.55vw, 64px);
+    font-weight: 950;
+    line-height: 0.95;
     letter-spacing: -0.06em;
 }

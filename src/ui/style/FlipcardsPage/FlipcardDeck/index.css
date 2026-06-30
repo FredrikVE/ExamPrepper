@@ -1,0 +1,11 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/index.css */
+@import "./tokens.css";
+@import "./layout.css";
+@import "./card-stack.css";
+@import "./flipcard.css";
+@import "./card-faces.css";
+@import "./swipe-indicators.css";
+@import "./hover-preview.css";
+@import "./feedback-toast.css";
+@import "./quick-actions.css";
+@import "./responsive.css";

@@ -11,17 +11,19 @@ import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewM
 import useExamSelectPageViewModel from "./ui/viewmodel/ExamSelectPageViewModel.js";
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
 import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.js";
+import useFlipcardsPageViewModel from "./ui/viewmodel/FlipcardsPageViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
+import FlipcardsPage from "./ui/view/pages/FlipcardsPage.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getMyStatisticsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlashcardsUseCase, getMyStatisticsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -65,7 +67,8 @@ function AppContent() {
 		t,
 		navigationViewModel.selectedSubjectId,
 		navigationViewModel.selectSubject,
-		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS
+		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS,
+		navigationViewModel.changeScreen
 	);
 
 	const examSelectPageViewModel = useExamSelectPageViewModel(
@@ -74,7 +77,10 @@ function AppContent() {
 		t,
 		subjectSelectPageViewModel.selectedSubject,
 		navigationViewModel.selectExam,
-		navigationViewModel.activeScreen === NAV_SCREENS.SELECT
+		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
+		navigationViewModel.changeScreen,
+		navigationViewModel.showBackButton,
+		navigationViewModel.goBack
 	);
 
 
@@ -95,6 +101,7 @@ function AppContent() {
 					onToggleSubjectPicker={navigationViewModel.toggleSubjectPicker}
 					onCloseSubjectPicker={navigationViewModel.closeSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
+					hasSelectedSubject={Boolean(navigationViewModel.selectedSubjectId)}
 					showBackButton={navigationViewModel.showBackButton}
 					onBack={navigationViewModel.goBack}
 					subjects={subjectSelectPageViewModel.subjects}
@@ -130,6 +137,16 @@ function AppContent() {
 						t={t}
 						onExamWorkModeChange={setExamWorkMode}
 						examWorkModeActionsRef={examWorkModeActionsRef}
+					/>
+				)}
+
+				{navigationViewModel.activeScreen === NAV_SCREENS.FLIPCARDS && (
+					<FlipcardsPageWrapper
+						subjectId={navigationViewModel.selectedSubjectId}
+						language={language}
+						t={t}
+						showBackButton={navigationViewModel.showBackButton}
+						onBack={navigationViewModel.goBack}
 					/>
 				)}
 
@@ -197,9 +214,23 @@ function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkMo
 	}, [examWorkModeActionsRef, onExamWorkModeChange]);
 
 	return (
-		<ExamPage
-			viewModel={examPageViewModel}
-		/>
+		<ExamPage viewModel={examPageViewModel} />
+	);
+}
+
+function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, onBack }) {
+	const flipcardsPageViewModel = useFlipcardsPageViewModel(
+		getFlashcardsUseCase,
+		subjectId,
+		language,
+		t,
+		true,
+		showBackButton,
+		onBack
+	);
+
+	return (
+		<FlipcardsPage viewModel={flipcardsPageViewModel} />
 	);
 }
 

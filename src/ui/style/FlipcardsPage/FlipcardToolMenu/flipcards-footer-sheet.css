@@ -1,0 +1,36 @@
+/* src/ui/style/FlipcardsPage/FlipcardToolMenu/flipcards-footer-sheet.css */
+.flipcards-footer-sheet {
+	display: contents;
+}
+
+.flipcards-mobile-bottom-sheet-content {
+	gap: var(--space-4);
+}
+
+@media (max-width: 932px) {
+	.flipcards-footer-sheet {
+		--mobile-bottom-sheet-collapsed-visible-height: 130px;
+
+		position: fixed;
+		z-index: 55;
+		right: max(0px, env(safe-area-inset-right));
+		bottom: 0;
+		left: max(0px, env(safe-area-inset-left));
+		display: block;
+		overflow: visible;
+		pointer-events: none;
+	}
+
+	.flipcards-footer-sheet .mobile-bottom-sheet-root[data-has-peek="true"] .mobile-bottom-sheet-content {
+		overflow-y: hidden;
+	}
+
+	.flipcards-footer-sheet[data-open="true"] .mobile-bottom-sheet-root[data-has-peek="true"] .mobile-bottom-sheet-content {
+		overflow-y: auto;
+	}
+
+	.flipcards-footer-sheet .mobile-bottom-sheet-grip-control-docked {
+		min-height: 34px;
+		margin-bottom: 0;
+	}
+}

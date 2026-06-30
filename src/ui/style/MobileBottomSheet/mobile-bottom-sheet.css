@@ -1,0 +1,204 @@
+/* src/ui/style/MobileBottomSheet/mobile-bottom-sheet.css */
+.mobile-bottom-sheet-root {
+    display: contents;
+}
+
+.mobile-bottom-sheet-root[data-has-peek="true"] {
+    display: none;
+}
+
+.mobile-bottom-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    min-height: 100dvh;
+    background: color-mix(in srgb, #020711 34%, transparent);
+    opacity: calc(1 - var(--drawer-swipe-progress));
+    transition: opacity 360ms cubic-bezier(0.32, 0.72, 0, 1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.mobile-bottom-sheet-backdrop[data-starting-style],
+.mobile-bottom-sheet-backdrop[data-ending-style] {
+    opacity: 0;
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+}
+
+.mobile-bottom-sheet-backdrop[data-swiping] {
+    transition-duration: 0ms;
+}
+
+.mobile-bottom-sheet-backdrop[data-ending-style] {
+    transition-duration: calc(var(--drawer-swipe-strength) * 360ms);
+}
+
+.mobile-bottom-sheet-viewport {
+    position: fixed;
+    inset: 0;
+    z-index: 71;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.mobile-bottom-sheet-popup {
+    --mobile-bottom-sheet-bleed: 24px;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    max-height: min(86dvh, 760px);
+    margin-bottom: calc(-1 * var(--mobile-bottom-sheet-bleed));
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+    border-bottom: 0;
+    border-radius: 30px 30px 0 0;
+    background:
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
+        radial-gradient(circle at 18% 94%, rgba(47, 128, 255, 0.08), transparent 32%),
+        linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 96%, transparent), color-mix(in srgb, var(--panel-bg) 98%, transparent));
+    box-shadow:
+        0 -24px 70px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    color: var(--text-main);
+    outline: none;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    padding: var(--space-2) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom) + var(--mobile-bottom-sheet-bleed));
+    pointer-events: auto;
+    touch-action: auto;
+    transform: translateY(var(--drawer-swipe-movement-y));
+    transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+}
+
+.mobile-bottom-sheet-popup[data-starting-style],
+.mobile-bottom-sheet-popup[data-ending-style] {
+    transform: translateY(calc(100% - var(--mobile-bottom-sheet-bleed) + 2px));
+}
+
+.mobile-bottom-sheet-popup[data-swiping] {
+    transition-duration: 0ms;
+    user-select: none;
+}
+
+.mobile-bottom-sheet-popup[data-ending-style] {
+    transition-duration: calc(var(--drawer-swipe-strength) * 400ms);
+}
+
+.mobile-bottom-sheet-content {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    flex: 0 1 auto;
+    min-height: 0;
+    width: 100%;
+    margin: 0 auto;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.mobile-bottom-sheet-content::-webkit-scrollbar {
+    display: none;
+}
+
+.mobile-bottom-sheet-grip-control {
+    display: grid;
+    justify-items: center;
+    min-height: 30px;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.mobile-bottom-sheet-grip-control:hover .mobile-bottom-sheet-grip-chevron,
+.mobile-bottom-sheet-grip-control:focus-visible .mobile-bottom-sheet-grip-chevron {
+    color: var(--text-main);
+}
+
+.mobile-bottom-sheet-grip-chevron {
+    width: 52px;
+    height: 24px;
+    color: color-mix(in srgb, var(--text-muted) 66%, transparent);
+    filter: drop-shadow(0 0 14px rgba(150, 160, 190, 0.24));
+    stroke-width: 3.8;
+    transition:
+        color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.mobile-bottom-sheet-grip-control-expanded .mobile-bottom-sheet-grip-chevron {
+    transform: rotate(180deg);
+}
+
+
+@media (max-width: 932px) {
+    .mobile-bottom-sheet-root[data-has-peek="true"] {
+        display: grid;
+        width: 100%;
+    }
+
+    .mobile-bottom-sheet-root[data-has-peek="true"] .mobile-bottom-sheet-popup {
+        display: flex;
+        width: 100%;
+        max-height: calc(100dvh - 54px);
+        margin-bottom: 0;
+        padding: var(--space-2) var(--space-4) calc(var(--space-5) + env(safe-area-inset-bottom));
+        touch-action: auto;
+        transform: translateY(calc(100% - var(--mobile-bottom-sheet-collapsed-visible-height, 122px)));
+        transition: transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .mobile-bottom-sheet-root[data-has-peek="true"][data-open="true"] .mobile-bottom-sheet-popup {
+        transform: translateY(0);
+    }
+
+    .mobile-bottom-sheet-root[data-has-peek="true"] .mobile-bottom-sheet-content {
+        max-height: calc(100dvh - 136px);
+        gap: var(--space-3);
+        padding-bottom: var(--space-1);
+    }
+
+    .mobile-bottom-sheet-grip-control-docked {
+        display: grid;
+        width: 100%;
+        min-height: 40px;
+        place-items: center;
+        margin: 0 0 var(--space-1);
+        cursor: pointer;
+        touch-action: auto;
+    }
+
+    .mobile-bottom-sheet-grip-control-docked .mobile-bottom-sheet-grip-chevron {
+        width: 56px;
+        height: 28px;
+        color: color-mix(in srgb, var(--text-muted) 74%, transparent);
+        stroke-width: 4.2;
+    }
+
+    .mobile-bottom-sheet-root[data-has-peek="true"][data-open="true"] .mobile-bottom-sheet-grip-control-docked .mobile-bottom-sheet-grip-chevron {
+        transform: rotate(180deg);
+    }
+}
+
+@media (min-width: 933px) {
+    .mobile-bottom-sheet-backdrop,
+    .mobile-bottom-sheet-viewport {
+        display: none;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) and (max-width: 932px) {
+    .mobile-bottom-sheet-root[data-has-peek="true"] .mobile-bottom-sheet-popup,
+    .mobile-bottom-sheet-grip-control-docked {
+        transition: none;
+    }
+}

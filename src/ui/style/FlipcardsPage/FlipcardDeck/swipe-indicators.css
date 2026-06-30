@@ -1,0 +1,82 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/swipe-indicators.css */
+.swipe-indicators {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	overflow: hidden;
+	border-radius: var(--flipcard-radius);
+	pointer-events: none;
+}
+
+.swipe-hint {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border-radius: inherit;
+	pointer-events: none;
+}
+
+.swipe-hint-practice {
+	background: radial-gradient(circle at 0% 50%, rgba(255, 95, 147, 0.16), transparent 45%);
+}
+
+.swipe-hint-mastered {
+	background: radial-gradient(circle at 100% 50%, rgba(56, 230, 192, 0.16), transparent 45%);
+}
+
+.swipe-badge {
+	position: absolute;
+	top: 42px;
+	z-index: 5;
+	padding: 10px 14px;
+	border-radius: var(--radius-full);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.08),
+		0 12px 30px rgba(0, 0, 0, 0.18);
+	font-size: 12px;
+	font-weight: 900;
+	letter-spacing: 0.12em;
+	line-height: 1;
+	text-transform: uppercase;
+	pointer-events: none;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+.swipe-badge-practice {
+	left: 42px;
+	border: 1px solid rgba(255, 95, 147, 0.28);
+	background: rgba(255, 95, 147, 0.075);
+	color: rgba(255, 115, 160, 0.96);
+	rotate: -12deg;
+}
+
+.swipe-badge-mastered {
+	right: 42px;
+	border: 1px solid rgba(56, 230, 192, 0.28);
+	background: rgba(56, 230, 192, 0.075);
+	color: rgba(75, 240, 205, 0.96);
+	rotate: 12deg;
+}
+
+@media (max-width: 480px) {
+	.swipe-badge {
+		top: 32px;
+		font-size: 11px;
+	}
+
+	.swipe-badge-practice {
+		left: 28px;
+	}
+
+	.swipe-badge-mastered {
+		right: 28px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.swipe-badge,
+	.swipe-hint {
+		transition: none;
+	}
+}

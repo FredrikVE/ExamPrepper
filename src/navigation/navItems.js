@@ -27,3 +27,51 @@ export const SIDEBAR_NAV_ITEMS = [
         activeScreens: [NAV_SCREENS.OVERVIEW]
     }
 ];
+
+export const PAGE_NAV_TOOL_IDS = {
+    EXAMS: "app-exams",
+    PRACTICE_TESTS: "app-practice-tests",
+    FLIPCARDS: "app-flipcards"
+};
+
+export const PAGE_NAV_TOOL_ITEMS = [
+    {
+        id: PAGE_NAV_TOOL_IDS.EXAMS,
+        screen: NAV_SCREENS.SELECT,
+        labelKey: "pageToolsExamsLabel",
+        fallbackLabel: "Eksamner",
+        iconKey: "file-text",
+        requiresSubject: true
+    },
+    {
+        id: PAGE_NAV_TOOL_IDS.PRACTICE_TESTS,
+        screen: NAV_SCREENS.SELECT,
+        labelKey: "pageToolsPracticeTestsLabel",
+        fallbackLabel: "Øveprøver",
+        iconKey: "clock-3",
+        requiresSubject: true
+    },
+    {
+        id: PAGE_NAV_TOOL_IDS.FLIPCARDS,
+        screen: NAV_SCREENS.FLIPCARDS,
+        labelKey: "pageToolsFlipcardsLabel",
+        fallbackLabel: "Flipcards",
+        iconKey: "gallery-horizontal-end",
+        requiresSubject: true
+    }
+];
+
+export function getSubjectSelectPageNavToolItems() {
+    return [];
+}
+
+export function getExamSelectPageNavToolItems() {
+    return PAGE_NAV_TOOL_ITEMS.filter((navItem) => (
+        navItem.id === PAGE_NAV_TOOL_IDS.EXAMS
+        || navItem.id === PAGE_NAV_TOOL_IDS.FLIPCARDS
+    ));
+}
+
+export function getSelectionPageNavToolItems() {
+    return getExamSelectPageNavToolItems();
+}

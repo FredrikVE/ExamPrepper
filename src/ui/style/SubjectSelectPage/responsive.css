@@ -6,8 +6,9 @@
 }
 
 @media (max-width: 1280px) {
-    .subject-select-workspace {
-        padding: 44px 36px;
+    .subject-select-layout {
+        --workspace-scaffold-inset: 36px;
+        --workspace-scaffold-content-top: 112px;
     }
 }
 
@@ -20,13 +21,64 @@
         min-height: 100vh;
         border-inline: 0;
         border-radius: 0;
-        padding: calc(var(--mobile-topbar-height) + 24px) 20px calc(90px + env(safe-area-inset-bottom));
+    }
+
+    .subject-select-scroll {
+        padding: calc(var(--mobile-topbar-height) + 24px) 20px calc(255px + env(safe-area-inset-bottom));
     }
 
     .subject-select-topbar {
         align-items: center;
+        width: 100%;
         padding-left: 0;
         margin-bottom: 32px;
+    }
+
+    .subject-select-title {
+        font-size: 44px;
+        line-height: 0.96;
+    }
+
+    .subject-select-subtitle {
+        margin-top: 18px;
+        font-size: 17px;
+        line-height: 1.35;
+    }
+
+    .subject-select-grid {
+        gap: 16px;
+        width: 100%;
+    }
+
+    .subject-card {
+        min-height: 286px;
+        padding: 22px;
+        border-radius: 20px;
+    }
+
+    .subject-card-icon-wrap {
+        width: 62px;
+        height: 62px;
+        border-radius: 17px;
+    }
+
+    .subject-card-code {
+        margin-top: 20px;
+        margin-bottom: 0;
+        font-size: 13px;
+        letter-spacing: 0.26em;
+    }
+
+    .subject-card-title {
+        margin-top: 14px;
+        font-size: 25px;
+    }
+
+    .subject-card-description {
+        max-width: 315px;
+        margin-top: 18px;
+        font-size: 16px;
+        line-height: 1.35;
     }
 
     .subject-search-footer {
@@ -42,11 +94,11 @@
         height: auto;
         overflow: visible;
         padding: 0;
-        border-top: 1px solid var(--line);
-        border-radius: 24px 24px 0 0;
-        background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
-        backdrop-filter: var(--blur-panel);
-        box-shadow: 0 -8px 24px color-mix(in srgb, #000 12%, transparent);
+        border-top: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
     }
 
     .subject-select-controls {
@@ -54,47 +106,16 @@
         padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     }
 
-    .mobile-search-shell {
-        min-height: 58px;
-        border-radius: 16px;
-        background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
+    .subject-card-placeholder-note {
+        align-items: center;
+        max-width: 230px;
+        font-size: 13px;
     }
 
-    .mobile-search-icon,
-    .mobile-filter-icon {
-        width: 21px;
-        height: 21px;
+    .subject-card-placeholder-note-icon {
+        width: 24px;
+        height: 24px;
     }
-
-    .mobile-search-icon {
-        margin-left: 16px;
-    }
-
-    .mobile-search-input {
-        min-height: 56px;
-        padding: 0 12px 0 10px;
-        font-size: 16px;
-    }
-
-    .mobile-search-filter {
-        min-width: 124px;
-        min-height: 56px;
-        gap: 9px;
-        padding: 0 38px 0 14px;
-    }
-
-    .mobile-filter-label {
-        max-width: 92px;
-        font-size: 16px;
-    }
-
-
-    .mobile-filter-chevron {
-        right: 12px;
-        width: 18px;
-        height: 18px;
-    }
-
 }
 
 @media (max-width: 760px) {
@@ -117,9 +138,10 @@
 @media (max-width: 932px) and (max-height: 560px) and (orientation: landscape) {
     .subject-select-workspace {
         min-height: 100svh;
+    }
+
+    .subject-select-scroll {
         padding: calc(var(--mobile-topbar-height) + 10px) 18px calc(116px + env(safe-area-inset-bottom));
-        overflow-y: auto;
-        overscroll-behavior: contain;
     }
 
     .subject-select-topbar {
@@ -217,6 +239,10 @@
         white-space: nowrap;
     }
 
+    .subject-card-placeholder-note {
+        display: none;
+    }
+
     .subject-card-meta-icon {
         width: 16px;
         height: 16px;
@@ -234,7 +260,7 @@
 }
 
 @media (max-width: 932px) and (max-height: 430px) and (orientation: landscape) {
-    .subject-select-workspace {
+    .subject-select-scroll {
         padding-top: calc(var(--mobile-topbar-height) + 6px);
     }
 
@@ -280,10 +306,8 @@
    Når viewport-høyden blir ekstremt lav, bytter subject cards
    fra store grid-kort til en kompakt listevisning. */
 @media (max-height: 700px) and (min-width: 933px) {
-    .subject-select-workspace {
+    .subject-select-scroll {
         padding: clamp(18px, 3vw, 30px);
-        overflow-y: auto;
-        overscroll-behavior: contain;
     }
 
     .subject-select-topbar {
@@ -302,33 +326,6 @@
 
     .subject-select-controls {
         width: min(620px, 100%);
-    }
-
-    .mobile-search-shell {
-        min-height: 46px;
-        border-radius: 12px;
-    }
-
-    .mobile-search-input,
-    .mobile-search-filter {
-        min-height: 44px;
-        font-size: 15px;
-    }
-
-    .mobile-search-icon,
-    .mobile-filter-icon {
-        width: 19px;
-        height: 19px;
-    }
-
-    .mobile-search-icon {
-        margin-left: 16px;
-    }
-
-    .mobile-filter-chevron {
-        right: 14px;
-        width: 18px;
-        height: 18px;
     }
 
     .subject-select-grid {
@@ -409,6 +406,10 @@
     .subject-card-meta {
         font-size: 14px;
         white-space: nowrap;
+    }
+
+    .subject-card-placeholder-note {
+        display: none;
     }
 
     .subject-card-meta-icon {
@@ -509,14 +510,8 @@
 .subject-select-controls {
     flex-wrap: wrap;
 }
-
-.mobile-search-shell {
-    max-width: 100%;
-    min-width: 0;
-}
-
 .subject-select-grid {
-    width: 100%;
+    width: min(987px, 100%);
     overflow: visible;
 }
 

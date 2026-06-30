@@ -1,0 +1,35 @@
+/* src/ui/style/FlipcardsPage/responsive.css */
+@media (max-width: 932px) {
+    .flipcards-workspace {
+        min-height: calc(100dvh - var(--space-6) * 2);
+        border-radius: var(--radius-lg);
+        padding: calc(var(--mobile-topbar-height) + 14px) var(--space-5) var(--space-4);
+    }
+
+    .flipcards-page-placeholder,
+    .flipcards-state {
+        min-height: min(540px, 68vh);
+        padding: var(--space-8);
+    }
+
+    .flipcards-study-surface {
+        min-height: calc(100dvh - var(--mobile-topbar-height) - 24px);
+    }
+
+    .flipcards-study-body {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: var(--space-6);
+        padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    }
+}
+
+@media (max-height: 780px) and (max-width: 932px) {
+    .flipcards-workspace {
+        padding-top: calc(var(--mobile-topbar-height) + 8px);
+    }
+
+    .flipcards-study-surface {
+        gap: var(--space-6);
+    }
+}

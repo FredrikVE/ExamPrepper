@@ -1,6 +1,7 @@
 // src/ui/view/components/Sidebar/MobileDropDownTopBar.jsx
 import { ChevronLeft, Menu } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
+import { NAV_SCREENS } from "../../../../navigation/navGraph.js";
 import { SubjectPickerButton, SubjectPickerDropdown } from "./MobileSubjectPicker.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";
@@ -62,6 +63,7 @@ function MobileDropdownContent(props) {
 					section="primary"
 					activeScreen={props.activeScreen}
 					onChangeScreen={props.onChangeScreen}
+					hasSelectedSubject={props.hasSelectedSubject}
 				/>
 
 				<div className="mobile-dropdown-spacer" />
@@ -70,6 +72,7 @@ function MobileDropdownContent(props) {
 					section="secondary"
 					activeScreen={props.activeScreen}
 					onChangeScreen={props.onChangeScreen}
+					hasSelectedSubject={props.hasSelectedSubject}
 				/>
 
 				<SidebarSettingsButton
@@ -108,8 +111,10 @@ function MobileDropdownContent(props) {
 export default function MobileDropDownTopBar(props) {
 	const { t } = useLanguage();
 
+	const isFlipcardsScreen = props.activeScreen === NAV_SCREENS.FLIPCARDS;
 	const shouldShowSettingsTopbar = props.isMenuOpen && props.settingsOpen;
 	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
+	const showFlipcardsDeckPill = isFlipcardsScreen && !props.isMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
 	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMenuOpen;
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
 	const showTopbarBackButton = props.showBackButton || shouldShowSettingsTopbar;
@@ -128,6 +133,7 @@ export default function MobileDropDownTopBar(props) {
 	const topbarClassNames = [
 		"mobile-topbar",
 		showTopbarBackButton ? "mobile-topbar-with-back" : null,
+		isFlipcardsScreen ? "mobile-topbar-flipcards" : null,
 		props.isMenuOpen ? "mobile-topbar-menu-open" : null,
 		shouldShowSettingsTopbar ? "mobile-topbar-settings-open" : null
 	].filter(Boolean);
@@ -157,6 +163,16 @@ export default function MobileDropDownTopBar(props) {
 	const handleMenuButtonClick = shouldShowSettingsTopbar
 		? props.onCloseMenu
 		: props.onToggleMenu;
+
+	const handleFlipcardsDeckPillClick = () => {
+		if (!props.isMenuOpen) {
+			props.onToggleMenu();
+		}
+
+		if (!props.isSubjectPickerOpen) {
+			props.onToggleSubjectPicker();
+		}
+	};
 
 	const menuButtonLabel = props.isMenuOpen
 		? t.sidebarCloseNavigation
@@ -202,6 +218,16 @@ export default function MobileDropDownTopBar(props) {
 					</p>
 				)}
 
+				{showFlipcardsDeckPill && (
+					<div className="mobile-topbar-subject-picker mobile-topbar-subject-picker-flipcards">
+						<SubjectPickerButton
+							currentSubject={currentSubject}
+							isOpen={props.isSubjectPickerOpen}
+							onToggle={handleFlipcardsDeckPillClick}
+						/>
+					</div>
+				)}
+
 				{showPickerButton && (
 					<div className="mobile-topbar-subject-picker">
 						<SubjectPickerButton
@@ -237,6 +263,7 @@ export default function MobileDropDownTopBar(props) {
 					onBackFromSettings={props.onBackFromSettings}
 					subjects={props.subjects}
 					currentSubject={currentSubject}
+					hasSelectedSubject={props.hasSelectedSubject}
 					isSubjectPickerOpen={props.isSubjectPickerOpen}
 					onCloseSubjectPicker={props.onCloseSubjectPicker}
 					onSelectSubject={props.onSelectSubject}

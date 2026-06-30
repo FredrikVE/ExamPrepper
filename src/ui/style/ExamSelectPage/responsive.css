@@ -1,12 +1,13 @@
 /* src/ui/style/ExamSelectPage/responsive.css */
 
 @media (max-width: 1280px) {
-    .exam-select-shell {
-        grid-template-columns: 270px minmax(0, 1fr);
+    .exam-select-layout {
+        --workspace-scaffold-inset: var(--space-10);
+        --workspace-scaffold-content-top: 108px;
     }
 
-    .exam-select-workspace {
-        padding: 40px 34px;
+    .exam-select-shell {
+        grid-template-columns: 270px minmax(0, 1fr);
     }
 }
 
@@ -28,7 +29,10 @@
         min-height: 100vh;
         border-inline: 0;
         border-radius: 0;
-        padding: calc(var(--mobile-topbar-height) + 24px) 20px calc(90px + env(safe-area-inset-bottom));
+    }
+
+    .exam-select-scroll {
+        padding: calc(var(--mobile-topbar-height) + 24px) 24px calc(255px + env(safe-area-inset-bottom));
     }
 
     .exam-select-topbar {
@@ -39,7 +43,68 @@
 
     .exam-select-intro {
         padding-left: 0;
-        margin-bottom: 34px;
+        margin-bottom: 18px;
+    }
+
+    .exam-select-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .exam-select-card {
+        min-height: 300px;
+        padding: 22px;
+        border-radius: 20px;
+    }
+
+    .exam-select-card-icon-wrapper {
+        width: 62px;
+        height: 62px;
+        border-radius: 17px;
+    }
+
+    .exam-select-card-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .exam-select-card-eyebrow {
+        margin-bottom: 14px;
+        color: color-mix(in srgb, var(--accent) 70%, var(--text-muted));
+        font-size: 13px;
+    }
+
+    .exam-select-card-title {
+        font-size: 24px;
+        letter-spacing: -0.045em;
+    }
+
+    .exam-select-card-description {
+        margin-top: 17px;
+        max-width: 315px;
+        font-size: 15.5px;
+        font-weight: 560;
+        line-height: 1.38;
+    }
+
+    .exam-select-card-footer {
+        align-items: center;
+        gap: 16px;
+        min-height: auto;
+        padding-top: 0;
+        border-top: 0;
+    }
+
+    .exam-select-card-placeholder-note {
+        max-width: 210px;
+        gap: 9px;
+        font-size: 12px;
+        line-height: 1.22;
+    }
+
+    .exam-select-card-placeholder-note-icon {
+        width: 22px;
+        height: 22px;
     }
 
     .exam-search-footer {
@@ -55,11 +120,11 @@
         height: auto;
         overflow: visible;
         padding: 0;
-        border-top: 1px solid var(--line);
-        border-radius: 24px 24px 0 0;
-        background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
-        backdrop-filter: var(--blur-panel);
-        box-shadow: 0 -8px 24px color-mix(in srgb, #000 12%, transparent);
+        border-top: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
     }
 
     .exam-select-controls {
@@ -67,58 +132,10 @@
         padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     }
 
-    .mobile-search-shell {
-        min-height: 58px;
-        border-radius: 16px;
-        background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
-    }
-
-    .mobile-search-icon,
-    .mobile-filter-icon {
-        width: 21px;
-        height: 21px;
-    }
-
-    .mobile-search-icon {
-        margin-left: 16px;
-    }
-
-    .mobile-search-input {
-        min-height: 56px;
-        padding: 0 12px 0 10px;
-        font-size: 16px;
-    }
-
-    .mobile-search-filter {
-        min-width: 124px;
-        min-height: 56px;
-        gap: 9px;
-        padding: 0 38px 0 14px;
-    }
-
-    .mobile-filter-label {
-        max-width: 92px;
-        font-size: 16px;
-    }
-
-    .mobile-filter-chevron {
-        right: 12px;
-        width: 18px;
-        height: 18px;
-    }
-
 
 }
 
 @media (max-width: 720px) {
-    .exam-select-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .exam-select-card {
-        min-height: 0;
-    }
-
     .exam-select-card-footer {
         flex-wrap: wrap;
     }
@@ -145,10 +162,8 @@
    Når viewport-høyden blir ekstremt lav, bytter exam cards
    fra store grid-kort til en kompakt listevisning. */
 @media (max-height: 700px) and (min-width: 933px) {
-    .exam-select-workspace {
+    .exam-select-scroll {
         padding: clamp(18px, 3vw, 30px);
-        overflow-y: auto;
-        overscroll-behavior: contain;
     }
 
     .exam-select-topbar {
@@ -258,7 +273,8 @@
         font-size: 11px;
     }
 
-    .exam-select-card-footer-divider {
+    .exam-select-card-footer-divider,
+    .exam-select-card-placeholder-note {
         display: none;
     }
 
@@ -331,7 +347,8 @@
         display: none;
     }
 
-    .exam-select-card-meta {
+    .exam-select-card-meta,
+    .exam-select-card-placeholder-note {
         display: none;
     }
 
@@ -390,7 +407,9 @@
 .exam-select-card-title,
 .exam-select-card-description {
     max-width: 100%;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
 }
 
 .exam-select-card-description {
@@ -423,9 +442,10 @@
         min-height: 100svh;
         border-inline: 0;
         border-radius: 0;
+    }
+
+    .exam-select-scroll {
         padding: calc(var(--mobile-topbar-height) + 14px) 16px 28px;
-        overflow-y: auto;
-        overscroll-behavior: contain;
     }
 
     .exam-select-topbar {
@@ -571,7 +591,8 @@
 
 @media (max-width: 700px) and (max-height: 500px) {
     .exam-select-card-description,
-    .exam-select-card-meta {
+    .exam-select-card-meta,
+    .exam-select-card-placeholder-note {
         display: none;
     }
 

@@ -1,0 +1,189 @@
+/* src/ui/style/FlipcardsPage/FlipcardDeck/flipcard.css */
+.flipcard {
+	--flipcard-surface-x: 50%;
+	--flipcard-surface-y: 44%;
+	--flipcard-surface-opacity: 0.26;
+	--flipcard-surface-saturation: 1.05;
+	--flipcard-practice-surface-opacity: 0.14;
+	--flipcard-mastered-surface-opacity: 0.14;
+	--flipcard-practice-shadow-opacity: 0;
+	--flipcard-mastered-shadow-opacity: 0;
+	--flipcard-edge-practice-surface-opacity: 0;
+	--flipcard-edge-mastered-surface-opacity: 0;
+	--flipcard-edge-practice-shadow-opacity: 0;
+	--flipcard-edge-mastered-shadow-opacity: 0;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	cursor: grab;
+	touch-action: pan-y;
+	user-select: none;
+	transform-origin: 50% 92%;
+	transform-style: preserve-3d;
+	will-change: transform;
+}
+
+.flipcard-preview-shell {
+	position: absolute;
+	inset: 0;
+	transform-origin: 50% 92%;
+	transform-style: preserve-3d;
+	will-change: transform;
+}
+
+.flipcard-edge-hover-practice {
+	--flipcard-edge-practice-surface-opacity: 0.34;
+	--flipcard-edge-mastered-surface-opacity: 0.08;
+	--flipcard-edge-practice-shadow-opacity: 0.11;
+	--flipcard-surface-saturation: 1.16;
+}
+
+.flipcard-edge-hover-mastered {
+	--flipcard-edge-practice-surface-opacity: 0.08;
+	--flipcard-edge-mastered-surface-opacity: 0.34;
+	--flipcard-edge-mastered-shadow-opacity: 0.11;
+	--flipcard-surface-saturation: 1.16;
+}
+
+.flipcard:active {
+	cursor: grabbing;
+}
+
+.card-edge-action {
+	position: absolute;
+	top: 50%;
+	z-index: 8;
+	display: grid;
+	place-items: center;
+	width: 96px;
+	height: 180px;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	opacity: 0.76;
+	transform: translateY(-50%);
+	transition:
+		opacity var(--transition-fast),
+		transform var(--transition-fast);
+	-webkit-tap-highlight-color: transparent;
+}
+
+.card-edge-action-left {
+	left: 0;
+}
+
+.card-edge-action-right {
+	right: 0;
+}
+
+.card-edge-action span {
+	display: grid;
+	place-items: center;
+	width: 46px;
+	height: 46px;
+	border: 1px solid rgba(255, 255, 255, 0.085);
+	border-radius: var(--radius-full);
+	background: rgba(255, 255, 255, 0.025);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.06),
+		0 10px 30px rgba(0, 0, 0, 0.12);
+	font-size: 25px;
+	font-weight: 500;
+	line-height: 1;
+	transition:
+		color var(--transition-fast),
+		border-color var(--transition-fast),
+		background var(--transition-fast),
+		box-shadow var(--transition-fast),
+		transform var(--transition-fast);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.card-edge-action-left span {
+	color: rgba(255, 95, 147, 0.56);
+}
+
+.card-edge-action-right span {
+	color: rgba(56, 230, 192, 0.56);
+}
+
+.card-edge-action:disabled {
+	cursor: not-allowed;
+	opacity: 0.28;
+}
+
+.card-edge-action:not(:disabled):active {
+	transform: translateY(-50%) scale(0.985);
+}
+
+.card-edge-action:not(:disabled):active span {
+	transform: scale(0.94);
+}
+
+@media (hover: hover) {
+	.card-edge-action {
+		opacity: 0.42;
+	}
+
+	.card-edge-action:not(:disabled):hover,
+	.card-edge-action:not(:disabled):focus-visible {
+		opacity: 1;
+	}
+
+	.card-edge-action-left:not(:disabled):hover span,
+	.card-edge-action-left:not(:disabled):focus-visible span,
+	.flipcard-edge-hover-practice .card-edge-action-left:not(:disabled) span {
+		border-color: rgba(255, 95, 147, 0.32);
+		background: rgba(255, 95, 147, 0.082);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 0 32px rgba(255, 95, 147, 0.18),
+			0 10px 30px rgba(0, 0, 0, 0.14);
+		color: rgba(255, 95, 147, 0.98);
+	}
+
+	.card-edge-action-right:not(:disabled):hover span,
+	.card-edge-action-right:not(:disabled):focus-visible span,
+	.flipcard-edge-hover-mastered .card-edge-action-right:not(:disabled) span {
+		border-color: rgba(56, 230, 192, 0.32);
+		background: rgba(56, 230, 192, 0.082);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 0 32px rgba(56, 230, 192, 0.18),
+			0 10px 30px rgba(0, 0, 0, 0.14);
+		color: rgba(56, 230, 192, 0.98);
+	}
+}
+
+@media (hover: none) {
+	.card-edge-action {
+		opacity: 0.82;
+	}
+
+	.card-edge-action span {
+		width: 48px;
+		height: 48px;
+		background: rgba(255, 255, 255, 0.035);
+		font-size: 26px;
+	}
+}
+
+@media (max-width: 480px) {
+	.card-edge-action {
+		width: 76px;
+	}
+
+	.card-edge-action span {
+		width: 46px;
+		height: 46px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.card-edge-action,
+	.card-edge-action span {
+		transition: none;
+	}
+}

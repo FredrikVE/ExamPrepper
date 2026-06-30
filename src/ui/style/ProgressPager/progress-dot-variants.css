@@ -1,0 +1,143 @@
+/* src/ui/style/ProgressPager/progress-dot-variants.css */
+.progress-pager-dot {
+    position: relative;
+    display: inline-grid;
+    flex: 0 0 clamp(16px, 1.55vw, 22px);
+    width: clamp(16px, 1.55vw, 22px);
+    height: clamp(16px, 1.55vw, 22px);
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.progress-pager-dot::before {
+    content: "";
+    width: clamp(5px, 0.45vw, 8px);
+    height: clamp(5px, 0.45vw, 8px);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-soft) 28%, transparent);
+    transition: transform var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.progress-pager-dot:hover,
+.progress-pager-dot:focus-visible {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    transform: translateY(-1px);
+}
+
+.progress-pager-dot:hover::before,
+.progress-pager-dot:focus-visible::before {
+    transform: scale(1.35);
+    background: color-mix(in srgb, var(--accent) 48%, var(--text-soft));
+}
+
+.progress-pager-dot:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+    outline-offset: 2px;
+}
+
+.progress-pager-dot-active::before {
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* ── Filled compact mode ──────────── */
+.progress-pager-dot-filled-compact {
+    flex-basis: clamp(16px, 1.35vw, 22px);
+    width: clamp(16px, 1.35vw, 22px);
+    height: clamp(16px, 1.35vw, 22px);
+}
+
+.progress-pager-dot-filled-compact::before {
+    width: clamp(8px, 0.8vw, 12px);
+    height: clamp(8px, 0.8vw, 12px);
+    border: 1.5px solid color-mix(in srgb, var(--text-soft) 52%, transparent);
+    background: transparent;
+}
+
+.progress-pager-dot-filled-compact:hover::before,
+.progress-pager-dot-filled-compact:focus-visible::before {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--accent) 54%, var(--text-soft));
+}
+
+.progress-pager-dot-filled-compact.progress-pager-dot-active::before,
+.progress-pager-dot-filled-compact.progress-pager-dot-active:hover::before,
+.progress-pager-dot-filled-compact.progress-pager-dot-active:focus-visible::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* ── Minimal compact fallback ──────────── */
+.progress-pager-dot-compact {
+    flex-basis: clamp(22px, 2vw, 28px);
+    width: clamp(22px, 2vw, 28px);
+    height: clamp(22px, 2vw, 28px);
+}
+
+.progress-pager-dot-compact::before {
+    width: clamp(13px, 1.25vw, 18px);
+    height: clamp(13px, 1.25vw, 18px);
+    border: 2px solid color-mix(in srgb, var(--text-soft) 56%, transparent);
+    background: transparent;
+}
+
+.progress-pager-dot-compact:hover::before,
+.progress-pager-dot-compact:focus-visible::before {
+    background: transparent;
+    border-color: color-mix(in srgb, var(--accent) 54%, var(--text-soft));
+}
+
+.progress-pager-dot-compact.progress-pager-dot-active::before,
+.progress-pager-dot-compact.progress-pager-dot-active:hover::before,
+.progress-pager-dot-compact.progress-pager-dot-active:focus-visible::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* ── Ellipsis ──────────── */
+.progress-pager-dot-ellipsis {
+    display: inline-grid;
+    place-items: center;
+    color: color-mix(in srgb, var(--text-soft) 68%, transparent);
+    font-weight: 800;
+    line-height: 1;
+    user-select: none;
+}
+
+.progress-pager-dot-ellipsis-filled-compact {
+    min-width: clamp(14px, 1.25vw, 20px);
+    min-height: clamp(16px, 1.35vw, 22px);
+    font-size: clamp(0.82rem, 1vw, 1.08rem);
+}
+
+.progress-pager-dot-ellipsis-compact {
+    min-width: clamp(18px, 1.7vw, 26px);
+    min-height: clamp(22px, 2vw, 28px);
+    font-size: clamp(1rem, 1.35vw, 1.35rem);
+}
+
+/* ── Submitted result states ──────────── */
+.progress-pager-dot-correct::before {
+    background: var(--success);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 18%, transparent);
+}
+
+.progress-pager-dot-wrong::before {
+    background: var(--danger);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 18%, transparent);
+}
+
+.progress-pager-dot-correct.progress-pager-dot-active::before {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 28%, transparent);
+}
+
+.progress-pager-dot-wrong.progress-pager-dot-active::before {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 28%, transparent);
+}

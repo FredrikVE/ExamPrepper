@@ -9,10 +9,17 @@
 @import "./ExamSelectPage/index.css";
 @import "./ExamPage/index.css";
 @import "./StatisticsPage/index.css";
+@import "./FlipcardsPage/index.css";
 
 /* Shared UI */
 @import "./Shared/index.css";
+@import "./Search/index.css";
+@import "./DesktopPopOutMenu/index.css";
+@import "./MobileBottomSheet/index.css";
+@import "./ToolCard/index.css";
+@import "./WorkspaceScaffold/index.css";
+@import "./PageTools/index.css";
 @import "./Header/index.css";
-@import "./Footer/index.css";
+@import "./ProgressPager/index.css";
 @import "./Settings/index.css";
 @import "./Sidebar/index.css";

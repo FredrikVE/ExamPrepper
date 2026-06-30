@@ -1,6 +1,6 @@
 // src/ui/view/pages/ExamPage.jsx
 import Header from "../components/Header/Header.jsx";
-import Footer from "../components/Footer/Footer.jsx";
+import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
@@ -59,7 +59,22 @@ export default function ExamPage({ viewModel }) {
                     </div>
                 </main>
 
-                <Footer viewModel={viewModel} />
+                <ExamFooter
+                    previousQuestion={viewModel.previousQuestion}
+                    canGoPrevious={viewModel.canGoPrevious}
+                    questionDotEntries={viewModel.questionDotEntries}
+                    filledCompactQuestionDotEntries={viewModel.filledCompactQuestionDotEntries}
+                    minimalCompactQuestionDotEntries={viewModel.minimalCompactQuestionDotEntries}
+                    shouldUseCompactDots={viewModel.shouldUseCompactDots}
+                    shouldUseResponsiveCompactDots={viewModel.shouldUseResponsiveCompactDots}
+                    submitted={viewModel.submitted}
+                    questionProgressLabel={viewModel.questionProgressLabel}
+                    onGoToQuestion={viewModel.goToQuestion}
+                    showSubmitButton={viewModel.showSubmitButton}
+                    onSubmit={viewModel.openSubmitConfirmation}
+                    onNext={viewModel.nextQuestion}
+                    isNextDisabled={viewModel.isLastQuestion}
+                />
             </ExamWorkspace>
 
             {viewModel.isSubmitConfirmOpen && (

@@ -1,18 +1,16 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import { getPresentationMode, PRESENTATION_MODE, subscribeToPresentationMode } from "../presentation/presentationMode.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
-// Speiler navigasjonens breakpoint (mobil/topbar ≤ 932px, desktop ≥ 933px),
-// slik at Settings alltid er sheet når nav er topbar og sidebar når nav er sidebar.
-const MOBILE_SETTINGS_QUERY = "(max-width: 932px)";
 
-function getInitialSettingsPresentationMode() {
-	if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-		return "sidebar";
-	}
+function resolveSettingsPresentationMode(presentationMode) {
+	return presentationMode === PRESENTATION_MODE.MOBILE ? "sheet" : "sidebar";
+}
 
-	return window.matchMedia(MOBILE_SETTINGS_QUERY).matches ? "sheet" : "sidebar";
+function getSettingsPresentationMode() {
+	return resolveSettingsPresentationMode(getPresentationMode());
 }
 
 export default function useAppNavigationViewModel(params) {
@@ -25,7 +23,7 @@ export default function useAppNavigationViewModel(params) {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isSubjectPickerOpen, setIsSubjectPickerOpen] = useState(false);
-	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getInitialSettingsPresentationMode);
+	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getSettingsPresentationMode);
 
 	const prevLanguageRef = useRef(params.language);
 
@@ -65,22 +63,12 @@ export default function useAppNavigationViewModel(params) {
 	// batcher dem til én commit: den nye varianten mountes lukket og rekker aldri
 	// å vises i feil geometri.
 	useEffect(() => {
-		if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-			return undefined;
-		}
-
-		const mediaQuery = window.matchMedia(MOBILE_SETTINGS_QUERY);
-
-		const handleChange = (event) => {
-			setSettingsPresentationMode(event.matches ? "sheet" : "sidebar");
+		const handlePresentationModeChange = () => {
+			setSettingsPresentationMode(getSettingsPresentationMode());
 			setSettingsOpen(false);
 		};
 
-		mediaQuery.addEventListener("change", handleChange);
-
-		return () => {
-			mediaQuery.removeEventListener("change", handleChange);
-		};
+		return subscribeToPresentationMode(handlePresentationModeChange);
 	}, []);
 
 	const selectSubject = useCallback((subjectId) => {
@@ -151,7 +139,7 @@ export default function useAppNavigationViewModel(params) {
 			return;
 		}
 
-		if (activeScreen === NAV_SCREENS.OVERVIEW) {
+		if (activeScreen === NAV_SCREENS.FLIPCARDS || activeScreen === NAV_SCREENS.OVERVIEW) {
 			setSelectedExamId(null);
 
 			if (selectedSubjectId) {
@@ -195,6 +183,18 @@ export default function useAppNavigationViewModel(params) {
 			}
 
 			setActiveScreen(NAV_SCREENS.EXAM);
+			return;
+		}
+
+		if (nextScreen === NAV_SCREENS.FLIPCARDS) {
+			setSelectedExamId(null);
+
+			if (selectedSubjectId) {
+				setActiveScreen(NAV_SCREENS.FLIPCARDS);
+			} else {
+				setActiveScreen(NAV_SCREENS.SUBJECTS);
+			}
+
 			return;
 		}
 
@@ -276,7 +276,8 @@ export default function useAppNavigationViewModel(params) {
 
 	const shouldShowSubjectSwitcher =
 		activeScreen === NAV_SCREENS.SELECT ||
-		activeScreen === NAV_SCREENS.EXAM;
+		activeScreen === NAV_SCREENS.EXAM ||
+		activeScreen === NAV_SCREENS.FLIPCARDS;
 
 	const showBackButton = activeScreen !== NAV_SCREENS.SUBJECTS;
 

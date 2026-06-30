@@ -1,0 +1,59 @@
+/* src/ui/style/ProgressPager/progress-dots.css */
+.progress-pager-dots {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.progress-pager-dot-list {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(2px, 0.35vw, 8px);
+    overflow: hidden;
+}
+
+.progress-pager-dot-list-filled-compact,
+.progress-pager-dot-list-compact {
+    display: none;
+}
+
+.progress-pager-dot-list-filled-compact {
+    gap: clamp(4px, 0.65vw, 12px);
+}
+
+.progress-pager-dot-list-compact {
+    justify-content: center;
+    gap: clamp(12px, 2.2vw, 28px);
+}
+
+.progress-pager-dots-compact-by-count .progress-pager-dot-list-normal {
+    display: none;
+}
+
+.progress-pager-dots-compact-by-count .progress-pager-dot-list-filled-compact {
+    display: flex;
+}
+
+@container (max-width: 520px) {
+    .progress-pager-dots-responsive-compact .progress-pager-dot-list-normal {
+        display: none;
+    }
+
+    .progress-pager-dots-responsive-compact .progress-pager-dot-list-filled-compact {
+        display: flex;
+    }
+}
+
+@container (max-width: 280px) {
+    .progress-pager-dots-responsive-compact .progress-pager-dot-list-filled-compact {
+        display: none;
+    }
+
+    .progress-pager-dots-responsive-compact .progress-pager-dot-list-compact {
+        display: flex;
+    }
+}

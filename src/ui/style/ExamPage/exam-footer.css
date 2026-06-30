@@ -1,0 +1,38 @@
+/* src/ui/style/ExamPage/exam-footer.css */
+.exam-footer-submit-button {
+    color: white;
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+    box-shadow: 0 14px 26px color-mix(in srgb, var(--success) 28%, transparent);
+}
+
+.progress-pager-button.exam-footer-submit-button-mobile {
+    display: none;
+}
+
+.exam-footer-submit-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+}
+
+@media (max-width: 932px) {
+    .progress-pager-button.exam-footer-submit-button-desktop {
+        display: none;
+    }
+
+    .progress-pager-button.exam-footer-submit-button-mobile {
+        display: inline-flex;
+    }
+
+    .exam-footer-submit-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .exam-footer-submit-icon {
+        width: 15px;
+        height: 15px;
+    }
+}
