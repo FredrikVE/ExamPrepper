@@ -3,9 +3,13 @@ import { afterAll, beforeEach, describe, expect, jest, test } from "@jest/global
 const stateValues = [];
 const stateSetters = [];
 const refValues = [];
+let stateCursor = 0;
+let refCursor = 0;
 
 const useState = jest.fn((initialValue) => {
-	const stateIndex = stateSetters.length;
+	const stateIndex = stateCursor;
+	stateCursor += 1;
+
 	const fallbackValue = typeof initialValue === "function" ? initialValue() : initialValue;
 	const value = stateIndex in stateValues ? stateValues[stateIndex] : fallbackValue;
 	const setter = jest.fn((nextValue) => {
@@ -14,7 +18,7 @@ const useState = jest.fn((initialValue) => {
 			: nextValue;
 	});
 
-	stateSetters.push(setter);
+	stateSetters[stateIndex] = setter;
 
 	return [value, setter];
 });
@@ -22,7 +26,8 @@ const useState = jest.fn((initialValue) => {
 const useCallback = jest.fn((callback) => callback);
 const useEffect = jest.fn((effect) => effect());
 const useRef = jest.fn((initialValue) => {
-	const refIndex = refValues.length;
+	const refIndex = refCursor;
+	refCursor += 1;
 
 	if (!refValues[refIndex]) {
 		refValues[refIndex] = { current: initialValue };
@@ -52,8 +57,11 @@ const setTimeoutSpy = jest.spyOn(globalThis, "setTimeout").mockImplementation((c
 });
 const clearTimeoutSpy = jest.spyOn(globalThis, "clearTimeout").mockImplementation(() => {});
 
-function createHook(isDisabled) {
-	return useFlipcardHoverPreviewInteraction({ isDisabled });
+function renderHook(activeCardId, isDisabled) {
+	stateCursor = 0;
+	refCursor = 0;
+
+	return useFlipcardHoverPreviewInteraction({ activeCardId, isDisabled });
 }
 
 afterAll(() => {
@@ -66,6 +74,8 @@ describe("useFlipcardHoverPreviewInteraction", () => {
 		stateValues.length = 0;
 		stateSetters.length = 0;
 		refValues.length = 0;
+		stateCursor = 0;
+		refCursor = 0;
 		queuedTimeoutCallback = null;
 		timeoutId = null;
 		useState.mockClear();
@@ -77,7 +87,7 @@ describe("useFlipcardHoverPreviewInteraction", () => {
 	});
 
 	test("starts the intro preview on initial mount and arms the hover border after the prototype cue duration", () => {
-		createHook(false);
+		renderHook("card-1", false);
 
 		expect(stateSetters[0]).toHaveBeenCalledWith(true);
 		expect(stateSetters[1]).toHaveBeenCalledWith(false);
@@ -90,14 +100,27 @@ describe("useFlipcardHoverPreviewInteraction", () => {
 	});
 
 	test("does not expose a hover replay callback", () => {
-		const hoverPreview = createHook(false);
+		const hoverPreview = renderHook("card-1", false);
 
 		expect(hoverPreview.requestHoverPreview).toBeUndefined();
 	});
 
 	test("does not start the intro preview when the screen loads with interaction disabled", () => {
-		createHook(true);
+		renderHook("card-1", true);
 
 		expect(setTimeoutSpy).not.toHaveBeenCalled();
+	});
+
+	test("stops the intro preview instead of replaying it when the active card changes", () => {
+		renderHook("card-1", false);
+		setTimeoutSpy.mockClear();
+
+		const hoverPreview = renderHook("card-2", false);
+
+		expect(hoverPreview.isHoverPreviewActive).toBe(false);
+		expect(setTimeoutSpy).not.toHaveBeenCalled();
+		expect(clearTimeoutSpy).toHaveBeenCalledWith(timeoutId);
+		expect(stateSetters[0]).toHaveBeenLastCalledWith(false);
+		expect(stateSetters[1]).toHaveBeenLastCalledWith(true);
 	});
 });

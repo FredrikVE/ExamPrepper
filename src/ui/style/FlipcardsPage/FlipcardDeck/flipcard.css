@@ -24,6 +24,14 @@
 	will-change: transform;
 }
 
+.flipcard-preview-shell {
+	position: absolute;
+	inset: 0;
+	transform-origin: 50% 92%;
+	transform-style: preserve-3d;
+	will-change: transform;
+}
+
 .flipcard-edge-hover-practice {
 	--flipcard-edge-practice-surface-opacity: 0.34;
 	--flipcard-edge-mastered-surface-opacity: 0.08;

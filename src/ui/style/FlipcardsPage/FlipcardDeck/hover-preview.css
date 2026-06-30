@@ -1,5 +1,5 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/hover-preview.css */
-.flipcard::before {
+.flipcard-preview-shell::before {
 	content: "";
 	position: absolute;
 	inset: -5px;
@@ -15,7 +15,7 @@
 		box-shadow var(--transition-fast);
 }
 
-.flipcard-edge-hover-practice::before {
+.flipcard-edge-hover-practice .flipcard-preview-shell::before {
 	border-color: rgba(255, 95, 147, 0.62);
 	box-shadow:
 		0 0 0 1px rgba(255, 95, 147, 0.24),
@@ -24,7 +24,7 @@
 	opacity: 1;
 }
 
-.flipcard-edge-hover-mastered::before {
+.flipcard-edge-hover-mastered .flipcard-preview-shell::before {
 	border-color: rgba(56, 230, 192, 0.62);
 	box-shadow:
 		0 0 0 1px rgba(56, 230, 192, 0.24),
@@ -37,7 +37,7 @@
 	--flipcard-surface-saturation: 1.16;
 }
 
-.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .card-faces {
+.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .flipcard-preview-shell {
 	animation: flipcard-hover-waggle 3.85s linear 1.18s both;
 }
 
@@ -82,14 +82,33 @@
 }
 
 @media (hover: hover) {
-	.flipcard-hover-border-ready:hover:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered)::before,
-	.flipcard-hover-border-ready:focus-within:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered)::before {
-		border-color: rgba(126, 103, 255, 0.58);
+	.flipcard:hover:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-hover-preview-active):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered),
+	.flipcard:focus-within:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-hover-preview-active):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered) {
+		--flipcard-surface-opacity: 0.46;
+		--flipcard-surface-saturation: 1.22;
+	}
+
+	.flipcard:hover:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-hover-preview-active):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered) .flipcard-preview-shell::before,
+	.flipcard:focus-within:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-hover-preview-active):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered) .flipcard-preview-shell::before {
+		border-color: rgba(126, 103, 255, 0.86);
 		box-shadow:
-			0 0 0 1px rgba(126, 103, 255, 0.22),
-			0 0 26px rgba(126, 103, 255, 0.22),
-			0 0 70px rgba(126, 103, 255, 0.10);
+			0 0 0 2px rgba(126, 103, 255, 0.34),
+			0 0 34px rgba(126, 103, 255, 0.36),
+			0 0 96px rgba(126, 103, 255, 0.2);
 		opacity: 1;
+	}
+
+	.flipcard:hover:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-hover-preview-active):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered) .card-face,
+	.flipcard:focus-within:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-hover-preview-active):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered) .card-face {
+		border-color: rgba(126, 103, 255, 0.82);
+		box-shadow:
+			-28px 34px 90px rgba(255, 95, 147, var(--flipcard-practice-shadow-opacity)),
+			28px 34px 90px rgba(56, 230, 192, var(--flipcard-mastered-shadow-opacity)),
+			-24px 32px 82px rgba(255, 95, 147, var(--flipcard-edge-practice-shadow-opacity)),
+			24px 32px 82px rgba(56, 230, 192, var(--flipcard-edge-mastered-shadow-opacity)),
+			0 30px 80px rgba(0, 0, 0, 0.45),
+			0 0 0 1px rgba(126, 103, 255, 0.18),
+			0 0 40px rgba(126, 103, 255, 0.18);
 	}
 }
 
@@ -377,7 +396,8 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.flipcard,
-	.flipcard::before,
+	.flipcard-preview-shell,
+	.flipcard-preview-shell::before,
 	.flipcard .card-faces,
 	.flipcard .card-faces-inner,
 	.flipcard .card-face::before,

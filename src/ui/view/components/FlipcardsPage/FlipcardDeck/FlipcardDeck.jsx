@@ -7,7 +7,9 @@ import QuickActions from "./QuickActions.jsx";
 import { useFlipcardHoverPreviewInteraction } from "./useFlipcardHoverPreviewInteraction.js";
 
 export default function FlipcardDeck(props) {
+	const activeCardId = props.activeCard ? props.activeCard.id : null;
 	const hoverPreview = useFlipcardHoverPreviewInteraction({
+		activeCardId,
 		isDisabled: props.isSwipeCommandActive || props.isActiveCardFlipped || props.isDeckComplete || props.cards.length === 0
 	});
 

@@ -6,6 +6,7 @@ export const FLIPCARD_HOVER_PREVIEW_DURATION_MS = 5350;
 export function useFlipcardHoverPreviewInteraction(params) {
 	const timeoutRef = useRef(null);
 	const hasRequestedInitialPreviewRef = useRef(false);
+	const initialCardIdRef = useRef(params.activeCardId);
 	const [isHoverPreviewActive, setIsHoverPreviewActive] = useState(false);
 	const [isHoverBorderReady, setIsHoverBorderReady] = useState(false);
 
@@ -17,6 +18,12 @@ export function useFlipcardHoverPreviewInteraction(params) {
 		globalThis.clearTimeout(timeoutRef.current);
 		timeoutRef.current = null;
 	}, []);
+
+	const finishInitialHoverPreview = useCallback(() => {
+		clearHoverPreviewTimeout();
+		setIsHoverPreviewActive(false);
+		setIsHoverBorderReady(true);
+	}, [clearHoverPreviewTimeout]);
 
 	const startInitialHoverPreview = useCallback(() => {
 		if (hasRequestedInitialPreviewRef.current) {
@@ -34,24 +41,29 @@ export function useFlipcardHoverPreviewInteraction(params) {
 		setIsHoverBorderReady(false);
 
 		timeoutRef.current = globalThis.setTimeout(() => {
-			timeoutRef.current = null;
-			setIsHoverPreviewActive(false);
-			setIsHoverBorderReady(true);
+			finishInitialHoverPreview();
 		}, FLIPCARD_HOVER_PREVIEW_DURATION_MS);
-	}, [clearHoverPreviewTimeout, params.isDisabled]);
+	}, [clearHoverPreviewTimeout, finishInitialHoverPreview, params.isDisabled]);
 
 	useEffect(() => {
 		startInitialHoverPreview();
 	}, [startInitialHoverPreview]);
 
 	useEffect(() => {
+		if (params.activeCardId === initialCardIdRef.current) {
+			return;
+		}
+
+		finishInitialHoverPreview();
+	}, [finishInitialHoverPreview, params.activeCardId]);
+
+	useEffect(() => {
 		if (!params.isDisabled) {
 			return;
 		}
 
-		clearHoverPreviewTimeout();
-		setIsHoverPreviewActive(false);
-	}, [clearHoverPreviewTimeout, params.isDisabled]);
+		finishInitialHoverPreview();
+	}, [finishInitialHoverPreview, params.isDisabled]);
 
 	useEffect(() => {
 		return () => {
@@ -59,8 +71,10 @@ export function useFlipcardHoverPreviewInteraction(params) {
 		};
 	}, [clearHoverPreviewTimeout]);
 
+	const shouldShowInitialHoverPreview = isHoverPreviewActive && params.activeCardId === initialCardIdRef.current;
+
 	return {
-		isHoverPreviewActive,
+		isHoverPreviewActive: shouldShowInitialHoverPreview,
 		isHoverBorderReady
 	};
 }
