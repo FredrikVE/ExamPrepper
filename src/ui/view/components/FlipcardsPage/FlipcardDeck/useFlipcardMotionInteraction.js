@@ -24,6 +24,10 @@ export function useFlipcardMotionInteraction(params) {
 	const rotate = useTransform(x, [-240, 0, 240], [-11, 0, 11]);
 	const practiceOpacity = useTransform(x, [-160, -64, 0], [1, 0.35, 0]);
 	const masteredOpacity = useTransform(x, [0, 64, 160], [0, 0.35, 1]);
+	const practiceHintOpacity = useTransform(x, [-160, -64, 0], [0.9, 0.32, 0]);
+	const masteredHintOpacity = useTransform(x, [0, 64, 160], [0, 0.32, 0.9]);
+	const practiceBadgeScale = useTransform(x, [-160, -64, 0], [1, 0.96, 0.92]);
+	const masteredBadgeScale = useTransform(x, [0, 64, 160], [0.92, 0.96, 1]);
 	const handledSwipeCommandIdRef = useRef(null);
 	const isCompletingSwipeRef = useRef(false);
 	const activeAnimationRef = useRef(null);
@@ -109,6 +113,10 @@ export function useFlipcardMotionInteraction(params) {
 		rotate,
 		practiceOpacity,
 		masteredOpacity,
+		practiceHintOpacity,
+		masteredHintOpacity,
+		practiceBadgeScale,
+		masteredBadgeScale,
 		isCompletingSwipe,
 		handleDragEnd
 	};

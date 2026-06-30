@@ -1,49 +1,82 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/swipe-indicators.css */
 .swipe-indicators {
-    position: absolute;
-    inset: 24px;
-    z-index: 3;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    pointer-events: none;
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	overflow: hidden;
+	border-radius: var(--flipcard-radius);
+	pointer-events: none;
 }
 
-.swipe-indicator {
-    border: 1px solid currentColor;
-    border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--panel-bg) 84%, transparent);
-    box-shadow: var(--shadow-card);
-    font-size: 13px;
-    font-weight: 950;
-    letter-spacing: 0.08em;
-    line-height: 1;
-    padding: 11px 14px;
-    text-transform: uppercase;
+.swipe-hint {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border-radius: inherit;
+	pointer-events: none;
 }
 
-.swipe-indicator-practice {
-    color: #ff607d;
-    transform: rotate(-10deg);
+.swipe-hint-practice {
+	background: radial-gradient(circle at 0% 50%, rgba(255, 95, 147, 0.16), transparent 45%);
 }
 
-.swipe-indicator-mastered {
-    color: #22d3a6;
-    transform: rotate(10deg);
+.swipe-hint-mastered {
+	background: radial-gradient(circle at 100% 50%, rgba(56, 230, 192, 0.16), transparent 45%);
 }
 
-.swipe-indicator-proxy {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    border-radius: var(--radius-xl);
-    pointer-events: none;
+.swipe-badge {
+	position: absolute;
+	top: 42px;
+	z-index: 5;
+	padding: 10px 14px;
+	border-radius: var(--radius-full);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.08),
+		0 12px 30px rgba(0, 0, 0, 0.18);
+	font-size: 12px;
+	font-weight: 900;
+	letter-spacing: 0.12em;
+	line-height: 1;
+	text-transform: uppercase;
+	pointer-events: none;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
 }
 
-.swipe-indicator-proxy-practice {
-    background: linear-gradient(90deg, rgba(255, 96, 125, 0.16), transparent 52%);
+.swipe-badge-practice {
+	left: 42px;
+	border: 1px solid rgba(255, 95, 147, 0.28);
+	background: rgba(255, 95, 147, 0.075);
+	color: rgba(255, 115, 160, 0.96);
+	rotate: -12deg;
 }
 
-.swipe-indicator-proxy-mastered {
-    background: linear-gradient(270deg, rgba(34, 211, 166, 0.16), transparent 52%);
+.swipe-badge-mastered {
+	right: 42px;
+	border: 1px solid rgba(56, 230, 192, 0.28);
+	background: rgba(56, 230, 192, 0.075);
+	color: rgba(75, 240, 205, 0.96);
+	rotate: 12deg;
+}
+
+@media (max-width: 480px) {
+	.swipe-badge {
+		top: 32px;
+		font-size: 11px;
+	}
+
+	.swipe-badge-practice {
+		left: 28px;
+	}
+
+	.swipe-badge-mastered {
+		right: 28px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.swipe-badge,
+	.swipe-hint {
+		transition: none;
+	}
 }

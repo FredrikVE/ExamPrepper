@@ -35,6 +35,10 @@ const xMotionValue = { id: "x-motion-value" };
 const rotateTransform = { id: "rotate-transform" };
 const practiceOpacityTransform = { id: "practice-opacity-transform" };
 const masteredOpacityTransform = { id: "mastered-opacity-transform" };
+const practiceHintOpacityTransform = { id: "practice-hint-opacity-transform" };
+const masteredHintOpacityTransform = { id: "mastered-hint-opacity-transform" };
+const practiceBadgeScaleTransform = { id: "practice-badge-scale-transform" };
+const masteredBadgeScaleTransform = { id: "mastered-badge-scale-transform" };
 
 const stopAnimation = jest.fn();
 const animate = jest.fn(() => ({ stop: stopAnimation }));
@@ -50,7 +54,23 @@ const useTransform = jest.fn((_value, _inputRange, _outputRange) => {
 		return practiceOpacityTransform;
 	}
 
-	return masteredOpacityTransform;
+	if (transformIndex === 3) {
+		return masteredOpacityTransform;
+	}
+
+	if (transformIndex === 4) {
+		return practiceHintOpacityTransform;
+	}
+
+	if (transformIndex === 5) {
+		return masteredHintOpacityTransform;
+	}
+
+	if (transformIndex === 6) {
+		return practiceBadgeScaleTransform;
+	}
+
+	return masteredBadgeScaleTransform;
 });
 
 jest.unstable_mockModule("react", () => ({
@@ -108,6 +128,10 @@ describe("useFlipcardMotionInteraction", () => {
 		expect(motionInteraction.rotate).toBe(rotateTransform);
 		expect(motionInteraction.practiceOpacity).toBe(practiceOpacityTransform);
 		expect(motionInteraction.masteredOpacity).toBe(masteredOpacityTransform);
+		expect(motionInteraction.practiceHintOpacity).toBe(practiceHintOpacityTransform);
+		expect(motionInteraction.masteredHintOpacity).toBe(masteredHintOpacityTransform);
+		expect(motionInteraction.practiceBadgeScale).toBe(practiceBadgeScaleTransform);
+		expect(motionInteraction.masteredBadgeScale).toBe(masteredBadgeScaleTransform);
 		expect(motionInteraction.isCompletingSwipe).toBe(false);
 	});
 

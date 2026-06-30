@@ -65,10 +65,9 @@ export default function FlipcardDeck(props) {
 					label={props.labels.activeCardLabel(props.activeCardIndex + 1, props.cards.length)}
 					labels={props.labels}
 					swipeCommand={props.activeSwipeCommand}
-					hasPrevious={props.hasPreviousCard}
-					hasNext={props.hasNextCard}
-					onPrevious={props.onGoToPreviousCard}
-					onNext={props.onGoToNextCard}
+					isSwipeCommandActive={props.isSwipeCommandActive}
+					onRequestPracticeSwipe={props.onRequestPracticeSwipe}
+					onRequestMasteredSwipe={props.onRequestMasteredSwipe}
 					onSwipePractice={props.onPractice}
 					onSwipeMastered={props.onMastered}
 				/>

@@ -31,16 +31,10 @@ export default function Flipcard(props) {
 				labels={props.labels}
 				practiceOpacity={motionInteraction.practiceOpacity}
 				masteredOpacity={motionInteraction.masteredOpacity}
-			/>
-			<motion.div
-				className="swipe-indicator-proxy swipe-indicator-proxy-practice"
-				style={{ opacity: motionInteraction.practiceOpacity }}
-				aria-hidden="true"
-			/>
-			<motion.div
-				className="swipe-indicator-proxy swipe-indicator-proxy-mastered"
-				style={{ opacity: motionInteraction.masteredOpacity }}
-				aria-hidden="true"
+				practiceHintOpacity={motionInteraction.practiceHintOpacity}
+				masteredHintOpacity={motionInteraction.masteredHintOpacity}
+				practiceBadgeScale={motionInteraction.practiceBadgeScale}
+				masteredBadgeScale={motionInteraction.masteredBadgeScale}
 			/>
 
 			<button
