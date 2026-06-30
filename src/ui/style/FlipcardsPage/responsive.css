@@ -20,7 +20,7 @@
         grid-template-columns: minmax(0, 1fr);
         align-items: stretch;
         gap: var(--space-6);
-        padding-bottom: calc(128px + env(safe-area-inset-bottom));
+        padding-bottom: calc(140px + env(safe-area-inset-bottom));
     }
 }
 

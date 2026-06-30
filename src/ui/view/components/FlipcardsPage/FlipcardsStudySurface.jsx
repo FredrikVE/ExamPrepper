@@ -1,5 +1,5 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
 import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
@@ -8,6 +8,7 @@ import FlipcardsMobileFooterSheet from "./FlipcardToolMenu/FlipcardsMobileFooter
 import useFlipcardToolMenu from "./FlipcardToolMenu/useFlipcardToolMenu.js";
 import ProgressPager from "../ProgressPager/ProgressPager.jsx";
 import createProgressPagerEntries from "../ProgressPager/createProgressPagerEntries.js";
+import shouldHandleFlipcardKeyboardShortcut from "./FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js";
 
 const resolveFlipcardProgressCorrectness = () => false;
 
@@ -64,6 +65,39 @@ export default function FlipcardsStudySurface(props) {
         props.onCardForPractice(activeCard.id);
         deck.goToNext();
     };
+
+    const handleFlipcardKeyboardShortcut = useCallback((event) => {
+        if (!shouldHandleFlipcardKeyboardShortcut(event)) {
+            return;
+        }
+
+        if (props.cards.length === 0 || deck.isComplete || deck.isSwipeCommandActive) {
+            return;
+        }
+
+        if (event.key === "ArrowLeft" && deck.hasPrevious) {
+            event.preventDefault();
+            deck.goToPrevious();
+            return;
+        }
+
+        if (event.key === "ArrowRight" && deck.hasNext) {
+            event.preventDefault();
+            deck.goToNext();
+            return;
+        }
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+            deck.flipActiveCard();
+        }
+    }, [props.cards.length, deck.isComplete, deck.isSwipeCommandActive, deck.hasPrevious, deck.hasNext, deck.goToPrevious, deck.goToNext, deck.flipActiveCard]);
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleFlipcardKeyboardShortcut);
+
+        return () => window.removeEventListener("keydown", handleFlipcardKeyboardShortcut);
+    }, [handleFlipcardKeyboardShortcut]);
 
     const studySurfaceClassName = isDesktopToolsPanelOpen
         ? "flipcards-study-surface flipcards-study-surface-desktop-tools-open"
