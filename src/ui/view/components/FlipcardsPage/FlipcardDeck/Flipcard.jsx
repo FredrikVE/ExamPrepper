@@ -11,16 +11,34 @@ const EDGE_HOVER_DIRECTION = {
 	MASTERED: "mastered"
 };
 
-function getFlipcardClassName(edgeHoverDirection) {
-	if (edgeHoverDirection === EDGE_HOVER_DIRECTION.PRACTICE) {
-		return "flipcard flipcard-edge-hover-practice";
+function getFlipcardClassName(params) {
+	const classNames = ["flipcard"];
+
+	if (params.edgeHoverDirection === EDGE_HOVER_DIRECTION.PRACTICE) {
+		classNames.push("flipcard-edge-hover-practice");
 	}
 
-	if (edgeHoverDirection === EDGE_HOVER_DIRECTION.MASTERED) {
-		return "flipcard flipcard-edge-hover-mastered";
+	if (params.edgeHoverDirection === EDGE_HOVER_DIRECTION.MASTERED) {
+		classNames.push("flipcard-edge-hover-mastered");
 	}
 
-	return "flipcard";
+	if (params.isHoverPreviewActive) {
+		classNames.push("flipcard-hover-preview-active");
+	}
+
+	if (params.isHoverBorderReady) {
+		classNames.push("flipcard-hover-border-ready");
+	}
+
+	if (params.isInteractionDisabled) {
+		classNames.push("flipcard-interaction-disabled");
+	}
+
+	if (params.isFlipped) {
+		classNames.push("flipcard-card-flipped");
+	}
+
+	return classNames.join(" ");
 }
 
 export default function Flipcard(props) {
@@ -31,27 +49,34 @@ export default function Flipcard(props) {
 		onSwipePractice: props.onSwipePractice,
 		onSwipeMastered: props.onSwipeMastered
 	});
-	const className = getFlipcardClassName(edgeHoverDirection);
+	const isInteractionDisabled = props.isSwipeCommandActive || motionInteraction.isCompletingSwipe;
+	const className = getFlipcardClassName({
+		edgeHoverDirection,
+		isHoverPreviewActive: props.isHoverPreviewActive,
+		isHoverBorderReady: props.isHoverBorderReady,
+		isInteractionDisabled,
+		isFlipped: props.isFlipped
+	});
 
 	const stopButtonPointerPropagation = (event) => {
 		event.stopPropagation();
 	};
 
 	const showPracticeEdgeHover = useCallback(() => {
-		if (props.isSwipeCommandActive || motionInteraction.isCompletingSwipe) {
+		if (isInteractionDisabled) {
 			return;
 		}
 
 		setEdgeHoverDirection(EDGE_HOVER_DIRECTION.PRACTICE);
-	}, [motionInteraction.isCompletingSwipe, props.isSwipeCommandActive]);
+	}, [isInteractionDisabled]);
 
 	const showMasteredEdgeHover = useCallback(() => {
-		if (props.isSwipeCommandActive || motionInteraction.isCompletingSwipe) {
+		if (isInteractionDisabled) {
 			return;
 		}
 
 		setEdgeHoverDirection(EDGE_HOVER_DIRECTION.MASTERED);
-	}, [motionInteraction.isCompletingSwipe, props.isSwipeCommandActive]);
+	}, [isInteractionDisabled]);
 
 	const clearEdgeHover = useCallback(() => {
 		setEdgeHoverDirection(EDGE_HOVER_DIRECTION.NONE);
@@ -96,7 +121,7 @@ export default function Flipcard(props) {
 				onPointerLeave={clearEdgeHover}
 				onFocus={showPracticeEdgeHover}
 				onBlur={clearEdgeHover}
-				disabled={props.isSwipeCommandActive || motionInteraction.isCompletingSwipe}
+				disabled={isInteractionDisabled}
 				aria-label={props.labels.practiceCardLabel}
 			>
 				<span aria-hidden="true">×</span>
@@ -111,7 +136,7 @@ export default function Flipcard(props) {
 				onPointerLeave={clearEdgeHover}
 				onFocus={showMasteredEdgeHover}
 				onBlur={clearEdgeHover}
-				disabled={props.isSwipeCommandActive || motionInteraction.isCompletingSwipe}
+				disabled={isInteractionDisabled}
 				aria-label={props.labels.masteredCardLabel}
 			>
 				<span aria-hidden="true">✓</span>

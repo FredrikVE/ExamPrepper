@@ -2,8 +2,13 @@
 import CardStack from "./CardStack.jsx";
 import Flipcard from "./Flipcard.jsx";
 import QuickActions from "./QuickActions.jsx";
+import { useFlipcardHoverPreviewInteraction } from "./useFlipcardHoverPreviewInteraction.js";
 
 export default function FlipcardDeck(props) {
+	const hoverPreview = useFlipcardHoverPreviewInteraction({
+		isDisabled: props.isSwipeCommandActive || props.isActiveCardFlipped || props.isDeckComplete || props.cards.length === 0
+	});
+
 	if (props.cards.length === 0) {
 		return (
 			<section className="flipcard-deck flipcard-deck-state" aria-label={props.labels.deckLabel}>
@@ -64,6 +69,8 @@ export default function FlipcardDeck(props) {
 					isFlipped={props.isActiveCardFlipped}
 					label={props.labels.activeCardLabel(props.activeCardIndex + 1, props.cards.length)}
 					labels={props.labels}
+					isHoverPreviewActive={hoverPreview.isHoverPreviewActive}
+					isHoverBorderReady={hoverPreview.isHoverBorderReady}
 					swipeCommand={props.activeSwipeCommand}
 					isSwipeCommandActive={props.isSwipeCommandActive}
 					onRequestPracticeSwipe={props.onRequestPracticeSwipe}
