@@ -39,39 +39,32 @@ const practiceHintOpacityTransform = { id: "practice-hint-opacity-transform" };
 const masteredHintOpacityTransform = { id: "mastered-hint-opacity-transform" };
 const practiceBadgeScaleTransform = { id: "practice-badge-scale-transform" };
 const masteredBadgeScaleTransform = { id: "mastered-badge-scale-transform" };
+const surfaceXTransform = { id: "surface-x-transform" };
+const surfaceOpacityTransform = { id: "surface-opacity-transform" };
+const practiceSurfaceOpacityTransform = { id: "practice-surface-opacity-transform" };
+const masteredSurfaceOpacityTransform = { id: "mastered-surface-opacity-transform" };
+const practiceShadowOpacityTransform = { id: "practice-shadow-opacity-transform" };
+const masteredShadowOpacityTransform = { id: "mastered-shadow-opacity-transform" };
+const transformValues = [
+	rotateTransform,
+	practiceOpacityTransform,
+	masteredOpacityTransform,
+	practiceHintOpacityTransform,
+	masteredHintOpacityTransform,
+	practiceBadgeScaleTransform,
+	masteredBadgeScaleTransform,
+	surfaceXTransform,
+	surfaceOpacityTransform,
+	practiceSurfaceOpacityTransform,
+	masteredSurfaceOpacityTransform,
+	practiceShadowOpacityTransform,
+	masteredShadowOpacityTransform
+];
 
 const stopAnimation = jest.fn();
 const animate = jest.fn(() => ({ stop: stopAnimation }));
 const useMotionValue = jest.fn(() => xMotionValue);
-const useTransform = jest.fn((_value, _inputRange, _outputRange) => {
-	const transformIndex = useTransform.mock.calls.length;
-
-	if (transformIndex === 1) {
-		return rotateTransform;
-	}
-
-	if (transformIndex === 2) {
-		return practiceOpacityTransform;
-	}
-
-	if (transformIndex === 3) {
-		return masteredOpacityTransform;
-	}
-
-	if (transformIndex === 4) {
-		return practiceHintOpacityTransform;
-	}
-
-	if (transformIndex === 5) {
-		return masteredHintOpacityTransform;
-	}
-
-	if (transformIndex === 6) {
-		return practiceBadgeScaleTransform;
-	}
-
-	return masteredBadgeScaleTransform;
-});
+const useTransform = jest.fn(() => transformValues[useTransform.mock.calls.length - 1]);
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
@@ -132,7 +125,24 @@ describe("useFlipcardMotionInteraction", () => {
 		expect(motionInteraction.masteredHintOpacity).toBe(masteredHintOpacityTransform);
 		expect(motionInteraction.practiceBadgeScale).toBe(practiceBadgeScaleTransform);
 		expect(motionInteraction.masteredBadgeScale).toBe(masteredBadgeScaleTransform);
+		expect(motionInteraction.surfaceX).toBe(surfaceXTransform);
+		expect(motionInteraction.surfaceOpacity).toBe(surfaceOpacityTransform);
+		expect(motionInteraction.practiceSurfaceOpacity).toBe(practiceSurfaceOpacityTransform);
+		expect(motionInteraction.masteredSurfaceOpacity).toBe(masteredSurfaceOpacityTransform);
+		expect(motionInteraction.practiceShadowOpacity).toBe(practiceShadowOpacityTransform);
+		expect(motionInteraction.masteredShadowOpacity).toBe(masteredShadowOpacityTransform);
 		expect(motionInteraction.isCompletingSwipe).toBe(false);
+	});
+
+	test("maps drag x to prototype-like surface effects", () => {
+		createHook(createParams(null, jest.fn(), jest.fn()));
+
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, 0, 180], ["18%", "50%", "82%"]);
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -32, 0, 32, 180], [0.52, 0.34, 0.26, 0.34, 0.52]);
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -64, 0], [0.34, 0.22, 0.14]);
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [0, 64, 180], [0.14, 0.22, 0.34]);
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -64, 0], [0.13, 0.08, 0]);
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [0, 64, 180], [0, 0.08, 0.13]);
 	});
 
 	test("completes command swipes with the card id after the exit animation", () => {

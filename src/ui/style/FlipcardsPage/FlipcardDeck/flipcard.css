@@ -1,5 +1,17 @@
 /* src/ui/style/FlipcardsPage/FlipcardDeck/flipcard.css */
 .flipcard {
+	--flipcard-surface-x: 50%;
+	--flipcard-surface-y: 44%;
+	--flipcard-surface-opacity: 0.26;
+	--flipcard-surface-saturation: 1.05;
+	--flipcard-practice-surface-opacity: 0.14;
+	--flipcard-mastered-surface-opacity: 0.14;
+	--flipcard-practice-shadow-opacity: 0;
+	--flipcard-mastered-shadow-opacity: 0;
+	--flipcard-edge-practice-surface-opacity: 0;
+	--flipcard-edge-mastered-surface-opacity: 0;
+	--flipcard-edge-practice-shadow-opacity: 0;
+	--flipcard-edge-mastered-shadow-opacity: 0;
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -10,6 +22,20 @@
 	transform-origin: 50% 92%;
 	transform-style: preserve-3d;
 	will-change: transform;
+}
+
+.flipcard-edge-hover-practice {
+	--flipcard-edge-practice-surface-opacity: 0.34;
+	--flipcard-edge-mastered-surface-opacity: 0.08;
+	--flipcard-edge-practice-shadow-opacity: 0.11;
+	--flipcard-surface-saturation: 1.16;
+}
+
+.flipcard-edge-hover-mastered {
+	--flipcard-edge-practice-surface-opacity: 0.08;
+	--flipcard-edge-mastered-surface-opacity: 0.34;
+	--flipcard-edge-mastered-shadow-opacity: 0.11;
+	--flipcard-surface-saturation: 1.16;
 }
 
 .flipcard:active {
@@ -99,17 +125,27 @@
 	}
 
 	.card-edge-action-left:not(:disabled):hover span,
-	.card-edge-action-left:not(:disabled):focus-visible span {
-		border-color: rgba(255, 95, 147, 0.22);
-		background: rgba(255, 95, 147, 0.055);
-		color: rgba(255, 95, 147, 0.9);
+	.card-edge-action-left:not(:disabled):focus-visible span,
+	.flipcard-edge-hover-practice .card-edge-action-left:not(:disabled) span {
+		border-color: rgba(255, 95, 147, 0.32);
+		background: rgba(255, 95, 147, 0.082);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 0 32px rgba(255, 95, 147, 0.18),
+			0 10px 30px rgba(0, 0, 0, 0.14);
+		color: rgba(255, 95, 147, 0.98);
 	}
 
 	.card-edge-action-right:not(:disabled):hover span,
-	.card-edge-action-right:not(:disabled):focus-visible span {
-		border-color: rgba(56, 230, 192, 0.22);
-		background: rgba(56, 230, 192, 0.055);
-		color: rgba(56, 230, 192, 0.9);
+	.card-edge-action-right:not(:disabled):focus-visible span,
+	.flipcard-edge-hover-mastered .card-edge-action-right:not(:disabled) span {
+		border-color: rgba(56, 230, 192, 0.32);
+		background: rgba(56, 230, 192, 0.082);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 0 32px rgba(56, 230, 192, 0.18),
+			0 10px 30px rgba(0, 0, 0, 0.14);
+		color: rgba(56, 230, 192, 0.98);
 	}
 }
 

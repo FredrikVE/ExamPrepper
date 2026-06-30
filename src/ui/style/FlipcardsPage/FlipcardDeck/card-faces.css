@@ -29,6 +29,10 @@
 		linear-gradient(135deg, rgba(30, 70, 85, 0.35), rgba(25, 28, 76, 0.72)),
 		color-mix(in srgb, var(--panel-bg) 88%, transparent);
 	box-shadow:
+		-28px 34px 90px rgba(255, 95, 147, var(--flipcard-practice-shadow-opacity)),
+		28px 34px 90px rgba(56, 230, 192, var(--flipcard-mastered-shadow-opacity)),
+		-24px 32px 82px rgba(255, 95, 147, var(--flipcard-edge-practice-shadow-opacity)),
+		24px 32px 82px rgba(56, 230, 192, var(--flipcard-edge-mastered-shadow-opacity)),
 		0 30px 80px rgba(0, 0, 0, 0.45),
 		0 0 0 1px rgba(255, 255, 255, 0.025);
 	padding: var(--flipcard-face-padding);
@@ -36,31 +40,40 @@
 	backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
 	isolation: isolate;
+	transition:
+		border-color var(--transition-fast),
+		box-shadow var(--transition-fast);
 }
 
 .card-face::before {
 	content: "";
 	position: absolute;
 	inset: 0;
-	z-index: -1;
+	z-index: 0;
 	border-radius: inherit;
 	pointer-events: none;
 	background:
-		radial-gradient(circle at 50% 44%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 38%),
-		radial-gradient(circle at 4% 50%, rgba(255, 95, 147, 0.18), transparent 46%),
-		radial-gradient(circle at 96% 50%, rgba(56, 230, 192, 0.18), transparent 46%),
+		radial-gradient(circle at var(--flipcard-surface-x) var(--flipcard-surface-y), rgba(126, 103, 255, var(--flipcard-surface-opacity)), transparent 38%),
+		radial-gradient(circle at 4% 50%, rgba(255, 95, 147, var(--flipcard-practice-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 96% 50%, rgba(56, 230, 192, var(--flipcard-mastered-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 4% 50%, rgba(255, 95, 147, var(--flipcard-edge-practice-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 96% 50%, rgba(56, 230, 192, var(--flipcard-edge-mastered-surface-opacity)), transparent 46%),
 		linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.085) 46%, transparent 64%);
-	background-size: 150% 150%, 130% 130%, 130% 130%, 230% 230%;
-	background-position: 50% 46%, 0% 50%, 100% 50%, -70% 50%;
+	background-size: 150% 150%, 130% 130%, 130% 130%, 130% 130%, 130% 130%, 230% 230%;
+	background-position: 50% 46%, 0% 50%, 100% 50%, 0% 50%, 100% 50%, -70% 50%;
 	mix-blend-mode: screen;
-	opacity: 0.26;
+	opacity: 1;
+	filter: saturate(var(--flipcard-surface-saturation));
+	transition:
+		background-position var(--transition-fast),
+		filter var(--transition-fast);
 }
 
 .card-face::after {
 	content: "";
 	position: absolute;
 	inset: 0;
-	z-index: -1;
+	z-index: 0;
 	pointer-events: none;
 	background: linear-gradient(120deg, rgba(255, 255, 255, 0.045), transparent 28%, transparent 68%, color-mix(in srgb, var(--accent) 4%, transparent));
 	opacity: 0.7;
@@ -71,6 +84,8 @@
 }
 
 .flip-title {
+	position: relative;
+	z-index: 1;
 	display: block;
 	width: 100%;
 	max-width: 82%;
@@ -101,6 +116,8 @@
 }
 
 .flip-definition {
+	position: relative;
+	z-index: 1;
 	display: block;
 	width: 100%;
 	max-width: 78%;
@@ -135,5 +152,10 @@
 @media (prefers-reduced-motion: reduce) {
 	.card-faces-inner {
 		transition-duration: 1ms;
+	}
+
+	.card-face,
+	.card-face::before {
+		transition: none;
 	}
 }
