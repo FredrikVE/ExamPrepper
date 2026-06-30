@@ -9,7 +9,7 @@
 
 @media (max-width: 932px) {
     .flipcards-footer-sheet {
-        --mobile-bottom-sheet-collapsed-visible-height: 138px;
+        --mobile-bottom-sheet-collapsed-visible-height: 118px;
 
         position: fixed;
         z-index: 55;
