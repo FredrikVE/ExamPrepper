@@ -3,109 +3,88 @@ import CardStack from "./CardStack.jsx";
 import Flipcard from "./Flipcard.jsx";
 import QuickActions from "./QuickActions.jsx";
 
-export default function FlipcardDeck({
-    cards,
-    activeCard,
-    activeCardIndex,
-    isActiveCardFlipped,
-    isDeckComplete,
-    hasPreviousCard,
-    hasNextCard,
-    activeSwipeCommand,
-    isSwipeCommandActive,
-    labels,
-    progressModel,
-    footerPager,
-    onGoToPreviousCard,
-    onGoToNextCard,
-    onToggleActiveCard,
-    onRequestPracticeSwipe,
-    onRequestMasteredSwipe,
-    onPractice,
-    onMastered,
-    onRestart
-}) {
-    if (cards.length === 0) {
-        return (
-            <section className="flipcard-deck flipcard-deck-state" aria-label={labels.deckLabel}>
-                <h2>{labels.emptyDeckTitle}</h2>
-            </section>
-        );
-    }
+export default function FlipcardDeck(props) {
+	if (props.cards.length === 0) {
+		return (
+			<section className="flipcard-deck flipcard-deck-state" aria-label={props.labels.deckLabel}>
+				<h2>{props.labels.emptyDeckTitle}</h2>
+			</section>
+		);
+	}
 
-    if (isDeckComplete) {
-        return (
-            <section className="flipcard-deck flipcard-deck-state" aria-label={labels.deckLabel}>
-                <h2>{labels.completeTitle}</h2>
-                <p>{progressModel.completeBody}</p>
-                <div className="flipcard-complete-stats" aria-label={labels.completeStatsLabel}>
-                    <span>{labels.completedCardsLabel(progressModel.completedCount, progressModel.totalCardCount)}</span>
-                    <span>{labels.masteredCardsLabel(progressModel.masteredCount)}</span>
-                    <span>{labels.practiceCardsLabel(progressModel.practiceCount)}</span>
-                </div>
-                <div className="flipcard-deck-state-actions">
-                    <button
-                        type="button"
-                        className="flipcards-secondary-action"
-                        onClick={onGoToPreviousCard}
-                        disabled={!hasPreviousCard}
-                    >
-                        {labels.previousCardLabel}
-                    </button>
-                    <button
-                        type="button"
-                        className="flipcards-primary-action"
-                        onClick={onRestart}
-                    >
-                        {labels.restartDeckLabel}
-                    </button>
-                </div>
-            </section>
-        );
-    }
+	if (props.isDeckComplete) {
+		return (
+			<section className="flipcard-deck flipcard-deck-state" aria-label={props.labels.deckLabel}>
+				<h2>{props.labels.completeTitle}</h2>
+				<p>{props.progressModel.completeBody}</p>
+				<div className="flipcard-complete-stats" aria-label={props.labels.completeStatsLabel}>
+					<span>{props.labels.completedCardsLabel(props.progressModel.completedCount, props.progressModel.totalCardCount)}</span>
+					<span>{props.labels.masteredCardsLabel(props.progressModel.masteredCount)}</span>
+					<span>{props.labels.practiceCardsLabel(props.progressModel.practiceCount)}</span>
+				</div>
+				<div className="flipcard-deck-state-actions">
+					<button
+						type="button"
+						className="flipcards-secondary-action"
+						onClick={props.onGoToPreviousCard}
+						disabled={!props.hasPreviousCard}
+					>
+						{props.labels.previousCardLabel}
+					</button>
+					<button
+						type="button"
+						className="flipcards-primary-action"
+						onClick={props.onRestart}
+					>
+						{props.labels.restartDeckLabel}
+					</button>
+				</div>
+			</section>
+		);
+	}
 
-    if (!activeCard) {
-        return null;
-    }
+	if (!props.activeCard) {
+		return null;
+	}
 
-    return (
-        <section className="flipcard-deck" aria-label={labels.deckLabel}>
-            <div className="flipcard-stage">
-                <div className="flipcard-stage-glow" aria-hidden="true" />
+	return (
+		<section className="flipcard-deck" aria-label={props.labels.deckLabel}>
+			<div className="flipcard-stage">
+				<div className="flipcard-stage-glow" aria-hidden="true" />
 
-                <CardStack
-                    cardCount={cards.length}
-                    activeIndex={activeCardIndex}
-                />
+				<CardStack
+					cardCount={props.cards.length}
+					activeIndex={props.activeCardIndex}
+				/>
 
-                <Flipcard
-                    key={activeCard.id}
-                    term={activeCard.term}
-                    definition={activeCard.definition}
-                    isFlipped={isActiveCardFlipped}
-                    label={labels.activeCardLabel(activeCardIndex + 1, cards.length)}
-                    labels={labels}
-                    swipeCommand={activeSwipeCommand}
-                    hasPrevious={hasPreviousCard}
-                    hasNext={hasNextCard}
-                    onPrevious={onGoToPreviousCard}
-                    onNext={onGoToNextCard}
-                    onSwipePractice={onPractice}
-                    onSwipeMastered={onMastered}
-                />
-            </div>
+				<Flipcard
+					key={props.activeCard.id}
+					term={props.activeCard.term}
+					definition={props.activeCard.definition}
+					isFlipped={props.isActiveCardFlipped}
+					label={props.labels.activeCardLabel(props.activeCardIndex + 1, props.cards.length)}
+					labels={props.labels}
+					swipeCommand={props.activeSwipeCommand}
+					hasPrevious={props.hasPreviousCard}
+					hasNext={props.hasNextCard}
+					onPrevious={props.onGoToPreviousCard}
+					onNext={props.onGoToNextCard}
+					onSwipePractice={props.onPractice}
+					onSwipeMastered={props.onMastered}
+				/>
+			</div>
 
-            <QuickActions
-                isSwipeCommandActive={isSwipeCommandActive}
-                labels={labels}
-                onPractice={onRequestPracticeSwipe}
-                onFlip={onToggleActiveCard}
-                onMastered={onRequestMasteredSwipe}
-            />
+			<QuickActions
+				isSwipeCommandActive={props.isSwipeCommandActive}
+				labels={props.labels}
+				onPractice={props.onRequestPracticeSwipe}
+				onFlip={props.onToggleActiveCard}
+				onMastered={props.onRequestMasteredSwipe}
+			/>
 
-            <div className="flipcard-deck-progress-pager">
-                {footerPager}
-            </div>
-        </section>
-    );
+			<div className="flipcard-deck-progress-pager">
+				{props.footerPager}
+			</div>
+		</section>
+	);
 }
