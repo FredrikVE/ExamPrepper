@@ -83,6 +83,20 @@ export default function Flipcard(props) {
 		setEdgeHoverDirection(EDGE_HOVER_DIRECTION.NONE);
 	}, []);
 
+	const handleCardTap = useCallback((event) => {
+		if (isInteractionDisabled) {
+			return;
+		}
+
+		const target = event.target;
+
+		if (target.closest("button")) {
+			return;
+		}
+
+		props.onToggleCard();
+	}, [isInteractionDisabled, props.onToggleCard]);
+
 	return (
 		<motion.article
 			className={className}
@@ -101,6 +115,7 @@ export default function Flipcard(props) {
 				"--flipcard-mastered-shadow-opacity": motionInteraction.masteredShadowOpacity
 			}}
 			onDragEnd={motionInteraction.handleDragEnd}
+			onTap={handleCardTap}
 			whileTap={{ cursor: "grabbing" }}
 		>
 			<div className="flipcard-preview-shell">

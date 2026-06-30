@@ -2,8 +2,8 @@
 @media (max-width: 1100px) {
 	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-width: min(620px, 100%);
-		--flipcard-stage-height: clamp(410px, 54vh, 460px);
+		--flipcard-stage-width: min(600px, 100%);
+		--flipcard-stage-height: clamp(390px, 52vh, 440px);
 	}
 
 	.card-stack-title {
@@ -14,18 +14,18 @@
 @media (max-width: 932px) {
 	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-width: min(100%, 430px);
-		--flipcard-stage-height: clamp(380px, 58dvh, 430px);
+		--flipcard-stage-width: min(100%, 410px);
+		--flipcard-stage-height: clamp(330px, 50dvh, 390px);
 		--flipcard-face-padding: 42px clamp(42px, 12vw, 68px);
 		--flipcard-radius: 28px;
 	}
 
 	.flipcard-deck-column {
-		gap: var(--space-7);
+		gap: var(--space-4);
 	}
 
 	.flipcard-deck {
-		gap: var(--space-7);
+		gap: var(--space-4);
 		width: min(100%, var(--flipcard-stage-width));
 	}
 
@@ -113,11 +113,11 @@
 @media (max-height: 780px) and (max-width: 932px) {
 	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-height: clamp(340px, 52dvh, 390px);
+		--flipcard-stage-height: clamp(300px, 46dvh, 350px);
 	}
 
 	.flipcard-deck {
-		gap: var(--space-6);
+		gap: var(--space-3);
 	}
 
 	.card-edge-action {
@@ -129,7 +129,7 @@
 	.flipcard-deck-column,
 	.flipcard-deck {
 		--flipcard-stage-width: 100%;
-		--flipcard-stage-height: clamp(350px, 56dvh, 380px);
+		--flipcard-stage-height: clamp(300px, 48dvh, 340px);
 		--flipcard-face-padding: 38px 34px;
 	}
 
@@ -169,7 +169,7 @@
 @media (max-width: 380px) {
 	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-height: clamp(330px, 54dvh, 360px);
+		--flipcard-stage-height: clamp(280px, 46dvh, 320px);
 		--flipcard-face-padding: 34px 30px;
 	}
 
@@ -254,7 +254,7 @@
 @media (max-height: 700px) and (max-width: 480px) {
 	.flipcard-deck-column,
 	.flipcard-deck {
-		--flipcard-stage-height: clamp(310px, 50dvh, 340px);
+		--flipcard-stage-height: clamp(260px, 44dvh, 300px);
 		--flipcard-face-padding: 30px 26px;
 	}
 

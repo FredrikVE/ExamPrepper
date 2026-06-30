@@ -63,6 +63,7 @@ export default function FlipcardDeck(props) {
 					onSwipePractice={props.onPractice}
 					onSwipeMastered={props.onMastered}
 					onSwipeFeedback={props.onSwipeFeedback}
+					onToggleCard={props.onToggleActiveCard}
 				/>
 
 				<FeedbackToast
