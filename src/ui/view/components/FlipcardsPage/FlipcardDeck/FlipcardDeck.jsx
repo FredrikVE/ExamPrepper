@@ -3,11 +3,28 @@ import CardStack from "./CardStack.jsx";
 import Flipcard from "./Flipcard.jsx";
 import QuickActions from "./QuickActions.jsx";
 
-export default function FlipcardDeck(props) {
-    const cards = props.cards;
-    const deck = props.deck;
-    const labels = props.labels;
-    const progressModel = props.progressModel;
+export default function FlipcardDeck({
+    cards,
+    activeCard,
+    activeCardIndex,
+    isActiveCardFlipped,
+    isDeckComplete,
+    hasPreviousCard,
+    hasNextCard,
+    activeSwipeCommand,
+    isSwipeCommandActive,
+    labels,
+    progressModel,
+    footerPager,
+    onGoToPreviousCard,
+    onGoToNextCard,
+    onToggleActiveCard,
+    onRequestPracticeSwipe,
+    onRequestMasteredSwipe,
+    onPractice,
+    onMastered,
+    onRestart
+}) {
     if (cards.length === 0) {
         return (
             <section className="flipcard-deck flipcard-deck-state" aria-label={labels.deckLabel}>
@@ -16,7 +33,7 @@ export default function FlipcardDeck(props) {
         );
     }
 
-    if (deck.isComplete) {
+    if (isDeckComplete) {
         return (
             <section className="flipcard-deck flipcard-deck-state" aria-label={labels.deckLabel}>
                 <h2>{labels.completeTitle}</h2>
@@ -30,15 +47,15 @@ export default function FlipcardDeck(props) {
                     <button
                         type="button"
                         className="flipcards-secondary-action"
-                        onClick={deck.goToPrevious}
-                        disabled={!deck.hasPrevious}
+                        onClick={onGoToPreviousCard}
+                        disabled={!hasPreviousCard}
                     >
                         {labels.previousCardLabel}
                     </button>
                     <button
                         type="button"
                         className="flipcards-primary-action"
-                        onClick={props.onRestart}
+                        onClick={onRestart}
                     >
                         {labels.restartDeckLabel}
                     </button>
@@ -47,7 +64,9 @@ export default function FlipcardDeck(props) {
         );
     }
 
-    const activeCard = cards[deck.activeIndex];
+    if (!activeCard) {
+        return null;
+    }
 
     return (
         <section className="flipcard-deck" aria-label={labels.deckLabel}>
@@ -56,36 +75,36 @@ export default function FlipcardDeck(props) {
 
                 <CardStack
                     cardCount={cards.length}
-                    activeIndex={deck.activeIndex}
+                    activeIndex={activeCardIndex}
                 />
 
                 <Flipcard
                     key={activeCard.id}
                     term={activeCard.term}
                     definition={activeCard.definition}
-                    isFlipped={deck.isFlipped}
-                    label={labels.activeCardLabel(deck.activeIndex + 1, cards.length)}
+                    isFlipped={isActiveCardFlipped}
+                    label={labels.activeCardLabel(activeCardIndex + 1, cards.length)}
                     labels={labels}
-                    swipeCommand={deck.swipeCommand}
-                    hasPrevious={deck.hasPrevious}
-                    hasNext={deck.hasNext}
-                    onPrevious={deck.goToPrevious}
-                    onNext={deck.goToNext}
-                    onSwipePractice={props.onPractice}
-                    onSwipeMastered={props.onMastered}
+                    swipeCommand={activeSwipeCommand}
+                    hasPrevious={hasPreviousCard}
+                    hasNext={hasNextCard}
+                    onPrevious={onGoToPreviousCard}
+                    onNext={onGoToNextCard}
+                    onSwipePractice={onPractice}
+                    onSwipeMastered={onMastered}
                 />
             </div>
 
             <QuickActions
-                isSwipeCommandActive={deck.isSwipeCommandActive}
+                isSwipeCommandActive={isSwipeCommandActive}
                 labels={labels}
-                onPractice={deck.requestSwipeLeft}
-                onFlip={deck.flipActiveCard}
-                onMastered={deck.requestSwipeRight}
+                onPractice={onRequestPracticeSwipe}
+                onFlip={onToggleActiveCard}
+                onMastered={onRequestMasteredSwipe}
             />
 
             <div className="flipcard-deck-progress-pager">
-                {props.footerPager}
+                {footerPager}
             </div>
         </section>
     );

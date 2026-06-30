@@ -33,36 +33,6 @@ export default function FlipcardsStudySurface(props) {
         });
     }, [props.activeCardIndex, props.cards.length]);
 
-    const deck = useMemo(() => ({
-        activeIndex: props.activeCardIndex,
-        isFlipped: props.isActiveCardFlipped,
-        isComplete: props.isDeckComplete,
-        hasPrevious: props.hasPreviousCard,
-        hasNext: props.hasNextCard,
-        swipeCommand: activeSwipeCommand,
-        isSwipeCommandActive,
-        flipActiveCard: props.onToggleActiveCard,
-        goToPrevious: props.onGoToPreviousCard,
-        goToNext: props.onGoToNextCard,
-        goToCard: props.onGoToCard,
-        requestSwipeLeft: requestPracticeSwipe,
-        requestSwipeRight: requestMasteredSwipe
-    }), [
-        activeSwipeCommand,
-        isSwipeCommandActive,
-        props.activeCardIndex,
-        props.hasNextCard,
-        props.hasPreviousCard,
-        props.isActiveCardFlipped,
-        props.isDeckComplete,
-        props.onGoToCard,
-        props.onGoToNextCard,
-        props.onGoToPreviousCard,
-        props.onToggleActiveCard,
-        requestMasteredSwipe,
-        requestPracticeSwipe
-    ]);
-
     useEffect(() => {
         if (presentationMode !== PRESENTATION_MODE.DESKTOP) {
             closeDesktopMenu();
@@ -182,10 +152,22 @@ export default function FlipcardsStudySurface(props) {
             <div className="flipcards-study-body">
                 <FlipcardDeck
                     cards={props.cards}
-                    deck={deck}
+                    activeCard={props.activeCard}
+                    activeCardIndex={props.activeCardIndex}
+                    isActiveCardFlipped={props.isActiveCardFlipped}
+                    isDeckComplete={props.isDeckComplete}
+                    hasPreviousCard={props.hasPreviousCard}
+                    hasNextCard={props.hasNextCard}
+                    activeSwipeCommand={activeSwipeCommand}
+                    isSwipeCommandActive={isSwipeCommandActive}
                     labels={props.labels}
                     progressModel={props.progressModel}
                     footerPager={progressPager}
+                    onGoToPreviousCard={props.onGoToPreviousCard}
+                    onGoToNextCard={props.onGoToNextCard}
+                    onToggleActiveCard={props.onToggleActiveCard}
+                    onRequestPracticeSwipe={requestPracticeSwipe}
+                    onRequestMasteredSwipe={requestMasteredSwipe}
                     onPractice={completeForPractice}
                     onMastered={completeAsMastered}
                     onRestart={restartSession}
