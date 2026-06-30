@@ -1,5 +1,4 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/Flipcard.jsx
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
 import CardFaces from "./CardFaces.jsx";
 import SwipeIndicators from "./SwipeIndicators.jsx";
@@ -12,6 +11,10 @@ export default function Flipcard(props) {
 		onSwipePractice: props.onSwipePractice,
 		onSwipeMastered: props.onSwipeMastered
 	});
+
+	const stopButtonPointerPropagation = (event) => {
+		event.stopPropagation();
+	};
 
 	return (
 		<motion.article
@@ -39,26 +42,27 @@ export default function Flipcard(props) {
 				style={{ opacity: motionInteraction.masteredOpacity }}
 				aria-hidden="true"
 			/>
+
 			<button
 				type="button"
-				className="flipcard-nav flipcard-nav-previous"
-				onClick={props.onPrevious}
-				onPointerDown={(event) => event.stopPropagation()}
-				disabled={!props.hasPrevious || motionInteraction.isCompletingSwipe}
-				aria-label={props.labels.previousCardLabel}
+				className="card-edge-action card-edge-action-left"
+				onClick={props.onRequestPracticeSwipe}
+				onPointerDown={stopButtonPointerPropagation}
+				disabled={props.isSwipeCommandActive || motionInteraction.isCompletingSwipe}
+				aria-label={props.labels.practiceCardLabel}
 			>
-				<ChevronLeft aria-hidden="true" focusable="false" />
+				<span aria-hidden="true">×</span>
 			</button>
 
 			<button
 				type="button"
-				className="flipcard-nav flipcard-nav-next"
-				onClick={props.onNext}
-				onPointerDown={(event) => event.stopPropagation()}
-				disabled={!props.hasNext || motionInteraction.isCompletingSwipe}
-				aria-label={props.labels.nextCardLabel}
+				className="card-edge-action card-edge-action-right"
+				onClick={props.onRequestMasteredSwipe}
+				onPointerDown={stopButtonPointerPropagation}
+				disabled={props.isSwipeCommandActive || motionInteraction.isCompletingSwipe}
+				aria-label={props.labels.masteredCardLabel}
 			>
-				<ChevronRight aria-hidden="true" focusable="false" />
+				<span aria-hidden="true">✓</span>
 			</button>
 
 			<CardFaces term={props.term} definition={props.definition} isFlipped={props.isFlipped} />
