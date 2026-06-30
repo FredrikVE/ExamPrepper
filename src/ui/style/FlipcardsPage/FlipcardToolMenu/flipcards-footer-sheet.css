@@ -4,7 +4,7 @@
 }
 
 .flipcards-mobile-bottom-sheet-content {
-    gap: var(--space-3);
+    gap: var(--space-4);
 }
 
 @media (max-width: 932px) {
@@ -18,5 +18,10 @@
         left: max(0px, env(safe-area-inset-left));
         display: block;
         overflow: visible;
+    }
+
+    .flipcards-footer-sheet .mobile-bottom-sheet-grip-control-docked {
+        min-height: 34px;
+        margin-bottom: 0;
     }
 }
