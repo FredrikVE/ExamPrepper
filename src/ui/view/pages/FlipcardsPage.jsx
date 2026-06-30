@@ -39,14 +39,26 @@ export default function FlipcardsPage({ viewModel }) {
             <FlipcardsStudySurface
                 cards={viewModel.visibleCards}
                 visibleDeckKey={viewModel.visibleDeckKey}
+                activeCardIndex={viewModel.activeCardIndex}
+                activeCard={viewModel.activeCard}
+                nextCard={viewModel.nextCard}
+                isActiveCardFlipped={viewModel.isActiveCardFlipped}
+                isDeckComplete={viewModel.isDeckComplete}
+                hasPreviousCard={viewModel.hasPreviousCard}
+                hasNextCard={viewModel.hasNextCard}
+                activeCardPositionLabel={viewModel.activeCardPositionLabel}
                 deckToolItems={viewModel.deckToolItems}
-                onSelectDeckTool={viewModel.onSelectDeckTool}
                 progressModel={viewModel.progressModel}
                 presentationMode={viewModel.presentationMode}
                 labels={viewModel.labels}
-                onCardMastered={viewModel.markCardAsMastered}
-                onCardForPractice={viewModel.markCardForPractice}
-                onResetProgress={viewModel.resetFlipcardsProgress}
+                onGoToPreviousCard={viewModel.goToPreviousCard}
+                onGoToNextCard={viewModel.goToNextCard}
+                onGoToCard={viewModel.goToCard}
+                onToggleActiveCard={viewModel.toggleActiveCard}
+                onCompleteForPractice={viewModel.completeCardForPractice}
+                onCompleteAsMastered={viewModel.completeCardAsMastered}
+                onRestartSession={viewModel.restartFlipcardSession}
+                onSelectDeckTool={viewModel.onSelectDeckTool}
             />
         </FlipcardsShell>
     );

@@ -14,6 +14,8 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
     const [practiceCardIds, setPracticeCardIds] = useState([]);
     const [activeDeckToolKey, setActiveDeckToolKey] = useState(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
     const [selectedDeckCardIds, setSelectedDeckCardIds] = useState([]);
+    const [activeCardIndex, setActiveCardIndex] = useState(0);
+    const [isActiveCardFlipped, setIsActiveCardFlipped] = useState(false);
 
     useEffect(() => {
         if (!isActive) {
@@ -171,6 +173,30 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         return [deckKey, activeDeckToolKey, visibleCards.map((card) => card.id).join("|")].join("::");
     }, [activeDeckToolKey, deckKey, visibleCards]);
 
+    useEffect(() => {
+        setActiveCardIndex(0);
+        setIsActiveCardFlipped(false);
+    }, [visibleDeckKey]);
+
+    const activeCard = visibleCards[activeCardIndex] ?? null;
+
+    const nextCard = activeCardIndex < visibleCards.length - 1
+        ? visibleCards[activeCardIndex + 1]
+        : null;
+
+    const isDeckComplete = activeCardIndex >= visibleCards.length;
+
+    const hasPreviousCard = activeCardIndex > 0;
+
+    const hasNextCard = activeCardIndex < visibleCards.length - 1;
+
+    const activeCardPositionLabel = isDeckComplete
+        ? labels.completePositionLabel
+        : labels.deckPositionLabel(
+            Math.min(activeCardIndex + 1, visibleCards.length),
+            visibleCards.length
+        );
+
     const repeatDifficultCardIds = useMemo(() => {
         return createRepeatDifficultCardIds(flashcards, practiceCardIds);
     }, [flashcards, practiceCardIds]);
@@ -226,6 +252,53 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         }
     }, [disabledDeckToolKeys, repeatDifficultCards, showAllCards, shuffleDeck]);
 
+    const goToPreviousCard = useCallback(() => {
+        setIsActiveCardFlipped(false);
+        setActiveCardIndex((currentIndex) => Math.max(currentIndex - 1, 0));
+    }, []);
+
+    const goToNextCard = useCallback(() => {
+        setIsActiveCardFlipped(false);
+        setActiveCardIndex((currentIndex) => Math.min(currentIndex + 1, visibleCards.length));
+    }, [visibleCards.length]);
+
+    const goToCard = useCallback((cardIndex) => {
+        setIsActiveCardFlipped(false);
+        setActiveCardIndex(
+            Math.min(Math.max(cardIndex, 0), Math.max(visibleCards.length - 1, 0))
+        );
+    }, [visibleCards.length]);
+
+    const toggleActiveCard = useCallback(() => {
+        setIsActiveCardFlipped((isCurrentlyFlipped) => !isCurrentlyFlipped);
+    }, []);
+
+    const completeCardForPractice = useCallback((cardId) => {
+        if (!activeCard || activeCard.id !== cardId) {
+            return;
+        }
+
+        markCardForPractice(cardId);
+        setIsActiveCardFlipped(false);
+        setActiveCardIndex((currentIndex) => Math.min(currentIndex + 1, visibleCards.length));
+    }, [activeCard, markCardForPractice, visibleCards.length]);
+
+    const completeCardAsMastered = useCallback((cardId) => {
+        if (!activeCard || activeCard.id !== cardId) {
+            return;
+        }
+
+        markCardAsMastered(cardId);
+        setIsActiveCardFlipped(false);
+        setActiveCardIndex((currentIndex) => Math.min(currentIndex + 1, visibleCards.length));
+    }, [activeCard, markCardAsMastered, visibleCards.length]);
+
+    const restartFlipcardSession = useCallback(() => {
+        resetFlipcardsProgress();
+        setActiveCardIndex(0);
+        setIsActiveCardFlipped(false);
+    }, [resetFlipcardsProgress]);
+
     return {
         labels,
         flashcards,
@@ -239,6 +312,21 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         visibleDeckKey,
         activeDeckToolKey,
         deckToolItems,
+        activeCardIndex,
+        activeCard,
+        nextCard,
+        isActiveCardFlipped,
+        isDeckComplete,
+        hasPreviousCard,
+        hasNextCard,
+        activeCardPositionLabel,
+        goToPreviousCard,
+        goToNextCard,
+        goToCard,
+        toggleActiveCard,
+        completeCardForPractice,
+        completeCardAsMastered,
+        restartFlipcardSession,
         masteredCardIds,
         practiceCardIds,
         markCardAsMastered,

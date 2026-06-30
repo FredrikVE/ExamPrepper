@@ -1,7 +1,7 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
-import { useFlipcardDeck } from "./FlipcardDeck/useFlipcardDeck.js";
+import { useFlipcardSwipeInteraction } from "./FlipcardDeck/useFlipcardSwipeInteraction.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
 import FlipcardsMobileFooterSheet from "./FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx";
@@ -16,17 +16,52 @@ export default function FlipcardsStudySurface(props) {
     const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
     const presentationMode = props.presentationMode;
     const { isDesktopMenuOpen, closeDesktopMenu, setDesktopMenuOpen } = useFlipcardToolMenu();
+    const {
+        activeSwipeCommand,
+        isSwipeCommandActive,
+        requestPracticeSwipe,
+        requestMasteredSwipe,
+        clearActiveSwipeCommand
+    } = useFlipcardSwipeInteraction(props.visibleDeckKey);
 
-    const deck = useFlipcardDeck(props.cards.length, props.visibleDeckKey);
-    const activeCard = props.cards[deck.activeIndex] ?? null;
-    const currentPosition = Math.min(deck.activeIndex + 1, props.cards.length);
-    const progressLabel = props.labels.deckPositionLabel(currentPosition, props.cards.length);
-    const progressEntries = createProgressPagerEntries({
-        count: props.cards.length,
-        activeIndex: deck.activeIndex,
-        keyPrefix: "flipcard-dot",
-        resolveIsCorrect: resolveFlipcardProgressCorrectness
-    });
+    const progressEntries = useMemo(() => {
+        return createProgressPagerEntries({
+            count: props.cards.length,
+            activeIndex: props.activeCardIndex,
+            keyPrefix: "flipcard-dot",
+            resolveIsCorrect: resolveFlipcardProgressCorrectness
+        });
+    }, [props.activeCardIndex, props.cards.length]);
+
+    const deck = useMemo(() => ({
+        activeIndex: props.activeCardIndex,
+        isFlipped: props.isActiveCardFlipped,
+        isComplete: props.isDeckComplete,
+        hasPrevious: props.hasPreviousCard,
+        hasNext: props.hasNextCard,
+        swipeCommand: activeSwipeCommand,
+        isSwipeCommandActive,
+        flipActiveCard: props.onToggleActiveCard,
+        goToPrevious: props.onGoToPreviousCard,
+        goToNext: props.onGoToNextCard,
+        goToCard: props.onGoToCard,
+        requestSwipeLeft: requestPracticeSwipe,
+        requestSwipeRight: requestMasteredSwipe
+    }), [
+        activeSwipeCommand,
+        isSwipeCommandActive,
+        props.activeCardIndex,
+        props.hasNextCard,
+        props.hasPreviousCard,
+        props.isActiveCardFlipped,
+        props.isDeckComplete,
+        props.onGoToCard,
+        props.onGoToNextCard,
+        props.onGoToPreviousCard,
+        props.onToggleActiveCard,
+        requestMasteredSwipe,
+        requestPracticeSwipe
+    ]);
 
     useEffect(() => {
         if (presentationMode !== PRESENTATION_MODE.DESKTOP) {
@@ -38,60 +73,69 @@ export default function FlipcardsStudySurface(props) {
         setIsDesktopToolsPanelOpen(presentationMode === PRESENTATION_MODE.DESKTOP && isDesktopMenuOpen);
     }, [isDesktopMenuOpen, presentationMode]);
 
-    const restartSession = () => {
-        props.onResetProgress();
-        deck.restartDeck();
-    };
+    const restartSession = useCallback(() => {
+        clearActiveSwipeCommand();
+        props.onRestartSession();
+    }, [clearActiveSwipeCommand, props]);
 
-    const selectDeckTool = (deckToolKey) => {
+    const selectDeckTool = useCallback((deckToolKey) => {
+        clearActiveSwipeCommand();
         props.onSelectDeckTool(deckToolKey);
-        deck.restartDeck();
-    };
+    }, [clearActiveSwipeCommand, props]);
 
-    const completeAsMastered = () => {
-        if (!activeCard) {
+    const completeAsMastered = useCallback(() => {
+        if (!props.activeCard) {
             return;
         }
 
-        props.onCardMastered(activeCard.id);
-        deck.goToNext();
-    };
+        clearActiveSwipeCommand();
+        props.onCompleteAsMastered(props.activeCard.id);
+    }, [clearActiveSwipeCommand, props]);
 
-    const completeForPractice = () => {
-        if (!activeCard) {
+    const completeForPractice = useCallback(() => {
+        if (!props.activeCard) {
             return;
         }
 
-        props.onCardForPractice(activeCard.id);
-        deck.goToNext();
-    };
+        clearActiveSwipeCommand();
+        props.onCompleteForPractice(props.activeCard.id);
+    }, [clearActiveSwipeCommand, props]);
 
     const handleFlipcardKeyboardShortcut = useCallback((event) => {
         if (!shouldHandleFlipcardKeyboardShortcut(event)) {
             return;
         }
 
-        if (props.cards.length === 0 || deck.isComplete || deck.isSwipeCommandActive) {
+        if (props.cards.length === 0 || props.isDeckComplete || isSwipeCommandActive) {
             return;
         }
 
-        if (event.key === "ArrowLeft" && deck.hasPrevious) {
+        if (event.key === "ArrowLeft" && props.hasPreviousCard) {
             event.preventDefault();
-            deck.goToPrevious();
+            props.onGoToPreviousCard();
             return;
         }
 
-        if (event.key === "ArrowRight" && deck.hasNext) {
+        if (event.key === "ArrowRight" && props.hasNextCard) {
             event.preventDefault();
-            deck.goToNext();
+            props.onGoToNextCard();
             return;
         }
 
         if (event.key === "Enter") {
             event.preventDefault();
-            deck.flipActiveCard();
+            props.onToggleActiveCard();
         }
-    }, [props.cards.length, deck.isComplete, deck.isSwipeCommandActive, deck.hasPrevious, deck.hasNext, deck.goToPrevious, deck.goToNext, deck.flipActiveCard]);
+    }, [
+        isSwipeCommandActive,
+        props.cards.length,
+        props.hasNextCard,
+        props.hasPreviousCard,
+        props.isDeckComplete,
+        props.onGoToNextCard,
+        props.onGoToPreviousCard,
+        props.onToggleActiveCard
+    ]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleFlipcardKeyboardShortcut);
@@ -109,25 +153,25 @@ export default function FlipcardsStudySurface(props) {
             containerClassName="flipcards-progress-pager-container"
             ariaLabel={props.labels.toolMenuPagerLabel}
             previousLabel={props.labels.previousCardLabel}
-            previousDisabled={!deck.hasPrevious || deck.isSwipeCommandActive}
+            previousDisabled={!props.hasPreviousCard || isSwipeCommandActive}
             previousButtonClassName="flipcards-progress-pager-button"
-            onPrevious={deck.goToPrevious}
+            onPrevious={props.onGoToPreviousCard}
             entries={progressEntries}
             compactEntries={progressEntries}
             minimalCompactEntries={progressEntries}
             shouldUseCompactDots={props.cards.length > 9}
             shouldUseResponsiveCompactDots={true}
             submitted={false}
-            onSelectEntry={deck.goToCard}
+            onSelectEntry={props.onGoToCard}
             dotsLabel={props.labels.toolMenuPagerLabel}
             goToEntryLabel={props.labels.goToCardLabel}
-            counterLabel={progressLabel}
+            counterLabel={props.activeCardPositionLabel}
             counterClassName="flipcards-progress-pager-counter"
             counterLabelClassName="flipcards-progress-pager-label"
             nextLabel={props.labels.nextCardLabel}
-            nextDisabled={!deck.hasNext || deck.isSwipeCommandActive}
+            nextDisabled={!props.hasNextCard || isSwipeCommandActive}
             nextButtonClassName="flipcards-progress-pager-button"
-            onNext={deck.goToNext}
+            onNext={props.onGoToNextCard}
             hasActionButton={false}
             actionButton={null}
         />
@@ -159,15 +203,15 @@ export default function FlipcardsStudySurface(props) {
 
             <FlipcardsMobileFooterSheet
                 progressEntries={progressEntries}
-                progressLabel={progressLabel}
-                hasPrevious={deck.hasPrevious}
-                hasNext={deck.hasNext}
-                isSwipeCommandActive={deck.isSwipeCommandActive}
+                progressLabel={props.activeCardPositionLabel}
+                hasPrevious={props.hasPreviousCard}
+                hasNext={props.hasNextCard}
+                isSwipeCommandActive={isSwipeCommandActive}
                 deckToolItems={props.deckToolItems}
                 labels={props.labels}
-                onPrevious={deck.goToPrevious}
-                onNext={deck.goToNext}
-                onGoToCard={deck.goToCard}
+                onPrevious={props.onGoToPreviousCard}
+                onNext={props.onGoToNextCard}
+                onGoToCard={props.onGoToCard}
                 onDeckToolSelect={selectDeckTool}
             />
         </section>
