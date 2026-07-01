@@ -1,8 +1,8 @@
-// src/ui/view/components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx
-export default function WorkspaceScaffoldSearchFooter(props) {
+// src/ui/view/components/Footer/Footer.jsx
+export default function Footer(props) {
     const className = [
-        "workspace-scaffold-search-footer",
-        props.isOpen ? "workspace-scaffold-search-footer-open" : null,
+        "footer",
+        props.isOpen ? "footer-open" : null,
         props.isOpen ? props.openClassName : null,
         props.className
     ].filter(Boolean).join(" ");

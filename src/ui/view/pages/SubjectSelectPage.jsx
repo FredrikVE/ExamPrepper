@@ -6,7 +6,7 @@ import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 import Header from "../components/Header/Header.jsx";
-import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx";
+import Footer from "../components/Footer/Footer.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
@@ -110,7 +110,7 @@ export default function SubjectSelectPage({ viewModel }) {
 				/>
 			)}
 
-			<WorkspaceScaffoldSearchFooter
+			<Footer
 				isOpen={viewModel.isSearchSheetOpen}
 				className="subject-search-footer"
 				openClassName="subject-search-footer-open"
@@ -126,7 +126,7 @@ export default function SubjectSelectPage({ viewModel }) {
 					renderSearchContent={renderSearchContent}
 					onCloseSheet={viewModel.closeSubjectSearchSheet}
 				/>
-			</WorkspaceScaffoldSearchFooter>
+			</Footer>
 		</div>
 	);
 }

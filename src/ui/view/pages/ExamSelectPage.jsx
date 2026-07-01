@@ -7,7 +7,7 @@ import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 import Header from "../components/Header/Header.jsx";
-import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx";
+import Footer from "../components/Footer/Footer.jsx";
 
 export default function ExamSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
@@ -124,7 +124,7 @@ export default function ExamSelectPage({ viewModel }) {
                 />
             )}
 
-            <WorkspaceScaffoldSearchFooter
+            <Footer
                 isOpen={viewModel.isSearchSheetOpen}
                 className="exam-search-footer"
                 openClassName="exam-search-footer-open"
@@ -140,7 +140,7 @@ export default function ExamSelectPage({ viewModel }) {
                     renderSearchContent={renderSearchContent}
                     onCloseSheet={viewModel.closeExamSearchSheet}
                 />
-            </WorkspaceScaffoldSearchFooter>
+            </Footer>
         </div>
     );
 }

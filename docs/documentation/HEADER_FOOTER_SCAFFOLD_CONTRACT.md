@@ -260,6 +260,96 @@ Footer.jsx
     └── ExamFooter -> ProgressPager senere
 ```
 
+
+## Footer implementation follow-up
+
+Oppdatert etter patch: `introduce-footer-ssot`
+
+Faktisk første `Footer.jsx`-kontrakt er nå implementert som en direkte videreføring av tidligere `WorkspaceScaffoldSearchFooter`:
+
+```jsx
+<Footer
+	isOpen={viewModel.isSearchSheetOpen}
+	className="subject-search-footer"
+	openClassName="subject-search-footer-open"
+	onBlur={handleFooterBlur}
+>
+	<PageToolsMobileFooterSheet ... />
+</Footer>
+```
+
+Samme kontrakt brukes av `ExamSelectPage`, med `exam-search-footer` og `exam-search-footer-open` som side-spesifikke klasser.
+
+Gjeldende props:
+
+```txt
+isOpen        boolean    styrer felles footer-open class
+className     string     side-spesifikk footerklasse
+openClassName string     side-spesifikk open-state klasse
+onBlur        function   side-eid blur/close-handler
+children      node       innholdsslot, per nå PageToolsMobileFooterSheet
+```
+
+Felles klasser eid av `Footer.jsx`:
+
+```txt
+footer
+footer-open
+```
+
+Side-spesifikke klasser beholdes på sidene:
+
+```txt
+subject-search-footer
+subject-search-footer-open
+exam-search-footer
+exam-search-footer-open
+```
+
+Nåværende konsumenter:
+
+```txt
+SubjectSelectPage
+└── Footer
+    └── PageToolsMobileFooterSheet
+        ├── renderControls fra SubjectSelectPage
+        ├── renderSearchContent fra SubjectSelectPage
+        └── onCloseSheet fra SubjectSelectPageViewModel
+
+ExamSelectPage
+└── Footer
+    └── PageToolsMobileFooterSheet
+        ├── renderControls fra ExamSelectPage
+        ├── renderSearchContent fra ExamSelectPage
+        └── onCloseSheet fra ExamSelectPageViewModel
+```
+
+Første Footer-implementasjon flytter bare scaffold-footeren. Den flytter ikke search state, filter state, render-funksjoner eller close-regler ut av Page/ViewModel.
+
+Regler som fortsatt gjelder:
+
+```txt
+- Footer.jsx får ikke viewModel.
+- Footer.jsx eier ikke PageToolsMobileFooterSheet.
+- Footer.jsx eier ikke MobileBottomSheet-mekanikk.
+- Footer.jsx eier ikke ProgressPager.
+- Footer.jsx eier ikke search/filter-state.
+- Footer.jsx leser ikke route, pageName eller window.
+- Footer.jsx rendrer bare felles footer-wrapper og children-slot.
+```
+
+CSS etter første implementasjon:
+
+```txt
+src/ui/style/Footer/
+├── index.css
+└── footer.css
+```
+
+`src/ui/style/WorkspaceScaffold/search-footer.css` er flyttet ut. `WorkspaceScaffold/` beholder fortsatt header-CSS inntil `WorkspaceScaffoldHeader` er fjernet eller erstattet i senere cleanup.
+
+Search-backdrop-regelen bruker nå felles `.footer-open` i stedet for gammel `.workspace-scaffold-search-footer-open`. Dette er bevisst, fordi open-state nå eies av scaffold `Footer.jsx`.
+
 ## Tittelplassering
 
 Side-titler er sideinnhold som standard.
