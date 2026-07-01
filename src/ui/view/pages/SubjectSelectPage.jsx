@@ -5,7 +5,7 @@ import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
-import WorkspaceScaffoldHeader from "../components/WorkspaceScaffold/WorkspaceScaffoldHeader.jsx";
+import Header from "../components/Header/Header.jsx";
 import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
@@ -75,7 +75,7 @@ export default function SubjectSelectPage({ viewModel }) {
 			<main className="subject-select-workspace">
 				<div className="subject-select-ambient-light" aria-hidden="true" />
 
-				<WorkspaceScaffoldHeader
+				<Header
 					showBackButton={viewModel.showBackButton}
 					backLabel={viewModel.backLabel}
 					navigationLabel={viewModel.navigationLabel}
