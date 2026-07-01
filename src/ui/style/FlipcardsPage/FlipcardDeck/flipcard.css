@@ -82,12 +82,12 @@
 	place-items: center;
 	width: 46px;
 	height: 46px;
-	border: 1px solid rgba(255, 255, 255, 0.085);
+	border: 1px solid rgba(43, 63, 92, 0.12);
 	border-radius: var(--radius-full);
-	background: rgba(255, 255, 255, 0.025);
+	background: rgba(255, 255, 255, 0.62);
 	box-shadow:
-		inset 0 1px 0 rgba(255, 255, 255, 0.06),
-		0 10px 30px rgba(0, 0, 0, 0.12);
+		inset 0 1px 0 rgba(255, 255, 255, 0.82),
+		0 10px 30px rgba(18, 38, 63, 0.1);
 	font-size: 25px;
 	font-weight: 500;
 	line-height: 1;
@@ -102,11 +102,11 @@
 }
 
 .card-edge-action-left span {
-	color: rgba(255, 95, 147, 0.56);
+	color: rgba(220, 38, 38, 0.72);
 }
 
 .card-edge-action-right span {
-	color: rgba(56, 230, 192, 0.56);
+	color: rgba(5, 150, 105, 0.74);
 }
 
 .card-edge-action:disabled {
@@ -135,25 +135,25 @@
 	.card-edge-action-left:not(:disabled):hover span,
 	.card-edge-action-left:not(:disabled):focus-visible span,
 	.flipcard-edge-hover-practice .card-edge-action-left:not(:disabled) span {
-		border-color: rgba(255, 95, 147, 0.32);
-		background: rgba(255, 95, 147, 0.082);
+		border-color: rgba(220, 38, 38, 0.26);
+		background: rgba(239, 68, 68, 0.09);
 		box-shadow:
 			inset 0 1px 0 rgba(255, 255, 255, 0.08),
-			0 0 32px rgba(255, 95, 147, 0.18),
-			0 10px 30px rgba(0, 0, 0, 0.14);
-		color: rgba(255, 95, 147, 0.98);
+			0 0 32px rgba(239, 68, 68, 0.14),
+			0 10px 30px rgba(18, 38, 63, 0.11);
+		color: rgba(220, 38, 38, 0.96);
 	}
 
 	.card-edge-action-right:not(:disabled):hover span,
 	.card-edge-action-right:not(:disabled):focus-visible span,
 	.flipcard-edge-hover-mastered .card-edge-action-right:not(:disabled) span {
-		border-color: rgba(56, 230, 192, 0.32);
-		background: rgba(56, 230, 192, 0.082);
+		border-color: rgba(5, 150, 105, 0.26);
+		background: rgba(16, 185, 129, 0.09);
 		box-shadow:
 			inset 0 1px 0 rgba(255, 255, 255, 0.08),
-			0 0 32px rgba(56, 230, 192, 0.18),
-			0 10px 30px rgba(0, 0, 0, 0.14);
-		color: rgba(56, 230, 192, 0.98);
+			0 0 32px rgba(16, 185, 129, 0.14),
+			0 10px 30px rgba(18, 38, 63, 0.11);
+		color: rgba(5, 150, 105, 0.96);
 	}
 }
 
@@ -165,7 +165,7 @@
 	.card-edge-action span {
 		width: 48px;
 		height: 48px;
-		background: rgba(255, 255, 255, 0.035);
+		background: rgba(255, 255, 255, 0.72);
 		font-size: 26px;
 	}
 }

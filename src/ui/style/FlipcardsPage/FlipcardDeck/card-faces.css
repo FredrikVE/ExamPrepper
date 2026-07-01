@@ -26,15 +26,15 @@
 	border: 1px solid color-mix(in srgb, var(--accent) 52%, var(--line));
 	border-radius: var(--flipcard-radius);
 	background:
-		linear-gradient(135deg, rgba(30, 70, 85, 0.35), rgba(25, 28, 76, 0.72)),
-		color-mix(in srgb, var(--panel-bg) 88%, transparent);
+		linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, #ffffff), rgba(255, 255, 255, 0.98)),
+		color-mix(in srgb, var(--panel-bg) 94%, #ffffff);
 	box-shadow:
-		-28px 34px 90px rgba(255, 95, 147, var(--flipcard-practice-shadow-opacity)),
-		28px 34px 90px rgba(56, 230, 192, var(--flipcard-mastered-shadow-opacity)),
-		-24px 32px 82px rgba(255, 95, 147, var(--flipcard-edge-practice-shadow-opacity)),
-		24px 32px 82px rgba(56, 230, 192, var(--flipcard-edge-mastered-shadow-opacity)),
-		0 30px 80px rgba(0, 0, 0, 0.45),
-		0 0 0 1px rgba(255, 255, 255, 0.025);
+		-28px 34px 90px rgba(239, 68, 68, var(--flipcard-practice-shadow-opacity)),
+		28px 34px 90px rgba(16, 185, 129, var(--flipcard-mastered-shadow-opacity)),
+		-24px 32px 82px rgba(239, 68, 68, var(--flipcard-edge-practice-shadow-opacity)),
+		24px 32px 82px rgba(16, 185, 129, var(--flipcard-edge-mastered-shadow-opacity)),
+		0 24px 68px rgba(18, 38, 63, 0.13),
+		inset 0 1px 0 rgba(255, 255, 255, 0.86);
 	padding: var(--flipcard-face-padding);
 	text-align: center;
 	backface-visibility: hidden;
@@ -53,16 +53,16 @@
 	border-radius: inherit;
 	pointer-events: none;
 	background:
-		radial-gradient(circle at var(--flipcard-surface-x) var(--flipcard-surface-y), rgba(126, 103, 255, var(--flipcard-surface-opacity)), transparent 38%),
-		radial-gradient(circle at 4% 50%, rgba(255, 95, 147, var(--flipcard-practice-surface-opacity)), transparent 46%),
-		radial-gradient(circle at 96% 50%, rgba(56, 230, 192, var(--flipcard-mastered-surface-opacity)), transparent 46%),
-		radial-gradient(circle at 4% 50%, rgba(255, 95, 147, var(--flipcard-edge-practice-surface-opacity)), transparent 46%),
-		radial-gradient(circle at 96% 50%, rgba(56, 230, 192, var(--flipcard-edge-mastered-surface-opacity)), transparent 46%),
-		linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.085) 46%, transparent 64%);
+		radial-gradient(circle at var(--flipcard-surface-x) var(--flipcard-surface-y), rgba(16, 103, 255, var(--flipcard-surface-opacity)), transparent 38%),
+		radial-gradient(circle at 4% 50%, rgba(239, 68, 68, var(--flipcard-practice-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 96% 50%, rgba(16, 185, 129, var(--flipcard-mastered-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 4% 50%, rgba(239, 68, 68, var(--flipcard-edge-practice-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 96% 50%, rgba(16, 185, 129, var(--flipcard-edge-mastered-surface-opacity)), transparent 46%),
+		linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.58) 46%, transparent 64%);
 	background-size: 150% 150%, 130% 130%, 130% 130%, 130% 130%, 130% 130%, 230% 230%;
 	background-position: 50% 46%, 0% 50%, 100% 50%, 0% 50%, 100% 50%, -70% 50%;
-	mix-blend-mode: screen;
-	opacity: 1;
+	mix-blend-mode: normal;
+	opacity: 0.82;
 	filter: saturate(var(--flipcard-surface-saturation));
 	transition:
 		background-position var(--transition-fast),
@@ -75,8 +75,8 @@
 	inset: 0;
 	z-index: 0;
 	pointer-events: none;
-	background: linear-gradient(120deg, rgba(255, 255, 255, 0.045), transparent 28%, transparent 68%, color-mix(in srgb, var(--accent) 4%, transparent));
-	opacity: 0.7;
+	background: linear-gradient(120deg, rgba(255, 255, 255, 0.7), transparent 28%, transparent 68%, color-mix(in srgb, var(--accent) 6%, transparent));
+	opacity: 0.8;
 }
 
 .card-face-back {
@@ -95,7 +95,7 @@
 	line-height: 0.94;
 	letter-spacing: -0.055em;
 	text-align: center;
-	text-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
+	text-shadow: 0 5px 0 rgba(18, 38, 63, 0.08);
 	white-space: normal;
 	overflow-wrap: anywhere;
 	hyphens: auto;
@@ -127,7 +127,7 @@
 	line-height: 1.18;
 	letter-spacing: -0.036em;
 	text-align: center;
-	text-shadow: 0 4px 0 rgba(0, 0, 0, 0.24);
+	text-shadow: 0 4px 0 rgba(18, 38, 63, 0.07);
 	overflow-wrap: anywhere;
 }
 
