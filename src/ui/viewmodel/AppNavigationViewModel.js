@@ -13,6 +13,15 @@ function getSettingsPresentationMode() {
 	return resolveSettingsPresentationMode(getPresentationMode());
 }
 
+export function createAppBackContract({ activeScreen, backLabel, navigationLabel, onBack }) {
+	return {
+		showBackButton: activeScreen !== NAV_SCREENS.SUBJECTS,
+		backLabel,
+		navigationLabel,
+		onBack
+	};
+}
+
 export default function useAppNavigationViewModel(params) {
 	// Navigasjons-state
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
@@ -279,7 +288,12 @@ export default function useAppNavigationViewModel(params) {
 		activeScreen === NAV_SCREENS.EXAM ||
 		activeScreen === NAV_SCREENS.FLIPCARDS;
 
-	const showBackButton = activeScreen !== NAV_SCREENS.SUBJECTS;
+	const backContract = createAppBackContract({
+		activeScreen,
+		backLabel: params.backLabel,
+		navigationLabel: params.navigationLabel,
+		onBack: goBack
+	});
 
 	const usesSelectionLayout =
 		isSelectionScreen ||
@@ -300,7 +314,10 @@ export default function useAppNavigationViewModel(params) {
 		selectedExamId,
 		isSelectionScreen,
 		shouldShowSubjectSwitcher,
-		showBackButton,
+		showBackButton: backContract.showBackButton,
+		backLabel: backContract.backLabel,
+		navigationLabel: backContract.navigationLabel,
+		onBack: backContract.onBack,
 		pageClassName,
 		shellClassName,
 

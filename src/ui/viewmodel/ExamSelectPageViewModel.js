@@ -14,7 +14,7 @@ const SEARCH_SHEET_MODES = {
 
 const SEARCH_SUGGESTION_LIMIT = 6;
 
-export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive, onChangeScreen, showBackButton, onBack) {
+export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive, onChangeScreen, showBackButton, backLabel, navigationLabel, onBack) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
     const [examsLoadError, setExamsLoadError] = useState(null);
@@ -189,8 +189,8 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
 
         // Navigasjon
         showBackButton,
-        backLabel: t.sidebarBack,
-        navigationLabel: t.sidebarMobileNavigation,
+        backLabel,
+        navigationLabel,
         onBack,
 
         // Søk og filter

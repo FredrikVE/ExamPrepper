@@ -46,7 +46,13 @@ function AppContent() {
 	const [examWorkMode, setExamWorkMode] = useState(null);
 	const examWorkModeActionsRef = useRef(null);
 
-	const navigationViewModel = useAppNavigationViewModel({ language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase });
+	const navigationViewModel = useAppNavigationViewModel({
+		language,
+		getExamByIdUseCase,
+		getExamByBaseIdAndLangUseCase,
+		backLabel: t.sidebarBack,
+		navigationLabel: t.sidebarMobileNavigation
+	});
 
 	const openExamSubmitConfirm = useCallback(() => {
 		examWorkModeActionsRef.current?.openConfirm();
@@ -80,7 +86,9 @@ function AppContent() {
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
 		navigationViewModel.changeScreen,
 		navigationViewModel.showBackButton,
-		navigationViewModel.goBack
+		navigationViewModel.backLabel,
+		navigationViewModel.navigationLabel,
+		navigationViewModel.onBack
 	);
 
 
@@ -103,7 +111,9 @@ function AppContent() {
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					hasSelectedSubject={Boolean(navigationViewModel.selectedSubjectId)}
 					showBackButton={navigationViewModel.showBackButton}
-					onBack={navigationViewModel.goBack}
+					backLabel={navigationViewModel.backLabel}
+					navigationLabel={navigationViewModel.navigationLabel}
+					onBack={navigationViewModel.onBack}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
 					onSelectSubject={navigationViewModel.selectSubject}
@@ -146,7 +156,9 @@ function AppContent() {
 						language={language}
 						t={t}
 						showBackButton={navigationViewModel.showBackButton}
-						onBack={navigationViewModel.goBack}
+						backLabel={navigationViewModel.backLabel}
+						navigationLabel={navigationViewModel.navigationLabel}
+						onBack={navigationViewModel.onBack}
 					/>
 				)}
 
@@ -218,7 +230,7 @@ function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkMo
 	);
 }
 
-function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, onBack }) {
+function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, backLabel, navigationLabel, onBack }) {
 	const flipcardsPageViewModel = useFlipcardsPageViewModel(
 		getFlashcardsUseCase,
 		subjectId,
@@ -226,6 +238,8 @@ function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, onBack }
 		t,
 		true,
 		showBackButton,
+		backLabel,
+		navigationLabel,
 		onBack
 	);
 

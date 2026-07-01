@@ -153,9 +153,10 @@ export default function MobileDropDownTopBar(props) {
 	].filter(Boolean);
 
 	const currentSubject = resolveCurrentSubject(props.subjects, props.selectedSubject);
+	const topbarNavigationLabel = props.navigationLabel ?? t.sidebarMobileNavigation;
 	const topbarBackLabel = shouldShowSettingsTopbar
 		? t.settingsBackToMenu
-		: t.sidebarBack;
+		: props.backLabel ?? t.sidebarBack;
 	const handleTopbarBack = shouldShowSettingsTopbar
 		? props.onBackFromSettings
 		: props.onBack;
@@ -182,7 +183,7 @@ export default function MobileDropDownTopBar(props) {
 		<>
 			<header
 				className={topbarClassNames.join(" ")}
-				aria-label={t.sidebarMobileNavigation}
+				aria-label={topbarNavigationLabel}
 			>
 				{showTopbarBackButton && (
 					<button

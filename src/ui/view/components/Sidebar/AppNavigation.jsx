@@ -34,6 +34,8 @@ export default function AppNavigation(props) {
 				showSubjectSwitcher={props.showSubjectSwitcher}
 				hasSelectedSubject={props.hasSelectedSubject}
 				showBackButton={props.showBackButton}
+				backLabel={props.backLabel}
+				navigationLabel={props.navigationLabel}
 				onBack={props.onBack}
 				subjects={props.subjects}
 				selectedSubject={props.selectedSubject}

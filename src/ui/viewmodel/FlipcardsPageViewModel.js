@@ -5,7 +5,7 @@ import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedF
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 
-export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectId, language, t, isActive, showBackButton, onBack) {
+export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectId, language, t, isActive, showBackButton, backLabel, navigationLabel, onBack) {
     const presentationMode = usePresentationMode();
     const [flashcards, setFlashcards] = useState([]);
     const [flashcardsLoading, setFlashcardsLoading] = useState(true);
@@ -315,8 +315,8 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         activeDeckToolKey,
         deckToolItems,
         showBackButton,
-        backLabel: t.sidebarBack,
-        navigationLabel: t.sidebarMobileNavigation,
+        backLabel,
+        navigationLabel,
         onBack,
         activeCardIndex,
         activeCard,
