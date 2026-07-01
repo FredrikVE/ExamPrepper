@@ -78,7 +78,9 @@ function FlipcardsShell(props) {
 				tools={null}
 			/>
 
-			{props.children}
+			<div className="flipcards-scroll">
+				{props.children}
+			</div>
 		</main>
 	);
 }
