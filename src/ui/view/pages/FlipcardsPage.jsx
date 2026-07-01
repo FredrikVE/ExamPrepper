@@ -1,5 +1,5 @@
 // src/ui/view/pages/FlipcardsPage.jsx
-import WorkspaceScaffoldHeader from "../components/WorkspaceScaffold/WorkspaceScaffoldHeader.jsx";
+import Header from "../components/Header/Header.jsx";
 import FlipcardsStudySurface from "../components/FlipcardsPage/FlipcardsStudySurface.jsx";
 
 export default function FlipcardsPage({ viewModel }) {
@@ -70,7 +70,7 @@ function FlipcardsShell(props) {
 		<main className="flipcards-workspace">
 			<div className="flipcards-ambient-light" aria-hidden="true" />
 
-			<WorkspaceScaffoldHeader
+			<Header
 				showBackButton={props.viewModel.showBackButton}
 				backLabel={props.viewModel.backLabel}
 				navigationLabel={props.viewModel.navigationLabel}

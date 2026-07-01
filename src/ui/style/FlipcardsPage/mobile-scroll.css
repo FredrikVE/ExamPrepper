@@ -42,10 +42,6 @@
 		padding: 0;
 	}
 
-	.flipcards-workspace .workspace-scaffold-header {
-		display: none;
-	}
-
 	.flipcards-scroll {
 		padding: calc(var(--mobile-topbar-height) + 14px) var(--space-5) var(--space-4);
 	}
