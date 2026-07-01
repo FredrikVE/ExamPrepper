@@ -346,7 +346,7 @@ src/ui/style/Footer/
 └── footer.css
 ```
 
-`src/ui/style/WorkspaceScaffold/search-footer.css` er flyttet ut. `WorkspaceScaffold/` beholder fortsatt header-CSS inntil `WorkspaceScaffoldHeader` er fjernet eller erstattet i senere cleanup.
+`src/ui/style/WorkspaceScaffold/` og `src/ui/view/components/WorkspaceScaffold/` er fjernet etter at Header.jsx og Footer.jsx overtok scaffold-header og scaffold-footer. Ingen runtime-imports skal peke til `WorkspaceScaffold/`.
 
 Search-backdrop-regelen bruker nå felles `.footer-open` i stedet for gammel `.workspace-scaffold-search-footer-open`. Dette er bevisst, fordi open-state nå eies av scaffold `Footer.jsx`.
 
@@ -410,7 +410,7 @@ P1: subject-select-use-header
 P1: exam-select-use-header
 P1: flipcards-use-header
 P1: introduce-footer-ssot
-P2: cleanup-workspace-scaffold
+P2: cleanup-workspace-scaffold   # fullført: WorkspaceScaffold-mappene er fjernet
 P2: cleanup-old-header-footer-surfaces
 ```
 
@@ -423,6 +423,7 @@ P2: cleanup-old-header-footer-surfaces
 - Modell A for mobil Header-rendering er låst.
 - Header.jsx-kontrakt er dokumentert.
 - Footer.jsx-kontrakt er dokumentert.
+- WorkspaceScaffold-mappene er fjernet når imports er borte.
 - MVVM-regler for Header/Footer er dokumentert.
 - Tittelplassering er dokumentert.
 - Sidebeslutninger fra inventory er dokumentert.
