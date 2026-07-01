@@ -1,0 +1,17 @@
+/* src/ui/style/Header/responsive.css */
+@media (prefers-reduced-motion: reduce) {
+    .scaffold-header-button {
+        transition: none;
+    }
+
+    .scaffold-header-button:hover,
+    .scaffold-header-button:focus-visible {
+        transform: none;
+    }
+}
+
+@media (max-width: 932px) {
+    .scaffold-header {
+        display: none;
+    }
+}
