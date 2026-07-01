@@ -37,7 +37,14 @@ export default function ExamPage({ viewModel }) {
                 className={viewModel.workspaceClassName}
                 scrollToTopRequestId={viewModel.scrollToTopRequestId}
             >
-                <ExamToolbar viewModel={viewModel} />
+                <ExamToolbar
+                    answeredPercentLabel={viewModel.answeredPercentLabel}
+                    scoreLabel={viewModel.scoreLabel}
+                    elapsedTimeLabel={viewModel.elapsedTimeLabel}
+                    submitted={viewModel.submitted}
+                    onSubmit={viewModel.openSubmitConfirmation}
+                    onReset={viewModel.resetExam}
+                />
 
                 {viewModel.attemptSaving && (
                     <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>

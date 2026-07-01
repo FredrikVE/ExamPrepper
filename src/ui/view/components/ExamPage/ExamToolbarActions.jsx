@@ -4,30 +4,34 @@ import ExamToolbarStatCard from "./ExamToolbarStatCard.jsx";
 import ExamToolbarButtons from "./ExamToolbarButtons.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function ExamToolbarActions({ viewModel }) {
+export default function ExamToolbarActions(props) {
     const { t } = useLanguage();
 
     return (
         <div className="exam-header-actions">
             <ExamToolbarStatCard
-                value={viewModel.answeredPercentLabel}
+                value={props.answeredPercentLabel}
                 label={t.headerStatAnswered}
                 icon={<CheckCircle2 />}
             />
 
             <ExamToolbarStatCard
-                value={viewModel.scoreLabel}
+                value={props.scoreLabel}
                 label={t.headerStatScore}
                 icon={<Star />}
             />
 
             <ExamToolbarStatCard
-                value={viewModel.elapsedTimeLabel}
+                value={props.elapsedTimeLabel}
                 label={t.headerStatTime}
                 icon={<Clock3 />}
             />
 
-            <ExamToolbarButtons viewModel={viewModel} />
+            <ExamToolbarButtons
+                submitted={props.submitted}
+                onSubmit={props.onSubmit}
+                onReset={props.onReset}
+            />
         </div>
     );
 }

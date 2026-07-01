@@ -3,13 +3,13 @@ import { CheckCircle2 } from "lucide-react";
 import ExamToolbarSubmittedActions from "./ExamToolbarSubmittedActions.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function ExamToolbarButtons({ viewModel }) {
+export default function ExamToolbarButtons({ submitted, onSubmit, onReset }) {
     const { t } = useLanguage();
 
-    if (viewModel.submitted) {
+    if (submitted) {
         return (
             <ExamToolbarSubmittedActions
-                onResetExam={viewModel.resetExam}
+                onResetExam={onReset}
             />
         );
     }
@@ -17,7 +17,7 @@ export default function ExamToolbarButtons({ viewModel }) {
     return (
         <button
             type="button"
-            onClick={viewModel.openSubmitConfirmation}
+            onClick={onSubmit}
             className="exam-header-button exam-header-button-primary"
         >
             <CheckCircle2 className="exam-header-icon" />
