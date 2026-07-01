@@ -1,7 +1,7 @@
 /* src/ui/style/SubjectSelectPage/workspace.css */
 .subject-select-layout {
-    --workspace-scaffold-inset: clamp(42px, 5vw, 72px);
-    --workspace-scaffold-content-top: clamp(116px, 9vw, 136px);
+    --scaffold-inset: clamp(42px, 5vw, 72px);
+    --scaffold-content-top: clamp(116px, 9vw, 136px);
     --subject-search-footer-space: clamp(112px, 13vh, 148px);
 
     position: relative;
@@ -40,9 +40,9 @@
     overscroll-behavior: contain;
     scrollbar-width: none;
     padding:
-        var(--workspace-scaffold-content-top)
-        var(--workspace-scaffold-inset)
-        calc(var(--workspace-scaffold-inset) + var(--subject-search-footer-space));
+        var(--scaffold-content-top)
+        var(--scaffold-inset)
+        calc(var(--scaffold-inset) + var(--subject-search-footer-space));
 }
 
 .subject-select-scroll::-webkit-scrollbar {

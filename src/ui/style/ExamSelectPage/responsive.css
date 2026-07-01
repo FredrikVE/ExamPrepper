@@ -2,8 +2,8 @@
 
 @media (max-width: 1280px) {
     .exam-select-layout {
-        --workspace-scaffold-inset: var(--space-10);
-        --workspace-scaffold-content-top: 108px;
+        --scaffold-inset: var(--space-10);
+        --scaffold-content-top: 108px;
     }
 
     .exam-select-shell {
