@@ -1,5 +1,5 @@
-// src/ui/view/components/Header/StatCard.jsx
-export default function StatCard({ value, label, icon }) {
+// src/ui/view/components/ExamPage/ExamToolbarStatCard.jsx
+export default function ExamToolbarStatCard({ value, label, icon }) {
     return (
         <div className="exam-header-stat-card">
             <div className="exam-header-stat-icon" aria-hidden="true">

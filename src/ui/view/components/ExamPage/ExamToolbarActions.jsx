@@ -1,33 +1,33 @@
-// src/ui/view/components/Header/HeaderActions.jsx
+// src/ui/view/components/ExamPage/ExamToolbarActions.jsx
 import { CheckCircle2, Clock3, Star } from "lucide-react";
-import StatCard from "./StatCard.jsx";
-import HeaderButtons from "./HeaderButtons.jsx";
+import ExamToolbarStatCard from "./ExamToolbarStatCard.jsx";
+import ExamToolbarButtons from "./ExamToolbarButtons.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function ExamHeaderActions({ viewModel }) {
+export default function ExamToolbarActions({ viewModel }) {
     const { t } = useLanguage();
 
     return (
         <div className="exam-header-actions">
-            <StatCard
+            <ExamToolbarStatCard
                 value={viewModel.answeredPercentLabel}
                 label={t.headerStatAnswered}
                 icon={<CheckCircle2 />}
             />
 
-            <StatCard
+            <ExamToolbarStatCard
                 value={viewModel.scoreLabel}
                 label={t.headerStatScore}
                 icon={<Star />}
             />
 
-            <StatCard
+            <ExamToolbarStatCard
                 value={viewModel.elapsedTimeLabel}
                 label={t.headerStatTime}
                 icon={<Clock3 />}
             />
 
-            <HeaderButtons viewModel={viewModel} />
+            <ExamToolbarButtons viewModel={viewModel} />
         </div>
     );
 }

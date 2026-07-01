@@ -1,12 +1,12 @@
-// src/ui/view/components/Header/Header.jsx
-import HeaderActions from "./HeaderActions.jsx";
+// src/ui/view/components/ExamPage/ExamToolbar.jsx
+import ExamToolbarActions from "./ExamToolbarActions.jsx";
 
-export default function Header({ viewModel }) {
+export default function ExamToolbar({ viewModel }) {
     return (
         <header className="exam-header">
             <div className="exam-header-container">
                 <div className="exam-header-layout">
-                    <HeaderActions viewModel={viewModel} />
+                    <ExamToolbarActions viewModel={viewModel} />
                 </div>
             </div>
         </header>

@@ -1,8 +1,8 @@
-// src/ui/view/components/Header/SubmittedActions.jsx
+// src/ui/view/components/ExamPage/ExamToolbarSubmittedActions.jsx
 import { RotateCcw } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function SubmittedActions({ onResetExam }) {
+export default function ExamToolbarSubmittedActions({ onResetExam }) {
     const { t } = useLanguage();
 
     return (

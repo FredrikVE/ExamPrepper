@@ -1,4 +1,4 @@
-/* src/ui/style/Header/stat-card.css */
+/* src/ui/style/ExamPage/exam-toolbar-stat-card.css */
 .exam-header-stat-card {
     display: grid;
     min-width: var(--header-stat-card-min-width);

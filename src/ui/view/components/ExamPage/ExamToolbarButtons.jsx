@@ -1,14 +1,14 @@
-// src/ui/view/components/Header/HeaderButtons.jsx
+// src/ui/view/components/ExamPage/ExamToolbarButtons.jsx
 import { CheckCircle2 } from "lucide-react";
-import SubmittedActions from "./SubmittedActions.jsx";
+import ExamToolbarSubmittedActions from "./ExamToolbarSubmittedActions.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function HeaderButtons({ viewModel }) {
+export default function ExamToolbarButtons({ viewModel }) {
     const { t } = useLanguage();
 
     if (viewModel.submitted) {
         return (
-            <SubmittedActions
+            <ExamToolbarSubmittedActions
                 onResetExam={viewModel.resetExam}
             />
         );

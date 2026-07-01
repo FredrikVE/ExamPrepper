@@ -1,4 +1,4 @@
-/* src/ui/style/Header/buttons.css */
+/* src/ui/style/ExamPage/exam-toolbar-buttons.css */
 .exam-header-button {
     display: inline-flex;
     min-height: var(--header-button-min-height);
