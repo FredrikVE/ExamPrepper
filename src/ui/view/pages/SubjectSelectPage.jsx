@@ -5,8 +5,7 @@ import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
-import Header from "../components/Header/Header.jsx";
-import Footer from "../components/Footer/Footer.jsx";
+import SelectPageScaffold from "../components/SelectPageScaffold/SelectPageScaffold.jsx";
 
 export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
@@ -71,50 +70,23 @@ export default function SubjectSelectPage({ viewModel }) {
 	}
 
 	return (
-		<div className="subject-select-layout">
-			<main className="subject-select-workspace">
-				<div className="subject-select-ambient-light" aria-hidden="true" />
-
-				<Header
-					showBackButton={viewModel.showBackButton}
-					backLabel={viewModel.backLabel}
-					navigationLabel={viewModel.navigationLabel}
-					onBack={viewModel.onBack}
-					tools={viewModel.pageTools}
-				/>
-
-				<div className="subject-select-scroll">
-					<SubjectSelectTopbar t={viewModel.t} />
-
-					<SubjectSelectGrid
-						t={viewModel.t}
-						subjects={viewModel.filteredSubjects}
-						selectedSubject={viewModel.selectedSubject}
-						emptyTitle={viewModel.emptyTitle}
-						emptyDescription={viewModel.emptyDescription}
-						onSelectSubject={viewModel.selectSubject}
-					/>
-				</div>
-			</main>
-
-			{viewModel.isSearchSheetOpen && (
-				<button
-					type="button"
-					className="search-backdrop search-backdrop-visible"
-					onMouseDown={(event) => {
-						event.preventDefault();
-					}}
-					onClick={viewModel.closeSubjectSearchSheet}
-					aria-label={viewModel.searchCloseLabel}
-					tabIndex={-1}
-				/>
-			)}
-
-			<Footer
-				isOpen={viewModel.isFooterOpen}
-				className="subject-search-footer"
-				openClassName="subject-search-footer-open"
-			>
+		<SelectPageScaffold
+			layoutClassName="subject-select-layout"
+			workspaceClassName="subject-select-workspace"
+			ambientLightClassName="subject-select-ambient-light"
+			scrollClassName="subject-select-scroll"
+			showBackButton={viewModel.showBackButton}
+			backLabel={viewModel.backLabel}
+			navigationLabel={viewModel.navigationLabel}
+			onBack={viewModel.onBack}
+			pageTools={viewModel.pageTools}
+			isSearchSheetOpen={viewModel.isSearchSheetOpen}
+			onCloseSearchSheet={viewModel.closeSubjectSearchSheet}
+			searchCloseLabel={viewModel.searchCloseLabel}
+			isFooterOpen={viewModel.isFooterOpen}
+			footerClassName="subject-search-footer"
+			footerOpenClassName="subject-search-footer-open"
+			footer={(
 				<PageToolsMobileFooterSheet
 					tools={viewModel.pageTools}
 					renderControls={renderSearchControls}
@@ -123,7 +95,18 @@ export default function SubjectSelectPage({ viewModel }) {
 					onOpenSheet={viewModel.openSubjectFooterSheet}
 					onSheetOpenChange={viewModel.changeSubjectFooterSheetOpen}
 				/>
-			</Footer>
-		</div>
+			)}
+		>
+			<SubjectSelectTopbar t={viewModel.t} />
+
+			<SubjectSelectGrid
+				t={viewModel.t}
+				subjects={viewModel.filteredSubjects}
+				selectedSubject={viewModel.selectedSubject}
+				emptyTitle={viewModel.emptyTitle}
+				emptyDescription={viewModel.emptyDescription}
+				onSelectSubject={viewModel.selectSubject}
+			/>
+		</SelectPageScaffold>
 	);
 }

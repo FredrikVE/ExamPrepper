@@ -9,12 +9,8 @@
     border: 1px solid var(--line);
     border-radius: 18px;
     background: color-mix(in srgb, var(--panel-strong) 84%, transparent);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--progress-pager-shadow);
     backdrop-filter: blur(18px);
-}
-
-.dark .progress-pager {
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
 }
 
 .progress-pager-container {

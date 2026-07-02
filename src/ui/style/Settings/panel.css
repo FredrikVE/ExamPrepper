@@ -21,12 +21,8 @@
     transform: translateX(calc(-100% - 32px));
     border-radius: var(--radius-xl);
     background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
-    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+    box-shadow: var(--settings-sidebar-shadow);
     transition: transform 200ms ease-in-out;
-}
-
-.dark .settings-sidebar {
-    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.52);
 }
 
 .settings-sidebar[open] {

@@ -10,7 +10,7 @@
     border: 2px solid var(--accent);
     border-radius: var(--radius-sm);
     outline: none;
-    background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
+    background: var(--question-card-input-bg);
     color: var(--text-main);
     padding: 0 var(--space-6);
     font-size: inherit;
@@ -18,10 +18,6 @@
     line-height: normal;
     vertical-align: middle;
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
-}
-
-.dark .question-card-inline-input {
-    background: color-mix(in srgb, var(--panel-strong) 66%, transparent);
 }
 
 .question-card-inline-input::placeholder {
@@ -71,10 +67,6 @@
     font-size: 1.15rem;
     font-weight: 650;
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 12%, transparent);
-}
-
-.dark .question-card-input {
-    background: color-mix(in srgb, var(--panel-strong) 66%, transparent);
 }
 
 .question-card-input::placeholder {

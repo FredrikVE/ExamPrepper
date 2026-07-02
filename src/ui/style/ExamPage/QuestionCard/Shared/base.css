@@ -11,14 +11,10 @@
 
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-xl);
-    background: var(--panel-strong);
+    background: var(--question-card-surface);
     box-shadow:
         var(--shadow-card),
         0 1px 0 color-mix(in srgb, #fff 75%, transparent) inset;
-}
-
-.dark .question-card {
-    background: #07162a;
 }
 
 .question-card::before {
@@ -27,16 +23,12 @@
     inset: 0;
     z-index: 0;
     display: none;
+    background: var(--question-card-ambient-glow);
     pointer-events: none;
 }
 
 .dark .question-card::before {
     display: block;
-    background: radial-gradient(
-        circle at 88% 0%,
-        color-mix(in srgb, var(--accent) 16%, transparent),
-        transparent 18rem
-    );
 }
 
 .question-card-body {

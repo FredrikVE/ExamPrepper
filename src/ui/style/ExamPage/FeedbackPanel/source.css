@@ -44,22 +44,8 @@
     gap: 18px;
     margin-top: 18px;
     border-radius: 16px;
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--accent) 8%, white),
-            color-mix(in srgb, var(--panel-bg) 94%, white)
-        );
+    background: var(--feedback-source-quote-bg);
     padding: 18px 22px;
-}
-
-.dark .feedback-panel-source-quote {
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--accent) 14%, var(--panel-strong)),
-            color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong))
-        );
 }
 
 .feedback-panel-source-quote-icon {

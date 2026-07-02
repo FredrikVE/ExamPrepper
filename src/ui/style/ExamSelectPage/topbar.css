@@ -1,18 +1,9 @@
 /* src/ui/style/ExamSelectPage/topbar.css */
 .exam-select-topbar {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-6);
     margin-bottom: 0;
 }
 
 .exam-select-title {
-    margin: 0;
-    color: var(--text-main);
     font-size: clamp(52px, 4.55vw, 64px);
-    font-weight: 950;
     line-height: 0.95;
-    letter-spacing: -0.06em;
 }

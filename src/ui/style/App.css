@@ -5,6 +5,7 @@
 @import "./Global.css";
 
 /* Pages */
+@import "./SelectPageScaffold/index.css";
 @import "./SubjectSelectPage/index.css";
 @import "./ExamSelectPage/index.css";
 @import "./ExamPage/index.css";

@@ -29,26 +29,14 @@
     --answer-accent: var(--success-text);
 
     border-color: var(--success-border);
-    background: color-mix(in srgb, var(--success-soft) 64%, transparent);
+    background: var(--question-card-answer-correct-bg);
 }
 
 .question-card-answer-card-wrong {
     --answer-accent: var(--danger-text);
 
     border-color: var(--danger-border);
-    background: color-mix(in srgb, var(--danger-soft) 64%, transparent);
-}
-
-.dark .question-card-answer-card-correct {
-    background:
-        radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--success) 9%, transparent), transparent 16rem),
-        color-mix(in srgb, var(--success-soft) 50%, transparent);
-}
-
-.dark .question-card-answer-card-wrong {
-    background:
-        radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--danger) 9%, transparent), transparent 16rem),
-        color-mix(in srgb, var(--danger-soft) 50%, transparent);
+    background: var(--question-card-answer-wrong-bg);
 }
 
 .question-card-answer-card-selected {
@@ -231,22 +219,8 @@
     margin-top: 18px;
     border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
     border-radius: 18px;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--accent) 4%, white),
-            color-mix(in srgb, var(--panel-bg) 88%, white)
-        );
+    background: var(--question-card-answer-extended-bg);
     padding: 22px 26px 24px;
-}
-
-.dark .question-card-answer-extended {
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--accent) 10%, var(--panel-strong)),
-            color-mix(in srgb, var(--panel-bg) 92%, var(--panel-strong))
-        );
 }
 
 .question-card-answer-extended-title-row {
@@ -307,7 +281,6 @@
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
-
 .question-card-answer-extended-images {
     display: flex;
     flex-direction: column;
@@ -318,13 +291,9 @@
     margin: 20px 0 0;
     border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
     border-radius: 14px;
-    background: color-mix(in srgb, var(--panel-bg) 92%, white);
+    background: var(--question-card-answer-figure-bg);
     padding: 14px;
     overflow: hidden;
-}
-
-.dark .question-card-answer-extended-figure {
-    background: color-mix(in srgb, var(--panel-strong) 82%, white);
 }
 
 .question-card-answer-extended-figure-first {
