@@ -4,9 +4,7 @@ export const NAV_SCREENS = {
 	SELECT: "select",
 	EXAM: "exam",
 	FLIPCARDS: "flipcards",
-	OVERVIEW: "overview",
-	NOTES: "notes",
-	SETTINGS: "settings"
+	OVERVIEW: "overview"
 };
 
 export const APP_LAYOUTS = {
@@ -22,8 +20,8 @@ export const APP_LAYOUTS = {
  * - clearsSubject / clearsExam: valg som nullstilles ved inngang til skjermen
  * - layout: hvilken app-layout skjermen bruker
  *
- * NOTES og SETTINGS har bevisst ingen node i grafen ennå. NOTES har ingen
- * konsumenter, og SETTINGS er SettingsPresentation-handling, ikke en skjerm.
+ * Grafen inneholder bare skjermer som faktisk rendres som app-ruter.
+ * Settings håndteres av SettingsPresentation og er ikke en NAV_SCREEN.
  */
 export const NAV_GRAPH = {
 	[NAV_SCREENS.SUBJECTS]: {

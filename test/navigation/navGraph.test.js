@@ -25,8 +25,6 @@ describe("navGraph", () => {
 			NAV_SCREENS.FLIPCARDS,
 			NAV_SCREENS.OVERVIEW
 		]);
-		expect(NAV_GRAPH[NAV_SCREENS.NOTES]).toBeUndefined();
-		expect(NAV_GRAPH[NAV_SCREENS.SETTINGS]).toBeUndefined();
 	});
 
 	test("declares a layout for every graph node", () => {
@@ -39,7 +37,6 @@ describe("navGraph", () => {
 		[NAV_SCREENS.OVERVIEW, APP_LAYOUTS.SELECTION],
 		[NAV_SCREENS.EXAM, APP_LAYOUTS.EXAM],
 		[NAV_SCREENS.FLIPCARDS, APP_LAYOUTS.EXAM],
-		[NAV_SCREENS.NOTES, APP_LAYOUTS.SELECTION],
 		["finnes-ikke", APP_LAYOUTS.SELECTION]
 	])("resolveScreenLayout(%s) returns %s", (activeScreen, expected) => {
 		expect(resolveScreenLayout(activeScreen)).toBe(expected);
@@ -160,8 +157,6 @@ describe("navGraph", () => {
 		[NAV_SCREENS.EXAM, true],
 		[NAV_SCREENS.FLIPCARDS, true],
 		[NAV_SCREENS.OVERVIEW, true],
-		[NAV_SCREENS.NOTES, true],
-		[NAV_SCREENS.SETTINGS, true],
 		["finnes-ikke", true]
 	])("hasBackNavigation(%s) returns %s", (activeScreen, expected) => {
 		expect(hasBackNavigation(activeScreen)).toBe(expected);

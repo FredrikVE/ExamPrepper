@@ -23,8 +23,7 @@ describe("createAppBackContract", () => {
 		NAV_SCREENS.SELECT,
 		NAV_SCREENS.EXAM,
 		NAV_SCREENS.FLIPCARDS,
-		NAV_SCREENS.OVERVIEW,
-		NAV_SCREENS.NOTES
+		NAV_SCREENS.OVERVIEW
 	])("shows back on non-root screen %s", (activeScreen) => {
 		const onBack = jest.fn();
 
@@ -47,8 +46,7 @@ describe("createAppLayoutClassNames", () => {
 		[NAV_SCREENS.SUBJECTS, "exam-select-page", "exam-select-shell"],
 		[NAV_SCREENS.SELECT, "exam-select-page", "exam-select-shell"],
 		[NAV_SCREENS.OVERVIEW, "exam-select-page", "exam-select-shell"],
-		[NAV_SCREENS.EXAM, "exam-page", "exam-shell"],
-		[NAV_SCREENS.NOTES, "exam-select-page", "exam-select-shell"]
+		[NAV_SCREENS.EXAM, "exam-page", "exam-shell"]
 	])("returns standard layout classes for %s", (activeScreen, pageClassName, shellClassName) => {
 		expect(createAppLayoutClassNames(activeScreen)).toEqual({
 			pageClassName,

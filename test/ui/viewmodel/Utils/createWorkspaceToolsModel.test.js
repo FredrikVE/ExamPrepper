@@ -1,6 +1,6 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, getExamSelectPageNavToolItems, getSubjectSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
+import { PAGE_NAV_TOOL_IDS, getExamSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
 import { PAGE_TOOL_ITEM_IDS, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
 
@@ -30,7 +30,7 @@ function createTools(params) {
     return createWorkspaceToolsModel({
         pageToolGroup: getPageToolGroup(params.screen),
         t,
-        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectPageNavToolItems() : getExamSelectPageNavToolItems(),
+        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? [] : getExamSelectPageNavToolItems(),
         workspaceActionToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectWorkspaceActionToolItems() : getExamSelectWorkspaceActionToolItems(),
         hasSelectedSubject: params.hasSelectedSubject,
         onChangeScreen: params.onChangeScreen
