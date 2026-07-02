@@ -48,7 +48,7 @@ describe("createAppLayoutClassNames", () => {
 		[NAV_SCREENS.SELECT, "exam-select-page", "exam-select-shell"],
 		[NAV_SCREENS.OVERVIEW, "exam-select-page", "exam-select-shell"],
 		[NAV_SCREENS.EXAM, "exam-page", "exam-shell"],
-		[NAV_SCREENS.NOTES, "exam-page", "exam-shell"]
+		[NAV_SCREENS.NOTES, "exam-select-page", "exam-select-shell"]
 	])("returns standard layout classes for %s", (activeScreen, pageClassName, shellClassName) => {
 		expect(createAppLayoutClassNames(activeScreen)).toEqual({
 			pageClassName,

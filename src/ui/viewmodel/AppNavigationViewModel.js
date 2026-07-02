@@ -1,23 +1,13 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
-import { NAV_SCREENS, createAppBackContract, resolveBackNavigation, resolveScreenEntry } from "../../navigation/navGraph.js";
-import { getPresentationMode, PRESENTATION_MODE, subscribeToPresentationMode } from "../presentation/presentationMode.js";
+import { APP_LAYOUTS, NAV_SCREENS, createAppBackContract, resolveBackNavigation, resolveScreenEntry, resolveScreenLayout } from "../../navigation/navGraph.js";
+import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
+import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
-
-function resolveSettingsPresentationMode(presentationMode) {
-	return presentationMode === PRESENTATION_MODE.MOBILE ? "sheet" : "sidebar";
-}
-
-function getSettingsPresentationMode() {
-	return resolveSettingsPresentationMode(getPresentationMode());
-}
-
 export function createAppLayoutClassNames(activeScreen) {
-	const usesSelectionLayout =
-		activeScreen === NAV_SCREENS.SUBJECTS ||
-		activeScreen === NAV_SCREENS.SELECT ||
-		activeScreen === NAV_SCREENS.OVERVIEW;
+	const appLayout = resolveScreenLayout(activeScreen);
+	const usesSelectionLayout = appLayout === APP_LAYOUTS.SELECTION;
 	const usesFlipcardsThemeScope = activeScreen === NAV_SCREENS.FLIPCARDS;
 
 	return {
@@ -36,56 +26,20 @@ export default function useAppNavigationViewModel(params) {
 	const [selectedExamId, setSelectedExamId] = useState(null);
 
 	// Layout-state
-	const [settingsOpen, setSettingsOpen] = useState(false);
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const [isSubjectPickerOpen, setIsSubjectPickerOpen] = useState(false);
-	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getSettingsPresentationMode);
+	const mobileTopBar = useMobileDropDownTopBarModel();
+	const settingsPresentation = useSettingsPresentationModel();
 
 	const prevLanguageRef = useRef(params.language);
 
-	const toggleMenu = useCallback(() => {
-		setIsMenuOpen((wasOpen) => !wasOpen);
-	}, []);
-
 	const closeMenu = useCallback(() => {
-		setIsMenuOpen(false);
-		setSettingsOpen(false);
-		setIsSubjectPickerOpen(false);
-	}, []);
-
-	const toggleSubjectPicker = useCallback(() => {
-		setIsSubjectPickerOpen((wasOpen) => !wasOpen);
-	}, []);
-
-	const closeSubjectPicker = useCallback(() => {
-		setIsSubjectPickerOpen(false);
-	}, []);
-
-	const closeSettings = useCallback(() => {
-		setSettingsOpen(false);
-	}, []);
-
-
-	const openSettings = useCallback(() => {
-		setSettingsOpen(true);
-	}, []);
-
-	const backFromSettingsToMenu = useCallback(() => {
-		setSettingsOpen(false);
-	}, []);
-
-	// Settings skal ikke overleve et layout-mode-bytte. Når breakpointet krysses
-	// settes presentasjonsmodus og settingsOpen i samme handler, slik at React
-	// batcher dem til én commit: den nye varianten mountes lukket og rekker aldri
-	// å vises i feil geometri.
-	useEffect(() => {
-		const handlePresentationModeChange = () => {
-			setSettingsPresentationMode(getSettingsPresentationMode());
-			setSettingsOpen(false);
-		};
-
-		return subscribeToPresentationMode(handlePresentationModeChange);
-	}, []);
+		mobileTopBar.closeMobileDropDownMenu();
+		settingsPresentation.closeSettingsPresentation();
+		mobileTopBar.closeMobileSubjectPicker();
+	}, [
+		mobileTopBar.closeMobileDropDownMenu,
+		mobileTopBar.closeMobileSubjectPicker,
+		settingsPresentation.closeSettingsPresentation
+	]);
 
 	const applyNavigation = useCallback((nextNavState) => {
 		if (!nextNavState) {
@@ -96,10 +50,14 @@ export default function useAppNavigationViewModel(params) {
 		setSelectedSubjectId(nextNavState.selectedSubjectId);
 		setSelectedExamId(nextNavState.selectedExamId);
 
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
-		setIsSubjectPickerOpen(false);
-	}, []);
+		settingsPresentation.closeSettingsPresentation();
+		mobileTopBar.closeMobileDropDownMenu();
+		mobileTopBar.closeMobileSubjectPicker();
+	}, [
+		mobileTopBar.closeMobileDropDownMenu,
+		mobileTopBar.closeMobileSubjectPicker,
+		settingsPresentation.closeSettingsPresentation
+	]);
 
 	const changeScreen = useCallback((nextScreen) => {
 		applyNavigation(resolveScreenEntry(nextScreen, {
@@ -234,19 +192,19 @@ export default function useAppNavigationViewModel(params) {
 		shellClassName,
 
 		// Layout
-		settingsOpen,
-		isMenuOpen,
-		isSubjectPickerOpen,
-		settingsPresentationMode,
+		settingsOpen: settingsPresentation.isSettingsPresentationOpen,
+		isMenuOpen: mobileTopBar.isMobileDropDownMenuOpen,
+		isSubjectPickerOpen: mobileTopBar.isMobileSubjectPickerOpen,
+		settingsPresentationMode: settingsPresentation.settingsPresentationMode,
 
 		// Handlers
-		closeSettings,
-		toggleMenu,
+		closeSettings: settingsPresentation.closeSettingsPresentation,
+		toggleMenu: mobileTopBar.toggleMobileDropDownMenu,
 		closeMenu,
-		openSettings,
-		backFromSettingsToMenu,
-		toggleSubjectPicker,
-		closeSubjectPicker,
+		openSettings: settingsPresentation.openSettingsPresentation,
+		backFromSettingsToMenu: settingsPresentation.closeSettingsPresentation,
+		toggleSubjectPicker: mobileTopBar.toggleMobileSubjectPicker,
+		closeSubjectPicker: mobileTopBar.closeMobileSubjectPicker,
 		changeScreen,
 		selectSubject,
 		showAllSubjects,

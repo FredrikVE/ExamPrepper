@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { NAV_GRAPH, NAV_SCREENS, createAppBackContract, hasBackNavigation, resolveBackNavigation, resolveScreenEntry } from "../../src/navigation/navGraph.js";
+import { APP_LAYOUTS, NAV_GRAPH, NAV_SCREENS, createAppBackContract, hasBackNavigation, resolveBackNavigation, resolveScreenEntry, resolveScreenLayout } from "../../src/navigation/navGraph.js";
 
 const WITH_SUBJECT_AND_EXAM = {
 	selectedSubjectId: "in5431",
@@ -27,6 +27,22 @@ describe("navGraph", () => {
 		]);
 		expect(NAV_GRAPH[NAV_SCREENS.NOTES]).toBeUndefined();
 		expect(NAV_GRAPH[NAV_SCREENS.SETTINGS]).toBeUndefined();
+	});
+
+	test("declares a layout for every graph node", () => {
+		expect(Object.values(NAV_GRAPH).every((node) => Boolean(node.layout))).toBe(true);
+	});
+
+	test.each([
+		[NAV_SCREENS.SUBJECTS, APP_LAYOUTS.SELECTION],
+		[NAV_SCREENS.SELECT, APP_LAYOUTS.SELECTION],
+		[NAV_SCREENS.OVERVIEW, APP_LAYOUTS.SELECTION],
+		[NAV_SCREENS.EXAM, APP_LAYOUTS.EXAM],
+		[NAV_SCREENS.FLIPCARDS, APP_LAYOUTS.EXAM],
+		[NAV_SCREENS.NOTES, APP_LAYOUTS.SELECTION],
+		["finnes-ikke", APP_LAYOUTS.SELECTION]
+	])("resolveScreenLayout(%s) returns %s", (activeScreen, expected) => {
+		expect(resolveScreenLayout(activeScreen)).toBe(expected);
 	});
 
 	test.each([

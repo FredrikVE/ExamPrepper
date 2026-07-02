@@ -9,18 +9,25 @@ export const NAV_SCREENS = {
 	SETTINGS: "settings"
 };
 
+export const APP_LAYOUTS = {
+	SELECTION: "selection",
+	EXAM: "exam"
+};
+
 /*
  * Deklarativ navigasjonsgraf. Hver node beskriver:
  * - backTo: skjermen tilbake-navigasjon peker mot (null = ingen back)
  * - requiresSubject: uten valgt fag faller navigasjonen tilbake til SUBJECTS
  * - requiresExam: uten valgt eksamen skjer ingen navigasjon
  * - clearsSubject / clearsExam: valg som nullstilles ved inngang til skjermen
+ * - layout: hvilken app-layout skjermen bruker
  *
  * NOTES og SETTINGS har bevisst ingen node i grafen ennå. NOTES har ingen
  * konsumenter, og SETTINGS er SettingsPresentation-handling, ikke en skjerm.
  */
 export const NAV_GRAPH = {
 	[NAV_SCREENS.SUBJECTS]: {
+		layout: APP_LAYOUTS.SELECTION,
 		backTo: null,
 		requiresSubject: false,
 		requiresExam: false,
@@ -28,6 +35,7 @@ export const NAV_GRAPH = {
 		clearsExam: true
 	},
 	[NAV_SCREENS.SELECT]: {
+		layout: APP_LAYOUTS.SELECTION,
 		backTo: NAV_SCREENS.SUBJECTS,
 		requiresSubject: true,
 		requiresExam: false,
@@ -35,6 +43,7 @@ export const NAV_GRAPH = {
 		clearsExam: true
 	},
 	[NAV_SCREENS.EXAM]: {
+		layout: APP_LAYOUTS.EXAM,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: false,
 		requiresExam: true,
@@ -42,6 +51,7 @@ export const NAV_GRAPH = {
 		clearsExam: false
 	},
 	[NAV_SCREENS.FLIPCARDS]: {
+		layout: APP_LAYOUTS.EXAM,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,
 		requiresExam: false,
@@ -49,6 +59,7 @@ export const NAV_GRAPH = {
 		clearsExam: true
 	},
 	[NAV_SCREENS.OVERVIEW]: {
+		layout: APP_LAYOUTS.SELECTION,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: false,
 		requiresExam: false,
@@ -93,6 +104,10 @@ export function resolveBackNavigation(navState) {
 export function hasBackNavigation(activeScreen) {
 	const node = NAV_GRAPH[activeScreen];
 	return Boolean(node ? node.backTo : NAV_SCREENS.SUBJECTS);
+}
+
+export function resolveScreenLayout(activeScreen) {
+	return NAV_GRAPH[activeScreen]?.layout ?? APP_LAYOUTS.SELECTION;
 }
 
 export function createAppBackContract({ activeScreen, backLabel, navigationLabel, onBack }) {
