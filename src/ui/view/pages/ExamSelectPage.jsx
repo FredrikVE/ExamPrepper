@@ -128,11 +128,6 @@ export default function ExamSelectPage({ viewModel }) {
                 isOpen={viewModel.isFooterOpen}
                 className="exam-search-footer"
                 openClassName="exam-search-footer-open"
-                onBlur={(event) => {
-                    if (!event.currentTarget.contains(event.relatedTarget)) {
-                        viewModel.closeExamSearchSheet();
-                    }
-                }}
             >
                 <PageToolsMobileFooterSheet
                     tools={viewModel.pageTools}

@@ -8,7 +8,7 @@ export default function Footer(props) {
     ].filter(Boolean).join(" ");
 
     return (
-        <div className={className} onBlur={props.onBlur}>
+        <div className={className}>
             {props.children}
         </div>
     );

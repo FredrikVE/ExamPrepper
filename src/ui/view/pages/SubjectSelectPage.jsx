@@ -114,11 +114,6 @@ export default function SubjectSelectPage({ viewModel }) {
 				isOpen={viewModel.isFooterOpen}
 				className="subject-search-footer"
 				openClassName="subject-search-footer-open"
-				onBlur={(event) => {
-					if (!event.currentTarget.contains(event.relatedTarget)) {
-						viewModel.closeSubjectSearchSheet();
-					}
-				}}
 			>
 				<PageToolsMobileFooterSheet
 					tools={viewModel.pageTools}
