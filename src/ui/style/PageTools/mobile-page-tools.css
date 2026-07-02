@@ -20,6 +20,10 @@
         width: 100%;
     }
 
+    .footer > .page-tools-mobile-footer-shell {
+        pointer-events: none;
+    }
+
     .page-tools-mobile-inline-content {
         display: none;
     }
