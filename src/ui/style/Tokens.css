@@ -120,6 +120,15 @@
     --warning-border: rgba(245, 158, 11, 0.28);
     --warning-text: #92400e;
 
+    /* ── Flipcards (lys/mørk-par; scopet i FlipcardsPage avleder resten) ── */
+    --flipcards-purple-soft: #5f55f7;
+    --flipcards-green: #059669;
+    --flipcards-amber: #b45309;
+    --flipcards-amber-soft: rgba(245, 158, 11, 0.12);
+    --flipcard-face-surface: #ffffff;
+    --flipcard-face-inset-highlight: rgba(255, 255, 255, 0.86);
+    --flipcard-face-sheen: rgba(255, 255, 255, 0.58);
+
     /* ── Elevation ─────────────────────────── */
     --shadow-soft: 0 22px 60px rgba(18, 38, 63, 0.12);
     --shadow-card: 0 16px 48px rgba(18, 38, 63, 0.09);
@@ -248,6 +257,15 @@
     --warning-soft: rgba(120, 53, 15, 0.2);
     --warning-border: rgba(245, 158, 11, 0.28);
     --warning-text: #fde68a;
+
+    /* ── Flipcards ─────────────────────────── */
+    --flipcards-purple-soft: #7a71ff;
+    --flipcards-green: #34d399;
+    --flipcards-amber: #fde68a;
+    --flipcards-amber-soft: rgba(245, 158, 11, 0.18);
+    --flipcard-face-surface: #0b1c33;
+    --flipcard-face-inset-highlight: rgba(255, 255, 255, 0.08);
+    --flipcard-face-sheen: rgba(255, 255, 255, 0.05);
 
     /* ── Elevation ─────────────────────────── */
     --shadow-soft: 0 26px 80px rgba(0, 0, 0, 0.42);
