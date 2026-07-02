@@ -22,6 +22,23 @@ export function createAppBackContract({ activeScreen, backLabel, navigationLabel
 	};
 }
 
+
+export function createAppLayoutClassNames(activeScreen) {
+	const usesSelectionLayout =
+		activeScreen === NAV_SCREENS.SUBJECTS ||
+		activeScreen === NAV_SCREENS.SELECT ||
+		activeScreen === NAV_SCREENS.OVERVIEW;
+	const usesFlipcardsThemeScope = activeScreen === NAV_SCREENS.FLIPCARDS;
+
+	return {
+		pageClassName: [
+			usesSelectionLayout ? "exam-select-page" : "exam-page",
+			usesFlipcardsThemeScope ? "flipcards-theme-scope" : null
+		].filter(Boolean).join(" "),
+		shellClassName: usesSelectionLayout ? "exam-select-shell" : "exam-shell"
+	};
+}
+
 export default function useAppNavigationViewModel(params) {
 	// Navigasjons-state
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
@@ -295,17 +312,7 @@ export default function useAppNavigationViewModel(params) {
 		onBack: goBack
 	});
 
-	const usesSelectionLayout =
-		isSelectionScreen ||
-		activeScreen === NAV_SCREENS.OVERVIEW;
-
-	const pageClassName = usesSelectionLayout
-		? "exam-select-page"
-		: "exam-page";
-
-	const shellClassName = usesSelectionLayout
-		? "exam-select-shell"
-		: "exam-shell";
+	const { pageClassName, shellClassName } = createAppLayoutClassNames(activeScreen);
 
 	return {
 		// Navigasjon

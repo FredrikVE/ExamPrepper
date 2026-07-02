@@ -1,5 +1,9 @@
 /* src/ui/style/FlipcardsPage/tokens.css */
-.flipcards-workspace {
+.flipcards-theme-scope,
+.flipcards-workspace,
+.desktop-pop-out-menu__panel--flipcards {
+	color-scheme: light;
+
 	--flipcards-bg: #f7fbff;
 	--flipcards-bg-elevated: #ffffff;
 	--flipcards-line-strong: rgba(43, 63, 92, 0.16);

@@ -1,6 +1,6 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../../src/navigation/navGraph.js";
-import { createAppBackContract } from "../../../src/ui/viewmodel/AppNavigationViewModel.js";
+import { createAppBackContract, createAppLayoutClassNames } from "../../../src/ui/viewmodel/AppNavigationViewModel.js";
 
 describe("createAppBackContract", () => {
 	test("hides back on the subjects root screen", () => {
@@ -38,6 +38,28 @@ describe("createAppBackContract", () => {
 			backLabel: "Tilbake",
 			navigationLabel: "Navigasjon",
 			onBack
+		});
+	});
+});
+
+describe("createAppLayoutClassNames", () => {
+	test.each([
+		[NAV_SCREENS.SUBJECTS, "exam-select-page", "exam-select-shell"],
+		[NAV_SCREENS.SELECT, "exam-select-page", "exam-select-shell"],
+		[NAV_SCREENS.OVERVIEW, "exam-select-page", "exam-select-shell"],
+		[NAV_SCREENS.EXAM, "exam-page", "exam-shell"],
+		[NAV_SCREENS.NOTES, "exam-page", "exam-shell"]
+	])("returns standard layout classes for %s", (activeScreen, pageClassName, shellClassName) => {
+		expect(createAppLayoutClassNames(activeScreen)).toEqual({
+			pageClassName,
+			shellClassName
+		});
+	});
+
+	test("adds the flipcards theme scope to the Flipcards route", () => {
+		expect(createAppLayoutClassNames(NAV_SCREENS.FLIPCARDS)).toEqual({
+			pageClassName: "exam-page flipcards-theme-scope",
+			shellClassName: "exam-shell"
 		});
 	});
 });
