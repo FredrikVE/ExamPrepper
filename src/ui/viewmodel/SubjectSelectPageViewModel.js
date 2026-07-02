@@ -3,23 +3,30 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
+import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
-
-const SEARCH_SHEET_MODES = {
-	SEARCH_SUGGESTIONS: "searchSuggestions",
-	FILTER_OPTIONS: "filterOptions"
-};
-
-const SEARCH_SUGGESTION_LIMIT = 6;
 
 export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, onChangeScreen) {
 	const [subjects, setSubjects] = useState([]);
 	const [subjectsLoading, setSubjectsLoading] = useState(true);
 	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
-	const [searchTerm, setSearchTerm] = useState("");
-	const [faculty, setFaculty] = useState(ALL_FACULTIES);
-	const [isSearchSheetOpen, setIsSearchSheetOpen] = useState(false);
-	const [searchSheetMode, setSearchSheetMode] = useState(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
+	const subjectSearchSheet = useSearchSheetModel({
+		isActive,
+		defaultFilterValue: ALL_FACULTIES
+	});
+	const {
+		searchTerm,
+		filterValue: faculty,
+		isSearchSheetOpen,
+		isSearchSuggestionsMode,
+		isFilterOptionsMode,
+		changeSearchTerm: changeSubjectSearchTerm,
+		changeFilterValue: changeFaculty,
+		selectFilterOption: selectFacultyFilterOption,
+		openSearchSuggestions: openSubjectSearchSuggestions,
+		openFilterOptions: openSubjectFacultyOptions,
+		closeSearchSheet: closeSubjectSearchSheet
+	} = subjectSearchSheet;
 
 	useEffect(() => {
 		let cancelled = false;
@@ -92,56 +99,9 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		];
 	}, [faculties, t.subjectAllFaculties]);
 
-	const isSearchSuggestionsMode = searchSheetMode === SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS;
-	const isFilterOptionsMode = searchSheetMode === SEARCH_SHEET_MODES.FILTER_OPTIONS;
-
 	const facultyLabel = useMemo(() => {
 		return faculty === ALL_FACULTIES ? t.filterAllLabel : faculty;
 	}, [faculty, t.filterAllLabel]);
-
-	const closeSubjectSearchSheet = useCallback(() => {
-		setSearchTerm("");
-		setIsSearchSheetOpen(false);
-		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-	}, []);
-
-	useEffect(() => {
-		if (!isActive) {
-			closeSubjectSearchSheet();
-		}
-	}, [isActive, closeSubjectSearchSheet]);
-
-	const openSubjectSearchSuggestions = useCallback(() => {
-		setIsSearchSheetOpen(true);
-		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-	}, []);
-
-	const openSubjectFacultyOptions = useCallback(() => {
-		if (isSearchSheetOpen && isFilterOptionsMode) {
-			closeSubjectSearchSheet();
-			return;
-		}
-
-		setIsSearchSheetOpen(true);
-		setSearchSheetMode(SEARCH_SHEET_MODES.FILTER_OPTIONS);
-	}, [closeSubjectSearchSheet, isFilterOptionsMode, isSearchSheetOpen]);
-
-	const changeSubjectSearchTerm = useCallback((nextSearchTerm) => {
-		setSearchTerm(nextSearchTerm);
-		setIsSearchSheetOpen(true);
-		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-	}, []);
-
-	const changeFaculty = useCallback((nextFaculty) => {
-		closeSubjectSearchSheet();
-		setFaculty(nextFaculty);
-	}, [closeSubjectSearchSheet]);
-
-	const selectFacultyFilterOption = useCallback((nextFaculty) => {
-		setFaculty(nextFaculty);
-		setIsSearchSheetOpen(true);
-		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-	}, []);
 
 	const selectSubject = useCallback((subjectId) => {
 		closeSubjectSearchSheet();

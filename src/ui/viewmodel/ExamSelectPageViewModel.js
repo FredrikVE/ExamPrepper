@@ -5,23 +5,30 @@ import { getExamSelectWorkspaceActionToolItems, getPageToolGroup } from "../../n
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
+import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_CATEGORIES, buildExamCategories, filterExams } from "./ExamSelectPage/examSelectPageFilters.js";
-
-const SEARCH_SHEET_MODES = {
-    SEARCH_SUGGESTIONS: "searchSuggestions",
-    FILTER_OPTIONS: "filterOptions"
-};
-
-const SEARCH_SUGGESTION_LIMIT = 6;
 
 export default function useExamSelectPageViewModel(getAvailableExamsUseCase, language, t, selectedSubject, onSelectExam, isActive, onChangeScreen, showBackButton, backLabel, navigationLabel, onBack) {
     const [exams, setExams] = useState([]);
     const [examsLoading, setExamsLoading] = useState(false);
     const [examsLoadError, setExamsLoadError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [category, setCategory] = useState(ALL_CATEGORIES);
-    const [isSearchSheetOpen, setIsSearchSheetOpen] = useState(false);
-    const [searchSheetMode, setSearchSheetMode] = useState(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
+    const examSearchSheet = useSearchSheetModel({
+        isActive,
+        defaultFilterValue: ALL_CATEGORIES
+    });
+    const {
+        searchTerm,
+        filterValue: category,
+        isSearchSheetOpen,
+        isSearchSuggestionsMode,
+        isFilterOptionsMode,
+        changeSearchTerm: changeExamSearchTerm,
+        changeFilterValue: changeCategory,
+        selectFilterOption: selectCategoryFilterOption,
+        openSearchSuggestions: openExamSearchSuggestions,
+        openFilterOptions: openExamCategoryOptions,
+        closeSearchSheet: closeExamSearchSheet
+    } = examSearchSheet;
 
     const subjectId = selectedSubject?.id ?? null;
 
@@ -105,56 +112,9 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         ];
     }, [categories, t.examAllCategories, t.examAllCategoriesSheetOption]);
 
-    const isSearchSuggestionsMode = searchSheetMode === SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS;
-    const isFilterOptionsMode = searchSheetMode === SEARCH_SHEET_MODES.FILTER_OPTIONS;
-
     const categoryLabel = useMemo(() => {
         return category === ALL_CATEGORIES ? t.filterAllLabel : category;
     }, [category, t.filterAllLabel]);
-
-    const closeExamSearchSheet = useCallback(() => {
-        setSearchTerm("");
-        setIsSearchSheetOpen(false);
-        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-    }, []);
-
-    useEffect(() => {
-        if (!isActive) {
-            closeExamSearchSheet();
-        }
-    }, [isActive, closeExamSearchSheet]);
-
-    const openExamSearchSuggestions = useCallback(() => {
-        setIsSearchSheetOpen(true);
-        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-    }, []);
-
-    const openExamCategoryOptions = useCallback(() => {
-        if (isSearchSheetOpen && isFilterOptionsMode) {
-            closeExamSearchSheet();
-            return;
-        }
-
-        setIsSearchSheetOpen(true);
-        setSearchSheetMode(SEARCH_SHEET_MODES.FILTER_OPTIONS);
-    }, [closeExamSearchSheet, isFilterOptionsMode, isSearchSheetOpen]);
-
-    const changeExamSearchTerm = useCallback((nextSearchTerm) => {
-        setSearchTerm(nextSearchTerm);
-        setIsSearchSheetOpen(true);
-        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-    }, []);
-
-    const changeCategory = useCallback((nextCategory) => {
-        closeExamSearchSheet();
-        setCategory(nextCategory);
-    }, [closeExamSearchSheet]);
-
-    const selectCategoryFilterOption = useCallback((nextCategory) => {
-        setCategory(nextCategory);
-        setIsSearchSheetOpen(true);
-        setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-    }, []);
 
     const selectExam = useCallback((examId) => {
         closeExamSearchSheet();
