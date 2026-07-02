@@ -123,18 +123,6 @@ export function getAvailableSequenceItems(question, answer) {
     });
 }
 
-export function getSequenceItemStatus(question, answer, index) {
-    const correctOrder = getCorrectSequenceOrder(question);
-    const safeAnswer = normalizeSequenceOrderAnswer(question, answer);
-    const selectedSequenceItemId = safeAnswer[index];
-
-    if (!selectedSequenceItemId) {
-        return "unanswered";
-    }
-
-    return selectedSequenceItemId === correctOrder[index] ? "correct" : "wrong";
-}
-
 export function getSequenceItemFeedback(question, sequenceItemId) {
     const itemFeedback = isPlainObject(question?.itemFeedback)
         ? question.itemFeedback

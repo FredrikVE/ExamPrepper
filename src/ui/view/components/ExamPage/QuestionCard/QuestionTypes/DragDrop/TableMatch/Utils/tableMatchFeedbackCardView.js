@@ -23,14 +23,6 @@ export const getExtendedImages = (target) => {
     return [];
 };
 
-export const getCorrectAnswerLabel = (target) => {
-    if (target.correctLabel !== undefined && target.correctLabel !== null) {
-        return target.correctLabel;
-    }
-
-    return target.correctCardId;
-};
-
 export const shouldShowCorrectAnswer = (props) => {
     if (props.targetIsCorrect) {
         return false;
