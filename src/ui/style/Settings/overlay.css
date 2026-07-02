@@ -1,6 +1,5 @@
 /* src/ui/style/Settings/overlay.css */
-.settings-sidebar::backdrop,
-.settings-sheet::backdrop {
+.settings-sidebar::backdrop {
     background: rgba(2, 8, 19, 0.38);
     backdrop-filter: var(--blur-overlay);
 }

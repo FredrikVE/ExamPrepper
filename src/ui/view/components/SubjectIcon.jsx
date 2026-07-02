@@ -25,7 +25,7 @@ function normalizeSubjectIconKey(icon) {
     return LEGACY_ICON_KEYS[iconKey] ?? iconKey;
 }
 
-export function getSubjectIcon(icon) {
+function getSubjectIcon(icon) {
     const iconKey = normalizeSubjectIconKey(icon);
 
     return SUBJECT_ICON_COMPONENTS[iconKey] ?? SUBJECT_ICON_COMPONENTS[FALLBACK_ICON_KEY];

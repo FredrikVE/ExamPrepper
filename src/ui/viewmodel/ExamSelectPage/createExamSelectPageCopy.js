@@ -1,5 +1,5 @@
 // src/ui/viewmodel/ExamSelectPage/createExamSelectPageCopy.js
-export function createExamSelectSubtitle(t, selectedSubject) {
+function createExamSelectSubtitle(t, selectedSubject) {
     if (!selectedSubject?.code) {
         return t.selectSubtitleFallback;
     }
