@@ -1,9 +1,9 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { APP_LAYOUTS, NAV_SCREENS, createAppBackContract, resolveBackNavigation, resolveScreenEntry, resolveScreenLayout } from "../../navigation/navGraph.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
-import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
+import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
 
 export function createAppLayoutClassNames(activeScreen) {
 	const appLayout = resolveScreenLayout(activeScreen);
@@ -29,7 +29,6 @@ export default function useAppNavigationViewModel(params) {
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
 
-	const prevLanguageRef = useRef(params.language);
 
 	const closeMobileDropDownTopBarMenu = useCallback(() => {
 		mobileTopBar.closeMobileDropDownTopBarMenu();
@@ -103,61 +102,21 @@ export default function useAppNavigationViewModel(params) {
 		}));
 	}, [activeScreen, selectedSubjectId, selectedExamId, applyNavigation]);
 
-	const syncSelectedExamWithLanguage = useCallback(() => {
-		if (prevLanguageRef.current === params.language) {
-			return;
-		}
+	const resolveSyncedExam = useCallback((examId, subjectId) => {
+		setSelectedExamId(examId);
+		setSelectedSubjectId(subjectId);
+	}, []);
 
-		prevLanguageRef.current = params.language;
-
-		if (activeScreen !== NAV_SCREENS.EXAM || !selectedExamId) {
-			return;
-		}
-
-		let cancelled = false;
-
-		const run = async () => {
-			try {
-				const resolved = await resolveTranslatedExamId(
-					selectedExamId,
-					params.language,
-					params.getExamByIdUseCase,
-					params.getExamByBaseIdAndLangUseCase
-				);
-
-				if (cancelled) {
-					return;
-				}
-
-				if (resolved) {
-					setSelectedExamId(resolved.examId);
-					setSelectedSubjectId(resolved.subjectId ?? selectedSubjectId);
-				} else {
-					backToExamList();
-				}
-			} catch {
-				if (!cancelled) {
-					backToExamList();
-				}
-			}
-		};
-
-		run();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [
-		params.language,
+	useSyncSelectedExamWithLanguage({
+		language: params.language,
 		activeScreen,
 		selectedExamId,
 		selectedSubjectId,
-		params.getExamByIdUseCase,
-		params.getExamByBaseIdAndLangUseCase,
-		backToExamList
-	]);
-
-	useEffect(syncSelectedExamWithLanguage, [syncSelectedExamWithLanguage]);
+		getExamByIdUseCase: params.getExamByIdUseCase,
+		getExamByBaseIdAndLangUseCase: params.getExamByBaseIdAndLangUseCase,
+		onExamResolved: resolveSyncedExam,
+		onExamUnavailable: backToExamList
+	});
 
 	const isSelectionScreen =
 		activeScreen === NAV_SCREENS.SUBJECTS ||
