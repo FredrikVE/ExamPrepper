@@ -6,10 +6,20 @@ import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
 import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
 import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
+import useExamFooterNavigationKeys from "../components/ExamPage/useExamFooterNavigationKeys.js";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel }) {
     const { t } = useLanguage();
+
+    useExamFooterNavigationKeys({
+        isEnabled: viewModel.isFooterNavigationEnabled,
+        canGoPrevious: viewModel.canGoPrevious,
+        canGoNext: viewModel.canGoNext,
+        submitted: viewModel.submitted,
+        onNavigatePrevious: viewModel.previousQuestion,
+        onNavigateNext: viewModel.nextQuestion
+    });
 
     if (viewModel.questionsLoading) {
         return (

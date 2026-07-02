@@ -9,7 +9,6 @@ import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptio
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
 import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
 import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
-import shouldHandleFooterNavigationKeyDown from "./Utils/keyboardNavigation.js";
 import transformAnswersForApi from "./Utils/transformAnswersForApi.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
@@ -187,28 +186,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		requestScrollToTop();
 	}, [visibleQuestionCount, requestScrollToTop]);
 
-	const handleFooterNavigationKeyDown = useCallback((event) => {
-		if (!shouldHandleFooterNavigationKeyDown(event)) {
-			return;
-		}
-
-		if (event.key === "ArrowLeft" && canGoPrevious) {
-			event.preventDefault();
-			previousQuestion();
-			return;
-		}
-
-		if (event.key === "ArrowRight" && canGoNext) {
-			event.preventDefault();
-			nextQuestion();
-			return;
-		}
-
-		if (event.key === "Enter" && !submitted && canGoNext) {
-			event.preventDefault();
-			nextQuestion();
-		}
-	}, [submitted, canGoPrevious, canGoNext, previousQuestion, nextQuestion]);
+	const isFooterNavigationEnabled = canGoPrevious || canGoNext;
 
 	const goToQuestion = useCallback((index) => {
 		if (index < 0 || index >= visibleQuestionCount) {
@@ -440,12 +418,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
 
 	useEffect(() => {
-		window.addEventListener("keydown", handleFooterNavigationKeyDown);
-
-		return () => window.removeEventListener("keydown", handleFooterNavigationKeyDown);
-	}, [handleFooterNavigationKeyDown]);
-
-	useEffect(() => {
 		if (submitted) {
 			return;
 		}
@@ -508,6 +480,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 		canGoPrevious,
 		canGoNext,
+		isFooterNavigationEnabled,
 		isLastQuestion,
 		showSubmitButton,
 		shouldUseCompactDots,
