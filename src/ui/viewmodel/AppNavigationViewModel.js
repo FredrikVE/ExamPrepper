@@ -31,12 +31,12 @@ export default function useAppNavigationViewModel(params) {
 
 	const prevLanguageRef = useRef(params.language);
 
-	const closeMenu = useCallback(() => {
-		mobileTopBar.closeMobileDropDownMenu();
+	const closeMobileDropDownTopBarMenu = useCallback(() => {
+		mobileTopBar.closeMobileDropDownTopBarMenu();
 		settingsPresentation.closeSettingsPresentation();
 		mobileTopBar.closeMobileSubjectPicker();
 	}, [
-		mobileTopBar.closeMobileDropDownMenu,
+		mobileTopBar.closeMobileDropDownTopBarMenu,
 		mobileTopBar.closeMobileSubjectPicker,
 		settingsPresentation.closeSettingsPresentation
 	]);
@@ -51,10 +51,10 @@ export default function useAppNavigationViewModel(params) {
 		setSelectedExamId(nextNavState.selectedExamId);
 
 		settingsPresentation.closeSettingsPresentation();
-		mobileTopBar.closeMobileDropDownMenu();
+		mobileTopBar.closeMobileDropDownTopBarMenu();
 		mobileTopBar.closeMobileSubjectPicker();
 	}, [
-		mobileTopBar.closeMobileDropDownMenu,
+		mobileTopBar.closeMobileDropDownTopBarMenu,
 		mobileTopBar.closeMobileSubjectPicker,
 		settingsPresentation.closeSettingsPresentation
 	]);
@@ -192,19 +192,19 @@ export default function useAppNavigationViewModel(params) {
 		shellClassName,
 
 		// Layout
-		settingsOpen: settingsPresentation.isSettingsPresentationOpen,
-		isMenuOpen: mobileTopBar.isMobileDropDownMenuOpen,
-		isSubjectPickerOpen: mobileTopBar.isMobileSubjectPickerOpen,
+		isSettingsPresentationOpen: settingsPresentation.isSettingsPresentationOpen,
+		isMobileDropDownTopBarMenuOpen: mobileTopBar.isMobileDropDownTopBarMenuOpen,
+		isMobileSubjectPickerOpen: mobileTopBar.isMobileSubjectPickerOpen,
 		settingsPresentationMode: settingsPresentation.settingsPresentationMode,
 
 		// Handlers
-		closeSettings: settingsPresentation.closeSettingsPresentation,
-		toggleMenu: mobileTopBar.toggleMobileDropDownMenu,
-		closeMenu,
-		openSettings: settingsPresentation.openSettingsPresentation,
-		backFromSettingsToMenu: settingsPresentation.closeSettingsPresentation,
-		toggleSubjectPicker: mobileTopBar.toggleMobileSubjectPicker,
-		closeSubjectPicker: mobileTopBar.closeMobileSubjectPicker,
+		closeSettingsPresentation: settingsPresentation.closeSettingsPresentation,
+		toggleMobileDropDownTopBarMenu: mobileTopBar.toggleMobileDropDownTopBarMenu,
+		closeMobileDropDownTopBarMenu,
+		openSettingsPresentation: settingsPresentation.openSettingsPresentation,
+		backFromSettingsToMobileDropDownTopBarMenu: settingsPresentation.closeSettingsPresentation,
+		toggleMobileSubjectPicker: mobileTopBar.toggleMobileSubjectPicker,
+		closeMobileSubjectPicker: mobileTopBar.closeMobileSubjectPicker,
 		changeScreen,
 		selectSubject,
 		showAllSubjects,

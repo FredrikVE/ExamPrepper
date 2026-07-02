@@ -2,15 +2,15 @@
 import { useCallback, useState } from "react";
 
 export default function useMobileDropDownTopBarModel() {
-	const [isMobileDropDownMenuOpen, setIsMobileDropDownMenuOpen] = useState(false);
+	const [isMobileDropDownTopBarMenuOpen, setIsMobileDropDownTopBarMenuOpen] = useState(false);
 	const [isMobileSubjectPickerOpen, setIsMobileSubjectPickerOpen] = useState(false);
 
-	const toggleMobileDropDownMenu = useCallback(() => {
-		setIsMobileDropDownMenuOpen((wasOpen) => !wasOpen);
+	const toggleMobileDropDownTopBarMenu = useCallback(() => {
+		setIsMobileDropDownTopBarMenuOpen((wasOpen) => !wasOpen);
 	}, []);
 
-	const closeMobileDropDownMenu = useCallback(() => {
-		setIsMobileDropDownMenuOpen(false);
+	const closeMobileDropDownTopBarMenu = useCallback(() => {
+		setIsMobileDropDownTopBarMenuOpen(false);
 	}, []);
 
 	const toggleMobileSubjectPicker = useCallback(() => {
@@ -22,10 +22,10 @@ export default function useMobileDropDownTopBarModel() {
 	}, []);
 
 	return {
-		isMobileDropDownMenuOpen,
+		isMobileDropDownTopBarMenuOpen,
 		isMobileSubjectPickerOpen,
-		toggleMobileDropDownMenu,
-		closeMobileDropDownMenu,
+		toggleMobileDropDownTopBarMenu,
+		closeMobileDropDownTopBarMenu,
 		toggleMobileSubjectPicker,
 		closeMobileSubjectPicker
 	};

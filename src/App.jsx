@@ -63,9 +63,9 @@ function AppContent() {
 	}, []);
 
 	const confirmExamSubmit = useCallback(() => {
-		navigationViewModel.closeMenu();
+		navigationViewModel.closeMobileDropDownTopBarMenu();
 		examWorkModeActionsRef.current?.confirmSubmit();
-	}, [navigationViewModel.closeMenu]);
+	}, [navigationViewModel.closeMobileDropDownTopBarMenu]);
 
 	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
 		getAvailableSubjectsUseCase,
@@ -98,16 +98,16 @@ function AppContent() {
 				<AppNavigation
 					activeScreen={navigationViewModel.activeScreen}
 					onChangeScreen={navigationViewModel.changeScreen}
-					settingsOpen={navigationViewModel.settingsOpen}
-					onOpenSettings={navigationViewModel.openSettings}
-					onCloseSettings={navigationViewModel.closeSettings}
-					onBackFromSettings={navigationViewModel.backFromSettingsToMenu}
-					isMenuOpen={navigationViewModel.isMenuOpen}
-					onToggleMenu={navigationViewModel.toggleMenu}
-					onCloseMenu={navigationViewModel.closeMenu}
-					isSubjectPickerOpen={navigationViewModel.isSubjectPickerOpen}
-					onToggleSubjectPicker={navigationViewModel.toggleSubjectPicker}
-					onCloseSubjectPicker={navigationViewModel.closeSubjectPicker}
+					isSettingsPresentationOpen={navigationViewModel.isSettingsPresentationOpen}
+					onOpenSettingsPresentation={navigationViewModel.openSettingsPresentation}
+					onCloseSettingsPresentation={navigationViewModel.closeSettingsPresentation}
+					onBackFromSettingsToMobileDropDownTopBarMenu={navigationViewModel.backFromSettingsToMobileDropDownTopBarMenu}
+					isMobileDropDownTopBarMenuOpen={navigationViewModel.isMobileDropDownTopBarMenuOpen}
+					onToggleMobileDropDownTopBarMenu={navigationViewModel.toggleMobileDropDownTopBarMenu}
+					onCloseMobileDropDownTopBarMenu={navigationViewModel.closeMobileDropDownTopBarMenu}
+					isMobileSubjectPickerOpen={navigationViewModel.isMobileSubjectPickerOpen}
+					onToggleMobileSubjectPicker={navigationViewModel.toggleMobileSubjectPicker}
+					onCloseMobileSubjectPicker={navigationViewModel.closeMobileSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					hasSelectedSubject={Boolean(navigationViewModel.selectedSubjectId)}
 					showBackButton={navigationViewModel.showBackButton}
@@ -172,9 +172,8 @@ function AppContent() {
 
 				<SettingsPresentation
 					mode={navigationViewModel.settingsPresentationMode}
-					isOpen={navigationViewModel.settingsOpen}
-					onClose={navigationViewModel.closeSettings}
-					onBackToMenu={navigationViewModel.backFromSettingsToMenu}
+					isOpen={navigationViewModel.isSettingsPresentationOpen}
+					onClose={navigationViewModel.closeSettingsPresentation}
 				/>
 			</div>
 		</div>

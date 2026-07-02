@@ -31,7 +31,7 @@ function MobileDropdownContent(props) {
 
 	const showExamSubmitAction = props.isExamWorkMode && props.showExamSubmitAction;
 
-	if (props.settingsOpen) {
+	if (props.isSettingsPresentationOpen) {
 		return (
 			<div className="mobile-dropdown-settings-content">
 				<SettingsPanelContent />
@@ -50,12 +50,12 @@ function MobileDropdownContent(props) {
 				className={contentClassNames.join(" ")}
 				aria-hidden={props.isExamSubmitConfirmOpen ? "true" : undefined}
 			>
-				{props.isSubjectPickerOpen && (
+				{props.isMobileSubjectPickerOpen && (
 					<SubjectPickerDropdown
 						subjects={props.subjects}
 						currentSubjectId={props.currentSubject.id}
 						onSelectSubject={props.onSelectSubject}
-						onClose={props.onCloseSubjectPicker}
+						onClose={props.onCloseMobileSubjectPicker}
 					/>
 				)}
 
@@ -76,8 +76,8 @@ function MobileDropdownContent(props) {
 				/>
 
 				<SidebarSettingsButton
-					settingsOpen={props.settingsOpen}
-					onOpenSettings={props.onOpenSettings}
+					isSettingsPresentationOpen={props.isSettingsPresentationOpen}
+					onOpenSettingsPresentation={props.onOpenSettingsPresentation}
 				/>
 
 				{showExamSubmitAction && (
@@ -90,7 +90,7 @@ function MobileDropdownContent(props) {
 
 				<SidebarUserCard />
 
-				<SidebarCloseButton onCloseMenu={props.onCloseMenu} />
+				<SidebarCloseButton onCloseMobileDropDownTopBarMenu={props.onCloseMobileDropDownTopBarMenu} />
 			</div>
 
 			{props.isExamSubmitConfirmOpen && (
@@ -112,43 +112,43 @@ export default function MobileDropDownTopBar(props) {
 	const { t } = useLanguage();
 
 	const isFlipcardsScreen = props.activeScreen === NAV_SCREENS.FLIPCARDS;
-	const shouldShowSettingsTopbar = props.isMenuOpen && props.settingsOpen;
-	const showPickerButton = props.isMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
-	const showFlipcardsDeckPill = isFlipcardsScreen && !props.isMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
-	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMenuOpen;
+	const shouldShowSettingsTopbar = props.isMobileDropDownTopBarMenuOpen && props.isSettingsPresentationOpen;
+	const showPickerButton = props.isMobileDropDownTopBarMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
+	const showFlipcardsDeckPill = isFlipcardsScreen && !props.isMobileDropDownTopBarMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
+	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMobileDropDownTopBarMenuOpen;
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
 	const showTopbarBackButton = props.showBackButton || shouldShowSettingsTopbar;
 
 	useMobileMenuEscapeKey({
-		isMenuOpen: props.isMenuOpen,
-		onCloseMenu: props.onCloseMenu,
-		isSettingsOpen: props.settingsOpen,
-		onCloseSettings: props.onCloseSettings,
+		isMobileDropDownTopBarMenuOpen: props.isMobileDropDownTopBarMenuOpen,
+		onCloseMobileDropDownTopBarMenu: props.onCloseMobileDropDownTopBarMenu,
+		isSettingsPresentationOpen: props.isSettingsPresentationOpen,
+		onCloseSettingsPresentation: props.onCloseSettingsPresentation,
 		isSubmitConfirmOpen: showExamSubmitConfirm,
 		onCloseSubmitConfirm: props.onCloseExamSubmitConfirm,
-		isSubjectPickerOpen: props.isSubjectPickerOpen,
-		onCloseSubjectPicker: props.onCloseSubjectPicker
+		isMobileSubjectPickerOpen: props.isMobileSubjectPickerOpen,
+		onCloseMobileSubjectPicker: props.onCloseMobileSubjectPicker
 	});
 
 	const topbarClassNames = [
 		"mobile-topbar",
 		showTopbarBackButton ? "mobile-topbar-with-back" : null,
 		isFlipcardsScreen ? "mobile-topbar-flipcards" : null,
-		props.isMenuOpen ? "mobile-topbar-menu-open" : null,
+		props.isMobileDropDownTopBarMenuOpen ? "mobile-topbar-menu-open" : null,
 		shouldShowSettingsTopbar ? "mobile-topbar-settings-open" : null
 	].filter(Boolean);
 
 	const dropdownClassNames = [
 		"mobile-dropdown",
-		props.isMenuOpen ? "mobile-dropdown-open" : null,
+		props.isMobileDropDownTopBarMenuOpen ? "mobile-dropdown-open" : null,
 		showPickerButton ? "mobile-dropdown-with-picker" : null,
 		showExamSubmitConfirm ? "mobile-dropdown-submit-confirm-open" : null
 	].filter(Boolean);
 
 	const backdropClassNames = [
 		"mobile-dropdown-backdrop",
-		props.isMenuOpen ? "mobile-dropdown-backdrop-visible" : null,
-		props.isSubjectPickerOpen ? "mobile-dropdown-backdrop-picker-open" : null,
+		props.isMobileDropDownTopBarMenuOpen ? "mobile-dropdown-backdrop-visible" : null,
+		props.isMobileSubjectPickerOpen ? "mobile-dropdown-backdrop-picker-open" : null,
 		showExamSubmitConfirm ? "mobile-dropdown-backdrop-submit-confirm-open" : null
 	].filter(Boolean);
 
@@ -158,24 +158,24 @@ export default function MobileDropDownTopBar(props) {
 		? t.settingsBackToMenu
 		: props.backLabel ?? t.sidebarBack;
 	const handleTopbarBack = shouldShowSettingsTopbar
-		? props.onBackFromSettings
+		? props.onBackFromSettingsToMobileDropDownTopBarMenu
 		: props.onBack;
 
 	const handleMenuButtonClick = shouldShowSettingsTopbar
-		? props.onCloseMenu
-		: props.onToggleMenu;
+		? props.onCloseMobileDropDownTopBarMenu
+		: props.onToggleMobileDropDownTopBarMenu;
 
 	const handleFlipcardsDeckPillClick = () => {
-		if (!props.isMenuOpen) {
-			props.onToggleMenu();
+		if (!props.isMobileDropDownTopBarMenuOpen) {
+			props.onToggleMobileDropDownTopBarMenu();
 		}
 
-		if (!props.isSubjectPickerOpen) {
-			props.onToggleSubjectPicker();
+		if (!props.isMobileSubjectPickerOpen) {
+			props.onToggleMobileSubjectPicker();
 		}
 	};
 
-	const menuButtonLabel = props.isMenuOpen
+	const menuButtonLabel = props.isMobileDropDownTopBarMenuOpen
 		? t.sidebarCloseNavigation
 		: t.sidebarOpenNavigation;
 
@@ -202,7 +202,7 @@ export default function MobileDropDownTopBar(props) {
 					onClick={handleMenuButtonClick}
 					aria-label={menuButtonLabel}
 					aria-controls="app-navigation-menu"
-					aria-expanded={props.isMenuOpen}
+					aria-expanded={props.isMobileDropDownTopBarMenuOpen}
 				>
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
@@ -223,7 +223,7 @@ export default function MobileDropDownTopBar(props) {
 					<div className="mobile-topbar-subject-picker mobile-topbar-subject-picker-flipcards">
 						<SubjectPickerButton
 							currentSubject={currentSubject}
-							isOpen={props.isSubjectPickerOpen}
+							isOpen={props.isMobileSubjectPickerOpen}
 							onToggle={handleFlipcardsDeckPillClick}
 						/>
 					</div>
@@ -233,8 +233,8 @@ export default function MobileDropDownTopBar(props) {
 					<div className="mobile-topbar-subject-picker">
 						<SubjectPickerButton
 							currentSubject={currentSubject}
-							isOpen={props.isSubjectPickerOpen}
-							onToggle={props.onToggleSubjectPicker}
+							isOpen={props.isMobileSubjectPickerOpen}
+							onToggle={props.onToggleMobileSubjectPicker}
 						/>
 					</div>
 				)}
@@ -243,30 +243,30 @@ export default function MobileDropDownTopBar(props) {
 			<button
 				type="button"
 				className={backdropClassNames.join(" ")}
-				onClick={props.onCloseMenu}
+				onClick={props.onCloseMobileDropDownTopBarMenu}
 				aria-label={t.sidebarCloseNavigation}
-				aria-hidden={!props.isMenuOpen}
-				tabIndex={props.isMenuOpen ? 0 : -1}
+				aria-hidden={!props.isMobileDropDownTopBarMenuOpen}
+				tabIndex={props.isMobileDropDownTopBarMenuOpen ? 0 : -1}
 			/>
 
 			<aside
 				id="app-navigation-menu"
 				className={dropdownClassNames.join(" ")}
 				aria-label={t.sidebarNavigationMenu}
-				aria-hidden={!props.isMenuOpen}
+				aria-hidden={!props.isMobileDropDownTopBarMenuOpen}
 			>
 				<MobileDropdownContent
 					activeScreen={props.activeScreen}
 					onChangeScreen={props.onChangeScreen}
-					settingsOpen={props.settingsOpen}
-					onOpenSettings={props.onOpenSettings}
-					onCloseMenu={props.onCloseMenu}
-					onBackFromSettings={props.onBackFromSettings}
+					isSettingsPresentationOpen={props.isSettingsPresentationOpen}
+					onOpenSettingsPresentation={props.onOpenSettingsPresentation}
+					onCloseMobileDropDownTopBarMenu={props.onCloseMobileDropDownTopBarMenu}
+					onBackFromSettingsToMobileDropDownTopBarMenu={props.onBackFromSettingsToMobileDropDownTopBarMenu}
 					subjects={props.subjects}
 					currentSubject={currentSubject}
 					hasSelectedSubject={props.hasSelectedSubject}
-					isSubjectPickerOpen={props.isSubjectPickerOpen}
-					onCloseSubjectPicker={props.onCloseSubjectPicker}
+					isMobileSubjectPickerOpen={props.isMobileSubjectPickerOpen}
+					onCloseMobileSubjectPicker={props.onCloseMobileSubjectPicker}
 					onSelectSubject={props.onSelectSubject}
 					onShowAllSubjects={props.onShowAllSubjects}
 					isExamWorkMode={props.isExamWorkMode}

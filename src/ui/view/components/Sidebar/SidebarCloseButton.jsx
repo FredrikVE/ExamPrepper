@@ -2,14 +2,14 @@
 import { ChevronUp } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function SidebarCloseButton({ onCloseMenu }) {
+export default function SidebarCloseButton({ onCloseMobileDropDownTopBarMenu }) {
 	const { t } = useLanguage();
 
 	return (
 		<button
 			type="button"
 			className="sidebar-close-button"
-			onClick={onCloseMenu}
+			onClick={onCloseMobileDropDownTopBarMenu}
 			aria-label={t.sidebarCloseNavigation}
 			aria-controls="app-navigation-menu"
 		>

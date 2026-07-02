@@ -1205,6 +1205,29 @@ const hasAnswered = answers[question.id] !== undefined;
 const showFeedback = submitted && showAllFeedback;
 ```
 
+Boolean UI-state som styrer en konkret organisme eller komponent, skal navngis etter komponenten den styrer.
+Handlers følger samme navn.
+
+```js
+// Riktig — state-navnet peker på faktisk komponent/organisme:
+const isMobileDropDownTopBarMenuOpen = true;
+const closeMobileDropDownTopBarMenu = () => { ... };
+const isMobileSubjectPickerOpen = false;
+const toggleMobileSubjectPicker = () => { ... };
+const isSettingsPresentationOpen = false;
+const openSettingsPresentation = () => { ... };
+
+// Forbudt — samlebegreper uten komponentnavn:
+const isMenuOpen = true;
+const isOverlayOpen = true;
+const isSurfaceOpen = true;
+const isPanelOpen = true;
+```
+
+Samlebegreper som `overlay`, `surface`, `panel` og `drawer` skal ikke brukes i state-navn
+med mindre det faktisk finnes en komponent med samme navn. Navnet skal gjøre det tydelig
+hvilken del av komponenttreet verdien styrer.
+
 ### Løkkevariabler og kortlivede variabler
 
 `i`, `j`, `k` er akseptable i rene tallindeks-løkker uten domenekontekst.
