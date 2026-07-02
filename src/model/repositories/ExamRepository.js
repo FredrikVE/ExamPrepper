@@ -2,6 +2,8 @@
 export default class ExamRepository {
     #examQuestionDataSource;
     #conceptImageDataSource;
+    #examPromisesById = new Map();
+    #allExamsPromise = null;
 
     constructor(examQuestionDataSource, conceptImageDataSource) {
         this.#examQuestionDataSource = examQuestionDataSource;
@@ -9,11 +11,19 @@ export default class ExamRepository {
     }
 
     async getAllExams() {
-        return await this.#examQuestionDataSource.fetchAllExams();
+        if (!this.#allExamsPromise) {
+            this.#allExamsPromise = this.#examQuestionDataSource.fetchAllExams()
+                .catch((fetchError) => {
+                    this.#allExamsPromise = null;
+                    throw fetchError;
+                });
+        }
+
+        return await this.#allExamsPromise;
     }
 
     async getAvailableExams({ subjectId, language } = {}) {
-        const exams = await this.#examQuestionDataSource.fetchAllExams();
+        const exams = await this.getAllExams();
 
         return exams
             .filter((exam) => this.#matchesSubject(exam, subjectId))
@@ -23,7 +33,21 @@ export default class ExamRepository {
     }
 
     async getExamById(examId) {
-        return await this.#examQuestionDataSource.fetchExamById(examId);
+        if (!examId) {
+            return null;
+        }
+
+        if (!this.#examPromisesById.has(examId)) {
+            const examPromise = this.#examQuestionDataSource.fetchExamById(examId)
+                .catch((fetchError) => {
+                    this.#examPromisesById.delete(examId);
+                    throw fetchError;
+                });
+
+            this.#examPromisesById.set(examId, examPromise);
+        }
+
+        return await this.#examPromisesById.get(examId);
     }
 
     async getExamQuestions(input) {
@@ -42,10 +66,11 @@ export default class ExamRepository {
     }
 
     async getExamByBaseIdAndLang(baseId, language) {
-        return await this.#examQuestionDataSource.fetchExamByBaseIdAndLang(
-            baseId,
-            language
-        );
+        const exams = await this.getAllExams();
+
+        return exams.find((exam) => {
+            return exam.baseId === baseId && exam.lang === language;
+        }) ?? null;
     }
 
     async #enrichQuestionsWithConceptImages(questions, examContext) {
