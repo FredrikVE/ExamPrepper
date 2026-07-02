@@ -2,43 +2,23 @@
 
 /* ── Tone palette ─────────────────────────── */
 .statistics-kpi-card--blue {
-	--statistics-kpi-accent: #1067ff;
-	--statistics-kpi-accent-surface: rgba(16, 103, 255, 0.1);
+	--statistics-kpi-accent: var(--statistics-kpi-blue);
+	--statistics-kpi-accent-surface: var(--statistics-kpi-blue-surface);
 }
 
 .statistics-kpi-card--green {
-	--statistics-kpi-accent: #12b886;
-	--statistics-kpi-accent-surface: rgba(18, 184, 134, 0.1);
+	--statistics-kpi-accent: var(--statistics-kpi-green);
+	--statistics-kpi-accent-surface: var(--statistics-kpi-green-surface);
 }
 
 .statistics-kpi-card--purple {
-	--statistics-kpi-accent: #7c3aed;
-	--statistics-kpi-accent-surface: rgba(124, 58, 237, 0.1);
+	--statistics-kpi-accent: var(--statistics-kpi-purple);
+	--statistics-kpi-accent-surface: var(--statistics-kpi-purple-surface);
 }
 
 .statistics-kpi-card--orange {
-	--statistics-kpi-accent: #e8590c;
-	--statistics-kpi-accent-surface: rgba(232, 89, 12, 0.1);
-}
-
-.dark .statistics-kpi-card--blue {
-	--statistics-kpi-accent: #6d9eff;
-	--statistics-kpi-accent-surface: rgba(109, 158, 255, 0.14);
-}
-
-.dark .statistics-kpi-card--green {
-	--statistics-kpi-accent: #38d9a9;
-	--statistics-kpi-accent-surface: rgba(56, 217, 169, 0.14);
-}
-
-.dark .statistics-kpi-card--purple {
-	--statistics-kpi-accent: #a78bfa;
-	--statistics-kpi-accent-surface: rgba(167, 139, 250, 0.14);
-}
-
-.dark .statistics-kpi-card--orange {
-	--statistics-kpi-accent: #ff922b;
-	--statistics-kpi-accent-surface: rgba(255, 146, 43, 0.14);
+	--statistics-kpi-accent: var(--statistics-kpi-orange);
+	--statistics-kpi-accent-surface: var(--statistics-kpi-orange-surface);
 }
 
 /* ── Grid ─────────────────────────────────── */

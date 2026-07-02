@@ -22,14 +22,11 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    display: none;
+    display: var(--question-card-ambient-glow-display);
     background: var(--question-card-ambient-glow);
     pointer-events: none;
 }
 
-.dark .question-card::before {
-    display: block;
-}
 
 .question-card-body {
     position: relative;

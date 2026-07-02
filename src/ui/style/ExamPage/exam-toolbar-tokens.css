@@ -32,13 +32,7 @@
     --header-stat-label-font-size: 0.74rem;
     --header-stat-label-font-weight: 600;
 
-    --header-stat-card-bg: color-mix(in srgb, var(--panel-strong) 80%, transparent);
-    --header-stat-card-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
-    --header-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
-}
-
-.dark {
-    --header-stat-card-bg: color-mix(in srgb, var(--panel-strong) 62%, transparent);
-    --header-stat-card-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
-    --header-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
+    --header-stat-card-bg: var(--exam-toolbar-stat-card-bg);
+    --header-stat-card-shadow: var(--exam-toolbar-stat-card-shadow);
+    --header-primary-button-shadow: var(--exam-toolbar-primary-button-shadow);
 }

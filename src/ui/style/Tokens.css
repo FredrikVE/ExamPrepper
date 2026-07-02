@@ -38,11 +38,33 @@
     --feedback-source-quote-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, white), color-mix(in srgb, var(--panel-bg) 94%, white));
     --question-card-surface: var(--panel-strong);
     --question-card-ambient-glow: radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 18rem);
+    --question-card-ambient-glow-display: none;
     --question-card-input-bg: color-mix(in srgb, var(--panel-strong) 82%, transparent);
     --question-card-answer-correct-bg: color-mix(in srgb, var(--success-soft) 64%, transparent);
     --question-card-answer-wrong-bg: color-mix(in srgb, var(--danger-soft) 64%, transparent);
     --question-card-answer-extended-bg: linear-gradient(180deg, color-mix(in srgb, var(--accent) 4%, white), color-mix(in srgb, var(--panel-bg) 88%, white));
     --question-card-answer-figure-bg: color-mix(in srgb, var(--panel-bg) 92%, white);
+    --exam-toolbar-stat-card-bg: color-mix(in srgb, var(--panel-strong) 80%, transparent);
+    --exam-toolbar-stat-card-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+    --exam-toolbar-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
+
+    /* ── Statistics surfaces ───────────────── */
+    --statistics-kpi-blue: #1067ff;
+    --statistics-kpi-blue-surface: rgba(16, 103, 255, 0.1);
+    --statistics-kpi-green: #12b886;
+    --statistics-kpi-green-surface: rgba(18, 184, 134, 0.1);
+    --statistics-kpi-purple: #7c3aed;
+    --statistics-kpi-purple-surface: rgba(124, 58, 237, 0.1);
+    --statistics-kpi-orange: #e8590c;
+    --statistics-kpi-orange-surface: rgba(232, 89, 12, 0.1);
+    --statistics-recommended-accent: #ff3d6e;
+    --statistics-recommended-accent-soft: #fff0f5;
+    --statistics-recommended-card-bg: #fff5f7;
+    --statistics-recommended-card-border: #ffe1e9;
+    --statistics-recommended-icon-bg: #fff0f4;
+    --statistics-recommended-icon-border: #ffdce6;
+    --statistics-recommended-badge-bg: #ffeaf0;
+    --statistics-recommended-heart-border: #ffd9e5;
 
     /* ── Typography ────────────────────────── */
     --text-main: #071124;
@@ -182,11 +204,33 @@
     --feedback-explanation-warning-bg: linear-gradient(135deg, color-mix(in srgb, #f59e0b 16%, var(--panel-strong)), color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong)));
     --feedback-source-quote-bg: var(--feedback-explanation-correct-bg);
     --question-card-surface: #07162a;
+    --question-card-ambient-glow-display: block;
     --question-card-input-bg: color-mix(in srgb, var(--panel-strong) 66%, transparent);
     --question-card-answer-correct-bg: radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--success) 9%, transparent), transparent 16rem), color-mix(in srgb, var(--success-soft) 50%, transparent);
     --question-card-answer-wrong-bg: radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--danger) 9%, transparent), transparent 16rem), color-mix(in srgb, var(--danger-soft) 50%, transparent);
     --question-card-answer-extended-bg: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, var(--panel-strong)), color-mix(in srgb, var(--panel-bg) 92%, var(--panel-strong)));
     --question-card-answer-figure-bg: color-mix(in srgb, var(--panel-strong) 82%, white);
+    --exam-toolbar-stat-card-bg: color-mix(in srgb, var(--panel-strong) 62%, transparent);
+    --exam-toolbar-stat-card-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    --exam-toolbar-primary-button-shadow: 0 14px 28px color-mix(in srgb, var(--success-text) 24%, transparent);
+
+    /* ── Statistics surfaces ───────────────── */
+    --statistics-kpi-blue: #6d9eff;
+    --statistics-kpi-blue-surface: rgba(109, 158, 255, 0.14);
+    --statistics-kpi-green: #38d9a9;
+    --statistics-kpi-green-surface: rgba(56, 217, 169, 0.14);
+    --statistics-kpi-purple: #a78bfa;
+    --statistics-kpi-purple-surface: rgba(167, 139, 250, 0.14);
+    --statistics-kpi-orange: #ff922b;
+    --statistics-kpi-orange-surface: rgba(255, 146, 43, 0.14);
+    --statistics-recommended-accent: #ff7aa2;
+    --statistics-recommended-accent-soft: rgba(255, 61, 110, 0.14);
+    --statistics-recommended-card-bg: rgba(255, 61, 110, 0.1);
+    --statistics-recommended-card-border: rgba(255, 122, 162, 0.28);
+    --statistics-recommended-icon-bg: rgba(255, 61, 110, 0.13);
+    --statistics-recommended-icon-border: rgba(255, 122, 162, 0.32);
+    --statistics-recommended-badge-bg: rgba(255, 61, 110, 0.16);
+    --statistics-recommended-heart-border: rgba(255, 122, 162, 0.32);
 
     /* ── Typography ────────────────────────── */
     --text-main: #f7fbff;

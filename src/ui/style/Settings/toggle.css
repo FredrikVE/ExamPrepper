@@ -14,8 +14,7 @@
     transform: translateY(-1px);
 }
 
-.settings-toggle-track-on,
-.dark .settings-toggle-track-on {
+.settings-toggle-track-on {
     background: var(--accent);
 }
 
