@@ -134,6 +134,13 @@
        Named layers keep stacking order centralized and intentional. */
     --z-exam-submit-confirmation: 110;
 
+    /* ── Mobile bottom sheet ──────────────────
+       These linked dimensions must stay in sync across the docked sheet
+       and select-page scroll reserve. */
+    --mobile-sheet-peek-height: 122px;
+    --mobile-sheet-top-clearance: 54px;
+    --mobile-sheet-scroll-reserve: 255px;
+
     /* ── Mobile exam confirmation ───────────── */
     --exam-submit-confirmation-mobile-footer-clearance: calc(var(--space-12) + env(safe-area-inset-bottom));
 }

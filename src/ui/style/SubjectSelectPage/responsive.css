@@ -24,7 +24,7 @@
     }
 
     .subject-select-scroll {
-        padding: calc(var(--mobile-topbar-height) + 24px) 20px calc(255px + env(safe-area-inset-bottom));
+        padding: calc(var(--mobile-topbar-height) + 24px) 20px calc(var(--mobile-sheet-scroll-reserve) + env(safe-area-inset-bottom));
     }
 
     .subject-select-topbar {

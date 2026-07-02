@@ -32,7 +32,7 @@
     }
 
     .exam-select-scroll {
-        padding: calc(var(--mobile-topbar-height) + 24px) 24px calc(255px + env(safe-area-inset-bottom));
+        padding: calc(var(--mobile-topbar-height) + 24px) 24px calc(var(--mobile-sheet-scroll-reserve) + env(safe-area-inset-bottom));
     }
 
     .exam-select-topbar {
