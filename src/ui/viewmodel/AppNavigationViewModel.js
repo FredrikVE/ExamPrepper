@@ -1,6 +1,6 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
-import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import { NAV_SCREENS, createAppBackContract, resolveBackNavigation, resolveScreenEntry } from "../../navigation/navGraph.js";
 import { getPresentationMode, PRESENTATION_MODE, subscribeToPresentationMode } from "../presentation/presentationMode.js";
 import resolveTranslatedExamId from "./Utils/resolveTranslatedExamId.js";
 
@@ -12,16 +12,6 @@ function resolveSettingsPresentationMode(presentationMode) {
 function getSettingsPresentationMode() {
 	return resolveSettingsPresentationMode(getPresentationMode());
 }
-
-export function createAppBackContract({ activeScreen, backLabel, navigationLabel, onBack }) {
-	return {
-		showBackButton: activeScreen !== NAV_SCREENS.SUBJECTS,
-		backLabel,
-		navigationLabel,
-		onBack
-	};
-}
-
 
 export function createAppLayoutClassNames(activeScreen) {
 	const usesSelectionLayout =
@@ -97,148 +87,63 @@ export default function useAppNavigationViewModel(params) {
 		return subscribeToPresentationMode(handlePresentationModeChange);
 	}, []);
 
-	const selectSubject = useCallback((subjectId) => {
-		setSelectedSubjectId(subjectId);
-		setSelectedExamId(null);
-		setActiveScreen(NAV_SCREENS.SELECT);
+	const applyNavigation = useCallback((nextNavState) => {
+		if (!nextNavState) {
+			return;
+		}
+
+		setActiveScreen(nextNavState.screen);
+		setSelectedSubjectId(nextNavState.selectedSubjectId);
+		setSelectedExamId(nextNavState.selectedExamId);
+
 		setSettingsOpen(false);
 		setIsMenuOpen(false);
 		setIsSubjectPickerOpen(false);
 	}, []);
-
-	const showAllSubjects = useCallback(() => {
-		setSelectedSubjectId(null);
-		setSelectedExamId(null);
-		setActiveScreen(NAV_SCREENS.SUBJECTS);
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
-	}, []);
-
-	const selectExam = useCallback((examId) => {
-		setSelectedExamId(examId);
-		setActiveScreen(NAV_SCREENS.EXAM);
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
-	}, []);
-
-	const showStatistics = useCallback(() => {
-		setSelectedExamId(null);
-		setActiveScreen(NAV_SCREENS.OVERVIEW);
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
-	}, []);
-
-	const backToExamList = useCallback(() => {
-		setSelectedExamId(null);
-
-		if (selectedSubjectId) {
-			setActiveScreen(NAV_SCREENS.SELECT);
-		} else {
-			setActiveScreen(NAV_SCREENS.SUBJECTS);
-		}
-
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
-	}, [selectedSubjectId]);
-
-	const goBack = useCallback(() => {
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
-		setIsSubjectPickerOpen(false);
-
-		if (activeScreen === NAV_SCREENS.SELECT) {
-			setSelectedSubjectId(null);
-			setSelectedExamId(null);
-			setActiveScreen(NAV_SCREENS.SUBJECTS);
-			return;
-		}
-
-		if (activeScreen === NAV_SCREENS.EXAM) {
-			setSelectedExamId(null);
-
-			if (selectedSubjectId) {
-				setActiveScreen(NAV_SCREENS.SELECT);
-			} else {
-				setActiveScreen(NAV_SCREENS.SUBJECTS);
-			}
-
-			return;
-		}
-
-		if (activeScreen === NAV_SCREENS.FLIPCARDS || activeScreen === NAV_SCREENS.OVERVIEW) {
-			setSelectedExamId(null);
-
-			if (selectedSubjectId) {
-				setActiveScreen(NAV_SCREENS.SELECT);
-			} else {
-				setActiveScreen(NAV_SCREENS.SUBJECTS);
-			}
-
-			return;
-		}
-
-		setSelectedSubjectId(null);
-		setSelectedExamId(null);
-		setActiveScreen(NAV_SCREENS.SUBJECTS);
-	}, [activeScreen, selectedSubjectId]);
 
 	const changeScreen = useCallback((nextScreen) => {
-		setSettingsOpen(false);
-		setIsMenuOpen(false);
+		applyNavigation(resolveScreenEntry(nextScreen, {
+			selectedSubjectId,
+			selectedExamId
+		}));
+	}, [selectedSubjectId, selectedExamId, applyNavigation]);
 
-		if (nextScreen === NAV_SCREENS.SUBJECTS) {
-			showAllSubjects();
-			return;
-		}
+	const selectSubject = useCallback((subjectId) => {
+		applyNavigation(resolveScreenEntry(NAV_SCREENS.SELECT, {
+			selectedSubjectId: subjectId,
+			selectedExamId: null
+		}));
+	}, [applyNavigation]);
 
-		if (nextScreen === NAV_SCREENS.SELECT) {
-			setSelectedExamId(null);
+	const showAllSubjects = useCallback(() => {
+		changeScreen(NAV_SCREENS.SUBJECTS);
+	}, [changeScreen]);
 
-			if (selectedSubjectId) {
-				setActiveScreen(NAV_SCREENS.SELECT);
-			} else {
-				setActiveScreen(NAV_SCREENS.SUBJECTS);
-			}
+	const selectExam = useCallback((examId) => {
+		applyNavigation(resolveScreenEntry(NAV_SCREENS.EXAM, {
+			selectedSubjectId,
+			selectedExamId: examId
+		}));
+	}, [selectedSubjectId, applyNavigation]);
 
-			return;
-		}
+	const showStatistics = useCallback(() => {
+		changeScreen(NAV_SCREENS.OVERVIEW);
+	}, [changeScreen]);
 
-		if (nextScreen === NAV_SCREENS.EXAM) {
-			if (!selectedExamId) {
-				return;
-			}
+	const backToExamList = useCallback(() => {
+		applyNavigation(resolveScreenEntry(NAV_SCREENS.SELECT, {
+			selectedSubjectId,
+			selectedExamId
+		}));
+	}, [selectedSubjectId, selectedExamId, applyNavigation]);
 
-			setActiveScreen(NAV_SCREENS.EXAM);
-			return;
-		}
-
-		if (nextScreen === NAV_SCREENS.FLIPCARDS) {
-			setSelectedExamId(null);
-
-			if (selectedSubjectId) {
-				setActiveScreen(NAV_SCREENS.FLIPCARDS);
-			} else {
-				setActiveScreen(NAV_SCREENS.SUBJECTS);
-			}
-
-			return;
-		}
-
-		if (nextScreen === NAV_SCREENS.OVERVIEW) {
-			showStatistics();
-			return;
-		}
-
-		if (nextScreen === NAV_SCREENS.NOTES) {
-			setSelectedExamId(null);
-			setActiveScreen(nextScreen);
-			return;
-		}
-
-		if (nextScreen === NAV_SCREENS.SETTINGS) {
-			setSettingsOpen(true);
-		}
-	}, [selectedSubjectId, selectedExamId, showAllSubjects, showStatistics]);
+	const goBack = useCallback(() => {
+		applyNavigation(resolveBackNavigation({
+			activeScreen,
+			selectedSubjectId,
+			selectedExamId
+		}));
+	}, [activeScreen, selectedSubjectId, selectedExamId, applyNavigation]);
 
 	const syncSelectedExamWithLanguage = useCallback(() => {
 		if (prevLanguageRef.current === params.language) {

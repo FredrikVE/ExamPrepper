@@ -1,6 +1,6 @@
 import { describe, expect, jest, test } from "@jest/globals";
-import { NAV_SCREENS } from "../../../src/navigation/navGraph.js";
-import { createAppBackContract, createAppLayoutClassNames } from "../../../src/ui/viewmodel/AppNavigationViewModel.js";
+import { NAV_SCREENS, createAppBackContract } from "../../../src/navigation/navGraph.js";
+import { createAppLayoutClassNames } from "../../../src/ui/viewmodel/AppNavigationViewModel.js";
 
 describe("createAppBackContract", () => {
 	test("hides back on the subjects root screen", () => {
