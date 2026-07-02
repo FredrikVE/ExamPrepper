@@ -103,9 +103,27 @@ export default function useAppNavigationViewModel(params) {
 	}, [activeScreen, selectedSubjectId, selectedExamId, applyNavigation]);
 
 	const resolveSyncedExam = useCallback((examId, subjectId) => {
+		console.debug("[language-sync] vm:onExamResolved", {
+			activeScreen,
+			previousExamId: selectedExamId,
+			previousSubjectId: selectedSubjectId,
+			nextExamId: examId,
+			nextSubjectId: subjectId
+		});
+
 		setSelectedExamId(examId);
 		setSelectedSubjectId(subjectId);
-	}, []);
+	}, [activeScreen, selectedExamId, selectedSubjectId]);
+
+	const handleSyncedExamUnavailable = useCallback(() => {
+		console.debug("[language-sync] vm:onExamUnavailable", {
+			activeScreen,
+			selectedExamId,
+			selectedSubjectId
+		});
+
+		backToExamList();
+	}, [activeScreen, selectedExamId, selectedSubjectId, backToExamList]);
 
 	useSyncSelectedExamWithLanguage({
 		language: params.language,
@@ -115,7 +133,7 @@ export default function useAppNavigationViewModel(params) {
 		getExamByIdUseCase: params.getExamByIdUseCase,
 		getExamByBaseIdAndLangUseCase: params.getExamByBaseIdAndLangUseCase,
 		onExamResolved: resolveSyncedExam,
-		onExamUnavailable: backToExamList
+		onExamUnavailable: handleSyncedExamUnavailable
 	});
 
 	const isSelectionScreen =

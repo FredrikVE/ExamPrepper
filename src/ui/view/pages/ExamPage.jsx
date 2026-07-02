@@ -21,7 +21,7 @@ export default function ExamPage({ viewModel }) {
         onNavigateNext: viewModel.nextQuestion
     });
 
-    if (viewModel.questionsLoading) {
+    if (viewModel.isInitialQuestionsLoad) {
         return (
             <ExamPageState>
                 <p className="exam-page-loading-message">

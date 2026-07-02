@@ -1,5 +1,5 @@
 // src/ui/viewmodel/ExamPageViewModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
 import getScoreLabel from "./Utils/getScoreLabel.js";
@@ -15,11 +15,13 @@ import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
 import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
+import shouldPreserveExamAttemptOnQuestionReload from "./ExamPage/shouldPreserveExamAttemptOnQuestionReload.js";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [questions, setQuestions] = useState([]);
+	const questionsRef = useRef([]);
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
@@ -165,6 +167,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const answeredPercentLabel = `${answeredPercent}%`;
 	const mobileWorkStatusLabel = `${elapsedTimeLabel} · ${answeredPercentLabel} ${copy.answeredLabel}`;
 	const canSubmitExam = !submitted && questions.length > 0;
+	const isInitialQuestionsLoad = questionsLoading && questions.length === 0;
 
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
@@ -362,24 +365,33 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 				setQuestionsLoading(true);
 				setQuestionsLoadError(null);
 
+				// examId is the question-load SSOT; language changes resolve to a translated examId.
 				const loadedQuestions = await getExamQuestionsUseCase.execute({
-					examId,
-					language
+					examId
 				});
 
 				if (!cancelled) {
+					const shouldPreserveAttempt = shouldPreserveExamAttemptOnQuestionReload(
+						questionsRef.current,
+						loadedQuestions
+					);
+
+					questionsRef.current = loadedQuestions;
 					setQuestions(loadedQuestions);
-					setAnswers({});
-					setSubmitted(false);
-					setShowAllFeedback(true);
-					setCurrentQuestionIndex(0);
-					setElapsedSeconds(0);
-					setExpandedAnswerOptionIndexesByQuestionId({});
-					setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
-					setSavedAttempt(null);
-					setAttemptSaveError(null);
-					setAttemptSaving(false);
-					setIsSubmitConfirmOpen(false);
+
+					if (!shouldPreserveAttempt) {
+						setAnswers({});
+						setSubmitted(false);
+						setShowAllFeedback(true);
+						setCurrentQuestionIndex(0);
+						setElapsedSeconds(0);
+						setExpandedAnswerOptionIndexesByQuestionId({});
+						setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
+						setSavedAttempt(null);
+						setAttemptSaveError(null);
+						setAttemptSaving(false);
+						setIsSubmitConfirmOpen(false);
+					}
 				}
 			}
 
@@ -401,7 +413,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return () => {
 			cancelled = true;
 		};
-	}, [copy.questionsLoadErrorMessage, getExamQuestionsUseCase, examId, language]);
+	}, [copy.questionsLoadErrorMessage, getExamQuestionsUseCase, examId]);
 
 	const clampCurrentQuestionIndex = useCallback(() => {
 		if (visibleQuestionCount === 0) {
@@ -451,6 +463,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		attemptSavingMessage: copy.attemptSavingMessage,
 
 		questionsLoading,
+		isInitialQuestionsLoad,
 		questionsLoadError,
 		submitted,
 		showAllFeedback,
