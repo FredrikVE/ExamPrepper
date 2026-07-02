@@ -1,6 +1,6 @@
 // src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx
 import { useCallback, useState } from "react";
-import MobileBottomSheet from "../../MobileBottomSheet/MobileBottomSheet.jsx";
+import DockedMobileBottomSheet from "../../MobileBottomSheet/DockedMobileBottomSheet.jsx";
 import ProgressPager from "../../ProgressPager/ProgressPager.jsx";
 import MobileFlipcardDeckToolGrid from "./MobileFlipcardDeckToolGrid.jsx";
 
@@ -20,17 +20,15 @@ export default function FlipcardsMobileFooterSheet(props) {
 
 	return (
 		<div className="flipcards-footer-sheet" data-open={isOpen ? "true" : "false"}>
-			<MobileBottomSheet
+			<DockedMobileBottomSheet
 				isOpen={isOpen}
 				onOpenChange={changeSheetOpen}
-				finalFocusRef={null}
 				contentId="flipcards-mobile-bottom-sheet"
 				title={props.labels.toolMenuTitle}
 				subtitle={props.labels.toolMenuSubtitle}
 				openLabel={props.labels.openToolMenuLabel}
 				closeLabel={props.labels.closeToolMenuLabel}
 				peekLabel={props.labels.toolMenuLabel}
-				hasPeek={true}
 				popupClassName=""
 				contentClassName="flipcards-mobile-bottom-sheet-content"
 			>
@@ -69,7 +67,7 @@ export default function FlipcardsMobileFooterSheet(props) {
 						onDeckToolSelect={selectDeckTool}
 					/>
 				)}
-			</MobileBottomSheet>
+			</DockedMobileBottomSheet>
 		</div>
 	);
 }

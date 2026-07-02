@@ -1,6 +1,6 @@
 // src/ui/view/components/PageTools/PageToolsMobileFooterSheet.jsx
 import { useCallback } from "react";
-import MobileBottomSheet from "../MobileBottomSheet/MobileBottomSheet.jsx";
+import DockedMobileBottomSheet from "../MobileBottomSheet/DockedMobileBottomSheet.jsx";
 import ToolCardGrid from "../ToolCard/ToolCardGrid.jsx";
 import { TOOL_CARD_SURFACES } from "../ToolCard/toolCardSurfaces.js";
 
@@ -37,17 +37,15 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
                 {renderControls()}
             </div>
 
-            <MobileBottomSheet
+            <DockedMobileBottomSheet
                 isOpen={isSheetOpen}
                 onOpenChange={onSheetOpenChange}
-                finalFocusRef={null}
                 contentId={sheetId}
                 title={tools.actionsLabel}
                 subtitle={tools.mobileHandleLabel}
                 openLabel={tools.openLabel}
                 closeLabel={tools.closeLabel}
                 peekLabel={tools.mobileHandleLabel}
-                hasPeek={true}
                 popupClassName=""
                 contentClassName="page-tools-mobile-bottom-sheet-content"
             >
@@ -64,7 +62,7 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
                     items={tools.items}
                     onSelectItem={selectTool}
                 />
-            </MobileBottomSheet>
+            </DockedMobileBottomSheet>
         </div>
     );
 }
