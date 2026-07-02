@@ -38,8 +38,6 @@ introdusere tilsvarende brudd.
 
 - **Filbanekommentarer uten mellomrom** — eldre filer bruker `//src/...` i stedet for `// src/...`
   (gjelder bl.a. `dependencies.js`, `ExamPage.jsx`, `ExamPageViewModel.js`).
-- **`src/utils/answer/getCorrectIndexes.js`** — har domenekjennskap (`question.options[n].correct`).
-  Hører i `src/model/domain/utils/` eller i det Use Case som bruker den.
 - **Domenekjennskap i `ExamPage.jsx`** — importerer `QUESTION_TYPES` og beregner layout
   (`shouldUseScrollFooter`, `isDragDropQuestion` osv.) direkte i View. Denne logikken
   hører i `ExamPageViewModel` og skal eksponeres som ferdige verdier.
@@ -333,7 +331,7 @@ export function getCorrectIndexes(question) {
         .filter(Boolean);
 }
 
-// Riktig — flytt til src/model/domain/utils/ eller inn i relevant UseCase
+// Riktig — domenespesifikk hjelpefunksjon ligger i src/model/domain/utils/.
 ```
 
 ---
@@ -887,7 +885,12 @@ Drill spesifikke props. `QuestionCard` skal ikke vite at en ViewModel eksisterer
 // Feil plassering:
 // src/utils/answer/getCorrectIndexes.js vet om question.options[n].correct
 ```
-Flytt til `src/model/domain/utils/` eller inn i det Use Case som bruker den.
+Slik logikk hører i `src/model/domain/utils/` eller direkte i det Use Case som bruker den.
+
+Nåværende eksempel i kodebasen:
+```txt
+src/model/domain/utils/getCorrectIndexes.js
+```
 
 **Komponent-tokens i `Tokens.css`**
 ```css
