@@ -125,7 +125,7 @@ export default function ExamSelectPage({ viewModel }) {
             )}
 
             <Footer
-                isOpen={viewModel.isSearchSheetOpen}
+                isOpen={viewModel.isFooterOpen}
                 className="exam-search-footer"
                 openClassName="exam-search-footer-open"
                 onBlur={(event) => {
@@ -138,7 +138,9 @@ export default function ExamSelectPage({ viewModel }) {
                     tools={viewModel.pageTools}
                     renderControls={renderSearchControls}
                     renderSearchContent={renderSearchContent}
-                    onCloseSheet={viewModel.closeExamSearchSheet}
+                    isSheetOpen={viewModel.isFooterSheetOpen}
+                    onOpenSheet={viewModel.openExamFooterSheet}
+                    onSheetOpenChange={viewModel.changeExamFooterSheetOpen}
                 />
             </Footer>
         </div>

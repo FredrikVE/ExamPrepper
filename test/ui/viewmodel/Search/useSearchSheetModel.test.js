@@ -54,6 +54,8 @@ describe("useSearchSheetModel", () => {
 		expect(viewModel.isSearchSheetOpen).toBe(false);
 		expect(viewModel.isSearchSuggestionsMode).toBe(true);
 		expect(viewModel.isFilterOptionsMode).toBe(false);
+		expect(viewModel.isFooterSheetOpen).toBe(false);
+		expect(viewModel.isFooterOpen).toBe(false);
 	});
 
 	test("closes the sheet when the owner page becomes inactive", () => {
@@ -65,10 +67,11 @@ describe("useSearchSheetModel", () => {
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
 		expect(stateSetters[2]).toHaveBeenCalledWith(false);
 		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 	});
 
 	test("toggles an already-open filter options sheet closed", () => {
-		stateValues.push("", "all", true, "filterOptions");
+		stateValues.push("", "all", true, "filterOptions", true);
 
 		const viewModel = useSearchSheetModel({
 			isActive: true,
@@ -77,6 +80,36 @@ describe("useSearchSheetModel", () => {
 
 		viewModel.openFilterOptions();
 
+		expect(stateSetters[0]).toHaveBeenCalledWith("");
+		expect(stateSetters[2]).toHaveBeenCalledWith(false);
+		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+	});
+
+	test("opens the controlled footer sheet with search suggestions", () => {
+		const viewModel = useSearchSheetModel({
+			isActive: true,
+			defaultFilterValue: "all"
+		});
+
+		viewModel.openSearchSuggestions();
+
+		expect(stateSetters[4]).toHaveBeenCalledWith(true);
+		expect(stateSetters[2]).toHaveBeenCalledWith(true);
+		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
+	});
+
+	test("closing the controlled footer sheet also closes search content", () => {
+		stateValues.push("term", "all", true, "searchSuggestions", true);
+
+		const viewModel = useSearchSheetModel({
+			isActive: true,
+			defaultFilterValue: "all"
+		});
+
+		viewModel.changeFooterSheetOpen(false);
+
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
 		expect(stateSetters[2]).toHaveBeenCalledWith(false);
 		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
@@ -91,6 +124,7 @@ describe("useSearchSheetModel", () => {
 		viewModel.selectFilterOption("faculty");
 
 		expect(stateSetters[1]).toHaveBeenCalledWith("faculty");
+		expect(stateSetters[4]).toHaveBeenCalledWith(true);
 		expect(stateSetters[2]).toHaveBeenCalledWith(true);
 		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
 	});

@@ -111,7 +111,7 @@ export default function SubjectSelectPage({ viewModel }) {
 			)}
 
 			<Footer
-				isOpen={viewModel.isSearchSheetOpen}
+				isOpen={viewModel.isFooterOpen}
 				className="subject-search-footer"
 				openClassName="subject-search-footer-open"
 				onBlur={(event) => {
@@ -124,7 +124,9 @@ export default function SubjectSelectPage({ viewModel }) {
 					tools={viewModel.pageTools}
 					renderControls={renderSearchControls}
 					renderSearchContent={renderSearchContent}
-					onCloseSheet={viewModel.closeSubjectSearchSheet}
+					isSheetOpen={viewModel.isFooterSheetOpen}
+					onOpenSheet={viewModel.openSubjectFooterSheet}
+					onSheetOpenChange={viewModel.changeSubjectFooterSheetOpen}
 				/>
 			</Footer>
 		</div>

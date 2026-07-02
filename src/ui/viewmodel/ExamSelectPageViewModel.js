@@ -22,11 +22,15 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         isSearchSheetOpen,
         isSearchSuggestionsMode,
         isFilterOptionsMode,
+        isFooterSheetOpen,
+        isFooterOpen,
         changeSearchTerm: changeExamSearchTerm,
         changeFilterValue: changeCategory,
         selectFilterOption: selectCategoryFilterOption,
         openSearchSuggestions: openExamSearchSuggestions,
         openFilterOptions: openExamCategoryOptions,
+        openFooterSheet: openExamFooterSheet,
+        changeFooterSheetOpen: changeExamFooterSheetOpen,
         closeSearchSheet: closeExamSearchSheet
     } = examSearchSheet;
 
@@ -160,6 +164,8 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         isSearchSheetOpen,
         isSearchSuggestionsMode,
         isFilterOptionsMode,
+        isFooterSheetOpen,
+        isFooterOpen,
         searchSuggestions,
         categoryFilterOptions,
         searchCloseLabel: t.searchCloseLabel,
@@ -174,6 +180,8 @@ export default function useExamSelectPageViewModel(getAvailableExamsUseCase, lan
         selectCategoryFilterOption,
         openExamSearchSuggestions,
         openExamCategoryOptions,
+        openExamFooterSheet,
+        changeExamFooterSheetOpen,
         closeExamSearchSheet,
         selectExam
     };

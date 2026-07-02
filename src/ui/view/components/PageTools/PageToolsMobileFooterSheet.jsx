@@ -1,28 +1,13 @@
 // src/ui/view/components/PageTools/PageToolsMobileFooterSheet.jsx
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import MobileBottomSheet from "../MobileBottomSheet/MobileBottomSheet.jsx";
 import ToolCardGrid from "../ToolCard/ToolCardGrid.jsx";
 import { TOOL_CARD_SURFACES } from "../ToolCard/toolCardSurfaces.js";
 
-export default function PageToolsMobileFooterSheet({ tools, renderControls, renderSearchContent, onCloseSheet }) {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const openSheet = useCallback(() => {
-        setIsOpen(true);
-    }, []);
-
+export default function PageToolsMobileFooterSheet({ tools, renderControls, renderSearchContent, isSheetOpen, onOpenSheet, onSheetOpenChange }) {
     const closeSheet = useCallback(() => {
-        setIsOpen(false);
-        onCloseSheet();
-    }, [onCloseSheet]);
-
-    const changeSheetOpen = useCallback((nextIsOpen) => {
-        setIsOpen(nextIsOpen);
-
-        if (!nextIsOpen) {
-            onCloseSheet();
-        }
-    }, [onCloseSheet]);
+        onSheetOpenChange(false);
+    }, [onSheetOpenChange]);
 
     const selectTool = useCallback((toolItem) => {
         if (!toolItem.onSelect) {
@@ -46,15 +31,15 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
     const searchContent = renderSearchContent();
 
     return (
-        <div className="page-tools-mobile-footer-shell" data-open={isOpen ? "true" : "false"}>
+        <div className="page-tools-mobile-footer-shell" data-open={isSheetOpen ? "true" : "false"}>
             <div className="page-tools-mobile-inline-content">
                 {renderSearchContent()}
                 {renderControls()}
             </div>
 
             <MobileBottomSheet
-                isOpen={isOpen}
-                onOpenChange={changeSheetOpen}
+                isOpen={isSheetOpen}
+                onOpenChange={onSheetOpenChange}
                 finalFocusRef={null}
                 contentId={sheetId}
                 title={tools.actionsLabel}
@@ -66,7 +51,7 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
                 popupClassName=""
                 contentClassName="page-tools-mobile-bottom-sheet-content"
             >
-                <div className="page-tools-mobile-sheet-controls" onFocusCapture={openSheet} onPointerDownCapture={openSheet}>
+                <div className="page-tools-mobile-sheet-controls" onFocusCapture={onOpenSheet} onPointerDownCapture={onOpenSheet}>
                     {renderControls()}
                 </div>
 

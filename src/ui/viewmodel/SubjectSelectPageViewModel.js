@@ -20,11 +20,15 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		isSearchSheetOpen,
 		isSearchSuggestionsMode,
 		isFilterOptionsMode,
+		isFooterSheetOpen,
+		isFooterOpen,
 		changeSearchTerm: changeSubjectSearchTerm,
 		changeFilterValue: changeFaculty,
 		selectFilterOption: selectFacultyFilterOption,
 		openSearchSuggestions: openSubjectSearchSuggestions,
 		openFilterOptions: openSubjectFacultyOptions,
+		openFooterSheet: openSubjectFooterSheet,
+		changeFooterSheetOpen: changeSubjectFooterSheetOpen,
 		closeSearchSheet: closeSubjectSearchSheet
 	} = subjectSearchSheet;
 
@@ -152,6 +156,8 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		isSearchSheetOpen,
 		isSearchSuggestionsMode,
 		isFilterOptionsMode,
+		isFooterSheetOpen,
+		isFooterOpen,
 		searchSuggestions,
 		facultyFilterOptions,
 
@@ -161,6 +167,8 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectFacultyFilterOption,
 		openSubjectSearchSuggestions,
 		openSubjectFacultyOptions,
+		openSubjectFooterSheet,
+		changeSubjectFooterSheetOpen,
 		closeSubjectSearchSheet,
 		selectSubject
 	};
