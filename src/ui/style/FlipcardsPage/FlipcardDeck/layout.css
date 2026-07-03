@@ -169,11 +169,11 @@
 	border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--line));
 	border-radius: var(--flipcard-radius);
 	background:
-		linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, #ffffff), rgba(255, 255, 255, 0.98)),
-		color-mix(in srgb, var(--panel-strong) 96%, #ffffff);
+		linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, var(--flipcard-face-surface)), color-mix(in srgb, var(--flipcard-face-surface) 98%, transparent)),
+		color-mix(in srgb, var(--panel-strong) 96%, var(--flipcard-face-surface));
 	box-shadow:
 		0 24px 68px rgba(18, 38, 63, 0.13),
-		inset 0 1px 0 rgba(255, 255, 255, 0.9);
+		inset 0 1px 0 var(--flipcard-face-inset-highlight);
 	text-align: center;
 	isolation: isolate;
 }
@@ -188,7 +188,7 @@
 		radial-gradient(circle at 50% 20%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 38%),
 		radial-gradient(circle at 12% 58%, rgba(239, 68, 68, 0.08), transparent 44%),
 		radial-gradient(circle at 88% 58%, rgba(16, 185, 129, 0.1), transparent 46%),
-		linear-gradient(115deg, transparent 22%, rgba(255, 255, 255, 0.52) 46%, transparent 64%);
+		linear-gradient(115deg, transparent 22%, var(--flipcard-face-sheen) 46%, transparent 64%);
 	background-size: 150% 150%, 130% 130%, 130% 130%, 230% 230%;
 	background-position: 50% 44%, 0% 50%, 100% 50%, -40% 50%;
 	opacity: 0.74;
@@ -202,7 +202,7 @@
 	inset: 0;
 	z-index: -1;
 	background:
-		linear-gradient(120deg, rgba(255, 255, 255, 0.72), transparent 30%, transparent 68%, color-mix(in srgb, var(--accent) 6%, transparent));
+		linear-gradient(120deg, color-mix(in srgb, var(--flipcard-face-surface) 70%, transparent), transparent 30%, transparent 68%, color-mix(in srgb, var(--accent) 6%, transparent));
 	opacity: 0.8;
 	pointer-events: none;
 }
@@ -216,12 +216,12 @@
 	border: 1px solid rgba(16, 185, 129, 0.28);
 	border-radius: var(--radius-full);
 	background:
-		radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.78), transparent 34%),
-		rgba(16, 185, 129, 0.1);
+		radial-gradient(circle at 32% 24%, var(--flipcard-face-inset-highlight), transparent 34%),
+		var(--success-soft);
 	box-shadow:
 		0 0 30px rgba(16, 185, 129, 0.16),
 		0 16px 34px rgba(18, 38, 63, 0.12),
-		inset 0 1px 0 rgba(255, 255, 255, 0.74);
+		inset 0 1px 0 var(--flipcard-face-inset-highlight);
 	color: var(--flipcards-green);
 	font-size: clamp(38px, 6vw, 52px);
 	font-weight: 900;
