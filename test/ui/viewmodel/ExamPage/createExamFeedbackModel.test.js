@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import createExamFeedbackModel from "../../../../src/ui/viewmodel/ExamPage/createExamFeedbackModel.js";
 
 const firstQuestion = { id: "q1" };

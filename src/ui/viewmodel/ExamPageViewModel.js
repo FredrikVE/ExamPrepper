@@ -1,5 +1,5 @@
 // src/ui/viewmodel/ExamPageViewModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
@@ -60,20 +60,31 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		onSubmitStarted: requestScrollToTop
 	});
 
-	const handleQuestionsLoaded = useCallback(({ loadedQuestions, shouldPreserveAttempt }) => {
-		if (shouldPreserveAttempt) {
-			return;
-		}
-
+	/* SSOT for hard reset av eksamensforsøket: svar, submit-tilstand, feedback,
+	   indeks, timer, expansion og alternativ-rekkefølge nullstilles samlet.
+	   Kallstedene definerer scenarioene:
+	   - nytt question-set etter load  → hardResetExamAttempt(loadedQuestions)
+	   - manuell reset-knapp           → hardResetExamAttempt(questions) + scroll
+	   Soft reload (samme question-set, f.eks. språkbytte) skal ALDRI hit —
+	   den avgjøres av shouldPreserveExamAttemptOnQuestionReload i load-modellen. */
+	const hardResetExamAttempt = useCallback((questionSet) => {
 		setAnswers({});
 		setSubmitted(false);
 		setShowAllFeedback(true);
 		setCurrentQuestionIndex(0);
 		resetElapsedSeconds();
 		setExpandedAnswerOptionIndexesByQuestionId({});
-		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
+		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questionSet));
 		resetSubmitModel();
 	}, [resetElapsedSeconds, resetSubmitModel]);
+
+	const handleQuestionsLoaded = useCallback(({ loadedQuestions, shouldPreserveAttempt }) => {
+		if (shouldPreserveAttempt) {
+			return;
+		}
+
+		hardResetExamAttempt(loadedQuestions);
+	}, [hardResetExamAttempt]);
 
 	const {
 		questions,
@@ -300,17 +311,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	}, [confirmSubmitExamAttempt, createSubmitAttemptInput]);
 
 	const resetExam = useCallback(() => {
-		setAnswers({});
-		setSubmitted(false);
-		setShowAllFeedback(true);
-		setCurrentQuestionIndex(0);
-		resetElapsedSeconds();
-		setExpandedAnswerOptionIndexesByQuestionId({});
-		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questions));
-		resetSubmitModel();
-
+		hardResetExamAttempt(questions);
 		requestScrollToTop();
-	}, [questions, requestScrollToTop, resetElapsedSeconds, resetSubmitModel]);
+	}, [hardResetExamAttempt, questions, requestScrollToTop]);
 
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);

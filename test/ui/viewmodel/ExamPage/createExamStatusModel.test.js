@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { QUESTION_TYPES } from "../../../../src/constants/QuestionTypes.js";
 import createExamStatusModel from "../../../../src/ui/viewmodel/ExamPage/createExamStatusModel.js";
 
