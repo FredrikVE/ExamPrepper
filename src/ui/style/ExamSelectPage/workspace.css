@@ -1,58 +1,15 @@
 /* src/ui/style/ExamSelectPage/workspace.css */
 .exam-select-layout {
-    --workspace-scaffold-inset: clamp(28px, 3.4vw, 48px);
-    --workspace-scaffold-content-top: clamp(124px, 9vw, 142px);
-    --exam-search-footer-space: clamp(132px, 16vh, 184px);
-
-    position: relative;
-    min-width: 0;
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
-}
-
-.exam-select-workspace {
-    position: relative;
-    min-width: 0;
-    min-height: 0;
-    height: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    isolation: isolate;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-lg);
-    background: var(--shell-bg);
-    box-shadow: var(--shadow-heavy);
-    backdrop-filter: var(--blur-panel);
-}
-
-.exam-select-scroll {
-    position: absolute;
-    z-index: 1;
-    inset: 0;
-    box-sizing: border-box;
-    min-width: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: none;
-    padding:
-        var(--workspace-scaffold-content-top)
-        var(--workspace-scaffold-inset)
-        calc(var(--workspace-scaffold-inset) + var(--exam-search-footer-space));
-}
-
-.exam-select-scroll::-webkit-scrollbar {
-    display: none;
+    --scaffold-inset: clamp(28px, 3.4vw, 48px);
+    --scaffold-content-top: clamp(124px, 9vw, 142px);
+    --select-search-footer-space: clamp(132px, 16vh, 184px);
+    --select-search-footer-padding: 18px clamp(36px, 4vw, 64px) clamp(24px, 3vw, 42px);
+    --select-mobile-scroll-inline-padding: 24px;
 }
 
 .exam-select-ambient-light {
-    position: absolute;
-    z-index: 0;
     inset: -20% -10% auto auto;
     width: min(820px, 64vw);
     height: 520px;
-    pointer-events: none;
     background: radial-gradient(circle at 50% 15%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%);
-    filter: blur(2px);
 }

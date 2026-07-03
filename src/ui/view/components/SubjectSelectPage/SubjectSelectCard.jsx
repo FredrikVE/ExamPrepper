@@ -3,12 +3,18 @@ import { ChevronRight, FileText } from "lucide-react";
 import SubjectIcon from "../SubjectIcon.jsx";
 
 export default function SubjectSelectCard({ t, subject, index, isSelected, onSelectSubject }) {
+    const titleId = `subject-card-title-${subject.id}`;
+    const descriptionId = `subject-card-description-${subject.id}`;
+
     return (
-        <button
-            type="button"
-            className={`subject-card subject-card-${index + 1} ${isSelected ? "subject-card-selected" : ""}`}
-            onClick={() => onSelectSubject(subject.id)}
-        >
+        <article className={`subject-card subject-card-${index + 1} ${isSelected ? "subject-card-selected" : ""}`}>
+            <button
+                type="button"
+                className="subject-card-action"
+                onClick={() => onSelectSubject(subject.id)}
+                aria-labelledby={`${titleId} ${descriptionId}`}
+            />
+
             <span className="subject-card-icon-wrap" aria-hidden="true">
                 <SubjectIcon icon={subject.icon} className="subject-card-icon" />
             </span>
@@ -17,11 +23,11 @@ export default function SubjectSelectCard({ t, subject, index, isSelected, onSel
                 {subject.code}
             </span>
 
-            <span className="subject-card-title">
+            <span id={titleId} className="subject-card-title">
                 {subject.name}
             </span>
 
-            <span className="subject-card-description">
+            <span id={descriptionId} className="subject-card-description">
                 {subject.description}
             </span>
 
@@ -35,6 +41,6 @@ export default function SubjectSelectCard({ t, subject, index, isSelected, onSel
                     <ChevronRight className="subject-card-arrow-icon" />
                 </span>
             </span>
-        </button>
+        </article>
     );
 }

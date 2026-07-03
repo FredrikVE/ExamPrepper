@@ -1,0 +1,38 @@
+/* src/ui/style/ExamPage/exam-toolbar-tokens.css */
+
+:root {
+    --header-padding-desktop: var(--space-9) var(--space-10) var(--space-8);
+    --header-padding-tablet: calc(var(--mobile-topbar-height, var(--space-11)) + var(--space-4)) var(--space-6) var(--space-5);
+    --header-padding-mobile: calc(var(--mobile-topbar-height, var(--space-11)) + var(--space-4)) var(--space-6) var(--space-7);
+
+    --header-layout-gap: var(--space-8);
+    --header-actions-gap: var(--space-3);
+
+    --header-button-min-height: 54px;
+    --header-button-padding: 0 var(--space-7);
+    --header-button-font-size: 0.94rem;
+    --header-button-font-weight: 800;
+    --header-button-hover-offset: -1px;
+
+    --header-icon-size: var(--space-7);
+
+    --header-stat-card-min-width: 84px;
+    --header-stat-card-icon-column: var(--space-9);
+    --header-stat-card-gap: var(--space-2);
+    --header-stat-card-padding: var(--space-3) var(--space-4);
+    --header-stat-card-mobile-padding: var(--space-3);
+
+    --header-stat-icon-size: var(--space-9);
+    --header-stat-icon-svg-size: 15px;
+
+    --header-stat-value-font-size: 0.94rem;
+    --header-stat-value-font-weight: 850;
+
+    --header-stat-label-margin-top: 2px;
+    --header-stat-label-font-size: 0.74rem;
+    --header-stat-label-font-weight: 600;
+
+    --header-stat-card-bg: var(--exam-toolbar-stat-card-bg);
+    --header-stat-card-shadow: var(--exam-toolbar-stat-card-shadow);
+    --header-primary-button-shadow: var(--exam-toolbar-primary-button-shadow);
+}

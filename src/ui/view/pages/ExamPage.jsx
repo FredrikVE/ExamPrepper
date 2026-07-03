@@ -1,17 +1,27 @@
 // src/ui/view/pages/ExamPage.jsx
-import Header from "../components/Header/Header.jsx";
+import ExamToolbar from "../components/ExamPage/ExamToolbar.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
 import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
 import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
+import useExamFooterNavigationKeys from "../components/ExamPage/useExamFooterNavigationKeys.js";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel }) {
     const { t } = useLanguage();
 
-    if (viewModel.questionsLoading) {
+    useExamFooterNavigationKeys({
+        isEnabled: viewModel.isFooterNavigationEnabled,
+        canGoPrevious: viewModel.canGoPrevious,
+        canGoNext: viewModel.canGoNext,
+        submitted: viewModel.submitted,
+        onNavigatePrevious: viewModel.previousQuestion,
+        onNavigateNext: viewModel.nextQuestion
+    });
+
+    if (viewModel.isInitialQuestionsLoad) {
         return (
             <ExamPageState>
                 <p className="exam-page-loading-message">
@@ -37,7 +47,14 @@ export default function ExamPage({ viewModel }) {
                 className={viewModel.workspaceClassName}
                 scrollToTopRequestId={viewModel.scrollToTopRequestId}
             >
-                <Header viewModel={viewModel} />
+                <ExamToolbar
+                    answeredPercentLabel={viewModel.answeredPercentLabel}
+                    scoreLabel={viewModel.scoreLabel}
+                    elapsedTimeLabel={viewModel.elapsedTimeLabel}
+                    submitted={viewModel.submitted}
+                    onSubmit={viewModel.openSubmitConfirmation}
+                    onReset={viewModel.resetExam}
+                />
 
                 {viewModel.attemptSaving && (
                     <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>

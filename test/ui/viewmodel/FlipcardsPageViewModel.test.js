@@ -112,6 +112,8 @@ function createViewModel(params) {
 		createTranslations(),
 		false,
 		true,
+		"sidebarBack",
+		"sidebarMobileNavigation",
 		onBack
 	);
 

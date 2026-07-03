@@ -1,0 +1,23 @@
+/* src/ui/style/Footer/footer.css */
+.footer {
+    isolation: isolate;
+}
+
+.footer-open {
+    z-index: 50;
+}
+
+@media (min-width: 933px) {
+    .footer {
+        border-right: 1px solid var(--line-strong);
+        border-bottom: 1px solid var(--line-strong);
+        border-left: 1px solid var(--line-strong);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    .footer-open {
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+}

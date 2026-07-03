@@ -205,7 +205,7 @@ const FLIPCARDS_DECK_TOOL_ITEMS = [
     }
 ];
 
-export const PAGE_TOOL_GROUPS_BY_SCREEN = {
+const PAGE_TOOL_GROUPS_BY_SCREEN = {
     [NAV_SCREENS.SUBJECTS]: {
         id: PAGE_TOOL_GROUP_IDS.SUBJECT_SELECT,
         screen: NAV_SCREENS.SUBJECTS,
@@ -262,10 +262,6 @@ export const PAGE_TOOL_GROUPS_BY_SCREEN = {
         items: []
     }
 };
-export function getWorkspaceActionToolItems() {
-    return WORKSPACE_ACTION_TOOL_ITEMS;
-}
-
 export function getSubjectSelectWorkspaceActionToolItems() {
     return SUBJECT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS;
 }
@@ -274,9 +270,6 @@ export function getExamSelectWorkspaceActionToolItems() {
     return EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS;
 }
 
-export function getSelectionWorkspaceActionToolItems() {
-    return getExamSelectWorkspaceActionToolItems();
-}
 
 export function getPageToolGroup(screen) {
     return PAGE_TOOL_GROUPS_BY_SCREEN[screen] ?? null;

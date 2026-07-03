@@ -6,7 +6,7 @@
 
 Selve React-komponentene ligger under `ui/view/components/`, mens sider ligger under `ui/view/pages/`. Styling er samlet separat i `ui/style/`, slik at komponentstruktur og CSS-struktur holdes adskilt, men fortsatt speiler hverandre der det gir bedre feature-eierskap.
 
-Den mest detaljerte delen av strukturen ligger under `ExamPage/QuestionCard/`, der oppgavetypene er samlet i `QuestionTypes/`. Hver oppgavetype har egne komponenter og eventuelle lokale `Utils/`, mens felles komponenter for hele spørsmålsvisningen ligger i `Shared/`. CSS-en for `QuestionCard` følger samme feature-inndeling under `src/ui/style/QuestionCard`, med delte base-stiler i `Base/` og spørsmålstype-spesifikk styling under `QuestionTypes/`. Globale hjelpefunksjoner beholdes kun i `src/utils/` når de brukes på tvers av flere lag eller features.
+Den mest detaljerte delen av strukturen ligger under `ExamPage/QuestionCard/`, der oppgavetypene er samlet i `QuestionTypes/`. Hver oppgavetype har egne komponenter og eventuelle lokale `Utils/`, mens felles komponenter for hele spørsmålsvisningen ligger i `Shared/`. CSS-en for `QuestionCard` følger samme feature-inndeling under `src/ui/style/QuestionCard`, med delte base-stiler i `Base/` og spørsmålstype-spesifikk styling under `QuestionTypes/`. Globale hjelpefunksjoner beholdes kun i `src/utils/` når de er tekniske og domeneløse. Domenespesifikke hjelpefunksjoner ligger i `src/model/domain/utils/`.
 
 ```bash
 IN5431-Exam-Emulator/
@@ -55,6 +55,10 @@ IN5431-Exam-Emulator/
     │   ├── datasource/
     │   │   └── ...
     │   ├── domain/
+    │   │   ├── utils/
+    │   │   │   ├── fuzzyMatch.js
+    │   │   │   ├── getCorrectIndexes.js
+    │   │   │   └── normalizeAnswer.js
     │   │   └── ...
     │   └── repositories/
     │       └── ...
@@ -180,8 +184,4 @@ IN5431-Exam-Emulator/
     │       ├── SubjectSelectPageViewModel.js
     │       └── Utils/
     │           └── ...
-    └── utils/
-        └── answer/
-            ├── getCorrectIndexes.js
-            └── normalizeAnswer.js
 ```

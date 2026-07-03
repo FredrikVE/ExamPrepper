@@ -1,29 +1,18 @@
 /* src/ui/style/StatisticsPage/recommended.css */
 .statistics-recommended-panel {
-	--recommended-accent: #ff3d6e;
-	--recommended-accent-soft: #fff0f5;
-	--recommended-card-bg: #fff5f7;
-	--recommended-card-border: #ffe1e9;
-	--recommended-icon-bg: #fff0f4;
-	--recommended-icon-border: #ffdce6;
-	--recommended-badge-bg: #ffeaf0;
-	--recommended-heart-border: #ffd9e5;
+	--recommended-accent: var(--statistics-recommended-accent);
+	--recommended-accent-soft: var(--statistics-recommended-accent-soft);
+	--recommended-card-bg: var(--statistics-recommended-card-bg);
+	--recommended-card-border: var(--statistics-recommended-card-border);
+	--recommended-icon-bg: var(--statistics-recommended-icon-bg);
+	--recommended-icon-border: var(--statistics-recommended-icon-border);
+	--recommended-badge-bg: var(--statistics-recommended-badge-bg);
+	--recommended-heart-border: var(--statistics-recommended-heart-border);
 
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
 	row-gap: var(--space-7);
 	align-content: start;
-}
-
-.dark .statistics-recommended-panel {
-	--recommended-accent: #ff7aa2;
-	--recommended-accent-soft: rgba(255, 61, 110, 0.14);
-	--recommended-card-bg: rgba(255, 61, 110, 0.1);
-	--recommended-card-border: rgba(255, 122, 162, 0.28);
-	--recommended-icon-bg: rgba(255, 61, 110, 0.13);
-	--recommended-icon-border: rgba(255, 122, 162, 0.32);
-	--recommended-badge-bg: rgba(255, 61, 110, 0.16);
-	--recommended-heart-border: rgba(255, 122, 162, 0.32);
 }
 
 .statistics-recommended-panel .statistics-recommended-heading {

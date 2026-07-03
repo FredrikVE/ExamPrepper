@@ -1,33 +1,23 @@
 /* src/ui/style/FlipcardsPage/tokens.css */
-.flipcards-workspace {
-	--flipcards-bg: #f7fbff;
-	--flipcards-bg-elevated: #ffffff;
-	--flipcards-line-strong: rgba(43, 63, 92, 0.16);
-	--flipcards-purple-soft: #5f55f7;
-	--flipcards-green: #059669;
-	--flipcards-green-soft: rgba(16, 185, 129, 0.1);
-	--flipcards-red: #dc2626;
-	--flipcards-red-soft: rgba(239, 68, 68, 0.1);
-	--flipcards-amber: #b45309;
-	--flipcards-amber-soft: rgba(245, 158, 11, 0.12);
-	--flipcards-glass-shadow: 0 28px 90px rgba(18, 38, 63, 0.14);
-	--flipcards-soft-shadow: 0 16px 48px rgba(18, 38, 63, 0.09);
-
-	--shell-bg: rgba(255, 255, 255, 0.94);
-	--panel-bg: rgba(255, 255, 255, 0.88);
-	--panel-strong: #ffffff;
-	--text-main: #071124;
-	--text-muted: #5d6b85;
-	--text-soft: #8390a7;
-	--line: rgba(113, 128, 150, 0.22);
-	--line-strong: var(--flipcards-line-strong);
-	--accent: #1067ff;
-	--accent-soft: rgba(16, 103, 255, 0.1);
-	--accent-strong: #0057ee;
-	--success-text: var(--flipcards-green);
-	--warning-text: var(--flipcards-amber);
-	--danger-text: var(--flipcards-red);
-	--shadow-card: var(--flipcards-soft-shadow);
-	--shadow-heavy: var(--flipcards-glass-shadow);
-	--blur-panel: blur(24px);
+/*
+ * Flipcards-scopede tokens.
+ *
+ * Regel (SSOT for tema): dette scopet inneholder KUN avledninger av
+ * globale semantiske tokens fra Tokens.css. Ingen literale farger,
+ * ingen redeklarasjon av globale token-navn, ingen color-scheme —
+ * alt tema-eierskap (lys/mørk) ligger i Tokens.css (:root / .dark).
+ * Flipcards-spesifikke verdipar (purple/green/amber) bor også i
+ * Tokens.css, slik at .dark aldri forekommer i denne mappen.
+ */
+.flipcards-theme-scope,
+.flipcards-workspace,
+.desktop-pop-out-menu__panel--flipcards {
+	--flipcards-bg: var(--app-bg);
+	--flipcards-bg-elevated: var(--panel-strong);
+	--flipcards-line-strong: var(--line-strong);
+	--flipcards-green-soft: var(--success-soft);
+	--flipcards-red: var(--danger);
+	--flipcards-red-soft: var(--danger-soft);
+	--flipcards-glass-shadow: var(--shadow-heavy);
+	--flipcards-soft-shadow: var(--shadow-card);
 }

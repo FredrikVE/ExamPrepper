@@ -46,7 +46,13 @@ function AppContent() {
 	const [examWorkMode, setExamWorkMode] = useState(null);
 	const examWorkModeActionsRef = useRef(null);
 
-	const navigationViewModel = useAppNavigationViewModel({ language, getExamByIdUseCase, getExamByBaseIdAndLangUseCase });
+	const navigationViewModel = useAppNavigationViewModel({
+		language,
+		getExamByIdUseCase,
+		getExamByBaseIdAndLangUseCase,
+		backLabel: t.sidebarBack,
+		navigationLabel: t.sidebarMobileNavigation
+	});
 
 	const openExamSubmitConfirm = useCallback(() => {
 		examWorkModeActionsRef.current?.openConfirm();
@@ -57,9 +63,9 @@ function AppContent() {
 	}, []);
 
 	const confirmExamSubmit = useCallback(() => {
-		navigationViewModel.closeMenu();
+		navigationViewModel.closeMobileDropDownTopBarMenu();
 		examWorkModeActionsRef.current?.confirmSubmit();
-	}, [navigationViewModel.closeMenu]);
+	}, [navigationViewModel.closeMobileDropDownTopBarMenu]);
 
 	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
 		getAvailableSubjectsUseCase,
@@ -80,7 +86,9 @@ function AppContent() {
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
 		navigationViewModel.changeScreen,
 		navigationViewModel.showBackButton,
-		navigationViewModel.goBack
+		navigationViewModel.backLabel,
+		navigationViewModel.navigationLabel,
+		navigationViewModel.onBack
 	);
 
 
@@ -90,20 +98,22 @@ function AppContent() {
 				<AppNavigation
 					activeScreen={navigationViewModel.activeScreen}
 					onChangeScreen={navigationViewModel.changeScreen}
-					settingsOpen={navigationViewModel.settingsOpen}
-					onOpenSettings={navigationViewModel.openSettings}
-					onCloseSettings={navigationViewModel.closeSettings}
-					onBackFromSettings={navigationViewModel.backFromSettingsToMenu}
-					isMenuOpen={navigationViewModel.isMenuOpen}
-					onToggleMenu={navigationViewModel.toggleMenu}
-					onCloseMenu={navigationViewModel.closeMenu}
-					isSubjectPickerOpen={navigationViewModel.isSubjectPickerOpen}
-					onToggleSubjectPicker={navigationViewModel.toggleSubjectPicker}
-					onCloseSubjectPicker={navigationViewModel.closeSubjectPicker}
+					isSettingsPresentationOpen={navigationViewModel.isSettingsPresentationOpen}
+					onOpenSettingsPresentation={navigationViewModel.openSettingsPresentation}
+					onCloseSettingsPresentation={navigationViewModel.closeSettingsPresentation}
+					onBackFromSettingsToMobileDropDownTopBarMenu={navigationViewModel.backFromSettingsToMobileDropDownTopBarMenu}
+					isMobileDropDownTopBarMenuOpen={navigationViewModel.isMobileDropDownTopBarMenuOpen}
+					onToggleMobileDropDownTopBarMenu={navigationViewModel.toggleMobileDropDownTopBarMenu}
+					onCloseMobileDropDownTopBarMenu={navigationViewModel.closeMobileDropDownTopBarMenu}
+					isMobileSubjectPickerOpen={navigationViewModel.isMobileSubjectPickerOpen}
+					onToggleMobileSubjectPicker={navigationViewModel.toggleMobileSubjectPicker}
+					onCloseMobileSubjectPicker={navigationViewModel.closeMobileSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					hasSelectedSubject={Boolean(navigationViewModel.selectedSubjectId)}
 					showBackButton={navigationViewModel.showBackButton}
-					onBack={navigationViewModel.goBack}
+					backLabel={navigationViewModel.backLabel}
+					navigationLabel={navigationViewModel.navigationLabel}
+					onBack={navigationViewModel.onBack}
 					subjects={subjectSelectPageViewModel.subjects}
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
 					onSelectSubject={navigationViewModel.selectSubject}
@@ -146,7 +156,9 @@ function AppContent() {
 						language={language}
 						t={t}
 						showBackButton={navigationViewModel.showBackButton}
-						onBack={navigationViewModel.goBack}
+						backLabel={navigationViewModel.backLabel}
+						navigationLabel={navigationViewModel.navigationLabel}
+						onBack={navigationViewModel.onBack}
 					/>
 				)}
 
@@ -160,9 +172,8 @@ function AppContent() {
 
 				<SettingsPresentation
 					mode={navigationViewModel.settingsPresentationMode}
-					isOpen={navigationViewModel.settingsOpen}
-					onClose={navigationViewModel.closeSettings}
-					onBackToMenu={navigationViewModel.backFromSettingsToMenu}
+					isOpen={navigationViewModel.isSettingsPresentationOpen}
+					onClose={navigationViewModel.closeSettingsPresentation}
 				/>
 			</div>
 		</div>
@@ -218,7 +229,7 @@ function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkMo
 	);
 }
 
-function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, onBack }) {
+function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, backLabel, navigationLabel, onBack }) {
 	const flipcardsPageViewModel = useFlipcardsPageViewModel(
 		getFlashcardsUseCase,
 		subjectId,
@@ -226,6 +237,8 @@ function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, onBack }
 		t,
 		true,
 		showBackButton,
+		backLabel,
+		navigationLabel,
 		onBack
 	);
 

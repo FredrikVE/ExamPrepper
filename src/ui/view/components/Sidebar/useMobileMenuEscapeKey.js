@@ -2,17 +2,17 @@
 import { useEffect } from "react";
 
 export default function useMobileMenuEscapeKey({
-	isMenuOpen,
-	onCloseMenu,
-	isSettingsOpen,
-	onCloseSettings,
+	isMobileDropDownTopBarMenuOpen,
+	onCloseMobileDropDownTopBarMenu,
+	isSettingsPresentationOpen,
+	onCloseSettingsPresentation,
 	isSubmitConfirmOpen,
 	onCloseSubmitConfirm,
-	isSubjectPickerOpen,
-	onCloseSubjectPicker
+	isMobileSubjectPickerOpen,
+	onCloseMobileSubjectPicker
 }) {
 	useEffect(() => {
-		if (!isMenuOpen || typeof window === "undefined") {
+		if (!isMobileDropDownTopBarMenuOpen || typeof window === "undefined") {
 			return undefined;
 		}
 
@@ -21,8 +21,8 @@ export default function useMobileMenuEscapeKey({
 				return;
 			}
 
-			if (isSettingsOpen && onCloseSettings) {
-				onCloseSettings();
+			if (isSettingsPresentationOpen && onCloseSettingsPresentation) {
+				onCloseSettingsPresentation();
 				return;
 			}
 
@@ -31,12 +31,12 @@ export default function useMobileMenuEscapeKey({
 				return;
 			}
 
-			if (isSubjectPickerOpen) {
-				onCloseSubjectPicker?.();
+			if (isMobileSubjectPickerOpen) {
+				onCloseMobileSubjectPicker?.();
 				return;
 			}
 
-			onCloseMenu();
+			onCloseMobileDropDownTopBarMenu();
 		};
 
 		window.addEventListener("keydown", handleEscape);
@@ -45,13 +45,13 @@ export default function useMobileMenuEscapeKey({
 			window.removeEventListener("keydown", handleEscape);
 		};
 	}, [
-		isMenuOpen,
-		onCloseMenu,
-		isSettingsOpen,
-		onCloseSettings,
+		isMobileDropDownTopBarMenuOpen,
+		onCloseMobileDropDownTopBarMenu,
+		isSettingsPresentationOpen,
+		onCloseSettingsPresentation,
 		isSubmitConfirmOpen,
 		onCloseSubmitConfirm,
-		isSubjectPickerOpen,
-		onCloseSubjectPicker
+		isMobileSubjectPickerOpen,
+		onCloseMobileSubjectPicker
 	]);
 }

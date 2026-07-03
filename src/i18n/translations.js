@@ -13,8 +13,8 @@ export const translations = {
     [LANGUAGES.NO]: {
         // SubjectSelectPage
         subjectSelectTitle: "Velg fag",
-        subjectSelectSubtitle: "Velg hvilket fag du vil øve på før du velger mock-eksamen.",
-        subjectSelectEyebrow: "Mock Exam Simulator",
+        subjectSelectSubtitle: "Velg hvilket fag du vil øve på før du velger øveprøve.",
+        subjectSelectEyebrow: "Øveprøvesimulator",
         subjectSearchLabel: "Søk etter fag",
         subjectSearchPlaceholder: "Søk på fagkode eller navn...",
         searchCloseLabel: "Lukk søk",
@@ -25,10 +25,10 @@ export const translations = {
         subjectEmptyMessage: "Fant ingen fag som matcher søket ditt.",
         subjectLoadingMessage: "Laster fag...",
         subjectErrorMessage: "Kunne ikke laste inn fag.",
-        subjectMockExamCount: (count) => `${count} mock-eksamen${count === 1 ? "" : "er"}`,
+        subjectMockExamCount: (count) => `${count} øveprøve${count === 1 ? "" : "r"}`,
         subjectAddPlaceholderCode: "OPPRETT FAG",
         subjectAddPlaceholderTitle: "Legg til nytt fag",
-        subjectAddPlaceholderDescription: "Sett opp et nytt fag med egne mock-eksamener, notater og forelesningsslides.",
+        subjectAddPlaceholderDescription: "Sett opp et nytt fag med egne øveprøver, notater og forelesningsslides.",
         subjectAddPlaceholderNote: "Ingen begrensning på antall fag",
 
         // ExamSelectPage
@@ -45,7 +45,7 @@ export const translations = {
         examAddPlaceholderDescription: "Sett opp en ny øvingsprøve med egne spørsmål, tid og innstillinger.",
         examAddPlaceholderNote: "Ingen begrensning på antall prøver",
         selectEmptyTitle: "Ingen eksamener tilgjengelig",
-        selectEmptyMessage: "Dette faget har ingen mock-eksamener ennå.",
+        selectEmptyMessage: "Dette faget har ingen øveprøver ennå.",
         selectLoadingMessage: "Laster eksamener...",
         examSearchLabel: "Søk etter eksamen",
         examSearchPlaceholder: "Søk etter eksamen...",
@@ -55,7 +55,7 @@ export const translations = {
         selectBackToSubjects: "Tilbake til fag",
 
         // Header
-        headerLabel: "Mock skoleeksamen",
+        headerLabel: "Øveprøve",
         headerTitle: "Eksamens-emulator med fasit",
         headerQuestionProgress: (current, total) => `Spørsmål ${current} av ${total}`,
         headerStatAnswered: "besvart",
@@ -245,7 +245,7 @@ export const translations = {
 		statisticsActivityHourShort: "t",
 		statisticsActivityMinuteShort: "min",
 		statisticsAttemptFallbackTitlePrefix: "Eksamen",
-		statisticsPracticeExamFallbackTitlePrefix: "Øveeksamen",
+		statisticsPracticeExamFallbackTitlePrefix: "Øveprøve",
 		statisticsDemoExamFallbackTitle: "Demoeksamen",
 		statisticsAttemptScoreLabel: "Score",
 		statisticsTrendPointLabel: "Forsøk",
@@ -285,7 +285,7 @@ export const translations = {
         pageToolsStatisticsTitle: "Statistikk-verktøy",
         pageToolsStatisticsSubtitle: "Handlinger for innsikt og progresjon",
         pageToolsStatisticsActionsLabel: "Statistikk-handlinger",
-        pageToolsExamsLabel: "Eksamner",
+        pageToolsExamsLabel: "Eksamener",
         pageToolsPracticeTestsLabel: "Øveprøver",
         pageToolsFlipcardsLabel: "Flipcards",
         pageToolsCreateExamLabel: "Opprett ny eksamen",
@@ -381,8 +381,8 @@ export const translations = {
     [LANGUAGES.EN]: {
         // SubjectSelectPage
         subjectSelectTitle: "Choose subject",
-        subjectSelectSubtitle: "Choose which subject you want to practise before selecting a mock exam.",
-        subjectSelectEyebrow: "Mock Exam Simulator",
+        subjectSelectSubtitle: "Choose which subject you want to practise before selecting a practice exam.",
+        subjectSelectEyebrow: "Practice Exam Simulator",
         subjectSearchLabel: "Search for subject",
         subjectSearchPlaceholder: "Search by subject code or name...",
         searchCloseLabel: "Close search",
@@ -393,10 +393,10 @@ export const translations = {
         subjectEmptyMessage: "No subjects matched your search.",
         subjectLoadingMessage: "Loading subjects...",
         subjectErrorMessage: "Could not load subjects.",
-        subjectMockExamCount: (count) => `${count} mock exam${count === 1 ? "" : "s"}`,
+        subjectMockExamCount: (count) => `${count} practice exam${count === 1 ? "" : "s"}`,
         subjectAddPlaceholderCode: "CREATE SUBJECT",
         subjectAddPlaceholderTitle: "Add new subject",
-        subjectAddPlaceholderDescription: "Set up a new subject with your own mock exams, notes and lecture slides.",
+        subjectAddPlaceholderDescription: "Set up a new subject with your own practice exams, notes and lecture slides.",
         subjectAddPlaceholderNote: "No limit on subject count",
 
         // ExamSelectPage
@@ -413,7 +413,7 @@ export const translations = {
         examAddPlaceholderDescription: "Set up a new practice exam with custom questions, timing and settings.",
         examAddPlaceholderNote: "No limit on practice exam count",
         selectEmptyTitle: "No exams available",
-        selectEmptyMessage: "This subject does not have any mock exams yet.",
+        selectEmptyMessage: "This subject does not have any practice exams yet.",
         selectLoadingMessage: "Loading exams...",
         examSearchLabel: "Search for exam",
         examSearchPlaceholder: "Search for exam...",
@@ -423,7 +423,7 @@ export const translations = {
         selectBackToSubjects: "Back to subjects",
 
         // Header
-        headerLabel: "Mock exam",
+        headerLabel: "Practice exam",
         headerTitle: "Exam emulator with answer key",
         headerQuestionProgress: (current, total) => `Question ${current} of ${total}`,
         headerStatAnswered: "answered",

@@ -1,9 +1,0 @@
-/* src/ui/style/Header/actions.css */
-.exam-header-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: var(--header-actions-gap);
-    width: max-content;
-    max-width: 100%;
-}

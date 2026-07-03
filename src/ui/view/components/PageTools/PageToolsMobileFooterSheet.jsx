@@ -1,28 +1,13 @@
 // src/ui/view/components/PageTools/PageToolsMobileFooterSheet.jsx
-import { useCallback, useState } from "react";
-import MobileBottomSheet from "../MobileBottomSheet/MobileBottomSheet.jsx";
+import { useCallback } from "react";
+import DockedMobileBottomSheet from "../MobileBottomSheet/DockedMobileBottomSheet.jsx";
 import ToolCardGrid from "../ToolCard/ToolCardGrid.jsx";
 import { TOOL_CARD_SURFACES } from "../ToolCard/toolCardSurfaces.js";
 
-export default function PageToolsMobileFooterSheet({ tools, renderControls, renderSearchContent, onCloseSheet }) {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const openSheet = useCallback(() => {
-        setIsOpen(true);
-    }, []);
-
+export default function PageToolsMobileFooterSheet({ tools, renderControls, renderSearchContent, isSheetOpen, onOpenSheet, onSheetOpenChange }) {
     const closeSheet = useCallback(() => {
-        setIsOpen(false);
-        onCloseSheet();
-    }, [onCloseSheet]);
-
-    const changeSheetOpen = useCallback((nextIsOpen) => {
-        setIsOpen(nextIsOpen);
-
-        if (!nextIsOpen) {
-            onCloseSheet();
-        }
-    }, [onCloseSheet]);
+        onSheetOpenChange(false);
+    }, [onSheetOpenChange]);
 
     const selectTool = useCallback((toolItem) => {
         if (!toolItem.onSelect) {
@@ -46,32 +31,32 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
     const searchContent = renderSearchContent();
 
     return (
-        <div className="page-tools-mobile-footer-shell" data-open={isOpen ? "true" : "false"}>
+        <div className="page-tools-mobile-footer-shell" data-open={isSheetOpen ? "true" : "false"}>
             <div className="page-tools-mobile-inline-content">
                 {renderSearchContent()}
                 {renderControls()}
             </div>
 
-            <MobileBottomSheet
-                isOpen={isOpen}
-                onOpenChange={changeSheetOpen}
-                finalFocusRef={null}
+            <DockedMobileBottomSheet
+                isOpen={isSheetOpen}
+                onOpenChange={onSheetOpenChange}
                 contentId={sheetId}
                 title={tools.actionsLabel}
                 subtitle={tools.mobileHandleLabel}
                 openLabel={tools.openLabel}
                 closeLabel={tools.closeLabel}
                 peekLabel={tools.mobileHandleLabel}
-                hasPeek={true}
                 popupClassName=""
                 contentClassName="page-tools-mobile-bottom-sheet-content"
             >
-                <div className="page-tools-mobile-sheet-controls" onFocusCapture={openSheet} onPointerDownCapture={openSheet}>
-                    {renderControls()}
-                </div>
-
+                {/* Forslagslisten ligger FØR kontrollene slik at autocomplete vokser
+                    oppover fra søkefeltet — samme rekkefølge som inline-varianten. */}
                 <div className="page-tools-mobile-sheet-search-content">
                     {searchContent}
+                </div>
+
+                <div className="page-tools-mobile-sheet-controls" onFocusCapture={onOpenSheet} onPointerDownCapture={onOpenSheet}>
+                    {renderControls()}
                 </div>
 
                 <ToolCardGrid
@@ -79,7 +64,7 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
                     items={tools.items}
                     onSelectItem={selectTool}
                 />
-            </MobileBottomSheet>
+            </DockedMobileBottomSheet>
         </div>
     );
 }

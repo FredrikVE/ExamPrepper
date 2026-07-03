@@ -1,21 +1,12 @@
 /* src/ui/style/SubjectSelectPage/topbar.css */
 .subject-select-topbar {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-6);
     width: min(987px, 100%);
     margin-bottom: 58px;
 }
 
 .subject-select-title {
-    margin: 0;
-    color: var(--text-main);
     font-size: clamp(48px, 5vw, 64px);
-    font-weight: 950;
     line-height: 0.93;
-    letter-spacing: -0.06em;
 }
 
 .subject-select-subtitle {

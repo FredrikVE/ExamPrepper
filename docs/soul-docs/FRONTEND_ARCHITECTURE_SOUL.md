@@ -38,8 +38,6 @@ introdusere tilsvarende brudd.
 
 - **Filbanekommentarer uten mellomrom** — eldre filer bruker `//src/...` i stedet for `// src/...`
   (gjelder bl.a. `dependencies.js`, `ExamPage.jsx`, `ExamPageViewModel.js`).
-- **`src/utils/answer/getCorrectIndexes.js`** — har domenekjennskap (`question.options[n].correct`).
-  Hører i `src/model/domain/utils/` eller i det Use Case som bruker den.
 - **Domenekjennskap i `ExamPage.jsx`** — importerer `QUESTION_TYPES` og beregner layout
   (`shouldUseScrollFooter`, `isDragDropQuestion` osv.) direkte i View. Denne logikken
   hører i `ExamPageViewModel` og skal eksponeres som ferdige verdier.
@@ -333,7 +331,7 @@ export function getCorrectIndexes(question) {
         .filter(Boolean);
 }
 
-// Riktig — flytt til src/model/domain/utils/ eller inn i relevant UseCase
+// Riktig — domenespesifikk hjelpefunksjon ligger i src/model/domain/utils/.
 ```
 
 ---
@@ -887,7 +885,12 @@ Drill spesifikke props. `QuestionCard` skal ikke vite at en ViewModel eksisterer
 // Feil plassering:
 // src/utils/answer/getCorrectIndexes.js vet om question.options[n].correct
 ```
-Flytt til `src/model/domain/utils/` eller inn i det Use Case som bruker den.
+Slik logikk hører i `src/model/domain/utils/` eller direkte i det Use Case som bruker den.
+
+Nåværende eksempel i kodebasen:
+```txt
+src/model/domain/utils/getCorrectIndexes.js
+```
 
 **Komponent-tokens i `Tokens.css`**
 ```css
@@ -1201,6 +1204,29 @@ const canGoNext = currentIndex < totalQuestions - 1;
 const hasAnswered = answers[question.id] !== undefined;
 const showFeedback = submitted && showAllFeedback;
 ```
+
+Boolean UI-state som styrer en konkret organisme eller komponent, skal navngis etter komponenten den styrer.
+Handlers følger samme navn.
+
+```js
+// Riktig — state-navnet peker på faktisk komponent/organisme:
+const isMobileDropDownTopBarMenuOpen = true;
+const closeMobileDropDownTopBarMenu = () => { ... };
+const isMobileSubjectPickerOpen = false;
+const toggleMobileSubjectPicker = () => { ... };
+const isSettingsPresentationOpen = false;
+const openSettingsPresentation = () => { ... };
+
+// Forbudt — samlebegreper uten komponentnavn:
+const isMenuOpen = true;
+const isOverlayOpen = true;
+const isSurfaceOpen = true;
+const isPanelOpen = true;
+```
+
+Samlebegreper som `overlay`, `surface`, `panel` og `drawer` skal ikke brukes i state-navn
+med mindre det faktisk finnes en komponent med samme navn. Navnet skal gjøre det tydelig
+hvilken del av komponenttreet verdien styrer.
 
 ### Løkkevariabler og kortlivede variabler
 

@@ -11,7 +11,7 @@ export function getRadioButtonGridRows(question, answerOptionOrder = null) {
 	);
 }
 
-export function getRadioButtonGridAnswer(answer) {
+function getRadioButtonGridAnswer(answer) {
 	if (!answer || typeof answer !== "object" || Array.isArray(answer)) {
 		return {};
 	}

@@ -89,6 +89,28 @@ describe("ExamRepository", () => {
         expect(result).toHaveLength(3);
     });
 
+    test("caches all exams list requests", async () => {
+        await repository.getAvailableExams();
+        await repository.getAvailableExams({
+            subjectId: "in5431",
+            language: "en"
+        });
+
+        expect(dataSource.fetchAllExams).toHaveBeenCalledTimes(1);
+    });
+
+    test("retries all exams list requests after failures", async () => {
+        dataSource.fetchAllExams
+            .mockRejectedValueOnce(new Error("network down"))
+            .mockResolvedValueOnce(exams);
+
+        await expect(repository.getAllExams()).rejects.toThrow("network down");
+        const result = await repository.getAllExams();
+
+        expect(result).toBe(exams);
+        expect(dataSource.fetchAllExams).toHaveBeenCalledTimes(2);
+    });
+
     test("sorts available exams by explicit sortOrder", async () => {
         const result = await repository.getAvailableExams();
 
@@ -105,6 +127,45 @@ describe("ExamRepository", () => {
         expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
 
+    test("caches exam requests by exam id", async () => {
+        const firstResult = await repository.getExamQuestions("exam-no");
+        const secondResult = await repository.getExamQuestions("exam-no");
+
+        expect(firstResult).toEqual([{ id: 1 }, { id: 2 }]);
+        expect(secondResult).toEqual([{ id: 1 }, { id: 2 }]);
+        expect(dataSource.fetchExamById).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchExamById).toHaveBeenCalledWith("exam-no");
+    });
+
+    test("dedupes parallel exam requests by exam id", async () => {
+        const deferredExam = createDeferred();
+        dataSource.fetchExamById.mockReset();
+        dataSource.fetchExamById.mockReturnValue(deferredExam.promise);
+
+        const firstRequest = repository.getExamById("exam-no");
+        const secondRequest = repository.getExamById("exam-no");
+
+        expect(dataSource.fetchExamById).toHaveBeenCalledTimes(1);
+
+        deferredExam.resolve(exams[0]);
+
+        await expect(Promise.all([firstRequest, secondRequest])).resolves.toEqual([
+            exams[0],
+            exams[0]
+        ]);
+    });
+
+    test("retries exam requests after failures", async () => {
+        dataSource.fetchExamById
+            .mockRejectedValueOnce(new Error("exam request failed"))
+            .mockResolvedValueOnce(exams[0]);
+
+        await expect(repository.getExamById("exam-no")).rejects.toThrow("exam request failed");
+        const result = await repository.getExamById("exam-no");
+
+        expect(result).toBe(exams[0]);
+        expect(dataSource.fetchExamById).toHaveBeenCalledTimes(2);
+    });
 
     test("hydrates answer options with subject-scoped concept images", async () => {
         const examWithImage = {
@@ -177,10 +238,27 @@ describe("ExamRepository", () => {
         expect(result).toEqual([]);
     });
 
-    test("finds exam by base id and language", async () => {
+    test("finds exam by base id and language through cached exam list", async () => {
         const result = await repository.getExamByBaseIdAndLang("exam", "en");
 
         expect(result).toMatchObject({ id: "exam-en" });
-        expect(dataSource.fetchExamByBaseIdAndLang).toHaveBeenCalledWith("exam", "en");
+        expect(dataSource.fetchAllExams).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchExamByBaseIdAndLang).not.toHaveBeenCalled();
     });
 });
+
+function createDeferred() {
+    let resolve;
+    let reject;
+
+    const promise = new Promise((resolvePromise, rejectPromise) => {
+        resolve = resolvePromise;
+        reject = rejectPromise;
+    });
+
+    return {
+        promise,
+        resolve,
+        reject
+    };
+}

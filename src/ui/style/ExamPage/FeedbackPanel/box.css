@@ -43,40 +43,12 @@
 
 .feedback-panel-explanation-card-correct {
     border-color: color-mix(in srgb, var(--accent) 18%, var(--line));
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--accent) 7%, white),
-            color-mix(in srgb, var(--panel-bg) 94%, white)
-        );
+    background: var(--feedback-explanation-correct-bg);
 }
 
 .feedback-panel-explanation-card-wrong {
     border-color: color-mix(in srgb, var(--warning-border, #f6b36b) 42%, var(--line));
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, #f59e0b 9%, white),
-            color-mix(in srgb, var(--panel-bg) 94%, white)
-        );
-}
-
-.dark .feedback-panel-explanation-card-correct {
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--accent) 14%, var(--panel-strong)),
-            color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong))
-        );
-}
-
-.dark .feedback-panel-explanation-card-wrong {
-    background:
-        linear-gradient(
-            135deg,
-            color-mix(in srgb, #f59e0b 16%, var(--panel-strong)),
-            color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong))
-        );
+    background: var(--feedback-explanation-warning-bg);
 }
 
 .feedback-panel-explanation-icon-wrap {

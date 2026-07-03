@@ -39,8 +39,8 @@ export default function DesktopSideBar(props) {
 			/>
 
 			<SidebarSettingsButton
-				settingsOpen={props.settingsOpen}
-				onOpenSettings={props.onOpenSettings}
+				isSettingsPresentationOpen={props.isSettingsPresentationOpen}
+				onOpenSettingsPresentation={props.onOpenSettingsPresentation}
 			/>
 
 			<SidebarUserCard />

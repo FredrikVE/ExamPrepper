@@ -1,5 +1,5 @@
 // src/ui/presentation/presentationMode.js
-export const APP_MOBILE_QUERY = "(max-width: 932px)";
+const APP_MOBILE_QUERY = "(max-width: 932px)";
 
 export const PRESENTATION_MODE = {
     MOBILE: "mobile",

@@ -6,8 +6,7 @@ import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
-import WorkspaceScaffoldHeader from "../components/WorkspaceScaffold/WorkspaceScaffoldHeader.jsx";
-import WorkspaceScaffoldSearchFooter from "../components/WorkspaceScaffold/WorkspaceScaffoldSearchFooter.jsx";
+import SelectPageScaffold from "../components/SelectPageScaffold/SelectPageScaffold.jsx";
 
 export default function ExamSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
@@ -75,72 +74,53 @@ export default function ExamSelectPage({ viewModel }) {
     }
 
     return (
-        <div className="exam-select-layout">
-            <main className="exam-select-workspace">
-                <div className="exam-select-ambient-light" aria-hidden="true" />
-
-                <WorkspaceScaffoldHeader
-                    showBackButton={viewModel.showBackButton}
-                    backLabel={viewModel.backLabel}
-                    navigationLabel={viewModel.navigationLabel}
-                    onBack={viewModel.onBack}
-                    tools={viewModel.pageTools}
-                />
-
-                <div className="exam-select-scroll">
-                    <ExamSelectTopbar title={viewModel.title} />
-
-                    <ExamSelectIntro
-                        selectedSubject={viewModel.selectedSubject}
-                        subtitle={viewModel.subtitle}
-                    />
-
-                    <ExamSelectGrid
-                        exams={viewModel.exams}
-                        emptyTitle={viewModel.emptyTitle}
-                        emptyMessage={viewModel.emptyMessage}
-                        practiceExamLabel={viewModel.practiceExamLabel}
-                        questionLabel={viewModel.questionLabel}
-                        minuteLabel={viewModel.minuteLabel}
-                        addPlaceholderCode={viewModel.addPlaceholderCode}
-                        addPlaceholderTitle={viewModel.addPlaceholderTitle}
-                        addPlaceholderDescription={viewModel.addPlaceholderDescription}
-                        addPlaceholderNote={viewModel.addPlaceholderNote}
-                        onSelectExam={viewModel.selectExam}
-                    />
-                </div>
-            </main>
-
-            {viewModel.isSearchSheetOpen && (
-                <button
-                    type="button"
-                    className="search-backdrop search-backdrop-visible"
-                    onMouseDown={(event) => {
-                        event.preventDefault();
-                    }}
-                    onClick={viewModel.closeExamSearchSheet}
-                    aria-label={viewModel.searchCloseLabel}
-                    tabIndex={-1}
-                />
-            )}
-
-            <WorkspaceScaffoldSearchFooter
-                isOpen={viewModel.isSearchSheetOpen}
-                className="exam-search-footer"
-                openClassName="exam-search-footer-open"
-                onBlur={(event) => {
-                    if (!event.currentTarget.contains(event.relatedTarget)) {
-                        viewModel.closeExamSearchSheet();
-                    }
-                }}
-            >
+        <SelectPageScaffold
+            layoutClassName="exam-select-layout"
+            workspaceClassName="exam-select-workspace"
+            ambientLightClassName="exam-select-ambient-light"
+            scrollClassName="exam-select-scroll"
+            showBackButton={viewModel.showBackButton}
+            backLabel={viewModel.backLabel}
+            navigationLabel={viewModel.navigationLabel}
+            onBack={viewModel.onBack}
+            pageTools={viewModel.pageTools}
+            isSearchSheetOpen={viewModel.isSearchSheetOpen}
+            onCloseSearchSheet={viewModel.closeExamSearchSheet}
+            searchCloseLabel={viewModel.searchCloseLabel}
+            isFooterOpen={viewModel.isFooterOpen}
+            footerClassName="exam-search-footer"
+            footerOpenClassName="exam-search-footer-open"
+            footer={(
                 <PageToolsMobileFooterSheet
                     tools={viewModel.pageTools}
                     renderControls={renderSearchControls}
                     renderSearchContent={renderSearchContent}
-                    onCloseSheet={viewModel.closeExamSearchSheet}
+                    isSheetOpen={viewModel.isFooterSheetOpen}
+                    onOpenSheet={viewModel.openExamFooterSheet}
+                    onSheetOpenChange={viewModel.changeExamFooterSheetOpen}
                 />
-            </WorkspaceScaffoldSearchFooter>
-        </div>
+            )}
+        >
+            <ExamSelectTopbar title={viewModel.title} />
+
+            <ExamSelectIntro
+                selectedSubject={viewModel.selectedSubject}
+                subtitle={viewModel.subtitle}
+            />
+
+            <ExamSelectGrid
+                exams={viewModel.exams}
+                emptyTitle={viewModel.emptyTitle}
+                emptyMessage={viewModel.emptyMessage}
+                practiceExamLabel={viewModel.practiceExamLabel}
+                questionLabel={viewModel.questionLabel}
+                minuteLabel={viewModel.minuteLabel}
+                addPlaceholderCode={viewModel.addPlaceholderCode}
+                addPlaceholderTitle={viewModel.addPlaceholderTitle}
+                addPlaceholderDescription={viewModel.addPlaceholderDescription}
+                addPlaceholderNote={viewModel.addPlaceholderNote}
+                onSelectExam={viewModel.selectExam}
+            />
+        </SelectPageScaffold>
     );
 }

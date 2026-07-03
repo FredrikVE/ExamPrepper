@@ -39,7 +39,7 @@ export const PAGE_NAV_TOOL_ITEMS = [
         id: PAGE_NAV_TOOL_IDS.EXAMS,
         screen: NAV_SCREENS.SELECT,
         labelKey: "pageToolsExamsLabel",
-        fallbackLabel: "Eksamner",
+        fallbackLabel: "Eksamener",
         iconKey: "file-text",
         requiresSubject: true
     },
@@ -61,17 +61,9 @@ export const PAGE_NAV_TOOL_ITEMS = [
     }
 ];
 
-export function getSubjectSelectPageNavToolItems() {
-    return [];
-}
-
 export function getExamSelectPageNavToolItems() {
     return PAGE_NAV_TOOL_ITEMS.filter((navItem) => (
         navItem.id === PAGE_NAV_TOOL_IDS.EXAMS
         || navItem.id === PAGE_NAV_TOOL_IDS.FLIPCARDS
     ));
-}
-
-export function getSelectionPageNavToolItems() {
-    return getExamSelectPageNavToolItems();
 }

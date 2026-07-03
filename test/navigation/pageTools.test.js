@@ -1,15 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
-import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getPageToolItems, getSubjectSelectWorkspaceActionToolItems, getWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
+import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getPageToolItems, getSubjectSelectWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
-
-const workspaceActionToolIds = [
-    PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
-    PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
-    PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,
-    PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE,
-    PAGE_TOOL_ITEM_IDS.APP_AI_EXAM
-];
 
 describe("pageTools", () => {
     test("defines search-first tools metadata for subject and exam select pages", () => {
@@ -40,7 +32,6 @@ describe("pageTools", () => {
             PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,
             PAGE_TOOL_ITEM_IDS.APP_AI_EXAM
         ]);
-        expect(getWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual(workspaceActionToolIds);
     });
 
 
@@ -130,7 +121,7 @@ describe("pageTools", () => {
     });
 
     test("returns an empty item list for screens without a page tools group", () => {
-        expect(getPageToolGroup(NAV_SCREENS.NOTES)).toBeNull();
-        expect(getPageToolItems(NAV_SCREENS.NOTES)).toEqual([]);
+        expect(getPageToolGroup("missing-screen")).toBeNull();
+        expect(getPageToolItems("missing-screen")).toEqual([]);
     });
 });

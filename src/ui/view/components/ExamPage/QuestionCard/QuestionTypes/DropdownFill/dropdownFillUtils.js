@@ -11,7 +11,7 @@ export function getDropdownFillItems(question, answerOptionOrder = null) {
 	);
 }
 
-export function getDropdownFillAnswer(answer) {
+function getDropdownFillAnswer(answer) {
 	if (!answer || typeof answer !== "object" || Array.isArray(answer)) {
 		return {};
 	}

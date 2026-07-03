@@ -1,40 +1,30 @@
 // src/ui/viewmodel/ExamPageViewModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
-import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
-import getScoreLabel from "./Utils/getScoreLabel.js";
-import getQuestionProgressLabel from "./Utils/getQuestionProgressLabel.js";
-import getFeedbackToggleLabel from "./Utils/getFeedbackToggleLabel.js";
 import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
-import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
-import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
-import shouldHandleFooterNavigationKeyDown from "./Utils/keyboardNavigation.js";
-import transformAnswersForApi from "./Utils/transformAnswersForApi.js";
-import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
+import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots } from "./Utils/questionDotPagination.js";
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
-import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
-import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
+import { resetExamAttemptState } from "./ExamPage/createExamAttemptResetActions.js";
+import createExamFeedbackModel from "./ExamPage/createExamFeedbackModel.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
+import createExamProgressNavigationModel, { clampExamQuestionIndex } from "./ExamPage/createExamProgressNavigationModel.js";
+import createExamStatusModel from "./ExamPage/createExamStatusModel.js";
+import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
+import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
+import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
+import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
 	const { randomizeAnswerOptions } = useSettings();
 
-	const [questions, setQuestions] = useState([]);
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
-	const [questionsLoading, setQuestionsLoading] = useState(true);
-	const [questionsLoadError, setQuestionsLoadError] = useState(null);
-	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-	const [elapsedSeconds, setElapsedSeconds] = useState(0);
+	const [rawCurrentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
-	const [savedAttempt, setSavedAttempt] = useState(null);
-	const [attemptSaveError, setAttemptSaveError] = useState(null);
-	const [attemptSaving, setAttemptSaving] = useState(false);
 	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(0);
-	const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
 
 	const copy = useMemo(() => {
 		return createExamPageCopy(t);
@@ -44,19 +34,80 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setScrollToTopRequestId((requestId) => requestId + 1);
 	}, []);
 
-	const examScore = useMemo(() => {
-		return calculateExamScoreUseCase.execute(questions, answers);
-	}, [questions, answers, calculateExamScoreUseCase]);
+	const markExamSubmitted = useCallback(() => {
+		setSubmitted(true);
+	}, []);
 
-	const answeredCount = useMemo(() => {
-		return questions.filter((question) => {
-			return isQuestionAnswered(question, answers[question.id]);
-		}).length;
-	}, [questions, answers]);
+	const { elapsedSeconds, elapsedTimeLabel, resetElapsedSeconds } = useExamElapsedTimerModel({
+		isPaused: submitted
+	});
+
+	const {
+		savedAttempt,
+		attemptSaving,
+		attemptSaveError,
+		isSubmitConfirmOpen,
+		resetSubmitModel,
+		submitExamAttempt,
+		openSubmitConfirmation,
+		closeSubmitConfirmation,
+		confirmSubmitExamAttempt
+	} = useExamSubmitModel({
+		attemptSaveErrorMessage: copy.attemptSaveErrorMessage,
+		isSubmitted: submitted,
+		submitExamAttemptUseCase,
+		onExamSubmitted: markExamSubmitted,
+		onSubmitStarted: requestScrollToTop
+	});
+
+	/* SSOT for hard reset av eksamensforsøket: svar, submit-tilstand, feedback,
+	   indeks, timer, expansion og alternativ-rekkefølge nullstilles samlet.
+	   Kallstedene definerer scenarioene:
+	   - nytt question-set etter load  → hardResetExamAttempt(loadedQuestions)
+	   - manuell reset-knapp           → hardResetExamAttempt(questions) + scroll
+	   Soft reload (samme question-set, f.eks. språkbytte) skal ALDRI hit —
+	   den avgjøres av shouldPreserveExamAttemptOnQuestionReload i load-modellen. */
+	const hardResetExamAttempt = useCallback((questionSet) => {
+		resetExamAttemptState({
+			questionSet,
+			setAnswers,
+			setSubmitted,
+			setShowAllFeedback,
+			setCurrentQuestionIndex,
+			resetElapsedSeconds,
+			setExpandedAnswerOptionIndexesByQuestionId,
+			setAnswerOptionOrderByQuestionId,
+			resetSubmitModel
+		});
+	}, [resetElapsedSeconds, resetSubmitModel]);
+
+	const handleQuestionsLoaded = useCallback(({ loadedQuestions, shouldPreserveAttempt }) => {
+		if (shouldPreserveAttempt) {
+			return;
+		}
+
+		hardResetExamAttempt(loadedQuestions);
+	}, [hardResetExamAttempt]);
+
+	const {
+		questions,
+		questionsLoading,
+		questionsLoadError,
+		isInitialQuestionsLoad
+	} = useExamQuestionLoadModel({
+		getExamQuestionsUseCase,
+		examId,
+		questionsLoadErrorMessage: copy.questionsLoadErrorMessage,
+		onQuestionsLoaded: handleQuestionsLoaded
+	});
 
 	const visibleQuestions = questions;
 	const visibleQuestionCount = visibleQuestions.length;
-	const questionCount = questions.length;
+
+	/* Klampes ved avledning i stedet for setState-i-effekt: når visibleQuestionCount
+	   krymper (f.eks. nytt question-set) er indeksen alltid gyldig i samme render,
+	   uten kaskaderende re-render (react-hooks/set-state-in-effect). */
+	const currentQuestionIndex = clampExamQuestionIndex(rawCurrentQuestionIndex, visibleQuestionCount);
 
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
 
@@ -68,65 +119,52 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		? expandedAnswerOptionIndexesByQuestionId[currentQuestion.id] ?? []
 		: [];
 
-	const currentQuestionNumber = currentQuestionIndex + 1;
+	const progressNavigationModel = useMemo(() => {
+		return createExamProgressNavigationModel({
+			currentQuestionIndex,
+			visibleQuestionCount
+		});
+	}, [currentQuestionIndex, visibleQuestionCount]);
 
-	const canGoPrevious = currentQuestionIndex > 0;
-	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
-
-	const isLastQuestion = !canGoNext;
+	const {
+		currentQuestionNumber,
+		canGoPrevious,
+		canGoNext,
+		isFooterNavigationEnabled,
+		isLastQuestion
+	} = progressNavigationModel;
 	const showSubmitButton = isLastQuestion && !submitted;
 
 	const shouldUseCompactDots = shouldUseCompactDotsByQuestionCount(visibleQuestionCount);
 	const shouldUseResponsiveCompactDots = shouldAllowResponsiveCompactDots(visibleQuestionCount);
 
-	const questionCorrectnessByQuestionId = useMemo(() => {
-		if (!submitted) {
-			return {};
-		}
-
-		return createQuestionCorrectnessByQuestionId(
+	const feedbackModel = useMemo(() => {
+		return createExamFeedbackModel({
+			submitted,
+			currentQuestion,
 			questions,
+			visibleQuestions,
+			currentQuestionIndex,
 			answers,
 			gradeAnswerUseCase
-		);
-	}, [submitted, questions, answers, gradeAnswerUseCase]);
-
-	const questionDotEntries = useMemo(() => {
-		return createQuestionDotEntries(
-			visibleQuestions,
-			currentQuestionIndex,
-			questionCorrectnessByQuestionId
-		);
-	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
-
-	const filledCompactQuestionDotEntries = useMemo(() => {
-		return createCompactQuestionDotEntries(
-			getFilledCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex),
-			visibleQuestions,
-			currentQuestionIndex,
-			questionCorrectnessByQuestionId
-		);
-	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
-
-	const minimalCompactQuestionDotEntries = useMemo(() => {
-		return createCompactQuestionDotEntries(
-			getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex),
-			visibleQuestions,
-			currentQuestionIndex,
-			questionCorrectnessByQuestionId
-		);
-	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
-
-	const currentQuestionIsCorrect = currentQuestion
-		? questionCorrectnessByQuestionId[currentQuestion.id] ?? false
-		: false;
-
-	const currentQuestionFillMatchType = getCurrentQuestionFillMatchType(
+		});
+	}, [
 		submitted,
 		currentQuestion,
+		questions,
+		visibleQuestions,
+		currentQuestionIndex,
 		answers,
 		gradeAnswerUseCase
-	);
+	]);
+
+	const {
+		questionDotEntries,
+		filledCompactQuestionDotEntries,
+		minimalCompactQuestionDotEntries,
+		currentQuestionIsCorrect,
+		currentQuestionFillMatchType
+	} = feedbackModel;
 
 	const currentAnswerOptionOrder = useMemo(() => {
 		return getCurrentAnswerOptionOrder(
@@ -136,79 +174,59 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		);
 	}, [currentQuestion, randomizeAnswerOptions, answerOptionOrderByQuestionId]);
 
-	const answeredCountLabel = getAnsweredCountLabel(
-		answeredCount,
-		questionCount
-	);
-
-	const scoreLabel = getScoreLabel(
-		submitted,
-		examScore.score,
-		examScore.totalPoints
-	);
-
-	const questionProgressLabel = getQuestionProgressLabel(
+	const statusModel = useMemo(() => {
+		return createExamStatusModel({
+			questions,
+			visibleQuestions,
+			currentQuestionIndex,
+			answers,
+			submitted,
+			showAllFeedback,
+			elapsedTimeLabel,
+			calculateExamScoreUseCase,
+			copy
+		});
+	}, [
+		questions,
+		visibleQuestions,
 		currentQuestionIndex,
-		visibleQuestionCount
-	);
+		answers,
+		submitted,
+		showAllFeedback,
+		elapsedTimeLabel,
+		calculateExamScoreUseCase,
+		copy
+	]);
 
-	const feedbackToggleLabel = getFeedbackToggleLabel(showAllFeedback);
-
-	const elapsedTimeLabel = useMemo(() => {
-		return formatElapsedTime(elapsedSeconds);
-	}, [elapsedSeconds]);
-
-	const answeredPercent = useMemo(() => {
-		const total = Math.max(visibleQuestions.length, 1);
-		return Math.round((answeredCount / total) * 100);
-	}, [answeredCount, visibleQuestions.length]);
-
-	const answeredPercentLabel = `${answeredPercent}%`;
-	const mobileWorkStatusLabel = `${elapsedTimeLabel} · ${answeredPercentLabel} ${copy.answeredLabel}`;
-	const canSubmitExam = !submitted && questions.length > 0;
+	const {
+		examScore,
+		answeredCount,
+		answeredCountLabel,
+		answeredPercentLabel,
+		scoreLabel,
+		questionProgressLabel,
+		feedbackToggleLabel,
+		mobileWorkStatusLabel,
+		canSubmitExam
+	} = statusModel;
 
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
-			return Math.max(previousIndex - 1, 0);
-		});
-
-		requestScrollToTop();
-	}, [requestScrollToTop]);
-
-	const nextQuestion = useCallback(() => {
-		setCurrentQuestionIndex((previousIndex) => {
-			if (visibleQuestionCount === 0) {
-				return 0;
-			}
-
-			return Math.min(previousIndex + 1, visibleQuestionCount - 1);
+			const normalizedIndex = clampExamQuestionIndex(previousIndex, visibleQuestionCount);
+			return Math.max(normalizedIndex - 1, 0);
 		});
 
 		requestScrollToTop();
 	}, [visibleQuestionCount, requestScrollToTop]);
 
-	const handleFooterNavigationKeyDown = useCallback((event) => {
-		if (!shouldHandleFooterNavigationKeyDown(event)) {
-			return;
-		}
+	const nextQuestion = useCallback(() => {
+		setCurrentQuestionIndex((previousIndex) => {
+			const normalizedIndex = clampExamQuestionIndex(previousIndex, visibleQuestionCount);
+			return clampExamQuestionIndex(normalizedIndex + 1, visibleQuestionCount);
+		});
 
-		if (event.key === "ArrowLeft" && canGoPrevious) {
-			event.preventDefault();
-			previousQuestion();
-			return;
-		}
-
-		if (event.key === "ArrowRight" && canGoNext) {
-			event.preventDefault();
-			nextQuestion();
-			return;
-		}
-
-		if (event.key === "Enter" && !submitted && canGoNext) {
-			event.preventDefault();
-			nextQuestion();
-		}
-	}, [submitted, canGoPrevious, canGoNext, previousQuestion, nextQuestion]);
+		requestScrollToTop();
+	}, [visibleQuestionCount, requestScrollToTop]);
 
 	const goToQuestion = useCallback((index) => {
 		if (index < 0 || index >= visibleQuestionCount) {
@@ -225,10 +243,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			return {
-				...previousAnswers,
-				[questionId]: selectedValue
-			};
+			return updateSingleAnswerSelection(previousAnswers, questionId, selectedValue);
 		});
 	}, [submitted]);
 
@@ -238,21 +253,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			const currentAnswer = Array.isArray(previousAnswers[questionId])
-				? previousAnswers[questionId]
-				: [];
-
-			const nextAnswer = currentAnswer.includes(selectedValue)
-				? currentAnswer.filter((answerValue) => answerValue !== selectedValue)
-				: [...currentAnswer, selectedValue];
-
-			return {
-				...previousAnswers,
-				[questionId]: nextAnswer
-			};
+			return toggleMultiAnswerSelection(previousAnswers, questionId, selectedValue);
 		});
 	}, [submitted]);
-
 
 	const selectDropdownFillAnswer = useCallback((questionId, itemId, optionId) => {
 		if (submitted) {
@@ -260,24 +263,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			const currentQuestionAnswer = isPlainObject(previousAnswers[questionId])
-				? previousAnswers[questionId]
-				: {};
-			const nextQuestionAnswer = { ...currentQuestionAnswer };
-
-			if (optionId) {
-				nextQuestionAnswer[itemId] = optionId;
-			} else {
-				delete nextQuestionAnswer[itemId];
-			}
-
-			return {
-				...previousAnswers,
-				[questionId]: nextQuestionAnswer
-			};
+			return updateObjectAnswerSelection(previousAnswers, questionId, itemId, optionId);
 		});
 	}, [submitted]);
-
 
 	const selectRadioButtonGridAnswer = useCallback((questionId, rowId, columnId) => {
 		if (submitted) {
@@ -285,21 +273,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			const currentQuestionAnswer = isPlainObject(previousAnswers[questionId])
-				? previousAnswers[questionId]
-				: {};
-			const nextQuestionAnswer = { ...currentQuestionAnswer };
-
-			if (columnId) {
-				nextQuestionAnswer[rowId] = columnId;
-			} else {
-				delete nextQuestionAnswer[rowId];
-			}
-
-			return {
-				...previousAnswers,
-				[questionId]: nextQuestionAnswer
-			};
+			return updateObjectAnswerSelection(previousAnswers, questionId, rowId, columnId);
 		});
 	}, [submitted]);
 
@@ -321,147 +295,32 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		});
 	}, []);
 
+	const createSubmitAttemptInput = useCallback(() => {
+		return {
+			answers,
+			examId,
+			language,
+			questions,
+			durationSeconds: elapsedSeconds
+		};
+	}, [answers, elapsedSeconds, examId, language, questions]);
+
 	const submitExam = useCallback(async () => {
-		setSubmitted(true);
-		setAttemptSaving(true);
-		setAttemptSaveError(null);
-		requestScrollToTop();
-
-		try {
-			const attempt = await submitExamAttemptUseCase.execute({
-				examId,
-				lang: language,
-				durationSeconds: elapsedSeconds,
-				answers: transformAnswersForApi(questions, answers)
-			});
-
-			setSavedAttempt(attempt);
-		} catch (error) {
-			setAttemptSaveError(error?.message ?? copy.attemptSaveErrorMessage);
-		} finally {
-			setAttemptSaving(false);
-		}
-	}, [answers, copy.attemptSaveErrorMessage, elapsedSeconds, examId, language, questions, requestScrollToTop, submitExamAttemptUseCase]);
-
-	const openSubmitConfirmation = useCallback(() => {
-		setIsSubmitConfirmOpen(true);
-	}, []);
-
-	const closeSubmitConfirmation = useCallback(() => {
-		setIsSubmitConfirmOpen(false);
-	}, []);
+		await submitExamAttempt(createSubmitAttemptInput());
+	}, [createSubmitAttemptInput, submitExamAttempt]);
 
 	const confirmSubmitExam = useCallback(async () => {
-		setIsSubmitConfirmOpen(false);
-		await submitExam();
-	}, [submitExam]);
+		await confirmSubmitExamAttempt(createSubmitAttemptInput());
+	}, [confirmSubmitExamAttempt, createSubmitAttemptInput]);
 
 	const resetExam = useCallback(() => {
-		setAnswers({});
-		setSubmitted(false);
-		setShowAllFeedback(true);
-		setCurrentQuestionIndex(0);
-		setElapsedSeconds(0);
-		setExpandedAnswerOptionIndexesByQuestionId({});
-		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questions));
-		setSavedAttempt(null);
-		setAttemptSaveError(null);
-		setAttemptSaving(false);
-		setIsSubmitConfirmOpen(false);
-
+		hardResetExamAttempt(questions);
 		requestScrollToTop();
-	}, [questions, requestScrollToTop]);
+	}, [hardResetExamAttempt, questions, requestScrollToTop]);
 
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
 	}, []);
-
-	const loadQuestions = useCallback(() => {
-		let cancelled = false;
-
-		const run = async () => {
-			try {
-				setQuestionsLoading(true);
-				setQuestionsLoadError(null);
-
-				const loadedQuestions = await getExamQuestionsUseCase.execute({
-					examId,
-					language
-				});
-
-				if (!cancelled) {
-					setQuestions(loadedQuestions);
-					setAnswers({});
-					setSubmitted(false);
-					setShowAllFeedback(true);
-					setCurrentQuestionIndex(0);
-					setElapsedSeconds(0);
-					setExpandedAnswerOptionIndexesByQuestionId({});
-					setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
-					setSavedAttempt(null);
-					setAttemptSaveError(null);
-					setAttemptSaving(false);
-					setIsSubmitConfirmOpen(false);
-				}
-			}
-
-			catch (questionsError) {
-				if (!cancelled) {
-					setQuestionsLoadError(questionsError?.message ?? copy.questionsLoadErrorMessage);
-				}
-			}
-
-			finally {
-				if (!cancelled) {
-					setQuestionsLoading(false);
-				}
-			}
-		};
-
-		run();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [copy.questionsLoadErrorMessage, getExamQuestionsUseCase, examId, language]);
-
-	const clampCurrentQuestionIndex = useCallback(() => {
-		if (visibleQuestionCount === 0) {
-			setCurrentQuestionIndex(0);
-			return;
-		}
-
-		if (currentQuestionIndex > visibleQuestionCount - 1) {
-			setCurrentQuestionIndex(visibleQuestionCount - 1);
-		}
-	}, [visibleQuestionCount, currentQuestionIndex]);
-
-	useEffect(loadQuestions, [loadQuestions]);
-	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
-
-	useEffect(() => {
-		window.addEventListener("keydown", handleFooterNavigationKeyDown);
-
-		return () => window.removeEventListener("keydown", handleFooterNavigationKeyDown);
-	}, [handleFooterNavigationKeyDown]);
-
-	useEffect(() => {
-		if (submitted) {
-			return;
-		}
-
-		const intervalId = window.setInterval(() => {
-			setElapsedSeconds((elapsedSecondCount) => elapsedSecondCount + 1);
-		}, 1000);
-
-		return () => window.clearInterval(intervalId);
-	}, [submitted]);
-
-	useEffect(() => {
-		if (submitted) {
-			setIsSubmitConfirmOpen(false);
-		}
-	}, [submitted]);
 
 	return {
 		questions,
@@ -479,6 +338,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		attemptSavingMessage: copy.attemptSavingMessage,
 
 		questionsLoading,
+		isInitialQuestionsLoad,
 		questionsLoadError,
 		submitted,
 		showAllFeedback,
@@ -508,6 +368,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 		canGoPrevious,
 		canGoNext,
+		isFooterNavigationEnabled,
 		isLastQuestion,
 		showSubmitButton,
 		shouldUseCompactDots,
@@ -531,27 +392,3 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		toggleShowAllFeedback
 	};
 }
-
-const formatElapsedTime = (seconds) => {
-	const safeSeconds = Math.max(seconds, 0);
-	const minutes = Math.floor(safeSeconds / 60);
-	const remainingSeconds = safeSeconds % 60;
-
-	return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
-};
-
-const getCurrentQuestionFillMatchType = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {
-	if (!submitted || !currentQuestion) {
-		return "none";
-	}
-
-	return gradeAnswerUseCase.getFillMatchType(
-		currentQuestion,
-		answers[currentQuestion.id]
-	);
-};
-
-
-const isPlainObject = (value) => {
-	return Boolean(value && typeof value === "object" && !Array.isArray(value));
-};

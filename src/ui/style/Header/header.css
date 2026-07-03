@@ -1,0 +1,95 @@
+/* src/ui/style/Header/header.css */
+.scaffold-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: minmax(64px, 1fr) minmax(0, auto) minmax(64px, 1fr);
+    align-items: flex-start;
+    min-height: var(--scaffold-header-height, 112px);
+    padding: 24px var(--scaffold-inset, clamp(42px, 5vw, 72px)) 18px;
+    pointer-events: none;
+}
+
+.scaffold-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 48%),
+        linear-gradient(
+            180deg,
+            var(--shell-bg) 0%,
+            color-mix(in srgb, var(--shell-bg) 98%, #000 2%) 54%,
+            color-mix(in srgb, var(--shell-bg) 92%, transparent) 78%,
+            color-mix(in srgb, var(--shell-bg) 68%, transparent) 100%
+        );
+    box-shadow:
+        0 18px 52px color-mix(in srgb, #000 22%, transparent),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(22px) saturate(132%);
+    -webkit-backdrop-filter: blur(22px) saturate(132%);
+}
+
+.scaffold-header::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -38px;
+    left: 0;
+    height: 38px;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--shell-bg) 34%, transparent) 0%,
+            color-mix(in srgb, var(--shell-bg) 14%, transparent) 58%,
+            transparent 100%
+        );
+}
+
+.scaffold-header__leading,
+.scaffold-header__heading,
+.scaffold-header__trailing {
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+.scaffold-header__leading {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+}
+
+.scaffold-header__heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    max-width: min(560px, 48vw);
+}
+
+.scaffold-header__trailing {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    min-width: 0;
+}
+
+.scaffold-header__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    min-width: 0;
+}
+
+.scaffold-header .desktop-pop-out-menu__trigger {
+    pointer-events: auto;
+}

@@ -85,6 +85,8 @@ function createViewModel(params = {}) {
         params.isActive ?? true,
         jest.fn(),
         params.showBackButton ?? true,
+        params.backLabel ?? "Tilbake",
+        params.navigationLabel ?? "Navigasjon",
         goBack
     );
 

@@ -8,8 +8,8 @@ export default function AppNavigation(props) {
 			<DesktopSideBar
 				activeScreen={props.activeScreen}
 				onChangeScreen={props.onChangeScreen}
-				settingsOpen={props.settingsOpen}
-				onOpenSettings={props.onOpenSettings}
+				isSettingsPresentationOpen={props.isSettingsPresentationOpen}
+				onOpenSettingsPresentation={props.onOpenSettingsPresentation}
 				showSubjectSwitcher={props.showSubjectSwitcher}
 				hasSelectedSubject={props.hasSelectedSubject}
 				subjects={props.subjects}
@@ -21,19 +21,21 @@ export default function AppNavigation(props) {
 			<MobileDropDownTopBar
 				activeScreen={props.activeScreen}
 				onChangeScreen={props.onChangeScreen}
-				settingsOpen={props.settingsOpen}
-				onOpenSettings={props.onOpenSettings}
-				onCloseSettings={props.onCloseSettings}
-				onBackFromSettings={props.onBackFromSettings}
-				isMenuOpen={props.isMenuOpen}
-				onToggleMenu={props.onToggleMenu}
-				onCloseMenu={props.onCloseMenu}
-				isSubjectPickerOpen={props.isSubjectPickerOpen}
-				onToggleSubjectPicker={props.onToggleSubjectPicker}
-				onCloseSubjectPicker={props.onCloseSubjectPicker}
+				isSettingsPresentationOpen={props.isSettingsPresentationOpen}
+				onOpenSettingsPresentation={props.onOpenSettingsPresentation}
+				onCloseSettingsPresentation={props.onCloseSettingsPresentation}
+				onBackFromSettingsToMobileDropDownTopBarMenu={props.onBackFromSettingsToMobileDropDownTopBarMenu}
+				isMobileDropDownTopBarMenuOpen={props.isMobileDropDownTopBarMenuOpen}
+				onToggleMobileDropDownTopBarMenu={props.onToggleMobileDropDownTopBarMenu}
+				onCloseMobileDropDownTopBarMenu={props.onCloseMobileDropDownTopBarMenu}
+				isMobileSubjectPickerOpen={props.isMobileSubjectPickerOpen}
+				onToggleMobileSubjectPicker={props.onToggleMobileSubjectPicker}
+				onCloseMobileSubjectPicker={props.onCloseMobileSubjectPicker}
 				showSubjectSwitcher={props.showSubjectSwitcher}
 				hasSelectedSubject={props.hasSelectedSubject}
 				showBackButton={props.showBackButton}
+				backLabel={props.backLabel}
+				navigationLabel={props.navigationLabel}
 				onBack={props.onBack}
 				subjects={props.subjects}
 				selectedSubject={props.selectedSubject}

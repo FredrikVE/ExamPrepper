@@ -2,16 +2,16 @@
 import { Settings } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function SidebarSettingsButton({ settingsOpen, onOpenSettings }) {
+export default function SidebarSettingsButton({ isSettingsPresentationOpen, onOpenSettingsPresentation }) {
     const { t } = useLanguage();
 
     return (
         <button
             type="button"
-            onClick={onOpenSettings}
-            className={`sidebar-settings-button ${settingsOpen ? "sidebar-settings-button-active" : ""}`}
+            onClick={onOpenSettingsPresentation}
+            className={`sidebar-settings-button ${isSettingsPresentationOpen ? "sidebar-settings-button-active" : ""}`}
             aria-controls="settings-panel"
-            aria-expanded={settingsOpen}
+            aria-expanded={isSettingsPresentationOpen}
         >
             <Settings className="sidebar-settings-button-icon" />
             <span>{t.sidebarSettings}</span>

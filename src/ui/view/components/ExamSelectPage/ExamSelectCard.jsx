@@ -8,15 +8,20 @@ export default function ExamSelectCard({ exam, index, practiceExamLabel, questio
     const modeLabel = exam.modeLabel ?? practiceExamLabel(index + 1);
     const estimatedMinutes = exam.estimatedMinutes ?? DEFAULT_ESTIMATED_MINUTES;
     const accentIndex = index % 6 + 1;
+    const titleId = `exam-select-card-title-${exam.id}`;
+    const descriptionId = `exam-select-card-description-${exam.id}`;
 
     return (
-        <button
-            type="button"
-            onClick={() => onSelectExam(exam.id)}
-            className={`exam-select-card exam-select-card-${accentIndex}`}
-        >
+        <article className={`exam-select-card exam-select-card-${accentIndex}`}>
+            <button
+                type="button"
+                className="exam-select-card-action"
+                onClick={() => onSelectExam(exam.id)}
+                aria-labelledby={`${titleId} ${descriptionId}`}
+            />
+
             <div className="exam-select-card-main-row">
-                <div className="exam-select-card-icon-wrapper">
+                <div className="exam-select-card-icon-wrapper" aria-hidden="true">
                     <BookOpen className="exam-select-card-icon" />
                 </div>
 
@@ -25,11 +30,11 @@ export default function ExamSelectCard({ exam, index, practiceExamLabel, questio
                         {modeLabel}
                     </p>
 
-                    <h2 className="exam-select-card-title">
+                    <h2 id={titleId} className="exam-select-card-title">
                         {exam.title}
                     </h2>
 
-                    <p className="exam-select-card-description">
+                    <p id={descriptionId} className="exam-select-card-description">
                         <FormattedText text={exam.description} />
                     </p>
                 </div>
@@ -58,6 +63,6 @@ export default function ExamSelectCard({ exam, index, practiceExamLabel, questio
                     <ChevronRight className="exam-select-card-arrow-icon" />
                 </span>
             </div>
-        </button>
+        </article>
     );
 }
