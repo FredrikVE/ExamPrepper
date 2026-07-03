@@ -1,19 +1,15 @@
 // src/ui/viewmodel/ExamPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
-import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
-import getScoreLabel from "./Utils/getScoreLabel.js";
-import getQuestionProgressLabel from "./Utils/getQuestionProgressLabel.js";
-import getFeedbackToggleLabel from "./Utils/getFeedbackToggleLabel.js";
 import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
-import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
 import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots } from "./Utils/questionDotPagination.js";
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import createExamFeedbackModel from "./ExamPage/createExamFeedbackModel.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
 import createExamProgressNavigationModel, { clampExamQuestionIndex } from "./ExamPage/createExamProgressNavigationModel.js";
+import createExamStatusModel from "./ExamPage/createExamStatusModel.js";
 import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
 import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
 import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
@@ -91,16 +87,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		onQuestionsLoaded: handleQuestionsLoaded
 	});
 
-	const examScore = useMemo(() => {
-		return calculateExamScoreUseCase.execute(questions, answers);
-	}, [questions, answers, calculateExamScoreUseCase]);
-
-	const answeredCount = useMemo(() => {
-		return questions.filter((question) => {
-			return isQuestionAnswered(question, answers[question.id]);
-		}).length;
-	}, [questions, answers]);
-
 	const visibleQuestions = questions;
 	const visibleQuestionCount = visibleQuestions.length;
 	const questionCount = questions.length;
@@ -170,32 +156,41 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		);
 	}, [currentQuestion, randomizeAnswerOptions, answerOptionOrderByQuestionId]);
 
-	const answeredCountLabel = getAnsweredCountLabel(
-		answeredCount,
-		questionCount
-	);
-
-	const scoreLabel = getScoreLabel(
-		submitted,
-		examScore.score,
-		examScore.totalPoints
-	);
-
-	const questionProgressLabel = getQuestionProgressLabel(
+	const statusModel = useMemo(() => {
+		return createExamStatusModel({
+			questions,
+			visibleQuestions,
+			currentQuestionIndex,
+			answers,
+			submitted,
+			showAllFeedback,
+			elapsedTimeLabel,
+			calculateExamScoreUseCase,
+			copy
+		});
+	}, [
+		questions,
+		visibleQuestions,
 		currentQuestionIndex,
-		visibleQuestionCount
-	);
+		answers,
+		submitted,
+		showAllFeedback,
+		elapsedTimeLabel,
+		calculateExamScoreUseCase,
+		copy
+	]);
 
-	const feedbackToggleLabel = getFeedbackToggleLabel(showAllFeedback);
-
-	const answeredPercent = useMemo(() => {
-		const total = Math.max(visibleQuestions.length, 1);
-		return Math.round((answeredCount / total) * 100);
-	}, [answeredCount, visibleQuestions.length]);
-
-	const answeredPercentLabel = `${answeredPercent}%`;
-	const mobileWorkStatusLabel = `${elapsedTimeLabel} · ${answeredPercentLabel} ${copy.answeredLabel}`;
-	const canSubmitExam = !submitted && questions.length > 0;
+	const {
+		examScore,
+		answeredCount,
+		answeredCountLabel,
+		answeredPercentLabel,
+		scoreLabel,
+		questionProgressLabel,
+		feedbackToggleLabel,
+		mobileWorkStatusLabel,
+		canSubmitExam
+	} = statusModel;
 
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
