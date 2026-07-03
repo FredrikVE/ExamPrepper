@@ -21,7 +21,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
-	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+	const [rawCurrentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
 	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(0);
@@ -89,7 +89,11 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const visibleQuestions = questions;
 	const visibleQuestionCount = visibleQuestions.length;
-	const questionCount = questions.length;
+
+	/* Klampes ved avledning i stedet for setState-i-effekt: når visibleQuestionCount
+	   krymper (f.eks. nytt question-set) er indeksen alltid gyldig i samme render,
+	   uten kaskaderende re-render (react-hooks/set-state-in-effect). */
+	const currentQuestionIndex = clampExamQuestionIndex(rawCurrentQuestionIndex, visibleQuestionCount);
 
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
 
@@ -194,15 +198,17 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
-			return Math.max(previousIndex - 1, 0);
+			const normalizedIndex = clampExamQuestionIndex(previousIndex, visibleQuestionCount);
+			return Math.max(normalizedIndex - 1, 0);
 		});
 
 		requestScrollToTop();
-	}, [requestScrollToTop]);
+	}, [visibleQuestionCount, requestScrollToTop]);
 
 	const nextQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
-			return clampExamQuestionIndex(previousIndex + 1, visibleQuestionCount);
+			const normalizedIndex = clampExamQuestionIndex(previousIndex, visibleQuestionCount);
+			return clampExamQuestionIndex(normalizedIndex + 1, visibleQuestionCount);
 		});
 
 		requestScrollToTop();
@@ -309,15 +315,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
 	}, []);
-
-	const clampCurrentQuestionIndex = useCallback(() => {
-		setCurrentQuestionIndex((previousIndex) => {
-			return clampExamQuestionIndex(previousIndex, visibleQuestionCount);
-		});
-	}, [visibleQuestionCount]);
-
-	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
-
 
 	return {
 		questions,
