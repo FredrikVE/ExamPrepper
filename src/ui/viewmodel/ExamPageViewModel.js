@@ -9,7 +9,6 @@ import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptio
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
 import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
 import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
-import transformAnswersForApi from "./Utils/transformAnswersForApi.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
@@ -17,6 +16,7 @@ import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./Exa
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
 import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
 import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
+import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
 import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
@@ -28,11 +28,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
-	const [savedAttempt, setSavedAttempt] = useState(null);
-	const [attemptSaveError, setAttemptSaveError] = useState(null);
-	const [attemptSaving, setAttemptSaving] = useState(false);
 	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(0);
-	const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
 
 	const copy = useMemo(() => {
 		return createExamPageCopy(t);
@@ -42,8 +38,30 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setScrollToTopRequestId((requestId) => requestId + 1);
 	}, []);
 
+	const markExamSubmitted = useCallback(() => {
+		setSubmitted(true);
+	}, []);
+
 	const { elapsedSeconds, elapsedTimeLabel, resetElapsedSeconds } = useExamElapsedTimerModel({
 		isPaused: submitted
+	});
+
+	const {
+		savedAttempt,
+		attemptSaving,
+		attemptSaveError,
+		isSubmitConfirmOpen,
+		resetSubmitModel,
+		submitExamAttempt,
+		openSubmitConfirmation,
+		closeSubmitConfirmation,
+		confirmSubmitExamAttempt
+	} = useExamSubmitModel({
+		attemptSaveErrorMessage: copy.attemptSaveErrorMessage,
+		isSubmitted: submitted,
+		submitExamAttemptUseCase,
+		onExamSubmitted: markExamSubmitted,
+		onSubmitStarted: requestScrollToTop
 	});
 
 	const handleQuestionsLoaded = useCallback(({ loadedQuestions, shouldPreserveAttempt }) => {
@@ -58,11 +76,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		resetElapsedSeconds();
 		setExpandedAnswerOptionIndexesByQuestionId({});
 		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
-		setSavedAttempt(null);
-		setAttemptSaveError(null);
-		setAttemptSaving(false);
-		setIsSubmitConfirmOpen(false);
-	}, [resetElapsedSeconds]);
+		resetSubmitModel();
+	}, [resetElapsedSeconds, resetSubmitModel]);
 
 	const {
 		questions,
@@ -284,40 +299,23 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		});
 	}, []);
 
+	const createSubmitAttemptInput = useCallback(() => {
+		return {
+			answers,
+			examId,
+			language,
+			questions,
+			durationSeconds: elapsedSeconds
+		};
+	}, [answers, elapsedSeconds, examId, language, questions]);
+
 	const submitExam = useCallback(async () => {
-		setSubmitted(true);
-		setAttemptSaving(true);
-		setAttemptSaveError(null);
-		requestScrollToTop();
-
-		try {
-			const attempt = await submitExamAttemptUseCase.execute({
-				examId,
-				lang: language,
-				durationSeconds: elapsedSeconds,
-				answers: transformAnswersForApi(questions, answers)
-			});
-
-			setSavedAttempt(attempt);
-		} catch (error) {
-			setAttemptSaveError(error?.message ?? copy.attemptSaveErrorMessage);
-		} finally {
-			setAttemptSaving(false);
-		}
-	}, [answers, copy.attemptSaveErrorMessage, elapsedSeconds, examId, language, questions, requestScrollToTop, submitExamAttemptUseCase]);
-
-	const openSubmitConfirmation = useCallback(() => {
-		setIsSubmitConfirmOpen(true);
-	}, []);
-
-	const closeSubmitConfirmation = useCallback(() => {
-		setIsSubmitConfirmOpen(false);
-	}, []);
+		await submitExamAttempt(createSubmitAttemptInput());
+	}, [createSubmitAttemptInput, submitExamAttempt]);
 
 	const confirmSubmitExam = useCallback(async () => {
-		setIsSubmitConfirmOpen(false);
-		await submitExam();
-	}, [submitExam]);
+		await confirmSubmitExamAttempt(createSubmitAttemptInput());
+	}, [confirmSubmitExamAttempt, createSubmitAttemptInput]);
 
 	const resetExam = useCallback(() => {
 		setAnswers({});
@@ -327,13 +325,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		resetElapsedSeconds();
 		setExpandedAnswerOptionIndexesByQuestionId({});
 		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questions));
-		setSavedAttempt(null);
-		setAttemptSaveError(null);
-		setAttemptSaving(false);
-		setIsSubmitConfirmOpen(false);
+		resetSubmitModel();
 
 		requestScrollToTop();
-	}, [questions, requestScrollToTop, resetElapsedSeconds]);
+	}, [questions, requestScrollToTop, resetElapsedSeconds, resetSubmitModel]);
 
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
@@ -352,11 +347,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
 
-	useEffect(() => {
-		if (submitted) {
-			setIsSubmitConfirmOpen(false);
-		}
-	}, [submitted]);
 
 	return {
 		questions,
