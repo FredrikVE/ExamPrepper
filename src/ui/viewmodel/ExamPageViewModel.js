@@ -16,6 +16,7 @@ import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorr
 import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
 import shouldPreserveExamAttemptOnQuestionReload from "./ExamPage/shouldPreserveExamAttemptOnQuestionReload.js";
+import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
 	const { randomizeAnswerOptions } = useSettings();
@@ -206,10 +207,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			return {
-				...previousAnswers,
-				[questionId]: selectedValue
-			};
+			return updateSingleAnswerSelection(previousAnswers, questionId, selectedValue);
 		});
 	}, [submitted]);
 
@@ -219,21 +217,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			const currentAnswer = Array.isArray(previousAnswers[questionId])
-				? previousAnswers[questionId]
-				: [];
-
-			const nextAnswer = currentAnswer.includes(selectedValue)
-				? currentAnswer.filter((answerValue) => answerValue !== selectedValue)
-				: [...currentAnswer, selectedValue];
-
-			return {
-				...previousAnswers,
-				[questionId]: nextAnswer
-			};
+			return toggleMultiAnswerSelection(previousAnswers, questionId, selectedValue);
 		});
 	}, [submitted]);
-
 
 	const selectDropdownFillAnswer = useCallback((questionId, itemId, optionId) => {
 		if (submitted) {
@@ -241,24 +227,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			const currentQuestionAnswer = isPlainObject(previousAnswers[questionId])
-				? previousAnswers[questionId]
-				: {};
-			const nextQuestionAnswer = { ...currentQuestionAnswer };
-
-			if (optionId) {
-				nextQuestionAnswer[itemId] = optionId;
-			} else {
-				delete nextQuestionAnswer[itemId];
-			}
-
-			return {
-				...previousAnswers,
-				[questionId]: nextQuestionAnswer
-			};
+			return updateObjectAnswerSelection(previousAnswers, questionId, itemId, optionId);
 		});
 	}, [submitted]);
-
 
 	const selectRadioButtonGridAnswer = useCallback((questionId, rowId, columnId) => {
 		if (submitted) {
@@ -266,21 +237,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 
 		setAnswers((previousAnswers) => {
-			const currentQuestionAnswer = isPlainObject(previousAnswers[questionId])
-				? previousAnswers[questionId]
-				: {};
-			const nextQuestionAnswer = { ...currentQuestionAnswer };
-
-			if (columnId) {
-				nextQuestionAnswer[rowId] = columnId;
-			} else {
-				delete nextQuestionAnswer[rowId];
-			}
-
-			return {
-				...previousAnswers,
-				[questionId]: nextQuestionAnswer
-			};
+			return updateObjectAnswerSelection(previousAnswers, questionId, rowId, columnId);
 		});
 	}, [submitted]);
 
@@ -535,9 +492,4 @@ const getCurrentQuestionFillMatchType = (submitted, currentQuestion, answers, gr
 		currentQuestion,
 		answers[currentQuestion.id]
 	);
-};
-
-
-const isPlainObject = (value) => {
-	return Boolean(value && typeof value === "object" && !Array.isArray(value));
 };
