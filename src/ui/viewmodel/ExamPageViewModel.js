@@ -9,10 +9,9 @@ import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptio
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
 import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
 import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
-import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots, getFilledCompactQuestionDotEntries, getMinimalCompactQuestionDotEntries } from "./Utils/questionDotPagination.js";
+import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots } from "./Utils/questionDotPagination.js";
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
-import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
-import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
+import createExamFeedbackModel from "./ExamPage/createExamFeedbackModel.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
 import createExamProgressNavigationModel, { clampExamQuestionIndex } from "./ExamPage/createExamProgressNavigationModel.js";
 import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
@@ -135,54 +134,33 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const shouldUseCompactDots = shouldUseCompactDotsByQuestionCount(visibleQuestionCount);
 	const shouldUseResponsiveCompactDots = shouldAllowResponsiveCompactDots(visibleQuestionCount);
 
-	const questionCorrectnessByQuestionId = useMemo(() => {
-		if (!submitted) {
-			return {};
-		}
-
-		return createQuestionCorrectnessByQuestionId(
+	const feedbackModel = useMemo(() => {
+		return createExamFeedbackModel({
+			submitted,
+			currentQuestion,
 			questions,
+			visibleQuestions,
+			currentQuestionIndex,
 			answers,
 			gradeAnswerUseCase
-		);
-	}, [submitted, questions, answers, gradeAnswerUseCase]);
-
-	const questionDotEntries = useMemo(() => {
-		return createQuestionDotEntries(
-			visibleQuestions,
-			currentQuestionIndex,
-			questionCorrectnessByQuestionId
-		);
-	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
-
-	const filledCompactQuestionDotEntries = useMemo(() => {
-		return createCompactQuestionDotEntries(
-			getFilledCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex),
-			visibleQuestions,
-			currentQuestionIndex,
-			questionCorrectnessByQuestionId
-		);
-	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
-
-	const minimalCompactQuestionDotEntries = useMemo(() => {
-		return createCompactQuestionDotEntries(
-			getMinimalCompactQuestionDotEntries(visibleQuestions, currentQuestionIndex),
-			visibleQuestions,
-			currentQuestionIndex,
-			questionCorrectnessByQuestionId
-		);
-	}, [visibleQuestions, currentQuestionIndex, questionCorrectnessByQuestionId]);
-
-	const currentQuestionIsCorrect = currentQuestion
-		? questionCorrectnessByQuestionId[currentQuestion.id] ?? false
-		: false;
-
-	const currentQuestionFillMatchType = getCurrentQuestionFillMatchType(
+		});
+	}, [
 		submitted,
 		currentQuestion,
+		questions,
+		visibleQuestions,
+		currentQuestionIndex,
 		answers,
 		gradeAnswerUseCase
-	);
+	]);
+
+	const {
+		questionDotEntries,
+		filledCompactQuestionDotEntries,
+		minimalCompactQuestionDotEntries,
+		currentQuestionIsCorrect,
+		currentQuestionFillMatchType
+	} = feedbackModel;
 
 	const currentAnswerOptionOrder = useMemo(() => {
 		return getCurrentAnswerOptionOrder(
@@ -416,14 +394,3 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		toggleShowAllFeedback
 	};
 }
-
-const getCurrentQuestionFillMatchType = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {
-	if (!submitted || !currentQuestion) {
-		return "none";
-	}
-
-	return gradeAnswerUseCase.getFillMatchType(
-		currentQuestion,
-		answers[currentQuestion.id]
-	);
-};
