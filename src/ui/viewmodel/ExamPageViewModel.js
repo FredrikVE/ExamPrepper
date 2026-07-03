@@ -3,9 +3,9 @@ import { useCallback, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
-import createAnswerOptionOrderByQuestionId from "./Utils/answerOptionOrder.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots } from "./Utils/questionDotPagination.js";
 import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
+import { resetExamAttemptState } from "./ExamPage/createExamAttemptResetActions.js";
 import createExamFeedbackModel from "./ExamPage/createExamFeedbackModel.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
 import createExamProgressNavigationModel, { clampExamQuestionIndex } from "./ExamPage/createExamProgressNavigationModel.js";
@@ -68,14 +68,17 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	   Soft reload (samme question-set, f.eks. språkbytte) skal ALDRI hit —
 	   den avgjøres av shouldPreserveExamAttemptOnQuestionReload i load-modellen. */
 	const hardResetExamAttempt = useCallback((questionSet) => {
-		setAnswers({});
-		setSubmitted(false);
-		setShowAllFeedback(true);
-		setCurrentQuestionIndex(0);
-		resetElapsedSeconds();
-		setExpandedAnswerOptionIndexesByQuestionId({});
-		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questionSet));
-		resetSubmitModel();
+		resetExamAttemptState({
+			questionSet,
+			setAnswers,
+			setSubmitted,
+			setShowAllFeedback,
+			setCurrentQuestionIndex,
+			resetElapsedSeconds,
+			setExpandedAnswerOptionIndexesByQuestionId,
+			setAnswerOptionOrderByQuestionId,
+			resetSubmitModel
+		});
 	}, [resetElapsedSeconds, resetSubmitModel]);
 
 	const handleQuestionsLoaded = useCallback(({ loadedQuestions, shouldPreserveAttempt }) => {
