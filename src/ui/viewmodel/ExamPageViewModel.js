@@ -14,6 +14,7 @@ import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
 import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
+import createExamProgressNavigationModel, { clampExamQuestionIndex } from "./ExamPage/createExamProgressNavigationModel.js";
 import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
 import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
 import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
@@ -115,12 +116,20 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		? expandedAnswerOptionIndexesByQuestionId[currentQuestion.id] ?? []
 		: [];
 
-	const currentQuestionNumber = currentQuestionIndex + 1;
+	const progressNavigationModel = useMemo(() => {
+		return createExamProgressNavigationModel({
+			currentQuestionIndex,
+			visibleQuestionCount
+		});
+	}, [currentQuestionIndex, visibleQuestionCount]);
 
-	const canGoPrevious = currentQuestionIndex > 0;
-	const canGoNext = currentQuestionIndex < visibleQuestionCount - 1;
-
-	const isLastQuestion = !canGoNext;
+	const {
+		currentQuestionNumber,
+		canGoPrevious,
+		canGoNext,
+		isFooterNavigationEnabled,
+		isLastQuestion
+	} = progressNavigationModel;
 	const showSubmitButton = isLastQuestion && !submitted;
 
 	const shouldUseCompactDots = shouldUseCompactDotsByQuestionCount(visibleQuestionCount);
@@ -220,17 +229,11 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const nextQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
-			if (visibleQuestionCount === 0) {
-				return 0;
-			}
-
-			return Math.min(previousIndex + 1, visibleQuestionCount - 1);
+			return clampExamQuestionIndex(previousIndex + 1, visibleQuestionCount);
 		});
 
 		requestScrollToTop();
 	}, [visibleQuestionCount, requestScrollToTop]);
-
-	const isFooterNavigationEnabled = canGoPrevious || canGoNext;
 
 	const goToQuestion = useCallback((index) => {
 		if (index < 0 || index >= visibleQuestionCount) {
@@ -335,15 +338,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	}, []);
 
 	const clampCurrentQuestionIndex = useCallback(() => {
-		if (visibleQuestionCount === 0) {
-			setCurrentQuestionIndex(0);
-			return;
-		}
-
-		if (currentQuestionIndex > visibleQuestionCount - 1) {
-			setCurrentQuestionIndex(visibleQuestionCount - 1);
-		}
-	}, [visibleQuestionCount, currentQuestionIndex]);
+		setCurrentQuestionIndex((previousIndex) => {
+			return clampExamQuestionIndex(previousIndex, visibleQuestionCount);
+		});
+	}, [visibleQuestionCount]);
 
 	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
 
