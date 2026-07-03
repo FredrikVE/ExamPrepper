@@ -49,12 +49,14 @@ export default function PageToolsMobileFooterSheet({ tools, renderControls, rend
                 popupClassName=""
                 contentClassName="page-tools-mobile-bottom-sheet-content"
             >
-                <div className="page-tools-mobile-sheet-controls" onFocusCapture={onOpenSheet} onPointerDownCapture={onOpenSheet}>
-                    {renderControls()}
-                </div>
-
+                {/* Forslagslisten ligger FØR kontrollene slik at autocomplete vokser
+                    oppover fra søkefeltet — samme rekkefølge som inline-varianten. */}
                 <div className="page-tools-mobile-sheet-search-content">
                     {searchContent}
+                </div>
+
+                <div className="page-tools-mobile-sheet-controls" onFocusCapture={onOpenSheet} onPointerDownCapture={onOpenSheet}>
+                    {renderControls()}
                 </div>
 
                 <ToolCardGrid

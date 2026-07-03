@@ -1,5 +1,5 @@
 // src/ui/viewmodel/ExamPageViewModel.js
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import getAnsweredCountLabel from "./Utils/getAnsweredCountLabel.js";
 import getScoreLabel from "./Utils/getScoreLabel.js";
@@ -15,21 +15,17 @@ import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import createQuestionCorrectnessByQuestionId from "./ExamPage/createQuestionCorrectnessByQuestionId.js";
 import { createCompactQuestionDotEntries, createQuestionDotEntries } from "./ExamPage/createQuestionDotEntries.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
-import shouldPreserveExamAttemptOnQuestionReload from "./ExamPage/shouldPreserveExamAttemptOnQuestionReload.js";
+import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
+import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
 import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
 	const { randomizeAnswerOptions } = useSettings();
 
-	const [questions, setQuestions] = useState([]);
-	const questionsRef = useRef([]);
 	const [answers, setAnswers] = useState({});
 	const [submitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
-	const [questionsLoading, setQuestionsLoading] = useState(true);
-	const [questionsLoadError, setQuestionsLoadError] = useState(null);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-	const [elapsedSeconds, setElapsedSeconds] = useState(0);
 	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
 	const [savedAttempt, setSavedAttempt] = useState(null);
@@ -45,6 +41,40 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const requestScrollToTop = useCallback(() => {
 		setScrollToTopRequestId((requestId) => requestId + 1);
 	}, []);
+
+	const { elapsedSeconds, elapsedTimeLabel, resetElapsedSeconds } = useExamElapsedTimerModel({
+		isPaused: submitted
+	});
+
+	const handleQuestionsLoaded = useCallback(({ loadedQuestions, shouldPreserveAttempt }) => {
+		if (shouldPreserveAttempt) {
+			return;
+		}
+
+		setAnswers({});
+		setSubmitted(false);
+		setShowAllFeedback(true);
+		setCurrentQuestionIndex(0);
+		resetElapsedSeconds();
+		setExpandedAnswerOptionIndexesByQuestionId({});
+		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
+		setSavedAttempt(null);
+		setAttemptSaveError(null);
+		setAttemptSaving(false);
+		setIsSubmitConfirmOpen(false);
+	}, [resetElapsedSeconds]);
+
+	const {
+		questions,
+		questionsLoading,
+		questionsLoadError,
+		isInitialQuestionsLoad
+	} = useExamQuestionLoadModel({
+		getExamQuestionsUseCase,
+		examId,
+		questionsLoadErrorMessage: copy.questionsLoadErrorMessage,
+		onQuestionsLoaded: handleQuestionsLoaded
+	});
 
 	const examScore = useMemo(() => {
 		return calculateExamScoreUseCase.execute(questions, answers);
@@ -156,10 +186,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const feedbackToggleLabel = getFeedbackToggleLabel(showAllFeedback);
 
-	const elapsedTimeLabel = useMemo(() => {
-		return formatElapsedTime(elapsedSeconds);
-	}, [elapsedSeconds]);
-
 	const answeredPercent = useMemo(() => {
 		const total = Math.max(visibleQuestions.length, 1);
 		return Math.round((answeredCount / total) * 100);
@@ -168,7 +194,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const answeredPercentLabel = `${answeredPercent}%`;
 	const mobileWorkStatusLabel = `${elapsedTimeLabel} · ${answeredPercentLabel} ${copy.answeredLabel}`;
 	const canSubmitExam = !submitted && questions.length > 0;
-	const isInitialQuestionsLoad = questionsLoading && questions.length === 0;
 
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
@@ -299,7 +324,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setSubmitted(false);
 		setShowAllFeedback(true);
 		setCurrentQuestionIndex(0);
-		setElapsedSeconds(0);
+		resetElapsedSeconds();
 		setExpandedAnswerOptionIndexesByQuestionId({});
 		setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(questions));
 		setSavedAttempt(null);
@@ -308,69 +333,11 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setIsSubmitConfirmOpen(false);
 
 		requestScrollToTop();
-	}, [questions, requestScrollToTop]);
+	}, [questions, requestScrollToTop, resetElapsedSeconds]);
 
 	const toggleShowAllFeedback = useCallback(() => {
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
 	}, []);
-
-	const loadQuestions = useCallback(() => {
-		let cancelled = false;
-
-		const run = async () => {
-			try {
-				setQuestionsLoading(true);
-				setQuestionsLoadError(null);
-
-				// examId is the question-load SSOT; language changes resolve to a translated examId.
-				const loadedQuestions = await getExamQuestionsUseCase.execute({
-					examId
-				});
-
-				if (!cancelled) {
-					const shouldPreserveAttempt = shouldPreserveExamAttemptOnQuestionReload(
-						questionsRef.current,
-						loadedQuestions
-					);
-
-					questionsRef.current = loadedQuestions;
-					setQuestions(loadedQuestions);
-
-					if (!shouldPreserveAttempt) {
-						setAnswers({});
-						setSubmitted(false);
-						setShowAllFeedback(true);
-						setCurrentQuestionIndex(0);
-						setElapsedSeconds(0);
-						setExpandedAnswerOptionIndexesByQuestionId({});
-						setAnswerOptionOrderByQuestionId(createAnswerOptionOrderByQuestionId(loadedQuestions));
-						setSavedAttempt(null);
-						setAttemptSaveError(null);
-						setAttemptSaving(false);
-						setIsSubmitConfirmOpen(false);
-					}
-				}
-			}
-
-			catch (questionsError) {
-				if (!cancelled) {
-					setQuestionsLoadError(questionsError?.message ?? copy.questionsLoadErrorMessage);
-				}
-			}
-
-			finally {
-				if (!cancelled) {
-					setQuestionsLoading(false);
-				}
-			}
-		};
-
-		run();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [copy.questionsLoadErrorMessage, getExamQuestionsUseCase, examId]);
 
 	const clampCurrentQuestionIndex = useCallback(() => {
 		if (visibleQuestionCount === 0) {
@@ -383,20 +350,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		}
 	}, [visibleQuestionCount, currentQuestionIndex]);
 
-	useEffect(loadQuestions, [loadQuestions]);
 	useEffect(clampCurrentQuestionIndex, [clampCurrentQuestionIndex]);
-
-	useEffect(() => {
-		if (submitted) {
-			return;
-		}
-
-		const intervalId = window.setInterval(() => {
-			setElapsedSeconds((elapsedSecondCount) => elapsedSecondCount + 1);
-		}, 1000);
-
-		return () => window.clearInterval(intervalId);
-	}, [submitted]);
 
 	useEffect(() => {
 		if (submitted) {
@@ -474,14 +428,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		toggleShowAllFeedback
 	};
 }
-
-const formatElapsedTime = (seconds) => {
-	const safeSeconds = Math.max(seconds, 0);
-	const minutes = Math.floor(safeSeconds / 60);
-	const remainingSeconds = safeSeconds % 60;
-
-	return `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
-};
 
 const getCurrentQuestionFillMatchType = (submitted, currentQuestion, answers, gradeAnswerUseCase) => {
 	if (!submitted || !currentQuestion) {
