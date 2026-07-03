@@ -1,13 +1,11 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
 import { FLIPCARD_SWIPE_RESULT } from "./FlipcardDeck/flipcardSwipe.js";
 import { useFlipcardFeedbackToast } from "./FlipcardDeck/useFlipcardFeedbackToast.js";
 import { useFlipcardSwipeInteraction } from "./FlipcardDeck/useFlipcardSwipeInteraction.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
-import FlipcardToolMenu from "./FlipcardToolMenu/FlipcardToolMenu.jsx";
 import FlipcardsMobileFooterSheet from "./FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx";
-import useFlipcardToolMenu from "./FlipcardToolMenu/useFlipcardToolMenu.js";
 import ProgressPager from "../ProgressPager/ProgressPager.jsx";
 import createProgressPagerEntries from "../ProgressPager/createProgressPagerEntries.js";
 import shouldHandleFlipcardKeyboardShortcut from "./FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js";
@@ -15,9 +13,9 @@ import shouldHandleFlipcardKeyboardShortcut from "./FlipcardDeck/shouldHandleFli
 const resolveFlipcardProgressCorrectness = () => false;
 
 export default function FlipcardsStudySurface(props) {
-	const [isDesktopToolsPanelOpen, setIsDesktopToolsPanelOpen] = useState(false);
 	const presentationMode = props.presentationMode;
-	const { isDesktopMenuOpen, closeDesktopMenu, setDesktopMenuOpen } = useFlipcardToolMenu();
+	const isDesktopToolsPanelOpen =
+		presentationMode === PRESENTATION_MODE.DESKTOP && props.isDesktopMenuOpen;
 	const {
 		activeSwipeCommand,
 		isSwipeCommandActive,
@@ -41,16 +39,6 @@ export default function FlipcardsStudySurface(props) {
 			resolveIsCorrect: resolveFlipcardProgressCorrectness
 		});
 	}, [props.activeCardIndex, props.cards.length]);
-
-	useEffect(() => {
-		if (presentationMode !== PRESENTATION_MODE.DESKTOP) {
-			closeDesktopMenu();
-		}
-	}, [closeDesktopMenu, presentationMode]);
-
-	useEffect(() => {
-		setIsDesktopToolsPanelOpen(presentationMode === PRESENTATION_MODE.DESKTOP && isDesktopMenuOpen);
-	}, [isDesktopMenuOpen, presentationMode]);
 
 	const restartSession = useCallback(() => {
 		clearActiveSwipeCommand();
@@ -193,15 +181,6 @@ export default function FlipcardsStudySurface(props) {
 						</div>
 					)}
 				</div>
-
-				<FlipcardToolMenu
-					presentationMode={presentationMode}
-					isDesktopMenuOpen={isDesktopMenuOpen}
-					onDesktopMenuOpenChange={setDesktopMenuOpen}
-					labels={props.labels}
-					deckToolItems={props.deckToolItems}
-					onDeckToolSelect={selectDeckTool}
-				/>
 			</div>
 
 			<FlipcardsMobileFooterSheet
