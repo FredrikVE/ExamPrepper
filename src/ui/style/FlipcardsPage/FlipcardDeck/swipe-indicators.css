@@ -31,7 +31,7 @@
 	padding: 10px 14px;
 	border-radius: var(--radius-full);
 	box-shadow:
-		inset 0 1px 0 rgba(255, 255, 255, 0.78),
+		inset 0 1px 0 var(--flipcard-face-inset-highlight),
 		0 12px 30px rgba(18, 38, 63, 0.12);
 	font-size: 12px;
 	font-weight: 900;
@@ -45,17 +45,17 @@
 
 .swipe-badge-practice {
 	left: 42px;
-	border: 1px solid rgba(220, 38, 38, 0.2);
-	background: rgba(254, 242, 242, 0.82);
-	color: rgba(220, 38, 38, 0.96);
+	border: 1px solid color-mix(in srgb, var(--flipcards-red) 20%, transparent);
+	background: var(--flipcard-pill-practice-bg);
+	color: var(--flipcards-red);
 	rotate: -12deg;
 }
 
 .swipe-badge-mastered {
 	right: 42px;
-	border: 1px solid rgba(5, 150, 105, 0.2);
-	background: rgba(236, 253, 245, 0.82);
-	color: rgba(5, 150, 105, 0.96);
+	border: 1px solid color-mix(in srgb, var(--flipcards-green) 20%, transparent);
+	background: var(--flipcard-pill-mastered-bg);
+	color: var(--flipcards-green);
 	rotate: 12deg;
 }
 

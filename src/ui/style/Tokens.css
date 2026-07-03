@@ -150,6 +150,8 @@
     --flipcard-face-surface: #ffffff;
     --flipcard-face-inset-highlight: rgba(255, 255, 255, 0.86);
     --flipcard-face-sheen: rgba(255, 255, 255, 0.58);
+    --flipcard-pill-practice-bg: rgba(254, 242, 242, 0.82);
+    --flipcard-pill-mastered-bg: rgba(236, 253, 245, 0.82);
 
     /* ── Elevation ─────────────────────────── */
     --shadow-soft: 0 22px 60px rgba(18, 38, 63, 0.12);
@@ -310,6 +312,8 @@
     --flipcard-face-surface: #0b1c33;
     --flipcard-face-inset-highlight: rgba(255, 255, 255, 0.08);
     --flipcard-face-sheen: rgba(255, 255, 255, 0.05);
+    --flipcard-pill-practice-bg: color-mix(in srgb, var(--danger) 16%, var(--flipcard-face-surface));
+    --flipcard-pill-mastered-bg: color-mix(in srgb, var(--success) 16%, var(--flipcard-face-surface));
 
     /* ── Elevation ─────────────────────────── */
     --shadow-soft: 0 26px 80px rgba(0, 0, 0, 0.42);
