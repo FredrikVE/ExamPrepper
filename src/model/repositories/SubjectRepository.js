@@ -19,6 +19,25 @@ export default class SubjectRepository {
         }) ?? null;
     }
 
+    async getTopicAreasBySubject(subjectId) {
+        const dtos = await this.subjectDataSource.fetchTopicAreasBySubject(subjectId);
+        const topicAreas = [];
+
+        for (const dto of dtos) {
+            topicAreas.push({
+                key: dto.areaKey,
+                label: {
+                    no: dto.labelNo,
+                    en: dto.labelEn
+                },
+                iconKey: dto.iconKey,
+                position: dto.position
+            });
+        }
+
+        return topicAreas;
+    }
+
     async getSubjectsWithExamCount({ language } = {}) {
         const [subjects, exams] = await Promise.all([
             this.subjectDataSource.fetchSubjects(),

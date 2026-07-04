@@ -27,16 +27,16 @@
 }
 
 .flipcards-progress-pager-button.progress-pager-button-previous {
-    border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line));
-    background: color-mix(in srgb, var(--panel-strong) 64%, transparent);
-    color: var(--text-muted);
+    border: 1px solid var(--button-secondary-border);
+    background: var(--button-secondary-bg);
+    color: var(--button-secondary-muted-text);
 }
 
 .flipcards-progress-pager-button.progress-pager-button-next {
-    border: 1px solid color-mix(in srgb, var(--accent) 44%, var(--line));
-    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 86%, #ffffff), var(--accent-strong));
-    color: #ffffff;
-    box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 28%, transparent);
+    border: 1px solid var(--button-primary-border);
+    background: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    box-shadow: var(--button-primary-shadow);
 }
 
 .flipcards-progress-pager-counter {

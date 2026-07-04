@@ -8,11 +8,11 @@
     width: 64px;
     height: 64px;
     place-items: center;
-    border: 1px solid var(--line-strong);
+    border: 1px solid var(--button-secondary-border);
     border-radius: 18px;
-    color: var(--accent);
-    background: var(--panel-strong);
-    box-shadow: var(--shadow-card);
+    color: var(--button-secondary-icon);
+    background: var(--button-secondary-bg);
+    box-shadow: var(--button-surface-shadow);
     backdrop-filter: var(--blur-panel);
     padding: 0;
     pointer-events: auto;
@@ -27,19 +27,19 @@
 .desktop-pop-out-menu__trigger:focus-visible,
 .desktop-pop-out-menu__trigger[data-popup-open] {
     transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--accent) 42%, var(--line-strong));
-    background: color-mix(in srgb, var(--accent) 8%, var(--panel-strong));
-    box-shadow: var(--shadow-card), 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+    border-color: var(--button-secondary-border-hover);
+    background: var(--button-secondary-bg-hover);
+    box-shadow: var(--button-surface-shadow), 0 0 0 3px var(--button-focus-ring);
 }
 
 .desktop-pop-out-menu__trigger--flipcards[data-popup-open] {
-    background: color-mix(in srgb, var(--accent) 12%, var(--panel-strong));
+    background: var(--button-secondary-bg-hover);
 }
 
 .desktop-pop-out-menu__trigger svg {
     width: 26px;
     height: 26px;
-    color: var(--accent);
+    color: var(--button-secondary-icon);
     stroke-width: 2.4;
 }
 

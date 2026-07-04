@@ -182,7 +182,7 @@ Denne delen beskriver hvordan appen er strukturert visuelt. Layouten skal gi bru
     </tr>
     <tr>
         <td>Laptop-optimalisert layout</td>
-        <td><code>ExamPage</code>, <code>SubjectSelectPage</code> og <code>ExamSelectPage</code> har egne responsive regler for typiske laptop-skjermer og svært lave viewport-høyder.</td>
+        <td><code>ExamPage</code>, <code>SubjectSelectPage</code> og <code>LearningContentSelectPage</code> har egne responsive regler for typiske laptop-skjermer og svært lave viewport-høyder.</td>
     </tr>
     <tr>
         <td>Moderne eksamenslayout</td>

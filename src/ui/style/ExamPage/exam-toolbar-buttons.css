@@ -1,38 +1,38 @@
 /* src/ui/style/ExamPage/exam-toolbar-buttons.css */
-.exam-header-button {
+.exam-toolbar-button {
     display: inline-flex;
-    min-height: var(--header-button-min-height);
+    min-height: var(--exam-toolbar-button-min-height);
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
     border: 0;
     border-radius: var(--radius-sm);
-    padding: var(--header-button-padding);
-    font-size: var(--header-button-font-size);
-    font-weight: var(--header-button-font-weight);
+    padding: var(--exam-toolbar-button-padding);
+    font-size: var(--exam-toolbar-button-font-size);
+    font-weight: var(--exam-toolbar-button-font-weight);
     transition:
         transform var(--transition-fast),
         box-shadow var(--transition-fast),
         background var(--transition-fast);
 }
 
-.exam-header-button:hover {
-    transform: translateY(var(--header-button-hover-offset));
+.exam-toolbar-button:hover {
+    transform: translateY(var(--exam-toolbar-button-hover-offset));
 }
 
-.exam-header-button-primary {
+.exam-toolbar-button-primary {
     color: white;
     background: linear-gradient(135deg, var(--success) 0%, var(--success-text) 100%);
-    box-shadow: var(--header-primary-button-shadow);
+    box-shadow: var(--exam-toolbar-primary-button-shadow);
 }
 
-.exam-header-button-secondary {
+.exam-toolbar-button-secondary {
     border: 1px solid var(--line);
     color: var(--text-main);
     background: color-mix(in srgb, var(--panel-strong) 80%, transparent);
 }
 
-.exam-header-icon {
-    width: var(--header-icon-size);
-    height: var(--header-icon-size);
+.exam-toolbar-icon {
+    width: var(--exam-toolbar-icon-size);
+    height: var(--exam-toolbar-icon-size);
 }

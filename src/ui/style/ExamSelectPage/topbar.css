@@ -1,9 +1,0 @@
-/* src/ui/style/ExamSelectPage/topbar.css */
-.exam-select-topbar {
-    margin-bottom: 0;
-}
-
-.exam-select-title {
-    font-size: clamp(52px, 4.55vw, 64px);
-    line-height: 0.95;
-}

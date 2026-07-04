@@ -84,18 +84,18 @@ const SidebarNavigationItem = ({ Icon, label, active, onClick }) => {
 
 const shouldShowNavigationItem = (item, activeScreen, hasSelectedSubject) => {
     const isSubjectHomeButton = item.screen === NAV_SCREENS.SUBJECTS;
-    const isExamSelectButton = item.screen === NAV_SCREENS.SELECT;
+    const isLearningContentSelectButton = item.screen === NAV_SCREENS.SELECT;
 
     if (item.requiresSubject && !hasSelectedSubject) {
         return false;
     }
 
     if (activeScreen === NAV_SCREENS.SUBJECTS) {
-        return !isSubjectHomeButton && !isExamSelectButton;
+        return !isSubjectHomeButton && !isLearningContentSelectButton;
     }
 
     if (activeScreen === NAV_SCREENS.SELECT) {
-        return !isExamSelectButton;
+        return !isLearningContentSelectButton;
     }
 
     return true;

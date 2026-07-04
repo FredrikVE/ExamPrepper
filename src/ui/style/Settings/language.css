@@ -7,28 +7,33 @@
 
 .settings-language-button {
     min-width: 96px;
-    border: 1px solid var(--line);
+    border: 1px solid var(--button-secondary-border);
     border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--text-muted);
+    background: var(--button-secondary-bg);
+    color: var(--button-secondary-muted-text);
     padding: 10px 14px;
     font-size: 0.92rem;
     font-weight: 750;
-    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.settings-language-button:hover {
-    color: var(--text-main);
-    background: var(--accent-soft);
+.settings-language-button:hover,
+.settings-language-button:focus-visible {
+    color: var(--button-secondary-text);
+    border-color: var(--button-secondary-border-hover);
+    background: var(--button-secondary-bg-hover);
+    box-shadow: 0 0 0 3px var(--button-focus-ring);
 }
 
 .settings-language-button-active {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: white;
+    border-color: var(--button-primary-border);
+    background: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    box-shadow: var(--button-primary-shadow);
 }
 
-.settings-language-button-active:hover {
-    color: white;
-    background: var(--accent-strong);
+.settings-language-button-active:hover,
+.settings-language-button-active:focus-visible {
+    color: var(--button-primary-text);
+    background: var(--button-primary-bg-hover);
 }

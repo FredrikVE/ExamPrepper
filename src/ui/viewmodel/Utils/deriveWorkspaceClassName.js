@@ -31,12 +31,14 @@ const shouldQuestionUseScrollFooter = (question, submitted) => {
 	const dragDropTargetCount = question?.targets?.length ?? 0;
 	const dragCategorizeCategoryCount = question?.categories?.length ?? 0;
 	const matrixQuadrantCount = getMatrixPlacementQuadrantCount(question);
+	const isMultiChoiceQuestion = question?.type === QUESTION_TYPES.MULTI;
 	const isDragDropQuestion = question?.type === QUESTION_TYPES.DRAG_DROP;
 	const isDragCategorizeQuestion = question?.type === QUESTION_TYPES.DRAG_CATEGORIZE;
 	const isMatrixPlacementQuestion = question?.type === QUESTION_TYPES.MATRIX_PLACEMENT;
 	const isSequenceOrderQuestion = question?.type === QUESTION_TYPES.SEQUENCE_ORDER;
 
 	return optionCount >= 6 ||
+		(isMultiChoiceQuestion && optionCount >= 5) ||
 		isDragDropQuestion ||
 		isDragCategorizeQuestion ||
 		isMatrixPlacementQuestion ||

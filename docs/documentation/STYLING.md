@@ -13,7 +13,7 @@ Global styling importeres fra `src/ui/style/App.css`.
 @import "./Global.css";
 
 @import "./SubjectSelectPage/index.css";
-@import "./ExamSelectPage/index.css";
+@import "./LearningContentSelectPage/index.css";
 @import "./ExamPage/index.css";
 
 @import "./Header/index.css";
@@ -51,7 +51,7 @@ Retningslinjer:
 - Global reset og basisregler legges i `Global.css`.
 - Responsiv styling legges som hovedregel i `responsive.css` i den relevante side- eller komponentmappen.
 - Globale responsive regler bør unngås med mindre de faktisk gjelder hele appen.
-- Side-spesifikk styling legges i mappen for siden, for eksempel `SubjectSelectPage/`, `ExamSelectPage/` eller `ExamPage/`.
+- Side-spesifikk styling legges i mappen for siden, for eksempel `SubjectSelectPage/`, `LearningContentSelectPage/` eller `ExamPage/`.
 - Komponentområde-spesifikk styling legges i mappen for komponentområdet, for eksempel `Header/`, `Sidebar/`, `QuestionCard/` eller `FeedbackPanel/`.
 - Hver mappe bør ha en `index.css` som importerer del-filene i riktig rekkefølge.
 - `responsive.css` bør importeres sist i mappen sin `index.css`, slik at responsive regler kan overstyre base-styling.

@@ -1,7 +1,7 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, getExamSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
-import { PAGE_TOOL_ITEM_IDS, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
+import { PAGE_NAV_TOOL_IDS, getLearningContentSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
+import { PAGE_TOOL_ITEM_IDS, getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
 
 const t = {
@@ -13,6 +13,7 @@ const t = {
     pageToolsCloseLabel: "Lukk verktøymeny",
     pageToolsMobileHandleLabel: "Verktøy",
     pageToolsUnavailableLabel: "Kommer senere",
+    pageToolsSelectedLabel: "Aktiv",
     pageToolsSelectSubjectFirstLabel: "Velg fag først",
     pageToolsExamsLabel: "Eksamner",
     pageToolsPracticeTestsLabel: "Øveprøver",
@@ -30,8 +31,8 @@ function createTools(params) {
     return createWorkspaceToolsModel({
         pageToolGroup: getPageToolGroup(params.screen),
         t,
-        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? [] : getExamSelectPageNavToolItems(),
-        workspaceActionToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectWorkspaceActionToolItems() : getExamSelectWorkspaceActionToolItems(),
+        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? [] : getLearningContentSelectPageNavToolItems(),
+        workspaceActionToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectWorkspaceActionToolItems() : getLearningContentSelectWorkspaceActionToolItems(),
         hasSelectedSubject: params.hasSelectedSubject,
         onChangeScreen: params.onChangeScreen
     });
@@ -47,7 +48,7 @@ describe("createWorkspaceToolsModel", () => {
         });
 
         const examsTool = tools.items.find((toolItem) => toolItem.id === PAGE_NAV_TOOL_IDS.EXAMS);
-        const createExamTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM);
+        const importMaterialsTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS);
 
         expect(tools.title).toBe("Velg læringsverktøy");
         expect(tools.subtitle).toBe("");
@@ -60,9 +61,9 @@ describe("createWorkspaceToolsModel", () => {
             screen: NAV_SCREENS.SELECT,
             isDisabled: false
         }));
-        expect(createExamTool).toEqual(expect.objectContaining({
+        expect(importMaterialsTool).toEqual(expect.objectContaining({
             statusLabel: "Kommer senere",
-            ariaLabel: "Opprett ny eksamen · Kommer senere",
+            ariaLabel: "Legg inn notater eller forelesningsslides · Kommer senere",
             isDisabled: true,
             onSelect: null
         }));
@@ -93,8 +94,8 @@ describe("createWorkspaceToolsModel", () => {
         const tools = createWorkspaceToolsModel({
             pageToolGroup: null,
             t,
-            navToolItems: getExamSelectPageNavToolItems(),
-            workspaceActionToolItems: getExamSelectWorkspaceActionToolItems(),
+            navToolItems: getLearningContentSelectPageNavToolItems(),
+            workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
             hasSelectedSubject: true,
             onChangeScreen: jest.fn()
         });

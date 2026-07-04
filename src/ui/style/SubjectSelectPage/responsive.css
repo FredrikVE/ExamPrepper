@@ -30,14 +30,14 @@
     }
 
     .subject-select-grid {
-        gap: 16px;
+        gap: var(--selection-card-mobile-grid-gap);
         width: 100%;
     }
 
     .subject-card {
-        min-height: 286px;
-        padding: 22px;
-        border-radius: 20px;
+        min-height: var(--selection-card-mobile-min-height);
+        padding: var(--selection-card-mobile-padding);
+        border-radius: var(--selection-card-mobile-radius);
     }
 
     .subject-card-icon-wrap {
@@ -469,7 +469,7 @@
     flex-wrap: wrap;
 }
 .subject-select-grid {
-    width: min(987px, 100%);
+    width: var(--selection-card-grid-width);
     overflow: visible;
 }
 

@@ -12,11 +12,16 @@
     font-size: 0.92rem;
     font-weight: 800;
     white-space: nowrap;
-    transition: transform var(--transition-fast), opacity var(--transition-fast), box-shadow var(--transition-fast);
+    transition: transform var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .progress-pager-button:hover:not(:disabled) {
     transform: translateY(-1px);
+}
+
+.progress-pager-button:focus-visible {
+    outline: 3px solid var(--button-focus-ring);
+    outline-offset: 3px;
 }
 
 .progress-pager-button:disabled {
@@ -26,15 +31,28 @@
 
 
 .progress-pager-button-previous {
-    border: 1px solid var(--line);
-    color: var(--text-main);
-    background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
+    border: 1px solid var(--button-secondary-border);
+    color: var(--button-secondary-muted-text);
+    background: var(--button-secondary-bg);
+}
+
+.progress-pager-button-previous:hover:not(:disabled),
+.progress-pager-button-previous:focus-visible {
+    border-color: var(--button-secondary-border-hover);
+    color: var(--button-secondary-text);
+    background: var(--button-secondary-bg-hover);
 }
 
 .progress-pager-button-next {
-    color: white;
-    background: var(--accent-gradient);
-    box-shadow: var(--shadow-button);
+    border: 1px solid var(--button-primary-border);
+    color: var(--button-primary-text);
+    background: var(--button-primary-bg);
+    box-shadow: var(--button-primary-shadow);
+}
+
+.progress-pager-button-next:hover:not(:disabled),
+.progress-pager-button-next:focus-visible {
+    background: var(--button-primary-bg-hover);
 }
 
 

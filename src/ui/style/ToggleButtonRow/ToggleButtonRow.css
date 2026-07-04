@@ -1,0 +1,128 @@
+/* src/ui/style/ToggleButtonRow/ToggleButtonRow.css */
+.toggle-button-row {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    width: min(668px, 100%);
+    height: 56px;
+    margin: 0 auto clamp(18px, 2.6vw, 35px);
+    padding: 5px;
+    border: 1px solid var(--segmented-control-border);
+    border-radius: 13px;
+    background: var(--segmented-control-bg);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+}
+
+.toggle-button-row-button {
+    position: relative;
+    min-width: 0;
+    border: 0;
+    border-radius: 10px;
+    padding: 0 var(--space-3);
+    color: var(--segmented-control-inactive-text);
+    background: transparent;
+    font-size: 18px;
+    font-weight: 760;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transform-origin: center;
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.toggle-button-row-button:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: -3px;
+    width: 1px;
+    height: 56px;
+    background: var(--segmented-control-divider);
+}
+
+.toggle-button-row-button:not(:disabled):hover,
+.toggle-button-row-button:not(:disabled):focus-visible {
+    z-index: 2;
+    transform: var(--segmented-control-button-hover-transform);
+}
+
+.toggle-button-row-button:not([data-active="true"]):not(:disabled):hover,
+.toggle-button-row-button:not([data-active="true"]):not(:disabled):focus-visible {
+    color: var(--text-main);
+}
+
+.toggle-button-row-button[data-active="true"]:not(:disabled):hover,
+.toggle-button-row-button[data-active="true"]:not(:disabled):focus-visible {
+    color: var(--segmented-control-active-text);
+    background: var(--segmented-control-active-bg-hover);
+}
+
+.toggle-button-row-button[data-active="true"] {
+    color: var(--segmented-control-active-text);
+    background: var(--segmented-control-active-bg);
+    box-shadow:
+        0 0 0 1px var(--button-primary-border),
+        var(--segmented-control-active-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.toggle-button-row-button[data-active="true"]::after {
+    display: none;
+}
+
+.toggle-button-row-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.48;
+}
+
+.toggle-button-row-button:focus-visible {
+    outline: 3px solid var(--button-focus-ring);
+    outline-offset: 3px;
+}
+
+@media (max-width: 932px) {
+    .toggle-button-row {
+        width: 100%;
+        height: 54px;
+        margin: 22px auto 18px;
+        border-radius: 17px;
+        border-color: var(--segmented-control-border);
+        background: var(--segmented-control-bg);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.025),
+            0 14px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    .toggle-button-row-button {
+        border-radius: 13px;
+        padding: 0 var(--space-2);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+
+    .toggle-button-row-button:not(:last-child)::after {
+        top: 4px;
+        height: 36px;
+        background: var(--segmented-control-divider);
+    }
+
+    .toggle-button-row-button[data-active="true"] {
+        box-shadow:
+            var(--segmented-control-active-shadow),
+            inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+}
+
+@media (max-width: 380px) {
+    .toggle-button-row-button {
+        font-size: 12px;
+    }
+}

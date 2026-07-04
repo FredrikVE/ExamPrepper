@@ -76,7 +76,7 @@ IN5431-Exam-Emulator/
     │   │   ├── Tokens.css
     │   │   ├── ExamPage/
     │   │   │   └── ...
-    │   │   ├── ExamSelectPage/
+    │   │   ├── LearningContentSelectPage/
     │   │   │   └── ...
     │   │   ├── FeedbackPanel/
     │   │   │   └── ...
@@ -115,7 +115,7 @@ IN5431-Exam-Emulator/
     │   ├── view/
     │   │   ├── pages/
     │   │   │   ├── ExamPage.jsx
-    │   │   │   ├── ExamSelectPage.jsx
+    │   │   │   ├── LearningContentSelectPage.jsx
     │   │   │   └── SubjectSelectPage.jsx
     │   │   └── components/
     │   │       ├── ExamPage/
@@ -164,7 +164,7 @@ IN5431-Exam-Emulator/
     │   │       │   │           └── ...
     │   │       │   └── ResultBadge/
     │   │       │       └── ResultBadge.jsx
-    │   │       ├── ExamSelectPage/
+    │   │       ├── LearningContentSelectPage/
     │   │       │   └── ...
     │   │       ├── Footer/
     │   │       │   └── ...
@@ -180,7 +180,7 @@ IN5431-Exam-Emulator/
     │   └── viewmodel/
     │       ├── AppNavigationViewModel.js
     │       ├── ExamPageViewModel.js
-    │       ├── ExamSelectPageViewModel.js
+    │       ├── LearningContentSelectPageViewModel.js
     │       ├── SubjectSelectPageViewModel.js
     │       └── Utils/
     │           └── ...

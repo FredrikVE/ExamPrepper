@@ -17,6 +17,8 @@ import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
 import GetExamByIdUseCase from "../model/domain/GetExamByIdUseCase.js";
 import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
 import GetFlashcardsUseCase from "../model/domain/GetFlashcardsUseCase.js";
+import GetTopicAreasUseCase from "../model/domain/GetTopicAreasUseCase.js";
+import GetFlashcardDeckSummariesUseCase from "../model/domain/GetFlashcardDeckSummariesUseCase.js";
 
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
@@ -72,6 +74,8 @@ const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCa
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
 const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
 const getFlashcardsUseCase = new GetFlashcardsUseCase(flashcardRepository);
+const getTopicAreasUseCase = new GetTopicAreasUseCase(subjectRepository);
+const getFlashcardDeckSummariesUseCase = new GetFlashcardDeckSummariesUseCase(flashcardRepository, subjectRepository);
 
 // Export
 export {
@@ -85,5 +89,7 @@ export {
     calculateExamScoreUseCase,
     submitExamAttemptUseCase,
     getMyStatisticsUseCase,
-    getFlashcardsUseCase
+    getFlashcardsUseCase,
+    getTopicAreasUseCase,
+    getFlashcardDeckSummariesUseCase
 };

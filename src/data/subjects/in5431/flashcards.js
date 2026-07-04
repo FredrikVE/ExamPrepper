@@ -2,6 +2,7 @@
 export const IN5431_FLASHCARDS = [
     {
         id: "in5431-digitization",
+        topicAreaKey: "digital-transformation",
         term: {
             no: "Digitalisering",
             en: "Digitization"
@@ -13,6 +14,7 @@ export const IN5431_FLASHCARDS = [
     },
     {
         id: "in5431-digital-transformation",
+        topicAreaKey: "digital-transformation",
         term: {
             no: "Digital transformasjon",
             en: "Digital transformation"
@@ -24,6 +26,7 @@ export const IN5431_FLASHCARDS = [
     },
     {
         id: "in5431-it-governance",
+        topicAreaKey: "it-governance",
         term: {
             no: "IT-styring",
             en: "IT governance"
@@ -35,6 +38,7 @@ export const IN5431_FLASHCARDS = [
     },
     {
         id: "in5431-enterprise-architecture",
+        topicAreaKey: "frameworks",
         term: {
             no: "Virksomhetsarkitektur",
             en: "Enterprise architecture"
@@ -46,6 +50,7 @@ export const IN5431_FLASHCARDS = [
     },
     {
         id: "in5431-sociotechnical-system",
+        topicAreaKey: "designed-for-digital",
         term: {
             no: "Sosioteknisk system",
             en: "Sociotechnical system"
@@ -57,6 +62,7 @@ export const IN5431_FLASHCARDS = [
     },
     {
         id: "in5431-legacy-system",
+        topicAreaKey: "designed-for-digital",
         term: {
             no: "Legacy-system",
             en: "Legacy system"

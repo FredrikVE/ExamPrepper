@@ -263,7 +263,7 @@ AppNavigationViewModel
 Eksempel:
 
 ```mermaid
-App --> SubjectSelectPage & ExamSelectPage & ExamPage & AppSidebar & SettingsMenu & AppNavVM
+App --> SubjectSelectPage & LearningContentSelectPage & ExamPage & AppSidebar & SettingsMenu & AppNavVM
 ```
 
 Ikke bruk diagrammet til å antyde at `App.jsx` inneholder domenelogikk.
@@ -280,7 +280,7 @@ Eksempel:
 subgraph Pages["3. Pages / Views"]
     direction LR
         SubjectSelectPage["SubjectSelectPage.jsx"]
-        ExamSelectPage["ExamSelectPage.jsx"]
+        LearningContentSelectPage["LearningContentSelectPage.jsx"]
         ExamPage["ExamPage.jsx"]
 end
 ```
@@ -319,7 +319,7 @@ Anbefalt struktur:
 
 ```txt
 SubjectSelectPage Components
-ExamSelectPage Components
+LearningContentSelectPage Components
 ExamPage Components
 QuestionCard Components
 Global Components
@@ -395,7 +395,7 @@ subgraph ViewModel["5. ViewModels / Hooks"]
         AppNavVM["useAppNavigationViewModel"]
         ResolveTranslated["resolveTranslatedExamId"]
         SubjectSelectVM["useSubjectSelectPageViewModel"]
-        ExamSelectVM["useExamSelectPageViewModel"]
+        ExamSelectVM["useLearningContentSelectPageViewModel"]
         ExamPageVM["useExamPageViewModel"]
 end
 ```
@@ -404,7 +404,7 @@ Pages skal peke til sine ViewModels:
 
 ```mermaid
 SubjectSelectPage --> SubjectSelectVM
-ExamSelectPage --> ExamSelectVM
+LearningContentSelectPage --> ExamSelectVM
 ExamPage --> ExamPageVM
 ```
 

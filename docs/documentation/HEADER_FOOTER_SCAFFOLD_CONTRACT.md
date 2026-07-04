@@ -278,7 +278,7 @@ Faktisk første `Footer.jsx`-kontrakt er nå implementert som en direkte videref
 </Footer>
 ```
 
-Samme kontrakt brukes av `ExamSelectPage`, med `exam-search-footer` og `exam-search-footer-open` som side-spesifikke klasser.
+Samme kontrakt brukes av `LearningContentSelectPage`, med `exam-search-footer` og `exam-search-footer-open` som side-spesifikke klasser.
 
 Gjeldende props:
 
@@ -316,12 +316,12 @@ SubjectSelectPage
         ├── renderSearchContent fra SubjectSelectPage
         └── onCloseSheet fra SubjectSelectPageViewModel
 
-ExamSelectPage
+LearningContentSelectPage
 └── Footer
     └── PageToolsMobileFooterSheet
-        ├── renderControls fra ExamSelectPage
-        ├── renderSearchContent fra ExamSelectPage
-        └── onCloseSheet fra ExamSelectPageViewModel
+        ├── renderControls fra LearningContentSelectPage
+        ├── renderSearchContent fra LearningContentSelectPage
+        └── onCloseSheet fra LearningContentSelectPageViewModel
 ```
 
 Første Footer-implementasjon flytter bare scaffold-footeren. Den flytter ikke search state, filter state, render-funksjoner eller close-regler ut av Page/ViewModel.
@@ -359,8 +359,8 @@ SubjectSelectPage
 └── SubjectSelectTopbar.jsx
     └── h1 + undertittel, scroller med innhold
 
-ExamSelectPage
-└── ExamSelectTopbar.jsx
+LearningContentSelectPage
+└── LearningContentTopbar.jsx
     └── h1 + undertittel, scroller med innhold
 ```
 
@@ -384,7 +384,7 @@ ExamSelect
 └── skal migreres til Header.jsx på desktop
 └── Header.jsx rendres ikke på mobil i Modell A
 └── dette fjerner dagens tildekkede tabbable/a11y-back-risiko
-└── ExamSelectTopbar forblir scrollende sideinnhold
+└── LearningContentTopbar forblir scrollende sideinnhold
 
 Flipcards
 └── skal migreres etter SubjectSelect/ExamSelect

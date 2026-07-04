@@ -1,9 +1,9 @@
 /* src/ui/style/ExamPage/exam-toolbar-actions.css */
-.exam-header-actions {
+.exam-toolbar-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--header-actions-gap);
+    gap: var(--exam-toolbar-actions-gap);
     width: max-content;
     max-width: 100%;
 }

@@ -44,6 +44,16 @@ describe("deriveWorkspaceClassName", () => {
         expect(result).not.toContain("exam-workspace-scroll-footer-mode");
     });
 
+    test("adds scroll-footer-mode for multi-choice question with five options", () => {
+        const question = {
+            type: "multi",
+            options: Array.from({ length: 5 }, (_, i) => ({ text: `Option ${i}` }))
+        };
+        const result = deriveWorkspaceClassName(question, false);
+
+        expect(result).toContain("exam-workspace-scroll-footer-mode");
+    });
+
     test("does not add scroll-footer-mode when submitted", () => {
         const question = {
             type: "single",

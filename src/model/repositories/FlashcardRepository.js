@@ -16,7 +16,8 @@ export default class FlashcardRepository {
         return {
             id: flashcard.id,
             term: this.#resolveLocalizedText(flashcard.term, language),
-            definition: this.#resolveLocalizedText(flashcard.definition, language)
+            definition: this.#resolveLocalizedText(flashcard.definition, language),
+            topicAreaKey: flashcard.topicAreaKey ?? null
         };
     }
 

@@ -3,9 +3,9 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 21px;
-    width: min(987px, 100%);
+    grid-template-columns: var(--selection-card-grid-columns);
+    gap: var(--selection-card-grid-gap);
+    width: var(--selection-card-grid-width);
 }
 
 .subject-select-empty {

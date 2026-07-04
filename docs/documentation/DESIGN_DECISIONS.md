@@ -184,9 +184,9 @@ Fagvelgeren er delt opp i `SubjectSelectTopbar`, `SubjectSelectControls`, `Subje
 
 Dette gjør siden lettere å vedlikeholde og gjør det enklere å endre layout uten at page-filen vokser.
 
-### ExamSelectPage er modularisert
+### LearningContentSelectPage er modularisert
 
-Eksamensvelgeren er delt opp i `ExamSelectTopbar`, `ExamSelectIntro`, `ExamSelectGrid` og `ExamSelectCard`.
+Eksamensvelgeren er delt opp i `LearningContentTopbar`, `LearningContentIntro`, `ExamGrid` og `ExamCard`.
 
 Dette gjør siden lettere å vedlikeholde og gir samme strukturelle prinsipp som fagvelgeren.
 
@@ -303,7 +303,7 @@ Dette gjør at brukeren hele tiden ser hvor langt de har kommet, hvilken oppgave
 
 Responsiv styling ligger som hovedregel i `responsive.css` i den relevante side- eller komponentmappen.
 
-Det gjør at `ExamPage`, `ExamSelectPage`, `SubjectSelectPage`, `QuestionCard`, `Footer`, `Header` og `FeedbackPanel` kan justeres hver for seg uten én stor global responsive-fil.
+Det gjør at `ExamPage`, `LearningContentSelectPage`, `SubjectSelectPage`, `QuestionCard`, `Footer`, `Header` og `FeedbackPanel` kan justeres hver for seg uten én stor global responsive-fil.
 
 ### Laptop- og edge-case-layout er håndtert eksplisitt
 
@@ -347,7 +347,7 @@ Større UI-områder har egne mapper med `index.css` og mindre CSS-moduler:
 
 ```text
 ExamPage
-ExamSelectPage
+LearningContentSelectPage
 SubjectSelectPage
 Header
 Footer

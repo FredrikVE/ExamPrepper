@@ -17,7 +17,7 @@ export const APP_LAYOUTS = {
  * - backTo: skjermen tilbake-navigasjon peker mot (null = ingen back)
  * - requiresSubject: uten valgt fag faller navigasjonen tilbake til SUBJECTS
  * - requiresExam: uten valgt eksamen skjer ingen navigasjon
- * - clearsSubject / clearsExam: valg som nullstilles ved inngang til skjermen
+ * - clearsSubject / clearsExam / clearsTopicArea: valg som nullstilles ved inngang til skjermen
  * - layout: hvilken app-layout skjermen bruker
  *
  * Grafen inneholder bare skjermer som faktisk rendres som app-ruter.
@@ -30,7 +30,8 @@ export const NAV_GRAPH = {
 		requiresSubject: false,
 		requiresExam: false,
 		clearsSubject: true,
-		clearsExam: true
+		clearsExam: true,
+		clearsTopicArea: true
 	},
 	[NAV_SCREENS.SELECT]: {
 		layout: APP_LAYOUTS.SELECTION,
@@ -38,7 +39,8 @@ export const NAV_GRAPH = {
 		requiresSubject: true,
 		requiresExam: false,
 		clearsSubject: false,
-		clearsExam: true
+		clearsExam: true,
+		clearsTopicArea: true
 	},
 	[NAV_SCREENS.EXAM]: {
 		layout: APP_LAYOUTS.EXAM,
@@ -46,7 +48,8 @@ export const NAV_GRAPH = {
 		requiresSubject: false,
 		requiresExam: true,
 		clearsSubject: false,
-		clearsExam: false
+		clearsExam: false,
+		clearsTopicArea: false
 	},
 	[NAV_SCREENS.FLIPCARDS]: {
 		layout: APP_LAYOUTS.EXAM,
@@ -54,7 +57,8 @@ export const NAV_GRAPH = {
 		requiresSubject: true,
 		requiresExam: false,
 		clearsSubject: false,
-		clearsExam: true
+		clearsExam: true,
+		clearsTopicArea: false
 	},
 	[NAV_SCREENS.OVERVIEW]: {
 		layout: APP_LAYOUTS.SELECTION,
@@ -62,7 +66,8 @@ export const NAV_GRAPH = {
 		requiresSubject: false,
 		requiresExam: false,
 		clearsSubject: false,
-		clearsExam: true
+		clearsExam: true,
+		clearsTopicArea: false
 	}
 };
 
@@ -81,11 +86,18 @@ export function resolveScreenEntry(nextScreen, navState) {
 		return resolveScreenEntry(NAV_SCREENS.SUBJECTS, navState);
 	}
 
-	return {
+	const selectedTopicAreaKey = node.clearsTopicArea ? null : navState.selectedTopicAreaKey;
+	const nextNavState = {
 		screen: nextScreen,
 		selectedSubjectId: node.clearsSubject ? null : navState.selectedSubjectId,
 		selectedExamId: node.clearsExam ? null : navState.selectedExamId
 	};
+
+	if (Object.prototype.hasOwnProperty.call(navState, "selectedTopicAreaKey") || selectedTopicAreaKey) {
+		nextNavState.selectedTopicAreaKey = selectedTopicAreaKey ?? null;
+	}
+
+	return nextNavState;
 }
 
 export function resolveBackNavigation(navState) {

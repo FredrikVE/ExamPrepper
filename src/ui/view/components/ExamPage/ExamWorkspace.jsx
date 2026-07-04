@@ -1,27 +1,31 @@
 // src/ui/view/components/ExamPage/ExamWorkspace.jsx
 import { useEffect, useRef } from "react";
 
-export default function ExamWorkspace({ className, scrollToTopRequestId, children }) {
-	const examWorkspaceRef = useRef(null);
+export default function ExamWorkspace({ className, header, scrollToTopRequestId, children }) {
+	const examScrollRef = useRef(null);
 
 	useEffect(() => {
 		if (scrollToTopRequestId === 0) {
 			return;
 		}
 
-		scrollExamWorkspaceToTop(examWorkspaceRef);
+		scrollExamSurfaceToTop(examScrollRef);
 	}, [scrollToTopRequestId]);
 
 	return (
-		<div ref={examWorkspaceRef} className={className}>
-			{children}
+		<div className={className}>
+			{header}
+
+			<div ref={examScrollRef} className="exam-scroll">
+				{children}
+			</div>
 		</div>
 	);
 }
 
-const scrollExamWorkspaceToTop = (examWorkspaceRef) => {
+const scrollExamSurfaceToTop = (examScrollRef) => {
 	window.requestAnimationFrame(() => {
-		examWorkspaceRef.current?.scrollTo({
+		examScrollRef.current?.scrollTo({
 			top: 0,
 			behavior: "smooth"
 		});

@@ -14,7 +14,7 @@ export const PAGE_TOOL_PRIMARY_SLOTS = {
 
 export const PAGE_TOOL_GROUP_IDS = {
     SUBJECT_SELECT: "subject-select",
-    EXAM_SELECT: "exam-select",
+    LEARNING_CONTENT_SELECT: "learning-content-select",
     EXAM: "exam",
     FLIPCARDS: "flipcards",
     STATISTICS: "statistics"
@@ -23,20 +23,28 @@ export const PAGE_TOOL_GROUP_IDS = {
 export const PAGE_TOOL_ICON_KEYS = {
     BAR_CHART_3: "bar-chart-3",
     BOOK_OPEN: "book-open",
+    BUG: "bug",
     CHEVRON_LEFT: "chevron-left",
     CHEVRON_RIGHT: "chevron-right",
     CLOCK_3: "clock-3",
     FILE_TEXT: "file-text",
+    FINGERPRINT: "fingerprint",
     GALLERY_HORIZONTAL_END: "gallery-horizontal-end",
+    KEY: "key",
+    LEAF: "leaf",
     LIST: "list",
+    NETWORK: "network",
     PANELS_TOP_LEFT: "panels-top-left",
     PIE_CHART: "pie-chart",
     PLUS: "plus",
     REFRESH_CW: "refresh-cw",
     ROTATE_CCW: "rotate-ccw",
     SEND: "send",
+    SHIELD_CHECK: "shield-check",
     SHUFFLE: "shuffle",
-    SPARKLES: "sparkles"
+    SPARKLES: "sparkles",
+    TOOLBOX: "toolbox",
+    USER_COG: "user-cog"
 };
 
 export const PAGE_TOOL_AVAILABILITY = {
@@ -135,9 +143,15 @@ const WORKSPACE_ACTION_TOOL_ITEMS = [
     }
 ];
 
-const EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS = WORKSPACE_ACTION_TOOL_ITEMS.filter((toolItem) => (
-    toolItem.id !== PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE
-));
+const LEARNING_CONTENT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS = [
+    {
+        id: PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS,
+        actionId: PAGE_TOOL_ACTION_IDS.IMPORT_SUBJECT_MATERIALS,
+        labelKey: "pageToolsImportSubjectMaterialsLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.FILE_TEXT,
+        availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    }
+];
 
 const EXAM_TOOL_ITEMS = [
     {
@@ -218,7 +232,7 @@ const PAGE_TOOL_GROUPS_BY_SCREEN = {
         items: SUBJECT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS
     },
     [NAV_SCREENS.SELECT]: {
-        id: PAGE_TOOL_GROUP_IDS.EXAM_SELECT,
+        id: PAGE_TOOL_GROUP_IDS.LEARNING_CONTENT_SELECT,
         screen: NAV_SCREENS.SELECT,
         titleKey: "pageToolsWorkspaceTitle",
         subtitleKey: "pageToolsWorkspaceSubtitle",
@@ -226,7 +240,7 @@ const PAGE_TOOL_GROUPS_BY_SCREEN = {
         desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
         mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
         mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH,
-        items: EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS
+        items: LEARNING_CONTENT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS
     },
     [NAV_SCREENS.EXAM]: {
         id: PAGE_TOOL_GROUP_IDS.EXAM,
@@ -266,8 +280,8 @@ export function getSubjectSelectWorkspaceActionToolItems() {
     return SUBJECT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS;
 }
 
-export function getExamSelectWorkspaceActionToolItems() {
-    return EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS;
+export function getLearningContentSelectWorkspaceActionToolItems() {
+    return LEARNING_CONTENT_SELECT_WORKSPACE_ACTION_TOOL_ITEMS;
 }
 
 

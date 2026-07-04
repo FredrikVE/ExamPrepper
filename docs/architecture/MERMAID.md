@@ -47,7 +47,7 @@ end
 subgraph Pages["3. Pages / Views"]
     direction LR
         SubjectSelectPage["SubjectSelectPage.jsx"]
-        ExamSelectPage["ExamSelectPage.jsx"]
+        LearningContentSelectPage["LearningContentSelectPage.jsx"]
         ExamPage["ExamPage.jsx"]
 end
 
@@ -62,12 +62,12 @@ subgraph SubjectSelectComponents["SubjectSelectPage Components"]
         SubjectSelectCard["SubjectSelectCard"]
 end
 
-subgraph ExamSelectComponents["ExamSelectPage Components"]
+subgraph ExamSelectComponents["LearningContentSelectPage Components"]
     direction TB
-        ExamSelectTopbar["ExamSelectTopbar"]
-        ExamSelectIntro["ExamSelectIntro"]
-        ExamSelectGrid["ExamSelectGrid"]
-        ExamSelectCard["ExamSelectCard"]
+        LearningContentTopbar["LearningContentTopbar"]
+        LearningContentIntro["LearningContentIntro"]
+        ExamGrid["ExamGrid"]
+        ExamCard["ExamCard"]
 end
 
 subgraph ExamPageComponents["ExamPage Components"]
@@ -112,7 +112,7 @@ subgraph ViewModel["5. ViewModels / Hooks"]
         AppNavVM["useAppNavigationViewModel"]
         ResolveTranslated["resolveTranslatedExamId"]
         SubjectSelectVM["useSubjectSelectPageViewModel"]
-        ExamSelectVM["useExamSelectPageViewModel"]
+        ExamSelectVM["useLearningContentSelectPageViewModel"]
         ExamPageVM["useExamPageViewModel"]
 end
 
@@ -183,7 +183,7 @@ NavItems -.-> AppSidebar
 %% =========================
 %% APP → PAGES / GLOBAL COMPONENTS
 %% =========================
-App --> SubjectSelectPage & ExamSelectPage & ExamPage & AppSidebar & SettingsMenu & AppNavVM
+App --> SubjectSelectPage & LearningContentSelectPage & ExamPage & AppSidebar & SettingsMenu & AppNavVM
 
 %% =========================
 %% PAGES → COMPONENTS
@@ -192,8 +192,8 @@ SubjectSelectPage --> SubjectSelectTopbar & SubjectSelectControls & SubjectSelec
 SubjectSelectGrid --> SubjectSelectCard
 SubjectSelectCard --> SubjectIcon
 
-ExamSelectPage --> ExamSelectTopbar & ExamSelectIntro & ExamSelectGrid & ExamSelectVM
-ExamSelectGrid --> ExamSelectCard
+LearningContentSelectPage --> LearningContentTopbar & LearningContentIntro & ExamGrid & ExamSelectVM
+ExamGrid --> ExamCard
 
 ExamPage --> Header & ExamProgress & ExamPageContent & Footer & ExamPageVM
 ExamPageContent --> QuestionCard
@@ -254,17 +254,17 @@ NavItems:::sideNode
 App:::appNode
 
 SubjectSelectPage:::pageNode
-ExamSelectPage:::pageNode
+LearningContentSelectPage:::pageNode
 ExamPage:::pageNode
 
 SubjectSelectTopbar:::componentNode
 SubjectSelectControls:::componentNode
 SubjectSelectGrid:::componentNode
 SubjectSelectCard:::componentNode
-ExamSelectTopbar:::componentNode
-ExamSelectIntro:::componentNode
-ExamSelectGrid:::componentNode
-ExamSelectCard:::componentNode
+LearningContentTopbar:::componentNode
+LearningContentIntro:::componentNode
+ExamGrid:::componentNode
+ExamCard:::componentNode
 Header:::componentNode
 ExamProgress:::componentNode
 ExamPageContent:::componentNode
