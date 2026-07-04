@@ -148,6 +148,9 @@ function AppContent() {
 						examId={navigationViewModel.selectedExamId}
 						language={language}
 						t={t}
+						showBackButton={navigationViewModel.showBackButton}
+						backLabel={navigationViewModel.backLabel}
+						onBack={navigationViewModel.onBack}
 						onExamWorkModeChange={setExamWorkMode}
 						examWorkModeActionsRef={examWorkModeActionsRef}
 					/>
@@ -184,7 +187,7 @@ function AppContent() {
 	);
 }
 
-function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkModeActionsRef }) {
+function ExamPageWrapper({ examId, language, t, showBackButton, backLabel, onBack, onExamWorkModeChange, examWorkModeActionsRef }) {
 	const examPageViewModel = useExamPageViewModel(
 		getExamQuestionsUseCase,
 		gradeAnswerUseCase,
@@ -192,7 +195,10 @@ function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkMo
 		submitExamAttemptUseCase,
 		examId,
 		language,
-		t
+		t,
+		showBackButton,
+		backLabel,
+		onBack
 	);
 
 	useEffect(() => {

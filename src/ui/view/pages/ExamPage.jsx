@@ -1,4 +1,5 @@
 // src/ui/view/pages/ExamPage.jsx
+import ExamBackButton from "../components/ExamPage/ExamBackButton.jsx";
 import ExamToolbar from "../components/ExamPage/ExamToolbar.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
@@ -47,6 +48,12 @@ export default function ExamPage({ viewModel }) {
                 className={viewModel.workspaceClassName}
                 scrollToTopRequestId={viewModel.scrollToTopRequestId}
             >
+                <ExamBackButton
+                    showBackButton={viewModel.showBackButton}
+                    backLabel={viewModel.backLabel}
+                    onBack={viewModel.onBack}
+                />
+
                 <ExamToolbar
                     answeredPercentLabel={viewModel.answeredPercentLabel}
                     scoreLabel={viewModel.scoreLabel}

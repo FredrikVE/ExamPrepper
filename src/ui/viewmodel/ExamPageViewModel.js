@@ -15,7 +15,7 @@ import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
 import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
 import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
 
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t) {
+export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, showBackButton = false, backLabel = "", onBack = null) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [answers, setAnswers] = useState({});
@@ -344,6 +344,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		showAllFeedback,
 		currentAnswerOptionOrder,
 		workspaceClassName,
+		showBackButton,
+		backLabel,
+		onBack,
 
 		score: examScore.score,
 		totalPoints: examScore.totalPoints,
