@@ -81,6 +81,32 @@
     --accent-strong: #0057ee;
     --accent-gradient: linear-gradient(135deg, #0768ff 0%, #0051e6 100%);
 
+    /* ── Buttons / segmented controls ─────────
+       Shared button tokens keep select toggles, header controls, settings
+       buttons and pager actions visually aligned across light/dark themes. */
+    --button-primary-bg: var(--accent-gradient);
+    --button-primary-bg-hover: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+    --button-primary-text: #ffffff;
+    --button-primary-border: color-mix(in srgb, var(--accent) 44%, transparent);
+    --button-primary-shadow: var(--shadow-button);
+    --button-secondary-bg: color-mix(in srgb, var(--panel-strong) 82%, transparent);
+    --button-secondary-bg-hover: color-mix(in srgb, var(--accent) 8%, var(--panel-strong));
+    --button-secondary-text: var(--text-main);
+    --button-secondary-muted-text: var(--text-muted);
+    --button-secondary-icon: var(--accent);
+    --button-secondary-border: var(--line-strong);
+    --button-secondary-border-hover: color-mix(in srgb, var(--accent) 42%, var(--line-strong));
+    --button-surface-shadow: var(--shadow-card);
+    --button-focus-ring: color-mix(in srgb, var(--accent) 24%, transparent);
+    --segmented-control-bg: color-mix(in srgb, var(--panel-strong) 78%, transparent);
+    --segmented-control-border: var(--button-secondary-border);
+    --segmented-control-divider: color-mix(in srgb, var(--line-strong) 60%, transparent);
+    --segmented-control-inactive-text: color-mix(in srgb, var(--text-muted) 86%, var(--text-main));
+    --segmented-control-active-bg: var(--button-primary-bg);
+    --segmented-control-active-text: var(--button-primary-text);
+    --segmented-control-active-shadow: var(--button-primary-shadow);
+    --tool-card-icon: var(--accent);
+
     /* ── Drag & drop kortflate ──────── */
     --dnd-card-border: color-mix(in srgb, var(--accent) 20%, var(--line));
     --dnd-card-bg: linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 94%, var(--accent-soft)), color-mix(in srgb, var(--panel-bg) 90%, white));
@@ -248,6 +274,29 @@
     --accent-soft: rgba(109, 92, 255, 0.16);
     --accent-strong: #745cff;
     --accent-gradient: linear-gradient(135deg, #7b61ff 0%, #4d46ff 100%);
+
+    /* ── Buttons / segmented controls ───────── */
+    --button-primary-bg: var(--accent-gradient);
+    --button-primary-bg-hover: linear-gradient(135deg, #8268ff 0%, var(--accent-strong) 100%);
+    --button-primary-text: #ffffff;
+    --button-primary-border: color-mix(in srgb, var(--accent) 56%, transparent);
+    --button-primary-shadow: var(--shadow-button);
+    --button-secondary-bg: color-mix(in srgb, var(--panel-strong) 72%, transparent);
+    --button-secondary-bg-hover: color-mix(in srgb, var(--accent) 10%, var(--panel-strong));
+    --button-secondary-text: var(--text-main);
+    --button-secondary-muted-text: var(--text-muted);
+    --button-secondary-icon: var(--accent);
+    --button-secondary-border: var(--line-strong);
+    --button-secondary-border-hover: color-mix(in srgb, var(--accent) 44%, var(--line-strong));
+    --button-surface-shadow: var(--shadow-card);
+    --button-focus-ring: color-mix(in srgb, var(--accent) 34%, transparent);
+    --segmented-control-bg: color-mix(in srgb, var(--panel-bg) 56%, transparent);
+    --segmented-control-border: color-mix(in srgb, var(--line-strong) 68%, transparent);
+    --segmented-control-divider: color-mix(in srgb, var(--line-strong) 34%, transparent);
+    --segmented-control-inactive-text: color-mix(in srgb, var(--text-muted) 84%, var(--text-main));
+    --segmented-control-active-bg: var(--button-primary-bg);
+    --segmented-control-active-text: var(--button-primary-text);
+    --segmented-control-active-shadow: var(--button-primary-shadow);
 
     /* Solid, lysere accent for ikoner på verktøykort. Avledet fra --accent
        slik at den følger temaet. --accent-soft er en gjennomsiktig fyllfarge
