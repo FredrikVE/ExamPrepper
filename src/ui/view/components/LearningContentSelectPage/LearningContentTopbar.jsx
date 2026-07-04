@@ -1,5 +1,5 @@
-// src/ui/view/components/ExamSelectPage/ExamSelectTopbar.jsx
-export default function ExamSelectTopbar({ title }) {
+// src/ui/view/components/LearningContentSelectPage/LearningContentTopbar.jsx
+export default function LearningContentTopbar({ title }) {
     return (
         <div className="exam-select-topbar">
             <h1 className="exam-select-title">

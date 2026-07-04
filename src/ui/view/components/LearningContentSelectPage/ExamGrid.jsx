@@ -1,7 +1,7 @@
-import ExamSelectCard from "./ExamSelectCard.jsx";
-import ExamSelectPlaceholderCard from "./ExamSelectPlaceholderCard.jsx";
+import ExamCard from "./ExamCard.jsx";
+import LearningContentPlaceholderCard from "./LearningContentPlaceholderCard.jsx";
 
-export default function ExamSelectGrid(props) {
+export default function ExamGrid(props) {
 	if (props.exams.length === 0) {
 		return (
 			<section className="exam-select-empty">
@@ -14,7 +14,7 @@ export default function ExamSelectGrid(props) {
 	return (
 		<section className="exam-select-grid">
 			{props.exams.map((exam, index) => (
-				<ExamSelectCard
+				<ExamCard
 					key={exam.id}
 					exam={exam}
 					index={index}
@@ -25,7 +25,7 @@ export default function ExamSelectGrid(props) {
 				/>
 			))}
 
-			<ExamSelectPlaceholderCard
+			<LearningContentPlaceholderCard
 				code={props.addPlaceholderCode}
 				title={props.addPlaceholderTitle}
 				description={props.addPlaceholderDescription}

@@ -1,4 +1,4 @@
-// src/ui/viewmodel/ExamSelectPage/flashcardDeckFilters.js
+// src/ui/viewmodel/LearningContentSelectPage/flashcardDeckFilters.js
 import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
 
 export function filterDeckSummaries(deckSummaries, searchTerm, topicAreaKey) {

@@ -1,7 +1,7 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, getExamSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
-import { PAGE_TOOL_ITEM_IDS, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
+import { PAGE_NAV_TOOL_IDS, getLearningContentSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
+import { PAGE_TOOL_ITEM_IDS, getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
 
 const t = {
@@ -31,8 +31,8 @@ function createTools(params) {
     return createWorkspaceToolsModel({
         pageToolGroup: getPageToolGroup(params.screen),
         t,
-        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? [] : getExamSelectPageNavToolItems(),
-        workspaceActionToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectWorkspaceActionToolItems() : getExamSelectWorkspaceActionToolItems(),
+        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? [] : getLearningContentSelectPageNavToolItems(),
+        workspaceActionToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectWorkspaceActionToolItems() : getLearningContentSelectWorkspaceActionToolItems(),
         hasSelectedSubject: params.hasSelectedSubject,
         onChangeScreen: params.onChangeScreen
     });
@@ -94,8 +94,8 @@ describe("createWorkspaceToolsModel", () => {
         const tools = createWorkspaceToolsModel({
             pageToolGroup: null,
             t,
-            navToolItems: getExamSelectPageNavToolItems(),
-            workspaceActionToolItems: getExamSelectWorkspaceActionToolItems(),
+            navToolItems: getLearningContentSelectPageNavToolItems(),
+            workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
             hasSelectedSubject: true,
             onChangeScreen: jest.fn()
         });

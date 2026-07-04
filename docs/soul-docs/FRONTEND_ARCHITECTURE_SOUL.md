@@ -1055,7 +1055,7 @@ filnavn alene forteller hvilket lag en fil tilhører og hva den gjør.
 | Repository | `[Navn]Repository` | `ExamRepository` |
 | Use Case | `[Verb][Subjekt]UseCase` | `GetExamQuestionsUseCase`, `GradeAnswerUseCase` |
 | ViewModel | `use[PageNavn]ViewModel` | `useExamPageViewModel` |
-| Page | `[Navn]Page` | `ExamPage`, `ExamSelectPage` |
+| Page | `[Navn]Page` | `ExamPage`, `LearningContentSelectPage` |
 | Lokal hook | `use[KomponentNavn]` | `useCategorySortQuestion` |
 
 ### Use Case-navngiving

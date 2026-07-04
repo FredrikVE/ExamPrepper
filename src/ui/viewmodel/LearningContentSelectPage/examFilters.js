@@ -1,4 +1,4 @@
-// src/ui/viewmodel/ExamSelectPage/examSelectPageFilters.js
+// src/ui/viewmodel/LearningContentSelectPage/examFilters.js
 import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
 
 export { ALL_TOPIC_AREAS };

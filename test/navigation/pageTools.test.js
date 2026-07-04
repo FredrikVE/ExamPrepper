@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../src/navigation/navGraph.js";
-import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getExamSelectWorkspaceActionToolItems, getPageToolGroup, getPageToolItems, getSubjectSelectWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
+import { PAGE_TOOL_ACTION_IDS, PAGE_TOOL_AVAILABILITY, PAGE_TOOL_GROUP_IDS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, PAGE_TOOL_PRIMARY_SLOTS, PAGE_TOOL_SURFACES, getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, getPageToolItems, getSubjectSelectWorkspaceActionToolItems } from "../../src/navigation/pageTools.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
 
 describe("pageTools", () => {
@@ -16,7 +16,7 @@ describe("pageTools", () => {
         }));
 
         expect(examSelectTools).toEqual(expect.objectContaining({
-            id: PAGE_TOOL_GROUP_IDS.EXAM_SELECT,
+            id: PAGE_TOOL_GROUP_IDS.LEARNING_CONTENT_SELECT,
             desktopSurface: PAGE_TOOL_SURFACES.DESKTOP_POPOUT,
             mobileSurface: PAGE_TOOL_SURFACES.MOBILE_BOTTOM_SHEET,
             mobilePrimarySlot: PAGE_TOOL_PRIMARY_SLOTS.SEARCH
@@ -37,7 +37,7 @@ describe("pageTools", () => {
             PAGE_TOOL_ITEM_IDS.APP_CREATE_SUBJECT,
             PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
         ]);
-        expect(getExamSelectWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual([
+        expect(getLearningContentSelectWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual([
             PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
         ]);
     });

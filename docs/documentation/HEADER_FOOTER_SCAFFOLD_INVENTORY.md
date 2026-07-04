@@ -137,7 +137,7 @@ Importbruk:
 
 ```txt
 src/ui/view/pages/SubjectSelectPage.jsx
-src/ui/view/pages/ExamSelectPage.jsx
+src/ui/view/pages/LearningContentSelectPage.jsx
 src/ui/view/pages/FlipcardsPage.jsx
 ```
 
@@ -196,7 +196,7 @@ Importbruk:
 
 ```txt
 src/ui/view/pages/SubjectSelectPage.jsx
-src/ui/view/pages/ExamSelectPage.jsx
+src/ui/view/pages/LearningContentSelectPage.jsx
 ```
 
 Komponentkontrakt i dag:
@@ -281,7 +281,7 @@ Side-VM-funn:
 SubjectSelectPageViewModel
 └── showBackButton: false
 
-ExamSelectPageViewModel
+LearningContentSelectPageViewModel
 └── showBackButton kommer fra AppNavigationViewModel
 
 FlipcardsPageViewModel
@@ -388,7 +388,7 @@ Beslutning:
 ExamSelect skal migreres til Header.jsx etter at Header.jsx er etablert.
 Header.jsx skal ikke rendres på mobil i Modell A.
 Dette er nødvendig for å fjerne dagens tildekkede tabbable/a11y-back.
-ExamSelectTopbar/Intro skal fortsatt være sideinnhold som scroller.
+LearningContentTopbar/Intro skal fortsatt være sideinnhold som scroller.
 ```
 
 ### Flipcards

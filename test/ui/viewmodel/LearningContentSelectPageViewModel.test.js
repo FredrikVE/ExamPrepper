@@ -25,7 +25,7 @@ jest.unstable_mockModule("react", () => ({
     useState
 }));
 
-const { default: useExamSelectPageViewModel } = await import("../../../src/ui/viewmodel/ExamSelectPageViewModel.js");
+const { default: useLearningContentSelectPageViewModel } = await import("../../../src/ui/viewmodel/LearningContentSelectPageViewModel.js");
 
 function createT() {
     return {
@@ -98,7 +98,7 @@ function createViewModel(params = {}) {
     };
     const goBack = jest.fn();
 
-    const viewModel = useExamSelectPageViewModel(
+    const viewModel = useLearningContentSelectPageViewModel(
         getAvailableExamsUseCase,
         getTopicAreasUseCase,
         getFlashcardDeckSummariesUseCase,
@@ -124,7 +124,7 @@ function createViewModel(params = {}) {
     };
 }
 
-describe("useExamSelectPageViewModel", () => {
+describe("useLearningContentSelectPageViewModel", () => {
     beforeEach(() => {
         stateSetters.length = 0;
         useState.mockClear();

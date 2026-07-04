@@ -31,7 +31,7 @@ export const translations = {
         subjectAddPlaceholderDescription: "Sett opp et nytt fag med egne øveprøver, notater og forelesningsslides.",
         subjectAddPlaceholderNote: "Ingen begrensning på antall fag",
 
-        // ExamSelectPage
+        // LearningContentSelectPage
         selectTitle: "Eksamens-emulator",
         selectIntroTitle: "Velg eksamen",
         selectSubtitle: (subjectCode) => `Velg en øvingsprøve for ${subjectCode}`,
@@ -418,7 +418,7 @@ export const translations = {
         subjectAddPlaceholderDescription: "Set up a new subject with your own practice exams, notes and lecture slides.",
         subjectAddPlaceholderNote: "No limit on subject count",
 
-        // ExamSelectPage
+        // LearningContentSelectPage
         selectTitle: "Exam Emulator",
         selectIntroTitle: "Choose exam",
         selectSubtitle: (subjectCode) => `Choose a practice exam for ${subjectCode}`,

@@ -1,7 +1,7 @@
-// src/ui/view/components/ExamSelectPage/ExamSelectPlaceholderCard.jsx
+// src/ui/view/components/LearningContentSelectPage/LearningContentPlaceholderCard.jsx
 import { ChevronRight, Info, Plus } from "lucide-react";
 
-export default function ExamSelectPlaceholderCard(props) {
+export default function LearningContentPlaceholderCard(props) {
     return (
         <article className="exam-select-card exam-select-card-add-placeholder" aria-label={props.title}>
             <div className="exam-select-card-main-row">

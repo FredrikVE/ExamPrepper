@@ -1,4 +1,4 @@
-/* src/ui/style/ExamSelectPage/shell.css */
+/* src/ui/style/LearningContentSelectPage/shell.css */
 .exam-select-shell {
     display: grid;
     grid-template-columns: 320px minmax(0, 1fr);

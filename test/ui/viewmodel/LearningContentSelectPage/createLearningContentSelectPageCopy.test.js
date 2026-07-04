@@ -1,6 +1,6 @@
-// test/ui/viewmodel/ExamSelectPage/createExamSelectPageCopy.test.js
+// test/ui/viewmodel/LearningContentSelectPage/createLearningContentSelectPageCopy.test.js
 import { describe, expect, jest, test } from "@jest/globals";
-import createExamSelectPageCopy from "../../../../src/ui/viewmodel/ExamSelectPage/createExamSelectPageCopy.js";
+import createLearningContentSelectPageCopy from "../../../../src/ui/viewmodel/LearningContentSelectPage/createLearningContentSelectPageCopy.js";
 
 function createTranslations() {
     return {
@@ -16,10 +16,10 @@ function createTranslations() {
     };
 }
 
-describe("createExamSelectPageCopy", () => {
+describe("createLearningContentSelectPageCopy", () => {
     test("returns exam select copy from translations", () => {
         const t = createTranslations();
-        const copy = createExamSelectPageCopy(t, { code: "IN5431" });
+        const copy = createLearningContentSelectPageCopy(t, { code: "IN5431" });
 
         expect(copy).toEqual({
             title: "Velg eksamen",
@@ -37,7 +37,7 @@ describe("createExamSelectPageCopy", () => {
 
     test("uses subtitle fallback when subject code is missing", () => {
         const t = createTranslations();
-        const copy = createExamSelectPageCopy(t, null);
+        const copy = createLearningContentSelectPageCopy(t, null);
 
         expect(copy.subtitle).toBe("Velg en øvingsprøve for å starte");
         expect(t.selectSubtitle).not.toHaveBeenCalled();

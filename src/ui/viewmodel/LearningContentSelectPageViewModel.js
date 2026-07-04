@@ -1,15 +1,15 @@
-// src/ui/viewmodel/ExamSelectPageViewModel.js
+// src/ui/viewmodel/LearningContentSelectPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getExamSelectWorkspaceActionToolItems, getPageToolGroup, PAGE_TOOL_AVAILABILITY } from "../../navigation/pageTools.js";
+import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, PAGE_TOOL_AVAILABILITY } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
-import createExamSelectPageCopy from "./ExamSelectPage/createExamSelectPageCopy.js";
+import createLearningContentSelectPageCopy from "./LearningContentSelectPage/createLearningContentSelectPageCopy.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
-import { ALL_TOPIC_AREAS, filterExams } from "./ExamSelectPage/examSelectPageFilters.js";
-import { filterDeckSummaries } from "./ExamSelectPage/flashcardDeckFilters.js";
+import { ALL_TOPIC_AREAS, filterExams } from "./LearningContentSelectPage/examFilters.js";
+import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
 
-export default function useExamSelectPageViewModel(
+export default function useLearningContentSelectPageViewModel(
     getAvailableExamsUseCase,
     getTopicAreasUseCase,
     getFlashcardDeckSummariesUseCase,
@@ -192,7 +192,7 @@ export default function useExamSelectPageViewModel(
     }, [getFlashcardDeckSummariesUseCase, isActive, subjectId, language]);
 
     const pageCopy = useMemo(() => {
-        return createExamSelectPageCopy(t, selectedSubject);
+        return createLearningContentSelectPageCopy(t, selectedSubject);
     }, [t, selectedSubject]);
 
     const selectContentType = useCallback((contentTypeId) => {
@@ -312,7 +312,7 @@ export default function useExamSelectPageViewModel(
         return createWorkspaceToolsModel({
             pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
             t,
-            workspaceActionToolItems: getExamSelectWorkspaceActionToolItems(),
+            workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
             topicAreaToolItems,
             activeTopicAreaKey: topicAreaKey,
             hasSelectedSubject: Boolean(subjectId),

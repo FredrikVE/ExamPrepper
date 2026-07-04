@@ -1,9 +1,9 @@
-// src/ui/view/pages/ExamSelectPage.jsx
-import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx";
-import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
-import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
-import ExamSelectPlaceholderCard from "../components/ExamSelectPage/ExamSelectPlaceholderCard.jsx";
-import FlashcardDeckGrid from "../components/ExamSelectPage/FlashcardDeckGrid.jsx";
+// src/ui/view/pages/LearningContentSelectPage.jsx
+import LearningContentTopbar from "../components/LearningContentSelectPage/LearningContentTopbar.jsx";
+import LearningContentIntro from "../components/LearningContentSelectPage/LearningContentIntro.jsx";
+import ExamGrid from "../components/LearningContentSelectPage/ExamGrid.jsx";
+import LearningContentPlaceholderCard from "../components/LearningContentSelectPage/LearningContentPlaceholderCard.jsx";
+import FlashcardDeckGrid from "../components/LearningContentSelectPage/FlashcardDeckGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
@@ -11,7 +11,7 @@ import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileF
 import SelectPageScaffold from "../components/SelectPageScaffold/SelectPageScaffold.jsx";
 import ToggleButtonRow from "../components/Shared/ToggleButtonRow/ToggleButtonRow.jsx";
 
-export default function ExamSelectPage({ viewModel }) {
+export default function LearningContentSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
 
     const renderSearchContent = () => {
@@ -104,9 +104,9 @@ export default function ExamSelectPage({ viewModel }) {
                 />
             )}
         >
-            <ExamSelectTopbar title={viewModel.title} />
+            <LearningContentTopbar title={viewModel.title} />
 
-            <ExamSelectIntro
+            <LearningContentIntro
                 selectedSubject={viewModel.selectedSubject}
                 subtitle={viewModel.subtitle}
             />
@@ -119,7 +119,7 @@ export default function ExamSelectPage({ viewModel }) {
             />
 
             {viewModel.isExamsContentActive && (
-                <ExamSelectGrid
+                <ExamGrid
                     exams={viewModel.visibleExams}
                     emptyTitle={viewModel.emptyTitle}
                     emptyMessage={viewModel.emptyMessage}
@@ -149,7 +149,7 @@ export default function ExamSelectPage({ viewModel }) {
 
             {viewModel.isConceptListsContentActive && (
                 <section className="exam-select-grid">
-                    <ExamSelectPlaceholderCard
+                    <LearningContentPlaceholderCard
                         code={viewModel.conceptListPlaceholderCode}
                         title={viewModel.conceptListPlaceholderTitle}
                         description={viewModel.conceptListPlaceholderDescription}

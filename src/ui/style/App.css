@@ -7,7 +7,7 @@
 /* Pages */
 @import "./SelectPageScaffold/index.css";
 @import "./SubjectSelectPage/index.css";
-@import "./ExamSelectPage/index.css";
+@import "./LearningContentSelectPage/index.css";
 @import "./ExamPage/index.css";
 @import "./StatisticsPage/index.css";
 @import "./FlipcardsPage/index.css";

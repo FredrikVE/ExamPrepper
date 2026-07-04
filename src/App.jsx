@@ -8,13 +8,13 @@ import { SettingsProvider } from "./ui/settings/SettingsContext.jsx";
 
 import useAppNavigationViewModel from "./ui/viewmodel/AppNavigationViewModel.js";
 import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewModel.js";
-import useExamSelectPageViewModel from "./ui/viewmodel/ExamSelectPageViewModel.js";
+import useLearningContentSelectPageViewModel from "./ui/viewmodel/LearningContentSelectPageViewModel.js";
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
 import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.js";
 import useFlipcardsPageViewModel from "./ui/viewmodel/FlipcardsPageViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
-import ExamSelectPage from "./ui/view/pages/ExamSelectPage.jsx";
+import LearningContentSelectPage from "./ui/view/pages/LearningContentSelectPage.jsx";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
 import FlipcardsPage from "./ui/view/pages/FlipcardsPage.jsx";
@@ -77,7 +77,7 @@ function AppContent() {
 		navigationViewModel.changeScreen
 	);
 
-	const examSelectPageViewModel = useExamSelectPageViewModel(
+	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(
 		getAvailableExamsUseCase,
 		getTopicAreasUseCase,
 		getFlashcardDeckSummariesUseCase,
@@ -140,7 +140,7 @@ function AppContent() {
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.SELECT && (
-					<ExamSelectPage viewModel={examSelectPageViewModel} />
+					<LearningContentSelectPage viewModel={learningContentSelectPageViewModel} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (

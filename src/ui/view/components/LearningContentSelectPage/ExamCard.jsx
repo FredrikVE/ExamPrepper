@@ -1,10 +1,10 @@
-// src/ui/view/components/ExamSelectPage/ExamSelectCard.jsx
+// src/ui/view/components/LearningContentSelectPage/ExamCard.jsx
 import { BookOpen, ChevronRight, CircleHelp, Clock3 } from "lucide-react";
 import FormattedText from "../Shared/FormattedText.jsx";
 
 const DEFAULT_ESTIMATED_MINUTES = "45–60";
 
-export default function ExamSelectCard({ exam, index, practiceExamLabel, questionLabel, minuteLabel, onSelectExam }) {
+export default function ExamCard({ exam, index, practiceExamLabel, questionLabel, minuteLabel, onSelectExam }) {
     const modeLabel = exam.modeLabel ?? practiceExamLabel(index + 1);
     const estimatedMinutes = exam.estimatedMinutes ?? DEFAULT_ESTIMATED_MINUTES;
     const accentIndex = index % 6 + 1;
