@@ -23,20 +23,28 @@ export const PAGE_TOOL_GROUP_IDS = {
 export const PAGE_TOOL_ICON_KEYS = {
     BAR_CHART_3: "bar-chart-3",
     BOOK_OPEN: "book-open",
+    BUG: "bug",
     CHEVRON_LEFT: "chevron-left",
     CHEVRON_RIGHT: "chevron-right",
     CLOCK_3: "clock-3",
     FILE_TEXT: "file-text",
+    FINGERPRINT: "fingerprint",
     GALLERY_HORIZONTAL_END: "gallery-horizontal-end",
+    KEY: "key",
+    LEAF: "leaf",
     LIST: "list",
+    NETWORK: "network",
     PANELS_TOP_LEFT: "panels-top-left",
     PIE_CHART: "pie-chart",
     PLUS: "plus",
     REFRESH_CW: "refresh-cw",
     ROTATE_CCW: "rotate-ccw",
     SEND: "send",
+    SHIELD_CHECK: "shield-check",
     SHUFFLE: "shuffle",
-    SPARKLES: "sparkles"
+    SPARKLES: "sparkles",
+    TOOLBOX: "toolbox",
+    USER_COG: "user-cog"
 };
 
 export const PAGE_TOOL_AVAILABILITY = {
@@ -135,9 +143,15 @@ const WORKSPACE_ACTION_TOOL_ITEMS = [
     }
 ];
 
-const EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS = WORKSPACE_ACTION_TOOL_ITEMS.filter((toolItem) => (
-    toolItem.id !== PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE
-));
+const EXAM_SELECT_WORKSPACE_ACTION_TOOL_ITEMS = [
+    {
+        id: PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS,
+        actionId: PAGE_TOOL_ACTION_IDS.IMPORT_SUBJECT_MATERIALS,
+        labelKey: "pageToolsImportSubjectMaterialsLabel",
+        iconKey: PAGE_TOOL_ICON_KEYS.FILE_TEXT,
+        availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    }
+];
 
 const EXAM_TOOL_ITEMS = [
     {

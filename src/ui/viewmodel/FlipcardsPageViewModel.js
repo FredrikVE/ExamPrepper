@@ -1,14 +1,33 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
+import { filterFlashcardsByTopicArea } from "../../model/domain/utils/filterFlashcardsByTopicArea.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 
-export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectId, language, t, isActive, showBackButton, backLabel, navigationLabel, onBack) {
+const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
+
+export default function useFlipcardsPageViewModel(
+    getFlashcardsUseCase,
+    getTopicAreasUseCase,
+    subjectId,
+    initialTopicAreaKey,
+    language,
+    t,
+    isActive,
+    showBackButton,
+    backLabel,
+    navigationLabel,
+    onBack
+) {
     const presentationMode = usePresentationMode();
     const [flashcards, setFlashcards] = useState([]);
+    const [topicAreas, setTopicAreas] = useState([]);
+    const [topicAreaKey, setTopicAreaKey] = useState(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
     const [flashcardsLoading, setFlashcardsLoading] = useState(true);
+    const [topicAreasLoading, setTopicAreasLoading] = useState(false);
     const [flashcardsLoadError, setFlashcardsLoadError] = useState(null);
     const [masteredCardIds, setMasteredCardIds] = useState([]);
     const [practiceCardIds, setPracticeCardIds] = useState([]);
@@ -16,6 +35,10 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
     const [selectedDeckCardIds, setSelectedDeckCardIds] = useState([]);
     const [activeCardIndex, setActiveCardIndex] = useState(0);
     const [isActiveCardFlipped, setIsActiveCardFlipped] = useState(false);
+
+    useEffect(() => {
+        setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
+    }, [initialTopicAreaKey, subjectId]);
 
     useEffect(() => {
         if (!isActive) {
@@ -60,6 +83,59 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         };
     }, [getFlashcardsUseCase, subjectId, language, t.flipcardsErrorMessage, isActive]);
 
+    useEffect(() => {
+        if (!isActive || !subjectId) {
+            setTopicAreas([]);
+            setTopicAreasLoading(false);
+            return undefined;
+        }
+
+        let cancelled = false;
+
+        async function loadTopicAreas() {
+            try {
+                setTopicAreasLoading(true);
+
+                const loadedTopicAreas = await getTopicAreasUseCase.execute({
+                    subjectId,
+                    language
+                });
+
+                if (!cancelled) {
+                    setTopicAreas(loadedTopicAreas);
+                }
+            } catch (error) {
+                console.error("Feil ved henting av fagområder for flipcards:", error);
+
+                if (!cancelled) {
+                    setTopicAreas([]);
+                }
+            } finally {
+                if (!cancelled) {
+                    setTopicAreasLoading(false);
+                }
+            }
+        }
+
+        loadTopicAreas();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [getTopicAreasUseCase, subjectId, language, isActive]);
+
+    const topicFilteredFlashcards = useMemo(() => {
+        return filterFlashcardsByTopicArea(flashcards, topicAreaKey);
+    }, [flashcards, topicAreaKey]);
+
+    const visibleMasteredCardIds = useMemo(() => {
+        return selectCardIdsForCards(masteredCardIds, topicFilteredFlashcards);
+    }, [masteredCardIds, topicFilteredFlashcards]);
+
+    const visiblePracticeCardIds = useMemo(() => {
+        return selectCardIdsForCards(practiceCardIds, topicFilteredFlashcards);
+    }, [practiceCardIds, topicFilteredFlashcards]);
+
     const updateCardProgress = useCallback((cardId, status) => {
         const progressUpdate = resolveUpdatedFlipcardProgress({
             masteredCardIds,
@@ -89,91 +165,108 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
 
     const progressModel = useMemo(() => {
         return createFlipcardsProgressModel({
-            totalCardCount: flashcards.length,
-            masteredCardIds,
-            practiceCardIds,
+            totalCardCount: topicFilteredFlashcards.length,
+            masteredCardIds: visibleMasteredCardIds,
+            practiceCardIds: visiblePracticeCardIds,
             labels: {
                 progressLabel: t.flipcardsProgressLabel,
                 completeBody: t.flipcardsCompleteBody
             }
         });
-    }, [flashcards.length, masteredCardIds, practiceCardIds, t.flipcardsCompleteBody, t.flipcardsProgressLabel]);
+    }, [topicFilteredFlashcards.length, visibleMasteredCardIds, visiblePracticeCardIds, t.flipcardsCompleteBody, t.flipcardsProgressLabel]);
 
     const deckKey = useMemo(() => {
-        return flashcards.map((flashcard) => flashcard.id).join("|");
-    }, [flashcards]);
+        return createDeckKey(topicFilteredFlashcards);
+    }, [topicFilteredFlashcards]);
 
     useEffect(() => {
         setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
         setSelectedDeckCardIds([]);
     }, [deckKey]);
 
-    const labels = useMemo(() => ({
-        pageEyebrow: t.flipcardsEyebrow,
-        pageTitle: t.flipcardsTitle,
-        pageIntro: t.flipcardsIntro,
-        loadingTitle: t.flipcardsLoadingTitle,
-        errorTitle: t.flipcardsErrorTitle,
-        emptyTitle: t.flipcardsEmptyTitle,
-        emptyBody: t.flipcardsEmptyBody,
-        summaryLabel: t.flipcardsSummaryLabel,
-        cardCountLabel: t.flipcardsCardCountLabel,
-        studySurfaceLabel: t.flipcardsStudySurfaceLabel,
-        studyKicker: t.flipcardsStudyKicker,
-        studyTitle: t.flipcardsStudyTitle,
-        progressSummaryLabel: t.flipcardsProgressSummaryLabel,
-        deckLabel: t.flipcardsDeckLabel,
-        emptyDeckTitle: t.flipcardsEmptyDeckTitle,
-        completeTitle: t.flipcardsCompleteTitle,
-        completeStatsLabel: t.flipcardsCompleteStatsLabel,
-        completedCardsLabel: t.flipcardsCompletedCardsLabel,
-        masteredCardsLabel: t.flipcardsMasteredCardsLabel,
-        practiceCardsLabel: t.flipcardsPracticeCardsLabel,
-        restartDeckLabel: t.flipcardsRestartDeckLabel,
-        previousCardLabel: t.flipcardsPreviousCardLabel,
-        nextCardLabel: t.flipcardsNextCardLabel,
-        practiceCardLabel: t.flipcardsPracticeCardLabel,
-        flipCardLabel: t.flipcardsFlipCardLabel,
-        masteredCardLabel: t.flipcardsMasteredCardLabel,
-        practiceFeedbackLabel: t.flipcardsPracticeFeedbackLabel,
-        masteredFeedbackLabel: t.flipcardsMasteredFeedbackLabel,
-        quickActionsLabel: t.flipcardsQuickActionsLabel,
-        completePositionLabel: t.flipcardsCompletePositionLabel,
-        completeBody: t.flipcardsCompleteBody,
-        deckPositionLabel: t.flipcardsDeckPositionLabel,
-        activeCardLabel: t.flipcardsActiveCardLabel,
-        toolMenuLabel: t.flipcardsToolMenuLabel,
-        openToolMenuLabel: t.flipcardsOpenToolMenuLabel,
-        closeToolMenuLabel: t.flipcardsCloseToolMenuLabel,
-        toolMenuTitle: t.flipcardsToolMenuTitle,
-        toolMenuSubtitle: t.flipcardsToolMenuSubtitle,
-        toolMenuPagerLabel: t.flipcardsToolMenuPagerLabel,
-        toolMenuCurrentCardLabel: t.flipcardsToolMenuCurrentCardLabel,
-        toolMenuActionsLabel: t.flipcardsToolMenuActionsLabel,
-        toolMenuStatsLabel: t.flipcardsToolMenuStatsLabel,
-        goToCardLabel: t.flipcardsGoToCardLabel,
-        toolMenuAllCardsLabel: t.flipcardsToolMenuAllCardsLabel,
-        toolMenuShuffleLabel: t.flipcardsToolMenuShuffleLabel,
-        toolMenuRepeatDifficultLabel: t.flipcardsToolMenuRepeatDifficultLabel,
-        toolMenuAddCardLabel: t.flipcardsToolMenuAddCardLabel,
-        toolMenuUnavailableLabel: t.flipcardsToolMenuUnavailableLabel,
-        toolMenuSelectedLabel: t.flipcardsToolMenuSelectedLabel,
-        toolMenuAllCardsStatusLabel: t.flipcardsToolMenuAllCardsStatusLabel,
-        toolMenuShuffleStatusLabel: t.flipcardsToolMenuShuffleStatusLabel,
-        toolMenuRepeatDifficultCountLabel: t.flipcardsToolMenuRepeatDifficultCountLabel,
-        toolMenuNoPracticeCardsLabel: t.flipcardsToolMenuNoPracticeCardsLabel,
-        toolMenuPracticeDescription: t.flipcardsToolMenuPracticeDescription,
-        toolMenuFlipDescription: t.flipcardsToolMenuFlipDescription,
-        toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription,
-    }), [t]);
+    const activeTopicArea = useMemo(() => {
+        return findTopicArea(topicAreas, topicAreaKey);
+    }, [topicAreas, topicAreaKey]);
+
+    const labels = useMemo(() => {
+        const topicAreaLabel = activeTopicArea?.label ?? null;
+        const pageTitle = topicAreaLabel
+            ? t.flipcardsTopicAreaTitle(topicAreaLabel)
+            : t.flipcardsTitle;
+        const pageIntro = topicAreaLabel
+            ? t.flipcardsTopicAreaIntro(topicAreaLabel)
+            : t.flipcardsIntro;
+
+        return {
+            pageEyebrow: t.flipcardsEyebrow,
+            pageTitle,
+            pageIntro,
+            loadingTitle: t.flipcardsLoadingTitle,
+            errorTitle: t.flipcardsErrorTitle,
+            emptyTitle: t.flipcardsEmptyTitle,
+            emptyBody: t.flipcardsEmptyBody,
+            summaryLabel: t.flipcardsSummaryLabel,
+            cardCountLabel: t.flipcardsCardCountLabel,
+            studySurfaceLabel: t.flipcardsStudySurfaceLabel,
+            studyKicker: t.flipcardsStudyKicker,
+            studyTitle: t.flipcardsStudyTitle,
+            progressSummaryLabel: t.flipcardsProgressSummaryLabel,
+            deckLabel: t.flipcardsDeckLabel,
+            emptyDeckTitle: t.flipcardsEmptyDeckTitle,
+            completeTitle: t.flipcardsCompleteTitle,
+            completeStatsLabel: t.flipcardsCompleteStatsLabel,
+            completedCardsLabel: t.flipcardsCompletedCardsLabel,
+            masteredCardsLabel: t.flipcardsMasteredCardsLabel,
+            practiceCardsLabel: t.flipcardsPracticeCardsLabel,
+            restartDeckLabel: t.flipcardsRestartDeckLabel,
+            previousCardLabel: t.flipcardsPreviousCardLabel,
+            nextCardLabel: t.flipcardsNextCardLabel,
+            practiceCardLabel: t.flipcardsPracticeCardLabel,
+            flipCardLabel: t.flipcardsFlipCardLabel,
+            masteredCardLabel: t.flipcardsMasteredCardLabel,
+            practiceFeedbackLabel: t.flipcardsPracticeFeedbackLabel,
+            masteredFeedbackLabel: t.flipcardsMasteredFeedbackLabel,
+            quickActionsLabel: t.flipcardsQuickActionsLabel,
+            completePositionLabel: t.flipcardsCompletePositionLabel,
+            completeBody: t.flipcardsCompleteBody,
+            deckPositionLabel: t.flipcardsDeckPositionLabel,
+            activeCardLabel: t.flipcardsActiveCardLabel,
+            toolMenuLabel: t.flipcardsToolMenuLabel,
+            openToolMenuLabel: t.flipcardsOpenToolMenuLabel,
+            closeToolMenuLabel: t.flipcardsCloseToolMenuLabel,
+            toolMenuTitle: t.flipcardsToolMenuTitle,
+            toolMenuSubtitle: t.flipcardsToolMenuSubtitle,
+            toolMenuPagerLabel: t.flipcardsToolMenuPagerLabel,
+            toolMenuCurrentCardLabel: t.flipcardsToolMenuCurrentCardLabel,
+            toolMenuActionsLabel: t.flipcardsToolMenuActionsLabel,
+            toolMenuStatsLabel: t.flipcardsToolMenuStatsLabel,
+            goToCardLabel: t.flipcardsGoToCardLabel,
+            toolMenuAllCardsLabel: t.flipcardsToolMenuAllCardsLabel,
+            toolMenuShuffleLabel: t.flipcardsToolMenuShuffleLabel,
+            toolMenuRepeatDifficultLabel: t.flipcardsToolMenuRepeatDifficultLabel,
+            toolMenuAddCardLabel: t.flipcardsToolMenuAddCardLabel,
+            toolMenuUnavailableLabel: t.flipcardsToolMenuUnavailableLabel,
+            toolMenuSelectedLabel: t.flipcardsToolMenuSelectedLabel,
+            toolMenuAllCardsStatusLabel: t.flipcardsToolMenuAllCardsStatusLabel,
+            toolMenuShuffleStatusLabel: t.flipcardsToolMenuShuffleStatusLabel,
+            toolMenuRepeatDifficultCountLabel: t.flipcardsToolMenuRepeatDifficultCountLabel,
+            toolMenuNoPracticeCardsLabel: t.flipcardsToolMenuNoPracticeCardsLabel,
+            toolMenuPracticeDescription: t.flipcardsToolMenuPracticeDescription,
+            toolMenuFlipDescription: t.flipcardsToolMenuFlipDescription,
+            toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription,
+            topicAreaAllLabel: t.topicAreaAllLabel,
+            topicAreaToolStatusLabel: t.flipcardsTopicAreaToolStatusLabel,
+            topicAreaSelectedLabel: t.flipcardsToolMenuSelectedLabel
+        };
+    }, [activeTopicArea, t]);
 
     const visibleCards = useMemo(() => {
-        return createVisibleFlipcards(flashcards, selectedDeckCardIds);
-    }, [flashcards, selectedDeckCardIds]);
+        return createVisibleFlipcards(topicFilteredFlashcards, selectedDeckCardIds);
+    }, [topicFilteredFlashcards, selectedDeckCardIds]);
 
     const visibleDeckKey = useMemo(() => {
-        return [deckKey, activeDeckToolKey, visibleCards.map((card) => card.id).join("|")].join("::");
-    }, [activeDeckToolKey, deckKey, visibleCards]);
+        return [topicAreaKey, deckKey, activeDeckToolKey, createDeckKey(visibleCards)].join("::");
+    }, [activeDeckToolKey, deckKey, topicAreaKey, visibleCards]);
 
     useEffect(() => {
         setActiveCardIndex(0);
@@ -200,20 +293,38 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         );
 
     const repeatDifficultCardIds = useMemo(() => {
-        return createRepeatDifficultCardIds(flashcards, practiceCardIds);
-    }, [flashcards, practiceCardIds]);
+        return createRepeatDifficultCardIds(topicFilteredFlashcards, practiceCardIds);
+    }, [topicFilteredFlashcards, practiceCardIds]);
 
     const disabledDeckToolKeys = useMemo(() => {
         return createDisabledDeckToolKeys(repeatDifficultCardIds);
     }, [repeatDifficultCardIds]);
 
     const deckToolStatusLabels = useMemo(() => {
-        return createDeckToolStatusLabels(labels, flashcards.length, repeatDifficultCardIds.length);
-    }, [flashcards.length, labels, repeatDifficultCardIds.length]);
+        return createDeckToolStatusLabels(labels, topicFilteredFlashcards.length, repeatDifficultCardIds.length);
+    }, [topicFilteredFlashcards.length, labels, repeatDifficultCardIds.length]);
 
-    const deckToolItems = useMemo(() => {
+    const baseDeckToolItems = useMemo(() => {
         return createDeckToolItems(labels, activeDeckToolKey, disabledDeckToolKeys, deckToolStatusLabels);
     }, [activeDeckToolKey, deckToolStatusLabels, disabledDeckToolKeys, labels]);
+
+    const topicAreaDeckToolItems = useMemo(() => {
+        return createTopicAreaDeckToolItems(topicAreas, topicAreaKey, labels);
+    }, [labels, topicAreaKey, topicAreas]);
+
+    const deckToolItems = useMemo(() => {
+        const items = [];
+
+        for (const item of baseDeckToolItems) {
+            items.push(item);
+        }
+
+        for (const item of topicAreaDeckToolItems) {
+            items.push(item);
+        }
+
+        return items;
+    }, [baseDeckToolItems, topicAreaDeckToolItems]);
 
     const showAllCards = useCallback(() => {
         setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
@@ -222,8 +333,8 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
 
     const shuffleDeck = useCallback(() => {
         setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.SHUFFLE);
-        setSelectedDeckCardIds(createShuffledFlipcardIds(flashcards));
-    }, [flashcards]);
+        setSelectedDeckCardIds(createShuffledFlipcardIds(topicFilteredFlashcards));
+    }, [topicFilteredFlashcards]);
 
     const repeatDifficultCards = useCallback(() => {
         if (repeatDifficultCardIds.length === 0) {
@@ -234,7 +345,20 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         setSelectedDeckCardIds(repeatDifficultCardIds);
     }, [repeatDifficultCardIds]);
 
+    const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
+        setTopicAreaKey(nextTopicAreaKey);
+        setActiveDeckToolKey(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
+        setSelectedDeckCardIds([]);
+        setActiveCardIndex(0);
+        setIsActiveCardFlipped(false);
+    }, []);
+
     const selectDeckTool = useCallback((deckToolKey) => {
+        if (isTopicAreaDeckToolKey(deckToolKey)) {
+            selectTopicAreaKey(readTopicAreaKeyFromDeckToolKey(deckToolKey));
+            return;
+        }
+
         if (disabledDeckToolKeys.includes(deckToolKey)) {
             return;
         }
@@ -252,7 +376,7 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         if (deckToolKey === FLIPCARD_DECK_TOOL_KEYS.REPEAT_DIFFICULT) {
             repeatDifficultCards();
         }
-    }, [disabledDeckToolKeys, repeatDifficultCards, showAllCards, shuffleDeck]);
+    }, [disabledDeckToolKeys, repeatDifficultCards, selectTopicAreaKey, showAllCards, shuffleDeck]);
 
     const goToPreviousCard = useCallback(() => {
         setIsActiveCardFlipped(false);
@@ -303,8 +427,10 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
 
     return {
         labels,
-        flashcards,
-        flashcardsLoading,
+        flashcards: topicFilteredFlashcards,
+        topicAreas,
+        topicAreaKey,
+        flashcardsLoading: flashcardsLoading || topicAreasLoading,
         flashcardsLoadError,
         progressLabel: progressModel.progressLabel,
         progressModel,
@@ -340,4 +466,105 @@ export default function useFlipcardsPageViewModel(getFlashcardsUseCase, subjectI
         resetFlipcardsProgress,
         onSelectDeckTool: selectDeckTool
     };
+}
+
+function createDeckKey(cards) {
+    const cardIds = [];
+
+    for (const card of cards) {
+        cardIds.push(card.id);
+    }
+
+    return cardIds.join("|");
+}
+
+function selectCardIdsForCards(cardIds, cards) {
+    const selectedCardIds = [];
+    const visibleCardIds = new Set();
+
+    for (const card of cards) {
+        visibleCardIds.add(card.id);
+    }
+
+    for (const cardId of cardIds) {
+        if (!visibleCardIds.has(cardId)) {
+            continue;
+        }
+
+        selectedCardIds.push(cardId);
+    }
+
+    return selectedCardIds;
+}
+
+function findTopicArea(topicAreas, topicAreaKey) {
+    for (const topicArea of topicAreas) {
+        if (topicArea.key === topicAreaKey) {
+            return topicArea;
+        }
+    }
+
+    return null;
+}
+
+function createTopicAreaDeckToolItems(topicAreas, activeTopicAreaKey, labels) {
+    const items = [
+        {
+            key: createTopicAreaDeckToolKey(ALL_TOPIC_AREAS),
+            iconKey: "list",
+            label: labels.topicAreaAllLabel,
+            statusLabel: labels.topicAreaToolStatusLabel,
+            ariaLabel: createTopicAreaDeckToolAriaLabel(
+                labels.topicAreaAllLabel,
+                labels.topicAreaToolStatusLabel,
+                activeTopicAreaKey === ALL_TOPIC_AREAS,
+                labels.topicAreaSelectedLabel
+            ),
+            isSelected: activeTopicAreaKey === ALL_TOPIC_AREAS,
+            isDisabled: false
+        }
+    ];
+
+    for (const topicArea of topicAreas) {
+        const isSelected = activeTopicAreaKey === topicArea.key;
+
+        items.push({
+            key: createTopicAreaDeckToolKey(topicArea.key),
+            iconKey: topicArea.iconKey,
+            label: topicArea.label,
+            statusLabel: labels.topicAreaToolStatusLabel,
+            ariaLabel: createTopicAreaDeckToolAriaLabel(
+                topicArea.label,
+                labels.topicAreaToolStatusLabel,
+                isSelected,
+                labels.topicAreaSelectedLabel
+            ),
+            isSelected,
+            isDisabled: false
+        });
+    }
+
+    return items;
+}
+
+function createTopicAreaDeckToolAriaLabel(label, statusLabel, isSelected, selectedLabel) {
+    const labelParts = [label, statusLabel];
+
+    if (isSelected) {
+        labelParts.push(selectedLabel);
+    }
+
+    return labelParts.join(" · ");
+}
+
+function createTopicAreaDeckToolKey(topicAreaKey) {
+    return `${TOPIC_AREA_DECK_TOOL_PREFIX}${topicAreaKey}`;
+}
+
+function isTopicAreaDeckToolKey(deckToolKey) {
+    return deckToolKey.startsWith(TOPIC_AREA_DECK_TOOL_PREFIX);
+}
+
+function readTopicAreaKeyFromDeckToolKey(deckToolKey) {
+    return deckToolKey.slice(TOPIC_AREA_DECK_TOOL_PREFIX.length);
 }

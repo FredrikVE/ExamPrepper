@@ -1,32 +1,14 @@
 // src/ui/viewmodel/ExamSelectPage/examSelectPageFilters.js
-export const ALL_CATEGORIES = "all";
+import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
 
-export function buildExamCategories(exams) {
-	const categories = [];
+export { ALL_TOPIC_AREAS };
 
-	for (const exam of exams) {
-		const category = exam.modeLabel;
-
-		if (!category) {
-			continue;
-		}
-
-		if (categories.includes(category)) {
-			continue;
-		}
-
-		categories.push(category);
-	}
-
-	return categories;
-}
-
-export function filterExams(exams, searchTerm, category) {
+export function filterExams(exams, searchTerm, topicAreaKey) {
 	const normalizedSearchTerm = searchTerm.trim().toLowerCase();
 	const filteredExams = [];
 
 	for (const exam of exams) {
-		if (!examMatchesCategory(exam, category)) {
+		if (!examMatchesTopicArea(exam, topicAreaKey)) {
 			continue;
 		}
 
@@ -40,8 +22,30 @@ export function filterExams(exams, searchTerm, category) {
 	return filteredExams;
 }
 
-function examMatchesCategory(exam, category) {
-	return category === ALL_CATEGORIES || exam.modeLabel === category;
+export function filterExamsByTopicArea(exams, topicAreaKey) {
+	const filteredExams = [];
+
+	for (const exam of exams) {
+		if (!examMatchesTopicArea(exam, topicAreaKey)) {
+			continue;
+		}
+
+		filteredExams.push(exam);
+	}
+
+	return filteredExams;
+}
+
+function examMatchesTopicArea(exam, topicAreaKey) {
+	if (topicAreaKey === ALL_TOPIC_AREAS) {
+		return true;
+	}
+
+	if (!Array.isArray(exam.topicAreaKeys)) {
+		return false;
+	}
+
+	return exam.topicAreaKeys.includes(topicAreaKey);
 }
 
 function examMatchesSearchTerm(exam, normalizedSearchTerm) {

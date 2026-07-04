@@ -13,6 +13,7 @@ const t = {
     pageToolsCloseLabel: "Lukk verktøymeny",
     pageToolsMobileHandleLabel: "Verktøy",
     pageToolsUnavailableLabel: "Kommer senere",
+    pageToolsSelectedLabel: "Aktiv",
     pageToolsSelectSubjectFirstLabel: "Velg fag først",
     pageToolsExamsLabel: "Eksamner",
     pageToolsPracticeTestsLabel: "Øveprøver",
@@ -47,7 +48,7 @@ describe("createWorkspaceToolsModel", () => {
         });
 
         const examsTool = tools.items.find((toolItem) => toolItem.id === PAGE_NAV_TOOL_IDS.EXAMS);
-        const createExamTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM);
+        const importMaterialsTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS);
 
         expect(tools.title).toBe("Velg læringsverktøy");
         expect(tools.subtitle).toBe("");
@@ -60,9 +61,9 @@ describe("createWorkspaceToolsModel", () => {
             screen: NAV_SCREENS.SELECT,
             isDisabled: false
         }));
-        expect(createExamTool).toEqual(expect.objectContaining({
+        expect(importMaterialsTool).toEqual(expect.objectContaining({
             statusLabel: "Kommer senere",
-            ariaLabel: "Opprett ny eksamen · Kommer senere",
+            ariaLabel: "Legg inn notater eller forelesningsslides · Kommer senere",
             isDisabled: true,
             onSelect: null
         }));

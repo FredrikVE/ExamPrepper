@@ -6,6 +6,28 @@ export default function createWorkspaceToolsModel(params) {
 		return null;
 	}
 
+	const items = [];
+	const navToolItems = params.navToolItems ?? [];
+	const workspaceActionToolItems = params.workspaceActionToolItems ?? [];
+	const topicAreaToolItems = params.topicAreaToolItems ?? [];
+
+	for (const navItem of navToolItems) {
+		items.push(createNavToolItemModel({
+			navItem,
+			t: params.t,
+			hasSelectedSubject: params.hasSelectedSubject,
+			onChangeScreen: params.onChangeScreen
+		}));
+	}
+
+	for (const toolItem of workspaceActionToolItems) {
+		items.push(createWorkspaceActionToolItemModel({ toolItem, t: params.t }));
+	}
+
+	for (const topicAreaToolItem of topicAreaToolItems) {
+		items.push(createTopicAreaToolItemModel({ topicAreaToolItem, activeTopicAreaKey: params.activeTopicAreaKey }));
+	}
+
 	return {
 		id: params.pageToolGroup.id,
 		title: params.pageToolGroup.titleKey ? params.t[params.pageToolGroup.titleKey] : "",
@@ -14,10 +36,7 @@ export default function createWorkspaceToolsModel(params) {
 		openLabel: params.t.pageToolsOpenLabel,
 		closeLabel: params.t.pageToolsCloseLabel,
 		mobileHandleLabel: params.t.pageToolsMobileHandleLabel,
-		items: [
-			...params.navToolItems.map((navItem) => createNavToolItemModel({ navItem, t: params.t, hasSelectedSubject: params.hasSelectedSubject, onChangeScreen: params.onChangeScreen })),
-			...params.workspaceActionToolItems.map((toolItem) => createWorkspaceActionToolItemModel({ toolItem, t: params.t }))
-		]
+		items
 	};
 }
 
@@ -55,5 +74,24 @@ function createWorkspaceActionToolItemModel(params) {
 		ariaLabel,
 		isDisabled,
 		onSelect: null
+	};
+}
+
+function createTopicAreaToolItemModel(params) {
+	const isSelected = params.topicAreaToolItem.topicAreaKey === params.activeTopicAreaKey;
+	const statusLabel = isSelected ? params.topicAreaToolItem.selectedStatusLabel : "";
+	const ariaLabel = statusLabel ? `${params.topicAreaToolItem.label} · ${statusLabel}` : params.topicAreaToolItem.label;
+
+	return {
+		id: params.topicAreaToolItem.id,
+		topicAreaKey: params.topicAreaToolItem.topicAreaKey,
+		iconKey: params.topicAreaToolItem.iconKey,
+		label: params.topicAreaToolItem.label,
+		statusLabel,
+		ariaLabel,
+		isSelected,
+		isActive: isSelected,
+		isDisabled: false,
+		onSelect: params.topicAreaToolItem.onSelect
 	};
 }

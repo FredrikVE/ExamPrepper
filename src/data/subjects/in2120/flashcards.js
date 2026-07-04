@@ -2,6 +2,7 @@
 export const IN2120_FLASHCARDS = [
     {
         id: "in2120-confidentiality",
+        topicAreaKey: "begreper",
         term: {
             no: "Konfidensialitet",
             en: "Confidentiality"
@@ -13,6 +14,7 @@ export const IN2120_FLASHCARDS = [
     },
     {
         id: "in2120-integrity",
+        topicAreaKey: "begreper",
         term: {
             no: "Integritet",
             en: "Integrity"
@@ -24,6 +26,7 @@ export const IN2120_FLASHCARDS = [
     },
     {
         id: "in2120-availability",
+        topicAreaKey: "begreper",
         term: {
             no: "Tilgjengelighet",
             en: "Availability"

@@ -73,6 +73,18 @@
     opacity: 0.62;
 }
 
+.page-tools-desktop-card-selected {
+    border-color: color-mix(in srgb, var(--accent) 58%, var(--line-strong));
+    background:
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 48%),
+        color-mix(in srgb, var(--panel-strong) 72%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.page-tools-desktop-card-selected small {
+    color: color-mix(in srgb, var(--accent) 74%, var(--text-main));
+}
+
 .flipcard-desktop-tools-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -316,6 +328,18 @@
     .page-tools-mobile-card:disabled {
         cursor: not-allowed;
         opacity: 0.62;
+    }
+
+    .page-tools-mobile-card-selected {
+        border-color: color-mix(in srgb, var(--accent) 58%, var(--line-strong));
+        background:
+            radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 48%),
+            color-mix(in srgb, var(--panel-strong) 72%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+
+    .page-tools-mobile-card-selected small {
+        color: color-mix(in srgb, var(--accent) 74%, var(--text-main));
     }
 }
 

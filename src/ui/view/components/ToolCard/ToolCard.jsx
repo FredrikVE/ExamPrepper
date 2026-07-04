@@ -4,10 +4,12 @@ import { TOOL_CARD_SURFACES } from "./toolCardSurfaces.js";
 
 const TOOL_CARD_CLASS_NAMES_BY_SURFACE = {
     [TOOL_CARD_SURFACES.PAGE_TOOLS_DESKTOP]: {
-        root: "page-tools-desktop-card"
+        root: "page-tools-desktop-card",
+        selected: "page-tools-desktop-card-selected"
     },
     [TOOL_CARD_SURFACES.PAGE_TOOLS_MOBILE]: {
-        root: "page-tools-mobile-card"
+        root: "page-tools-mobile-card",
+        selected: "page-tools-mobile-card-selected"
     },
     [TOOL_CARD_SURFACES.FLIPCARDS_DESKTOP]: {
         root: "flipcard-desktop-tools-card",
@@ -26,8 +28,8 @@ function createToolCardClassName(surface, toolItem) {
 
     return [
         classNames.root,
-        toolItem.isSelected ? classNames.selected : null,
-        toolItem.isDisabled ? classNames.disabled : null
+        toolItem.isSelected && classNames.selected ? classNames.selected : null,
+        toolItem.isDisabled && classNames.disabled ? classNames.disabled : null
     ].filter(Boolean).join(" ");
 }
 
@@ -47,6 +49,8 @@ export default function ToolCard({ surface, toolItem, onSelect }) {
             type="button"
             className={createToolCardClassName(surface, toolItem)}
             aria-current={toolItem.isSelected ? "true" : undefined}
+            aria-pressed={toolItem.isSelected ? "true" : undefined}
+            data-active={toolItem.isSelected ? "true" : "false"}
             aria-label={toolItem.ariaLabel}
             disabled={toolItem.isDisabled}
             onClick={selectTool}

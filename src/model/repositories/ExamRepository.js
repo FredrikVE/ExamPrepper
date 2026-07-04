@@ -236,7 +236,8 @@ export default class ExamRepository {
             duration: exam.duration,
             durationMinutes: exam.durationMinutes,
             sortOrder: exam.sortOrder,
-            questionCount: exam.questionCount ?? exam.questions?.length ?? 0
+            questionCount: exam.questionCount ?? exam.questions?.length ?? 0,
+            topicAreaKeys: Array.isArray(exam.topicAreaKeys) ? exam.topicAreaKeys : []
         };
     }
 }

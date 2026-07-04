@@ -23,7 +23,7 @@ import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlashcardsUseCase, getMyStatisticsUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlashcardsUseCase, getFlashcardDeckSummariesUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -79,10 +79,13 @@ function AppContent() {
 
 	const examSelectPageViewModel = useExamSelectPageViewModel(
 		getAvailableExamsUseCase,
+		getTopicAreasUseCase,
+		getFlashcardDeckSummariesUseCase,
 		language,
 		t,
 		subjectSelectPageViewModel.selectedSubject,
 		navigationViewModel.selectExam,
+		navigationViewModel.selectFlipcardDeck,
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
 		navigationViewModel.changeScreen,
 		navigationViewModel.showBackButton,
@@ -153,6 +156,7 @@ function AppContent() {
 				{navigationViewModel.activeScreen === NAV_SCREENS.FLIPCARDS && (
 					<FlipcardsPageWrapper
 						subjectId={navigationViewModel.selectedSubjectId}
+						initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
 						language={language}
 						t={t}
 						showBackButton={navigationViewModel.showBackButton}
@@ -229,10 +233,12 @@ function ExamPageWrapper({ examId, language, t, onExamWorkModeChange, examWorkMo
 	);
 }
 
-function FlipcardsPageWrapper({ subjectId, language, t, showBackButton, backLabel, navigationLabel, onBack }) {
+function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, showBackButton, backLabel, navigationLabel, onBack }) {
 	const flipcardsPageViewModel = useFlipcardsPageViewModel(
 		getFlashcardsUseCase,
+		getTopicAreasUseCase,
 		subjectId,
+		initialTopicAreaKey,
 		language,
 		t,
 		true,

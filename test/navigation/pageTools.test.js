@@ -27,10 +27,7 @@ describe("pageTools", () => {
             PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
         ]);
         expect(examSelectTools.items.map((toolCard) => toolCard.id)).toEqual([
-            PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
-            PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
-            PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,
-            PAGE_TOOL_ITEM_IDS.APP_AI_EXAM
+            PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
         ]);
     });
 
@@ -41,10 +38,7 @@ describe("pageTools", () => {
             PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
         ]);
         expect(getExamSelectWorkspaceActionToolItems().map((toolCard) => toolCard.id)).toEqual([
-            PAGE_TOOL_ITEM_IDS.APP_CREATE_EXAM,
-            PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
-            PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_GRAPHS,
-            PAGE_TOOL_ITEM_IDS.APP_AI_EXAM
+            PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
         ]);
     });
 

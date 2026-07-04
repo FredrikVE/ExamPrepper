@@ -56,6 +56,7 @@ function createT() {
         pageToolsCloseLabel: "Lukk verktøymeny",
         pageToolsMobileHandleLabel: "Verktøy",
         pageToolsUnavailableLabel: "Kommer senere",
+        pageToolsSelectedLabel: "Aktiv",
         pageToolsSelectSubjectFirstLabel: "Velg fag først",
         pageToolsExamsLabel: "Eksamener",
         pageToolsPracticeTestsLabel: "Øveprøver",
@@ -66,7 +67,22 @@ function createT() {
         pageToolsConceptListLabel: "Begrepslister",
         pageToolsCurriculumGraphsLabel: "Pensumoversikt",
         pageToolsCurriculumFigureLabel: "Lag pensum-oversiktsfigur",
-        pageToolsAiExamLabel: "Lag AI-generert øveeksamen"
+        pageToolsAiExamLabel: "Lag AI-generert øveeksamen",
+        contentToggleExamsLabel: "Eksamener",
+        contentToggleFlipcardsLabel: "Flipcards",
+        contentToggleConceptListsLabel: "Begrepslister",
+        contentToggleAriaLabel: "Velg innholdstype",
+        flipcardsSearchPlaceholder: "Søk i flipcard-bunker",
+        conceptListSearchPlaceholder: "Søk i begrepslister",
+        topicAreaAllLabel: "Alle områder",
+        topicAreaFilterAriaLabel: "Fagområde",
+        deckCardCountLabel: (cardCount) => `${cardCount} kort`,
+        deckCardUnitLabel: "kort",
+        deckEmptyTitle: "Ingen bunker",
+        deckEmptyMessage: "Ingen bunker funnet",
+        conceptListPlaceholderTitle: "Begrepslister kommer senere",
+        conceptListPlaceholderDescription: "Ikke koblet på ennå",
+        conceptListPlaceholderNote: "Kommer senere"
     };
 }
 
@@ -74,13 +90,22 @@ function createViewModel(params = {}) {
     const getAvailableExamsUseCase = {
         execute: jest.fn().mockResolvedValue([])
     };
+    const getTopicAreasUseCase = {
+        execute: jest.fn().mockResolvedValue([])
+    };
+    const getFlashcardDeckSummariesUseCase = {
+        execute: jest.fn().mockResolvedValue([])
+    };
     const goBack = jest.fn();
 
     const viewModel = useExamSelectPageViewModel(
         getAvailableExamsUseCase,
+        getTopicAreasUseCase,
+        getFlashcardDeckSummariesUseCase,
         "nb",
         createT(),
         { id: "in5431", code: "IN5431" },
+        jest.fn(),
         jest.fn(),
         params.isActive ?? true,
         jest.fn(),
@@ -92,6 +117,8 @@ function createViewModel(params = {}) {
 
     return {
         getAvailableExamsUseCase,
+        getTopicAreasUseCase,
+        getFlashcardDeckSummariesUseCase,
         goBack,
         viewModel
     };

@@ -53,7 +53,8 @@ describe("FlashcardRepository", () => {
         expect(result[0]).toEqual({
             id: "card-1",
             term: "Term",
-            definition: "English explanation"
+            definition: "English explanation",
+            topicAreaKey: null
         });
     });
 
@@ -66,7 +67,8 @@ describe("FlashcardRepository", () => {
         expect(result[1]).toEqual({
             id: "card-2",
             term: "Fallback-begrep",
-            definition: "Fallback-forklaring"
+            definition: "Fallback-forklaring",
+            topicAreaKey: null
         });
     });
 });

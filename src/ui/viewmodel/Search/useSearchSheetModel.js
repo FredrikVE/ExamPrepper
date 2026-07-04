@@ -26,6 +26,14 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 		setIsFooterSheetOpen(false);
 	}, []);
 
+	const resetSearchSheet = useCallback((nextFilterValue = defaultFilterValue) => {
+		setSearchTerm("");
+		setFilterValue(nextFilterValue);
+		setIsSearchSheetOpen(false);
+		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
+		setIsFooterSheetOpen(false);
+	}, [defaultFilterValue]);
+
 	const openFooterSheet = useCallback(() => {
 		setIsFooterSheetOpen(true);
 	}, []);
@@ -90,6 +98,7 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 		isFooterOpen,
 		changeSearchTerm,
 		changeFilterValue,
+		resetSearchSheet,
 		selectFilterOption,
 		openSearchSuggestions,
 		openFilterOptions,
@@ -110,6 +119,7 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 		openFilterOptions,
 		openFooterSheet,
 		openSearchSuggestions,
+		resetSearchSheet,
 		searchTerm,
 		selectFilterOption
 	]);

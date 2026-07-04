@@ -2,11 +2,14 @@
 import ExamSelectTopbar from "../components/ExamSelectPage/ExamSelectTopbar.jsx";
 import ExamSelectIntro from "../components/ExamSelectPage/ExamSelectIntro.jsx";
 import ExamSelectGrid from "../components/ExamSelectPage/ExamSelectGrid.jsx";
+import ExamSelectPlaceholderCard from "../components/ExamSelectPage/ExamSelectPlaceholderCard.jsx";
+import FlashcardDeckGrid from "../components/ExamSelectPage/FlashcardDeckGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 import SelectPageScaffold from "../components/SelectPageScaffold/SelectPageScaffold.jsx";
+import ToggleButtonRow from "../components/Shared/ToggleButtonRow/ToggleButtonRow.jsx";
 
 export default function ExamSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
@@ -22,7 +25,7 @@ export default function ExamSelectPage({ viewModel }) {
                 searchSuggestions={viewModel.searchSuggestions}
                 filterOptions={viewModel.categoryFilterOptions}
                 selectedFilterValue={viewModel.category}
-                onSelectSearchSuggestion={viewModel.selectExam}
+                onSelectSearchSuggestion={viewModel.selectSearchSuggestion}
                 onSelectFilterOption={viewModel.selectCategoryFilterOption}
             />
         );
@@ -108,19 +111,52 @@ export default function ExamSelectPage({ viewModel }) {
                 subtitle={viewModel.subtitle}
             />
 
-            <ExamSelectGrid
-                exams={viewModel.exams}
-                emptyTitle={viewModel.emptyTitle}
-                emptyMessage={viewModel.emptyMessage}
-                practiceExamLabel={viewModel.practiceExamLabel}
-                questionLabel={viewModel.questionLabel}
-                minuteLabel={viewModel.minuteLabel}
-                addPlaceholderCode={viewModel.addPlaceholderCode}
-                addPlaceholderTitle={viewModel.addPlaceholderTitle}
-                addPlaceholderDescription={viewModel.addPlaceholderDescription}
-                addPlaceholderNote={viewModel.addPlaceholderNote}
-                onSelectExam={viewModel.selectExam}
+            <ToggleButtonRow
+                entries={viewModel.contentToggleEntries}
+                activeEntryId={viewModel.activeContentType}
+                onSelectEntry={viewModel.selectContentType}
+                ariaLabel={viewModel.contentToggleAriaLabel}
             />
+
+            {viewModel.isExamsContentActive && (
+                <ExamSelectGrid
+                    exams={viewModel.visibleExams}
+                    emptyTitle={viewModel.emptyTitle}
+                    emptyMessage={viewModel.emptyMessage}
+                    practiceExamLabel={viewModel.practiceExamLabel}
+                    questionLabel={viewModel.questionLabel}
+                    minuteLabel={viewModel.minuteLabel}
+                    addPlaceholderCode={viewModel.addPlaceholderCode}
+                    addPlaceholderTitle={viewModel.addPlaceholderTitle}
+                    addPlaceholderDescription={viewModel.addPlaceholderDescription}
+                    addPlaceholderNote={viewModel.addPlaceholderNote}
+                    onSelectExam={viewModel.selectExam}
+                />
+            )}
+
+            {viewModel.isFlipcardsContentActive && (
+                <FlashcardDeckGrid
+                    decks={viewModel.visibleFlashcardDecks}
+                    eyebrowLabel={viewModel.flipcardsDeckEyebrow}
+                    cardCountLabel={viewModel.deckCardCountLabel}
+                    cardUnitLabel={viewModel.deckCardUnitLabel}
+                    minuteLabel={viewModel.minuteLabel}
+                    emptyTitle={viewModel.deckEmptyTitle}
+                    emptyMessage={viewModel.deckEmptyMessage}
+                    onSelectDeck={viewModel.selectFlashcardDeck}
+                />
+            )}
+
+            {viewModel.isConceptListsContentActive && (
+                <section className="exam-select-grid">
+                    <ExamSelectPlaceholderCard
+                        code={viewModel.conceptListPlaceholderCode}
+                        title={viewModel.conceptListPlaceholderTitle}
+                        description={viewModel.conceptListPlaceholderDescription}
+                        note={viewModel.conceptListPlaceholderNote}
+                    />
+                </section>
+            )}
         </SelectPageScaffold>
     );
 }

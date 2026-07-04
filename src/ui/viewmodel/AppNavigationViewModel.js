@@ -24,6 +24,7 @@ export default function useAppNavigationViewModel(params) {
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
 	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 	const [selectedExamId, setSelectedExamId] = useState(null);
+	const [selectedTopicAreaKey, setSelectedTopicAreaKey] = useState(null);
 
 	// Layout-state
 	const mobileTopBar = useMobileDropDownTopBarModel();
@@ -48,6 +49,7 @@ export default function useAppNavigationViewModel(params) {
 		setActiveScreen(nextNavState.screen);
 		setSelectedSubjectId(nextNavState.selectedSubjectId);
 		setSelectedExamId(nextNavState.selectedExamId);
+		setSelectedTopicAreaKey(nextNavState.selectedTopicAreaKey ?? null);
 
 		settingsPresentation.closeSettingsPresentation();
 		mobileTopBar.closeMobileDropDownTopBarMenu();
@@ -61,14 +63,16 @@ export default function useAppNavigationViewModel(params) {
 	const changeScreen = useCallback((nextScreen) => {
 		applyNavigation(resolveScreenEntry(nextScreen, {
 			selectedSubjectId,
-			selectedExamId
+			selectedExamId,
+			selectedTopicAreaKey
 		}));
-	}, [selectedSubjectId, selectedExamId, applyNavigation]);
+	}, [selectedSubjectId, selectedExamId, selectedTopicAreaKey, applyNavigation]);
 
 	const selectSubject = useCallback((subjectId) => {
 		applyNavigation(resolveScreenEntry(NAV_SCREENS.SELECT, {
 			selectedSubjectId: subjectId,
-			selectedExamId: null
+			selectedExamId: null,
+			selectedTopicAreaKey: null
 		}));
 	}, [applyNavigation]);
 
@@ -79,7 +83,16 @@ export default function useAppNavigationViewModel(params) {
 	const selectExam = useCallback((examId) => {
 		applyNavigation(resolveScreenEntry(NAV_SCREENS.EXAM, {
 			selectedSubjectId,
-			selectedExamId: examId
+			selectedExamId: examId,
+			selectedTopicAreaKey
+		}));
+	}, [selectedSubjectId, selectedTopicAreaKey, applyNavigation]);
+
+	const selectFlipcardDeck = useCallback((topicAreaKey) => {
+		applyNavigation(resolveScreenEntry(NAV_SCREENS.FLIPCARDS, {
+			selectedSubjectId,
+			selectedExamId: null,
+			selectedTopicAreaKey: topicAreaKey ?? null
 		}));
 	}, [selectedSubjectId, applyNavigation]);
 
@@ -90,17 +103,19 @@ export default function useAppNavigationViewModel(params) {
 	const backToExamList = useCallback(() => {
 		applyNavigation(resolveScreenEntry(NAV_SCREENS.SELECT, {
 			selectedSubjectId,
-			selectedExamId
+			selectedExamId,
+			selectedTopicAreaKey
 		}));
-	}, [selectedSubjectId, selectedExamId, applyNavigation]);
+	}, [selectedSubjectId, selectedExamId, selectedTopicAreaKey, applyNavigation]);
 
 	const goBack = useCallback(() => {
 		applyNavigation(resolveBackNavigation({
 			activeScreen,
 			selectedSubjectId,
-			selectedExamId
+			selectedExamId,
+			selectedTopicAreaKey
 		}));
-	}, [activeScreen, selectedSubjectId, selectedExamId, applyNavigation]);
+	}, [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, applyNavigation]);
 
 	const resolveSyncedExam = useCallback((examId, subjectId) => {
 		setSelectedExamId(examId);
@@ -145,6 +160,7 @@ export default function useAppNavigationViewModel(params) {
 		activeScreen,
 		selectedSubjectId,
 		selectedExamId,
+		selectedTopicAreaKey,
 		isSelectionScreen,
 		shouldShowSubjectSwitcher,
 		showBackButton: backContract.showBackButton,
@@ -173,6 +189,7 @@ export default function useAppNavigationViewModel(params) {
 		showAllSubjects,
 		showStatistics,
 		selectExam,
+		selectFlipcardDeck,
 		backToExamList,
 		goBack
 	};
