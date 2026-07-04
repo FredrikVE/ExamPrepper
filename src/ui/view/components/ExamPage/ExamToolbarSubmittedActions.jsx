@@ -9,9 +9,9 @@ export default function ExamToolbarSubmittedActions({ onResetExam }) {
         <button
             type="button"
             onClick={onResetExam}
-            className="exam-header-button exam-header-button-primary"
+            className="exam-toolbar-button exam-toolbar-button-primary"
         >
-            <RotateCcw className="exam-header-icon" />
+            <RotateCcw className="exam-toolbar-icon" />
             {t.headerResetButton}
         </button>
     );

@@ -8,7 +8,7 @@ export default function ExamToolbarActions(props) {
     const { t } = useLanguage();
 
     return (
-        <div className="exam-header-actions">
+        <div className="exam-toolbar-actions">
             <ExamToolbarStatCard
                 value={props.answeredPercentLabel}
                 label={t.headerStatAnswered}

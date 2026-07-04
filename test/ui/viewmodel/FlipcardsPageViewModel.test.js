@@ -118,6 +118,12 @@ function createViewModel(params) {
 	};
 
 	const onBack = jest.fn();
+	const backContract = {
+		showBackButton: true,
+		backLabel: "sidebarBack",
+		navigationLabel: "sidebarMobileNavigation",
+		onBack
+	};
 	const viewModel = useFlipcardsPageViewModel(
 		getFlashcardsUseCase,
 		getTopicAreasUseCase,
@@ -126,10 +132,7 @@ function createViewModel(params) {
 		"no",
 		createTranslations(),
 		false,
-		true,
-		"sidebarBack",
-		"sidebarMobileNavigation",
-		onBack
+		backContract
 	);
 
 	return {

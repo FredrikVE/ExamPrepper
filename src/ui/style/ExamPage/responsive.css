@@ -29,12 +29,10 @@
 		max-height: 100svh;
 		border-radius: 0;
 		border-inline: 0;
+	}
+
+	.exam-scroll {
 		padding-top: var(--mobile-topbar-height);
-		overflow-x: hidden;
-		overflow-y: auto;
-		overscroll-behavior: contain;
-		touch-action: pan-y;
-		-webkit-overflow-scrolling: touch;
 	}
 
     .exam-page-main {
@@ -58,7 +56,9 @@
 
     .exam-workspace {
         min-height: 0;
-        overflow-y: auto;
+    }
+
+    .exam-scroll {
         overscroll-behavior: contain;
     }
 
@@ -82,7 +82,7 @@
         --exam-content-max-width: 880px;
     }
 
-    .exam-workspace {
+    .exam-scroll {
         padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
     }
 

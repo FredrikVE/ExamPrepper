@@ -163,6 +163,7 @@ export default function useAppNavigationViewModel(params) {
 		selectedTopicAreaKey,
 		isSelectionScreen,
 		shouldShowSubjectSwitcher,
+		backContract,
 		showBackButton: backContract.showBackButton,
 		backLabel: backContract.backLabel,
 		navigationLabel: backContract.navigationLabel,

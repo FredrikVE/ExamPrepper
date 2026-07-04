@@ -1,6 +1,6 @@
 // src/ui/view/pages/ExamPage.jsx
-import ExamBackButton from "../components/ExamPage/ExamBackButton.jsx";
-import ExamToolbar from "../components/ExamPage/ExamToolbar.jsx";
+import Header from "../components/Header/Header.jsx";
+import ExamToolbarActions from "../components/ExamPage/ExamToolbarActions.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
@@ -42,27 +42,33 @@ export default function ExamPage({ viewModel }) {
         );
     }
 
+    const headerToolbar = (
+        <ExamToolbarActions
+            answeredPercentLabel={viewModel.answeredPercentLabel}
+            scoreLabel={viewModel.scoreLabel}
+            elapsedTimeLabel={viewModel.elapsedTimeLabel}
+            submitted={viewModel.submitted}
+            onSubmit={viewModel.openSubmitConfirmation}
+            onReset={viewModel.resetExam}
+        />
+    );
+
     return (
         <>
             <ExamWorkspace
                 className={viewModel.workspaceClassName}
+                header={(
+                    <Header
+                        showBackButton={viewModel.showBackButton}
+                        backLabel={viewModel.backLabel}
+                        navigationLabel={viewModel.navigationLabel}
+                        onBack={viewModel.onBack}
+                        tools={null}
+                        trailing={headerToolbar}
+                    />
+                )}
                 scrollToTopRequestId={viewModel.scrollToTopRequestId}
             >
-                <ExamBackButton
-                    showBackButton={viewModel.showBackButton}
-                    backLabel={viewModel.backLabel}
-                    onBack={viewModel.onBack}
-                />
-
-                <ExamToolbar
-                    answeredPercentLabel={viewModel.answeredPercentLabel}
-                    scoreLabel={viewModel.scoreLabel}
-                    elapsedTimeLabel={viewModel.elapsedTimeLabel}
-                    submitted={viewModel.submitted}
-                    onSubmit={viewModel.openSubmitConfirmation}
-                    onReset={viewModel.resetExam}
-                />
-
                 {viewModel.attemptSaving && (
                     <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>
                 )}

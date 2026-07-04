@@ -18,9 +18,9 @@ export default function ExamToolbarButtons({ submitted, onSubmit, onReset }) {
         <button
             type="button"
             onClick={onSubmit}
-            className="exam-header-button exam-header-button-primary"
+            className="exam-toolbar-button exam-toolbar-button-primary"
         >
-            <CheckCircle2 className="exam-header-icon" />
+            <CheckCircle2 className="exam-toolbar-icon" />
             {t.headerSubmitButton}
         </button>
     );

@@ -148,9 +148,7 @@ function AppContent() {
 						examId={navigationViewModel.selectedExamId}
 						language={language}
 						t={t}
-						showBackButton={navigationViewModel.showBackButton}
-						backLabel={navigationViewModel.backLabel}
-						onBack={navigationViewModel.onBack}
+						backContract={navigationViewModel.backContract}
 						onExamWorkModeChange={setExamWorkMode}
 						examWorkModeActionsRef={examWorkModeActionsRef}
 					/>
@@ -162,10 +160,8 @@ function AppContent() {
 						initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
 						language={language}
 						t={t}
-						showBackButton={navigationViewModel.showBackButton}
-						backLabel={navigationViewModel.backLabel}
-						navigationLabel={navigationViewModel.navigationLabel}
-						onBack={navigationViewModel.onBack}
+						isActive={navigationViewModel.activeScreen === NAV_SCREENS.FLIPCARDS}
+						backContract={navigationViewModel.backContract}
 					/>
 				)}
 
@@ -187,7 +183,7 @@ function AppContent() {
 	);
 }
 
-function ExamPageWrapper({ examId, language, t, showBackButton, backLabel, onBack, onExamWorkModeChange, examWorkModeActionsRef }) {
+function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChange, examWorkModeActionsRef }) {
 	const examPageViewModel = useExamPageViewModel(
 		getExamQuestionsUseCase,
 		gradeAnswerUseCase,
@@ -196,9 +192,7 @@ function ExamPageWrapper({ examId, language, t, showBackButton, backLabel, onBac
 		examId,
 		language,
 		t,
-		showBackButton,
-		backLabel,
-		onBack
+		backContract
 	);
 
 	useEffect(() => {
@@ -239,7 +233,7 @@ function ExamPageWrapper({ examId, language, t, showBackButton, backLabel, onBac
 	);
 }
 
-function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, showBackButton, backLabel, navigationLabel, onBack }) {
+function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
 	const flipcardsPageViewModel = useFlipcardsPageViewModel(
 		getFlashcardsUseCase,
 		getTopicAreasUseCase,
@@ -247,11 +241,8 @@ function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, sho
 		initialTopicAreaKey,
 		language,
 		t,
-		true,
-		showBackButton,
-		backLabel,
-		navigationLabel,
-		onBack
+		isActive,
+		backContract
 	);
 
 	return (

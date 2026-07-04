@@ -17,10 +17,7 @@ export default function useFlipcardsPageViewModel(
     language,
     t,
     isActive,
-    showBackButton,
-    backLabel,
-    navigationLabel,
-    onBack
+    backContract
 ) {
     const presentationMode = usePresentationMode();
     const [flashcards, setFlashcards] = useState([]);
@@ -440,10 +437,10 @@ export default function useFlipcardsPageViewModel(
         visibleDeckKey,
         activeDeckToolKey,
         deckToolItems,
-        showBackButton,
-        backLabel,
-        navigationLabel,
-        onBack,
+        showBackButton: backContract.showBackButton,
+        backLabel: backContract.backLabel,
+        navigationLabel: backContract.navigationLabel,
+        onBack: backContract.onBack,
         activeCardIndex,
         activeCard,
         nextCard,

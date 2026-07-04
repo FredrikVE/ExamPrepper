@@ -52,12 +52,82 @@
     min-width: 0;
     height: 100%;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-lg);
     background: var(--shell-bg);
     box-shadow: var(--shadow-heavy);
     backdrop-filter: var(--blur-panel);
+}
+
+.exam-scroll {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	min-width: 0;
+	min-height: 0;
+	height: 100%;
+	flex: 1 1 auto;
+	flex-direction: column;
+	padding-top: var(--scaffold-header-height, 112px);
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
+	touch-action: pan-y;
+	scrollbar-color: color-mix(in srgb, var(--accent) 26%, transparent) transparent;
+	scrollbar-width: thin;
+}
+
+.exam-workspace .scaffold-header {
+	grid-template-columns: auto minmax(0, 1fr);
+}
+
+.exam-workspace .scaffold-header::before {
+	background:
+		radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 22rem),
+		radial-gradient(circle at 46% 4%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 18rem),
+		var(--shell-bg);
+	box-shadow: none;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+
+.exam-workspace .scaffold-header::after {
+	display: none;
+}
+
+.exam-workspace .scaffold-header__trailing,
+.exam-workspace .scaffold-header__actions {
+	justify-content: flex-end;
+}
+
+.exam-workspace .scaffold-header__leading,
+.exam-workspace .scaffold-header__heading,
+.exam-workspace .scaffold-header__trailing,
+.exam-workspace .scaffold-header__actions {
+	pointer-events: none;
+}
+
+.exam-workspace .scaffold-header-button,
+.exam-workspace .desktop-pop-out-menu__trigger,
+.exam-workspace .exam-toolbar-button {
+	pointer-events: auto;
+}
+
+.exam-scroll::-webkit-scrollbar {
+	width: 10px;
+}
+
+.exam-scroll::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.exam-scroll::-webkit-scrollbar-thumb {
+	border: 3px solid transparent;
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--accent) 26%, transparent);
+	background-clip: content-box;
 }
 
 .exam-workspace::before {

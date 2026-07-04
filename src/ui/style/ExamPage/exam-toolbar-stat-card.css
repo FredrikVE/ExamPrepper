@@ -1,21 +1,21 @@
 /* src/ui/style/ExamPage/exam-toolbar-stat-card.css */
-.exam-header-stat-card {
+.exam-toolbar-stat-card {
     display: grid;
-    min-width: var(--header-stat-card-min-width);
-    grid-template-columns: var(--header-stat-card-icon-column) minmax(0, 1fr);
+    min-width: var(--exam-toolbar-stat-card-min-width);
+    grid-template-columns: var(--exam-toolbar-stat-card-icon-column) minmax(0, 1fr);
     align-items: center;
-    gap: var(--header-stat-card-gap);
+    gap: var(--exam-toolbar-stat-card-gap);
     border: 1px solid var(--line);
     border-radius: var(--radius-sm);
-    background: var(--header-stat-card-bg);
-    box-shadow: var(--header-stat-card-shadow);
-    padding: var(--header-stat-card-padding);
+    background: var(--exam-toolbar-stat-card-bg);
+    box-shadow: var(--exam-toolbar-stat-card-shadow);
+    padding: var(--exam-toolbar-stat-card-padding);
 }
 
-.exam-header-stat-icon {
+.exam-toolbar-stat-icon {
     display: grid;
-    width: var(--header-stat-icon-size);
-    height: var(--header-stat-icon-size);
+    width: var(--exam-toolbar-stat-icon-size);
+    height: var(--exam-toolbar-stat-icon-size);
     place-items: center;
     border: 1px solid var(--line);
     border-radius: var(--radius-full);
@@ -23,22 +23,22 @@
     background: var(--accent-soft);
 }
 
-.exam-header-stat-icon svg {
-    width: var(--header-stat-icon-svg-size);
-    height: var(--header-stat-icon-svg-size);
+.exam-toolbar-stat-icon svg {
+    width: var(--exam-toolbar-stat-icon-svg-size);
+    height: var(--exam-toolbar-stat-icon-svg-size);
 }
 
-.exam-header-stat-value {
+.exam-toolbar-stat-value {
     color: var(--text-main);
-    font-size: var(--header-stat-value-font-size);
-    font-weight: var(--header-stat-value-font-weight);
+    font-size: var(--exam-toolbar-stat-value-font-size);
+    font-weight: var(--exam-toolbar-stat-value-font-weight);
     line-height: 1.05;
 }
 
-.exam-header-stat-label {
-    margin-top: var(--header-stat-label-margin-top);
+.exam-toolbar-stat-label {
+    margin-top: var(--exam-toolbar-stat-label-margin-top);
     color: var(--text-muted);
-    font-size: var(--header-stat-label-font-size);
-    font-weight: var(--header-stat-label-font-weight);
+    font-size: var(--exam-toolbar-stat-label-font-size);
+    font-weight: var(--exam-toolbar-stat-label-font-weight);
     line-height: 1;
 }
