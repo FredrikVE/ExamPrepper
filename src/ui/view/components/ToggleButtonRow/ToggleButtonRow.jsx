@@ -1,4 +1,4 @@
-// src/ui/view/components/Shared/ToggleButtonRow/ToggleButtonRow.jsx
+// src/ui/view/components/ToggleButtonRow/ToggleButtonRow.jsx
 export default function ToggleButtonRow({ entries, activeEntryId, onSelectEntry, ariaLabel }) {
     const buttons = [];
 

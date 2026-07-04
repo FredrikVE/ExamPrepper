@@ -9,7 +9,7 @@ import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
 import SelectPageScaffold from "../components/SelectPageScaffold/SelectPageScaffold.jsx";
-import ToggleButtonRow from "../components/Shared/ToggleButtonRow/ToggleButtonRow.jsx";
+import ToggleButtonRow from "../components/ToggleButtonRow/ToggleButtonRow.jsx";
 
 export default function LearningContentSelectPage({ viewModel }) {
     useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);

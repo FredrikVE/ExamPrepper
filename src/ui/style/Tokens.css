@@ -103,6 +103,7 @@
     --segmented-control-divider: color-mix(in srgb, var(--line-strong) 60%, transparent);
     --segmented-control-inactive-text: color-mix(in srgb, var(--text-muted) 86%, var(--text-main));
     --segmented-control-active-bg: var(--button-primary-bg);
+    --segmented-control-active-bg-hover: var(--button-primary-bg-hover);
     --segmented-control-active-text: var(--button-primary-text);
     --segmented-control-active-shadow: var(--button-primary-shadow);
     --tool-card-icon: var(--accent);
@@ -295,6 +296,7 @@
     --segmented-control-divider: color-mix(in srgb, var(--line-strong) 34%, transparent);
     --segmented-control-inactive-text: color-mix(in srgb, var(--text-muted) 84%, var(--text-main));
     --segmented-control-active-bg: var(--button-primary-bg);
+    --segmented-control-active-bg-hover: var(--button-primary-bg-hover);
     --segmented-control-active-text: var(--button-primary-text);
     --segmented-control-active-shadow: var(--button-primary-shadow);
 

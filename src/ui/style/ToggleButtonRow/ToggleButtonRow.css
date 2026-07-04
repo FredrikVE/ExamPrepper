@@ -1,4 +1,4 @@
-/* src/ui/style/Shared/ToggleButtonRow/toggle-button-row.css */
+/* src/ui/style/ToggleButtonRow/ToggleButtonRow.css */
 .toggle-button-row {
     position: relative;
     z-index: 1;
@@ -46,9 +46,15 @@
     background: var(--segmented-control-divider);
 }
 
-.toggle-button-row-button:not(:disabled):hover,
-.toggle-button-row-button:not(:disabled):focus-visible {
+.toggle-button-row-button:not([data-active="true"]):not(:disabled):hover,
+.toggle-button-row-button:not([data-active="true"]):not(:disabled):focus-visible {
     color: var(--text-main);
+}
+
+.toggle-button-row-button[data-active="true"]:not(:disabled):hover,
+.toggle-button-row-button[data-active="true"]:not(:disabled):focus-visible {
+    color: var(--segmented-control-active-text);
+    background: var(--segmented-control-active-bg-hover);
 }
 
 .toggle-button-row-button[data-active="true"] {
