@@ -3,10 +3,10 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+    grid-template-columns: var(--selection-card-grid-columns);
     align-items: stretch;
-    gap: clamp(var(--space-4), 1.45vw, var(--space-8));
-    width: min(1312px, 100%);
+    gap: var(--selection-card-grid-gap);
+    width: var(--selection-card-grid-width);
     padding-bottom: 26px;
 }
 

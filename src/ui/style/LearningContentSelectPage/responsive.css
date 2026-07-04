@@ -32,13 +32,13 @@
 
     .exam-select-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: var(--selection-card-mobile-grid-gap);
     }
 
     .exam-select-card {
-        min-height: 300px;
-        padding: 22px;
-        border-radius: 20px;
+        min-height: var(--selection-card-mobile-min-height);
+        padding: var(--selection-card-mobile-padding);
+        border-radius: var(--selection-card-mobile-radius);
     }
 
     .exam-select-card-icon-wrapper {

@@ -1,0 +1,14 @@
+/* src/ui/style/Shared/SelectionCard/selection-card-dimensions.css */
+/* SSOT for card dimensions used by selection pages. */
+:root {
+    --selection-card-grid-width: min(987px, 100%);
+    --selection-card-grid-columns: repeat(3, minmax(0, 1fr));
+    --selection-card-grid-gap: 21px;
+    --selection-card-min-height: 392px;
+    --selection-card-padding: 28px;
+    --selection-card-radius: 16px;
+    --selection-card-mobile-min-height: 286px;
+    --selection-card-mobile-padding: 22px;
+    --selection-card-mobile-radius: 20px;
+    --selection-card-mobile-grid-gap: 16px;
+}
