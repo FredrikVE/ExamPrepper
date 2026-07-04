@@ -192,8 +192,8 @@ export default function useLearningContentSelectPageViewModel(
     }, [getFlashcardDeckSummariesUseCase, isActive, subjectId, language]);
 
     const pageCopy = useMemo(() => {
-        return createLearningContentSelectPageCopy(t, selectedSubject);
-    }, [t, selectedSubject]);
+        return createLearningContentSelectPageCopy(t, selectedSubject, activeContentType);
+    }, [t, selectedSubject, activeContentType]);
 
     const selectContentType = useCallback((contentTypeId) => {
         const contentTypeEntry = findContentTypeEntry(contentTypeId);
