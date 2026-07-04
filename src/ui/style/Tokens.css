@@ -105,6 +105,7 @@
     --segmented-control-active-bg: var(--button-primary-bg);
     --segmented-control-active-bg-hover: var(--button-primary-bg-hover);
     --segmented-control-active-text: var(--button-primary-text);
+    --segmented-control-button-hover-transform: translateY(-1px) scale(1.035);
     --segmented-control-active-shadow: var(--button-primary-shadow);
     --tool-card-icon: var(--accent);
 
@@ -298,6 +299,7 @@
     --segmented-control-active-bg: var(--button-primary-bg);
     --segmented-control-active-bg-hover: var(--button-primary-bg-hover);
     --segmented-control-active-text: var(--button-primary-text);
+    --segmented-control-button-hover-transform: translateY(-1px) scale(1.035);
     --segmented-control-active-shadow: var(--button-primary-shadow);
 
     /* Solid, lysere accent for ikoner på verktøykort. Avledet fra --accent

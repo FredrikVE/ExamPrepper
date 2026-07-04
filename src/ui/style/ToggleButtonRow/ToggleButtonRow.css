@@ -29,6 +29,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transform-origin: center;
     transition:
         background var(--transition-fast),
         box-shadow var(--transition-fast),
@@ -44,6 +45,12 @@
     width: 1px;
     height: 56px;
     background: var(--segmented-control-divider);
+}
+
+.toggle-button-row-button:not(:disabled):hover,
+.toggle-button-row-button:not(:disabled):focus-visible {
+    z-index: 2;
+    transform: var(--segmented-control-button-hover-transform);
 }
 
 .toggle-button-row-button:not([data-active="true"]):not(:disabled):hover,
