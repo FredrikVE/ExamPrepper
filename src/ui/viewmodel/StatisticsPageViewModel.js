@@ -24,7 +24,7 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 	const statisticsLoad = useLoadModel({
 		execute: executeStatisticsLoad,
 		emptyData: null,
-		errorFallbackMessage: text.loadErrorMessage,
+		errorMessage: text.loadErrorMessage,
 		onLoaded: noteStatisticsLoaded
 	});
 

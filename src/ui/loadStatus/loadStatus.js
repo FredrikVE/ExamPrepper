@@ -1,7 +1,6 @@
 // src/ui/loadStatus/loadStatus.js
 export const LOAD_STATUS = {
 	LOADING: "loading",
-	RELOADING: "reloading",
 	ERROR: "error",
 	READY: "ready"
 };

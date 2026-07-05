@@ -64,14 +64,14 @@ export default function useFlipcardsPageViewModel(
     const flashcardLoad = useLoadModel({
         execute: executeFlashcardLoad,
         emptyData: [],
-        errorFallbackMessage: t.flipcardsErrorMessage,
+        errorMessage: t.flipcardsErrorMessage,
         onLoaded: noteFlashcardsLoaded
     });
 
     const topicAreaLoad = useLoadModel({
         execute: executeTopicAreaLoad,
         emptyData: [],
-        errorFallbackMessage: t.flipcardsErrorMessage,
+        errorMessage: t.flipcardsErrorMessage,
         onLoaded: noteFlipcardTopicAreasLoaded
     });
 

@@ -33,7 +33,7 @@ export default function useExamQuestionLoadModel({
 	const questionLoad = useLoadModel({
 		execute: executeQuestionLoad,
 		emptyData: [],
-		errorFallbackMessage: questionsLoadErrorMessage,
+		errorMessage: questionsLoadErrorMessage,
 		onLoaded: noteQuestionsLoaded
 	});
 

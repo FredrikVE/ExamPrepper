@@ -1,11 +1,12 @@
 // src/ui/view/pages/StatisticsPage.jsx
-import { LOAD_STATUS, isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
+import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import StatisticsKpiGrid from "../components/StatisticsPage/StatisticsKpiGrid.jsx";
 import StatisticsRecentAttempts from "../components/StatisticsPage/StatisticsRecentAttempts.jsx";
 import StatisticsRecommendedExam from "../components/StatisticsPage/StatisticsRecommendedExam.jsx";
 import StatisticsScoreTrendChart from "../components/StatisticsPage/StatisticsScoreTrendChart.jsx";
 import StatisticsWeeklyActivity from "../components/StatisticsPage/StatisticsWeeklyActivity.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 
 export default function StatisticsPage({ viewModel }) {
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
@@ -14,10 +15,12 @@ export default function StatisticsPage({ viewModel }) {
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.loadingTitle}
-					title={viewModel.errorTitle}
-					body={viewModel.pageErrorMessage}
-					actionLabel={viewModel.retryButtonLabel}
-					onAction={viewModel.onRetryLoadStatistics}
+					errorTitle={viewModel.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					errorAction={{
+						label: viewModel.retryButtonLabel,
+						onAction: viewModel.onRetryLoadStatistics
+					}}
 				/>
 			</StatisticsShell>
 		);
@@ -26,13 +29,13 @@ export default function StatisticsPage({ viewModel }) {
 	if (viewModel.isSignedOut) {
 		return (
 			<StatisticsShell viewModel={viewModel}>
-				<WorkspaceState
-					status={LOAD_STATUS.READY}
-					loadingLabel={viewModel.loadingTitle}
+				<WorkspaceMessage
 					title={viewModel.signedOutTitle}
 					body={viewModel.signedOutBody}
-					actionLabel={viewModel.startNewExamLabel}
-					onAction={viewModel.onStartNewExam}
+					action={{
+						label: viewModel.startNewExamLabel,
+						onAction: viewModel.onStartNewExam
+					}}
 				/>
 			</StatisticsShell>
 		);
@@ -63,13 +66,13 @@ export default function StatisticsPage({ viewModel }) {
 			</section>
 
 			{viewModel.isStatisticsEmpty ? (
-				<WorkspaceState
-					status={LOAD_STATUS.READY}
-					loadingLabel={viewModel.loadingTitle}
+				<WorkspaceMessage
 					title={viewModel.emptyTitle}
 					body={viewModel.emptyBody}
-					actionLabel={viewModel.startNewExamLabel}
-					onAction={viewModel.onStartNewExam}
+					action={{
+						label: viewModel.startNewExamLabel,
+						onAction: viewModel.onStartNewExam
+					}}
 				/>
 			) : (
 				<>

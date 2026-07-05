@@ -123,7 +123,7 @@ describe("useSubjectSelectPageViewModel", () => {
 		expect(subjects).toBe(loadedSubjects);
 		expect(execute).toHaveBeenCalledWith({ language: "nb" });
 		expect(loadConfiguration.emptyData).toEqual([]);
-		expect(loadConfiguration.errorFallbackMessage).toBe("Kunne ikke hente fag");
+		expect(loadConfiguration.errorMessage).toBe("Kunne ikke hente fag");
 	});
 
 	test("exposes page status and error message from the shared load model", () => {

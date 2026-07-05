@@ -52,10 +52,9 @@ export default function SubjectSelectPage({ viewModel }) {
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.loadingTitle}
-					title={viewModel.errorTitle}
-					body={viewModel.pageErrorMessage}
-					actionLabel={null}
-					onAction={null}
+					errorTitle={viewModel.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					errorAction={null}
 				/>
 			);
 		}

@@ -62,7 +62,7 @@ describe("useLoadModel", () => {
 		const loadModel = useLoadModel({
 			execute: jest.fn(() => new Promise(() => {})),
 			emptyData,
-			errorFallbackMessage: "Kunne ikke laste.",
+			errorMessage: "Kunne ikke laste.",
 			onLoaded: jest.fn()
 		});
 
@@ -80,7 +80,7 @@ describe("useLoadModel", () => {
 		useLoadModel({
 			execute,
 			emptyData: [],
-			errorFallbackMessage: "Kunne ikke laste.",
+			errorMessage: "Kunne ikke laste.",
 			onLoaded
 		});
 
@@ -96,7 +96,7 @@ describe("useLoadModel", () => {
 		expect(onLoaded).toHaveBeenCalledWith({ loadedData });
 	});
 
-	test("uses reloading status after first successful load", () => {
+	test("keeps ready status with previous data during refresh after first successful load", () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {
 			status: LOAD_STATUS.READY,
@@ -110,7 +110,7 @@ describe("useLoadModel", () => {
 		useLoadModel({
 			execute: jest.fn(() => new Promise(() => {})),
 			emptyData: [],
-			errorFallbackMessage: "Kunne ikke laste.",
+			errorMessage: "Kunne ikke laste.",
 			onLoaded: jest.fn()
 		});
 
@@ -118,7 +118,7 @@ describe("useLoadModel", () => {
 		const inFlightResource = updateInFlightResource(previousResource);
 
 		expect(inFlightResource).toEqual({
-			status: LOAD_STATUS.RELOADING,
+			status: LOAD_STATUS.READY,
 			data: previousData,
 			error: null
 		});
@@ -139,7 +139,7 @@ describe("useLoadModel", () => {
 		useLoadModel({
 			execute,
 			emptyData: previousData,
-			errorFallbackMessage: "Kunne ikke laste.",
+			errorMessage: "Kunne ikke laste.",
 			onLoaded
 		});
 
@@ -164,7 +164,7 @@ describe("useLoadModel", () => {
 		useLoadModel({
 			execute,
 			emptyData: [],
-			errorFallbackMessage: "Kunne ikke laste.",
+			errorMessage: "Kunne ikke laste.",
 			onLoaded: jest.fn()
 		});
 
@@ -190,7 +190,7 @@ describe("useLoadModel", () => {
 		useLoadModel({
 			execute,
 			emptyData: [],
-			errorFallbackMessage: "Kunne ikke laste.",
+			errorMessage: "Kunne ikke laste.",
 			onLoaded
 		});
 

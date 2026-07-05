@@ -3,8 +3,7 @@ import { LOAD_STATUS } from "../../loadStatus/loadStatus.js";
 
 const STATUS_PRIORITY = [
 	LOAD_STATUS.ERROR,
-	LOAD_STATUS.LOADING,
-	LOAD_STATUS.RELOADING
+	LOAD_STATUS.LOADING
 ];
 
 export default function combineLoadStatuses(statuses) {

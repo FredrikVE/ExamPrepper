@@ -90,21 +90,21 @@ export default function useLearningContentSelectPageViewModel(
 	const examLoad = useLoadModel({
 		execute: executeExamLoad,
 		emptyData: [],
-		errorFallbackMessage: t.selectErrorMessage,
+		errorMessage: t.selectErrorMessage,
 		onLoaded: noteLearningContentResourceLoaded
 	});
 
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
-		errorFallbackMessage: t.selectErrorMessage,
+		errorMessage: t.selectErrorMessage,
 		onLoaded: noteLearningContentResourceLoaded
 	});
 
 	const flashcardDeckLoad = useLoadModel({
 		execute: executeFlashcardDeckLoad,
 		emptyData: [],
-		errorFallbackMessage: t.selectErrorMessage,
+		errorMessage: t.selectErrorMessage,
 		onLoaded: noteLearningContentResourceLoaded
 	});
 

@@ -19,7 +19,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	const subjectLoad = useLoadModel({
 		execute: executeSubjectLoad,
 		emptyData: [],
-		errorFallbackMessage: t.subjectErrorMessage,
+		errorMessage: t.subjectErrorMessage,
 		onLoaded: noteSubjectsLoaded
 	});
 	const subjects = subjectLoad.data;

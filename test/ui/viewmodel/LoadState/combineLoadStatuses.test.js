@@ -13,18 +13,9 @@ describe("combineLoadStatuses", () => {
 		expect(status).toBe(LOAD_STATUS.READY);
 	});
 
-	test("returns reloading when at least one resource is reloading", () => {
+	test("returns loading when at least one resource is loading", () => {
 		const status = combineLoadStatuses([
 			LOAD_STATUS.READY,
-			LOAD_STATUS.RELOADING
-		]);
-
-		expect(status).toBe(LOAD_STATUS.RELOADING);
-	});
-
-	test("returns loading before reloading", () => {
-		const status = combineLoadStatuses([
-			LOAD_STATUS.RELOADING,
 			LOAD_STATUS.LOADING
 		]);
 
@@ -35,7 +26,7 @@ describe("combineLoadStatuses", () => {
 		const status = combineLoadStatuses([
 			LOAD_STATUS.LOADING,
 			LOAD_STATUS.ERROR,
-			LOAD_STATUS.RELOADING
+			LOAD_STATUS.READY
 		]);
 
 		expect(status).toBe(LOAD_STATUS.ERROR);
