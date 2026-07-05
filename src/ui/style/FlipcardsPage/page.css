@@ -37,17 +37,11 @@
 }
 
 .flipcards-ambient-light {
-    position: absolute;
-    inset: -22% -16% auto auto;
-    z-index: -1;
-    width: min(940px, 72vw);
-    max-width: 100%;
-    height: 620px;
-    pointer-events: none;
-	background:
-		radial-gradient(circle at 48% 12%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 58%),
-		radial-gradient(circle at 72% 54%, rgba(16, 103, 255, 0.08), transparent 52%);
-	filter: blur(4px);
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background: var(--workspace-ambient-glow);
 }
 
 .flipcards-page-placeholder {
