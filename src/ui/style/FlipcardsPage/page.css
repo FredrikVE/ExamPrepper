@@ -44,6 +44,13 @@
 	background: var(--workspace-ambient-glow);
 }
 
+/* Headeren scroller med innholdet her (workspacet er selv scroll-
+   containeren), så ingen tekst legger seg under den. Da kan den være
+   gjennomsiktig og la workspace-bakgrunnen skinne gjennom. */
+.flipcards-workspace .scaffold-header::before {
+	background: none;
+}
+
 .flipcards-page-placeholder {
     display: grid;
     align-content: center;
