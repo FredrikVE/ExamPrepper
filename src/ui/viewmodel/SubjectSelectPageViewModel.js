@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import { getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
-import useLoadModel from "./load/useLoadModel.js";
+import useLoadModel from "./LoadState/useLoadModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 

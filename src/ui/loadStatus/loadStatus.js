@@ -1,4 +1,4 @@
-// src/ui/presentation/loadStatus.js
+// src/ui/loadStatus/loadStatus.js
 export const LOAD_STATUS = {
 	LOADING: "loading",
 	RELOADING: "reloading",

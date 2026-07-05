@@ -1,7 +1,7 @@
 // src/ui/view/pages/FlipcardsPage.jsx
 import { useEffect } from "react";
 import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
-import { LOAD_STATUS, isBlockingLoadStatus } from "../../presentation/loadStatus.js";
+import { LOAD_STATUS, isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import FlipcardsStudySurface from "../components/FlipcardsPage/FlipcardsStudySurface.jsx";
 import FlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx";
@@ -37,8 +37,8 @@ export default function FlipcardsPage({ viewModel }) {
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.labels.loadingTitle}
-					errorTitle={viewModel.labels.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
+					title={viewModel.labels.errorTitle}
+					body={viewModel.pageErrorMessage}
 					actionLabel={null}
 					onAction={null}
 				/>
@@ -52,8 +52,8 @@ export default function FlipcardsPage({ viewModel }) {
 				<WorkspaceState
 					status={LOAD_STATUS.READY}
 					loadingLabel={viewModel.labels.loadingTitle}
-					errorTitle={viewModel.labels.emptyTitle}
-					errorBody={viewModel.labels.emptyBody}
+					title={viewModel.labels.emptyTitle}
+					body={viewModel.labels.emptyBody}
 					actionLabel={null}
 					onAction={null}
 				/>

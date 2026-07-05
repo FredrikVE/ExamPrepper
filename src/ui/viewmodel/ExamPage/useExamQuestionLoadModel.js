@@ -1,6 +1,6 @@
 // src/ui/viewmodel/ExamPage/useExamQuestionLoadModel.js
 import { useCallback, useRef } from "react";
-import useLoadModel from "../load/useLoadModel.js";
+import useLoadModel from "../LoadState/useLoadModel.js";
 import shouldPreserveExamAttemptOnQuestionReload from "./shouldPreserveExamAttemptOnQuestionReload.js";
 
 export default function useExamQuestionLoadModel({

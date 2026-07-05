@@ -1,6 +1,6 @@
 // test/ui/viewmodel/ExamPage/useExamQuestionLoadModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../../src/ui/presentation/loadStatus.js";
+import { LOAD_STATUS } from "../../../../src/ui/loadStatus/loadStatus.js";
 
 const stateValues = [];
 const stateSetters = [];

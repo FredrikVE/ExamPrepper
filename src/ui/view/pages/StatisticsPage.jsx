@@ -1,5 +1,5 @@
 // src/ui/view/pages/StatisticsPage.jsx
-import { LOAD_STATUS, isBlockingLoadStatus } from "../../presentation/loadStatus.js";
+import { LOAD_STATUS, isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import StatisticsKpiGrid from "../components/StatisticsPage/StatisticsKpiGrid.jsx";
 import StatisticsRecentAttempts from "../components/StatisticsPage/StatisticsRecentAttempts.jsx";
 import StatisticsRecommendedExam from "../components/StatisticsPage/StatisticsRecommendedExam.jsx";
@@ -14,8 +14,8 @@ export default function StatisticsPage({ viewModel }) {
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.loadingTitle}
-					errorTitle={viewModel.errorTitle}
-					errorBody={null}
+					title={viewModel.errorTitle}
+					body={viewModel.pageErrorMessage}
 					actionLabel={viewModel.retryButtonLabel}
 					onAction={viewModel.onRetryLoadStatistics}
 				/>
@@ -29,8 +29,8 @@ export default function StatisticsPage({ viewModel }) {
 				<WorkspaceState
 					status={LOAD_STATUS.READY}
 					loadingLabel={viewModel.loadingTitle}
-					errorTitle={viewModel.signedOutTitle}
-					errorBody={viewModel.signedOutBody}
+					title={viewModel.signedOutTitle}
+					body={viewModel.signedOutBody}
 					actionLabel={viewModel.startNewExamLabel}
 					onAction={viewModel.onStartNewExam}
 				/>
@@ -66,8 +66,8 @@ export default function StatisticsPage({ viewModel }) {
 				<WorkspaceState
 					status={LOAD_STATUS.READY}
 					loadingLabel={viewModel.loadingTitle}
-					errorTitle={viewModel.emptyTitle}
-					errorBody={viewModel.emptyBody}
+					title={viewModel.emptyTitle}
+					body={viewModel.emptyBody}
 					actionLabel={viewModel.startNewExamLabel}
 					onAction={viewModel.onStartNewExam}
 				/>

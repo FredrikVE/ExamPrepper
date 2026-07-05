@@ -1,6 +1,6 @@
 // test/ui/viewmodel/SubjectSelectPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../src/ui/presentation/loadStatus.js";
+import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
 
 const stateSetters = [];
 let subjectLoadModel;
@@ -29,7 +29,7 @@ jest.unstable_mockModule("react", () => ({
 	useState
 }));
 
-jest.unstable_mockModule("../../../src/ui/viewmodel/load/useLoadModel.js", () => ({
+jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({
 	default: useLoadModel
 }));
 

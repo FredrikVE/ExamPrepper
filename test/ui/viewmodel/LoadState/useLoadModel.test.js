@@ -1,6 +1,6 @@
-// test/ui/viewmodel/load/useLoadModel.test.js
+// test/ui/viewmodel/LoadState/useLoadModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../../src/ui/presentation/loadStatus.js";
+import { LOAD_STATUS } from "../../../../src/ui/loadStatus/loadStatus.js";
 
 const stateValues = [];
 const stateSetters = [];
@@ -38,7 +38,7 @@ jest.unstable_mockModule("react", () => ({
 	useState
 }));
 
-const { default: useLoadModel } = await import("../../../../src/ui/viewmodel/load/useLoadModel.js");
+const { default: useLoadModel } = await import("../../../../src/ui/viewmodel/LoadState/useLoadModel.js");
 
 const flushPromises = async () => {
 	await Promise.resolve();

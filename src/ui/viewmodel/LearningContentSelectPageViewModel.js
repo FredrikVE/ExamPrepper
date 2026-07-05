@@ -8,8 +8,8 @@ import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_TOPIC_AREAS, filterExams } from "./LearningContentSelectPage/examFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
-import useLoadModel from "./load/useLoadModel.js";
-import combineLoadStatuses from "./load/combineLoadStatuses.js";
+import useLoadModel from "./LoadState/useLoadModel.js";
+import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 
 export default function useLearningContentSelectPageViewModel(
 	getAvailableExamsUseCase,

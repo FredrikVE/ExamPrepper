@@ -1,7 +1,7 @@
-// test/ui/viewmodel/load/combineLoadStatuses.test.js
+// test/ui/viewmodel/LoadState/combineLoadStatuses.test.js
 import { describe, expect, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../../src/ui/presentation/loadStatus.js";
-import combineLoadStatuses from "../../../../src/ui/viewmodel/load/combineLoadStatuses.js";
+import { LOAD_STATUS } from "../../../../src/ui/loadStatus/loadStatus.js";
+import combineLoadStatuses from "../../../../src/ui/viewmodel/LoadState/combineLoadStatuses.js";
 
 describe("combineLoadStatuses", () => {
 	test("returns ready when all resources are ready", () => {

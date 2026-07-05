@@ -1,10 +1,10 @@
 // src/ui/viewmodel/StatisticsPageViewModel.js
 import { useCallback, useMemo } from "react";
-import { LOAD_STATUS } from "../presentation/loadStatus.js";
+import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
 import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
 import createStatisticsDashboardModel from "./StatisticsPage/createStatisticsDashboardModel.js";
-import useLoadModel from "./load/useLoadModel.js";
-import combineLoadStatuses from "./load/combineLoadStatuses.js";
+import useLoadModel from "./LoadState/useLoadModel.js";
+import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 
 export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, formatDate, t, authState, onStartNewExam }) {
 	const isAuthLoaded = authState.isLoaded;

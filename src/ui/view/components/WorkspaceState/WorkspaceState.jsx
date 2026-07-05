@@ -1,12 +1,12 @@
 // src/ui/view/components/WorkspaceState/WorkspaceState.jsx
-import { LOAD_STATUS } from "../../../presentation/loadStatus.js";
+import { LOAD_STATUS } from "../../../loadStatus/loadStatus.js";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
 export default function WorkspaceState({
 	status,
 	loadingLabel,
-	errorTitle,
-	errorBody,
+	title,
+	body,
 	actionLabel,
 	onAction
 }) {
@@ -14,8 +14,8 @@ export default function WorkspaceState({
 		return (
 			<div className="workspace-state">
 				<section className="workspace-state-card workspace-state-card-error" role="alert">
-					<h2>{errorTitle}</h2>
-					{errorBody ? <p>{errorBody}</p> : null}
+					<h2>{title}</h2>
+					<p>{body}</p>
 
 					{actionLabel && onAction ? (
 						<button type="button" className="workspace-state-action" onClick={onAction}>
@@ -31,8 +31,8 @@ export default function WorkspaceState({
 		return (
 			<div className="workspace-state">
 				<section className="workspace-state-card workspace-state-card-message" role="status">
-					<h2>{errorTitle}</h2>
-					{errorBody ? <p>{errorBody}</p> : null}
+					<h2>{title}</h2>
+					<p>{body}</p>
 
 					{actionLabel && onAction ? (
 						<button type="button" className="workspace-state-action" onClick={onAction}>

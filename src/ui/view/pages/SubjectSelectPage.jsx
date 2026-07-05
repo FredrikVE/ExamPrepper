@@ -1,5 +1,5 @@
 // src/ui/view/pages/SubjectSelectPage.jsx
-import { isBlockingLoadStatus } from "../../presentation/loadStatus.js";
+import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
@@ -52,8 +52,8 @@ export default function SubjectSelectPage({ viewModel }) {
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.loadingTitle}
-					errorTitle={viewModel.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
+					title={viewModel.errorTitle}
+					body={viewModel.pageErrorMessage}
 					actionLabel={null}
 					onAction={null}
 				/>

@@ -1,6 +1,6 @@
-// src/ui/viewmodel/load/useLoadModel.js
+// src/ui/viewmodel/LoadState/useLoadModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LOAD_STATUS } from "../../presentation/loadStatus.js";
+import { LOAD_STATUS } from "../../loadStatus/loadStatus.js";
 
 export default function useLoadModel({
 	execute,

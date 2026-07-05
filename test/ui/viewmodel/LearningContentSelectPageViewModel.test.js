@@ -1,5 +1,5 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import { LOAD_STATUS } from "../../../src/ui/presentation/loadStatus.js";
+import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
 
 const stateSetters = [];
 let loadModelQueue = [];
@@ -32,7 +32,7 @@ jest.unstable_mockModule("react", () => ({
     useState
 }));
 
-jest.unstable_mockModule("../../../src/ui/viewmodel/load/useLoadModel.js", () => ({
+jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({
 	default: useLoadModel
 }));
 

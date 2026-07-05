@@ -1,5 +1,5 @@
 // src/ui/view/pages/ExamPage.jsx
-import { isBlockingLoadStatus } from "../../presentation/loadStatus.js";
+import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import ExamToolbarActions from "../components/ExamPage/ExamToolbarActions.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
@@ -44,8 +44,8 @@ export default function ExamPage({ viewModel }) {
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.loadingTitle}
-					errorTitle={viewModel.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
+					title={viewModel.errorTitle}
+					body={viewModel.pageErrorMessage}
 					actionLabel={null}
 					onAction={null}
 				/>

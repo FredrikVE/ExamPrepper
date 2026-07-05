@@ -6,8 +6,8 @@ import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
-import useLoadModel from "./load/useLoadModel.js";
-import combineLoadStatuses from "./load/combineLoadStatuses.js";
+import useLoadModel from "./LoadState/useLoadModel.js";
+import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
 

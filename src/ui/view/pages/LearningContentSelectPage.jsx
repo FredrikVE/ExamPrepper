@@ -1,5 +1,5 @@
 // src/ui/view/pages/LearningContentSelectPage.jsx
-import { isBlockingLoadStatus } from "../../presentation/loadStatus.js";
+import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import LearningContentTopbar from "../components/LearningContentSelectPage/LearningContentTopbar.jsx";
 import LearningContentIntro from "../components/LearningContentSelectPage/LearningContentIntro.jsx";
@@ -57,8 +57,8 @@ export default function LearningContentSelectPage({ viewModel }) {
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.loadingMessage}
-					errorTitle={viewModel.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
+					title={viewModel.errorTitle}
+					body={viewModel.pageErrorMessage}
 					actionLabel={null}
 					onAction={null}
 				/>

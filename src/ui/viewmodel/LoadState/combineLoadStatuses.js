@@ -1,5 +1,5 @@
-// src/ui/viewmodel/load/combineLoadStatuses.js
-import { LOAD_STATUS } from "../../presentation/loadStatus.js";
+// src/ui/viewmodel/LoadState/combineLoadStatuses.js
+import { LOAD_STATUS } from "../../loadStatus/loadStatus.js";
 
 const STATUS_PRIORITY = [
 	LOAD_STATUS.ERROR,
