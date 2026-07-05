@@ -15,7 +15,7 @@ export default function StatisticsPage({ viewModel }) {
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.loadingTitle}
 					errorTitle={viewModel.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
+					errorBody={null}
 					actionLabel={viewModel.retryButtonLabel}
 					onAction={viewModel.onRetryLoadStatistics}
 				/>

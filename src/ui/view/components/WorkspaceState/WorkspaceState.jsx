@@ -15,7 +15,7 @@ export default function WorkspaceState({
 			<div className="workspace-state">
 				<section className="workspace-state-card workspace-state-card-error" role="alert">
 					<h2>{errorTitle}</h2>
-					<p>{errorBody}</p>
+					{errorBody ? <p>{errorBody}</p> : null}
 
 					{actionLabel && onAction ? (
 						<button type="button" className="workspace-state-action" onClick={onAction}>
@@ -32,7 +32,7 @@ export default function WorkspaceState({
 			<div className="workspace-state">
 				<section className="workspace-state-card workspace-state-card-message" role="status">
 					<h2>{errorTitle}</h2>
-					<p>{errorBody}</p>
+					{errorBody ? <p>{errorBody}</p> : null}
 
 					{actionLabel && onAction ? (
 						<button type="button" className="workspace-state-action" onClick={onAction}>

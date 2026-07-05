@@ -156,7 +156,7 @@ describe("useLoadModel", () => {
 		expect(onLoaded).not.toHaveBeenCalled();
 	});
 
-	test("sets error message when load fails with message", async () => {
+	test("sets fallback error when load fails with technical message", async () => {
 		const execute = jest.fn(async () => {
 			throw new Error("API svarte 500.");
 		});
@@ -177,7 +177,7 @@ describe("useLoadModel", () => {
 			error: null
 		});
 
-		expect(failedResource.error).toBe("API svarte 500.");
+		expect(failedResource.error).toBe("Kunne ikke laste.");
 	});
 
 	test("ignores completed loads after cleanup", async () => {

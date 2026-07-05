@@ -50,10 +50,12 @@ export default function useLoadModel({
 					return;
 				}
 
+				logLoadError(loadError);
+
 				setResource((previousResource) => ({
 					status: LOAD_STATUS.ERROR,
 					data: previousResource.data,
-					error: loadError?.message ?? errorFallbackMessage
+					error: errorFallbackMessage
 				}));
 			}
 		};
@@ -73,4 +75,12 @@ export default function useLoadModel({
 		error: resource.error,
 		reload: runLoad
 	};
+}
+
+function logLoadError(loadError) {
+	if (import.meta.env?.DEV !== true) {
+		return;
+	}
+
+	console.error("[useLoadModel] Load failed", loadError);
 }
