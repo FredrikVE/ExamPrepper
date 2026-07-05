@@ -1,89 +1,64 @@
 // src/ui/viewmodel/StatisticsPageViewModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
+import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
 import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
 import createStatisticsDashboardModel from "./StatisticsPage/createStatisticsDashboardModel.js";
-
-const isNeverCancelled = () => false;
+import useLoadModel from "./LoadState/useLoadModel.js";
+import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 
 export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, formatDate, t, authState, onStartNewExam }) {
-	const [statistics, setStatistics] = useState(null);
-	const [statisticsLoading, setStatisticsLoading] = useState(false);
-	const [statisticsLoadError, setStatisticsLoadError] = useState(null);
-
 	const isAuthLoaded = authState.isLoaded;
 	const isSignedIn = authState.isSignedIn === true;
 	const hasClerkAuth = authState.hasClerkAuth === true;
 
 	const text = useMemo(() => createStatisticsTextModel(t), [t]);
 
-	const loadStatistics = useCallback(async (isCancelled = isNeverCancelled) => {
+	const executeStatisticsLoad = useCallback(() => {
 		if (!isAuthLoaded || !isSignedIn) {
-			setStatistics(null);
-			setStatisticsLoading(false);
-			setStatisticsLoadError(null);
-			return;
+			return Promise.resolve(null);
 		}
 
-		try {
-			setStatisticsLoading(true);
-			setStatisticsLoadError(null);
+		return getMyStatisticsUseCase.execute();
+	}, [getMyStatisticsUseCase, isAuthLoaded, isSignedIn]);
 
-			const result = await getMyStatisticsUseCase.execute();
+	const statisticsLoad = useLoadModel({
+		execute: executeStatisticsLoad,
+		emptyData: null,
+		errorMessage: text.loadErrorMessage,
+		onLoaded: noteStatisticsLoaded
+	});
 
-			if (!isCancelled()) {
-				setStatistics(result);
-			}
-		} catch (error) {
-			console.error("Feil ved henting av statistikk:", error);
-
-			if (!isCancelled()) {
-				setStatistics(null);
-				setStatisticsLoadError(error?.message ?? text.loadErrorMessage);
-			}
-		} finally {
-			if (!isCancelled()) {
-				setStatisticsLoading(false);
-			}
-		}
-	}, [text.loadErrorMessage, getMyStatisticsUseCase, isAuthLoaded, isSignedIn]);
-
-	useEffect(() => {
-		let cancelled = false;
-
-		loadStatistics(() => cancelled);
-
-		return () => {
-			cancelled = true;
-		};
-	}, [loadStatistics]);
+	const authStatus = resolveAuthLoadStatus(hasClerkAuth, isAuthLoaded);
+	const pageStatus = combineLoadStatuses([
+		authStatus,
+		statisticsLoad.status
+	]);
+	const statistics = statisticsLoad.data;
+	const pageErrorMessage = statisticsLoad.error ?? text.loadErrorMessage;
 
 	const dashboard = useMemo(() => createStatisticsDashboardModel(
 		statistics, formatDate, text
 	), [statistics, formatDate, text]);
 
 	const retryLoadStatistics = useCallback(() => {
-		loadStatistics();
-	}, [loadStatistics]);
+		statisticsLoad.reload();
+	}, [statisticsLoad.reload]);
 
 	const startNewExam = useCallback(() => {
 		onStartNewExam();
 	}, [onStartNewExam]);
-
-	const isInitialStatisticsLoading = isAuthLoaded && isSignedIn && statistics === null && !statisticsLoadError;
-	const isStatisticsLoading = statisticsLoading || isInitialStatisticsLoading;
 
 	return {
 		// Auth state
 		hasClerkAuth,
 		isAuthLoaded,
 		isSignedIn,
-		isAuthLoading: hasClerkAuth && !isAuthLoaded,
 		isSignedOut: !hasClerkAuth || (isAuthLoaded && !isSignedIn),
 
 		// Data state
 		statistics,
-		statisticsLoading: isStatisticsLoading,
-		statisticsLoadError,
+		pageStatus,
+		pageErrorMessage,
 
 		// Text
 		pageTitle: text.pageTitle,
@@ -105,4 +80,14 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 		onRetryLoadStatistics: retryLoadStatistics,
 		onStartNewExam: startNewExam
 	};
+}
+
+function noteStatisticsLoaded() {}
+
+function resolveAuthLoadStatus(hasClerkAuth, isAuthLoaded) {
+	if (hasClerkAuth && !isAuthLoaded) {
+		return LOAD_STATUS.LOADING;
+	}
+
+	return LOAD_STATUS.READY;
 }

@@ -1,122 +1,132 @@
 // src/ui/view/pages/ExamPage.jsx
+import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import ExamToolbarActions from "../components/ExamPage/ExamToolbarActions.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
 import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
-import ExamPageState from "../components/ExamPage/ExamPageState.jsx";
 import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
 import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
+import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import useExamFooterNavigationKeys from "../components/ExamPage/useExamFooterNavigationKeys.js";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 export default function ExamPage({ viewModel }) {
-    const { t } = useLanguage();
+	const { t } = useLanguage();
 
-    useExamFooterNavigationKeys({
-        isEnabled: viewModel.isFooterNavigationEnabled,
-        canGoPrevious: viewModel.canGoPrevious,
-        canGoNext: viewModel.canGoNext,
-        submitted: viewModel.submitted,
-        onNavigatePrevious: viewModel.previousQuestion,
-        onNavigateNext: viewModel.nextQuestion
-    });
+	useExamFooterNavigationKeys({
+		isEnabled: viewModel.isFooterNavigationEnabled,
+		canGoPrevious: viewModel.canGoPrevious,
+		canGoNext: viewModel.canGoNext,
+		submitted: viewModel.submitted,
+		onNavigatePrevious: viewModel.previousQuestion,
+		onNavigateNext: viewModel.nextQuestion
+	});
 
-    if (viewModel.isInitialQuestionsLoad) {
-        return (
-            <ExamPageState>
-                <p className="exam-page-loading-message">
-                    {viewModel.loadingMessage}
-                </p>
-            </ExamPageState>
-        );
-    }
+	const header = (
+		<Header
+			showBackButton={viewModel.showBackButton}
+			backLabel={viewModel.backLabel}
+			navigationLabel={viewModel.navigationLabel}
+			onBack={viewModel.onBack}
+			tools={null}
+			trailing={null}
+		/>
+	);
 
-    if (viewModel.questionsLoadError) {
-        return (
-            <ExamPageState>
-                <p className="exam-page-error-message">
-                    {viewModel.errorPrefix}: {viewModel.questionsLoadError}
-                </p>
-            </ExamPageState>
-        );
-    }
+	if (isBlockingLoadStatus(viewModel.pageStatus)) {
+		return (
+			<ExamWorkspace
+				className={viewModel.workspaceClassName}
+				header={header}
+				scrollToTopRequestId={0}
+			>
+				<WorkspaceState
+					status={viewModel.pageStatus}
+					loadingLabel={viewModel.loadingTitle}
+					errorTitle={viewModel.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					errorAction={null}
+				/>
+			</ExamWorkspace>
+		);
+	}
 
-    const headerToolbar = (
-        <ExamToolbarActions
-            answeredPercentLabel={viewModel.answeredPercentLabel}
-            scoreLabel={viewModel.scoreLabel}
-            elapsedTimeLabel={viewModel.elapsedTimeLabel}
-            submitted={viewModel.submitted}
-            onSubmit={viewModel.openSubmitConfirmation}
-            onReset={viewModel.resetExam}
-        />
-    );
+	const headerToolbar = (
+		<ExamToolbarActions
+			answeredPercentLabel={viewModel.answeredPercentLabel}
+			scoreLabel={viewModel.scoreLabel}
+			elapsedTimeLabel={viewModel.elapsedTimeLabel}
+			submitted={viewModel.submitted}
+			onSubmit={viewModel.openSubmitConfirmation}
+			onReset={viewModel.resetExam}
+		/>
+	);
 
-    return (
-        <>
-            <ExamWorkspace
-                className={viewModel.workspaceClassName}
-                header={(
-                    <Header
-                        showBackButton={viewModel.showBackButton}
-                        backLabel={viewModel.backLabel}
-                        navigationLabel={viewModel.navigationLabel}
-                        onBack={viewModel.onBack}
-                        tools={null}
-                        trailing={headerToolbar}
-                    />
-                )}
-                scrollToTopRequestId={viewModel.scrollToTopRequestId}
-            >
-                {viewModel.attemptSaving && (
-                    <p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>
-                )}
+	return (
+		<>
+			<ExamWorkspace
+				className={viewModel.workspaceClassName}
+				header={(
+					<Header
+						showBackButton={viewModel.showBackButton}
+						backLabel={viewModel.backLabel}
+						navigationLabel={viewModel.navigationLabel}
+						onBack={viewModel.onBack}
+						tools={null}
+						trailing={headerToolbar}
+					/>
+				)}
+				scrollToTopRequestId={viewModel.scrollToTopRequestId}
+			>
+				{viewModel.attemptSaving && (
+					<p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>
+				)}
 
-                {viewModel.attemptSaveError && (
-                    <p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
-                )}
+				{viewModel.attemptSaveError && (
+					<p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
+				)}
 
-                <ExamProgress
-                    visibleQuestions={viewModel.visibleQuestions}
-                    currentQuestionIndex={viewModel.currentQuestionIndex}
-                    onGoToQuestion={viewModel.goToQuestion}
-                />
+				<ExamProgress
+					visibleQuestions={viewModel.visibleQuestions}
+					currentQuestionIndex={viewModel.currentQuestionIndex}
+					onGoToQuestion={viewModel.goToQuestion}
+				/>
 
-                <main className="exam-page-main">
-                    <div className="exam-page-content">
-                        <ExamPageContent viewModel={viewModel} />
-                    </div>
-                </main>
+				<main className="exam-page-main">
+					<div className="exam-page-content">
+						<ExamPageContent viewModel={viewModel} />
+					</div>
+				</main>
 
-                <ExamFooter
-                    previousQuestion={viewModel.previousQuestion}
-                    canGoPrevious={viewModel.canGoPrevious}
-                    questionDotEntries={viewModel.questionDotEntries}
-                    filledCompactQuestionDotEntries={viewModel.filledCompactQuestionDotEntries}
-                    minimalCompactQuestionDotEntries={viewModel.minimalCompactQuestionDotEntries}
-                    shouldUseCompactDots={viewModel.shouldUseCompactDots}
-                    shouldUseResponsiveCompactDots={viewModel.shouldUseResponsiveCompactDots}
-                    submitted={viewModel.submitted}
-                    questionProgressLabel={viewModel.questionProgressLabel}
-                    onGoToQuestion={viewModel.goToQuestion}
-                    showSubmitButton={viewModel.showSubmitButton}
-                    onSubmit={viewModel.openSubmitConfirmation}
-                    onNext={viewModel.nextQuestion}
-                    isNextDisabled={viewModel.isLastQuestion}
-                />
-            </ExamWorkspace>
+				<ExamFooter
+					previousQuestion={viewModel.previousQuestion}
+					canGoPrevious={viewModel.canGoPrevious}
+					questionDotEntries={viewModel.questionDotEntries}
+					filledCompactQuestionDotEntries={viewModel.filledCompactQuestionDotEntries}
+					minimalCompactQuestionDotEntries={viewModel.minimalCompactQuestionDotEntries}
+					shouldUseCompactDots={viewModel.shouldUseCompactDots}
+					shouldUseResponsiveCompactDots={viewModel.shouldUseResponsiveCompactDots}
+					submitted={viewModel.submitted}
+					questionProgressLabel={viewModel.questionProgressLabel}
+					onGoToQuestion={viewModel.goToQuestion}
+					showSubmitButton={viewModel.showSubmitButton}
+					onSubmit={viewModel.openSubmitConfirmation}
+					onNext={viewModel.nextQuestion}
+					isNextDisabled={viewModel.isLastQuestion}
+				/>
+			</ExamWorkspace>
 
-            {viewModel.isSubmitConfirmOpen && (
-                <ExamSubmitConfirmation
-                    title={t.examSubmitConfirmTitle}
-                    body={t.examSubmitConfirmBody}
-                    cancelLabel={t.examSubmitConfirmCancelLabel}
-                    confirmLabel={t.examSubmitConfirmConfirmLabel}
-                    onCancel={viewModel.closeSubmitConfirmation}
-                    onConfirm={viewModel.confirmSubmitExam}
-                />
-            )}
-        </>
-    );
+			{viewModel.isSubmitConfirmOpen && (
+				<ExamSubmitConfirmation
+					title={t.examSubmitConfirmTitle}
+					body={t.examSubmitConfirmBody}
+					cancelLabel={t.examSubmitConfirmCancelLabel}
+					confirmLabel={t.examSubmitConfirmConfirmLabel}
+					onCancel={viewModel.closeSubmitConfirmation}
+					onConfirm={viewModel.confirmSubmitExam}
+				/>
+			)}
+		</>
+	);
 }

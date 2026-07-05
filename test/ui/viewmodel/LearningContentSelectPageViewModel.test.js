@@ -1,6 +1,8 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
+import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
 
 const stateSetters = [];
+let loadModelQueue = [];
 
 const useState = jest.fn((initialValue) => {
     const value = typeof initialValue === "function" ? initialValue() : initialValue;
@@ -17,12 +19,21 @@ const useEffect = jest.fn((effect) => {
 
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
+const useLoadModel = jest.fn((params) => {
+	params.execute();
+
+	return loadModelQueue.shift();
+});
 
 jest.unstable_mockModule("react", () => ({
     useCallback,
     useEffect,
     useMemo,
     useState
+}));
+
+jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({
+	default: useLoadModel
 }));
 
 const { default: useLearningContentSelectPageViewModel } = await import("../../../src/ui/viewmodel/LearningContentSelectPageViewModel.js");
@@ -93,6 +104,11 @@ function createT() {
 }
 
 function createViewModel(params = {}) {
+	loadModelQueue = [
+		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() },
+		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() },
+		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() }
+	];
     const getAvailableExamsUseCase = {
         execute: jest.fn().mockResolvedValue([])
     };
@@ -137,6 +153,7 @@ describe("useLearningContentSelectPageViewModel", () => {
         useEffect.mockClear();
         useMemo.mockClear();
         useCallback.mockClear();
+		useLoadModel.mockClear();
     });
 
     test("does not load exams while the page is inactive", () => {
@@ -156,6 +173,17 @@ describe("useLearningContentSelectPageViewModel", () => {
             subjectId: "in5431",
             language: "nb"
         });
+    });
+
+
+
+    test("returns centralized page load state", () => {
+        const { viewModel } = createViewModel();
+
+        expect(viewModel.pageStatus).toBe(LOAD_STATUS.READY);
+        expect(viewModel.pageErrorMessage).toBe("Kunne ikke hente eksamener");
+        expect(viewModel.examsLoading).toBeUndefined();
+        expect(viewModel.examsLoadError).toBeUndefined();
     });
 
     test("returns injected navigation props", () => {

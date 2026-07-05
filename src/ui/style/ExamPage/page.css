@@ -10,30 +10,6 @@
         linear-gradient(135deg, var(--app-bg) 0%, color-mix(in srgb, var(--accent) 6%, var(--app-bg)) 52%, var(--app-bg) 100%);
 }
 
-.exam-page-state {
-    display: grid;
-    min-height: 100vh;
-    place-items: center;
-    background: var(--app-bg);
-    color: var(--text-main);
-}
-
-.exam-page-loading-message,
-.exam-page-error-message {
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    background: var(--panel-strong);
-    box-shadow: var(--shadow-card);
-    padding: 1rem 1.25rem;
-    color: var(--text-soft);
-    font-size: 18px;
-    font-weight: 650;
-}
-
-.exam-page-error-message {
-    border-color: var(--danger-border);
-    color: var(--danger-text);
-}
 
 /* ── Shell ────────────────────────────── */
 .exam-shell {

@@ -2,7 +2,6 @@
 .statistics-page-header,
 .statistics-hero,
 .statistics-panel,
-.statistics-state,
 .statistics-kpi-card {
 	border: 1px solid var(--line-strong);
 	background: var(--panel-bg);
@@ -12,8 +11,7 @@
 
 .statistics-page-header h1,
 .statistics-hero h2,
-.statistics-panel h2,
-.statistics-state h2 {
+.statistics-panel h2 {
 	margin: 0;
 	color: var(--text-main);
 }
@@ -21,7 +19,6 @@
 .statistics-page-header p,
 .statistics-hero p,
 .statistics-panel p,
-.statistics-state p,
 .statistics-kpi-card p,
 .statistics-kpi-card span,
 .statistics-attempt-item span {
@@ -29,8 +26,7 @@
 	color: var(--text-muted);
 }
 
-.statistics-panel,
-.statistics-state {
+.statistics-panel {
 	border-radius: var(--radius-lg);
 	padding: clamp(20px, 3vw, 28px);
 }
@@ -42,15 +38,19 @@
 	margin-bottom: var(--space-7);
 }
 
-.statistics-panel h2,
-.statistics-state h2 {
+.statistics-panel h2 {
 	font-size: 22px;
 	letter-spacing: -0.03em;
 }
 
-.statistics-panel p,
-.statistics-state p {
+.statistics-panel p {
 	margin-top: var(--space-2);
 	font-size: 14px;
 	line-height: 1.6;
+}
+
+.statistics-empty-text {
+	border: 1px dashed var(--line-strong);
+	border-radius: var(--radius-md);
+	padding: var(--space-6);
 }

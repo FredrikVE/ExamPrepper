@@ -6,8 +6,7 @@
         padding: calc(var(--mobile-topbar-height) + 14px) var(--space-5) var(--space-4);
     }
 
-    .flipcards-page-placeholder,
-    .flipcards-state {
+    .flipcards-page-placeholder {
         min-height: min(540px, 68vh);
         padding: var(--space-8);
     }

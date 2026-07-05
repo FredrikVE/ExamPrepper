@@ -91,9 +91,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 
 	const {
 		questions,
-		questionsLoading,
-		questionsLoadError,
-		isInitialQuestionsLoad
+		questionsStatus,
+		questionsError
 	} = useExamQuestionLoadModel({
 		getExamQuestionsUseCase,
 		examId,
@@ -332,14 +331,13 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		currentQuestionFillMatchType,
 		answers,
 
-		loadingMessage: copy.loadingMessage,
-		errorPrefix: copy.errorPrefix,
+		loadingTitle: copy.loadingMessage,
+		errorTitle: copy.errorPrefix,
 		emptyMessage: copy.emptyMessage,
 		attemptSavingMessage: copy.attemptSavingMessage,
 
-		questionsLoading,
-		isInitialQuestionsLoad,
-		questionsLoadError,
+		pageStatus: questionsStatus,
+		pageErrorMessage: questionsError,
 		submitted,
 		showAllFeedback,
 		currentAnswerOptionOrder,

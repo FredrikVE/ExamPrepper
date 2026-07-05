@@ -1,10 +1,13 @@
 // src/ui/view/pages/FlipcardsPage.jsx
 import { useEffect } from "react";
 import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
+import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import FlipcardsStudySurface from "../components/FlipcardsPage/FlipcardsStudySurface.jsx";
 import FlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx";
 import useFlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/useFlipcardToolMenu.js";
+import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 
 export default function FlipcardsPage({ viewModel }) {
 	const { isDesktopMenuOpen, closeDesktopMenu, setDesktopMenuOpen } = useFlipcardToolMenu();
@@ -29,22 +32,15 @@ export default function FlipcardsPage({ viewModel }) {
 		/>
 	);
 
-	if (viewModel.flashcardsLoading) {
+	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
 			<FlipcardsShell viewModel={viewModel}>
-				<FlipcardsState
-					title={viewModel.labels.loadingTitle}
-				/>
-			</FlipcardsShell>
-		);
-	}
-
-	if (viewModel.flashcardsLoadError) {
-		return (
-			<FlipcardsShell viewModel={viewModel}>
-				<FlipcardsState
-					title={viewModel.labels.errorTitle}
-					body={viewModel.flashcardsLoadError}
+				<WorkspaceState
+					status={viewModel.pageStatus}
+					loadingLabel={viewModel.labels.loadingTitle}
+					errorTitle={viewModel.labels.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					errorAction={null}
 				/>
 			</FlipcardsShell>
 		);
@@ -53,9 +49,10 @@ export default function FlipcardsPage({ viewModel }) {
 	if (viewModel.flashcards.length === 0) {
 		return (
 			<FlipcardsShell viewModel={viewModel}>
-				<FlipcardsState
+				<WorkspaceMessage
 					title={viewModel.labels.emptyTitle}
 					body={viewModel.labels.emptyBody}
+					action={null}
 				/>
 			</FlipcardsShell>
 		);
@@ -110,14 +107,5 @@ function FlipcardsShell(props) {
 				{props.children}
 			</div>
 		</main>
-	);
-}
-
-function FlipcardsState(props) {
-	return (
-		<section className="flipcards-state">
-			<h1>{props.title}</h1>
-			{props.body && <p>{props.body}</p>}
-		</section>
 	);
 }

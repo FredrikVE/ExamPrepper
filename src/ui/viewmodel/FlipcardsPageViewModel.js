@@ -6,6 +6,8 @@ import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
+import useLoadModel from "./LoadState/useLoadModel.js";
+import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
 
@@ -20,12 +22,7 @@ export default function useFlipcardsPageViewModel(
     backContract
 ) {
     const presentationMode = usePresentationMode();
-    const [flashcards, setFlashcards] = useState([]);
-    const [topicAreas, setTopicAreas] = useState([]);
     const [topicAreaKey, setTopicAreaKey] = useState(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
-    const [flashcardsLoading, setFlashcardsLoading] = useState(true);
-    const [topicAreasLoading, setTopicAreasLoading] = useState(false);
-    const [flashcardsLoadError, setFlashcardsLoadError] = useState(null);
     const [masteredCardIds, setMasteredCardIds] = useState([]);
     const [practiceCardIds, setPracticeCardIds] = useState([]);
     const [activeDeckToolKey, setActiveDeckToolKey] = useState(FLIPCARD_DECK_TOOL_KEYS.ALL_CARDS);
@@ -37,89 +34,58 @@ export default function useFlipcardsPageViewModel(
         setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
     }, [initialTopicAreaKey, subjectId]);
 
-    useEffect(() => {
-        if (!isActive) {
-            return undefined;
-        }
-
-        let cancelled = false;
-
-        async function loadFlashcards() {
-            try {
-                setFlashcardsLoading(true);
-                setFlashcardsLoadError(null);
-
-                const loadedFlashcards = await getFlashcardsUseCase.execute({
-                    subjectId,
-                    language
-                });
-
-                if (!cancelled) {
-                    setFlashcards(loadedFlashcards);
-                    setMasteredCardIds([]);
-                    setPracticeCardIds([]);
-                }
-            } catch (error) {
-                console.error("Feil ved henting av flipcards:", error);
-
-                if (!cancelled) {
-                    setFlashcards([]);
-                    setFlashcardsLoadError(t.flipcardsErrorMessage);
-                }
-            } finally {
-                if (!cancelled) {
-                    setFlashcardsLoading(false);
-                }
-            }
-        }
-
-        loadFlashcards();
-
-        return () => {
-            cancelled = true;
-        };
-    }, [getFlashcardsUseCase, subjectId, language, t.flipcardsErrorMessage, isActive]);
-
-    useEffect(() => {
+    const executeFlashcardLoad = useCallback(() => {
         if (!isActive || !subjectId) {
-            setTopicAreas([]);
-            setTopicAreasLoading(false);
-            return undefined;
+            return Promise.resolve([]);
         }
 
-        let cancelled = false;
+        return getFlashcardsUseCase.execute({
+            subjectId,
+            language
+        });
+    }, [getFlashcardsUseCase, isActive, subjectId, language]);
 
-        async function loadTopicAreas() {
-            try {
-                setTopicAreasLoading(true);
-
-                const loadedTopicAreas = await getTopicAreasUseCase.execute({
-                    subjectId,
-                    language
-                });
-
-                if (!cancelled) {
-                    setTopicAreas(loadedTopicAreas);
-                }
-            } catch (error) {
-                console.error("Feil ved henting av fagområder for flipcards:", error);
-
-                if (!cancelled) {
-                    setTopicAreas([]);
-                }
-            } finally {
-                if (!cancelled) {
-                    setTopicAreasLoading(false);
-                }
-            }
+    const executeTopicAreaLoad = useCallback(() => {
+        if (!isActive || !subjectId) {
+            return Promise.resolve([]);
         }
 
-        loadTopicAreas();
+        return getTopicAreasUseCase.execute({
+            subjectId,
+            language
+        });
+    }, [getTopicAreasUseCase, isActive, subjectId, language]);
 
-        return () => {
-            cancelled = true;
-        };
-    }, [getTopicAreasUseCase, subjectId, language, isActive]);
+    const noteFlashcardsLoaded = useCallback(() => {
+        setMasteredCardIds([]);
+        setPracticeCardIds([]);
+    }, []);
+
+    const flashcardLoad = useLoadModel({
+        execute: executeFlashcardLoad,
+        emptyData: [],
+        errorMessage: t.flipcardsErrorMessage,
+        onLoaded: noteFlashcardsLoaded
+    });
+
+    const topicAreaLoad = useLoadModel({
+        execute: executeTopicAreaLoad,
+        emptyData: [],
+        errorMessage: t.flipcardsErrorMessage,
+        onLoaded: noteFlipcardTopicAreasLoaded
+    });
+
+    const flashcards = flashcardLoad.data;
+    const topicAreas = topicAreaLoad.data;
+    const pageStatus = combineLoadStatuses([
+        flashcardLoad.status,
+        topicAreaLoad.status
+    ]);
+    const pageErrorMessage = resolveFlipcardsPageErrorMessage(
+        flashcardLoad,
+        topicAreaLoad,
+        t.flipcardsErrorMessage
+    );
 
     const topicFilteredFlashcards = useMemo(() => {
         return filterFlashcardsByTopicArea(flashcards, topicAreaKey);
@@ -427,8 +393,8 @@ export default function useFlipcardsPageViewModel(
         flashcards: topicFilteredFlashcards,
         topicAreas,
         topicAreaKey,
-        flashcardsLoading: flashcardsLoading || topicAreasLoading,
-        flashcardsLoadError,
+        pageStatus,
+        pageErrorMessage,
         progressLabel: progressModel.progressLabel,
         progressModel,
         presentationMode,
@@ -463,6 +429,20 @@ export default function useFlipcardsPageViewModel(
         resetFlipcardsProgress,
         onSelectDeckTool: selectDeckTool
     };
+}
+
+function noteFlipcardTopicAreasLoaded() {}
+
+function resolveFlipcardsPageErrorMessage(flashcardLoad, topicAreaLoad, fallbackMessage) {
+    if (flashcardLoad.error) {
+        return flashcardLoad.error;
+    }
+
+    if (topicAreaLoad.error) {
+        return topicAreaLoad.error;
+    }
+
+    return fallbackMessage;
 }
 
 function createDeckKey(cards) {

@@ -1,4 +1,6 @@
 // src/ui/view/pages/SubjectSelectPage.jsx
+import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
+import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
@@ -44,30 +46,34 @@ export default function SubjectSelectPage({ viewModel }) {
 		</div>
 	);
 
-	if (viewModel.subjectsLoading) {
-		return (
-			<div className="subject-select-layout">
-				<main className="subject-select-workspace">
-					<section className="subject-select-empty" aria-label={viewModel.loadingAriaLabel}>
-						<h2>{viewModel.loadingTitle}</h2>
-					</section>
-				</main>
-			</div>
-		);
-	}
+	const renderPageContent = () => {
+		if (isBlockingLoadStatus(viewModel.pageStatus)) {
+			return (
+				<WorkspaceState
+					status={viewModel.pageStatus}
+					loadingLabel={viewModel.loadingTitle}
+					errorTitle={viewModel.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					errorAction={null}
+				/>
+			);
+		}
 
-	if (viewModel.subjectsLoadError) {
 		return (
-			<div className="subject-select-layout">
-				<main className="subject-select-workspace">
-					<section className="subject-select-empty" aria-label={viewModel.errorAriaLabel}>
-						<h2>{viewModel.errorTitle}</h2>
-						<p>{viewModel.subjectsLoadError}</p>
-					</section>
-				</main>
-			</div>
+			<>
+				<SubjectSelectTopbar t={viewModel.t} />
+
+				<SubjectSelectGrid
+					t={viewModel.t}
+					subjects={viewModel.filteredSubjects}
+					selectedSubject={viewModel.selectedSubject}
+					emptyTitle={viewModel.emptyTitle}
+					emptyDescription={viewModel.emptyDescription}
+					onSelectSubject={viewModel.selectSubject}
+				/>
+			</>
 		);
-	}
+	};
 
 	return (
 		<SelectPageScaffold
@@ -97,16 +103,7 @@ export default function SubjectSelectPage({ viewModel }) {
 				/>
 			)}
 		>
-			<SubjectSelectTopbar t={viewModel.t} />
-
-			<SubjectSelectGrid
-				t={viewModel.t}
-				subjects={viewModel.filteredSubjects}
-				selectedSubject={viewModel.selectedSubject}
-				emptyTitle={viewModel.emptyTitle}
-				emptyDescription={viewModel.emptyDescription}
-				onSelectSubject={viewModel.selectSubject}
-			/>
+			{renderPageContent()}
 		</SelectPageScaffold>
 	);
 }
