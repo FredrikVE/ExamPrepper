@@ -11,19 +11,19 @@ export default function useLoadModel({
 	const hasLoadedOnceRef = useRef(false);
 	const activeRunIdRef = useRef(0);
 
-	/* Meldingen og callbacken leses via refs slik at identiteten deres
-	   ALDRI er en reload-trigger: språkbytte skal utløse reload via
-	   execute-avhengighetene (bevisst), ikke via at en i18n-streng
+	/* Callbacken leses via ref slik at identiteten dens ALDRI er en
+	   reload-trigger: språkbytte skal utløse reload via
+	   execute-avhengighetene (bevisst), ikke via at en funksjonsreferanse
 	   tilfeldigvis byttet identitet. */
-	const errorMessageRef = useRef(errorMessage);
 	const onLoadedRef = useRef(onLoaded);
-	errorMessageRef.current = errorMessage;
 	onLoadedRef.current = onLoaded;
 
+	/* Ressursen holder KUN status og data — aldri presentasjonstekst.
+	   Feilteksten avledes ved retur, slik at et språkbytte mens brukeren
+	   står i ERROR-tilstand oppdaterer meldingen uten reload. */
 	const [resource, setResource] = useState({
 		status: LOAD_STATUS.LOADING,
-		data: emptyData,
-		error: null
+		data: emptyData
 	});
 
 	const runLoad = useCallback(() => {
@@ -44,8 +44,7 @@ export default function useLoadModel({
 
 			setResource((previousResource) => ({
 				status: inFlightStatus,
-				data: previousResource.data,
-				error: null
+				data: previousResource.data
 			}));
 
 			try {
@@ -58,8 +57,7 @@ export default function useLoadModel({
 				hasLoadedOnceRef.current = true;
 				setResource({
 					status: LOAD_STATUS.READY,
-					data: loadedData,
-					error: null
+					data: loadedData
 				});
 				onLoadedRef.current({ loadedData });
 			}
@@ -73,8 +71,7 @@ export default function useLoadModel({
 
 				setResource((previousResource) => ({
 					status: LOAD_STATUS.ERROR,
-					data: previousResource.data,
-					error: errorMessageRef.current
+					data: previousResource.data
 				}));
 			}
 		};
@@ -95,7 +92,7 @@ export default function useLoadModel({
 	return {
 		status: resource.status,
 		data: resource.data,
-		error: resource.error,
+		error: resource.status === LOAD_STATUS.ERROR ? errorMessage : null,
 		reload: runLoad
 	};
 }

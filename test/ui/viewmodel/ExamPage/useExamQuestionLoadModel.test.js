@@ -90,8 +90,7 @@ describe("useExamQuestionLoadModel", () => {
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(1, expect.any(Function));
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
 			status: LOAD_STATUS.READY,
-			data: loadedQuestions,
-			error: null
+			data: loadedQuestions
 		});
 		expect(onQuestionsLoaded).toHaveBeenCalledWith({
 			loadedQuestions,
@@ -139,14 +138,12 @@ describe("useExamQuestionLoadModel", () => {
 		const updateFailedResource = stateSetters[0].mock.calls[1][0];
 		const failedResource = updateFailedResource({
 			status: LOAD_STATUS.LOADING,
-			data: [],
-			error: null
+			data: []
 		});
 
 		expect(failedResource).toEqual({
 			status: LOAD_STATUS.ERROR,
-			data: [],
-			error: "Kunne ikke laste spørsmål."
+			data: []
 		});
 	});
 

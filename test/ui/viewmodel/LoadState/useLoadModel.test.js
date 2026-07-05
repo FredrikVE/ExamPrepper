@@ -90,8 +90,7 @@ describe("useLoadModel", () => {
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(1, expect.any(Function));
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
 			status: LOAD_STATUS.READY,
-			data: loadedData,
-			error: null
+			data: loadedData
 		});
 		expect(onLoaded).toHaveBeenCalledWith({ loadedData });
 	});
@@ -100,8 +99,7 @@ describe("useLoadModel", () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {
 			status: LOAD_STATUS.READY,
-			data: previousData,
-			error: null
+			data: previousData
 		};
 
 		refValues.push({ current: true });
@@ -119,17 +117,15 @@ describe("useLoadModel", () => {
 
 		expect(inFlightResource).toEqual({
 			status: LOAD_STATUS.READY,
-			data: previousData,
-			error: null
+			data: previousData
 		});
 	});
 
-	test("sets fallback error when load fails without message", async () => {
+	test("sets error status when load fails without message", async () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {
 			status: LOAD_STATUS.LOADING,
-			data: previousData,
-			error: null
+			data: previousData
 		};
 		const execute = jest.fn(async () => {
 			throw null;
@@ -150,18 +146,22 @@ describe("useLoadModel", () => {
 
 		expect(failedResource).toEqual({
 			status: LOAD_STATUS.ERROR,
-			data: previousData,
-			error: "Kunne ikke laste."
+			data: previousData
 		});
 		expect(onLoaded).not.toHaveBeenCalled();
 	});
 
-	test("sets fallback error when load fails with technical message", async () => {
+	test("returns product error text and never the technical message when status is error", async () => {
 		const execute = jest.fn(async () => {
 			throw new Error("API svarte 500.");
 		});
 
-		useLoadModel({
+		stateValues.push({
+			status: LOAD_STATUS.ERROR,
+			data: []
+		});
+
+		const loadModel = useLoadModel({
 			execute,
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
@@ -170,14 +170,35 @@ describe("useLoadModel", () => {
 
 		await flushPromises();
 
-		const updateFailedResource = stateSetters[0].mock.calls[1][0];
-		const failedResource = updateFailedResource({
-			status: LOAD_STATUS.LOADING,
-			data: [],
-			error: null
+		expect(loadModel.error).toBe("Kunne ikke laste.");
+	});
+
+	test("returns current error text so a language switch updates the message without reload", () => {
+		const erroredResource = {
+			status: LOAD_STATUS.ERROR,
+			data: []
+		};
+
+		stateValues.push(erroredResource);
+
+		const norwegianModel = useLoadModel({
+			execute: jest.fn(() => new Promise(() => {})),
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			onLoaded: jest.fn()
 		});
 
-		expect(failedResource.error).toBe("Kunne ikke laste.");
+		stateValues.push(erroredResource);
+
+		const englishModel = useLoadModel({
+			execute: jest.fn(() => new Promise(() => {})),
+			emptyData: [],
+			errorMessage: "Could not load.",
+			onLoaded: jest.fn()
+		});
+
+		expect(norwegianModel.error).toBe("Kunne ikke laste.");
+		expect(englishModel.error).toBe("Could not load.");
 	});
 
 	test("ignores completed loads after cleanup", async () => {
