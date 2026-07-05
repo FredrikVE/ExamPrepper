@@ -1,18 +1,23 @@
 // src/ui/view/pages/StatisticsPage.jsx
+import { LOAD_STATUS, isBlockingLoadStatus } from "../../presentation/loadStatus.js";
 import StatisticsKpiGrid from "../components/StatisticsPage/StatisticsKpiGrid.jsx";
 import StatisticsRecentAttempts from "../components/StatisticsPage/StatisticsRecentAttempts.jsx";
 import StatisticsRecommendedExam from "../components/StatisticsPage/StatisticsRecommendedExam.jsx";
 import StatisticsScoreTrendChart from "../components/StatisticsPage/StatisticsScoreTrendChart.jsx";
 import StatisticsWeeklyActivity from "../components/StatisticsPage/StatisticsWeeklyActivity.jsx";
-import StatisticsState from "../components/StatisticsPage/StatisticsState.jsx";
+import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 
 export default function StatisticsPage({ viewModel }) {
-	if (viewModel.isAuthLoading) {
+	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
 			<StatisticsShell viewModel={viewModel}>
-				<StatisticsState
-					title={viewModel.loadingTitle}
-					body={viewModel.loadingBody}
+				<WorkspaceState
+					status={viewModel.pageStatus}
+					loadingLabel={viewModel.loadingTitle}
+					errorTitle={viewModel.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					actionLabel={viewModel.retryButtonLabel}
+					onAction={viewModel.onRetryLoadStatistics}
 				/>
 			</StatisticsShell>
 		);
@@ -21,35 +26,13 @@ export default function StatisticsPage({ viewModel }) {
 	if (viewModel.isSignedOut) {
 		return (
 			<StatisticsShell viewModel={viewModel}>
-				<StatisticsState
-					title={viewModel.signedOutTitle}
-					body={viewModel.signedOutBody}
+				<WorkspaceState
+					status={LOAD_STATUS.READY}
+					loadingLabel={viewModel.loadingTitle}
+					errorTitle={viewModel.signedOutTitle}
+					errorBody={viewModel.signedOutBody}
 					actionLabel={viewModel.startNewExamLabel}
 					onAction={viewModel.onStartNewExam}
-				/>
-			</StatisticsShell>
-		);
-	}
-
-	if (viewModel.statisticsLoading) {
-		return (
-			<StatisticsShell viewModel={viewModel}>
-				<StatisticsState
-					title={viewModel.loadingTitle}
-					body={viewModel.loadingBody}
-				/>
-			</StatisticsShell>
-		);
-	}
-
-	if (viewModel.statisticsLoadError) {
-		return (
-			<StatisticsShell viewModel={viewModel}>
-				<StatisticsState
-					title={viewModel.errorTitle}
-					body={viewModel.statisticsLoadError}
-					actionLabel={viewModel.retryButtonLabel}
-					onAction={viewModel.onRetryLoadStatistics}
 				/>
 			</StatisticsShell>
 		);
@@ -80,9 +63,11 @@ export default function StatisticsPage({ viewModel }) {
 			</section>
 
 			{viewModel.isStatisticsEmpty ? (
-				<StatisticsState
-					title={viewModel.emptyTitle}
-					body={viewModel.emptyBody}
+				<WorkspaceState
+					status={LOAD_STATUS.READY}
+					loadingLabel={viewModel.loadingTitle}
+					errorTitle={viewModel.emptyTitle}
+					errorBody={viewModel.emptyBody}
 					actionLabel={viewModel.startNewExamLabel}
 					onAction={viewModel.onStartNewExam}
 				/>

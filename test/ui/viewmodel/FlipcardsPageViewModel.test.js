@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import { LOAD_STATUS } from "../../../src/ui/presentation/loadStatus.js";
 
 const stateValues = [];
 const stateSetters = [];
+let loadModelQueue = [];
 
 const useState = jest.fn((initialValue) => {
 	const stateIndex = stateSetters.length;
@@ -20,6 +22,7 @@ const useEffect = jest.fn((effect) => {
 
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
+const useLoadModel = jest.fn(() => loadModelQueue.shift());
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
@@ -30,6 +33,10 @@ jest.unstable_mockModule("react", () => ({
 
 jest.unstable_mockModule("../../../src/ui/presentation/usePresentationMode.js", () => ({
 	default: jest.fn(() => "desktop")
+}));
+
+jest.unstable_mockModule("../../../src/ui/viewmodel/load/useLoadModel.js", () => ({
+	default: useLoadModel
 }));
 
 const { default: useFlipcardsPageViewModel } = await import("../../../src/ui/viewmodel/FlipcardsPageViewModel.js");
@@ -93,22 +100,21 @@ function createViewModelParams(overrides) {
 }
 
 function primeViewModelState(params) {
-	stateValues[0] = params.flashcards;
-	stateValues[1] = params.topicAreas;
-	stateValues[2] = params.topicAreaKey;
-	stateValues[3] = false;
-	stateValues[4] = false;
-	stateValues[5] = null;
-	stateValues[6] = params.masteredCardIds;
-	stateValues[7] = params.practiceCardIds;
-	stateValues[8] = params.activeDeckToolKey;
-	stateValues[9] = params.selectedDeckCardIds;
-	stateValues[10] = params.activeCardIndex;
-	stateValues[11] = params.isActiveCardFlipped;
+	stateValues[0] = params.topicAreaKey;
+	stateValues[1] = params.masteredCardIds;
+	stateValues[2] = params.practiceCardIds;
+	stateValues[3] = params.activeDeckToolKey;
+	stateValues[4] = params.selectedDeckCardIds;
+	stateValues[5] = params.activeCardIndex;
+	stateValues[6] = params.isActiveCardFlipped;
 }
 
 function createViewModel(params) {
 	primeViewModelState(params);
+	loadModelQueue = [
+		{ status: LOAD_STATUS.READY, data: params.flashcards, error: null, reload: jest.fn() },
+		{ status: LOAD_STATUS.READY, data: params.topicAreas, error: null, reload: jest.fn() }
+	];
 
 	const getFlashcardsUseCase = {
 		execute: jest.fn()
@@ -155,6 +161,7 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 		useEffect.mockClear();
 		useMemo.mockClear();
 		useCallback.mockClear();
+		useLoadModel.mockClear();
 	});
 
 	test("returns active card session state derived from visible cards", () => {
@@ -174,14 +181,26 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 		expect(viewModel.activeCardPositionLabel).toBe("2/3");
 	});
 
+
+	test("returns centralized page load state", () => {
+		const { viewModel } = createViewModel(createViewModelParams({
+			activeCardIndex: 0
+		}));
+
+		expect(viewModel.pageStatus).toBe(LOAD_STATUS.READY);
+		expect(viewModel.pageErrorMessage).toBe("flipcardsErrorMessage");
+		expect(viewModel.flashcardsLoading).toBeUndefined();
+		expect(viewModel.flashcardsLoadError).toBeUndefined();
+	});
+
 	test("resets cursor and flipped state when the visible deck key changes", () => {
 		createViewModel(createViewModelParams({
 			activeCardIndex: 2,
 			isActiveCardFlipped: true
 		}));
 
-		expect(stateSetters[10]).toHaveBeenCalledWith(0);
-		expect(stateSetters[11]).toHaveBeenCalledWith(false);
+		expect(stateSetters[5]).toHaveBeenCalledWith(0);
+		expect(stateSetters[6]).toHaveBeenCalledWith(false);
 	});
 
 
@@ -205,27 +224,27 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 		clearStateSetterCalls();
 
 		viewModel.goToPreviousCard();
-		expect(stateSetters[11]).toHaveBeenCalledWith(false);
-		expect(stateSetters[10].mock.calls[0][0](1)).toBe(0);
-		expect(stateSetters[10].mock.calls[0][0](0)).toBe(0);
+		expect(stateSetters[6]).toHaveBeenCalledWith(false);
+		expect(stateSetters[5].mock.calls[0][0](1)).toBe(0);
+		expect(stateSetters[5].mock.calls[0][0](0)).toBe(0);
 
 		clearStateSetterCalls();
 
 		viewModel.goToNextCard();
-		expect(stateSetters[11]).toHaveBeenCalledWith(false);
-		expect(stateSetters[10].mock.calls[0][0](1)).toBe(2);
-		expect(stateSetters[10].mock.calls[0][0](2)).toBe(3);
+		expect(stateSetters[6]).toHaveBeenCalledWith(false);
+		expect(stateSetters[5].mock.calls[0][0](1)).toBe(2);
+		expect(stateSetters[5].mock.calls[0][0](2)).toBe(3);
 
 		clearStateSetterCalls();
 
 		viewModel.goToCard(99);
-		expect(stateSetters[11]).toHaveBeenCalledWith(false);
-		expect(stateSetters[10]).toHaveBeenCalledWith(2);
+		expect(stateSetters[6]).toHaveBeenCalledWith(false);
+		expect(stateSetters[5]).toHaveBeenCalledWith(2);
 
 		clearStateSetterCalls();
 
 		viewModel.toggleActiveCard();
-		expect(stateSetters[11].mock.calls[0][0](false)).toBe(true);
+		expect(stateSetters[6].mock.calls[0][0](false)).toBe(true);
 	});
 
 	test("guards completion handlers against stale card ids", () => {
@@ -237,16 +256,16 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 
 		viewModel.completeCardForPractice("card-c");
 
+		expect(stateSetters[1]).not.toHaveBeenCalled();
+		expect(stateSetters[2]).not.toHaveBeenCalled();
+		expect(stateSetters[5]).not.toHaveBeenCalled();
 		expect(stateSetters[6]).not.toHaveBeenCalled();
-		expect(stateSetters[7]).not.toHaveBeenCalled();
-		expect(stateSetters[10]).not.toHaveBeenCalled();
-		expect(stateSetters[11]).not.toHaveBeenCalled();
 
 		viewModel.completeCardForPractice("card-b");
 
-		expect(stateSetters[6]).toHaveBeenCalledWith([]);
-		expect(stateSetters[7]).toHaveBeenCalledWith(["card-b"]);
-		expect(stateSetters[11]).toHaveBeenCalledWith(false);
-		expect(stateSetters[10].mock.calls[0][0](1)).toBe(2);
+		expect(stateSetters[1]).toHaveBeenCalledWith([]);
+		expect(stateSetters[2]).toHaveBeenCalledWith(["card-b"]);
+		expect(stateSetters[6]).toHaveBeenCalledWith(false);
+		expect(stateSetters[5].mock.calls[0][0](1)).toBe(2);
 	});
 });

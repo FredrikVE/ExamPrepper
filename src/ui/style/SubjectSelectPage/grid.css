@@ -1,14 +1,9 @@
 /* src/ui/style/SubjectSelectPage/grid.css */
 .subject-select-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: var(--selection-card-grid-columns);
-    gap: var(--selection-card-grid-gap);
-    width: var(--selection-card-grid-width);
-}
-
-.subject-select-empty {
-    width: min(760px, 100%);
-    margin-inline: auto;
+	position: relative;
+	z-index: 1;
+	display: grid;
+	grid-template-columns: var(--selection-card-grid-columns);
+	gap: var(--selection-card-grid-gap);
+	width: var(--selection-card-grid-width);
 }

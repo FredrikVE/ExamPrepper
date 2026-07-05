@@ -27,6 +27,23 @@ export default function WorkspaceState({
 		);
 	}
 
+	if (status === LOAD_STATUS.READY) {
+		return (
+			<div className="workspace-state">
+				<section className="workspace-state-card workspace-state-card-message" role="status">
+					<h2>{errorTitle}</h2>
+					<p>{errorBody}</p>
+
+					{actionLabel && onAction ? (
+						<button type="button" className="workspace-state-action" onClick={onAction}>
+							{actionLabel}
+						</button>
+					) : null}
+				</section>
+			</div>
+		);
+	}
+
 	return (
 		<div className="workspace-state">
 			<section className="workspace-state-card" role="status">

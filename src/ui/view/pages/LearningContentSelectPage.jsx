@@ -1,4 +1,6 @@
 // src/ui/view/pages/LearningContentSelectPage.jsx
+import { isBlockingLoadStatus } from "../../presentation/loadStatus.js";
+import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import LearningContentTopbar from "../components/LearningContentSelectPage/LearningContentTopbar.jsx";
 import LearningContentIntro from "../components/LearningContentSelectPage/LearningContentIntro.jsx";
 import ExamGrid from "../components/LearningContentSelectPage/ExamGrid.jsx";
@@ -48,33 +50,79 @@ export default function LearningContentSelectPage({ viewModel }) {
         </div>
     );
 
-    if (viewModel.examsLoading) {
-        return (
-            <div className="exam-select-layout">
-                <main className="exam-select-workspace">
-                    <div className="exam-select-ambient-light" aria-hidden="true" />
 
-                    <section className="exam-select-state">
-                        <p>{viewModel.loadingMessage}</p>
-                    </section>
-                </main>
-            </div>
-        );
-    }
+	const renderPageContent = () => {
+		if (isBlockingLoadStatus(viewModel.pageStatus)) {
+			return (
+				<WorkspaceState
+					status={viewModel.pageStatus}
+					loadingLabel={viewModel.loadingMessage}
+					errorTitle={viewModel.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					actionLabel={null}
+					onAction={null}
+				/>
+			);
+		}
 
-    if (viewModel.examsLoadError) {
-        return (
-            <div className="exam-select-layout">
-                <main className="exam-select-workspace">
-                    <div className="exam-select-ambient-light" aria-hidden="true" />
+		return (
+			<>
+				<LearningContentTopbar title={viewModel.title} />
 
-                    <section className="exam-select-state">
-                        <p>{viewModel.examsLoadError}</p>
-                    </section>
-                </main>
-            </div>
-        );
-    }
+				<LearningContentIntro
+					selectedSubject={viewModel.selectedSubject}
+					subtitle={viewModel.subtitle}
+				/>
+
+				<ToggleButtonRow
+					entries={viewModel.contentToggleEntries}
+					activeEntryId={viewModel.activeContentType}
+					onSelectEntry={viewModel.selectContentType}
+					ariaLabel={viewModel.contentToggleAriaLabel}
+				/>
+
+				{viewModel.isExamsContentActive && (
+					<ExamGrid
+						exams={viewModel.visibleExams}
+						emptyTitle={viewModel.emptyTitle}
+						emptyMessage={viewModel.emptyMessage}
+						practiceExamLabel={viewModel.practiceExamLabel}
+						questionLabel={viewModel.questionLabel}
+						minuteLabel={viewModel.minuteLabel}
+						addPlaceholderCode={viewModel.addPlaceholderCode}
+						addPlaceholderTitle={viewModel.addPlaceholderTitle}
+						addPlaceholderDescription={viewModel.addPlaceholderDescription}
+						addPlaceholderNote={viewModel.addPlaceholderNote}
+						onSelectExam={viewModel.selectExam}
+					/>
+				)}
+
+				{viewModel.isFlipcardsContentActive && (
+					<FlashcardDeckGrid
+						decks={viewModel.visibleFlashcardDecks}
+						eyebrowLabel={viewModel.flipcardsDeckEyebrow}
+						cardCountLabel={viewModel.deckCardCountLabel}
+						cardUnitLabel={viewModel.deckCardUnitLabel}
+						minuteLabel={viewModel.minuteLabel}
+						emptyTitle={viewModel.deckEmptyTitle}
+						emptyMessage={viewModel.deckEmptyMessage}
+						onSelectDeck={viewModel.selectFlashcardDeck}
+					/>
+				)}
+
+				{viewModel.isConceptListsContentActive && (
+					<section className="exam-select-grid">
+						<LearningContentPlaceholderCard
+							code={viewModel.conceptListPlaceholderCode}
+							title={viewModel.conceptListPlaceholderTitle}
+							description={viewModel.conceptListPlaceholderDescription}
+							note={viewModel.conceptListPlaceholderNote}
+						/>
+					</section>
+				)}
+			</>
+		);
+	};
 
     return (
         <SelectPageScaffold
@@ -104,59 +152,7 @@ export default function LearningContentSelectPage({ viewModel }) {
                 />
             )}
         >
-            <LearningContentTopbar title={viewModel.title} />
-
-            <LearningContentIntro
-                selectedSubject={viewModel.selectedSubject}
-                subtitle={viewModel.subtitle}
-            />
-
-            <ToggleButtonRow
-                entries={viewModel.contentToggleEntries}
-                activeEntryId={viewModel.activeContentType}
-                onSelectEntry={viewModel.selectContentType}
-                ariaLabel={viewModel.contentToggleAriaLabel}
-            />
-
-            {viewModel.isExamsContentActive && (
-                <ExamGrid
-                    exams={viewModel.visibleExams}
-                    emptyTitle={viewModel.emptyTitle}
-                    emptyMessage={viewModel.emptyMessage}
-                    practiceExamLabel={viewModel.practiceExamLabel}
-                    questionLabel={viewModel.questionLabel}
-                    minuteLabel={viewModel.minuteLabel}
-                    addPlaceholderCode={viewModel.addPlaceholderCode}
-                    addPlaceholderTitle={viewModel.addPlaceholderTitle}
-                    addPlaceholderDescription={viewModel.addPlaceholderDescription}
-                    addPlaceholderNote={viewModel.addPlaceholderNote}
-                    onSelectExam={viewModel.selectExam}
-                />
-            )}
-
-            {viewModel.isFlipcardsContentActive && (
-                <FlashcardDeckGrid
-                    decks={viewModel.visibleFlashcardDecks}
-                    eyebrowLabel={viewModel.flipcardsDeckEyebrow}
-                    cardCountLabel={viewModel.deckCardCountLabel}
-                    cardUnitLabel={viewModel.deckCardUnitLabel}
-                    minuteLabel={viewModel.minuteLabel}
-                    emptyTitle={viewModel.deckEmptyTitle}
-                    emptyMessage={viewModel.deckEmptyMessage}
-                    onSelectDeck={viewModel.selectFlashcardDeck}
-                />
-            )}
-
-            {viewModel.isConceptListsContentActive && (
-                <section className="exam-select-grid">
-                    <LearningContentPlaceholderCard
-                        code={viewModel.conceptListPlaceholderCode}
-                        title={viewModel.conceptListPlaceholderTitle}
-                        description={viewModel.conceptListPlaceholderDescription}
-                        note={viewModel.conceptListPlaceholderNote}
-                    />
-                </section>
-            )}
+			{renderPageContent()}
         </SelectPageScaffold>
     );
 }

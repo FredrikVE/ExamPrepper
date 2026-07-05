@@ -1,10 +1,12 @@
 // src/ui/view/pages/FlipcardsPage.jsx
 import { useEffect } from "react";
 import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
+import { LOAD_STATUS, isBlockingLoadStatus } from "../../presentation/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import FlipcardsStudySurface from "../components/FlipcardsPage/FlipcardsStudySurface.jsx";
 import FlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx";
 import useFlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/useFlipcardToolMenu.js";
+import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 
 export default function FlipcardsPage({ viewModel }) {
 	const { isDesktopMenuOpen, closeDesktopMenu, setDesktopMenuOpen } = useFlipcardToolMenu();
@@ -29,22 +31,16 @@ export default function FlipcardsPage({ viewModel }) {
 		/>
 	);
 
-	if (viewModel.flashcardsLoading) {
+	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
 			<FlipcardsShell viewModel={viewModel}>
-				<FlipcardsState
-					title={viewModel.labels.loadingTitle}
-				/>
-			</FlipcardsShell>
-		);
-	}
-
-	if (viewModel.flashcardsLoadError) {
-		return (
-			<FlipcardsShell viewModel={viewModel}>
-				<FlipcardsState
-					title={viewModel.labels.errorTitle}
-					body={viewModel.flashcardsLoadError}
+				<WorkspaceState
+					status={viewModel.pageStatus}
+					loadingLabel={viewModel.labels.loadingTitle}
+					errorTitle={viewModel.labels.errorTitle}
+					errorBody={viewModel.pageErrorMessage}
+					actionLabel={null}
+					onAction={null}
 				/>
 			</FlipcardsShell>
 		);
@@ -53,9 +49,13 @@ export default function FlipcardsPage({ viewModel }) {
 	if (viewModel.flashcards.length === 0) {
 		return (
 			<FlipcardsShell viewModel={viewModel}>
-				<FlipcardsState
-					title={viewModel.labels.emptyTitle}
-					body={viewModel.labels.emptyBody}
+				<WorkspaceState
+					status={LOAD_STATUS.READY}
+					loadingLabel={viewModel.labels.loadingTitle}
+					errorTitle={viewModel.labels.emptyTitle}
+					errorBody={viewModel.labels.emptyBody}
+					actionLabel={null}
+					onAction={null}
 				/>
 			</FlipcardsShell>
 		);
@@ -110,14 +110,5 @@ function FlipcardsShell(props) {
 				{props.children}
 			</div>
 		</main>
-	);
-}
-
-function FlipcardsState(props) {
-	return (
-		<section className="flipcards-state">
-			<h1>{props.title}</h1>
-			{props.body && <p>{props.body}</p>}
-		</section>
 	);
 }

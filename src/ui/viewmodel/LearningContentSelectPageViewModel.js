@@ -1,5 +1,5 @@
 // src/ui/viewmodel/LearningContentSelectPageViewModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, PAGE_TOOL_AVAILABILITY } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
@@ -8,399 +8,343 @@ import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_TOPIC_AREAS, filterExams } from "./LearningContentSelectPage/examFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
+import useLoadModel from "./load/useLoadModel.js";
+import combineLoadStatuses from "./load/combineLoadStatuses.js";
 
 export default function useLearningContentSelectPageViewModel(
-    getAvailableExamsUseCase,
-    getTopicAreasUseCase,
-    getFlashcardDeckSummariesUseCase,
-    language,
-    t,
-    selectedSubject,
-    onSelectExam,
-    onSelectFlashcardDeck,
-    isActive,
-    onChangeScreen,
-    showBackButton,
-    backLabel,
-    navigationLabel,
-    onBack
+	getAvailableExamsUseCase,
+	getTopicAreasUseCase,
+	getFlashcardDeckSummariesUseCase,
+	language,
+	t,
+	selectedSubject,
+	onSelectExam,
+	onSelectFlashcardDeck,
+	isActive,
+	onChangeScreen,
+	showBackButton,
+	backLabel,
+	navigationLabel,
+	onBack
 ) {
-    const [exams, setExams] = useState([]);
-    const [examsLoading, setExamsLoading] = useState(false);
-    const [examsLoadError, setExamsLoadError] = useState(null);
-    const [topicAreas, setTopicAreas] = useState([]);
-    const [topicAreasLoading, setTopicAreasLoading] = useState(false);
-    const [flashcardDeckSummaries, setFlashcardDeckSummaries] = useState([]);
-    const [flashcardDecksLoading, setFlashcardDecksLoading] = useState(false);
-    const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
+	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
 
-    const examSearchSheet = useSearchSheetModel({
-        isActive,
-        defaultFilterValue: ALL_TOPIC_AREAS
-    });
-    const {
-        searchTerm,
-        filterValue: topicAreaKey,
-        isSearchSheetOpen,
-        isSearchSuggestionsMode,
-        isFilterOptionsMode,
-        isFooterSheetOpen,
-        isFooterOpen,
-        changeSearchTerm: changeExamSearchTerm,
-        changeFilterValue: changeTopicAreaKey,
-        resetSearchSheet,
-        selectFilterOption: selectTopicAreaFilterOption,
-        openSearchSuggestions: openExamSearchSuggestions,
-        openFilterOptions: openTopicAreaOptions,
-        openFooterSheet: openExamFooterSheet,
-        changeFooterSheetOpen: changeExamFooterSheetOpen,
-        closeSearchSheet: closeExamSearchSheet
-    } = examSearchSheet;
+	const examSearchSheet = useSearchSheetModel({
+		isActive,
+		defaultFilterValue: ALL_TOPIC_AREAS
+	});
+	const {
+		searchTerm,
+		filterValue: topicAreaKey,
+		isSearchSheetOpen,
+		isSearchSuggestionsMode,
+		isFilterOptionsMode,
+		isFooterSheetOpen,
+		isFooterOpen,
+		changeSearchTerm: changeExamSearchTerm,
+		changeFilterValue: changeTopicAreaKey,
+		resetSearchSheet,
+		selectFilterOption: selectTopicAreaFilterOption,
+		openSearchSuggestions: openExamSearchSuggestions,
+		openFilterOptions: openTopicAreaOptions,
+		openFooterSheet: openExamFooterSheet,
+		changeFooterSheetOpen: changeExamFooterSheetOpen,
+		closeSearchSheet: closeExamSearchSheet
+	} = examSearchSheet;
 
-    const subjectId = selectedSubject?.id ?? null;
+	const subjectId = selectedSubject?.id ?? null;
 
-    useEffect(() => {
-        if (!isActive || !subjectId) {
-            setExams([]);
-            setExamsLoading(false);
-            setExamsLoadError(null);
-            return;
-        }
+	const executeExamLoad = useCallback(() => {
+		if (!isActive || !subjectId) {
+			return Promise.resolve([]);
+		}
 
-        let cancelled = false;
+		return getAvailableExamsUseCase.execute({
+			subjectId,
+			language
+		});
+	}, [getAvailableExamsUseCase, isActive, subjectId, language]);
 
-        async function loadExams() {
-            try {
-                setExamsLoading(true);
-                setExamsLoadError(null);
+	const executeTopicAreaLoad = useCallback(() => {
+		if (!isActive || !subjectId) {
+			return Promise.resolve([]);
+		}
 
-                const loadedExams = await getAvailableExamsUseCase.execute({
-                    subjectId,
-                    language
-                });
+		return getTopicAreasUseCase.execute({
+			subjectId,
+			language
+		});
+	}, [getTopicAreasUseCase, isActive, subjectId, language]);
 
-                if (!cancelled) {
-                    setExams(loadedExams);
-                }
-            }
-            catch (error) {
-                console.error("Feil ved henting av eksamener:", error);
+	const executeFlashcardDeckLoad = useCallback(() => {
+		if (!isActive || !subjectId) {
+			return Promise.resolve([]);
+		}
 
-                if (!cancelled) {
-                    setExams([]);
-                    setExamsLoadError(t.selectErrorMessage);
-                }
-            }
-            finally {
-                if (!cancelled) {
-                    setExamsLoading(false);
-                }
-            }
-        }
+		return getFlashcardDeckSummariesUseCase.execute({
+			subjectId,
+			language
+		});
+	}, [getFlashcardDeckSummariesUseCase, isActive, subjectId, language]);
 
-        loadExams();
+	const examLoad = useLoadModel({
+		execute: executeExamLoad,
+		emptyData: [],
+		errorFallbackMessage: t.selectErrorMessage,
+		onLoaded: noteLearningContentResourceLoaded
+	});
 
-        return () => {
-            cancelled = true;
-        };
-    }, [getAvailableExamsUseCase, isActive, subjectId, language, t.selectErrorMessage]);
+	const topicAreaLoad = useLoadModel({
+		execute: executeTopicAreaLoad,
+		emptyData: [],
+		errorFallbackMessage: t.selectErrorMessage,
+		onLoaded: noteLearningContentResourceLoaded
+	});
 
-    useEffect(() => {
-        if (!isActive || !subjectId) {
-            setTopicAreas([]);
-            setTopicAreasLoading(false);
-            return;
-        }
+	const flashcardDeckLoad = useLoadModel({
+		execute: executeFlashcardDeckLoad,
+		emptyData: [],
+		errorFallbackMessage: t.selectErrorMessage,
+		onLoaded: noteLearningContentResourceLoaded
+	});
 
-        let cancelled = false;
+	const exams = examLoad.data;
+	const topicAreas = topicAreaLoad.data;
+	const flashcardDeckSummaries = flashcardDeckLoad.data;
+	const pageStatus = combineLoadStatuses([
+		examLoad.status,
+		topicAreaLoad.status,
+		flashcardDeckLoad.status
+	]);
+	const pageErrorMessage = resolveLearningContentPageErrorMessage(
+		examLoad,
+		topicAreaLoad,
+		flashcardDeckLoad,
+		t.selectErrorMessage
+	);
 
-        async function loadTopicAreas() {
-            try {
-                setTopicAreasLoading(true);
+	const pageCopy = useMemo(() => {
+		return createLearningContentSelectPageCopy(t, selectedSubject, activeContentType);
+	}, [t, selectedSubject, activeContentType]);
 
-                const loadedTopicAreas = await getTopicAreasUseCase.execute({
-                    subjectId,
-                    language
-                });
+	const selectContentType = useCallback((contentTypeId) => {
+		const contentTypeEntry = findContentTypeEntry(contentTypeId);
 
-                if (!cancelled) {
-                    setTopicAreas(loadedTopicAreas);
-                }
-            }
-            catch (error) {
-                console.error("Feil ved henting av fagområder:", error);
+		if (!contentTypeEntry || contentTypeEntry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE) {
+			return;
+		}
 
-                if (!cancelled) {
-                    setTopicAreas([]);
-                }
-            }
-            finally {
-                if (!cancelled) {
-                    setTopicAreasLoading(false);
-                }
-            }
-        }
+		setActiveContentType(contentTypeId);
+		resetSearchSheet(ALL_TOPIC_AREAS);
+	}, [resetSearchSheet]);
 
-        loadTopicAreas();
+	const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
+		changeTopicAreaKey(nextTopicAreaKey);
+	}, [changeTopicAreaKey]);
 
-        return () => {
-            cancelled = true;
-        };
-    }, [getTopicAreasUseCase, isActive, subjectId, language]);
+	const contentToggleEntries = useMemo(() => {
+		const entries = [];
 
-    useEffect(() => {
-        if (!isActive || !subjectId) {
-            setFlashcardDeckSummaries([]);
-            setFlashcardDecksLoading(false);
-            return;
-        }
+		for (const entry of LEARNING_CONTENT_ENTRIES) {
+			entries.push({
+				id: entry.id,
+				label: t[entry.labelKey],
+				isDisabled: entry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+			});
+		}
 
-        let cancelled = false;
+		return entries;
+	}, [t]);
 
-        async function loadFlashcardDeckSummaries() {
-            try {
-                setFlashcardDecksLoading(true);
+	const visibleExams = useMemo(() => {
+		return filterExams(exams, searchTerm, topicAreaKey);
+	}, [exams, searchTerm, topicAreaKey]);
 
-                const loadedDeckSummaries = await getFlashcardDeckSummariesUseCase.execute({
-                    subjectId,
-                    language
-                });
+	const visibleFlashcardDecks = useMemo(() => {
+		return filterDeckSummaries(flashcardDeckSummaries, searchTerm, topicAreaKey);
+	}, [flashcardDeckSummaries, searchTerm, topicAreaKey]);
 
-                if (!cancelled) {
-                    setFlashcardDeckSummaries(loadedDeckSummaries);
-                }
-            }
-            catch (error) {
-                console.error("Feil ved henting av flipcard-bunker:", error);
+	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
+	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
+	const isConceptListsContentActive = activeContentType === LEARNING_CONTENT_TYPES.CONCEPT_LISTS;
 
-                if (!cancelled) {
-                    setFlashcardDeckSummaries([]);
-                }
-            }
-            finally {
-                if (!cancelled) {
-                    setFlashcardDecksLoading(false);
-                }
-            }
-        }
+	const searchSuggestions = useMemo(() => {
+		if (isFlipcardsContentActive) {
+			return createDeckSearchSuggestions(visibleFlashcardDecks);
+		}
 
-        loadFlashcardDeckSummaries();
+		return createExamSearchSuggestions(visibleExams);
+	}, [isFlipcardsContentActive, visibleExams, visibleFlashcardDecks]);
 
-        return () => {
-            cancelled = true;
-        };
-    }, [getFlashcardDeckSummariesUseCase, isActive, subjectId, language]);
+	const topicAreaFilterOptions = useMemo(() => {
+		const filterOptions = [
+			{
+				id: ALL_TOPIC_AREAS,
+				value: ALL_TOPIC_AREAS,
+				label: t.topicAreaAllLabel
+			}
+		];
 
-    const pageCopy = useMemo(() => {
-        return createLearningContentSelectPageCopy(t, selectedSubject, activeContentType);
-    }, [t, selectedSubject, activeContentType]);
+		for (const topicArea of topicAreas) {
+			filterOptions.push({
+				id: topicArea.key,
+				value: topicArea.key,
+				label: topicArea.label
+			});
+		}
 
-    const selectContentType = useCallback((contentTypeId) => {
-        const contentTypeEntry = findContentTypeEntry(contentTypeId);
+		return filterOptions;
+	}, [topicAreas, t.topicAreaAllLabel]);
 
-        if (!contentTypeEntry || contentTypeEntry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE) {
-            return;
-        }
+	const topicAreaLabel = useMemo(() => {
+		if (topicAreaKey === ALL_TOPIC_AREAS) {
+			return t.filterAllLabel;
+		}
 
-        setActiveContentType(contentTypeId);
-        resetSearchSheet(ALL_TOPIC_AREAS);
-    }, [resetSearchSheet]);
+		const topicArea = findTopicArea(topicAreas, topicAreaKey);
 
-    const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
-        changeTopicAreaKey(nextTopicAreaKey);
-    }, [changeTopicAreaKey]);
+		return topicArea?.label ?? t.filterAllLabel;
+	}, [topicAreas, topicAreaKey, t.filterAllLabel]);
 
-    const contentToggleEntries = useMemo(() => {
-        const entries = [];
+	const searchPlaceholder = useMemo(() => {
+		const activeEntry = findContentTypeEntry(activeContentType);
 
-        for (const entry of LEARNING_CONTENT_ENTRIES) {
-            entries.push({
-                id: entry.id,
-                label: t[entry.labelKey],
-                isDisabled: entry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE
-            });
-        }
+		return t[activeEntry?.searchPlaceholderKey] ?? t.examSearchPlaceholder;
+	}, [activeContentType, t]);
 
-        return entries;
-    }, [t]);
+	const selectExam = useCallback((examId) => {
+		closeExamSearchSheet();
+		onSelectExam(examId);
+	}, [closeExamSearchSheet, onSelectExam]);
 
-    const visibleExams = useMemo(() => {
-        return filterExams(exams, searchTerm, topicAreaKey);
-    }, [exams, searchTerm, topicAreaKey]);
+	const selectFlashcardDeck = useCallback((nextTopicAreaKey) => {
+		closeExamSearchSheet();
+		onSelectFlashcardDeck(nextTopicAreaKey);
+	}, [closeExamSearchSheet, onSelectFlashcardDeck]);
 
-    const visibleFlashcardDecks = useMemo(() => {
-        return filterDeckSummaries(flashcardDeckSummaries, searchTerm, topicAreaKey);
-    }, [flashcardDeckSummaries, searchTerm, topicAreaKey]);
+	const selectSearchSuggestion = useCallback((suggestionId) => {
+		if (isFlipcardsContentActive) {
+			selectFlashcardDeck(suggestionId);
+			return;
+		}
 
-    const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
-    const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
-    const isConceptListsContentActive = activeContentType === LEARNING_CONTENT_TYPES.CONCEPT_LISTS;
+		selectExam(suggestionId);
+	}, [isFlipcardsContentActive, selectExam, selectFlashcardDeck]);
 
-    const searchSuggestions = useMemo(() => {
-        if (isFlipcardsContentActive) {
-            return createDeckSearchSuggestions(visibleFlashcardDecks);
-        }
+	const topicAreaToolItems = useMemo(() => {
+		return createTopicAreaToolItems({
+			topicAreas,
+			t,
+			selectedStatusLabel: t.pageToolsSelectedLabel,
+			onSelectTopicArea: selectTopicAreaKey
+		});
+	}, [selectTopicAreaKey, t, topicAreas]);
 
-        return createExamSearchSuggestions(visibleExams);
-    }, [isFlipcardsContentActive, visibleExams, visibleFlashcardDecks]);
+	const pageTools = useMemo(() => {
+		return createWorkspaceToolsModel({
+			pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
+			t,
+			workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
+			topicAreaToolItems,
+			activeTopicAreaKey: topicAreaKey,
+			hasSelectedSubject: Boolean(subjectId),
+			onChangeScreen
+		});
+	}, [onChangeScreen, subjectId, t, topicAreaKey, topicAreaToolItems]);
 
-    const topicAreaFilterOptions = useMemo(() => {
-        const filterOptions = [
-            {
-                id: ALL_TOPIC_AREAS,
-                value: ALL_TOPIC_AREAS,
-                label: t.topicAreaAllLabel
-            }
-        ];
+	return {
+		// Data
+		exams: visibleExams,
+		visibleExams,
+		visibleFlashcardDecks,
+		selectedSubject,
+		pageStatus,
+		pageErrorMessage,
+		topicAreas,
+		topicAreaKey,
+		pageTools,
+		...pageCopy,
 
-        for (const topicArea of topicAreas) {
-            filterOptions.push({
-                id: topicArea.key,
-                value: topicArea.key,
-                label: topicArea.label
-            });
-        }
+		addPlaceholderCode: t.examAddPlaceholderCode,
+		addPlaceholderTitle: t.examAddPlaceholderTitle,
+		addPlaceholderDescription: t.examAddPlaceholderDescription,
+		addPlaceholderNote: t.examAddPlaceholderNote,
 
-        return filterOptions;
-    }, [topicAreas, t.topicAreaAllLabel]);
+		// Innholdstyper
+		activeContentType,
+		contentToggleEntries,
+		contentToggleAriaLabel: t.contentToggleAriaLabel,
+		isExamsContentActive,
+		isFlipcardsContentActive,
+		isConceptListsContentActive,
+		conceptListPlaceholderCode: t.contentToggleConceptListsLabel,
+		conceptListPlaceholderTitle: t.conceptListPlaceholderTitle,
+		conceptListPlaceholderDescription: t.conceptListPlaceholderDescription,
+		conceptListPlaceholderNote: t.conceptListPlaceholderNote,
+		deckCardCountLabel: t.deckCardCountLabel,
+		deckCardUnitLabel: t.deckCardUnitLabel,
+		deckEmptyTitle: t.deckEmptyTitle,
+		deckEmptyMessage: t.deckEmptyMessage,
+		flipcardsDeckEyebrow: t.contentToggleFlipcardsLabel,
 
-    const topicAreaLabel = useMemo(() => {
-        if (topicAreaKey === ALL_TOPIC_AREAS) {
-            return t.filterAllLabel;
-        }
+		// Navigasjon
+		showBackButton,
+		backLabel,
+		navigationLabel,
+		onBack,
 
-        const topicArea = findTopicArea(topicAreas, topicAreaKey);
+		// Søk og filter
+		searchTerm,
+		category: topicAreaKey,
+		categoryLabel: topicAreaLabel,
+		topicAreaKey,
+		topicAreaLabel,
+		isSearchSheetOpen,
+		isSearchSuggestionsMode,
+		isFilterOptionsMode,
+		isFooterSheetOpen,
+		isFooterOpen,
+		searchSuggestions,
+		categoryFilterOptions: topicAreaFilterOptions,
+		topicAreaFilterOptions,
+		searchCloseLabel: t.searchCloseLabel,
+		searchLabel: t.examSearchLabel,
+		searchPlaceholder,
+		categoryAriaLabel: t.topicAreaFilterAriaLabel,
+		allCategoriesLabel: t.topicAreaAllLabel,
 
-        return topicArea?.label ?? t.filterAllLabel;
-    }, [topicAreas, topicAreaKey, t.filterAllLabel]);
+		// Handlers
+		changeExamSearchTerm,
+		changeCategory: changeTopicAreaKey,
+		changeTopicAreaKey,
+		selectCategoryFilterOption: selectTopicAreaFilterOption,
+		selectTopicAreaFilterOption,
+		openExamSearchSuggestions,
+		openExamCategoryOptions: openTopicAreaOptions,
+		openTopicAreaOptions,
+		openExamFooterSheet,
+		changeExamFooterSheetOpen,
+		closeExamSearchSheet,
+		selectExam,
+		selectFlashcardDeck,
+		selectContentType,
+		selectTopicAreaKey,
+		selectSearchSuggestion
+	};
+}
 
-    const searchPlaceholder = useMemo(() => {
-        const activeEntry = findContentTypeEntry(activeContentType);
+function noteLearningContentResourceLoaded() {}
 
-        return t[activeEntry?.searchPlaceholderKey] ?? t.examSearchPlaceholder;
-    }, [activeContentType, t]);
+function resolveLearningContentPageErrorMessage(examLoad, topicAreaLoad, flashcardDeckLoad, fallbackMessage) {
+	const loadModels = [examLoad, topicAreaLoad, flashcardDeckLoad];
 
-    const selectExam = useCallback((examId) => {
-        closeExamSearchSheet();
-        onSelectExam(examId);
-    }, [closeExamSearchSheet, onSelectExam]);
+	for (const loadModel of loadModels) {
+		if (loadModel.error) {
+			return loadModel.error;
+		}
+	}
 
-    const selectFlashcardDeck = useCallback((nextTopicAreaKey) => {
-        closeExamSearchSheet();
-        onSelectFlashcardDeck(nextTopicAreaKey);
-    }, [closeExamSearchSheet, onSelectFlashcardDeck]);
-
-    const selectSearchSuggestion = useCallback((suggestionId) => {
-        if (isFlipcardsContentActive) {
-            selectFlashcardDeck(suggestionId);
-            return;
-        }
-
-        selectExam(suggestionId);
-    }, [isFlipcardsContentActive, selectExam, selectFlashcardDeck]);
-
-    const topicAreaToolItems = useMemo(() => {
-        return createTopicAreaToolItems({
-            topicAreas,
-            t,
-            selectedStatusLabel: t.pageToolsSelectedLabel,
-            onSelectTopicArea: selectTopicAreaKey
-        });
-    }, [selectTopicAreaKey, t, topicAreas]);
-
-    const pageTools = useMemo(() => {
-        return createWorkspaceToolsModel({
-            pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
-            t,
-            workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
-            topicAreaToolItems,
-            activeTopicAreaKey: topicAreaKey,
-            hasSelectedSubject: Boolean(subjectId),
-            onChangeScreen
-        });
-    }, [onChangeScreen, subjectId, t, topicAreaKey, topicAreaToolItems]);
-
-    const examsLoadingOrAuxiliaryLoading = examsLoading || topicAreasLoading || flashcardDecksLoading;
-
-    return {
-        // Data
-        exams: visibleExams,
-        visibleExams,
-        visibleFlashcardDecks,
-        selectedSubject,
-        examsLoading: examsLoadingOrAuxiliaryLoading,
-        examsLoadError,
-        topicAreas,
-        topicAreaKey,
-        pageTools,
-        ...pageCopy,
-
-        addPlaceholderCode: t.examAddPlaceholderCode,
-        addPlaceholderTitle: t.examAddPlaceholderTitle,
-        addPlaceholderDescription: t.examAddPlaceholderDescription,
-        addPlaceholderNote: t.examAddPlaceholderNote,
-
-        // Innholdstyper
-        activeContentType,
-        contentToggleEntries,
-        contentToggleAriaLabel: t.contentToggleAriaLabel,
-        isExamsContentActive,
-        isFlipcardsContentActive,
-        isConceptListsContentActive,
-        conceptListPlaceholderCode: t.contentToggleConceptListsLabel,
-        conceptListPlaceholderTitle: t.conceptListPlaceholderTitle,
-        conceptListPlaceholderDescription: t.conceptListPlaceholderDescription,
-        conceptListPlaceholderNote: t.conceptListPlaceholderNote,
-        deckCardCountLabel: t.deckCardCountLabel,
-        deckCardUnitLabel: t.deckCardUnitLabel,
-        deckEmptyTitle: t.deckEmptyTitle,
-        deckEmptyMessage: t.deckEmptyMessage,
-        flipcardsDeckEyebrow: t.contentToggleFlipcardsLabel,
-
-        // Navigasjon
-        showBackButton,
-        backLabel,
-        navigationLabel,
-        onBack,
-
-        // Søk og filter
-        searchTerm,
-        category: topicAreaKey,
-        categoryLabel: topicAreaLabel,
-        topicAreaKey,
-        topicAreaLabel,
-        isSearchSheetOpen,
-        isSearchSuggestionsMode,
-        isFilterOptionsMode,
-        isFooterSheetOpen,
-        isFooterOpen,
-        searchSuggestions,
-        categoryFilterOptions: topicAreaFilterOptions,
-        topicAreaFilterOptions,
-        searchCloseLabel: t.searchCloseLabel,
-        searchLabel: t.examSearchLabel,
-        searchPlaceholder,
-        categoryAriaLabel: t.topicAreaFilterAriaLabel,
-        allCategoriesLabel: t.topicAreaAllLabel,
-
-        // Handlers
-        changeExamSearchTerm,
-        changeCategory: changeTopicAreaKey,
-        changeTopicAreaKey,
-        selectCategoryFilterOption: selectTopicAreaFilterOption,
-        selectTopicAreaFilterOption,
-        openExamSearchSuggestions,
-        openExamCategoryOptions: openTopicAreaOptions,
-        openTopicAreaOptions,
-        openExamFooterSheet,
-        changeExamFooterSheetOpen,
-        closeExamSearchSheet,
-        selectExam,
-        selectFlashcardDeck,
-        selectContentType,
-        selectTopicAreaKey,
-        selectSearchSuggestion
-    };
+	return fallbackMessage;
 }
 
 function findContentTypeEntry(contentTypeId) {

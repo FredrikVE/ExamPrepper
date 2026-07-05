@@ -50,8 +50,7 @@
 	filter: blur(4px);
 }
 
-.flipcards-page-placeholder,
-.flipcards-state {
+.flipcards-page-placeholder {
     display: grid;
     align-content: center;
     gap: var(--space-5);
@@ -67,8 +66,7 @@
     padding: clamp(28px, 5vw, 54px);
 }
 
-.flipcards-page-placeholder h1,
-.flipcards-state h1 {
+.flipcards-page-placeholder h1 {
     margin: 0;
     color: var(--text-main);
     font-size: clamp(36px, 6vw, 68px);
@@ -76,8 +74,7 @@
     letter-spacing: -0.055em;
 }
 
-.flipcards-page-placeholder p,
-.flipcards-state p {
+.flipcards-page-placeholder p {
     max-width: 58ch;
     margin: 0;
     color: var(--text-muted);

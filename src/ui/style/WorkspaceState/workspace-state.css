@@ -29,6 +29,10 @@
 	animation-delay: 0ms;
 }
 
+.workspace-state-card-message {
+	animation-delay: 0ms;
+}
+
 .workspace-state-action {
 	border: 1px solid var(--button-secondary-border);
 	border-radius: var(--radius-full);

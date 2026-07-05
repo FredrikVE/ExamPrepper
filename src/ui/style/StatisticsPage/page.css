@@ -59,8 +59,7 @@
 	line-height: 1.6;
 }
 
-.statistics-start-button,
-.statistics-state-button {
+.statistics-start-button {
 	border: 0;
 	border-radius: var(--radius-full);
 	background: var(--accent-gradient);

@@ -1,15 +1,28 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
+import useLoadModel from "./load/useLoadModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
+function noteSubjectsLoaded() {}
+
 export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, onChangeScreen) {
-	const [subjects, setSubjects] = useState([]);
-	const [subjectsLoading, setSubjectsLoading] = useState(true);
-	const [subjectsLoadError, setSubjectsLoadError] = useState(null);
+	const executeSubjectLoad = useCallback(() => {
+		return getAvailableSubjectsUseCase.execute({
+			language
+		});
+	}, [getAvailableSubjectsUseCase, language]);
+
+	const subjectLoad = useLoadModel({
+		execute: executeSubjectLoad,
+		emptyData: [],
+		errorFallbackMessage: t.subjectErrorMessage,
+		onLoaded: noteSubjectsLoaded
+	});
+	const subjects = subjectLoad.data;
 	const subjectSearchSheet = useSearchSheetModel({
 		isActive,
 		defaultFilterValue: ALL_FACULTIES
@@ -31,42 +44,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		changeFooterSheetOpen: changeSubjectFooterSheetOpen,
 		closeSearchSheet: closeSubjectSearchSheet
 	} = subjectSearchSheet;
-
-	useEffect(() => {
-		let cancelled = false;
-
-		async function loadSubjects() {
-			try {
-				setSubjectsLoading(true);
-				setSubjectsLoadError(null);
-
-				const loadedSubjects = await getAvailableSubjectsUseCase.execute({
-					language
-				});
-
-				if (!cancelled) {
-					setSubjects(loadedSubjects);
-				}
-			} catch (error) {
-				console.error("Feil ved henting av fag:", error);
-
-				if (!cancelled) {
-					setSubjects([]);
-					setSubjectsLoadError(t.subjectErrorMessage);
-				}
-			} finally {
-				if (!cancelled) {
-					setSubjectsLoading(false);
-				}
-			}
-		}
-
-		loadSubjects();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [getAvailableSubjectsUseCase, language, t.subjectErrorMessage]);
 
 	const selectedSubject = useMemo(() => {
 		return findSubjectById(subjects, selectedSubjectId);
@@ -129,8 +106,8 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectedSubject,
 		filteredSubjects,
 		faculties,
-		subjectsLoading,
-		subjectsLoadError,
+		pageStatus: subjectLoad.status,
+		pageErrorMessage: subjectLoad.error,
 		pageTools,
 
 		// Navigasjon
@@ -142,9 +119,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		// Tekster
 		t,
 		loadingTitle: t.subjectLoadingMessage,
-		loadingAriaLabel: t.subjectLoadingMessage,
 		errorTitle: t.errorPrefix,
-		errorAriaLabel: t.subjectErrorMessage,
 		emptyTitle: t.subjectEmptyMessage,
 		emptyDescription: "",
 		searchCloseLabel: t.searchCloseLabel,
