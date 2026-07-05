@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+// src/ui/viewmodel/ExamPage/useExamQuestionLoadModel.js
+import { useCallback, useRef } from "react";
+import useLoadModel from "../load/useLoadModel.js";
 import shouldPreserveExamAttemptOnQuestionReload from "./shouldPreserveExamAttemptOnQuestionReload.js";
 
 export default function useExamQuestionLoadModel({
@@ -7,65 +9,37 @@ export default function useExamQuestionLoadModel({
 	questionsLoadErrorMessage,
 	onQuestionsLoaded
 }) {
-	const [questions, setQuestions] = useState([]);
 	const questionsRef = useRef([]);
-	const [questionsLoading, setQuestionsLoading] = useState(true);
-	const [questionsLoadError, setQuestionsLoadError] = useState(null);
 
-	const loadQuestions = useCallback(() => {
-		let cancelled = false;
+	const executeQuestionLoad = useCallback(() => {
+		return getExamQuestionsUseCase.execute({
+			examId
+		});
+	}, [examId, getExamQuestionsUseCase]);
 
-		const run = async () => {
-			try {
-				setQuestionsLoading(true);
-				setQuestionsLoadError(null);
+	const noteQuestionsLoaded = useCallback(({ loadedData }) => {
+		const shouldPreserveAttempt = shouldPreserveExamAttemptOnQuestionReload(
+			questionsRef.current,
+			loadedData
+		);
 
-				// examId is the question-load SSOT; language changes resolve to a translated examId.
-				const loadedQuestions = await getExamQuestionsUseCase.execute({
-					examId
-				});
+		questionsRef.current = loadedData;
+		onQuestionsLoaded({
+			loadedQuestions: loadedData,
+			shouldPreserveAttempt
+		});
+	}, [onQuestionsLoaded]);
 
-				if (!cancelled) {
-					const shouldPreserveAttempt = shouldPreserveExamAttemptOnQuestionReload(
-						questionsRef.current,
-						loadedQuestions
-					);
-
-					questionsRef.current = loadedQuestions;
-					setQuestions(loadedQuestions);
-					onQuestionsLoaded({
-						loadedQuestions,
-						shouldPreserveAttempt
-					});
-				}
-			}
-
-			catch (questionsError) {
-				if (!cancelled) {
-					setQuestionsLoadError(questionsError?.message ?? questionsLoadErrorMessage);
-				}
-			}
-
-			finally {
-				if (!cancelled) {
-					setQuestionsLoading(false);
-				}
-			}
-		};
-
-		run();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [examId, getExamQuestionsUseCase, onQuestionsLoaded, questionsLoadErrorMessage]);
-
-	useEffect(loadQuestions, [loadQuestions]);
+	const questionLoad = useLoadModel({
+		execute: executeQuestionLoad,
+		emptyData: [],
+		errorFallbackMessage: questionsLoadErrorMessage,
+		onLoaded: noteQuestionsLoaded
+	});
 
 	return {
-		questions,
-		questionsLoading,
-		questionsLoadError,
-		isInitialQuestionsLoad: questionsLoading && questions.length === 0
+		questions: questionLoad.data,
+		questionsStatus: questionLoad.status,
+		questionsError: questionLoad.error
 	};
 }

@@ -1,4 +1,6 @@
+// test/ui/viewmodel/ExamPage/useExamQuestionLoadModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import { LOAD_STATUS } from "../../../../src/ui/presentation/loadStatus.js";
 
 const stateValues = [];
 const stateSetters = [];
@@ -66,9 +68,8 @@ describe("useExamQuestionLoadModel", () => {
 		});
 
 		expect(viewModel.questions).toEqual([]);
-		expect(viewModel.questionsLoading).toBe(true);
-		expect(viewModel.questionsLoadError).toBe(null);
-		expect(viewModel.isInitialQuestionsLoad).toBe(true);
+		expect(viewModel.questionsStatus).toBe(LOAD_STATUS.LOADING);
+		expect(viewModel.questionsError).toBe(null);
 	});
 
 	test("loads questions by examId and reports a fresh question set", async () => {
@@ -86,14 +87,16 @@ describe("useExamQuestionLoadModel", () => {
 		await flushPromises();
 
 		expect(execute).toHaveBeenCalledWith({ examId: "exam-1" });
-		expect(stateSetters[1]).toHaveBeenCalledWith(true);
-		expect(stateSetters[2]).toHaveBeenCalledWith(null);
-		expect(stateSetters[0]).toHaveBeenCalledWith(loadedQuestions);
+		expect(stateSetters[0]).toHaveBeenNthCalledWith(1, expect.any(Function));
+		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
+			status: LOAD_STATUS.READY,
+			data: loadedQuestions,
+			error: null
+		});
 		expect(onQuestionsLoaded).toHaveBeenCalledWith({
 			loadedQuestions,
 			shouldPreserveAttempt: false
 		});
-		expect(stateSetters[1]).toHaveBeenLastCalledWith(false);
 	});
 
 	test("reports preserved attempt when question ids are unchanged", async () => {
@@ -133,8 +136,18 @@ describe("useExamQuestionLoadModel", () => {
 
 		await flushPromises();
 
-		expect(stateSetters[2]).toHaveBeenCalledWith("Kunne ikke laste spørsmål.");
-		expect(stateSetters[1]).toHaveBeenLastCalledWith(false);
+		const updateFailedResource = stateSetters[0].mock.calls[1][0];
+		const failedResource = updateFailedResource({
+			status: LOAD_STATUS.LOADING,
+			data: [],
+			error: null
+		});
+
+		expect(failedResource).toEqual({
+			status: LOAD_STATUS.ERROR,
+			data: [],
+			error: "Kunne ikke laste spørsmål."
+		});
 	});
 
 	test("ignores completed loads after cleanup", async () => {
@@ -155,9 +168,7 @@ describe("useExamQuestionLoadModel", () => {
 		resolveQuestions([{ id: "q1" }]);
 		await flushPromises();
 
-		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[0]).toHaveBeenCalledTimes(1);
 		expect(onQuestionsLoaded).not.toHaveBeenCalled();
-		expect(stateSetters[1]).toHaveBeenCalledWith(true);
-		expect(stateSetters[1]).not.toHaveBeenCalledWith(false);
 	});
 });

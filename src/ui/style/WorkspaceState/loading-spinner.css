@@ -1,0 +1,22 @@
+/* src/ui/style/WorkspaceState/loading-spinner.css */
+.loading-spinner {
+	width: 44px;
+	height: 44px;
+	border: 3px solid color-mix(in srgb, var(--accent) 22%, transparent);
+	border-top-color: var(--accent);
+	border-radius: var(--radius-full);
+	animation: loading-spinner-rotate 0.9s linear infinite;
+}
+
+@keyframes loading-spinner-rotate {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.loading-spinner {
+		animation: none;
+		border-top-color: color-mix(in srgb, var(--accent) 55%, transparent);
+	}
+}

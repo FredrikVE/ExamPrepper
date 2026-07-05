@@ -13,6 +13,7 @@
 @import "./FlipcardsPage/index.css";
 
 /* Shared UI */
+@import "./WorkspaceState/index.css";
 @import "./Shared/index.css";
 @import "./ToggleButtonRow/ToggleButtonRow.css";
 @import "./Search/index.css";
