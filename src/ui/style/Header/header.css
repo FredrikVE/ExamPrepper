@@ -14,41 +14,13 @@
 }
 
 .scaffold-header::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-        radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 48%),
-        linear-gradient(
-            180deg,
-            var(--shell-bg) 0%,
-            color-mix(in srgb, var(--shell-bg) 98%, #000 2%) 54%,
-            color-mix(in srgb, var(--shell-bg) 92%, transparent) 78%,
-            color-mix(in srgb, var(--shell-bg) 68%, transparent) 100%
-        );
-    box-shadow:
-        0 18px 52px color-mix(in srgb, #000 22%, transparent),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.025);
-    backdrop-filter: blur(22px) saturate(132%);
-    -webkit-backdrop-filter: blur(22px) saturate(132%);
-}
-
-.scaffold-header::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: -38px;
-    left: 0;
-    height: 38px;
-    pointer-events: none;
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--shell-bg) 34%, transparent) 0%,
-            color-mix(in srgb, var(--shell-bg) 14%, transparent) 58%,
-            transparent 100%
-        );
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background:
+		var(--workspace-ambient-glow),
+		linear-gradient(var(--shell-bg), var(--shell-bg)) var(--app-bg);
 }
 
 .scaffold-header__leading,

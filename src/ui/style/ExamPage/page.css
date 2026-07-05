@@ -59,20 +59,6 @@
 	grid-template-columns: auto minmax(0, 1fr);
 }
 
-.exam-workspace .scaffold-header::before {
-	background:
-		radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 22rem),
-		radial-gradient(circle at 46% 4%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 18rem),
-		var(--shell-bg);
-	box-shadow: none;
-	backdrop-filter: none;
-	-webkit-backdrop-filter: none;
-}
-
-.exam-workspace .scaffold-header::after {
-	display: none;
-}
-
 .exam-workspace .scaffold-header__trailing,
 .exam-workspace .scaffold-header__actions {
 	justify-content: flex-end;
@@ -107,14 +93,12 @@
 }
 
 .exam-workspace::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-        radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 22rem),
-        radial-gradient(circle at 46% 4%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 18rem);
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background: var(--workspace-ambient-glow);
 }
 
 .exam-workspace-submit-confirm-open > * {

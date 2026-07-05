@@ -8,8 +8,9 @@
 }
 
 .exam-select-ambient-light {
-    inset: -20% -10% auto auto;
-    width: min(820px, 64vw);
-    height: 520px;
-    background: radial-gradient(circle at 50% 15%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%);
+	inset: 0;
+	width: auto;
+	height: auto;
+	filter: none;
+	background: var(--workspace-ambient-glow);
 }

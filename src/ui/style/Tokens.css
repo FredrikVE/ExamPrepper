@@ -31,6 +31,9 @@
     --shell-bg: rgba(255, 255, 255, 0.94);
     --panel-bg: rgba(255, 255, 255, 0.88);
     --panel-strong: #ffffff;
+	--workspace-ambient-glow:
+		radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 22rem),
+		radial-gradient(circle at 46% 4%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 18rem);
 
     /* ── Shared dark-mode-ready component surfaces ─── */
     --feedback-explanation-correct-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, white), color-mix(in srgb, var(--panel-bg) 94%, white));
