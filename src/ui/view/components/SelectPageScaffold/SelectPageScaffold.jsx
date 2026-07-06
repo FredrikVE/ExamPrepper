@@ -15,6 +15,7 @@ export default function SelectPageScaffold(props) {
 					backLabel={props.backLabel}
 					navigationLabel={props.navigationLabel}
 					onBack={props.onBack}
+					progressBarModel={null}
 					tools={props.pageTools}
 				/>
 

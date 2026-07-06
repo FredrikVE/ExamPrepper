@@ -20,7 +20,6 @@ import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
 import FlipcardsPage from "./ui/view/pages/FlipcardsPage.jsx";
 import MatchCardsPage from "./ui/view/pages/MatchCardsPage.jsx";
-import MatchCardsProgress from "./ui/view/components/MatchCardsPage/MatchCardsProgress.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
@@ -47,7 +46,7 @@ function AppContent() {
 	const { language, t, formatDate } = useLanguage();
 
 	const [examWorkMode, setExamWorkMode] = useState(null);
-	const [matchCardsProgress, setMatchCardsProgress] = useState(null);
+	const [headerProgressBarModel, setHeaderProgressBarModel] = useState(null);
 	const examWorkModeActionsRef = useRef(null);
 
 	const navigationViewModel = useAppNavigationViewModel({
@@ -80,10 +79,6 @@ function AppContent() {
 		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS,
 		navigationViewModel.changeScreen
 	);
-
-	const mobileTopbarHeading = matchCardsProgress
-		? <MatchCardsProgress progress={matchCardsProgress} />
-		: null;
 
 	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(
 		getAvailableExamsUseCase,
@@ -133,7 +128,7 @@ function AppContent() {
 					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
 					examWorkStatusLabel={examWorkMode?.statusLabel ?? ""}
 					showExamSubmitAction={Boolean(examWorkMode?.canSubmit)}
-					mobileTopbarHeading={mobileTopbarHeading}
+					progressBarModel={headerProgressBarModel}
 					examSubmitLabel={t.examSubmitLabel}
 					isExamSubmitConfirmOpen={Boolean(examWorkMode?.isConfirmOpen)}
 					examSubmitConfirmTitle={t.examSubmitConfirmTitle}
@@ -160,6 +155,7 @@ function AppContent() {
 						t={t}
 						backContract={navigationViewModel.backContract}
 						onExamWorkModeChange={setExamWorkMode}
+						onHeaderProgressBarModelChange={setHeaderProgressBarModel}
 						examWorkModeActionsRef={examWorkModeActionsRef}
 					/>
 				)}
@@ -183,7 +179,7 @@ function AppContent() {
 						t={t}
 						isActive={navigationViewModel.activeScreen === NAV_SCREENS.MATCHCARDS}
 						backContract={navigationViewModel.backContract}
-						onProgressChange={setMatchCardsProgress}
+						onHeaderProgressBarModelChange={setHeaderProgressBarModel}
 					/>
 				)}
 
@@ -205,7 +201,7 @@ function AppContent() {
 	);
 }
 
-function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChange, examWorkModeActionsRef }) {
+function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef }) {
 	const examPageViewModel = useExamPageViewModel(
 		getExamQuestionsUseCase,
 		gradeAnswerUseCase,
@@ -244,11 +240,20 @@ function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChan
 	]);
 
 	useEffect(() => {
+		onHeaderProgressBarModelChange(examPageViewModel.examProgressBarModel);
+
+		return () => {
+			onHeaderProgressBarModelChange(null);
+		};
+	}, [examPageViewModel.examProgressBarModel, onHeaderProgressBarModelChange]);
+
+	useEffect(() => {
 		return () => {
 			examWorkModeActionsRef.current = null;
 			onExamWorkModeChange(null);
+			onHeaderProgressBarModelChange(null);
 		};
-	}, [examWorkModeActionsRef, onExamWorkModeChange]);
+	}, [examWorkModeActionsRef, onExamWorkModeChange, onHeaderProgressBarModelChange]);
 
 	return (
 		<ExamPage viewModel={examPageViewModel} />
@@ -272,7 +277,7 @@ function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isA
 	);
 }
 
-function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onProgressChange }) {
+function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onHeaderProgressBarModelChange }) {
 	const matchCardsPageViewModel = useMatchCardsPageViewModel({
 		getConceptsForSubjectUseCase,
 		getTopicAreasUseCase,
@@ -285,12 +290,12 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 	});
 
 	useEffect(() => {
-		onProgressChange(matchCardsPageViewModel.session ? matchCardsPageViewModel.progress : null);
+		onHeaderProgressBarModelChange(matchCardsPageViewModel.session ? matchCardsPageViewModel.progressBarModel : null);
 
 		return () => {
-			onProgressChange(null);
+			onHeaderProgressBarModelChange(null);
 		};
-	}, [matchCardsPageViewModel.progress, matchCardsPageViewModel.session, onProgressChange]);
+	}, [matchCardsPageViewModel.progressBarModel, matchCardsPageViewModel.session, onHeaderProgressBarModelChange]);
 
 	return (
 		<MatchCardsPage viewModel={matchCardsPageViewModel} />

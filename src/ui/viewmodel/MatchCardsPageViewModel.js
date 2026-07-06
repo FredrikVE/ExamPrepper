@@ -1,3 +1,4 @@
+import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
@@ -250,11 +251,16 @@ export default function useMatchCardsPageViewModel({
 	const matchedPairCount = session?.matchedPairCount ?? 0;
 	const totalPairCount = session?.roundPairCount ?? 0;
 	const progressLabel = labels.progressLabel(matchedPairCount, totalPairCount);
-	const progress = createMatchCardsProgressModel({
-		matchedPairCount,
-		totalPairCount,
-		labels
-	});
+	const progressBarModel = useMemo(() => {
+		return buildProgressBarModel({
+			totalSteps: totalPairCount,
+			currentStep: Math.max(matchedPairCount, 1),
+			ariaLabel: labels.progressAriaLabel,
+			startLabel: labels.progressStartLabel,
+			formatStepLabel: labels.progressLabel,
+			onActivateStep: null
+		});
+	}, [labels, matchedPairCount, totalPairCount]);
 
 	return {
 		labels,
@@ -273,68 +279,11 @@ export default function useMatchCardsPageViewModel({
 		matchedPairCount,
 		totalPairCount,
 		progressLabel,
-		progress,
+		progressBarModel,
 		isInteractionLocked,
 		isRoundComplete: Boolean(session?.isRoundComplete),
 		handleSelectSlot,
 		restartSession
-	};
-}
-
-function createMatchCardsProgressModel({ matchedPairCount, totalPairCount, labels }) {
-	const safeTotalPairCount = Math.max(totalPairCount, 1);
-	const boundedMatchedPairCount = Math.min(matchedPairCount, safeTotalPairCount);
-	const fillPercent = Math.round((boundedMatchedPairCount / safeTotalPairCount) * 100);
-	const middlePoint = Math.max(Math.ceil(safeTotalPairCount / 2), 1);
-	const latePoint = Math.max(Math.ceil(safeTotalPairCount * 0.75), middlePoint);
-
-	return {
-		ariaLabel: labels.progressAriaLabel,
-		fillPercent,
-		points: [
-			createMatchCardsProgressPoint({
-				key: "start",
-				left: 0,
-				label: labels.progressStartLabel,
-				threshold: 0,
-				matchedPairCount: boundedMatchedPairCount,
-				isFlag: false
-			}),
-			createMatchCardsProgressPoint({
-				key: "middle",
-				left: 50,
-				label: labels.progressLabel(middlePoint, safeTotalPairCount),
-				threshold: middlePoint,
-				matchedPairCount: boundedMatchedPairCount,
-				isFlag: false
-			}),
-			createMatchCardsProgressPoint({
-				key: "late",
-				left: 75,
-				label: labels.progressLabel(latePoint, safeTotalPairCount),
-				threshold: latePoint,
-				matchedPairCount: boundedMatchedPairCount,
-				isFlag: false
-			}),
-			createMatchCardsProgressPoint({
-				key: "finish",
-				left: 100,
-				label: labels.progressLabel(safeTotalPairCount, safeTotalPairCount),
-				threshold: safeTotalPairCount,
-				matchedPairCount: boundedMatchedPairCount,
-				isFlag: true
-			})
-		]
-	};
-}
-
-function createMatchCardsProgressPoint({ key, left, label, threshold, matchedPairCount, isFlag }) {
-	return {
-		key,
-		left,
-		label,
-		isActive: matchedPairCount >= threshold,
-		isFlag
 	};
 }
 

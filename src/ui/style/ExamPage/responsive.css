@@ -98,52 +98,6 @@
     }
 }
 
-/* ── Progress responsiveness ───────────────────────── */
-@media (max-width: 920px) {
-    .exam-progress {
-        width: var(--exam-content-width);
-        max-width: var(--exam-content-max-width);
-    }
-}
-
-/* Compact progress rail for laptop heights. */
-@media (min-width: 933px) and (max-width: 1760px), (min-width: 933px) and (max-height: 960px) {
-    .exam-progress {
-        --exam-progress-track-height: 54px;
-        --exam-progress-line-top: 22px;
-        --exam-progress-line-height: 3px;
-        --exam-progress-icon-slot-height: 16px;
-        --exam-progress-label-offset: 12px;
-
-        margin-bottom: 0;
-        padding-top: 0;
-    }
-
-    .exam-progress-point {
-        min-width: 58px;
-        font-size: 0.76rem;
-    }
-
-    .exam-progress-dot {
-        width: 9px;
-        height: 9px;
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--shell-bg) 74%, transparent);
-    }
-
-    .exam-progress-flag {
-        width: 16px;
-        height: 16px;
-    }
-}
-
-@media (max-height: 820px) and (min-width: 933px) {
-    .exam-progress {
-        --exam-progress-track-height: 46px;
-        --exam-progress-line-top: 20px;
-        --exam-progress-label-offset: 10px;
-    }
-}
-
 /* ── Submitted feedback mode ─────────────
    Feedback cards are naturally taller than active question cards.
    Let the full page scroll instead of trying to keep the footer pinned. */
@@ -290,12 +244,4 @@
         padding: 10px 0 8px;
     }
 
-    .exam-progress {
-        margin-bottom: 0;
-        padding-top: 0;
-    }
-
-    .exam-progress-track {
-        height: 30px;
-    }
 }

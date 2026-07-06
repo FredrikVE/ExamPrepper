@@ -44,7 +44,7 @@ export default function AppNavigation(props) {
 				isExamWorkMode={props.isExamWorkMode}
 				examWorkStatusLabel={props.examWorkStatusLabel}
 				showExamSubmitAction={props.showExamSubmitAction}
-				mobileTopbarHeading={props.mobileTopbarHeading}
+				progressBarModel={props.progressBarModel}
 				examSubmitLabel={props.examSubmitLabel}
 				isExamSubmitConfirmOpen={props.isExamSubmitConfirmOpen}
 				examSubmitConfirmTitle={props.examSubmitConfirmTitle}

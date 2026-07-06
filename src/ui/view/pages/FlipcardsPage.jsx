@@ -99,6 +99,7 @@ function FlipcardsShell(props) {
 				backLabel={props.viewModel.backLabel}
 				navigationLabel={props.viewModel.navigationLabel}
 				onBack={props.viewModel.onBack}
+				progressBarModel={null}
 				tools={null}
 				trailing={props.headerTrailing}
 			/>

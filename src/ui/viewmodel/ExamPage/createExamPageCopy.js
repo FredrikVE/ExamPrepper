@@ -7,6 +7,8 @@ export default function createExamPageCopy(t) {
 		questionsLoadErrorMessage: t.examLoadErrorMessage,
 		attemptSavingMessage: t.examAttemptSavingMessage,
 		attemptSaveErrorMessage: t.examAttemptSaveErrorMessage,
-		answeredLabel: t.examAnsweredLabel
+		answeredLabel: t.examAnsweredLabel,
+		examProgressAriaLabel: t.examProgressAriaLabel,
+		examProgressStartLabel: t.examProgressStartLabel
 	};
 }

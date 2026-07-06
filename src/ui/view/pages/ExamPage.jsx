@@ -3,7 +3,6 @@ import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import ExamToolbarActions from "../components/ExamPage/ExamToolbarActions.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
-import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
 import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
 import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
@@ -29,6 +28,7 @@ export default function ExamPage({ viewModel }) {
 			backLabel={viewModel.backLabel}
 			navigationLabel={viewModel.navigationLabel}
 			onBack={viewModel.onBack}
+			progressBarModel={null}
 			tools={null}
 			trailing={null}
 		/>
@@ -73,6 +73,7 @@ export default function ExamPage({ viewModel }) {
 						backLabel={viewModel.backLabel}
 						navigationLabel={viewModel.navigationLabel}
 						onBack={viewModel.onBack}
+						progressBarModel={viewModel.examProgressBarModel}
 						tools={null}
 						trailing={headerToolbar}
 					/>
@@ -86,12 +87,6 @@ export default function ExamPage({ viewModel }) {
 				{viewModel.attemptSaveError && (
 					<p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
 				)}
-
-				<ExamProgress
-					visibleQuestions={viewModel.visibleQuestions}
-					currentQuestionIndex={viewModel.currentQuestionIndex}
-					onGoToQuestion={viewModel.goToQuestion}
-				/>
 
 				<main className="exam-page-main">
 					<div className="exam-page-content">

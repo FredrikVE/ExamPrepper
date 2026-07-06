@@ -14,27 +14,27 @@
 		gap: var(--space-4);
 	}
 
-	.matchcards-progress {
-		--matchcards-progress-track-height: 54px;
-		--matchcards-progress-line-top: 22px;
-		--matchcards-progress-line-height: 4px;
-		--matchcards-progress-icon-slot-height: 16px;
-		--matchcards-progress-label-offset: 11px;
+	.matchcards-workspace .progress-bar {
+		--progress-bar-track-height: 54px;
+		--progress-bar-line-top: 22px;
+		--progress-bar-line-height: 4px;
+		--progress-bar-icon-slot-height: 16px;
+		--progress-bar-label-offset: 11px;
 		padding-inline: var(--space-1);
 	}
 
-	.matchcards-progress-point {
+	.matchcards-workspace .progress-bar-point {
 		min-width: 54px;
 		font-size: 0.74rem;
 	}
 
-	.matchcards-progress-dot {
+	.matchcards-workspace .progress-bar-dot {
 		width: 9px;
 		height: 9px;
 		box-shadow: 0 0 0 4px color-mix(in srgb, var(--shell-bg) 74%, transparent);
 	}
 
-	.matchcards-progress-flag {
+	.matchcards-workspace .progress-bar-flag {
 		width: 16px;
 		height: 16px;
 	}
@@ -86,13 +86,13 @@
 		gap: var(--space-3);
 	}
 
-	.matchcards-progress {
-		--matchcards-progress-track-height: 48px;
-		--matchcards-progress-line-top: 19px;
-		--matchcards-progress-label-offset: 10px;
+	.matchcards-workspace .progress-bar {
+		--progress-bar-track-height: 48px;
+		--progress-bar-line-top: 19px;
+		--progress-bar-label-offset: 10px;
 	}
 
-	.matchcards-progress-point {
+	.matchcards-workspace .progress-bar-point {
 		min-width: 46px;
 		font-size: 0.68rem;
 	}
@@ -129,10 +129,10 @@
 		gap: var(--space-3);
 	}
 
-	.matchcards-progress {
-		--matchcards-progress-track-height: 42px;
-		--matchcards-progress-line-top: 17px;
-		--matchcards-progress-label-offset: 8px;
+	.matchcards-workspace .progress-bar {
+		--progress-bar-track-height: 42px;
+		--progress-bar-line-top: 17px;
+		--progress-bar-label-offset: 8px;
 	}
 
 	.matchcards-column-slots {

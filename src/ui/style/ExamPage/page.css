@@ -56,7 +56,18 @@
 }
 
 .exam-workspace .scaffold-header {
-	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-columns: 64px minmax(0, 1fr) auto;
+	column-gap: clamp(var(--space-5), 3vw, var(--space-8));
+}
+
+.exam-workspace .scaffold-header__heading {
+	width: min(100%, 620px);
+	max-width: min(620px, 42vw);
+	justify-content: stretch;
+}
+
+.exam-workspace .scaffold-header__heading .progress-bar {
+	padding: 0;
 }
 
 .exam-workspace .scaffold-header__trailing,
@@ -73,7 +84,9 @@
 
 .exam-workspace .scaffold-header-button,
 .exam-workspace .desktop-pop-out-menu__trigger,
-.exam-workspace .exam-toolbar-button {
+.exam-workspace .exam-toolbar-button,
+.exam-workspace .progress-bar,
+.exam-workspace .progress-bar-point {
 	pointer-events: auto;
 }
 

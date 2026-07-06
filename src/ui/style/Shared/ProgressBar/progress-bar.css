@@ -1,42 +1,43 @@
-.matchcards-progress {
-	--matchcards-progress-track-height: 64px;
-	--matchcards-progress-line-top: 26px;
-	--matchcards-progress-line-height: 4px;
-	--matchcards-progress-icon-slot-height: 18px;
-	--matchcards-progress-label-offset: 14px;
+/* src/ui/style/Shared/ProgressBar/progress-bar.css */
+.progress-bar {
+	--progress-bar-track-height: 64px;
+	--progress-bar-line-top: 26px;
+	--progress-bar-line-height: 4px;
+	--progress-bar-icon-slot-height: 18px;
+	--progress-bar-label-offset: 14px;
 
 	width: 100%;
 	min-width: 0;
 	padding: 0 clamp(var(--space-2), 1.2vw, var(--space-4));
 }
 
-.matchcards-progress-track {
+.progress-bar-track {
 	position: relative;
-	height: var(--matchcards-progress-track-height);
+	height: var(--progress-bar-track-height);
 }
 
-.matchcards-progress-line {
+.progress-bar-line {
 	position: absolute;
-	top: var(--matchcards-progress-line-top);
+	top: var(--progress-bar-line-top);
 	left: 8px;
 	right: 8px;
-	height: var(--matchcards-progress-line-height);
+	height: var(--progress-bar-line-height);
 	border-radius: var(--radius-full);
 	background: color-mix(in srgb, var(--text-soft) 22%, transparent);
 }
 
-.matchcards-progress-fill {
+.progress-bar-fill {
 	position: absolute;
-	top: var(--matchcards-progress-line-top);
+	top: var(--progress-bar-line-top);
 	left: 8px;
-	height: var(--matchcards-progress-line-height);
+	height: var(--progress-bar-line-height);
 	border-radius: var(--radius-full);
 	background: var(--accent);
 	box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 36%, transparent);
 	transition: width 220ms ease;
 }
 
-.matchcards-progress-point {
+.progress-bar-point {
 	position: absolute;
 	top: 0;
 	transform: translateX(-50%);
@@ -47,33 +48,39 @@
 	border: 0;
 	background: transparent;
 	color: var(--text-muted);
+	font: inherit;
 	font-size: 0.8rem;
 	font-weight: 800;
 	line-height: 1;
+	text-align: center;
 }
 
-.matchcards-progress-point:first-of-type {
+.progress-bar-point:first-of-type {
 	align-items: flex-start;
 	transform: translateX(0);
 }
 
-.matchcards-progress-point:last-of-type {
+.progress-bar-point:last-of-type {
 	align-items: flex-end;
 	transform: translateX(-100%);
 }
 
-.matchcards-progress-icon-slot {
+button.progress-bar-point {
+	cursor: pointer;
+}
+
+.progress-bar-icon-slot {
 	display: flex;
-	min-height: var(--matchcards-progress-icon-slot-height);
+	min-height: var(--progress-bar-icon-slot-height);
 	align-items: center;
 	justify-content: center;
 }
 
-.matchcards-progress-label {
-	margin-top: var(--matchcards-progress-label-offset);
+.progress-bar-label {
+	margin-top: var(--progress-bar-label-offset);
 }
 
-.matchcards-progress-dot {
+.progress-bar-dot {
 	width: 10px;
 	height: 10px;
 	border: 2px solid color-mix(in srgb, var(--text-soft) 55%, transparent);
@@ -82,16 +89,16 @@
 	box-shadow: 0 0 0 5px color-mix(in srgb, var(--shell-bg) 74%, transparent);
 }
 
-.matchcards-progress-point-active {
+.progress-bar-point-active {
 	color: var(--accent);
 }
 
-.matchcards-progress-point-active .matchcards-progress-dot {
+.progress-bar-point-active .progress-bar-dot {
 	border-color: var(--accent);
 	background: var(--accent);
 }
 
-.matchcards-progress-flag {
+.progress-bar-flag {
 	width: 18px;
 	height: 18px;
 	color: var(--text-muted);
@@ -109,6 +116,6 @@
 	justify-content: stretch;
 }
 
-.matchcards-workspace .scaffold-header__heading .matchcards-progress {
+.matchcards-workspace .scaffold-header__heading .progress-bar {
 	padding: 0;
 }

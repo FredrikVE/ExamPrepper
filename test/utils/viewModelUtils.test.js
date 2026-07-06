@@ -5,7 +5,6 @@ import getFeedbackToggleLabel from "../../src/ui/viewmodel/Utils/getFeedbackTogg
 import getQuestionProgressLabel from "../../src/ui/viewmodel/Utils/getQuestionProgressLabel.js";
 import getScoreLabel from "../../src/ui/viewmodel/Utils/getScoreLabel.js";
 import toggleExpandedAnswerOptionIndexes from "../../src/ui/viewmodel/Utils/toggleExpandedAnswerOptionIndexes.js";
-import { buildExamProgressPoints } from "../../src/ui/view/components/ExamPage/ExamProgress/Utils/buildExamProgressPoints.js";
 
 describe("view model utils", () => {
     test("formats answered count", () => {
@@ -33,18 +32,4 @@ describe("view model utils", () => {
         expect(toggleExpandedAnswerOptionIndexes([1, 3], 1)).toEqual([3]);
     });
 
-    test("builds progress points for multiple questions", () => {
-        const result = buildExamProgressPoints({ total: 25, currentQuestionNumber: 13 });
-
-        expect(result.fillPercent).toBe(50);
-        expect(result.points[0]).toEqual({ label: "Start", question: 1, left: 0 });
-        expect(result.points.at(-1)).toEqual({ label: "25/25", question: 25, left: 100, isFlag: true });
-    });
-
-    test("builds progress points for one question", () => {
-        const result = buildExamProgressPoints({ total: 1, currentQuestionNumber: 1 });
-
-        expect(result.fillPercent).toBe(100);
-        expect(result.points.at(-1)).toMatchObject({ question: 1, left: 100 });
-    });
 });

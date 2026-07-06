@@ -3,12 +3,11 @@ import Header from "../components/Header/Header.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
-import MatchCardsProgress from "../components/MatchCardsPage/MatchCardsProgress.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
-			<MatchCardsShell viewModel={viewModel}>
+			<MatchCardsShell viewModel={viewModel} progressBarModel={null}>
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.labels.loadingTitle}
@@ -22,7 +21,7 @@ export default function MatchCardsPage({ viewModel }) {
 
 	if (!viewModel.session) {
 		return (
-			<MatchCardsShell viewModel={viewModel}>
+			<MatchCardsShell viewModel={viewModel} progressBarModel={null}>
 				<WorkspaceMessage
 					title={viewModel.labels.emptyTitle}
 					body={viewModel.labels.emptyBody}
@@ -32,10 +31,8 @@ export default function MatchCardsPage({ viewModel }) {
 		);
 	}
 
-	const headerProgress = <MatchCardsProgress progress={viewModel.progress} />;
-
 	return (
-		<MatchCardsShell viewModel={viewModel} headerProgress={headerProgress}>
+		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
 			<section className="matchcards-game-shell">
 				<MatchCardsGrid
 					termSlots={viewModel.termSlots}
@@ -61,7 +58,7 @@ export default function MatchCardsPage({ viewModel }) {
 	);
 }
 
-function MatchCardsShell({ viewModel, headerProgress, children }) {
+function MatchCardsShell({ viewModel, progressBarModel, children }) {
 	return (
 		<main className="matchcards-workspace">
 			<div className="matchcards-ambient-light" aria-hidden="true" />
@@ -71,7 +68,7 @@ function MatchCardsShell({ viewModel, headerProgress, children }) {
 				backLabel={viewModel.backLabel}
 				navigationLabel={viewModel.navigationLabel}
 				onBack={viewModel.onBack}
-				heading={headerProgress}
+				progressBarModel={progressBarModel}
 				tools={null}
 			/>
 

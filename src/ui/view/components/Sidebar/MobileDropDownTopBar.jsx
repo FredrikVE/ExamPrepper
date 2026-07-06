@@ -9,6 +9,7 @@ import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import MobileExamSubmitAction from "./MobileExamSubmitAction.jsx";
 import MobileExamSubmitConfirmation from "./MobileExamSubmitConfirmation.jsx";
+import ProgressBar from "../Shared/ProgressBar/ProgressBar.jsx";
 import SettingsPanelContent from "../Settings/SettingsPanelContent.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 import useSubmitConfirmFocus from "./useSubmitConfirmFocus.js";
@@ -117,10 +118,10 @@ export default function MobileDropDownTopBar(props) {
 	const shouldShowSettingsTopbar = props.isMobileDropDownTopBarMenuOpen && props.isSettingsPresentationOpen;
 	const showPickerButton = props.isMobileDropDownTopBarMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
 	const showFlipcardsDeckPill = isFlipcardsScreen && !props.isMobileDropDownTopBarMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
-	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMobileDropDownTopBarMenuOpen;
+	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMobileDropDownTopBarMenuOpen && !props.progressBarModel;
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
 	const showTopbarBackButton = props.showBackButton || shouldShowSettingsTopbar;
-	const showMobileTopbarHeading = Boolean(props.mobileTopbarHeading) && !props.isMobileDropDownTopBarMenuOpen && !shouldShowSettingsTopbar;
+	const showMobileProgressBar = Boolean(props.progressBarModel) && !props.isMobileDropDownTopBarMenuOpen && !shouldShowSettingsTopbar;
 
 	useMobileMenuEscapeKey({
 		isMobileDropDownTopBarMenuOpen: props.isMobileDropDownTopBarMenuOpen,
@@ -210,9 +211,9 @@ export default function MobileDropDownTopBar(props) {
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
 
-				{showMobileTopbarHeading && (
-					<div className="mobile-topbar-heading">
-						{props.mobileTopbarHeading}
+				{showMobileProgressBar && (
+					<div className="mobile-topbar-progress">
+						<ProgressBar model={props.progressBarModel} />
 					</div>
 				)}
 
