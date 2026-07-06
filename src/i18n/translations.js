@@ -33,7 +33,10 @@ export const translations = {
 
         // LearningContentSelectPage
         selectTitle: "Eksamens-emulator",
-        selectIntroTitle: "Velg eksamen",
+        selectExamsTitle: "Velg eksamen",
+        selectFlipcardsTitle: "Velg flipcards",
+        selectMatchCardsTitle: "Velg begrepsmatch",
+        selectConceptListsTitle: "Velg begrepsliste",
         selectSubtitle: (subjectCode) => `Velg en øvingsprøve for ${subjectCode}`,
         selectSubtitleFallback: "Velg en øvingsprøve for å starte",
         selectExamsSubtitle: (subjectCode) => `Velg en øvingsprøve for ${subjectCode}`,
@@ -456,7 +459,10 @@ export const translations = {
 
         // LearningContentSelectPage
         selectTitle: "Exam Emulator",
-        selectIntroTitle: "Choose exam",
+        selectExamsTitle: "Choose exam",
+        selectFlipcardsTitle: "Choose flipcards",
+        selectMatchCardsTitle: "Choose concept match",
+        selectConceptListsTitle: "Choose glossary",
         selectSubtitle: (subjectCode) => `Choose a practice exam for ${subjectCode}`,
         selectSubtitleFallback: "Choose a practice exam to begin",
         selectExamsSubtitle: (subjectCode) => `Choose a practice exam for ${subjectCode}`,

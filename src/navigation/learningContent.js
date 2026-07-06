@@ -12,6 +12,7 @@ export const LEARNING_CONTENT_ENTRIES = [
     {
         id: LEARNING_CONTENT_TYPES.EXAMS,
         labelKey: "contentToggleExamsLabel",
+        titleKey: "selectExamsTitle",
         searchPlaceholderKey: "examSearchPlaceholder",
         subtitleKey: "selectExamsSubtitle",
         subtitleFallbackKey: "selectExamsSubtitleFallback",
@@ -20,6 +21,7 @@ export const LEARNING_CONTENT_ENTRIES = [
     {
         id: LEARNING_CONTENT_TYPES.FLIPCARDS,
         labelKey: "contentToggleFlipcardsLabel",
+        titleKey: "selectFlipcardsTitle",
         searchPlaceholderKey: "flipcardsSearchPlaceholder",
         subtitleKey: "selectFlipcardsSubtitle",
         subtitleFallbackKey: "selectFlipcardsSubtitleFallback",
@@ -28,6 +30,7 @@ export const LEARNING_CONTENT_ENTRIES = [
     {
         id: LEARNING_CONTENT_TYPES.MATCHCARDS,
         labelKey: "contentToggleMatchCardsLabel",
+        titleKey: "selectMatchCardsTitle",
         searchPlaceholderKey: "matchCardsSearchPlaceholder",
         subtitleKey: "selectMatchCardsSubtitle",
         subtitleFallbackKey: "selectMatchCardsSubtitleFallback",
@@ -36,6 +39,7 @@ export const LEARNING_CONTENT_ENTRIES = [
     {
         id: LEARNING_CONTENT_TYPES.CONCEPT_LISTS,
         labelKey: "contentToggleConceptListsLabel",
+        titleKey: "selectConceptListsTitle",
         searchPlaceholderKey: "conceptListSearchPlaceholder",
         subtitleKey: "selectGlossariesSubtitle",
         subtitleFallbackKey: "selectGlossariesSubtitleFallback",

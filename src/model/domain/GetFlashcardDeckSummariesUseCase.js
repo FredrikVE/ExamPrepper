@@ -1,5 +1,6 @@
 // src/model/domain/GetFlashcardDeckSummariesUseCase.js
 import { buildFlashcardDeckSummaries } from "./utils/buildFlashcardDeckSummaries.js";
+import { findTopicAreaByKey } from "./utils/topicAreaFilters.js";
 
 export default class GetFlashcardDeckSummariesUseCase {
     constructor(flashcardRepository, subjectRepository) {
@@ -55,16 +56,6 @@ export default class GetFlashcardDeckSummariesUseCase {
 
         return localizedTopicAreas;
     }
-}
-
-function findTopicAreaByKey(topicAreas, topicAreaKey) {
-    for (const topicArea of topicAreas) {
-        if (topicArea.key === topicAreaKey) {
-            return topicArea;
-        }
-    }
-
-    return null;
 }
 
 function compareDeckSummariesByTopicAreaPosition(a, b) {

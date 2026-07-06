@@ -1,6 +1,6 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
 import { filterFlashcardsByTopicArea } from "../../model/domain/utils/filterFlashcardsByTopicArea.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
@@ -8,6 +8,7 @@ import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
 
@@ -83,11 +84,10 @@ export default function useFlipcardsPageViewModel(
         flashcardLoad.status,
         topicAreaLoad.status
     ]);
-    const pageErrorMessage = resolveFlipcardsPageErrorMessage(
+    const pageErrorMessage = resolveFirstLoadError([
         flashcardLoad,
-        topicAreaLoad,
-        t.flipcardsErrorMessage
-    );
+        topicAreaLoad
+    ], t.flipcardsErrorMessage);
 
     const topicFilteredFlashcards = useMemo(() => {
         return filterFlashcardsByTopicArea(flashcards, topicAreaKey);
@@ -150,7 +150,7 @@ export default function useFlipcardsPageViewModel(
     }, [deckKey]);
 
     const activeTopicArea = useMemo(() => {
-        return findTopicArea(topicAreas, topicAreaKey);
+        return findTopicAreaByKey(topicAreas, topicAreaKey);
     }, [topicAreas, topicAreaKey]);
 
     const labels = useMemo(() => {
@@ -435,18 +435,6 @@ export default function useFlipcardsPageViewModel(
 
 function noteFlipcardTopicAreasLoaded() {}
 
-function resolveFlipcardsPageErrorMessage(flashcardLoad, topicAreaLoad, fallbackMessage) {
-    if (flashcardLoad.error) {
-        return flashcardLoad.error;
-    }
-
-    if (topicAreaLoad.error) {
-        return topicAreaLoad.error;
-    }
-
-    return fallbackMessage;
-}
-
 function createDeckKey(cards) {
     const cardIds = [];
 
@@ -474,16 +462,6 @@ function selectCardIdsForCards(cardIds, cards) {
     }
 
     return selectedCardIds;
-}
-
-function findTopicArea(topicAreas, topicAreaKey) {
-    for (const topicArea of topicAreas) {
-        if (topicArea.key === topicAreaKey) {
-            return topicArea;
-        }
-    }
-
-    return null;
 }
 
 function createTopicAreaDeckToolItems(topicAreas, activeTopicAreaKey, labels) {

@@ -33,7 +33,7 @@ export default function MatchCardsPage({ viewModel }) {
 
 	return (
 		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
-			<section className="matchcards-game-shell">
+			<section className="matchcards-game-shell matchcards-workspace-card">
 				<MatchCardsGrid
 					termSlots={viewModel.termSlots}
 					explanationSlots={viewModel.explanationSlots}

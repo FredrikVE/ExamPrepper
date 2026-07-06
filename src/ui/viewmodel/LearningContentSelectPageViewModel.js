@@ -6,10 +6,12 @@ import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigati
 import createLearningContentSelectPageCopy from "./LearningContentSelectPage/createLearningContentSelectPageCopy.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
-import { ALL_TOPIC_AREAS, filterExams } from "./LearningContentSelectPage/examFilters.js";
+import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
+import { filterExams } from "./LearningContentSelectPage/examFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 export default function useLearningContentSelectPageViewModel(
 	getAvailableExamsUseCase,
@@ -117,12 +119,11 @@ export default function useLearningContentSelectPageViewModel(
 		topicAreaLoad.status,
 		flashcardDeckLoad.status
 	]);
-	const pageErrorMessage = resolveLearningContentPageErrorMessage(
+	const pageErrorMessage = resolveFirstLoadError([
 		examLoad,
 		topicAreaLoad,
-		flashcardDeckLoad,
-		t.selectErrorMessage
-	);
+		flashcardDeckLoad
+	], t.selectErrorMessage);
 
 	const pageCopy = useMemo(() => {
 		return createLearningContentSelectPageCopy(t, selectedSubject, activeContentType);
@@ -203,7 +204,7 @@ export default function useLearningContentSelectPageViewModel(
 			return t.filterAllLabel;
 		}
 
-		const topicArea = findTopicArea(topicAreas, topicAreaKey);
+		const topicArea = findTopicAreaByKey(topicAreas, topicAreaKey);
 
 		return topicArea?.label ?? t.filterAllLabel;
 	}, [topicAreas, topicAreaKey, t.filterAllLabel]);
@@ -350,32 +351,10 @@ export default function useLearningContentSelectPageViewModel(
 
 function noteLearningContentResourceLoaded() {}
 
-function resolveLearningContentPageErrorMessage(examLoad, topicAreaLoad, flashcardDeckLoad, fallbackMessage) {
-	const loadModels = [examLoad, topicAreaLoad, flashcardDeckLoad];
-
-	for (const loadModel of loadModels) {
-		if (loadModel.error) {
-			return loadModel.error;
-		}
-	}
-
-	return fallbackMessage;
-}
-
 function findContentTypeEntry(contentTypeId) {
     for (const entry of LEARNING_CONTENT_ENTRIES) {
         if (entry.id === contentTypeId) {
             return entry;
-        }
-    }
-
-    return null;
-}
-
-function findTopicArea(topicAreas, topicAreaKey) {
-    for (const topicArea of topicAreas) {
-        if (topicArea.key === topicAreaKey) {
-            return topicArea;
         }
     }
 

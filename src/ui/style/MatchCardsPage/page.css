@@ -41,7 +41,7 @@
 	padding:
 		calc(var(--scaffold-header-height, 112px) + var(--space-3))
 		max(var(--space-7), env(safe-area-inset-right))
-		calc(var(--space-6) + env(safe-area-inset-bottom));
+		calc(var(--space-5) + env(safe-area-inset-bottom));
 	scrollbar-color: color-mix(in srgb, var(--accent) 26%, transparent) transparent;
 	scrollbar-width: thin;
 }
@@ -62,13 +62,37 @@
 }
 
 .matchcards-game-shell {
-	width: min(1280px, 100%);
-	height: min(100%, clamp(640px, 82vh, 920px));
+	width: min(1360px, 100%);
+	height: min(100%, clamp(720px, 88vh, 1040px));
 	min-height: 0;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
 	gap: clamp(var(--space-4), 2vh, var(--space-6));
+}
+
+.matchcards-workspace-card {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	padding: clamp(var(--space-5), 2.8vh, var(--space-8));
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-xl);
+	background: var(--question-card-surface);
+	box-shadow:
+		var(--shadow-card),
+		0 1px 0 color-mix(in srgb, #fff 72%, transparent) inset;
+}
+
+.matchcards-workspace-card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background:
+		radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 30rem),
+		radial-gradient(circle at 88% 10%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 24rem);
+	pointer-events: none;
 }
 
 .matchcards-round-complete {

@@ -1,8 +1,9 @@
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 import {
 	advanceMatchedPair,
 	canStartMatchCardsSession,
@@ -82,14 +83,13 @@ export default function useMatchCardsPageViewModel({
 		conceptLoad.status,
 		topicAreaLoad.status
 	]);
-	const pageErrorMessage = resolveMatchCardsPageErrorMessage(
+	const pageErrorMessage = resolveFirstLoadError([
 		conceptLoad,
-		topicAreaLoad,
-		t.matchCardsErrorMessage
-	);
+		topicAreaLoad
+	], t.matchCardsErrorMessage);
 
 	const activeTopicArea = useMemo(() => {
-		return findTopicArea(topicAreas, topicAreaKey);
+		return findTopicAreaByKey(topicAreas, topicAreaKey);
 	}, [topicAreas, topicAreaKey]);
 
 	const labels = useMemo(() => {
@@ -288,28 +288,6 @@ export default function useMatchCardsPageViewModel({
 }
 
 function noteMatchCardsResourceLoaded() {}
-
-function resolveMatchCardsPageErrorMessage(conceptLoad, topicAreaLoad, fallbackMessage) {
-	if (conceptLoad.error) {
-		return conceptLoad.error;
-	}
-
-	if (topicAreaLoad.error) {
-		return topicAreaLoad.error;
-	}
-
-	return fallbackMessage;
-}
-
-function findTopicArea(topicAreas, topicAreaKey) {
-	for (const topicArea of topicAreas) {
-		if (topicArea.key === topicAreaKey) {
-			return topicArea;
-		}
-	}
-
-	return null;
-}
 
 function selectSlotsByColumn(slots, column) {
 	const selectedSlots = [];

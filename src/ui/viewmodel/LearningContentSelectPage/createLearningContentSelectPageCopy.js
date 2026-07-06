@@ -1,6 +1,20 @@
 // src/ui/viewmodel/LearningContentSelectPage/createLearningContentSelectPageCopy.js
 import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../../navigation/learningContent.js";
 
+function createLearningContentSelectTitle(t, activeContentType) {
+    const activeEntry = findLearningContentEntry(activeContentType);
+
+    if (activeEntry) {
+        const title = t[activeEntry.titleKey];
+
+        if (title) {
+            return title;
+        }
+    }
+
+    return t.selectExamsTitle;
+}
+
 function createLearningContentSelectSubtitle(t, selectedSubject, activeContentType) {
     const activeEntry = findLearningContentEntry(activeContentType);
 
@@ -43,13 +57,9 @@ function findLearningContentEntry(activeContentType) {
     return null;
 }
 
-export default function createLearningContentSelectPageCopy(
-    t,
-    selectedSubject,
-    activeContentType = LEARNING_CONTENT_TYPES.EXAMS
-) {
+export default function createLearningContentSelectPageCopy(t, selectedSubject, activeContentType) {
     return {
-        title: t.selectIntroTitle,
+        title: createLearningContentSelectTitle(t, activeContentType),
         subtitle: createLearningContentSelectSubtitle(t, selectedSubject, activeContentType),
         loadingMessage: t.selectLoadingMessage,
         emptyTitle: t.selectEmptyTitle,
