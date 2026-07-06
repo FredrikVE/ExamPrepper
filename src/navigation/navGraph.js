@@ -4,6 +4,7 @@ export const NAV_SCREENS = {
 	SELECT: "select",
 	EXAM: "exam",
 	FLIPCARDS: "flipcards",
+	MATCHCARDS: "matchcards",
 	OVERVIEW: "overview"
 };
 
@@ -52,6 +53,15 @@ export const NAV_GRAPH = {
 		clearsTopicArea: false
 	},
 	[NAV_SCREENS.FLIPCARDS]: {
+		layout: APP_LAYOUTS.EXAM,
+		backTo: NAV_SCREENS.SELECT,
+		requiresSubject: true,
+		requiresExam: false,
+		clearsSubject: false,
+		clearsExam: true,
+		clearsTopicArea: false
+	},
+	[NAV_SCREENS.MATCHCARDS]: {
 		layout: APP_LAYOUTS.EXAM,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,

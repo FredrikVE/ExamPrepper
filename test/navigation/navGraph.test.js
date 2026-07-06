@@ -23,6 +23,7 @@ describe("navGraph", () => {
 			NAV_SCREENS.SELECT,
 			NAV_SCREENS.EXAM,
 			NAV_SCREENS.FLIPCARDS,
+			NAV_SCREENS.MATCHCARDS,
 			NAV_SCREENS.OVERVIEW
 		]);
 	});
@@ -37,6 +38,7 @@ describe("navGraph", () => {
 		[NAV_SCREENS.OVERVIEW, APP_LAYOUTS.SELECTION],
 		[NAV_SCREENS.EXAM, APP_LAYOUTS.EXAM],
 		[NAV_SCREENS.FLIPCARDS, APP_LAYOUTS.EXAM],
+		[NAV_SCREENS.MATCHCARDS, APP_LAYOUTS.EXAM],
 		["finnes-ikke", APP_LAYOUTS.SELECTION]
 	])("resolveScreenLayout(%s) returns %s", (activeScreen, expected) => {
 		expect(resolveScreenLayout(activeScreen)).toBe(expected);
@@ -86,6 +88,18 @@ describe("navGraph", () => {
 			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
 		],
 		[
+			"MATCHCARDS med fag beholder fag og nullstiller eksamen",
+			NAV_SCREENS.MATCHCARDS,
+			WITH_SUBJECT_AND_EXAM,
+			{ screen: NAV_SCREENS.MATCHCARDS, selectedSubjectId: "in5431", selectedExamId: null }
+		],
+		[
+			"MATCHCARDS uten fag faller tilbake til SUBJECTS",
+			NAV_SCREENS.MATCHCARDS,
+			WITHOUT_SELECTION,
+			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
+		],
+		[
 			"OVERVIEW uten fag er tillatt og nullstiller eksamen",
 			NAV_SCREENS.OVERVIEW,
 			WITHOUT_SELECTION,
@@ -130,6 +144,16 @@ describe("navGraph", () => {
 		[
 			"FLIPCARDS uten fag faller tilbake til SUBJECTS",
 			{ activeScreen: NAV_SCREENS.FLIPCARDS, selectedSubjectId: null, selectedExamId: null },
+			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
+		],
+		[
+			"MATCHCARDS med fag går tilbake til SELECT",
+			{ activeScreen: NAV_SCREENS.MATCHCARDS, ...WITH_SUBJECT_AND_EXAM },
+			{ screen: NAV_SCREENS.SELECT, selectedSubjectId: "in5431", selectedExamId: null }
+		],
+		[
+			"MATCHCARDS uten fag faller tilbake til SUBJECTS",
+			{ activeScreen: NAV_SCREENS.MATCHCARDS, selectedSubjectId: null, selectedExamId: null },
 			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
 		],
 		[

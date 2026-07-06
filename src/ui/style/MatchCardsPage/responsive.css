@@ -1,0 +1,33 @@
+@media (max-width: 932px) {
+	.matchcards-scroll {
+		align-content: start;
+		align-items: start;
+		padding:
+			calc(var(--mobile-topbar-height) + var(--space-5))
+			var(--space-5)
+			calc(var(--space-8) + env(safe-area-inset-bottom));
+	}
+
+	.matchcards-column {
+		border-radius: var(--radius-lg);
+	}
+
+	.matchcards-round-complete {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.matchcards-board {
+		grid-template-columns: 1fr;
+		gap: var(--space-5);
+	}
+
+	.matchcards-column {
+		padding: var(--space-5);
+	}
+
+	.matchcard {
+		min-height: 96px;
+		padding: var(--space-5);
+	}
+}

@@ -109,6 +109,19 @@ export default function LearningContentSelectPage({ viewModel }) {
 					/>
 				)}
 
+				{viewModel.isMatchCardsContentActive && (
+					<FlashcardDeckGrid
+						decks={viewModel.visibleFlashcardDecks}
+						eyebrowLabel={viewModel.matchCardsDeckEyebrow}
+						cardCountLabel={viewModel.deckCardCountLabel}
+						cardUnitLabel={viewModel.deckCardUnitLabel}
+						minuteLabel={viewModel.minuteLabel}
+						emptyTitle={viewModel.deckEmptyTitle}
+						emptyMessage={viewModel.deckEmptyMessage}
+						onSelectDeck={viewModel.selectMatchCardsDeck}
+					/>
+				)}
+
 				{viewModel.isConceptListsContentActive && (
 					<section className="exam-select-grid">
 						<LearningContentPlaceholderCard

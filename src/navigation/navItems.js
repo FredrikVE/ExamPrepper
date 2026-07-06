@@ -16,7 +16,7 @@ export const SIDEBAR_NAV_ITEMS = [
         screen: NAV_SCREENS.SELECT,
         labelKey: "sidebarExams",
         fallbackLabel: "Velg eksamen",
-        activeScreens: [NAV_SCREENS.SELECT, NAV_SCREENS.EXAM]
+        activeScreens: [NAV_SCREENS.SELECT, NAV_SCREENS.EXAM, NAV_SCREENS.FLIPCARDS, NAV_SCREENS.MATCHCARDS]
     },
     {
         id: "overview",
@@ -31,7 +31,8 @@ export const SIDEBAR_NAV_ITEMS = [
 export const PAGE_NAV_TOOL_IDS = {
     EXAMS: "app-exams",
     PRACTICE_TESTS: "app-practice-tests",
-    FLIPCARDS: "app-flipcards"
+    FLIPCARDS: "app-flipcards",
+    MATCHCARDS: "app-matchcards"
 };
 
 export const PAGE_NAV_TOOL_ITEMS = [
@@ -58,6 +59,14 @@ export const PAGE_NAV_TOOL_ITEMS = [
         fallbackLabel: "Flipcards",
         iconKey: "gallery-horizontal-end",
         requiresSubject: true
+    },
+    {
+        id: PAGE_NAV_TOOL_IDS.MATCHCARDS,
+        screen: NAV_SCREENS.MATCHCARDS,
+        labelKey: "pageToolsMatchCardsLabel",
+        fallbackLabel: "Begrepsmatch",
+        iconKey: "panels-top-left",
+        requiresSubject: true
     }
 ];
 
@@ -65,5 +74,6 @@ export function getLearningContentSelectPageNavToolItems() {
     return PAGE_NAV_TOOL_ITEMS.filter((navItem) => (
         navItem.id === PAGE_NAV_TOOL_IDS.EXAMS
         || navItem.id === PAGE_NAV_TOOL_IDS.FLIPCARDS
+        || navItem.id === PAGE_NAV_TOOL_IDS.MATCHCARDS
     ));
 }

@@ -20,6 +20,7 @@ export default function useLearningContentSelectPageViewModel(
 	selectedSubject,
 	onSelectExam,
 	onSelectFlashcardDeck,
+	onSelectMatchCardsDeck,
 	isActive,
 	onChangeScreen,
 	showBackButton,
@@ -166,15 +167,16 @@ export default function useLearningContentSelectPageViewModel(
 
 	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
 	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
+	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
 	const isConceptListsContentActive = activeContentType === LEARNING_CONTENT_TYPES.CONCEPT_LISTS;
 
 	const searchSuggestions = useMemo(() => {
-		if (isFlipcardsContentActive) {
+		if (isFlipcardsContentActive || isMatchCardsContentActive) {
 			return createDeckSearchSuggestions(visibleFlashcardDecks);
 		}
 
 		return createExamSearchSuggestions(visibleExams);
-	}, [isFlipcardsContentActive, visibleExams, visibleFlashcardDecks]);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, visibleExams, visibleFlashcardDecks]);
 
 	const topicAreaFilterOptions = useMemo(() => {
 		const filterOptions = [
@@ -222,14 +224,24 @@ export default function useLearningContentSelectPageViewModel(
 		onSelectFlashcardDeck(nextTopicAreaKey);
 	}, [closeExamSearchSheet, onSelectFlashcardDeck]);
 
+	const selectMatchCardsDeck = useCallback((nextTopicAreaKey) => {
+		closeExamSearchSheet();
+		onSelectMatchCardsDeck(nextTopicAreaKey);
+	}, [closeExamSearchSheet, onSelectMatchCardsDeck]);
+
 	const selectSearchSuggestion = useCallback((suggestionId) => {
 		if (isFlipcardsContentActive) {
 			selectFlashcardDeck(suggestionId);
 			return;
 		}
 
+		if (isMatchCardsContentActive) {
+			selectMatchCardsDeck(suggestionId);
+			return;
+		}
+
 		selectExam(suggestionId);
-	}, [isFlipcardsContentActive, selectExam, selectFlashcardDeck]);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, selectExam, selectFlashcardDeck, selectMatchCardsDeck]);
 
 	const topicAreaToolItems = useMemo(() => {
 		return createTopicAreaToolItems({
@@ -276,6 +288,7 @@ export default function useLearningContentSelectPageViewModel(
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 		isExamsContentActive,
 		isFlipcardsContentActive,
+		isMatchCardsContentActive,
 		isConceptListsContentActive,
 		conceptListPlaceholderCode: t.contentToggleConceptListsLabel,
 		conceptListPlaceholderTitle: t.conceptListPlaceholderTitle,
@@ -286,6 +299,7 @@ export default function useLearningContentSelectPageViewModel(
 		deckEmptyTitle: t.deckEmptyTitle,
 		deckEmptyMessage: t.deckEmptyMessage,
 		flipcardsDeckEyebrow: t.contentToggleFlipcardsLabel,
+		matchCardsDeckEyebrow: t.contentToggleMatchCardsLabel,
 
 		// Navigasjon
 		showBackButton,
@@ -327,6 +341,7 @@ export default function useLearningContentSelectPageViewModel(
 		closeExamSearchSheet,
 		selectExam,
 		selectFlashcardDeck,
+		selectMatchCardsDeck,
 		selectContentType,
 		selectTopicAreaKey,
 		selectSearchSuggestion

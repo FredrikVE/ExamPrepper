@@ -4,6 +4,7 @@ import { PAGE_TOOL_AVAILABILITY } from "./pageTools.js";
 export const LEARNING_CONTENT_TYPES = {
     EXAMS: "exams",
     FLIPCARDS: "flipcards",
+    MATCHCARDS: "matchcards",
     CONCEPT_LISTS: "concept-lists"
 };
 
@@ -22,6 +23,14 @@ export const LEARNING_CONTENT_ENTRIES = [
         searchPlaceholderKey: "flipcardsSearchPlaceholder",
         subtitleKey: "selectFlipcardsSubtitle",
         subtitleFallbackKey: "selectFlipcardsSubtitleFallback",
+        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
+    },
+    {
+        id: LEARNING_CONTENT_TYPES.MATCHCARDS,
+        labelKey: "contentToggleMatchCardsLabel",
+        searchPlaceholderKey: "matchCardsSearchPlaceholder",
+        subtitleKey: "selectMatchCardsSubtitle",
+        subtitleFallbackKey: "selectMatchCardsSubtitleFallback",
         availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
     },
     {
