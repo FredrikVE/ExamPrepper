@@ -1,22 +1,21 @@
 @media (max-width: 932px) {
+	.matchcards-workspace {
+		height: 100svh;
+		border-inline: 0;
+		border-radius: 0;
+	}
+
 	.matchcards-scroll {
-		align-content: center;
-		align-items: center;
 		padding:
-			calc(var(--mobile-topbar-height) + var(--space-2))
+			calc(var(--mobile-topbar-height) + var(--space-4))
 			var(--space-4)
 			calc(var(--space-4) + env(safe-area-inset-bottom));
 	}
 
 	.matchcards-game-shell {
 		width: min(100%, 860px);
-		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-4) - env(safe-area-inset-bottom)));
-		gap: var(--space-3);
-	}
-
-	.matchcards-workspace-card {
-		padding: clamp(var(--space-3), 3vw, var(--space-5));
-		border-radius: clamp(22px, 6vw, var(--radius-xl));
+		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-8) - env(safe-area-inset-bottom)));
+		min-height: 0;
 	}
 
 	.matchcards-workspace .progress-bar {
@@ -46,11 +45,11 @@
 
 	.matchcards-board {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		gap: clamp(var(--space-3), 3.2vw, var(--space-5));
+		column-gap: clamp(var(--space-3), 3.2vw, var(--space-5));
 	}
 
 	.matchcards-column-slots {
-		gap: clamp(var(--space-3), 1.65vh, var(--space-5));
+		gap: clamp(var(--space-3), 2vh, var(--space-5));
 	}
 
 	.matchcards-round-complete {
@@ -61,18 +60,18 @@
 	.matchcard {
 		padding: clamp(var(--space-3), 3.3vw, var(--space-5));
 		border-radius: clamp(18px, 4.8vw, 28px);
-		box-shadow: inset 0 -4px 0 color-mix(in srgb, #000 24%, transparent);
+		box-shadow: 0 10px 24px color-mix(in srgb, #000 15%, transparent);
 	}
 
 	.matchcard-text {
-		font-size: clamp(0.72rem, 3.1vw, 1.12rem);
-		line-height: 1.03;
+		font-size: clamp(0.86rem, 3.45vw, 1.32rem);
+		line-height: 1.06;
 		letter-spacing: -0.022em;
 	}
 
 	.matchcard--explanation .matchcard-text {
-		font-size: clamp(0.46rem, 1.98vw, 0.74rem);
-		line-height: 1.04;
+		font-size: clamp(0.58rem, 2.28vw, 0.9rem);
+		line-height: 1.06;
 		letter-spacing: -0.027em;
 	}
 
@@ -87,12 +86,7 @@
 	}
 
 	.matchcards-game-shell {
-		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-3) - env(safe-area-inset-bottom)));
-		gap: var(--space-2);
-	}
-
-	.matchcards-workspace-card {
-		padding: var(--space-3);
+		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-7) - env(safe-area-inset-bottom)));
 	}
 
 	.matchcards-workspace .progress-bar {
@@ -107,7 +101,7 @@
 	}
 
 	.matchcards-board {
-		gap: var(--space-3);
+		column-gap: var(--space-3);
 	}
 
 	.matchcards-column-slots {
@@ -119,27 +113,17 @@
 	}
 
 	.matchcard-text {
-		font-size: clamp(0.64rem, 2.95vw, 0.98rem);
+		font-size: clamp(0.74rem, 3.25vw, 1.08rem);
 	}
 
 	.matchcard--explanation .matchcard-text {
-		font-size: clamp(0.42rem, 1.85vw, 0.66rem);
+		font-size: clamp(0.48rem, 2.05vw, 0.74rem);
 	}
 }
 
 @media (max-height: 740px) and (max-width: 932px) {
-	.matchcards-scroll {
-		align-content: center;
-		align-items: center;
-	}
-
 	.matchcards-game-shell {
-		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-3) - env(safe-area-inset-bottom)));
-		gap: var(--space-2);
-	}
-
-	.matchcards-workspace-card {
-		padding: var(--space-2);
+		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-5) - env(safe-area-inset-bottom)));
 	}
 
 	.matchcards-workspace .progress-bar {
@@ -157,10 +141,10 @@
 	}
 
 	.matchcard-text {
-		font-size: clamp(0.58rem, 2.65vh, 0.9rem);
+		font-size: clamp(0.66rem, 2.9vh, 0.98rem);
 	}
 
 	.matchcard--explanation .matchcard-text {
-		font-size: clamp(0.38rem, 1.75vh, 0.6rem);
+		font-size: clamp(0.42rem, 1.9vh, 0.64rem);
 	}
 }
