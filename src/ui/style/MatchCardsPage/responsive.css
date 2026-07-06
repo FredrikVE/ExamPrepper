@@ -1,15 +1,51 @@
 @media (max-width: 932px) {
 	.matchcards-scroll {
-		align-content: start;
-		align-items: start;
+		align-content: center;
+		align-items: center;
 		padding:
-			calc(var(--mobile-topbar-height) + var(--space-5))
-			var(--space-5)
-			calc(var(--space-8) + env(safe-area-inset-bottom));
+			calc(var(--mobile-topbar-height) + var(--space-3))
+			var(--space-4)
+			calc(var(--space-5) + env(safe-area-inset-bottom));
 	}
 
-	.matchcards-column {
-		border-radius: var(--radius-lg);
+	.matchcards-game-shell {
+		width: min(100%, 860px);
+		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-7) - env(safe-area-inset-bottom)));
+		gap: var(--space-4);
+	}
+
+	.matchcards-progress {
+		--matchcards-progress-track-height: 54px;
+		--matchcards-progress-line-top: 22px;
+		--matchcards-progress-line-height: 4px;
+		--matchcards-progress-icon-slot-height: 16px;
+		--matchcards-progress-label-offset: 11px;
+		padding-inline: var(--space-1);
+	}
+
+	.matchcards-progress-point {
+		min-width: 54px;
+		font-size: 0.74rem;
+	}
+
+	.matchcards-progress-dot {
+		width: 9px;
+		height: 9px;
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--shell-bg) 74%, transparent);
+	}
+
+	.matchcards-progress-flag {
+		width: 16px;
+		height: 16px;
+	}
+
+	.matchcards-board {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: clamp(var(--space-4), 4vw, var(--space-7));
+	}
+
+	.matchcards-column-slots {
+		gap: clamp(var(--space-4), 2.2vh, var(--space-6));
 	}
 
 	.matchcards-round-complete {
@@ -17,17 +53,101 @@
 		flex-direction: column;
 	}
 
-	.matchcards-board {
-		grid-template-columns: 1fr;
-		gap: var(--space-5);
+	.matchcard {
+		padding: clamp(var(--space-3), 3.1vw, var(--space-5));
+		border-radius: clamp(18px, 4.8vw, 28px);
+		box-shadow: inset 0 -4px 0 color-mix(in srgb, #000 24%, transparent);
 	}
 
-	.matchcards-column {
-		padding: var(--space-5);
+	.matchcard-text {
+		font-size: clamp(0.76rem, 3.35vw, 1.16rem);
+		line-height: 1.03;
+		letter-spacing: -0.022em;
+	}
+
+	.matchcard--explanation .matchcard-text {
+		font-size: clamp(0.48rem, 2.18vw, 0.76rem);
+		line-height: 1.04;
+		letter-spacing: -0.027em;
+	}
+
+	.matchcard-status {
+		font-size: clamp(0.52rem, 2vw, 0.66rem);
+	}
+}
+
+@media (max-width: 520px) {
+	.matchcards-scroll {
+		padding-inline: var(--space-3);
+	}
+
+	.matchcards-game-shell {
+		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-6) - env(safe-area-inset-bottom)));
+		gap: var(--space-3);
+	}
+
+	.matchcards-progress {
+		--matchcards-progress-track-height: 48px;
+		--matchcards-progress-line-top: 19px;
+		--matchcards-progress-label-offset: 10px;
+	}
+
+	.matchcards-progress-point {
+		min-width: 46px;
+		font-size: 0.68rem;
+	}
+
+	.matchcards-board {
+		gap: var(--space-4);
+	}
+
+	.matchcards-column-slots {
+		gap: var(--space-4);
 	}
 
 	.matchcard {
-		min-height: 96px;
-		padding: var(--space-5);
+		padding: var(--space-3);
+	}
+
+	.matchcard-text {
+		font-size: clamp(0.68rem, 3.25vw, 1.02rem);
+	}
+
+	.matchcard--explanation .matchcard-text {
+		font-size: clamp(0.46rem, 2.05vw, 0.68rem);
+	}
+}
+
+@media (max-height: 740px) and (max-width: 932px) {
+	.matchcards-scroll {
+		align-content: center;
+		align-items: center;
+	}
+
+	.matchcards-game-shell {
+		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-5) - env(safe-area-inset-bottom)));
+		gap: var(--space-3);
+	}
+
+	.matchcards-progress {
+		--matchcards-progress-track-height: 42px;
+		--matchcards-progress-line-top: 17px;
+		--matchcards-progress-label-offset: 8px;
+	}
+
+	.matchcards-column-slots {
+		gap: var(--space-3);
+	}
+
+	.matchcard {
+		padding-block: var(--space-2);
+	}
+
+	.matchcard-text {
+		font-size: clamp(0.62rem, 3vh, 0.92rem);
+	}
+
+	.matchcard--explanation .matchcard-text {
+		font-size: clamp(0.42rem, 2vh, 0.62rem);
 	}
 }

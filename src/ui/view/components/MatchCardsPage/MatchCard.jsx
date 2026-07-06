@@ -2,7 +2,7 @@ import { MATCH_SLOT_STATUS } from "../../../viewmodel/MatchCardsPage/matchCardsS
 
 export default function MatchCard({ slot, labels, isInteractionLocked, onSelectSlot }) {
 	const isEmpty = slot.status === MATCH_SLOT_STATUS.EMPTY;
-	const className = createMatchCardClassName(slot.status);
+	const className = createMatchCardClassName(slot);
 	const statusLabel = createStatusLabel(slot.status, labels);
 	const ariaLabel = labels.cardAriaLabel(slot.text ?? labels.emptySlotLabel, statusLabel);
 
@@ -25,10 +25,11 @@ export default function MatchCard({ slot, labels, isInteractionLocked, onSelectS
 	);
 }
 
-function createMatchCardClassName(status) {
+function createMatchCardClassName(slot) {
 	return [
 		"matchcard",
-		`matchcard--${status.toLowerCase().replaceAll("_", "-")}`
+		`matchcard--${slot.column}`,
+		`matchcard--${slot.status.toLowerCase().replaceAll("_", "-")}`
 	].join(" ");
 }
 

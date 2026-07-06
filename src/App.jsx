@@ -20,6 +20,7 @@ import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
 import FlipcardsPage from "./ui/view/pages/FlipcardsPage.jsx";
 import MatchCardsPage from "./ui/view/pages/MatchCardsPage.jsx";
+import MatchCardsProgress from "./ui/view/components/MatchCardsPage/MatchCardsProgress.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
@@ -46,6 +47,7 @@ function AppContent() {
 	const { language, t, formatDate } = useLanguage();
 
 	const [examWorkMode, setExamWorkMode] = useState(null);
+	const [matchCardsProgress, setMatchCardsProgress] = useState(null);
 	const examWorkModeActionsRef = useRef(null);
 
 	const navigationViewModel = useAppNavigationViewModel({
@@ -78,6 +80,10 @@ function AppContent() {
 		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS,
 		navigationViewModel.changeScreen
 	);
+
+	const mobileTopbarHeading = matchCardsProgress
+		? <MatchCardsProgress progress={matchCardsProgress} />
+		: null;
 
 	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(
 		getAvailableExamsUseCase,
@@ -127,6 +133,7 @@ function AppContent() {
 					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
 					examWorkStatusLabel={examWorkMode?.statusLabel ?? ""}
 					showExamSubmitAction={Boolean(examWorkMode?.canSubmit)}
+					mobileTopbarHeading={mobileTopbarHeading}
 					examSubmitLabel={t.examSubmitLabel}
 					isExamSubmitConfirmOpen={Boolean(examWorkMode?.isConfirmOpen)}
 					examSubmitConfirmTitle={t.examSubmitConfirmTitle}
@@ -176,6 +183,7 @@ function AppContent() {
 						t={t}
 						isActive={navigationViewModel.activeScreen === NAV_SCREENS.MATCHCARDS}
 						backContract={navigationViewModel.backContract}
+						onProgressChange={setMatchCardsProgress}
 					/>
 				)}
 
@@ -264,7 +272,7 @@ function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isA
 	);
 }
 
-function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
+function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onProgressChange }) {
 	const matchCardsPageViewModel = useMatchCardsPageViewModel({
 		getConceptsForSubjectUseCase,
 		getTopicAreasUseCase,
@@ -275,6 +283,14 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 		isActive,
 		backContract
 	});
+
+	useEffect(() => {
+		onProgressChange(matchCardsPageViewModel.session ? matchCardsPageViewModel.progress : null);
+
+		return () => {
+			onProgressChange(null);
+		};
+	}, [matchCardsPageViewModel.progress, matchCardsPageViewModel.session, onProgressChange]);
 
 	return (
 		<MatchCardsPage viewModel={matchCardsPageViewModel} />

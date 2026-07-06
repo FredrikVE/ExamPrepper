@@ -197,7 +197,7 @@
 }
 
 @media (max-width: 932px) {
-	.mobile-topbar-flipcards {
+	.mobile-topbar-transparent-practice {
 		border-bottom-color: transparent;
 		background: transparent;
 		box-shadow: none;
@@ -205,12 +205,12 @@
 		-webkit-backdrop-filter: none;
 	}
 
-	.mobile-topbar-flipcards::after {
+	.mobile-topbar-transparent-practice::after {
 		display: none;
 	}
 
-	.mobile-topbar-flipcards .mobile-topbar-menu-button,
-	.mobile-topbar-flipcards .mobile-topbar-back-button {
+	.mobile-topbar-transparent-practice .mobile-topbar-menu-button,
+	.mobile-topbar-transparent-practice .mobile-topbar-back-button {
 		border-color: color-mix(in srgb, var(--accent) 18%, var(--line));
 		border-radius: 17px;
 		background:
@@ -250,5 +250,68 @@
 		margin-top: 5px;
 		font-size: 11px;
 		font-weight: 700;
+	}
+}
+
+@media (max-width: 932px) {
+	.mobile-topbar-heading {
+		position: relative;
+		z-index: 1;
+		grid-column: 2;
+		grid-row: 1;
+		align-self: center;
+		justify-self: stretch;
+		min-width: 0;
+	}
+
+	.mobile-topbar-heading .matchcards-progress {
+		--matchcards-progress-track-height: 48px;
+		--matchcards-progress-line-top: 18px;
+		--matchcards-progress-line-height: 3px;
+		--matchcards-progress-icon-slot-height: 14px;
+		--matchcards-progress-label-offset: 9px;
+
+		padding: 0 var(--space-1);
+	}
+
+	.mobile-topbar-heading .matchcards-progress-point {
+		min-width: 42px;
+		font-size: 0.64rem;
+	}
+
+	.mobile-topbar-heading .matchcards-progress-dot {
+		width: 8px;
+		height: 8px;
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--shell-bg) 74%, transparent);
+	}
+
+	.mobile-topbar-heading .matchcards-progress-flag {
+		width: 15px;
+		height: 15px;
+	}
+}
+
+@media (max-width: 520px) {
+	.mobile-topbar-heading .matchcards-progress {
+		--matchcards-progress-track-height: 42px;
+		--matchcards-progress-line-top: 15px;
+		--matchcards-progress-label-offset: 8px;
+	}
+
+	.mobile-topbar-heading .matchcards-progress-point {
+		min-width: 34px;
+		font-size: 0.58rem;
+	}
+}
+
+@media (max-width: 932px) and (max-height: 500px) {
+	.mobile-topbar-heading .matchcards-progress {
+		--matchcards-progress-track-height: 34px;
+		--matchcards-progress-line-top: 12px;
+		--matchcards-progress-label-offset: 6px;
+	}
+
+	.mobile-topbar-heading .matchcards-progress-point {
+		font-size: 0.54rem;
 	}
 }

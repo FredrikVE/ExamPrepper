@@ -3,6 +3,7 @@ import Header from "../components/Header/Header.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
+import MatchCardsProgress from "../components/MatchCardsPage/MatchCardsProgress.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
@@ -31,15 +32,19 @@ export default function MatchCardsPage({ viewModel }) {
 		);
 	}
 
+	const headerProgress = <MatchCardsProgress progress={viewModel.progress} />;
+
 	return (
-		<MatchCardsShell viewModel={viewModel}>
-			<MatchCardsGrid
-				termSlots={viewModel.termSlots}
-				explanationSlots={viewModel.explanationSlots}
-				labels={viewModel.labels}
-				isInteractionLocked={viewModel.isInteractionLocked}
-				onSelectSlot={viewModel.handleSelectSlot}
-			/>
+		<MatchCardsShell viewModel={viewModel} headerProgress={headerProgress}>
+			<section className="matchcards-game-shell">
+				<MatchCardsGrid
+					termSlots={viewModel.termSlots}
+					explanationSlots={viewModel.explanationSlots}
+					labels={viewModel.labels}
+					isInteractionLocked={viewModel.isInteractionLocked}
+					onSelectSlot={viewModel.handleSelectSlot}
+				/>
+			</section>
 
 			{viewModel.isRoundComplete && (
 				<section className="matchcards-round-complete" role="status">
@@ -56,7 +61,7 @@ export default function MatchCardsPage({ viewModel }) {
 	);
 }
 
-function MatchCardsShell({ viewModel, children }) {
+function MatchCardsShell({ viewModel, headerProgress, children }) {
 	return (
 		<main className="matchcards-workspace">
 			<div className="matchcards-ambient-light" aria-hidden="true" />
@@ -66,6 +71,7 @@ function MatchCardsShell({ viewModel, children }) {
 				backLabel={viewModel.backLabel}
 				navigationLabel={viewModel.navigationLabel}
 				onBack={viewModel.onBack}
+				heading={headerProgress}
 				tools={null}
 			/>
 
