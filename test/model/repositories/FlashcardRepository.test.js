@@ -3,72 +3,50 @@ import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import FlashcardRepository from "../../../src/model/repositories/FlashcardRepository.js";
 
 describe("FlashcardRepository", () => {
-    let flashcardDataSource;
-    let repository;
+	let conceptRepository;
+	let repository;
 
-    beforeEach(() => {
-        flashcardDataSource = {
-            fetchFlashcardsBySubject: jest.fn().mockResolvedValue([
-                {
-                    id: "card-1",
-                    term: {
-                        no: "Begrep",
-                        en: "Term"
-                    },
-                    definition: {
-                        no: "Norsk forklaring",
-                        en: "English explanation"
-                    }
-                },
-                {
-                    id: "card-2",
-                    term: {
-                        no: "Fallback-begrep"
-                    },
-                    definition: {
-                        no: "Fallback-forklaring"
-                    }
-                }
-            ])
-        };
+	beforeEach(() => {
+		conceptRepository = {
+			getConceptsBySubject: jest.fn().mockResolvedValue([
+				{
+					id: "card-1",
+					term: {
+						no: "Begrep",
+						en: "Term"
+					},
+					explanation: {
+						no: "Norsk forklaring",
+						en: "English explanation"
+					},
+					topicAreaKey: "begreper"
+				}
+			])
+		};
 
-        repository = new FlashcardRepository(flashcardDataSource);
-    });
+		repository = new FlashcardRepository(conceptRepository);
+	});
 
-    test("fetches flashcards for subject", async () => {
-        await repository.getFlashcardsBySubject({
-            subjectId: "in5431",
-            language: "no"
-        });
+	test("fetches concepts for subject", async () => {
+		await repository.getFlashcardsBySubject({ subjectId: "in5431" });
 
-        expect(flashcardDataSource.fetchFlashcardsBySubject).toHaveBeenCalledWith("in5431");
-    });
+		expect(conceptRepository.getConceptsBySubject).toHaveBeenCalledWith({ subjectId: "in5431" });
+	});
 
-    test("returns localized flashcards for selected language", async () => {
-        const result = await repository.getFlashcardsBySubject({
-            subjectId: "in5431",
-            language: "en"
-        });
+	test("returns bilingual flashcards from concepts", async () => {
+		const result = await repository.getFlashcardsBySubject({ subjectId: "in5431" });
 
-        expect(result[0]).toEqual({
-            id: "card-1",
-            term: "Term",
-            definition: "English explanation",
-            topicAreaKey: null
-        });
-    });
-
-    test("falls back to Norwegian text when selected language is missing", async () => {
-        const result = await repository.getFlashcardsBySubject({
-            subjectId: "in5431",
-            language: "en"
-        });
-
-        expect(result[1]).toEqual({
-            id: "card-2",
-            term: "Fallback-begrep",
-            definition: "Fallback-forklaring",
-            topicAreaKey: null
-        });
-    });
+		expect(result[0]).toEqual({
+			id: "card-1",
+			term: {
+				no: "Begrep",
+				en: "Term"
+			},
+			definition: {
+				no: "Norsk forklaring",
+				en: "English explanation"
+			},
+			topicAreaKey: "begreper"
+		});
+	});
 });

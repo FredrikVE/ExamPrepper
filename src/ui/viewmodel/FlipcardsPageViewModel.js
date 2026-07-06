@@ -40,10 +40,9 @@ export default function useFlipcardsPageViewModel(
         }
 
         return getFlashcardsUseCase.execute({
-            subjectId,
-            language
+            subjectId
         });
-    }, [getFlashcardsUseCase, isActive, subjectId, language]);
+    }, [getFlashcardsUseCase, isActive, subjectId]);
 
     const executeTopicAreaLoad = useCallback(() => {
         if (!isActive || !subjectId) {
@@ -75,7 +74,10 @@ export default function useFlipcardsPageViewModel(
         onLoaded: noteFlipcardTopicAreasLoaded
     });
 
-    const flashcards = flashcardLoad.data;
+    const rawFlashcards = flashcardLoad.data;
+    const flashcards = useMemo(() => {
+        return localizeFlashcards(rawFlashcards, language);
+    }, [rawFlashcards, language]);
     const topicAreas = topicAreaLoad.data;
     const pageStatus = combineLoadStatuses([
         flashcardLoad.status,
@@ -544,4 +546,33 @@ function isTopicAreaDeckToolKey(deckToolKey) {
 
 function readTopicAreaKeyFromDeckToolKey(deckToolKey) {
     return deckToolKey.slice(TOPIC_AREA_DECK_TOOL_PREFIX.length);
+}
+
+
+function localizeFlashcards(flashcards, language) {
+    const localizedFlashcards = [];
+
+    for (const flashcard of flashcards) {
+        const localizedFlashcard = {
+            id: flashcard.id,
+            term: resolveLocalizedFlashcardText(flashcard.term, language),
+            topicAreaKey: flashcard.topicAreaKey
+        };
+
+        if (flashcard.definition !== undefined) {
+            localizedFlashcard.definition = resolveLocalizedFlashcardText(flashcard.definition, language);
+        }
+
+        localizedFlashcards.push(localizedFlashcard);
+    }
+
+    return localizedFlashcards;
+}
+
+function resolveLocalizedFlashcardText(value, language) {
+    if (typeof value === "string") {
+        return value;
+    }
+
+    return value?.[language] ?? value?.no ?? "";
 }

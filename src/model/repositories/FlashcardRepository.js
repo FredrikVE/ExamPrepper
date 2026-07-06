@@ -1,31 +1,28 @@
 // src/model/repositories/FlashcardRepository.js
 export default class FlashcardRepository {
-    #flashcardDataSource;
+	#conceptRepository;
 
-    constructor(flashcardDataSource) {
-        this.#flashcardDataSource = flashcardDataSource;
-    }
+	constructor(conceptRepository) {
+		this.#conceptRepository = conceptRepository;
+	}
 
-    async getFlashcardsBySubject({ subjectId, language } = {}) {
-        const flashcards = await this.#flashcardDataSource.fetchFlashcardsBySubject(subjectId);
+	async getFlashcardsBySubject({ subjectId } = {}) {
+		const concepts = await this.#conceptRepository.getConceptsBySubject({ subjectId });
+		const flashcards = [];
 
-        return flashcards.map((flashcard) => this.#toFlashcard(flashcard, language));
-    }
+		for (const concept of concepts) {
+			flashcards.push(this.#toFlashcard(concept));
+		}
 
-    #toFlashcard(flashcard, language = "no") {
-        return {
-            id: flashcard.id,
-            term: this.#resolveLocalizedText(flashcard.term, language),
-            definition: this.#resolveLocalizedText(flashcard.definition, language),
-            topicAreaKey: flashcard.topicAreaKey ?? null
-        };
-    }
+		return flashcards;
+	}
 
-    #resolveLocalizedText(value, language = "no") {
-        if (typeof value === "string") {
-            return value;
-        }
-
-        return value?.[language] ?? value?.no ?? "";
-    }
+	#toFlashcard(concept) {
+		return {
+			id: concept.id,
+			term: { ...concept.term },
+			definition: { ...concept.explanation },
+			topicAreaKey: concept.topicAreaKey ?? null
+		};
+	}
 }
