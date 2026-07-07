@@ -1,0 +1,21 @@
+/* src/ui/style/MatchCardsPage/tokens.css */
+.matchcards-workspace {
+	--matchcard-border-color: color-mix(in srgb, var(--accent) 28%, var(--line-strong));
+	--matchcard-border-color-hover: color-mix(in srgb, var(--accent) 52%, var(--line));
+	--matchcard-border-color-selected: color-mix(in srgb, var(--accent) 70%, var(--line));
+	--matchcard-radius: clamp(24px, 1.9vw, 30px);
+	--matchcard-surface: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+	--matchcard-shadow: var(--shadow-card);
+	--matchcard-hover-shadow: var(--shadow-heavy);
+	--matchcard-inset-highlight: 0 1px 0 color-mix(in srgb, var(--panel-strong) 18%, transparent) inset;
+	--matchcard-hover-inset-highlight: 0 0 0 1px var(--matchcard-glow-border) inset;
+	--matchcard-glow-border: color-mix(in srgb, var(--accent) 16%, transparent);
+	--matchcard-glow-shadow: 0 0 18px color-mix(in srgb, var(--accent) 5%, transparent);
+	--matchcard-selected-ring: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+	--matchcard-selected-shadow: 0 18px 42px color-mix(in srgb, var(--accent) 18%, transparent);
+	--matchcard-success-ring: 0 0 0 4px color-mix(in srgb, var(--success) 16%, transparent);
+	--matchcard-wrong-ring: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
+	--matchcard-success-surface: color-mix(in srgb, var(--success-soft) 72%, var(--panel-strong));
+	--matchcard-wrong-surface: color-mix(in srgb, var(--danger-soft) 72%, var(--panel-strong));
+	--matchcards-visible-pair-count: 4;
+}

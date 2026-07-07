@@ -21,7 +21,9 @@ describe("ConceptRepository", () => {
 
 		const result = await repository.getConceptsBySubject({ subjectId: "in2120" });
 
-		expect(conceptDataSource.fetchConceptsBySubject).toHaveBeenCalledWith("in2120");
+		expect(conceptDataSource.fetchConceptsBySubject).toHaveBeenCalledWith({
+			subjectId: "in2120"
+		});
 		expect(result).toEqual([
 			{
 				id: "kap1-konfidensialitet",

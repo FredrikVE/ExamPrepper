@@ -4,11 +4,12 @@ export default function MatchCardsGrid({
 	termSlots,
 	explanationSlots,
 	labels,
+	boardStyle,
 	isInteractionLocked,
 	onSelectSlot
 }) {
 	return (
-		<section className="matchcards-board" aria-label={labels.pageTitle}>
+		<section className="matchcards-board" style={boardStyle} aria-label={labels.pageTitle}>
 			<MatchCardsColumn
 				slots={termSlots}
 				labels={labels}

@@ -38,6 +38,7 @@ export default function MatchCardsPage({ viewModel }) {
 					termSlots={viewModel.termSlots}
 					explanationSlots={viewModel.explanationSlots}
 					labels={viewModel.labels}
+					boardStyle={viewModel.boardStyle}
 					isInteractionLocked={viewModel.isInteractionLocked}
 					onSelectSlot={viewModel.handleSelectSlot}
 				/>

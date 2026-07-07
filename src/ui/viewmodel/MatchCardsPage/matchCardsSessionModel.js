@@ -13,52 +13,36 @@ export const MATCH_SLOT_STATUS = Object.freeze({
 	EMPTY: "EMPTY"
 });
 
-function createSlot({ slotId, column, conceptKey, text, status }) {
+function createSlot({ slotId, column, conceptKey, textByLanguage, status }) {
 	return {
 		slotId,
 		column,
 		conceptKey,
-		text,
+		textByLanguage,
 		status
 	};
 }
 
-function getLocalizedText({ textByLanguage, language }) {
-	const languageText = textByLanguage[language];
-
-	if (languageText) {
-		return languageText;
-	}
-
-	if (textByLanguage.no) {
-		return textByLanguage.no;
-	}
-
-	return textByLanguage.en;
-}
-
-function createPairFromConcept({ concept, language }) {
+function createTextByLanguage(textByLanguage) {
 	return {
-		conceptKey: concept.conceptKey,
-		termText: getLocalizedText({
-			textByLanguage: concept.term,
-			language
-		}),
-		explanationText: getLocalizedText({
-			textByLanguage: concept.explanation,
-			language
-		})
+		no: textByLanguage.no,
+		en: textByLanguage.en
 	};
 }
 
-function createPairsFromConcepts({ concepts, language }) {
+function createPairFromConcept(concept) {
+	return {
+		conceptKey: concept.conceptKey,
+		termTextByLanguage: createTextByLanguage(concept.term),
+		explanationTextByLanguage: createTextByLanguage(concept.explanation)
+	};
+}
+
+function createPairsFromConcepts({ concepts }) {
 	const pairs = [];
 
 	for (const concept of concepts) {
-		pairs.push(createPairFromConcept({
-			concept,
-			language
-		}));
+		pairs.push(createPairFromConcept(concept));
 	}
 
 	return pairs;
@@ -88,14 +72,14 @@ function copyPairsFromIndex({ pairs, startIndex }) {
 function createTermSlotContent(pair) {
 	return {
 		conceptKey: pair.conceptKey,
-		text: pair.termText
+		textByLanguage: pair.termTextByLanguage
 	};
 }
 
 function createExplanationSlotContent(pair) {
 	return {
 		conceptKey: pair.conceptKey,
-		text: pair.explanationText
+		textByLanguage: pair.explanationTextByLanguage
 	};
 }
 
@@ -119,7 +103,7 @@ function createColumnSlots({ column, contents }) {
 			slotId: `${column}-${index}`,
 			column,
 			conceptKey: content.conceptKey,
-			text: content.text,
+			textByLanguage: content.textByLanguage,
 			status: MATCH_SLOT_STATUS.IDLE
 		}));
 	}
@@ -223,7 +207,7 @@ function createReplacementSlot({ slot, pair }) {
 			slotId: slot.slotId,
 			column: slot.column,
 			conceptKey: pair.conceptKey,
-			text: pair.termText,
+			textByLanguage: pair.termTextByLanguage,
 			status: MATCH_SLOT_STATUS.FADING_IN
 		});
 	}
@@ -232,7 +216,7 @@ function createReplacementSlot({ slot, pair }) {
 		slotId: slot.slotId,
 		column: slot.column,
 		conceptKey: pair.conceptKey,
-		text: pair.explanationText,
+		textByLanguage: pair.explanationTextByLanguage,
 		status: MATCH_SLOT_STATUS.FADING_IN
 	});
 }
@@ -242,7 +226,7 @@ function createEmptySlot(slot) {
 		slotId: slot.slotId,
 		column: slot.column,
 		conceptKey: null,
-		text: null,
+		textByLanguage: null,
 		status: MATCH_SLOT_STATUS.EMPTY
 	});
 }
@@ -252,19 +236,15 @@ function isReplaceableMatchedSlot(slot) {
 }
 
 function createReplacementModel({ queuedPairs }) {
-	const replacementPairs = [];
+	const replacementPair = queuedPairs[0] ?? null;
 	const remainingQueuedPairs = [];
 
-	for (let index = 0; index < queuedPairs.length; index += 1) {
-		if (index === 0) {
-			replacementPairs.push(queuedPairs[index]);
-		} else {
-			remainingQueuedPairs.push(queuedPairs[index]);
-		}
+	for (let index = 1; index < queuedPairs.length; index += 1) {
+		remainingQueuedPairs.push(queuedPairs[index]);
 	}
 
 	return {
-		replacementPair: replacementPairs[0] ?? null,
+		replacementPair,
 		remainingQueuedPairs
 	};
 }
@@ -295,14 +275,12 @@ export function isMatchingPair(firstSlot, secondSlot) {
 
 export function createMatchCardsSession({
 	concepts,
-	language,
 	roundPairCount,
 	visiblePairCount,
 	randomNumber
 }) {
 	const pairs = createPairsFromConcepts({
-		concepts,
-		language
+		concepts
 	});
 
 	shuffleInPlace({

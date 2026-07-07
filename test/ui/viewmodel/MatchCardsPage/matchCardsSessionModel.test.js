@@ -57,6 +57,13 @@ function createConcepts() {
 			termEn: "Term C",
 			explanationNo: "Forklaring C",
 			explanationEn: "Explanation C"
+		}),
+		createConcept({
+			conceptKey: "concept-d",
+			termNo: "Begrep D",
+			termEn: "Term D",
+			explanationNo: "Forklaring D",
+			explanationEn: "Explanation D"
 		})
 	];
 }
@@ -104,10 +111,9 @@ describe("matchCardsSessionModel", () => {
 		expect(items).toEqual(["b", "c", "a"]);
 	});
 
-	test("creates a localized round with active slots and queued pairs", () => {
+	test("creates a language-agnostic round with active slots and queued pairs", () => {
 		const session = createMatchCardsSession({
 			concepts: createConcepts(),
-			language: "en",
 			roundPairCount: 3,
 			visiblePairCount: 2,
 			randomNumber: keepOrderRandomNumber
@@ -118,8 +124,14 @@ describe("matchCardsSessionModel", () => {
 		expect(session.queuedPairs).toEqual([
 			{
 				conceptKey: "concept-c",
-				termText: "Term C",
-				explanationText: "Explanation C"
+				termTextByLanguage: {
+					no: "Begrep C",
+					en: "Term C"
+				},
+				explanationTextByLanguage: {
+					no: "Forklaring C",
+					en: "Explanation C"
+				}
 			}
 		]);
 		expect(session.slots).toEqual([
@@ -127,28 +139,40 @@ describe("matchCardsSessionModel", () => {
 				slotId: "term-0",
 				column: MATCH_CARD_COLUMN.TERM,
 				conceptKey: "concept-a",
-				text: "Term A",
+				textByLanguage: {
+					no: "Begrep A",
+					en: "Term A"
+				},
 				status: MATCH_SLOT_STATUS.IDLE
 			},
 			{
 				slotId: "term-1",
 				column: MATCH_CARD_COLUMN.TERM,
 				conceptKey: "concept-b",
-				text: "Term B",
+				textByLanguage: {
+					no: "Begrep B",
+					en: "Term B"
+				},
 				status: MATCH_SLOT_STATUS.IDLE
 			},
 			{
 				slotId: "explanation-0",
 				column: MATCH_CARD_COLUMN.EXPLANATION,
 				conceptKey: "concept-a",
-				text: "Explanation A",
+				textByLanguage: {
+					no: "Forklaring A",
+					en: "Explanation A"
+				},
 				status: MATCH_SLOT_STATUS.IDLE
 			},
 			{
 				slotId: "explanation-1",
 				column: MATCH_CARD_COLUMN.EXPLANATION,
 				conceptKey: "concept-b",
-				text: "Explanation B",
+				textByLanguage: {
+					no: "Forklaring B",
+					en: "Explanation B"
+				},
 				status: MATCH_SLOT_STATUS.IDLE
 			}
 		]);
@@ -157,7 +181,6 @@ describe("matchCardsSessionModel", () => {
 	test("degrades round size when the concept pool is smaller than requested", () => {
 		const session = createMatchCardsSession({
 			concepts: createConcepts().slice(0, 2),
-			language: "no",
 			roundPairCount: 6,
 			visiblePairCount: 4,
 			randomNumber: keepOrderRandomNumber
@@ -195,7 +218,6 @@ describe("matchCardsSessionModel", () => {
 	test("moves selection when the next selected slot is in the same column", () => {
 		const session = createMatchCardsSession({
 			concepts: createConcepts(),
-			language: "no",
 			roundPairCount: 3,
 			visiblePairCount: 2,
 			randomNumber: keepOrderRandomNumber
@@ -217,7 +239,6 @@ describe("matchCardsSessionModel", () => {
 	test("marks a wrong pair and resets it to idle", () => {
 		const session = createMatchCardsSession({
 			concepts: createConcepts(),
-			language: "no",
 			roundPairCount: 3,
 			visiblePairCount: 2,
 			randomNumber: keepOrderRandomNumber
@@ -244,7 +265,6 @@ describe("matchCardsSessionModel", () => {
 	test("marks a matching pair as success", () => {
 		const session = createMatchCardsSession({
 			concepts: createConcepts(),
-			language: "no",
 			roundPairCount: 3,
 			visiblePairCount: 2,
 			randomNumber: keepOrderRandomNumber
@@ -266,7 +286,6 @@ describe("matchCardsSessionModel", () => {
 	test("replaces a matched pair from the queue and settles fading slots", () => {
 		const session = createMatchCardsSession({
 			concepts: createConcepts(),
-			language: "no",
 			roundPairCount: 3,
 			visiblePairCount: 2,
 			randomNumber: keepOrderRandomNumber
@@ -302,15 +321,56 @@ describe("matchCardsSessionModel", () => {
 		expect(advancedSession.matchedPairCount).toBe(1);
 		expect(advancedSession.queuedPairs).toEqual([]);
 		expect(replacementTermSlot.status).toBe(MATCH_SLOT_STATUS.FADING_IN);
+		expect(replacementTermSlot.textByLanguage).toEqual({
+			no: "Begrep C",
+			en: "Term C"
+		});
 		expect(replacementExplanationSlot.status).toBe(MATCH_SLOT_STATUS.FADING_IN);
+		expect(replacementExplanationSlot.textByLanguage).toEqual({
+			no: "Forklaring C",
+			en: "Explanation C"
+		});
 		expect(findSlot(settledSession.slots, replacementTermSlot.slotId).status).toBe(MATCH_SLOT_STATUS.IDLE);
 		expect(findSlot(settledSession.slots, replacementExplanationSlot.slotId).status).toBe(MATCH_SLOT_STATUS.IDLE);
+	});
+
+	test("consumes only one queued pair when replacing matched slots", () => {
+		const session = createMatchCardsSession({
+			concepts: createConcepts(),
+			roundPairCount: 4,
+			visiblePairCount: 2,
+			randomNumber: keepOrderRandomNumber
+		});
+		const firstSelection = selectMatchSlot({
+			session,
+			slotId: "term-0"
+		});
+		const successSelection = selectMatchSlot({
+			session: firstSelection,
+			slotId: "explanation-0"
+		});
+		const advancedSession = advanceMatchedPair({
+			session: successSelection
+		});
+		const replacementTermSlot = findSlotByColumnAndConcept({
+			slots: advancedSession.slots,
+			column: MATCH_CARD_COLUMN.TERM,
+			conceptKey: "concept-c"
+		});
+		const replacementExplanationSlot = findSlotByColumnAndConcept({
+			slots: advancedSession.slots,
+			column: MATCH_CARD_COLUMN.EXPLANATION,
+			conceptKey: "concept-c"
+		});
+
+		expect(advancedSession.queuedPairs.map((pair) => pair.conceptKey)).toEqual(["concept-d"]);
+		expect(replacementTermSlot.status).toBe(MATCH_SLOT_STATUS.FADING_IN);
+		expect(replacementExplanationSlot.status).toBe(MATCH_SLOT_STATUS.FADING_IN);
 	});
 
 	test("keeps empty slots when the queue is exhausted", () => {
 		const session = createMatchCardsSession({
 			concepts: createConcepts().slice(0, 2),
-			language: "no",
 			roundPairCount: 2,
 			visiblePairCount: 2,
 			randomNumber: keepOrderRandomNumber
@@ -332,14 +392,14 @@ describe("matchCardsSessionModel", () => {
 			slotId: "term-0",
 			column: MATCH_CARD_COLUMN.TERM,
 			conceptKey: null,
-			text: null,
+			textByLanguage: null,
 			status: MATCH_SLOT_STATUS.EMPTY
 		});
 		expect(findSlot(advancedSession.slots, "explanation-0")).toEqual({
 			slotId: "explanation-0",
 			column: MATCH_CARD_COLUMN.EXPLANATION,
 			conceptKey: null,
-			text: null,
+			textByLanguage: null,
 			status: MATCH_SLOT_STATUS.EMPTY
 		});
 	});
@@ -357,14 +417,20 @@ describe("matchCardsSessionModel", () => {
 					slotId: "term-0",
 					column: MATCH_CARD_COLUMN.TERM,
 					conceptKey: "concept-a",
-					text: "Begrep A",
+					textByLanguage: {
+						no: "Begrep A",
+						en: "Term A"
+					},
 					status: MATCH_SLOT_STATUS.SUCCESS
 				},
 				{
 					slotId: "explanation-0",
 					column: MATCH_CARD_COLUMN.EXPLANATION,
 					conceptKey: "concept-a",
-					text: "Forklaring A",
+					textByLanguage: {
+						no: "Forklaring A",
+						en: "Explanation A"
+					},
 					status: MATCH_SLOT_STATUS.SUCCESS
 				}
 			]

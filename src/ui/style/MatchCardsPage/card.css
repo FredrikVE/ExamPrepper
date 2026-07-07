@@ -10,12 +10,12 @@
 	gap: var(--space-2);
 	padding: clamp(var(--space-5), 2.4vh, var(--space-7)) clamp(var(--space-6), 2.8vw, var(--space-9));
 	overflow: hidden;
-	border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line-strong));
-	border-radius: clamp(24px, 1.9vw, 30px);
-	background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+	border: 1px solid var(--matchcard-border-color);
+	border-radius: var(--matchcard-radius);
+	background: var(--matchcard-surface);
 	box-shadow:
-		0 12px 30px color-mix(in srgb, #000 18%, transparent),
-		0 1px 0 color-mix(in srgb, #fff 7%, transparent) inset;
+		var(--matchcard-shadow),
+		var(--matchcard-inset-highlight);
 	color: var(--text-main);
 	font: inherit;
 	text-align: center;
@@ -32,20 +32,20 @@
 	content: "";
 	position: absolute;
 	inset: 0;
-	border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+	border: 1px solid var(--matchcard-glow-border);
 	border-radius: inherit;
 	box-shadow:
-		0 0 18px color-mix(in srgb, var(--accent) 5%, transparent),
-		0 0 18px color-mix(in srgb, var(--accent) 5%, transparent) inset;
+		var(--matchcard-glow-shadow),
+		var(--matchcard-glow-shadow) inset;
 	pointer-events: none;
 }
 
 .matchcard:hover:not(:disabled) {
 	transform: translateY(-2px);
-	border-color: color-mix(in srgb, var(--accent) 52%, var(--line));
+	border-color: var(--matchcard-border-color-hover);
 	box-shadow:
-		0 18px 42px color-mix(in srgb, #000 20%, transparent),
-		0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent) inset;
+		var(--matchcard-hover-shadow),
+		var(--matchcard-hover-inset-highlight);
 }
 
 .matchcard:focus-visible {
@@ -87,10 +87,10 @@
 }
 
 .matchcard--selected {
-	border-color: color-mix(in srgb, var(--accent) 70%, var(--line));
+	border-color: var(--matchcard-border-color-selected);
 	box-shadow:
-		0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent),
-		0 18px 42px color-mix(in srgb, var(--accent) 18%, transparent);
+		var(--matchcard-selected-ring),
+		var(--matchcard-selected-shadow);
 }
 
 .matchcard--selected .matchcard-status {
@@ -100,8 +100,8 @@
 .matchcard--success,
 .matchcard--fading-out {
 	border-color: var(--success-border);
-	background: color-mix(in srgb, var(--success-soft) 72%, var(--panel-strong));
-	box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 16%, transparent);
+	background: var(--matchcard-success-surface);
+	box-shadow: var(--matchcard-success-ring);
 }
 
 .matchcard--success .matchcard-status,
@@ -111,8 +111,8 @@
 
 .matchcard--wrong {
 	border-color: var(--danger-border);
-	background: color-mix(in srgb, var(--danger-soft) 72%, var(--panel-strong));
-	box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent);
+	background: var(--matchcard-wrong-surface);
+	box-shadow: var(--matchcard-wrong-ring);
 }
 
 .matchcard--wrong .matchcard-status {

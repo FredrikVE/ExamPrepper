@@ -131,12 +131,11 @@ export default function useMatchCardsPageViewModel({
 
 		setSession(createMatchCardsSession({
 			concepts,
-			language,
 			roundPairCount: MATCH_CARDS_ROUND_PAIR_COUNT,
 			visiblePairCount: MATCH_CARDS_VISIBLE_PAIR_COUNT,
 			randomNumber: Math.random
 		}));
-	}, [concepts, language]);
+	}, [concepts]);
 
 	const clearTimers = useCallback(() => {
 		for (const timerId of timersRef.current) {
@@ -175,6 +174,7 @@ export default function useMatchCardsPageViewModel({
 
 	const scheduleMatchedPairAdvance = useCallback(() => {
 		clearTimers();
+		// Timer order is one transition: fade out, advance one queued pair, settle new slots.
 		registerTimer(() => {
 			setSession((currentSession) => {
 				if (!currentSession) {
@@ -240,14 +240,28 @@ export default function useMatchCardsPageViewModel({
 	}, [clearTimers, createSession]);
 
 	const termSlots = useMemo(() => {
-		return selectSlotsByColumn(session?.slots ?? [], MATCH_CARD_COLUMN.TERM);
-	}, [session]);
+		return selectPresentedSlotsByColumn({
+			slots: session?.slots ?? [],
+			column: MATCH_CARD_COLUMN.TERM,
+			language
+		});
+	}, [language, session]);
 
 	const explanationSlots = useMemo(() => {
-		return selectSlotsByColumn(session?.slots ?? [], MATCH_CARD_COLUMN.EXPLANATION);
-	}, [session]);
+		return selectPresentedSlotsByColumn({
+			slots: session?.slots ?? [],
+			column: MATCH_CARD_COLUMN.EXPLANATION,
+			language
+		});
+	}, [language, session]);
 
 	const isInteractionLocked = session ? isSessionFeedbackLocked(session) : false;
+	const visiblePairCount = session?.visiblePairCount ?? MATCH_CARDS_VISIBLE_PAIR_COUNT;
+	const boardStyle = useMemo(() => {
+		return {
+			"--matchcards-visible-pair-count": visiblePairCount
+		};
+	}, [visiblePairCount]);
 	const matchedPairCount = session?.matchedPairCount ?? 0;
 	const totalPairCount = session?.roundPairCount ?? 0;
 	const progressLabel = labels.progressLabel(matchedPairCount, totalPairCount);
@@ -280,6 +294,7 @@ export default function useMatchCardsPageViewModel({
 		totalPairCount,
 		progressLabel,
 		progressBarModel,
+		boardStyle,
 		isInteractionLocked,
 		isRoundComplete: Boolean(session?.isRoundComplete),
 		handleSelectSlot,
@@ -287,16 +302,47 @@ export default function useMatchCardsPageViewModel({
 	};
 }
 
-function selectSlotsByColumn(slots, column) {
+function selectPresentedSlotsByColumn({ slots, column, language }) {
 	const selectedSlots = [];
 
 	for (const slot of slots) {
 		if (slot.column === column) {
-			selectedSlots.push(slot);
+			selectedSlots.push(createPresentedSlot({
+				slot,
+				language
+			}));
 		}
 	}
 
 	return selectedSlots;
+}
+
+function createPresentedSlot({ slot, language }) {
+	return {
+		...slot,
+		text: getLocalizedSlotText({
+			textByLanguage: slot.textByLanguage,
+			language
+		})
+	};
+}
+
+function getLocalizedSlotText({ textByLanguage, language }) {
+	if (textByLanguage === null) {
+		return null;
+	}
+
+	const languageText = textByLanguage[language];
+
+	if (languageText) {
+		return languageText;
+	}
+
+	if (textByLanguage.no) {
+		return textByLanguage.no;
+	}
+
+	return textByLanguage.en;
 }
 
 function hasSlotStatus(slots, status) {

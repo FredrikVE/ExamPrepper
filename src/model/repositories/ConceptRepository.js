@@ -7,7 +7,9 @@ export default class ConceptRepository {
 	}
 
 	async getConceptsBySubject({ subjectId }) {
-		const response = await this.#conceptDataSource.fetchConceptsBySubject(subjectId);
+		const response = await this.#conceptDataSource.fetchConceptsBySubject({
+			subjectId
+		});
 		return this.#toConcepts(response.concepts ?? []);
 	}
 

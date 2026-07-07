@@ -2,7 +2,7 @@
 import ApiDataSource from "./ApiDataSource.js";
 
 export default class ApiConceptDataSource extends ApiDataSource {
-	async fetchConceptsBySubject(subjectId) {
+	async fetchConceptsBySubject({ subjectId }) {
 		return await this.get(`/subjects/${encodeURIComponent(subjectId)}/concepts`);
 	}
 
