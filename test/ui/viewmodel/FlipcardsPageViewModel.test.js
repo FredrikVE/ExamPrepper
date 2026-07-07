@@ -41,10 +41,16 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", 
 
 const { default: useFlipcardsPageViewModel } = await import("../../../src/ui/viewmodel/FlipcardsPageViewModel.js");
 
+const concepts = [
+	{ id: "card-a", term: { no: "A" }, explanation: { no: "A-definition" }, topicAreaKey: "kryptografi" },
+	{ id: "card-b", term: { no: "B" }, explanation: { no: "B-definition" }, topicAreaKey: "kryptografi" },
+	{ id: "card-c", term: { no: "C" }, explanation: { no: "C-definition" }, topicAreaKey: "iam" }
+];
+
 const cards = [
-	{ id: "card-a", term: "A", topicAreaKey: "kryptografi" },
-	{ id: "card-b", term: "B", topicAreaKey: "kryptografi" },
-	{ id: "card-c", term: "C", topicAreaKey: "iam" }
+	{ id: "card-a", term: "A", definition: "A-definition", topicAreaKey: "kryptografi" },
+	{ id: "card-b", term: "B", definition: "B-definition", topicAreaKey: "kryptografi" },
+	{ id: "card-c", term: "C", definition: "C-definition", topicAreaKey: "iam" }
 ];
 
 const topicAreas = [
@@ -86,7 +92,7 @@ function createTranslations() {
 
 function createViewModelParams(overrides) {
 	return {
-		flashcards: cards,
+		concepts,
 		topicAreas,
 		topicAreaKey: "all",
 		masteredCardIds: [],
@@ -112,11 +118,11 @@ function primeViewModelState(params) {
 function createViewModel(params) {
 	primeViewModelState(params);
 	loadModelQueue = [
-		{ status: LOAD_STATUS.READY, data: params.flashcards, error: null, reload: jest.fn() },
+		{ status: LOAD_STATUS.READY, data: params.concepts, error: null, reload: jest.fn() },
 		{ status: LOAD_STATUS.READY, data: params.topicAreas, error: null, reload: jest.fn() }
 	];
 
-	const getFlashcardsUseCase = {
+	const getConceptsForSubjectUseCase = {
 		execute: jest.fn()
 	};
 	const getTopicAreasUseCase = {
@@ -131,7 +137,7 @@ function createViewModel(params) {
 		onBack
 	};
 	const viewModel = useFlipcardsPageViewModel(
-		getFlashcardsUseCase,
+		getConceptsForSubjectUseCase,
 		getTopicAreasUseCase,
 		"in2120",
 		params.topicAreaKey,
@@ -142,7 +148,7 @@ function createViewModel(params) {
 	);
 
 	return {
-		getFlashcardsUseCase,
+		getConceptsForSubjectUseCase,
 		getTopicAreasUseCase,
 		onBack,
 		viewModel
@@ -165,12 +171,12 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 	});
 
 	test("returns active card session state derived from visible cards", () => {
-		const { getFlashcardsUseCase, viewModel } = createViewModel(createViewModelParams({
+		const { getConceptsForSubjectUseCase, viewModel } = createViewModel(createViewModelParams({
 			activeCardIndex: 1,
 			isActiveCardFlipped: true
 		}));
 
-		expect(getFlashcardsUseCase.execute).not.toHaveBeenCalled();
+		expect(getConceptsForSubjectUseCase.execute).not.toHaveBeenCalled();
 		expect(viewModel.activeCardIndex).toBe(1);
 		expect(viewModel.activeCard).toEqual(cards[1]);
 		expect(viewModel.nextCard).toEqual(cards[2]);

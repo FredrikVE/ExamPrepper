@@ -25,7 +25,7 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 		execute: executeStatisticsLoad,
 		emptyData: null,
 		errorMessage: text.loadErrorMessage,
-		onLoaded: noteStatisticsLoaded
+		onLoaded: null
 	});
 
 	const authStatus = resolveAuthLoadStatus(hasClerkAuth, isAuthLoaded);
@@ -81,8 +81,6 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 		onStartNewExam: startNewExam
 	};
 }
-
-function noteStatisticsLoaded() {}
 
 function resolveAuthLoadStatus(hasClerkAuth, isAuthLoaded) {
 	if (hasClerkAuth && !isAuthLoaded) {

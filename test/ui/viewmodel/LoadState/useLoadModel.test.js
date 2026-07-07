@@ -95,6 +95,26 @@ describe("useLoadModel", () => {
 		expect(onLoaded).toHaveBeenCalledWith({ loadedData });
 	});
 
+	test("allows an explicit null onLoaded callback", async () => {
+		const loadedData = [{ id: "one" }];
+		const execute = jest.fn(async () => loadedData);
+
+		useLoadModel({
+			execute,
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			onLoaded: null
+		});
+
+		await flushPromises();
+
+		expect(execute).toHaveBeenCalledWith();
+		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
+			status: LOAD_STATUS.READY,
+			data: loadedData
+		});
+	});
+
 	test("keeps ready status with previous data during refresh after first successful load", () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {

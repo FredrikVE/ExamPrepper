@@ -1,7 +1,7 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
-import { filterFlashcardsByTopicArea } from "../../model/domain/utils/filterFlashcardsByTopicArea.js";
+import { filterConceptCardsByTopicArea } from "../../model/domain/utils/filterConceptCardsByTopicArea.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
@@ -13,7 +13,7 @@ import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
 
 export default function useFlipcardsPageViewModel(
-    getFlashcardsUseCase,
+    getConceptsForSubjectUseCase,
     getTopicAreasUseCase,
     subjectId,
     initialTopicAreaKey,
@@ -35,15 +35,16 @@ export default function useFlipcardsPageViewModel(
         setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
     }, [initialTopicAreaKey, subjectId]);
 
-    const executeFlashcardLoad = useCallback(() => {
+    const executeConceptLoad = useCallback(() => {
         if (!isActive || !subjectId) {
             return Promise.resolve([]);
         }
 
-        return getFlashcardsUseCase.execute({
-            subjectId
+        return getConceptsForSubjectUseCase.execute({
+            subjectId,
+            topicAreaKey: ALL_TOPIC_AREAS
         });
-    }, [getFlashcardsUseCase, isActive, subjectId]);
+    }, [getConceptsForSubjectUseCase, isActive, subjectId]);
 
     const executeTopicAreaLoad = useCallback(() => {
         if (!isActive || !subjectId) {
@@ -56,41 +57,41 @@ export default function useFlipcardsPageViewModel(
         });
     }, [getTopicAreasUseCase, isActive, subjectId, language]);
 
-    const noteFlashcardsLoaded = useCallback(() => {
+    const noteConceptsLoaded = useCallback(() => {
         setMasteredCardIds([]);
         setPracticeCardIds([]);
     }, []);
 
-    const flashcardLoad = useLoadModel({
-        execute: executeFlashcardLoad,
+    const conceptLoad = useLoadModel({
+        execute: executeConceptLoad,
         emptyData: [],
         errorMessage: t.flipcardsErrorMessage,
-        onLoaded: noteFlashcardsLoaded
+        onLoaded: noteConceptsLoaded
     });
 
     const topicAreaLoad = useLoadModel({
         execute: executeTopicAreaLoad,
         emptyData: [],
         errorMessage: t.flipcardsErrorMessage,
-        onLoaded: noteFlipcardTopicAreasLoaded
+        onLoaded: null
     });
 
-    const rawFlashcards = flashcardLoad.data;
+    const concepts = conceptLoad.data;
     const flashcards = useMemo(() => {
-        return localizeFlashcards(rawFlashcards, language);
-    }, [rawFlashcards, language]);
+        return localizeConceptsForFlipcards(concepts, language);
+    }, [concepts, language]);
     const topicAreas = topicAreaLoad.data;
     const pageStatus = combineLoadStatuses([
-        flashcardLoad.status,
+        conceptLoad.status,
         topicAreaLoad.status
     ]);
     const pageErrorMessage = resolveFirstLoadError([
-        flashcardLoad,
+        conceptLoad,
         topicAreaLoad
     ], t.flipcardsErrorMessage);
 
     const topicFilteredFlashcards = useMemo(() => {
-        return filterFlashcardsByTopicArea(flashcards, topicAreaKey);
+        return filterConceptCardsByTopicArea(flashcards, topicAreaKey);
     }, [flashcards, topicAreaKey]);
 
     const visibleMasteredCardIds = useMemo(() => {
@@ -433,8 +434,6 @@ export default function useFlipcardsPageViewModel(
     };
 }
 
-function noteFlipcardTopicAreasLoaded() {}
-
 function createDeckKey(cards) {
     const cardIds = [];
 
@@ -527,27 +526,22 @@ function readTopicAreaKeyFromDeckToolKey(deckToolKey) {
 }
 
 
-function localizeFlashcards(flashcards, language) {
-    const localizedFlashcards = [];
+function localizeConceptsForFlipcards(concepts, language) {
+    const localizedFlipcards = [];
 
-    for (const flashcard of flashcards) {
-        const localizedFlashcard = {
-            id: flashcard.id,
-            term: resolveLocalizedFlashcardText(flashcard.term, language),
-            topicAreaKey: flashcard.topicAreaKey
-        };
-
-        if (flashcard.definition !== undefined) {
-            localizedFlashcard.definition = resolveLocalizedFlashcardText(flashcard.definition, language);
-        }
-
-        localizedFlashcards.push(localizedFlashcard);
+    for (const concept of concepts) {
+        localizedFlipcards.push({
+            id: concept.id,
+            term: resolveLocalizedConceptText(concept.term, language),
+            definition: resolveLocalizedConceptText(concept.explanation, language),
+            topicAreaKey: concept.topicAreaKey
+        });
     }
 
-    return localizedFlashcards;
+    return localizedFlipcards;
 }
 
-function resolveLocalizedFlashcardText(value, language) {
+function resolveLocalizedConceptText(value, language) {
     if (typeof value === "string") {
         return value;
     }

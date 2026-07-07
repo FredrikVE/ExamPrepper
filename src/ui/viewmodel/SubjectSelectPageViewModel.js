@@ -7,7 +7,6 @@ import useLoadModel from "./LoadState/useLoadModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
-function noteSubjectsLoaded() {}
 
 export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, onChangeScreen) {
 	const executeSubjectLoad = useCallback(() => {
@@ -20,7 +19,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		execute: executeSubjectLoad,
 		emptyData: [],
 		errorMessage: t.subjectErrorMessage,
-		onLoaded: noteSubjectsLoaded
+		onLoaded: null
 	});
 	const subjects = subjectLoad.data;
 	const subjectSearchSheet = useSearchSheetModel({

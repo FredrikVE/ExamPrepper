@@ -67,14 +67,14 @@ export default function useMatchCardsPageViewModel({
 		execute: executeConceptLoad,
 		emptyData: [],
 		errorMessage: t.matchCardsErrorMessage,
-		onLoaded: noteMatchCardsResourceLoaded
+		onLoaded: null
 	});
 
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
 		errorMessage: t.matchCardsErrorMessage,
-		onLoaded: noteMatchCardsResourceLoaded
+		onLoaded: null
 	});
 
 	const concepts = conceptLoad.data;
@@ -286,8 +286,6 @@ export default function useMatchCardsPageViewModel({
 		restartSession
 	};
 }
-
-function noteMatchCardsResourceLoaded() {}
 
 function selectSlotsByColumn(slots, column) {
 	const selectedSlots = [];

@@ -98,7 +98,7 @@ export default function LearningContentSelectPage({ viewModel }) {
 
 				{viewModel.isFlipcardsContentActive && (
 					<FlashcardDeckGrid
-						decks={viewModel.visibleFlashcardDecks}
+						decks={viewModel.visibleFlipcardDecks}
 						eyebrowLabel={viewModel.flipcardsDeckEyebrow}
 						cardCountLabel={viewModel.deckCardCountLabel}
 						cardUnitLabel={viewModel.deckCardUnitLabel}
@@ -111,7 +111,7 @@ export default function LearningContentSelectPage({ viewModel }) {
 
 				{viewModel.isMatchCardsContentActive && (
 					<FlashcardDeckGrid
-						decks={viewModel.visibleFlashcardDecks}
+						decks={viewModel.visibleFlipcardDecks}
 						eyebrowLabel={viewModel.matchCardsDeckEyebrow}
 						cardCountLabel={viewModel.deckCardCountLabel}
 						cardUnitLabel={viewModel.deckCardUnitLabel}

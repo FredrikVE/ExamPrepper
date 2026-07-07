@@ -123,7 +123,7 @@ function createViewModel(params = {}) {
     const getTopicAreasUseCase = {
         execute: jest.fn().mockResolvedValue([])
     };
-    const getFlashcardDeckSummariesUseCase = {
+    const getFlipcardDeckSummariesUseCase = {
         execute: jest.fn().mockResolvedValue([])
     };
     const goBack = jest.fn();
@@ -131,7 +131,7 @@ function createViewModel(params = {}) {
     const viewModel = useLearningContentSelectPageViewModel(
         getAvailableExamsUseCase,
         getTopicAreasUseCase,
-        getFlashcardDeckSummariesUseCase,
+        getFlipcardDeckSummariesUseCase,
         "nb",
         createT(),
         { id: "in5431", code: "IN5431" },
@@ -149,7 +149,7 @@ function createViewModel(params = {}) {
     return {
         getAvailableExamsUseCase,
         getTopicAreasUseCase,
-        getFlashcardDeckSummariesUseCase,
+        getFlipcardDeckSummariesUseCase,
         goBack,
         viewModel
     };

@@ -16,7 +16,7 @@ import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 export default function useLearningContentSelectPageViewModel(
 	getAvailableExamsUseCase,
 	getTopicAreasUseCase,
-	getFlashcardDeckSummariesUseCase,
+	getFlipcardDeckSummariesUseCase,
 	language,
 	t,
 	selectedSubject,
@@ -79,50 +79,50 @@ export default function useLearningContentSelectPageViewModel(
 		});
 	}, [getTopicAreasUseCase, isActive, subjectId, language]);
 
-	const executeFlashcardDeckLoad = useCallback(() => {
+	const executeFlipcardDeckLoad = useCallback(() => {
 		if (!isActive || !subjectId) {
 			return Promise.resolve([]);
 		}
 
-		return getFlashcardDeckSummariesUseCase.execute({
+		return getFlipcardDeckSummariesUseCase.execute({
 			subjectId,
 			language
 		});
-	}, [getFlashcardDeckSummariesUseCase, isActive, subjectId, language]);
+	}, [getFlipcardDeckSummariesUseCase, isActive, subjectId, language]);
 
 	const examLoad = useLoadModel({
 		execute: executeExamLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
-		onLoaded: noteLearningContentResourceLoaded
+		onLoaded: null
 	});
 
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
-		onLoaded: noteLearningContentResourceLoaded
+		onLoaded: null
 	});
 
-	const flashcardDeckLoad = useLoadModel({
-		execute: executeFlashcardDeckLoad,
+	const flipcardDeckLoad = useLoadModel({
+		execute: executeFlipcardDeckLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
-		onLoaded: noteLearningContentResourceLoaded
+		onLoaded: null
 	});
 
 	const exams = examLoad.data;
 	const topicAreas = topicAreaLoad.data;
-	const flashcardDeckSummaries = flashcardDeckLoad.data;
+	const flipcardDeckSummaries = flipcardDeckLoad.data;
 	const pageStatus = combineLoadStatuses([
 		examLoad.status,
 		topicAreaLoad.status,
-		flashcardDeckLoad.status
+		flipcardDeckLoad.status
 	]);
 	const pageErrorMessage = resolveFirstLoadError([
 		examLoad,
 		topicAreaLoad,
-		flashcardDeckLoad
+		flipcardDeckLoad
 	], t.selectErrorMessage);
 
 	const pageCopy = useMemo(() => {
@@ -162,9 +162,9 @@ export default function useLearningContentSelectPageViewModel(
 		return filterExams(exams, searchTerm, topicAreaKey);
 	}, [exams, searchTerm, topicAreaKey]);
 
-	const visibleFlashcardDecks = useMemo(() => {
-		return filterDeckSummaries(flashcardDeckSummaries, searchTerm, topicAreaKey);
-	}, [flashcardDeckSummaries, searchTerm, topicAreaKey]);
+	const visibleFlipcardDecks = useMemo(() => {
+		return filterDeckSummaries(flipcardDeckSummaries, searchTerm, topicAreaKey);
+	}, [flipcardDeckSummaries, searchTerm, topicAreaKey]);
 
 	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
 	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
@@ -173,11 +173,11 @@ export default function useLearningContentSelectPageViewModel(
 
 	const searchSuggestions = useMemo(() => {
 		if (isFlipcardsContentActive || isMatchCardsContentActive) {
-			return createDeckSearchSuggestions(visibleFlashcardDecks);
+			return createDeckSearchSuggestions(visibleFlipcardDecks);
 		}
 
 		return createExamSearchSuggestions(visibleExams);
-	}, [isFlipcardsContentActive, isMatchCardsContentActive, visibleExams, visibleFlashcardDecks]);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, visibleExams, visibleFlipcardDecks]);
 
 	const topicAreaFilterOptions = useMemo(() => {
 		const filterOptions = [
@@ -269,7 +269,7 @@ export default function useLearningContentSelectPageViewModel(
 		// Data
 		exams: visibleExams,
 		visibleExams,
-		visibleFlashcardDecks,
+		visibleFlipcardDecks,
 		selectedSubject,
 		pageStatus,
 		pageErrorMessage,
@@ -348,8 +348,6 @@ export default function useLearningContentSelectPageViewModel(
 		selectSearchSuggestion
 	};
 }
-
-function noteLearningContentResourceLoaded() {}
 
 function findContentTypeEntry(contentTypeId) {
     for (const entry of LEARNING_CONTENT_ENTRIES) {

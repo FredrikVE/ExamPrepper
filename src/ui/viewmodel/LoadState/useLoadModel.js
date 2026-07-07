@@ -59,7 +59,10 @@ export default function useLoadModel({
 					status: LOAD_STATUS.READY,
 					data: loadedData
 				});
-				onLoadedRef.current({ loadedData });
+
+				if (onLoadedRef.current !== null) {
+					onLoadedRef.current({ loadedData });
+				}
 			}
 
 			catch (loadError) {
