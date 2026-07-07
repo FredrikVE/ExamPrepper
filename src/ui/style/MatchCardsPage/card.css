@@ -62,16 +62,20 @@
 	z-index: 1;
 	max-width: 100%;
 	font-size: clamp(1.28rem, 2.08vw, 2.05rem);
-	font-weight: 600;
+	font-weight: 500;
 	line-height: 1.12;
 	letter-spacing: -0.018em;
 	overflow-wrap: anywhere;
 	text-wrap: balance;
 }
 
+.matchcard-text strong {
+	font-weight: 850;
+}
+
 .matchcard--explanation .matchcard-text {
 	font-size: clamp(1rem, 1.28vw, 1.34rem);
-	font-weight: 600;
+	font-weight: 450;
 	line-height: 1.18;
 	letter-spacing: -0.012em;
 }
