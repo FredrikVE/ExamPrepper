@@ -32,6 +32,14 @@ export default function MatchCardsPage({ viewModel }) {
 		);
 	}
 
+	if (viewModel.isRoundComplete) {
+		return (
+			<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
+				<MatchCardsRoundComplete viewModel={viewModel} />
+			</MatchCardsShell>
+		);
+	}
+
 	return (
 		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
 			<MatchCardsGrid
@@ -42,19 +50,22 @@ export default function MatchCardsPage({ viewModel }) {
 				isInteractionLocked={viewModel.isInteractionLocked}
 				onSelectSlot={viewModel.handleSelectSlot}
 			/>
-
-			{viewModel.isRoundComplete && (
-				<section className="matchcards-round-complete" role="status">
-					<div>
-						<h2>{viewModel.labels.roundCompleteTitle}</h2>
-						<p>{viewModel.labels.roundCompleteBody}</p>
-					</div>
-					<button type="button" className="matchcards-restart-button" onClick={viewModel.restartSession}>
-						{viewModel.labels.restartLabel}
-					</button>
-				</section>
-			)}
 		</MatchCardsShell>
+	);
+}
+
+function MatchCardsRoundComplete({ viewModel }) {
+	return (
+		<section className="matchcards-round-complete" role="status">
+			<div className="matchcards-round-complete-copy">
+				<h2>{viewModel.labels.roundCompleteTitle}</h2>
+				<p>{viewModel.labels.roundCompleteBody}</p>
+			</div>
+
+			<button type="button" className="matchcards-restart-button" onClick={viewModel.restartSession}>
+				{viewModel.labels.restartLabel}
+			</button>
+		</section>
 	);
 }
 

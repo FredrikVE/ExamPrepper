@@ -54,8 +54,23 @@
 	}
 
 	.matchcards-round-complete {
-		align-items: stretch;
-		flex-direction: column;
+		min-height: calc(100dvh - var(--mobile-topbar-height) - var(--space-8) - env(safe-area-inset-bottom));
+		align-items: center;
+		justify-content: center;
+		gap: clamp(var(--space-5), 6vw, var(--space-8));
+		padding: clamp(var(--space-6), 7vw, var(--space-9));
+	}
+
+	.matchcards-round-complete h2 {
+		font-size: clamp(2.25rem, 10vw, 3.6rem);
+	}
+
+	.matchcards-round-complete p {
+		font-size: clamp(1.15rem, 4.4vw, 1.55rem);
+	}
+
+	.matchcards-restart-button {
+		width: 100%;
 	}
 
 	.matchcard {

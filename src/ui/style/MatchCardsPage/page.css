@@ -21,36 +21,56 @@
 }
 
 .matchcards-round-complete {
-	width: min(1120px, 100%);
-	margin: var(--space-8) auto 0;
+	width: 100%;
+	min-height: min(720px, calc(100dvh - var(--scaffold-header-height, 112px) - clamp(156px, 20vh, 220px)));
+	margin: 0 auto;
+	flex: 1 1 auto;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-content: space-between;
-	gap: var(--space-6);
-	padding: var(--space-6);
+	justify-content: center;
+	gap: clamp(var(--space-5), 3vw, var(--space-8));
+	text-align: center;
+	padding: clamp(var(--space-8), 6vw, var(--space-13));
 	border: 1px solid var(--success-border);
-	border-radius: var(--radius-lg);
-	background: color-mix(in srgb, var(--success-soft) 62%, var(--panel-bg));
+	border-radius: var(--radius-xl);
+	background:
+		radial-gradient(circle at 78% 18%, color-mix(in srgb, var(--success-soft) 54%, transparent), transparent 32rem),
+		color-mix(in srgb, var(--success-soft) 50%, var(--workspace-card-surface));
 	box-shadow: var(--shadow-card);
 }
 
+.matchcards-round-complete-copy {
+	width: min(760px, 100%);
+	max-width: 760px;
+}
+
 .matchcards-round-complete h2 {
-	margin: 0 0 var(--space-1);
+	margin: 0 0 var(--space-3);
 	color: var(--text-main);
+	font-size: clamp(2.1rem, 4.5vw, 4.4rem);
+	line-height: 1.02;
+	letter-spacing: -0.045em;
 }
 
 .matchcards-round-complete p {
 	margin: 0;
 	color: var(--text-muted);
+	font-size: clamp(1.05rem, 2vw, 1.55rem);
+	font-weight: 520;
+	line-height: 1.35;
 }
 
 .matchcards-restart-button {
+	width: min(420px, 100%);
+	min-width: 0;
 	border: 1px solid var(--button-primary-border);
 	border-radius: var(--radius-full);
-	padding: var(--space-4) var(--space-6);
+	padding: var(--space-4) var(--space-8);
 	background: var(--button-primary-bg);
 	box-shadow: var(--button-primary-shadow);
 	color: var(--button-primary-text);
+	font-size: clamp(1rem, 1.45vw, 1.25rem);
 	font-weight: 800;
 	cursor: pointer;
 }
