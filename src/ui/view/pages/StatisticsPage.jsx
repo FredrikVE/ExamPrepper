@@ -7,6 +7,7 @@ import StatisticsScoreTrendChart from "../components/StatisticsPage/StatisticsSc
 import StatisticsWeeklyActivity from "../components/StatisticsPage/StatisticsWeeklyActivity.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
+import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
 
 export default function StatisticsPage({ viewModel }) {
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
@@ -104,9 +105,7 @@ export default function StatisticsPage({ viewModel }) {
 
 function StatisticsShell({ viewModel, children }) {
 	return (
-		<main className="statistics-page-workspace">
-			<div className="statistics-page-ambient-light" aria-hidden="true" />
-
+		<WorkSpaceScaffold className="statistics-page-workspace" header={null} scrollToTopRequestId={0}>
 			<header className="statistics-page-header">
 				<div>
 					<h1>{viewModel.pageTitle}</h1>
@@ -123,6 +122,6 @@ function StatisticsShell({ viewModel, children }) {
 			</header>
 
 			{children}
-		</main>
+		</WorkSpaceScaffold>
 	);
 }

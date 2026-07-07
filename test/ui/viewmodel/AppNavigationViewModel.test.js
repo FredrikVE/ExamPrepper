@@ -23,6 +23,7 @@ describe("createAppBackContract", () => {
 		NAV_SCREENS.SELECT,
 		NAV_SCREENS.EXAM,
 		NAV_SCREENS.FLIPCARDS,
+		NAV_SCREENS.MATCHCARDS,
 		NAV_SCREENS.OVERVIEW
 	])("shows back on non-root screen %s", (activeScreen) => {
 		const onBack = jest.fn();
@@ -54,8 +55,13 @@ describe("createAppLayoutClassNames", () => {
 		});
 	});
 
-	test("adds the flipcards theme scope to the Flipcards route", () => {
+	test("adds the flipcards theme scope to concept practice routes", () => {
 		expect(createAppLayoutClassNames(NAV_SCREENS.FLIPCARDS)).toEqual({
+			pageClassName: "exam-page flipcards-theme-scope",
+			shellClassName: "exam-shell"
+		});
+
+		expect(createAppLayoutClassNames(NAV_SCREENS.MATCHCARDS)).toEqual({
 			pageClassName: "exam-page flipcards-theme-scope",
 			shellClassName: "exam-shell"
 		});

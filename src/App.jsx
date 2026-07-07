@@ -12,18 +12,20 @@ import useLearningContentSelectPageViewModel from "./ui/viewmodel/LearningConten
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
 import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.js";
 import useFlipcardsPageViewModel from "./ui/viewmodel/FlipcardsPageViewModel.js";
+import useMatchCardsPageViewModel from "./ui/viewmodel/MatchCardsPageViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import LearningContentSelectPage from "./ui/view/pages/LearningContentSelectPage.jsx";
 import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
 import FlipcardsPage from "./ui/view/pages/FlipcardsPage.jsx";
+import MatchCardsPage from "./ui/view/pages/MatchCardsPage.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlashcardsUseCase, getFlashcardDeckSummariesUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getConceptsForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -44,6 +46,7 @@ function AppContent() {
 	const { language, t, formatDate } = useLanguage();
 
 	const [examWorkMode, setExamWorkMode] = useState(null);
+	const [headerProgressBarModel, setHeaderProgressBarModel] = useState(null);
 	const examWorkModeActionsRef = useRef(null);
 
 	const navigationViewModel = useAppNavigationViewModel({
@@ -80,12 +83,13 @@ function AppContent() {
 	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(
 		getAvailableExamsUseCase,
 		getTopicAreasUseCase,
-		getFlashcardDeckSummariesUseCase,
+		getFlipcardDeckSummariesUseCase,
 		language,
 		t,
 		subjectSelectPageViewModel.selectedSubject,
 		navigationViewModel.selectExam,
 		navigationViewModel.selectFlipcardDeck,
+		navigationViewModel.selectMatchCardsDeck,
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
 		navigationViewModel.changeScreen,
 		navigationViewModel.showBackButton,
@@ -124,6 +128,7 @@ function AppContent() {
 					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
 					examWorkStatusLabel={examWorkMode?.statusLabel ?? ""}
 					showExamSubmitAction={Boolean(examWorkMode?.canSubmit)}
+					progressBarModel={headerProgressBarModel}
 					examSubmitLabel={t.examSubmitLabel}
 					isExamSubmitConfirmOpen={Boolean(examWorkMode?.isConfirmOpen)}
 					examSubmitConfirmTitle={t.examSubmitConfirmTitle}
@@ -150,6 +155,7 @@ function AppContent() {
 						t={t}
 						backContract={navigationViewModel.backContract}
 						onExamWorkModeChange={setExamWorkMode}
+						onHeaderProgressBarModelChange={setHeaderProgressBarModel}
 						examWorkModeActionsRef={examWorkModeActionsRef}
 					/>
 				)}
@@ -162,6 +168,18 @@ function AppContent() {
 						t={t}
 						isActive={navigationViewModel.activeScreen === NAV_SCREENS.FLIPCARDS}
 						backContract={navigationViewModel.backContract}
+					/>
+				)}
+
+				{navigationViewModel.activeScreen === NAV_SCREENS.MATCHCARDS && (
+					<MatchCardsPageWrapper
+						subjectId={navigationViewModel.selectedSubjectId}
+						initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
+						language={language}
+						t={t}
+						isActive={navigationViewModel.activeScreen === NAV_SCREENS.MATCHCARDS}
+						backContract={navigationViewModel.backContract}
+						onHeaderProgressBarModelChange={setHeaderProgressBarModel}
 					/>
 				)}
 
@@ -183,7 +201,7 @@ function AppContent() {
 	);
 }
 
-function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChange, examWorkModeActionsRef }) {
+function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef }) {
 	const examPageViewModel = useExamPageViewModel(
 		getExamQuestionsUseCase,
 		gradeAnswerUseCase,
@@ -222,11 +240,20 @@ function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChan
 	]);
 
 	useEffect(() => {
+		onHeaderProgressBarModelChange(examPageViewModel.examProgressBarModel);
+
+		return () => {
+			onHeaderProgressBarModelChange(null);
+		};
+	}, [examPageViewModel.examProgressBarModel, onHeaderProgressBarModelChange]);
+
+	useEffect(() => {
 		return () => {
 			examWorkModeActionsRef.current = null;
 			onExamWorkModeChange(null);
+			onHeaderProgressBarModelChange(null);
 		};
-	}, [examWorkModeActionsRef, onExamWorkModeChange]);
+	}, [examWorkModeActionsRef, onExamWorkModeChange, onHeaderProgressBarModelChange]);
 
 	return (
 		<ExamPage viewModel={examPageViewModel} />
@@ -235,7 +262,7 @@ function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChan
 
 function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
 	const flipcardsPageViewModel = useFlipcardsPageViewModel(
-		getFlashcardsUseCase,
+		getConceptsForSubjectUseCase,
 		getTopicAreasUseCase,
 		subjectId,
 		initialTopicAreaKey,
@@ -247,6 +274,31 @@ function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isA
 
 	return (
 		<FlipcardsPage viewModel={flipcardsPageViewModel} />
+	);
+}
+
+function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onHeaderProgressBarModelChange }) {
+	const matchCardsPageViewModel = useMatchCardsPageViewModel({
+		getConceptsForSubjectUseCase,
+		getTopicAreasUseCase,
+		subjectId,
+		initialTopicAreaKey,
+		language,
+		t,
+		isActive,
+		backContract
+	});
+
+	useEffect(() => {
+		onHeaderProgressBarModelChange(matchCardsPageViewModel.session ? matchCardsPageViewModel.progressBarModel : null);
+
+		return () => {
+			onHeaderProgressBarModelChange(null);
+		};
+	}, [matchCardsPageViewModel.progressBarModel, matchCardsPageViewModel.session, onHeaderProgressBarModelChange]);
+
+	return (
+		<MatchCardsPage viewModel={matchCardsPageViewModel} />
 	);
 }
 

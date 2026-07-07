@@ -10,10 +10,15 @@ import createExamFeedbackModel from "./ExamPage/createExamFeedbackModel.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
 import createExamProgressNavigationModel, { clampExamQuestionIndex } from "./ExamPage/createExamProgressNavigationModel.js";
 import createExamStatusModel from "./ExamPage/createExamStatusModel.js";
+import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
 import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
 import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
 import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
+
+function formatExamProgressStepLabel(stepNumber, totalSteps) {
+	return `${stepNumber}/${totalSteps}`;
+}
 
 export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, backContract) {
 	const { randomizeAnswerOptions } = useSettings();
@@ -236,6 +241,25 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		requestScrollToTop();
 	}, [visibleQuestionCount, requestScrollToTop]);
 
+	const activateExamProgressStep = useCallback((stepNumber) => {
+		goToQuestion(stepNumber - 1);
+	}, [goToQuestion]);
+
+	const examProgressBarModel = useMemo(() => {
+		if (visibleQuestionCount === 0) {
+			return null;
+		}
+
+		return buildProgressBarModel({
+			totalSteps: visibleQuestionCount,
+			currentStep: currentQuestionNumber,
+			ariaLabel: copy.examProgressAriaLabel,
+			startLabel: copy.examProgressStartLabel,
+			formatStepLabel: formatExamProgressStepLabel,
+			onActivateStep: activateExamProgressStep
+		});
+	}, [visibleQuestionCount, currentQuestionNumber, copy.examProgressAriaLabel, copy.examProgressStartLabel, activateExamProgressStep]);
+
 	const setSingleAnswer = useCallback((questionId, selectedValue) => {
 		if (submitted) {
 			return;
@@ -342,6 +366,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		showAllFeedback,
 		currentAnswerOptionOrder,
 		workspaceClassName,
+		examProgressBarModel,
 		showBackButton: backContract.showBackButton,
 		backLabel: backContract.backLabel,
 		navigationLabel: backContract.navigationLabel,

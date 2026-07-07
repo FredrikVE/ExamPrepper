@@ -4,6 +4,7 @@ import { PAGE_TOOL_AVAILABILITY } from "./pageTools.js";
 export const LEARNING_CONTENT_TYPES = {
     EXAMS: "exams",
     FLIPCARDS: "flipcards",
+    MATCHCARDS: "matchcards",
     CONCEPT_LISTS: "concept-lists"
 };
 
@@ -11,6 +12,7 @@ export const LEARNING_CONTENT_ENTRIES = [
     {
         id: LEARNING_CONTENT_TYPES.EXAMS,
         labelKey: "contentToggleExamsLabel",
+        titleKey: "selectExamsTitle",
         searchPlaceholderKey: "examSearchPlaceholder",
         subtitleKey: "selectExamsSubtitle",
         subtitleFallbackKey: "selectExamsSubtitleFallback",
@@ -19,14 +21,25 @@ export const LEARNING_CONTENT_ENTRIES = [
     {
         id: LEARNING_CONTENT_TYPES.FLIPCARDS,
         labelKey: "contentToggleFlipcardsLabel",
+        titleKey: "selectFlipcardsTitle",
         searchPlaceholderKey: "flipcardsSearchPlaceholder",
         subtitleKey: "selectFlipcardsSubtitle",
         subtitleFallbackKey: "selectFlipcardsSubtitleFallback",
         availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
     },
     {
+        id: LEARNING_CONTENT_TYPES.MATCHCARDS,
+        labelKey: "contentToggleMatchCardsLabel",
+        titleKey: "selectMatchCardsTitle",
+        searchPlaceholderKey: "matchCardsSearchPlaceholder",
+        subtitleKey: "selectMatchCardsSubtitle",
+        subtitleFallbackKey: "selectMatchCardsSubtitleFallback",
+        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
+    },
+    {
         id: LEARNING_CONTENT_TYPES.CONCEPT_LISTS,
         labelKey: "contentToggleConceptListsLabel",
+        titleKey: "selectConceptListsTitle",
         searchPlaceholderKey: "conceptListSearchPlaceholder",
         subtitleKey: "selectGlossariesSubtitle",
         subtitleFallbackKey: "selectGlossariesSubtitleFallback",

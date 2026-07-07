@@ -10,7 +10,10 @@ describe("createExamPageCopy", () => {
 			emptyMessage: "No questions",
 			examLoadErrorMessage: "Could not load exam",
 			examAttemptSavingMessage: "Saving attempt",
-			examAttemptSaveErrorMessage: "Could not save attempt"
+			examAttemptSaveErrorMessage: "Could not save attempt",
+			examAnsweredLabel: "answered",
+			examProgressAriaLabel: "Progress",
+			examProgressStartLabel: "Start"
 		});
 
 		expect(copy).toEqual({
@@ -19,7 +22,10 @@ describe("createExamPageCopy", () => {
 			emptyMessage: "No questions",
 			questionsLoadErrorMessage: "Could not load exam",
 			attemptSavingMessage: "Saving attempt",
-			attemptSaveErrorMessage: "Could not save attempt"
+			attemptSaveErrorMessage: "Could not save attempt",
+			answeredLabel: "answered",
+			examProgressAriaLabel: "Progress",
+			examProgressStartLabel: "Start"
 		});
 	});
 });

@@ -27,9 +27,7 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
         correct
     });
 
-    const cardClassName = viewState.feedbackMode
-        ? "question-card question-card-feedback-mode"
-        : "question-card";
+    const cardClassName = createQuestionCardClassName(viewState.feedbackMode);
 
     return (
         <section className={cardClassName}>
@@ -190,4 +188,12 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
             </div>
         </section>
     );
+}
+
+function createQuestionCardClassName(feedbackMode) {
+    if (feedbackMode) {
+        return "workspace-card question-card question-card-feedback-mode";
+    }
+
+    return "workspace-card question-card";
 }

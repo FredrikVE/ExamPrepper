@@ -39,9 +39,10 @@
     --feedback-explanation-correct-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, white), color-mix(in srgb, var(--panel-bg) 94%, white));
     --feedback-explanation-warning-bg: linear-gradient(135deg, color-mix(in srgb, #f59e0b 9%, white), color-mix(in srgb, var(--panel-bg) 94%, white));
     --feedback-source-quote-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, white), color-mix(in srgb, var(--panel-bg) 94%, white));
-    --question-card-surface: var(--panel-strong);
-    --question-card-ambient-glow: radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 18rem);
-    --question-card-ambient-glow-display: none;
+    --workspace-card-surface: var(--panel-strong);
+    --question-card-surface: var(--workspace-card-surface);
+    --workspace-card-ambient-glow: radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 18rem);
+    --workspace-card-ambient-glow-display: none;
     --question-card-input-bg: color-mix(in srgb, var(--panel-strong) 82%, transparent);
     --question-card-answer-correct-bg: color-mix(in srgb, var(--success-soft) 64%, transparent);
     --question-card-answer-wrong-bg: color-mix(in srgb, var(--danger-soft) 64%, transparent);
@@ -236,8 +237,9 @@
     --feedback-explanation-correct-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, var(--panel-strong)), color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong)));
     --feedback-explanation-warning-bg: linear-gradient(135deg, color-mix(in srgb, #f59e0b 16%, var(--panel-strong)), color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong)));
     --feedback-source-quote-bg: var(--feedback-explanation-correct-bg);
-    --question-card-surface: #07162a;
-    --question-card-ambient-glow-display: block;
+    --workspace-card-surface: #07162a;
+    --question-card-surface: var(--workspace-card-surface);
+    --workspace-card-ambient-glow-display: block;
     --question-card-input-bg: color-mix(in srgb, var(--panel-strong) 66%, transparent);
     --question-card-answer-correct-bg: radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--success) 9%, transparent), transparent 16rem), color-mix(in srgb, var(--success-soft) 50%, transparent);
     --question-card-answer-wrong-bg: radial-gradient(circle at 78% 0%, color-mix(in srgb, var(--danger) 9%, transparent), transparent 16rem), color-mix(in srgb, var(--danger-soft) 50%, transparent);

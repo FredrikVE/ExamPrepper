@@ -3,9 +3,8 @@ import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import ExamToolbarActions from "../components/ExamPage/ExamToolbarActions.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
-import ExamProgress from "../components/ExamPage/ExamProgress/ExamProgress.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
-import ExamWorkspace from "../components/ExamPage/ExamWorkspace.jsx";
+import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
 import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import useExamFooterNavigationKeys from "../components/ExamPage/useExamFooterNavigationKeys.js";
@@ -29,6 +28,7 @@ export default function ExamPage({ viewModel }) {
 			backLabel={viewModel.backLabel}
 			navigationLabel={viewModel.navigationLabel}
 			onBack={viewModel.onBack}
+			progressBarModel={null}
 			tools={null}
 			trailing={null}
 		/>
@@ -36,7 +36,7 @@ export default function ExamPage({ viewModel }) {
 
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
-			<ExamWorkspace
+			<WorkSpaceScaffold
 				className={viewModel.workspaceClassName}
 				header={header}
 				scrollToTopRequestId={0}
@@ -48,7 +48,7 @@ export default function ExamPage({ viewModel }) {
 					errorBody={viewModel.pageErrorMessage}
 					errorAction={null}
 				/>
-			</ExamWorkspace>
+			</WorkSpaceScaffold>
 		);
 	}
 
@@ -65,7 +65,7 @@ export default function ExamPage({ viewModel }) {
 
 	return (
 		<>
-			<ExamWorkspace
+			<WorkSpaceScaffold
 				className={viewModel.workspaceClassName}
 				header={(
 					<Header
@@ -73,6 +73,7 @@ export default function ExamPage({ viewModel }) {
 						backLabel={viewModel.backLabel}
 						navigationLabel={viewModel.navigationLabel}
 						onBack={viewModel.onBack}
+						progressBarModel={viewModel.examProgressBarModel}
 						tools={null}
 						trailing={headerToolbar}
 					/>
@@ -87,17 +88,11 @@ export default function ExamPage({ viewModel }) {
 					<p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
 				)}
 
-				<ExamProgress
-					visibleQuestions={viewModel.visibleQuestions}
-					currentQuestionIndex={viewModel.currentQuestionIndex}
-					onGoToQuestion={viewModel.goToQuestion}
-				/>
-
-				<main className="exam-page-main">
+				<div className="exam-page-main">
 					<div className="exam-page-content">
 						<ExamPageContent viewModel={viewModel} />
 					</div>
-				</main>
+				</div>
 
 				<ExamFooter
 					previousQuestion={viewModel.previousQuestion}
@@ -115,7 +110,7 @@ export default function ExamPage({ viewModel }) {
 					onNext={viewModel.nextQuestion}
 					isNextDisabled={viewModel.isLastQuestion}
 				/>
-			</ExamWorkspace>
+			</WorkSpaceScaffold>
 
 			{viewModel.isSubmitConfirmOpen && (
 				<ExamSubmitConfirmation

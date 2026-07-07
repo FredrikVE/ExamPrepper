@@ -8,7 +8,7 @@ import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExam
 export function createAppLayoutClassNames(activeScreen) {
 	const appLayout = resolveScreenLayout(activeScreen);
 	const usesSelectionLayout = appLayout === APP_LAYOUTS.SELECTION;
-	const usesFlipcardsThemeScope = activeScreen === NAV_SCREENS.FLIPCARDS;
+	const usesFlipcardsThemeScope = activeScreen === NAV_SCREENS.FLIPCARDS || activeScreen === NAV_SCREENS.MATCHCARDS;
 
 	return {
 		pageClassName: [
@@ -96,6 +96,14 @@ export default function useAppNavigationViewModel(params) {
 		}));
 	}, [selectedSubjectId, applyNavigation]);
 
+	const selectMatchCardsDeck = useCallback((topicAreaKey) => {
+		applyNavigation(resolveScreenEntry(NAV_SCREENS.MATCHCARDS, {
+			selectedSubjectId,
+			selectedExamId: null,
+			selectedTopicAreaKey: topicAreaKey ?? null
+		}));
+	}, [selectedSubjectId, applyNavigation]);
+
 	const showStatistics = useCallback(() => {
 		changeScreen(NAV_SCREENS.OVERVIEW);
 	}, [changeScreen]);
@@ -144,7 +152,8 @@ export default function useAppNavigationViewModel(params) {
 	const shouldShowSubjectSwitcher =
 		activeScreen === NAV_SCREENS.SELECT ||
 		activeScreen === NAV_SCREENS.EXAM ||
-		activeScreen === NAV_SCREENS.FLIPCARDS;
+		activeScreen === NAV_SCREENS.FLIPCARDS ||
+		activeScreen === NAV_SCREENS.MATCHCARDS;
 
 	const backContract = createAppBackContract({
 		activeScreen,
@@ -191,6 +200,7 @@ export default function useAppNavigationViewModel(params) {
 		showStatistics,
 		selectExam,
 		selectFlipcardDeck,
+		selectMatchCardsDeck,
 		backToExamList,
 		goBack
 	};

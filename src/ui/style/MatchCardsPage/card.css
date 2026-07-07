@@ -1,0 +1,145 @@
+.matchcard {
+	position: relative;
+	min-height: 0;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	padding: clamp(var(--space-5), 2.4vh, var(--space-7)) clamp(var(--space-6), 2.8vw, var(--space-9));
+	overflow: hidden;
+	border: 1px solid var(--matchcard-border-color);
+	border-radius: var(--matchcard-radius);
+	background: var(--matchcard-surface);
+	box-shadow:
+		var(--matchcard-shadow),
+		var(--matchcard-inset-highlight);
+	color: var(--text-main);
+	font: inherit;
+	text-align: center;
+	cursor: pointer;
+	transition:
+		transform var(--transition-fast),
+		border-color var(--transition-fast),
+		box-shadow var(--transition-fast),
+		background var(--transition-fast),
+		opacity var(--transition-fast);
+}
+
+.matchcard::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border: 1px solid var(--matchcard-glow-border);
+	border-radius: inherit;
+	box-shadow:
+		var(--matchcard-glow-shadow),
+		var(--matchcard-glow-shadow) inset;
+	pointer-events: none;
+}
+
+.matchcard:hover:not(:disabled) {
+	transform: translateY(-2px);
+	border-color: var(--matchcard-border-color-hover);
+	box-shadow:
+		var(--matchcard-hover-shadow),
+		var(--matchcard-hover-inset-highlight);
+}
+
+.matchcard:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 3px;
+}
+
+.matchcard:disabled {
+	cursor: default;
+}
+
+.matchcard-text {
+	position: relative;
+	z-index: 1;
+	max-width: 100%;
+	font-size: clamp(1.28rem, 2.08vw, 2.05rem);
+	font-weight: 600;
+	line-height: 1.12;
+	letter-spacing: -0.018em;
+	overflow-wrap: anywhere;
+	text-wrap: balance;
+}
+
+.matchcard--explanation .matchcard-text {
+	font-size: clamp(1rem, 1.28vw, 1.34rem);
+	font-weight: 600;
+	line-height: 1.18;
+	letter-spacing: -0.012em;
+}
+
+.matchcard-status {
+	position: relative;
+	z-index: 1;
+	font-size: 0.7rem;
+	font-weight: 900;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--text-muted);
+}
+
+.matchcard--selected {
+	border-color: var(--matchcard-border-color-selected);
+	box-shadow:
+		var(--matchcard-selected-ring),
+		var(--matchcard-selected-shadow);
+}
+
+.matchcard--selected .matchcard-status {
+	color: var(--accent);
+}
+
+.matchcard--success,
+.matchcard--fading-out {
+	border-color: var(--success-border);
+	background: var(--matchcard-success-surface);
+	box-shadow: var(--matchcard-success-ring);
+}
+
+.matchcard--success .matchcard-status,
+.matchcard--fading-out .matchcard-status {
+	color: var(--success-text);
+}
+
+.matchcard--wrong {
+	border-color: var(--danger-border);
+	background: var(--matchcard-wrong-surface);
+	box-shadow: var(--matchcard-wrong-ring);
+}
+
+.matchcard--wrong .matchcard-status {
+	color: var(--danger-text);
+}
+
+.matchcard--fading-out {
+	opacity: 0;
+	transform: scale(0.98);
+}
+
+.matchcard--fading-in {
+	animation: matchcard-fade-in 180ms ease both;
+}
+
+.matchcard--empty {
+	visibility: hidden;
+}
+
+@keyframes matchcard-fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px) scale(0.98);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}

@@ -2,13 +2,13 @@
 import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
 import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
 import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
+import ApiConceptDataSource from "../model/datasource/ApiConceptDataSource.js";
 import ApiExamAttemptDataSource from "../model/datasource/ApiExamAttemptDataSource.js";
-import FlashcardDataSource from "../model/datasource/FlashcardDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
 import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
-import FlashcardRepository from "../model/repositories/FlashcardRepository.js";
+import ConceptRepository from "../model/repositories/ConceptRepository.js";
 
 import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js";
 import GetAvailableExamsUseCase from "../model/domain/GetAvailableExamsUseCase.js";
@@ -16,9 +16,9 @@ import GetAvailableSubjectsUseCase from "../model/domain/GetAvailableSubjectsUse
 import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
 import GetExamByIdUseCase from "../model/domain/GetExamByIdUseCase.js";
 import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
-import GetFlashcardsUseCase from "../model/domain/GetFlashcardsUseCase.js";
+import GetConceptsForSubjectUseCase from "../model/domain/GetConceptsForSubjectUseCase.js";
 import GetTopicAreasUseCase from "../model/domain/GetTopicAreasUseCase.js";
-import GetFlashcardDeckSummariesUseCase from "../model/domain/GetFlashcardDeckSummariesUseCase.js";
+import GetFlipcardDeckSummariesUseCase from "../model/domain/GetFlipcardDeckSummariesUseCase.js";
 
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
@@ -50,17 +50,20 @@ const conceptImageDataSource = new ApiConceptImageDataSource({
     imageBaseUrl,
     getToken: getActiveAuthToken
 });
+const conceptDataSource = new ApiConceptDataSource({
+    baseUrl: apiBaseUrl,
+    getToken: getActiveAuthToken
+});
 const examAttemptDataSource = new ApiExamAttemptDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken
 });
-const flashcardDataSource = new FlashcardDataSource();
 
 // Repositories
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
 const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
-const flashcardRepository = new FlashcardRepository(flashcardDataSource);
+const conceptRepository = new ConceptRepository(conceptDataSource);
 
 // Use cases
 const gradeAnswerUseCase = new GradeAnswerUseCase();
@@ -73,9 +76,9 @@ const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
 const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
-const getFlashcardsUseCase = new GetFlashcardsUseCase(flashcardRepository);
+const getConceptsForSubjectUseCase = new GetConceptsForSubjectUseCase(conceptRepository);
 const getTopicAreasUseCase = new GetTopicAreasUseCase(subjectRepository);
-const getFlashcardDeckSummariesUseCase = new GetFlashcardDeckSummariesUseCase(flashcardRepository, subjectRepository);
+const getFlipcardDeckSummariesUseCase = new GetFlipcardDeckSummariesUseCase(conceptRepository, subjectRepository);
 
 // Export
 export {
@@ -89,7 +92,7 @@ export {
     calculateExamScoreUseCase,
     submitExamAttemptUseCase,
     getMyStatisticsUseCase,
-    getFlashcardsUseCase,
+    getConceptsForSubjectUseCase,
     getTopicAreasUseCase,
-    getFlashcardDeckSummariesUseCase
+    getFlipcardDeckSummariesUseCase
 };

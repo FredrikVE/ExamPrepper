@@ -1,18 +1,19 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
-import { filterFlashcardsByTopicArea } from "../../model/domain/utils/filterFlashcardsByTopicArea.js";
+import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
+import { filterConceptCardsByTopicArea } from "../../model/domain/utils/filterConceptCardsByTopicArea.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
 
 export default function useFlipcardsPageViewModel(
-    getFlashcardsUseCase,
+    getConceptsForSubjectUseCase,
     getTopicAreasUseCase,
     subjectId,
     initialTopicAreaKey,
@@ -34,16 +35,16 @@ export default function useFlipcardsPageViewModel(
         setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
     }, [initialTopicAreaKey, subjectId]);
 
-    const executeFlashcardLoad = useCallback(() => {
+    const executeConceptLoad = useCallback(() => {
         if (!isActive || !subjectId) {
             return Promise.resolve([]);
         }
 
-        return getFlashcardsUseCase.execute({
+        return getConceptsForSubjectUseCase.execute({
             subjectId,
-            language
+            topicAreaKey: ALL_TOPIC_AREAS
         });
-    }, [getFlashcardsUseCase, isActive, subjectId, language]);
+    }, [getConceptsForSubjectUseCase, isActive, subjectId]);
 
     const executeTopicAreaLoad = useCallback(() => {
         if (!isActive || !subjectId) {
@@ -56,39 +57,41 @@ export default function useFlipcardsPageViewModel(
         });
     }, [getTopicAreasUseCase, isActive, subjectId, language]);
 
-    const noteFlashcardsLoaded = useCallback(() => {
+    const noteConceptsLoaded = useCallback(() => {
         setMasteredCardIds([]);
         setPracticeCardIds([]);
     }, []);
 
-    const flashcardLoad = useLoadModel({
-        execute: executeFlashcardLoad,
+    const conceptLoad = useLoadModel({
+        execute: executeConceptLoad,
         emptyData: [],
         errorMessage: t.flipcardsErrorMessage,
-        onLoaded: noteFlashcardsLoaded
+        onLoaded: noteConceptsLoaded
     });
 
     const topicAreaLoad = useLoadModel({
         execute: executeTopicAreaLoad,
         emptyData: [],
         errorMessage: t.flipcardsErrorMessage,
-        onLoaded: noteFlipcardTopicAreasLoaded
+        onLoaded: null
     });
 
-    const flashcards = flashcardLoad.data;
+    const concepts = conceptLoad.data;
+    const flashcards = useMemo(() => {
+        return localizeConceptsForFlipcards(concepts, language);
+    }, [concepts, language]);
     const topicAreas = topicAreaLoad.data;
     const pageStatus = combineLoadStatuses([
-        flashcardLoad.status,
+        conceptLoad.status,
         topicAreaLoad.status
     ]);
-    const pageErrorMessage = resolveFlipcardsPageErrorMessage(
-        flashcardLoad,
-        topicAreaLoad,
-        t.flipcardsErrorMessage
-    );
+    const pageErrorMessage = resolveFirstLoadError([
+        conceptLoad,
+        topicAreaLoad
+    ], t.flipcardsErrorMessage);
 
     const topicFilteredFlashcards = useMemo(() => {
-        return filterFlashcardsByTopicArea(flashcards, topicAreaKey);
+        return filterConceptCardsByTopicArea(flashcards, topicAreaKey);
     }, [flashcards, topicAreaKey]);
 
     const visibleMasteredCardIds = useMemo(() => {
@@ -148,7 +151,7 @@ export default function useFlipcardsPageViewModel(
     }, [deckKey]);
 
     const activeTopicArea = useMemo(() => {
-        return findTopicArea(topicAreas, topicAreaKey);
+        return findTopicAreaByKey(topicAreas, topicAreaKey);
     }, [topicAreas, topicAreaKey]);
 
     const labels = useMemo(() => {
@@ -431,20 +434,6 @@ export default function useFlipcardsPageViewModel(
     };
 }
 
-function noteFlipcardTopicAreasLoaded() {}
-
-function resolveFlipcardsPageErrorMessage(flashcardLoad, topicAreaLoad, fallbackMessage) {
-    if (flashcardLoad.error) {
-        return flashcardLoad.error;
-    }
-
-    if (topicAreaLoad.error) {
-        return topicAreaLoad.error;
-    }
-
-    return fallbackMessage;
-}
-
 function createDeckKey(cards) {
     const cardIds = [];
 
@@ -472,16 +461,6 @@ function selectCardIdsForCards(cardIds, cards) {
     }
 
     return selectedCardIds;
-}
-
-function findTopicArea(topicAreas, topicAreaKey) {
-    for (const topicArea of topicAreas) {
-        if (topicArea.key === topicAreaKey) {
-            return topicArea;
-        }
-    }
-
-    return null;
 }
 
 function createTopicAreaDeckToolItems(topicAreas, activeTopicAreaKey, labels) {
@@ -544,4 +523,28 @@ function isTopicAreaDeckToolKey(deckToolKey) {
 
 function readTopicAreaKeyFromDeckToolKey(deckToolKey) {
     return deckToolKey.slice(TOPIC_AREA_DECK_TOOL_PREFIX.length);
+}
+
+
+function localizeConceptsForFlipcards(concepts, language) {
+    const localizedFlipcards = [];
+
+    for (const concept of concepts) {
+        localizedFlipcards.push({
+            id: concept.id,
+            term: resolveLocalizedConceptText(concept.term, language),
+            definition: resolveLocalizedConceptText(concept.explanation, language),
+            topicAreaKey: concept.topicAreaKey
+        });
+    }
+
+    return localizedFlipcards;
+}
+
+function resolveLocalizedConceptText(value, language) {
+    if (typeof value === "string") {
+        return value;
+    }
+
+    return value?.[language] ?? value?.no ?? "";
 }

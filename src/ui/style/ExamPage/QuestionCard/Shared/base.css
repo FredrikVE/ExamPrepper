@@ -1,32 +1,9 @@
 /* src/ui/style/ExamPage/QuestionCard/Shared/base.css */
 
 .question-card {
-    position: relative;
-    isolation: isolate;
     overflow: hidden;
-
-    display: flex;
-    flex-direction: column;
     min-height: clamp(520px, 56vh, 680px);
-
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-xl);
-    background: var(--question-card-surface);
-    box-shadow:
-        var(--shadow-card),
-        0 1px 0 color-mix(in srgb, #fff 75%, transparent) inset;
 }
-
-.question-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    display: var(--question-card-ambient-glow-display);
-    background: var(--question-card-ambient-glow);
-    pointer-events: none;
-}
-
 
 .question-card-body {
     position: relative;

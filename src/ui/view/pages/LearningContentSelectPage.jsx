@@ -98,7 +98,7 @@ export default function LearningContentSelectPage({ viewModel }) {
 
 				{viewModel.isFlipcardsContentActive && (
 					<FlashcardDeckGrid
-						decks={viewModel.visibleFlashcardDecks}
+						decks={viewModel.visibleFlipcardDecks}
 						eyebrowLabel={viewModel.flipcardsDeckEyebrow}
 						cardCountLabel={viewModel.deckCardCountLabel}
 						cardUnitLabel={viewModel.deckCardUnitLabel}
@@ -106,6 +106,19 @@ export default function LearningContentSelectPage({ viewModel }) {
 						emptyTitle={viewModel.deckEmptyTitle}
 						emptyMessage={viewModel.deckEmptyMessage}
 						onSelectDeck={viewModel.selectFlashcardDeck}
+					/>
+				)}
+
+				{viewModel.isMatchCardsContentActive && (
+					<FlashcardDeckGrid
+						decks={viewModel.visibleFlipcardDecks}
+						eyebrowLabel={viewModel.matchCardsDeckEyebrow}
+						cardCountLabel={viewModel.deckCardCountLabel}
+						cardUnitLabel={viewModel.deckCardUnitLabel}
+						minuteLabel={viewModel.minuteLabel}
+						emptyTitle={viewModel.deckEmptyTitle}
+						emptyMessage={viewModel.deckEmptyMessage}
+						onSelectDeck={viewModel.selectMatchCardsDeck}
 					/>
 				)}
 

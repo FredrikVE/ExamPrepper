@@ -49,9 +49,14 @@ function createT() {
         selectExamsSubtitleFallback: "Velg en øvingsprøve.",
         selectFlipcardsSubtitle: (subjectCode) => `Velg Flipcards for ${subjectCode}.`,
         selectFlipcardsSubtitleFallback: "Velg Flipcards.",
+        selectMatchCardsSubtitle: (subjectCode) => `Velg Begrepsmatch for ${subjectCode}.`,
+        selectMatchCardsSubtitleFallback: "Velg Begrepsmatch.",
         selectGlossariesSubtitle: (subjectCode) => `Øv på nøkkelbegreper og definisjoner for ${subjectCode}.`,
         selectGlossariesSubtitleFallback: "Øv på nøkkelbegreper og definisjoner.",
-        selectIntroTitle: "Velg eksamen",
+        selectExamsTitle: "Velg eksamen",
+        selectFlipcardsTitle: "Velg flipcards",
+        selectMatchCardsTitle: "Velg begrepsmatch",
+        selectConceptListsTitle: "Velg begrepsliste",
         selectLoadingMessage: "Laster eksamener",
         selectEmptyTitle: "Ingen eksamener",
         selectEmptyMessage: "Ingen eksamener funnet",
@@ -78,6 +83,7 @@ function createT() {
         pageToolsExamsLabel: "Eksamener",
         pageToolsPracticeTestsLabel: "Øveprøver",
         pageToolsFlipcardsLabel: "Flipcards",
+        pageToolsMatchCardsLabel: "Begrepsmatch",
         pageToolsCreateExamLabel: "Opprett ny eksamen",
         pageToolsCreateSubjectLabel: "Opprett nytt fag",
         pageToolsImportSubjectMaterialsLabel: "Legg inn notater eller forelesningsslides",
@@ -87,9 +93,11 @@ function createT() {
         pageToolsAiExamLabel: "Lag AI-generert øveeksamen",
         contentToggleExamsLabel: "Eksamener",
         contentToggleFlipcardsLabel: "Flipcards",
+        contentToggleMatchCardsLabel: "Begrepsmatch",
         contentToggleConceptListsLabel: "Begrepslister",
         contentToggleAriaLabel: "Velg innholdstype",
         flipcardsSearchPlaceholder: "Søk i flipcard-bunker",
+        matchCardsSearchPlaceholder: "Søk i begrepsmatch-bunker",
         conceptListSearchPlaceholder: "Søk i begrepslister",
         topicAreaAllLabel: "Alle områder",
         topicAreaFilterAriaLabel: "Fagområde",
@@ -115,7 +123,7 @@ function createViewModel(params = {}) {
     const getTopicAreasUseCase = {
         execute: jest.fn().mockResolvedValue([])
     };
-    const getFlashcardDeckSummariesUseCase = {
+    const getFlipcardDeckSummariesUseCase = {
         execute: jest.fn().mockResolvedValue([])
     };
     const goBack = jest.fn();
@@ -123,10 +131,11 @@ function createViewModel(params = {}) {
     const viewModel = useLearningContentSelectPageViewModel(
         getAvailableExamsUseCase,
         getTopicAreasUseCase,
-        getFlashcardDeckSummariesUseCase,
+        getFlipcardDeckSummariesUseCase,
         "nb",
         createT(),
         { id: "in5431", code: "IN5431" },
+        jest.fn(),
         jest.fn(),
         jest.fn(),
         params.isActive ?? true,
@@ -140,7 +149,7 @@ function createViewModel(params = {}) {
     return {
         getAvailableExamsUseCase,
         getTopicAreasUseCase,
-        getFlashcardDeckSummariesUseCase,
+        getFlipcardDeckSummariesUseCase,
         goBack,
         viewModel
     };

@@ -9,6 +9,7 @@ import SidebarUserCard from "./SidebarUserCard.jsx";
 import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import MobileExamSubmitAction from "./MobileExamSubmitAction.jsx";
 import MobileExamSubmitConfirmation from "./MobileExamSubmitConfirmation.jsx";
+import ProgressBar from "../Shared/ProgressBar/ProgressBar.jsx";
 import SettingsPanelContent from "../Settings/SettingsPanelContent.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 import useSubmitConfirmFocus from "./useSubmitConfirmFocus.js";
@@ -112,12 +113,15 @@ export default function MobileDropDownTopBar(props) {
 	const { t } = useLanguage();
 
 	const isFlipcardsScreen = props.activeScreen === NAV_SCREENS.FLIPCARDS;
+	const isMatchCardsScreen = props.activeScreen === NAV_SCREENS.MATCHCARDS;
+	const usesTransparentPracticeTopbar = isFlipcardsScreen || isMatchCardsScreen;
 	const shouldShowSettingsTopbar = props.isMobileDropDownTopBarMenuOpen && props.isSettingsPresentationOpen;
 	const showPickerButton = props.isMobileDropDownTopBarMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
 	const showFlipcardsDeckPill = isFlipcardsScreen && !props.isMobileDropDownTopBarMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
-	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMobileDropDownTopBarMenuOpen;
+	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMobileDropDownTopBarMenuOpen && !props.progressBarModel;
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
 	const showTopbarBackButton = props.showBackButton || shouldShowSettingsTopbar;
+	const showMobileProgressBar = Boolean(props.progressBarModel) && !props.isMobileDropDownTopBarMenuOpen && !shouldShowSettingsTopbar;
 
 	useMobileMenuEscapeKey({
 		isMobileDropDownTopBarMenuOpen: props.isMobileDropDownTopBarMenuOpen,
@@ -133,7 +137,7 @@ export default function MobileDropDownTopBar(props) {
 	const topbarClassNames = [
 		"mobile-topbar",
 		showTopbarBackButton ? "mobile-topbar-with-back" : null,
-		isFlipcardsScreen ? "mobile-topbar-flipcards" : null,
+		usesTransparentPracticeTopbar ? "mobile-topbar-transparent-practice" : null,
 		props.isMobileDropDownTopBarMenuOpen ? "mobile-topbar-menu-open" : null,
 		shouldShowSettingsTopbar ? "mobile-topbar-settings-open" : null
 	].filter(Boolean);
@@ -206,6 +210,12 @@ export default function MobileDropDownTopBar(props) {
 				>
 					<Menu className="mobile-topbar-menu-icon" />
 				</button>
+
+				{showMobileProgressBar && (
+					<div className="mobile-topbar-progress">
+						<ProgressBar model={props.progressBarModel} />
+					</div>
+				)}
 
 				{shouldShowSettingsTopbar && (
 					<h2 className="mobile-topbar-settings-title">

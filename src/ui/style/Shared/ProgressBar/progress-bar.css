@@ -1,0 +1,121 @@
+/* src/ui/style/Shared/ProgressBar/progress-bar.css */
+.progress-bar {
+	--progress-bar-track-height: 64px;
+	--progress-bar-line-top: 26px;
+	--progress-bar-line-height: 4px;
+	--progress-bar-icon-slot-height: 18px;
+	--progress-bar-label-offset: 14px;
+
+	width: 100%;
+	min-width: 0;
+	padding: 0 clamp(var(--space-2), 1.2vw, var(--space-4));
+}
+
+.progress-bar-track {
+	position: relative;
+	height: var(--progress-bar-track-height);
+}
+
+.progress-bar-line {
+	position: absolute;
+	top: var(--progress-bar-line-top);
+	left: 8px;
+	right: 8px;
+	height: var(--progress-bar-line-height);
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--text-soft) 22%, transparent);
+}
+
+.progress-bar-fill {
+	position: absolute;
+	top: var(--progress-bar-line-top);
+	left: 8px;
+	height: var(--progress-bar-line-height);
+	border-radius: var(--radius-full);
+	background: var(--accent);
+	box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 36%, transparent);
+	transition: width 220ms ease;
+}
+
+.progress-bar-point {
+	position: absolute;
+	top: 0;
+	transform: translateX(-50%);
+	display: flex;
+	min-width: 68px;
+	flex-direction: column;
+	align-items: center;
+	border: 0;
+	background: transparent;
+	color: var(--text-muted);
+	font: inherit;
+	font-size: 0.8rem;
+	font-weight: 800;
+	line-height: 1;
+	text-align: center;
+}
+
+.progress-bar-point:first-of-type {
+	align-items: flex-start;
+	transform: translateX(0);
+}
+
+.progress-bar-point:last-of-type {
+	align-items: flex-end;
+	transform: translateX(-100%);
+}
+
+button.progress-bar-point {
+	cursor: pointer;
+}
+
+.progress-bar-icon-slot {
+	display: flex;
+	min-height: var(--progress-bar-icon-slot-height);
+	align-items: center;
+	justify-content: center;
+}
+
+.progress-bar-label {
+	margin-top: var(--progress-bar-label-offset);
+}
+
+.progress-bar-dot {
+	width: 10px;
+	height: 10px;
+	border: 2px solid color-mix(in srgb, var(--text-soft) 55%, transparent);
+	border-radius: var(--radius-full);
+	background: var(--shell-bg);
+	box-shadow: 0 0 0 5px color-mix(in srgb, var(--shell-bg) 74%, transparent);
+}
+
+.progress-bar-point-active {
+	color: var(--accent);
+}
+
+.progress-bar-point-active .progress-bar-dot {
+	border-color: var(--accent);
+	background: var(--accent);
+}
+
+.progress-bar-flag {
+	width: 18px;
+	height: 18px;
+	color: var(--text-muted);
+}
+
+.matchcards-workspace .scaffold-header {
+	grid-template-columns: 64px minmax(0, 1fr) 64px;
+	column-gap: clamp(var(--space-6), 4vw, var(--space-10));
+}
+
+.matchcards-workspace .scaffold-header__heading {
+	width: 100%;
+	max-width: none;
+	align-self: center;
+	justify-content: stretch;
+}
+
+.matchcards-workspace .scaffold-header__heading .progress-bar {
+	padding: 0;
+}

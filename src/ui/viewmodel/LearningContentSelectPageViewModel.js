@@ -6,20 +6,23 @@ import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigati
 import createLearningContentSelectPageCopy from "./LearningContentSelectPage/createLearningContentSelectPageCopy.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
-import { ALL_TOPIC_AREAS, filterExams } from "./LearningContentSelectPage/examFilters.js";
+import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
+import { filterExams } from "./LearningContentSelectPage/examFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 export default function useLearningContentSelectPageViewModel(
 	getAvailableExamsUseCase,
 	getTopicAreasUseCase,
-	getFlashcardDeckSummariesUseCase,
+	getFlipcardDeckSummariesUseCase,
 	language,
 	t,
 	selectedSubject,
 	onSelectExam,
 	onSelectFlashcardDeck,
+	onSelectMatchCardsDeck,
 	isActive,
 	onChangeScreen,
 	showBackButton,
@@ -76,52 +79,51 @@ export default function useLearningContentSelectPageViewModel(
 		});
 	}, [getTopicAreasUseCase, isActive, subjectId, language]);
 
-	const executeFlashcardDeckLoad = useCallback(() => {
+	const executeFlipcardDeckLoad = useCallback(() => {
 		if (!isActive || !subjectId) {
 			return Promise.resolve([]);
 		}
 
-		return getFlashcardDeckSummariesUseCase.execute({
+		return getFlipcardDeckSummariesUseCase.execute({
 			subjectId,
 			language
 		});
-	}, [getFlashcardDeckSummariesUseCase, isActive, subjectId, language]);
+	}, [getFlipcardDeckSummariesUseCase, isActive, subjectId, language]);
 
 	const examLoad = useLoadModel({
 		execute: executeExamLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
-		onLoaded: noteLearningContentResourceLoaded
+		onLoaded: null
 	});
 
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
-		onLoaded: noteLearningContentResourceLoaded
+		onLoaded: null
 	});
 
-	const flashcardDeckLoad = useLoadModel({
-		execute: executeFlashcardDeckLoad,
+	const flipcardDeckLoad = useLoadModel({
+		execute: executeFlipcardDeckLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
-		onLoaded: noteLearningContentResourceLoaded
+		onLoaded: null
 	});
 
 	const exams = examLoad.data;
 	const topicAreas = topicAreaLoad.data;
-	const flashcardDeckSummaries = flashcardDeckLoad.data;
+	const flipcardDeckSummaries = flipcardDeckLoad.data;
 	const pageStatus = combineLoadStatuses([
 		examLoad.status,
 		topicAreaLoad.status,
-		flashcardDeckLoad.status
+		flipcardDeckLoad.status
 	]);
-	const pageErrorMessage = resolveLearningContentPageErrorMessage(
+	const pageErrorMessage = resolveFirstLoadError([
 		examLoad,
 		topicAreaLoad,
-		flashcardDeckLoad,
-		t.selectErrorMessage
-	);
+		flipcardDeckLoad
+	], t.selectErrorMessage);
 
 	const pageCopy = useMemo(() => {
 		return createLearningContentSelectPageCopy(t, selectedSubject, activeContentType);
@@ -160,21 +162,22 @@ export default function useLearningContentSelectPageViewModel(
 		return filterExams(exams, searchTerm, topicAreaKey);
 	}, [exams, searchTerm, topicAreaKey]);
 
-	const visibleFlashcardDecks = useMemo(() => {
-		return filterDeckSummaries(flashcardDeckSummaries, searchTerm, topicAreaKey);
-	}, [flashcardDeckSummaries, searchTerm, topicAreaKey]);
+	const visibleFlipcardDecks = useMemo(() => {
+		return filterDeckSummaries(flipcardDeckSummaries, searchTerm, topicAreaKey);
+	}, [flipcardDeckSummaries, searchTerm, topicAreaKey]);
 
 	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
 	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
+	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
 	const isConceptListsContentActive = activeContentType === LEARNING_CONTENT_TYPES.CONCEPT_LISTS;
 
 	const searchSuggestions = useMemo(() => {
-		if (isFlipcardsContentActive) {
-			return createDeckSearchSuggestions(visibleFlashcardDecks);
+		if (isFlipcardsContentActive || isMatchCardsContentActive) {
+			return createDeckSearchSuggestions(visibleFlipcardDecks);
 		}
 
 		return createExamSearchSuggestions(visibleExams);
-	}, [isFlipcardsContentActive, visibleExams, visibleFlashcardDecks]);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, visibleExams, visibleFlipcardDecks]);
 
 	const topicAreaFilterOptions = useMemo(() => {
 		const filterOptions = [
@@ -201,7 +204,7 @@ export default function useLearningContentSelectPageViewModel(
 			return t.filterAllLabel;
 		}
 
-		const topicArea = findTopicArea(topicAreas, topicAreaKey);
+		const topicArea = findTopicAreaByKey(topicAreas, topicAreaKey);
 
 		return topicArea?.label ?? t.filterAllLabel;
 	}, [topicAreas, topicAreaKey, t.filterAllLabel]);
@@ -222,14 +225,24 @@ export default function useLearningContentSelectPageViewModel(
 		onSelectFlashcardDeck(nextTopicAreaKey);
 	}, [closeExamSearchSheet, onSelectFlashcardDeck]);
 
+	const selectMatchCardsDeck = useCallback((nextTopicAreaKey) => {
+		closeExamSearchSheet();
+		onSelectMatchCardsDeck(nextTopicAreaKey);
+	}, [closeExamSearchSheet, onSelectMatchCardsDeck]);
+
 	const selectSearchSuggestion = useCallback((suggestionId) => {
 		if (isFlipcardsContentActive) {
 			selectFlashcardDeck(suggestionId);
 			return;
 		}
 
+		if (isMatchCardsContentActive) {
+			selectMatchCardsDeck(suggestionId);
+			return;
+		}
+
 		selectExam(suggestionId);
-	}, [isFlipcardsContentActive, selectExam, selectFlashcardDeck]);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, selectExam, selectFlashcardDeck, selectMatchCardsDeck]);
 
 	const topicAreaToolItems = useMemo(() => {
 		return createTopicAreaToolItems({
@@ -256,7 +269,7 @@ export default function useLearningContentSelectPageViewModel(
 		// Data
 		exams: visibleExams,
 		visibleExams,
-		visibleFlashcardDecks,
+		visibleFlipcardDecks,
 		selectedSubject,
 		pageStatus,
 		pageErrorMessage,
@@ -276,6 +289,7 @@ export default function useLearningContentSelectPageViewModel(
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 		isExamsContentActive,
 		isFlipcardsContentActive,
+		isMatchCardsContentActive,
 		isConceptListsContentActive,
 		conceptListPlaceholderCode: t.contentToggleConceptListsLabel,
 		conceptListPlaceholderTitle: t.conceptListPlaceholderTitle,
@@ -286,6 +300,7 @@ export default function useLearningContentSelectPageViewModel(
 		deckEmptyTitle: t.deckEmptyTitle,
 		deckEmptyMessage: t.deckEmptyMessage,
 		flipcardsDeckEyebrow: t.contentToggleFlipcardsLabel,
+		matchCardsDeckEyebrow: t.contentToggleMatchCardsLabel,
 
 		// Navigasjon
 		showBackButton,
@@ -327,40 +342,17 @@ export default function useLearningContentSelectPageViewModel(
 		closeExamSearchSheet,
 		selectExam,
 		selectFlashcardDeck,
+		selectMatchCardsDeck,
 		selectContentType,
 		selectTopicAreaKey,
 		selectSearchSuggestion
 	};
 }
 
-function noteLearningContentResourceLoaded() {}
-
-function resolveLearningContentPageErrorMessage(examLoad, topicAreaLoad, flashcardDeckLoad, fallbackMessage) {
-	const loadModels = [examLoad, topicAreaLoad, flashcardDeckLoad];
-
-	for (const loadModel of loadModels) {
-		if (loadModel.error) {
-			return loadModel.error;
-		}
-	}
-
-	return fallbackMessage;
-}
-
 function findContentTypeEntry(contentTypeId) {
     for (const entry of LEARNING_CONTENT_ENTRIES) {
         if (entry.id === contentTypeId) {
             return entry;
-        }
-    }
-
-    return null;
-}
-
-function findTopicArea(topicAreas, topicAreaKey) {
-    for (const topicArea of topicAreas) {
-        if (topicArea.key === topicAreaKey) {
-            return topicArea;
         }
     }
 
