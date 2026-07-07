@@ -11,7 +11,7 @@
 }
 
 @media (max-width: 820px) {
-	.statistics-page-workspace {
+	.statistics-page-workspace .workspace-scaffold-scroll {
 		padding: var(--space-6);
 	}
 
@@ -38,10 +38,13 @@
 }
 
 @media (max-width: 932px) {
-	.statistics-page-workspace {
+	.workspace-scaffold.statistics-page-workspace {
 		min-height: 100vh;
 		border-inline: 0;
 		border-radius: 0;
+	}
+
+	.statistics-page-workspace .workspace-scaffold-scroll {
 		padding: calc(var(--mobile-topbar-height) + 24px) var(--space-6) var(--space-10);
 	}
 }

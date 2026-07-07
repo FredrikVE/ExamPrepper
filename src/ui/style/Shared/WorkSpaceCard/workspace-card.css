@@ -1,0 +1,25 @@
+/* src/ui/style/Shared/WorkSpaceCard/workspace-card.css */
+
+.workspace-card {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	flex-direction: column;
+
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-xl);
+	background: var(--workspace-card-surface);
+	box-shadow:
+		var(--shadow-card),
+		0 1px 0 color-mix(in srgb, #fff 75%, transparent) inset;
+}
+
+.workspace-card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	display: var(--workspace-card-ambient-glow-display);
+	background: var(--workspace-card-ambient-glow);
+	pointer-events: none;
+}

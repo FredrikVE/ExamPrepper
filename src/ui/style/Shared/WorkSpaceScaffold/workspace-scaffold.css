@@ -1,0 +1,61 @@
+/* src/ui/style/Shared/WorkSpaceScaffold/workspace-scaffold.css */
+.workspace-scaffold {
+	--workspace-scaffold-backdrop-filter: var(--blur-panel);
+
+	position: relative;
+	z-index: 1;
+	box-sizing: border-box;
+	display: flex;
+	min-width: 0;
+	min-height: 0;
+	height: 100%;
+	flex-direction: column;
+	overflow: hidden;
+	isolation: isolate;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-lg);
+	background: var(--shell-bg);
+	box-shadow: var(--shadow-heavy);
+	color: var(--text-main);
+	backdrop-filter: var(--workspace-scaffold-backdrop-filter);
+}
+
+.workspace-scaffold::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background: var(--workspace-ambient-glow);
+}
+
+.workspace-scaffold-scroll {
+	position: relative;
+	z-index: 1;
+	box-sizing: border-box;
+	min-width: 0;
+	min-height: 0;
+	flex: 1 1 auto;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
+	touch-action: pan-y;
+	scrollbar-color: color-mix(in srgb, var(--accent) 26%, transparent) transparent;
+	scrollbar-width: thin;
+}
+
+.workspace-scaffold-scroll::-webkit-scrollbar {
+	width: 10px;
+}
+
+.workspace-scaffold-scroll::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.workspace-scaffold-scroll::-webkit-scrollbar-thumb {
+	border: 3px solid transparent;
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--accent) 26%, transparent);
+	background-clip: content-box;
+}

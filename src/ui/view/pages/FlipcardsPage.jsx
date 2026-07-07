@@ -8,6 +8,7 @@ import FlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/Flipc
 import useFlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/useFlipcardToolMenu.js";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
+import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
 
 export default function FlipcardsPage({ viewModel }) {
 	const { isDesktopMenuOpen, closeDesktopMenu, setDesktopMenuOpen } = useFlipcardToolMenu();
@@ -20,7 +21,7 @@ export default function FlipcardsPage({ viewModel }) {
 
 	/* Verktøymenyen monteres i Headerens trailing-slot slik at triggeren bor i
 	   headerens stacking-kontekst (z 30) — ikke som fixed-imposter inne i
-	   .flipcards-scroll (z 1), der headerens glassflate maler over den. */
+	   .workspace-scaffold-scroll (z 1), der headerens glassflate maler over den. */
 	const headerToolMenu = (
 		<FlipcardToolMenu
 			presentationMode={viewModel.presentationMode}
@@ -34,7 +35,7 @@ export default function FlipcardsPage({ viewModel }) {
 
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
-			<FlipcardsShell viewModel={viewModel}>
+			<FlipcardsShell viewModel={viewModel} headerTrailing={null}>
 				<WorkspaceState
 					status={viewModel.pageStatus}
 					loadingLabel={viewModel.labels.loadingTitle}
@@ -48,7 +49,7 @@ export default function FlipcardsPage({ viewModel }) {
 
 	if (viewModel.flashcards.length === 0) {
 		return (
-			<FlipcardsShell viewModel={viewModel}>
+			<FlipcardsShell viewModel={viewModel} headerTrailing={null}>
 				<WorkspaceMessage
 					title={viewModel.labels.emptyTitle}
 					body={viewModel.labels.emptyBody}
@@ -90,23 +91,21 @@ export default function FlipcardsPage({ viewModel }) {
 }
 
 function FlipcardsShell(props) {
+	const header = (
+		<Header
+			showBackButton={props.viewModel.showBackButton}
+			backLabel={props.viewModel.backLabel}
+			navigationLabel={props.viewModel.navigationLabel}
+			onBack={props.viewModel.onBack}
+			progressBarModel={null}
+			tools={null}
+			trailing={props.headerTrailing}
+		/>
+	);
+
 	return (
-		<main className="flipcards-workspace">
-			<div className="flipcards-ambient-light" aria-hidden="true" />
-
-			<Header
-				showBackButton={props.viewModel.showBackButton}
-				backLabel={props.viewModel.backLabel}
-				navigationLabel={props.viewModel.navigationLabel}
-				onBack={props.viewModel.onBack}
-				progressBarModel={null}
-				tools={null}
-				trailing={props.headerTrailing}
-			/>
-
-			<div className="flipcards-scroll">
-				{props.children}
-			</div>
-		</main>
+		<WorkSpaceScaffold className="flipcards-workspace" header={header} scrollToTopRequestId={0}>
+			{props.children}
+		</WorkSpaceScaffold>
 	);
 }

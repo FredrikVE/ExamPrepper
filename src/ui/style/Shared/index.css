@@ -1,3 +1,5 @@
 /* src/ui/style/Shared/index.css */
 @import "./SelectionCard/selection-card-dimensions.css";
+@import "./WorkSpaceCard/index.css";
+@import "./WorkSpaceScaffold/index.css";
 @import "./ProgressBar/index.css";

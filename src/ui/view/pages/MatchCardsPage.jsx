@@ -2,6 +2,8 @@ import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import WorkSpaceCard from "../components/Shared/WorkSpaceCard/WorkSpaceCard.jsx";
+import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
@@ -33,7 +35,7 @@ export default function MatchCardsPage({ viewModel }) {
 
 	return (
 		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
-			<section className="matchcards-game-shell">
+			<WorkSpaceCard className="matchcards-workspace-card">
 				<MatchCardsGrid
 					termSlots={viewModel.termSlots}
 					explanationSlots={viewModel.explanationSlots}
@@ -42,7 +44,7 @@ export default function MatchCardsPage({ viewModel }) {
 					isInteractionLocked={viewModel.isInteractionLocked}
 					onSelectSlot={viewModel.handleSelectSlot}
 				/>
-			</section>
+			</WorkSpaceCard>
 
 			{viewModel.isRoundComplete && (
 				<section className="matchcards-round-complete" role="status">
@@ -60,8 +62,8 @@ export default function MatchCardsPage({ viewModel }) {
 }
 
 function MatchCardsShell({ viewModel, progressBarModel, children }) {
-	return (
-		<main className="matchcards-workspace">
+	const header = (
+		<>
 			<div className="matchcards-ambient-light" aria-hidden="true" />
 
 			<Header
@@ -72,10 +74,12 @@ function MatchCardsShell({ viewModel, progressBarModel, children }) {
 				progressBarModel={progressBarModel}
 				tools={null}
 			/>
+		</>
+	);
 
-			<div className="matchcards-scroll">
-				{children}
-			</div>
-		</main>
+	return (
+		<WorkSpaceScaffold className="matchcards-workspace" header={header} scrollToTopRequestId={0}>
+			{children}
+		</WorkSpaceScaffold>
 	);
 }

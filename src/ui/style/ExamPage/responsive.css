@@ -31,7 +31,7 @@
 		border-inline: 0;
 	}
 
-	.exam-scroll {
+	.exam-workspace .workspace-scaffold-scroll {
 		padding-top: var(--mobile-topbar-height);
 	}
 
@@ -58,7 +58,7 @@
         min-height: 0;
     }
 
-    .exam-scroll {
+    .exam-workspace .workspace-scaffold-scroll {
         overscroll-behavior: contain;
     }
 
@@ -82,7 +82,7 @@
         --exam-content-max-width: 880px;
     }
 
-    .exam-scroll {
+    .exam-workspace .workspace-scaffold-scroll {
         padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
     }
 

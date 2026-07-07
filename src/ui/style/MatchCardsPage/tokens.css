@@ -4,9 +4,9 @@
 	--matchcard-border-color-hover: color-mix(in srgb, var(--accent) 52%, var(--line));
 	--matchcard-border-color-selected: color-mix(in srgb, var(--accent) 70%, var(--line));
 	--matchcard-radius: clamp(24px, 1.9vw, 30px);
-	--matchcard-surface: color-mix(in srgb, var(--panel-bg) 76%, transparent);
-	--matchcard-shadow: var(--shadow-card);
-	--matchcard-hover-shadow: var(--shadow-heavy);
+	--matchcard-surface: color-mix(in srgb, var(--shell-bg) 74%, transparent);
+	--matchcard-shadow: 0 10px 26px color-mix(in srgb, var(--shadow-color) 18%, transparent);
+	--matchcard-hover-shadow: 0 18px 42px color-mix(in srgb, var(--shadow-color) 22%, transparent);
 	--matchcard-inset-highlight: 0 1px 0 color-mix(in srgb, var(--panel-strong) 18%, transparent) inset;
 	--matchcard-hover-inset-highlight: 0 0 0 1px var(--matchcard-glow-border) inset;
 	--matchcard-glow-border: color-mix(in srgb, var(--accent) 16%, transparent);
