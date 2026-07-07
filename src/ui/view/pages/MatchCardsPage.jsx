@@ -2,7 +2,6 @@ import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
-import WorkSpaceCard from "../components/Shared/WorkSpaceCard/WorkSpaceCard.jsx";
 import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
 
@@ -35,16 +34,14 @@ export default function MatchCardsPage({ viewModel }) {
 
 	return (
 		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
-			<WorkSpaceCard className="matchcards-workspace-card">
-				<MatchCardsGrid
-					termSlots={viewModel.termSlots}
-					explanationSlots={viewModel.explanationSlots}
-					labels={viewModel.labels}
-					boardStyle={viewModel.boardStyle}
-					isInteractionLocked={viewModel.isInteractionLocked}
-					onSelectSlot={viewModel.handleSelectSlot}
-				/>
-			</WorkSpaceCard>
+			<MatchCardsGrid
+				termSlots={viewModel.termSlots}
+				explanationSlots={viewModel.explanationSlots}
+				labels={viewModel.labels}
+				boardStyle={viewModel.boardStyle}
+				isInteractionLocked={viewModel.isInteractionLocked}
+				onSelectSlot={viewModel.handleSelectSlot}
+			/>
 
 			{viewModel.isRoundComplete && (
 				<section className="matchcards-round-complete" role="status">
