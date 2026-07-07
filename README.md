@@ -80,6 +80,7 @@ Se full oversikt i [FEATURES.md](./docs/documentation/FEATURES.md).
 
 ---
 
+
 ## Prosjektstruktur
 
 Prosjektet er organisert med tydelig skille mellom data, domenelogikk, viewmodels, sider, komponenter og styling.
