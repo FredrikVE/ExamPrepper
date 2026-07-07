@@ -11,7 +11,7 @@
 
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-xl);
-    background: var(--question-card-surface);
+    background: var(--workspace-card-surface);
     box-shadow:
         var(--shadow-card),
         0 1px 0 color-mix(in srgb, #fff 75%, transparent) inset;

@@ -8,7 +8,7 @@
 	isolation: isolate;
 	border: 1px solid var(--line-strong);
 	border-radius: var(--radius-lg);
-	background: var(--shell-bg);
+	background: var(--workspace-card-surface);
 	box-shadow: var(--shadow-heavy);
 	color: var(--text-main);
 	backdrop-filter: var(--blur-panel);
