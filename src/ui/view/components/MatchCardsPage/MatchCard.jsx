@@ -1,10 +1,13 @@
+// src/ui/view/components/MatchCardsPage/MatchCard.jsx
+import FormattedText, { createPlainFormattedText } from "../Shared/FormattedText.jsx";
 import { MATCH_SLOT_STATUS } from "../../../viewmodel/MatchCardsPage/matchCardsSessionModel.js";
 
 export default function MatchCard({ slot, labels, isInteractionLocked, onSelectSlot }) {
 	const isEmpty = slot.status === MATCH_SLOT_STATUS.EMPTY;
 	const className = createMatchCardClassName(slot);
 	const statusLabel = createStatusLabel(slot.status, labels);
-	const ariaLabel = labels.cardAriaLabel(slot.text ?? labels.emptySlotLabel, statusLabel);
+	const readableText = createPlainFormattedText(slot.text ?? labels.emptySlotLabel);
+	const ariaLabel = labels.cardAriaLabel(readableText, statusLabel);
 
 	const selectSlot = () => {
 		onSelectSlot(slot.slotId);
@@ -19,7 +22,7 @@ export default function MatchCard({ slot, labels, isInteractionLocked, onSelectS
 			aria-label={ariaLabel}
 			onClick={selectSlot}
 		>
-			<span className="matchcard-text">{slot.text}</span>
+			<span className="matchcard-text"><FormattedText text={slot.text} /></span>
 			{statusLabel && <span className="matchcard-status">{statusLabel}</span>}
 		</button>
 	);
