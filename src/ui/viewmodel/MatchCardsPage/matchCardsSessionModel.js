@@ -1,3 +1,4 @@
+// src/ui/viewmodel/MatchCardsPage/matchCardsSessionModel.js
 export const MATCH_CARD_COLUMN = Object.freeze({
 	TERM: "term",
 	EXPLANATION: "explanation"
@@ -38,7 +39,7 @@ function createPairFromGlossaryEntry(glossaryEntry) {
 	};
 }
 
-function createPairsFromGlossaryEntries({ glossaryEntries }) {
+export function createPairsFromGlossaryEntries(glossaryEntries) {
 	const pairs = [];
 
 	for (const glossaryEntry of glossaryEntries) {
@@ -279,9 +280,7 @@ export function createMatchCardsSession({
 	visiblePairCount,
 	randomNumber
 }) {
-	const pairs = createPairsFromGlossaryEntries({
-		glossaryEntries
-	});
+	const pairs = createPairsFromGlossaryEntries(glossaryEntries);
 
 	shuffleInPlace({
 		items: pairs,

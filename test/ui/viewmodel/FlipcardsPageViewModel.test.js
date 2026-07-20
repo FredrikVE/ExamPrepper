@@ -42,9 +42,9 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", 
 const { default: useFlipcardsPageViewModel } = await import("../../../src/ui/viewmodel/FlipcardsPageViewModel.js");
 
 const glossaryEntries = [
-	{ id: "card-a", term: { no: "A" }, explanation: { no: "A-definition" }, topicAreaKey: "kryptografi" },
-	{ id: "card-b", term: { no: "B" }, explanation: { no: "B-definition" }, topicAreaKey: "kryptografi" },
-	{ id: "card-c", term: { no: "C" }, explanation: { no: "C-definition" }, topicAreaKey: "iam" }
+	{ id: "card-a", glossaryEntryKey: "card-a", term: { no: "A" }, explanation: { no: "A-definition" }, topicAreaKey: "kryptografi" },
+	{ id: "card-b", glossaryEntryKey: "card-b", term: { no: "B" }, explanation: { no: "B-definition" }, topicAreaKey: "kryptografi" },
+	{ id: "card-c", glossaryEntryKey: "card-c", term: { no: "C" }, explanation: { no: "C-definition" }, topicAreaKey: "iam" }
 ];
 
 const cards = [
