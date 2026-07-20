@@ -5,7 +5,7 @@ export const LEARNING_CONTENT_TYPES = {
     EXAMS: "exams",
     FLIPCARDS: "flipcards",
     MATCHCARDS: "matchcards",
-    CONCEPT_LISTS: "concept-lists"
+    GLOSSARY: "glossary"
 };
 
 export const LEARNING_CONTENT_ENTRIES = [
@@ -37,10 +37,10 @@ export const LEARNING_CONTENT_ENTRIES = [
         availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
     },
     {
-        id: LEARNING_CONTENT_TYPES.CONCEPT_LISTS,
-        labelKey: "contentToggleConceptListsLabel",
-        titleKey: "selectConceptListsTitle",
-        searchPlaceholderKey: "conceptListSearchPlaceholder",
+        id: LEARNING_CONTENT_TYPES.GLOSSARY,
+        labelKey: "contentToggleGlossaryLabel",
+        titleKey: "selectGlossaryTitle",
+        searchPlaceholderKey: "glossarySearchPlaceholder",
         subtitleKey: "selectGlossariesSubtitle",
         subtitleFallbackKey: "selectGlossariesSubtitleFallback",
         availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE

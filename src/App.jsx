@@ -25,7 +25,7 @@ import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getConceptsForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -262,7 +262,7 @@ function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChan
 
 function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
 	const flipcardsPageViewModel = useFlipcardsPageViewModel(
-		getConceptsForSubjectUseCase,
+		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		subjectId,
 		initialTopicAreaKey,
@@ -279,7 +279,7 @@ function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isA
 
 function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onHeaderProgressBarModelChange }) {
 	const matchCardsPageViewModel = useMatchCardsPageViewModel({
-		getConceptsForSubjectUseCase,
+		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		subjectId,
 		initialTopicAreaKey,

@@ -7,7 +7,7 @@ describe("resolveFirstLoadError", () => {
 		const loadModels = [
 			{ error: null },
 			{ error: "Topic areas failed" },
-			{ error: "Concepts failed" }
+			{ error: "Glossary failed" }
 		];
 
 		expect(resolveFirstLoadError(loadModels, "Fallback")).toBe("Topic areas failed");

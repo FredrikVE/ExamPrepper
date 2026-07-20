@@ -61,7 +61,7 @@ function createT() {
 		pageToolsCreateExamLabel: "Opprett ny eksamen",
 		pageToolsCreateSubjectLabel: "Opprett nytt fag",
 		pageToolsImportSubjectMaterialsLabel: "Legg inn notater eller forelesningsslides",
-		pageToolsConceptListLabel: "Begrepslister",
+		pageToolsGlossaryLabel: "Begrepslister",
 		pageToolsCurriculumGraphsLabel: "Pensumoversikt",
 		pageToolsCurriculumFigureLabel: "Lag pensum-oversiktsfigur",
 		pageToolsAiExamLabel: "Lag AI-generert øveeksamen"

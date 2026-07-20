@@ -1,10 +1,10 @@
-// test/model/domain/utils/buildConceptDeckSummaries.test.js
+// test/model/domain/utils/buildGlossaryDeckSummaries.test.js
 import { describe, expect, test } from "@jest/globals";
-import { buildConceptDeckSummaries } from "../../../../src/model/domain/utils/buildConceptDeckSummaries.js";
+import { buildGlossaryDeckSummaries } from "../../../../src/model/domain/utils/buildGlossaryDeckSummaries.js";
 
-describe("buildConceptDeckSummaries", () => {
-	test("counts concepts by topic area and skips empty topic areas", () => {
-		const concepts = [
+describe("buildGlossaryDeckSummaries", () => {
+	test("counts glossary entries by topic area and skips empty topic areas", () => {
+		const glossaryEntries = [
 			{ id: "a", topicAreaKey: "crypto" },
 			{ id: "b", topicAreaKey: "crypto" },
 			{ id: "c", topicAreaKey: "iam" }
@@ -15,7 +15,7 @@ describe("buildConceptDeckSummaries", () => {
 			{ key: "unused" }
 		];
 
-		const result = buildConceptDeckSummaries(concepts, topicAreas);
+		const result = buildGlossaryDeckSummaries(glossaryEntries, topicAreas);
 
 		expect(result).toEqual([
 			{ topicAreaKey: "crypto", cardCount: 2, estimatedMinutes: 5 },

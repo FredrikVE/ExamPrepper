@@ -2,13 +2,13 @@
 import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
 import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
 import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
-import ApiConceptDataSource from "../model/datasource/ApiConceptDataSource.js";
+import ApiGlossaryDataSource from "../model/datasource/ApiGlossaryDataSource.js";
 import ApiExamAttemptDataSource from "../model/datasource/ApiExamAttemptDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
 import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
-import ConceptRepository from "../model/repositories/ConceptRepository.js";
+import GlossaryRepository from "../model/repositories/GlossaryRepository.js";
 
 import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js";
 import GetAvailableExamsUseCase from "../model/domain/GetAvailableExamsUseCase.js";
@@ -16,7 +16,7 @@ import GetAvailableSubjectsUseCase from "../model/domain/GetAvailableSubjectsUse
 import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
 import GetExamByIdUseCase from "../model/domain/GetExamByIdUseCase.js";
 import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
-import GetConceptsForSubjectUseCase from "../model/domain/GetConceptsForSubjectUseCase.js";
+import GetGlossaryEntriesForSubjectUseCase from "../model/domain/GetGlossaryEntriesForSubjectUseCase.js";
 import GetTopicAreasUseCase from "../model/domain/GetTopicAreasUseCase.js";
 import GetFlipcardDeckSummariesUseCase from "../model/domain/GetFlipcardDeckSummariesUseCase.js";
 
@@ -50,7 +50,7 @@ const conceptImageDataSource = new ApiConceptImageDataSource({
     imageBaseUrl,
     getToken: getActiveAuthToken
 });
-const conceptDataSource = new ApiConceptDataSource({
+const glossaryDataSource = new ApiGlossaryDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken
 });
@@ -63,7 +63,7 @@ const examAttemptDataSource = new ApiExamAttemptDataSource({
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
 const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
-const conceptRepository = new ConceptRepository(conceptDataSource);
+const glossaryRepository = new GlossaryRepository(glossaryDataSource);
 
 // Use cases
 const gradeAnswerUseCase = new GradeAnswerUseCase();
@@ -76,9 +76,9 @@ const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
 const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
-const getConceptsForSubjectUseCase = new GetConceptsForSubjectUseCase(conceptRepository);
+const getGlossaryEntriesForSubjectUseCase = new GetGlossaryEntriesForSubjectUseCase(glossaryRepository);
 const getTopicAreasUseCase = new GetTopicAreasUseCase(subjectRepository);
-const getFlipcardDeckSummariesUseCase = new GetFlipcardDeckSummariesUseCase(conceptRepository, subjectRepository);
+const getFlipcardDeckSummariesUseCase = new GetFlipcardDeckSummariesUseCase(glossaryRepository, subjectRepository);
 
 // Export
 export {
@@ -92,7 +92,7 @@ export {
     calculateExamScoreUseCase,
     submitExamAttemptUseCase,
     getMyStatisticsUseCase,
-    getConceptsForSubjectUseCase,
+    getGlossaryEntriesForSubjectUseCase,
     getTopicAreasUseCase,
     getFlipcardDeckSummariesUseCase
 };

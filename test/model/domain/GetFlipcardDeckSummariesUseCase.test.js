@@ -2,10 +2,10 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import GetFlipcardDeckSummariesUseCase from "../../../src/model/domain/GetFlipcardDeckSummariesUseCase.js";
 
-const concepts = [
-	{ id: "concept-a", topicAreaKey: "iam" },
-	{ id: "concept-b", topicAreaKey: "iam" },
-	{ id: "concept-c", topicAreaKey: "crypto" }
+const glossaryEntries = [
+	{ id: "entry-a", topicAreaKey: "iam" },
+	{ id: "entry-b", topicAreaKey: "iam" },
+	{ id: "entry-c", topicAreaKey: "crypto" }
 ];
 
 const topicAreas = [
@@ -30,32 +30,32 @@ const topicAreas = [
 ];
 
 describe("GetFlipcardDeckSummariesUseCase", () => {
-	let conceptRepository;
+	let glossaryRepository;
 	let subjectRepository;
 	let useCase;
 
 	beforeEach(() => {
-		conceptRepository = {
-			getConceptsBySubject: jest.fn().mockResolvedValue(concepts)
+		glossaryRepository = {
+			getGlossaryEntriesBySubject: jest.fn().mockResolvedValue(glossaryEntries)
 		};
 		subjectRepository = {
 			getTopicAreasBySubject: jest.fn().mockResolvedValue(topicAreas)
 		};
-		useCase = new GetFlipcardDeckSummariesUseCase(conceptRepository, subjectRepository);
+		useCase = new GetFlipcardDeckSummariesUseCase(glossaryRepository, subjectRepository);
 	});
 
 	test("returns empty list when subject id is missing", async () => {
 		const result = await useCase.execute({ subjectId: null, language: "no" });
 
 		expect(result).toEqual([]);
-		expect(conceptRepository.getConceptsBySubject).not.toHaveBeenCalled();
+		expect(glossaryRepository.getGlossaryEntriesBySubject).not.toHaveBeenCalled();
 		expect(subjectRepository.getTopicAreasBySubject).not.toHaveBeenCalled();
 	});
 
-	test("builds localized flipcard deck summaries from concepts", async () => {
+	test("builds localized flipcard deck summaries from glossary entries", async () => {
 		const result = await useCase.execute({ subjectId: "in2120", language: "en" });
 
-		expect(conceptRepository.getConceptsBySubject).toHaveBeenCalledWith({ subjectId: "in2120" });
+		expect(glossaryRepository.getGlossaryEntriesBySubject).toHaveBeenCalledWith({ subjectId: "in2120" });
 		expect(subjectRepository.getTopicAreasBySubject).toHaveBeenCalledWith("in2120");
 		expect(result).toEqual([
 			{

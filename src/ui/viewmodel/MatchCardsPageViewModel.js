@@ -24,7 +24,7 @@ const SUCCESS_ADVANCE_DELAY_MS = 480;
 const FADING_IN_SETTLE_DELAY_MS = 720;
 
 export default function useMatchCardsPageViewModel({
-	getConceptsForSubjectUseCase,
+	getGlossaryEntriesForSubjectUseCase,
 	getTopicAreasUseCase,
 	subjectId,
 	initialTopicAreaKey,
@@ -41,16 +41,16 @@ export default function useMatchCardsPageViewModel({
 		setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
 	}, [initialTopicAreaKey, subjectId]);
 
-	const executeConceptLoad = useCallback(() => {
+	const executeGlossaryEntryLoad = useCallback(() => {
 		if (!isActive || !subjectId) {
 			return Promise.resolve([]);
 		}
 
-		return getConceptsForSubjectUseCase.execute({
+		return getGlossaryEntriesForSubjectUseCase.execute({
 			subjectId,
 			topicAreaKey
 		});
-	}, [getConceptsForSubjectUseCase, isActive, subjectId, topicAreaKey]);
+	}, [getGlossaryEntriesForSubjectUseCase, isActive, subjectId, topicAreaKey]);
 
 	const executeTopicAreaLoad = useCallback(() => {
 		if (!isActive || !subjectId) {
@@ -63,8 +63,8 @@ export default function useMatchCardsPageViewModel({
 		});
 	}, [getTopicAreasUseCase, isActive, subjectId, language]);
 
-	const conceptLoad = useLoadModel({
-		execute: executeConceptLoad,
+	const glossaryEntryLoad = useLoadModel({
+		execute: executeGlossaryEntryLoad,
 		emptyData: [],
 		errorMessage: t.matchCardsErrorMessage,
 		onLoaded: null
@@ -77,14 +77,14 @@ export default function useMatchCardsPageViewModel({
 		onLoaded: null
 	});
 
-	const concepts = conceptLoad.data;
+	const glossaryEntries = glossaryEntryLoad.data;
 	const topicAreas = topicAreaLoad.data;
 	const pageStatus = combineLoadStatuses([
-		conceptLoad.status,
+		glossaryEntryLoad.status,
 		topicAreaLoad.status
 	]);
 	const pageErrorMessage = resolveFirstLoadError([
-		conceptLoad,
+		glossaryEntryLoad,
 		topicAreaLoad
 	], t.matchCardsErrorMessage);
 
@@ -124,18 +124,18 @@ export default function useMatchCardsPageViewModel({
 	}, [activeTopicArea, t]);
 
 	const createSession = useCallback(() => {
-		if (!canStartMatchCardsSession({ concepts })) {
+		if (!canStartMatchCardsSession({ glossaryEntries })) {
 			setSession(null);
 			return;
 		}
 
 		setSession(createMatchCardsSession({
-			concepts,
+			glossaryEntries,
 			roundPairCount: MATCH_CARDS_ROUND_PAIR_COUNT,
 			visiblePairCount: MATCH_CARDS_VISIBLE_PAIR_COUNT,
 			randomNumber: Math.random
 		}));
-	}, [concepts]);
+	}, [glossaryEntries]);
 
 	const clearTimers = useCallback(() => {
 		for (const timerId of timersRef.current) {
@@ -278,7 +278,7 @@ export default function useMatchCardsPageViewModel({
 
 	return {
 		labels,
-		concepts,
+		glossaryEntries,
 		topicAreas,
 		topicAreaKey,
 		pageStatus,

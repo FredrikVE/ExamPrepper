@@ -8,7 +8,7 @@ function createTranslations() {
         selectExamsTitle: "Velg eksamen",
         selectFlipcardsTitle: "Velg flipcards",
         selectMatchCardsTitle: "Velg begrepsmatch",
-        selectConceptListsTitle: "Velg begrepsliste",
+        selectGlossaryTitle: "Velg begrepsliste",
         selectSubtitle: jest.fn((subjectCode) => `Velg en øvingsprøve for ${subjectCode}`),
         selectSubtitleFallback: "Velg en øvingsprøve for å starte",
         selectExamsSubtitle: jest.fn((subjectCode) => `Velg en øvingsprøve for ${subjectCode}`),
@@ -34,7 +34,7 @@ function createEnglishTranslations() {
         selectExamsTitle: "Choose exam",
         selectFlipcardsTitle: "Choose flipcards",
         selectMatchCardsTitle: "Choose concept match",
-        selectConceptListsTitle: "Choose glossary"
+        selectGlossaryTitle: "Choose glossary"
     };
 }
 
@@ -62,7 +62,7 @@ describe("createLearningContentSelectPageCopy", () => {
             { activeContentType: LEARNING_CONTENT_TYPES.EXAMS, noTitle: "Velg eksamen", enTitle: "Choose exam" },
             { activeContentType: LEARNING_CONTENT_TYPES.FLIPCARDS, noTitle: "Velg flipcards", enTitle: "Choose flipcards" },
             { activeContentType: LEARNING_CONTENT_TYPES.MATCHCARDS, noTitle: "Velg begrepsmatch", enTitle: "Choose concept match" },
-            { activeContentType: LEARNING_CONTENT_TYPES.CONCEPT_LISTS, noTitle: "Velg begrepsliste", enTitle: "Choose glossary" }
+            { activeContentType: LEARNING_CONTENT_TYPES.GLOSSARY, noTitle: "Velg begrepsliste", enTitle: "Choose glossary" }
         ];
 
         for (const testCase of cases) {
@@ -103,7 +103,7 @@ describe("createLearningContentSelectPageCopy", () => {
 
     test("returns glossary subtitle when glossary content is active", () => {
         const t = createTranslations();
-        const copy = createLearningContentSelectPageCopy(t, { code: "IN2120" }, LEARNING_CONTENT_TYPES.CONCEPT_LISTS);
+        const copy = createLearningContentSelectPageCopy(t, { code: "IN2120" }, LEARNING_CONTENT_TYPES.GLOSSARY);
 
         expect(copy.title).toBe("Velg begrepsliste");
         expect(copy.subtitle).toBe("Øv på nøkkelbegreper og definisjoner for IN2120");

@@ -54,7 +54,7 @@ export const PAGE_TOOL_AVAILABILITY = {
 
 export const PAGE_TOOL_ACTION_IDS = {
     CREATE_EXAM: "exam.create",
-    CREATE_CONCEPT_LIST: "curriculum.createConceptList",
+    CREATE_GLOSSARY: "curriculum.createGlossary",
     CREATE_CURRICULUM_GRAPHS: "curriculum.createGraphs",
     CREATE_CURRICULUM_FIGURE: "curriculum.createFigure",
     CREATE_AI_EXAM: "exam.createAiExam",
@@ -72,7 +72,7 @@ export const PAGE_TOOL_ACTION_IDS = {
 
 export const PAGE_TOOL_ITEM_IDS = {
     APP_CREATE_EXAM: "app-create-exam",
-    APP_CONCEPT_LIST: "app-concept-list",
+    APP_GLOSSARY: "app-glossary",
     APP_CURRICULUM_GRAPHS: "app-curriculum-graphs",
     APP_CURRICULUM_FIGURE: "app-curriculum-figure",
     APP_AI_EXAM: "app-ai-exam",
@@ -114,9 +114,9 @@ const WORKSPACE_ACTION_TOOL_ITEMS = [
         availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
     },
     {
-        id: PAGE_TOOL_ITEM_IDS.APP_CONCEPT_LIST,
-        actionId: PAGE_TOOL_ACTION_IDS.CREATE_CONCEPT_LIST,
-        labelKey: "pageToolsConceptListLabel",
+        id: PAGE_TOOL_ITEM_IDS.APP_GLOSSARY,
+        actionId: PAGE_TOOL_ACTION_IDS.CREATE_GLOSSARY,
+        labelKey: "pageToolsGlossaryLabel",
         iconKey: PAGE_TOOL_ICON_KEYS.LIST,
         availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
     },

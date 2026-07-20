@@ -169,7 +169,7 @@ export default function useLearningContentSelectPageViewModel(
 	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
 	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
 	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
-	const isConceptListsContentActive = activeContentType === LEARNING_CONTENT_TYPES.CONCEPT_LISTS;
+	const isGlossaryContentActive = activeContentType === LEARNING_CONTENT_TYPES.GLOSSARY;
 
 	const searchSuggestions = useMemo(() => {
 		if (isFlipcardsContentActive || isMatchCardsContentActive) {
@@ -290,11 +290,11 @@ export default function useLearningContentSelectPageViewModel(
 		isExamsContentActive,
 		isFlipcardsContentActive,
 		isMatchCardsContentActive,
-		isConceptListsContentActive,
-		conceptListPlaceholderCode: t.contentToggleConceptListsLabel,
-		conceptListPlaceholderTitle: t.conceptListPlaceholderTitle,
-		conceptListPlaceholderDescription: t.conceptListPlaceholderDescription,
-		conceptListPlaceholderNote: t.conceptListPlaceholderNote,
+		isGlossaryContentActive,
+		glossaryPlaceholderCode: t.contentToggleGlossaryLabel,
+		glossaryPlaceholderTitle: t.glossaryPlaceholderTitle,
+		glossaryPlaceholderDescription: t.glossaryPlaceholderDescription,
+		glossaryPlaceholderNote: t.glossaryPlaceholderNote,
 		deckCardCountLabel: t.deckCardCountLabel,
 		deckCardUnitLabel: t.deckCardUnitLabel,
 		deckEmptyTitle: t.deckEmptyTitle,
