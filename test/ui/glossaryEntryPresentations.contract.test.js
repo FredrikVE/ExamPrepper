@@ -2,7 +2,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { createGlossaryTableRows } from "../../src/ui/viewmodel/GlossaryPage/glossaryTableModel.js";
 import { createFlipcardsFromGlossaryEntries } from "../../src/ui/viewmodel/FlipcardsPage/glossaryEntryFlipcardModel.js";
-import { createPairsFromGlossaryEntries } from "../../src/ui/viewmodel/MatchCardsPage/matchCardsSessionModel.js";
+import { createPairsFromGlossaryEntries } from "../../src/ui/viewmodel/MatchCardsPage/matchCardsPairModel.js";
 
 const glossaryEntry = Object.freeze({
 	id: "zero-trust",
