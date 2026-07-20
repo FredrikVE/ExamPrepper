@@ -1,0 +1,62 @@
+/* src/ui/style/GlossaryPage/table.css */
+.glossary-table-scroll {
+	min-width: 0;
+	overflow-x: auto;
+}
+
+.glossary-table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.glossary-table__term-column {
+	width: var(--glossary-term-column-width);
+}
+
+.glossary-table th,
+.glossary-table td {
+	padding: var(--space-6) var(--space-8);
+	border-bottom: 1px solid var(--line);
+	vertical-align: top;
+	text-align: left;
+	line-height: 1.62;
+}
+
+.glossary-table thead th {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background: var(--panel-strong);
+	color: var(--text-muted);
+	font-size: 12px;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.glossary-table tbody th {
+	color: var(--text-main);
+	font-size: 15px;
+	font-weight: 760;
+}
+
+.glossary-table tbody td {
+	color: var(--text-muted);
+}
+
+.glossary-table tbody tr:last-child th,
+.glossary-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.glossary-table tbody tr:hover {
+	background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+
+.glossary-search-mark {
+	padding: 0 var(--space-1);
+	border-radius: var(--radius-sm);
+	background: color-mix(in srgb, var(--accent) 18%, transparent);
+	color: inherit;
+}

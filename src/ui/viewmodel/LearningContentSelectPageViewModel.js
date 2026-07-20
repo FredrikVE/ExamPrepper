@@ -23,6 +23,7 @@ export default function useLearningContentSelectPageViewModel(
 	onSelectExam,
 	onSelectFlashcardDeck,
 	onSelectMatchCardsDeck,
+	onSelectGlossary,
 	isActive,
 	onChangeScreen,
 	showBackButton,
@@ -136,9 +137,15 @@ export default function useLearningContentSelectPageViewModel(
 			return;
 		}
 
-		setActiveContentType(contentTypeId);
 		resetSearchSheet(ALL_TOPIC_AREAS);
-	}, [resetSearchSheet]);
+
+		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
+			onSelectGlossary(null);
+			return;
+		}
+
+		setActiveContentType(contentTypeId);
+	}, [onSelectGlossary, resetSearchSheet]);
 
 	const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
 		changeTopicAreaKey(nextTopicAreaKey);
@@ -169,7 +176,6 @@ export default function useLearningContentSelectPageViewModel(
 	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
 	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
 	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
-	const isGlossaryContentActive = activeContentType === LEARNING_CONTENT_TYPES.GLOSSARY;
 
 	const searchSuggestions = useMemo(() => {
 		if (isFlipcardsContentActive || isMatchCardsContentActive) {
@@ -290,11 +296,6 @@ export default function useLearningContentSelectPageViewModel(
 		isExamsContentActive,
 		isFlipcardsContentActive,
 		isMatchCardsContentActive,
-		isGlossaryContentActive,
-		glossaryPlaceholderCode: t.contentToggleGlossaryLabel,
-		glossaryPlaceholderTitle: t.glossaryPlaceholderTitle,
-		glossaryPlaceholderDescription: t.glossaryPlaceholderDescription,
-		glossaryPlaceholderNote: t.glossaryPlaceholderNote,
 		deckCardCountLabel: t.deckCardCountLabel,
 		deckCardUnitLabel: t.deckCardUnitLabel,
 		deckEmptyTitle: t.deckEmptyTitle,

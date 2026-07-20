@@ -4,7 +4,6 @@ import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import LearningContentTopbar from "../components/LearningContentSelectPage/LearningContentTopbar.jsx";
 import LearningContentIntro from "../components/LearningContentSelectPage/LearningContentIntro.jsx";
 import ExamGrid from "../components/LearningContentSelectPage/ExamGrid.jsx";
-import LearningContentPlaceholderCard from "../components/LearningContentSelectPage/LearningContentPlaceholderCard.jsx";
 import FlashcardDeckGrid from "../components/LearningContentSelectPage/FlashcardDeckGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
@@ -122,16 +121,6 @@ export default function LearningContentSelectPage({ viewModel }) {
 					/>
 				)}
 
-				{viewModel.isGlossaryContentActive && (
-					<section className="exam-select-grid">
-						<LearningContentPlaceholderCard
-							code={viewModel.glossaryPlaceholderCode}
-							title={viewModel.glossaryPlaceholderTitle}
-							description={viewModel.glossaryPlaceholderDescription}
-							note={viewModel.glossaryPlaceholderNote}
-						/>
-					</section>
-				)}
 			</>
 		);
 	};

@@ -325,9 +325,6 @@ export const translations = {
         deckCardUnitLabel: "kort",
         deckEmptyTitle: "Ingen flipcard-bunker",
         deckEmptyMessage: "Dette faget har ingen flipcards i valgt fagområde ennå.",
-        glossaryPlaceholderTitle: "Begrepslister kommer senere",
-        glossaryPlaceholderDescription: "Begrepslister er reservert i innholdstypevelgeren, men datakilden er ikke koblet på ennå.",
-        glossaryPlaceholderNote: "Kommer i en senere serie",
 
         // GlossaryPage
         glossaryPageTitle: "Begrepsliste",
@@ -776,9 +773,6 @@ export const translations = {
         deckCardUnitLabel: "cards",
         deckEmptyTitle: "No flipcard decks",
         deckEmptyMessage: "This subject does not have flipcards in the selected topic area yet.",
-        glossaryPlaceholderTitle: "Glossaries are coming later",
-        glossaryPlaceholderDescription: "Glossaries are reserved in the content type switcher, but the data source is not connected yet.",
-        glossaryPlaceholderNote: "Coming in a later series",
 
         // GlossaryPage
         glossaryPageTitle: "Glossary",

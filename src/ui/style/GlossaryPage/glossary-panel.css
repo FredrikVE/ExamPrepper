@@ -1,0 +1,59 @@
+/* src/ui/style/GlossaryPage/glossary-panel.css */
+.glossary-panel {
+	min-width: 0;
+	overflow: hidden;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-lg);
+	background: var(--panel-bg);
+	box-shadow: var(--shadow-card);
+	backdrop-filter: var(--blur-panel);
+}
+
+.glossary-panel-heading {
+	display: flex;
+	align-items: center;
+	gap: var(--space-5);
+	padding: var(--space-8);
+	border-bottom: 1px solid var(--line);
+	background: color-mix(in srgb, var(--panel-strong) 84%, transparent);
+}
+
+.glossary-panel-heading__icon {
+	display: grid;
+	width: 46px;
+	height: 46px;
+	flex: 0 0 auto;
+	place-items: center;
+	border-radius: var(--radius-md);
+	background: var(--accent-soft);
+	color: var(--accent);
+}
+
+.glossary-panel-heading__icon svg {
+	width: 22px;
+	height: 22px;
+}
+
+.glossary-panel-heading__copy {
+	min-width: 0;
+}
+
+.glossary-panel-heading h2,
+.glossary-panel-heading p {
+	margin: 0;
+}
+
+.glossary-panel-heading h2 {
+	font-size: clamp(20px, 2vw, 26px);
+	letter-spacing: -0.025em;
+}
+
+.glossary-panel-heading p {
+	margin-top: var(--space-1);
+	color: var(--text-muted);
+	line-height: 1.45;
+}
+
+.glossary-panel > .workspace-message {
+	min-height: 360px;
+}

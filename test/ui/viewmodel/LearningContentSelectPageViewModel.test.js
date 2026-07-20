@@ -127,6 +127,7 @@ function createViewModel(params = {}) {
         execute: jest.fn().mockResolvedValue([])
     };
     const goBack = jest.fn();
+    const selectGlossary = jest.fn();
 
     const viewModel = useLearningContentSelectPageViewModel(
         getAvailableExamsUseCase,
@@ -138,6 +139,7 @@ function createViewModel(params = {}) {
         jest.fn(),
         jest.fn(),
         jest.fn(),
+        selectGlossary,
         params.isActive ?? true,
         jest.fn(),
         params.showBackButton ?? true,
@@ -151,6 +153,7 @@ function createViewModel(params = {}) {
         getTopicAreasUseCase,
         getFlipcardDeckSummariesUseCase,
         goBack,
+        selectGlossary,
         viewModel
     };
 }
@@ -205,4 +208,13 @@ describe("useLearningContentSelectPageViewModel", () => {
         expect(viewModel.navigationLabel).toBe("Navigasjon");
         expect(viewModel.onBack).toBe(goBack);
     });
+    test("navigates directly to glossary and resets the initial topic area", () => {
+        const { selectGlossary, viewModel } = createViewModel();
+
+        viewModel.selectContentType("glossary");
+
+        expect(selectGlossary).toHaveBeenCalledWith(null);
+        expect(stateSetters[0]).not.toHaveBeenCalledWith("glossary");
+    });
+
 });

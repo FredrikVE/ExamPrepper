@@ -1,0 +1,32 @@
+/* src/ui/style/GlossaryPage/page.css */
+.glossary-workspace {
+	--glossary-sidebar-width: clamp(248px, 24vw, 320px);
+	--glossary-term-column-width: clamp(180px, 24%, 280px);
+}
+
+.glossary-page {
+	min-height: 100%;
+	padding: calc(var(--scaffold-header-height, 112px) + var(--space-8))
+		var(--scaffold-inset, clamp(24px, 5vw, 72px)) var(--space-10);
+}
+
+.glossary-page__heading {
+	max-width: 1240px;
+	margin: 0 auto var(--space-8);
+}
+
+.glossary-page__heading h1 {
+	margin: 0;
+	font-size: clamp(28px, 3vw, 42px);
+	line-height: 1.08;
+	letter-spacing: -0.04em;
+}
+
+.glossary-page__content {
+	display: grid;
+	grid-template-columns: var(--glossary-sidebar-width) minmax(0, 1fr);
+	gap: var(--space-8);
+	max-width: 1240px;
+	margin: 0 auto;
+	align-items: start;
+}

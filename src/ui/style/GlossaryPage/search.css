@@ -1,0 +1,72 @@
+/* src/ui/style/GlossaryPage/search.css */
+.glossary-search-control {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.glossary-search-field {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--space-3);
+	min-height: 52px;
+	padding: 0 var(--space-4);
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-md);
+	background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
+	box-shadow: var(--shadow-card);
+	transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.glossary-search-field:focus-within {
+	border-color: color-mix(in srgb, var(--accent) 52%, var(--line-strong));
+	box-shadow: 0 0 0 4px var(--button-focus-ring), var(--shadow-card);
+}
+
+.glossary-search-field__icon {
+	width: 19px;
+	height: 19px;
+	color: var(--text-muted);
+}
+
+.glossary-search-field__input {
+	min-width: 0;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	color: var(--text-main);
+}
+
+.glossary-search-field__input::placeholder {
+	color: var(--text-soft);
+}
+
+.glossary-search-field__clear {
+	display: grid;
+	width: 32px;
+	height: 32px;
+	place-items: center;
+	border: 0;
+	border-radius: var(--radius-full);
+	background: var(--button-secondary-bg);
+	color: var(--button-secondary-muted-text);
+}
+
+.glossary-search-field__clear:hover {
+	background: var(--button-secondary-bg-hover);
+	color: var(--text-main);
+}
+
+.glossary-search-field__clear svg {
+	width: 17px;
+	height: 17px;
+}
+
+.glossary-search-meta {
+	display: grid;
+	gap: var(--space-1);
+	min-height: 34px;
+	color: var(--text-muted);
+	font-size: 13px;
+	line-height: 1.4;
+}

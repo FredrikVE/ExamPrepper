@@ -12,6 +12,7 @@
 @import "./StatisticsPage/index.css";
 @import "./FlipcardsPage/index.css";
 @import "./MatchCardsPage/index.css";
+@import "./GlossaryPage/index.css";
 
 /* Shared UI */
 @import "./WorkspaceState/index.css";

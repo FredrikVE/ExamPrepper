@@ -1,10 +1,17 @@
 // src/ui/view/components/GlossaryPage/TopicAreaPanel/TopicAreaPanel.jsx
+import ToggleButtonRow from "../../ToggleButtonRow/ToggleButtonRow.jsx";
 import GlossarySearchField from "./GlossarySearchField.jsx";
 import TopicAreaListItem from "./TopicAreaListItem.jsx";
 
 const TOPIC_AREA_LIST_ID = "glossary-topic-area-list";
 
 export default function TopicAreaPanel(props) {
+	const toggleEntries = props.topicAreaListItems.map((item) => ({
+		...item,
+		id: item.topicAreaKey,
+		elementId: item.id
+	}));
+
 	return (
 		<aside className="glossary-topic-area-panel" aria-label={props.searchPlaceholder}>
 			<GlossarySearchField
@@ -25,20 +32,16 @@ export default function TopicAreaPanel(props) {
 			/>
 
 			<nav className="glossary-topic-area-navigation" aria-label={props.navigationLabel}>
-				<div
-					id={TOPIC_AREA_LIST_ID}
+				<ToggleButtonRow
+					entries={toggleEntries}
+					activeEntryId={props.topicAreaListItems.find((item) => item.isActive)?.topicAreaKey ?? null}
+					onSelectEntry={props.onSelectTopicArea}
+					ariaLabel={props.navigationLabel}
 					className="glossary-topic-area-list"
-					role={props.isSearchComboboxActive ? "listbox" : undefined}
-				>
-					{props.topicAreaListItems.map((topicAreaListItem) => (
-						<TopicAreaListItem
-							key={topicAreaListItem.topicAreaKey}
-							item={topicAreaListItem}
-							usesOptionSemantics={props.isSearchComboboxActive}
-							onSelect={props.onSelectTopicArea}
-						/>
-					))}
-				</div>
+					containerId={TOPIC_AREA_LIST_ID}
+					semanticMode={props.isSearchComboboxActive ? "listbox" : "navigation"}
+					renderEntry={(item) => <TopicAreaListItem item={item} />}
+				/>
 			</nav>
 		</aside>
 	);
