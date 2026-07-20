@@ -1,10 +1,10 @@
 // src/model/domain/GetFlipcardDeckSummariesUseCase.js
-import { buildConceptDeckSummaries } from "./utils/buildConceptDeckSummaries.js";
+import { buildGlossaryDeckSummaries } from "./utils/buildGlossaryDeckSummaries.js";
 import { findTopicAreaByKey } from "./utils/topicAreaFilters.js";
 
 export default class GetFlipcardDeckSummariesUseCase {
-	constructor(conceptRepository, subjectRepository) {
-		this.conceptRepository = conceptRepository;
+	constructor(glossaryRepository, subjectRepository) {
+		this.glossaryRepository = glossaryRepository;
 		this.subjectRepository = subjectRepository;
 	}
 
@@ -13,10 +13,10 @@ export default class GetFlipcardDeckSummariesUseCase {
 			return [];
 		}
 
-		const concepts = await this.conceptRepository.getConceptsBySubject({ subjectId });
+		const glossaryEntries = await this.glossaryRepository.getGlossaryEntriesBySubject({ subjectId });
 		const topicAreas = await this.subjectRepository.getTopicAreasBySubject(subjectId);
 		const localizedTopicAreas = this.localizeTopicAreas(topicAreas, language);
-		const deckSummaries = buildConceptDeckSummaries(concepts, localizedTopicAreas);
+		const deckSummaries = buildGlossaryDeckSummaries(glossaryEntries, localizedTopicAreas);
 		const deckSummaryModels = [];
 
 		for (const deckSummary of deckSummaries) {

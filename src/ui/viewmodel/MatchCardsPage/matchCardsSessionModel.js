@@ -13,11 +13,11 @@ export const MATCH_SLOT_STATUS = Object.freeze({
 	EMPTY: "EMPTY"
 });
 
-function createSlot({ slotId, column, conceptKey, textByLanguage, status }) {
+function createSlot({ slotId, column, glossaryEntryKey, textByLanguage, status }) {
 	return {
 		slotId,
 		column,
-		conceptKey,
+		glossaryEntryKey,
 		textByLanguage,
 		status
 	};
@@ -30,19 +30,19 @@ function createTextByLanguage(textByLanguage) {
 	};
 }
 
-function createPairFromConcept(concept) {
+function createPairFromGlossaryEntry(glossaryEntry) {
 	return {
-		conceptKey: concept.conceptKey,
-		termTextByLanguage: createTextByLanguage(concept.term),
-		explanationTextByLanguage: createTextByLanguage(concept.explanation)
+		glossaryEntryKey: glossaryEntry.glossaryEntryKey,
+		termTextByLanguage: createTextByLanguage(glossaryEntry.term),
+		explanationTextByLanguage: createTextByLanguage(glossaryEntry.explanation)
 	};
 }
 
-function createPairsFromConcepts({ concepts }) {
+function createPairsFromGlossaryEntries({ glossaryEntries }) {
 	const pairs = [];
 
-	for (const concept of concepts) {
-		pairs.push(createPairFromConcept(concept));
+	for (const glossaryEntry of glossaryEntries) {
+		pairs.push(createPairFromGlossaryEntry(glossaryEntry));
 	}
 
 	return pairs;
@@ -71,14 +71,14 @@ function copyPairsFromIndex({ pairs, startIndex }) {
 
 function createTermSlotContent(pair) {
 	return {
-		conceptKey: pair.conceptKey,
+		glossaryEntryKey: pair.glossaryEntryKey,
 		textByLanguage: pair.termTextByLanguage
 	};
 }
 
 function createExplanationSlotContent(pair) {
 	return {
-		conceptKey: pair.conceptKey,
+		glossaryEntryKey: pair.glossaryEntryKey,
 		textByLanguage: pair.explanationTextByLanguage
 	};
 }
@@ -102,7 +102,7 @@ function createColumnSlots({ column, contents }) {
 		slots.push(createSlot({
 			slotId: `${column}-${index}`,
 			column,
-			conceptKey: content.conceptKey,
+			glossaryEntryKey: content.glossaryEntryKey,
 			textByLanguage: content.textByLanguage,
 			status: MATCH_SLOT_STATUS.IDLE
 		}));
@@ -206,7 +206,7 @@ function createReplacementSlot({ slot, pair }) {
 		return createSlot({
 			slotId: slot.slotId,
 			column: slot.column,
-			conceptKey: pair.conceptKey,
+			glossaryEntryKey: pair.glossaryEntryKey,
 			textByLanguage: pair.termTextByLanguage,
 			status: MATCH_SLOT_STATUS.FADING_IN
 		});
@@ -215,7 +215,7 @@ function createReplacementSlot({ slot, pair }) {
 	return createSlot({
 		slotId: slot.slotId,
 		column: slot.column,
-		conceptKey: pair.conceptKey,
+		glossaryEntryKey: pair.glossaryEntryKey,
 		textByLanguage: pair.explanationTextByLanguage,
 		status: MATCH_SLOT_STATUS.FADING_IN
 	});
@@ -225,7 +225,7 @@ function createEmptySlot(slot) {
 	return createSlot({
 		slotId: slot.slotId,
 		column: slot.column,
-		conceptKey: null,
+		glossaryEntryKey: null,
 		textByLanguage: null,
 		status: MATCH_SLOT_STATUS.EMPTY
 	});
@@ -249,8 +249,8 @@ function createReplacementModel({ queuedPairs }) {
 	};
 }
 
-export function canStartMatchCardsSession({ concepts }) {
-	return concepts.length >= 2;
+export function canStartMatchCardsSession({ glossaryEntries }) {
+	return glossaryEntries.length >= 2;
 }
 
 export function shuffleInPlace({ items, randomNumber }) {
@@ -270,17 +270,17 @@ export function isMatchingPair(firstSlot, secondSlot) {
 		return false;
 	}
 
-	return firstSlot.conceptKey === secondSlot.conceptKey;
+	return firstSlot.glossaryEntryKey === secondSlot.glossaryEntryKey;
 }
 
 export function createMatchCardsSession({
-	concepts,
+	glossaryEntries,
 	roundPairCount,
 	visiblePairCount,
 	randomNumber
 }) {
-	const pairs = createPairsFromConcepts({
-		concepts
+	const pairs = createPairsFromGlossaryEntries({
+		glossaryEntries
 	});
 
 	shuffleInPlace({

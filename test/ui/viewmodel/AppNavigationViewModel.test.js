@@ -55,7 +55,7 @@ describe("createAppLayoutClassNames", () => {
 		});
 	});
 
-	test("adds the flipcards theme scope to concept practice routes", () => {
+	test("adds the flipcards theme scope to card practice routes", () => {
 		expect(createAppLayoutClassNames(NAV_SCREENS.FLIPCARDS)).toEqual({
 			pageClassName: "exam-page flipcards-theme-scope",
 			shellClassName: "exam-shell"

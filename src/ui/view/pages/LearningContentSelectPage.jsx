@@ -122,13 +122,13 @@ export default function LearningContentSelectPage({ viewModel }) {
 					/>
 				)}
 
-				{viewModel.isConceptListsContentActive && (
+				{viewModel.isGlossaryContentActive && (
 					<section className="exam-select-grid">
 						<LearningContentPlaceholderCard
-							code={viewModel.conceptListPlaceholderCode}
-							title={viewModel.conceptListPlaceholderTitle}
-							description={viewModel.conceptListPlaceholderDescription}
-							note={viewModel.conceptListPlaceholderNote}
+							code={viewModel.glossaryPlaceholderCode}
+							title={viewModel.glossaryPlaceholderTitle}
+							description={viewModel.glossaryPlaceholderDescription}
+							note={viewModel.glossaryPlaceholderNote}
 						/>
 					</section>
 				)}

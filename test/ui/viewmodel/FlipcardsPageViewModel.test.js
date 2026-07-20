@@ -41,7 +41,7 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", 
 
 const { default: useFlipcardsPageViewModel } = await import("../../../src/ui/viewmodel/FlipcardsPageViewModel.js");
 
-const concepts = [
+const glossaryEntries = [
 	{ id: "card-a", term: { no: "A" }, explanation: { no: "A-definition" }, topicAreaKey: "kryptografi" },
 	{ id: "card-b", term: { no: "B" }, explanation: { no: "B-definition" }, topicAreaKey: "kryptografi" },
 	{ id: "card-c", term: { no: "C" }, explanation: { no: "C-definition" }, topicAreaKey: "iam" }
@@ -92,7 +92,7 @@ function createTranslations() {
 
 function createViewModelParams(overrides) {
 	return {
-		concepts,
+		glossaryEntries,
 		topicAreas,
 		topicAreaKey: "all",
 		masteredCardIds: [],
@@ -118,11 +118,11 @@ function primeViewModelState(params) {
 function createViewModel(params) {
 	primeViewModelState(params);
 	loadModelQueue = [
-		{ status: LOAD_STATUS.READY, data: params.concepts, error: null, reload: jest.fn() },
+		{ status: LOAD_STATUS.READY, data: params.glossaryEntries, error: null, reload: jest.fn() },
 		{ status: LOAD_STATUS.READY, data: params.topicAreas, error: null, reload: jest.fn() }
 	];
 
-	const getConceptsForSubjectUseCase = {
+	const getGlossaryEntriesForSubjectUseCase = {
 		execute: jest.fn()
 	};
 	const getTopicAreasUseCase = {
@@ -137,7 +137,7 @@ function createViewModel(params) {
 		onBack
 	};
 	const viewModel = useFlipcardsPageViewModel(
-		getConceptsForSubjectUseCase,
+		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		"in2120",
 		params.topicAreaKey,
@@ -148,7 +148,7 @@ function createViewModel(params) {
 	);
 
 	return {
-		getConceptsForSubjectUseCase,
+		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		onBack,
 		viewModel
@@ -171,12 +171,12 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 	});
 
 	test("returns active card session state derived from visible cards", () => {
-		const { getConceptsForSubjectUseCase, viewModel } = createViewModel(createViewModelParams({
+		const { getGlossaryEntriesForSubjectUseCase, viewModel } = createViewModel(createViewModelParams({
 			activeCardIndex: 1,
 			isActiveCardFlipped: true
 		}));
 
-		expect(getConceptsForSubjectUseCase.execute).not.toHaveBeenCalled();
+		expect(getGlossaryEntriesForSubjectUseCase.execute).not.toHaveBeenCalled();
 		expect(viewModel.activeCardIndex).toBe(1);
 		expect(viewModel.activeCard).toEqual(cards[1]);
 		expect(viewModel.nextCard).toEqual(cards[2]);
