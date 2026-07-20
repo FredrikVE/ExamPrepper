@@ -78,6 +78,7 @@ export default function useGlossaryPageViewModel({
 
     const labels = useMemo(() => ({
         pageTitle: t.glossaryPageTitle,
+        pageDescription: t.glossaryPageDescription,
         searchPlaceholder: t.glossaryPageSearchPlaceholder,
         searchClearLabel: t.glossaryPageSearchClearLabel,
         searchKeyboardHint: t.glossaryPageSearchKeyboardHint,

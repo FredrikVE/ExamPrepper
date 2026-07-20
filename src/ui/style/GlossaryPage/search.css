@@ -1,26 +1,26 @@
 /* src/ui/style/GlossaryPage/search.css */
 .glossary-search-control {
-	display: grid;
-	gap: var(--space-3);
+	flex: 0 0 auto;
 }
 
 .glossary-search-field {
 	display: grid;
-	grid-template-columns: auto minmax(0, 1fr) auto;
+	grid-template-columns: 24px minmax(0, 1fr) 34px;
 	align-items: center;
-	gap: var(--space-3);
-	min-height: 52px;
-	padding: 0 var(--space-4);
-	border: 1px solid var(--line-strong);
-	border-radius: var(--radius-md);
-	background: color-mix(in srgb, var(--panel-strong) 82%, transparent);
-	box-shadow: var(--shadow-card);
-	transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+	gap: 10px;
+	width: 100%;
+	min-height: 48px;
+	padding: 0 7px 0 14px;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
+	transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
 }
 
 .glossary-search-field:focus-within {
-	border-color: color-mix(in srgb, var(--accent) 52%, var(--line-strong));
-	box-shadow: 0 0 0 4px var(--button-focus-ring), var(--shadow-card);
+	border-color: color-mix(in srgb, var(--accent) 55%, var(--line-strong));
+	background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 13%, transparent);
 }
 
 .glossary-search-field__icon {
@@ -31,6 +31,8 @@
 
 .glossary-search-field__input {
 	min-width: 0;
+	height: 46px;
+	padding: 0;
 	border: 0;
 	outline: 0;
 	background: transparent;
@@ -45,15 +47,17 @@
 	display: grid;
 	width: 32px;
 	height: 32px;
+	padding: 0;
 	place-items: center;
 	border: 0;
-	border-radius: var(--radius-full);
-	background: var(--button-secondary-bg);
-	color: var(--button-secondary-muted-text);
+	border-radius: 9px;
+	background: transparent;
+	color: var(--text-soft);
+	cursor: pointer;
 }
 
 .glossary-search-field__clear:hover {
-	background: var(--button-secondary-bg-hover);
+	background: var(--accent-soft);
 	color: var(--text-main);
 }
 
@@ -63,10 +67,19 @@
 }
 
 .glossary-search-meta {
-	display: grid;
-	gap: var(--space-1);
-	min-height: 34px;
-	color: var(--text-muted);
-	font-size: 13px;
-	line-height: 1.4;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	min-height: 26px;
+	padding: 7px 4px 0;
+	color: var(--text-soft);
+	font-size: 12px;
+	line-height: 1.2;
+	opacity: 0;
+	transition: opacity var(--transition-fast);
+}
+
+.glossary-search-control--active .glossary-search-meta {
+	opacity: 1;
 }

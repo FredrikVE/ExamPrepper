@@ -61,7 +61,7 @@ export default function GlossarySearchField(props) {
 	);
 
 	return (
-		<div className="glossary-search-control">
+		<div className={props.isSearching ? "glossary-search-control glossary-search-control--active" : "glossary-search-control"}>
 			<label className="glossary-search-field">
 				<Search className="glossary-search-field__icon" aria-hidden="true" focusable="false" />
 				{searchInput}

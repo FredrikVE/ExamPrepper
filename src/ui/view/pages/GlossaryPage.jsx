@@ -39,6 +39,7 @@ export default function GlossaryPage({ viewModel }) {
 			<section className="glossary-page" aria-labelledby="glossary-page-title">
 				<header className="glossary-page__heading">
 					<h1 id="glossary-page-title">{viewModel.labels.pageTitle}</h1>
+					<p>{viewModel.labels.pageDescription}</p>
 				</header>
 
 				<div className="glossary-page__content">

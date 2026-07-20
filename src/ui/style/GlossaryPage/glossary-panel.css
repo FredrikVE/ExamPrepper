@@ -1,37 +1,36 @@
 /* src/ui/style/GlossaryPage/glossary-panel.css */
 .glossary-panel {
+	display: flex;
 	min-width: 0;
+	min-height: 0;
+	flex-direction: column;
 	overflow: hidden;
-	border: 1px solid var(--line-strong);
-	border-radius: var(--radius-lg);
-	background: var(--panel-bg);
-	box-shadow: var(--shadow-card);
-	backdrop-filter: var(--blur-panel);
+	padding: 18px 14px 14px;
 }
 
 .glossary-panel-heading {
 	display: flex;
 	align-items: center;
-	gap: var(--space-5);
-	padding: var(--space-8);
-	border-bottom: 1px solid var(--line);
-	background: color-mix(in srgb, var(--panel-strong) 84%, transparent);
+	gap: 14px;
+	flex: 0 0 auto;
+	margin: 2px 6px 14px;
 }
 
 .glossary-panel-heading__icon {
 	display: grid;
-	width: 46px;
-	height: 46px;
-	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	flex: 0 0 44px;
 	place-items: center;
-	border-radius: var(--radius-md);
-	background: var(--accent-soft);
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
 	color: var(--accent);
 }
 
 .glossary-panel-heading__icon svg {
-	width: 22px;
-	height: 22px;
+	width: 24px;
+	height: 24px;
 }
 
 .glossary-panel-heading__copy {
@@ -44,16 +43,20 @@
 }
 
 .glossary-panel-heading h2 {
-	font-size: clamp(20px, 2vw, 26px);
-	letter-spacing: -0.025em;
+	font-size: 26px;
+	font-weight: 900;
+	line-height: 1.1;
+	letter-spacing: -0.035em;
 }
 
 .glossary-panel-heading p {
-	margin-top: var(--space-1);
+	margin-top: 5px;
 	color: var(--text-muted);
-	line-height: 1.45;
+	font-size: 14px;
+	line-height: 1.4;
 }
 
 .glossary-panel > .workspace-message {
-	min-height: 360px;
+	min-height: 0;
+	flex: 1;
 }

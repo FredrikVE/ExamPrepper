@@ -327,7 +327,8 @@ export const translations = {
         deckEmptyMessage: "Dette faget har ingen flipcards i valgt fagområde ennå.",
 
         // GlossaryPage
-        glossaryPageTitle: "Begrepsliste",
+        glossaryPageTitle: "Begrepslister",
+        glossaryPageDescription: "Utforsk viktige begreper og bygg et sterkt faglig fundament.",
         glossaryPageSearchPlaceholder: "Søk i begreper og kapitler...",
         glossaryPageSearchClearLabel: "Tøm søk",
         glossaryPageSearchKeyboardHint: "↑↓ for å bla · Enter for å åpne",
@@ -775,7 +776,8 @@ export const translations = {
         deckEmptyMessage: "This subject does not have flipcards in the selected topic area yet.",
 
         // GlossaryPage
-        glossaryPageTitle: "Glossary",
+        glossaryPageTitle: "Glossaries",
+        glossaryPageDescription: "Explore important terminology and build a strong academic foundation.",
         glossaryPageSearchPlaceholder: "Search terms and chapters...",
         glossaryPageSearchClearLabel: "Clear search",
         glossaryPageSearchKeyboardHint: "↑↓ to browse · Enter to open",
