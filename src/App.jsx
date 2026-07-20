@@ -92,7 +92,6 @@ function AppContent() {
 		navigationViewModel.selectExam,
 		navigationViewModel.selectFlipcardDeck,
 		navigationViewModel.selectMatchCardsDeck,
-		navigationViewModel.selectGlossary,
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
 		navigationViewModel.changeScreen,
 		navigationViewModel.showBackButton,

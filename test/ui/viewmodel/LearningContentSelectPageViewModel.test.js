@@ -1,5 +1,6 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
+import { NAV_SCREENS } from "../../../src/navigation/navGraph.js";
 
 const stateSetters = [];
 let loadModelQueue = [];
@@ -127,7 +128,7 @@ function createViewModel(params = {}) {
         execute: jest.fn().mockResolvedValue([])
     };
     const goBack = jest.fn();
-    const selectGlossary = jest.fn();
+    const changeScreen = jest.fn();
 
     const viewModel = useLearningContentSelectPageViewModel(
         getAvailableExamsUseCase,
@@ -139,9 +140,8 @@ function createViewModel(params = {}) {
         jest.fn(),
         jest.fn(),
         jest.fn(),
-        selectGlossary,
         params.isActive ?? true,
-        jest.fn(),
+        changeScreen,
         params.showBackButton ?? true,
         params.backLabel ?? "Tilbake",
         params.navigationLabel ?? "Navigasjon",
@@ -153,7 +153,7 @@ function createViewModel(params = {}) {
         getTopicAreasUseCase,
         getFlipcardDeckSummariesUseCase,
         goBack,
-        selectGlossary,
+        changeScreen,
         viewModel
     };
 }
@@ -208,12 +208,12 @@ describe("useLearningContentSelectPageViewModel", () => {
         expect(viewModel.navigationLabel).toBe("Navigasjon");
         expect(viewModel.onBack).toBe(goBack);
     });
-    test("navigates directly to glossary and resets the initial topic area", () => {
-        const { selectGlossary, viewModel } = createViewModel();
+    test("navigates to glossary through the shared screen navigation callback", () => {
+        const { changeScreen, viewModel } = createViewModel();
 
         viewModel.selectContentType("glossary");
 
-        expect(selectGlossary).toHaveBeenCalledWith(null);
+        expect(changeScreen).toHaveBeenCalledWith(NAV_SCREENS.GLOSSARY);
         expect(stateSetters[0]).not.toHaveBeenCalledWith("glossary");
     });
 

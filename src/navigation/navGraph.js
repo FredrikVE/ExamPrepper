@@ -78,8 +78,7 @@ export const NAV_GRAPH = {
 		requiresExam: false,
 		clearsSubject: false,
 		clearsExam: true,
-		// selectGlossary skriver alltid null eller ønsket initialTopicAreaKey eksplisitt.
-		clearsTopicArea: false
+		clearsTopicArea: true
 	},
 	[NAV_SCREENS.OVERVIEW]: {
 		layout: APP_LAYOUTS.SELECTION,

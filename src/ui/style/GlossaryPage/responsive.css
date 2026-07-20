@@ -13,7 +13,7 @@
 		position: static;
 	}
 
-	.glossary-topic-area-panel .glossary-topic-area-list {
+	.glossary-topic-area-panel .toggle-button-row {
 		grid-auto-flow: column;
 		grid-auto-columns: minmax(210px, 1fr);
 		grid-template-columns: none;

@@ -23,7 +23,6 @@ export default function useLearningContentSelectPageViewModel(
 	onSelectExam,
 	onSelectFlashcardDeck,
 	onSelectMatchCardsDeck,
-	onSelectGlossary,
 	isActive,
 	onChangeScreen,
 	showBackButton,
@@ -140,12 +139,12 @@ export default function useLearningContentSelectPageViewModel(
 		resetSearchSheet(ALL_TOPIC_AREAS);
 
 		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
-			onSelectGlossary(null);
+			onChangeScreen(NAV_SCREENS.GLOSSARY);
 			return;
 		}
 
 		setActiveContentType(contentTypeId);
-	}, [onSelectGlossary, resetSearchSheet]);
+	}, [onChangeScreen, resetSearchSheet]);
 
 	const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
 		changeTopicAreaKey(nextTopicAreaKey);

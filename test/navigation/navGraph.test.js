@@ -33,6 +33,10 @@ describe("navGraph", () => {
 		expect(Object.values(NAV_GRAPH).every((node) => Boolean(node.layout))).toBe(true);
 	});
 
+	test("lets the glossary graph node own topic-area reset", () => {
+		expect(NAV_GRAPH[NAV_SCREENS.GLOSSARY].clearsTopicArea).toBe(true);
+	});
+
 	test.each([
 		[NAV_SCREENS.SUBJECTS, APP_LAYOUTS.SELECTION],
 		[NAV_SCREENS.SELECT, APP_LAYOUTS.SELECTION],
@@ -102,20 +106,9 @@ describe("navGraph", () => {
 			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
 		],
 		[
-			"GLOSSARY med fag beholder eksplisitt initial topic-area-nøkkel",
+			"GLOSSARY med fag nullstiller tidligere topic-area-valg",
 			NAV_SCREENS.GLOSSARY,
-			{ ...WITH_SUBJECT_AND_EXAM, selectedTopicAreaKey: "unknown-key" },
-			{
-				screen: NAV_SCREENS.GLOSSARY,
-				selectedSubjectId: "in5431",
-				selectedExamId: null,
-				selectedTopicAreaKey: "unknown-key"
-			}
-		],
-		[
-			"GLOSSARY med eksplisitt null nullstiller tidligere topic-area-valg",
-			NAV_SCREENS.GLOSSARY,
-			{ ...WITH_SUBJECT_AND_EXAM, selectedTopicAreaKey: null },
+			{ ...WITH_SUBJECT_AND_EXAM, selectedTopicAreaKey: "old-topic-area" },
 			{
 				screen: NAV_SCREENS.GLOSSARY,
 				selectedSubjectId: "in5431",

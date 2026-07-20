@@ -104,13 +104,6 @@ export default function useAppNavigationViewModel(params) {
 		}));
 	}, [selectedSubjectId, applyNavigation]);
 
-	const selectGlossary = useCallback((topicAreaKey = null) => {
-		applyNavigation(resolveScreenEntry(NAV_SCREENS.GLOSSARY, {
-			selectedSubjectId,
-			selectedExamId: null,
-			selectedTopicAreaKey: topicAreaKey ?? null
-		}));
-	}, [selectedSubjectId, applyNavigation]);
 
 	const showStatistics = useCallback(() => {
 		changeScreen(NAV_SCREENS.OVERVIEW);
@@ -210,7 +203,6 @@ export default function useAppNavigationViewModel(params) {
 		selectExam,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
-		selectGlossary,
 		backToExamList,
 		goBack
 	};

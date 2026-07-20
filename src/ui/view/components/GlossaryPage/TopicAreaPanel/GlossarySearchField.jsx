@@ -4,16 +4,6 @@ import { Search, X } from "lucide-react";
 const SEARCH_META_ID = "glossary-search-meta";
 
 export default function GlossarySearchField(props) {
-	const comboboxProps = props.isSearchComboboxActive
-		? {
-			role: "combobox",
-			"aria-expanded": true,
-			"aria-controls": props.controlledListId,
-			"aria-activedescendant": props.searchActiveDescendantId ?? undefined,
-			"aria-autocomplete": "list"
-		}
-		: {};
-
 	const handleKeyDown = (event) => {
 		if (event.key === "ArrowDown") {
 			event.preventDefault();
@@ -39,23 +29,42 @@ export default function GlossarySearchField(props) {
 		}
 	};
 
+	const searchInput = props.isSearching ? (
+		<input
+			className="glossary-search-field__input"
+			type="search"
+			value={props.searchTerm}
+			placeholder={props.searchPlaceholder}
+			aria-label={props.searchPlaceholder}
+			aria-describedby={SEARCH_META_ID}
+			role="combobox"
+			aria-expanded={props.isSearchComboboxActive}
+			aria-controls={props.controlledListId}
+			aria-activedescendant={props.searchActiveDescendantId || undefined}
+			aria-autocomplete="list"
+			autoComplete="off"
+			onChange={(event) => props.onSearchTermChange(event.target.value)}
+			onKeyDown={handleKeyDown}
+		/>
+	) : (
+		<input
+			className="glossary-search-field__input"
+			type="search"
+			value={props.searchTerm}
+			placeholder={props.searchPlaceholder}
+			aria-label={props.searchPlaceholder}
+			aria-describedby={SEARCH_META_ID}
+			autoComplete="off"
+			onChange={(event) => props.onSearchTermChange(event.target.value)}
+			onKeyDown={handleKeyDown}
+		/>
+	);
+
 	return (
 		<div className="glossary-search-control">
 			<label className="glossary-search-field">
 				<Search className="glossary-search-field__icon" aria-hidden="true" focusable="false" />
-
-				<input
-					className="glossary-search-field__input"
-					type="search"
-					value={props.searchTerm}
-					placeholder={props.searchPlaceholder}
-					aria-label={props.searchPlaceholder}
-					aria-describedby={SEARCH_META_ID}
-					autoComplete="off"
-					onChange={(event) => props.onSearchTermChange(event.target.value)}
-					onKeyDown={handleKeyDown}
-					{...comboboxProps}
-				/>
+				{searchInput}
 
 				{props.isSearching ? (
 					<button
