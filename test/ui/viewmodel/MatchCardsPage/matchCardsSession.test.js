@@ -1,18 +1,11 @@
-// test/ui/viewmodel/MatchCardsPage/matchCardsSessionFactory.test.js
+// test/ui/viewmodel/MatchCardsPage/matchCardsSession.test.js
 import { describe, expect, test } from "@jest/globals";
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsConstants.js";
-import {
-	canStartMatchCardsSession,
-	createMatchCardsSession
-} from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSessionFactory.js";
+import { canStartMatchCardsSession, createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSession.js";
 import { shuffleInPlace } from "../../../../src/ui/viewmodel/MatchCardsPage/shuffleInPlace.js";
-import {
-	createGlossaryEntries,
-	keepOrderRandomNumber,
-	reverseRandomNumber
-} from "./matchCardsTestFixtures.js";
+import { createGlossaryEntries, keepOrderRandomNumber, reverseRandomNumber } from "./matchCardsTestFixtures.js";
 
-describe("matchCardsSessionFactory", () => {
+describe("matchCardsSession", () => {
 	test("requires at least two glossary entries before starting", () => {
 		expect(canStartMatchCardsSession([])).toBe(false);
 		expect(canStartMatchCardsSession([createGlossaryEntries()[0]])).toBe(false);

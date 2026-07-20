@@ -1,16 +1,9 @@
 // test/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.test.js
 import { describe, expect, test } from "@jest/globals";
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsConstants.js";
-import { createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSessionFactory.js";
-import {
-	isMatchingPair,
-	selectMatchSlot
-} from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.js";
-import {
-	createGlossaryEntries,
-	findSlot,
-	keepOrderRandomNumber
-} from "./matchCardsTestFixtures.js";
+import { createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSession.js";
+import { isMatchingPair, selectMatchSlot } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.js";
+import { createGlossaryEntries, findSlot, keepOrderRandomNumber } from "./matchCardsTestFixtures.js";
 
 describe("matchCardsSelectionTransitions", () => {
 	test("matches only slots in opposite columns with the same glossaryEntry key", () => {

@@ -5,17 +5,9 @@ import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./MatchCardsPage/matchCardsConstants.js";
-import {
-	canStartMatchCardsSession,
-	createMatchCardsSession
-} from "./MatchCardsPage/matchCardsSessionFactory.js";
+import { canStartMatchCardsSession, createMatchCardsSession } from "./MatchCardsPage/matchCardsSession.js";
 import { selectMatchSlot } from "./MatchCardsPage/matchCardsSelectionTransitions.js";
-import {
-	advanceMatchedPair,
-	markSuccessfulSlotsForFadeOut,
-	resetWrongSlots,
-	settleFadingInSlots
-} from "./MatchCardsPage/matchCardsRoundTransitions.js";
+import { advanceMatchedPair, markSuccessfulSlotsForFadeOut, resetWrongSlots, settleFadingInSlots } from "./MatchCardsPage/matchCardsRoundTransitions.js";
 
 const MATCH_CARDS_ROUND_PAIR_COUNT = 6;
 const MATCH_CARDS_VISIBLE_PAIR_COUNT = 4;

@@ -1,6 +1,6 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsSessionFactory.js
+// src/ui/viewmodel/MatchCardsPage/matchCardsSession.js
 import { createPairsFromGlossaryEntries } from "./matchCardsPairModel.js";
-import { createIdleSlotsForPairs } from "./matchCardsSlotFactory.js";
+import { createIdleSlotsForPairs } from "./matchCardsSlots.js";
 import { shuffleInPlace } from "./shuffleInPlace.js";
 
 export function canStartMatchCardsSession(glossaryEntries) {
