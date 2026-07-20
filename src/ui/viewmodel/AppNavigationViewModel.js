@@ -104,6 +104,14 @@ export default function useAppNavigationViewModel(params) {
 		}));
 	}, [selectedSubjectId, applyNavigation]);
 
+	const selectGlossary = useCallback((topicAreaKey = null) => {
+		applyNavigation(resolveScreenEntry(NAV_SCREENS.GLOSSARY, {
+			selectedSubjectId,
+			selectedExamId: null,
+			selectedTopicAreaKey: topicAreaKey ?? null
+		}));
+	}, [selectedSubjectId, applyNavigation]);
+
 	const showStatistics = useCallback(() => {
 		changeScreen(NAV_SCREENS.OVERVIEW);
 	}, [changeScreen]);
@@ -153,7 +161,8 @@ export default function useAppNavigationViewModel(params) {
 		activeScreen === NAV_SCREENS.SELECT ||
 		activeScreen === NAV_SCREENS.EXAM ||
 		activeScreen === NAV_SCREENS.FLIPCARDS ||
-		activeScreen === NAV_SCREENS.MATCHCARDS;
+		activeScreen === NAV_SCREENS.MATCHCARDS ||
+		activeScreen === NAV_SCREENS.GLOSSARY;
 
 	const backContract = createAppBackContract({
 		activeScreen,
@@ -201,6 +210,7 @@ export default function useAppNavigationViewModel(params) {
 		selectExam,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
+		selectGlossary,
 		backToExamList,
 		goBack
 	};
