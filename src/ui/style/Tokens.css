@@ -85,6 +85,15 @@
     --accent-strong: #0057ee;
     --accent-gradient: linear-gradient(135deg, #0768ff 0%, #0051e6 100%);
 
+    /* ── Glossary interactions ─────────────── */
+    --glossary-topic-hover-bg: color-mix(in srgb, var(--accent) 6%, transparent);
+    --glossary-topic-hover-border: color-mix(in srgb, var(--accent) 18%, transparent);
+    --glossary-topic-active-hover-bg:
+        linear-gradient(100deg,
+            color-mix(in srgb, var(--accent) 28%, transparent),
+            color-mix(in srgb, var(--accent-soft) 92%, transparent));
+    --glossary-table-row-hover-bg: color-mix(in srgb, var(--accent) 12%, var(--panel-strong));
+
     /* ── Buttons / segmented controls ─────────
        Shared button tokens keep select toggles, header controls, settings
        buttons and pager actions visually aligned across light/dark themes. */
@@ -281,6 +290,15 @@
     --accent-soft: rgba(109, 92, 255, 0.16);
     --accent-strong: #745cff;
     --accent-gradient: linear-gradient(135deg, #7b61ff 0%, #4d46ff 100%);
+
+    /* ── Glossary interactions ─────────────── */
+    --glossary-topic-hover-bg: color-mix(in srgb, var(--accent) 6%, transparent);
+    --glossary-topic-hover-border: color-mix(in srgb, var(--accent) 18%, transparent);
+    --glossary-topic-active-hover-bg:
+        linear-gradient(100deg,
+            color-mix(in srgb, var(--accent) 30%, transparent),
+            color-mix(in srgb, var(--accent-soft) 92%, transparent));
+    --glossary-table-row-hover-bg: color-mix(in srgb, var(--accent) 18%, var(--panel-strong));
 
     /* ── Buttons / segmented controls ───────── */
     --button-primary-bg: var(--accent-gradient);

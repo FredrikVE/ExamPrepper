@@ -75,15 +75,17 @@
 		box-shadow var(--transition-fast);
 }
 
-.glossary-topic-area-button:hover,
-.glossary-topic-area-button:focus-visible {
-	z-index: 2;
-	border-color: color-mix(in srgb, var(--accent) 18%, transparent);
-	background: color-mix(in srgb, var(--accent) 6%, transparent);
-	transform: var(--segmented-control-button-hover-transform);
+@media (hover: hover) and (pointer: fine) {
+	.glossary-topic-area-button:hover {
+		z-index: 2;
+		border-color: var(--glossary-topic-hover-border);
+		background: var(--glossary-topic-hover-bg);
+	}
 }
 
 .glossary-topic-area-button:focus-visible {
+	z-index: 2;
+	border-color: var(--button-secondary-border-hover);
 	outline: 3px solid var(--button-focus-ring);
 	outline-offset: 3px;
 }
@@ -99,10 +101,15 @@
 	color: var(--text-main);
 }
 
-.glossary-topic-area-button[data-active="true"]:hover,
+@media (hover: hover) and (pointer: fine) {
+	.glossary-topic-area-button[data-active="true"]:hover {
+		background: var(--glossary-topic-active-hover-bg);
+		color: var(--text-main);
+	}
+}
+
 .glossary-topic-area-button[data-active="true"]:focus-visible {
-	background: var(--segmented-control-active-bg-hover);
-	color: var(--segmented-control-active-text);
+	color: var(--text-main);
 }
 
 .glossary-topic-area-button[data-keyboard-target="true"] {
