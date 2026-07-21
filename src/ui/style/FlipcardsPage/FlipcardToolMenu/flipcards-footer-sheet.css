@@ -41,7 +41,4 @@
 		radial-gradient(circle at 18% 94%, rgba(16, 103, 255, 0.06), transparent 32%),
 		linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 98%, transparent), color-mix(in srgb, var(--panel-bg) 98%, transparent))
 		var(--app-bg);
-	box-shadow:
-		0 -18px 52px rgba(18, 38, 63, 0.14),
-		inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }

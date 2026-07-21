@@ -271,12 +271,15 @@ export default function useGlossaryPageViewModel(
 
 	return {
 		pageTitle: t.glossaryPageTitle,
-		pageDescription: t.glossaryPageDescription,
 		searchPlaceholder: t.glossaryPageSearchPlaceholder,
 		searchClearLabel: t.glossaryPageSearchClearLabel,
 		searchKeyboardHint: t.glossaryPageSearchKeyboardHint,
 		termColumnHeader: t.glossaryPageTermColumnHeader,
 		explanationColumnHeader: t.glossaryPageExplanationColumnHeader,
+		mobileChapterSheetTitle: t.glossaryPageMobileChapterSheetTitle,
+		mobileChapterSheetSubtitle: t.glossaryPageMobileChapterSheetSubtitle,
+		mobileChapterSheetOpenLabel: t.glossaryPageMobileChapterSheetOpenLabel,
+		mobileChapterSheetCloseLabel: t.glossaryPageMobileChapterSheetCloseLabel,
 		loadingTitle: t.glossaryPageLoadingTitle,
 		errorTitle: t.glossaryPageErrorTitle,
 

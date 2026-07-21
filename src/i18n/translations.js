@@ -328,7 +328,6 @@ export const translations = {
 
         // GlossaryPage
         glossaryPageTitle: "Begrepslister",
-        glossaryPageDescription: "Utforsk viktige begreper og bygg et sterkt faglig fundament.",
         glossaryPageSearchPlaceholder: "Søk i begreper og kapitler...",
         glossaryPageSearchClearLabel: "Tøm søk",
         glossaryPageSearchKeyboardHint: "↑↓ for å bla · Enter for å åpne",
@@ -338,6 +337,10 @@ export const translations = {
         glossaryPageChapterSearchSubtitle: (matchCount) => `${matchCount} treff i dette kapittelet`,
         glossaryPageTermColumnHeader: "Begrep",
         glossaryPageExplanationColumnHeader: "Forklaring",
+        glossaryPageMobileChapterSheetTitle: "Velg kapittel",
+        glossaryPageMobileChapterSheetSubtitle: "Søk eller velg hvilket kapittel begrepslisten skal vise.",
+        glossaryPageMobileChapterSheetOpenLabel: "Åpne kapittelvelger",
+        glossaryPageMobileChapterSheetCloseLabel: "Lukk kapittelvelger",
         glossaryPageEmptySearchTitle: "Ingen treff",
         glossaryPageEmptySearchBody: (searchTerm) => `Ingen kapitler eller begreper samsvarer med «${searchTerm}».`,
         glossaryPageEmptyTitle: "Ingen begreper ennå",
@@ -777,7 +780,6 @@ export const translations = {
 
         // GlossaryPage
         glossaryPageTitle: "Glossaries",
-        glossaryPageDescription: "Explore important terminology and build a strong academic foundation.",
         glossaryPageSearchPlaceholder: "Search terms and chapters...",
         glossaryPageSearchClearLabel: "Clear search",
         glossaryPageSearchKeyboardHint: "↑↓ to browse · Enter to open",
@@ -787,6 +789,10 @@ export const translations = {
         glossaryPageChapterSearchSubtitle: (matchCount) => `${matchCount} matches in this chapter`,
         glossaryPageTermColumnHeader: "Term",
         glossaryPageExplanationColumnHeader: "Explanation",
+        glossaryPageMobileChapterSheetTitle: "Choose chapter",
+        glossaryPageMobileChapterSheetSubtitle: "Search or choose which chapter the glossary should show.",
+        glossaryPageMobileChapterSheetOpenLabel: "Open chapter selector",
+        glossaryPageMobileChapterSheetCloseLabel: "Close chapter selector",
         glossaryPageEmptySearchTitle: "No matches",
         glossaryPageEmptySearchBody: (searchTerm) => `No chapters or terms match “${searchTerm}”.`,
         glossaryPageEmptyTitle: "No terms yet",

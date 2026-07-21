@@ -35,24 +35,12 @@
 	margin: 0 auto 18px;
 }
 
-.glossary-page__heading h1,
-.glossary-page__heading p {
-	margin: 0;
-}
-
 .glossary-page__heading h1 {
+	margin: 0;
 	font-size: clamp(42px, 3.1vw, 58px);
 	font-weight: 950;
 	line-height: 0.98;
 	letter-spacing: -0.055em;
-}
-
-.glossary-page__heading p {
-	margin-top: 12px;
-	color: var(--text-muted);
-	font-size: 15px;
-	font-weight: 580;
-	line-height: 1.45;
 }
 
 .glossary-page__content {

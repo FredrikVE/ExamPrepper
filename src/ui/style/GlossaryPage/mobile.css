@@ -1,0 +1,164 @@
+/* src/ui/style/GlossaryPage/mobile.css */
+.glossary-entry-card-list,
+.glossary-mobile-chapter-sheet {
+	display: none;
+}
+
+@media (max-width: 932px) {
+	.glossary-mobile-chapter-sheet {
+		--mobile-bottom-sheet-collapsed-visible-height: var(--glossary-mobile-sheet-collapsed-height);
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 60;
+		display: block;
+		pointer-events: none;
+	}
+
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root {
+		pointer-events: none;
+	}
+
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-popup {
+		pointer-events: auto;
+	}
+
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root[data-has-peek="true"] .glossary-mobile-chapter-sheet__popup {
+		border-color: color-mix(in srgb, var(--accent) 32%, var(--line));
+		padding-top: var(--space-1);
+		padding-bottom: calc(var(--space-7) + env(safe-area-inset-bottom));
+	}
+
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root[data-has-peek="true"] .glossary-mobile-chapter-sheet__content {
+		gap: 0;
+		max-width: 560px;
+	}
+
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-grip-control-docked {
+		min-height: 28px;
+		margin-bottom: 0;
+	}
+
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root:not([data-open="true"]) .glossary-mobile-chapter-sheet__body {
+		visibility: hidden;
+	}
+
+	.glossary-mobile-chapter-sheet__search {
+		width: 100%;
+		flex: 0 0 auto;
+	}
+
+	.glossary-mobile-chapter-sheet .glossary-search-field {
+		min-height: 56px;
+		border-color: var(--line-strong);
+		border-radius: var(--radius-md);
+		background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
+	}
+
+	.glossary-mobile-chapter-sheet .glossary-search-field__input {
+		height: 54px;
+		font-size: 16px;
+	}
+
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root:not([data-open="true"]) .glossary-search-meta {
+		display: none;
+	}
+
+	.glossary-mobile-chapter-sheet__body {
+		display: flex;
+		min-height: 0;
+		flex: 1;
+		flex-direction: column;
+		overflow: hidden;
+		padding-bottom: var(--space-2);
+	}
+
+	.glossary-mobile-chapter-sheet .glossary-search-control {
+		flex: 0 0 auto;
+	}
+
+	.glossary-mobile-chapter-sheet .glossary-topic-area-navigation {
+		margin-top: var(--space-2);
+	}
+
+	.glossary-mobile-chapter-sheet .glossary-topic-area-list {
+		grid-auto-rows: minmax(78px, auto);
+		align-content: start;
+		gap: var(--space-2);
+		margin-top: var(--space-2);
+		padding: 0 var(--space-1) var(--space-3);
+	}
+
+	.glossary-mobile-chapter-sheet .glossary-topic-area-button {
+		min-height: 78px;
+		height: auto;
+		border-color: var(--line);
+		background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
+	}
+
+	.glossary-mobile-chapter-sheet .glossary-topic-area-button[data-active="true"] {
+		border-color: color-mix(in srgb, var(--accent) 54%, transparent);
+		background: linear-gradient(100deg, color-mix(in srgb, var(--accent) 22%, var(--panel-strong)), var(--accent-soft));
+		box-shadow: inset 4px 0 0 var(--accent);
+	}
+
+	.glossary-entry-card-list {
+		display: grid;
+		gap: var(--space-3);
+		min-height: 0;
+		margin: 0;
+		padding: 0 0 var(--glossary-mobile-sheet-collapsed-height);
+		overflow: visible;
+	}
+
+	.glossary-entry-card {
+		display: grid;
+		gap: var(--space-4);
+		margin: 0;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-md);
+		background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
+		box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text-main) 3%, transparent);
+		padding: var(--space-5);
+	}
+
+	.glossary-entry-card__section {
+		display: grid;
+		gap: var(--space-2);
+		min-width: 0;
+	}
+
+	.glossary-entry-card__section + .glossary-entry-card__section {
+		border-top: 1px solid var(--line);
+		padding-top: var(--space-4);
+	}
+
+	.glossary-entry-card__label {
+		color: var(--accent);
+		font-size: 11px;
+		font-weight: 820;
+		letter-spacing: 0.06em;
+		line-height: 1.2;
+		text-transform: uppercase;
+	}
+
+	.glossary-entry-card__term,
+	.glossary-entry-card__explanation {
+		margin: 0;
+	}
+
+	.glossary-entry-card__term {
+		color: var(--text-main);
+		font-size: 17px;
+		font-weight: 800;
+		line-height: 1.35;
+	}
+
+	.glossary-entry-card__explanation {
+		color: var(--text-muted);
+		font-size: 15px;
+		font-weight: 480;
+		line-height: 1.6;
+	}
+}

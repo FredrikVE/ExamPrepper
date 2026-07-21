@@ -55,25 +55,9 @@
 				color-mix(in srgb, var(--panel-strong) 96%, transparent) 0%,
 				color-mix(in srgb, var(--shell-bg) 84%, transparent) 100%
 			);
-		box-shadow: 0 22px 54px color-mix(in srgb, #000 24%, transparent),
-			inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+		box-shadow: none;
 		padding: calc(env(safe-area-inset-top) + 16px) 20px 16px;
 		backdrop-filter: var(--blur-panel);
-	}
-
-	.mobile-topbar::after {
-		content: "";
-		position: absolute;
-		right: 0;
-		bottom: -28px;
-		left: 0;
-		height: 28px;
-		pointer-events: none;
-		background: linear-gradient(
-			180deg,
-			color-mix(in srgb, var(--app-bg) 44%, transparent),
-			transparent
-		);
 	}
 
 	.mobile-topbar.mobile-topbar-menu-open {
@@ -152,11 +136,6 @@
 		grid-template-columns: 48px minmax(0, 1fr) 48px;
 		column-gap: 8px;
 		padding: calc(env(safe-area-inset-top) + 6px) 12px 6px;
-	}
-
-	.mobile-topbar::after {
-		bottom: -16px;
-		height: 16px;
 	}
 
 	.mobile-topbar-menu-button,
