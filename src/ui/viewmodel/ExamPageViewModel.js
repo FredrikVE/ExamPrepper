@@ -194,7 +194,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		showAllFeedback,
 		elapsedTimeLabel,
 		calculateExamScoreUseCase,
-		copy
+		t.examAnsweredLabel
 	]);
 
 	const {
