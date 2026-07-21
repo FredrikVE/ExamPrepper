@@ -8,10 +8,6 @@ function createCalculateExamScoreUseCase(scoreModel = { score: 2, totalPoints: 3
 	};
 }
 
-const copy = {
-	answeredLabel: "besvart"
-};
-
 describe("createExamStatusModel", () => {
 	it("creates unanswered in-progress labels", () => {
 		const calculateExamScoreUseCase = createCalculateExamScoreUseCase();
@@ -29,7 +25,7 @@ describe("createExamStatusModel", () => {
 			showAllFeedback: true,
 			elapsedTimeLabel: "00:12",
 			calculateExamScoreUseCase,
-			copy
+			answeredLabel: "besvart"
 		});
 
 		expect(statusModel).toEqual({
@@ -65,7 +61,7 @@ describe("createExamStatusModel", () => {
 			showAllFeedback: false,
 			elapsedTimeLabel: "03:45",
 			calculateExamScoreUseCase,
-			copy
+			answeredLabel: "besvart"
 		});
 
 		expect(statusModel).toEqual({
@@ -91,7 +87,7 @@ describe("createExamStatusModel", () => {
 			showAllFeedback: true,
 			elapsedTimeLabel: "00:00",
 			calculateExamScoreUseCase: createCalculateExamScoreUseCase({ score: 0, totalPoints: 0, percentage: 0 }),
-			copy
+			answeredLabel: "besvart"
 		});
 
 		expect(statusModel.answeredCountLabel).toBe("0/0");

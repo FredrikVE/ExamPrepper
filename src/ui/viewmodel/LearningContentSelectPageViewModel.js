@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, PAGE_TOOL_AVAILABILITY } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
-import createLearningContentSelectPageCopy from "./LearningContentSelectPage/createLearningContentSelectPageCopy.js";
+import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
@@ -125,8 +125,8 @@ export default function useLearningContentSelectPageViewModel(
 		flipcardDeckLoad
 	], t.selectErrorMessage);
 
-	const pageCopy = useMemo(() => {
-		return createLearningContentSelectPageCopy(t, selectedSubject, activeContentType);
+	const pageHeading = useMemo(() => {
+		return createLearningContentSelectPageHeading(t, selectedSubject, activeContentType);
 	}, [t, selectedSubject, activeContentType]);
 
 	const selectContentType = useCallback((contentTypeId) => {
@@ -281,7 +281,13 @@ export default function useLearningContentSelectPageViewModel(
 		topicAreas,
 		topicAreaKey,
 		pageTools,
-		...pageCopy,
+		...pageHeading,
+		loadingMessage: t.selectLoadingMessage,
+		emptyTitle: t.selectEmptyTitle,
+		emptyMessage: t.selectEmptyMessage,
+		practiceExamLabel: t.selectPracticeExamLabel,
+		questionLabel: t.selectQuestionLabel,
+		minuteLabel: t.selectMinuteLabel,
 
 		addPlaceholderCode: t.examAddPlaceholderCode,
 		addPlaceholderTitle: t.examAddPlaceholderTitle,

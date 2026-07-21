@@ -13,7 +13,7 @@ export default function createExamStatusModel({
 	showAllFeedback,
 	elapsedTimeLabel,
 	calculateExamScoreUseCase,
-	copy
+	answeredLabel
 }) {
 	const examScore = calculateExamScoreUseCase.execute(questions, answers);
 	const answeredCount = questions.filter((question) => {
@@ -38,7 +38,7 @@ export default function createExamStatusModel({
 			visibleQuestions.length
 		),
 		feedbackToggleLabel: getFeedbackToggleLabel(showAllFeedback),
-		mobileWorkStatusLabel: `${elapsedTimeLabel} · ${answeredPercentLabel} ${copy.answeredLabel}`,
+		mobileWorkStatusLabel: `${elapsedTimeLabel} · ${answeredPercentLabel} ${answeredLabel}`,
 		canSubmitExam: !submitted && questions.length > 0
 	};
 }
