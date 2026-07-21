@@ -4,7 +4,6 @@ import { useSettings } from "../settings/SettingsContext.jsx";
 import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
 import deriveWorkspaceClassName from "./Utils/deriveWorkspaceClassName.js";
 import { shouldUseCompactDotsByQuestionCount, shouldAllowResponsiveCompactDots } from "./Utils/questionDotPagination.js";
-import createExamPageCopy from "./ExamPage/createExamPageCopy.js";
 import { resetExamAttemptState } from "./ExamPage/createExamAttemptResetActions.js";
 import createExamFeedbackModel from "./ExamPage/createExamFeedbackModel.js";
 import getCurrentAnswerOptionOrder from "./ExamPage/getCurrentAnswerOptionOrder.js";
@@ -31,10 +30,6 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
 	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(0);
 
-	const copy = useMemo(() => {
-		return createExamPageCopy(t);
-	}, [t]);
-
 	const requestScrollToTop = useCallback(() => {
 		setScrollToTopRequestId((requestId) => requestId + 1);
 	}, []);
@@ -58,7 +53,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		closeSubmitConfirmation,
 		confirmSubmitExamAttempt
 	} = useExamSubmitModel({
-		attemptSaveErrorMessage: copy.attemptSaveErrorMessage,
+		attemptSaveErrorMessage: t.examAttemptSaveErrorMessage,
 		isSubmitted: submitted,
 		submitExamAttemptUseCase,
 		onExamSubmitted: markExamSubmitted,
@@ -101,7 +96,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	} = useExamQuestionLoadModel({
 		getExamQuestionsUseCase,
 		examId,
-		questionsLoadErrorMessage: copy.questionsLoadErrorMessage,
+		questionsLoadErrorMessage: t.examLoadErrorMessage,
 		onQuestionsLoaded: handleQuestionsLoaded
 	});
 
@@ -188,7 +183,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			showAllFeedback,
 			elapsedTimeLabel,
 			calculateExamScoreUseCase,
-			copy
+			answeredLabel: t.examAnsweredLabel
 		});
 	}, [
 		questions,
@@ -199,7 +194,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		showAllFeedback,
 		elapsedTimeLabel,
 		calculateExamScoreUseCase,
-		copy
+		t.examAnsweredLabel
 	]);
 
 	const {
@@ -253,12 +248,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return buildProgressBarModel({
 			totalSteps: visibleQuestionCount,
 			currentStep: currentQuestionNumber,
-			ariaLabel: copy.examProgressAriaLabel,
-			startLabel: copy.examProgressStartLabel,
+			ariaLabel: t.examProgressAriaLabel,
+			startLabel: t.examProgressStartLabel,
 			formatStepLabel: formatExamProgressStepLabel,
 			onActivateStep: activateExamProgressStep
 		});
-	}, [visibleQuestionCount, currentQuestionNumber, copy.examProgressAriaLabel, copy.examProgressStartLabel, activateExamProgressStep]);
+	}, [visibleQuestionCount, currentQuestionNumber, t.examProgressAriaLabel, t.examProgressStartLabel, activateExamProgressStep]);
 
 	const setSingleAnswer = useCallback((questionId, selectedValue) => {
 		if (submitted) {
@@ -355,10 +350,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		currentQuestionFillMatchType,
 		answers,
 
-		loadingTitle: copy.loadingMessage,
-		errorTitle: copy.errorPrefix,
-		emptyMessage: copy.emptyMessage,
-		attemptSavingMessage: copy.attemptSavingMessage,
+		loadingTitle: t.loadingMessage,
+		errorTitle: t.errorPrefix,
+		emptyMessage: t.emptyMessage,
+		attemptSavingMessage: t.examAttemptSavingMessage,
 
 		pageStatus: questionsStatus,
 		pageErrorMessage: questionsError,

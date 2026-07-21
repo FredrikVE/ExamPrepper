@@ -43,6 +43,6 @@ export const LEARNING_CONTENT_ENTRIES = [
         searchPlaceholderKey: "glossarySearchPlaceholder",
         subtitleKey: "selectGlossariesSubtitle",
         subtitleFallbackKey: "selectGlossariesSubtitleFallback",
-        availability: PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+        availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
     }
 ];

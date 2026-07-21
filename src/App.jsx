@@ -13,6 +13,7 @@ import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
 import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.js";
 import useFlipcardsPageViewModel from "./ui/viewmodel/FlipcardsPageViewModel.js";
 import useMatchCardsPageViewModel from "./ui/viewmodel/MatchCardsPageViewModel.js";
+import useGlossaryPageViewModel from "./ui/viewmodel/GlossaryPageViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import LearningContentSelectPage from "./ui/view/pages/LearningContentSelectPage.jsx";
@@ -20,6 +21,7 @@ import ExamPage from "./ui/view/pages/ExamPage.jsx";
 import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
 import FlipcardsPage from "./ui/view/pages/FlipcardsPage.jsx";
 import MatchCardsPage from "./ui/view/pages/MatchCardsPage.jsx";
+import GlossaryPage from "./ui/view/pages/GlossaryPage.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
@@ -183,6 +185,17 @@ function AppContent() {
 					/>
 				)}
 
+				{navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY && (
+					<GlossaryPageWrapper
+						subjectId={navigationViewModel.selectedSubjectId}
+						initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
+						language={language}
+						t={t}
+						isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
+						backContract={navigationViewModel.backContract}
+					/>
+				)}
+
 				{navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
 					<StatisticsPageWrapper
 						formatDate={formatDate}
@@ -299,6 +312,23 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 
 	return (
 		<MatchCardsPage viewModel={matchCardsPageViewModel} />
+	);
+}
+
+function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
+	const glossaryPageViewModel = useGlossaryPageViewModel(
+		getGlossaryEntriesForSubjectUseCase,
+		getTopicAreasUseCase,
+		subjectId,
+		initialTopicAreaKey,
+		language,
+		t,
+		isActive,
+		backContract
+	);
+
+	return (
+		<GlossaryPage viewModel={glossaryPageViewModel} />
 	);
 }
 

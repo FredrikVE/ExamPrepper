@@ -1,6 +1,6 @@
 // src/ui/view/components/MatchCardsPage/MatchCard.jsx
 import FormattedText, { createPlainFormattedText } from "../Shared/FormattedText.jsx";
-import { MATCH_SLOT_STATUS } from "../../../viewmodel/MatchCardsPage/matchCardsSessionModel.js";
+import { MATCH_SLOT_STATUS } from "../../../viewmodel/MatchCardsPage/matchCardsConstants.js";
 
 export default function MatchCard({ slot, labels, isInteractionLocked, onSelectSlot }) {
 	const isEmpty = slot.status === MATCH_SLOT_STATUS.EMPTY;

@@ -4,17 +4,10 @@ import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/to
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
-import {
-	advanceMatchedPair,
-	canStartMatchCardsSession,
-	createMatchCardsSession,
-	markSuccessfulSlotsForFadeOut,
-	MATCH_CARD_COLUMN,
-	MATCH_SLOT_STATUS,
-	resetWrongSlots,
-	selectMatchSlot,
-	settleFadingInSlots
-} from "./MatchCardsPage/matchCardsSessionModel.js";
+import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./MatchCardsPage/matchCardsConstants.js";
+import { canStartMatchCardsSession, createMatchCardsSession } from "./MatchCardsPage/matchCardsSession.js";
+import { selectMatchSlot } from "./MatchCardsPage/matchCardsSelectionTransitions.js";
+import { advanceMatchedPair, markSuccessfulSlotsForFadeOut, resetWrongSlots, settleFadingInSlots } from "./MatchCardsPage/matchCardsRoundTransitions.js";
 
 const MATCH_CARDS_ROUND_PAIR_COUNT = 6;
 const MATCH_CARDS_VISIBLE_PAIR_COUNT = 4;
@@ -124,7 +117,7 @@ export default function useMatchCardsPageViewModel({
 	}, [activeTopicArea, t]);
 
 	const createSession = useCallback(() => {
-		if (!canStartMatchCardsSession({ glossaryEntries })) {
+		if (!canStartMatchCardsSession(glossaryEntries)) {
 			setSession(null);
 			return;
 		}
@@ -165,9 +158,7 @@ export default function useMatchCardsPageViewModel({
 					return currentSession;
 				}
 
-				return resetWrongSlots({
-					session: currentSession
-				});
+				return resetWrongSlots(currentSession);
 			});
 		}, WRONG_RESET_DELAY_MS);
 	}, [clearTimers, registerTimer]);
@@ -181,9 +172,7 @@ export default function useMatchCardsPageViewModel({
 					return currentSession;
 				}
 
-				return markSuccessfulSlotsForFadeOut({
-					session: currentSession
-				});
+				return markSuccessfulSlotsForFadeOut(currentSession);
 			});
 		}, SUCCESS_FADE_OUT_DELAY_MS);
 
@@ -193,9 +182,7 @@ export default function useMatchCardsPageViewModel({
 					return currentSession;
 				}
 
-				return advanceMatchedPair({
-					session: currentSession
-				});
+				return advanceMatchedPair(currentSession);
 			});
 		}, SUCCESS_ADVANCE_DELAY_MS);
 
@@ -205,9 +192,7 @@ export default function useMatchCardsPageViewModel({
 					return currentSession;
 				}
 
-				return settleFadingInSlots({
-					session: currentSession
-				});
+				return settleFadingInSlots(currentSession);
 			});
 		}, FADING_IN_SETTLE_DELAY_MS);
 	}, [clearTimers, registerTimer]);
@@ -217,10 +202,7 @@ export default function useMatchCardsPageViewModel({
 			return;
 		}
 
-		const nextSession = selectMatchSlot({
-			session,
-			slotId
-		});
+		const nextSession = selectMatchSlot(session, slotId);
 
 		setSession(nextSession);
 

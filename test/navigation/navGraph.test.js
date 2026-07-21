@@ -24,12 +24,17 @@ describe("navGraph", () => {
 			NAV_SCREENS.EXAM,
 			NAV_SCREENS.FLIPCARDS,
 			NAV_SCREENS.MATCHCARDS,
+			NAV_SCREENS.GLOSSARY,
 			NAV_SCREENS.OVERVIEW
 		]);
 	});
 
 	test("declares a layout for every graph node", () => {
 		expect(Object.values(NAV_GRAPH).every((node) => Boolean(node.layout))).toBe(true);
+	});
+
+	test("lets the glossary graph node own topic-area reset", () => {
+		expect(NAV_GRAPH[NAV_SCREENS.GLOSSARY].clearsTopicArea).toBe(true);
 	});
 
 	test.each([
@@ -39,6 +44,7 @@ describe("navGraph", () => {
 		[NAV_SCREENS.EXAM, APP_LAYOUTS.EXAM],
 		[NAV_SCREENS.FLIPCARDS, APP_LAYOUTS.EXAM],
 		[NAV_SCREENS.MATCHCARDS, APP_LAYOUTS.EXAM],
+		[NAV_SCREENS.GLOSSARY, APP_LAYOUTS.EXAM],
 		["finnes-ikke", APP_LAYOUTS.SELECTION]
 	])("resolveScreenLayout(%s) returns %s", (activeScreen, expected) => {
 		expect(resolveScreenLayout(activeScreen)).toBe(expected);
@@ -100,6 +106,28 @@ describe("navGraph", () => {
 			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
 		],
 		[
+			"GLOSSARY med fag nullstiller tidligere topic-area-valg",
+			NAV_SCREENS.GLOSSARY,
+			{ ...WITH_SUBJECT_AND_EXAM, selectedTopicAreaKey: "old-topic-area" },
+			{
+				screen: NAV_SCREENS.GLOSSARY,
+				selectedSubjectId: "in5431",
+				selectedExamId: null,
+				selectedTopicAreaKey: null
+			}
+		],
+		[
+			"GLOSSARY uten fag faller tilbake til SUBJECTS",
+			NAV_SCREENS.GLOSSARY,
+			{ ...WITHOUT_SELECTION, selectedTopicAreaKey: "unknown-key" },
+			{
+				screen: NAV_SCREENS.SUBJECTS,
+				selectedSubjectId: null,
+				selectedExamId: null,
+				selectedTopicAreaKey: null
+			}
+		],
+		[
 			"OVERVIEW uten fag er tillatt og nullstiller eksamen",
 			NAV_SCREENS.OVERVIEW,
 			WITHOUT_SELECTION,
@@ -157,6 +185,25 @@ describe("navGraph", () => {
 			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
 		],
 		[
+			"GLOSSARY med fag går tilbake til SELECT og nullstiller topic-area-valg",
+			{
+				activeScreen: NAV_SCREENS.GLOSSARY,
+				...WITH_SUBJECT_AND_EXAM,
+				selectedTopicAreaKey: "unknown-key"
+			},
+			{
+				screen: NAV_SCREENS.SELECT,
+				selectedSubjectId: "in5431",
+				selectedExamId: null,
+				selectedTopicAreaKey: null
+			}
+		],
+		[
+			"GLOSSARY uten fag faller tilbake til SUBJECTS",
+			{ activeScreen: NAV_SCREENS.GLOSSARY, selectedSubjectId: null, selectedExamId: null },
+			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null }
+		],
+		[
 			"OVERVIEW med fag går tilbake til SELECT",
 			{ activeScreen: NAV_SCREENS.OVERVIEW, ...WITH_SUBJECT_AND_EXAM },
 			{ screen: NAV_SCREENS.SELECT, selectedSubjectId: "in5431", selectedExamId: null }
@@ -180,6 +227,7 @@ describe("navGraph", () => {
 		[NAV_SCREENS.SELECT, true],
 		[NAV_SCREENS.EXAM, true],
 		[NAV_SCREENS.FLIPCARDS, true],
+		[NAV_SCREENS.GLOSSARY, true],
 		[NAV_SCREENS.OVERVIEW, true],
 		["finnes-ikke", true]
 	])("hasBackNavigation(%s) returns %s", (activeScreen, expected) => {

@@ -4,6 +4,7 @@ import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/to
 import { filterFlipcardsByTopicArea } from "../../model/domain/utils/filterFlipcardsByTopicArea.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
+import { createFlipcardsFromGlossaryEntries } from "./FlipcardsPage/glossaryEntryFlipcardModel.js";
 import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
@@ -78,7 +79,7 @@ export default function useFlipcardsPageViewModel(
 
     const glossaryEntries = glossaryEntryLoad.data;
     const flashcards = useMemo(() => {
-        return localizeGlossaryEntriesForFlipcards(glossaryEntries, language);
+        return createFlipcardsFromGlossaryEntries(glossaryEntries, language);
     }, [glossaryEntries, language]);
     const topicAreas = topicAreaLoad.data;
     const pageStatus = combineLoadStatuses([
@@ -523,28 +524,4 @@ function isTopicAreaDeckToolKey(deckToolKey) {
 
 function readTopicAreaKeyFromDeckToolKey(deckToolKey) {
     return deckToolKey.slice(TOPIC_AREA_DECK_TOOL_PREFIX.length);
-}
-
-
-function localizeGlossaryEntriesForFlipcards(glossaryEntries, language) {
-    const localizedFlipcards = [];
-
-    for (const glossaryEntry of glossaryEntries) {
-        localizedFlipcards.push({
-            id: glossaryEntry.id,
-            term: resolveLocalizedGlossaryEntryText(glossaryEntry.term, language),
-            definition: resolveLocalizedGlossaryEntryText(glossaryEntry.explanation, language),
-            topicAreaKey: glossaryEntry.topicAreaKey
-        });
-    }
-
-    return localizedFlipcards;
-}
-
-function resolveLocalizedGlossaryEntryText(value, language) {
-    if (typeof value === "string") {
-        return value;
-    }
-
-    return value?.[language] ?? value?.no ?? "";
 }
