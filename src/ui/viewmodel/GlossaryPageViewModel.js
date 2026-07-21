@@ -5,474 +5,508 @@ import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
-import { countEntryMatchesByTopicArea, filterEntriesBySearchTerm, normalizeSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
+import {
+	countEntryMatchesByTopicAreaForNormalizedSearchTerm,
+	filterEntriesByNormalizedSearchTerm,
+	normalizeSearchTerm
+} from "./GlossaryPage/glossarySearchModel.js";
 import { applyGlossaryTopicAreaInteractionState, createGlossaryTopicAreaListItems } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
+import {
+	createGlossaryPageShellModel,
+	createGlossaryPageView
+} from "./GlossaryPage/glossaryPagePresentationModel.js";
 
 export default function useGlossaryPageViewModel({
-    getGlossaryEntriesForSubjectUseCase,
-    getTopicAreasUseCase,
-    subjectId,
-    initialTopicAreaKey,
-    language,
-    t,
-    isActive,
-    backContract
+	getGlossaryEntriesForSubjectUseCase,
+	getTopicAreasUseCase,
+	subjectId,
+	initialTopicAreaKey,
+	language,
+	t,
+	isActive,
+	backContract
 }) {
-    const [glossarySearchTerm, setGlossarySearchTerm] = useState("");
-    const [activeTopicAreaKey, setActiveTopicAreaKey] = useState(initialTopicAreaKey ?? null);
-    const [searchKeyboardIndex, setSearchKeyboardIndex] = useState(-1);
+	const [glossarySearchTerm, setGlossarySearchTerm] = useState("");
+	const [activeTopicAreaKey, setActiveTopicAreaKey] = useState(initialTopicAreaKey ?? null);
+	const [searchKeyboardIndex, setSearchKeyboardIndex] = useState(-1);
 
-    useEffect(() => {
-        setGlossarySearchTerm("");
-        setActiveTopicAreaKey(initialTopicAreaKey ?? null);
-        setSearchKeyboardIndex(-1);
-    }, [initialTopicAreaKey, subjectId]);
+	useEffect(() => {
+		setGlossarySearchTerm("");
+		setActiveTopicAreaKey(initialTopicAreaKey ?? null);
+		setSearchKeyboardIndex(-1);
+	}, [initialTopicAreaKey, subjectId]);
 
-    const executeGlossaryEntryLoad = useCallback(() => {
-        if (!isActive || !subjectId) {
-            return Promise.resolve([]);
-        }
+	const executeGlossaryEntryLoad = useCallback(() => {
+		if (!isActive || !subjectId) {
+			return Promise.resolve([]);
+		}
 
-        return getGlossaryEntriesForSubjectUseCase.execute({
-            subjectId,
-            topicAreaKey: ALL_TOPIC_AREAS
-        });
-    }, [getGlossaryEntriesForSubjectUseCase, isActive, subjectId]);
+		return getGlossaryEntriesForSubjectUseCase.execute({
+			subjectId,
+			topicAreaKey: ALL_TOPIC_AREAS
+		});
+	}, [getGlossaryEntriesForSubjectUseCase, isActive, subjectId]);
 
-    const executeTopicAreaLoad = useCallback(() => {
-        if (!isActive || !subjectId) {
-            return Promise.resolve([]);
-        }
+	const executeTopicAreaLoad = useCallback(() => {
+		if (!isActive || !subjectId) {
+			return Promise.resolve([]);
+		}
 
-        return getTopicAreasUseCase.execute({
-            subjectId,
-            language
-        });
-    }, [getTopicAreasUseCase, isActive, language, subjectId]);
+		return getTopicAreasUseCase.execute({
+			subjectId,
+			language
+		});
+	}, [getTopicAreasUseCase, isActive, language, subjectId]);
 
-    const glossaryEntryLoad = useLoadModel({
-        execute: executeGlossaryEntryLoad,
-        emptyData: [],
-        errorMessage: t.glossaryPageErrorMessage,
-        onLoaded: null
-    });
+	const glossaryEntryLoad = useLoadModel({
+		execute: executeGlossaryEntryLoad,
+		emptyData: [],
+		errorMessage: t.glossaryPageErrorMessage,
+		onLoaded: null
+	});
 
-    const topicAreaLoad = useLoadModel({
-        execute: executeTopicAreaLoad,
-        emptyData: [],
-        errorMessage: t.glossaryPageErrorMessage,
-        onLoaded: null
-    });
+	const topicAreaLoad = useLoadModel({
+		execute: executeTopicAreaLoad,
+		emptyData: [],
+		errorMessage: t.glossaryPageErrorMessage,
+		onLoaded: null
+	});
 
-    const glossaryEntries = glossaryEntryLoad.data;
-    const topicAreas = topicAreaLoad.data;
-    const pageStatus = combineLoadStatuses([
-        glossaryEntryLoad.status,
-        topicAreaLoad.status
-    ]);
-    const pageErrorMessage = resolveFirstLoadError([
-        glossaryEntryLoad,
-        topicAreaLoad
-    ], t.glossaryPageErrorMessage);
+	const glossaryEntries = glossaryEntryLoad.data;
+	const topicAreas = topicAreaLoad.data;
+	const pageStatus = combineLoadStatuses([
+		glossaryEntryLoad.status,
+		topicAreaLoad.status
+	]);
+	const pageErrorMessage = resolveFirstLoadError([
+		glossaryEntryLoad,
+		topicAreaLoad
+	], t.glossaryPageErrorMessage);
 
-    const labels = useMemo(() => ({
-        pageTitle: t.glossaryPageTitle,
-        pageDescription: t.glossaryPageDescription,
-        searchPlaceholder: t.glossaryPageSearchPlaceholder,
-        searchClearLabel: t.glossaryPageSearchClearLabel,
-        searchKeyboardHint: t.glossaryPageSearchKeyboardHint,
-        termColumnHeader: t.glossaryPageTermColumnHeader,
-        explanationColumnHeader: t.glossaryPageExplanationColumnHeader,
-        loadingTitle: t.glossaryPageLoadingTitle,
-        errorTitle: t.glossaryPageErrorTitle
-    }), [t]);
+	const labels = useMemo(() => ({
+		pageTitle: t.glossaryPageTitle,
+		pageDescription: t.glossaryPageDescription,
+		searchPlaceholder: t.glossaryPageSearchPlaceholder,
+		searchClearLabel: t.glossaryPageSearchClearLabel,
+		searchKeyboardHint: t.glossaryPageSearchKeyboardHint,
+		termColumnHeader: t.glossaryPageTermColumnHeader,
+		explanationColumnHeader: t.glossaryPageExplanationColumnHeader,
+		loadingTitle: t.glossaryPageLoadingTitle,
+		errorTitle: t.glossaryPageErrorTitle
+	}), [t]);
 
-    const topicAreaListLabels = useMemo(() => ({
-        chapterMatchCount: t.glossaryPageChapterMatchCount,
-        chapterSubtitle: t.glossaryPageChapterSubtitle,
-        chapterSearchSubtitle: t.glossaryPageChapterSearchSubtitle
-    }), [t]);
+	const topicAreaListLabels = useMemo(() => ({
+		chapterMatchCount: t.glossaryPageChapterMatchCount,
+		chapterSubtitle: t.glossaryPageChapterSubtitle,
+		chapterSearchSubtitle: t.glossaryPageChapterSearchSubtitle
+	}), [t]);
 
-    const localizedEntries = useMemo(() => {
-        return localizeGlossaryEntries(glossaryEntries, language);
-    }, [glossaryEntries, language]);
+	const localizedEntries = useMemo(() => {
+		return localizeGlossaryEntries(glossaryEntries, language);
+	}, [glossaryEntries, language]);
 
-    const entriesByTopicAreaKey = useMemo(() => {
-        return groupGlossaryEntriesByTopicAreaKey(localizedEntries);
-    }, [localizedEntries]);
+	const entriesByTopicAreaKey = useMemo(() => {
+		return groupGlossaryEntriesByTopicAreaKey(localizedEntries);
+	}, [localizedEntries]);
 
-    const isSearching = normalizeSearchTerm(glossarySearchTerm).length > 0;
+	const normalizedSearchTerm = useMemo(() => {
+		return normalizeSearchTerm(glossarySearchTerm);
+	}, [glossarySearchTerm]);
+	const isSearching = normalizedSearchTerm.length > 0;
 
-    const matchCountsByTopicAreaKey = useMemo(() => {
-        return countEntryMatchesByTopicArea(localizedEntries, glossarySearchTerm);
-    }, [glossarySearchTerm, localizedEntries]);
+	const matchCountsByTopicAreaKey = useMemo(() => {
+		return countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, normalizedSearchTerm);
+	}, [localizedEntries, normalizedSearchTerm]);
 
-    const baseTopicAreaListItems = useMemo(() => {
-        return createGlossaryTopicAreaListItems({
-            topicAreas,
-            entriesByTopicAreaKey,
-            matchCountsByTopicAreaKey,
-            searchTerm: glossarySearchTerm,
-            labels: topicAreaListLabels
-        });
-    }, [
-        entriesByTopicAreaKey,
-        glossarySearchTerm,
-        matchCountsByTopicAreaKey,
-        topicAreaListLabels,
-        topicAreas
-    ]);
+	const baseTopicAreaListItems = useMemo(() => {
+		return createGlossaryTopicAreaListItems({
+			topicAreas,
+			entriesByTopicAreaKey,
+			matchCountsByTopicAreaKey,
+			normalizedSearchTerm,
+			labels: topicAreaListLabels
+		});
+	}, [
+		entriesByTopicAreaKey,
+		matchCountsByTopicAreaKey,
+		normalizedSearchTerm,
+		topicAreaListLabels,
+		topicAreas
+	]);
 
-    const resolvedActiveTopicAreaKey = useMemo(() => {
-        return resolveActiveTopicAreaKey({
-            topicAreaListItems: baseTopicAreaListItems,
-            activeTopicAreaKey
-        });
-    }, [activeTopicAreaKey, baseTopicAreaListItems]);
+	const resolvedActiveTopicAreaKey = useMemo(() => {
+		return resolveActiveTopicAreaKey({
+			topicAreaListItems: baseTopicAreaListItems,
+			activeTopicAreaKey
+		});
+	}, [activeTopicAreaKey, baseTopicAreaListItems]);
 
-    const resolvedSearchKeyboardIndex = resolveSearchKeyboardIndex({
-        searchKeyboardIndex,
-        topicAreaCount: baseTopicAreaListItems.length,
-        isSearching
-    });
+	const resolvedSearchKeyboardIndex = resolveSearchKeyboardIndex({
+		searchKeyboardIndex,
+		topicAreaCount: baseTopicAreaListItems.length,
+		isSearching
+	});
 
-    const topicAreaListItems = useMemo(() => {
-        return applyGlossaryTopicAreaInteractionState({
-            topicAreaListItems: baseTopicAreaListItems,
-            activeTopicAreaKey: resolvedActiveTopicAreaKey,
-            searchKeyboardIndex: resolvedSearchKeyboardIndex
-        });
-    }, [
-        baseTopicAreaListItems,
-        resolvedActiveTopicAreaKey,
-        resolvedSearchKeyboardIndex
-    ]);
+	const topicAreaListItems = useMemo(() => {
+		return applyGlossaryTopicAreaInteractionState({
+			topicAreaListItems: baseTopicAreaListItems,
+			activeTopicAreaKey: resolvedActiveTopicAreaKey,
+			searchKeyboardIndex: resolvedSearchKeyboardIndex
+		});
+	}, [
+		baseTopicAreaListItems,
+		resolvedActiveTopicAreaKey,
+		resolvedSearchKeyboardIndex
+	]);
 
-    const activeTopicAreaListItem = useMemo(() => {
-        return findTopicAreaListItemByKey(
-            topicAreaListItems,
-            resolvedActiveTopicAreaKey
-        );
-    }, [resolvedActiveTopicAreaKey, topicAreaListItems]);
+	const activeTopicAreaListItem = useMemo(() => {
+		return findTopicAreaListItemByKey(
+			topicAreaListItems,
+			resolvedActiveTopicAreaKey
+		);
+	}, [resolvedActiveTopicAreaKey, topicAreaListItems]);
 
-    const activeTopicAreaEntries = useMemo(() => {
-        if (!activeTopicAreaListItem) {
-            return [];
-        }
+	const activeTopicAreaEntries = useMemo(() => {
+		if (!activeTopicAreaListItem) {
+			return [];
+		}
 
-        const topicAreaEntries = entriesByTopicAreaKey.get(
-            activeTopicAreaListItem.topicAreaKey
-        ) ?? [];
+		const topicAreaEntries = entriesByTopicAreaKey.get(
+			activeTopicAreaListItem.topicAreaKey
+		) ?? [];
 
-        if (activeTopicAreaListItem.showsAllEntries) {
-            return topicAreaEntries;
-        }
+		if (activeTopicAreaListItem.showsAllEntries) {
+			return topicAreaEntries;
+		}
 
-        return filterEntriesBySearchTerm(topicAreaEntries, glossarySearchTerm);
-    }, [
-        activeTopicAreaListItem,
-        entriesByTopicAreaKey,
-        glossarySearchTerm
-    ]);
+		return filterEntriesByNormalizedSearchTerm(topicAreaEntries, normalizedSearchTerm);
+	}, [
+		activeTopicAreaListItem,
+		entriesByTopicAreaKey,
+		normalizedSearchTerm
+	]);
 
-    const glossaryPanelHeading = useMemo(() => {
-        if (!activeTopicAreaListItem) {
-            return null;
-        }
+	const glossaryPanelHeading = useMemo(() => {
+		if (!activeTopicAreaListItem) {
+			return null;
+		}
 
-        return {
-            title: activeTopicAreaListItem.label,
-            subtitle: activeTopicAreaListItem.subtitle,
-            iconKey: activeTopicAreaListItem.iconKey
-        };
-    }, [activeTopicAreaListItem]);
+		return {
+			title: activeTopicAreaListItem.label,
+			subtitle: activeTopicAreaListItem.subtitle,
+			iconKey: activeTopicAreaListItem.iconKey
+		};
+	}, [activeTopicAreaListItem]);
 
-    const glossaryTableRows = useMemo(() => {
-        return createGlossaryTableRows({
-            localizedEntries: activeTopicAreaEntries,
-            searchTerm: glossarySearchTerm
-        });
-    }, [activeTopicAreaEntries, glossarySearchTerm]);
+	const glossaryTableRows = useMemo(() => {
+		return createGlossaryTableRows({
+			localizedEntries: activeTopicAreaEntries,
+			normalizedSearchTerm
+		});
+	}, [activeTopicAreaEntries, normalizedSearchTerm]);
 
-    const searchSummaryLabel = useMemo(() => {
-        if (!isSearching) {
-            return "";
-        }
+	const searchSummaryLabel = useMemo(() => {
+		if (!isSearching) {
+			return "";
+		}
 
-        return t.glossaryPageSearchSummary(
-            topicAreaListItems.length,
-            sumMatchCounts(matchCountsByTopicAreaKey)
-        );
-    }, [isSearching, matchCountsByTopicAreaKey, t, topicAreaListItems.length]);
+		return t.glossaryPageSearchSummary(
+			topicAreaListItems.length,
+			sumMatchCounts(matchCountsByTopicAreaKey)
+		);
+	}, [isSearching, matchCountsByTopicAreaKey, t, topicAreaListItems.length]);
 
-    const hasNoSearchMatches = isSearching && topicAreaListItems.length === 0;
-    const emptyStateKind = resolveEmptyStateKind({
-        pageStatus,
-        topicAreas,
-        localizedEntries,
-        hasNoSearchMatches
-    });
-    const emptyState = createGlossaryEmptyState({
-        emptyStateKind,
-        searchTerm: glossarySearchTerm,
-        t
-    });
-    const isSearchComboboxActive = isSearching && topicAreaListItems.length > 0;
-    const searchActiveDescendantId = isSearchComboboxActive
-        ? topicAreaListItems[resolvedSearchKeyboardIndex]?.id ?? null
-        : null;
+	const hasNoSearchMatches = isSearching && topicAreaListItems.length === 0;
+	const emptyStateKind = resolveEmptyStateKind({
+		pageStatus,
+		topicAreas,
+		localizedEntries,
+		hasNoSearchMatches
+	});
+	const emptyState = createGlossaryEmptyState({
+		emptyStateKind,
+		searchTerm: glossarySearchTerm,
+		t
+	});
+	const isSearchComboboxActive = isSearching && topicAreaListItems.length > 0;
+	const searchActiveDescendantId = isSearchComboboxActive
+		? topicAreaListItems[resolvedSearchKeyboardIndex]?.id ?? null
+		: null;
 
-    const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
-        const safeSearchTerm = String(nextSearchTerm ?? "");
-        setGlossarySearchTerm(safeSearchTerm);
-        setSearchKeyboardIndex(normalizeSearchTerm(safeSearchTerm) ? 0 : -1);
-    }, []);
+	const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
+		setGlossarySearchTerm(nextSearchTerm);
+		setSearchKeyboardIndex(nextSearchTerm.length > 0 ? 0 : -1);
+	}, []);
 
-    const clearGlossarySearch = useCallback(() => {
-        setGlossarySearchTerm("");
-        setSearchKeyboardIndex(-1);
-    }, []);
+	const clearGlossarySearch = useCallback(() => {
+		setGlossarySearchTerm("");
+		setSearchKeyboardIndex(-1);
+	}, []);
 
-    const selectTopicArea = useCallback((topicAreaKey) => {
-        const topicAreaIndex = findTopicAreaListItemIndexByKey(
-            topicAreaListItems,
-            topicAreaKey
-        );
+	const selectTopicArea = useCallback((topicAreaKey) => {
+		const topicAreaIndex = findTopicAreaListItemIndexByKey(
+			topicAreaListItems,
+			topicAreaKey
+		);
 
-        if (topicAreaIndex === -1) {
-            return;
-        }
+		if (topicAreaIndex === -1) {
+			return;
+		}
 
-        setActiveTopicAreaKey(topicAreaKey);
-        setSearchKeyboardIndex(isSearching ? topicAreaIndex : -1);
-    }, [isSearching, topicAreaListItems]);
+		setActiveTopicAreaKey(topicAreaKey);
+		setSearchKeyboardIndex(isSearching ? topicAreaIndex : -1);
+	}, [isSearching, topicAreaListItems]);
 
-    const moveSearchSelectionDown = useCallback(() => {
-        moveSearchSelection({
-            direction: 1,
-            isSearching,
-            topicAreaCount: topicAreaListItems.length,
-            setSearchKeyboardIndex
-        });
-    }, [isSearching, topicAreaListItems.length]);
+	const moveSearchSelection = useCallback((direction) => {
+		if (!isSearching || topicAreaListItems.length === 0) {
+			return;
+		}
 
-    const moveSearchSelectionUp = useCallback(() => {
-        moveSearchSelection({
-            direction: -1,
-            isSearching,
-            topicAreaCount: topicAreaListItems.length,
-            setSearchKeyboardIndex
-        });
-    }, [isSearching, topicAreaListItems.length]);
+		setSearchKeyboardIndex((previousIndex) => calculateNextSearchKeyboardIndex({
+			previousIndex,
+			direction,
+			topicAreaCount: topicAreaListItems.length
+		}));
+	}, [isSearching, topicAreaListItems.length]);
 
-    const openSearchKeyboardSelection = useCallback(() => {
-        const selectedTopicArea = topicAreaListItems[resolvedSearchKeyboardIndex];
+	const moveSearchSelectionDown = useCallback(() => {
+		moveSearchSelection(1);
+	}, [moveSearchSelection]);
 
-        if (!isSearching || !selectedTopicArea) {
-            return;
-        }
+	const moveSearchSelectionUp = useCallback(() => {
+		moveSearchSelection(-1);
+	}, [moveSearchSelection]);
 
-        setActiveTopicAreaKey(selectedTopicArea.topicAreaKey);
-    }, [isSearching, resolvedSearchKeyboardIndex, topicAreaListItems]);
+	const openSearchKeyboardSelection = useCallback(() => {
+		const selectedTopicArea = topicAreaListItems[resolvedSearchKeyboardIndex];
 
-    return {
-        labels,
-        pageStatus,
-        pageErrorMessage,
-        glossarySearchTerm,
-        searchKeyboardIndex: resolvedSearchKeyboardIndex,
-        isSearching,
-        isSearchComboboxActive,
-        searchActiveDescendantId,
-        searchSummaryLabel,
-        topicAreaListItems,
-        resolvedActiveTopicAreaKey,
-        glossaryPanelHeading,
-        glossaryTableRows,
-        hasNoSearchMatches,
-        emptyStateKind,
-        emptyState,
-        changeGlossarySearchTerm,
-        clearGlossarySearch,
-        selectTopicArea,
-        moveSearchSelectionDown,
-        moveSearchSelectionUp,
-        openSearchKeyboardSelection,
-        showBackButton: backContract.showBackButton,
-        backLabel: backContract.backLabel,
-        navigationLabel: backContract.navigationLabel,
-        onBack: backContract.onBack
-    };
+		if (!isSearching || !selectedTopicArea) {
+			return;
+		}
+
+		setActiveTopicAreaKey(selectedTopicArea.topicAreaKey);
+	}, [isSearching, resolvedSearchKeyboardIndex, topicAreaListItems]);
+
+	const shellModel = useMemo(() => {
+		return createGlossaryPageShellModel({ backContract });
+	}, [backContract.backLabel, backContract.navigationLabel, backContract.showBackButton]);
+
+	const pageView = useMemo(() => {
+		return createGlossaryPageView({
+			labels,
+			pageStatus,
+			pageErrorMessage,
+			glossarySearchTerm,
+			isSearching,
+			isSearchComboboxActive,
+			searchActiveDescendantId,
+			searchSummaryLabel,
+			topicAreaListItems,
+			resolvedActiveTopicAreaKey,
+			glossaryPanelHeading,
+			glossaryTableRows,
+			emptyStateKind,
+			emptyState
+		});
+	}, [
+		emptyState,
+		emptyStateKind,
+		glossaryPanelHeading,
+		glossarySearchTerm,
+		glossaryTableRows,
+		isSearchComboboxActive,
+		isSearching,
+		labels,
+		pageErrorMessage,
+		pageStatus,
+		resolvedActiveTopicAreaKey,
+		searchActiveDescendantId,
+		searchSummaryLabel,
+		topicAreaListItems
+	]);
+
+	const actions = useMemo(() => ({
+		shell: {
+			onBack: backContract.onBack
+		},
+		topicAreaPanel: {
+			onSearchTermChange: changeGlossarySearchTerm,
+			onClearSearch: clearGlossarySearch,
+			onMoveSearchSelectionDown: moveSearchSelectionDown,
+			onMoveSearchSelectionUp: moveSearchSelectionUp,
+			onOpenSearchKeyboardSelection: openSearchKeyboardSelection,
+			onSelectTopicArea: selectTopicArea
+		}
+	}), [
+		backContract.onBack,
+		changeGlossarySearchTerm,
+		clearGlossarySearch,
+		moveSearchSelectionDown,
+		moveSearchSelectionUp,
+		openSearchKeyboardSelection,
+		selectTopicArea
+	]);
+
+	return {
+		shellModel,
+		pageView,
+		actions
+	};
 }
 
 function localizeGlossaryEntries(glossaryEntries, language) {
-    return glossaryEntries.map((glossaryEntry) => ({
-        glossaryEntryKey: glossaryEntry.glossaryEntryKey,
-        topicAreaKey: glossaryEntry.topicAreaKey,
-        term: resolveLocalizedText(glossaryEntry.term, language),
-        explanation: resolveLocalizedText(glossaryEntry.explanation, language),
-        position: glossaryEntry.position
-    }));
+	return glossaryEntries.map((glossaryEntry) => ({
+		glossaryEntryKey: glossaryEntry.glossaryEntryKey,
+		topicAreaKey: glossaryEntry.topicAreaKey,
+		term: resolveLocalizedText(glossaryEntry.term, language),
+		explanation: resolveLocalizedText(glossaryEntry.explanation, language),
+		position: glossaryEntry.position
+	}));
 }
 
 function resolveLocalizedText(localizedText, language) {
-    if (typeof localizedText === "string") {
-        return localizedText;
-    }
+	if (typeof localizedText === "string") {
+		return localizedText;
+	}
 
-    return localizedText?.[language]
-        ?? localizedText?.no
-        ?? localizedText?.en
-        ?? "";
+	return localizedText?.[language]
+		?? localizedText?.no
+		?? localizedText?.en
+		?? "";
 }
 
 function groupGlossaryEntriesByTopicAreaKey(localizedEntries) {
-    const entriesByTopicAreaKey = new Map();
+	const entriesByTopicAreaKey = new Map();
 
-    for (const localizedEntry of localizedEntries) {
-        if (!entriesByTopicAreaKey.has(localizedEntry.topicAreaKey)) {
-            entriesByTopicAreaKey.set(localizedEntry.topicAreaKey, []);
-        }
+	for (const localizedEntry of localizedEntries) {
+		if (!entriesByTopicAreaKey.has(localizedEntry.topicAreaKey)) {
+			entriesByTopicAreaKey.set(localizedEntry.topicAreaKey, []);
+		}
 
-        entriesByTopicAreaKey.get(localizedEntry.topicAreaKey).push(localizedEntry);
-    }
+		entriesByTopicAreaKey.get(localizedEntry.topicAreaKey).push(localizedEntry);
+	}
 
-    for (const topicAreaEntries of entriesByTopicAreaKey.values()) {
-        topicAreaEntries.sort(compareGlossaryEntries);
-    }
+	for (const topicAreaEntries of entriesByTopicAreaKey.values()) {
+		topicAreaEntries.sort(compareGlossaryEntries);
+	}
 
-    return entriesByTopicAreaKey;
+	return entriesByTopicAreaKey;
 }
 
 function compareGlossaryEntries(leftEntry, rightEntry) {
-    const positionDifference = leftEntry.position - rightEntry.position;
+	const positionDifference = leftEntry.position - rightEntry.position;
 
-    if (positionDifference !== 0) {
-        return positionDifference;
-    }
+	if (positionDifference !== 0) {
+		return positionDifference;
+	}
 
-    return leftEntry.glossaryEntryKey.localeCompare(rightEntry.glossaryEntryKey);
+	return leftEntry.glossaryEntryKey.localeCompare(rightEntry.glossaryEntryKey);
 }
 
 function resolveActiveTopicAreaKey({ topicAreaListItems, activeTopicAreaKey }) {
-    if (findTopicAreaListItemByKey(topicAreaListItems, activeTopicAreaKey)) {
-        return activeTopicAreaKey;
-    }
+	if (findTopicAreaListItemByKey(topicAreaListItems, activeTopicAreaKey)) {
+		return activeTopicAreaKey;
+	}
 
-    return topicAreaListItems[0]?.topicAreaKey ?? null;
+	return topicAreaListItems[0]?.topicAreaKey ?? null;
 }
 
 function resolveSearchKeyboardIndex({
-    searchKeyboardIndex,
-    topicAreaCount,
-    isSearching
+	searchKeyboardIndex,
+	topicAreaCount,
+	isSearching
 }) {
-    if (!isSearching || topicAreaCount === 0) {
-        return -1;
-    }
+	if (!isSearching || topicAreaCount === 0) {
+		return -1;
+	}
 
-    if (searchKeyboardIndex < 0 || searchKeyboardIndex >= topicAreaCount) {
-        return 0;
-    }
+	if (searchKeyboardIndex < 0 || searchKeyboardIndex >= topicAreaCount) {
+		return 0;
+	}
 
-    return searchKeyboardIndex;
+	return searchKeyboardIndex;
 }
 
 function findTopicAreaListItemByKey(topicAreaListItems, topicAreaKey) {
-    return topicAreaListItems.find((topicAreaListItem) => (
-        topicAreaListItem.topicAreaKey === topicAreaKey
-    )) ?? null;
+	return topicAreaListItems.find((topicAreaListItem) => (
+		topicAreaListItem.topicAreaKey === topicAreaKey
+	)) ?? null;
 }
 
 function findTopicAreaListItemIndexByKey(topicAreaListItems, topicAreaKey) {
-    return topicAreaListItems.findIndex((topicAreaListItem) => (
-        topicAreaListItem.topicAreaKey === topicAreaKey
-    ));
+	return topicAreaListItems.findIndex((topicAreaListItem) => (
+		topicAreaListItem.topicAreaKey === topicAreaKey
+	));
 }
 
 function sumMatchCounts(matchCountsByTopicAreaKey) {
-    let totalMatchCount = 0;
+	let totalMatchCount = 0;
 
-    for (const matchCount of matchCountsByTopicAreaKey.values()) {
-        totalMatchCount += matchCount;
-    }
+	for (const matchCount of matchCountsByTopicAreaKey.values()) {
+		totalMatchCount += matchCount;
+	}
 
-    return totalMatchCount;
+	return totalMatchCount;
 }
 
 function resolveEmptyStateKind({
-    pageStatus,
-    topicAreas,
-    localizedEntries,
-    hasNoSearchMatches
+	pageStatus,
+	topicAreas,
+	localizedEntries,
+	hasNoSearchMatches
 }) {
-    if (pageStatus !== LOAD_STATUS.READY) {
-        return null;
-    }
+	if (pageStatus !== LOAD_STATUS.READY) {
+		return null;
+	}
 
-    if (topicAreas.length === 0) {
-        return "no-topic-areas";
-    }
+	if (topicAreas.length === 0) {
+		return "no-topic-areas";
+	}
 
-    if (localizedEntries.length === 0) {
-        return "no-glossary-entries";
-    }
+	if (localizedEntries.length === 0) {
+		return "no-glossary-entries";
+	}
 
-    if (hasNoSearchMatches) {
-        return "no-search-results";
-    }
+	if (hasNoSearchMatches) {
+		return "no-search-results";
+	}
 
-    return null;
+	return null;
 }
 
 function createGlossaryEmptyState({ emptyStateKind, searchTerm, t }) {
-    if (emptyStateKind === "no-topic-areas") {
-        return {
-            kind: emptyStateKind,
-            title: t.glossaryPageNoTopicAreasTitle,
-            body: t.glossaryPageNoTopicAreasBody
-        };
-    }
+	if (emptyStateKind === "no-topic-areas") {
+		return {
+			kind: emptyStateKind,
+			title: t.glossaryPageNoTopicAreasTitle,
+			body: t.glossaryPageNoTopicAreasBody
+		};
+	}
 
-    if (emptyStateKind === "no-glossary-entries") {
-        return {
-            kind: emptyStateKind,
-            title: t.glossaryPageNoEntriesTitle,
-            body: t.glossaryPageNoEntriesBody
-        };
-    }
+	if (emptyStateKind === "no-glossary-entries") {
+		return {
+			kind: emptyStateKind,
+			title: t.glossaryPageNoEntriesTitle,
+			body: t.glossaryPageNoEntriesBody
+		};
+	}
 
-    if (emptyStateKind === "no-search-results") {
-        return {
-            kind: emptyStateKind,
-            title: t.glossaryPageNoSearchResultsTitle,
-            body: t.glossaryPageNoSearchResultsBody(searchTerm)
-        };
-    }
+	if (emptyStateKind === "no-search-results") {
+		return {
+			kind: emptyStateKind,
+			title: t.glossaryPageNoSearchResultsTitle,
+			body: t.glossaryPageNoSearchResultsBody(searchTerm)
+		};
+	}
 
-    return null;
+	return null;
 }
 
-function moveSearchSelection({
-    direction,
-    isSearching,
-    topicAreaCount,
-    setSearchKeyboardIndex
-}) {
-    if (!isSearching || topicAreaCount === 0) {
-        return;
-    }
+const calculateNextSearchKeyboardIndex = ({ previousIndex, direction, topicAreaCount }) => {
+	if (previousIndex < 0) {
+		return direction > 0 ? 0 : topicAreaCount - 1;
+	}
 
-    setSearchKeyboardIndex((previousSearchKeyboardIndex) => {
-        if (previousSearchKeyboardIndex < 0) {
-            return direction > 0 ? 0 : topicAreaCount - 1;
-        }
-
-        return (
-            previousSearchKeyboardIndex
-            + direction
-            + topicAreaCount
-        ) % topicAreaCount;
-    });
-}
+	return (previousIndex + direction + topicAreaCount) % topicAreaCount;
+};

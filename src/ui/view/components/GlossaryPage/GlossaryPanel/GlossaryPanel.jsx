@@ -3,20 +3,23 @@ import WorkspaceMessage from "../../WorkspaceState/WorkspaceMessage.jsx";
 import GlossaryPanelHeading from "./GlossaryPanelHeading.jsx";
 import GlossaryTable from "./GlossaryTable.jsx";
 
-export default function GlossaryPanel(props) {
+export default function GlossaryPanel({ model }) {
+	if (model.kind === "empty-state") {
+		return (
+			<article className="glossary-panel">
+				<WorkspaceMessage title={model.emptyState.title} body={model.emptyState.body} action={null} />
+			</article>
+		);
+	}
+
 	return (
 		<article className="glossary-panel">
-			{props.heading ? <GlossaryPanelHeading heading={props.heading} /> : null}
-
-			{props.emptyState ? (
-				<WorkspaceMessage title={props.emptyState.title} body={props.emptyState.body} action={null} />
-			) : (
-				<GlossaryTable
-					rows={props.tableRows}
-					termColumnHeader={props.termColumnHeader}
-					explanationColumnHeader={props.explanationColumnHeader}
-				/>
-			)}
+			<GlossaryPanelHeading heading={model.heading} />
+			<GlossaryTable
+				rows={model.table.rows}
+				termColumnHeader={model.table.termColumnHeader}
+				explanationColumnHeader={model.table.explanationColumnHeader}
+			/>
 		</article>
 	);
 }

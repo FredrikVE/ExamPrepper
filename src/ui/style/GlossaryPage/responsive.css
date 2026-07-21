@@ -28,16 +28,15 @@
 		margin-top: 8px;
 	}
 
-	.glossary-topic-area-panel .toggle-button-row,
-	.glossary-topic-area-search-list {
+	.glossary-topic-area-list {
 		grid-auto-rows: minmax(70px, 1fr);
 	}
 
-	.glossary-topic-area-search-list {
+	.glossary-topic-area-list--search {
 		grid-auto-rows: minmax(70px, auto);
 	}
 
-	.glossary-topic-area-panel .toggle-button-row-button {
+	.glossary-topic-area-button {
 		min-height: 70px;
 	}
 }
@@ -66,8 +65,7 @@
 		border-bottom: 1px solid var(--line);
 	}
 
-	.glossary-topic-area-panel .toggle-button-row,
-	.glossary-topic-area-search-list {
+	.glossary-topic-area-list {
 		grid-auto-flow: column;
 		grid-auto-columns: minmax(220px, 1fr);
 		grid-auto-rows: minmax(76px, 1fr);
@@ -76,7 +74,7 @@
 		overflow-y: hidden;
 	}
 
-	.glossary-topic-area-panel .toggle-button-row-button {
+	.glossary-topic-area-button {
 		min-height: 76px;
 	}
 }

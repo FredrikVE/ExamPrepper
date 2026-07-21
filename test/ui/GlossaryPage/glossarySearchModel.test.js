@@ -2,7 +2,9 @@
 import { describe, expect, test } from "@jest/globals";
 import {
     countEntryMatchesByTopicArea,
+    countEntryMatchesByTopicAreaForNormalizedSearchTerm,
     entryMatchesSearchTerm,
+    filterEntriesByNormalizedSearchTerm,
     filterEntriesBySearchTerm,
     normalizeSearchTerm
 } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
@@ -50,6 +52,15 @@ describe("glossarySearchModel", () => {
         expect(filterEntriesBySearchTerm(localizedEntries, "angrepsflater")).toEqual([
             localizedEntries[2]
         ]);
+    });
+
+    test("uses normalized variants without repeating normalization", () => {
+        expect(filterEntriesByNormalizedSearchTerm(localizedEntries, "tilgang")).toEqual([
+            localizedEntries[1]
+        ]);
+        expect(countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, "trussel")).toEqual(new Map([
+            ["security-models", 1]
+        ]));
     });
 
     test("returns all entries and counts for an empty search term", () => {

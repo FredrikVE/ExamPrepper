@@ -1,40 +1,23 @@
 // src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossaryTopicAreaSearchList.jsx
-import TopicAreaListItem from "./TopicAreaListItem.jsx";
+import GlossaryTopicAreaButton from "./GlossaryTopicAreaButton.jsx";
 
-export default function GlossaryTopicAreaSearchList({
-	topicAreaListItems,
-	listId,
-	ariaLabel,
-	onSelectTopicArea
-}) {
-	const options = [];
-
-	for (const item of topicAreaListItems) {
-		options.push(
-			<button
-				key={item.topicAreaKey}
-				id={item.id}
-				type="button"
-				className="toggle-button-row-button"
-				role="option"
-				aria-selected={item.isKeyboardTarget}
-				data-active={item.isActive ? "true" : "false"}
-				data-keyboard-target={item.isKeyboardTarget ? "true" : "false"}
-				onClick={() => onSelectTopicArea(item.topicAreaKey)}
-			>
-				<TopicAreaListItem item={item} />
-			</button>
-		);
-	}
-
+export default function GlossaryTopicAreaSearchList({ model, actions }) {
 	return (
 		<div
-			id={listId}
-			className="toggle-button-row glossary-topic-area-search-list"
+			id={model.listId}
+			className="glossary-topic-area-list glossary-topic-area-list--search"
 			role="listbox"
-			aria-label={ariaLabel}
+			aria-label={model.ariaLabel}
 		>
-			{options}
+			{model.items.map((item) => (
+				<GlossaryTopicAreaButton
+					key={item.topicAreaKey}
+					item={item}
+					role="option"
+					isSelected={item.isKeyboardTarget}
+					onSelectTopicArea={actions.onSelectTopicArea}
+				/>
+			))}
 		</div>
 	);
 }

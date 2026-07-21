@@ -3,75 +3,75 @@ import { Search, X } from "lucide-react";
 
 const SEARCH_META_ID = "glossary-search-meta";
 
-export default function GlossarySearchField(props) {
+export default function GlossarySearchField({ model, actions }) {
 	const handleKeyDown = (event) => {
 		if (event.key === "ArrowDown") {
 			event.preventDefault();
-			props.onMoveSearchSelectionDown();
+			actions.onMoveSearchSelectionDown();
 			return;
 		}
 
 		if (event.key === "ArrowUp") {
 			event.preventDefault();
-			props.onMoveSearchSelectionUp();
+			actions.onMoveSearchSelectionUp();
 			return;
 		}
 
 		if (event.key === "Enter") {
 			event.preventDefault();
-			props.onOpenSearchKeyboardSelection();
+			actions.onOpenSearchKeyboardSelection();
 			return;
 		}
 
-		if (event.key === "Escape" && props.isSearching) {
+		if (event.key === "Escape" && model.isSearching) {
 			event.preventDefault();
-			props.onClearSearch();
+			actions.onClearSearch();
 		}
 	};
 
-	const searchInput = props.isSearching ? (
+	const searchInput = model.input.kind === "combobox" ? (
 		<input
 			className="glossary-search-field__input"
 			type="search"
-			value={props.searchTerm}
-			placeholder={props.searchPlaceholder}
-			aria-label={props.searchPlaceholder}
+			value={model.term}
+			placeholder={model.placeholder}
+			aria-label={model.placeholder}
 			aria-describedby={SEARCH_META_ID}
 			role="combobox"
-			aria-expanded={props.isSearchComboboxActive}
-			aria-controls={props.controlledListId}
-			aria-activedescendant={props.searchActiveDescendantId || undefined}
+			aria-expanded={model.input.isExpanded}
+			aria-controls={model.input.controlledListId}
+			aria-activedescendant={model.input.activeDescendantId}
 			aria-autocomplete="list"
 			autoComplete="off"
-			onChange={(event) => props.onSearchTermChange(event.target.value)}
+			onChange={(event) => actions.onSearchTermChange(event.target.value)}
 			onKeyDown={handleKeyDown}
 		/>
 	) : (
 		<input
 			className="glossary-search-field__input"
 			type="search"
-			value={props.searchTerm}
-			placeholder={props.searchPlaceholder}
-			aria-label={props.searchPlaceholder}
+			value={model.term}
+			placeholder={model.placeholder}
+			aria-label={model.placeholder}
 			aria-describedby={SEARCH_META_ID}
 			autoComplete="off"
-			onChange={(event) => props.onSearchTermChange(event.target.value)}
+			onChange={(event) => actions.onSearchTermChange(event.target.value)}
 			onKeyDown={handleKeyDown}
 		/>
 	);
 
 	return (
-		<div className={props.isSearching ? "glossary-search-control glossary-search-control--active" : "glossary-search-control"}>
+		<div className={model.isSearching ? "glossary-search-control glossary-search-control--active" : "glossary-search-control"}>
 			<label className="glossary-search-field">
 				<Search className="glossary-search-field__icon" aria-hidden="true" focusable="false" />
 				{searchInput}
 
-				{props.isSearching ? (
+				{model.isSearching ? (
 					<button
 						className="glossary-search-field__clear"
 						type="button"
-						aria-label={props.searchClearLabel}
-						onClick={props.onClearSearch}
+						aria-label={model.clearLabel}
+						onClick={actions.onClearSearch}
 					>
 						<X aria-hidden="true" focusable="false" />
 					</button>
@@ -79,8 +79,8 @@ export default function GlossarySearchField(props) {
 			</label>
 
 			<div id={SEARCH_META_ID} className="glossary-search-meta" aria-live="polite">
-				<span>{props.searchSummaryLabel}</span>
-				{props.isSearching ? <span>{props.searchKeyboardHint}</span> : null}
+				<span>{model.summaryLabel}</span>
+				{model.isSearching ? <span>{model.keyboardHint}</span> : null}
 			</div>
 		</div>
 	);
