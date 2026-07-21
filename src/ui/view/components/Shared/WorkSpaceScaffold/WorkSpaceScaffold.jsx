@@ -1,7 +1,7 @@
 // src/ui/view/components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx
 import { useEffect, useRef } from "react";
 
-export default function WorkSpaceScaffold({ className, header, scrollToTopRequestId, children }) {
+export default function WorkSpaceScaffold({ className, header, footer, scrollToTopRequestId, children }) {
 	const scrollRef = useRef(null);
 
 	useEffect(() => {
@@ -19,6 +19,8 @@ export default function WorkSpaceScaffold({ className, header, scrollToTopReques
 			<div ref={scrollRef} className="workspace-scaffold-scroll">
 				{children}
 			</div>
+
+			{footer}
 		</main>
 	);
 }

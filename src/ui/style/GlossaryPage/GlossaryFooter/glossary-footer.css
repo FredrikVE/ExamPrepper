@@ -1,0 +1,40 @@
+/* src/ui/style/GlossaryPage/GlossaryFooter/glossary-footer.css */
+.glossary-search-footer {
+	position: relative;
+	z-index: 3;
+	display: flex;
+	width: 100%;
+	flex: 0 0 auto;
+	justify-content: center;
+	padding: var(--space-3) var(--scaffold-inset, clamp(24px, 5vw, 72px)) var(--space-5);
+	pointer-events: none;
+	background: var(--shell-bg);
+}
+
+.glossary-search-footer > * {
+	pointer-events: auto;
+}
+
+.glossary-search-footer__controls {
+	width: min(860px, 72%);
+	min-width: 620px;
+}
+
+@media (max-width: 1320px) {
+	.glossary-search-footer__controls {
+		width: min(760px, 78%);
+		min-width: 560px;
+	}
+}
+
+@media (max-width: 932px) {
+	.glossary-search-footer {
+		position: static;
+		z-index: 60;
+		display: block;
+		height: 0;
+		flex: 0 0 0;
+		padding: 0;
+		background: transparent;
+	}
+}

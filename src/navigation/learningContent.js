@@ -46,3 +46,11 @@ export const LEARNING_CONTENT_ENTRIES = [
         availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
     }
 ];
+
+export function createLearningContentToggleEntries(t) {
+    return LEARNING_CONTENT_ENTRIES.map((entry) => ({
+        id: entry.id,
+        label: t[entry.labelKey],
+        isDisabled: entry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    }));
+}

@@ -104,7 +104,7 @@ function FlipcardsShell(props) {
 	);
 
 	return (
-		<WorkSpaceScaffold className="flipcards-workspace" header={header} scrollToTopRequestId={0}>
+		<WorkSpaceScaffold className="flipcards-workspace" header={header} footer={null} scrollToTopRequestId={0}>
 			{props.children}
 		</WorkSpaceScaffold>
 	);

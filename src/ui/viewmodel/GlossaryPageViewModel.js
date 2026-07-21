@@ -1,12 +1,13 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { LEARNING_CONTENT_TYPES, createLearningContentToggleEntries } from "../../navigation/learningContent.js";
 import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
 import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 import { countEntryMatchesByTopicAreaForNormalizedSearchTerm, filterEntriesByNormalizedSearchTerm, normalizeSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
-import { applyGlossaryTopicAreaInteractionState, createGlossaryTopicAreaListItems, GLOSSARY_TOPIC_AREA_LIST_ID } from "./GlossaryPage/glossaryTopicAreaListModel.js";
+import { applyGlossaryTopicAreaInteractionState, createGlossaryAllTopicAreaListItem, createGlossaryTopicAreaListItems, GLOSSARY_TOPIC_AREA_LIST_ID } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
 
 export default function useGlossaryPageViewModel(
@@ -17,15 +18,16 @@ export default function useGlossaryPageViewModel(
 	language,
 	t,
 	isActive,
-	backContract
+	backContract,
+	onSelectContentType
 ) {
 	const [glossarySearchTerm, setGlossarySearchTerm] = useState("");
-	const [activeTopicAreaKey, setActiveTopicAreaKey] = useState(initialTopicAreaKey ?? null);
+	const [selectedTopicAreaKeys, setSelectedTopicAreaKeys] = useState(null);
 	const [searchKeyboardIndex, setSearchKeyboardIndex] = useState(-1);
 
 	useEffect(() => {
 		setGlossarySearchTerm("");
-		setActiveTopicAreaKey(initialTopicAreaKey ?? null);
+		setSelectedTopicAreaKeys(null);
 		setSearchKeyboardIndex(-1);
 	}, [initialTopicAreaKey, subjectId]);
 
@@ -84,6 +86,23 @@ export default function useGlossaryPageViewModel(
 		return groupGlossaryEntriesByTopicAreaKey(localizedEntries);
 	}, [localizedEntries]);
 
+	const topicAreaByKey = useMemo(() => {
+		return createTopicAreaByKey(topicAreas);
+	}, [topicAreas]);
+
+	const resolvedSelectedTopicAreaKeys = useMemo(() => {
+		return resolveSelectedTopicAreaKeys({
+			selectedTopicAreaKeys,
+			topicAreas,
+			initialTopicAreaKey
+		});
+	}, [initialTopicAreaKey, selectedTopicAreaKeys, topicAreas]);
+
+	const isAllTopicAreasSelected = topicAreas.length > 0
+		&& resolvedSelectedTopicAreaKeys.size === topicAreas.length;
+	const isTopicAreaSelectionMode = !isAllTopicAreasSelected;
+	const selectedTopicAreaCount = resolvedSelectedTopicAreaKeys.size;
+
 	const normalizedSearchTerm = useMemo(() => {
 		return normalizeSearchTerm(glossarySearchTerm);
 	}, [glossarySearchTerm]);
@@ -105,20 +124,7 @@ export default function useGlossaryPageViewModel(
 				chapterSearchSubtitle: t.glossaryPageChapterSearchSubtitle
 			}
 		});
-	}, [
-		entriesByTopicAreaKey,
-		matchCountsByTopicAreaKey,
-		normalizedSearchTerm,
-		t,
-		topicAreas
-	]);
-
-	const resolvedActiveTopicAreaKey = useMemo(() => {
-		return resolveActiveTopicAreaKey({
-			topicAreaListItems: baseTopicAreaListItems,
-			activeTopicAreaKey
-		});
-	}, [activeTopicAreaKey, baseTopicAreaListItems]);
+	}, [entriesByTopicAreaKey, matchCountsByTopicAreaKey, normalizedSearchTerm, t, topicAreas]);
 
 	const resolvedSearchKeyboardIndex = resolveSearchKeyboardIndex({
 		searchKeyboardIndex,
@@ -129,60 +135,64 @@ export default function useGlossaryPageViewModel(
 	const topicAreaListItems = useMemo(() => {
 		return applyGlossaryTopicAreaInteractionState({
 			topicAreaListItems: baseTopicAreaListItems,
-			activeTopicAreaKey: resolvedActiveTopicAreaKey,
-			searchKeyboardIndex: resolvedSearchKeyboardIndex
+			selectedTopicAreaKeys: resolvedSelectedTopicAreaKeys,
+			searchKeyboardIndex: resolvedSearchKeyboardIndex,
+			showsSelectionControls: isTopicAreaSelectionMode
 		});
-	}, [
-		baseTopicAreaListItems,
-		resolvedActiveTopicAreaKey,
-		resolvedSearchKeyboardIndex
-	]);
+	}, [baseTopicAreaListItems, isTopicAreaSelectionMode, resolvedSearchKeyboardIndex, resolvedSelectedTopicAreaKeys]);
 
-	const activeTopicAreaListItem = useMemo(() => {
-		return findTopicAreaListItemByKey(
-			topicAreaListItems,
-			resolvedActiveTopicAreaKey
-		);
-	}, [resolvedActiveTopicAreaKey, topicAreaListItems]);
+	const allTopicAreaListItem = useMemo(() => {
+		return createGlossaryAllTopicAreaListItem({
+			topicAreaCount: topicAreas.length,
+			selectedTopicAreaCount,
+			entryCount: localizedEntries.length,
+			isSelected: isAllTopicAreasSelected,
+			labels: {
+				allTopicAreas: t.glossaryPageSelectAllChaptersLabel,
+				allTopicAreasEyebrow: t.glossaryPageAllChaptersEyebrow,
+				topicAreaSelectionEyebrow: t.glossaryPageChapterSelectionEyebrow,
+				allTopicAreasSelected: t.glossaryPageAllChaptersSelectedSummary,
+				topicAreaSelection: t.glossaryPageChapterSelectionSummary
+			}
+		});
+	}, [isAllTopicAreasSelected, localizedEntries.length, selectedTopicAreaCount, t, topicAreas.length]);
 
-	const activeTopicAreaEntries = useMemo(() => {
-		if (!activeTopicAreaListItem) {
-			return [];
-		}
+	const visibleTopicAreaListItemByKey = useMemo(() => {
+		return createTopicAreaListItemByKey(baseTopicAreaListItems);
+	}, [baseTopicAreaListItems]);
 
-		const topicAreaEntries = entriesByTopicAreaKey.get(
-			activeTopicAreaListItem.topicAreaKey
-		) ?? [];
+	const selectedTopicAreaEntries = useMemo(() => {
+		return collectSelectedTopicAreaEntries({
+			topicAreas,
+			selectedTopicAreaKeys: resolvedSelectedTopicAreaKeys,
+			entriesByTopicAreaKey,
+			visibleTopicAreaListItemByKey,
+			normalizedSearchTerm,
+			isSearching
+		});
+	}, [entriesByTopicAreaKey, isSearching, normalizedSearchTerm, resolvedSelectedTopicAreaKeys, topicAreas, visibleTopicAreaListItemByKey]);
 
-		if (activeTopicAreaListItem.showsAllEntries) {
-			return topicAreaEntries;
-		}
-
-		return filterEntriesByNormalizedSearchTerm(topicAreaEntries, normalizedSearchTerm);
-	}, [
-		activeTopicAreaListItem,
-		entriesByTopicAreaKey,
-		normalizedSearchTerm
-	]);
-
-	const glossaryPanelHeading = useMemo(() => {
-		if (!activeTopicAreaListItem) {
-			return null;
-		}
-
-		return {
-			title: activeTopicAreaListItem.label,
-			subtitle: activeTopicAreaListItem.subtitle,
-			iconKey: activeTopicAreaListItem.iconKey
-		};
-	}, [activeTopicAreaListItem]);
+	const topicAreaReferenceByKey = useMemo(() => {
+		return createTopicAreaReferenceByKey(topicAreas, t.glossaryPageChapterReference);
+	}, [t.glossaryPageChapterReference, topicAreas]);
 
 	const glossaryTableRows = useMemo(() => {
 		return createGlossaryTableRows({
-			localizedEntries: activeTopicAreaEntries,
-			normalizedSearchTerm
+			localizedEntries: selectedTopicAreaEntries,
+			normalizedSearchTerm,
+			topicAreaReferenceByKey
 		});
-	}, [activeTopicAreaEntries, normalizedSearchTerm]);
+	}, [normalizedSearchTerm, selectedTopicAreaEntries, topicAreaReferenceByKey]);
+
+	const glossaryPanelHeading = useMemo(() => {
+		return createGlossaryPanelHeading({
+			topicAreaByKey,
+			selectedTopicAreaKeys: resolvedSelectedTopicAreaKeys,
+			isAllTopicAreasSelected,
+			visibleEntryCount: selectedTopicAreaEntries.length,
+			t
+		});
+	}, [isAllTopicAreasSelected, resolvedSelectedTopicAreaKeys, selectedTopicAreaEntries.length, t, topicAreaByKey]);
 
 	const searchSummaryLabel = useMemo(() => {
 		if (!isSearching) {
@@ -195,15 +205,23 @@ export default function useGlossaryPageViewModel(
 		);
 	}, [isSearching, matchCountsByTopicAreaKey, t, topicAreaListItems.length]);
 
-	const hasNoSearchMatches = isSearching && topicAreaListItems.length === 0;
-	const emptyStateKind = resolveEmptyStateKind({
+	const pageEmptyStateKind = resolvePageEmptyStateKind({
 		pageStatus,
 		topicAreas,
-		localizedEntries,
-		hasNoSearchMatches
+		localizedEntries
 	});
-	const emptyState = createGlossaryEmptyState({
-		emptyStateKind,
+	const pageEmptyState = createGlossaryEmptyState({
+		emptyStateKind: pageEmptyStateKind,
+		searchTerm: glossarySearchTerm,
+		t
+	});
+	const glossaryPanelEmptyStateKind = resolveGlossaryPanelEmptyStateKind({
+		selectedTopicAreaCount,
+		selectedEntryCount: selectedTopicAreaEntries.length,
+		isSearching
+	});
+	const glossaryPanelEmptyState = createGlossaryEmptyState({
+		emptyStateKind: glossaryPanelEmptyStateKind,
 		searchTerm: glossarySearchTerm,
 		t
 	});
@@ -212,9 +230,13 @@ export default function useGlossaryPageViewModel(
 		? topicAreaListItems[resolvedSearchKeyboardIndex]?.id ?? null
 		: null;
 
+	const contentToggleEntries = useMemo(() => {
+		return createLearningContentToggleEntries(t);
+	}, [t]);
+
 	const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
 		setGlossarySearchTerm(nextSearchTerm);
-		setSearchKeyboardIndex(nextSearchTerm.length > 0 ? 0 : -1);
+		setSearchKeyboardIndex(nextSearchTerm.trim().length > 0 ? 0 : -1);
 	}, []);
 
 	const clearGlossarySearch = useCallback(() => {
@@ -223,18 +245,41 @@ export default function useGlossaryPageViewModel(
 	}, []);
 
 	const selectTopicArea = useCallback((topicAreaKey) => {
-		const topicAreaIndex = findTopicAreaListItemIndexByKey(
-			topicAreaListItems,
-			topicAreaKey
-		);
-
-		if (topicAreaIndex === -1) {
+		if (topicAreaKey === ALL_TOPIC_AREAS) {
+			setSelectedTopicAreaKeys(new Set(topicAreas.map((topicArea) => topicArea.key)));
+			setSearchKeyboardIndex(-1);
 			return;
 		}
 
-		setActiveTopicAreaKey(topicAreaKey);
-		setSearchKeyboardIndex(isSearching ? topicAreaIndex : -1);
-	}, [isSearching, topicAreaListItems]);
+		const topicAreaIndex = findTopicAreaListItemIndexByKey(topicAreaListItems, topicAreaKey);
+
+		if (!topicAreaByKey.has(topicAreaKey)) {
+			return;
+		}
+
+		setSelectedTopicAreaKeys((previousSelectedTopicAreaKeys) => {
+			const currentSelectedTopicAreaKeys = resolveSelectedTopicAreaKeys({
+				selectedTopicAreaKeys: previousSelectedTopicAreaKeys,
+				topicAreas,
+				initialTopicAreaKey
+			});
+
+			if (currentSelectedTopicAreaKeys.size === topicAreas.length) {
+				return new Set([topicAreaKey]);
+			}
+
+			const nextSelectedTopicAreaKeys = new Set(currentSelectedTopicAreaKeys);
+
+			if (nextSelectedTopicAreaKeys.has(topicAreaKey)) {
+				nextSelectedTopicAreaKeys.delete(topicAreaKey);
+			} else {
+				nextSelectedTopicAreaKeys.add(topicAreaKey);
+			}
+
+			return nextSelectedTopicAreaKeys;
+		});
+		setSearchKeyboardIndex(isSearching && topicAreaIndex >= 0 ? topicAreaIndex : -1);
+	}, [initialTopicAreaKey, isSearching, topicAreaByKey, topicAreaListItems, topicAreas]);
 
 	const moveSearchSelection = useCallback((direction) => {
 		if (!isSearching || topicAreaListItems.length === 0) {
@@ -263,11 +308,8 @@ export default function useGlossaryPageViewModel(
 			return;
 		}
 
-		setActiveTopicAreaKey(selectedTopicArea.topicAreaKey);
-	}, [isSearching, resolvedSearchKeyboardIndex, topicAreaListItems]);
-
-	const pageEmptyState = emptyStateKind === "no-search-results" ? null : emptyState;
-	const glossaryPanelEmptyState = emptyStateKind === "no-search-results" ? emptyState : null;
+		selectTopicArea(selectedTopicArea.topicAreaKey);
+	}, [isSearching, resolvedSearchKeyboardIndex, selectTopicArea, topicAreaListItems]);
 
 	return {
 		pageTitle: t.glossaryPageTitle,
@@ -282,6 +324,7 @@ export default function useGlossaryPageViewModel(
 		mobileChapterSheetCloseLabel: t.glossaryPageMobileChapterSheetCloseLabel,
 		loadingTitle: t.glossaryPageLoadingTitle,
 		errorTitle: t.glossaryPageErrorTitle,
+		contentToggleAriaLabel: t.contentToggleAriaLabel,
 
 		pageStatus,
 		pageErrorMessage,
@@ -294,10 +337,12 @@ export default function useGlossaryPageViewModel(
 		searchActiveDescendantId,
 		searchSummaryLabel,
 		topicAreaListId: GLOSSARY_TOPIC_AREA_LIST_ID,
+		allTopicAreaListItem,
 		topicAreaListItems,
-		resolvedActiveTopicAreaKey,
 		glossaryPanelHeading,
 		glossaryTableRows,
+		contentToggleEntries,
+		activeContentType: LEARNING_CONTENT_TYPES.GLOSSARY,
 
 		showBackButton: backContract.showBackButton,
 		backLabel: backContract.backLabel,
@@ -309,7 +354,8 @@ export default function useGlossaryPageViewModel(
 		moveSearchSelectionDown,
 		moveSearchSelectionUp,
 		openSearchKeyboardSelection,
-		selectTopicArea
+		selectTopicArea,
+		selectContentType: onSelectContentType
 	};
 }
 
@@ -362,12 +408,127 @@ function compareGlossaryEntries(leftEntry, rightEntry) {
 	return leftEntry.glossaryEntryKey.localeCompare(rightEntry.glossaryEntryKey);
 }
 
-function resolveActiveTopicAreaKey({ topicAreaListItems, activeTopicAreaKey }) {
-	if (findTopicAreaListItemByKey(topicAreaListItems, activeTopicAreaKey)) {
-		return activeTopicAreaKey;
+function createTopicAreaByKey(topicAreas) {
+	return new Map(topicAreas.map((topicArea) => [topicArea.key, topicArea]));
+}
+
+function createTopicAreaListItemByKey(topicAreaListItems) {
+	return new Map(topicAreaListItems.map((topicAreaListItem) => [
+		topicAreaListItem.topicAreaKey,
+		topicAreaListItem
+	]));
+}
+
+function createTopicAreaReferenceByKey(topicAreas, createChapterReference) {
+	return new Map(topicAreas.map((topicArea) => [
+		topicArea.key,
+		createChapterReference(topicArea.position)
+	]));
+}
+
+function resolveSelectedTopicAreaKeys({
+	selectedTopicAreaKeys,
+	topicAreas,
+	initialTopicAreaKey
+}) {
+	const validTopicAreaKeys = new Set(topicAreas.map((topicArea) => topicArea.key));
+
+	if (selectedTopicAreaKeys === null) {
+		if (validTopicAreaKeys.has(initialTopicAreaKey)) {
+			return new Set([initialTopicAreaKey]);
+		}
+
+		return validTopicAreaKeys;
 	}
 
-	return topicAreaListItems[0]?.topicAreaKey ?? null;
+	const resolvedTopicAreaKeys = new Set();
+
+	for (const topicAreaKey of selectedTopicAreaKeys) {
+		if (validTopicAreaKeys.has(topicAreaKey)) {
+			resolvedTopicAreaKeys.add(topicAreaKey);
+		}
+	}
+
+	return resolvedTopicAreaKeys;
+}
+
+function collectSelectedTopicAreaEntries({
+	topicAreas,
+	selectedTopicAreaKeys,
+	entriesByTopicAreaKey,
+	visibleTopicAreaListItemByKey,
+	normalizedSearchTerm,
+	isSearching
+}) {
+	const selectedEntries = [];
+
+	for (const topicArea of topicAreas) {
+		if (!selectedTopicAreaKeys.has(topicArea.key)) {
+			continue;
+		}
+
+		const topicAreaEntries = entriesByTopicAreaKey.get(topicArea.key) ?? [];
+
+		if (!isSearching) {
+			selectedEntries.push(...topicAreaEntries);
+			continue;
+		}
+
+		const visibleTopicAreaListItem = visibleTopicAreaListItemByKey.get(topicArea.key);
+
+		if (!visibleTopicAreaListItem) {
+			continue;
+		}
+
+		if (visibleTopicAreaListItem.showsAllEntries) {
+			selectedEntries.push(...topicAreaEntries);
+			continue;
+		}
+
+		selectedEntries.push(...filterEntriesByNormalizedSearchTerm(
+			topicAreaEntries,
+			normalizedSearchTerm
+		));
+	}
+
+	return selectedEntries;
+}
+
+function createGlossaryPanelHeading({
+	topicAreaByKey,
+	selectedTopicAreaKeys,
+	isAllTopicAreasSelected,
+	visibleEntryCount,
+	t
+}) {
+	if (selectedTopicAreaKeys.size === 0) {
+		return {
+			title: t.glossaryPageNoChaptersSelectedHeading,
+			subtitle: t.glossaryPageSelectChaptersPrompt
+		};
+	}
+
+	if (isAllTopicAreasSelected) {
+		return {
+			title: t.glossaryPageAllChaptersHeading,
+			subtitle: t.glossaryPageChapterSubtitle(visibleEntryCount)
+		};
+	}
+
+	if (selectedTopicAreaKeys.size === 1) {
+		const selectedTopicAreaKey = selectedTopicAreaKeys.values().next().value;
+		const selectedTopicArea = topicAreaByKey.get(selectedTopicAreaKey);
+
+		return {
+			title: selectedTopicArea?.label ?? t.glossaryPageSelectedChaptersHeading(1),
+			subtitle: t.glossaryPageChapterSubtitle(visibleEntryCount)
+		};
+	}
+
+	return {
+		title: t.glossaryPageSelectedChaptersHeading(selectedTopicAreaKeys.size),
+		subtitle: t.glossaryPageChapterSubtitle(visibleEntryCount)
+	};
 }
 
 function resolveSearchKeyboardIndex({
@@ -386,12 +547,6 @@ function resolveSearchKeyboardIndex({
 	return searchKeyboardIndex;
 }
 
-function findTopicAreaListItemByKey(topicAreaListItems, topicAreaKey) {
-	return topicAreaListItems.find((topicAreaListItem) => (
-		topicAreaListItem.topicAreaKey === topicAreaKey
-	)) ?? null;
-}
-
 function findTopicAreaListItemIndexByKey(topicAreaListItems, topicAreaKey) {
 	return topicAreaListItems.findIndex((topicAreaListItem) => (
 		topicAreaListItem.topicAreaKey === topicAreaKey
@@ -408,11 +563,10 @@ function sumMatchCounts(matchCountsByTopicAreaKey) {
 	return totalMatchCount;
 }
 
-function resolveEmptyStateKind({
+function resolvePageEmptyStateKind({
 	pageStatus,
 	topicAreas,
-	localizedEntries,
-	hasNoSearchMatches
+	localizedEntries
 }) {
 	if (pageStatus !== LOAD_STATUS.READY) {
 		return null;
@@ -426,8 +580,24 @@ function resolveEmptyStateKind({
 		return "no-glossary-entries";
 	}
 
-	if (hasNoSearchMatches) {
+	return null;
+}
+
+function resolveGlossaryPanelEmptyStateKind({
+	selectedTopicAreaCount,
+	selectedEntryCount,
+	isSearching
+}) {
+	if (selectedTopicAreaCount === 0) {
+		return "no-selected-topic-areas";
+	}
+
+	if (selectedEntryCount === 0 && isSearching) {
 		return "no-search-results";
+	}
+
+	if (selectedEntryCount === 0) {
+		return "no-entries-in-selection";
 	}
 
 	return null;
@@ -447,6 +617,22 @@ function createGlossaryEmptyState({ emptyStateKind, searchTerm, t }) {
 			kind: emptyStateKind,
 			title: t.glossaryPageNoEntriesTitle,
 			body: t.glossaryPageNoEntriesBody
+		};
+	}
+
+	if (emptyStateKind === "no-selected-topic-areas") {
+		return {
+			kind: emptyStateKind,
+			title: t.glossaryPageNoSelectedChaptersTitle,
+			body: t.glossaryPageNoSelectedChaptersBody
+		};
+	}
+
+	if (emptyStateKind === "no-entries-in-selection") {
+		return {
+			kind: emptyStateKind,
+			title: t.glossaryPageNoEntriesInSelectionTitle,
+			body: t.glossaryPageNoEntriesInSelectionBody
 		};
 	}
 

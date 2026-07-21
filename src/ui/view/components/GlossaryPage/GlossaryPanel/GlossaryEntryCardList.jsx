@@ -1,3 +1,4 @@
+// src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryEntryCardList.jsx
 import HighlightedText from "../Shared/HighlightedText.jsx";
 
 export default function GlossaryEntryCardList({ rows, termLabel, explanationLabel }) {
@@ -10,6 +11,7 @@ export default function GlossaryEntryCardList({ rows, termLabel, explanationLabe
 						<dt className="glossary-entry-card__term">
 							<HighlightedText segments={row.termSegments} />
 						</dt>
+						<span className="glossary-entry-card__topic-area-reference">{row.topicAreaReference}</span>
 					</div>
 
 					<div className="glossary-entry-card__section">

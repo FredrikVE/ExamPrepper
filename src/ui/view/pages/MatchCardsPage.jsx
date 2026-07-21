@@ -86,7 +86,7 @@ function MatchCardsShell({ viewModel, progressBarModel, children }) {
 	);
 
 	return (
-		<WorkSpaceScaffold className="matchcards-workspace" header={header} scrollToTopRequestId={0}>
+		<WorkSpaceScaffold className="matchcards-workspace" header={header} footer={null} scrollToTopRequestId={0}>
 			{children}
 		</WorkSpaceScaffold>
 	);

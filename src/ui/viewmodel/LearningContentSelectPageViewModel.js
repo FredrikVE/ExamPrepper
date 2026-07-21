@@ -2,7 +2,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, PAGE_TOOL_AVAILABILITY } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
-import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
+import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES, createLearningContentToggleEntries } from "../../navigation/learningContent.js";
 import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
@@ -151,17 +151,7 @@ export default function useLearningContentSelectPageViewModel(
 	}, [changeTopicAreaKey]);
 
 	const contentToggleEntries = useMemo(() => {
-		const entries = [];
-
-		for (const entry of LEARNING_CONTENT_ENTRIES) {
-			entries.push({
-				id: entry.id,
-				label: t[entry.labelKey],
-				isDisabled: entry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE
-			});
-		}
-
-		return entries;
+		return createLearningContentToggleEntries(t);
 	}, [t]);
 
 	const visibleExams = useMemo(() => {

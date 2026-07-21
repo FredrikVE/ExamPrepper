@@ -54,6 +54,11 @@
 	}
 
 	.glossary-page__heading {
+		margin-bottom: 0;
+	}
+
+	.glossary-page > .toggle-button-row {
+		margin-top: var(--space-5);
 		margin-bottom: var(--space-4);
 	}
 

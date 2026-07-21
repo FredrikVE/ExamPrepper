@@ -161,4 +161,8 @@
 		font-weight: 480;
 		line-height: 1.6;
 	}
+
+	.glossary-entry-card__topic-area-reference {
+		margin-top: 0;
+	}
 }

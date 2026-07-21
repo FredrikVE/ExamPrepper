@@ -5,18 +5,12 @@ import GlossaryEntryCardList from "./GlossaryEntryCardList.jsx";
 import GlossaryTable from "./GlossaryTable.jsx";
 
 export default function GlossaryPanel({ heading, rows, termColumnHeader, explanationColumnHeader, emptyState, isMobile }) {
-	if (emptyState !== null) {
-		return (
-			<article className="glossary-panel">
-				<WorkspaceMessage title={emptyState.title} body={emptyState.body} action={null} />
-			</article>
-		);
-	}
-
 	return (
 		<article className="glossary-panel">
 			<GlossaryPanelHeading heading={heading} />
-			{isMobile ? (
+			{emptyState !== null ? (
+				<WorkspaceMessage title={emptyState.title} body={emptyState.body} action={null} />
+			) : isMobile ? (
 				<GlossaryEntryCardList rows={rows} termLabel={termColumnHeader} explanationLabel={explanationColumnHeader} />
 			) : (
 				<GlossaryTable rows={rows} termColumnHeader={termColumnHeader} explanationColumnHeader={explanationColumnHeader} />

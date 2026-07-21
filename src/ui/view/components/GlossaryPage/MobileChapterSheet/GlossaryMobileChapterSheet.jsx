@@ -1,3 +1,4 @@
+// src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx
 import { useState } from "react";
 import DockedMobileBottomSheet from "../../MobileBottomSheet/DockedMobileBottomSheet.jsx";
 import GlossarySearchField from "../TopicAreaPanel/GlossarySearchField.jsx";
@@ -15,8 +16,8 @@ export default function GlossaryMobileChapterSheet({
 	isSearching,
 	isSearchComboboxActive,
 	searchActiveDescendantId,
+	allTopicAreaListItem,
 	topicAreaListItems,
-	activeTopicAreaKey,
 	topicAreaListAriaLabel,
 	sheetTitle,
 	sheetSubtitle,
@@ -38,16 +39,6 @@ export default function GlossaryMobileChapterSheet({
 	const changeSearchTerm = (nextSearchTerm) => {
 		setIsOpen(true);
 		onSearchTermChange(nextSearchTerm);
-	};
-
-	const selectTopicArea = (topicAreaKey) => {
-		onSelectTopicArea(topicAreaKey);
-		setIsOpen(false);
-	};
-
-	const openSearchKeyboardSelection = () => {
-		onOpenSearchKeyboardSelection();
-		setIsOpen(false);
 	};
 
 	return (
@@ -83,7 +74,7 @@ export default function GlossaryMobileChapterSheet({
 						onClearSearch={onClearSearch}
 						onMoveSearchSelectionDown={onMoveSearchSelectionDown}
 						onMoveSearchSelectionUp={onMoveSearchSelectionUp}
-						onOpenSearchKeyboardSelection={openSearchKeyboardSelection}
+						onOpenSearchKeyboardSelection={onOpenSearchKeyboardSelection}
 					/>
 				</div>
 
@@ -92,15 +83,16 @@ export default function GlossaryMobileChapterSheet({
 						<GlossaryTopicAreaSearchList
 							listId={MOBILE_TOPIC_AREA_LIST_ID}
 							ariaLabel={topicAreaListAriaLabel}
+							allTopicAreaListItem={allTopicAreaListItem}
 							items={topicAreaListItems}
-							onSelectTopicArea={selectTopicArea}
+							onSelectTopicArea={onSelectTopicArea}
 						/>
 					) : (
 						<GlossaryTopicAreaNavigationList
 							ariaLabel={topicAreaListAriaLabel}
+							allTopicAreaListItem={allTopicAreaListItem}
 							items={topicAreaListItems}
-							activeTopicAreaKey={activeTopicAreaKey}
-							onSelectTopicArea={selectTopicArea}
+							onSelectTopicArea={onSelectTopicArea}
 						/>
 					)}
 				</div>

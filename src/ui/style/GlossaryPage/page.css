@@ -25,7 +25,7 @@
 	flex-direction: column;
 	overflow: hidden;
 	padding: calc(var(--scaffold-header-height, 112px) + 6px)
-		var(--scaffold-inset, clamp(24px, 5vw, 72px)) var(--space-5);
+		var(--scaffold-inset, clamp(24px, 5vw, 72px)) var(--space-2);
 }
 
 .glossary-page__heading {
@@ -41,6 +41,11 @@
 	font-weight: 950;
 	line-height: 0.98;
 	letter-spacing: -0.055em;
+}
+
+.glossary-page > .toggle-button-row {
+	flex: 0 0 auto;
+	margin-bottom: var(--space-5);
 }
 
 .glossary-page__content {

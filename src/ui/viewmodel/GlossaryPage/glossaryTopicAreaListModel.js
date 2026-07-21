@@ -1,4 +1,6 @@
 // src/ui/viewmodel/GlossaryPage/glossaryTopicAreaListModel.js
+import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
+
 export const GLOSSARY_TOPIC_AREA_LIST_ID = "glossary-topic-area-list";
 
 export function createGlossaryTopicAreaListItems({
@@ -39,23 +41,63 @@ export function createGlossaryTopicAreaListItems({
 				? labels.chapterSearchSubtitle(matchCount)
 				: labels.chapterSubtitle(entryCount),
 			matchesTopicAreaLabel,
-			showsAllEntries
+			showsAllEntries,
+			isAllTopicAreas: false
 		});
 	}
 
 	return topicAreaListItems;
 }
 
+export function createGlossaryAllTopicAreaListItem({
+	topicAreaCount,
+	selectedTopicAreaCount,
+	entryCount,
+	isSelected,
+	labels
+}) {
+	return {
+		id: createGlossaryTopicAreaOptionId(ALL_TOPIC_AREAS),
+		topicAreaKey: ALL_TOPIC_AREAS,
+		label: labels.allTopicAreas,
+		subtitle: isSelected
+			? labels.allTopicAreasSelected(topicAreaCount)
+			: labels.topicAreaSelection(selectedTopicAreaCount, topicAreaCount),
+		eyebrow: isSelected
+			? labels.allTopicAreasEyebrow
+			: labels.topicAreaSelectionEyebrow,
+		iconKey: "book-open",
+		position: 0,
+		entryCount,
+		matchCount: 0,
+		matchCountLabel: null,
+		matchesTopicAreaLabel: false,
+		showsAllEntries: true,
+		isAllTopicAreas: true,
+		isSelected,
+		isActive: isSelected,
+		isKeyboardTarget: false,
+		showsSelectionControl: false
+	};
+}
+
 export function applyGlossaryTopicAreaInteractionState({
 	topicAreaListItems,
-	activeTopicAreaKey,
-	searchKeyboardIndex
+	selectedTopicAreaKeys,
+	searchKeyboardIndex,
+	showsSelectionControls
 }) {
-	return topicAreaListItems.map((topicAreaListItem, topicAreaIndex) => ({
-		...topicAreaListItem,
-		isActive: topicAreaListItem.topicAreaKey === activeTopicAreaKey,
-		isKeyboardTarget: topicAreaIndex === searchKeyboardIndex
-	}));
+	return topicAreaListItems.map((topicAreaListItem, topicAreaIndex) => {
+		const isSelected = selectedTopicAreaKeys.has(topicAreaListItem.topicAreaKey);
+
+		return {
+			...topicAreaListItem,
+			isSelected,
+			isActive: showsSelectionControls && isSelected,
+			isKeyboardTarget: topicAreaIndex === searchKeyboardIndex,
+			showsSelectionControl: showsSelectionControls
+		};
+	});
 }
 
 export function createGlossaryTopicAreaOptionId(topicAreaKey) {

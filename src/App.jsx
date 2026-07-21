@@ -27,6 +27,7 @@ import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
+import { LEARNING_CONTENT_TYPES } from "./navigation/learningContent.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
@@ -100,6 +101,14 @@ function AppContent() {
 		navigationViewModel.onBack
 	);
 
+	const selectLearningContentTypeFromGlossary = useCallback((contentTypeId) => {
+		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
+			return;
+		}
+
+		learningContentSelectPageViewModel.selectContentType(contentTypeId);
+		navigationViewModel.changeScreen(NAV_SCREENS.SELECT);
+	}, [learningContentSelectPageViewModel.selectContentType, navigationViewModel.changeScreen]);
 
 	return (
 		<div className={navigationViewModel.pageClassName}>
@@ -193,6 +202,7 @@ function AppContent() {
 						t={t}
 						isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
 						backContract={navigationViewModel.backContract}
+						onSelectContentType={selectLearningContentTypeFromGlossary}
 					/>
 				)}
 
@@ -315,7 +325,7 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 	);
 }
 
-function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
+function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType }) {
 	const glossaryPageViewModel = useGlossaryPageViewModel(
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
@@ -324,7 +334,8 @@ function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isAc
 		language,
 		t,
 		isActive,
-		backContract
+		backContract,
+		onSelectContentType
 	);
 
 	return (

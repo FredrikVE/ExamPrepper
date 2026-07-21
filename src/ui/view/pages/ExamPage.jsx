@@ -39,6 +39,7 @@ export default function ExamPage({ viewModel }) {
 			<WorkSpaceScaffold
 				className={viewModel.workspaceClassName}
 				header={header}
+				footer={null}
 				scrollToTopRequestId={0}
 			>
 				<WorkspaceState
@@ -78,6 +79,7 @@ export default function ExamPage({ viewModel }) {
 						trailing={headerToolbar}
 					/>
 				)}
+				footer={null}
 				scrollToTopRequestId={viewModel.scrollToTopRequestId}
 			>
 				{viewModel.attemptSaving && (

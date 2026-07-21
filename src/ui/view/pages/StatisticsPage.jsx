@@ -105,7 +105,7 @@ export default function StatisticsPage({ viewModel }) {
 
 function StatisticsShell({ viewModel, children }) {
 	return (
-		<WorkSpaceScaffold className="statistics-page-workspace" header={null} scrollToTopRequestId={0}>
+		<WorkSpaceScaffold className="statistics-page-workspace" header={null} footer={null} scrollToTopRequestId={0}>
 			<header className="statistics-page-header">
 				<div>
 					<h1>{viewModel.pageTitle}</h1>
