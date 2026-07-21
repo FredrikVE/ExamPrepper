@@ -4,47 +4,32 @@
 }
 
 .glossary-search-field {
-	display: grid;
-	grid-template-columns: 24px minmax(0, 1fr) 34px;
-	align-items: center;
-	gap: 10px;
-	width: 100%;
 	min-height: 48px;
-	padding: 0 7px 0 14px;
-	border: 1px solid var(--line);
+	border-color: var(--line);
 	border-radius: 12px;
 	background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
-	transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+	padding-right: 7px;
 }
 
-.glossary-search-field:focus-within {
-	border-color: color-mix(in srgb, var(--accent) 55%, var(--line-strong));
-	background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
-	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 13%, transparent);
+.glossary-search-field .search-field-main {
+	gap: 10px;
 }
 
-.glossary-search-field__icon {
+.glossary-search-field .search-field-icon {
 	width: 19px;
 	height: 19px;
+	margin-left: 14px;
 	color: var(--text-muted);
 }
 
 .glossary-search-field__input {
-	min-width: 0;
 	height: 46px;
 	padding: 0;
-	border: 0;
-	outline: 0;
-	background: transparent;
-	color: var(--text-main);
-}
-
-.glossary-search-field__input::placeholder {
-	color: var(--text-soft);
 }
 
 .glossary-search-field__clear {
 	display: grid;
+	flex: 0 0 auto;
 	width: 32px;
 	height: 32px;
 	padding: 0;

@@ -1,6 +1,7 @@
 // src/ui/view/components/Search/SearchFilterField.jsx
 import { useRef } from "react";
-import { ChevronDown, Funnel, Search } from "lucide-react";
+import { ChevronDown, Funnel } from "lucide-react";
+import SearchField from "./SearchField.jsx";
 
 export default function SearchFilterField({
 	searchTerm,
@@ -16,29 +17,8 @@ export default function SearchFilterField({
 }) {
 	const searchInputRef = useRef(null);
 
-	return (
-		<div className="search-filter-field">
-			<div className="search-filter-field-main">
-				<Search className="search-filter-field-icon" aria-hidden="true" />
-				<input
-					ref={searchInputRef}
-					className="search-filter-field-input"
-					type="search"
-					value={searchTerm}
-					onChange={(event) => onSearchTermChange(event.target.value)}
-					onFocus={onFocusSearch}
-					onKeyDown={(event) => {
-						if (event.key === "Escape") {
-							event.preventDefault();
-							onRequestClose();
-							event.currentTarget.blur();
-						}
-					}}
-					placeholder={searchPlaceholder}
-					aria-label={searchLabel}
-				/>
-			</div>
-
+	const filterControl = (
+		<>
 			<span className="search-filter-field-divider" aria-hidden="true" />
 
 			<div className="search-filter-field-filter">
@@ -59,6 +39,28 @@ export default function SearchFilterField({
 				/>
 				<ChevronDown className="search-filter-field-filter-chevron" aria-hidden="true" />
 			</div>
-		</div>
+		</>
+	);
+
+	return (
+		<SearchField className="search-filter-field" trailingContent={filterControl}>
+			<input
+				ref={searchInputRef}
+				className="search-field-input search-filter-field-input"
+				type="search"
+				value={searchTerm}
+				onChange={(event) => onSearchTermChange(event.target.value)}
+				onFocus={onFocusSearch}
+				onKeyDown={(event) => {
+					if (event.key === "Escape") {
+						event.preventDefault();
+						onRequestClose();
+						event.currentTarget.blur();
+					}
+				}}
+				placeholder={searchPlaceholder}
+				aria-label={searchLabel}
+			/>
+		</SearchField>
 	);
 }

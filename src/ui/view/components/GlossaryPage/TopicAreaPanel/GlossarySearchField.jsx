@@ -1,5 +1,6 @@
 // src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossarySearchField.jsx
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
+import SearchField from "../../Search/SearchField.jsx";
 
 const SEARCH_META_ID = "glossary-search-meta";
 
@@ -46,7 +47,7 @@ export default function GlossarySearchField({
 
 	const searchInput = isSearching ? (
 		<input
-			className="glossary-search-field__input"
+			className="search-field-input glossary-search-field__input"
 			type="search"
 			value={searchTerm}
 			placeholder={searchPlaceholder}
@@ -63,7 +64,7 @@ export default function GlossarySearchField({
 		/>
 	) : (
 		<input
-			className="glossary-search-field__input"
+			className="search-field-input glossary-search-field__input"
 			type="search"
 			value={searchTerm}
 			placeholder={searchPlaceholder}
@@ -75,18 +76,17 @@ export default function GlossarySearchField({
 		/>
 	);
 
+	const clearControl = isSearching ? (
+		<button className="glossary-search-field__clear" type="button" aria-label={searchClearLabel} onClick={onClearSearch}>
+			<X aria-hidden="true" focusable="false" />
+		</button>
+	) : null;
+
 	return (
 		<div className={isSearching ? "glossary-search-control glossary-search-control--active" : "glossary-search-control"}>
-			<label className="glossary-search-field">
-				<Search className="glossary-search-field__icon" aria-hidden="true" focusable="false" />
+			<SearchField className="glossary-search-field" trailingContent={clearControl}>
 				{searchInput}
-
-				{isSearching ? (
-					<button className="glossary-search-field__clear" type="button" aria-label={searchClearLabel} onClick={onClearSearch}>
-						<X aria-hidden="true" focusable="false" />
-					</button>
-				) : null}
-			</label>
+			</SearchField>
 
 			<div id={SEARCH_META_ID} className="glossary-search-meta" aria-live="polite">
 				<span>{searchSummaryLabel}</span>

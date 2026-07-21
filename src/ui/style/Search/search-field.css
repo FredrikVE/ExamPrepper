@@ -1,0 +1,56 @@
+/* src/ui/style/Search/search-field.css */
+.search-field {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	overflow: hidden;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-md);
+	background: color-mix(in srgb, var(--panel-strong) 86%, transparent);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+	transition: border-color var(--transition-normal), box-shadow var(--transition-normal), background var(--transition-normal);
+}
+
+.search-field:focus-within {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.search-field-main {
+	display: flex;
+	align-items: center;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.search-field-icon {
+	flex: 0 0 auto;
+	color: var(--text-soft);
+}
+
+.search-field-input {
+	width: 100%;
+	min-width: 0;
+	border: 0;
+	outline: none;
+	background: transparent;
+	color: var(--text-main);
+	caret-color: var(--text-main);
+	font: inherit;
+	appearance: none;
+}
+
+.search-field-input::-webkit-search-decoration,
+.search-field-input::-webkit-search-cancel-button {
+	-webkit-appearance: none;
+}
+
+.search-field-input:focus-visible {
+	outline: none;
+}
+
+.search-field-input::placeholder {
+	color: var(--text-soft);
+}
