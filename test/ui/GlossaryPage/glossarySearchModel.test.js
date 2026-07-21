@@ -1,6 +1,6 @@
 // test/ui/GlossaryPage/glossarySearchModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import { countEntryMatchesByTopicArea, countEntryMatchesByTopicAreaForNormalizedSearchTerm, entryMatchesSearchTerm, filterEntriesByNormalizedSearchTerm, filterEntriesBySearchTerm, normalizeSearchTerm } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicArea, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeChapters, doesGlossarySearchScopeIncludeTerms, entryMatchesSearchTerm, filterEntriesByNormalizedSearchTerm, filterEntriesBySearchTerm, normalizeSearchTerm } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
 
 const localizedEntries = [
     {
@@ -30,6 +30,14 @@ const localizedEntries = [
 ];
 
 describe("glossarySearchModel", () => {
+
+    test("defines all as the combined chapter and term scope", () => {
+        expect(doesGlossarySearchScopeIncludeTerms(GLOSSARY_SEARCH_SCOPES.ALL)).toBe(true);
+        expect(doesGlossarySearchScopeIncludeChapters(GLOSSARY_SEARCH_SCOPES.ALL)).toBe(true);
+        expect(doesGlossarySearchScopeIncludeTerms(GLOSSARY_SEARCH_SCOPES.CHAPTERS)).toBe(false);
+        expect(doesGlossarySearchScopeIncludeChapters(GLOSSARY_SEARCH_SCOPES.TERMS)).toBe(false);
+    });
+
     test("normalizes surrounding whitespace and casing", () => {
         expect(normalizeSearchTerm("  KRYPTOGRAFI  ")).toBe("kryptografi");
     });

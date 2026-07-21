@@ -54,13 +54,26 @@ const {
 } = await import(
 	"../../src/ui/viewmodel/GlossaryPage/glossaryTableModel.js"
 );
+const {
+	GLOSSARY_SEARCH_SCOPES
+} = await import(
+	"../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js"
+);
 
 const translations = {
 	glossaryPageTitle: "Begrepslister",
-	glossaryPageSearchPlaceholder: "Søk",
+	glossaryPageSearchLabel: "Søk i begrepslisten",
+	glossaryPageSearchAllPlaceholder: "Søk i alt",
+	glossaryPageSearchTermsPlaceholder: "Søk i begreper",
+	glossaryPageSearchChaptersPlaceholder: "Søk i kapitler",
+	glossaryPageSearchScopeAriaLabel: "Avgrens søket",
+	glossaryPageSearchScopeAllLabel: "Alt",
+	glossaryPageSearchScopeTermsLabel: "Begreper",
+	glossaryPageSearchScopeChaptersLabel: "Kapitler",
 	glossaryPageSearchClearLabel: "Tøm",
 	glossaryPageSearchKeyboardHint: "Bruk piltastene",
 	glossaryPageSearchSummary: (chapterCount, matchCount) => `${chapterCount}/${matchCount}`,
+	glossaryPageChapterSearchSummary: (chapterCount) => `${chapterCount} kapitler`,
 	glossaryPageChapterMatchCount: (matchCount) => `${matchCount} treff`,
 	glossaryPageChapterSubtitle: (entryCount) => `${entryCount} begreper`,
 	glossaryPageChapterSearchSubtitle: (matchCount) => `${matchCount} søketreff`,
@@ -73,19 +86,17 @@ const translations = {
 	glossaryPageChapterSelectionSummary: (selected, total) => `${selected} av ${total} valgt`,
 	glossaryPageAllChaptersHeading: "Alle kapitler",
 	glossaryPageSelectedChaptersHeading: (count) => `${count} valgte kapitler`,
-	glossaryPageNoChaptersSelectedHeading: "Ingen kapitler valgt",
-	glossaryPageSelectChaptersPrompt: "Velg ett eller flere kapitler",
 	glossaryPageChapterReference: (position) => `Kapittel ${position}`,
 	glossaryPageNoTopicAreasTitle: "Ingen kapitler",
 	glossaryPageNoTopicAreasBody: "Ingen kapitler finnes.",
 	glossaryPageNoEntriesTitle: "Ingen begreper",
 	glossaryPageNoEntriesBody: "Ingen begreper finnes.",
-	glossaryPageNoSelectedChaptersTitle: "Ingen kapitler valgt",
-	glossaryPageNoSelectedChaptersBody: "Velg minst ett kapittel.",
 	glossaryPageNoEntriesInSelectionTitle: "Ingen begreper i utvalget",
 	glossaryPageNoEntriesInSelectionBody: "Velg et annet kapittel.",
 	glossaryPageNoSearchResultsTitle: "Ingen treff",
-	glossaryPageNoSearchResultsBody: (searchTerm) => `Ingen treff for ${searchTerm}.`,
+	glossaryPageNoAllSearchResultsBody: (searchTerm) => `Ingen treff i alt for ${searchTerm}.`,
+	glossaryPageNoTermSearchResultsBody: (searchTerm) => `Ingen begrepstreff for ${searchTerm}.`,
+	glossaryPageNoChapterSearchResultsBody: (searchTerm) => `Ingen kapitteltreff for ${searchTerm}.`,
 	glossaryPageMobileChapterSheetTitle: "Velg kapitler",
 	glossaryPageMobileChapterSheetSubtitle: "Velg ett eller flere kapitler",
 	glossaryPageMobileChapterSheetOpenLabel: "Åpne kapittelvelger",
@@ -148,8 +159,10 @@ const glossaryEntries = [
 
 function createViewModel({
 	searchTerm = "",
+	searchScope = GLOSSARY_SEARCH_SCOPES.ALL,
 	selectedTopicAreaKeys = null,
 	keyboardIndex = -1,
+	isSearchFilterOptionsOpen = false,
 	loadedGlossaryEntries = glossaryEntries,
 	loadedTopicAreas = topicAreas,
 	glossaryStatus = LOAD_STATUS.READY,
@@ -161,7 +174,7 @@ function createViewModel({
 	language = "no",
 	isActive = true
 } = {}) {
-	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex);
+	stateValues.push(searchTerm, searchScope, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen);
 	loadModelQueue = [
 		{
 			status: glossaryStatus,
@@ -256,8 +269,10 @@ describe("GlossaryPage presentation models", () => {
 				["cryptography", 2]
 			]),
 			normalizedSearchTerm: "",
+			searchScope: GLOSSARY_SEARCH_SCOPES.TERMS,
 			labels: {
 				chapterMatchCount: translations.glossaryPageChapterMatchCount,
+				chapterReference: translations.glossaryPageChapterReference,
 				chapterSubtitle: translations.glossaryPageChapterSubtitle,
 				chapterSearchSubtitle: translations.glossaryPageChapterSearchSubtitle
 			}
@@ -272,13 +287,15 @@ describe("GlossaryPage presentation models", () => {
 });
 
 describe("useGlossaryPageViewModel", () => {
-	test("owns only search, selected chapters, and keyboard state", () => {
+	test("owns search scope, chapter selection, keyboard state, and filter visibility", () => {
 		createViewModel();
 
-		expect(useState).toHaveBeenCalledTimes(3);
+		expect(useState).toHaveBeenCalledTimes(5);
 		expect(useState).toHaveBeenNthCalledWith(1, "");
-		expect(useState).toHaveBeenNthCalledWith(2, null);
-		expect(useState).toHaveBeenNthCalledWith(3, -1);
+		expect(useState).toHaveBeenNthCalledWith(2, GLOSSARY_SEARCH_SCOPES.ALL);
+		expect(useState).toHaveBeenNthCalledWith(3, null);
+		expect(useState).toHaveBeenNthCalledWith(4, -1);
+		expect(useState).toHaveBeenNthCalledWith(5, false);
 	});
 
 	test("loads all glossary entries once and topic areas for the active language", async () => {
@@ -425,9 +442,31 @@ describe("useGlossaryPageViewModel", () => {
 		});
 	});
 
-	test("shows a complete selected chapter when its localized name matches", () => {
+	test("all search includes chapter matches and shows the complete matching chapter", () => {
 		const { viewModel } = createViewModel({
 			searchTerm: "kryptografi",
+			searchScope: GLOSSARY_SEARCH_SCOPES.ALL,
+			selectedTopicAreaKeys: new Set(["cryptography"])
+		});
+
+		expect(viewModel.topicAreaListItems[0]).toMatchObject({
+			topicAreaKey: "cryptography",
+			matchesTopicAreaLabel: true,
+			showsAllEntries: true,
+			matchCount: 0,
+			isSelected: true
+		});
+		expect(viewModel.searchSummaryLabel).toBe("1/0");
+		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
+			"asymmetric-key",
+			"public-key"
+		]);
+	});
+
+	test("chapter search matches chapter labels and shows the complete selected chapter", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "kryptografi",
+			searchScope: GLOSSARY_SEARCH_SCOPES.CHAPTERS,
 			selectedTopicAreaKeys: new Set(["cryptography"])
 		});
 
@@ -440,27 +479,22 @@ describe("useGlossaryPageViewModel", () => {
 			subtitle: "2 begreper",
 			isSelected: true
 		});
-		expect(viewModel.searchSummaryLabel).toBe("1/0");
+		expect(viewModel.searchSummaryLabel).toBe("1 kapitler");
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
 			"asymmetric-key",
 			"public-key"
 		]);
 	});
 
-	test("supports an explicit empty chapter selection", () => {
+	test("normalizes an empty chapter selection back to all chapters", () => {
 		const { viewModel } = createViewModel({
 			selectedTopicAreaKeys: new Set()
 		});
 
-		expect(viewModel.allTopicAreaListItem.isSelected).toBe(false);
-		expect(viewModel.glossaryTableRows).toEqual([]);
-		expect(viewModel.glossaryPanelHeading).toEqual({
-			title: "Ingen kapitler valgt",
-			subtitle: "Velg ett eller flere kapitler"
-		});
-		expect(viewModel.glossaryPanelEmptyState).toMatchObject({
-			kind: "no-selected-topic-areas"
-		});
+		expect(viewModel.allTopicAreaListItem.isSelected).toBe(true);
+		expect(viewModel.topicAreaListItems.map((item) => item.isSelected)).toEqual([true, true]);
+		expect(viewModel.glossaryTableRows).toHaveLength(glossaryEntries.length);
+		expect(viewModel.glossaryPanelEmptyState).toBeNull();
 	});
 
 	test.each([
@@ -520,18 +554,22 @@ describe("useGlossaryPageViewModel", () => {
 		expect(english.getGlossaryEntriesForSubjectUseCase.execute).not.toHaveBeenCalled();
 	});
 
-	test("resets search, chapter selection, and keyboard state when the subject contract changes", () => {
+	test("resets search, scope, chapter selection, keyboard state, and filter visibility when the subject contract changes", () => {
 		createViewModel({
 			searchTerm: "nøkkel",
+			searchScope: GLOSSARY_SEARCH_SCOPES.CHAPTERS,
 			selectedTopicAreaKeys: new Set(["networking"]),
 			keyboardIndex: 1,
+			isSearchFilterOptionsOpen: true,
 			initialTopicAreaKey: "cryptography",
 			subjectId: "in2120"
 		});
 
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[1]).toHaveBeenCalledWith(null);
-		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
+		expect(stateSetters[1]).toHaveBeenCalledWith(GLOSSARY_SEARCH_SCOPES.ALL);
+		expect(stateSetters[2]).toHaveBeenCalledWith(null);
+		expect(stateSetters[3]).toHaveBeenCalledWith(-1);
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 	});
 
 	test("first chapter selection replaces the all-chapters default", () => {
@@ -540,7 +578,7 @@ describe("useGlossaryPageViewModel", () => {
 
 		viewModel.selectTopicArea("cryptography");
 
-		const updateSelection = stateSetters[1].mock.calls[0][0];
+		const updateSelection = stateSetters[2].mock.calls[0][0];
 		expectSetContents(updateSelection(null), ["cryptography"]);
 	});
 
@@ -550,15 +588,15 @@ describe("useGlossaryPageViewModel", () => {
 		clearStateSetterCalls();
 
 		viewModel.selectTopicArea("networking");
-		const addSelection = stateSetters[1].mock.calls[0][0];
+		const addSelection = stateSetters[2].mock.calls[0][0];
 		const addedKeys = addSelection(selectedKeys);
 		expectSetContents(addedKeys, ["cryptography", "networking"]);
 		expectSetContents(selectedKeys, ["cryptography"]);
 
 		clearStateSetterCalls();
 		viewModel.selectTopicArea("cryptography");
-		const removeSelection = stateSetters[1].mock.calls[0][0];
-		expectSetContents(removeSelection(selectedKeys), []);
+		const removeSelection = stateSetters[2].mock.calls[0][0];
+		expectSetContents(removeSelection(selectedKeys), ["networking", "cryptography"]);
 	});
 
 	test("the all-chapters item restores the complete selection", () => {
@@ -569,8 +607,42 @@ describe("useGlossaryPageViewModel", () => {
 
 		viewModel.selectTopicArea(ALL_TOPIC_AREAS);
 
-		expectSetContents(stateSetters[1].mock.calls[0][0], ["networking", "cryptography"]);
-		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
+		expectSetContents(stateSetters[2].mock.calls[0][0], ["networking", "cryptography"]);
+		expect(stateSetters[3]).toHaveBeenCalledWith(-1);
+	});
+
+	test("exposes all, term, and chapter search scopes and keeps filter state in the ViewModel", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "kryptografi",
+			isSearchFilterOptionsOpen: true
+		});
+		clearStateSetterCalls();
+
+		expect(viewModel.searchScopeOptions).toEqual([
+			{ id: GLOSSARY_SEARCH_SCOPES.ALL, value: GLOSSARY_SEARCH_SCOPES.ALL, label: "Alt" },
+			{ id: GLOSSARY_SEARCH_SCOPES.TERMS, value: GLOSSARY_SEARCH_SCOPES.TERMS, label: "Begreper" },
+			{ id: GLOSSARY_SEARCH_SCOPES.CHAPTERS, value: GLOSSARY_SEARCH_SCOPES.CHAPTERS, label: "Kapitler" }
+		]);
+		expect(viewModel).toMatchObject({
+			glossarySearchScope: GLOSSARY_SEARCH_SCOPES.ALL,
+			searchScopeLabel: "Alt",
+			searchPlaceholder: "Søk i alt",
+			isSearchFilterOptionsOpen: true
+		});
+
+		viewModel.selectGlossarySearchScope(GLOSSARY_SEARCH_SCOPES.CHAPTERS);
+		expect(stateSetters[1]).toHaveBeenCalledWith(GLOSSARY_SEARCH_SCOPES.CHAPTERS);
+		expect(stateSetters[3]).toHaveBeenCalledWith(0);
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+
+		clearStateSetterCalls();
+		viewModel.openGlossarySearchFilterOptions();
+		expect(stateSetters[4].mock.calls[0][0](false)).toBe(true);
+		expect(stateSetters[4].mock.calls[0][0](true)).toBe(false);
+
+		clearStateSetterCalls();
+		viewModel.closeGlossarySearchFilterOptions();
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 	});
 
 	test("exposes named handlers and content navigation without leaking setters", () => {
@@ -583,29 +655,29 @@ describe("useGlossaryPageViewModel", () => {
 
 		viewModel.changeGlossarySearchTerm("  pakke  ");
 		expect(stateSetters[0]).toHaveBeenCalledWith("  pakke  ");
-		expect(stateSetters[2]).toHaveBeenCalledWith(0);
+		expect(stateSetters[3]).toHaveBeenCalledWith(0);
 
 		clearStateSetterCalls();
 		viewModel.clearGlossarySearch();
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[1]).not.toHaveBeenCalled();
-		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
+		expect(stateSetters[2]).not.toHaveBeenCalled();
+		expect(stateSetters[3]).toHaveBeenCalledWith(-1);
 
 		clearStateSetterCalls();
 		viewModel.moveSearchSelectionDown();
-		expect(stateSetters[2].mock.calls[0][0](-1)).toBe(0);
-		expect(stateSetters[2].mock.calls[0][0](0)).toBe(1);
-		expect(stateSetters[2].mock.calls[0][0](1)).toBe(0);
+		expect(stateSetters[3].mock.calls[0][0](-1)).toBe(0);
+		expect(stateSetters[3].mock.calls[0][0](0)).toBe(1);
+		expect(stateSetters[3].mock.calls[0][0](1)).toBe(0);
 
 		clearStateSetterCalls();
 		viewModel.moveSearchSelectionUp();
-		expect(stateSetters[2].mock.calls[0][0](-1)).toBe(1);
-		expect(stateSetters[2].mock.calls[0][0](0)).toBe(1);
-		expect(stateSetters[2].mock.calls[0][0](1)).toBe(0);
+		expect(stateSetters[3].mock.calls[0][0](-1)).toBe(1);
+		expect(stateSetters[3].mock.calls[0][0](0)).toBe(1);
+		expect(stateSetters[3].mock.calls[0][0](1)).toBe(0);
 
 		clearStateSetterCalls();
 		viewModel.openSearchKeyboardSelection();
-		expect(stateSetters[1]).toHaveBeenCalledWith(expect.any(Function));
+		expect(stateSetters[2]).toHaveBeenCalledWith(expect.any(Function));
 
 		expect(viewModel.selectContentType).toBe(onSelectContentType);
 		expect(viewModel.activeContentType).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
@@ -636,6 +708,9 @@ describe("useGlossaryPageViewModel", () => {
 			onBack,
 			changeGlossarySearchTerm: expect.any(Function),
 			clearGlossarySearch: expect.any(Function),
+			openGlossarySearchFilterOptions: expect.any(Function),
+			closeGlossarySearchFilterOptions: expect.any(Function),
+			selectGlossarySearchScope: expect.any(Function),
 			selectTopicArea: expect.any(Function),
 			selectContentType: expect.any(Function)
 		});

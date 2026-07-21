@@ -1,4 +1,18 @@
 // src/ui/viewmodel/GlossaryPage/glossarySearchModel.js
+export const GLOSSARY_SEARCH_SCOPES = {
+	ALL: "all",
+	TERMS: "terms",
+	CHAPTERS: "chapters"
+};
+
+export function doesGlossarySearchScopeIncludeTerms(searchScope) {
+	return searchScope !== GLOSSARY_SEARCH_SCOPES.CHAPTERS;
+}
+
+export function doesGlossarySearchScopeIncludeChapters(searchScope) {
+	return searchScope !== GLOSSARY_SEARCH_SCOPES.TERMS;
+}
+
 export function normalizeSearchTerm(searchTerm) {
 	return searchTerm.trim().toLowerCase();
 }
@@ -10,6 +24,16 @@ export function entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm) {
 
 	return localizedEntry.term.toLowerCase().includes(normalizedSearchTerm)
 		|| localizedEntry.explanation.toLowerCase().includes(normalizedSearchTerm);
+}
+
+export function topicAreaMatchesSearchTerm(topicArea, normalizedSearchTerm, chapterReference) {
+	if (!normalizedSearchTerm) {
+		return true;
+	}
+
+	return topicArea.label.toLowerCase().includes(normalizedSearchTerm)
+		|| String(topicArea.position).includes(normalizedSearchTerm)
+		|| chapterReference.toLowerCase().includes(normalizedSearchTerm);
 }
 
 export function filterEntriesByNormalizedSearchTerm(localizedEntries, normalizedSearchTerm) {

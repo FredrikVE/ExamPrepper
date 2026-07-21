@@ -1,5 +1,6 @@
 /* src/ui/style/Search/index.css */
 @import "./search-backdrop.css";
 @import "./search-field.css";
+@import "./search-filter-control.css";
 @import "./search-sheet.css";
 @import "./search-filter-field.css";

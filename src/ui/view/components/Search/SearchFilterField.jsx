@@ -1,7 +1,7 @@
 // src/ui/view/components/Search/SearchFilterField.jsx
 import { useRef } from "react";
-import { ChevronDown, Funnel } from "lucide-react";
 import SearchField from "./SearchField.jsx";
+import SearchFilterControl from "./SearchFilterControl.jsx";
 
 export default function SearchFilterField({
 	searchTerm,
@@ -18,28 +18,15 @@ export default function SearchFilterField({
 	const searchInputRef = useRef(null);
 
 	const filterControl = (
-		<>
-			<span className="search-filter-field-divider" aria-hidden="true" />
-
-			<div className="search-filter-field-filter">
-				<Funnel className="search-filter-field-filter-icon" aria-hidden="true" />
-				<span className="search-filter-field-filter-label" aria-hidden="true">
-					{filterButtonLabel}
-				</span>
-				<button
-					type="button"
-					className="search-filter-field-filter-button"
-					onClick={() => {
-						searchInputRef.current?.blur();
-						onOpenFilterOptions();
-					}}
-					aria-haspopup="listbox"
-					aria-expanded={isFilterOptionsOpen}
-					aria-label={filterButtonAriaLabel}
-				/>
-				<ChevronDown className="search-filter-field-filter-chevron" aria-hidden="true" />
-			</div>
-		</>
+		<SearchFilterControl
+			label={filterButtonLabel}
+			ariaLabel={filterButtonAriaLabel}
+			isOpen={isFilterOptionsOpen}
+			onOpen={() => {
+				searchInputRef.current?.blur();
+				onOpenFilterOptions();
+			}}
+		/>
 	);
 
 	return (

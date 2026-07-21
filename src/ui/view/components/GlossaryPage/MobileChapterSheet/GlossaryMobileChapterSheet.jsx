@@ -1,6 +1,7 @@
 // src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx
 import { useState } from "react";
 import DockedMobileBottomSheet from "../../MobileBottomSheet/DockedMobileBottomSheet.jsx";
+import FilterOptionList from "../../Search/FilterOptionList.jsx";
 import GlossarySearchField from "../TopicAreaPanel/GlossarySearchField.jsx";
 import GlossaryTopicAreaNavigationList from "../TopicAreaPanel/GlossaryTopicAreaNavigationList.jsx";
 import GlossaryTopicAreaSearchList from "../TopicAreaPanel/GlossaryTopicAreaSearchList.jsx";
@@ -10,9 +11,15 @@ const MOBILE_TOPIC_AREA_LIST_ID = "glossary-mobile-topic-area-list";
 export default function GlossaryMobileChapterSheet({
 	searchTerm,
 	searchPlaceholder,
+	searchLabel,
 	searchClearLabel,
 	searchKeyboardHint,
 	searchSummaryLabel,
+	searchScope,
+	searchScopeLabel,
+	searchScopeAriaLabel,
+	searchScopeOptions,
+	isSearchFilterOptionsOpen,
 	isSearching,
 	isSearchComboboxActive,
 	searchActiveDescendantId,
@@ -24,7 +31,11 @@ export default function GlossaryMobileChapterSheet({
 	sheetOpenLabel,
 	sheetCloseLabel,
 	onSearchTermChange,
+	onFocusSearch,
 	onClearSearch,
+	onOpenFilterOptions,
+	onCloseFilterOptions,
+	onSelectFilterOption,
 	onMoveSearchSelectionDown,
 	onMoveSearchSelectionUp,
 	onOpenSearchKeyboardSelection,
@@ -36,16 +47,34 @@ export default function GlossaryMobileChapterSheet({
 		setIsOpen(true);
 	};
 
+	const focusSearch = () => {
+		setIsOpen(true);
+		onFocusSearch();
+	};
+
 	const changeSearchTerm = (nextSearchTerm) => {
 		setIsOpen(true);
 		onSearchTermChange(nextSearchTerm);
+	};
+
+	const openFilterOptions = () => {
+		setIsOpen(true);
+		onOpenFilterOptions();
+	};
+
+	const changeSheetOpen = (nextIsOpen) => {
+		setIsOpen(nextIsOpen);
+
+		if (!nextIsOpen) {
+			onCloseFilterOptions();
+		}
 	};
 
 	return (
 		<div className="glossary-mobile-chapter-sheet">
 			<DockedMobileBottomSheet
 				isOpen={isOpen}
-				onOpenChange={setIsOpen}
+				onOpenChange={changeSheetOpen}
 				contentId="glossary-mobile-chapter-sheet"
 				title={sheetTitle}
 				subtitle={sheetSubtitle}
@@ -57,21 +86,26 @@ export default function GlossaryMobileChapterSheet({
 			>
 				<div
 					className="glossary-mobile-chapter-sheet__search"
-					onFocusCapture={openSheet}
 					onPointerDownCapture={openSheet}
 				>
 					<GlossarySearchField
 						searchTerm={searchTerm}
 						searchPlaceholder={searchPlaceholder}
+						searchLabel={searchLabel}
 						searchClearLabel={searchClearLabel}
 						searchKeyboardHint={searchKeyboardHint}
 						searchSummaryLabel={searchSummaryLabel}
+						searchScopeLabel={searchScopeLabel}
+						searchScopeAriaLabel={searchScopeAriaLabel}
+						isSearchFilterOptionsOpen={isSearchFilterOptionsOpen}
 						isSearching={isSearching}
-						isSearchComboboxActive={isOpen && isSearchComboboxActive}
-						searchActiveDescendantId={isOpen ? searchActiveDescendantId : null}
+						isSearchComboboxActive={isOpen && !isSearchFilterOptionsOpen && isSearchComboboxActive}
+						searchActiveDescendantId={isOpen && !isSearchFilterOptionsOpen ? searchActiveDescendantId : null}
 						topicAreaListId={MOBILE_TOPIC_AREA_LIST_ID}
 						onSearchTermChange={changeSearchTerm}
+						onFocusSearch={focusSearch}
 						onClearSearch={onClearSearch}
+						onOpenFilterOptions={openFilterOptions}
 						onMoveSearchSelectionDown={onMoveSearchSelectionDown}
 						onMoveSearchSelectionUp={onMoveSearchSelectionUp}
 						onOpenSearchKeyboardSelection={onOpenSearchKeyboardSelection}
@@ -79,7 +113,13 @@ export default function GlossaryMobileChapterSheet({
 				</div>
 
 				<div className="glossary-mobile-chapter-sheet__body" aria-hidden={!isOpen} inert={!isOpen}>
-					{isSearching ? (
+					{isSearchFilterOptionsOpen ? (
+						<FilterOptionList
+							filterOptions={searchScopeOptions}
+							selectedFilterValue={searchScope}
+							onSelectFilterOption={onSelectFilterOption}
+						/>
+					) : isSearching ? (
 						<GlossaryTopicAreaSearchList
 							listId={MOBILE_TOPIC_AREA_LIST_ID}
 							ariaLabel={topicAreaListAriaLabel}

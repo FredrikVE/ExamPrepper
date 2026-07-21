@@ -10,8 +10,11 @@ import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceS
 import ToggleButtonRow from "../components/ToggleButtonRow/ToggleButtonRow.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 
 export default function GlossaryPage({ viewModel }) {
+	useSearchSheetEscapeKey(viewModel.isSearchFilterOptionsOpen, viewModel.closeGlossarySearchFilterOptions);
+
 	const presentationMode = usePresentationMode();
 	const isMobile = presentationMode === PRESENTATION_MODE.MOBILE;
 	const footer = viewModel.pageEmptyState === null && !isBlockingLoadStatus(viewModel.pageStatus) ? (
@@ -19,9 +22,15 @@ export default function GlossaryPage({ viewModel }) {
 			isMobile={isMobile}
 			searchTerm={viewModel.glossarySearchTerm}
 			searchPlaceholder={viewModel.searchPlaceholder}
+			searchLabel={viewModel.searchLabel}
 			searchClearLabel={viewModel.searchClearLabel}
 			searchKeyboardHint={viewModel.searchKeyboardHint}
 			searchSummaryLabel={viewModel.searchSummaryLabel}
+			searchScope={viewModel.glossarySearchScope}
+			searchScopeLabel={viewModel.searchScopeLabel}
+			searchScopeAriaLabel={viewModel.searchScopeAriaLabel}
+			searchScopeOptions={viewModel.searchScopeOptions}
+			isSearchFilterOptionsOpen={viewModel.isSearchFilterOptionsOpen}
 			isSearching={viewModel.isSearching}
 			isSearchComboboxActive={viewModel.isSearchComboboxActive}
 			searchActiveDescendantId={viewModel.searchActiveDescendantId}
@@ -34,7 +43,11 @@ export default function GlossaryPage({ viewModel }) {
 			sheetOpenLabel={viewModel.mobileChapterSheetOpenLabel}
 			sheetCloseLabel={viewModel.mobileChapterSheetCloseLabel}
 			onSearchTermChange={viewModel.changeGlossarySearchTerm}
+			onFocusSearch={viewModel.closeGlossarySearchFilterOptions}
 			onClearSearch={viewModel.clearGlossarySearch}
+			onOpenFilterOptions={viewModel.openGlossarySearchFilterOptions}
+			onCloseFilterOptions={viewModel.closeGlossarySearchFilterOptions}
+			onSelectFilterOption={viewModel.selectGlossarySearchScope}
 			onMoveSearchSelectionDown={viewModel.moveSearchSelectionDown}
 			onMoveSearchSelectionUp={viewModel.moveSearchSelectionUp}
 			onOpenSearchKeyboardSelection={viewModel.openSearchKeyboardSelection}

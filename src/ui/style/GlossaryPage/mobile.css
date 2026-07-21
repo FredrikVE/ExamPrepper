@@ -166,3 +166,11 @@
 		margin-top: 0;
 	}
 }
+
+@media (max-width: 932px) {
+	.glossary-mobile-chapter-sheet__body > .search-sheet-list {
+		width: 100%;
+		max-height: none;
+		padding-top: var(--space-2);
+	}
+}

@@ -8,7 +8,6 @@
 	border-color: var(--line);
 	border-radius: 12px;
 	background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
-	padding-right: 7px;
 }
 
 .glossary-search-field .search-field-main {

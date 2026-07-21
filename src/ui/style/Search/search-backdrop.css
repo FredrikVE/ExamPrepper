@@ -39,7 +39,7 @@
         transform var(--transition-normal);
 }
 
-.footer-open .search-filter-field-divider {
+.footer-open .search-filter-control-divider {
     background: color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
@@ -51,7 +51,7 @@
         transform: none;
     }
 
-    .footer-open .search-filter-field-divider {
+    .footer-open .search-filter-control-divider {
         background: color-mix(in srgb, var(--text-soft) 18%, transparent);
     }
 }

@@ -1,5 +1,6 @@
 // src/ui/viewmodel/GlossaryPage/glossaryTopicAreaListModel.js
 import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
+import { doesGlossarySearchScopeIncludeChapters, doesGlossarySearchScopeIncludeTerms, topicAreaMatchesSearchTerm } from "./glossarySearchModel.js";
 
 export const GLOSSARY_TOPIC_AREA_LIST_ID = "glossary-topic-area-list";
 
@@ -8,23 +9,33 @@ export function createGlossaryTopicAreaListItems({
 	entriesByTopicAreaKey,
 	matchCountsByTopicAreaKey,
 	normalizedSearchTerm,
+	searchScope,
 	labels
 }) {
 	const isSearching = normalizedSearchTerm.length > 0;
+	const searchesTerms = doesGlossarySearchScopeIncludeTerms(searchScope);
+	const searchesChapters = doesGlossarySearchScopeIncludeChapters(searchScope);
 	const topicAreaListItems = [];
 
 	for (const topicArea of topicAreas) {
 		const entries = entriesByTopicAreaKey.get(topicArea.key) ?? [];
 		const entryCount = entries.length;
-		const matchCount = matchCountsByTopicAreaKey.get(topicArea.key) ?? 0;
+		const matchCount = searchesTerms
+			? matchCountsByTopicAreaKey.get(topicArea.key) ?? 0
+			: 0;
 		const matchesTopicAreaLabel = isSearching
-			&& topicArea.label.toLowerCase().includes(normalizedSearchTerm);
+			&& searchesChapters
+			&& topicAreaMatchesSearchTerm(
+				topicArea,
+				normalizedSearchTerm,
+				labels.chapterReference(topicArea.position)
+			);
 
 		if (isSearching && !matchesTopicAreaLabel && matchCount === 0) {
 			continue;
 		}
 
-		const showsAllEntries = !isSearching || matchesTopicAreaLabel;
+		const showsAllEntries = !isSearching || !searchesTerms || matchesTopicAreaLabel;
 
 		topicAreaListItems.push({
 			id: createGlossaryTopicAreaOptionId(topicArea.key),
@@ -37,7 +48,7 @@ export function createGlossaryTopicAreaListItems({
 			matchCountLabel: isSearching && matchCount > 0
 				? labels.chapterMatchCount(matchCount)
 				: null,
-			subtitle: isSearching && !showsAllEntries
+			subtitle: isSearching && matchCount > 0
 				? labels.chapterSearchSubtitle(matchCount)
 				: labels.chapterSubtitle(entryCount),
 			matchesTopicAreaLabel,
