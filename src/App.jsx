@@ -316,7 +316,7 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 }
 
 function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
-	const glossaryPageViewModel = useGlossaryPageViewModel({
+	const glossaryPageViewModel = useGlossaryPageViewModel(
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		subjectId,
@@ -325,7 +325,7 @@ function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isAc
 		t,
 		isActive,
 		backContract
-	});
+	);
 
 	return (
 		<GlossaryPage viewModel={glossaryPageViewModel} />

@@ -5,19 +5,11 @@ import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
-import {
-	countEntryMatchesByTopicAreaForNormalizedSearchTerm,
-	filterEntriesByNormalizedSearchTerm,
-	normalizeSearchTerm
-} from "./GlossaryPage/glossarySearchModel.js";
-import { applyGlossaryTopicAreaInteractionState, createGlossaryTopicAreaListItems } from "./GlossaryPage/glossaryTopicAreaListModel.js";
+import { countEntryMatchesByTopicAreaForNormalizedSearchTerm, filterEntriesByNormalizedSearchTerm, normalizeSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
+import { applyGlossaryTopicAreaInteractionState, createGlossaryTopicAreaListItems, GLOSSARY_TOPIC_AREA_LIST_ID } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
-import {
-	createGlossaryPageShellModel,
-	createGlossaryPageView
-} from "./GlossaryPage/glossaryPagePresentationModel.js";
 
-export default function useGlossaryPageViewModel({
+export default function useGlossaryPageViewModel(
 	getGlossaryEntriesForSubjectUseCase,
 	getTopicAreasUseCase,
 	subjectId,
@@ -26,7 +18,7 @@ export default function useGlossaryPageViewModel({
 	t,
 	isActive,
 	backContract
-}) {
+) {
 	const [glossarySearchTerm, setGlossarySearchTerm] = useState("");
 	const [activeTopicAreaKey, setActiveTopicAreaKey] = useState(initialTopicAreaKey ?? null);
 	const [searchKeyboardIndex, setSearchKeyboardIndex] = useState(-1);
@@ -84,24 +76,6 @@ export default function useGlossaryPageViewModel({
 		topicAreaLoad
 	], t.glossaryPageErrorMessage);
 
-	const labels = useMemo(() => ({
-		pageTitle: t.glossaryPageTitle,
-		pageDescription: t.glossaryPageDescription,
-		searchPlaceholder: t.glossaryPageSearchPlaceholder,
-		searchClearLabel: t.glossaryPageSearchClearLabel,
-		searchKeyboardHint: t.glossaryPageSearchKeyboardHint,
-		termColumnHeader: t.glossaryPageTermColumnHeader,
-		explanationColumnHeader: t.glossaryPageExplanationColumnHeader,
-		loadingTitle: t.glossaryPageLoadingTitle,
-		errorTitle: t.glossaryPageErrorTitle
-	}), [t]);
-
-	const topicAreaListLabels = useMemo(() => ({
-		chapterMatchCount: t.glossaryPageChapterMatchCount,
-		chapterSubtitle: t.glossaryPageChapterSubtitle,
-		chapterSearchSubtitle: t.glossaryPageChapterSearchSubtitle
-	}), [t]);
-
 	const localizedEntries = useMemo(() => {
 		return localizeGlossaryEntries(glossaryEntries, language);
 	}, [glossaryEntries, language]);
@@ -125,13 +99,17 @@ export default function useGlossaryPageViewModel({
 			entriesByTopicAreaKey,
 			matchCountsByTopicAreaKey,
 			normalizedSearchTerm,
-			labels: topicAreaListLabels
+			labels: {
+				chapterMatchCount: t.glossaryPageChapterMatchCount,
+				chapterSubtitle: t.glossaryPageChapterSubtitle,
+				chapterSearchSubtitle: t.glossaryPageChapterSearchSubtitle
+			}
 		});
 	}, [
 		entriesByTopicAreaKey,
 		matchCountsByTopicAreaKey,
 		normalizedSearchTerm,
-		topicAreaListLabels,
+		t,
 		topicAreas
 	]);
 
@@ -288,70 +266,47 @@ export default function useGlossaryPageViewModel({
 		setActiveTopicAreaKey(selectedTopicArea.topicAreaKey);
 	}, [isSearching, resolvedSearchKeyboardIndex, topicAreaListItems]);
 
-	const shellModel = useMemo(() => {
-		return createGlossaryPageShellModel({ backContract });
-	}, [backContract.backLabel, backContract.navigationLabel, backContract.showBackButton]);
+	const pageEmptyState = emptyStateKind === "no-search-results" ? null : emptyState;
+	const glossaryPanelEmptyState = emptyStateKind === "no-search-results" ? emptyState : null;
 
-	const pageView = useMemo(() => {
-		return createGlossaryPageView({
-			labels,
-			pageStatus,
-			pageErrorMessage,
-			glossarySearchTerm,
-			isSearching,
-			isSearchComboboxActive,
-			searchActiveDescendantId,
-			searchSummaryLabel,
-			topicAreaListItems,
-			resolvedActiveTopicAreaKey,
-			glossaryPanelHeading,
-			glossaryTableRows,
-			emptyStateKind,
-			emptyState
-		});
-	}, [
-		emptyState,
-		emptyStateKind,
-		glossaryPanelHeading,
-		glossarySearchTerm,
-		glossaryTableRows,
-		isSearchComboboxActive,
-		isSearching,
-		labels,
-		pageErrorMessage,
+	return {
+		pageTitle: t.glossaryPageTitle,
+		pageDescription: t.glossaryPageDescription,
+		searchPlaceholder: t.glossaryPageSearchPlaceholder,
+		searchClearLabel: t.glossaryPageSearchClearLabel,
+		searchKeyboardHint: t.glossaryPageSearchKeyboardHint,
+		termColumnHeader: t.glossaryPageTermColumnHeader,
+		explanationColumnHeader: t.glossaryPageExplanationColumnHeader,
+		loadingTitle: t.glossaryPageLoadingTitle,
+		errorTitle: t.glossaryPageErrorTitle,
+
 		pageStatus,
-		resolvedActiveTopicAreaKey,
+		pageErrorMessage,
+		pageEmptyState,
+		glossaryPanelEmptyState,
+
+		glossarySearchTerm,
+		isSearching,
+		isSearchComboboxActive,
 		searchActiveDescendantId,
 		searchSummaryLabel,
-		topicAreaListItems
-	]);
+		topicAreaListId: GLOSSARY_TOPIC_AREA_LIST_ID,
+		topicAreaListItems,
+		resolvedActiveTopicAreaKey,
+		glossaryPanelHeading,
+		glossaryTableRows,
 
-	const actions = useMemo(() => ({
-		shell: {
-			onBack: backContract.onBack
-		},
-		topicAreaPanel: {
-			onSearchTermChange: changeGlossarySearchTerm,
-			onClearSearch: clearGlossarySearch,
-			onMoveSearchSelectionDown: moveSearchSelectionDown,
-			onMoveSearchSelectionUp: moveSearchSelectionUp,
-			onOpenSearchKeyboardSelection: openSearchKeyboardSelection,
-			onSelectTopicArea: selectTopicArea
-		}
-	}), [
-		backContract.onBack,
+		showBackButton: backContract.showBackButton,
+		backLabel: backContract.backLabel,
+		navigationLabel: backContract.navigationLabel,
+		onBack: backContract.onBack,
+
 		changeGlossarySearchTerm,
 		clearGlossarySearch,
 		moveSearchSelectionDown,
 		moveSearchSelectionUp,
 		openSearchKeyboardSelection,
 		selectTopicArea
-	]);
-
-	return {
-		shellModel,
-		pageView,
-		actions
 	};
 }
 
