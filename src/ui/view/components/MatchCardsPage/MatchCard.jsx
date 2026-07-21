@@ -1,5 +1,6 @@
 // src/ui/view/components/MatchCardsPage/MatchCard.jsx
-import FormattedText, { createPlainFormattedText } from "../Shared/FormattedText.jsx";
+import { createPlainFormattedText } from "../../../presentation/formattedText.js";
+import FormattedText from "../Shared/FormattedText.jsx";
 import { MATCH_SLOT_STATUS } from "../../../viewmodel/MatchCardsPage/matchCardsConstants.js";
 
 export default function MatchCard({ slot, labels, isInteractionLocked, onSelectSlot }) {

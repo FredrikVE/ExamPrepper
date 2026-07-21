@@ -61,11 +61,6 @@
 	transition: background-color var(--transition-fast);
 }
 
-.glossary-table tbody tr:last-child th,
-.glossary-table tbody tr:last-child td {
-	border-bottom: 0;
-}
-
 @media (hover: hover) and (pointer: fine) {
 	.glossary-table tbody tr:hover > * {
 		background-color: var(--glossary-table-row-hover-bg);

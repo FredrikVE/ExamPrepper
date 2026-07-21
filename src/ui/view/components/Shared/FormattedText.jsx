@@ -1,33 +1,16 @@
 // src/ui/view/components/Shared/FormattedText.jsx
-const BOLD_TEXT_PATTERN = /(\*\*[^*]+?\*\*)/g;
+import { createFormattedTextSegments } from "../../../presentation/formattedText.js";
 
 export default function FormattedText({ text }) {
-	const textValue = createPlainFormattedTextInput(text);
-	const parts = textValue.split(BOLD_TEXT_PATTERN);
+	const segments = createFormattedTextSegments(text);
 
 	return (
 		<>
-			{parts.map((part, index) => {
-				if (isBoldPart(part)) {
-					return <strong key={index}>{part.slice(2, -2)}</strong>;
-				}
-
-				return <span key={index}>{part}</span>;
-			})}
+			{segments.map((segment, index) => (
+				segment.isBold
+					? <strong key={index}>{segment.text}</strong>
+					: <span key={index}>{segment.text}</span>
+			))}
 		</>
 	);
-}
-
-export function createPlainFormattedText(text) {
-	const textValue = createPlainFormattedTextInput(text);
-
-	return textValue.replaceAll("**", "");
-}
-
-function createPlainFormattedTextInput(text) {
-	return String(text ?? "");
-}
-
-function isBoldPart(part) {
-	return part.startsWith("**") && part.endsWith("**") && part.length > 4;
 }
