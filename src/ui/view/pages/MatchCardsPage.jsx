@@ -1,3 +1,4 @@
+// src/ui/view/pages/MatchCardsPage.jsx
 import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
 import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
@@ -6,51 +7,49 @@ import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceS
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
+	return (
+		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.headerProgressBarModel}>
+			{renderMatchCardsContent(viewModel)}
+		</MatchCardsShell>
+	);
+}
+
+function renderMatchCardsContent(viewModel) {
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
-			<MatchCardsShell viewModel={viewModel} progressBarModel={null}>
-				<WorkspaceState
-					status={viewModel.pageStatus}
-					loadingLabel={viewModel.labels.loadingTitle}
-					errorTitle={viewModel.labels.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
-					errorAction={null}
-				/>
-			</MatchCardsShell>
+			<WorkspaceState
+				status={viewModel.pageStatus}
+				loadingLabel={viewModel.loadingTitle}
+				errorTitle={viewModel.errorTitle}
+				errorBody={viewModel.pageErrorMessage}
+				errorAction={null}
+			/>
 		);
 	}
 
 	if (!viewModel.session) {
 		return (
-			<MatchCardsShell viewModel={viewModel} progressBarModel={null}>
-				<WorkspaceMessage
-					title={viewModel.labels.emptyTitle}
-					body={viewModel.labels.emptyBody}
-					action={null}
-				/>
-			</MatchCardsShell>
+			<WorkspaceMessage
+				title={viewModel.emptyTitle}
+				body={viewModel.emptyBody}
+				action={null}
+			/>
 		);
 	}
 
 	if (viewModel.isRoundComplete) {
-		return (
-			<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
-				<MatchCardsRoundComplete viewModel={viewModel} />
-			</MatchCardsShell>
-		);
+		return <MatchCardsRoundComplete viewModel={viewModel} />;
 	}
 
 	return (
-		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
-			<MatchCardsGrid
-				termSlots={viewModel.termSlots}
-				explanationSlots={viewModel.explanationSlots}
-				labels={viewModel.labels}
-				boardStyle={viewModel.boardStyle}
-				isInteractionLocked={viewModel.isInteractionLocked}
-				onSelectSlot={viewModel.handleSelectSlot}
-			/>
-		</MatchCardsShell>
+		<MatchCardsGrid
+			termSlots={viewModel.termSlots}
+			explanationSlots={viewModel.explanationSlots}
+			labels={viewModel.labels}
+			boardStyle={viewModel.boardStyle}
+			isInteractionLocked={viewModel.isInteractionLocked}
+			onSelectSlot={viewModel.handleSelectSlot}
+		/>
 	);
 }
 

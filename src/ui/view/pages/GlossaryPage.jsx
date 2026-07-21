@@ -17,7 +17,7 @@ export default function GlossaryPage({ viewModel }) {
 
 	const presentationMode = usePresentationMode();
 	const isMobile = presentationMode === PRESENTATION_MODE.MOBILE;
-	const footer = viewModel.pageEmptyState === null && !isBlockingLoadStatus(viewModel.pageStatus) ? (
+	const footer = viewModel.pageEmptyState === null ? (
 		<GlossaryFooter
 			isMobile={isMobile}
 			searchTerm={viewModel.glossarySearchTerm}
@@ -63,12 +63,27 @@ export default function GlossaryPage({ viewModel }) {
 			onBack={viewModel.onBack}
 			footer={footer}
 		>
-			{renderPageContent(viewModel, isMobile)}
+			<section className="glossary-page" aria-labelledby="glossary-page-title">
+				<header className="glossary-page__heading">
+					<h1 id="glossary-page-title">{viewModel.pageTitle}</h1>
+				</header>
+
+				<ToggleButtonRow
+					entries={viewModel.contentToggleEntries}
+					activeEntryId={viewModel.activeContentType}
+					onSelectEntry={viewModel.selectContentType}
+					ariaLabel={viewModel.contentToggleAriaLabel}
+				/>
+
+				<div className="glossary-page__content">
+					{renderGlossaryWorkspaceContent(viewModel, isMobile)}
+				</div>
+			</section>
 		</GlossaryPageShell>
 	);
 }
 
-const renderPageContent = (viewModel, isMobile) => {
+const renderGlossaryWorkspaceContent = (viewModel, isMobile) => {
 	if (isBlockingLoadStatus(viewModel.pageStatus)) {
 		return (
 			<WorkspaceState
@@ -92,39 +107,26 @@ const renderPageContent = (viewModel, isMobile) => {
 	}
 
 	return (
-		<section className="glossary-page" aria-labelledby="glossary-page-title">
-			<header className="glossary-page__heading">
-				<h1 id="glossary-page-title">{viewModel.pageTitle}</h1>
-			</header>
-
-			<ToggleButtonRow
-				entries={viewModel.contentToggleEntries}
-				activeEntryId={viewModel.activeContentType}
-				onSelectEntry={viewModel.selectContentType}
-				ariaLabel={viewModel.contentToggleAriaLabel}
-			/>
-
-			<div className="glossary-page__content">
-				{!isMobile ? (
-					<TopicAreaPanel
-						isSearching={viewModel.isSearching}
-						topicAreaListId={viewModel.topicAreaListId}
-						allTopicAreaListItem={viewModel.allTopicAreaListItem}
-						topicAreaListItems={viewModel.topicAreaListItems}
-						topicAreaListAriaLabel={viewModel.pageTitle}
-						onSelectTopicArea={viewModel.selectTopicArea}
-					/>
-				) : null}
-				<GlossaryPanel
-					heading={viewModel.glossaryPanelHeading}
-					rows={viewModel.glossaryTableRows}
-					termColumnHeader={viewModel.termColumnHeader}
-					explanationColumnHeader={viewModel.explanationColumnHeader}
-					emptyState={viewModel.glossaryPanelEmptyState}
-					isMobile={isMobile}
+		<>
+			{!isMobile ? (
+				<TopicAreaPanel
+					isSearching={viewModel.isSearching}
+					topicAreaListId={viewModel.topicAreaListId}
+					allTopicAreaListItem={viewModel.allTopicAreaListItem}
+					topicAreaListItems={viewModel.topicAreaListItems}
+					topicAreaListAriaLabel={viewModel.pageTitle}
+					onSelectTopicArea={viewModel.selectTopicArea}
 				/>
-			</div>
-		</section>
+			) : null}
+			<GlossaryPanel
+				heading={viewModel.glossaryPanelHeading}
+				rows={viewModel.glossaryTableRows}
+				termColumnHeader={viewModel.termColumnHeader}
+				explanationColumnHeader={viewModel.explanationColumnHeader}
+				emptyState={viewModel.glossaryPanelEmptyState}
+				isMobile={isMobile}
+			/>
+		</>
 	);
 };
 

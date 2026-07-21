@@ -313,12 +313,12 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 	});
 
 	useEffect(() => {
-		onHeaderProgressBarModelChange(matchCardsPageViewModel.session ? matchCardsPageViewModel.progressBarModel : null);
+		onHeaderProgressBarModelChange(matchCardsPageViewModel.headerProgressBarModel);
 
 		return () => {
 			onHeaderProgressBarModelChange(null);
 		};
-	}, [matchCardsPageViewModel.progressBarModel, matchCardsPageViewModel.session, onHeaderProgressBarModelChange]);
+	}, [matchCardsPageViewModel.headerProgressBarModel, onHeaderProgressBarModelChange]);
 
 	return (
 		<MatchCardsPage viewModel={matchCardsPageViewModel} />

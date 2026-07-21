@@ -1,6 +1,7 @@
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
+import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
@@ -98,10 +99,6 @@ export default function useMatchCardsPageViewModel({
 			pageTitle,
 			pageEyebrow: t.matchCardsEyebrow,
 			pageIntro,
-			loadingTitle: t.matchCardsLoadingTitle,
-			errorTitle: t.matchCardsErrorTitle,
-			emptyTitle: t.matchCardsEmptyTitle,
-			emptyBody: t.matchCardsEmptyBody,
 			selectedSlotLabel: t.matchCardsSelectedSlotLabel,
 			wrongSlotLabel: t.matchCardsWrongSlotLabel,
 			successSlotLabel: t.matchCardsSuccessSlotLabel,
@@ -257,6 +254,9 @@ export default function useMatchCardsPageViewModel({
 			onActivateStep: null
 		});
 	}, [labels, matchedPairCount, totalPairCount]);
+	const headerProgressBarModel = pageStatus === LOAD_STATUS.READY && session !== null
+		? progressBarModel
+		: null;
 
 	return {
 		labels,
@@ -265,6 +265,10 @@ export default function useMatchCardsPageViewModel({
 		topicAreaKey,
 		pageStatus,
 		pageErrorMessage,
+		loadingTitle: t.matchCardsLoadingTitle,
+		errorTitle: t.matchCardsErrorTitle,
+		emptyTitle: t.matchCardsEmptyTitle,
+		emptyBody: t.matchCardsEmptyBody,
 		showBackButton: backContract.showBackButton,
 		backLabel: backContract.backLabel,
 		navigationLabel: backContract.navigationLabel,
@@ -275,7 +279,7 @@ export default function useMatchCardsPageViewModel({
 		matchedPairCount,
 		totalPairCount,
 		progressLabel,
-		progressBarModel,
+		headerProgressBarModel,
 		boardStyle,
 		isInteractionLocked,
 		isRoundComplete: Boolean(session?.isRoundComplete),
