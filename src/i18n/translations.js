@@ -330,7 +330,7 @@ export const translations = {
 
         // GlossaryPage
         glossaryPageTitle: "Begrepslister",
-        glossaryPageSubtitle: (subjectName) => `Sentrale begreper og definisjoner i ${subjectName}`,
+        glossaryPageSubtitle: (subjectCode) => `Sentrale begreper og definisjoner i ${subjectCode}`,
         glossaryPageSubtitleFallback: "Sentrale begreper og definisjoner",
         glossaryPageSearchLabel: "Søk i begrepslisten",
         glossaryPageSearchAllPlaceholder: "Søk i kapitler, begreper og forklaringer...",
@@ -806,7 +806,7 @@ export const translations = {
 
         // GlossaryPage
         glossaryPageTitle: "Glossaries",
-        glossaryPageSubtitle: (subjectName) => `Key terms and definitions in ${subjectName}`,
+        glossaryPageSubtitle: (subjectCode) => `Key terms and definitions in ${subjectCode}`,
         glossaryPageSubtitleFallback: "Key terms and definitions",
         glossaryPageSearchLabel: "Search the glossary",
         glossaryPageSearchAllPlaceholder: "Search chapters, terms, and explanations...",

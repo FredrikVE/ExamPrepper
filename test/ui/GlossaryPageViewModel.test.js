@@ -63,7 +63,7 @@ const {
 
 const translations = {
 	glossaryPageTitle: "Begrepslister",
-	glossaryPageSubtitle: (subjectName) => `Sentrale begreper og definisjoner i ${subjectName}`,
+	glossaryPageSubtitle: (subjectCode) => `Sentrale begreper og definisjoner i ${subjectCode}`,
 	glossaryPageSubtitleFallback: "Sentrale begreper og definisjoner",
 	glossaryPageSearchLabel: "Søk i begrepslisten",
 	glossaryPageSearchAllPlaceholder: "Søk i alt",
@@ -265,16 +265,21 @@ beforeEach(() => {
 });
 
 describe("GlossaryPage presentation models", () => {
-	test("returns a localized subtitle with the selected subject name", () => {
+	test("returns a localized subtitle with the selected subject code", () => {
 		const { viewModel } = createViewModel();
 
 		expect(viewModel.pageSubtitle).toBe(
-			"Sentrale begreper og definisjoner i Informasjonssikkerhet"
+			"Sentrale begreper og definisjoner i IN2120"
 		);
 	});
 
-	test("returns the subtitle fallback without a selected subject", () => {
-		const { viewModel } = createViewModel({ selectedSubject: null });
+	test("returns the subtitle fallback without a selected subject code", () => {
+		const { viewModel } = createViewModel({
+			selectedSubject: {
+				id: "in2120",
+				name: "Informasjonssikkerhet"
+			}
+		});
 
 		expect(viewModel.pageSubtitle).toBe("Sentrale begreper og definisjoner");
 	});

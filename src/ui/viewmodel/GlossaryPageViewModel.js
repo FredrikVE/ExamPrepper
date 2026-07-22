@@ -474,11 +474,11 @@ export default function useGlossaryPageViewModel(
 }
 
 function createGlossaryPageSubtitle(t, selectedSubject) {
-	if (!selectedSubject?.name) {
+	if (!selectedSubject?.code) {
 		return t.glossaryPageSubtitleFallback;
 	}
 
-	return t.glossaryPageSubtitle(selectedSubject.name);
+	return t.glossaryPageSubtitle(selectedSubject.code);
 }
 
 function localizeGlossaryEntries(glossaryEntries, language) {
