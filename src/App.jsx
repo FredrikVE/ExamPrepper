@@ -188,6 +188,7 @@ function AppContent() {
 				{navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY && (
 					<GlossaryPageWrapper
 						subjectId={navigationViewModel.selectedSubjectId}
+						selectedSubject={subjectSelectPageViewModel.selectedSubject}
 						initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
 						language={language}
 						t={t}
@@ -316,11 +317,12 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 	);
 }
 
-function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType }) {
+function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType }) {
 	const glossaryPageViewModel = useGlossaryPageViewModel(
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		subjectId,
+		selectedSubject,
 		initialTopicAreaKey,
 		language,
 		t,

@@ -17,6 +17,7 @@ export default function useGlossaryPageViewModel(
 	getGlossaryEntriesForSubjectUseCase,
 	getTopicAreasUseCase,
 	subjectId,
+	selectedSubject,
 	initialTopicAreaKey,
 	language,
 	t,
@@ -407,6 +408,7 @@ export default function useGlossaryPageViewModel(
 
 	return {
 		pageTitle: t.glossaryPageTitle,
+		pageSubtitle: createGlossaryPageSubtitle(t, selectedSubject),
 		searchPlaceholder,
 		searchLabel: t.glossaryPageSearchLabel,
 		searchScopeAriaLabel: t.glossaryPageSearchScopeAriaLabel,
@@ -457,6 +459,14 @@ export default function useGlossaryPageViewModel(
 		selectTopicArea,
 		selectContentType
 	};
+}
+
+function createGlossaryPageSubtitle(t, selectedSubject) {
+	if (!selectedSubject?.name) {
+		return t.glossaryPageSubtitleFallback;
+	}
+
+	return t.glossaryPageSubtitle(selectedSubject.name);
 }
 
 function localizeGlossaryEntries(glossaryEntries, language) {

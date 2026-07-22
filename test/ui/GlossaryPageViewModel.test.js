@@ -63,6 +63,8 @@ const {
 
 const translations = {
 	glossaryPageTitle: "Begrepslister",
+	glossaryPageSubtitle: (subjectName) => `Sentrale begreper og definisjoner i ${subjectName}`,
+	glossaryPageSubtitleFallback: "Sentrale begreper og definisjoner",
 	glossaryPageSearchLabel: "Søk i begrepslisten",
 	glossaryPageSearchAllPlaceholder: "Søk i alt",
 	glossaryPageSearchTermsPlaceholder: "Søk i begreper",
@@ -171,6 +173,11 @@ function createViewModel({
 	glossaryError = null,
 	topicAreaError = null,
 	subjectId = "in2120",
+	selectedSubject = {
+		id: "in2120",
+		code: "IN2120",
+		name: "Informasjonssikkerhet"
+	},
 	initialTopicAreaKey = null,
 	language = "no",
 	isActive = true
@@ -210,6 +217,7 @@ function createViewModel({
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		subjectId,
+		selectedSubject,
 		initialTopicAreaKey,
 		language,
 		translations,
@@ -249,6 +257,20 @@ beforeEach(() => {
 });
 
 describe("GlossaryPage presentation models", () => {
+	test("returns a localized subtitle with the selected subject name", () => {
+		const { viewModel } = createViewModel();
+
+		expect(viewModel.pageSubtitle).toBe(
+			"Sentrale begreper og definisjoner i Informasjonssikkerhet"
+		);
+	});
+
+	test("returns the subtitle fallback without a selected subject", () => {
+		const { viewModel } = createViewModel({ selectedSubject: null });
+
+		expect(viewModel.pageSubtitle).toBe("Sentrale begreper og definisjoner");
+	});
+
 	test("escapes regular-expression characters and returns highlight segments as data", () => {
 		expect(splitTextIntoHighlightSegments("C++ og c++", "c++")).toEqual([
 			{ text: "C++", isMatch: true },

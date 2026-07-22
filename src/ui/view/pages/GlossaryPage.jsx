@@ -64,7 +64,7 @@ export default function GlossaryPage({ viewModel }) {
 			<section className="glossary-page" aria-labelledby="glossary-page-title">
 				<LearningContentHeader
 					title={viewModel.pageTitle}
-					subtitle={null}
+					subtitle={viewModel.pageSubtitle}
 					titleId="glossary-page-title"
 					entries={viewModel.contentToggleEntries}
 					activeEntryId={viewModel.activeContentType}
