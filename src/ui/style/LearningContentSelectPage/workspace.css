@@ -59,13 +59,13 @@
 
 .exam-search-footer > * {
 	position: relative;
-	z-index: 60;
+	z-index: var(--z-search-footer-content);
 	pointer-events: auto;
 }
 
 .exam-select-controls {
 	position: relative;
-	z-index: 60;
+	z-index: var(--z-search-footer-content);
 	display: flex;
 	width: min(860px, 100%);
 	max-width: 100%;
@@ -92,7 +92,7 @@
 
 	.exam-search-footer {
 		position: fixed;
-		z-index: 50;
+		z-index: var(--z-workspace-footer-overlay);
 		height: auto;
 		align-items: stretch;
 		justify-content: flex-start;

@@ -4,7 +4,7 @@
 }
 
 .footer-open {
-    z-index: 50;
+    z-index: var(--z-workspace-footer-overlay);
 }
 
 @media (min-width: 933px) {

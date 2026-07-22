@@ -220,6 +220,9 @@
 
     /* ── Layering ─────────────────────────────
        Named layers keep stacking order centralized and intentional. */
+    --z-search-backdrop: 40;
+    --z-workspace-footer-overlay: 50;
+    --z-search-footer-content: 60;
     --z-exam-submit-confirmation: 110;
 
     /* ── Mobile bottom sheet ──────────────────

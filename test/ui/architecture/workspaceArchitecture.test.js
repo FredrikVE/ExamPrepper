@@ -97,7 +97,8 @@ describe("workspace architecture", () => {
 		expect(pageScaffoldImports.every(({ importSource }) => importSource.endsWith("/WorkspaceScaffold.jsx"))).toBe(true);
 	});
 
-	test("keeps the search footer above the shared backdrop", () => {
+	test("keeps search layering centralized and ordered", () => {
+		const tokensCss = fs.readFileSync(path.join(STYLE_ROOT, "Tokens.css"), "utf8");
 		const scaffoldCss = fs.readFileSync(
 			path.join(STYLE_ROOT, "WorkspaceScaffold", "workspace-scaffold.css"),
 			"utf8"
@@ -112,14 +113,20 @@ describe("workspace architecture", () => {
 		const searchBackdropRule = searchBackdropCss.match(
 			/\.search-backdrop\s*\{([\s\S]*?)\}/
 		);
+		const readLayerToken = (tokenName) => {
+			const tokenMatch = tokensCss.match(new RegExp(`${tokenName}:\\s*(\\d+);`));
+
+			expect(tokenMatch).not.toBeNull();
+			return Number(tokenMatch[1]);
+		};
 
 		expect(footerOverlayRule).not.toBeNull();
 		expect(searchBackdropRule).not.toBeNull();
-
-		const footerOverlayZIndex = Number(footerOverlayRule[1].match(/z-index:\s*(\d+);/)[1]);
-		const searchBackdropZIndex = Number(searchBackdropRule[1].match(/z-index:\s*(\d+);/)[1]);
-
-		expect(footerOverlayZIndex).toBeGreaterThan(searchBackdropZIndex);
+		expect(footerOverlayRule[1]).toContain("z-index: var(--z-workspace-footer-overlay);");
+		expect(searchBackdropRule[1]).toContain("z-index: var(--z-search-backdrop);");
+		expect(readLayerToken("--z-workspace-footer-overlay")).toBeGreaterThan(
+			readLayerToken("--z-search-backdrop")
+		);
 	});
 
 	test("shares one LearningContentHeader between learning-content pages", () => {
