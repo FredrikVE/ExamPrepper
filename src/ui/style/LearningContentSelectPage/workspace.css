@@ -1,10 +1,7 @@
 /* src/ui/style/LearningContentSelectPage/workspace.css */
 .exam-select-layout {
-    --scaffold-inset: clamp(28px, 3.4vw, 48px);
-    --scaffold-content-top: clamp(106px, 7vw, 120px);
     --select-search-footer-space: clamp(132px, 16vh, 184px);
     --select-search-footer-padding: 18px clamp(36px, 4vw, 64px) clamp(24px, 3vw, 42px);
-    --select-mobile-scroll-inline-padding: 24px;
 }
 
 .exam-select-ambient-light {
@@ -35,8 +32,8 @@
 	overscroll-behavior: contain;
 	scrollbar-width: none;
 	padding:
-		var(--scaffold-content-top)
-		var(--scaffold-inset)
+		var(--learning-content-page-top)
+		var(--learning-content-page-inline)
 		calc(var(--scaffold-inset) + var(--select-search-footer-space));
 }
 
@@ -88,8 +85,8 @@
 
 	.exam-select-scroll {
 		padding:
-			calc(var(--mobile-topbar-height) + 14px)
-			var(--select-mobile-scroll-inline-padding)
+			var(--learning-content-page-top)
+			var(--learning-content-page-inline)
 			calc(var(--mobile-sheet-scroll-reserve) + env(safe-area-inset-bottom));
 	}
 

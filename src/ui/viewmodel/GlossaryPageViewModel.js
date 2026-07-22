@@ -2,11 +2,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LEARNING_CONTENT_TYPES, createLearningContentToggleEntries, resolveContentTypeNavigation } from "../../navigation/learningContent.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup } from "../../navigation/pageTools.js";
 import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
+import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeTerms, filterEntriesByNormalizedSearchTerm, normalizeSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
@@ -297,6 +299,15 @@ export default function useGlossaryPageViewModel(
 		return createLearningContentToggleEntries(t);
 	}, [t]);
 
+	const pageTools = useMemo(() => {
+		return createWorkspaceToolsModel({
+			pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
+			t,
+			workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
+			hasSelectedSubject: Boolean(subjectId)
+		});
+	}, [subjectId, t]);
+
 	const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
 		setGlossarySearchTerm(nextSearchTerm);
 		setSearchKeyboardIndex(nextSearchTerm.trim().length > 0 ? 0 : -1);
@@ -441,6 +452,7 @@ export default function useGlossaryPageViewModel(
 		glossaryPanelHeading,
 		glossaryTableRows,
 		contentToggleEntries,
+		pageTools,
 		activeContentType: LEARNING_CONTENT_TYPES.GLOSSARY,
 
 		showBackButton: backContract.showBackButton,

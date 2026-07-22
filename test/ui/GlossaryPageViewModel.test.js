@@ -111,7 +111,15 @@ const translations = {
 	contentToggleExamsLabel: "Eksamen",
 	contentToggleFlipcardsLabel: "Flipcards",
 	contentToggleMatchCardsLabel: "Begrepsmatch",
-	contentToggleGlossaryLabel: "Begrepslister"
+	contentToggleGlossaryLabel: "Begrepslister",
+	pageToolsWorkspaceTitle: "Velg læringsverktøy",
+	pageToolsWorkspaceSubtitle: "",
+	pageToolsWorkspaceActionsLabel: "Læringsverktøy",
+	pageToolsOpenLabel: "Åpne verktøymeny",
+	pageToolsCloseLabel: "Lukk verktøymeny",
+	pageToolsMobileHandleLabel: "Verktøy",
+	pageToolsUnavailableLabel: "Kommer senere",
+	pageToolsImportSubjectMaterialsLabel: "Legg inn fagmateriale"
 };
 
 const topicAreas = [
@@ -319,6 +327,22 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useState).toHaveBeenNthCalledWith(3, null);
 		expect(useState).toHaveBeenNthCalledWith(4, -1);
 		expect(useState).toHaveBeenNthCalledWith(5, false);
+	});
+
+	test("keeps the learning-content tools trigger available in the glossary header", () => {
+		const { viewModel } = createViewModel();
+
+		expect(viewModel.pageTools).toMatchObject({
+			id: "learning-content-select",
+			title: "Velg læringsverktøy",
+			openLabel: "Åpne verktøymeny"
+		});
+		expect(viewModel.pageTools.items).toEqual([
+			expect.objectContaining({
+				label: "Legg inn fagmateriale",
+				isDisabled: true
+			})
+		]);
 	});
 
 	test("loads all glossary entries once and topic areas for the active language", async () => {

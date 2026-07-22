@@ -146,7 +146,7 @@ export default function LearningContentSelectPage({ viewModel }) {
 
 	return (
 		<WorkspaceScaffold
-			className="exam-select-layout exam-select-workspace"
+			className="learning-content-workspace exam-select-layout exam-select-workspace"
 			contentClassName="exam-select-scroll"
 			header={header}
 			footer={footer}

@@ -60,6 +60,7 @@ export default function GlossaryPage({ viewModel }) {
 			navigationLabel={viewModel.navigationLabel}
 			onBack={viewModel.onBack}
 			footer={footer}
+			pageTools={viewModel.pageTools}
 		>
 			<section className="glossary-page" aria-labelledby="glossary-page-title">
 				<LearningContentHeader
@@ -105,7 +106,7 @@ const renderGlossaryWorkspaceContent = (viewModel, isMobile) => (
 	</WorkspaceState>
 );
 
-const GlossaryPageShell = ({ showBackButton, backLabel, navigationLabel, onBack, footer, children }) => {
+const GlossaryPageShell = ({ showBackButton, backLabel, navigationLabel, onBack, footer, pageTools, children }) => {
 	const header = (
 		<Header
 			showBackButton={showBackButton}
@@ -113,14 +114,14 @@ const GlossaryPageShell = ({ showBackButton, backLabel, navigationLabel, onBack,
 			navigationLabel={navigationLabel}
 			onBack={onBack}
 			progressBarModel={null}
-			tools={null}
+			tools={pageTools}
 			trailing={null}
 		/>
 	);
 
 	return (
 		<WorkspaceScaffold
-			className="glossary-workspace"
+			className="learning-content-workspace glossary-workspace"
 			contentClassName=""
 			header={header}
 			footer={footer}

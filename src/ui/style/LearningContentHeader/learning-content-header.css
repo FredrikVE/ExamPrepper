@@ -1,3 +1,43 @@
+/* Shared geometry for every page reached from LearningContentSelectPage.
+   Stable chrome and heading coordinates prevent layout shifts while tabbing. */
+.learning-content-workspace {
+	--scaffold-inset: clamp(28px, 3.4vw, 48px);
+	--learning-content-page-top: clamp(106px, 7vw, 120px);
+	--learning-content-page-inline: var(--scaffold-inset);
+}
+
+@media (max-width: 1280px) {
+	.learning-content-workspace {
+		--scaffold-inset: var(--space-10);
+		--learning-content-page-top: 100px;
+	}
+}
+
+@media (max-height: 760px) and (min-width: 933px) {
+	.learning-content-workspace {
+		--learning-content-page-top: 96px;
+	}
+}
+
+@media (max-height: 540px) and (min-width: 933px) {
+	.learning-content-workspace {
+		--learning-content-page-top: 88px;
+	}
+}
+
+@media (max-width: 932px) {
+	.learning-content-workspace {
+		--learning-content-page-top: calc(var(--mobile-topbar-height) + 14px);
+		--learning-content-page-inline: 24px;
+	}
+}
+
+@media (max-width: 640px) {
+	.learning-content-workspace {
+		--learning-content-page-inline: var(--space-4);
+	}
+}
+
 /* src/ui/style/LearningContentHeader/learning-content-header.css */
 .learning-content-header {
 	position: relative;
