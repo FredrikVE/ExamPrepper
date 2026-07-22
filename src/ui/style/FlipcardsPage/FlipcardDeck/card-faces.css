@@ -29,8 +29,8 @@
 		linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, var(--flipcard-face-surface)), color-mix(in srgb, var(--flipcard-face-surface) 98%, transparent)),
 		color-mix(in srgb, var(--panel-bg) 94%, var(--flipcard-face-surface));
 	box-shadow:
-		-28px 34px 90px rgba(239, 68, 68, var(--flipcard-practice-shadow-opacity)),
-		28px 34px 90px rgba(16, 185, 129, var(--flipcard-mastered-shadow-opacity)),
+		28px 34px 90px rgba(239, 68, 68, var(--flipcard-practice-shadow-opacity)),
+		-28px 34px 90px rgba(16, 185, 129, var(--flipcard-mastered-shadow-opacity)),
 		-24px 32px 82px rgba(239, 68, 68, var(--flipcard-edge-practice-shadow-opacity)),
 		24px 32px 82px rgba(16, 185, 129, var(--flipcard-edge-mastered-shadow-opacity)),
 		0 24px 68px rgba(18, 38, 63, 0.13),
@@ -54,13 +54,13 @@
 	pointer-events: none;
 	background:
 		radial-gradient(circle at var(--flipcard-surface-x) var(--flipcard-surface-y), rgba(16, 103, 255, var(--flipcard-surface-opacity)), transparent 38%),
-		radial-gradient(circle at 4% 50%, rgba(239, 68, 68, var(--flipcard-practice-surface-opacity)), transparent 46%),
-		radial-gradient(circle at 96% 50%, rgba(16, 185, 129, var(--flipcard-mastered-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 96% 50%, rgba(239, 68, 68, var(--flipcard-practice-surface-opacity)), transparent 46%),
+		radial-gradient(circle at 4% 50%, rgba(16, 185, 129, var(--flipcard-mastered-surface-opacity)), transparent 46%),
 		radial-gradient(circle at 4% 50%, rgba(239, 68, 68, var(--flipcard-edge-practice-surface-opacity)), transparent 46%),
 		radial-gradient(circle at 96% 50%, rgba(16, 185, 129, var(--flipcard-edge-mastered-surface-opacity)), transparent 46%),
 		linear-gradient(115deg, transparent 22%, var(--flipcard-face-sheen) 46%, transparent 64%);
 	background-size: 150% 150%, 130% 130%, 130% 130%, 130% 130%, 130% 130%, 230% 230%;
-	background-position: 50% 46%, 0% 50%, 100% 50%, 0% 50%, 100% 50%, -70% 50%;
+	background-position: 50% 46%, 100% 50%, 0% 50%, 0% 50%, 100% 50%, -70% 50%;
 	mix-blend-mode: normal;
 	opacity: 0.82;
 	filter: saturate(var(--flipcard-surface-saturation));

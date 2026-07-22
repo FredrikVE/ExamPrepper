@@ -10,7 +10,7 @@
 	background: radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 30rem);
 }
 
-.matchcards-workspace .workspace-scaffold-scroll {
+.matchcards-workspace .workspace-scaffold-body {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;

@@ -4,6 +4,7 @@ import { getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../.
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
+import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
@@ -19,6 +20,8 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		execute: executeSubjectLoad,
 		emptyData: [],
 		errorMessage: t.subjectErrorMessage,
+		resourceKey: language,
+		isEnabled: isActive,
 		onLoaded: null
 	});
 	const subjects = subjectLoad.data;
@@ -55,6 +58,19 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	const filteredSubjects = useMemo(() => {
 		return filterSubjects(subjects, searchTerm, faculty);
 	}, [subjects, searchTerm, faculty]);
+
+	const workspaceState = createWorkspaceState({
+		loadStatus: subjectLoad.status,
+		isEmpty: filteredSubjects.length === 0,
+		labels: {
+			loading: t.subjectLoadingMessage,
+			errorTitle: t.errorPrefix,
+			errorBody: subjectLoad.error,
+			emptyTitle: t.subjectEmptyMessage,
+			emptyBody: ""
+		},
+		errorAction: null
+	});
 
 	const searchSuggestions = useMemo(() => {
 		return filteredSubjects.slice(0, SEARCH_SUGGESTION_LIMIT).map((subject) => ({
@@ -105,8 +121,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectedSubject,
 		filteredSubjects,
 		faculties,
-		pageStatus: subjectLoad.status,
-		pageErrorMessage: subjectLoad.error,
+		workspaceState,
 		pageTools,
 
 		// Navigasjon
@@ -117,10 +132,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 
 		// Tekster
 		t,
-		loadingTitle: t.subjectLoadingMessage,
-		errorTitle: t.errorPrefix,
-		emptyTitle: t.subjectEmptyMessage,
-		emptyDescription: "",
 		searchCloseLabel: t.searchCloseLabel,
 
 		// Filter-verdier

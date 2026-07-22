@@ -2,15 +2,6 @@ import ExamCard from "./ExamCard.jsx";
 import LearningContentPlaceholderCard from "./LearningContentPlaceholderCard.jsx";
 
 export default function ExamGrid(props) {
-	if (props.exams.length === 0) {
-		return (
-			<section className="exam-select-empty">
-				<h2>{props.emptyTitle}</h2>
-				<p>{props.emptyMessage}</p>
-			</section>
-		);
-	}
-
 	return (
 		<section className="exam-select-grid">
 			{props.exams.map((exam, index) => (

@@ -21,11 +21,12 @@
     height: calc(100vh - 32px);
 }
 
-.exam-workspace .workspace-scaffold-scroll {
+.exam-workspace .workspace-scaffold-body {
 	display: flex;
 	height: 100%;
 	flex-direction: column;
 	padding-top: var(--scaffold-header-height, 112px);
+	padding-bottom: clamp(112px, 14vh, 152px);
 }
 
 .exam-workspace .scaffold-header {

@@ -1,5 +1,5 @@
 /* src/ui/style/FlipcardsPage/mobile-scroll.css */
-.flipcards-workspace .workspace-scaffold-scroll {
+.flipcards-workspace .workspace-scaffold-body {
 	padding: clamp(34px, 4vw, 58px);
 }
 
@@ -9,13 +9,13 @@
 		border-radius: var(--radius-lg);
 	}
 
-	.flipcards-workspace .workspace-scaffold-scroll {
+	.flipcards-workspace .workspace-scaffold-body {
 		padding: calc(var(--mobile-topbar-height) + 14px) var(--space-5) var(--space-4);
 	}
 }
 
 @media (max-height: 780px) and (max-width: 932px) {
-	.flipcards-workspace .workspace-scaffold-scroll {
+	.flipcards-workspace .workspace-scaffold-body {
 		padding-top: calc(var(--mobile-topbar-height) + 8px);
 	}
 }

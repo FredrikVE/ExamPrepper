@@ -1,6 +1,6 @@
 // test/ui/viewmodel/LoadState/useLoadModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../../src/ui/loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "../../../../src/ui/viewmodel/LoadState/loadStatus.js";
 
 const stateValues = [];
 const stateSetters = [];
@@ -63,6 +63,8 @@ describe("useLoadModel", () => {
 			execute: jest.fn(() => new Promise(() => {})),
 			emptyData,
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded: jest.fn()
 		});
 
@@ -81,6 +83,8 @@ describe("useLoadModel", () => {
 			execute,
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded
 		});
 
@@ -103,6 +107,8 @@ describe("useLoadModel", () => {
 			execute,
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded: null
 		});
 
@@ -129,6 +135,8 @@ describe("useLoadModel", () => {
 			execute: jest.fn(() => new Promise(() => {})),
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded: jest.fn()
 		});
 
@@ -156,6 +164,8 @@ describe("useLoadModel", () => {
 			execute,
 			emptyData: previousData,
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded
 		});
 
@@ -185,6 +195,8 @@ describe("useLoadModel", () => {
 			execute,
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded: jest.fn()
 		});
 
@@ -205,6 +217,8 @@ describe("useLoadModel", () => {
 			execute: jest.fn(() => new Promise(() => {})),
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded: jest.fn()
 		});
 
@@ -214,11 +228,142 @@ describe("useLoadModel", () => {
 			execute: jest.fn(() => new Promise(() => {})),
 			emptyData: [],
 			errorMessage: "Could not load.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded: jest.fn()
 		});
 
 		expect(norwegianModel.error).toBe("Kunne ikke laste.");
 		expect(englishModel.error).toBe("Could not load.");
+	});
+
+	test("does not execute or write while disabled", () => {
+		const execute = jest.fn();
+
+		useLoadModel({
+			execute,
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: false,
+			onLoaded: null
+		});
+
+		expect(execute).not.toHaveBeenCalled();
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+	});
+
+	test("resets to loading with empty data when resourceKey changes", () => {
+		const previousData = [{ id: "old" }];
+		const previousResource = {
+			status: LOAD_STATUS.READY,
+			data: previousData
+		};
+
+		refValues.push(
+			{ current: true },
+			{ current: 4 },
+			{ current: "resource-a" },
+			{ current: [] },
+			{ current: null }
+		);
+		stateValues.push(previousResource);
+
+		useLoadModel({
+			execute: jest.fn(() => new Promise(() => {})),
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-b",
+			isEnabled: true,
+			onLoaded: null
+		});
+
+		const updateInFlightResource = stateSetters[0].mock.calls[0][0];
+
+		expect(updateInFlightResource(previousResource)).toEqual({
+			status: LOAD_STATUS.LOADING,
+			data: []
+		});
+	});
+
+	test("runs a first load when a disabled model becomes enabled", () => {
+		const execute = jest.fn(() => new Promise(() => {}));
+		const hasLoadedOnceRef = { current: false };
+		const activeRunIdRef = { current: 0 };
+		const activeResourceKeyRef = { current: "resource-a" };
+		const emptyDataRef = { current: [] };
+		const onLoadedRef = { current: null };
+
+		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		useLoadModel({
+			execute,
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: false,
+			onLoaded: null
+		});
+
+		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		useLoadModel({
+			execute,
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
+			onLoaded: null
+		});
+
+		expect(execute).toHaveBeenCalledTimes(1);
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[1]).toHaveBeenCalledWith(expect.any(Function));
+	});
+
+	test("ignores a late response from an older resourceKey", async () => {
+		let resolveFirstLoad;
+		let resolveSecondLoad;
+		const firstExecute = jest.fn(() => new Promise((resolve) => {
+			resolveFirstLoad = resolve;
+		}));
+		const secondExecute = jest.fn(() => new Promise((resolve) => {
+			resolveSecondLoad = resolve;
+		}));
+		const hasLoadedOnceRef = { current: false };
+		const activeRunIdRef = { current: 0 };
+		const activeResourceKeyRef = { current: "resource-a" };
+		const emptyDataRef = { current: [] };
+		const onLoadedRef = { current: null };
+
+		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		useLoadModel({
+			execute: firstExecute,
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
+			onLoaded: null
+		});
+
+		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		useLoadModel({
+			execute: secondExecute,
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-b",
+			isEnabled: true,
+			onLoaded: null
+		});
+
+		resolveSecondLoad([{ id: "new" }]);
+		await flushPromises();
+		resolveFirstLoad([{ id: "old" }]);
+		await flushPromises();
+
+		expect(stateSetters[1]).toHaveBeenLastCalledWith({
+			status: LOAD_STATUS.READY,
+			data: [{ id: "new" }]
+		});
+		expect(stateSetters[0]).toHaveBeenCalledTimes(1);
 	});
 
 	test("ignores completed loads after cleanup", async () => {
@@ -232,6 +377,8 @@ describe("useLoadModel", () => {
 			execute,
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
+			resourceKey: "resource-a",
+			isEnabled: true,
 			onLoaded
 		});
 

@@ -8,7 +8,7 @@ import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardsMobileFooterSheet from "./FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx";
 import ProgressPager from "../ProgressPager/ProgressPager.jsx";
 import createProgressPagerEntries from "../ProgressPager/createProgressPagerEntries.js";
-import shouldHandleFlipcardKeyboardShortcut from "./FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js";
+import shouldHandleFlipcardKeyboardShortcut, { resolveFlipcardKeyboardSwipeResult } from "./FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js";
 
 const resolveFlipcardProgressCorrectness = () => false;
 
@@ -80,13 +80,15 @@ export default function FlipcardsStudySurface(props) {
 			return;
 		}
 
-		if (event.key === "ArrowLeft") {
+		const keyboardSwipeResult = resolveFlipcardKeyboardSwipeResult(event.key);
+
+		if (keyboardSwipeResult === FLIPCARD_SWIPE_RESULT.PRACTICE) {
 			event.preventDefault();
 			requestPracticeSwipe();
 			return;
 		}
 
-		if (event.key === "ArrowRight") {
+		if (keyboardSwipeResult === FLIPCARD_SWIPE_RESULT.MASTERED) {
 			event.preventDefault();
 			requestMasteredSwipe();
 			return;

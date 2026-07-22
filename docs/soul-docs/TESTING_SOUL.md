@@ -299,6 +299,27 @@ Oppgi alltid hva som dekkes, nevner og dekningsgrad. Eksempel: `5 av 6 branches`
 
 ---
 
+# Arkitekturgater for workspace
+
+Strukturelle invarianter som «nøyaktig én scaffold» og «View importerer ikke
+teknisk load-state» verifiseres med importanalyse og filsystem-sjekker. Testen
+skal lese importdeklarasjoner, ikke bruke et bredt tekstsøk som også finner
+forbudsordene i selve testfilen.
+
+Arkitekturgaten skal minst kontrollere at gamle scaffold-filer ikke finnes, at
+ingen kildefiler importerer dem, at det finnes nøyaktig én
+`WorkspaceScaffold`-implementasjon, og at View-laget ikke importerer teknisk
+`LOAD_STATUS` eller det avviklede page-state-API-et `WorkspaceMessage`. Pages skal
+heller ikke tolke `pageStatus`; de mottar én ferdig `workspaceState`.
+
+`createWorkspaceState` testes som ren enhet med alle fire varianter og
+kast-på-ukjent. `useLoadModel` testes som tilstandsovergang: første last, refresh
+av samme `resourceKey`, ny nøkkel, disabled, disabled→enabled og sen respons fra
+gammel nøkkel. Testen skal bevise observerbar state og race-garantien, ikke interne
+ref-detaljer.
+
+---
+
 # Teststruktur
 
 Teststruktur speiler arkitektur.

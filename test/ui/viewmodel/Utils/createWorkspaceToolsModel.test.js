@@ -1,8 +1,41 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { NAV_SCREENS } from "../../../../src/navigation/navGraph.js";
-import { PAGE_NAV_TOOL_IDS, getLearningContentSelectPageNavToolItems } from "../../../../src/navigation/navItems.js";
 import { PAGE_TOOL_ITEM_IDS, getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../../../src/navigation/pageTools.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
+
+const NAV_TOOL_IDS = {
+	EXAMS: "app-exams",
+	PRACTICE_TESTS: "app-practice-tests",
+	FLIPCARDS: "app-flipcards",
+	MATCHCARDS: "app-matchcards"
+};
+
+const getTestNavToolItems = () => [
+	{
+		id: NAV_TOOL_IDS.EXAMS,
+		screen: NAV_SCREENS.SELECT,
+		labelKey: "pageToolsExamsLabel",
+		fallbackLabel: "Eksamener",
+		iconKey: "file-text",
+		requiresSubject: true
+	},
+	{
+		id: NAV_TOOL_IDS.FLIPCARDS,
+		screen: NAV_SCREENS.FLIPCARDS,
+		labelKey: "pageToolsFlipcardsLabel",
+		fallbackLabel: "Flipcards",
+		iconKey: "gallery-horizontal-end",
+		requiresSubject: true
+	},
+	{
+		id: NAV_TOOL_IDS.MATCHCARDS,
+		screen: NAV_SCREENS.MATCHCARDS,
+		labelKey: "pageToolsMatchCardsLabel",
+		fallbackLabel: "Begrepsmatch",
+		iconKey: "panels-top-left",
+		requiresSubject: true
+	}
+];
 
 const t = {
     pageToolsWorkspaceTitle: "Velg læringsverktøy",
@@ -31,7 +64,7 @@ function createTools(params) {
     return createWorkspaceToolsModel({
         pageToolGroup: getPageToolGroup(params.screen),
         t,
-        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? [] : getLearningContentSelectPageNavToolItems(),
+        navToolItems: params.screen === NAV_SCREENS.SUBJECTS ? [] : getTestNavToolItems(),
         workspaceActionToolItems: params.screen === NAV_SCREENS.SUBJECTS ? getSubjectSelectWorkspaceActionToolItems() : getLearningContentSelectWorkspaceActionToolItems(),
         hasSelectedSubject: params.hasSelectedSubject,
         onChangeScreen: params.onChangeScreen
@@ -47,7 +80,7 @@ describe("createWorkspaceToolsModel", () => {
             onChangeScreen
         });
 
-        const examsTool = tools.items.find((toolItem) => toolItem.id === PAGE_NAV_TOOL_IDS.EXAMS);
+        const examsTool = tools.items.find((toolItem) => toolItem.id === NAV_TOOL_IDS.EXAMS);
         const importMaterialsTool = tools.items.find((toolItem) => toolItem.id === PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS);
 
         expect(tools.title).toBe("Velg læringsverktøy");
@@ -85,8 +118,8 @@ describe("createWorkspaceToolsModel", () => {
             PAGE_TOOL_ITEM_IDS.APP_CREATE_SUBJECT,
             PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
         ]);
-        expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_NAV_TOOL_IDS.PRACTICE_TESTS);
-        expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_NAV_TOOL_IDS.FLIPCARDS);
+        expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(NAV_TOOL_IDS.PRACTICE_TESTS);
+        expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(NAV_TOOL_IDS.FLIPCARDS);
         expect(tools.items.map((toolItem) => toolItem.id)).not.toContain(PAGE_TOOL_ITEM_IDS.APP_CURRICULUM_FIGURE);
     });
 
@@ -94,7 +127,7 @@ describe("createWorkspaceToolsModel", () => {
         const tools = createWorkspaceToolsModel({
             pageToolGroup: null,
             t,
-            navToolItems: getLearningContentSelectPageNavToolItems(),
+            navToolItems: getTestNavToolItems(),
             workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
             hasSelectedSubject: true,
             onChangeScreen: jest.fn()

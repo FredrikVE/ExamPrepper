@@ -132,6 +132,106 @@ const cls = question.categories.length >= 5 ? "wide" : "";
 
 ---
 
+## Workspace-scaffold og eksplisitte UI-kontrakter
+
+Alle pages som trenger en workspace-ramme bruker nøyaktig én `WorkspaceScaffold`.
+Pages skal ikke lage parallelle main-, scroll- eller footer-scaffolds. Scaffoldet
+eier bare generisk struktur og regionmekanikk; side-spesifikk state, tekst og
+domenelogikk hører fortsatt i PageViewModel og Page.
+
+`WorkspaceScaffold` har disse faste regionene:
+
+```txt
+.workspace-scaffold
+├── .workspace-scaffold-header
+├── .workspace-scaffold-body
+├── footer-overlay
+└── .workspace-scaffold-overlay
+```
+
+- Header-regionen er alltid til stede. Den delte `Header` ligger som overlay over
+  kroppsregionen; siden reserverer nødvendig topprom i sin egen CSS.
+- Kroppsregionen er scaffoldets fleksible scrollflate. Sider kan gjøre den
+  contained eller full-bleed med side-CSS uten å endre scaffold-kontrakten.
+- Footer er et overlay og skal aldri være en in-flow grid-rad som krymper kroppen.
+- Overlay-regionen brukes til backdrop, søkeark eller dialoglag.
+
+Alle props og parametere er obligatoriske. Det finnes ingen optionalparametere,
+default-parametere eller skjult `undefined`-semantikk. Fravær uttrykkes som
+eksplisitt `null` på et påkrevd felt, og kalleren sender alltid feltet.
+
+```jsx
+<WorkspaceScaffold
+	className={viewModel.workspaceClassName}
+	contentClassName={viewModel.contentClassName}
+	header={header}
+	footer={footer}
+	overlay={overlay}
+	scrollToTopRequestId={scrollToTopRequestId}
+>
+	<PageContent />
+</WorkspaceScaffold>
+```
+
+`footer` og `overlay` er `element | null`. `scrollToTopRequestId` er
+`number | null`; `null` betyr at siden ikke bruker kontrollert scroll-til-topp.
+Discriminated unions brukes bare når en modell har flere reelt ulike varianter,
+og slike unions håndteres uttømmende med kast på ukjent variant. Fravær skal
+aldri modelleres som `{ kind: "none" }`. Det finnes ikke et globalt forbud mot
+`??`; uten optionalparametere finnes det ingen defaults å maskere i disse
+kontraktene.
+
+---
+
+## Workspace-state og intern load-state
+
+Page-nivå rendring av loading, error, empty og content går gjennom nøyaktig én
+`WorkspaceState`. PageViewModel avleder en ferdig `workspaceState`-modell; Page
+sender modellen direkte videre og tolker aldri teknisk ressursstatus. Grids og
+andre underkomponenter rendrer innhold, ikke konkurrerende page-state-maskiner.
+
+```txt
+{ kind: "loading", label }
+{ kind: "error", title, body, action }
+{ kind: "empty", title, body, action }
+{ kind: "content" }
+```
+
+`action` er et påkrevd felt på error/empty og har kontrakten
+`null | { label, onAction }`. Unionen håndteres uttømmende; ukjent `kind` skal
+kaste. `WorkspaceMessage` er ikke et separat offentlig page-state-API.
+
+`LOAD_STATUS` er teknisk ressursstatus og ligger bare under
+`src/ui/viewmodel/LoadState/`. Ingen fil under `src/ui/view/` importerer eller
+tolker `LOAD_STATUS`. PageViewModel kombinerer ressursstatus og avleder
+`workspaceState` med en ren factory utenfor hooken.
+
+`useLoadModel` mottar alle felt eksplisitt:
+
+```js
+useLoadModel({
+	execute,
+	emptyData,
+	errorMessage,
+	resourceKey,
+	isEnabled,
+	onLoaded
+});
+```
+
+`resourceKey` inneholder hver identitetsdimensjon der stående data fra forrige
+verdi ikke er gyldig å vise mens en ny ressurs lastes. Første last for en nøkkel
+viser loading med `emptyData`; refresh av samme nøkkel beholder READY og stående
+data; ny nøkkel nullstiller første-last-semantikken. `isEnabled === false` betyr
+ingen kjøring og ingen skriving. Bare siste igangsatte last får skrive resultat.
+`onLoaded` er påkrevd og nullable; fravær sendes som `null`.
+
+Skjerm-chrome og contentType→skjerm er navigasjonskontrakter. Deres SSOT ligger i
+`src/navigation/navGraph.js` og `src/navigation/learningContent.js`, ikke i
+`App.jsx`, Pages eller ViewModels utover tynn delegering.
+
+---
+
 ## App.jsx — navigasjon og instansiering
 
 `App.jsx` er det eneste stedet ViewModels instansieres og kobles til Pages.

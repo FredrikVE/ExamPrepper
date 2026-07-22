@@ -5,7 +5,7 @@
 		border-radius: 0;
 	}
 
-	.matchcards-workspace .workspace-scaffold-scroll {
+	.matchcards-workspace .workspace-scaffold-body {
 		padding:
 			calc(var(--mobile-topbar-height) + var(--space-4))
 			var(--space-4)
@@ -97,7 +97,7 @@
 }
 
 @media (max-width: 520px) {
-	.matchcards-workspace .workspace-scaffold-scroll {
+	.matchcards-workspace .workspace-scaffold-body {
 		padding-inline: var(--space-3);
 	}
 

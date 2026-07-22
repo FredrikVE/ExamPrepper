@@ -1,50 +1,52 @@
 // src/ui/viewmodel/LoadState/useLoadModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LOAD_STATUS } from "../../loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "./loadStatus.js";
 
 export default function useLoadModel({
-	execute,                 // stabil referanse (useCallback hos kaller) — ENESTE reload-trigger
+	execute,
 	emptyData,
-	errorMessage,            // produkttekst som vises ved feil; tekniske feil logges kun i dev
+	errorMessage,
+	resourceKey,
+	isEnabled,
 	onLoaded
 }) {
 	const hasLoadedOnceRef = useRef(false);
 	const activeRunIdRef = useRef(0);
-
-	/* Callbacken leses via ref slik at identiteten dens ALDRI er en
-	   reload-trigger: språkbytte skal utløse reload via
-	   execute-avhengighetene (bevisst), ikke via at en funksjonsreferanse
-	   tilfeldigvis byttet identitet. */
+	const activeResourceKeyRef = useRef(resourceKey);
+	const emptyDataRef = useRef(emptyData);
 	const onLoadedRef = useRef(onLoaded);
+
+	emptyDataRef.current = emptyData;
 	onLoadedRef.current = onLoaded;
 
-	/* Ressursen holder KUN status og data — aldri presentasjonstekst.
-	   Feilteksten avledes ved retur, slik at et språkbytte mens brukeren
-	   står i ERROR-tilstand oppdaterer meldingen uten reload. */
 	const [resource, setResource] = useState({
 		status: LOAD_STATUS.LOADING,
 		data: emptyData
 	});
 
 	const runLoad = useCallback(() => {
-		/* Løpenummer: bare siste igangsatte last får skrive resultat.
-		   Beskytter mot interleaving når reload() kalles mens en last
-		   allerede er underveis (f.eks. to raske retry-klikk). */
+		if (!isEnabled) {
+			return () => {};
+		}
+
+		const hasResourceChanged = activeResourceKeyRef.current !== resourceKey;
+
+		if (hasResourceChanged) {
+			activeResourceKeyRef.current = resourceKey;
+			hasLoadedOnceRef.current = false;
+		}
+
 		activeRunIdRef.current = activeRunIdRef.current + 1;
 		const runId = activeRunIdRef.current;
 
 		const run = async () => {
-			/* Oppfrisking etter første vellykkede last er intern oppførsel,
-			   ikke offentlig status: ressursen holder READY med stående data,
-			   så innholdet blir værende uten spinner. Feiler oppfriskingen,
-			   eskalerer den til ERROR som vanlig. */
 			const inFlightStatus = hasLoadedOnceRef.current
 				? LOAD_STATUS.READY
 				: LOAD_STATUS.LOADING;
 
 			setResource((previousResource) => ({
 				status: inFlightStatus,
-				data: previousResource.data
+				data: hasResourceChanged ? emptyDataRef.current : previousResource.data
 			}));
 
 			try {
@@ -82,20 +84,26 @@ export default function useLoadModel({
 		run();
 
 		return () => {
-			/* Ugyldiggjør dette løpet ved unmount/re-run uten å blokkere
-			   et nyere løp som allerede har tatt over løpenummeret. */
 			if (activeRunIdRef.current === runId) {
 				activeRunIdRef.current = activeRunIdRef.current + 1;
 			}
 		};
-	}, [execute]);
+	}, [execute, isEnabled, resourceKey]);
 
 	useEffect(runLoad, [runLoad]);
 
+	const hasPendingResourceChange = isEnabled && activeResourceKeyRef.current !== resourceKey;
+	const visibleResource = hasPendingResourceChange
+		? {
+			status: LOAD_STATUS.LOADING,
+			data: emptyData
+		}
+		: resource;
+
 	return {
-		status: resource.status,
-		data: resource.data,
-		error: resource.status === LOAD_STATUS.ERROR ? errorMessage : null,
+		status: visibleResource.status,
+		data: visibleResource.data,
+		error: visibleResource.status === LOAD_STATUS.ERROR ? errorMessage : null,
 		reload: runLoad
 	};
 }

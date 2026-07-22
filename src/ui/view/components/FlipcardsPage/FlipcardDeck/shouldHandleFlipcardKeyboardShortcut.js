@@ -1,4 +1,6 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js
+import { FLIPCARD_SWIPE_RESULT } from "./flipcardSwipe.js";
+
 const FLIPCARD_KEYBOARD_SHORTCUT_KEYS = ["Enter", " ", "ArrowLeft", "ArrowRight"];
 
 export default function shouldHandleFlipcardKeyboardShortcut(event) {
@@ -11,6 +13,18 @@ export default function shouldHandleFlipcardKeyboardShortcut(event) {
 	}
 
 	return !isShortcutHandledByFocusedElement(event.target);
+}
+
+export function resolveFlipcardKeyboardSwipeResult(key) {
+	if (key === "ArrowLeft") {
+		return FLIPCARD_SWIPE_RESULT.PRACTICE;
+	}
+
+	if (key === "ArrowRight") {
+		return FLIPCARD_SWIPE_RESULT.MASTERED;
+	}
+
+	return null;
 }
 
 function isShortcutHandledByFocusedElement(target) {

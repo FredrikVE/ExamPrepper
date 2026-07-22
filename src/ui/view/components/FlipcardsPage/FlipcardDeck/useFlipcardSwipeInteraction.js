@@ -17,7 +17,7 @@ export function useFlipcardSwipeInteraction(resetKey) {
 
 		setActiveSwipeCommand({
 			id: nextSwipeCommandIdRef.current,
-			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.LEFT
+			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.RIGHT
 		});
 	}, []);
 
@@ -26,7 +26,7 @@ export function useFlipcardSwipeInteraction(resetKey) {
 
 		setActiveSwipeCommand({
 			id: nextSwipeCommandIdRef.current,
-			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.RIGHT
+			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.LEFT
 		});
 	}, []);
 

@@ -188,11 +188,13 @@ function AppContent() {
 				{navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY && (
 					<GlossaryPageWrapper
 						subjectId={navigationViewModel.selectedSubjectId}
+						selectedSubject={subjectSelectPageViewModel.selectedSubject}
 						initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
 						language={language}
 						t={t}
 						isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
 						backContract={navigationViewModel.backContract}
+						onSelectContentType={learningContentSelectPageViewModel.selectContentType}
 					/>
 				)}
 
@@ -303,28 +305,30 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 	});
 
 	useEffect(() => {
-		onHeaderProgressBarModelChange(matchCardsPageViewModel.session ? matchCardsPageViewModel.progressBarModel : null);
+		onHeaderProgressBarModelChange(matchCardsPageViewModel.headerProgressBarModel);
 
 		return () => {
 			onHeaderProgressBarModelChange(null);
 		};
-	}, [matchCardsPageViewModel.progressBarModel, matchCardsPageViewModel.session, onHeaderProgressBarModelChange]);
+	}, [matchCardsPageViewModel.headerProgressBarModel, onHeaderProgressBarModelChange]);
 
 	return (
 		<MatchCardsPage viewModel={matchCardsPageViewModel} />
 	);
 }
 
-function GlossaryPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
+function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType }) {
 	const glossaryPageViewModel = useGlossaryPageViewModel(
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		subjectId,
+		selectedSubject,
 		initialTopicAreaKey,
 		language,
 		t,
 		isActive,
-		backContract
+		backContract,
+		onSelectContentType
 	);
 
 	return (
@@ -341,7 +345,7 @@ function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 				formatDate={formatDate}
 				t={t}
 				onStartNewExam={onStartNewExam}
-				authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false }}
+				authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false, userId: null }}
 			/>
 		);
 	}
@@ -356,14 +360,14 @@ function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 }
 
 function AuthenticatedStatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
-	const { isLoaded, isSignedIn } = useAuth();
+	const { isLoaded, isSignedIn, userId } = useAuth();
 
 	return (
 		<StatisticsPageWithViewModel
 			formatDate={formatDate}
 			t={t}
 			onStartNewExam={onStartNewExam}
-			authState={{ hasClerkAuth: true, isLoaded, isSignedIn }}
+			authState={{ hasClerkAuth: true, isLoaded, isSignedIn, userId: userId ?? null }}
 		/>
 	);
 }

@@ -1,56 +1,50 @@
-import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
+// src/ui/view/pages/MatchCardsPage.jsx
 import Header from "../components/Header/Header.jsx";
-import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
-import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
+import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
-	if (isBlockingLoadStatus(viewModel.pageStatus)) {
-		return (
-			<MatchCardsShell viewModel={viewModel} progressBarModel={null}>
-				<WorkspaceState
-					status={viewModel.pageStatus}
-					loadingLabel={viewModel.labels.loadingTitle}
-					errorTitle={viewModel.labels.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
-					errorAction={null}
-				/>
-			</MatchCardsShell>
-		);
-	}
+	const header = (
+		<>
+			<div className="matchcards-ambient-light" aria-hidden="true" />
 
-	if (!viewModel.session) {
-		return (
-			<MatchCardsShell viewModel={viewModel} progressBarModel={null}>
-				<WorkspaceMessage
-					title={viewModel.labels.emptyTitle}
-					body={viewModel.labels.emptyBody}
-					action={null}
-				/>
-			</MatchCardsShell>
-		);
-	}
-
-	if (viewModel.isRoundComplete) {
-		return (
-			<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
-				<MatchCardsRoundComplete viewModel={viewModel} />
-			</MatchCardsShell>
-		);
-	}
+			<Header
+				showBackButton={viewModel.showBackButton}
+				backLabel={viewModel.backLabel}
+				navigationLabel={viewModel.navigationLabel}
+				onBack={viewModel.onBack}
+				progressBarModel={viewModel.headerProgressBarModel}
+				tools={null}
+				trailing={null}
+			/>
+		</>
+	);
 
 	return (
-		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.progressBarModel}>
-			<MatchCardsGrid
-				termSlots={viewModel.termSlots}
-				explanationSlots={viewModel.explanationSlots}
-				labels={viewModel.labels}
-				boardStyle={viewModel.boardStyle}
-				isInteractionLocked={viewModel.isInteractionLocked}
-				onSelectSlot={viewModel.handleSelectSlot}
-			/>
-		</MatchCardsShell>
+		<WorkspaceScaffold
+			className="matchcards-workspace"
+			contentClassName=""
+			header={header}
+			footer={null}
+			overlay={null}
+			scrollToTopRequestId={null}
+		>
+			<WorkspaceState state={viewModel.workspaceState}>
+				{viewModel.isRoundComplete ? (
+					<MatchCardsRoundComplete viewModel={viewModel} />
+				) : (
+					<MatchCardsGrid
+						termSlots={viewModel.termSlots}
+						explanationSlots={viewModel.explanationSlots}
+						labels={viewModel.labels}
+						boardStyle={viewModel.boardStyle}
+						isInteractionLocked={viewModel.isInteractionLocked}
+						onSelectSlot={viewModel.handleSelectSlot}
+					/>
+				)}
+			</WorkspaceState>
+		</WorkspaceScaffold>
 	);
 }
 
@@ -66,28 +60,5 @@ function MatchCardsRoundComplete({ viewModel }) {
 				{viewModel.labels.restartLabel}
 			</button>
 		</section>
-	);
-}
-
-function MatchCardsShell({ viewModel, progressBarModel, children }) {
-	const header = (
-		<>
-			<div className="matchcards-ambient-light" aria-hidden="true" />
-
-			<Header
-				showBackButton={viewModel.showBackButton}
-				backLabel={viewModel.backLabel}
-				navigationLabel={viewModel.navigationLabel}
-				onBack={viewModel.onBack}
-				progressBarModel={progressBarModel}
-				tools={null}
-			/>
-		</>
-	);
-
-	return (
-		<WorkSpaceScaffold className="matchcards-workspace" header={header} scrollToTopRequestId={0}>
-			{children}
-		</WorkSpaceScaffold>
 	);
 }

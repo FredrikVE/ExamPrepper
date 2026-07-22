@@ -1,6 +1,8 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
+import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 import { NAV_SCREENS } from "../../../src/navigation/navGraph.js";
+import { LEARNING_CONTENT_TYPES } from "../../../src/navigation/learningContent.js";
 
 const stateSetters = [];
 let loadModelQueue = [];
@@ -106,6 +108,8 @@ function createT() {
         deckCardUnitLabel: "kort",
         deckEmptyTitle: "Ingen bunker",
         deckEmptyMessage: "Ingen bunker funnet",
+        matchCardsDeckEmptyTitle: "Ingen begrepsmatch-bunker",
+        matchCardsDeckEmptyMessage: "Ingen begrepsmatch funnet",
         glossaryPlaceholderTitle: "Begrepslister kommer senere",
         glossaryPlaceholderDescription: "Ikke koblet på ennå",
         glossaryPlaceholderNote: "Kommer senere"
@@ -129,6 +133,9 @@ function createViewModel(params = {}) {
     };
     const goBack = jest.fn();
     const changeScreen = jest.fn();
+    const selectExam = jest.fn();
+    const selectFlipcardDeck = jest.fn();
+    const selectMatchCardsDeck = jest.fn();
 
     const viewModel = useLearningContentSelectPageViewModel(
         getAvailableExamsUseCase,
@@ -137,9 +144,9 @@ function createViewModel(params = {}) {
         "nb",
         createT(),
         { id: "in5431", code: "IN5431" },
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
+        selectExam,
+        selectFlipcardDeck,
+        selectMatchCardsDeck,
         params.isActive ?? true,
         changeScreen,
         params.showBackButton ?? true,
@@ -154,6 +161,9 @@ function createViewModel(params = {}) {
         getFlipcardDeckSummariesUseCase,
         goBack,
         changeScreen,
+        selectExam,
+        selectFlipcardDeck,
+        selectMatchCardsDeck,
         viewModel
     };
 }
@@ -189,14 +199,31 @@ describe("useLearningContentSelectPageViewModel", () => {
 
 
 
-    test("returns centralized page load state", () => {
+    test("uses match-card-specific empty text", () => {
+        useState.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.MATCHCARDS, jest.fn()]);
+
         const { viewModel } = createViewModel();
 
-        expect(viewModel.pageStatus).toBe(LOAD_STATUS.READY);
-        expect(viewModel.pageErrorMessage).toBe("Kunne ikke hente eksamener");
-        expect(viewModel.examsLoading).toBeUndefined();
-        expect(viewModel.examsLoadError).toBeUndefined();
+        expect(viewModel.workspaceState).toEqual({
+            kind: WORKSPACE_STATE_KINDS.EMPTY,
+            title: "Ingen begrepsmatch-bunker",
+            body: "Ingen begrepsmatch funnet",
+            action: null
+        });
     });
+
+	test("returns centralized empty workspace state for ready exams without content", () => {
+		const { viewModel } = createViewModel();
+
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.EMPTY,
+			title: "Ingen eksamener",
+			body: "Ingen eksamener funnet",
+			action: null
+		});
+		expect(viewModel.examsLoading).toBeUndefined();
+		expect(viewModel.examsLoadError).toBeUndefined();
+	});
 
     test("returns injected navigation props", () => {
         const { goBack, viewModel } = createViewModel({
@@ -208,6 +235,16 @@ describe("useLearningContentSelectPageViewModel", () => {
         expect(viewModel.navigationLabel).toBe("Navigasjon");
         expect(viewModel.onBack).toBe(goBack);
     });
+    test("selects a flipcard deck through the public ViewModel handler", () => {
+        const { selectFlipcardDeck, viewModel } = createViewModel();
+
+        expect(typeof viewModel.selectFlipcardDeck).toBe("function");
+
+        viewModel.selectFlipcardDeck("network-security");
+
+        expect(selectFlipcardDeck).toHaveBeenCalledWith("network-security");
+    });
+
     test("navigates to glossary through the shared screen navigation callback", () => {
         const { changeScreen, viewModel } = createViewModel();
 

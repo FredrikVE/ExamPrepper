@@ -61,11 +61,6 @@
 	transition: background-color var(--transition-fast);
 }
 
-.glossary-table tbody tr:last-child th,
-.glossary-table tbody tr:last-child td {
-	border-bottom: 0;
-}
-
 @media (hover: hover) and (pointer: fine) {
 	.glossary-table tbody tr:hover > * {
 		background-color: var(--glossary-table-row-hover-bg);
@@ -77,4 +72,23 @@
 	border-radius: 3px;
 	background: color-mix(in srgb, var(--accent) 34%, transparent);
 	color: inherit;
+}
+
+.glossary-table-term {
+	display: block;
+}
+
+.glossary-table-topic-area-reference,
+.glossary-entry-card__topic-area-reference {
+	display: inline-flex;
+	width: fit-content;
+	margin-top: var(--space-2);
+	border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--accent) 14%, transparent);
+	padding: 2px 7px;
+	color: var(--accent);
+	font-size: 10px;
+	font-weight: 750;
+	line-height: 1.2;
 }

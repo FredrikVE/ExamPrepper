@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
+import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
 const stateValues = [];
 const stateSetters = [];
@@ -193,8 +194,9 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 			activeCardIndex: 0
 		}));
 
-		expect(viewModel.pageStatus).toBe(LOAD_STATUS.READY);
-		expect(viewModel.pageErrorMessage).toBe("flipcardsErrorMessage");
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.CONTENT
+		});
 		expect(viewModel.flashcardsLoading).toBeUndefined();
 		expect(viewModel.flashcardsLoadError).toBeUndefined();
 	});

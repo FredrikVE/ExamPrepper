@@ -50,35 +50,35 @@
 }
 
 .flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .swipe-badge-practice {
-	animation: flipcard-left-badge-cue 3.85s linear 1.18s both;
-}
-
-.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .swipe-badge-mastered {
 	animation: flipcard-right-badge-cue 3.85s linear 1.18s both;
 }
 
-.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .swipe-hint-practice {
-	animation: flipcard-left-hint-cue 3.85s linear 1.18s both;
+.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .swipe-badge-mastered {
+	animation: flipcard-left-badge-cue 3.85s linear 1.18s both;
 }
 
-.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .swipe-hint-mastered {
+.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .swipe-hint-practice {
 	animation: flipcard-right-hint-cue 3.85s linear 1.18s both;
 }
 
-.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .card-edge-action-left {
-	animation: flipcard-left-edge-opacity-cue 3.85s linear 1.18s both;
+.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .swipe-hint-mastered {
+	animation: flipcard-left-hint-cue 3.85s linear 1.18s both;
 }
 
-.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .card-edge-action-right {
+.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .card-edge-action-left {
 	animation: flipcard-right-edge-opacity-cue 3.85s linear 1.18s both;
 }
 
+.flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .card-edge-action-right {
+	animation: flipcard-left-edge-opacity-cue 3.85s linear 1.18s both;
+}
+
 .flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .card-edge-action-left span {
-	animation: flipcard-left-edge-glow-cue 3.85s linear 1.18s both;
+	animation: flipcard-right-edge-glow-cue 3.85s linear 1.18s both;
 }
 
 .flipcard-hover-preview-active:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped) .card-edge-action-right span {
-	animation: flipcard-right-edge-glow-cue 3.85s linear 1.18s both;
+	animation: flipcard-left-edge-glow-cue 3.85s linear 1.18s both;
 }
 
 @media (hover: hover) {
@@ -102,8 +102,8 @@
 	.flipcard:focus-within:not(.flipcard-interaction-disabled):not(.flipcard-card-flipped):not(.flipcard-hover-preview-active):not(.flipcard-edge-hover-practice):not(.flipcard-edge-hover-mastered) .card-face {
 		border-color: rgba(16, 103, 255, 0.56);
 		box-shadow:
-			-28px 34px 90px rgba(239, 68, 68, var(--flipcard-practice-shadow-opacity)),
-			28px 34px 90px rgba(16, 185, 129, var(--flipcard-mastered-shadow-opacity)),
+			28px 34px 90px rgba(239, 68, 68, var(--flipcard-practice-shadow-opacity)),
+			-28px 34px 90px rgba(16, 185, 129, var(--flipcard-mastered-shadow-opacity)),
 			-24px 32px 82px rgba(239, 68, 68, var(--flipcard-edge-practice-shadow-opacity)),
 			24px 32px 82px rgba(16, 185, 129, var(--flipcard-edge-mastered-shadow-opacity)),
 			0 24px 68px rgba(18, 38, 63, 0.13),
@@ -114,12 +114,12 @@
 
 @keyframes flipcard-surface-gradient-idle {
 	0% {
-		background-position: 42% 46%, 0% 50%, 100% 50%, 0% 50%, 100% 50%, -22% 50%;
+		background-position: 42% 46%, 100% 50%, 0% 50%, 0% 50%, 100% 50%, -22% 50%;
 		filter: saturate(1.08);
 	}
 
 	100% {
-		background-position: 58% 48%, 5% 50%, 95% 50%, 5% 50%, 95% 50%, 46% 50%;
+		background-position: 58% 48%, 95% 50%, 5% 50%, 5% 50%, 95% 50%, 46% 50%;
 		filter: saturate(1.16);
 	}
 }

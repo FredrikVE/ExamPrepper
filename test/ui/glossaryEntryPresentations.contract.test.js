@@ -35,7 +35,11 @@ describe("GlossaryEntry presentation contract", () => {
 		const matchPair = createPairsFromGlossaryEntries([glossaryEntry])[0];
 		const tableRow = createGlossaryTableRows({
 			localizedEntries: [createLocalizedGlossaryEntry(glossaryEntry, "no")],
-			searchTerm: "tillit"
+			normalizedSearchTerm: "tillit",
+			topicAreaReferenceByKey: new Map([[
+				"security-architecture",
+				"Kapittel 1"
+			]])
 		})[0];
 
 		expect(flipcard).toEqual({
@@ -53,6 +57,7 @@ describe("GlossaryEntry presentation contract", () => {
 
 		expect(tableRow.glossaryEntryKey).toBe(glossaryEntry.glossaryEntryKey);
 		expect(tableRow.topicAreaKey).toBe(glossaryEntry.topicAreaKey);
+		expect(tableRow.topicAreaReference).toBe("Kapittel 1");
 		expect(joinSegments(tableRow.termSegments)).toBe(glossaryEntry.term.no);
 		expect(joinSegments(tableRow.explanationSegments)).toBe(glossaryEntry.explanation.no);
 	});

@@ -1,4 +1,5 @@
 // src/navigation/learningContent.js
+import { NAV_SCREENS } from "./navGraph.js";
 import { PAGE_TOOL_AVAILABILITY } from "./pageTools.js";
 
 export const LEARNING_CONTENT_TYPES = {
@@ -46,3 +47,32 @@ export const LEARNING_CONTENT_ENTRIES = [
         availability: PAGE_TOOL_AVAILABILITY.AVAILABLE
     }
 ];
+
+export function createLearningContentToggleEntries(t) {
+    return LEARNING_CONTENT_ENTRIES.map((entry) => ({
+        id: entry.id,
+        label: t[entry.labelKey],
+        isDisabled: entry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    }));
+}
+
+export function resolveContentTypeNavigation(contentTypeId) {
+	switch (contentTypeId) {
+		case LEARNING_CONTENT_TYPES.EXAMS:
+		case LEARNING_CONTENT_TYPES.FLIPCARDS:
+		case LEARNING_CONTENT_TYPES.MATCHCARDS:
+			return {
+				screen: NAV_SCREENS.SELECT,
+				contentTypeId
+			};
+
+		case LEARNING_CONTENT_TYPES.GLOSSARY:
+			return {
+				screen: NAV_SCREENS.GLOSSARY,
+				contentTypeId: null
+			};
+
+		default:
+			throw new Error(`Ukjent innholdstype: ${String(contentTypeId)}`);
+	}
+}

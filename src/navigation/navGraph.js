@@ -9,25 +9,22 @@ export const NAV_SCREENS = {
 	OVERVIEW: "overview"
 };
 
-export const APP_LAYOUTS = {
-	SELECTION: "selection",
-	EXAM: "exam"
-};
-
 /*
  * Deklarativ navigasjonsgraf. Hver node beskriver:
  * - backTo: skjermen tilbake-navigasjon peker mot (null = ingen back)
  * - requiresSubject: uten valgt fag faller navigasjonen tilbake til SUBJECTS
  * - requiresExam: uten valgt eksamen skjer ingen navigasjon
  * - clearsSubject / clearsExam / clearsTopicArea: valg som nullstilles ved inngang til skjermen
- * - layout: hvilken app-layout skjermen bruker
+ * - pageClass / shellClass / themeScope: skjermens app-chrome
  *
  * Grafen inneholder bare skjermer som faktisk rendres som app-ruter.
  * Settings håndteres av SettingsPresentation og er ikke en NAV_SCREEN.
  */
 export const NAV_GRAPH = {
 	[NAV_SCREENS.SUBJECTS]: {
-		layout: APP_LAYOUTS.SELECTION,
+		pageClass: "exam-select-page",
+		shellClass: "exam-select-shell",
+		themeScope: null,
 		backTo: null,
 		requiresSubject: false,
 		requiresExam: false,
@@ -36,7 +33,9 @@ export const NAV_GRAPH = {
 		clearsTopicArea: true
 	},
 	[NAV_SCREENS.SELECT]: {
-		layout: APP_LAYOUTS.SELECTION,
+		pageClass: "exam-select-page",
+		shellClass: "exam-select-shell",
+		themeScope: null,
 		backTo: NAV_SCREENS.SUBJECTS,
 		requiresSubject: true,
 		requiresExam: false,
@@ -45,7 +44,9 @@ export const NAV_GRAPH = {
 		clearsTopicArea: true
 	},
 	[NAV_SCREENS.EXAM]: {
-		layout: APP_LAYOUTS.EXAM,
+		pageClass: "exam-page",
+		shellClass: "exam-shell",
+		themeScope: null,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: false,
 		requiresExam: true,
@@ -54,7 +55,9 @@ export const NAV_GRAPH = {
 		clearsTopicArea: false
 	},
 	[NAV_SCREENS.FLIPCARDS]: {
-		layout: APP_LAYOUTS.EXAM,
+		pageClass: "exam-page",
+		shellClass: "exam-shell",
+		themeScope: "flipcards-theme-scope",
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,
 		requiresExam: false,
@@ -63,7 +66,9 @@ export const NAV_GRAPH = {
 		clearsTopicArea: false
 	},
 	[NAV_SCREENS.MATCHCARDS]: {
-		layout: APP_LAYOUTS.EXAM,
+		pageClass: "exam-page",
+		shellClass: "exam-shell",
+		themeScope: "flipcards-theme-scope",
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,
 		requiresExam: false,
@@ -72,7 +77,9 @@ export const NAV_GRAPH = {
 		clearsTopicArea: false
 	},
 	[NAV_SCREENS.GLOSSARY]: {
-		layout: APP_LAYOUTS.EXAM,
+		pageClass: "exam-select-page",
+		shellClass: "exam-select-shell",
+		themeScope: null,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,
 		requiresExam: false,
@@ -81,7 +88,9 @@ export const NAV_GRAPH = {
 		clearsTopicArea: true
 	},
 	[NAV_SCREENS.OVERVIEW]: {
-		layout: APP_LAYOUTS.SELECTION,
+		pageClass: "exam-select-page",
+		shellClass: "exam-select-shell",
+		themeScope: null,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: false,
 		requiresExam: false,
@@ -106,22 +115,16 @@ export function resolveScreenEntry(nextScreen, navState) {
 		return resolveScreenEntry(NAV_SCREENS.SUBJECTS, navState);
 	}
 
-	const selectedTopicAreaKey = node.clearsTopicArea ? null : navState.selectedTopicAreaKey;
-	const nextNavState = {
+	return {
 		screen: nextScreen,
 		selectedSubjectId: node.clearsSubject ? null : navState.selectedSubjectId,
-		selectedExamId: node.clearsExam ? null : navState.selectedExamId
+		selectedExamId: node.clearsExam ? null : navState.selectedExamId,
+		selectedTopicAreaKey: node.clearsTopicArea ? null : navState.selectedTopicAreaKey
 	};
-
-	if (Object.prototype.hasOwnProperty.call(navState, "selectedTopicAreaKey") || selectedTopicAreaKey) {
-		nextNavState.selectedTopicAreaKey = selectedTopicAreaKey ?? null;
-	}
-
-	return nextNavState;
 }
 
 export function resolveBackNavigation(navState) {
-	const node = NAV_GRAPH[navState.activeScreen];
+	const node = NAV_GRAPH[navState.screen];
 	const backScreen = node ? node.backTo : NAV_SCREENS.SUBJECTS;
 
 	if (backScreen === null) {
@@ -131,18 +134,23 @@ export function resolveBackNavigation(navState) {
 	return resolveScreenEntry(backScreen, navState);
 }
 
-export function hasBackNavigation(activeScreen) {
-	const node = NAV_GRAPH[activeScreen];
+export function hasBackNavigation(screen) {
+	const node = NAV_GRAPH[screen];
 	return Boolean(node ? node.backTo : NAV_SCREENS.SUBJECTS);
 }
 
-export function resolveScreenLayout(activeScreen) {
-	return NAV_GRAPH[activeScreen]?.layout ?? APP_LAYOUTS.SELECTION;
+export function resolveScreenChrome(screen) {
+	const node = NAV_GRAPH[screen] ?? NAV_GRAPH[NAV_SCREENS.SUBJECTS];
+
+	return {
+		pageClassName: [node.pageClass, node.themeScope].filter(Boolean).join(" "),
+		shellClassName: node.shellClass
+	};
 }
 
-export function createAppBackContract({ activeScreen, backLabel, navigationLabel, onBack }) {
+export function createAppBackContract({ screen, backLabel, navigationLabel, onBack }) {
 	return {
-		showBackButton: hasBackNavigation(activeScreen),
+		showBackButton: hasBackNavigation(screen),
 		backLabel,
 		navigationLabel,
 		onBack

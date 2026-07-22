@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
-import shouldHandleFlipcardKeyboardShortcut from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js";
+import { FLIPCARD_SWIPE_RESULT } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/flipcardSwipe.js";
+import shouldHandleFlipcardKeyboardShortcut, {
+	resolveFlipcardKeyboardSwipeResult
+} from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js";
 
 const originalElement = global.Element;
 
@@ -60,5 +63,18 @@ describe("shouldHandleFlipcardKeyboardShortcut", () => {
 		expect(shouldHandleFlipcardKeyboardShortcut(createKeyboardEvent("Spacebar", target, {}))).toBe(false);
 		expect(shouldHandleFlipcardKeyboardShortcut(createKeyboardEvent("Enter", target, { repeat: true }))).toBe(false);
 		expect(shouldHandleFlipcardKeyboardShortcut(createKeyboardEvent("Enter", target, { metaKey: true }))).toBe(false);
+	});
+});
+
+describe("resolveFlipcardKeyboardSwipeResult", () => {
+	test("maps left arrow to practice and right arrow to mastered", () => {
+		expect(resolveFlipcardKeyboardSwipeResult("ArrowLeft"))
+			.toBe(FLIPCARD_SWIPE_RESULT.PRACTICE);
+		expect(resolveFlipcardKeyboardSwipeResult("ArrowRight"))
+			.toBe(FLIPCARD_SWIPE_RESULT.MASTERED);
+	});
+
+	test("returns null for non-swipe keys", () => {
+		expect(resolveFlipcardKeyboardSwipeResult("Enter")).toBeNull();
 	});
 });

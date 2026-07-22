@@ -1,23 +1,9 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
-import { APP_LAYOUTS, NAV_SCREENS, createAppBackContract, resolveBackNavigation, resolveScreenEntry, resolveScreenLayout } from "../../navigation/navGraph.js";
+import { NAV_SCREENS, createAppBackContract, resolveBackNavigation, resolveScreenChrome, resolveScreenEntry } from "../../navigation/navGraph.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
-
-export function createAppLayoutClassNames(activeScreen) {
-	const appLayout = resolveScreenLayout(activeScreen);
-	const usesSelectionLayout = appLayout === APP_LAYOUTS.SELECTION;
-	const usesFlipcardsThemeScope = activeScreen === NAV_SCREENS.FLIPCARDS || activeScreen === NAV_SCREENS.MATCHCARDS;
-
-	return {
-		pageClassName: [
-			usesSelectionLayout ? "exam-select-page" : "exam-page",
-			usesFlipcardsThemeScope ? "flipcards-theme-scope" : null
-		].filter(Boolean).join(" "),
-		shellClassName: usesSelectionLayout ? "exam-select-shell" : "exam-shell"
-	};
-}
 
 export default function useAppNavigationViewModel(params) {
 	// Navigasjons-state
@@ -49,7 +35,7 @@ export default function useAppNavigationViewModel(params) {
 		setActiveScreen(nextNavState.screen);
 		setSelectedSubjectId(nextNavState.selectedSubjectId);
 		setSelectedExamId(nextNavState.selectedExamId);
-		setSelectedTopicAreaKey(nextNavState.selectedTopicAreaKey ?? null);
+		setSelectedTopicAreaKey(nextNavState.selectedTopicAreaKey);
 
 		settingsPresentation.closeSettingsPresentation();
 		mobileTopBar.closeMobileDropDownTopBarMenu();
@@ -104,11 +90,6 @@ export default function useAppNavigationViewModel(params) {
 		}));
 	}, [selectedSubjectId, applyNavigation]);
 
-
-	const showStatistics = useCallback(() => {
-		changeScreen(NAV_SCREENS.OVERVIEW);
-	}, [changeScreen]);
-
 	const backToExamList = useCallback(() => {
 		applyNavigation(resolveScreenEntry(NAV_SCREENS.SELECT, {
 			selectedSubjectId,
@@ -119,7 +100,7 @@ export default function useAppNavigationViewModel(params) {
 
 	const goBack = useCallback(() => {
 		applyNavigation(resolveBackNavigation({
-			activeScreen,
+			screen: activeScreen,
 			selectedSubjectId,
 			selectedExamId,
 			selectedTopicAreaKey
@@ -146,10 +127,6 @@ export default function useAppNavigationViewModel(params) {
 		onExamUnavailable: handleSyncedExamUnavailable
 	});
 
-	const isSelectionScreen =
-		activeScreen === NAV_SCREENS.SUBJECTS ||
-		activeScreen === NAV_SCREENS.SELECT;
-
 	const shouldShowSubjectSwitcher =
 		activeScreen === NAV_SCREENS.SELECT ||
 		activeScreen === NAV_SCREENS.EXAM ||
@@ -158,13 +135,13 @@ export default function useAppNavigationViewModel(params) {
 		activeScreen === NAV_SCREENS.GLOSSARY;
 
 	const backContract = createAppBackContract({
-		activeScreen,
+		screen: activeScreen,
 		backLabel: params.backLabel,
 		navigationLabel: params.navigationLabel,
 		onBack: goBack
 	});
 
-	const { pageClassName, shellClassName } = createAppLayoutClassNames(activeScreen);
+	const { pageClassName, shellClassName } = resolveScreenChrome(activeScreen);
 
 	return {
 		// Navigasjon
@@ -172,7 +149,6 @@ export default function useAppNavigationViewModel(params) {
 		selectedSubjectId,
 		selectedExamId,
 		selectedTopicAreaKey,
-		isSelectionScreen,
 		shouldShowSubjectSwitcher,
 		backContract,
 		showBackButton: backContract.showBackButton,
@@ -199,7 +175,6 @@ export default function useAppNavigationViewModel(params) {
 		changeScreen,
 		selectSubject,
 		showAllSubjects,
-		showStatistics,
 		selectExam,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,

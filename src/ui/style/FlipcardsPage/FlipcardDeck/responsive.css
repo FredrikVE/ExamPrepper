@@ -92,11 +92,11 @@
 	}
 
 	.swipe-badge-practice {
-		left: 32px;
+		right: 32px;
 	}
 
 	.swipe-badge-mastered {
-		right: 32px;
+		left: 32px;
 	}
 
 	.flipcard-feedback-toast {
@@ -166,11 +166,11 @@
 	}
 
 	.swipe-badge-practice {
-		left: 24px;
+		right: 24px;
 	}
 
 	.swipe-badge-mastered {
-		right: 24px;
+		left: 24px;
 	}
 
 	.flipcard-feedback-toast {
@@ -208,11 +208,11 @@
 	}
 
 	.swipe-badge-practice {
-		left: 20px;
+		right: 20px;
 	}
 
 	.swipe-badge-mastered {
-		right: 20px;
+		left: 20px;
 	}
 }
 

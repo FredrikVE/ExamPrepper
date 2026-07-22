@@ -1,6 +1,7 @@
 /* src/ui/style/GlossaryPage/index.css */
 @import "./page.css";
 @import "./search.css";
+@import "./GlossaryFooter/index.css";
 @import "./topic-area-panel.css";
 @import "./glossary-panel.css";
 @import "./table.css";

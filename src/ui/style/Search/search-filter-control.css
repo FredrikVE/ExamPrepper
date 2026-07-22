@@ -1,0 +1,101 @@
+/* src/ui/style/Search/search-filter-control.css */
+.search-filter-control-divider {
+	flex: 0 0 auto;
+	width: 1px;
+	height: var(--space-10);
+	background: color-mix(in srgb, var(--text-soft) 18%, transparent);
+}
+
+.search-filter-control {
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex: 0 0 auto;
+	gap: var(--space-3);
+	min-width: 128px;
+	min-height: 56px;
+	padding: 0 42px 0 var(--space-7);
+	color: var(--text-main);
+}
+
+.search-filter-control-icon {
+	width: 22px;
+	height: 22px;
+	color: var(--text-soft);
+}
+
+.search-filter-control-label {
+	max-width: 132px;
+	overflow: hidden;
+	font-size: 17px;
+	font-weight: 620;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.search-filter-control-button {
+	position: absolute;
+	inset: 0;
+	display: block;
+	border: 0;
+	padding: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.search-filter-control-button:focus-visible {
+	outline: 3px solid color-mix(in srgb, var(--accent) 24%, transparent);
+	outline-offset: -3px;
+}
+
+.search-filter-control-chevron {
+	position: absolute;
+	right: var(--space-6);
+	width: 20px;
+	height: 20px;
+	pointer-events: none;
+	color: var(--text-soft);
+}
+
+@media (max-width: 932px) {
+	.search-filter-control-icon {
+		width: 21px;
+		height: 21px;
+	}
+
+	.search-filter-control {
+		min-width: 124px;
+		min-height: 56px;
+		gap: 9px;
+		padding: 0 38px 0 var(--space-5);
+	}
+
+	.search-filter-control-label {
+		max-width: 92px;
+		font-size: 16px;
+	}
+
+	.search-filter-control-chevron {
+		right: var(--space-4);
+		width: 18px;
+		height: 18px;
+	}
+}
+
+@media (max-height: 700px) and (min-width: 933px) {
+	.search-filter-control {
+		min-height: 44px;
+		font-size: 15px;
+	}
+
+	.search-filter-control-icon {
+		width: 19px;
+		height: 19px;
+	}
+
+	.search-filter-control-chevron {
+		right: var(--space-5);
+		width: 18px;
+		height: 18px;
+	}
+}

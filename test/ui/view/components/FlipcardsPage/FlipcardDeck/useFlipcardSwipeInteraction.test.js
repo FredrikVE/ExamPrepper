@@ -97,11 +97,11 @@ describe("useFlipcardSwipeInteraction", () => {
 
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(1, {
 			id: 1,
-			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.LEFT
+			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.RIGHT
 		});
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
 			id: 2,
-			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.RIGHT
+			direction: FLIPCARD_SWIPE_COMMAND_DIRECTION.LEFT
 		});
 	});
 

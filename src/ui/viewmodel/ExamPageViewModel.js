@@ -13,6 +13,8 @@ import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarMode
 import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
 import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
 import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
+import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
 
 function formatExamProgressStepLabel(stepNumber, totalSteps) {
@@ -28,10 +30,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const [rawCurrentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
-	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(0);
+	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(null);
 
 	const requestScrollToTop = useCallback(() => {
-		setScrollToTopRequestId((requestId) => requestId + 1);
+		setScrollToTopRequestId((requestId) => requestId === null ? 1 : requestId + 1);
 	}, []);
 
 	const markExamSubmitted = useCallback(() => {
@@ -99,6 +101,20 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		questionsLoadErrorMessage: t.examLoadErrorMessage,
 		onQuestionsLoaded: handleQuestionsLoaded
 	});
+
+	const workspaceState = createWorkspaceState({
+		loadStatus: questionsStatus,
+		isEmpty: questions.length === 0,
+		labels: {
+			loading: t.loadingMessage,
+			errorTitle: t.errorPrefix,
+			errorBody: questionsError,
+			emptyTitle: t.emptyMessage,
+			emptyBody: ""
+		},
+		errorAction: null
+	});
+	const shouldShowExamChrome = workspaceState.kind === WORKSPACE_STATE_KINDS.CONTENT;
 
 	const visibleQuestions = questions;
 	const visibleQuestionCount = visibleQuestions.length;
@@ -350,13 +366,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		currentQuestionFillMatchType,
 		answers,
 
-		loadingTitle: t.loadingMessage,
-		errorTitle: t.errorPrefix,
-		emptyMessage: t.emptyMessage,
+		workspaceState,
+		shouldShowExamChrome,
 		attemptSavingMessage: t.examAttemptSavingMessage,
 
-		pageStatus: questionsStatus,
-		pageErrorMessage: questionsError,
 		submitted,
 		showAllFeedback,
 		currentAnswerOptionOrder,

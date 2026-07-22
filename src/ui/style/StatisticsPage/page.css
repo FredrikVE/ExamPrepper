@@ -5,8 +5,8 @@
 	max-height: 100%;
 }
 
-.statistics-page-workspace .workspace-scaffold-scroll {
-	padding: clamp(34px, 4vw, 58px);
+.statistics-page-workspace .workspace-scaffold-body {
+	padding: 0 clamp(34px, 4vw, 58px) clamp(34px, 4vw, 58px);
 }
 
 .statistics-page-header {
@@ -14,7 +14,7 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--space-6);
-	margin-bottom: var(--space-8);
+	margin: clamp(34px, 4vw, 58px) clamp(34px, 4vw, 58px) var(--space-8);
 	border-radius: var(--radius-lg);
 	padding: clamp(20px, 3vw, 28px);
 }

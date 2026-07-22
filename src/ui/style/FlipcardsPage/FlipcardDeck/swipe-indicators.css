@@ -17,11 +17,11 @@
 }
 
 .swipe-hint-practice {
-	background: radial-gradient(circle at 0% 50%, rgba(239, 68, 68, 0.1), transparent 45%);
+	background: radial-gradient(circle at 100% 50%, rgba(239, 68, 68, 0.1), transparent 45%);
 }
 
 .swipe-hint-mastered {
-	background: radial-gradient(circle at 100% 50%, rgba(16, 185, 129, 0.1), transparent 45%);
+	background: radial-gradient(circle at 0% 50%, rgba(16, 185, 129, 0.1), transparent 45%);
 }
 
 .swipe-badge {
@@ -44,19 +44,19 @@
 }
 
 .swipe-badge-practice {
-	left: 42px;
+	right: 42px;
 	border: 1px solid color-mix(in srgb, var(--flipcards-red) 20%, transparent);
 	background: var(--flipcard-pill-practice-bg);
 	color: var(--flipcards-red);
-	rotate: -12deg;
+	rotate: 12deg;
 }
 
 .swipe-badge-mastered {
-	right: 42px;
+	left: 42px;
 	border: 1px solid color-mix(in srgb, var(--flipcards-green) 20%, transparent);
 	background: var(--flipcard-pill-mastered-bg);
 	color: var(--flipcards-green);
-	rotate: 12deg;
+	rotate: -12deg;
 }
 
 @media (max-width: 480px) {
@@ -66,11 +66,11 @@
 	}
 
 	.swipe-badge-practice {
-		left: 28px;
+		right: 28px;
 	}
 
 	.swipe-badge-mastered {
-		right: 28px;
+		left: 28px;
 	}
 }
 

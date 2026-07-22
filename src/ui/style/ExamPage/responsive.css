@@ -31,7 +31,7 @@
 		border-inline: 0;
 	}
 
-	.exam-workspace .workspace-scaffold-scroll {
+	.exam-workspace .workspace-scaffold-body {
 		padding-top: var(--mobile-topbar-height);
 	}
 
@@ -58,7 +58,7 @@
         min-height: 0;
     }
 
-    .exam-workspace .workspace-scaffold-scroll {
+    .exam-workspace .workspace-scaffold-body {
         overscroll-behavior: contain;
     }
 
@@ -82,7 +82,7 @@
         --exam-content-max-width: 880px;
     }
 
-    .exam-workspace .workspace-scaffold-scroll {
+    .exam-workspace .workspace-scaffold-body {
         padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
     }
 
