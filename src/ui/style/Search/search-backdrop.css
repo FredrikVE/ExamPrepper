@@ -22,9 +22,9 @@
 }
 
 /* ── Desktop: search field lift when sheet is open ──
-   Footerens bakgrunn dimmes sammen med resten (z-index: auto).
-   Kontrollene flyter allerede over backdrop via
-   .footer > * { z-index: 60 }. */
+   Footerens transparente bakgrunn lar backdrop-effekten vises under feltet.
+   Hele footer-laget ligger over backdrop via
+   .workspace-scaffold-footer-overlay. */
 .footer-open .search-filter-field {
     border-color: color-mix(in srgb, var(--accent) 60%, transparent);
     background: var(--panel-strong);

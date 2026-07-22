@@ -7,6 +7,7 @@ const PROJECT_ROOT = process.cwd();
 const SOURCE_ROOT = path.join(PROJECT_ROOT, "src");
 const PAGE_ROOT = path.join(SOURCE_ROOT, "ui", "view", "pages");
 const COMPONENT_ROOT = path.join(SOURCE_ROOT, "ui", "view", "components");
+const STYLE_ROOT = path.join(SOURCE_ROOT, "ui", "style");
 const SOURCE_EXTENSIONS = new Set([".js", ".jsx"]);
 const IMPORT_SOURCE_PATTERN = /(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"']+)["']/g;
 
@@ -94,6 +95,31 @@ describe("workspace architecture", () => {
 		const pageScaffoldImports = findImportsFromSource("Scaffold", PAGE_ROOT);
 
 		expect(pageScaffoldImports.every(({ importSource }) => importSource.endsWith("/WorkspaceScaffold.jsx"))).toBe(true);
+	});
+
+	test("keeps the search footer above the shared backdrop", () => {
+		const scaffoldCss = fs.readFileSync(
+			path.join(STYLE_ROOT, "WorkspaceScaffold", "workspace-scaffold.css"),
+			"utf8"
+		);
+		const searchBackdropCss = fs.readFileSync(
+			path.join(STYLE_ROOT, "Search", "search-backdrop.css"),
+			"utf8"
+		);
+		const footerOverlayRule = scaffoldCss.match(
+			/\.workspace-scaffold-footer-overlay\s*\{([\s\S]*?)\}/
+		);
+		const searchBackdropRule = searchBackdropCss.match(
+			/\.search-backdrop\s*\{([\s\S]*?)\}/
+		);
+
+		expect(footerOverlayRule).not.toBeNull();
+		expect(searchBackdropRule).not.toBeNull();
+
+		const footerOverlayZIndex = Number(footerOverlayRule[1].match(/z-index:\s*(\d+);/)[1]);
+		const searchBackdropZIndex = Number(searchBackdropRule[1].match(/z-index:\s*(\d+);/)[1]);
+
+		expect(footerOverlayZIndex).toBeGreaterThan(searchBackdropZIndex);
 	});
 
 	test("shares one LearningContentHeader between learning-content pages", () => {
