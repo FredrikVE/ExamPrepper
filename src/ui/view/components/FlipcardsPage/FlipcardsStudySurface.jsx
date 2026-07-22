@@ -82,13 +82,13 @@ export default function FlipcardsStudySurface(props) {
 
 		if (event.key === "ArrowLeft") {
 			event.preventDefault();
-			requestPracticeSwipe();
+			requestMasteredSwipe();
 			return;
 		}
 
 		if (event.key === "ArrowRight") {
 			event.preventDefault();
-			requestMasteredSwipe();
+			requestPracticeSwipe();
 			return;
 		}
 

@@ -13,27 +13,27 @@ const SNAP_BACK_SPRING = {
 
 function resolveExitX(swipeResult) {
 	if (swipeResult === FLIPCARD_SWIPE_RESULT.PRACTICE) {
-		return -EXIT_DISTANCE;
+		return EXIT_DISTANCE;
 	}
 
-	return EXIT_DISTANCE;
+	return -EXIT_DISTANCE;
 }
 
 export function useFlipcardMotionInteraction(params) {
 	const x = useMotionValue(0);
 	const rotate = useTransform(x, [-240, 0, 240], [-11, 0, 11]);
-	const practiceOpacity = useTransform(x, [-160, -64, 0], [1, 0.35, 0]);
-	const masteredOpacity = useTransform(x, [0, 64, 160], [0, 0.35, 1]);
-	const practiceHintOpacity = useTransform(x, [-160, -64, 0], [0.9, 0.32, 0]);
-	const masteredHintOpacity = useTransform(x, [0, 64, 160], [0, 0.32, 0.9]);
-	const practiceBadgeScale = useTransform(x, [-160, -64, 0], [1, 0.96, 0.92]);
-	const masteredBadgeScale = useTransform(x, [0, 64, 160], [0.92, 0.96, 1]);
+	const practiceOpacity = useTransform(x, [0, 64, 160], [0, 0.35, 1]);
+	const masteredOpacity = useTransform(x, [-160, -64, 0], [1, 0.35, 0]);
+	const practiceHintOpacity = useTransform(x, [0, 64, 160], [0, 0.32, 0.9]);
+	const masteredHintOpacity = useTransform(x, [-160, -64, 0], [0.9, 0.32, 0]);
+	const practiceBadgeScale = useTransform(x, [0, 64, 160], [0.92, 0.96, 1]);
+	const masteredBadgeScale = useTransform(x, [-160, -64, 0], [1, 0.96, 0.92]);
 	const surfaceX = useTransform(x, [-180, 0, 180], ["18%", "50%", "82%"]);
 	const surfaceOpacity = useTransform(x, [-180, -32, 0, 32, 180], [0.52, 0.34, 0.26, 0.34, 0.52]);
-	const practiceSurfaceOpacity = useTransform(x, [-180, -64, 0], [0.34, 0.22, 0.14]);
-	const masteredSurfaceOpacity = useTransform(x, [0, 64, 180], [0.14, 0.22, 0.34]);
-	const practiceShadowOpacity = useTransform(x, [-180, -64, 0], [0.13, 0.08, 0]);
-	const masteredShadowOpacity = useTransform(x, [0, 64, 180], [0, 0.08, 0.13]);
+	const practiceSurfaceOpacity = useTransform(x, [0, 64, 180], [0.14, 0.22, 0.34]);
+	const masteredSurfaceOpacity = useTransform(x, [-180, -64, 0], [0.34, 0.22, 0.14]);
+	const practiceShadowOpacity = useTransform(x, [0, 64, 180], [0, 0.08, 0.13]);
+	const masteredShadowOpacity = useTransform(x, [-180, -64, 0], [0.13, 0.08, 0]);
 	const handledSwipeCommandIdRef = useRef(null);
 	const isCompletingSwipeRef = useRef(false);
 	const activeAnimationRef = useRef(null);

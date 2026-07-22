@@ -140,10 +140,10 @@ describe("useFlipcardMotionInteraction", () => {
 
 		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, 0, 180], ["18%", "50%", "82%"]);
 		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -32, 0, 32, 180], [0.52, 0.34, 0.26, 0.34, 0.52]);
-		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -64, 0], [0.34, 0.22, 0.14]);
 		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [0, 64, 180], [0.14, 0.22, 0.34]);
-		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -64, 0], [0.13, 0.08, 0]);
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -64, 0], [0.34, 0.22, 0.14]);
 		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [0, 64, 180], [0, 0.08, 0.13]);
+		expect(useTransform).toHaveBeenCalledWith(xMotionValue, [-180, -64, 0], [0.13, 0.08, 0]);
 	});
 
 	test("completes command swipes with the card id after the exit animation", () => {
@@ -160,10 +160,59 @@ describe("useFlipcardMotionInteraction", () => {
 			duration: 0.22,
 			ease: "easeOut"
 		}));
-		expect(onSwipeFeedback).toHaveBeenCalledWith(FLIPCARD_SWIPE_RESULT.PRACTICE);
-		expect(onSwipePractice).not.toHaveBeenCalled();
+		expect(onSwipeFeedback).toHaveBeenCalledWith(FLIPCARD_SWIPE_RESULT.MASTERED);
+		expect(onSwipeMastered).not.toHaveBeenCalled();
 
 		animate.mock.calls[0][2].onComplete();
+
+		expect(onSwipeMastered).toHaveBeenCalledWith("card-a");
+		expect(onSwipePractice).not.toHaveBeenCalled();
+	});
+
+	test.each([
+		{
+			name: "left drag as mastered",
+			offsetX: -140,
+			exitX: -720,
+			result: FLIPCARD_SWIPE_RESULT.MASTERED,
+			expectedCallback: "mastered"
+		},
+		{
+			name: "right drag as practice",
+			offsetX: 140,
+			exitX: 720,
+			result: FLIPCARD_SWIPE_RESULT.PRACTICE,
+			expectedCallback: "practice"
+		}
+	])("completes $name", ({ offsetX, exitX, result, expectedCallback }) => {
+		const onSwipePractice = jest.fn();
+		const onSwipeMastered = jest.fn();
+		const onSwipeFeedback = jest.fn();
+		const motionInteraction = createHook(createParams(
+			null,
+			onSwipePractice,
+			onSwipeMastered,
+			onSwipeFeedback
+		));
+
+		motionInteraction.handleDragEnd(null, {
+			offset: { x: offsetX },
+			velocity: { x: 0 }
+		});
+
+		expect(animate).toHaveBeenCalledWith(xMotionValue, exitX, expect.objectContaining({
+			duration: 0.22,
+			ease: "easeOut"
+		}));
+		expect(onSwipeFeedback).toHaveBeenCalledWith(result);
+
+		animate.mock.calls[0][2].onComplete();
+
+		if (expectedCallback === "mastered") {
+			expect(onSwipeMastered).toHaveBeenCalledWith("card-a");
+			expect(onSwipePractice).not.toHaveBeenCalled();
+			return;
+		}
 
 		expect(onSwipePractice).toHaveBeenCalledWith("card-a");
 		expect(onSwipeMastered).not.toHaveBeenCalled();
