@@ -129,6 +129,17 @@ describe("workspace architecture", () => {
 		);
 	});
 
+	test("keeps the glossary load owner mounted between learning-content tabs", () => {
+		const appSource = fs.readFileSync(path.join(SOURCE_ROOT, "App.jsx"), "utf8");
+
+		expect(appSource).not.toMatch(
+			/NAV_SCREENS\.GLOSSARY\s*&&\s*\(\s*<GlossaryPageWrapper/
+		);
+		expect(appSource).toMatch(
+			/function GlossaryPageWrapper[\s\S]*if \(!isActive\) \{\s*return null;\s*\}/
+		);
+	});
+
 	test("shares one LearningContentHeader between learning-content pages", () => {
 		const learningContentHeaderFiles = findFilesNamed("LearningContentHeader.jsx", COMPONENT_ROOT);
 		const learningContentHeaderImports = findImportsFromSource("LearningContentHeader", PAGE_ROOT);

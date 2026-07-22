@@ -185,18 +185,16 @@ function AppContent() {
 					/>
 				)}
 
-				{navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY && (
-					<GlossaryPageWrapper
-						subjectId={navigationViewModel.selectedSubjectId}
-						selectedSubject={subjectSelectPageViewModel.selectedSubject}
-						initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
-						language={language}
-						t={t}
-						isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
-						backContract={navigationViewModel.backContract}
-						onSelectContentType={learningContentSelectPageViewModel.selectContentType}
-					/>
-				)}
+				<GlossaryPageWrapper
+					subjectId={navigationViewModel.selectedSubjectId}
+					selectedSubject={subjectSelectPageViewModel.selectedSubject}
+					initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
+					language={language}
+					t={t}
+					isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
+					backContract={navigationViewModel.backContract}
+					onSelectContentType={learningContentSelectPageViewModel.selectContentType}
+				/>
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
 					<StatisticsPageWrapper
@@ -330,6 +328,10 @@ function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, 
 		backContract,
 		onSelectContentType
 	);
+
+	if (!isActive) {
+		return null;
+	}
 
 	return (
 		<GlossaryPage viewModel={glossaryPageViewModel} />
