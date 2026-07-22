@@ -3,7 +3,7 @@
 @media (max-width: 1280px) {
     .exam-select-layout {
         --scaffold-inset: var(--space-10);
-        --scaffold-content-top: 108px;
+        --scaffold-content-top: 100px;
     }
 
     .exam-select-shell {
