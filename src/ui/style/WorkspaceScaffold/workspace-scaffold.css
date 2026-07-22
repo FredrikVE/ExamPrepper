@@ -1,4 +1,4 @@
-/* src/ui/style/Shared/WorkSpaceScaffold/workspace-scaffold.css */
+/* src/ui/style/WorkspaceScaffold/workspace-scaffold.css */
 .workspace-scaffold {
 	--workspace-scaffold-backdrop-filter: var(--blur-panel);
 
@@ -29,7 +29,11 @@
 	background: var(--workspace-ambient-glow);
 }
 
-.workspace-scaffold-scroll {
+.workspace-scaffold-header {
+	display: contents;
+}
+
+.workspace-scaffold-body {
 	position: relative;
 	z-index: 1;
 	box-sizing: border-box;
@@ -45,17 +49,37 @@
 	scrollbar-width: thin;
 }
 
-.workspace-scaffold-scroll::-webkit-scrollbar {
+.workspace-scaffold-body::-webkit-scrollbar {
 	width: 10px;
 }
 
-.workspace-scaffold-scroll::-webkit-scrollbar-track {
+.workspace-scaffold-body::-webkit-scrollbar-track {
 	background: transparent;
 }
 
-.workspace-scaffold-scroll::-webkit-scrollbar-thumb {
+.workspace-scaffold-body::-webkit-scrollbar-thumb {
 	border: 3px solid transparent;
 	border-radius: var(--radius-full);
 	background: color-mix(in srgb, var(--accent) 26%, transparent);
 	background-clip: content-box;
+}
+
+.workspace-scaffold-footer-overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 40;
+	display: flex;
+	min-width: 0;
+	min-height: 0;
+	flex-direction: column;
+	justify-content: flex-end;
+	pointer-events: none;
+}
+
+.workspace-scaffold-footer-overlay > * {
+	pointer-events: auto;
+}
+
+.workspace-scaffold-overlay {
+	display: contents;
 }

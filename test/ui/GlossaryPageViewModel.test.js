@@ -2,7 +2,8 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
 import { LEARNING_CONTENT_TYPES } from "../../src/navigation/learningContent.js";
-import { LOAD_STATUS } from "../../src/ui/loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
+import { WORKSPACE_STATE_KINDS } from "../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
 const stateValues = [];
 const stateSetters = [];
@@ -679,7 +680,12 @@ describe("useGlossaryPageViewModel", () => {
 		viewModel.openSearchKeyboardSelection();
 		expect(stateSetters[2]).toHaveBeenCalledWith(expect.any(Function));
 
-		expect(viewModel.selectContentType).toBe(onSelectContentType);
+		viewModel.selectContentType(LEARNING_CONTENT_TYPES.EXAMS);
+		expect(onSelectContentType).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
+
+		onSelectContentType.mockClear();
+		viewModel.selectContentType(LEARNING_CONTENT_TYPES.GLOSSARY);
+		expect(onSelectContentType).not.toHaveBeenCalled();
 		expect(viewModel.activeContentType).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
 		expect(viewModel.contentToggleEntries.map((entry) => entry.id)).toEqual([
 			LEARNING_CONTENT_TYPES.EXAMS,
@@ -696,11 +702,13 @@ describe("useGlossaryPageViewModel", () => {
 		});
 
 		expect(viewModel).toMatchObject({
-			loadingTitle: "Laster",
-			errorTitle: "Kunne ikke laste",
-			pageStatus: LOAD_STATUS.ERROR,
-			pageErrorMessage: "Prøv igjen.",
-			pageEmptyState: null,
+			workspaceState: {
+				kind: WORKSPACE_STATE_KINDS.ERROR,
+				title: "Kunne ikke laste",
+				body: "Prøv igjen.",
+				action: null
+			},
+			shouldShowWorkspaceFooter: false,
 			glossaryPanelEmptyState: null,
 			showBackButton: true,
 			backLabel: "Tilbake",

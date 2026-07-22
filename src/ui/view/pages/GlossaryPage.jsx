@@ -1,14 +1,12 @@
 // src/ui/view/pages/GlossaryPage.jsx
 import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
 import usePresentationMode from "../../presentation/usePresentationMode.js";
-import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import GlossaryFooter from "../components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx";
 import GlossaryPanel from "../components/GlossaryPage/GlossaryPanel/GlossaryPanel.jsx";
 import TopicAreaPanel from "../components/GlossaryPage/TopicAreaPanel/TopicAreaPanel.jsx";
 import Header from "../components/Header/Header.jsx";
-import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
-import ToggleButtonRow from "../components/ToggleButtonRow/ToggleButtonRow.jsx";
-import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
+import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
+import LearningContentHeader from "../components/LearningContentHeader/LearningContentHeader.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 
@@ -17,7 +15,7 @@ export default function GlossaryPage({ viewModel }) {
 
 	const presentationMode = usePresentationMode();
 	const isMobile = presentationMode === PRESENTATION_MODE.MOBILE;
-	const footer = viewModel.pageEmptyState === null ? (
+	const footer = viewModel.shouldShowWorkspaceFooter ? (
 		<GlossaryFooter
 			isMobile={isMobile}
 			searchTerm={viewModel.glossarySearchTerm}
@@ -64,11 +62,10 @@ export default function GlossaryPage({ viewModel }) {
 			footer={footer}
 		>
 			<section className="glossary-page" aria-labelledby="glossary-page-title">
-				<header className="glossary-page__heading">
-					<h1 id="glossary-page-title">{viewModel.pageTitle}</h1>
-				</header>
-
-				<ToggleButtonRow
+				<LearningContentHeader
+					title={viewModel.pageTitle}
+					subtitle={null}
+					titleId="glossary-page-title"
 					entries={viewModel.contentToggleEntries}
 					activeEntryId={viewModel.activeContentType}
 					onSelectEntry={viewModel.selectContentType}
@@ -83,30 +80,8 @@ export default function GlossaryPage({ viewModel }) {
 	);
 }
 
-const renderGlossaryWorkspaceContent = (viewModel, isMobile) => {
-	if (isBlockingLoadStatus(viewModel.pageStatus)) {
-		return (
-			<WorkspaceState
-				status={viewModel.pageStatus}
-				loadingLabel={viewModel.loadingTitle}
-				errorTitle={viewModel.errorTitle}
-				errorBody={viewModel.pageErrorMessage}
-				errorAction={null}
-			/>
-		);
-	}
-
-	if (viewModel.pageEmptyState !== null) {
-		return (
-			<WorkspaceMessage
-				title={viewModel.pageEmptyState.title}
-				body={viewModel.pageEmptyState.body}
-				action={null}
-			/>
-		);
-	}
-
-	return (
+const renderGlossaryWorkspaceContent = (viewModel, isMobile) => (
+	<WorkspaceState state={viewModel.workspaceState}>
 		<>
 			{!isMobile ? (
 				<TopicAreaPanel
@@ -127,8 +102,8 @@ const renderGlossaryWorkspaceContent = (viewModel, isMobile) => {
 				isMobile={isMobile}
 			/>
 		</>
-	);
-};
+	</WorkspaceState>
+);
 
 const GlossaryPageShell = ({ showBackButton, backLabel, navigationLabel, onBack, footer, children }) => {
 	const header = (
@@ -139,12 +114,20 @@ const GlossaryPageShell = ({ showBackButton, backLabel, navigationLabel, onBack,
 			onBack={onBack}
 			progressBarModel={null}
 			tools={null}
+			trailing={null}
 		/>
 	);
 
 	return (
-		<WorkSpaceScaffold className="glossary-workspace" header={header} footer={footer} scrollToTopRequestId={0}>
+		<WorkspaceScaffold
+			className="glossary-workspace"
+			contentClassName=""
+			header={header}
+			footer={footer}
+			overlay={null}
+			scrollToTopRequestId={null}
+		>
 			{children}
-		</WorkSpaceScaffold>
+		</WorkspaceScaffold>
 	);
 };

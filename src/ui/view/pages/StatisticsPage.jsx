@@ -1,82 +1,39 @@
 // src/ui/view/pages/StatisticsPage.jsx
-import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import StatisticsKpiGrid from "../components/StatisticsPage/StatisticsKpiGrid.jsx";
 import StatisticsRecentAttempts from "../components/StatisticsPage/StatisticsRecentAttempts.jsx";
 import StatisticsRecommendedExam from "../components/StatisticsPage/StatisticsRecommendedExam.jsx";
 import StatisticsScoreTrendChart from "../components/StatisticsPage/StatisticsScoreTrendChart.jsx";
 import StatisticsWeeklyActivity from "../components/StatisticsPage/StatisticsWeeklyActivity.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
-import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
-import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
+import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 
 export default function StatisticsPage({ viewModel }) {
-	if (isBlockingLoadStatus(viewModel.pageStatus)) {
-		return (
-			<StatisticsShell viewModel={viewModel}>
-				<WorkspaceState
-					status={viewModel.pageStatus}
-					loadingLabel={viewModel.loadingTitle}
-					errorTitle={viewModel.errorTitle}
-					errorBody={viewModel.pageErrorMessage}
-					errorAction={{
-						label: viewModel.retryButtonLabel,
-						onAction: viewModel.onRetryLoadStatistics
-					}}
-				/>
-			</StatisticsShell>
-		);
-	}
-
-	if (viewModel.isSignedOut) {
-		return (
-			<StatisticsShell viewModel={viewModel}>
-				<WorkspaceMessage
-					title={viewModel.signedOutTitle}
-					body={viewModel.signedOutBody}
-					action={{
-						label: viewModel.startNewExamLabel,
-						onAction: viewModel.onStartNewExam
-					}}
-				/>
-			</StatisticsShell>
-		);
-	}
-
 	return (
 		<StatisticsShell viewModel={viewModel}>
-			<section className="statistics-hero" aria-labelledby="statistics-hero-title">
-				<div className="statistics-hero-copy">
-					<p className="statistics-eyebrow">{viewModel.pageTitle}</p>
-					<h2 id="statistics-hero-title">{viewModel.hero.title}</h2>
-					<p>{viewModel.hero.body}</p>
-
-					<div className="statistics-hero-progress">
-						<progress
-							className="statistics-progress-bar"
-							value={viewModel.hero.progressPercentage}
-							max={100}
-							aria-label={viewModel.hero.progressLabel}
-						/>
-					</div>
-				</div>
-
-				<div className={viewModel.hero.meterClassName}>
-					<strong>{viewModel.hero.meterValueLabel}</strong>
-					<span>{viewModel.hero.meterDescription}</span>
-				</div>
-			</section>
-
-			{viewModel.isStatisticsEmpty ? (
-				<WorkspaceMessage
-					title={viewModel.emptyTitle}
-					body={viewModel.emptyBody}
-					action={{
-						label: viewModel.startNewExamLabel,
-						onAction: viewModel.onStartNewExam
-					}}
-				/>
-			) : (
+			<WorkspaceState state={viewModel.workspaceState}>
 				<>
+					<section className="statistics-hero" aria-labelledby="statistics-hero-title">
+						<div className="statistics-hero-copy">
+							<p className="statistics-eyebrow">{viewModel.pageTitle}</p>
+							<h2 id="statistics-hero-title">{viewModel.hero.title}</h2>
+							<p>{viewModel.hero.body}</p>
+
+							<div className="statistics-hero-progress">
+								<progress
+									className="statistics-progress-bar"
+									value={viewModel.hero.progressPercentage}
+									max={100}
+									aria-label={viewModel.hero.progressLabel}
+								/>
+							</div>
+						</div>
+
+						<div className={viewModel.hero.meterClassName}>
+							<strong>{viewModel.hero.meterValueLabel}</strong>
+							<span>{viewModel.hero.meterDescription}</span>
+						</div>
+					</section>
+
 					<StatisticsKpiGrid cards={viewModel.kpiCards} ariaLabel={viewModel.kpiGridLabel} />
 
 					<div className="statistics-dashboard-grid">
@@ -98,30 +55,39 @@ export default function StatisticsPage({ viewModel }) {
 						attempts={viewModel.recentAttempts}
 					/>
 				</>
-			)}
+			</WorkspaceState>
 		</StatisticsShell>
 	);
 }
 
 function StatisticsShell({ viewModel, children }) {
+	const header = (
+		<header className="statistics-page-header">
+			<div>
+				<h1>{viewModel.pageTitle}</h1>
+				<p>{viewModel.pageSubtitle}</p>
+			</div>
+
+			<button
+				type="button"
+				className="statistics-start-button"
+				onClick={viewModel.onStartNewExam}
+			>
+				{viewModel.startNewExamLabel}
+			</button>
+		</header>
+	);
+
 	return (
-		<WorkSpaceScaffold className="statistics-page-workspace" header={null} footer={null} scrollToTopRequestId={0}>
-			<header className="statistics-page-header">
-				<div>
-					<h1>{viewModel.pageTitle}</h1>
-					<p>{viewModel.pageSubtitle}</p>
-				</div>
-
-				<button
-					type="button"
-					className="statistics-start-button"
-					onClick={viewModel.onStartNewExam}
-				>
-					{viewModel.startNewExamLabel}
-				</button>
-			</header>
-
+		<WorkspaceScaffold
+			className="statistics-page-workspace"
+			contentClassName=""
+			header={header}
+			footer={null}
+			overlay={null}
+			scrollToTopRequestId={null}
+		>
 			{children}
-		</WorkSpaceScaffold>
+		</WorkspaceScaffold>
 	);
 }

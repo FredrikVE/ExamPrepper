@@ -4,8 +4,10 @@
 @import "./Tokens.css";
 @import "./Global.css";
 
+/* Shared scaffold */
+@import "./WorkspaceScaffold/index.css";
+
 /* Pages */
-@import "./SelectPageScaffold/index.css";
 @import "./SubjectSelectPage/index.css";
 @import "./LearningContentSelectPage/index.css";
 @import "./ExamPage/index.css";
@@ -18,6 +20,7 @@
 @import "./WorkspaceState/index.css";
 @import "./Shared/index.css";
 @import "./ToggleButtonRow/ToggleButtonRow.css";
+@import "./LearningContentHeader/index.css";
 @import "./Search/index.css";
 @import "./DesktopPopOutMenu/index.css";
 @import "./MobileBottomSheet/index.css";

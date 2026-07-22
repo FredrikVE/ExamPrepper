@@ -1,10 +1,11 @@
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
-import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
+import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./MatchCardsPage/matchCardsConstants.js";
 import { canStartMatchCardsSession, createMatchCardsSession } from "./MatchCardsPage/matchCardsSession.js";
 import { selectMatchSlot } from "./MatchCardsPage/matchCardsSelectionTransitions.js";
@@ -57,10 +58,16 @@ export default function useMatchCardsPageViewModel({
 		});
 	}, [getTopicAreasUseCase, isActive, subjectId, language]);
 
+	const glossaryResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${topicAreaKey}`;
+	const topicAreaResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
+	const isLoadEnabled = isActive && subjectId !== null;
+
 	const glossaryEntryLoad = useLoadModel({
 		execute: executeGlossaryEntryLoad,
 		emptyData: [],
 		errorMessage: t.matchCardsErrorMessage,
+		resourceKey: glossaryResourceKey,
+		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
 
@@ -68,6 +75,8 @@ export default function useMatchCardsPageViewModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
 		errorMessage: t.matchCardsErrorMessage,
+		resourceKey: topicAreaResourceKey,
+		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
 
@@ -112,6 +121,19 @@ export default function useMatchCardsPageViewModel({
 			cardAriaLabel: t.matchCardsCardAriaLabel
 		};
 	}, [activeTopicArea, t]);
+
+	const workspaceState = createWorkspaceState({
+		loadStatus: pageStatus,
+		isEmpty: session === null,
+		labels: {
+			loading: t.matchCardsLoadingTitle,
+			errorTitle: t.matchCardsErrorTitle,
+			errorBody: pageErrorMessage,
+			emptyTitle: t.matchCardsEmptyTitle,
+			emptyBody: t.matchCardsEmptyBody
+		},
+		errorAction: null
+	});
 
 	const createSession = useCallback(() => {
 		if (!canStartMatchCardsSession(glossaryEntries)) {
@@ -254,7 +276,7 @@ export default function useMatchCardsPageViewModel({
 			onActivateStep: null
 		});
 	}, [labels, matchedPairCount, totalPairCount]);
-	const headerProgressBarModel = pageStatus === LOAD_STATUS.READY && session !== null
+	const headerProgressBarModel = workspaceState.kind === WORKSPACE_STATE_KINDS.CONTENT
 		? progressBarModel
 		: null;
 
@@ -263,12 +285,7 @@ export default function useMatchCardsPageViewModel({
 		glossaryEntries,
 		topicAreas,
 		topicAreaKey,
-		pageStatus,
-		pageErrorMessage,
-		loadingTitle: t.matchCardsLoadingTitle,
-		errorTitle: t.matchCardsErrorTitle,
-		emptyTitle: t.matchCardsEmptyTitle,
-		emptyBody: t.matchCardsEmptyBody,
+		workspaceState,
 		showBackButton: backContract.showBackButton,
 		backLabel: backContract.backLabel,
 		navigationLabel: backContract.navigationLabel,

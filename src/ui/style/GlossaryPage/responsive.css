@@ -16,13 +16,6 @@
 		padding-bottom: 14px;
 	}
 
-	.glossary-page__heading {
-		margin-bottom: 12px;
-	}
-
-	.glossary-page__heading h1 {
-		font-size: 42px;
-	}
 
 	.glossary-topic-area-list {
 		grid-auto-rows: minmax(70px, 1fr);
@@ -38,7 +31,11 @@
 }
 
 @media (max-width: 932px) {
-	.glossary-workspace .workspace-scaffold-scroll {
+	.glossary-workspace {
+		--glossary-footer-overlay-space: 0px;
+	}
+
+	.glossary-workspace .workspace-scaffold-body {
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
@@ -53,14 +50,6 @@
 		padding: calc(var(--mobile-topbar-height) + var(--space-7)) var(--space-5) 0;
 	}
 
-	.glossary-page__heading {
-		margin-bottom: 0;
-	}
-
-	.glossary-page > .toggle-button-row {
-		margin-top: var(--space-5);
-		margin-bottom: var(--space-4);
-	}
 
 	.glossary-page__content {
 		display: block;
@@ -94,9 +83,6 @@
 		padding-left: var(--space-4);
 	}
 
-	.glossary-page__heading h1 {
-		font-size: 36px;
-	}
 
 	.glossary-panel-heading {
 		margin-bottom: var(--space-3);

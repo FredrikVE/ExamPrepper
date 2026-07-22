@@ -9,6 +9,8 @@ import { FLIPCARD_DECK_TOOL_KEYS } from "./FlipcardsPage/flipcardDeckTools.js";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "./FlipcardsPage/flipcardDeckToolState.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
@@ -63,10 +65,16 @@ export default function useFlipcardsPageViewModel(
         setPracticeCardIds([]);
     }, []);
 
+    const glossaryResourceKey = subjectId;
+    const topicAreaResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
+    const isLoadEnabled = isActive && subjectId !== null;
+
     const glossaryEntryLoad = useLoadModel({
         execute: executeGlossaryEntryLoad,
         emptyData: [],
         errorMessage: t.flipcardsErrorMessage,
+        resourceKey: glossaryResourceKey,
+        isEnabled: isLoadEnabled,
         onLoaded: noteGlossaryEntriesLoaded
     });
 
@@ -74,6 +82,8 @@ export default function useFlipcardsPageViewModel(
         execute: executeTopicAreaLoad,
         emptyData: [],
         errorMessage: t.flipcardsErrorMessage,
+        resourceKey: topicAreaResourceKey,
+        isEnabled: isLoadEnabled,
         onLoaded: null
     });
 
@@ -226,6 +236,20 @@ export default function useFlipcardsPageViewModel(
             topicAreaSelectedLabel: t.flipcardsToolMenuSelectedLabel
         };
     }, [activeTopicArea, t]);
+
+    const workspaceState = createWorkspaceState({
+        loadStatus: pageStatus,
+        isEmpty: topicFilteredFlashcards.length === 0,
+        labels: {
+            loading: labels.loadingTitle,
+            errorTitle: labels.errorTitle,
+            errorBody: pageErrorMessage,
+            emptyTitle: labels.emptyTitle,
+            emptyBody: labels.emptyBody
+        },
+        errorAction: null
+    });
+    const shouldShowHeaderTools = workspaceState.kind === WORKSPACE_STATE_KINDS.CONTENT;
 
     const visibleCards = useMemo(() => {
         return createVisibleFlipcards(topicFilteredFlashcards, selectedDeckCardIds);
@@ -397,8 +421,8 @@ export default function useFlipcardsPageViewModel(
         flashcards: topicFilteredFlashcards,
         topicAreas,
         topicAreaKey,
-        pageStatus,
-        pageErrorMessage,
+        workspaceState,
+        shouldShowHeaderTools,
         progressLabel: progressModel.progressLabel,
         progressModel,
         presentationMode,

@@ -1,6 +1,8 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
+import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 import { NAV_SCREENS } from "../../../src/navigation/navGraph.js";
+import { LEARNING_CONTENT_TYPES } from "../../../src/navigation/learningContent.js";
 
 const stateSetters = [];
 let loadModelQueue = [];
@@ -106,6 +108,8 @@ function createT() {
         deckCardUnitLabel: "kort",
         deckEmptyTitle: "Ingen bunker",
         deckEmptyMessage: "Ingen bunker funnet",
+        matchCardsDeckEmptyTitle: "Ingen begrepsmatch-bunker",
+        matchCardsDeckEmptyMessage: "Ingen begrepsmatch funnet",
         glossaryPlaceholderTitle: "Begrepslister kommer senere",
         glossaryPlaceholderDescription: "Ikke koblet på ennå",
         glossaryPlaceholderNote: "Kommer senere"
@@ -189,11 +193,25 @@ describe("useLearningContentSelectPageViewModel", () => {
 
 
 
+    test("uses match-card-specific empty text", () => {
+        useState.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.MATCHCARDS, jest.fn()]);
+
+        const { viewModel } = createViewModel();
+
+        expect(viewModel.workspaceState).toEqual({
+            kind: WORKSPACE_STATE_KINDS.EMPTY,
+            title: "Ingen begrepsmatch-bunker",
+            body: "Ingen begrepsmatch funnet",
+            action: null
+        });
+    });
+
     test("returns centralized page load state", () => {
         const { viewModel } = createViewModel();
 
-        expect(viewModel.pageStatus).toBe(LOAD_STATUS.READY);
-        expect(viewModel.pageErrorMessage).toBe("Kunne ikke hente eksamener");
+        expect(viewModel.workspaceState).toEqual({
+            kind: WORKSPACE_STATE_KINDS.CONTENT
+        });
         expect(viewModel.examsLoading).toBeUndefined();
         expect(viewModel.examsLoadError).toBeUndefined();
     });

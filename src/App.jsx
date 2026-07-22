@@ -27,7 +27,6 @@ import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
 import { NAV_SCREENS } from "./navigation/navGraph.js";
-import { LEARNING_CONTENT_TYPES } from "./navigation/learningContent.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
@@ -101,14 +100,6 @@ function AppContent() {
 		navigationViewModel.onBack
 	);
 
-	const selectLearningContentTypeFromGlossary = useCallback((contentTypeId) => {
-		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
-			return;
-		}
-
-		learningContentSelectPageViewModel.selectContentType(contentTypeId);
-		navigationViewModel.changeScreen(NAV_SCREENS.SELECT);
-	}, [learningContentSelectPageViewModel.selectContentType, navigationViewModel.changeScreen]);
 
 	return (
 		<div className={navigationViewModel.pageClassName}>
@@ -202,7 +193,7 @@ function AppContent() {
 						t={t}
 						isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
 						backContract={navigationViewModel.backContract}
-						onSelectContentType={selectLearningContentTypeFromGlossary}
+						onSelectContentType={learningContentSelectPageViewModel.selectContentType}
 					/>
 				)}
 
@@ -352,7 +343,7 @@ function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 				formatDate={formatDate}
 				t={t}
 				onStartNewExam={onStartNewExam}
-				authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false }}
+				authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false, userId: null }}
 			/>
 		);
 	}
@@ -367,14 +358,14 @@ function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 }
 
 function AuthenticatedStatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
-	const { isLoaded, isSignedIn } = useAuth();
+	const { isLoaded, isSignedIn, userId } = useAuth();
 
 	return (
 		<StatisticsPageWithViewModel
 			formatDate={formatDate}
 			t={t}
 			onStartNewExam={onStartNewExam}
-			authState={{ hasClerkAuth: true, isLoaded, isSignedIn }}
+			authState={{ hasClerkAuth: true, isLoaded, isSignedIn, userId: userId ?? null }}
 		/>
 	);
 }

@@ -56,7 +56,18 @@
 	line-height: 1.4;
 }
 
-.glossary-panel > .workspace-message {
+.glossary-panel-empty {
+	display: grid;
 	min-height: 0;
 	flex: 1;
+	place-content: center;
+	gap: 10px;
+	padding: 24px;
+	color: var(--text-soft);
+	text-align: center;
+}
+
+.glossary-panel-empty h2,
+.glossary-panel-empty p {
+	margin: 0;
 }

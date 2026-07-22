@@ -2,7 +2,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, PAGE_TOOL_AVAILABILITY } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
-import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES, createLearningContentToggleEntries } from "../../navigation/learningContent.js";
+import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES, createLearningContentToggleEntries, resolveContentTypeNavigation } from "../../navigation/learningContent.js";
 import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
@@ -11,6 +11,7 @@ import { filterExams } from "./LearningContentSelectPage/examFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 export default function useLearningContentSelectPageViewModel(
@@ -56,6 +57,8 @@ export default function useLearningContentSelectPageViewModel(
 	} = examSearchSheet;
 
 	const subjectId = selectedSubject?.id ?? null;
+	const loadResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
+	const isLoadEnabled = isActive && subjectId !== null;
 
 	const executeExamLoad = useCallback(() => {
 		if (!isActive || !subjectId) {
@@ -94,6 +97,8 @@ export default function useLearningContentSelectPageViewModel(
 		execute: executeExamLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
+		resourceKey: loadResourceKey,
+		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
 
@@ -101,6 +106,8 @@ export default function useLearningContentSelectPageViewModel(
 		execute: executeTopicAreaLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
+		resourceKey: loadResourceKey,
+		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
 
@@ -108,6 +115,8 @@ export default function useLearningContentSelectPageViewModel(
 		execute: executeFlipcardDeckLoad,
 		emptyData: [],
 		errorMessage: t.selectErrorMessage,
+		resourceKey: loadResourceKey,
+		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
 
@@ -138,13 +147,16 @@ export default function useLearningContentSelectPageViewModel(
 
 		resetSearchSheet(ALL_TOPIC_AREAS);
 
-		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
-			onChangeScreen(NAV_SCREENS.GLOSSARY);
-			return;
+		const navigation = resolveContentTypeNavigation(contentTypeId);
+
+		if (navigation.contentTypeId !== null) {
+			setActiveContentType(navigation.contentTypeId);
 		}
 
-		setActiveContentType(contentTypeId);
-	}, [onChangeScreen, resetSearchSheet]);
+		if (!isActive || navigation.screen !== NAV_SCREENS.SELECT) {
+			onChangeScreen(navigation.screen);
+		}
+	}, [isActive, onChangeScreen, resetSearchSheet]);
 
 	const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
 		changeTopicAreaKey(nextTopicAreaKey);
@@ -165,6 +177,30 @@ export default function useLearningContentSelectPageViewModel(
 	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
 	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
 	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
+
+	const activeContentItems = isExamsContentActive ? visibleExams : visibleFlipcardDecks;
+	const activeEmptyTitle = isExamsContentActive
+		? t.selectEmptyTitle
+		: isMatchCardsContentActive
+			? t.matchCardsDeckEmptyTitle
+			: t.deckEmptyTitle;
+	const activeEmptyBody = isExamsContentActive
+		? t.selectEmptyMessage
+		: isMatchCardsContentActive
+			? t.matchCardsDeckEmptyMessage
+			: t.deckEmptyMessage;
+	const workspaceState = createWorkspaceState({
+		loadStatus: pageStatus,
+		isEmpty: activeContentItems.length === 0,
+		labels: {
+			loading: t.selectLoadingMessage,
+			errorTitle: t.errorPrefix,
+			errorBody: pageErrorMessage,
+			emptyTitle: activeEmptyTitle,
+			emptyBody: activeEmptyBody
+		},
+		errorAction: null
+	});
 
 	const searchSuggestions = useMemo(() => {
 		if (isFlipcardsContentActive || isMatchCardsContentActive) {
@@ -265,16 +301,11 @@ export default function useLearningContentSelectPageViewModel(
 		exams: visibleExams,
 		visibleExams,
 		visibleFlipcardDecks,
-		selectedSubject,
-		pageStatus,
-		pageErrorMessage,
+		workspaceState,
 		topicAreas,
 		topicAreaKey,
 		pageTools,
 		...pageHeading,
-		loadingMessage: t.selectLoadingMessage,
-		emptyTitle: t.selectEmptyTitle,
-		emptyMessage: t.selectEmptyMessage,
 		practiceExamLabel: t.selectPracticeExamLabel,
 		questionLabel: t.selectQuestionLabel,
 		minuteLabel: t.selectMinuteLabel,
@@ -293,8 +324,6 @@ export default function useLearningContentSelectPageViewModel(
 		isMatchCardsContentActive,
 		deckCardCountLabel: t.deckCardCountLabel,
 		deckCardUnitLabel: t.deckCardUnitLabel,
-		deckEmptyTitle: t.deckEmptyTitle,
-		deckEmptyMessage: t.deckEmptyMessage,
 		flipcardsDeckEyebrow: t.contentToggleFlipcardsLabel,
 		matchCardsDeckEyebrow: t.contentToggleMatchCardsLabel,
 

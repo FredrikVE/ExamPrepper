@@ -325,6 +325,8 @@ export const translations = {
         deckCardUnitLabel: "kort",
         deckEmptyTitle: "Ingen flipcard-bunker",
         deckEmptyMessage: "Dette faget har ingen flipcards i valgt fagområde ennå.",
+        matchCardsDeckEmptyTitle: "Ingen begrepsmatch-bunker",
+        matchCardsDeckEmptyMessage: "Dette faget har ingen begrepsmatch i valgt fagområde ennå.",
 
         // GlossaryPage
         glossaryPageTitle: "Begrepslister",
@@ -797,6 +799,8 @@ export const translations = {
         deckCardUnitLabel: "cards",
         deckEmptyTitle: "No flipcard decks",
         deckEmptyMessage: "This subject does not have flipcards in the selected topic area yet.",
+        matchCardsDeckEmptyTitle: "No match-card decks",
+        matchCardsDeckEmptyMessage: "This subject does not have match cards in the selected topic area yet.",
 
         // GlossaryPage
         glossaryPageTitle: "Glossaries",

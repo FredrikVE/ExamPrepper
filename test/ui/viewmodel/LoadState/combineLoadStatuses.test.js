@@ -1,6 +1,6 @@
 // test/ui/viewmodel/LoadState/combineLoadStatuses.test.js
 import { describe, expect, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../../src/ui/loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "../../../../src/ui/viewmodel/LoadState/loadStatus.js";
 import combineLoadStatuses from "../../../../src/ui/viewmodel/LoadState/combineLoadStatuses.js";
 
 describe("combineLoadStatuses", () => {

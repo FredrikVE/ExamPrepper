@@ -34,6 +34,8 @@ export default function useExamQuestionLoadModel({
 		execute: executeQuestionLoad,
 		emptyData: [],
 		errorMessage: questionsLoadErrorMessage,
+		resourceKey: examId,
+		isEnabled: examId !== null,
 		onLoaded: noteQuestionsLoaded
 	});
 

@@ -2,13 +2,14 @@
 .glossary-workspace {
 	--glossary-sidebar-width: minmax(315px, 32%);
 	--glossary-term-column-width: 27%;
+	--glossary-footer-overlay-space: 104px;
 }
 
 .glossary-workspace .scaffold-header::before {
 	background: none;
 }
 
-.glossary-workspace .workspace-scaffold-scroll {
+.glossary-workspace .workspace-scaffold-body {
 	display: flex;
 	min-height: 0;
 	flex-direction: column;
@@ -25,27 +26,8 @@
 	flex-direction: column;
 	overflow: hidden;
 	padding: calc(var(--scaffold-header-height, 112px) + 6px)
-		var(--scaffold-inset, clamp(24px, 5vw, 72px)) var(--space-2);
-}
-
-.glossary-page__heading {
-	width: 100%;
-	max-width: 1240px;
-	flex: 0 0 auto;
-	margin: 0 auto 18px;
-}
-
-.glossary-page__heading h1 {
-	margin: 0;
-	font-size: clamp(42px, 3.1vw, 58px);
-	font-weight: 950;
-	line-height: 0.98;
-	letter-spacing: -0.055em;
-}
-
-.glossary-page > .toggle-button-row {
-	flex: 0 0 auto;
-	margin-bottom: var(--space-5);
+		var(--scaffold-inset, clamp(24px, 5vw, 72px))
+		calc(var(--space-2) + var(--glossary-footer-overlay-space));
 }
 
 .glossary-page__content {

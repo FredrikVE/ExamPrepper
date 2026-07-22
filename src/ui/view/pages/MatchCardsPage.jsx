@@ -1,42 +1,20 @@
 // src/ui/view/pages/MatchCardsPage.jsx
-import { isBlockingLoadStatus } from "../../loadStatus/loadStatus.js";
 import Header from "../components/Header/Header.jsx";
-import WorkspaceMessage from "../components/WorkspaceState/WorkspaceMessage.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
-import WorkSpaceScaffold from "../components/Shared/WorkSpaceScaffold/WorkSpaceScaffold.jsx";
+import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
 	return (
 		<MatchCardsShell viewModel={viewModel} progressBarModel={viewModel.headerProgressBarModel}>
-			{renderMatchCardsContent(viewModel)}
+			<WorkspaceState state={viewModel.workspaceState}>
+				{renderMatchCardsContent(viewModel)}
+			</WorkspaceState>
 		</MatchCardsShell>
 	);
 }
 
 function renderMatchCardsContent(viewModel) {
-	if (isBlockingLoadStatus(viewModel.pageStatus)) {
-		return (
-			<WorkspaceState
-				status={viewModel.pageStatus}
-				loadingLabel={viewModel.loadingTitle}
-				errorTitle={viewModel.errorTitle}
-				errorBody={viewModel.pageErrorMessage}
-				errorAction={null}
-			/>
-		);
-	}
-
-	if (!viewModel.session) {
-		return (
-			<WorkspaceMessage
-				title={viewModel.emptyTitle}
-				body={viewModel.emptyBody}
-				action={null}
-			/>
-		);
-	}
-
 	if (viewModel.isRoundComplete) {
 		return <MatchCardsRoundComplete viewModel={viewModel} />;
 	}
@@ -80,13 +58,21 @@ function MatchCardsShell({ viewModel, progressBarModel, children }) {
 				onBack={viewModel.onBack}
 				progressBarModel={progressBarModel}
 				tools={null}
+				trailing={null}
 			/>
 		</>
 	);
 
 	return (
-		<WorkSpaceScaffold className="matchcards-workspace" header={header} footer={null} scrollToTopRequestId={0}>
+		<WorkspaceScaffold
+			className="matchcards-workspace"
+			contentClassName=""
+			header={header}
+			footer={null}
+			overlay={null}
+			scrollToTopRequestId={null}
+		>
 			{children}
-		</WorkSpaceScaffold>
+		</WorkspaceScaffold>
 	);
 }

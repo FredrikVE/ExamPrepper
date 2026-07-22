@@ -1,11 +1,14 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { LEARNING_CONTENT_TYPES, createLearningContentToggleEntries } from "../../navigation/learningContent.js";
+import { LEARNING_CONTENT_TYPES, createLearningContentToggleEntries, resolveContentTypeNavigation } from "../../navigation/learningContent.js";
+import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
-import { LOAD_STATUS } from "../loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
+import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeTerms, filterEntriesByNormalizedSearchTerm, normalizeSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
 import { applyGlossaryTopicAreaInteractionState, createGlossaryAllTopicAreaListItem, createGlossaryTopicAreaListItems, GLOSSARY_TOPIC_AREA_LIST_ID } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
@@ -57,10 +60,16 @@ export default function useGlossaryPageViewModel(
 		});
 	}, [getTopicAreasUseCase, isActive, language, subjectId]);
 
+	const glossaryResourceKey = subjectId;
+	const topicAreaResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
+	const isLoadEnabled = isActive && subjectId !== null;
+
 	const glossaryEntryLoad = useLoadModel({
 		execute: executeGlossaryEntryLoad,
 		emptyData: [],
 		errorMessage: t.glossaryPageErrorMessage,
+		resourceKey: glossaryResourceKey,
+		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
 
@@ -68,6 +77,8 @@ export default function useGlossaryPageViewModel(
 		execute: executeTopicAreaLoad,
 		emptyData: [],
 		errorMessage: t.glossaryPageErrorMessage,
+		resourceKey: topicAreaResourceKey,
+		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
 
@@ -232,6 +243,21 @@ export default function useGlossaryPageViewModel(
 		searchScope: glossarySearchScope,
 		t
 	});
+	const pageEmptyTitle = pageEmptyState === null ? "" : pageEmptyState.title;
+	const pageEmptyBody = pageEmptyState === null ? "" : pageEmptyState.body;
+	const workspaceState = createWorkspaceState({
+		loadStatus: pageStatus,
+		isEmpty: pageEmptyState !== null,
+		labels: {
+			loading: t.glossaryPageLoadingTitle,
+			errorTitle: t.glossaryPageErrorTitle,
+			errorBody: pageErrorMessage,
+			emptyTitle: pageEmptyTitle,
+			emptyBody: pageEmptyBody
+		},
+		errorAction: null
+	});
+	const shouldShowWorkspaceFooter = workspaceState.kind === WORKSPACE_STATE_KINDS.CONTENT;
 	const glossaryPanelEmptyStateKind = resolveGlossaryPanelEmptyStateKind({
 		selectedEntryCount: selectedTopicAreaEntries.length,
 		isSearching
@@ -359,6 +385,16 @@ export default function useGlossaryPageViewModel(
 		moveSearchSelection(-1);
 	}, [moveSearchSelection]);
 
+	const selectContentType = useCallback((contentTypeId) => {
+		const navigation = resolveContentTypeNavigation(contentTypeId);
+
+		if (navigation.screen === NAV_SCREENS.GLOSSARY) {
+			return;
+		}
+
+		onSelectContentType(contentTypeId);
+	}, [onSelectContentType]);
+
 	const openSearchKeyboardSelection = useCallback(() => {
 		const selectedTopicArea = topicAreaListItems[resolvedSearchKeyboardIndex];
 
@@ -382,13 +418,10 @@ export default function useGlossaryPageViewModel(
 		mobileChapterSheetSubtitle: t.glossaryPageMobileChapterSheetSubtitle,
 		mobileChapterSheetOpenLabel: t.glossaryPageMobileChapterSheetOpenLabel,
 		mobileChapterSheetCloseLabel: t.glossaryPageMobileChapterSheetCloseLabel,
-		loadingTitle: t.glossaryPageLoadingTitle,
-		errorTitle: t.glossaryPageErrorTitle,
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 
-		pageStatus,
-		pageErrorMessage,
-		pageEmptyState,
+		workspaceState,
+		shouldShowWorkspaceFooter,
 		glossaryPanelEmptyState,
 
 		glossarySearchTerm,
@@ -422,7 +455,7 @@ export default function useGlossaryPageViewModel(
 		moveSearchSelectionUp,
 		openSearchKeyboardSelection,
 		selectTopicArea,
-		selectContentType: onSelectContentType
+		selectContentType
 	};
 }
 

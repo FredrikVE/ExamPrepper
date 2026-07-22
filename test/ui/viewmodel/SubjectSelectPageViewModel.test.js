@@ -1,6 +1,7 @@
 // test/ui/viewmodel/SubjectSelectPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../src/ui/loadStatus/loadStatus.js";
+import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
+import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
 const stateSetters = [];
 let subjectLoadModel;
@@ -138,8 +139,12 @@ describe("useSubjectSelectPageViewModel", () => {
 			getAvailableSubjectsUseCase: { execute: jest.fn().mockResolvedValue([]) }
 		});
 
-		expect(viewModel.pageStatus).toBe(LOAD_STATUS.ERROR);
-		expect(viewModel.pageErrorMessage).toBe("Kunne ikke hente fag");
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.ERROR,
+			title: expect.anything(),
+			body: "Kunne ikke hente fag",
+			action: null
+		});
 		expect(viewModel.subjectsLoading).toBeUndefined();
 		expect(viewModel.subjectsLoadError).toBeUndefined();
 	});
