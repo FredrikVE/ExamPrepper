@@ -133,6 +133,9 @@ function createViewModel(params = {}) {
     };
     const goBack = jest.fn();
     const changeScreen = jest.fn();
+    const selectExam = jest.fn();
+    const selectFlipcardDeck = jest.fn();
+    const selectMatchCardsDeck = jest.fn();
 
     const viewModel = useLearningContentSelectPageViewModel(
         getAvailableExamsUseCase,
@@ -141,9 +144,9 @@ function createViewModel(params = {}) {
         "nb",
         createT(),
         { id: "in5431", code: "IN5431" },
-        jest.fn(),
-        jest.fn(),
-        jest.fn(),
+        selectExam,
+        selectFlipcardDeck,
+        selectMatchCardsDeck,
         params.isActive ?? true,
         changeScreen,
         params.showBackButton ?? true,
@@ -158,6 +161,9 @@ function createViewModel(params = {}) {
         getFlipcardDeckSummariesUseCase,
         goBack,
         changeScreen,
+        selectExam,
+        selectFlipcardDeck,
+        selectMatchCardsDeck,
         viewModel
     };
 }
@@ -229,6 +235,16 @@ describe("useLearningContentSelectPageViewModel", () => {
         expect(viewModel.navigationLabel).toBe("Navigasjon");
         expect(viewModel.onBack).toBe(goBack);
     });
+    test("selects a flipcard deck through the public ViewModel handler", () => {
+        const { selectFlipcardDeck, viewModel } = createViewModel();
+
+        expect(typeof viewModel.selectFlipcardDeck).toBe("function");
+
+        viewModel.selectFlipcardDeck("network-security");
+
+        expect(selectFlipcardDeck).toHaveBeenCalledWith("network-security");
+    });
+
     test("navigates to glossary through the shared screen navigation callback", () => {
         const { changeScreen, viewModel } = createViewModel();
 

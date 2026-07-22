@@ -22,7 +22,7 @@ export default function useLearningContentSelectPageViewModel(
 	t,
 	selectedSubject,
 	onSelectExam,
-	onSelectFlashcardDeck,
+	onSelectFlipcardDeck,
 	onSelectMatchCardsDeck,
 	isActive,
 	onChangeScreen,
@@ -251,10 +251,10 @@ export default function useLearningContentSelectPageViewModel(
 		onSelectExam(examId);
 	}, [closeExamSearchSheet, onSelectExam]);
 
-	const selectFlashcardDeck = useCallback((nextTopicAreaKey) => {
+	const selectFlipcardDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
-		onSelectFlashcardDeck(nextTopicAreaKey);
-	}, [closeExamSearchSheet, onSelectFlashcardDeck]);
+		onSelectFlipcardDeck(nextTopicAreaKey);
+	}, [closeExamSearchSheet, onSelectFlipcardDeck]);
 
 	const selectMatchCardsDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
@@ -263,7 +263,7 @@ export default function useLearningContentSelectPageViewModel(
 
 	const selectSearchSuggestion = useCallback((suggestionId) => {
 		if (isFlipcardsContentActive) {
-			selectFlashcardDeck(suggestionId);
+			selectFlipcardDeck(suggestionId);
 			return;
 		}
 
@@ -273,7 +273,7 @@ export default function useLearningContentSelectPageViewModel(
 		}
 
 		selectExam(suggestionId);
-	}, [isFlipcardsContentActive, isMatchCardsContentActive, selectExam, selectFlashcardDeck, selectMatchCardsDeck]);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, selectExam, selectFlipcardDeck, selectMatchCardsDeck]);
 
 	const topicAreaToolItems = useMemo(() => {
 		return createTopicAreaToolItems({
@@ -366,7 +366,7 @@ export default function useLearningContentSelectPageViewModel(
 		changeExamFooterSheetOpen,
 		closeExamSearchSheet,
 		selectExam,
-		selectFlashcardDeck,
+		selectFlipcardDeck,
 		selectMatchCardsDeck,
 		selectContentType,
 		selectTopicAreaKey,
