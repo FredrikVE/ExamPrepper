@@ -206,15 +206,18 @@ describe("useLearningContentSelectPageViewModel", () => {
         });
     });
 
-    test("returns centralized page load state", () => {
-        const { viewModel } = createViewModel();
+	test("returns centralized empty workspace state for ready exams without content", () => {
+		const { viewModel } = createViewModel();
 
-        expect(viewModel.workspaceState).toEqual({
-            kind: WORKSPACE_STATE_KINDS.CONTENT
-        });
-        expect(viewModel.examsLoading).toBeUndefined();
-        expect(viewModel.examsLoadError).toBeUndefined();
-    });
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.EMPTY,
+			title: "Ingen eksamener",
+			body: "Ingen eksamener funnet",
+			action: null
+		});
+		expect(viewModel.examsLoading).toBeUndefined();
+		expect(viewModel.examsLoadError).toBeUndefined();
+	});
 
     test("returns injected navigation props", () => {
         const { goBack, viewModel } = createViewModel({

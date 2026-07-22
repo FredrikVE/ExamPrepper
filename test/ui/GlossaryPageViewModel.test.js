@@ -503,26 +503,40 @@ describe("useGlossaryPageViewModel", () => {
 			name: "no topic areas",
 			loadedTopicAreas: [],
 			loadedGlossaryEntries: [],
-			expectedKind: "no-topic-areas"
+			expectedWorkspaceState: {
+				kind: WORKSPACE_STATE_KINDS.EMPTY,
+				title: "Ingen kapitler",
+				body: "Ingen kapitler finnes.",
+				action: null
+			}
 		},
 		{
 			name: "topic areas without glossary entries",
 			loadedTopicAreas: topicAreas,
 			loadedGlossaryEntries: [],
-			expectedKind: "no-glossary-entries"
+			expectedWorkspaceState: {
+				kind: WORKSPACE_STATE_KINDS.EMPTY,
+				title: "Ingen begreper",
+				body: "Ingen begreper finnes.",
+				action: null
+			}
 		},
 		{
 			name: "search without results",
 			loadedTopicAreas: topicAreas,
 			loadedGlossaryEntries: glossaryEntries,
 			searchTerm: "finnes-ikke",
-			expectedKind: "no-search-results"
+			expectedWorkspaceState: {
+				kind: WORKSPACE_STATE_KINDS.CONTENT
+			},
+			expectedPanelKind: "no-search-results"
 		}
 	])("returns the $name empty state", ({
 		loadedTopicAreas,
 		loadedGlossaryEntries,
 		searchTerm = "",
-		expectedKind
+		expectedWorkspaceState,
+		expectedPanelKind = null
 	}) => {
 		const { viewModel } = createViewModel({
 			loadedTopicAreas,
@@ -530,13 +544,13 @@ describe("useGlossaryPageViewModel", () => {
 			searchTerm
 		});
 
-		if (expectedKind === "no-search-results") {
-			expect(viewModel.pageEmptyState).toBeNull();
-			expect(viewModel.glossaryPanelEmptyState).toMatchObject({ kind: expectedKind });
-			return;
-		}
+		expect(viewModel.workspaceState).toEqual(expectedWorkspaceState);
 
-		expect(viewModel.pageEmptyState).toMatchObject({ kind: expectedKind });
+		if (expectedPanelKind !== null) {
+			expect(viewModel.glossaryPanelEmptyState).toMatchObject({
+				kind: expectedPanelKind
+			});
+		}
 	});
 
 	test("rebuilds localized rows for a language switch without reloading glossary entries", () => {
