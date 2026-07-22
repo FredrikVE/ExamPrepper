@@ -28,8 +28,27 @@ export default function FlipcardsPage({ viewModel }) {
 		/>
 	) : null;
 
+	const header = (
+		<Header
+			showBackButton={viewModel.showBackButton}
+			backLabel={viewModel.backLabel}
+			navigationLabel={viewModel.navigationLabel}
+			onBack={viewModel.onBack}
+			progressBarModel={null}
+			tools={null}
+			trailing={headerToolMenu}
+		/>
+	);
+
 	return (
-		<FlipcardsShell viewModel={viewModel} headerTrailing={headerToolMenu}>
+		<WorkspaceScaffold
+			className="flipcards-workspace"
+			contentClassName=""
+			header={header}
+			footer={null}
+			overlay={null}
+			scrollToTopRequestId={null}
+		>
 			<WorkspaceState state={viewModel.workspaceState}>
 				<FlipcardsStudySurface
 					isDesktopMenuOpen={isDesktopMenuOpen}
@@ -57,33 +76,6 @@ export default function FlipcardsPage({ viewModel }) {
 					onSelectDeckTool={viewModel.onSelectDeckTool}
 				/>
 			</WorkspaceState>
-		</FlipcardsShell>
-	);
-}
-
-function FlipcardsShell(props) {
-	const header = (
-		<Header
-			showBackButton={props.viewModel.showBackButton}
-			backLabel={props.viewModel.backLabel}
-			navigationLabel={props.viewModel.navigationLabel}
-			onBack={props.viewModel.onBack}
-			progressBarModel={null}
-			tools={null}
-			trailing={props.headerTrailing}
-		/>
-	);
-
-	return (
-		<WorkspaceScaffold
-			className="flipcards-workspace"
-			contentClassName=""
-			header={header}
-			footer={null}
-			overlay={null}
-			scrollToTopRequestId={null}
-		>
-			{props.children}
 		</WorkspaceScaffold>
 	);
 }

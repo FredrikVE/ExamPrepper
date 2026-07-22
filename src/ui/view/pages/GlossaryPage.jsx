@@ -15,6 +15,19 @@ export default function GlossaryPage({ viewModel }) {
 
 	const presentationMode = usePresentationMode();
 	const isMobile = presentationMode === PRESENTATION_MODE.MOBILE;
+
+	const header = (
+		<Header
+			showBackButton={viewModel.showBackButton}
+			backLabel={viewModel.backLabel}
+			navigationLabel={viewModel.navigationLabel}
+			onBack={viewModel.onBack}
+			progressBarModel={null}
+			tools={viewModel.pageTools}
+			trailing={null}
+		/>
+	);
+
 	const footer = viewModel.shouldShowWorkspaceFooter ? (
 		<GlossaryFooter
 			isMobile={isMobile}
@@ -54,13 +67,13 @@ export default function GlossaryPage({ viewModel }) {
 	) : null;
 
 	return (
-		<GlossaryPageShell
-			showBackButton={viewModel.showBackButton}
-			backLabel={viewModel.backLabel}
-			navigationLabel={viewModel.navigationLabel}
-			onBack={viewModel.onBack}
+		<WorkspaceScaffold
+			className="learning-content-workspace glossary-workspace"
+			contentClassName=""
+			header={header}
 			footer={footer}
-			pageTools={viewModel.pageTools}
+			overlay={null}
+			scrollToTopRequestId={null}
 		>
 			<section className="glossary-page" aria-labelledby="glossary-page-title">
 				<LearningContentHeader
@@ -74,61 +87,31 @@ export default function GlossaryPage({ viewModel }) {
 				/>
 
 				<div className="glossary-page__content">
-					{renderGlossaryWorkspaceContent(viewModel, isMobile)}
+					<WorkspaceState state={viewModel.workspaceState}>
+						<>
+							{!isMobile && (
+								<TopicAreaPanel
+									isSearching={viewModel.isSearching}
+									topicAreaListId={viewModel.topicAreaListId}
+									allTopicAreaListItem={viewModel.allTopicAreaListItem}
+									topicAreaListItems={viewModel.topicAreaListItems}
+									topicAreaListAriaLabel={viewModel.pageTitle}
+									onSelectTopicArea={viewModel.selectTopicArea}
+								/>
+							)}
+
+							<GlossaryPanel
+								heading={viewModel.glossaryPanelHeading}
+								rows={viewModel.glossaryTableRows}
+								termColumnHeader={viewModel.termColumnHeader}
+								explanationColumnHeader={viewModel.explanationColumnHeader}
+								emptyState={viewModel.glossaryPanelEmptyState}
+								isMobile={isMobile}
+							/>
+						</>
+					</WorkspaceState>
 				</div>
 			</section>
-		</GlossaryPageShell>
-	);
-}
-
-const renderGlossaryWorkspaceContent = (viewModel, isMobile) => (
-	<WorkspaceState state={viewModel.workspaceState}>
-		<>
-			{!isMobile ? (
-				<TopicAreaPanel
-					isSearching={viewModel.isSearching}
-					topicAreaListId={viewModel.topicAreaListId}
-					allTopicAreaListItem={viewModel.allTopicAreaListItem}
-					topicAreaListItems={viewModel.topicAreaListItems}
-					topicAreaListAriaLabel={viewModel.pageTitle}
-					onSelectTopicArea={viewModel.selectTopicArea}
-				/>
-			) : null}
-			<GlossaryPanel
-				heading={viewModel.glossaryPanelHeading}
-				rows={viewModel.glossaryTableRows}
-				termColumnHeader={viewModel.termColumnHeader}
-				explanationColumnHeader={viewModel.explanationColumnHeader}
-				emptyState={viewModel.glossaryPanelEmptyState}
-				isMobile={isMobile}
-			/>
-		</>
-	</WorkspaceState>
-);
-
-const GlossaryPageShell = ({ showBackButton, backLabel, navigationLabel, onBack, footer, pageTools, children }) => {
-	const header = (
-		<Header
-			showBackButton={showBackButton}
-			backLabel={backLabel}
-			navigationLabel={navigationLabel}
-			onBack={onBack}
-			progressBarModel={null}
-			tools={pageTools}
-			trailing={null}
-		/>
-	);
-
-	return (
-		<WorkspaceScaffold
-			className="learning-content-workspace glossary-workspace"
-			contentClassName=""
-			header={header}
-			footer={footer}
-			overlay={null}
-			scrollToTopRequestId={null}
-		>
-			{children}
 		</WorkspaceScaffold>
 	);
-};
+}

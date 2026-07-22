@@ -8,8 +8,32 @@ import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 
 export default function StatisticsPage({ viewModel }) {
+	const header = (
+		<header className="statistics-page-header">
+			<div>
+				<h1>{viewModel.pageTitle}</h1>
+				<p>{viewModel.pageSubtitle}</p>
+			</div>
+
+			<button
+				type="button"
+				className="statistics-start-button"
+				onClick={viewModel.onStartNewExam}
+			>
+				{viewModel.startNewExamLabel}
+			</button>
+		</header>
+	);
+
 	return (
-		<StatisticsShell viewModel={viewModel}>
+		<WorkspaceScaffold
+			className="statistics-page-workspace"
+			contentClassName=""
+			header={header}
+			footer={null}
+			overlay={null}
+			scrollToTopRequestId={null}
+		>
 			<WorkspaceState state={viewModel.workspaceState}>
 				<>
 					<section className="statistics-hero" aria-labelledby="statistics-hero-title">
@@ -56,38 +80,6 @@ export default function StatisticsPage({ viewModel }) {
 					/>
 				</>
 			</WorkspaceState>
-		</StatisticsShell>
-	);
-}
-
-function StatisticsShell({ viewModel, children }) {
-	const header = (
-		<header className="statistics-page-header">
-			<div>
-				<h1>{viewModel.pageTitle}</h1>
-				<p>{viewModel.pageSubtitle}</p>
-			</div>
-
-			<button
-				type="button"
-				className="statistics-start-button"
-				onClick={viewModel.onStartNewExam}
-			>
-				{viewModel.startNewExamLabel}
-			</button>
-		</header>
-	);
-
-	return (
-		<WorkspaceScaffold
-			className="statistics-page-workspace"
-			contentClassName=""
-			header={header}
-			footer={null}
-			overlay={null}
-			scrollToTopRequestId={null}
-		>
-			{children}
 		</WorkspaceScaffold>
 	);
 }
