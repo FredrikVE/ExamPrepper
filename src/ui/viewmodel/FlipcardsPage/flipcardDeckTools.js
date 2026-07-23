@@ -1,5 +1,5 @@
 // src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js
-import { FLIPCARDS_PAGE_TOOLS, PAGE_TOOL_ITEM_IDS } from "../../pageTools/pageTools.js";
+import { FLIPCARDS_PAGE_TOOLS, PAGE_TOOL_ITEM_IDS } from "../../../navigation/pageTools.js";
 
 export const FLIPCARD_DECK_TOOL_KEYS = {
     ALL_CARDS: PAGE_TOOL_ITEM_IDS.FLIPCARDS_ALL_CARDS,

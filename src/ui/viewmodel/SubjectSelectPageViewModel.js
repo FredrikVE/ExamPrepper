@@ -1,6 +1,6 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useMemo } from "react";
-import { SUBJECT_SELECT_PAGE_TOOLS } from "../pageTools/pageTools.js";
+import { SUBJECT_SELECT_PAGE_TOOLS } from "../../navigation/pageTools.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";

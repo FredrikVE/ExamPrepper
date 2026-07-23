@@ -1,4 +1,4 @@
-// src/ui/pageTools/pageTools.js
+// src/navigation/pageTools.js
 export const PAGE_TOOL_ICON_KEYS = {
 	BAR_CHART_3: "bar-chart-3",
 	BOOK_OPEN: "book-open",

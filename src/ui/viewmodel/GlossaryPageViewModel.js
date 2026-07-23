@@ -1,7 +1,7 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
-import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../pageTools/pageTools.js";
+import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../../navigation/pageTools.js";
 import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";

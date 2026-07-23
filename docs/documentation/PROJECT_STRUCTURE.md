@@ -189,4 +189,4 @@ IN5431-Exam-Emulator/
 
 ### Page tools
 
-Delte definisjoner for sideverktøy ligger i `src/ui/pageTools/pageTools.js`; de er UI-konfigurasjon, ikke navigasjonsregler.
+Delte definisjoner for sideverktøy ligger i `src/navigation/pageTools.js`; de beskriver skjermtilknyttede verktøy, men inneholder ikke overgangslogikk.

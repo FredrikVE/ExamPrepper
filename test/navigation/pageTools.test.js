@@ -1,11 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import {
-	FLIPCARDS_PAGE_TOOLS,
-	LEARNING_CONTENT_SELECT_PAGE_TOOLS,
-	PAGE_TOOL_ICON_KEYS,
-	PAGE_TOOL_ITEM_IDS,
-	SUBJECT_SELECT_PAGE_TOOLS
-} from "../../src/ui/pageTools/pageTools.js";
+import { FLIPCARDS_PAGE_TOOLS, LEARNING_CONTENT_SELECT_PAGE_TOOLS, PAGE_TOOL_ICON_KEYS, PAGE_TOOL_ITEM_IDS, SUBJECT_SELECT_PAGE_TOOLS } from "../../src/navigation/pageTools.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
 
 describe("pageTools", () => {

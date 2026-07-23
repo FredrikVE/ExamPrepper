@@ -3,7 +3,7 @@ import {
 	LEARNING_CONTENT_SELECT_PAGE_TOOLS,
 	PAGE_TOOL_ITEM_IDS,
 	SUBJECT_SELECT_PAGE_TOOLS
-} from "../../../../src/ui/pageTools/pageTools.js";
+} from "../../../../src/navigation/pageTools.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
 
 const t = {

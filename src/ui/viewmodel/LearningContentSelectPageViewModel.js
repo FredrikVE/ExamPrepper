@@ -1,6 +1,6 @@
 // src/ui/viewmodel/LearningContentSelectPageViewModel.js
 import { useCallback, useMemo, useState } from "react";
-import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../pageTools/pageTools.js";
+import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../../navigation/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
 import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
