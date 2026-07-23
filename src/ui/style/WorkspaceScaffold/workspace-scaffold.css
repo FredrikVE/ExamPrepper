@@ -33,6 +33,11 @@
 	display: contents;
 }
 
+/* Scaffoldet eier kroppens struktur. Standard er native flex-scroll.
+   Eneste tillatte overstyring er containment, og den gjøres spesifisitet-trygt
+   via en descendant: `.<side>-workspace .workspace-scaffold-body { overflow: hidden }`.
+   Sider skal ikke re-posisjonere kroppen (ingen `position: absolute` / `inset`) —
+   det gjeninnfører en konkurrerende struktur og gjør laget rekkefølge-avhengig. */
 .workspace-scaffold-body {
 	position: relative;
 	z-index: 1;
