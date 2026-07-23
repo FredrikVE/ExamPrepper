@@ -26,7 +26,6 @@ export default function DesktopSideBar(props) {
 				section="primary"
 				activeScreen={props.activeScreen}
 				onChangeScreen={props.onChangeScreen}
-				hasSelectedSubject={props.hasSelectedSubject}
 			/>
 
 			<div className="desktop-sidebar-spacer" />
@@ -35,7 +34,6 @@ export default function DesktopSideBar(props) {
 				section="secondary"
 				activeScreen={props.activeScreen}
 				onChangeScreen={props.onChangeScreen}
-				hasSelectedSubject={props.hasSelectedSubject}
 			/>
 
 			<SidebarSettingsButton

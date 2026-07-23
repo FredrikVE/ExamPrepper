@@ -82,7 +82,6 @@ function createT() {
         pageToolsMobileHandleLabel: "Verktøy",
         pageToolsUnavailableLabel: "Kommer senere",
         pageToolsSelectedLabel: "Aktiv",
-        pageToolsSelectSubjectFirstLabel: "Velg fag først",
         pageToolsExamsLabel: "Eksamener",
         pageToolsPracticeTestsLabel: "Øveprøver",
         pageToolsFlipcardsLabel: "Flipcards",

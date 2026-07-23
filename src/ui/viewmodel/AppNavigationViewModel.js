@@ -1,16 +1,14 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
-import { useCallback, useState } from "react";
-import { NAV_SCREENS, createAppBackContract, resolveBackNavigation, resolveScreenChrome, resolveScreenEntry } from "../../navigation/navGraph.js";
+import { useCallback, useReducer } from "react";
+import { INITIAL_NAV_STATE, NAV_SCREENS, resolveNavigation, resolveScreenChrome } from "../../navigation/navGraph.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
 
 export default function useAppNavigationViewModel(params) {
-	// Navigasjons-state
-	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
-	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
-	const [selectedExamId, setSelectedExamId] = useState(null);
-	const [selectedTopicAreaKey, setSelectedTopicAreaKey] = useState(null);
+	// resolveNavigation er allerede reducer-formet, så den brukes direkte.
+	const [navState, dispatch] = useReducer(resolveNavigation, INITIAL_NAV_STATE);
+	const { screen: activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey } = navState;
 
 	// Layout-state
 	const mobileTopBar = useMobileDropDownTopBarModel();
@@ -27,15 +25,10 @@ export default function useAppNavigationViewModel(params) {
 		settingsPresentation.closeSettingsPresentation
 	]);
 
-	const applyNavigation = useCallback((nextNavState) => {
-		if (!nextNavState) {
-			return;
-		}
-
-		setActiveScreen(nextNavState.screen);
-		setSelectedSubjectId(nextNavState.selectedSubjectId);
-		setSelectedExamId(nextNavState.selectedExamId);
-		setSelectedTopicAreaKey(nextNavState.selectedTopicAreaKey);
+	// Navigasjon lukker alltid åpne overlays. Dispatch er stabil, så
+	// navigatorene under trenger ingen state-dependencies.
+	const navigate = useCallback((action) => {
+		dispatch(action);
 
 		settingsPresentation.closeSettingsPresentation();
 		mobileTopBar.closeMobileDropDownTopBarMenu();
@@ -47,69 +40,42 @@ export default function useAppNavigationViewModel(params) {
 	]);
 
 	const changeScreen = useCallback((nextScreen) => {
-		applyNavigation(resolveScreenEntry(nextScreen, {
-			selectedSubjectId,
-			selectedExamId,
-			selectedTopicAreaKey
-		}));
-	}, [selectedSubjectId, selectedExamId, selectedTopicAreaKey, applyNavigation]);
+		navigate({ screen: nextScreen });
+	}, [navigate]);
 
 	const selectSubject = useCallback((subjectId) => {
-		applyNavigation(resolveScreenEntry(NAV_SCREENS.SELECT, {
-			selectedSubjectId: subjectId,
-			selectedExamId: null,
-			selectedTopicAreaKey: null
-		}));
-	}, [applyNavigation]);
+		navigate({ screen: NAV_SCREENS.SELECT, selection: { selectedSubjectId: subjectId } });
+	}, [navigate]);
 
 	const showAllSubjects = useCallback(() => {
-		changeScreen(NAV_SCREENS.SUBJECTS);
-	}, [changeScreen]);
+		navigate({ screen: NAV_SCREENS.SUBJECTS });
+	}, [navigate]);
 
 	const selectExam = useCallback((examId) => {
-		applyNavigation(resolveScreenEntry(NAV_SCREENS.EXAM, {
-			selectedSubjectId,
-			selectedExamId: examId,
-			selectedTopicAreaKey
-		}));
-	}, [selectedSubjectId, selectedTopicAreaKey, applyNavigation]);
+		navigate({ screen: NAV_SCREENS.EXAM, selection: { selectedExamId: examId } });
+	}, [navigate]);
 
 	const selectFlipcardDeck = useCallback((topicAreaKey) => {
-		applyNavigation(resolveScreenEntry(NAV_SCREENS.FLIPCARDS, {
-			selectedSubjectId,
-			selectedExamId: null,
-			selectedTopicAreaKey: topicAreaKey ?? null
-		}));
-	}, [selectedSubjectId, applyNavigation]);
+		navigate({ screen: NAV_SCREENS.FLIPCARDS, selection: { selectedTopicAreaKey: topicAreaKey ?? null } });
+	}, [navigate]);
 
 	const selectMatchCardsDeck = useCallback((topicAreaKey) => {
-		applyNavigation(resolveScreenEntry(NAV_SCREENS.MATCHCARDS, {
-			selectedSubjectId,
-			selectedExamId: null,
-			selectedTopicAreaKey: topicAreaKey ?? null
-		}));
-	}, [selectedSubjectId, applyNavigation]);
+		navigate({ screen: NAV_SCREENS.MATCHCARDS, selection: { selectedTopicAreaKey: topicAreaKey ?? null } });
+	}, [navigate]);
 
+	// Intern: eneste bruk er når språkbytte gjør valgt eksamen utilgjengelig.
 	const backToExamList = useCallback(() => {
-		applyNavigation(resolveScreenEntry(NAV_SCREENS.SELECT, {
-			selectedSubjectId,
-			selectedExamId,
-			selectedTopicAreaKey
-		}));
-	}, [selectedSubjectId, selectedExamId, selectedTopicAreaKey, applyNavigation]);
+		navigate({ screen: NAV_SCREENS.SELECT });
+	}, [navigate]);
 
 	const goBack = useCallback(() => {
-		applyNavigation(resolveBackNavigation({
-			screen: activeScreen,
-			selectedSubjectId,
-			selectedExamId,
-			selectedTopicAreaKey
-		}));
-	}, [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, applyNavigation]);
+		navigate({ back: true });
+	}, [navigate]);
 
+	// Uten screen: bli stående, bytt bare valgt eksamen. Går utenom navigate(),
+	// fordi språksynk ikke skal lukke åpne overlays.
 	const resolveSyncedExam = useCallback((examId, subjectId) => {
-		setSelectedExamId(examId);
-		setSelectedSubjectId(subjectId);
+		dispatch({ selection: { selectedExamId: examId, selectedSubjectId: subjectId } });
 	}, []);
 
 	const handleSyncedExamUnavailable = useCallback(() => {
@@ -134,14 +100,15 @@ export default function useAppNavigationViewModel(params) {
 		activeScreen === NAV_SCREENS.MATCHCARDS ||
 		activeScreen === NAV_SCREENS.GLOSSARY;
 
-	const backContract = createAppBackContract({
-		screen: activeScreen,
+	const { pageClassName, shellClassName, showBackButton } = resolveScreenChrome(activeScreen);
+
+	// Grafen avgjør OM knappen vises, ViewModel-laget eier tekst og handler.
+	const backContract = {
+		showBackButton,
 		backLabel: params.backLabel,
 		navigationLabel: params.navigationLabel,
 		onBack: goBack
-	});
-
-	const { pageClassName, shellClassName } = resolveScreenChrome(activeScreen);
+	};
 
 	return {
 		// Navigasjon
@@ -178,7 +145,6 @@ export default function useAppNavigationViewModel(params) {
 		selectExam,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
-		backToExamList,
 		goBack
 	};
 }

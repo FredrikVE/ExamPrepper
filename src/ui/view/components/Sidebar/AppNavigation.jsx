@@ -11,7 +11,6 @@ export default function AppNavigation(props) {
 				isSettingsPresentationOpen={props.isSettingsPresentationOpen}
 				onOpenSettingsPresentation={props.onOpenSettingsPresentation}
 				showSubjectSwitcher={props.showSubjectSwitcher}
-				hasSelectedSubject={props.hasSelectedSubject}
 				subjects={props.subjects}
 				selectedSubject={props.selectedSubject}
 				onSelectSubject={props.onSelectSubject}

@@ -17,9 +17,20 @@ export const NAV_SCREENS = {
  * - clearsSubject / clearsExam / clearsTopicArea: valg som nullstilles ved inngang til skjermen
  * - pageClass / shellClass / themeScope: skjermens app-chrome
  *
+ * Grafen eier hvilke skjermer som HAR tilbake-navigasjon (backTo), og
+ * resolveScreenChrome eksponerer det som showBackButton. Grafen eier ikke
+ * knappens tekst eller klikk-handler — det er ViewModel- og i18n-ansvar.
+ *
  * Grafen inneholder bare skjermer som faktisk rendres som app-ruter.
  * Settings håndteres av SettingsPresentation og er ikke en NAV_SCREEN.
  */
+export const INITIAL_NAV_STATE = {
+	screen: NAV_SCREENS.SUBJECTS,
+	selectedSubjectId: null,
+	selectedExamId: null,
+	selectedTopicAreaKey: null
+};
+
 export const NAV_GRAPH = {
 	[NAV_SCREENS.SUBJECTS]: {
 		pageClass: "exam-select-page",
@@ -100,7 +111,7 @@ export const NAV_GRAPH = {
 	}
 };
 
-export function resolveScreenEntry(nextScreen, navState) {
+function resolveScreenEntry(nextScreen, navState) {
 	const node = NAV_GRAPH[nextScreen];
 
 	if (!node) {
@@ -123,7 +134,7 @@ export function resolveScreenEntry(nextScreen, navState) {
 	};
 }
 
-export function resolveBackNavigation(navState) {
+function resolveBackNavigation(navState) {
 	const node = NAV_GRAPH[navState.screen];
 	const backScreen = node ? node.backTo : NAV_SCREENS.SUBJECTS;
 
@@ -134,9 +145,26 @@ export function resolveBackNavigation(navState) {
 	return resolveScreenEntry(backScreen, navState);
 }
 
-export function hasBackNavigation(screen) {
-	const node = NAV_GRAPH[screen];
-	return Boolean(node ? node.backTo : NAV_SCREENS.SUBJECTS);
+/**
+ * Navigasjonens eneste overgangsfunksjon. Signaturen (tilstand, forespørsel)
+ * er med vilje reducer-formet, så den kan sendes rett til useReducer.
+ *
+ *   { back: true }                    → følg nodens backTo
+ *   { screen }                        → gå til skjerm, grafen nullstiller
+ *   { selection }                     → bli stående, endre valg
+ *   { screen, selection }             → begge deler
+ *
+ * Avvist overgang returnerer samme tilstandsobjekt, slik at React hopper
+ * over re-render.
+ */
+export function resolveNavigation(navState, request) {
+	if (request.back) {
+		return resolveBackNavigation(navState) ?? navState;
+	}
+
+	const nextScreen = request.screen ?? navState.screen;
+
+	return resolveScreenEntry(nextScreen, { ...navState, ...request.selection }) ?? navState;
 }
 
 export function resolveScreenChrome(screen) {
@@ -144,15 +172,7 @@ export function resolveScreenChrome(screen) {
 
 	return {
 		pageClassName: [node.pageClass, node.themeScope].filter(Boolean).join(" "),
-		shellClassName: node.shellClass
-	};
-}
-
-export function createAppBackContract({ screen, backLabel, navigationLabel, onBack }) {
-	return {
-		showBackButton: hasBackNavigation(screen),
-		backLabel,
-		navigationLabel,
-		onBack
+		shellClassName: node.shellClass,
+		showBackButton: node.backTo !== null
 	};
 }

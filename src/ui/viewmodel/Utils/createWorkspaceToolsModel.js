@@ -7,18 +7,8 @@ export default function createWorkspaceToolsModel(params) {
 	}
 
 	const items = [];
-	const navToolItems = params.navToolItems ?? [];
 	const workspaceActionToolItems = params.workspaceActionToolItems ?? [];
 	const topicAreaToolItems = params.topicAreaToolItems ?? [];
-
-	for (const navItem of navToolItems) {
-		items.push(createNavToolItemModel({
-			navItem,
-			t: params.t,
-			hasSelectedSubject: params.hasSelectedSubject,
-			onChangeScreen: params.onChangeScreen
-		}));
-	}
 
 	for (const toolItem of workspaceActionToolItems) {
 		items.push(createWorkspaceActionToolItemModel({ toolItem, t: params.t }));
@@ -37,25 +27,6 @@ export default function createWorkspaceToolsModel(params) {
 		closeLabel: params.t.pageToolsCloseLabel,
 		mobileHandleLabel: params.t.pageToolsMobileHandleLabel,
 		items
-	};
-}
-
-function createNavToolItemModel(params) {
-	const label = params.t[params.navItem.labelKey] ?? params.navItem.fallbackLabel;
-	const disabledReason = params.navItem.requiresSubject && !params.hasSelectedSubject ? params.t.pageToolsSelectSubjectFirstLabel : "";
-	const isDisabled = Boolean(disabledReason) || typeof params.onChangeScreen !== "function";
-	const statusLabel = isDisabled ? disabledReason : "";
-	const ariaLabel = statusLabel ? `${label} · ${statusLabel}` : label;
-
-	return {
-		id: params.navItem.id,
-		screen: params.navItem.screen,
-		iconKey: params.navItem.iconKey,
-		label,
-		statusLabel,
-		ariaLabel,
-		isDisabled,
-		onSelect: isDisabled ? null : () => params.onChangeScreen(params.navItem.screen)
 	};
 }
 

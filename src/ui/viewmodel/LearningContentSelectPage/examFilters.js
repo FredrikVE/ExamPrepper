@@ -22,20 +22,6 @@ export function filterExams(exams, searchTerm, topicAreaKey) {
 	return filteredExams;
 }
 
-export function filterExamsByTopicArea(exams, topicAreaKey) {
-	const filteredExams = [];
-
-	for (const exam of exams) {
-		if (!examMatchesTopicArea(exam, topicAreaKey)) {
-			continue;
-		}
-
-		filteredExams.push(exam);
-	}
-
-	return filteredExams;
-}
-
 function examMatchesTopicArea(exam, topicAreaKey) {
 	if (topicAreaKey === ALL_TOPIC_AREAS) {
 		return true;

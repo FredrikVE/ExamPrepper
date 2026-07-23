@@ -108,9 +108,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		return createWorkspaceToolsModel({
 			pageToolGroup: getPageToolGroup(NAV_SCREENS.SUBJECTS),
 			t,
-			navToolItems: [],
 			workspaceActionToolItems: getSubjectSelectWorkspaceActionToolItems(),
-			hasSelectedSubject: Boolean(selectedSubjectId),
 			onChangeScreen
 		});
 	}, [onChangeScreen, selectedSubjectId, t]);

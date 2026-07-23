@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { NAV_GRAPH, NAV_SCREENS, createAppBackContract, hasBackNavigation, resolveBackNavigation, resolveScreenChrome, resolveScreenEntry } from "../../src/navigation/navGraph.js";
+import { INITIAL_NAV_STATE, NAV_GRAPH, NAV_SCREENS, resolveNavigation, resolveScreenChrome } from "../../src/navigation/navGraph.js";
 
 const WITH_SUBJECT_AND_EXAM = {
 	selectedSubjectId: "in5431",
@@ -45,16 +45,17 @@ describe("navGraph", () => {
 	});
 
 	test.each([
-		[NAV_SCREENS.SUBJECTS, "exam-select-page", "exam-select-shell"],
-		[NAV_SCREENS.SELECT, "exam-select-page", "exam-select-shell"],
-		[NAV_SCREENS.OVERVIEW, "exam-select-page", "exam-select-shell"],
-		[NAV_SCREENS.EXAM, "exam-page", "exam-shell"],
-		[NAV_SCREENS.GLOSSARY, "exam-select-page", "exam-select-shell"],
-		["finnes-ikke", "exam-select-page", "exam-select-shell"]
-	])("resolveScreenChrome(%s) returns standard classes", (screen, pageClassName, shellClassName) => {
+		[NAV_SCREENS.SUBJECTS, "exam-select-page", "exam-select-shell", false],
+		[NAV_SCREENS.SELECT, "exam-select-page", "exam-select-shell", true],
+		[NAV_SCREENS.OVERVIEW, "exam-select-page", "exam-select-shell", true],
+		[NAV_SCREENS.EXAM, "exam-page", "exam-shell", true],
+		[NAV_SCREENS.GLOSSARY, "exam-select-page", "exam-select-shell", true],
+		["finnes-ikke", "exam-select-page", "exam-select-shell", false]
+	])("resolveScreenChrome(%s) returns standard classes", (screen, pageClassName, shellClassName, showBackButton) => {
 		expect(resolveScreenChrome(screen)).toEqual({
 			pageClassName,
-			shellClassName
+			shellClassName,
+			showBackButton
 		});
 	});
 
@@ -63,7 +64,8 @@ describe("navGraph", () => {
 		(screen) => {
 			expect(resolveScreenChrome(screen)).toEqual({
 				pageClassName: "exam-page flipcards-theme-scope",
-				shellClassName: "exam-shell"
+				shellClassName: "exam-shell",
+				showBackButton: true
 			});
 		}
 	);
@@ -157,8 +159,8 @@ describe("navGraph", () => {
 			WITH_SUBJECT_AND_EXAM,
 			null
 		]
-	])("resolveScreenEntry: %s", (_, nextScreen, navState, expected) => {
-		expect(resolveScreenEntry(nextScreen, navState)).toEqual(expected);
+	])("resolveNavigation mot skjerm: %s", (_, nextScreen, navState, expected) => {
+		expect(resolveNavigation(navState, { screen: nextScreen })).toEqual(expected ?? navState);
 	});
 
 	test.each([
@@ -236,8 +238,40 @@ describe("navGraph", () => {
 			{ screen: "finnes-ikke", ...WITH_SUBJECT_AND_EXAM },
 			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null, selectedTopicAreaKey: null }
 		]
-	])("resolveBackNavigation: %s", (_, navState, expected) => {
-		expect(resolveBackNavigation(navState)).toEqual(expected);
+	])("resolveNavigation tilbake: %s", (_, navState, expected) => {
+		expect(resolveNavigation(navState, { back: true })).toEqual(expected ?? navState);
+	});
+
+	test("startstanden er fagoversikten uten valg", () => {
+		expect(INITIAL_NAV_STATE).toEqual({
+			screen: NAV_SCREENS.SUBJECTS,
+			selectedSubjectId: null,
+			selectedExamId: null,
+			selectedTopicAreaKey: null
+		});
+	});
+
+	test("uten screen blir man stående og endrer bare valg", () => {
+		const onExam = { screen: NAV_SCREENS.EXAM, selectedSubjectId: "in5431", selectedExamId: "e1", selectedTopicAreaKey: "arrays" };
+
+		expect(resolveNavigation(onExam, { selection: { selectedExamId: "e1-en" } })).toEqual({
+			...onExam,
+			selectedExamId: "e1-en"
+		});
+	});
+
+	test("kallstedet trenger ikke nullstille selv — grafen gjør det", () => {
+		const onExam = { screen: NAV_SCREENS.EXAM, selectedSubjectId: "in5431", selectedExamId: "e1", selectedTopicAreaKey: "arrays" };
+		const uten = resolveNavigation(onExam, { screen: NAV_SCREENS.FLIPCARDS, selection: { selectedTopicAreaKey: "loops" } });
+		const med = resolveNavigation(onExam, { screen: NAV_SCREENS.FLIPCARDS, selection: { selectedTopicAreaKey: "loops", selectedExamId: null } });
+
+		expect(uten).toEqual(med);
+		expect(uten.selectedExamId).toBeNull();
+	});
+
+	test("avvist overgang returnerer samme referanse, ikke bare samme verdi", () => {
+		expect(resolveNavigation(INITIAL_NAV_STATE, { screen: NAV_SCREENS.EXAM })).toBe(INITIAL_NAV_STATE);
+		expect(resolveNavigation(INITIAL_NAV_STATE, { back: true })).toBe(INITIAL_NAV_STATE);
 	});
 
 	test.each([
@@ -245,33 +279,28 @@ describe("navGraph", () => {
 		[NAV_SCREENS.SELECT, true],
 		[NAV_SCREENS.EXAM, true],
 		[NAV_SCREENS.FLIPCARDS, true],
+		[NAV_SCREENS.MATCHCARDS, true],
 		[NAV_SCREENS.GLOSSARY, true],
-		[NAV_SCREENS.OVERVIEW, true],
-		["finnes-ikke", true]
-	])("hasBackNavigation(%s) returns %s", (screen, expected) => {
-		expect(hasBackNavigation(screen)).toBe(expected);
+		[NAV_SCREENS.OVERVIEW, true]
+	])("resolveScreenChrome(%s).showBackButton is %s", (screen, expected) => {
+		expect(resolveScreenChrome(screen).showBackButton).toBe(expected);
 	});
 
-	test("createAppBackContract derives showBackButton from the navigation graph", () => {
-		const onBack = () => {};
+	test("ukjent skjerm faller til SUBJECTS-noden og viser ingen tilbake-knapp", () => {
+		expect(resolveScreenChrome("finnes-ikke")).toEqual(resolveScreenChrome(NAV_SCREENS.SUBJECTS));
+		expect(resolveScreenChrome("finnes-ikke").showBackButton).toBe(false);
+	});
 
-		expect(createAppBackContract({
-			screen: NAV_SCREENS.SUBJECTS,
-			backLabel: "Tilbake",
-			navigationLabel: "Navigasjon",
-			onBack
-		})).toEqual({
-			showBackButton: false,
-			backLabel: "Tilbake",
-			navigationLabel: "Navigasjon",
-			onBack
-		});
+	test("showBackButton er utledet av backTo, ikke deklarert separat", () => {
+		for (const [screen, node] of Object.entries(NAV_GRAPH)) {
+			expect(resolveScreenChrome(screen).showBackButton).toBe(node.backTo !== null);
+		}
+	});
 
-		expect(createAppBackContract({
-			screen: NAV_SCREENS.EXAM,
-			backLabel: "Tilbake",
-			navigationLabel: "Navigasjon",
-			onBack
-		}).showBackButton).toBe(true);
+	test("grafen eier ikke tilbake-knappens tekst eller handler", () => {
+		expect(Object.values(NAV_GRAPH).some((node) => (
+			Object.prototype.hasOwnProperty.call(node, "backLabel")
+			|| Object.prototype.hasOwnProperty.call(node, "onBack")
+		))).toBe(false);
 	});
 });

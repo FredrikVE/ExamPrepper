@@ -6,7 +6,6 @@ import { NAV_SCREENS } from "../../../../navigation/navGraph.js";
 
 const SIDEBAR_ICONS = {
     subjects: Home,
-    exams: BookOpen,
     overview: BarChart3
 };
 
@@ -17,11 +16,11 @@ const CLASS_NAMES = {
     icon: "sidebar-navigation-icon"
 };
 
-export default function SidebarNavigation({ activeScreen, onChangeScreen, section, hasSelectedSubject }) {
+export default function SidebarNavigation({ activeScreen, onChangeScreen, section }) {
     const { t } = useLanguage();
 
     const visibleItems = SIDEBAR_NAV_ITEMS.filter((item) => {
-        return item.section === section && shouldShowNavigationItem(item, activeScreen, hasSelectedSubject);
+        return item.section === section && shouldShowNavigationItem(item, activeScreen);
     });
 
     if (visibleItems.length === 0) {
@@ -82,20 +81,10 @@ const SidebarNavigationItem = ({ Icon, label, active, onClick }) => {
     );
 };
 
-const shouldShowNavigationItem = (item, activeScreen, hasSelectedSubject) => {
-    const isSubjectHomeButton = item.screen === NAV_SCREENS.SUBJECTS;
-    const isLearningContentSelectButton = item.screen === NAV_SCREENS.SELECT;
-
-    if (item.requiresSubject && !hasSelectedSubject) {
-        return false;
-    }
-
+// Eneste regel som er igjen: hjem-knappen skjules når du allerede er hjemme.
+const shouldShowNavigationItem = (item, activeScreen) => {
     if (activeScreen === NAV_SCREENS.SUBJECTS) {
-        return !isSubjectHomeButton && !isLearningContentSelectButton;
-    }
-
-    if (activeScreen === NAV_SCREENS.SELECT) {
-        return !isLearningContentSelectButton;
+        return item.screen !== NAV_SCREENS.SUBJECTS;
     }
 
     return true;

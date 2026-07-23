@@ -55,7 +55,6 @@ function createT() {
 		pageToolsCloseLabel: "Lukk verktøymeny",
 		pageToolsMobileHandleLabel: "Verktøy",
 		pageToolsUnavailableLabel: "Kommer senere",
-		pageToolsSelectSubjectFirstLabel: "Velg fag først",
 		pageToolsExamsLabel: "Eksamener",
 		pageToolsPracticeTestsLabel: "Øveprøver",
 		pageToolsFlipcardsLabel: "Flipcards",

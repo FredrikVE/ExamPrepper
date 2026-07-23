@@ -283,7 +283,6 @@ export const translations = {
         pageToolsOpenLabel: "Åpne verktøymeny",
         pageToolsCloseLabel: "Lukk verktøymeny",
         pageToolsMobileHandleLabel: "Verktøy",
-        pageToolsSelectSubjectFirstLabel: "Velg fag først",
         pageToolsExamTitle: "Eksamen-verktøy",
         pageToolsExamSubtitle: "Handlinger for aktiv øving",
         pageToolsExamActionsLabel: "Eksamen-handlinger",
@@ -469,7 +468,6 @@ export const translations = {
         // Sidebar
         sidebarLabel: "Eksamensnavigasjon",
         sidebarSubjects: "Velg fag fra hjemskjerm",
-        sidebarExams: "Velg eksamen",
         sidebarFlipcards: "Flipcards",
         sidebarHome: "Velg fag fra hjemskjerm",
         sidebarOverview: "Oversikt",
@@ -759,7 +757,6 @@ export const translations = {
         pageToolsOpenLabel: "Open tools menu",
         pageToolsCloseLabel: "Close tools menu",
         pageToolsMobileHandleLabel: "Tools",
-        pageToolsSelectSubjectFirstLabel: "Choose a subject first",
         pageToolsExamTitle: "Exam tools",
         pageToolsExamSubtitle: "Actions for active practice",
         pageToolsExamActionsLabel: "Exam actions",
@@ -945,7 +942,6 @@ export const translations = {
         // Sidebar
         sidebarLabel: "Exam navigation",
         sidebarSubjects: "Choose subject from home",
-        sidebarExams: "Choose exam",
         sidebarFlipcards: "Flipcards",
         sidebarHome: "Choose subject from home",
         sidebarOverview: "Overview",
