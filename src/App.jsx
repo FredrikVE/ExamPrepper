@@ -78,8 +78,7 @@ function AppContent() {
 		t,
 		navigationViewModel.selectedSubjectId,
 		navigationViewModel.selectSubject,
-		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS,
-		navigationViewModel.changeScreen
+		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS
 	);
 
 	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(

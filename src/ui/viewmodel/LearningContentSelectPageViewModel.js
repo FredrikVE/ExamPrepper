@@ -1,8 +1,8 @@
 // src/ui/viewmodel/LearningContentSelectPageViewModel.js
 import { useCallback, useMemo, useState } from "react";
-import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup, PAGE_TOOL_AVAILABILITY } from "../../navigation/pageTools.js";
+import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../pageTools/pageTools.js";
 import { NAV_SCREENS } from "../../navigation/navGraph.js";
-import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES, createLearningContentToggleEntries, resolveContentTypeNavigation } from "../../navigation/learningContent.js";
+import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
 import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
@@ -139,22 +139,21 @@ export default function useLearningContentSelectPageViewModel(
 	}, [t, selectedSubject, activeContentType]);
 
 	const selectContentType = useCallback((contentTypeId) => {
-		const contentTypeEntry = findContentTypeEntry(contentTypeId);
-
-		if (!contentTypeEntry || contentTypeEntry.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE) {
+		if (!findContentTypeEntry(contentTypeId)) {
 			return;
 		}
 
 		resetSearchSheet(ALL_TOPIC_AREAS);
 
-		const navigation = resolveContentTypeNavigation(contentTypeId);
-
-		if (navigation.contentTypeId !== null) {
-			setActiveContentType(navigation.contentTypeId);
+		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
+			onChangeScreen(NAV_SCREENS.GLOSSARY);
+			return;
 		}
 
-		if (!isActive || navigation.screen !== NAV_SCREENS.SELECT) {
-			onChangeScreen(navigation.screen);
+		setActiveContentType(contentTypeId);
+
+		if (!isActive) {
+			onChangeScreen(NAV_SCREENS.SELECT);
 		}
 	}, [isActive, onChangeScreen, resetSearchSheet]);
 
@@ -163,7 +162,11 @@ export default function useLearningContentSelectPageViewModel(
 	}, [changeTopicAreaKey]);
 
 	const contentToggleEntries = useMemo(() => {
-		return createLearningContentToggleEntries(t);
+		return LEARNING_CONTENT_ENTRIES.map((entry) => ({
+			id: entry.id,
+			label: t[entry.labelKey],
+			isDisabled: false
+		}));
 	}, [t]);
 
 	const visibleExams = useMemo(() => {
@@ -286,15 +289,12 @@ export default function useLearningContentSelectPageViewModel(
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
-			pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
+			pageToolGroup: LEARNING_CONTENT_SELECT_PAGE_TOOLS,
 			t,
-			workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
 			topicAreaToolItems,
-			activeTopicAreaKey: topicAreaKey,
-			hasSelectedSubject: Boolean(subjectId),
-			onChangeScreen
+			activeTopicAreaKey: topicAreaKey
 		});
-	}, [onChangeScreen, subjectId, t, topicAreaKey, topicAreaToolItems]);
+	}, [t, topicAreaKey, topicAreaToolItems]);
 
 	return {
 		// Data

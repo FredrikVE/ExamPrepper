@@ -1,8 +1,7 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { LEARNING_CONTENT_TYPES, createLearningContentToggleEntries, resolveContentTypeNavigation } from "../../navigation/learningContent.js";
-import { NAV_SCREENS } from "../../navigation/navGraph.js";
-import { getLearningContentSelectWorkspaceActionToolItems, getPageToolGroup } from "../../navigation/pageTools.js";
+import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
+import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../pageTools/pageTools.js";
 import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
@@ -296,17 +295,19 @@ export default function useGlossaryPageViewModel(
 	]), [t.glossaryPageSearchScopeAllLabel, t.glossaryPageSearchScopeChaptersLabel, t.glossaryPageSearchScopeTermsLabel]);
 
 	const contentToggleEntries = useMemo(() => {
-		return createLearningContentToggleEntries(t);
+		return LEARNING_CONTENT_ENTRIES.map((entry) => ({
+			id: entry.id,
+			label: t[entry.labelKey],
+			isDisabled: false
+		}));
 	}, [t]);
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
-			pageToolGroup: getPageToolGroup(NAV_SCREENS.SELECT),
-			t,
-			workspaceActionToolItems: getLearningContentSelectWorkspaceActionToolItems(),
-			hasSelectedSubject: Boolean(subjectId)
+			pageToolGroup: LEARNING_CONTENT_SELECT_PAGE_TOOLS,
+			t
 		});
-	}, [subjectId, t]);
+	}, [t]);
 
 	const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
 		setGlossarySearchTerm(nextSearchTerm);
@@ -398,9 +399,7 @@ export default function useGlossaryPageViewModel(
 	}, [moveSearchSelection]);
 
 	const selectContentType = useCallback((contentTypeId) => {
-		const navigation = resolveContentTypeNavigation(contentTypeId);
-
-		if (navigation.screen === NAV_SCREENS.GLOSSARY) {
+		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
 			return;
 		}
 

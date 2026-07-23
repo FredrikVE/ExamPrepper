@@ -1,7 +1,6 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useMemo } from "react";
-import { getPageToolGroup, getSubjectSelectWorkspaceActionToolItems } from "../../navigation/pageTools.js";
-import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import { SUBJECT_SELECT_PAGE_TOOLS } from "../pageTools/pageTools.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
@@ -9,7 +8,7 @@ import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearch
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, onChangeScreen) {
+export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive) {
 	const executeSubjectLoad = useCallback(() => {
 		return getAvailableSubjectsUseCase.execute({
 			language
@@ -106,12 +105,10 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
-			pageToolGroup: getPageToolGroup(NAV_SCREENS.SUBJECTS),
-			t,
-			workspaceActionToolItems: getSubjectSelectWorkspaceActionToolItems(),
-			onChangeScreen
+			pageToolGroup: SUBJECT_SELECT_PAGE_TOOLS,
+			t
 		});
-	}, [onChangeScreen, selectedSubjectId, t]);
+	}, [t]);
 
 	return {
 		// Data

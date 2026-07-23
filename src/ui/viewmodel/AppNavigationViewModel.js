@@ -1,86 +1,153 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
-import { useCallback, useReducer } from "react";
-import { INITIAL_NAV_STATE, NAV_SCREENS, resolveNavigation, resolveScreenChrome } from "../../navigation/navGraph.js";
+import { useCallback, useState } from "react";
+import { NAV_SCREENS } from "../../navigation/navGraph.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
 
-export default function useAppNavigationViewModel(params) {
-	// resolveNavigation er allerede reducer-formet, så den brukes direkte.
-	const [navState, dispatch] = useReducer(resolveNavigation, INITIAL_NAV_STATE);
-	const { screen: activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey } = navState;
+const SUBJECT_SCREENS = new Set([
+	NAV_SCREENS.SELECT,
+	NAV_SCREENS.FLIPCARDS,
+	NAV_SCREENS.MATCHCARDS,
+	NAV_SCREENS.GLOSSARY
+]);
 
-	// Layout-state
+const SUBJECT_SWITCHER_SCREENS = new Set([
+	NAV_SCREENS.SELECT,
+	NAV_SCREENS.EXAM,
+	NAV_SCREENS.FLIPCARDS,
+	NAV_SCREENS.MATCHCARDS,
+	NAV_SCREENS.GLOSSARY
+]);
+
+const VALID_SCREENS = new Set(Object.values(NAV_SCREENS));
+
+export default function useAppNavigationViewModel(params) {
+	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
+	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+	const [selectedExamId, setSelectedExamId] = useState(null);
+	const [selectedTopicAreaKey, setSelectedTopicAreaKey] = useState(null);
+
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
 
+	const closeNavigationOverlays = useCallback(() => {
+		settingsPresentation.closeSettingsPresentation();
+		mobileTopBar.closeMobileDropDownTopBarMenu();
+		mobileTopBar.closeMobileSubjectPicker();
+	}, [
+		mobileTopBar.closeMobileDropDownTopBarMenu,
+		mobileTopBar.closeMobileSubjectPicker,
+		settingsPresentation.closeSettingsPresentation
+	]);
 
 	const closeMobileDropDownTopBarMenu = useCallback(() => {
-		mobileTopBar.closeMobileDropDownTopBarMenu();
-		settingsPresentation.closeSettingsPresentation();
-		mobileTopBar.closeMobileSubjectPicker();
-	}, [
-		mobileTopBar.closeMobileDropDownTopBarMenu,
-		mobileTopBar.closeMobileSubjectPicker,
-		settingsPresentation.closeSettingsPresentation
-	]);
-
-	// Navigasjon lukker alltid åpne overlays. Dispatch er stabil, så
-	// navigatorene under trenger ingen state-dependencies.
-	const navigate = useCallback((action) => {
-		dispatch(action);
-
-		settingsPresentation.closeSettingsPresentation();
-		mobileTopBar.closeMobileDropDownTopBarMenu();
-		mobileTopBar.closeMobileSubjectPicker();
-	}, [
-		mobileTopBar.closeMobileDropDownTopBarMenu,
-		mobileTopBar.closeMobileSubjectPicker,
-		settingsPresentation.closeSettingsPresentation
-	]);
-
-	const changeScreen = useCallback((nextScreen) => {
-		navigate({ screen: nextScreen });
-	}, [navigate]);
-
-	const selectSubject = useCallback((subjectId) => {
-		navigate({ screen: NAV_SCREENS.SELECT, selection: { selectedSubjectId: subjectId } });
-	}, [navigate]);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays]);
 
 	const showAllSubjects = useCallback(() => {
-		navigate({ screen: NAV_SCREENS.SUBJECTS });
-	}, [navigate]);
+		setActiveScreen(NAV_SCREENS.SUBJECTS);
+		setSelectedSubjectId(null);
+		setSelectedExamId(null);
+		setSelectedTopicAreaKey(null);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays]);
+
+	const changeScreen = useCallback((nextScreen) => {
+		if (!VALID_SCREENS.has(nextScreen)) {
+			return;
+		}
+
+		if (nextScreen === NAV_SCREENS.EXAM && !selectedExamId) {
+			return;
+		}
+
+		if (SUBJECT_SCREENS.has(nextScreen) && !selectedSubjectId) {
+			showAllSubjects();
+			return;
+		}
+
+		if (nextScreen === NAV_SCREENS.SUBJECTS) {
+			showAllSubjects();
+			return;
+		}
+
+		if (nextScreen !== NAV_SCREENS.EXAM) {
+			setSelectedExamId(null);
+		}
+
+		if (nextScreen === NAV_SCREENS.SELECT || nextScreen === NAV_SCREENS.GLOSSARY) {
+			setSelectedTopicAreaKey(null);
+		}
+
+		setActiveScreen(nextScreen);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays, selectedExamId, selectedSubjectId, showAllSubjects]);
+
+	const selectSubject = useCallback((subjectId) => {
+		setSelectedSubjectId(subjectId);
+		setSelectedExamId(null);
+		setSelectedTopicAreaKey(null);
+		setActiveScreen(NAV_SCREENS.SELECT);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays]);
 
 	const selectExam = useCallback((examId) => {
-		navigate({ screen: NAV_SCREENS.EXAM, selection: { selectedExamId: examId } });
-	}, [navigate]);
+		if (!examId) {
+			return;
+		}
+
+		setSelectedExamId(examId);
+		setActiveScreen(NAV_SCREENS.EXAM);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays]);
 
 	const selectFlipcardDeck = useCallback((topicAreaKey) => {
-		navigate({ screen: NAV_SCREENS.FLIPCARDS, selection: { selectedTopicAreaKey: topicAreaKey ?? null } });
-	}, [navigate]);
+		if (!selectedSubjectId) {
+			showAllSubjects();
+			return;
+		}
+
+		setSelectedExamId(null);
+		setSelectedTopicAreaKey(topicAreaKey ?? null);
+		setActiveScreen(NAV_SCREENS.FLIPCARDS);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays, selectedSubjectId, showAllSubjects]);
 
 	const selectMatchCardsDeck = useCallback((topicAreaKey) => {
-		navigate({ screen: NAV_SCREENS.MATCHCARDS, selection: { selectedTopicAreaKey: topicAreaKey ?? null } });
-	}, [navigate]);
+		if (!selectedSubjectId) {
+			showAllSubjects();
+			return;
+		}
 
-	// Intern: eneste bruk er når språkbytte gjør valgt eksamen utilgjengelig.
-	const backToExamList = useCallback(() => {
-		navigate({ screen: NAV_SCREENS.SELECT });
-	}, [navigate]);
+		setSelectedExamId(null);
+		setSelectedTopicAreaKey(topicAreaKey ?? null);
+		setActiveScreen(NAV_SCREENS.MATCHCARDS);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays, selectedSubjectId, showAllSubjects]);
 
 	const goBack = useCallback(() => {
-		navigate({ back: true });
-	}, [navigate]);
+		if (activeScreen === NAV_SCREENS.SUBJECTS) {
+			return;
+		}
 
-	// Uten screen: bli stående, bytt bare valgt eksamen. Går utenom navigate(),
-	// fordi språksynk ikke skal lukke åpne overlays.
+		if (activeScreen === NAV_SCREENS.SELECT) {
+			showAllSubjects();
+			return;
+		}
+
+		changeScreen(NAV_SCREENS.SELECT);
+	}, [activeScreen, changeScreen, showAllSubjects]);
+
+	// Språkbytte skal oppdatere valgt eksamen uten å lukke åpne menyer.
 	const resolveSyncedExam = useCallback((examId, subjectId) => {
-		dispatch({ selection: { selectedExamId: examId, selectedSubjectId: subjectId } });
+		setSelectedExamId(examId);
+		setSelectedSubjectId(subjectId);
 	}, []);
 
 	const handleSyncedExamUnavailable = useCallback(() => {
-		backToExamList();
-	}, [backToExamList]);
+		changeScreen(NAV_SCREENS.SELECT);
+	}, [changeScreen]);
 
 	useSyncSelectedExamWithLanguage({
 		language: params.language,
@@ -93,16 +160,20 @@ export default function useAppNavigationViewModel(params) {
 		onExamUnavailable: handleSyncedExamUnavailable
 	});
 
-	const shouldShowSubjectSwitcher =
-		activeScreen === NAV_SCREENS.SELECT ||
-		activeScreen === NAV_SCREENS.EXAM ||
+	const shouldShowSubjectSwitcher = SUBJECT_SWITCHER_SCREENS.has(activeScreen);
+	const isPracticeScreen =
 		activeScreen === NAV_SCREENS.FLIPCARDS ||
-		activeScreen === NAV_SCREENS.MATCHCARDS ||
-		activeScreen === NAV_SCREENS.GLOSSARY;
+		activeScreen === NAV_SCREENS.MATCHCARDS;
+	const pageClassName = isPracticeScreen
+		? "exam-page flipcards-theme-scope"
+		: activeScreen === NAV_SCREENS.EXAM
+			? "exam-page"
+			: "exam-select-page";
+	const shellClassName = activeScreen === NAV_SCREENS.EXAM || isPracticeScreen
+		? "exam-shell"
+		: "exam-select-shell";
+	const showBackButton = activeScreen !== NAV_SCREENS.SUBJECTS;
 
-	const { pageClassName, shellClassName, showBackButton } = resolveScreenChrome(activeScreen);
-
-	// Grafen avgjør OM knappen vises, ViewModel-laget eier tekst og handler.
 	const backContract = {
 		showBackButton,
 		backLabel: params.backLabel,
@@ -111,27 +182,24 @@ export default function useAppNavigationViewModel(params) {
 	};
 
 	return {
-		// Navigasjon
 		activeScreen,
 		selectedSubjectId,
 		selectedExamId,
 		selectedTopicAreaKey,
 		shouldShowSubjectSwitcher,
 		backContract,
-		showBackButton: backContract.showBackButton,
+		showBackButton,
 		backLabel: backContract.backLabel,
 		navigationLabel: backContract.navigationLabel,
-		onBack: backContract.onBack,
+		onBack: goBack,
 		pageClassName,
 		shellClassName,
 
-		// Layout
 		isSettingsPresentationOpen: settingsPresentation.isSettingsPresentationOpen,
 		isMobileDropDownTopBarMenuOpen: mobileTopBar.isMobileDropDownTopBarMenuOpen,
 		isMobileSubjectPickerOpen: mobileTopBar.isMobileSubjectPickerOpen,
 		settingsPresentationMode: settingsPresentation.settingsPresentationMode,
 
-		// Handlers
 		closeSettingsPresentation: settingsPresentation.closeSettingsPresentation,
 		toggleMobileDropDownTopBarMenu: mobileTopBar.toggleMobileDropDownTopBarMenu,
 		closeMobileDropDownTopBarMenu,

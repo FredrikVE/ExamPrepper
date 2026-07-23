@@ -1,6 +1,5 @@
 // src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js
-import { NAV_SCREENS } from "../../../navigation/navGraph.js";
-import { PAGE_TOOL_AVAILABILITY, PAGE_TOOL_ITEM_IDS, getPageToolItems } from "../../../navigation/pageTools.js";
+import { FLIPCARDS_PAGE_TOOLS, PAGE_TOOL_ITEM_IDS } from "../../pageTools/pageTools.js";
 
 export const FLIPCARD_DECK_TOOL_KEYS = {
     ALL_CARDS: PAGE_TOOL_ITEM_IDS.FLIPCARDS_ALL_CARDS,
@@ -9,9 +8,9 @@ export const FLIPCARD_DECK_TOOL_KEYS = {
     ADD_CARD: PAGE_TOOL_ITEM_IDS.FLIPCARDS_ADD_CARD
 };
 
-export const FLIPCARD_DECK_TOOLS = getPageToolItems(NAV_SCREENS.FLIPCARDS).map((toolCard) => ({
+export const FLIPCARD_DECK_TOOLS = FLIPCARDS_PAGE_TOOLS.items.map((toolCard) => ({
     key: toolCard.id,
     labelKey: toolCard.viewModelLabelKey,
     iconKey: toolCard.iconKey,
-    unavailable: toolCard.availability === PAGE_TOOL_AVAILABILITY.UNAVAILABLE
+    unavailable: toolCard.isDisabled
 }));

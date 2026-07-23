@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { createDeckToolItems, createDeckToolStatusLabels, createDisabledDeckToolKeys, createRepeatDifficultCardIds, createShuffledFlipcardIds, createVisibleFlipcards } from "../../../../src/ui/viewmodel/FlipcardsPage/flipcardDeckToolState.js";
 import { FLIPCARD_DECK_TOOL_KEYS, FLIPCARD_DECK_TOOLS } from "../../../../src/ui/viewmodel/FlipcardsPage/flipcardDeckTools.js";
-import { PAGE_TOOL_ICON_KEYS } from "../../../../src/navigation/pageTools.js";
+import { PAGE_TOOL_ICON_KEYS } from "../../../../src/ui/pageTools/pageTools.js";
 
 const cards = [
     { id: "card-1", term: "One" },

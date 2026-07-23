@@ -226,9 +226,10 @@ data; ny nøkkel nullstiller første-last-semantikken. `isEnabled === false` bet
 ingen kjøring og ingen skriving. Bare siste igangsatte last får skrive resultat.
 `onLoaded` er påkrevd og nullable; fravær sendes som `null`.
 
-Skjerm-chrome og contentType→skjerm er navigasjonskontrakter. Deres SSOT ligger i
-`src/navigation/navGraph.js` og `src/navigation/learningContent.js`, ikke i
-`App.jsx`, Pages eller ViewModels utover tynn delegering.
+`src/navigation/navGraph.js` inneholder bare stabile skjerm-ID-er.
+`AppNavigationViewModel.js` eier de få overgangsreglene, valgt fag/eksamen og
+skjerm-chrome. `src/navigation/learningContent.js` inneholder metadata for
+innholdstypene, mens ViewModel-en avgjør om et valg bytter lokal fane eller skjerm.
 
 ---
 

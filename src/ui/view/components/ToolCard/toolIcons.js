@@ -1,6 +1,6 @@
 // src/ui/view/components/ToolCard/toolIcons.js
 import { BarChart3, BookOpen, Bug, ChevronLeft, ChevronRight, Clock3, FileText, Fingerprint, GalleryHorizontalEnd, KeyRound, Leaf, List, Network, PanelsTopLeft, PieChart, Plus, RefreshCw, RotateCcw, Send, ShieldCheck, Shuffle, Sparkles, UserCog, Wrench } from "lucide-react";
-import { PAGE_TOOL_ICON_KEYS } from "../../../../navigation/pageTools.js";
+import { PAGE_TOOL_ICON_KEYS } from "../../../pageTools/pageTools.js";
 
 const TOOL_ICONS_BY_KEY = {
     [PAGE_TOOL_ICON_KEYS.BAR_CHART_3]: BarChart3,
