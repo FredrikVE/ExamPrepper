@@ -1,5 +1,6 @@
 /* Shared geometry for every page reached from LearningContentSelectPage.
    Stable chrome and heading coordinates prevent layout shifts while tabbing. */
+/* --scaffold-inset overstyrer scaffoldets hook, den eies av WorkspaceScaffold. */
 .learning-content-workspace {
 	--scaffold-inset: clamp(28px, 3.4vw, 48px);
 	--learning-content-page-top: clamp(106px, 7vw, 120px);

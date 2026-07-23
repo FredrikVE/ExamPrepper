@@ -6,7 +6,7 @@
 	width: 100%;
 	flex: 0 0 auto;
 	justify-content: center;
-	padding: var(--space-3) var(--scaffold-inset, clamp(24px, 5vw, 72px)) var(--space-5);
+	padding: var(--space-3) var(--scaffold-inset) var(--space-5);
 	pointer-events: none;
 	background: var(--shell-bg);
 }

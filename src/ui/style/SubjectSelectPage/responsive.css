@@ -8,7 +8,7 @@
 @media (max-width: 1280px) {
     .subject-select-layout {
         --scaffold-inset: 36px;
-        --scaffold-content-top: 112px;
+        --subject-select-content-top: 112px;
     }
 }
 

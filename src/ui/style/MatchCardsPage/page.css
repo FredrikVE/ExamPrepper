@@ -15,14 +15,14 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	padding:
-		calc(var(--scaffold-header-height, 112px) + clamp(76px, 10vh, 108px))
+		calc(var(--scaffold-header-height) + clamp(76px, 10vh, 108px))
 		clamp(var(--space-5), 2.3vw, var(--space-8))
 		calc(var(--space-5) + env(safe-area-inset-bottom));
 }
 
 .matchcards-round-complete {
 	width: 100%;
-	min-height: min(720px, calc(100dvh - var(--scaffold-header-height, 112px) - clamp(156px, 20vh, 220px)));
+	min-height: min(720px, calc(100dvh - var(--scaffold-header-height) - clamp(156px, 20vh, 220px)));
 	margin: 0 auto;
 	flex: 1 1 auto;
 	display: flex;

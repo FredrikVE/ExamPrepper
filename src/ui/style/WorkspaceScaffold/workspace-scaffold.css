@@ -1,6 +1,14 @@
 /* src/ui/style/WorkspaceScaffold/workspace-scaffold.css */
+
+/* Scaffoldet erklærer sine egne geometri-hooks med standardverdier.
+   Sidefamilier kan overstyre dem på samme element, men de skal aldri
+   defineres for første gang utenfor denne filen — da har konsumenter
+   ingen garantert eier og må gjette med fallback.
+   Konsumenter skriver `var(--scaffold-x)` uten fallback. */
 .workspace-scaffold {
 	--workspace-scaffold-backdrop-filter: var(--blur-panel);
+	--scaffold-header-height: 112px;
+	--scaffold-inset: clamp(42px, 5vw, 72px);
 
 	position: relative;
 	z-index: 1;
@@ -33,11 +41,15 @@
 	display: contents;
 }
 
-/* Scaffoldet eier kroppens struktur. Standard er native flex-scroll.
-   Eneste tillatte overstyring er containment, og den gjøres spesifisitet-trygt
-   via en descendant: `.<side>-workspace .workspace-scaffold-body { overflow: hidden }`.
-   Sider skal ikke re-posisjonere kroppen (ingen `position: absolute` / `inset`) —
-   det gjeninnfører en konkurrerende struktur og gjør laget rekkefølge-avhengig. */
+/* Scaffoldet eier kroppens struktur: posisjonering, flex-oppførsel og scroll.
+   Sider kan sette padding og indre flex-oppsett direkte på kroppen — scaffoldet
+   setter ikke de propertyene selv, så der oppstår ingen konflikt.
+   Overstyring av en property scaffoldet SELV setter (overflow, overscroll,
+   scrollbar-*, flex, min-*) må gjøres via descendant, ellers har de to
+   selektorene lik spesifisitet og utfallet avgjøres av @import-rekkefølgen i
+   App.css: `.<side>-workspace .workspace-scaffold-body { … }`.
+   Sider skal ikke re-posisjonere kroppen (ingen `position` / `inset`) —
+   det gjeninnfører en konkurrerende struktur. */
 .workspace-scaffold-body {
 	position: relative;
 	z-index: 1;

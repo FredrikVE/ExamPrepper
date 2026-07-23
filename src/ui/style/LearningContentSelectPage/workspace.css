@@ -5,19 +5,18 @@
 }
 
 .exam-select-scroll {
-	box-sizing: border-box;
-	min-width: 0;
-	overflow-x: hidden;
-	overflow-y: auto;
-	overscroll-behavior: contain;
-	scrollbar-width: none;
 	padding:
 		var(--learning-content-page-top)
 		var(--learning-content-page-inline)
 		calc(var(--scaffold-inset) + var(--select-search-footer-space));
 }
 
-.exam-select-scroll::-webkit-scrollbar {
+/* Descendant, ikke søsken-klasse — se WorkspaceScaffold-kontrakten. */
+.exam-select-workspace .workspace-scaffold-body {
+	scrollbar-width: none;
+}
+
+.exam-select-workspace .workspace-scaffold-body::-webkit-scrollbar {
 	display: none;
 }
 

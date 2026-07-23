@@ -25,7 +25,7 @@
 	display: flex;
 	height: 100%;
 	flex-direction: column;
-	padding-top: var(--scaffold-header-height, 112px);
+	padding-top: var(--scaffold-header-height);
 	padding-bottom: clamp(112px, 14vh, 152px);
 }
 
