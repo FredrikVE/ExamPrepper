@@ -34,10 +34,10 @@ describe("navGraph", () => {
 
 	test("declares complete screen chrome for every graph node", () => {
 		expect(Object.values(NAV_GRAPH).every((node) => (
-		typeof node.pageClass === "string"
-		&& typeof node.shellClass === "string"
-		&& Object.prototype.hasOwnProperty.call(node, "themeScope")
-	))).toBe(true);
+			typeof node.classes.pageClass === "string"
+			&& typeof node.classes.shellClass === "string"
+			&& Object.prototype.hasOwnProperty.call(node.classes, "themeScope")
+		))).toBe(true);
 	});
 
 	test("lets the glossary graph node own topic-area reset", () => {
@@ -234,12 +234,34 @@ describe("navGraph", () => {
 			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null, selectedTopicAreaKey: null }
 		],
 		[
-			"ukjent aktiv skjerm går tilbake til SUBJECTS",
+			"ukjent aktiv skjerm behandles som rot, og rot har ingen back",
 			{ screen: "finnes-ikke", ...WITH_SUBJECT_AND_EXAM },
-			{ screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null, selectedTopicAreaKey: null }
+			null
 		]
 	])("resolveNavigation tilbake: %s", (_, navState, expected) => {
 		expect(resolveNavigation(navState, { back: true })).toEqual(expected ?? navState);
+	});
+
+	test("de tre klasse-presetene dekker alle skjermene", () => {
+		const kombinasjoner = new Set(Object.values(NAV_GRAPH).map((node) => node.classes));
+
+		expect(kombinasjoner.size).toBe(3);
+
+		for (const node of Object.values(NAV_GRAPH)) {
+			expect(typeof node.classes.pageClass).toBe("string");
+			expect(typeof node.classes.shellClass).toBe("string");
+		}
+	});
+
+	test("fag-guarden omdirigerer uten å kalle seg selv på nytt", () => {
+		const utenFag = { screen: NAV_SCREENS.SUBJECTS, selectedSubjectId: null, selectedExamId: null, selectedTopicAreaKey: "t1" };
+
+		expect(resolveNavigation(utenFag, { screen: NAV_SCREENS.FLIPCARDS })).toEqual({
+			screen: NAV_SCREENS.SUBJECTS,
+			selectedSubjectId: null,
+			selectedExamId: null,
+			selectedTopicAreaKey: null
+		});
 	});
 
 	test("startstanden er fagoversikten uten valg", () => {

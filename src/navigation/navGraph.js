@@ -15,7 +15,7 @@ export const NAV_SCREENS = {
  * - requiresSubject: uten valgt fag faller navigasjonen tilbake til SUBJECTS
  * - requiresExam: uten valgt eksamen skjer ingen navigasjon
  * - clearsSubject / clearsExam / clearsTopicArea: valg som nullstilles ved inngang til skjermen
- * - pageClass / shellClass / themeScope: skjermens app-chrome
+ * - classes: preset fra SCREEN_CLASSES — skjermens app-chrome
  *
  * Grafen eier hvilke skjermer som HAR tilbake-navigasjon (backTo), og
  * resolveScreenChrome eksponerer det som showBackButton. Grafen eier ikke
@@ -31,11 +31,21 @@ export const INITIAL_NAV_STATE = {
 	selectedTopicAreaKey: null
 };
 
+/*
+ * Tre klassekombinasjoner dekker alle sju skjermene. Presetene navngis her,
+ * slik at en endring i skallets klassenavn skjer ett sted og ikke i fire noder.
+ */
+const SCREEN_CLASSES = {
+	SELECT: { pageClass: "exam-select-page", shellClass: "exam-select-shell", themeScope: null },
+	EXAM: { pageClass: "exam-page", shellClass: "exam-shell", themeScope: null },
+	PRACTICE: { pageClass: "exam-page", shellClass: "exam-shell", themeScope: "flipcards-theme-scope" }
+};
+
+const ROOT_SCREEN = NAV_SCREENS.SUBJECTS;
+
 export const NAV_GRAPH = {
 	[NAV_SCREENS.SUBJECTS]: {
-		pageClass: "exam-select-page",
-		shellClass: "exam-select-shell",
-		themeScope: null,
+		classes: SCREEN_CLASSES.SELECT,
 		backTo: null,
 		requiresSubject: false,
 		requiresExam: false,
@@ -44,9 +54,7 @@ export const NAV_GRAPH = {
 		clearsTopicArea: true
 	},
 	[NAV_SCREENS.SELECT]: {
-		pageClass: "exam-select-page",
-		shellClass: "exam-select-shell",
-		themeScope: null,
+		classes: SCREEN_CLASSES.SELECT,
 		backTo: NAV_SCREENS.SUBJECTS,
 		requiresSubject: true,
 		requiresExam: false,
@@ -55,9 +63,7 @@ export const NAV_GRAPH = {
 		clearsTopicArea: true
 	},
 	[NAV_SCREENS.EXAM]: {
-		pageClass: "exam-page",
-		shellClass: "exam-shell",
-		themeScope: null,
+		classes: SCREEN_CLASSES.EXAM,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: false,
 		requiresExam: true,
@@ -66,9 +72,7 @@ export const NAV_GRAPH = {
 		clearsTopicArea: false
 	},
 	[NAV_SCREENS.FLIPCARDS]: {
-		pageClass: "exam-page",
-		shellClass: "exam-shell",
-		themeScope: "flipcards-theme-scope",
+		classes: SCREEN_CLASSES.PRACTICE,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,
 		requiresExam: false,
@@ -77,9 +81,7 @@ export const NAV_GRAPH = {
 		clearsTopicArea: false
 	},
 	[NAV_SCREENS.MATCHCARDS]: {
-		pageClass: "exam-page",
-		shellClass: "exam-shell",
-		themeScope: "flipcards-theme-scope",
+		classes: SCREEN_CLASSES.PRACTICE,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,
 		requiresExam: false,
@@ -88,9 +90,7 @@ export const NAV_GRAPH = {
 		clearsTopicArea: false
 	},
 	[NAV_SCREENS.GLOSSARY]: {
-		pageClass: "exam-select-page",
-		shellClass: "exam-select-shell",
-		themeScope: null,
+		classes: SCREEN_CLASSES.SELECT,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: true,
 		requiresExam: false,
@@ -99,9 +99,7 @@ export const NAV_GRAPH = {
 		clearsTopicArea: true
 	},
 	[NAV_SCREENS.OVERVIEW]: {
-		pageClass: "exam-select-page",
-		shellClass: "exam-select-shell",
-		themeScope: null,
+		classes: SCREEN_CLASSES.SELECT,
 		backTo: NAV_SCREENS.SELECT,
 		requiresSubject: false,
 		requiresExam: false,
@@ -111,6 +109,27 @@ export const NAV_GRAPH = {
 	}
 };
 
+/*
+ * Én policy for ukjent skjerm, brukt av alle som leser tilstand om en skjerm:
+ * den behandles som rotskjermen — også for backTo, som dermed er null.
+ * Å NAVIGERE til en ukjent skjerm er noe annet og avvises, se
+ * resolveScreenEntry.
+ *
+ * Tilstanden er uoppnåelig i drift: navState.screen kommer alltid fra
+ * resolveNavigation, som kun produserer skjermer i grafen.
+ */
+function getNodeOrRoot(screen) {
+	return NAV_GRAPH[screen] ?? NAV_GRAPH[ROOT_SCREEN];
+}
+
+/*
+ * Returnerer null når overgangen ikke skal skje: ukjent skjerm, eller en
+ * skjerm som krever eksamen uten at én er valgt.
+ *
+ * Mangler valgt fag omdirigeres til rot i stedet for å avvises. Målskjermen
+ * velges derfor før tilstanden bygges — ikke ved å kalle funksjonen på nytt,
+ * som ville vært avhengig av at rotnoden aldri selv krever fag.
+ */
 function resolveScreenEntry(nextScreen, navState) {
 	const node = NAV_GRAPH[nextScreen];
 
@@ -122,21 +141,20 @@ function resolveScreenEntry(nextScreen, navState) {
 		return null;
 	}
 
-	if (node.requiresSubject && !navState.selectedSubjectId) {
-		return resolveScreenEntry(NAV_SCREENS.SUBJECTS, navState);
-	}
+	const redirectsToRoot = node.requiresSubject && !navState.selectedSubjectId;
+	const targetScreen = redirectsToRoot ? ROOT_SCREEN : nextScreen;
+	const targetNode = NAV_GRAPH[targetScreen];
 
 	return {
-		screen: nextScreen,
-		selectedSubjectId: node.clearsSubject ? null : navState.selectedSubjectId,
-		selectedExamId: node.clearsExam ? null : navState.selectedExamId,
-		selectedTopicAreaKey: node.clearsTopicArea ? null : navState.selectedTopicAreaKey
+		screen: targetScreen,
+		selectedSubjectId: targetNode.clearsSubject ? null : navState.selectedSubjectId,
+		selectedExamId: targetNode.clearsExam ? null : navState.selectedExamId,
+		selectedTopicAreaKey: targetNode.clearsTopicArea ? null : navState.selectedTopicAreaKey
 	};
 }
 
 function resolveBackNavigation(navState) {
-	const node = NAV_GRAPH[navState.screen];
-	const backScreen = node ? node.backTo : NAV_SCREENS.SUBJECTS;
+	const backScreen = getNodeOrRoot(navState.screen).backTo;
 
 	if (backScreen === null) {
 		return null;
@@ -168,11 +186,11 @@ export function resolveNavigation(navState, request) {
 }
 
 export function resolveScreenChrome(screen) {
-	const node = NAV_GRAPH[screen] ?? NAV_GRAPH[NAV_SCREENS.SUBJECTS];
+	const node = getNodeOrRoot(screen);
 
 	return {
-		pageClassName: [node.pageClass, node.themeScope].filter(Boolean).join(" "),
-		shellClassName: node.shellClass,
+		pageClassName: [node.classes.pageClass, node.classes.themeScope].filter(Boolean).join(" "),
+		shellClassName: node.classes.shellClass,
 		showBackButton: node.backTo !== null
 	};
 }
