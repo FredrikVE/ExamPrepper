@@ -1,5 +1,8 @@
 # Header/Footer scaffold inventory
 
+> **Historisk dokument.** Dette beskriver snapshotet før den endelige SSOT-refaktoreringen. Gjeldende kontrakter finnes i [`docs/architecture/ARCHITECTURE.md`](../architecture/ARCHITECTURE.md), [`docs/architecture/SSOT_REGISTER_FRONTEND.md`](../architecture/SSOT_REGISTER_FRONTEND.md) og frontend-soul-dokumentet. Statistics bruker nå canonical Header, og `WorkspaceScaffoldHeader` er ikke gjeldende API.
+
+
 Oppdatert: 2026-07-01
 Patch: `inventory-header-footer-scaffold`
 Type: dokumentasjon / analyse

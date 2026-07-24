@@ -1,16 +1,15 @@
 /* src/ui/style/Header/header.css */
 .scaffold-header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 30;
-    display: grid;
-    grid-template-columns: minmax(64px, 1fr) minmax(0, auto) minmax(64px, 1fr);
-    align-items: flex-start;
-    min-height: var(--scaffold-header-height);
-    padding: 24px var(--scaffold-inset) 18px;
-    pointer-events: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: var(--z-scaffold-header);
+	display: grid;
+	align-items: flex-start;
+	min-height: var(--scaffold-header-height);
+	padding: 24px var(--scaffold-inset) 18px;
+	pointer-events: none;
 }
 
 .scaffold-header::before {
@@ -18,50 +17,94 @@
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
+}
+
+.scaffold-header--appearance-default::before {
 	background:
 		var(--workspace-ambient-glow),
 		linear-gradient(var(--shell-bg), var(--shell-bg)) var(--app-bg);
 }
 
+.scaffold-header--appearance-transparent::before {
+	background: none;
+}
+
+.scaffold-header--layout-default,
+.scaffold-header--layout-page-title {
+	grid-template-columns: minmax(64px, 1fr) minmax(0, auto) minmax(64px, 1fr);
+}
+
+.scaffold-header--layout-exam-progress {
+	grid-template-columns: 64px minmax(0, 1fr) auto;
+	column-gap: clamp(var(--space-5), 3vw, var(--space-8));
+}
+
+.scaffold-header--layout-matchcards-progress {
+	grid-template-columns: 64px minmax(0, 1fr) 64px;
+	column-gap: clamp(var(--space-6), 4vw, var(--space-10));
+}
+
 .scaffold-header__leading,
 .scaffold-header__heading,
 .scaffold-header__trailing {
-    position: relative;
-    z-index: 2;
-    pointer-events: auto;
+	position: relative;
+	z-index: 2;
+	pointer-events: auto;
 }
 
 .scaffold-header__leading {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-width: 0;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	min-width: 0;
 }
 
 .scaffold-header__heading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-    max-width: min(560px, 48vw);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 0;
+	max-width: min(560px, 48vw);
+}
+
+.scaffold-header__heading > * {
+	width: 100%;
+	min-width: 0;
+}
+
+.scaffold-header--layout-exam-progress .scaffold-header__heading {
+	width: min(100%, 620px);
+	max-width: min(620px, 42vw);
+	justify-content: stretch;
+}
+
+.scaffold-header--layout-matchcards-progress .scaffold-header__heading {
+	width: 100%;
+	max-width: none;
+	align-self: center;
+	justify-content: stretch;
+}
+
+.scaffold-header--layout-page-title .scaffold-header__heading {
+	max-width: min(760px, 56vw);
 }
 
 .scaffold-header__trailing {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    min-width: 0;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	min-width: 0;
 }
 
 .scaffold-header__actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    min-width: 0;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	min-width: 0;
 }
 
 .scaffold-header .desktop-pop-out-menu__trigger {
-    pointer-events: auto;
+	pointer-events: auto;
 }

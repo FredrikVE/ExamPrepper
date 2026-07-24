@@ -103,7 +103,7 @@
    Når viewport-høyden blir ekstremt lav, bytter exam cards
    fra store grid-kort til en kompakt listevisning. */
 @media (max-height: 700px) and (min-width: 933px) {
-    .exam-select-scroll {
+    .learning-content-select-page-content {
         padding:
             var(--learning-content-page-top)
             var(--learning-content-page-inline)
@@ -350,7 +350,7 @@
         border-radius: 0;
     }
 
-    .exam-select-scroll {
+    .learning-content-select-page-content {
         padding: var(--learning-content-page-top) var(--learning-content-page-inline) 28px;
     }
 

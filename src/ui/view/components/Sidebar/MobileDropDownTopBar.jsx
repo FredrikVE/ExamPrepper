@@ -10,6 +10,7 @@ import SidebarCloseButton from "./SidebarCloseButton.jsx";
 import MobileExamSubmitAction from "./MobileExamSubmitAction.jsx";
 import MobileExamSubmitConfirmation from "./MobileExamSubmitConfirmation.jsx";
 import ProgressBar from "../Shared/ProgressBar/ProgressBar.jsx";
+import { PROGRESS_BAR_VARIANTS } from "../Shared/ProgressBar/progressBarVariants.js";
 import SettingsPanelContent from "../Settings/SettingsPanelContent.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 import useSubmitConfirmFocus from "./useSubmitConfirmFocus.js";
@@ -107,7 +108,7 @@ export default function MobileDropDownTopBar(props) {
 	const showFlipcardsDeckPill = isFlipcardsScreen && !props.isMobileDropDownTopBarMenuOpen && props.showSubjectSwitcher && !shouldShowSettingsTopbar;
 	const shouldShowExamWorkStatus = props.isExamWorkMode && !props.isMobileDropDownTopBarMenuOpen && !props.progressBarModel;
 	const showExamSubmitConfirm = props.isExamWorkMode && props.isExamSubmitConfirmOpen;
-	const showTopbarBackButton = props.showBackButton || shouldShowSettingsTopbar;
+	const showTopbarBackButton = props.backContract.showBackButton || shouldShowSettingsTopbar;
 	const showMobileProgressBar = Boolean(props.progressBarModel) && !props.isMobileDropDownTopBarMenuOpen && !shouldShowSettingsTopbar;
 
 	useMobileMenuEscapeKey({
@@ -143,13 +144,13 @@ export default function MobileDropDownTopBar(props) {
 		showExamSubmitConfirm ? "mobile-dropdown-backdrop-submit-confirm-open" : null
 	].filter(Boolean);
 
-	const topbarNavigationLabel = props.navigationLabel ?? t.sidebarMobileNavigation;
+	const topbarNavigationLabel = props.backContract.navigationLabel;
 	const topbarBackLabel = shouldShowSettingsTopbar
 		? t.settingsBackToMenu
-		: props.backLabel ?? t.sidebarBack;
+		: props.backContract.backLabel;
 	const handleTopbarBack = shouldShowSettingsTopbar
 		? props.onBackFromSettingsToMobileDropDownTopBarMenu
-		: props.onBack;
+		: props.backContract.onBack;
 
 	const handleMenuButtonClick = shouldShowSettingsTopbar
 		? props.onCloseMobileDropDownTopBarMenu
@@ -199,7 +200,7 @@ export default function MobileDropDownTopBar(props) {
 
 				{showMobileProgressBar && (
 					<div className="mobile-topbar-progress">
-						<ProgressBar model={props.progressBarModel} />
+						<ProgressBar variant={PROGRESS_BAR_VARIANTS.DEFAULT} model={props.progressBarModel} />
 					</div>
 				)}
 

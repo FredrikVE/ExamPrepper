@@ -1,5 +1,6 @@
 // src/ui/viewmodel/Utils/answerOptionOrder.js
 import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
+import shuffleInPlace from "./shuffleInPlace.js";
 
 export default function createAnswerOptionOrderByQuestionId(questions) {
 	return questions.reduce((answerOptionOrderByQuestionId, question) => {
@@ -67,10 +68,5 @@ const getSequenceOrderItemCount = (question) => {
 const shuffleIndexes = (length) => {
 	const indexes = Array.from({ length }, (_, index) => index);
 
-	for (let index = indexes.length - 1; index > 0; index -= 1) {
-		const randomIndex = Math.floor(Math.random() * (index + 1));
-		[indexes[index], indexes[randomIndex]] = [indexes[randomIndex], indexes[index]];
-	}
-
-	return indexes;
+	return shuffleInPlace(indexes, Math.random);
 };

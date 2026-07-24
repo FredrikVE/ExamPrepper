@@ -1,7 +1,7 @@
 /* src/ui/style/Settings/panel.css */
 .settings-sidebar {
     position: fixed;
-    z-index: 130;
+    z-index: var(--z-settings-dialog);
     display: flex;
     flex-direction: column;
     margin: 0;

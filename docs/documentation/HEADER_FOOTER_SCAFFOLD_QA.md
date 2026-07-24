@@ -1,5 +1,8 @@
 # Header/Footer scaffold QA handover
 
+> **Historisk QA-handover.** Sluttstatusen her er erstattet av [`docs/architecture/REFACTOR_DELIVERY_REPORT.md`](../architecture/REFACTOR_DELIVERY_REPORT.md). Statistics bruker nå canonical Header; dagens kontrakt er slot-basert og feature-fri.
+
+
 Oppdatert: 2026-07-02
 Patch: `final-header-footer-qa-doc`
 Type: dokumentasjon / QA-handover

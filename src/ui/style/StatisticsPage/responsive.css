@@ -15,18 +15,8 @@
 		padding: 0 var(--space-6) var(--space-6);
 	}
 
-	.statistics-page-header {
-		margin: var(--space-6) var(--space-6) var(--space-8);
-	}
-
-	.statistics-page-header,
 	.statistics-hero {
 		align-items: stretch;
-		flex-direction: column;
-	}
-
-	.statistics-page-header,
-	.statistics-hero {
 		display: grid;
 		grid-template-columns: 1fr;
 	}
@@ -49,11 +39,13 @@
 	}
 
 	.statistics-page-workspace .workspace-scaffold-body {
-		padding: 0 var(--space-6) var(--space-10);
+		padding: calc(var(--mobile-topbar-height) + 24px) var(--space-6) var(--space-10);
 	}
 
-	.statistics-page-header {
-		margin-top: calc(var(--mobile-topbar-height) + 24px);
+	.statistics-start-button--mobile {
+		display: block;
+		width: 100%;
+		margin-bottom: var(--space-6);
 	}
 }
 

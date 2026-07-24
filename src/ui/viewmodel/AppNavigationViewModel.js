@@ -1,32 +1,16 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
-import { NAV_SCREENS } from "../../navigation/navigation.js";
+import { getScreenConfig, NAV_SCREENS } from "../../navigation/navigation.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
-
-const SUBJECT_SCREENS = new Set([
-	NAV_SCREENS.SELECT,
-	NAV_SCREENS.FLIPCARDS,
-	NAV_SCREENS.MATCHCARDS,
-	NAV_SCREENS.GLOSSARY
-]);
-
-const SUBJECT_SWITCHER_SCREENS = new Set([
-	NAV_SCREENS.SELECT,
-	NAV_SCREENS.EXAM,
-	NAV_SCREENS.FLIPCARDS,
-	NAV_SCREENS.MATCHCARDS,
-	NAV_SCREENS.GLOSSARY
-]);
-
-const VALID_SCREENS = new Set(Object.values(NAV_SCREENS));
 
 export default function useAppNavigationViewModel(params) {
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
 	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 	const [selectedExamId, setSelectedExamId] = useState(null);
 	const [selectedTopicAreaKey, setSelectedTopicAreaKey] = useState(null);
+	const [examLanguageSyncError, setExamLanguageSyncError] = useState(null);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
@@ -46,6 +30,7 @@ export default function useAppNavigationViewModel(params) {
 	}, [closeNavigationOverlays]);
 
 	const showAllSubjects = useCallback(() => {
+		setExamLanguageSyncError(null);
 		setActiveScreen(NAV_SCREENS.SUBJECTS);
 		setSelectedSubjectId(null);
 		setSelectedExamId(null);
@@ -54,15 +39,13 @@ export default function useAppNavigationViewModel(params) {
 	}, [closeNavigationOverlays]);
 
 	const changeScreen = useCallback((nextScreen) => {
-		if (!VALID_SCREENS.has(nextScreen)) {
+		const nextScreenConfig = getScreenConfig(nextScreen);
+
+		if (nextScreenConfig.requiresExam && !selectedExamId) {
 			return;
 		}
 
-		if (nextScreen === NAV_SCREENS.EXAM && !selectedExamId) {
-			return;
-		}
-
-		if (SUBJECT_SCREENS.has(nextScreen) && !selectedSubjectId) {
+		if (nextScreenConfig.requiresSubject && !selectedSubjectId) {
 			showAllSubjects();
 			return;
 		}
@@ -71,6 +54,8 @@ export default function useAppNavigationViewModel(params) {
 			showAllSubjects();
 			return;
 		}
+
+		setExamLanguageSyncError(null);
 
 		if (nextScreen !== NAV_SCREENS.EXAM) {
 			setSelectedExamId(null);
@@ -85,6 +70,7 @@ export default function useAppNavigationViewModel(params) {
 	}, [closeNavigationOverlays, selectedExamId, selectedSubjectId, showAllSubjects]);
 
 	const selectSubject = useCallback((subjectId) => {
+		setExamLanguageSyncError(null);
 		setSelectedSubjectId(subjectId);
 		setSelectedExamId(null);
 		setSelectedTopicAreaKey(null);
@@ -97,6 +83,7 @@ export default function useAppNavigationViewModel(params) {
 			return;
 		}
 
+		setExamLanguageSyncError(null);
 		setSelectedExamId(examId);
 		setActiveScreen(NAV_SCREENS.EXAM);
 		closeNavigationOverlays();
@@ -108,6 +95,7 @@ export default function useAppNavigationViewModel(params) {
 			return;
 		}
 
+		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.FLIPCARDS);
@@ -120,6 +108,7 @@ export default function useAppNavigationViewModel(params) {
 			return;
 		}
 
+		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.MATCHCARDS);
@@ -127,27 +116,36 @@ export default function useAppNavigationViewModel(params) {
 	}, [closeNavigationOverlays, selectedSubjectId, showAllSubjects]);
 
 	const goBack = useCallback(() => {
-		if (activeScreen === NAV_SCREENS.SUBJECTS) {
+		const activeScreenConfig = getScreenConfig(activeScreen);
+
+		if (activeScreenConfig.backTo === null) {
 			return;
 		}
 
-		if (activeScreen === NAV_SCREENS.SELECT) {
+		if (activeScreenConfig.backTo === NAV_SCREENS.SUBJECTS) {
 			showAllSubjects();
 			return;
 		}
 
-		changeScreen(NAV_SCREENS.SELECT);
+		changeScreen(activeScreenConfig.backTo);
 	}, [activeScreen, changeScreen, showAllSubjects]);
 
 	// Språkbytte skal oppdatere valgt eksamen uten å lukke åpne menyer.
 	const resolveSyncedExam = useCallback((examId, subjectId) => {
+		setExamLanguageSyncError(null);
 		setSelectedExamId(examId);
 		setSelectedSubjectId(subjectId);
 	}, []);
 
 	const handleSyncedExamUnavailable = useCallback(() => {
 		changeScreen(NAV_SCREENS.SELECT);
-	}, [changeScreen]);
+		setExamLanguageSyncError(params.examUnavailableMessage);
+	}, [changeScreen, params.examUnavailableMessage]);
+
+	const handleSyncedExamSyncFailed = useCallback(() => {
+		changeScreen(NAV_SCREENS.SELECT);
+		setExamLanguageSyncError(params.examSyncFailedMessage);
+	}, [changeScreen, params.examSyncFailedMessage]);
 
 	useSyncSelectedExamWithLanguage({
 		language: params.language,
@@ -157,22 +155,15 @@ export default function useAppNavigationViewModel(params) {
 		getExamByIdUseCase: params.getExamByIdUseCase,
 		getExamByBaseIdAndLangUseCase: params.getExamByBaseIdAndLangUseCase,
 		onExamResolved: resolveSyncedExam,
-		onExamUnavailable: handleSyncedExamUnavailable
+		onExamUnavailable: handleSyncedExamUnavailable,
+		onExamSyncFailed: handleSyncedExamSyncFailed
 	});
 
-	const shouldShowSubjectSwitcher = SUBJECT_SWITCHER_SCREENS.has(activeScreen);
-	const isPracticeScreen =
-		activeScreen === NAV_SCREENS.FLIPCARDS ||
-		activeScreen === NAV_SCREENS.MATCHCARDS;
-	const pageClassName = isPracticeScreen
-		? "exam-page flipcards-theme-scope"
-		: activeScreen === NAV_SCREENS.EXAM
-			? "exam-page"
-			: "exam-select-page";
-	const shellClassName = activeScreen === NAV_SCREENS.EXAM || isPracticeScreen
-		? "exam-shell"
-		: "exam-select-shell";
-	const showBackButton = activeScreen !== NAV_SCREENS.SUBJECTS;
+	const activeScreenConfig = getScreenConfig(activeScreen);
+	const shouldShowSubjectSwitcher = activeScreenConfig.showsSubjectSwitcher;
+	const pageClassName = activeScreenConfig.pageClassName;
+	const shellClassName = activeScreenConfig.shellClassName;
+	const showBackButton = activeScreenConfig.backTo !== null;
 
 	const backContract = {
 		showBackButton,
@@ -186,12 +177,9 @@ export default function useAppNavigationViewModel(params) {
 		selectedSubjectId,
 		selectedExamId,
 		selectedTopicAreaKey,
+		examLanguageSyncError,
 		shouldShowSubjectSwitcher,
 		backContract,
-		showBackButton,
-		backLabel: backContract.backLabel,
-		navigationLabel: backContract.navigationLabel,
-		onBack: goBack,
 		pageClassName,
 		shellClassName,
 

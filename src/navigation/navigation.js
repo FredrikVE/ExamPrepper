@@ -9,6 +9,75 @@ export const NAV_SCREENS = {
 	OVERVIEW: "overview"
 };
 
+export const SCREEN_CONFIG = {
+	[NAV_SCREENS.SUBJECTS]: {
+		requiresSubject: false,
+		requiresExam: false,
+		backTo: null,
+		showsSubjectSwitcher: false,
+		pageClassName: "exam-select-page",
+		shellClassName: "exam-select-shell"
+	},
+	[NAV_SCREENS.SELECT]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.SUBJECTS,
+		showsSubjectSwitcher: true,
+		pageClassName: "exam-select-page",
+		shellClassName: "exam-select-shell"
+	},
+	[NAV_SCREENS.EXAM]: {
+		requiresSubject: true,
+		requiresExam: true,
+		backTo: NAV_SCREENS.SELECT,
+		showsSubjectSwitcher: true,
+		pageClassName: "exam-page",
+		shellClassName: "exam-shell"
+	},
+	[NAV_SCREENS.FLIPCARDS]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.SELECT,
+		showsSubjectSwitcher: true,
+		pageClassName: "exam-page flipcards-theme-scope",
+		shellClassName: "exam-shell"
+	},
+	[NAV_SCREENS.MATCHCARDS]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.SELECT,
+		showsSubjectSwitcher: true,
+		pageClassName: "exam-page flipcards-theme-scope",
+		shellClassName: "exam-shell"
+	},
+	[NAV_SCREENS.GLOSSARY]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.SELECT,
+		showsSubjectSwitcher: true,
+		pageClassName: "exam-select-page",
+		shellClassName: "exam-select-shell"
+	},
+	[NAV_SCREENS.OVERVIEW]: {
+		requiresSubject: false,
+		requiresExam: false,
+		backTo: NAV_SCREENS.SELECT,
+		showsSubjectSwitcher: false,
+		pageClassName: "exam-select-page",
+		shellClassName: "exam-select-shell"
+	}
+};
+
+export function getScreenConfig(screen) {
+	const screenConfig = SCREEN_CONFIG[screen];
+
+	if (screenConfig === undefined) {
+		throw new Error(`Unknown navigation screen: ${String(screen)}`);
+	}
+
+	return screenConfig;
+}
+
 export const LEARNING_CONTENT_TYPES = {
 	EXAMS: "exams",
 	FLIPCARDS: "flipcards",
@@ -23,18 +92,18 @@ export const NAV_ITEMS = {
 			section: "primary",
 			screen: NAV_SCREENS.SUBJECTS,
 			labelKey: "sidebarSubjects",
-			fallbackLabel: "Velg fag fra hjemskjerm",
 			iconKey: "home",
-			activeScreens: [NAV_SCREENS.SUBJECTS]
+			activeScreens: [NAV_SCREENS.SUBJECTS],
+			hiddenOnScreens: [NAV_SCREENS.SUBJECTS]
 		},
 		{
 			id: "overview",
 			section: "secondary",
 			screen: NAV_SCREENS.OVERVIEW,
 			labelKey: "sidebarStatistics",
-			fallbackLabel: "Din statistikk",
 			iconKey: "bar-chart-3",
-			activeScreens: [NAV_SCREENS.OVERVIEW]
+			activeScreens: [NAV_SCREENS.OVERVIEW],
+			hiddenOnScreens: []
 		}
 	],
 

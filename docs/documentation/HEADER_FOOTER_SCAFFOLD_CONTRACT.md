@@ -1,5 +1,8 @@
 # Header/Footer scaffold contract
 
+> **Erstattet kontrakt.** Dette dokumentet beholdes som historikk for den tidligere Header/Footer-migreringen. Gjeldende slot-baserte Header-, variant-, back- og workspace-kontrakter finnes i [`docs/architecture/ARCHITECTURE.md`](../architecture/ARCHITECTURE.md), [`docs/architecture/SSOT_REGISTER_FRONTEND.md`](../architecture/SSOT_REGISTER_FRONTEND.md) og frontend-soul-dokumentet.
+
+
 Oppdatert: 2026-07-01
 Patch: `document-header-footer-contract`
 Type: dokumentasjon / arkitekturkontrakt

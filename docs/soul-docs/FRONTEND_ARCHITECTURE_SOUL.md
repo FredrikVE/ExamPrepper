@@ -1,12 +1,161 @@
-# SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
+# FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
-<!-- Sist oppdatert: 2026-05-29 -->
+<!-- Versjon: 2.5 — Sist oppdatert: 2026-07-24 — SSOT-refaktorering implementert -->
+<!-- Erstatter: docs/soul-docs/FRONTEND_ARCHITECTURE_SOUL.md (V1, 2026-05-29) -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
-Kodebasen følger disse reglene i stor grad, men har kjent gjeld der eldre kode ble skrevet
-før reglene ble formalisert. Se [Kjent teknisk gjeld](#kjent-teknisk-gjeld) for detaljer.
+Kodebasen følger disse reglene i stor grad, men har avgrenset gjeld der eldre kode ble skrevet
+før reglene ble formalisert. Se [Status etter SSOT-refaktoreringen](#status-etter-ssot-refaktoreringen).
 
 Når du er i tvil om hvor noe hører hjemme — les dette først.
+
+---
+
+## Endringslogg 2.4 → 2.5
+
+- **Pragmatisk Atomic Design er nå en låst komponentregel:** UI-primitiver,
+  sammensatte komponenter, feature-komponenter, app-shell/sidemaler og Pages har
+  eksplisitte ansvar og enveis avhengighetsretning.
+- **Atomic Design er konseptuell, ikke en tvungen mappestruktur:** prosjektet
+  innfører ikke generelle `atoms/`, `molecules/`, `organisms/` og `templates/`
+  mapper. Eksisterende feature- og komponentmapper beholdes.
+- **Uttrekks- og konsolideringsregler er kodifisert:** lik JSX er ikke nok for
+  gjenbruk; komponenter deles når de har samme semantiske ansvar, kontrakt,
+  interaksjonsmodell og endringsårsak.
+- **Atomic Design er koblet til MVVM:** forretningsstate eies fortsatt av
+  ViewModel. Lavere komponentnivåer mottar ferdige props og eier bare lokal,
+  visuell interaksjonsstate.
+- **Komponentnivåer er lagt inn i importregler, testing, plasseringstabell og
+  kortversjon.**
+
+---
+
+## Endringslogg 2.3 → 2.4
+
+- **Navigasjon oppdatert til dagens arkitektur:** `navGraph.js`, `navReducer.js`,
+  `navItems.js`, `learningContent.js` og `pageTools.js` er erstattet av
+  `src/navigation/navigation.js` for statisk konfigurasjon og
+  `AppNavigationViewModel` for runtime-state og eksplisitte handlinger.
+- **SSOT-begrepet strammet inn:** runtime-state/policy, autoritative registre,
+  CSS-eierskap og canonical UI-implementasjoner beskrives som ulike kategorier.
+  En delt renderer er ikke automatisk en source of truth.
+- **Lasttilstand synkronisert med ferdig migrering:** `LOAD_STATUS` ligger i
+  `viewmodel/LoadState/`; `WorkspaceState` rendrer loading, error, empty og
+  content; `WorkspaceMessage` og `pageStatus`-kontrakten er fjernet.
+- **Workspace-strukturen synkronisert:** den ytre komponenten heter
+  `WorkspaceScaffold` og ligger utenfor `Shared/`; scrollflaten heter
+  `.workspace-scaffold-body`. `WorkSpaceCard` beholder eksisterende navn og sti.
+- **Subject-switcher ført inn som avledet SSOT:** desktop og mobil bruker samme
+  modell. Falske fagobjekter er forbudt; `empty` og `unselected` er separate
+  tilstander.
+- **DI- og HTTP-eierskap presisert:** `dependencies.js` eier miljøvalidering,
+  base-URL-er og instansiering. `ApiDataSource` eier felles requestmekanikk.
+- **Kodestil utvidet:** imports og funksjons-/komponentsignaturer står
+  horisontalt. Lange props-kontrakter bruker `props` i stedet for vertikal
+  destrukturering.
+- **Kjent teknisk gjeld oppdatert** mot frontend-snapshot
+  `examprepper-frontend-safe-20260724-105708.zip`.
+
+---
+
+## Endringslogg V1 → V2
+
+- **Ny seksjon: Låste beslutninger.** Datostemplet beslutningslogg som trumfer brødteksten
+  ved konflikt. Fikser at dokumentet drifter bak beslutninger tatt i arbeid.
+- **Kodestil er nå kodifisert:** tabs, ingen valgfrie parametre med defaults, imperativ stil,
+  navngitte predikater/komparatorer, terskel for parameterobjekt. V1 manglet disse, og
+  V1-eksempler brøt dem. Alle eksempler i V2 er oppdatert til å følge egen standard.
+- **View-regelen presisert:** «ingen logikk» erstattet med «ingen domeneavledning».
+  Forgrening og iterasjon over mottatte props er lovlig View-arbeid.
+- **Boolean-navneregelen revidert:** state navngis etter funksjon, ikke etter
+  View-komponentnavn. Fjerner selvmotsigelsen mot «ViewModel vet ikke at komponenter
+  eksisterer». Eksisterende komponentkoblede navn er kjent gjeld.
+- **Undermodell-mønsteret legitimert:** ViewModels kan komponeres av undermodell-hooks
+  på gitte vilkår. Importtabellen er oppdatert tilsvarende.
+- **Nye SSOT-seksjoner:** navigasjon (`navGraph.js`), scaffold (`Header`/`Footer`),
+  lasttilstand (`loadStatus` / `useLoadModel` / `WorkspaceState`), brytpunkt og z-indeks.
+- **Backend-seksjonen omskrevet:** backend eksisterer nå (Express på Render, Clerk-auth).
+  Bytteløftet er justert: DI-wiring og token-tilførsel er lovlige berøringspunkter.
+- **DataSource-baseklassen:** logging kun bak dev-flagg.
+- **`execute()`-unntaket strammet inn.**
+
+## Endringslogg 2.2 → 2.3
+
+- **Nye workspace-SSOT-er:** `WorkSpaceScaffold` for ytre arbeidsflate/skall
+  og `WorkSpaceCard` for innholdsflaten inni skallet. Regelen skiller eksplisitt
+  mellom scaffold, innholdskort og utvalgskort.
+- **Arvekontrakt for workspace-CSS:** sideklasser kan komponeres med Shared-klassen
+  og sette navngitte `--workspace-scaffold-*`-/`--workspace-card-*`-variabler,
+  men redeklarerer ikke superklassens ramme, bakgrunn, skygge eller blur direkte.
+- **WorkSpaceCard-tokennavn:** felles flate bruker `--workspace-card-*`;
+  ExamPage-navn som `--question-card-*` er ikke nye utvidelsespunkter.
+- **Navngitte unntak:** Flipcard-faces og SelectionCard-familien er ikke
+  WorkSpaceCard-konsumenter. De har egne visuelle identiteter og skal ikke
+  presses inn i workspace-card-regelen.
+
+## Endringslogg 2.1 → 2.2
+
+- Alle plasseringsreferanser synkronisert med den låste strukturbeslutningen
+  (`src/ui/viewmodel/LoadState/`, `viewmodel/LoadState/`): importtabellen,
+  undermodell-vilkårene, «Hva hører hjemme hvor» og testseksjonen.
+- Lasttilstand: `RELOADING` fjernet fra offentlig `LOAD_STATUS`;
+  `WorkspaceMessage` skilt ut; feiltekst avledes ved retur fra `useLoadModel`
+  slik at språkbytte i ERROR-tilstand oppdaterer meldingen uten reload.
+
+## Endringslogg 2.0 → 2.1 (ekstern review)
+
+- Imperativ-regelen presisert: hard linje ved to eller flere kjedede ledd;
+  enkelt ledd tillatt der det er mer lesbart. Ført som datert presisering
+  av den låste 2026-06-beslutningen.
+- Defaults-forbudet scopet til produksjonskode (`src/`); testbyggere og
+  fixtures i `test/` er unntatt. Ikke unntak for «lokale helpers».
+- Lasttilstand-seksjonen markerer eksplisitt at eksisterende sider er
+  migreringsmål per LOAD_STATE_SSOT_PLAN.md — ny kode følger regelen fra dag én.
+- `<header>`-regelen omformulert: forbudet gjelder duplisert scaffold-header,
+  ikke semantiske `<header>`-elementer i avgrensede innholdskomponenter.
+- Brytpunktet omdøpt fra «SSOT» til «synkronisert JS/CSS-kontrakt».
+- Ny seksjon: Migreringsregel (gammel kode rettes når filen røres;
+  stil-migrering blandes aldri med featurepatcher).
+- Styringsregel for beslutningsloggen: holdes kort, erstattede
+  beslutninger erstattes i loggen — den er ikke historisk dagbok.
+
+---
+
+## Låste beslutninger
+
+Denne loggen er dokumentets høyeste autoritet. Ved konflikt mellom en låst beslutning
+og brødtekst eller eksempler lenger ned, gjelder beslutningen — og avviket skal meldes
+som dokumentfeil. Nye låste beslutninger føres her med dato i samme patch-serie som
+kodeendringen de springer ut av.
+
+Loggen holdes kort. Når en beslutning presiseres eller erstattes, oppdateres
+raden med ny dato — gamle versjoner akkumuleres ikke. Loggen er gjeldende rett,
+ikke historisk dagbok; historikken bor i git.
+
+| Dato | Beslutning |
+|---|---|
+| 2026-05 | MVVM-lagdeling med manuell DI via `dependencies.js`. Én ViewModel per side; app-shell-kapabiliteter kan ha egne ViewModels. |
+| 2026-05 | CSS-mapper speiler komponentmapper. `App.css` er eneste CSS-entry point. |
+| 2026-06, presisert 2026-07-24 | `Header.jsx` og `Footer.jsx` er canonical scaffold-implementasjoner. De skal ikke inlines eller dupliseres som konkurrerende app-shell. Semantiske innholdsheadere er tillatt. |
+| 2026-06, erstattet 2026-07-24 | Statisk navigasjonskonfigurasjon bor i `src/navigation/navigation.js`. Runtime-state og eksplisitte navigasjonshandlinger bor i `AppNavigationViewModel`. Stabile skjermegenskaper skal deklareres i navigation-config, ikke som parallelle skjermsett i ViewModels eller Views. |
+| 2026-06 | Tabs for innrykk i all JS/JSX/CSS. |
+| 2026-06, presisert 2026-07-05 | Ingen valgfrie parametre eller default-parametre i produksjonskode (`src/`). Fravær uttrykkes eksplisitt som `null`, `[]`, en navngitt no-op eller en diskriminert modell. Testbyggere og fixtures i `test/` er unntatt. |
+| 2026-07-24 | Imports, funksjonssignaturer og destrukturerte props står på én linje. Blir props-listen uleselig, mottar komponenten `props`; den vertikaliseres ikke i signaturen. Objektliteraler og argumentobjekter kan stå over flere linjer. |
+| 2026-06, presisert 2026-07-05 | Imperativ stil: eksplisitte `for`-løkker med `push`, navngitte predikater og komparatorer. To eller flere kjedede ledd er alltid løkke. Enkelt `.map()`/`.filter()`-ledd er tillatt der det er mer lesbart; JSX-rendring bruker `.map()`. |
+| 2026-06 | Ingen `.dark`-selektorer i komponent-CSS. Dark mode går utelukkende via tokens. |
+| 2026-07 | Back-kontrakten flyter som ett objekt (`backContract`), ikke som løse argumenter mellom app-shell og side-ViewModels. |
+| 2026-07, erstattet 2026-07-24 | Lasttilstand representeres med `LOAD_STATUS` i `src/ui/viewmodel/LoadState/loadStatus.js`. `useLoadModel` eier teknisk ressursstatus. `createWorkspaceState` avleder page-state, og `WorkspaceState` rendrer loading/error/empty/content. Views importerer ikke `LOAD_STATUS`. |
+| 2026-07-05 | Feiltekst til bruker er produkttekst fra i18n. Teknisk feilobjekt logges kun i dev og lekker ikke direkte til UI. |
+| 2026-07 | Flere enn fire hook-/konstruktørparametre, eller én boolean-parameter, utløser navngitt parameterobjekt. |
+| 2026-07 | State-booleans navngis etter funksjonen de styrer, ikke etter komponentnavnet som rendrer dem. |
+| 2026-07-07, presisert 2026-07-24 | `WorkspaceScaffold` i `components/WorkspaceScaffold/` er canonical eier av ytre workspace-skall, header-/footer-/overlay-slots og scrollflaten `.workspace-scaffold-body`. |
+| 2026-07-07 | `WorkSpaceCard` er SSOT for innholdsflaten inni et workspace: ramme, `--workspace-card-surface`, kortskygge, inset-highlight og ambient glow. `QuestionCard` adopterer via klassekomposisjon; enklere konsumenter bruker komponenten. |
+| 2026-07-07 | Workspace-arv skjer med multiklasse + deklarerte CSS-variabler. Sideklasser setter bare dokumenterte utvidelsespunkter og egen geometri; de redeklarerer ikke Shared-skjemaets kjerneegenskaper. |
+| 2026-07-07 | Flipcard-faces og SelectionCard/utvalgskort er navngitte unntak fra WorkSpaceCard. De beholder egen identitet. |
+| 2026-07-24 | Subject-switcher avledes én gang i `createSubjectSwitcherModel` og brukes av desktop og mobil. UI lager aldri et falskt fagobjekt. `empty` betyr ingen fag; `unselected` betyr fag finnes, men ingen er valgt. |
+| 2026-07-24 | «SSOT» reserveres for autoritativ state, policy, konfigurasjon eller token-eierskap. Delte renderere dokumenteres som canonical UI-implementasjoner, ikke som state-SSOT-er. |
+| 2026-07-24 | Komponentarkitekturen følger pragmatisk Atomic Design: UI-primitiver → sammensatte komponenter → feature-komponenter → app-shell/sidemal → Page. Nivåene beskriver ansvar og avhengighetsretning, ikke obligatoriske mapper. Lik markup alene er ikke grunnlag for konsolidering. |
+| (backlog) | Navngitt z-indeksskala i `Tokens.css`. Rå app-lag i komponent-CSS fases ut; lokale stacking-verdier tokeniseres ikke automatisk. |
 
 ---
 
@@ -18,6 +167,7 @@ Data          →   Repository   →   Domain (Use Cases)
                                   dependencies.js
                                         ↓
                                     ViewModel
+                                   (+ undermodeller)
                                         ↓
                                       View (Page)
                                         ↓
@@ -27,22 +177,36 @@ Data          →   Repository   →   Domain (Use Cases)
 ```
 
 Hvert lag har ett ansvar. Ingen lag hopper over et annet.
-Data flyter én vei: nedenfra og opp gjennom modellen, og deretter strikt ovenfra og ned gjennom View-hierarkiet.
+Data flyter én vei: nedenfra og opp gjennom modellen, og deretter strikt ovenfra
+og ned gjennom View-hierarkiet.
 
 ---
 
-## Kjent teknisk gjeld
+## Status etter SSOT-refaktoreringen
 
-Følgende brudd på arkitekturen er kjente og skal fikses. Ny kode skal ikke
-introdusere tilsvarende brudd.
+Den implementeringsklare SSOT-planen mot snapshotet fra 2026-07-24 er gjennomført. Følgende kontrakter er nå etablert og testlåst i kildekoden:
 
-- **Filbanekommentarer uten mellomrom** — eldre filer bruker `//src/...` i stedet for `// src/...`
-  (gjelder bl.a. `dependencies.js`, `ExamPage.jsx`, `ExamPageViewModel.js`).
-- **Domenekjennskap i `ExamPage.jsx`** — importerer `QUESTION_TYPES` og beregner layout
-  (`shouldUseScrollFooter`, `isDragDropQuestion` osv.) direkte i View. Denne logikken
-  hører i `ExamPageViewModel` og skal eksponeres som ferdige verdier.
-- **Generiske variabelnavn i `ExamPageViewModel`** — `loading`, `error` og `result` skal
-  hete `questionsLoading`, `questionsLoadError` og `examScore`.
+- `createSubjectSwitcherModel` skiller `empty` fra `unselected` og brukes av desktop og mobil.
+- `navigation.js` eier `SCREEN_CONFIG`; lokale screen-sets og Sidebar-policy er fjernet.
+- `backContract` er eneste back-API fra `AppNavigationViewModel` til app-shell.
+- `Header` er feature-fri, slot-basert og eier app-shell-geometri gjennom eksplisitte varianter.
+- Statistics bruker canonical Header; konkurrerende sideheader er fjernet.
+- `WorkspaceScaffold` har ikke lenger en dynamisk `contentClassName`-kanal.
+- 932/933-kontrakten er synkronisert og kontrollert med PostCSS.
+- Globale lag bruker bare tokens som stacking-inventeringen har bevist; lokale stacking contexts forblir lokale.
+- i18n-kontrakten håndhever key-/type-paritet, ikke-tomme strings og config-refererte keys.
+- `normalizeSearchTerm` og `shuffleInPlace` eier de dokumenterte duplikatene.
+- Root `AppErrorBoundary`, språksynkfeil og submit-feil har separate livsløp og recovery-kontrakter.
+- Ukjente spørsmålstyper får eksplisitt produkttekst og rutes ikke gjennom choice-renderere.
+- Sidebar validerer sine lokale icon keys uten et globalt ikonregister.
+
+Gjenstående, avgrenset gjeld som ikke var del av planen:
+
+- enkelte eldre ViewModels har fortsatt posisjonelle parametre over den nye terskelen,
+- eldre filer har fortsatt vertikale signaturer eller space-innrykk og migreres bare i dedikerte stilpatcher,
+- enkelte state-booleans er fortsatt navngitt etter konkrete View-komponenter,
+- `WorkspaceScaffold` og `WorkSpaceCard` har ulik kapitalisering,
+- browser-/device-QA må fortsatt kjøres i et miljø med installerte avhengigheter og nettleser.
 
 ---
 
@@ -50,10 +214,11 @@ introdusere tilsvarende brudd.
 
 ### 1. Datasource-laget — `src/model/datasource/`
 
-- Det eneste stedet rådata hentes fra (mockfiler, API, localStorage, osv.)
-- Ingen forretningslogikk, ingen transformasjon utover det strengt nødvendige for å lese dataene
+- Det eneste model-laget som kjenner transport: HTTP-endepunkter, headers og rå payloads
+- Ingen forretningslogikk; returnerer parsede transportdata/DTO-er, aldri `Response`
+- Brukerpreferanser i `localStorage` er et eksplisitt Context-unntak, ikke en DataSource
 - Instansieres i `dependencies.js` — aldri andre steder
-- Eksempel: `new ConceptImageDataSource(conceptImageCatalogsBySubjectId)`
+- Felles HTTP-mekanikk arves fra `ApiDataSource`
 
 ### 2. Repository-laget — `src/model/repositories/`
 
@@ -61,327 +226,666 @@ introdusere tilsvarende brudd.
 - Eksponerer rene domeneobjekter — ikke rådata
 - Vet ingenting om use cases eller ViewModels
 - Mottar DataSource-instanser via konstruktøren (injisert fra `dependencies.js`)
-- Eksempel: `new ExamRepository(examQuestionDataSource, conceptImageDataSource)`
 
 ### 3. Domain-laget — `src/model/domain/`
 
-- Inneholder Use Case-klasser med ett enkelt ansvar hver
-- Alle eksponerer `execute(...)` som eneste offentlige metode
-- Mottar Repository-instanser (eller andre Use Cases) via konstruktøren
+- Use Case-klasser med ett ansvar hver
+- `execute(...)` er inngangspunktet for den primære operasjonen
+- Mottar Repositories (eller andre Use Cases) via konstruktøren
 - Ingen UI-kjennskap, ingen React, ingen state
-- Eksempel: `new CalculateExamScoreUseCase(gradeAnswerUseCase)`
+
+**`execute()`-regelen, presisert:** tilleggsmetoder utover `execute()` er tillatt
+kun når de eksponerer delresultater av samme beregning (`getQuestionScore` etter
+`execute`). En metode som utfører en *annen operasjon* er et nytt Use Case —
+ikke en ny offentlig metode.
 
 ### 4. DI-containeren — `src/di/dependencies.js`
 
-- Det eneste stedet hele applikasjonen wires sammen
+- Det eneste stedet applikasjonen wires sammen
+- Leser og validerer runtime-konfigurasjon som påkrevde `VITE_*`-verdier
+- Eier konkrete base-URL-er og sender dem eksplisitt til DataSources
 - Instansierer DataSources, Repositories og Use Cases i riktig rekkefølge
-- Eksporterer ferdige Use Case-instanser — ingenting annet
-- Ingen logikk, ingen betingelser — bare konstruktørkall og exports
-
-```js
-const examQuestionDataSource  = new ExamQuestionDataSource();
-const examRepository          = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
-const getExamQuestionsUseCase = new GetExamQuestionsUseCase(examRepository);
-
-export { getExamQuestionsUseCase };
-```
+- Eksporterer ferdige Use Case-instanser
+- Kan velge konkrete implementasjoner og validere konfigurasjon, men inneholder ingen
+  domene-, navigasjons- eller presentasjonsbeslutninger
 
 ### 5. ViewModel-laget — `src/ui/viewmodel/`
 
-- Én ViewModel per side, skrevet som en React hook (`use[PageName]ViewModel`)
+- Én ViewModel per side, skrevet som React hook (`use[PageNavn]ViewModel`)
 - Mottar Use Case-instanser som parametere — aldri importert direkte inne i hooken
-- Eier all tilstand (`useState`, `useEffect`, `useMemo`, `useCallback`) for siden
-- Returnerer ett objekt med state, avledede verdier og handlers
-- Inneholder ingen JSX og ingen DOM-referanser
+- Eier all sidetilstand og returnerer ett objekt med state, avledede verdier og handlers
+- Ingen JSX, ingen DOM-referanser utover refs den eksponerer for scroll/fokus
 - Avledede presentasjonsverdier (labels, CSS-klassenavn) beregnes her — ikke i View
 
+**Parameterregel (låst 2026-07):** flere enn fire parametre, eller én boolean,
+utløser navngitt parameterobjekt. Alle felter påkrevde — ingen defaults.
+
 ```js
-export default function useExamPageViewModel(
-    getExamQuestionsUseCase,
-    gradeAnswerUseCase,
-    calculateExamScoreUseCase,
-    examId,
-    language
-) { ... }
+// Feil — posisjonell boolean og løse kontraktfelter:
+useFlipcardsPageViewModel(useCaseA, useCaseB, subjectId, key, language, t, true, showBackButton, backLabel, navigationLabel, onBack)
+
+// Riktig — kontrakter som objekter, boolean navngitt:
+useFlipcardsPageViewModel({
+	getFlashcardsUseCase,
+	getTopicAreasUseCase,
+	subjectId,
+	initialTopicAreaKey,
+	language,
+	t,
+	isActive,
+	backContract
+})
 ```
+
+#### Undermodeller — komponerte ViewModels
+
+En side-ViewModel kan komponeres av undermodell-hooks. Dette er mønsteret bak
+`useExamQuestionLoadModel`, `useLoadModel` og statistikk-dashboardets moduler,
+og det er den riktige kuren mot ViewModels på flere hundre linjer.
+
+Vilkår:
+
+- Undermodellen bor i en mappe navngitt etter eieren
+  (`src/ui/viewmodel/ExamPage/`) eller i en delt kapabilitetsmappe
+  (`src/ui/viewmodel/LoadState/`)
+- Den importeres og kalles kun av ViewModels — aldri av View-laget
+- Den inneholder ingen JSX
+- Delte undermodeller (`LoadState/`) er domenefrie; domenespesifikk logikk
+  (preserve-attempt o.l.) bor i eierens undermodellmappe
+- Side-ViewModelen er fortsatt eneste kontrakt mot View: undermodellens
+  retur re-eksponeres som navngitte felter, aldri som rått objekt
+
+«Alt for én side samles i én ViewModel» betyr dermed: samles bak **ett
+kontraktpunkt** — ikke nødvendigvis i én fil.
 
 ### 6. View-laget — `src/ui/view/`
 
 - Page-komponenter mottar `viewModel` som eneste prop
-- Page-komponenten gjør ingen beregninger, ingen logikk — bare rendring og prop-drilling ned til underkomponenter
 - Underkomponenter mottar spesifikke, navngitte props — ikke hele `viewModel`-objektet
-- Ingen import av Use Cases, Repositories, DataSources eller `dependencies.js` i View-laget
+- Ingen import av Use Cases, Repositories, DataSources eller `dependencies.js`
+
+**Logikkregelen, presisert:** View gjør ingen *domeneavledning* — den beregner
+aldri nye verdier fra domeneobjekter. Forgrening og iterasjon over det den
+mottar er lovlig View-arbeid:
 
 ```jsx
-// Riktig:
-export default function ExamPage({ viewModel }) {
-    return (
-        <div className={viewModel.workspaceClassName}>
-            <Header
-                scoreLabel={viewModel.scoreLabel}
-                elapsedTimeLabel={viewModel.elapsedTimeLabel}
-                onSubmit={viewModel.submitExam}
-            />
-        </div>
-    );
-}
+// Lovlig View-arbeid — forgrener og itererer over ferdige modeller:
+<WorkspaceState state={viewModel.workspaceState}>
+	{viewModel.visibleQuestions.map((question) => (
+		<QuestionCard key={question.id} question={question} />
+	))}
+</WorkspaceState>
 
-// Feil — View beregner klassenavn selv:
-const cls = question.categories.length >= 5 ? "wide" : "";
+// Forbudt — View avleder ny verdi fra domeneobjekt:
+const isWide = question.categories.length >= 5 || longestText >= 34;
 ```
+
+Grensetesten: kan uttrykket skrives uten å lese felter *inne i* et domeneobjekt
+for å produsere en ny verdi? Sammenligning mot en status-enum eller mapping over
+en liste består testen. Telling, måling og terskling av domenefelter gjør ikke.
+
+View-laget kan importere rene presentasjons- og navigasjonskonstanter fra
+`src/ui/presentation/` og `src/navigation/` (`PRESENTATION_MODE`,
+`NAV_SCREENS`). Page-Views importerer ikke `LOAD_STATUS`; de mottar ferdig
+`workspaceState` fra ViewModel. `WorkspaceState`-rendereren kan importere sin
+egen `WORKSPACE_STATE_KINDS`-kontrakt.
 
 ---
 
-## Workspace-scaffold og eksplisitte UI-kontrakter
+## Komponentarkitektur — pragmatisk Atomic Design
 
-Alle pages som trenger en workspace-ramme bruker nøyaktig én `WorkspaceScaffold`.
-Pages skal ikke lage parallelle main-, scroll- eller footer-scaffolds. Scaffoldet
-eier bare generisk struktur og regionmekanikk; side-spesifikk state, tekst og
-domenelogikk hører fortsatt i PageViewModel og Page.
+ExamPrepper bruker Atomic Design som modell for komponentkomposisjon. Modellen
+supplerer MVVM; den erstatter ikke lagdelingen eller state-eierskapet.
 
-`WorkspaceScaffold` har disse faste regionene:
+Den opprinnelige Atomic Design-terminologien oversettes slik:
+
+| Atomic Design | ExamPrepper-begrep | Ansvar |
+|---|---|---|
+| Atom | UI-primitive | Liten, domenefri UI-byggestein |
+| Molecule | Sammensatt komponent | Avgrenset UI-funksjon bygget av primitiver |
+| Organism | Feature-komponent | Produktspesifikk komponent med tydelig feature-kontrakt |
+| Template | App-shell / sidemal | Layout, slots, scroll, stacking og felles geometri |
+| Page | Page | Komposisjonsrot for én appskjerm |
+
+Dette er en konseptuell mapping. Prosjektet innfører ikke obligatoriske mapper som
+`atoms/`, `molecules/`, `organisms/` og `templates/`. Komponentene organiseres
+fortsatt etter ansvar, feature og eksisterende komponentstruktur.
+
+### Avhengighetsretning
+
+```txt
+UI-primitive
+  ↓
+Sammensatt komponent
+  ↓
+Feature-komponent
+  ↓
+App-shell / sidemal
+  ↓
+Page
+```
+
+En komponent kan komponere komponenter på samme eller lavere nivå. En generell
+primitive skal aldri importere en feature-komponent, Page, ViewModel eller
+model-laget. En feature-komponent skal ikke importere en Page eller en annen
+features interne komponent bare for å gjenbruke implementasjon.
+
+### UI-primitiver — atoms
+
+En UI-primitive er en liten, domenefri byggestein.
+
+Eksempler:
+
+```txt
+Button
+LoadingSpinner
+SearchField
+FilterOptionList
+ProgressBar
+WorkSpaceCard
+DockedMobileBottomSheet
+```
+
+Regler:
+
+- Har ett lite og generelt ansvar.
+- Kjenner ikke fag, eksamener, spørsmål eller andre produktdomener.
+- Eier ingen sidedata eller forretningsstate.
+- Importerer ikke ViewModels, Use Cases, Repositories, DataSources eller
+  `dependencies.js`.
+- Kan bruke generiske callback-navn som `onClick`, `onChange` og `onKeyDown`.
+- Mottar bare props den trenger; den mottar ikke et domeneobjekt som en skjult
+  prop-bag.
+- Trenger ikke være ett DOM-element. En primitive kan komponere flere elementer
+  dersom de samlet uttrykker én generell UI-funksjon.
+
+### Sammensatte komponenter — molecules
+
+En sammensatt komponent kombinerer primitiver til én avgrenset interaksjons-
+eller presentasjonsfunksjon.
+
+Eksempler:
+
+```txt
+SearchFilterControl
+SubjectPickerButton
+WorkspaceActionButton
+ToolCard
+ToolCardGrid
+LearningContentHeader
+```
+
+Regler:
+
+- Komponerer UI-primitiver og eventuelt små komponenter på samme nivå.
+- Mottar ferdig avledede presentasjonsverdier.
+- Henter ikke data og tolker ikke rå domeneobjekter.
+- Eier bare lokal visuell interaksjonsstate som ingen utenfor komponenttreet
+  trenger.
+- Rapporterer brukerhandlinger oppover gjennom callbacks.
+- Har en prop-kontrakt som beskriver UI-funksjonen, ikke siden som tilfeldigvis
+  bruker den.
+
+### Feature-komponenter — organisms
+
+En feature-komponent representerer en konkret produktfunksjon.
+
+Eksempler:
+
+```txt
+SidebarNavigation
+DesktopPopOutMenu
+GlossaryMobileChapterSheet
+QuestionCard
+FlipcardDeck
+ExamSubmitConfirmation
+```
+
+Regler:
+
+- Kan bruke domenespesifikke prop-navn.
+- Komponerer primitiver og sammensatte komponenter.
+- Mottar ferdig avledede modeller og verdier fra Page eller ViewModel.
+- Henter ikke data direkte.
+- Eier ikke state som Page, ViewModel eller søskenkomponenter trenger.
+- Kan eie lokal interaksjonsstate som fokus, drag-and-drop, hover eller åpnet
+  detaljvisning når staten bare påvirker eget tre.
+- Bruker presise callbacks som `onSelectSubject`, `onSubmitExam` og
+  `onSelectTopicArea`.
+
+Feature-komponenter konsolideres ikke bare fordi de bruker samme primitive.
+`GlossaryMobileChapterSheet` og en page-tools-sheet kan begge bruke
+`DockedMobileBottomSheet`, men de har ulike data, handlinger og endringsårsaker.
+De skal derfor være separate feature-komponenter.
+
+### App-shell og sidemaler — templates
+
+App-shell og sidemaler eier plassering, slots, geometri og felles sidestruktur.
+
+Eksempler:
+
+```txt
+WorkspaceScaffold
+Header
+Footer
+MobileDropDownTopBar
+```
+
+Regler:
+
+- Mottar innhold gjennom props, slots eller `children`.
+- Eier layout, scrollområde, stacking og felles geometri.
+- Kjenner ikke side-spesifikke domeneregler.
+- Henter ikke data.
+- Kopieres ikke eller implementeres på nytt per side.
+- Visuelle varianter uttrykkes som eksplisitte kontrakter, ikke som skjulte
+  descendant-regler i fremmed side-CSS.
+
+### Pages
+
+En Page er komposisjonsroten for én appskjerm.
+
+Eksempler:
+
+```txt
+SubjectSelectPage
+LearningContentSelectPage
+ExamPage
+FlipcardsPage
+MatchCardsPage
+GlossaryPage
+StatisticsPage
+```
+
+Regler:
+
+- Mottar Page-ViewModel som eneste toppnivå-prop.
+- Fordeler ferdige verdier og callbacks til feature-komponenter.
+- Forgrener på ferdige presentasjonsmodeller som `workspaceState`.
+- Henter ikke data og eier ikke forretningsregler.
+- Avleder ikke nye verdier fra domeneobjekter.
+- Skal hovedsakelig være lesbar komposisjon, ikke en ny ViewModel skrevet i JSX.
+
+### Atomic Design og state-eierskap
+
+Atomic Design endrer ikke MVVM-regelen:
+
+```txt
+ViewModel
+  ↓
+Page
+  ↓
+Feature-komponent
+  ↓
+Sammensatt komponent
+  ↓
+UI-primitive
+```
+
+Forretningsstate eies av ViewModel og flyter nedover. Lokale komponenter kan bare
+eie state som:
+
+- kun påvirker eget komponenttre,
+- er visuelt eller interaksjonsrelatert,
+- ikke må leses av ViewModel eller søskenkomponenter,
+- ikke representerer en domeneverdi eller servertilstand.
+
+### Uttrekksregel
+
+En komponent trekkes ut når minst ett av disse gjelder:
+
+1. Den har et eget ansvar som kan navngis presist.
+2. Den brukes på mer enn ett sted.
+3. Den skjuler en kompleks visuell struktur.
+4. Den har en selvstendig interaksjons- eller tilgjengelighetskontrakt.
+5. Parent-komponenten blir vanskelig å lese uten uttrekket.
+6. Den representerer en stabil UI-kontrakt som bør kunne endres isolert.
+
+En komponent trekkes ikke ut bare for å redusere linjetall. Mellomkomponenter
+uten eget ansvar er fragmentering, ikke Atomic Design.
+
+### Konsolideringsregel
+
+Lik JSX, samme ikon eller lik visuell form er ikke nok til å etablere en felles
+komponent.
+
+To komponenter konsolideres bare når de deler:
+
+- samme semantiske ansvar,
+- samme prop-kontrakt,
+- samme interaksjonsmodell,
+- samme tilgjengelighetskrav,
+- og forventes å endres av samme årsak.
+
+Deler de bare visuell struktur, trekkes den visuelle strukturen ut som en
+primitive eller sammensatt komponent. Feature-komponentene beholdes separate.
+
+Eksempel:
+
+```txt
+DockedMobileBottomSheet
+  ├── PageToolsMobileSheet
+  └── GlossaryMobileChapterSheet
+```
+
+`DockedMobileBottomSheet` eier sheet-struktur og geometri.
+`PageToolsMobileSheet` eier sidehandlinger.
+`GlossaryMobileChapterSheet` eier søk, filter og kapittelvalg.
+
+### Prop-kontrakter per nivå
+
+Prop-kontrakten blir mer konkret oppover i hierarkiet.
+
+```jsx
+<Button label={label} onClick={onClick} disabled={disabled} />
+<SubjectPickerButton subjectName={subjectName} subjectCode={subjectCode} onOpenSubjectPicker={openSubjectPicker} />
+```
+
+En primitive mottar ikke et helt subject- eller question-objekt dersom den bare
+trenger tekst, status og en callback. En feature-komponent mottar ikke hele
+Page-ViewModel-objektet; den får feltene den faktisk bruker.
+
+---
+
+## Navigasjon — statisk konfigurasjon og runtime-state har ulike eiere
+
+Navigasjon har to bevisste eiernivåer:
+
+| Eier | Ansvar |
+|---|---|
+| `src/navigation/navigation.js` | Skjerm-ID-er, læringsinnholdstyper, statiske sidebar-/toggle-/pop-out-items og stabile skjermegenskaper |
+| `AppNavigationViewModel` | Runtime-state, eksplisitte brukerhandlinger, overlay-koordinering og språksynk |
+
+`navigation.js` eksponerer i dag:
+
+```txt
+NAV_SCREENS
+LEARNING_CONTENT_TYPES
+NAV_ITEMS.sidebarItems
+NAV_ITEMS.toggleButtonItems
+NAV_ITEMS.popOutMenuItems
+```
+
+Stabile skjermegenskaper skal samles i samme modul som en liten deklarativ
+`screenConfig`, for eksempel:
+
+```js
+export const SCREEN_CONFIG = {
+	[NAV_SCREENS.SUBJECTS]: { requiresSubject: false, requiresExam: false, backTo: null, showsSubjectSwitcher: false, pageClassName: "exam-select-page", shellClassName: "exam-select-shell" },
+	[NAV_SCREENS.SELECT]: { requiresSubject: true, requiresExam: false, backTo: NAV_SCREENS.SUBJECTS, showsSubjectSwitcher: true, pageClassName: "exam-select-page", shellClassName: "exam-select-shell" }
+};
+```
+
+Dette registeret skal eie fakta om en skjerm. `AppNavigationViewModel` skal fortsatt
+ha eksplisitte domenehandlinger som `selectSubject`, `selectExam`,
+`selectFlipcardDeck`, `selectMatchCardsDeck`, `changeScreen` og `goBack`.
+
+Regler:
+
+- Ingen Page implementerer egne guards, nullstillingsregler eller back-targets.
+- Views oppretter ikke egne `Set`/arrays med skjerm-ID-er.
+- Nye skjermer registreres i `NAV_SCREENS` og `SCREEN_CONFIG` i samme patch.
+- `NAV_ITEMS` grupperes etter faktisk UI-flate. Glossarys dynamiske søk/kapittel-sheet
+  er ikke et pop-out-menu-item bare fordi det bruker samme mobile primitive.
+- Sidebar-synlighet deklareres på itemet eller i screen-config, ikke som lokal
+  skjermbetingelse i `SidebarNavigation`.
+- Back-kontrakten flyter som ett objekt fra app-shell til side-ViewModel.
+- `App.jsx` velger Page ut fra `activeScreen`, men eier ingen overgangsregler.
+
+Nåværende avvik: screen-policyen er fortsatt fordelt mellom `navigation.js`,
+`AppNavigationViewModel` og `SidebarNavigation`. Dette er prioritert gjeld, men
+den gamle generiske grafen/reduceren skal ikke gjeninnføres.
+
+---
+
+## App-shell — Header og Footer som canonical implementasjoner
+
+`src/ui/view/components/Header/Header.jsx` og `Footer/Footer.jsx` er appens
+canonical desktop-header og footer. De er delte strukturelle implementasjoner,
+ikke runtime-state-SSOT-er.
+
+- Tilbakeknappen rendres i Headers leading-slot — aldri som en frittsvevende
+  sideknapp.
+- Sideeide verktøy monteres gjennom Header-kontrakten; siden eier data og
+  handlinger, Header eier plassering og app-shell-struktur.
+- Header monteres via `WorkspaceScaffold` sin `header`-slot som søsken til
+  scrollflaten.
+- Mobil app-shell eies av `MobileDropDownTopBar`; desktop-Header skjules ved samme
+  brytpunkt. Dette er en responsiv variant, ikke en konkurrerende desktop-header.
+- Footer monteres gjennom scaffoldets `footer`-slot når siden trenger den.
+
+Forbudet gjelder scaffold-ansvar, ikke HTML-taggen. Semantiske `<header>`-elementer
+inne i kort, artikler, dialoger og avgrensede innholdskomponenter er lovlig HTML.
+
+Header-varianter skal være eksplisitte (`default`, `transparent`,
+`wide-progress` eller tilsvarende). Side-CSS skal ikke skjule header-policy gjennom
+vilkårlige descendant-overrides. Statistics-sidens egen app-shell-header og dagens
+sideeide header-varianter er kjent gjeld.
+
+---
+
+## Workspace-arkitektur — WorkspaceScaffold og WorkSpaceCard
+
+Workspace-reglene skiller mellom tre visuelle familier. Samme navn skal ikke
+brukes om ulike ansvar.
+
+| Begrep | Ansvar | Canonical eier |
+|---|---|---|
+| `WorkspaceScaffold` | Ytre avrundet arbeidsområde: shell, header/footer/overlay-slots og scrollflate | `src/ui/view/components/WorkspaceScaffold/` + `src/ui/style/WorkspaceScaffold/` |
+| `WorkSpaceCard` | Innholdsflate inni skallet: kortborder, surface, kortskygge, inset-highlight og ambient glow | `src/ui/view/components/Shared/WorkSpaceCard/` + `src/ui/style/Shared/WorkSpaceCard/` |
+| Utvalgskort | Valgkort og panelkort i grids/dashboards | `SelectionCard`-familien og tilhørende CSS |
+
+Flipcard-faces er et navngitt unntak. De har egen identitet med accent-ramme,
+mestringsskygger og 3D-flip og skal ikke adopteres av `WorkSpaceCard`.
+
+### WorkspaceScaffold
+
+`WorkspaceScaffold` rendrer `<main>` og mottar en eksplisitt kontrakt:
+
+```txt
+className
+contentClassName
+header
+footer
+overlay
+scrollToTopRequestId
+children
+```
+
+Fravær sendes eksplisitt som `null` eller tom streng etter propens kontrakt.
+Komponenten eier:
 
 ```txt
 .workspace-scaffold
-├── .workspace-scaffold-header
-├── .workspace-scaffold-body
-├── footer-overlay
-└── .workspace-scaffold-overlay
+.workspace-scaffold-header
+.workspace-scaffold-body
+.workspace-scaffold-footer-overlay
+.workspace-scaffold-overlay
 ```
 
-- Header-regionen er alltid til stede. Den delte `Header` ligger som overlay over
-  kroppsregionen; siden reserverer nødvendig topprom i sin egen CSS.
-- Kroppsregionen er scaffoldets fleksible scrollflate. Sider kan gjøre den
-  contained eller full-bleed med side-CSS uten å endre scaffold-kontrakten.
-- Footer er et overlay og skal aldri være en in-flow grid-rad som krymper kroppen.
-- Overlay-regionen brukes til backdrop, søkeark eller dialoglag.
+Regler:
 
-Alle props og parametere er obligatoriske. Det finnes ingen optionalparametere,
-default-parametere eller skjult `undefined`-semantikk. Fravær uttrykkes som
-eksplisitt `null` på et påkrevd felt, og kalleren sender alltid feltet.
+- Alle syv hovedsider bruker `WorkspaceScaffold`; de lager ikke konkurrerende
+  `<main className="x-workspace">`-skall med kopiert shell-oppskrift.
+- Header monteres via `header`-slotten og er søsken til
+  `.workspace-scaffold-body`.
+- `.workspace-scaffold` eier `position`, flex-shell, høyde, overflow, isolasjon,
+  border, radius, bakgrunn, skygge og backdrop-filter.
+- `.workspace-scaffold-body` eier posisjon, flex-oppførsel, min-størrelser,
+  scrolling, overscroll og scrollbar-kontrakt.
+- Side-CSS kan eie padding og indre layout når scaffoldet ikke setter den samme
+  propertyen. Overstyring av scaffold-eide body-properties skjer bare gjennom en
+  dokumentert descendant-kontrakt.
+- `contentClassName` er en modifikatorkanal, ikke en alternativ scaffold-eier.
+  En arkitekturtest skal avvise at enhver slik klasse setter scaffold-eide
+  properties som søskenklasse.
+- Scroll-to-top trigges bare når `scrollToTopRequestId` ikke er `null`.
 
-```jsx
-<WorkspaceScaffold
-	className={viewModel.workspaceClassName}
-	contentClassName={viewModel.contentClassName}
-	header={header}
-	footer={footer}
-	overlay={overlay}
-	scrollToTopRequestId={scrollToTopRequestId}
->
-	<PageContent />
-</WorkspaceScaffold>
+### WorkSpaceCard
+
+`WorkSpaceCard` er flate-SSOT-en inni et workspace. CSS-klassen er den primære
+kontrakten; komponenten er et tynt skall for enkle konsumenter. Kompliserte
+konsumenter kan adoptere flaten med klassekomposisjon uten DOM-endring.
+
+Regler:
+
+- `.workspace-card` eier border, radius, background, shadow, inset-highlight og
+  ambient glow.
+- Konsumenten eier geometri: `min-height`, `overflow`, `padding` og indre layout.
+- `QuestionCard` adopterer flaten med `className="workspace-card question-card"`.
+- Enkle konsumenter bruker `<WorkSpaceCard className={null}>...</WorkSpaceCard>`
+  eller sender en eksplisitt modifikatorklasse.
+- `--workspace-card-surface`, `--workspace-card-ambient-glow` og
+  `--workspace-card-ambient-glow-display` er generiske tokennavn. Nye
+  `--question-card-*`-utvidelsespunkter er forbudt.
+
+### Arvekontrakt for workspace-CSS
+
+CSS har ikke klassearv. Workspace-arv uttrykkes med multiklasse og deklarerte
+custom properties:
+
+```html
+<main class="workspace-scaffold exam-workspace">
 ```
 
-`footer` og `overlay` er `element | null`. `scrollToTopRequestId` er
-`number | null`; `null` betyr at siden ikke bruker kontrollert scroll-til-topp.
-Discriminated unions brukes bare når en modell har flere reelt ulike varianter,
-og slike unions håndteres uttømmende med kast på ukjent variant. Fravær skal
-aldri modelleres som `{ kind: "none" }`. Det finnes ikke et globalt forbud mot
-`??`; uten optionalparametere finnes det ingen defaults å maskere i disse
-kontraktene.
+Sideklassen får gjøre to ting:
 
----
+1. Sette dokumenterte `--workspace-scaffold-*`, `--scaffold-*` eller
+   `--workspace-card-*`-utvidelsespunkter.
+2. Style egne barn og egen geometri.
 
-## Workspace-state og intern load-state
+Sideklasser redeklarerer aldri Shared-/scaffold-oppskriftens kjerneegenskaper
+direkte: `border`, `background`, `box-shadow`, `backdrop-filter`, `isolation` og
+strukturell `overflow`. Trengs et avvik, opprettes et navngitt utvidelsespunkt i
+eierfilen i samme patch som første konsument.
 
-Page-nivå rendring av loading, error, empty og content går gjennom nøyaktig én
-`WorkspaceState`. PageViewModel avleder en ferdig `workspaceState`-modell; Page
-sender modellen direkte videre og tolker aldri teknisk ressursstatus. Grids og
-andre underkomponenter rendrer innhold, ikke konkurrerende page-state-maskiner.
+Utvidelsespunkter opprettes ikke på forskudd. Én reell variasjon gir én variabel.
+Verdier i sideklasser skal være tokens når de uttrykker design; rå verdier er bare
+tillatt for sideunik geometri.
 
-```txt
-{ kind: "loading", label }
-{ kind: "error", title, body, action }
-{ kind: "empty", title, body, action }
-{ kind: "content" }
-```
-
-`action` er et påkrevd felt på error/empty og har kontrakten
-`null | { label, onAction }`. Unionen håndteres uttømmende; ukjent `kind` skal
-kaste. `WorkspaceMessage` er ikke et separat offentlig page-state-API.
-
-`LOAD_STATUS` er teknisk ressursstatus og ligger bare under
-`src/ui/viewmodel/LoadState/`. Ingen fil under `src/ui/view/` importerer eller
-tolker `LOAD_STATUS`. PageViewModel kombinerer ressursstatus og avleder
-`workspaceState` med en ren factory utenfor hooken.
-
-`useLoadModel` mottar alle felt eksplisitt:
-
-```js
-useLoadModel({
-	execute,
-	emptyData,
-	errorMessage,
-	resourceKey,
-	isEnabled,
-	onLoaded
-});
-```
-
-`resourceKey` inneholder hver identitetsdimensjon der stående data fra forrige
-verdi ikke er gyldig å vise mens en ny ressurs lastes. Første last for en nøkkel
-viser loading med `emptyData`; refresh av samme nøkkel beholder READY og stående
-data; ny nøkkel nullstiller første-last-semantikken. `isEnabled === false` betyr
-ingen kjøring og ingen skriving. Bare siste igangsatte last får skrive resultat.
-`onLoaded` er påkrevd og nullable; fravær sendes som `null`.
-
-`src/navigation/navGraph.js` inneholder bare stabile skjerm-ID-er.
-`AppNavigationViewModel.js` eier de få overgangsreglene, valgt fag/eksamen og
-skjerm-chrome. `src/navigation/learningContent.js` inneholder metadata for
-innholdstypene, mens ViewModel-en avgjør om et valg bytter lokal fane eller skjerm.
-
----
-
-## App.jsx — navigasjon og instansiering
-
-`App.jsx` er det eneste stedet ViewModels instansieres og kobles til Pages.
-Bruk wrapper-komponenter for å isolere ViewModel-instansiering fra navigasjonslogikk:
-
-```jsx
-function ExamPageWrapper({ examId, language }) {
-    const viewModel = useExamPageViewModel(
-        getExamQuestionsUseCase,
-        gradeAnswerUseCase,
-        calculateExamScoreUseCase,
-        examId,
-        language
-    );
-    return <ExamPage viewModel={viewModel} />;
+```css
+/* Riktig */
+.flipcards-workspace {
+	--workspace-scaffold-backdrop-filter: none;
 }
 
-{activeScreen === NAV_SCREENS.EXAM && (
-    <ExamPageWrapper examId={selectedExamId} language={language} />
-)}
+/* Feil */
+.flipcards-workspace {
+	background: var(--shell-bg);
+	box-shadow: var(--shadow-heavy);
+	backdrop-filter: none;
+}
 ```
+
+---
+
+## Lasttilstand — én teknisk status, én page-state-modell
+
+Lasting, feil og suksess representeres ikke som boolean+nullable-par. Teknisk
+ressursstatus og presentert page-state er to forskjellige nivåer.
+
+### Teknisk ressursstatus
+
+SSOT:
+
+- `src/ui/viewmodel/LoadState/loadStatus.js` — `LOAD_STATUS` med `LOADING`,
+  `ERROR`, `READY`
+- `src/ui/viewmodel/LoadState/useLoadModel.js` — generisk async-ressurs som
+  eksponerer `{ status, data, error, reload }`
+- `src/ui/viewmodel/LoadState/combineLoadStatuses.js` — prioritet
+  `error > loading > ready` ved flere ressurser
+
+`useLoadModel` holder stående data under reload etter første vellykkede last.
+Teknisk `loadError` logges kun i dev. `error` som returneres til ViewModel er den
+brukersikre produktteksten som ble sendt inn fra i18n.
+
+### Page-state
+
+SSOT:
+
+- `src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js`
+- `src/ui/viewmodel/WorkspaceState/createWorkspaceState.js`
+- `src/ui/view/components/WorkspaceState/WorkspaceState.jsx`
+
+Gyldige page-state-varianter:
+
+```txt
+loading
+error
+empty
+content
+```
+
+Flyt:
+
+```txt
+useLoadModel / combineLoadStatuses
+  ↓
+createWorkspaceState({ loadStatus, isEmpty, labels, errorAction })
+  ↓
+WorkspaceState({ state, children })
+```
+
+Regler:
+
+- Page-ViewModel eksponerer `workspaceState`, ikke enkeltressursenes statuses.
+- Page-View importerer ikke `LOAD_STATUS`.
+- `WorkspaceState` er eneste page-level boundary for loading/error/empty/content.
+- `state.action` er eksplisitt `null` eller `{ label, onAction }`.
+- Loading/error/empty rendres inne i `WorkspaceScaffold`; app-shell forblir
+  montert.
+- Empty er en gyldig READY-presentasjon, ikke en teknisk feil.
+- Content returnerer `children` uten et ekstra wrapperlag.
+- Ukjente status-/kind-verdier kaster feil; de skjules ikke med defaults.
+
+Alle syv hovedsider er migrert til denne modellen. `WorkspaceMessage`,
+`pageStatus`, `pageErrorMessage` og lokale page-state-skall er ikke gjeldende
+arkitektur og skal ikke gjeninnføres.
 
 ---
 
 ## Unidirectional data flow og state hoisting
 
-### Prinsippet
-
-State skal eies så høyt oppe i hierarkiet som mulig — alltid i ViewModel.
+State eies så høyt oppe som mulig — alltid i ViewModel.
 Data flyter én vei: ViewModel → Page → komponenter → subkomponenter.
-Ingen komponent henter data selv. Den mottar det den trenger som props.
-
-```
-ViewModel  (eier all state og logikk)
-    ↓ viewModel prop
-  Page  (fordeler props nedover)
-    ↓ spesifikke props
-  Komponent  (bruker det den får, sender events opp via callbacks)
-    ↓ spesifikke props
-  Subkomponent  (rendrer kun)
-```
+Ingen komponent henter data selv.
 
 ### Data ned, events opp
 
-Props og verdier flyter nedover. Brukerhandlinger bobler oppover som callbacks. Aldri omvendt.
-
-En komponent som trenger å endre noe, kaller en callback den har fått som prop.
-Den muterer aldri state direkte, og den importerer aldri noe for å gjøre det selv.
+Props flyter nedover. Brukerhandlinger bobler oppover som callbacks.
 
 ```jsx
 // Riktig — komponenten rapporterer opp, ViewModel bestemmer:
 <AnswerOption
-    selected={isSelected}
-    onSelect={() => viewModel.setSingleAnswer(question.id, option.id)}
+	selected={isSelected}
+	onSelect={() => viewModel.setSingleAnswer(question.id, option.id)}
 />
 
-// Feil — komponenten sender en setter nedover:
-<AnswerOption
-    onSelect={() => setAnswers(prev => ({ ...prev, [id]: value }))}
-/>
+// Feil — komponenten mottar en setter:
+<AnswerOption onSelect={() => setAnswers(...)} />
 ```
 
-Callbacks navngis alltid med `on`-prefiks (`onSelect`, `onSubmit`, `onToggle`).
-Dersom du sender en setter (`setAnswers`, `setCurrentIndex`) som prop til en komponent,
-er det et tegn på at logikken hører i ViewModel — ikke i komponenten som mottar den.
+Callbacks navngis med `on`-prefiks. En setter (`setAnswers`) sendt som prop er
+et tegn på at logikken hører i ViewModel.
 
 ### Komponenter henter ingenting selv
 
-En komponent skal aldri:
-
-- importere fra `dependencies.js`
-- kalle et Use Case direkte
-- ha egne `useState`-kall for data som tilhører siden
-- bruke `useContext` for å hente forretningsdata
-
-Egne `useState`-kall er tillatt kun for rent lokal UI-state som ingen andre komponenter
-bryr seg om — se seksjonen om lokale interaksjonshooks nedenfor.
-
-```jsx
-// Feil — komponenten henter data selv:
-import { getExamQuestionsUseCase } from "../../../di/dependencies.js";
-
-function QuestionCard() {
-    const [question, setQuestion] = useState(null);
-    useEffect(() => {
-        getExamQuestionsUseCase.execute(...).then(setQuestion);
-    }, []);
-}
-
-// Riktig — komponenten mottar data som props:
-function QuestionCard({ question, answer, submitted, onAnswer }) {
-    return ...;
-}
-```
+En komponent skal aldri importere fra `dependencies.js`, kalle et Use Case,
+ha egne `useState`-kall for sidedata, eller bruke `useContext` for forretningsdata.
 
 ### Context er infrastruktur, ikke data
 
-`useContext` er tillatt for rent tekniske cross-cutting concerns:
-tema (lys/mørk), språkstrenger (`t.submit`), og innstillinger som ikke påvirker domenelogikk.
+`useContext` er tillatt for tekniske cross-cutting concerns: tema, språkstrenger,
+innstillinger. Forretningsdata — spørsmål, svar, score — sendes som props fra
+ViewModel, aldri via context.
 
-Dette er infrastruktur. Forretningsdata — spørsmål, svar, score, eksamensstatus —
-skal aldri hentes via context. De skal sendes som props fra ViewModel.
+### Lokale interaksjonshooks i View-laget
 
-### Ingen magiske imports i komponenter
-
-Følgende er forbudt i alle filer under `src/ui/view/`:
-
-```js
-// Forbudt:
-import { gradeAnswerUseCase } from "../../di/dependencies.js";
-import ExamRepository from "../../model/repositories/ExamRepository.js";
-```
-
-Tommelregel: hvis du skriver `import` i en View-fil og stien inneholder
-`model/`, `domain/`, `repositories/` eller `dependencies` — stopp.
-
----
-
-## Lokale interaksjonshooks i View-laget
-
-Drag-and-drop-komponenter (CategorySort, MatrixPlacement, TableMatch) bruker lokale hooks
-(`useCategorySortQuestion`, `useMatrixPlacementQuestion`, `useTableMatchQuestion`)
-som ligger i komponentmappene sine.
-
-Dette er et tillatt unntak fra "ingen state i View"-regelen, men kun under disse vilkårene:
-
-**Tillatt — hooken holder:**
-- visuell interaksjonsstate: hvilken item er "valgt", hvilken dropzone er aktiv
-- event-handlers for drag-and-drop (nettleser-APIer som `dataTransfer`, `dragOver`)
-- avledede visningsverdier basert på props den allerede har mottatt
-
-**Forbudt — hooken skal ikke:**
-- kalle Use Cases
-- importere fra `dependencies.js` eller `model/`
-- eie state som andre komponenter utenfor sin egen tre trenger
-- hente data fra noe annet enn props den mottar
-
-```js
-// Riktig — lokal hook opererer kun på props den mottar:
-export function useCategorySortQuestion(params) {
-    const [selectedItemId, setSelectedItemId] = useState(null);
-    const [dragOverCategoryId, setDragOverCategoryId] = useState(null);
-
-    const assignItem = (categoryId, itemId) => {
-        // kaller callback den fikk som prop — bobler opp til ViewModel
-        params.onSingleAnswer(params.question.id, nextAnswer);
-    };
-}
-```
+Drag-and-drop-komponenter bruker lokale hooks i komponentmappene sine
+(`useCategorySortQuestion` osv.). Tillatt unntak fra «ingen state i View»,
+kun for: visuell interaksjonsstate, drag-and-drop-eventhåndtering og avledede
+visningsverdier fra props hooken allerede har mottatt. Forbudt: kalle Use Cases,
+importere fra `model/`, eie state andre komponenter utenfor eget tre trenger.
 
 ---
 
@@ -391,393 +895,199 @@ export function useCategorySortQuestion(params) {
 
 | Fra | Kan importere | Kan ikke importere |
 |---|---|---|
-| View / komponent | Props (ingen imports av logikk) | Use Cases, Repositories, DataSources, `dependencies.js` |
-| ViewModel | Use Cases (via parametere), React hooks | View-komponenter, andre ViewModels |
-| Use Case | Repository (via konstruktør) | ViewModel, View, andre Use Cases (unntatt via konstruktør) |
-| Repository | DataSource (via konstruktør) | Use Cases, ViewModel, View |
-| DataSource | Rådata / ekstern kilde | Alle andre lag |
+| View / komponent | Props, canonical UI-primitiver, `presentation/`- og `navigation/`-konstanter, rene presentasjonshelpers | Use Cases, Repositories, DataSources, `dependencies.js`, side-ViewModels, `LOAD_STATUS` |
+| Page-ViewModel | Injiserte Use Cases, React hooks, egne undermodeller, `LoadState/`, `WorkspaceState/`, presentation/navigation-config | View-komponenter, andre siders ViewModels |
+| Undermodell | React hooks, rene konstanter, modeller i samme kapabilitet | View-komponenter, `dependencies.js`, andre siders ViewModels |
+| Use Case | Repository via konstruktør, andre Use Cases via konstruktør | ViewModel, View |
+| Repository | DataSource via konstruktør | Use Cases, ViewModel, View |
+| DataSource | Felles `ApiDataSource`, transportdata og plattform-API | Repository, Use Cases, ViewModel, View |
+| `dependencies.js` | Alle konkrete implementasjoner og runtime-konfigurasjon | UI-beslutninger og domeneregler |
 
-### Høy kohesjon — alt for én side samles i én ViewModel
+Atomic Design presiserer importretningen inne i View-laget:
 
-Ikke spre sidens logikk over løse hjelpefiler og komponenter.
-
-```js
-// Feil — logikk spredt ut av ViewModel og inn i View:
-// I ExamPage.jsx:
-const getLongestText = (question) => { /* domenekjennskap */ };
-const workspaceClass = isDragCategorize && count >= 5 ? "wide" : "";
-
-// Riktig — alt samlet i ExamPageViewModel.js:
-const workspaceClassName = useMemo(() =>
-    deriveWorkspaceClassName(currentQuestion, submitted),
-    [currentQuestion, submitted]
-);
+```txt
+Page → app-shell/feature → sammensatt komponent → UI-primitive
 ```
 
-### `src/utils/` — tekniske hjelpefunksjoner uten domenekjennskap
+Lavere nivå importerer aldri et høyere nivå. Komponenter på samme nivå kan deles
+når de har en reell felles kontrakt; features importerer ikke hverandres interne
+komponenter som snarvei.
 
-`src/utils/` er forbeholdt generiske tekniske hjelpefunksjoner som ikke vet noe om
-domeneobjektene i applikasjonen: stringformatering, datoutils, matematiske hjelpere.
+### `src/utils/` — tekniske hjelpere uten domenekjennskap
 
-Funksjoner som vet om `question.options`, `option.correct`, `answer.placements`
-eller andre domenestrukturer hører ikke i `src/utils/`. De hører i
-`src/model/domain/` eller absorberes direkte i det Use Case som bruker dem.
-
-```js
-// Feil — domenekjennskap i utils/:
-// src/utils/answer/getCorrectIndexes.js
-export function getCorrectIndexes(question) {
-    return question.options
-        .map((opt, i) => opt.correct ? i : null)
-        .filter(Boolean);
-}
-
-// Riktig — domenespesifikk hjelpefunksjon ligger i src/model/domain/utils/.
-```
+Funksjoner som kjenner `question.options`, `answer.placements` eller andre
+domenestrukturer hører i `src/model/domain/` — ikke i `src/utils/`.
 
 ---
 
 ## Bilder i utvidede forklaringer
 
-Bilder som vises i feedback og utvidede forklaringer flyter gjennom alle lag og
-berikes av Repository — ikke av View.
+Bilder flyter gjennom lagene og berikes av Repository — ikke av View.
 
-### Dataflyten
+1. **Rådata** (`src/data/subjects/{subjectId}/conceptImages.js`) — flat katalog
+   med metadata. Ingen `src`-strenger.
+2. **DataSource** (`ConceptImageDataSource`) — eneste sted en `src`-streng
+   konstrueres. Returnerer ferdige bildeobjekter.
+3. **Repository** (`ExamRepository`) — løser `whyExtendedImageRefs`
+   (array av `imageId`-strenger på spørsmål/alternativ/target) og legger
+   ferdige objekter på `whyExtendedImages` ved lasting.
+4. **View** — mottar `images`-arrayet og rendrer `<figure>/<img>`. Konstruerer
+   aldri `src` selv.
 
-**1. Rådata — `src/data/subjects/{subjectId}/conceptImages.js`**
-
-En flat liste av katalogoppføringer. Ingen `src`-strenger, ingen URL-er — bare metadata:
-
-```js
-{
-    moduleId: "cio-tool-box",
-    groupId: "cynefin",
-    imageId: "cynefin_theory_of_everything",
-    title: { no: "Cynefin-metoden", en: "The Cynefin method" },
-    alt:   { no: "...", en: "..." },
-    caption: { no: "...", en: "..." }
-}
-```
-
-Selve bildefilene ligger i `public/subjects/{subjectId}/{moduleId}/{groupId}/{imageId}.{ext}`.
-
-**2. DataSource — `ConceptImageDataSource.js`**
-
-Det eneste stedet som vet hvordan en `src`-streng konstrueres:
-
-```js
-#buildSrc(subjectId, moduleId, groupId, imageId, ext) {
-    return `/subjects/${subjectId}/${moduleId}/${groupId}/${imageId}.${ext}`;
-}
-```
-
-Returnerer ferdige bildeobjekter: `{ id, src, alt, title, caption }`.
-
-**3. Repository — `ExamRepository.js`**
-
-Beriker spørsmålsobjekter med bilder ved lasting — ikke ved visning.
-Resultatet er at `whyExtendedImages` er et ferdigbygd array på spørsmålet
-når det når ViewModel.
-
-Bildereferanser (`whyExtendedImageRefs`) ligger direkte på spørsmålet,
-svarsalternativet eller targeten i mockdata som en array av `imageId`-strenger.
-Repository løser dem via `ConceptImageDataSource` og legger ferdige
-bildeobjekter på `whyExtendedImages`.
-
-```js
-// I mockdata — bare imageId, ingen filbaner eller mappestruktur:
-whyExtendedImageRefs: ["cynefin_theory_of_everything"]
-```
-
-**4. View — komponenter som rendrer bilder**
-
-`AnswerOptionExtendedPanel` og `DragDropFeedbackExplanation` mottar `images`-arrayet
-som prop og rendrer `<figure>/<img>` direkte. De vet ingenting om hvordan bildene
-ble hentet, og de konstruerer aldri `src`-strenger selv.
+Nytt bilde: fil i `public/subjects/...`, oppføring i katalogen, `imageId` i
+`whyExtendedImageRefs`. View-laget røres ikke.
 
 ```jsx
-// Riktig — komponenten mottar ferdige bildeobjekter:
-function AnswerOptionExtendedPanel({ images = [] }) {
-    return images.map(image => (
-        <figure key={image.id ?? image.src}>
-            <img src={image.src} alt={image.alt ?? ""} loading="lazy" />
-            {image.caption && <p>{image.caption}</p>}
-        </figure>
-    ));
+// Riktig — alle props påkrevde, ingen default:
+function AnswerOptionExtendedPanel({ images }) {
+	return images.map((image) => (
+		<figure key={image.id}>
+			<img src={image.src} alt={image.alt} loading="lazy" />
+			{image.caption ? <p>{image.caption}</p> : null}
+		</figure>
+	));
 }
-
-// Forbudt — komponenten bygger src selv:
-const src = `/subjects/${subjectId}/${moduleId}/${imageId}.svg`;
 ```
 
-### Legge til nye bilder
-
-1. Legg bildefilen i `public/subjects/{subjectId}/{moduleId}/{groupId}/`
-2. Legg til en oppføring i `src/data/subjects/{subjectId}/conceptImages.js`
-3. Legg til `imageId` i `whyExtendedImageRefs` på spørsmålet eller alternativet
-
-View-laget trenger ingen endringer.
+Tomme lister sendes eksplisitt som `[]` fra ViewModel — komponenten skal aldri
+trenge en default for å overleve.
 
 ---
 
-## Fremtidig backend — DataSource-laget er bytte-punktet
+## Backend — ApiDataSource er HTTP-grensen
 
-ExamPrepper er i dag en ren frontend-applikasjon der DataSource-klassene henter data
-fra lokale mockfiler. Arkitekturen er bevisst designet slik at en Express.js backend
-kan innføres uten at noe annet enn DataSource-filene trenger å endres.
+Backend eksisterer: Express/TypeScript på Render, PostgreSQL via Neon og
+Clerk-JWT-auth. Frontendens DataSource-klasser er HTTP-grensen.
 
-### Hvorfor dette fungerer
+### Hva som er stabilt ved transportendringer
 
-DataSource-metodene er allerede `async` og returnerer Promises — selv om de i dag
-bare returnerer lokale objekter. Repository, Use Cases og ViewModel vet ikke om
-dataen kom fra en fil eller et API. De venter bare på et Promise.
+Når et endepunkt, transportformat eller backendmiljø endres, skal disse normalt
+ikke røres:
+
+- Use Cases
+- ViewModels og undermodeller
+- View-komponenter
+
+Repository kan måtte røres dersom transportens DTO-shape endres og mappingen til
+domeneobjekter må oppdateres. Løftet er domenestabilitet utover Repository, ikke at
+kun én fysisk fil alltid endres.
+
+### Eierskap
+
+`dependencies.js` eier:
+
+- validering av `VITE_API_BASE_URL` og `VITE_IMAGE_BASE_URL`,
+- konkrete DataSource-/Repository-/Use Case-instanser,
+- token-provider som injiseres,
+- valg av konkret implementasjon.
+
+`ApiDataSource` eier:
+
+- URL-sammensetting fra injisert base-URL,
+- auth-header fra injisert token-funksjon,
+- felles GET/POST-requestmekanikk,
+- parsing av payload,
+- avvisning av ikke-OK responses.
+
+DataSource kjenner ikke Clerk. Den mottar `getToken` eksplisitt; dersom en kilde
+kan være offentlig, sender wiring `null` eksplisitt.
+
+### Canonical baseklasse for HTTP
 
 ```js
-// Slik ser det ut i dag:
-export default class ExamQuestionDataSource {
-    async fetchAllExams() {
-        return EXAMS;              // returnerer mockdata direkte
-    }
+// src/model/datasource/ApiDataSource.js
+export default class ApiDataSource {
+	#baseUrl;
+	#getToken;
 
-    async fetchExamById(examId) {
-        return EXAMS.find(e => e.id === examId) ?? null;
-    }
-}
+	constructor({ baseUrl, getToken }) {
+		if (!baseUrl) {
+			throw new Error("ApiDataSource requires baseUrl");
+		}
 
-// Slik ser det ut med en Express-backend:
-export default class ExamQuestionDataSource {
-    #baseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+		this.#baseUrl = baseUrl.replace(/\/$/, "");
+		this.#getToken = getToken;
+	}
 
-    async fetchAllExams() {
-        const response = await fetch(`${this.#baseUrl}/api/exams`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-    }
+	async get(path) {
+		return await this.#request(path, { method: "GET", headers: null, body: null });
+	}
 
-    async fetchExamById(examId) {
-        const response = await fetch(`${this.#baseUrl}/api/exams/${examId}`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-    }
+	async #request(path, request) {
+		const authHeaders = await this.#getAuthHeaders();
+		const requestHeaders = request.headers === null ? {} : request.headers;
+		const response = await fetch(`${this.#baseUrl}${path}`, {
+			method: request.method,
+			headers: { Accept: "application/json", ...authHeaders, ...requestHeaders },
+			body: request.body
+		});
+
+		const payload = await readPayload(response);
+
+		if (!response.ok) {
+			throw new Error(payload?.error ?? `API request failed: ${response.status}`);
+		}
+
+		return payload;
+	}
+
+	async #getAuthHeaders() {
+		if (this.#getToken === null) {
+			return {};
+		}
+
+		const token = await this.#getToken();
+		return token === null ? {} : { Authorization: `Bearer ${token}` };
+	}
 }
 ```
 
-Resten av applikasjonen — Repository, Use Cases, ViewModel, View — er uendret.
+Eksemplet viser kontrakten, ikke et krav om nøyaktig intern implementasjon.
 
-### Abstrakt baseklasse for HTTP
+### Feilkontrakt
 
-Når backend innføres, bør DataSource-klassene arve fra en felles abstrakt baseklasse
-som håndterer URL-bygging, headers, feilhåndtering og logging. Mønsteret er det
-samme som vist i Havsus-prosjektet:
-
-```js
-// src/model/datasource/DataSource.js
-export default class DataSource {
-    #baseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
-    #callCount = 0;
-
-    async get(path) {
-        this.#callCount += 1;
-        const url = `${this.#baseUrl}/${path}`;
-        const who = this.constructor.name;
-
-        console.log(`[API][${who}] GET #${this.#callCount} → ${url}`);
-        const startedAt = performance.now();
-
-        const response = await fetch(url, {
-            headers: { Accept: "application/json" }
-        });
-
-        const ms = Math.round(performance.now() - startedAt);
-
-        if (!response.ok) {
-            console.warn(`[API][${who}] FEIL ${response.status} etter ${ms}ms → ${url}`);
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        console.log(`[API][${who}] OK ${response.status} etter ${ms}ms`);
-        return response.json();
-    }
-
-    async post(path, body) {
-        this.#callCount += 1;
-        const url = `${this.#baseUrl}/${path}`;
-        const who = this.constructor.name;
-
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            },
-            body: JSON.stringify(body)
-        });
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-    }
-}
-```
-
-```js
-// src/model/datasource/ExamQuestionDataSource.js
-import DataSource from "./DataSource.js";
-
-export default class ExamQuestionDataSource extends DataSource {
-    async fetchAllExams() {
-        return this.get("api/exams");
-    }
-
-    async fetchExamById(examId) {
-        return this.get(`api/exams/${examId}`);
-    }
-
-    async fetchExamByBaseIdAndLang(baseId, language) {
-        return this.get(`api/exams/base/${baseId}?lang=${language}`);
-    }
-}
-```
+- Teknisk feilobjekt vises ikke direkte i UI.
+- Page-load-feil går gjennom `useLoadModel` og i18n-produkttekst.
+- Action-feil kan ha egen lokal/felles modell fordi de har en annen livsløp enn
+  page-load.
+- Typed API-feil (`status`, `code`, `message`) innføres først når en konkret
+  konsument trenger forskjellig oppførsel per feiltype. Ikke bygg et hierarki på
+  forskudd.
+- En root ErrorBoundary skal håndtere uventede render-feil; dette er kjent gjeld.
 
 ### Regler for DataSource-implementasjon
 
-- Én DataSource-klasse per datakilde / API-domene
-- Metodenavn beskriver hva som hentes, ikke hvordan: `fetchExamById`, ikke `getFromApi`
-- Metodene er alltid `async` og returnerer alltid domeneobjekter eller `null` — aldri rå `Response`-objekter
-- Feilhåndtering (HTTP-statuskoder) skjer i DataSource — Repository forutsetter at data er gyldig
-- API-nøkler og base-URLer hentes fra miljøvariabler (`import.meta.env.VITE_*`), aldri hardkodet
-- DataSource vet om HTTP og JSON — den vet ikke om domeneregler, Repository eller ViewModel
-
-### Hva som ikke skal endres ved en backend-innføring
-
-Når `ExamQuestionDataSource` og `SubjectDataSource` byttes fra mockfiler til
-HTTP-kall, skal ingen av disse filene røres:
-
-- `ExamRepository.js`
-- `SubjectRepository.js`
-- Alle Use Case-klasser
-- `dependencies.js` (bortsett fra eventuell ny baseklasse-import)
-- Alle ViewModels
-- Alle View-komponenter
-
-Hvis du må endre noe utenfor `src/model/datasource/` for å innføre en backend,
-er det et tegn på at arkitekturgrensen er brutt et sted.
+- Én DataSource-klasse per API-domene
+- Metodenavn beskriver operasjonen: `fetchExamById`, ikke `getFromApi`
+- Metodene er `async` og returnerer parsede transportdata/DTO eller `null`, aldri
+  rå `Response`
+- Repository mapper transportdata til domeneobjekter
+- Base-URL injiseres fra `dependencies.js`, aldri leses eller hardkodes i konkrete
+  DataSource-klasser
+- Dev-logging står bak `import.meta.env.DEV`; ingen ubetinget requestlogging
 
 ---
 
 ## Sikkerhet og secrets
 
-### .env-filer og secrets
-
-Alle hemmeligheter og miljøspesifikke verdier hører i `.env`-filer.
-`.env`-filer skal alltid ligge i `.gitignore` og skal aldri committes.
-
-Prosjektet skal ha en `.env.example` som viser hvilke variabler som trengs,
-men uten faktiske verdier.
-
-```
-# .gitignore
-.env
-.env.local
-.env.production
-```
-
-```
-# .env.example — committes, viser struktur uten verdier
-VITE_API_BASE_URL=
-```
-
-### Hva som aldri skal i frontend
-
-Alt med `VITE_`-prefiks havner i den kompilerte JavaScript-bundlen og er
-fullt lesbar for alle som åpner nettleseren. Det er ikke en feil — det er
-designet slik. Det betyr at følgende aldri skal ligge i frontend, verken i
-kode eller i `.env`-filer:
-
-```env
-# Forbudt i frontend:
-VITE_ADMIN_API_KEY=...
-VITE_JWT_SECRET=...
-VITE_DATABASE_URL=...
-VITE_SUPABASE_SERVICE_ROLE_KEY=...
-```
-
-Det eneste som er trygt å ha i frontend med `VITE_`-prefiks er offentlige
-URL-er og ikke-sensitive konfigurasjoner:
-
-```env
-# Tillatt i frontend:
-VITE_API_BASE_URL=https://api.example.com
-VITE_SUPABASE_URL=https://xyz.supabase.co
-VITE_SUPABASE_ANON_KEY=...   ← kun tillatt når Supabase RLS er aktivert
-```
-
-Backend-secrets hører utelukkende i backend sin `.env` eller i hosting-platformens
-secret manager:
-
-```env
-# Kun i backend/.env — aldri i frontend:
-DATABASE_URL=postgres://...
-ADMIN_API_KEY=...
-JWT_SECRET=...
-CORS_ORIGIN=https://fredrikvogth.github.io
-```
-
-### XSS — ikke render brukerstyrt HTML
-
-React escaper tekst automatisk når den rendres normalt. Det er trygt:
-
-```jsx
-<p>{question.title}</p>
-```
-
-`dangerouslySetInnerHTML` er forbudt. Bruk det ikke, uansett kilde.
-
-```jsx
-// Forbudt:
-<div dangerouslySetInnerHTML={{ __html: question.explanation }} />
-```
-
-Hvis rik tekst må støttes i fremtiden, skal HTML sanitiseres før rendering
-med et godkjent bibliotek (f.eks. DOMPurify). Det bestemmes eksplisitt —
-ikke bare lagt til.
-
-### Scoring tilhører backend
-
-Frontend er aldri kilde til sannhet for resultater.
-
-Når backend innføres, skal frontend sende svar — ikke beregnet score:
-
-```js
-// Riktig — frontend sender kun svar:
-POST /api/exam-attempts
-{
-    "examId": "mock-exam-1-no",
-    "answers": { "q1": "a", "q2": ["b", "c"] }
-}
-
-// Feil — frontend beregner og sender score:
-POST /api/exam-attempts
-{
-    "score": 8,
-    "percentage": 80,
-    "passed": true
-}
-```
-
-Backend henter fasit, beregner score og persisterer resultatet.
-`CalculateExamScoreUseCase` og `GradeAnswerUseCase` brukes i dag lokalt
-for å gi umiddelbar feedback i UI — det er greit for en øvingsplattform,
-men de er ikke autoritative. Autoritativ scoring skjer på server.
+- `.env`-filer i `.gitignore`, aldri committet. `.env.example` viser struktur
+  uten verdier.
+- Alt med `VITE_`-prefiks er lesbart i bundlen. Kun offentlige URL-er og
+  ikke-sensitive verdier. Aldri: API-nøkler med skriverettigheter,
+  JWT-secrets, databasestrenger.
+- Backend-secrets bor i backend sin `.env` eller hostingplattformens secret
+  manager.
+- `dangerouslySetInnerHTML` er forbudt. Rik tekst krever eksplisitt beslutning
+  om sanitisering (DOMPurify) først.
+- **Scoring tilhører backend.** Frontend sender svar, aldri beregnet score.
+  Lokale `GradeAnswerUseCase`/`CalculateExamScoreUseCase` gir umiddelbar
+  UI-feedback, men er ikke autoritative.
 
 ---
 
 ## Filbanekommentarer
 
-Alle kildefiler skal ha en filbanekommentar som første linje. Formålet er at enhver
-fil kan leses i isolasjon — i en editor, i en AI-chat, i en code review — uten at
-man trenger å se mappestrukturen for å vite hvor den hører hjemme.
-
-### Format
+Første linje i hver kildefil, relativ sti fra prosjektroten, mellomrom etter `//`:
 
 ```js
 // src/ui/viewmodel/ExamPageViewModel.js
@@ -787,140 +1097,76 @@ man trenger å se mappestrukturen for å vite hvor den hører hjemme.
 /* src/ui/style/ExamPage/QuestionCard/index.css */
 ```
 
-**Mellomrom etter `//` er obligatorisk.** `//src/` ser ut som en URL og er feil.
-
-### Regler
-
-- Første linje i filen, ingen blank linje før
-- Stien er relativ fra prosjektroten (`src/...`)
-- JS/JSX bruker `//`, CSS bruker `/* ... */`
-- Kommentaren oppdateres hvis filen flyttes — en fil med feil sti i kommentaren
-  er verre enn ingen kommentar, fordi den aktivt villeder
-
-### Vanlige feil å unngå
-
-```js
-// Feil — mangler mellomrom:
-//src/ui/viewmodel/ExamPageViewModel.js
-
-// Feil — gammel sti etter refaktorering (ikke oppdatert):
-// src/ui/view/components/ExamPage/QuestionCard/DragDrop/TableMatch/...
-// (filen ligger nå under QuestionTypes/DragDrop/TableMatch/)
-
-// Riktig:
-// src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx
-```
+Kommentaren oppdateres når filen flyttes — feil sti villeder aktivt.
 
 ---
 
 ## CSS-struktur
 
-### Prinsippet: CSS-mapper speiler komponentmapper
+### CSS-mapper speiler komponentmapper
 
-CSS-mappestrukturen under `src/ui/style/` skal speile komponentstrukturen under
-`src/ui/view/components/`. For hver komponentmappe skal det finnes en tilsvarende
-CSS-mappe med samme navn og samme nesting.
-
-```
-view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/
-→ style/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/
-```
-
-Dette gjelder ned til mappenivå, ikke nødvendigvis én CSS-fil per komponentfil.
-En komponentmappe med mange komponenter kan samle styles i én eller noen få CSS-filer
-— men mappen den ligger i skal matche.
+For hver komponentmappe under `src/ui/view/components/` finnes en tilsvarende
+mappe med samme navn og nesting under `src/ui/style/`. Gjelder på mappenivå —
+én mappe kan samle styles i få filer.
 
 ### Entry point og importkjede
 
 `App.css` er eneste entry point. Ingen komponentfil importerer CSS direkte.
-All CSS importeres via `index.css`-filer som samler sin mappes innhold:
-
-```
-App.css
-└── ExamPage/index.css
-    ├── page.css
-    ├── progress.css
-    ├── responsive.css
-    ├── FeedbackPanel/index.css
-    ├── ResultBadge/index.css
-    └── QuestionCard/index.css
-        ├── Shared/index.css
-        └── QuestionTypes/...
-```
-
-### Inndeling innad i en CSS-mappe
-
-Én komponentmappe kan inneholde flere CSS-filer splittet på ansvar:
-
-| Fil | Inneholder |
-|---|---|
-| `index.css` | Bare `@import`-linjer, ingen regler |
-| `base.css` / `layout.css` | Struktur, posisjonering, flex/grid |
-| `[del].css` | Én fil per distinkt ansvarsområde (knapper, kort, topbar) |
-| `responsive.css` | Alle media queries for denne mappen samlet |
-
-`responsive.css` er alltid sist i `index.css`.
+All CSS importeres via `index.css`-filer per mappe. `index.css` inneholder kun
+`@import`-linjer. `responsive.css` er alltid sist i sin `index.css`.
 
 ### Tokens vs. komponent-CSS
 
-`Tokens.css` inneholder kun globale design tokens: spacing, farger, radii, shadows,
-overganger og dark mode-overrides. Disse gjelder hele applikasjonen.
+`Tokens.css` inneholder kun globale design tokens. Komponent-spesifikke
+størrelser hører i komponentens egen CSS. Hardkod aldri en verdi som finnes
+som token.
 
-Komponent-spesifikke størrelser og padding hører i komponentens egen CSS-fil —
-ikke i `Tokens.css`.
+Dark mode håndteres utelukkende via tokens. `.dark`-selektorer i komponent-CSS
+er forbudt (låst 2026-06) — `.dark { }` finnes kun i `Tokens.css`.
 
-```css
-/* Riktig i Tokens.css — gjelder globalt: */
---radius-md: 16px;
---accent: #1067ff;
+### Shared workspace-CSS
 
-/* Feil i Tokens.css — komponent-spesifikt: */
---header-button-min-height: 54px;
---header-stat-card-min-width: 84px;
-```
+Workspace-CSS følger samme speilregel som komponentene:
 
-### Bruk tokens så høyt oppe i hierarkiet som mulig
+- `components/WorkspaceScaffold/` har CSS under `style/WorkspaceScaffold/`
+- `components/Shared/WorkSpaceCard/` har CSS under
+  `style/Shared/WorkSpaceCard/`
 
-En CSS-variabel skal defineres på det høyeste nivået der den er meningsfull.
-Variabler som gjelder hele applikasjonen hører i `Tokens.css` på `:root`.
-Variabler som bare gjelder én komponent hører i den komponentens CSS — ikke i `Tokens.css`.
+Side-CSS under `ExamPage/`, `MatchCardsPage/`, `FlipcardsPage/`,
+`GlossaryPage/`, `StatisticsPage/`, `SubjectSelectPage/` og
+`LearningContentSelectPage/` inneholder sideavvik og geometri. Shell- og
+flateoppskrifter kopieres aldri ned i sidemapper.
 
-Det betyr at komponent-CSS ikke skal hardkode verdier som allerede finnes som tokens:
+### Brytpunktet — synkronisert JS/CSS-kontrakt
 
-```css
-/* Feil — hardkoder verdi som finnes som token: */
-.question-card {
-    border-radius: 28px;
-    background: #ffffff;
-    box-shadow: 0 16px 48px rgba(18, 38, 63, 0.09);
-}
+App-brytpunktet har to tekniske representasjoner fordi CSS ikke kan lese en
+JavaScript-konstant direkte:
 
-/* Riktig — bruker token: */
-.question-card {
-    border-radius: var(--radius-xl);
-    background: var(--panel-strong);
-    box-shadow: var(--shadow-card);
-}
-```
+- JS: `APP_MOBILE_QUERY = "(max-width: 932px)"` i
+  `src/ui/presentation/presentationMode.js`
+- CSS: `max-width: 932px` og den komplementære `min-width: 933px`
 
-Tommelregel: hvis du skriver en konkret fargeverdi, skygge, radius eller
-spacing-verdi i en komponent-CSS-fil, sjekk om det finnes en token for det i
-`Tokens.css` først. Finnes den — bruk tokenet. Finnes den ikke og verdien er
-gjenbrukbar — vurder å legge den til i `Tokens.css`. Er den kun aktuell for
-én komponent — la den bli i komponentens CSS.
+Dette er en synkronisert kontrakt, ikke én fysisk SSOT. Garantien skal være en
+arkitekturtest som tillater akkurat disse to grensene og avviser nye app-brytpunkt
+uten eksplisitt whitelist/låst beslutning. Endres grensen, endres JS, CSS og testen
+i samme patch.
 
-Dark mode håndteres utelukkende via tokens. Komponent-CSS skal aldri ha
-`.dark`-selektorer for farger og overflater — de skal bruke tokens som allerede
-har dark mode-verdier definert i `.dark { }` i `Tokens.css`.
+Dagens kode har mange literalforekomster og mangler full drifttest; det er kjent
+gjeld. En CSS custom property kan ikke brukes i media-query condition og er ikke
+løsningen.
 
-```css
-/* Feil — komponent-CSS omdefinerer farger for dark mode: */
-.question-card { background: var(--panel-strong); }
-.dark .question-card { background: #07162a; }
+### Z-indeksskala (backlog, låst retning)
 
-/* Riktig — --panel-strong er allerede overstyrt i .dark i Tokens.css: */
-.question-card { background: var(--panel-strong); }
-```
+Navngitt skala i `Tokens.css` (`--z-workspace`, `--z-scaffold-header`,
+`--z-overlay`, …). Rå z-index-tall i komponent-CSS er kjent gjeld og fases ut.
+Ny kode bruker skalaen fra dag én når den lander.
+
+### Stacking-fellen
+
+`backdrop-filter` og `filter` gjør elementet til containing block for
+`position: fixed`-etterkommere. Monter aldri `fixed`-elementer under en flate
+med disse egenskapene — det er roten til hamburger- og verktøymeny-buggene.
+Portaler (`createPortal`) er utveien for overlays.
 
 ---
 
@@ -928,225 +1174,183 @@ har dark mode-verdier definert i `.dark { }` i `Tokens.css`.
 
 | Spørsmål | Svar |
 |---|---|
-| Henter rådata | DataSource |
-| Kombinerer datakilder, returnerer domeneobjekter | Repository |
-| Beriker domeneobjekter med bilder | Repository (`ExamRepository`) |
+| Henter HTTP/transportdata | Konkret DataSource via `ApiDataSource` |
+| Validerer base-URL-er og wirer konkrete instanser | `dependencies.js` |
+| Mapper DTO-er og kombinerer kilder til domeneobjekter | Repository |
+| Beriker domeneobjekter med bilder | Repository |
 | Forretningsregel med ett ansvar | Use Case |
-| Wirer alt sammen | `dependencies.js` |
-| State, handlers, avledede verdier, CSS-klassenavn | ViewModel |
-| Fordeler props nedover, rendrer layout | Page |
-| Rendrer én avgrenset del av UI | Komponent |
-| Lokal drag-and-drop interaksjonsstate | Lokal hook i komponentmappen |
-| Instansierer ViewModels, bestemmer hvilken Page som vises | `App.jsx` |
-| Globale design tokens | `Tokens.css` |
-| CSS for en komponent | CSS-mappe som speiler komponentmappen |
-
----
-
-## Brudd på arkitekturen — konkrete eksempler
-
-**Magisk import i komponent**
-```js
-// Forbudt:
-import { getExamQuestionsUseCase } from "../../di/dependencies.js";
-```
-Use Cases injiseres inn i ViewModel. Ingen komponent importerer dem.
-
-**Domenekjennskap i View**
-```jsx
-// Forbudt — View beregner layout basert på domeneobjekter:
-const isWide = question.categories.length >= 5 || longestText >= 34;
-```
-Flytt til ViewModel. View mottar `viewModel.workspaceClassName` ferdig.
-
-**Komponent henter egne data**
-```jsx
-// Forbudt:
-const [questions, setQuestions] = useState([]);
-useEffect(() => { fetch("/api/questions").then(...) }, []);
-```
-State og datahenting tilhører ViewModel. Komponenten mottar `questions` som prop.
-
-**Setter sendes som prop**
-```jsx
-// Advarsel — indikerer at logikk hører i ViewModel:
-<QuestionCard onAnswer={setAnswers} />
-```
-Wrap i en handler i ViewModel og send den ned i stedet.
-
-**Hele viewModel sendes videre til underkomponent**
-```jsx
-// Unngå:
-<QuestionCard viewModel={viewModel} />
-```
-Drill spesifikke props. `QuestionCard` skal ikke vite at en ViewModel eksisterer.
-
-**Domenekjennskap i `src/utils/`**
-```js
-// Feil plassering:
-// src/utils/answer/getCorrectIndexes.js vet om question.options[n].correct
-```
-Slik logikk hører i `src/model/domain/utils/` eller direkte i det Use Case som bruker den.
-
-Nåværende eksempel i kodebasen:
-```txt
-src/model/domain/utils/getCorrectIndexes.js
-```
-
-**Komponent-tokens i `Tokens.css`**
-```css
-/* Feil — hører i Header/index.css eller Header/layout.css: */
---header-button-min-height: 54px;
-```
-
-**CSS-mappe som ikke matcher komponentmappe**
-```
-style/FeedbackPanel/   ← feil, komponenten ligger i view/ExamPage/FeedbackPanel/
-style/ExamPage/FeedbackPanel/   ← riktig
-```
-
-**ViewModel importerer fra View-laget**
-```js
-// Forbudt:
-import QuestionCard from "../view/components/QuestionCard.jsx";
-```
-ViewModel vet ikke at komponenter eksisterer. Eneste unntak er React selv.
+| Sidetilstand, handlers og avledede presentasjonsverdier | Page-ViewModel |
+| Gjenbrukbar async-lasting | `viewmodel/LoadState/useLoadModel` |
+| Page-level loading/error/empty/content | `createWorkspaceState` + `WorkspaceState` |
+| Domenespesifikk lastelogikk | Undermodell i `viewmodel/[Eier]/` |
+| Statisk navigasjonskonfigurasjon | `navigation/navigation.js` |
+| Runtime-navigasjon og eksplisitte handlinger | `AppNavigationViewModel` |
+| Subject-switcher-state | `createSubjectSwitcherModel` via `SubjectSelectPageViewModel` |
+| Desktop app-shell-header / footer | `components/Header/`, `components/Footer/` |
+| Mobil app-shell | `components/Sidebar/MobileDropDownTopBar.jsx` |
+| Ytre workspace-skall | `components/WorkspaceScaffold/` + `style/WorkspaceScaffold/` |
+| Workspace-innholdsflate | `components/Shared/WorkSpaceCard/` + `style/Shared/WorkSpaceCard/` |
+| Utvalgskort | `components/Shared/SelectionCard/`-familien, ikke WorkSpaceCard |
+| Domenefri gjenbrukbar UI-byggestein | UI-primitive / Atomic Design atom |
+| Avgrenset UI-funksjon bygget av primitiver | Sammensatt komponent / molecule |
+| Konkret produktfunksjon | Feature-komponent / organism |
+| Layout, slots, scroll og app-shell-geometri | App-shell / sidemal / template |
+| Fordeler props, forgrener på ferdige modeller, rendrer skjermen | Page |
+| Lokal visuell del uten domeneavledning | Komponent på passende Atomic Design-nivå |
+| Lokal drag/drop-/gesture-state | Lokal hook i komponentmappen |
+| Instansierer side-ViewModels og velger Page | `App.jsx` |
+| Globale designverdier og semantiske layer-tokens | `Tokens.css` |
+| Aktivt språk/tema/settings | Tilhørende Context-provider |
+| Dynamisk glossary chapter/search-sheet | Glossary-modell og Glossary-komponenter, ikke `NAV_ITEMS.popOutMenuItems` |
 
 ---
 
 ## React-native kode — bruk React, ikke vanilla JS
 
-Koden skal være React-native. Det betyr at React sine mekanismer brukes konsekvent
-der de finnes, og vanilla JS DOM-APIer brukes bare der React ikke har et alternativ.
+- `useState` for reaktiv state; `useRef` for ikke-reaktive verdier og
+  DOM-referanser (scroll, fokus)
+- React event-props for interaksjon på egne elementer; aldri
+  `addEventListener` på React-eide elementer
+- `document.addEventListener` kun for global scope (Escape i modaler,
+  klikk-utenfor), alltid med cleanup i `useEffect`
+- `createPortal` for modaler og overlays; aldri `document.body`-manipulasjon
+- Stilendringer via `className` og CSS-klasser; aldri `element.style`.
+  Unntak: `.dark` på `document.documentElement` i `ThemeContext`.
+- Timere via `window.setInterval`/`clearInterval` i `useEffect` med cleanup;
+  CSS-animasjoner foretrekkes fremfor JS
+- `localStorage` kun i Context-providers for brukerpreferanser; aldri i
+  ViewModels, komponenter eller Use Cases
 
-### State og refs
+---
 
-Bruk `useState` for reaktiv state. Bruk `useRef` for verdier som ikke skal trigge
-re-render, eller for å holde en referanse til et DOM-element når det er strengt
-nødvendig (f.eks. scroll-target eller focus-management).
+## Kodestil
 
-```jsx
-// Riktig:
-const [isOpen, setIsOpen] = useState(false);
+Låste regler (2026-06/07), gjelder all ny og endret kode:
 
-// Feil — vanilla JS muterer DOM direkte:
-document.getElementById("panel").style.display = "block";
-```
+### Tabs for innrykk
 
-### Eventlytting
+All JS/JSX/CSS bruker tabs. Blandet innrykk i en fil rettes når filen røres.
 
-Bruk React sine syntetiske event-props (`onClick`, `onChange`, `onKeyDown`) for
-brukerinteraksjon på egne elementer. Legg aldri til `addEventListener` på et
-React-eid element.
+### Horisontale imports og signaturer
 
-```jsx
-// Riktig:
-<button onClick={handleClose}>Lukk</button>
-
-// Feil — vanilla JS på React-eid element:
-useEffect(() => {
-    buttonRef.current.addEventListener("click", handleClose);
-}, []);
-```
-
-`document.addEventListener` er tillatt kun for hendelser som ikke kan fanges via
-React-props fordi de trenger global scope — typisk `keydown` på `document` for
-Escape-håndtering i modaler, og `mousedown` for klikk-utenfor-deteksjon.
-Begge skal alltid ryddes opp i cleanup-funksjonen i `useEffect`.
-
-```jsx
-// Tillatt — global scope er nødvendig:
-useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-}, [isOpen, onClose]);
-```
-
-### Portaler
-
-Bruk `createPortal` fra `react-dom` for å rendre modaler og overlays utenfor
-komponenttreet. Ikke manipuler `document.body` direkte.
-
-```jsx
-// Riktig:
-return createPortal(<Dialog />, document.body);
-
-// Feil:
-document.body.innerHTML += "<div class='dialog'>...</div>";
-```
-
-### Klasser og stilendringer
-
-Bruk className-strenger og CSS-klasser for stilendringer — ikke inline
-`element.style`-manipulasjon.
-
-```jsx
-// Riktig:
-<div className={isActive ? "panel panel-open" : "panel"} />
-
-// Feil:
-ref.current.style.opacity = "1";
-ref.current.style.transform = "translateX(0)";
-```
-
-Dark mode er unntaket: å toggle `.dark`-klassen på `document.documentElement`
-er tillatt i `ThemeContext` fordi dark mode krever en global CSS-klasse på roten
-som ikke kan håndteres av komponent-scoped className.
-
-### Timere og animasjoner
-
-Bruk `window.setInterval` / `window.clearInterval` og `window.requestAnimationFrame`
-der timing er nødvendig. Disse skal alltid kalles inne i `useEffect` med cleanup.
+Import-specifiers, funksjonsparametre og destrukturerte props står på én linje:
 
 ```js
-// Riktig — i ViewModel, med cleanup:
-useEffect(() => {
-    if (submitted) return;
-    const id = window.setInterval(() => setElapsedSeconds(s => s + 1), 1000);
-    return () => window.clearInterval(id);
-}, [submitted]);
+import { NAV_ITEMS, NAV_SCREENS, LEARNING_CONTENT_TYPES } from "../../navigation/navigation.js";
+
+export default function SubjectPickerButton({ subjectSwitcher, isOpen, onToggle }) {
+	// ...
+}
 ```
 
-CSS-animasjoner og transitions foretrekkes fremfor JS-animasjoner der det er mulig.
+Forbudt:
 
-### localStorage
+```js
+import {
+	NAV_ITEMS,
+	NAV_SCREENS
+} from "../../navigation/navigation.js";
 
-Bruk `localStorage` kun i Context-providers for persistering av brukerpreferanser
-(tema, språk). Aldri i ViewModels, komponenter eller Use Cases.
-
-```jsx
-// Riktig — i ThemeContext:
-const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem("theme");
-    return saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-});
-
-// Feil — i en komponent eller ViewModel:
-const saved = localStorage.getItem("theme");
+export default function SubjectPickerButton({
+	subjectSwitcher,
+	isOpen,
+	onToggle
+}) {
+}
 ```
 
-### Oppsummert — tillatt vs. forbudt
+Blir props-signaturen for lang, bruk `props` og eksplisitte feltnavn i kroppen:
 
-| Situasjon | Bruk |
-|---|---|
-| Brukerinteraksjon på egne elementer | React event-props (`onClick`, `onKeyDown`) |
-| Global tastatur- eller klikkdeteksjon | `document.addEventListener` i `useEffect` med cleanup |
-| Modale overlays | `createPortal` |
-| Stilendringer | `className` og CSS-klasser |
-| Dark mode root-klasse | `document.documentElement.classList` i ThemeContext |
-| Timere | `window.setInterval` / `window.clearInterval` i `useEffect` |
-| Scroll-posisjon | `ref.current.scrollTo()` i ViewModel via `useRef` |
-| Brukerpreferanser som skal persisteres | `localStorage` i Context-provider |
-| DOM-manipulasjon ellers | Forbudt |
+```js
+export default function MobileDropDownTopBar(props) {
+	return <button onClick={props.onToggleMenu}>{props.subjectSwitcher.label}</button>;
+}
+```
+
+Objektliteraler og navngitte argumentobjekter kan stå over flere linjer. Regelen
+gjelder imports og signaturer, ikke all multiline-kode.
+
+### Ingen valgfrie parametre med defaults (produksjonskode)
+
+```js
+// Forbudt:
+function useExamPageViewModel(..., showBackButton = false, onBack = null) { }
+
+// Riktig — alle parametre påkrevde; kalleren er eksplisitt:
+function useExamPageViewModel({ ..., backContract }) { }
+```
+
+Trengs et «tomt» tilfelle, sender kalleren det eksplisitt (`null`, `[]`, en
+navngitt no-op eller en diskriminert kontrakt). Fravær skal synes på kallstedet,
+ikke gjemmes i signaturen. Et objektfelt er enten påkrevd eller eksplisitt
+nullable; konsumenten skal ikke gjette om feltet finnes.
+
+**Scope:** forbudet gjelder all kode under `src/`. Testbyggere og fixtures
+under `test/` kan bruke defaults når defaulten er del av testoppsettet
+(`buildQuestion({ type = QUESTION_TYPES.SINGLE })`). Det finnes ikke noe
+«lokal helper»-unntak i produksjonskode — det er nøyaktig smutthullet
+regelen ble laget for å tette.
+
+### Parameterobjekt-terskelen
+
+Flere enn fire parametre, eller én boolean-parameter, utløser navngitt objekt.
+En naken `true` på et kallsted er alltid feil.
+
+### Imperativ stil
+
+Hovedregel: bruk imperativ stil — eksplisitte `for`-løkker med `push`,
+navngitte predikater og komparatorer — når transformasjonen har mer enn
+ett steg, domenegrener, sideeffekter eller behov for navngitte
+mellomverdier. Review-spørsmålet er «er dette lesbart og riktig?»,
+ikke «brukte du `.map()`?».
+
+Den harde, greppbare grensen: **to eller flere kjedede ledd er alltid
+løkke.** En kjede (`filter().map()`) skjuler mellomtilstandene og én løkke
+per ledd.
+
+```js
+// Forbudt — kjeding:
+const correctOptionIds = question.options
+	.filter((option) => option.correct)
+	.map((option) => option.id);
+
+// Riktig — imperativ med navngitt predikat:
+function isCorrectOption(option) {
+	return option.correct;
+}
+
+const correctOptionIds = [];
+for (const option of question.options) {
+	if (isCorrectOption(option)) {
+		correctOptionIds.push(option.id);
+	}
+}
+```
+
+Oppslagsstrukturer bygges imperativt:
+
+```js
+const questionsById = new Map();
+for (const question of questions) {
+	questionsById.set(question.id, question);
+}
+```
+
+Tillatt uten videre: JSX-rendring bruker `.map()` — det er Reacts idiom for
+lister, ikke databehandling. Ett enkelt `.map()`- eller `.filter()`-ledd uten
+kjeding er tillatt der det er mer lesbart enn løkken.
+
+### Migreringsregel
+
+Gammel kode som bryter kodestil eller reviderte regler rettes **når filen
+likevel røres** — aldri som del av en featurepatch. Stil-migrering er alltid
+en egen patch med ett formål (jf. PATCH_SOULs «én patch — ett formål» og
+«ikke rydd i nærliggende kode»). En AI som leser eksisterende kode skal
+behandle dokumentet, ikke kodebasen, som fasit for ny kode.
 
 ---
 
 ## Navnekonvensjoner
-
-Prosjektet har faste navnmønstre per lag. Disse skal følges konsekvent slik at
-filnavn alene forteller hvilket lag en fil tilhører og hva den gjør.
 
 ### Klasser og hooks
 
@@ -1154,748 +1358,192 @@ filnavn alene forteller hvilket lag en fil tilhører og hva den gjør.
 |---|---|---|
 | DataSource | `[Navn]DataSource` | `ExamQuestionDataSource` |
 | Repository | `[Navn]Repository` | `ExamRepository` |
-| Use Case | `[Verb][Subjekt]UseCase` | `GetExamQuestionsUseCase`, `GradeAnswerUseCase` |
+| Use Case | `[Verb][Subjekt]UseCase` | `GradeAnswerUseCase` |
 | ViewModel | `use[PageNavn]ViewModel` | `useExamPageViewModel` |
-| Page | `[Navn]Page` | `ExamPage`, `LearningContentSelectPage` |
+| Undermodell | `use[Ansvar]Model` | `useExamQuestionLoadModel`, `useLoadModel` |
+| Page | `[Navn]Page` | `ExamPage` |
 | Lokal hook | `use[KomponentNavn]` | `useCategorySortQuestion` |
 
-### Use Case-navngiving
-
-Verb-prefiks beskriver hva Use Case-et gjør:
-
-- `Get` — henter data: `GetExamByIdUseCase`, `GetAvailableExamsUseCase`
-- `Grade` — vurderer svar: `GradeAnswerUseCase`
-- `Calculate` — beregner noe: `CalculateExamScoreUseCase`
-
-Unngå generiske navn som `ExamUseCase`, `DataHelper` eller `Manager`.
-Ett Use Case — ett ansvar — ett presist verb.
+Verb-prefiks i Use Cases: `Get` henter, `Grade` vurderer, `Calculate` beregner,
+`Submit` sender. Aldri `Manager`, `Helper`, `Util`.
 
 ### Filer og mapper
 
-- Klasser bruker `PascalCase`: `ExamRepository.js`, `QuestionCard.jsx`
-- Hooks bruker `camelCase`: `useExamPageViewModel.js`, `useCategorySortQuestion.js`
-- CSS-filer bruker `kebab-case`: `answer-card.css`, `category-sort.css`
-- Mapper bruker `PascalCase` for komponenter og lag: `ExamPage/`, `QuestionTypes/`
-- Mapper bruker `kebab-case` for CSS-undermapper som ikke er komponentnavn: `cio-tool-box/`
-
-### `execute()` er eneste offentlige metode i Use Cases
-
-Use Cases eksponerer kun `execute(...)`. Hjelpemetoder er private.
-
-```js
-// Riktig:
-class GradeAnswerUseCase {
-    execute(question, answer) { ... }       // public
-    #gradeMultiChoice(question, answer) { } // private
-}
-
-// Feil — for mange offentlige metoder:
-class GradeAnswerUseCase {
-    grade(question, answer) { }
-    gradeMulti(question, answer) { }
-    gradeFill(question, answer) { }
-}
-```
-
-Unntak: Use Cases som trenger å eksponere mer enn rene sannhetsverdier
-(f.eks. `getQuestionScore`, `getDragDropStats`) kan ha tilleggsmetoder, men
-`execute` er alltid inngangspunktet for den primære operasjonen.
-
----
-
-## Eksplisitte navn — unngå AI-slop
-
-Dette er en av de viktigste reglene i hele dokumentet.
-
-Navn skal fortelle nøyaktig hva en variabel inneholder, hva en funksjon gjør,
-eller hva en komponent viser. Et navn som krever at man leser implementasjonen
-for å forstå hva det er, er et dårlig navn.
-
-Generiske navn som `data`, `result`, `item`, `value`, `response`, `content`,
-`handler`, `helper`, `manager`, `util`, `obj`, `temp`, `res`, `cb` er forbudt
-som permanente navn. De sier ingenting om hva de faktisk inneholder.
-
-### Variabler og state
-
-```js
-// Forbudt — sier ingenting:
-const data = await getExamQuestionsUseCase.execute({ examId, language });
-const result = calculateExamScoreUseCase.execute(questions, answers);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
-
-// Riktig — presist og selvforklarende:
-const questions = await getExamQuestionsUseCase.execute({ examId, language });
-const examScore = calculateExamScoreUseCase.execute(questions, answers);
-const [questionsLoading, setQuestionsLoading] = useState(true);
-const [questionsLoadError, setQuestionsLoadError] = useState(null);
-```
-
-Merk: `loading` og `error` er akseptable kun når det er én eneste ting som
-lastes på siden og konteksten er entydig. Er det flere asynkrone operasjoner,
-skal de navngis etter hva de representerer.
-
-### Props og callbacks
-
-Callbacks navngis etter hva de gjør — ikke bare `onClick` eller `onChange`:
-
-```jsx
-// Forbudt — generisk, sier ikke hva som skjer:
-<QuestionCard onClick={handleClick} onChange={handleChange} />
-
-// Riktig — presist, forteller hva callbacken gjør:
-<QuestionCard
-    onSelectSingleAnswer={viewModel.setSingleAnswer}
-    onToggleMultiAnswer={viewModel.toggleMultiAnswer}
-    onToggleAnswerExpanded={viewModel.toggleAnswerOptionExpanded}
-/>
-```
-
-`onClick` er tillatt kun som navn på en intern prop i en liten gjenbrukbar
-primitiv (f.eks. `SidebarNavigationItem({ onClick })`), ikke som prop-navn
-på domenespesifikke komponenter.
-
-### Funksjoner og handlers
-
-En funksjon skal ha et navn som beskriver hva den gjør, ikke bare at den er
-"en handler":
-
-```js
-// Forbudt:
-const handleClick = () => { ... };
-const handleChange = () => { ... };
-const handleEvent = () => { ... };
-const handleSubmit = () => { ... };
-
-// Riktig — beskriver hva som faktisk skjer:
-const selectAnswer = () => { ... };
-const toggleFeedbackPanel = () => { ... };
-const submitExam = () => { ... };
-const goToNextQuestion = () => { ... };
-```
-
-### Klasser og komponenter
-
-```js
-// Forbudt — sier ikke hva klassen gjør:
-class DataManager { }
-class QuestionHelper { }
-class ExamUtil { }
-class ContentHandler { }
-
-// Riktig — presist ansvar:
-class GetExamQuestionsUseCase { }
-class GradeAnswerUseCase { }
-class ExamRepository { }
-```
+- Klasser og komponenter: `PascalCase`
+- Hooks: `camelCase`
+- CSS-filer: `kebab-case`
+- Komponentmapper: `PascalCase`; CSS-undermapper som ikke er komponentnavn: `kebab-case`
 
 ### Booleans
 
-Booleans skal leses som spørsmål eller påstander:
+Booleans leser som påstander: `isSubmitted`, `canGoNext`, `hasAnswered`.
+
+**Revidert regel (låst 2026-07):** UI-state navngis etter *funksjonen* den
+styrer — ikke etter komponenten som rendrer den. ViewModel skal ikke kjenne
+View-treets navn, og et komponentbytte skal ikke tvinge navnebytte i et annet
+lag.
 
 ```js
-// Forbudt — uklart hva true/false betyr:
-const exam = true;
-const flag = false;
-const status = submitted;
+// Riktig — funksjonsbasert, overlever komponent-rename:
+const isMobileNavigationMenuOpen = false;
+const closeMobileNavigationMenu = () => { ... };
+const isSubjectPickerOpen = false;
 
-// Riktig — leser som en påstand:
-const isSubmitted = true;
-const canGoNext = currentIndex < totalQuestions - 1;
-const hasAnswered = answers[question.id] !== undefined;
-const showFeedback = submitted && showAllFeedback;
+// Kjent gjeld — komponentkoblet (døpes om opportunistisk):
+const isMobileDropDownTopBarMenuOpen = false;
 ```
 
-Boolean UI-state som styrer en konkret organisme eller komponent, skal navngis etter komponenten den styrer.
-Handlers følger samme navn.
+Kravet fra V1 består i kjernen: navnet skal entydig peke på hvilken del av
+UI-et verdien styrer. Samlebegreper uten referent (`isOverlayOpen`,
+`isPanelOpen`) er fortsatt forbudt.
+
+### Eksplisitte navn — unngå AI-slop
+
+Generiske navn er forbudt som permanente navn: `data`, `result`, `item`,
+`value`, `response`, `content`, `handler`, `helper`, `temp`, `res`, `cb`.
 
 ```js
-// Riktig — state-navnet peker på faktisk komponent/organisme:
-const isMobileDropDownTopBarMenuOpen = true;
-const closeMobileDropDownTopBarMenu = () => { ... };
-const isMobileSubjectPickerOpen = false;
-const toggleMobileSubjectPicker = () => { ... };
-const isSettingsPresentationOpen = false;
-const openSettingsPresentation = () => { ... };
-
-// Forbudt — samlebegreper uten komponentnavn:
-const isMenuOpen = true;
-const isOverlayOpen = true;
-const isSurfaceOpen = true;
-const isPanelOpen = true;
-```
-
-Samlebegreper som `overlay`, `surface`, `panel` og `drawer` skal ikke brukes i state-navn
-med mindre det faktisk finnes en komponent med samme navn. Navnet skal gjøre det tydelig
-hvilken del av komponenttreet verdien styrer.
-
-### Løkkevariabler og kortlivede variabler
-
-`i`, `j`, `k` er akseptable i rene tallindeks-løkker uten domenekontekst.
-I alle andre løkker skal variabelen navngis etter hva den representerer:
-
-```js
-// Akseptabelt — ren tallindeks:
-for (let i = 0; i < questions.length; i++) { ... }
-
-// Forbudt — item uten kontekst:
-for (const item of questions) { ... }
+// Forbudt:
+const data = await getExamQuestionsUseCase.execute({ examId });
+const [loading, setLoading] = useState(true);
 
 // Riktig:
-for (const question of questions) { ... }
-for (const [examId, attempts] of examAttemptMap) { ... }
+const questions = await getExamQuestionsUseCase.execute({ examId });
+const questionLoad = useLoadModel({ ... });
 ```
 
-### Test for et godt navn
+Handlers navngis etter hva de gjør: `submitExam`, `goToNextQuestion`,
+`toggleFeedbackPanel` — aldri `handleClick`, `handleChange`.
 
-Spør deg selv: hvis du ser bare variabelnavnet — uten å lese resten av koden
-— vet du da nøyaktig hva det er?
+`onClick` som prop-navn er tillatt kun i små gjenbrukbare primitiver.
+Domenekomponenter bruker presise callback-navn (`onSelectSingleAnswer`).
 
-```js
-const x = ...;                          // Nei
-const data = ...;                       // Nei
-const questions = ...;                  // Ja
-const currentQuestionIndex = ...;       // Ja
-const expandedAnswerOptionByQuestionId = ...; // Ja — presist og detaljert
-const answeredCountLabel = ...;         // Ja — forteller til og med at det er en label
-```
+Løkkevariabler: `i`/`j` kun i rene tallindeks-løkker. Ellers navngis etter
+innhold: `for (const question of questions)`.
 
-Detaljerte navn er ikke et problem. `expandedAnswerOptionByQuestionId` er bedre
-enn `expanded`. Kode leses langt oftere enn det skrives.
+Testen for et godt navn: ser du bare navnet — vet du nøyaktig hva det er?
+`expandedAnswerOptionIndexesByQuestionId` består. `expanded` gjør ikke.
 
 ---
 
 ## Testing
 
-### Testmappen speiler `src/`-strukturen
-
-`test/` er strukturert som et speil av `src/`. En fil i `src/model/domain/`
-testes i `test/model/domain/`, med samme filnavn og `.test.js`-suffiks.
-
-```
-src/model/domain/GradeAnswerUseCase.js
-→ test/model/domain/GradeAnswerUseCase.test.js
-
-src/model/repositories/ExamRepository.js
-→ test/model/repositories/ExamRepository.test.js
-
-src/ui/viewmodel/Utils/resolveTranslatedExamId.js
-→ test/ui/viewmodel/resolveTranslatedExamId.test.js
-```
-
-### Hva som skal testes
-
-Use Cases og Repositories er kjernen av det som testes. De inneholder
-forretningslogikken og skal kunne verifiseres i isolasjon uten DOM, browser
-eller React.
-
-```
-test/model/domain/       ← alle Use Cases testes her
-test/model/repositories/ ← alle Repositories testes her
-test/integration/        ← flyt gjennom flere lag sammen
-test/ui/viewmodel/       ← ViewModelutils og avledede verdier
-test/utils/              ← generiske hjelpefunksjoner
-```
-
-View-komponenter testes ikke med enhetstester. Visuelle komponenter og
-interaksjonslogikk dekkes av integrasjons- og manuell testing.
-
-### Use Cases testes uten avhengigheter
-
-Use Cases som ikke har Repository-avhengigheter instansieres direkte:
-
-```js
-// GradeAnswerUseCase har ingen avhengigheter — instansieres direkte:
-beforeEach(() => {
-    useCase = new GradeAnswerUseCase();
-});
-```
-
-Use Cases og Repositories med avhengigheter bruker manuelle mock-objekter —
-ikke importerte instanser fra `dependencies.js`:
-
-```js
-// ExamRepository testes med mock DataSource:
-beforeEach(() => {
-    dataSource = {
-        fetchAllExams: jest.fn(),
-        fetchExamById: jest.fn()
-    };
-    repository = new ExamRepository(dataSource, null);
-});
-```
-
-Dette er det samme DI-prinsippet som i produksjonskoden: avhengigheter
-injiseres inn, aldri importeres direkte inne i klassen.
-
-### Testnavngiving
-
-Testbeskrivelser skal leses som setninger:
-
-```js
-// Riktig — lesbar som setning:
-test("returns true when all correct alternatives are selected", ...)
-test("returns false when answer is not an array", ...)
-test("ignores unknown items and unknown quadrants", ...)
-
-// Feil — teknisk og uleselig:
-test("test1", ...)
-test("gradeAnswer correct", ...)
-```
-
-Grupper relaterte tester med `describe`:
-
-```js
-describe("GradeAnswerUseCase", () => {
-    describe("single choice", () => { ... });
-    describe("multi choice", () => { ... });
-    describe("fill in", () => { ... });
-});
-```
-
-### Filbanekommentar i testfiler
-
-Testfiler følger samme konvensjon som øvrige filer:
-
-```js
-// test/model/domain/GradeAnswerUseCase.test.js
-```
-
----
-
+- `test/` speiler `src/`-strukturen med `.test.js`-suffiks.
+- Use Cases og Repositories testes i isolasjon med injiserte avhengigheter.
+- ViewModel-undermodeller og rene modellbyggere testes direkte.
+- `useLoadModel`, workspace-state, subject-switcher og navigasjon har egne
+  kontraktstester.
+- Arkitekturtester brukes når regelen kan uttrykkes maskinelt: importgrenser,
+  én canonical implementasjon, CSS-token-eierskap, screen-config og breakpoint-drift.
+- Atomic Design-grenser kan testlåses der mappene har tydelig ansvar: generelle
+  primitiver importerer ikke feature-, Page-, ViewModel- eller model-lag; Pages
+  importeres ikke av lavere komponentnivåer.
+- Atomic Design-kategorier enhetstestes ikke som etiketter. Testen skal håndheve
+  faktisk avhengighetsretning og kontrakt, ikke filnavnet «atom» eller «organism».
+- React-komponenter render-enhetstestes ikke som standard i soloprosjektet. Rene
+  helpers og lokale interaksjonshooks under komponentmapper kan enhetstestes.
+- Avhengigheter mockes manuelt og injiseres; tester importerer ikke konkrete
+  instanser fra `dependencies.js`.
+- Testbeskrivelser leser som setninger og relaterte tester grupperes med `describe`.
+- Testfiler har filbanekommentar som produksjonsfiler.
+- En arkitekturpatch godkjennes først når `git apply --check`, Jest og build er
+  kjørt mot den navngitte commit/zip-basen. Kan miljøet ikke kjøre dem, skal det
+  stå eksplisitt; gamle tall gjenbrukes aldri.
 
 ---
 
 ## Kodekvalitetsprinsipper
 
-Kode skrives for å leses, forstås, testes, vedlikeholdes og utvides.
-I den rekkefølgen. Ytelse er viktig, men lesbarhet og korrekthet kommer først.
+Kode skrives for å leses, forstås, testes, vedlikeholdes og utvides — i den
+rekkefølgen.
 
----
+### KISS
 
-### KISS — Keep It Simple
-
-Løs problemet du har, ikke det du tror du kanskje får. Ikke introduser
-abstraksjon, generalisering eller fleksibilitet uten et konkret behov.
-
-```js
-// Feil — over-engineered for et problem som ikke eksisterer:
-class QuestionHandlerFactory {
-    static create(type) {
-        return QuestionHandlerRegistry.getInstance().resolve(type);
-    }
-}
-
-// Riktig — løser problemet direkte:
-if (question.type === QUESTION_TYPES.SINGLE) {
-    return this.#isSingleChoiceAnswerCorrect(question, answer);
-}
-```
-
-Hvert lag i arkitekturen er allerede en bevisst abstraksjon. Ikke lag
-abstraksjoner innad i lagene uten grunn.
-
----
+Løs problemet du har, ikke det du tror du får. Lagene er allerede bevisste
+abstraksjoner — ikke lag flere innad i dem uten konkret behov.
 
 ### SOLID
 
-**Single Responsibility** — én klasse, én grunn til å endre seg.
+- **Single Responsibility** — én modul har ett tydelig eierskap og én hovedgrunn
+  til å endre seg
+- **Open/Closed** — nye varianter bruker dokumenterte utvidelsespunkter; ikke lag
+  et register bare for å unngå enhver endring i eksisterende kode
+- **Liskov** — en ny DataSource-implementasjon leverer samme transportkontrakt;
+  Repository trenger ikke kjenne transportbyttet
+- **Interface Segregation** — `execute()` som primær inngang; ikke brede
+  «manager»-interfaces
+- **Dependency Inversion** — avhengigheter injiseres og kalles via kontrakt, aldri
+  instansiert inne i domeneklassen
 
-`GradeAnswerUseCase` vet om grading. `CalculateExamScoreUseCase` vet om
-totalscoring og delegerer til `GradeAnswerUseCase`. De vet ikke om hverandre
-annet enn via konstruktør-injeksjon. Slik skal det være.
+### Utvidbarhet
 
-```js
-// Feil — én klasse gjør for mye:
-class ExamUseCase {
-    fetchQuestions() { ... }
-    gradeAnswer() { ... }
-    calculateScore() { ... }
-    saveAttempt() { ... }
-}
+Ny spørsmålstype, nytt fag eller ny DataSource skal ikke kreve endring i
+eksisterende, velfungerende filer utover de definerte utvidelsespunktene.
+Krever en tilføyelse endringer mange steder, er koblingen for høy.
 
-// Riktig — ett ansvar per klasse:
-class GetExamQuestionsUseCase { execute() { ... } }
-class GradeAnswerUseCase      { execute() { ... } }
-class CalculateExamScoreUseCase { execute() { ... } }
-```
+### Tidskompleksitet
 
-**Open/Closed** — åpen for utvidelse, lukket for endring.
-
-Når en ny spørsmålstype legges til, skal eksisterende grading-logikk ikke
-endres — en ny `if`-gren legges til i `execute()`, og en ny privat metode
-implementerer grading for den typen. Eksisterende typer er uberørt.
-
-```js
-// Slik utvides GradeAnswerUseCase med en ny type:
-execute(question, answer) {
-    // ... eksisterende typer uberørt ...
-    if (question.type === QUESTION_TYPES.TABLE_MATCH) {
-        return this.#isTableMatchAnswerCorrect(question, answer); // nytt
-    }
-}
-```
-
-**Liskov Substitution** — en subklasse skal kunne brukes overalt der
-foreldreklassen brukes uten at oppførselen brytes.
-
-Når `ApiExamQuestionDataSource` erstatter `ExamQuestionDataSource`, skal alle
-metoder returnere samme shape. Repository skal ikke trenge å vite om bytten.
-
-**Interface Segregation** — ikke tving en klasse til å implementere mer enn
-den trenger. Use Cases eksponerer `execute()` — ikke et bredt interface med
-metoder kallerene ikke trenger.
-
-**Dependency Inversion** — avheng av abstraksjoner, ikke konkrete implementasjoner.
-
-`CalculateExamScoreUseCase` mottar `gradeAnswerUseCase` som parameter og kaller
-`execute()` på det. Den vet ikke hvilken konkret klasse det er. Det er DI i praksis.
-
-```js
-// CalculateExamScoreUseCase avhenger av interfacet { execute, getQuestionScore }
-// — ikke av den konkrete GradeAnswerUseCase-klassen:
-constructor(gradeAnswerUseCase) {
-    this.gradeAnswerUseCase = gradeAnswerUseCase;
-}
-```
-
----
-
-### Utvidbarhet og modularitet
-
-Ny funksjonalitet skal kunne legges til uten å endre eksisterende, velfungerende
-kode. Tegn på god modularitet:
-
-- Ny spørsmålstype → legg til i `QUESTION_TYPES`, implementer grading i
-  `GradeAnswerUseCase`, legg til komponent under `QuestionTypes/`. Ingen andre
-  filer skal røres.
-- Nytt fag → legg til i `src/data/subjects/`, registrer i
-  `conceptImageCatalogRegistry.js`. Frontend er uendret.
-- Ny DataSource → implementer samme metodesignatur, bytt ut i `dependencies.js`.
-  Repository, Use Cases og ViewModel er uendret.
-
-Hvis å legge til noe nytt krever at man endrer mange eksisterende filer,
-er det et tegn på for høy kobling.
-
----
-
-### Testbarhet
-
-Kode som er vanskelig å teste er som regel dårlig strukturert.
-
-Konkret:
-
-- Use Cases og Repositories skal kunne testes uten DOM, browser eller React.
-  De mottar avhengigheter via konstruktøren og kan testes med mock-objekter.
-- ViewModels skal kunne testes ved å sende inn mock Use Cases.
-- View-komponenter testes ikke med enhetstester — de er avhengige av
-  React-runtime og visuell kontekst.
-
-```js
-// Testbar fordi avhengighet er injisert:
-const useCase = new CalculateExamScoreUseCase(mockGradeAnswerUseCase);
-
-// Ikke testbar fordi avhengighet er hardkodet inne i klassen:
-class CalculateExamScoreUseCase {
-    #grader = new GradeAnswerUseCase(); // umulig å mocke
-}
-```
-
----
+Map/Set for oppslag, ikke lineærsøk i løkke. Men: eksamener har 15–30
+spørsmål — prioriter lesbarhet, og optimaliser kun når datasettet er stort,
+operasjonen ligger i en løkke, eller profilering viser faktisk treghet.
 
 ### Vedlikeholdbarhet
 
-Kode som er lett å vedlikeholde har disse egenskapene:
-
-- **Liten overraskelse** — koden gjør det navnet sier, ikke mer.
-- **Ingen skjult state** — side-effekter er eksplisitte og forutsigbare.
-- **Duplisering er konsekvent unngått** — samme logikk finnes ett sted. Når
-  noe endres, endres det ett sted.
-- **Kommentarer forklarer hvorfor, ikke hva** — koden er selvforklarende nok
-  til at "hva" ikke trenger forklaring. En kommentar som sier `// henter eksamen`
-  over `fetchExam()` er støy.
+- Liten overraskelse — koden gjør det navnet sier
+- Ingen skjult state — side-effekter er eksplisitte
+- Duplisering unngås konsekvent — samme logikk finnes ett sted
+- Kommentarer forklarer **hvorfor**, ikke hva. Ingen kommentar er bedre enn
+  støy.
 
 ```js
-// Kommentar som forklarer HVORFOR — verdifull:
-// Normaliserer longitude til -180..180 fordi New Zealand krysser datogrensen.
-const cleanLon = ((lon + 180) % 360 + 360) % 360 - 180;
+// Verdifull — forklarer noe koden ikke kan si:
+// Klampes ved avledning i stedet for setState-i-effekt: når antallet
+// krymper er indeksen gyldig i samme render, uten kaskaderende re-render.
 
-// Kommentar som bare gjentar koden — støy:
+// Støy — gjentar koden:
 // Henter eksamen ved id
-const exam = await examRepository.getExamById(examId);
 ```
-
----
-
-### Tidskompleksitet — O-notasjon
-
-Velg riktig datastruktur fra starten. Oppslag i en `Map` eller `Set` er O(1).
-Linjærsøk med `.find()` eller `.includes()` i en array er O(n) og blir
-merkbart tregere ettersom datasettet vokser.
-
-**Bruk Map og Set for oppslag og tilhørighetsssjekk:**
-
-```js
-// O(n) per oppslag — tregere med mange spørsmål:
-const question = questions.find(q => q.id === questionId);
-
-// O(1) per oppslag — bygg Map én gang, bruk mange ganger:
-const questionsById = new Map(questions.map(q => [q.id, q]));
-const question = questionsById.get(questionId);
-```
-
-`ConceptImageDataSource` gjør dette riktig — den bygger en intern `Map` i
-konstruktøren én gang, og alle etterfølgende oppslag er O(1):
-
-```js
-// Bygges én gang i konstruktøren:
-this.#index = this.#buildIndex(conceptImageCatalogsBySubjectId); // O(n)
-
-// Alle etterfølgende oppslag:
-const entry = this.#index.get(key); // O(1)
-```
-
-**Unngå nestede løkker på store datasett:**
-
-```js
-// O(n²) — for hvert spørsmål, søk gjennom alle svar:
-questions.forEach(question => {
-    const answer = answers.find(a => a.questionId === question.id);
-});
-
-// O(n) — bygg et oppslag først:
-const answersByQuestionId = new Map(answers.map(a => [a.questionId, a]));
-questions.forEach(question => {
-    const answer = answersByQuestionId.get(question.id); // O(1)
-});
-```
-
-**Praktisk tommelregel for dette prosjektet:**
-
-Eksamener har typisk 15–30 spørsmål. O(n) vs O(1) er umerkelig her.
-Prioriter alltid lesbarhet over mikrooptimalisering for slike størrelser.
-
-Optimaliser når:
-- Datasettet er stort og ukjent (f.eks. fremtidig database med tusenvis av eksamensforsøk)
-- En operasjon kalles i en løkke (da er O(n) inne i O(n) = O(n²))
-- Profiling viser faktisk tregthet
-
-Ikke optimaliser når:
-- Datasettet er lite og kjent
-- Optimaliseringen gjør koden vesentlig vanskeligere å lese
-- Det ikke er målt et faktisk problem
-
----
-
 
 ---
 
 ## Skrivestil — unngå AI-slop
 
-Dette gjelder all tekst en bot produserer i dette prosjektet: kodekommentarer,
-forklaringer, commit-meldinger, svar på spørsmål, og dokumentasjon.
+Gjelder all tekst en bot produserer i prosjektet: kommentarer, forklaringer,
+commit-meldinger, dokumentasjon.
 
-AI-generert tekst har gjenkjennelige mønstre. De gjør teksten vag, oppblåst og
-ubrukelig. Alle mønstrene nedenfor er forbudt.
-
----
-
-### Forbudte ord og fraser
-
-Følgende ord og fraser er typiske AI-slop-markører. De sier ingenting presist
-og skal ikke brukes:
-
-```
-crucial / pivotal / vital / key (som adjektiv)
-robust / powerful / elegant / seamless / intuitive
-ensure / leverage / streamline / facilitate
-comprehensive / holistic / sophisticated
-highlight / underscore / emphasize (som verb om kode)
-showcase / demonstrate (om hva kode "gjør")
-it's worth noting / it's important to note / notably
-serves as / stands as / acts as (i stedet for "er")
-foster / cultivate / enhance (om arkitektur)
-in order to (bruk bare "to")
-```
-
-```jsx
-// Forbudt — oppblåst og intetsigende:
-// This component serves as a crucial part of the exam flow,
-// ensuring a seamless user experience by leveraging React's
-// powerful state management capabilities.
-
-// Riktig — presist og direkte:
-// Rendrer spørsmålskortet og sender svar opp via onSingleAnswer.
-```
+- Forbudte slop-markører: `crucial`, `robust`, `seamless`, `leverage`,
+  `ensure`, `comprehensive`, `it's worth noting`, `serves as`, `foster`,
+  `enhance`, `in order to`
+- Ikke blås opp enkle ting med «significant implications» — forklar konkret
+  hvorfor noe er viktig, eller la være
+- Ingen hengende «-ing»-fraser som late begrunnelser («...ensuring separation
+  of concerns»)
+- Ingen «not just X, but Y»-kontraster mot misforståelser ingen hadde
+- Ikke tre punkter av vane — bruk antallet som er riktig
+- Ikke start svar med anerkjennelse («Godt spørsmål!») — svar direkte
+- Ikke oppsummer det du nettopp sa
+- Commit-meldinger: hva og hvorfor, konkret.
+  `"Flytt workspaceClassName-beregning fra ExamPage til ExamPageViewModel"`
 
 ---
-
-### Ikke blås opp enkle ting
-
-AI har en tendens til å gi enkle ting "profound implications" eller "significant
-impact on maintainability". Ikke gjør det.
-
-```
-// Forbudt:
-// This architectural decision has significant implications for
-// the scalability and long-term maintainability of the codebase.
-
-// Riktig:
-// Holder grading-logikken atskilt fra HTTP-logikken.
-```
-
-Hvis noe faktisk er viktig — forklar konkret *hvorfor* det er viktig.
-Ikke bare påstå at det er viktig.
-
----
-
-### Ikke heng på -ing-fraser
-
-AI legger ofte til "-ing"-fraser på slutten av setninger som late begrunnelser:
-"...ensuring separation of concerns", "...fostering maintainability",
-"...highlighting the importance of clean architecture".
-
-Disse frasene er nesten alltid tomme. Kutt dem.
-
-```
-// Forbudt:
-// Spørsmål hentes i DataSource-laget, ensuring a clean
-// separation between data access and business logic.
-
-// Riktig:
-// Spørsmål hentes i DataSource-laget. Business-logikk
-// ligger i Use Cases.
-```
-
----
-
-### Ikke bruk "not just X, but also Y"
-
-AI er glad i kontraster som later som om de avkrefter en misforståelse leseren
-aldri hadde:
-
-```
-// Forbudt:
-// This is not just a simple hook — it's a carefully designed
-// abstraction that encapsulates the entire exam state.
-
-// Riktig:
-// Hooken eier all state for eksamenssiden.
-```
-
----
-
-### Ikke bruk regel-av-tre uten grunn
-
-AI lager alltid tre eksempler, tre fordeler, tre punkter — selv når ett hadde
-holdt. Bruk det antallet som faktisk er riktig.
-
-```
-// Forbudt — tre punkter for å virke grundig:
-// Dette sikrer:
-// - Lav kobling mellom lagene
-// - Høy kohesjon innad i hvert lag
-// - Enkel testbarhet for alle komponenter
-
-// Riktig — hvis alle tre er reelle:
-// skriv dem. Hvis bare ett er poenget:
-// Dette gjør lagene enkle å teste i isolasjon.
-```
-
----
-
-### Ikke start med anerkjennelse
-
-AI starter gjerne svar med å anerkjenne spørsmålet eller rose det:
-
-```
-// Forbudt:
-"Det er et godt spørsmål. La meg forklare..."
-"Absolutt! Her er hvordan du kan..."
-"Selvfølgelig, det er viktig å forstå at..."
-
-// Riktig — svar direkte:
-"ExamRepository beriker spørsmålene med bilder ved lasting..."
-```
-
----
-
-### Ikke oppsummer det du akkurat sa
-
-AI avslutter gjerne med en oppsummering av det den nettopp forklarte:
-
-```
-// Forbudt:
-// I summary, the MVVM architecture ensures that the ViewModel
-// acts as the single source of truth, while the View remains
-// purely presentational, and the Model handles all data concerns.
-
-// Riktig — si det én gang, presist.
-```
-
----
-
-### Kodekommentarer — hva som er tillatt
-
-En kommentar skal forklare **hvorfor**, ikke **hva**. Koden viser hva som skjer.
-Kommentaren forklarer noe koden ikke kan si selv.
-
-```js
-// Forbudt — gjentar koden:
-// Henter eksamen basert på id
-const exam = await examRepository.getExamById(examId);
-
-// Forbudt — oppblåst:
-// This crucial step ensures that the exam data is properly
-// fetched from the repository layer, maintaining our clean
-// MVVM architecture.
-
-// Riktig — forklarer noe ikke-åpenbart:
-// Normaliserer longitude til -180..180 fordi New Zealand
-// krysser datogrensen og gir feil koordinater ellers.
-
-// Riktig — markerer bevisst valg:
-// Beregnes ved lasting, ikke ved visning, slik at View
-// aldri trenger å kjenne til bildekatalogen.
-```
-
-Ingen kommentar er bedre enn en kommentar som bare støyer.
-
----
-
-### Commit-meldinger og beskrivelser
-
-Konkret og presist. Hva ble endret og hvorfor — ikke en essay om hva endringen
-"ensures" eller "facilitates".
-
-```
-// Forbudt:
-"Refactor ExamPage to ensure better separation of concerns,
-fostering maintainability and improving the overall architecture
-by moving layout logic to the ViewModel layer."
-
-// Riktig:
-"Flytt workspaceClassName-beregning fra ExamPage til ExamPageViewModel"
-```
-
----
-
 
 ## Kortversjon
 
-> DataSource vet om data.
-> Repository vet om domenet — og beriker det med bilder.
-> Use Case vet om én regel.
-> `dependencies.js` vet om alle tre.
-> ViewModel eier siden — all state, all logikk, alle avledede verdier.
-> Page fordeler nedover.
-> Komponenter mottar og rendrer.
-> CSS-mapper speiler komponentmapper. Testmappen speiler `src/`.
-> Navnmønstre er ikke tilfeldige — de er kontrakter.
-> Navn skal fortelle hva ting er — ikke at de eksisterer.
-> KISS: løs problemet du har, ikke det du tror du får.
-> SOLID: ett ansvar, åpen for utvidelse, lukket for endring.
-> Bruk riktig datastruktur — Map og Set for oppslag, ikke array-søk.
-> Bruk React sine mekanismer — ikke vanilla JS DOM-APIer.
-> Skriv presist. Ikke "ensures maintainability" — forklar konkret hva som skjer.
-> Ingenting henter noe selv.
+> Låste beslutninger trumfer brødtekst. Oppdater loggen i samme patch som arkitekturendringen.
+> DataSource kjenner transport. Repository mapper til domene. Use Case eier én regel.
+> `dependencies.js` eier runtime-konfigurasjon og konkret wiring.
+> ViewModel eier siden bak ett kontraktpunkt; undermodeller deler byrden.
+> Komponenter følger pragmatisk Atomic Design: primitive → sammensatt → feature → app-shell → Page. Nivåene er ansvar, ikke tvungne mapper.
+> Page forgrener og fordeler ferdige modeller. Komponenter mottar og rendrer.
+> `navigation.js` eier statisk config; `AppNavigationViewModel` eier runtime-state og handlinger.
+> Header/Footer er canonical app-shell. WorkspaceScaffold eier ytre shell og scroll.
+> WorkSpaceCard eier innholdsflaten. Sideklasser er modifikatorer, ikke nye eiere.
+> `useLoadModel` eier teknisk lastestatus. `createWorkspaceState` + `WorkspaceState` eier page-state.
+> Subject-switcher avledes én gang. Ingen falske fagobjekter; empty og unselected er ulike.
+> CSS-mapper speiler komponentmapper. Brytpunktet er en testet JS/CSS-kontrakt.
+> Tabs. Horisontale imports/signaturer. Ingen valgfrie parametre i `src/`.
+> Objekt over fire parametre. To kjedede transformasjoner blir løkke.
+> Gammel kode rettes i egne patcher når området røres, ikke skjult i featurearbeid.
+> Navn forteller hva ting er og hvilken funksjon state styrer.
+> KISS: løs problemet du har. En delt renderer er ikke automatisk en SSOT.
+> Ingenting i View henter forretningsdata selv.

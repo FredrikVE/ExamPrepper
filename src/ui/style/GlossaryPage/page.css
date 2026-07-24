@@ -5,10 +5,6 @@
 	--glossary-footer-overlay-space: 104px;
 }
 
-.glossary-workspace .scaffold-header::before {
-	background: none;
-}
-
 .glossary-workspace .workspace-scaffold-body {
 	display: flex;
 	min-height: 0;

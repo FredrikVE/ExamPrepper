@@ -68,9 +68,10 @@ function setNavigationState({
 	activeScreen = NAV_SCREENS.SUBJECTS,
 	selectedSubjectId = null,
 	selectedExamId = null,
-	selectedTopicAreaKey = null
+	selectedTopicAreaKey = null,
+	examLanguageSyncError = null
 } = {}) {
-	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey];
+	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, examLanguageSyncError];
 }
 
 function createViewModel() {
@@ -80,7 +81,9 @@ function createViewModel() {
 		navigationLabel: "Navigasjon",
 		language: "nb",
 		getExamByIdUseCase: {},
-		getExamByBaseIdAndLangUseCase: {}
+		getExamByBaseIdAndLangUseCase: {},
+		examUnavailableMessage: "Eksamen finnes ikke på språket.",
+		examSyncFailedMessage: "Kunne ikke synkronisere eksamen."
 	});
 }
 
@@ -97,6 +100,7 @@ describe("useAppNavigationViewModel", () => {
 		expect(viewModel.selectedSubjectId).toBeNull();
 		expect(viewModel.selectedExamId).toBeNull();
 		expect(viewModel.selectedTopicAreaKey).toBeNull();
+		expect(viewModel.examLanguageSyncError).toBeNull();
 	});
 
 	test("valg av fag går direkte til innholdsvalg og nullstiller gamle valg", () => {
@@ -109,7 +113,7 @@ describe("useAppNavigationViewModel", () => {
 
 		createViewModel().selectSubject("inf1010");
 
-		expect(hookState).toEqual([
+		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.SELECT,
 			"inf1010",
 			null,
@@ -122,7 +126,7 @@ describe("useAppNavigationViewModel", () => {
 
 		createViewModel().selectExam("exam-2");
 
-		expect(hookState).toEqual([
+		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.EXAM,
 			"inf1010",
 			"exam-2",
@@ -139,7 +143,7 @@ describe("useAppNavigationViewModel", () => {
 
 		createViewModel().selectFlipcardDeck("loops");
 
-		expect(hookState).toEqual([
+		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.FLIPCARDS,
 			"inf1010",
 			null,
@@ -150,7 +154,7 @@ describe("useAppNavigationViewModel", () => {
 	test("fagavhengig navigasjon uten fag går hjem", () => {
 		createViewModel().changeScreen(NAV_SCREENS.GLOSSARY);
 
-		expect(hookState).toEqual([
+		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.SUBJECTS,
 			null,
 			null,
@@ -166,11 +170,10 @@ describe("useAppNavigationViewModel", () => {
 		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
 	});
 
-	test("ukjent skjerm ignoreres", () => {
+	test("ukjent skjerm feiler tydelig", () => {
 		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
 
-		createViewModel().changeScreen("missing-screen");
-
+		expect(() => createViewModel().changeScreen("missing-screen")).toThrow("Unknown navigation screen: missing-screen");
 		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
 	});
 
@@ -183,7 +186,7 @@ describe("useAppNavigationViewModel", () => {
 
 		createViewModel().goBack();
 
-		expect(hookState).toEqual([
+		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.SELECT,
 			"inf1010",
 			null,
@@ -196,7 +199,7 @@ describe("useAppNavigationViewModel", () => {
 
 		createViewModel().goBack();
 
-		expect(hookState).toEqual([
+		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.SUBJECTS,
 			null,
 			null,
@@ -229,6 +232,33 @@ describe("useAppNavigationViewModel", () => {
 		expect(closeMobileDropDownTopBarMenu).not.toHaveBeenCalled();
 	});
 
+
+	test("skiller utilgjengelig eksamen fra teknisk språksynkfeil", () => {
+		setNavigationState({
+			activeScreen: NAV_SCREENS.EXAM,
+			selectedSubjectId: "inf1000",
+			selectedExamId: "exam-1"
+		});
+		createViewModel();
+
+		const syncContract = useSyncSelectedExamWithLanguage.mock.calls[0][0];
+		syncContract.onExamUnavailable();
+		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[4]).toBe("Eksamen finnes ikke på språket.");
+
+		setNavigationState({
+			activeScreen: NAV_SCREENS.EXAM,
+			selectedSubjectId: "inf1000",
+			selectedExamId: "exam-1"
+		});
+		createViewModel();
+		useSyncSelectedExamWithLanguage.mock.calls.at(-1)[0].onExamSyncFailed();
+		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[4]).toBe("Kunne ikke synkronisere eksamen.");
+	});
+
 	test.each([
 		[NAV_SCREENS.SUBJECTS, "exam-select-page", "exam-select-shell", false],
 		[NAV_SCREENS.SELECT, "exam-select-page", "exam-select-shell", true],
@@ -244,7 +274,22 @@ describe("useAppNavigationViewModel", () => {
 
 		expect(viewModel.pageClassName).toBe(pageClassName);
 		expect(viewModel.shellClassName).toBe(shellClassName);
-		expect(viewModel.showBackButton).toBe(showBackButton);
+		expect(viewModel.backContract.showBackButton).toBe(showBackButton);
+	});
+
+	test("exposes back navigation only through backContract", () => {
+		const viewModel = createViewModel();
+
+		expect(viewModel.backContract).toEqual({
+			showBackButton: false,
+			backLabel: "Tilbake",
+			navigationLabel: "Navigasjon",
+			onBack: viewModel.goBack
+		});
+		expect(viewModel.showBackButton).toBeUndefined();
+		expect(viewModel.backLabel).toBeUndefined();
+		expect(viewModel.navigationLabel).toBeUndefined();
+		expect(viewModel.onBack).toBeUndefined();
 	});
 
 	test.each([

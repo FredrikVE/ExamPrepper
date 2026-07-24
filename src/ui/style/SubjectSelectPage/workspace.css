@@ -8,7 +8,7 @@
     --select-mobile-scroll-inline-padding: 20px;
 }
 
-.subject-select-scroll {
+.subject-select-page-content {
 	padding:
 		var(--subject-select-content-top)
 		var(--scaffold-inset)
@@ -16,7 +16,7 @@
 }
 
 /* Descendant, ikke søsken-klasse: scaffoldet setter selv scrollbar-*, så en
-   overstyring på `.subject-select-scroll` ville hatt lik spesifisitet. */
+   overstyring på `.subject-select-page-content` ville hatt lik spesifisitet. */
 .subject-select-workspace .workspace-scaffold-body {
 	scrollbar-width: none;
 }
@@ -67,7 +67,7 @@
 		border-radius: 0;
 	}
 
-	.subject-select-scroll {
+	.subject-select-page-content {
 		padding:
 			calc(var(--mobile-topbar-height) + 24px)
 			var(--select-mobile-scroll-inline-padding)

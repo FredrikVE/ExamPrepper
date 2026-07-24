@@ -8,7 +8,7 @@ import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 
-export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, formatDate, t, authState, onStartNewExam }) {
+export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, formatDate, t, authState, backContract, onStartNewExam }) {
 	const isAuthLoaded = authState.isLoaded;
 	const isSignedIn = authState.isSignedIn === true;
 	const hasClerkAuth = authState.hasClerkAuth === true;
@@ -73,6 +73,7 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 		// Data state
 		statistics,
 		workspaceState,
+		backContract,
 
 		// Text
 		pageTitle: text.pageTitle,

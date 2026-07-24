@@ -218,12 +218,20 @@
     --blur-panel: blur(24px);
     --blur-overlay: blur(4px);
 
-    /* ── Layering ─────────────────────────────
-       Named layers keep stacking order centralized and intentional. */
+    /* ── Global/app-shell layering ────────────
+       Only participants with a proven cross-component relationship live here. */
+    --z-app-content: 1;
+    --z-scaffold-header: 30;
     --z-search-backdrop: 40;
     --z-workspace-footer-overlay: 50;
     --z-search-footer-content: 60;
+    --z-mobile-sheet-backdrop: 70;
+    --z-mobile-sheet-viewport: 71;
+    --z-navigation-backdrop: 80;
+    --z-navigation-panel: 90;
+    --z-mobile-topbar: 100;
     --z-exam-submit-confirmation: 110;
+    --z-settings-dialog: 130;
 
     /* ── Mobile bottom sheet ──────────────────
        These linked dimensions must stay in sync across the docked sheet

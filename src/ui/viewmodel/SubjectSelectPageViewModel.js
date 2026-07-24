@@ -9,7 +9,7 @@ import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById }
 import { createSubjectSwitcherModel } from "./SubjectSelectPage/createSubjectSwitcherModel.js";
 
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive) {
+export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, backContract) {
 	const executeSubjectLoad = useCallback(() => {
 		return getAvailableSubjectsUseCase.execute({
 			language
@@ -51,12 +51,17 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		return findSubjectById(subjects, selectedSubjectId);
 	}, [subjects, selectedSubjectId]);
 
-	const subjectSwitcher = useMemo(() => {
-		return createSubjectSwitcherModel(subjects, selectedSubject, subjectLoad.status, subjectLoad.error, {
+	const subjectSwitcher = createSubjectSwitcherModel({
+		loadStatus: subjectLoad.status,
+		subjects,
+		selectedSubject,
+		labels: {
 			loading: t.subjectLoadingMessage,
-			empty: t.subjectSwitcherEmptyLabel
-		});
-	}, [selectedSubject, subjectLoad.error, subjectLoad.status, subjects, t.subjectLoadingMessage, t.subjectSwitcherEmptyLabel]);
+			error: t.subjectErrorMessage,
+			empty: t.subjectSwitcherEmptyLabel,
+			unselected: t.subjectSwitcherSelectLabel
+		}
+	});
 
 	const faculties = useMemo(() => {
 		return buildSubjectFaculties(subjects);
@@ -131,10 +136,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		pageTools,
 
 		// Navigasjon
-		showBackButton: false,
-		backLabel: t.sidebarBack,
-		navigationLabel: t.sidebarMobileNavigation,
-		onBack: null,
+		backContract,
 
 		// Tekster
 		t,

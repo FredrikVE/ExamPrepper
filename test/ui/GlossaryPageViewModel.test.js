@@ -113,7 +113,7 @@ const translations = {
 	contentToggleMatchCardsLabel: "Begrepsmatch",
 	contentToggleGlossaryLabel: "Begrepslister",
 	pageToolsWorkspaceTitle: "Velg læringsverktøy",
-	pageToolsWorkspaceSubtitle: "",
+	pageToolsWorkspaceSubtitle: null,
 	pageToolsWorkspaceActionsLabel: "Læringsverktøy",
 	pageToolsOpenLabel: "Åpne verktøymeny",
 	pageToolsCloseLabel: "Lukk verktøymeny",
@@ -751,7 +751,7 @@ describe("useGlossaryPageViewModel", () => {
 	});
 
 	test("exposes the shared load-status contract without a page-specific load union", () => {
-		const { onBack, viewModel } = createViewModel({
+		const { backContract, viewModel } = createViewModel({
 			glossaryStatus: LOAD_STATUS.ERROR,
 			glossaryError: "Prøv igjen."
 		});
@@ -765,10 +765,7 @@ describe("useGlossaryPageViewModel", () => {
 			},
 			shouldShowWorkspaceFooter: false,
 			glossaryPanelEmptyState: null,
-			showBackButton: true,
-			backLabel: "Tilbake",
-			navigationLabel: "Navigasjon",
-			onBack,
+			backContract,
 			changeGlossarySearchTerm: expect.any(Function),
 			clearGlossarySearch: expect.any(Function),
 			openGlossarySearchFilterOptions: expect.any(Function),

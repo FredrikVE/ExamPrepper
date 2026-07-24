@@ -1,4 +1,7 @@
 // src/ui/view/pages/StatisticsPage.jsx
+import Header from "../components/Header/Header.jsx";
+import HeaderTitle from "../components/Header/HeaderTitle.jsx";
+import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import StatisticsKpiGrid from "../components/StatisticsPage/StatisticsKpiGrid.jsx";
 import StatisticsRecentAttempts from "../components/StatisticsPage/StatisticsRecentAttempts.jsx";
 import StatisticsRecommendedExam from "../components/StatisticsPage/StatisticsRecommendedExam.jsx";
@@ -8,27 +11,26 @@ import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 
 export default function StatisticsPage({ viewModel }) {
-	const header = (
-		<header className="statistics-page-header">
-			<div>
-				<h1>{viewModel.pageTitle}</h1>
-				<p>{viewModel.pageSubtitle}</p>
-			</div>
+	const desktopStartButton = (
+		<button type="button" className="statistics-start-button statistics-start-button--desktop" onClick={viewModel.onStartNewExam}>
+			{viewModel.startNewExamLabel}
+		</button>
+	);
 
-			<button
-				type="button"
-				className="statistics-start-button"
-				onClick={viewModel.onStartNewExam}
-			>
-				{viewModel.startNewExamLabel}
-			</button>
-		</header>
+	const header = (
+		<Header
+			appearance={HEADER_APPEARANCES.DEFAULT}
+			layout={HEADER_LAYOUTS.PAGE_TITLE}
+			backContract={viewModel.backContract}
+			heading={<HeaderTitle title={viewModel.pageTitle} subtitle={viewModel.pageSubtitle} />}
+			tools={null}
+			trailing={desktopStartButton}
+		/>
 	);
 
 	return (
 		<WorkspaceScaffold
 			className="statistics-page-workspace"
-			contentClassName=""
 			header={header}
 			footer={null}
 			overlay={null}
@@ -36,6 +38,9 @@ export default function StatisticsPage({ viewModel }) {
 		>
 			<WorkspaceState state={viewModel.workspaceState}>
 				<>
+					<button type="button" className="statistics-start-button statistics-start-button--mobile" onClick={viewModel.onStartNewExam}>
+						{viewModel.startNewExamLabel}
+					</button>
 					<section className="statistics-hero" aria-labelledby="statistics-hero-title">
 						<div className="statistics-hero-copy">
 							<p className="statistics-eyebrow">{viewModel.pageTitle}</p>

@@ -375,10 +375,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		currentAnswerOptionOrder,
 		workspaceClassName,
 		examProgressBarModel,
-		showBackButton: backContract.showBackButton,
-		backLabel: backContract.backLabel,
-		navigationLabel: backContract.navigationLabel,
-		onBack: backContract.onBack,
+		backContract,
 
 		score: examScore.score,
 		totalPoints: examScore.totalPoints,

@@ -1,6 +1,7 @@
 // test/ui/GlossaryPage/glossarySearchModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicArea, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeChapters, doesGlossarySearchScopeIncludeTerms, entryMatchesSearchTerm, filterEntriesByNormalizedSearchTerm, filterEntriesBySearchTerm, normalizeSearchTerm } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicArea, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeChapters, doesGlossarySearchScopeIncludeTerms, entryMatchesSearchTerm, filterEntriesByNormalizedSearchTerm, filterEntriesBySearchTerm } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import normalizeSearchTerm from "../../../src/ui/viewmodel/Utils/normalizeSearchTerm.js";
 
 const localizedEntries = [
     {

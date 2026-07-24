@@ -1,7 +1,7 @@
 // src/ui/viewmodel/MatchCardsPage/matchCardsSession.js
 import { createPairsFromGlossaryEntries } from "./matchCardsPairModel.js";
 import { createIdleSlotsForPairs } from "./matchCardsSlots.js";
-import { shuffleInPlace } from "./shuffleInPlace.js";
+import shuffleInPlace from "../Utils/shuffleInPlace.js";
 
 export function canStartMatchCardsSession(glossaryEntries) {
 	return glossaryEntries.length >= 2;

@@ -1,6 +1,6 @@
 // src/ui/viewmodel/MatchCardsPage/matchCardsSlots.js
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./matchCardsConstants.js";
-import { shuffleInPlace } from "./shuffleInPlace.js";
+import shuffleInPlace from "../Utils/shuffleInPlace.js";
 
 export function createIdleSlotsForPairs(activePairs, randomNumber) {
 	const termContents = [];

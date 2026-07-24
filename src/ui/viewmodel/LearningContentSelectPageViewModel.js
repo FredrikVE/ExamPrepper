@@ -12,7 +12,7 @@ import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
-export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, showBackButton, backLabel, navigationLabel, onBack) {
+export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage) {
 	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
 
 	const examSearchSheet = useSearchSheetModel({
@@ -286,6 +286,7 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		visibleExams,
 		visibleFlipcardDecks,
 		workspaceState,
+		actionErrorMessage,
 		topicAreas,
 		topicAreaKey,
 		pageTools,
@@ -312,10 +313,7 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		matchCardsDeckEyebrow: t.contentToggleMatchCardsLabel,
 
 		// Navigasjon
-		showBackButton,
-		backLabel,
-		navigationLabel,
-		onBack,
+		backContract,
 
 		// Søk og filter
 		searchTerm,

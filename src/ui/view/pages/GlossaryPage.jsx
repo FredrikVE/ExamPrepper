@@ -5,6 +5,7 @@ import GlossaryFooter from "../components/GlossaryPage/GlossaryFooter/GlossaryFo
 import GlossaryPanel from "../components/GlossaryPage/GlossaryPanel/GlossaryPanel.jsx";
 import TopicAreaPanel from "../components/GlossaryPage/TopicAreaPanel/TopicAreaPanel.jsx";
 import Header from "../components/Header/Header.jsx";
+import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import LearningContentHeader from "../components/LearningContentHeader/LearningContentHeader.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
@@ -18,11 +19,10 @@ export default function GlossaryPage({ viewModel }) {
 
 	const header = (
 		<Header
-			showBackButton={viewModel.showBackButton}
-			backLabel={viewModel.backLabel}
-			navigationLabel={viewModel.navigationLabel}
-			onBack={viewModel.onBack}
-			progressBarModel={null}
+			appearance={HEADER_APPEARANCES.TRANSPARENT}
+			layout={HEADER_LAYOUTS.DEFAULT}
+			backContract={viewModel.backContract}
+			heading={null}
 			tools={null}
 			trailing={null}
 		/>
@@ -69,7 +69,6 @@ export default function GlossaryPage({ viewModel }) {
 	return (
 		<WorkspaceScaffold
 			className="learning-content-workspace glossary-workspace"
-			contentClassName=""
 			header={header}
 			footer={footer}
 			overlay={null}

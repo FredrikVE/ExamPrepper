@@ -5,12 +5,6 @@
 	--workspace-scaffold-backdrop-filter: none;
 }
 
-/* Headeren ligger over scrollflaten her, så den skal være gjennomsiktig og la
-   workspace-bakgrunnen skinne gjennom. */
-.flipcards-workspace .scaffold-header::before {
-	background: none;
-}
-
 .flipcards-page-placeholder {
 	display: grid;
 	align-content: center;

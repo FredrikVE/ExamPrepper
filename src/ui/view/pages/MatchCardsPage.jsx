@@ -1,5 +1,8 @@
 // src/ui/view/pages/MatchCardsPage.jsx
 import Header from "../components/Header/Header.jsx";
+import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
+import ProgressBar from "../components/Shared/ProgressBar/ProgressBar.jsx";
+import { PROGRESS_BAR_VARIANTS } from "../components/Shared/ProgressBar/progressBarVariants.js";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
@@ -10,11 +13,10 @@ export default function MatchCardsPage({ viewModel }) {
 			<div className="matchcards-ambient-light" aria-hidden="true" />
 
 			<Header
-				showBackButton={viewModel.showBackButton}
-				backLabel={viewModel.backLabel}
-				navigationLabel={viewModel.navigationLabel}
-				onBack={viewModel.onBack}
-				progressBarModel={viewModel.headerProgressBarModel}
+				appearance={HEADER_APPEARANCES.TRANSPARENT}
+				layout={HEADER_LAYOUTS.MATCHCARDS_PROGRESS}
+				backContract={viewModel.backContract}
+				heading={<ProgressBar variant={PROGRESS_BAR_VARIANTS.HEADER} model={viewModel.headerProgressBarModel} />}
 				tools={null}
 				trailing={null}
 			/>
@@ -24,7 +26,6 @@ export default function MatchCardsPage({ viewModel }) {
 	return (
 		<WorkspaceScaffold
 			className="matchcards-workspace"
-			contentClassName=""
 			header={header}
 			footer={null}
 			overlay={null}

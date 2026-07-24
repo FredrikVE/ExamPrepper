@@ -1,3 +1,5 @@
+import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
+
 // src/ui/viewmodel/GlossaryPage/glossarySearchModel.js
 export const GLOSSARY_SEARCH_SCOPES = {
 	ALL: "all",
@@ -11,10 +13,6 @@ export function doesGlossarySearchScopeIncludeTerms(searchScope) {
 
 export function doesGlossarySearchScopeIncludeChapters(searchScope) {
 	return searchScope !== GLOSSARY_SEARCH_SCOPES.TERMS;
-}
-
-export function normalizeSearchTerm(searchTerm) {
-	return searchTerm.trim().toLowerCase();
 }
 
 export function entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm) {

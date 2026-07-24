@@ -10,7 +10,7 @@
 .mobile-bottom-sheet-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 70;
+    z-index: var(--z-mobile-sheet-backdrop);
     min-height: 100dvh;
     background: color-mix(in srgb, #020711 34%, transparent);
     opacity: calc(1 - var(--drawer-swipe-progress));
@@ -37,7 +37,7 @@
 .mobile-bottom-sheet-viewport {
     position: fixed;
     inset: 0;
-    z-index: 71;
+    z-index: var(--z-mobile-sheet-viewport);
     display: flex;
     align-items: flex-end;
     justify-content: center;

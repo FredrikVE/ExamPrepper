@@ -1,5 +1,8 @@
 // src/ui/view/pages/ExamPage.jsx
 import Header from "../components/Header/Header.jsx";
+import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
+import ProgressBar from "../components/Shared/ProgressBar/ProgressBar.jsx";
+import { PROGRESS_BAR_VARIANTS } from "../components/Shared/ProgressBar/progressBarVariants.js";
 import ExamToolbarActions from "../components/ExamPage/ExamToolbarActions.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
 import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
@@ -32,13 +35,16 @@ export default function ExamPage({ viewModel }) {
 		/>
 	) : null;
 
+	const headerProgressBar = viewModel.shouldShowExamChrome ? (
+		<ProgressBar variant={PROGRESS_BAR_VARIANTS.HEADER} model={viewModel.examProgressBarModel} />
+	) : null;
+
 	const header = (
 		<Header
-			showBackButton={viewModel.showBackButton}
-			backLabel={viewModel.backLabel}
-			navigationLabel={viewModel.navigationLabel}
-			onBack={viewModel.onBack}
-			progressBarModel={viewModel.shouldShowExamChrome ? viewModel.examProgressBarModel : null}
+			appearance={HEADER_APPEARANCES.DEFAULT}
+			layout={HEADER_LAYOUTS.EXAM_PROGRESS}
+			backContract={viewModel.backContract}
+			heading={headerProgressBar}
 			tools={null}
 			trailing={headerToolbar}
 		/>
@@ -67,7 +73,6 @@ export default function ExamPage({ viewModel }) {
 		<>
 			<WorkspaceScaffold
 				className={viewModel.workspaceClassName}
-				contentClassName=""
 				header={header}
 				footer={examFooter}
 				overlay={null}

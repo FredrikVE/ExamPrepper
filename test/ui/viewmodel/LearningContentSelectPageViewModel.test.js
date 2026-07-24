@@ -73,8 +73,8 @@ function createT() {
 		examSearchPlaceholder: "Søk etter eksamen",
 		examCategoryLabel: "Kategori",
 		pageToolsWorkspaceTitle: "Velg læringsverktøy",
-		pageToolsSubjectWorkspaceTitle: "",
-		pageToolsWorkspaceSubtitle: "",
+		pageToolsSubjectWorkspaceTitle: null,
+		pageToolsWorkspaceSubtitle: null,
 		pageToolsWorkspaceActionsLabel: "Læringsverktøy",
 		pageToolsOpenLabel: "Åpne verktøymeny",
 		pageToolsCloseLabel: "Lukk verktøymeny",
@@ -135,6 +135,12 @@ function createViewModel(params = {}) {
 	const selectFlipcardDeck = jest.fn();
 	const selectMatchCardsDeck = jest.fn();
 
+	const backContract = {
+		showBackButton: params.showBackButton ?? true,
+		backLabel: params.backLabel ?? "Tilbake",
+		navigationLabel: params.navigationLabel ?? "Navigasjon",
+		onBack: goBack
+	};
 	const viewModel = useLearningContentSelectPageViewModel(
 		getAvailableExamsUseCase,
 		getTopicAreasUseCase,
@@ -147,10 +153,8 @@ function createViewModel(params = {}) {
 		selectMatchCardsDeck,
 		params.isActive ?? true,
 		changeScreen,
-		params.showBackButton ?? true,
-		params.backLabel ?? "Tilbake",
-		params.navigationLabel ?? "Navigasjon",
-		goBack
+		backContract,
+		params.actionErrorMessage ?? null
 	);
 
 	return {
@@ -228,10 +232,12 @@ describe("useLearningContentSelectPageViewModel", () => {
 			showBackButton: true
 		});
 
-		expect(viewModel.showBackButton).toBe(true);
-		expect(viewModel.backLabel).toBe("Tilbake");
-		expect(viewModel.navigationLabel).toBe("Navigasjon");
-		expect(viewModel.onBack).toBe(goBack);
+		expect(viewModel.backContract).toEqual({
+			showBackButton: true,
+			backLabel: "Tilbake",
+			navigationLabel: "Navigasjon",
+			onBack: goBack
+		});
 	});
 	test("selects a flipcard deck through the public ViewModel handler", () => {
 		const { selectFlipcardDeck, viewModel } = createViewModel();

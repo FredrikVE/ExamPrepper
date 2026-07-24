@@ -1,9 +1,12 @@
 // src/ui/view/components/Shared/ProgressBar/ProgressBar.jsx
 import { Flag } from "lucide-react";
+import { getProgressBarClassName } from "./progressBarVariants.js";
 
-export default function ProgressBar({ model }) {
+export default function ProgressBar({ variant, model }) {
+	const className = getProgressBarClassName(variant);
+
 	return (
-		<section className="progress-bar" aria-label={model.ariaLabel}>
+		<section className={className} aria-label={model.ariaLabel}>
 			<div className="progress-bar-track">
 				<div className="progress-bar-line" />
 				<div className="progress-bar-fill" style={{ width: `${model.fillPercent}%` }} />

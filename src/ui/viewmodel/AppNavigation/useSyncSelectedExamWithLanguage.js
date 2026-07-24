@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { NAV_SCREENS } from "../../../navigation/navigation.js";
 import resolveTranslatedExamId from "../Utils/resolveTranslatedExamId.js";
 
-export default function useSyncSelectedExamWithLanguage({ language, activeScreen, selectedExamId, selectedSubjectId, getExamByIdUseCase, getExamByBaseIdAndLangUseCase, onExamResolved, onExamUnavailable }) {
+export default function useSyncSelectedExamWithLanguage({ language, activeScreen, selectedExamId, selectedSubjectId, getExamByIdUseCase, getExamByBaseIdAndLangUseCase, onExamResolved, onExamUnavailable, onExamSyncFailed }) {
 	const prevLanguageRef = useRef(language);
 
 	useEffect(() => {
@@ -34,16 +34,22 @@ export default function useSyncSelectedExamWithLanguage({ language, activeScreen
 					return;
 				}
 
-				if (resolved) {
-					onExamResolved(resolved.examId, resolved.subjectId ?? selectedSubjectId);
+				if (resolved === null) {
+					onExamUnavailable();
 					return;
 				}
 
-				onExamUnavailable();
-			} catch {
-				if (!cancelled) {
-					onExamUnavailable();
+				onExamResolved(resolved.examId, resolved.subjectId ?? selectedSubjectId);
+			} catch (error) {
+				if (cancelled) {
+					return;
 				}
+
+				if (import.meta.env?.DEV === true) {
+					console.error("[useSyncSelectedExamWithLanguage] Sync failed", error);
+				}
+
+				onExamSyncFailed();
 			}
 		}
 
@@ -60,6 +66,7 @@ export default function useSyncSelectedExamWithLanguage({ language, activeScreen
 		getExamByIdUseCase,
 		getExamByBaseIdAndLangUseCase,
 		onExamResolved,
-		onExamUnavailable
+		onExamUnavailable,
+		onExamSyncFailed
 	]);
 }

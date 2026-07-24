@@ -1,5 +1,7 @@
 // src/ui/view/pages/LearningContentSelectPage.jsx
 import Header from "../components/Header/Header.jsx";
+import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
+import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import ExamGrid from "../components/LearningContentSelectPage/ExamGrid.jsx";
@@ -49,7 +51,11 @@ export default function LearningContentSelectPage({ viewModel }) {
 	);
 
 	const renderPageContent = () => (
-		<>
+		<div className="learning-content-select-page-content">
+			{viewModel.actionErrorMessage === null ? null : (
+				<p className="learning-content-action-error" role="alert">{viewModel.actionErrorMessage}</p>
+			)}
+
 			<LearningContentHeader
 				title={viewModel.title}
 				subtitle={viewModel.subtitle}
@@ -99,17 +105,16 @@ export default function LearningContentSelectPage({ viewModel }) {
 					)}
 				</>
 			</WorkspaceState>
-		</>
+		</div>
 	);
 
 	const header = (
 		<Header
-			showBackButton={viewModel.showBackButton}
-			backLabel={viewModel.backLabel}
-			navigationLabel={viewModel.navigationLabel}
-			onBack={viewModel.onBack}
-			progressBarModel={null}
-			tools={viewModel.pageTools}
+			appearance={HEADER_APPEARANCES.DEFAULT}
+			layout={HEADER_LAYOUTS.DEFAULT}
+			backContract={viewModel.backContract}
+			heading={null}
+			tools={<PageToolsDesktopPanel tools={viewModel.pageTools} />}
 			trailing={null}
 		/>
 	);
@@ -147,7 +152,6 @@ export default function LearningContentSelectPage({ viewModel }) {
 	return (
 		<WorkspaceScaffold
 			className="learning-content-workspace exam-select-layout exam-select-workspace"
-			contentClassName="exam-select-scroll"
 			header={header}
 			footer={footer}
 			overlay={overlay}

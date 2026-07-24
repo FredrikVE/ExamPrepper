@@ -1,5 +1,4 @@
 /* src/ui/style/StatisticsPage/shared.css */
-.statistics-page-header,
 .statistics-hero,
 .statistics-panel,
 .statistics-kpi-card {
@@ -9,14 +8,12 @@
 	backdrop-filter: var(--blur-panel);
 }
 
-.statistics-page-header h1,
 .statistics-hero h2,
 .statistics-panel h2 {
 	margin: 0;
 	color: var(--text-main);
 }
 
-.statistics-page-header p,
 .statistics-hero p,
 .statistics-panel p,
 .statistics-kpi-card p,

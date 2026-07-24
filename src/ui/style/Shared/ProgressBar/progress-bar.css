@@ -11,6 +11,10 @@
 	padding: 0 clamp(var(--space-2), 1.2vw, var(--space-4));
 }
 
+.progress-bar--header {
+	padding: 0;
+}
+
 .progress-bar-track {
 	position: relative;
 	height: var(--progress-bar-track-height);
@@ -102,20 +106,4 @@ button.progress-bar-point {
 	width: 18px;
 	height: 18px;
 	color: var(--text-muted);
-}
-
-.matchcards-workspace .scaffold-header {
-	grid-template-columns: 64px minmax(0, 1fr) 64px;
-	column-gap: clamp(var(--space-6), 4vw, var(--space-10));
-}
-
-.matchcards-workspace .scaffold-header__heading {
-	width: 100%;
-	max-width: none;
-	align-self: center;
-	justify-content: stretch;
-}
-
-.matchcards-workspace .scaffold-header__heading .progress-bar {
-	padding: 0;
 }

@@ -1,7 +1,3 @@
-.matchcards-workspace .scaffold-header::before {
-	background: transparent;
-}
-
 .matchcards-ambient-light {
 	position: absolute;
 	inset: 0;

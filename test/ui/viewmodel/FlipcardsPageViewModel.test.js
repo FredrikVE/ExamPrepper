@@ -217,10 +217,12 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 			activeCardIndex: 0
 		}));
 
-		expect(viewModel.showBackButton).toBe(true);
-		expect(viewModel.backLabel).toBe("sidebarBack");
-		expect(viewModel.navigationLabel).toBe("sidebarMobileNavigation");
-		expect(viewModel.onBack).toBe(onBack);
+		expect(viewModel.backContract).toEqual({
+			showBackButton: true,
+			backLabel: "sidebarBack",
+			navigationLabel: "sidebarMobileNavigation",
+			onBack
+		});
 	});
 
 	test("exposes navigation and flip handlers for the active card", () => {

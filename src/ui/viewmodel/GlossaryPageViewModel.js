@@ -8,7 +8,8 @@ import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
-import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeTerms, filterEntriesByNormalizedSearchTerm, normalizeSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
+import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeTerms, filterEntriesByNormalizedSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
+import normalizeSearchTerm from "./Utils/normalizeSearchTerm.js";
 import { applyGlossaryTopicAreaInteractionState, createGlossaryAllTopicAreaListItem, createGlossaryTopicAreaListItems, GLOSSARY_TOPIC_AREA_LIST_ID } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
 
@@ -434,10 +435,7 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 		pageTools: null,
 		activeContentType: LEARNING_CONTENT_TYPES.GLOSSARY,
 
-		showBackButton: backContract.showBackButton,
-		backLabel: backContract.backLabel,
-		navigationLabel: backContract.navigationLabel,
-		onBack: backContract.onBack,
+		backContract,
 
 		changeGlossarySearchTerm,
 		clearGlossarySearch,

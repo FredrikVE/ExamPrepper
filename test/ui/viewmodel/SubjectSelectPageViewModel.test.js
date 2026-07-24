@@ -48,9 +48,10 @@ function createT() {
 		errorPrefix: "Feil",
 		subjectEmptyMessage: "Ingen fag funnet",
 		subjectSwitcherEmptyLabel: "Ingen fag",
+		subjectSwitcherSelectLabel: "Velg fag",
 		pageToolsWorkspaceTitle: "Velg læringsverktøy",
-		pageToolsSubjectWorkspaceTitle: "",
-		pageToolsWorkspaceSubtitle: "",
+		pageToolsSubjectWorkspaceTitle: null,
+		pageToolsWorkspaceSubtitle: null,
 		pageToolsWorkspaceActionsLabel: "Læringsverktøy",
 		pageToolsOpenLabel: "Åpne verktøymeny",
 		pageToolsCloseLabel: "Lukk verktøymeny",
@@ -70,6 +71,13 @@ function createT() {
 }
 
 function createViewModel({ getAvailableSubjectsUseCase }) {
+	const backContract = {
+		showBackButton: false,
+		backLabel: "Tilbake",
+		navigationLabel: "Navigasjon",
+		onBack: null
+	};
+
 	return useSubjectSelectPageViewModel(
 		getAvailableSubjectsUseCase,
 		"nb",
@@ -77,7 +85,7 @@ function createViewModel({ getAvailableSubjectsUseCase }) {
 		null,
 		jest.fn(),
 		true,
-		jest.fn()
+		backContract
 	);
 }
 
@@ -102,10 +110,12 @@ describe("useSubjectSelectPageViewModel", () => {
 			getAvailableSubjectsUseCase: { execute: jest.fn().mockResolvedValue([]) }
 		});
 
-		expect(viewModel.showBackButton).toBe(false);
-		expect(viewModel.backLabel).toBe("Tilbake");
-		expect(viewModel.navigationLabel).toBe("Navigasjon");
-		expect(viewModel.onBack).toBeNull();
+		expect(viewModel.backContract).toEqual({
+			showBackButton: false,
+			backLabel: "Tilbake",
+			navigationLabel: "Navigasjon",
+			onBack: null
+		});
 	});
 
 	test("loads subjects through the shared load model", async () => {

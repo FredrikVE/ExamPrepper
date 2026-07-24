@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
 import Header from "../components/Header/Header.jsx";
+import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import FlipcardsStudySurface from "../components/FlipcardsPage/FlipcardsStudySurface.jsx";
 import FlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/FlipcardToolMenu.jsx";
 import useFlipcardToolMenu from "../components/FlipcardsPage/FlipcardToolMenu/useFlipcardToolMenu.js";
@@ -30,11 +31,10 @@ export default function FlipcardsPage({ viewModel }) {
 
 	const header = (
 		<Header
-			showBackButton={viewModel.showBackButton}
-			backLabel={viewModel.backLabel}
-			navigationLabel={viewModel.navigationLabel}
-			onBack={viewModel.onBack}
-			progressBarModel={null}
+			appearance={HEADER_APPEARANCES.TRANSPARENT}
+			layout={HEADER_LAYOUTS.DEFAULT}
+			backContract={viewModel.backContract}
+			heading={null}
 			tools={null}
 			trailing={headerToolMenu}
 		/>
@@ -43,7 +43,6 @@ export default function FlipcardsPage({ viewModel }) {
 	return (
 		<WorkspaceScaffold
 			className="flipcards-workspace"
-			contentClassName=""
 			header={header}
 			footer={null}
 			overlay={null}

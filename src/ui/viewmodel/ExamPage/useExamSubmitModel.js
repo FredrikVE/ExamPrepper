@@ -42,8 +42,12 @@ export default function useExamSubmitModel({
 			});
 
 			setSavedAttempt(attempt);
-		} catch (error) {
-			setAttemptSaveError(error?.message ?? attemptSaveErrorMessage);
+		} catch (submitError) {
+			if (import.meta.env?.DEV === true) {
+				console.error("[ExamSubmit] Submit failed", submitError);
+			}
+
+			setAttemptSaveError(attemptSaveErrorMessage);
 		} finally {
 			setAttemptSaving(false);
 		}

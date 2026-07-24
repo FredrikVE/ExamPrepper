@@ -1,15 +1,8 @@
 // src/ui/view/components/WorkspaceScaffold/WorkspaceScaffold.jsx
 import { useEffect, useRef } from "react";
 
-export default function WorkspaceScaffold({
-	className,
-	contentClassName,
-	header,
-	footer,
-	overlay,
-	scrollToTopRequestId,
-	children
-}) {
+export default function WorkspaceScaffold(props) {
+	const { className, header, footer, overlay, scrollToTopRequestId, children } = props;
 	const bodyRef = useRef(null);
 
 	useEffect(() => {
@@ -26,7 +19,7 @@ export default function WorkspaceScaffold({
 				{header}
 			</div>
 
-			<div ref={bodyRef} className={`workspace-scaffold-body ${contentClassName}`}>
+			<div ref={bodyRef} className="workspace-scaffold-body">
 				{children}
 			</div>
 

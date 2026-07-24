@@ -25,6 +25,8 @@ import GlossaryPage from "./ui/view/pages/GlossaryPage.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
+import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoundary.jsx";
+import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
 import { NAV_SCREENS } from "./navigation/navigation.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
@@ -37,11 +39,23 @@ export default function App() {
 		<ThemeProvider>
 			<LanguageProvider>
 				<SettingsProvider>
-					<AppContent />
+					<AppErrorBoundary onError={reportRenderError} fallback={<AppErrorFallback onRecover={reloadApplication} />}>
+						<AppContent />
+					</AppErrorBoundary>
 				</SettingsProvider>
 			</LanguageProvider>
 		</ThemeProvider>
 	);
+}
+
+function reportRenderError(error, errorInfo) {
+	if (import.meta.env?.DEV === true) {
+		console.error("[AppErrorBoundary] Render failed", error, errorInfo);
+	}
+}
+
+function reloadApplication() {
+	window.location.reload();
 }
 
 function AppContent() {
@@ -56,7 +70,9 @@ function AppContent() {
 		getExamByIdUseCase,
 		getExamByBaseIdAndLangUseCase,
 		backLabel: t.sidebarBack,
-		navigationLabel: t.sidebarMobileNavigation
+		navigationLabel: t.sidebarMobileNavigation,
+		examUnavailableMessage: t.examLanguageUnavailableMessage,
+		examSyncFailedMessage: t.examLanguageSyncErrorMessage
 	});
 
 	const openExamSubmitConfirm = useCallback(() => {
@@ -78,7 +94,8 @@ function AppContent() {
 		t,
 		navigationViewModel.selectedSubjectId,
 		navigationViewModel.selectSubject,
-		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS
+		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS,
+		navigationViewModel.backContract
 	);
 
 	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(
@@ -93,10 +110,8 @@ function AppContent() {
 		navigationViewModel.selectMatchCardsDeck,
 		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
 		navigationViewModel.changeScreen,
-		navigationViewModel.showBackButton,
-		navigationViewModel.backLabel,
-		navigationViewModel.navigationLabel,
-		navigationViewModel.onBack
+		navigationViewModel.backContract,
+		navigationViewModel.examLanguageSyncError
 	);
 
 
@@ -117,10 +132,7 @@ function AppContent() {
 					onToggleMobileSubjectPicker={navigationViewModel.toggleMobileSubjectPicker}
 					onCloseMobileSubjectPicker={navigationViewModel.closeMobileSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
-					showBackButton={navigationViewModel.showBackButton}
-					backLabel={navigationViewModel.backLabel}
-					navigationLabel={navigationViewModel.navigationLabel}
-					onBack={navigationViewModel.onBack}
+					backContract={navigationViewModel.backContract}
 					subjectSwitcher={subjectSelectPageViewModel.subjectSwitcher}
 					onSelectSubject={navigationViewModel.selectSubject}
 					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
@@ -196,6 +208,7 @@ function AppContent() {
 					<StatisticsPageWrapper
 						formatDate={formatDate}
 						t={t}
+						backContract={navigationViewModel.backContract}
 						onStartNewExam={navigationViewModel.showAllSubjects}
 					/>
 				)}
@@ -334,7 +347,7 @@ function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, 
 	);
 }
 
-function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
+function StatisticsPageWrapper({ formatDate, t, backContract, onStartNewExam }) {
 	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
 
 	if (!hasClerkAuth) {
@@ -342,6 +355,7 @@ function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 			<StatisticsPageWithViewModel
 				formatDate={formatDate}
 				t={t}
+				backContract={backContract}
 				onStartNewExam={onStartNewExam}
 				authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false, userId: null }}
 			/>
@@ -352,30 +366,33 @@ function StatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
 		<AuthenticatedStatisticsPageWrapper
 			formatDate={formatDate}
 			t={t}
+			backContract={backContract}
 			onStartNewExam={onStartNewExam}
 		/>
 	);
 }
 
-function AuthenticatedStatisticsPageWrapper({ formatDate, t, onStartNewExam }) {
+function AuthenticatedStatisticsPageWrapper({ formatDate, t, backContract, onStartNewExam }) {
 	const { isLoaded, isSignedIn, userId } = useAuth();
 
 	return (
 		<StatisticsPageWithViewModel
 			formatDate={formatDate}
 			t={t}
+			backContract={backContract}
 			onStartNewExam={onStartNewExam}
 			authState={{ hasClerkAuth: true, isLoaded, isSignedIn, userId: userId ?? null }}
 		/>
 	);
 }
 
-function StatisticsPageWithViewModel({ formatDate, t, onStartNewExam, authState }) {
+function StatisticsPageWithViewModel({ formatDate, t, backContract, onStartNewExam, authState }) {
 	const statisticsPageViewModel = useStatisticsPageViewModel({
 		getMyStatisticsUseCase,
 		formatDate,
 		t,
 		authState,
+		backContract,
 		onStartNewExam
 	});
 

@@ -1,3 +1,5 @@
+import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
+
 // src/ui/viewmodel/SubjectSelectPage/subjectSelectPageFilters.js
 export const ALL_FACULTIES = "all";
 
@@ -35,7 +37,7 @@ export function buildSubjectFaculties(subjects) {
 
 export function filterSubjects(subjects, searchTerm, faculty) {
 	const filteredSubjects = [];
-	const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+	const normalizedSearchTerm = normalizeSearchTerm(searchTerm);
 
 	for (const subject of subjects) {
 		if (!subjectMatchesFaculty(subject, faculty)) {

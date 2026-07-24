@@ -122,6 +122,27 @@ describe("useExamSubmitModel", () => {
 		expect(stateSetters[2]).toHaveBeenLastCalledWith(false);
 	});
 
+
+	test("never exposes a backend error message to the action UI", async () => {
+		const execute = jest.fn(async () => {
+			throw new Error("database connection details");
+		});
+		const viewModel = createModel({
+			submitExamAttemptUseCase: { execute }
+		});
+
+		await viewModel.submitExamAttempt({
+			answers: {},
+			examId: "exam-1-no",
+			language: "no",
+			questions: [],
+			durationSeconds: 42
+		});
+
+		expect(stateSetters[1]).toHaveBeenCalledWith("Kunne ikke lagre forsøket.");
+		expect(stateSetters[1]).not.toHaveBeenCalledWith("database connection details");
+	});
+
 	test("opens, closes, and resets submit confirmation state", () => {
 		const viewModel = createModel();
 

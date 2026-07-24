@@ -1,6 +1,8 @@
 // src/ui/view/pages/SubjectSelectPage.jsx
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import Header from "../components/Header/Header.jsx";
+import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
+import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
@@ -48,8 +50,9 @@ export default function SubjectSelectPage({ viewModel }) {
 	);
 
 	const renderPageContent = () => (
-		<WorkspaceState state={viewModel.workspaceState}>
-			<>
+		<div className="subject-select-page-content">
+			<WorkspaceState state={viewModel.workspaceState}>
+				<>
 				<SubjectSelectTopbar t={viewModel.t} />
 
 				<SubjectSelectGrid
@@ -58,18 +61,18 @@ export default function SubjectSelectPage({ viewModel }) {
 					selectedSubject={viewModel.selectedSubject}
 					onSelectSubject={viewModel.selectSubject}
 				/>
-			</>
-		</WorkspaceState>
+				</>
+			</WorkspaceState>
+		</div>
 	);
 
 	const header = (
 		<Header
-			showBackButton={viewModel.showBackButton}
-			backLabel={viewModel.backLabel}
-			navigationLabel={viewModel.navigationLabel}
-			onBack={viewModel.onBack}
-			progressBarModel={null}
-			tools={viewModel.pageTools}
+			appearance={HEADER_APPEARANCES.DEFAULT}
+			layout={HEADER_LAYOUTS.DEFAULT}
+			backContract={viewModel.backContract}
+			heading={null}
+			tools={<PageToolsDesktopPanel tools={viewModel.pageTools} />}
 			trailing={null}
 		/>
 	);
@@ -107,7 +110,6 @@ export default function SubjectSelectPage({ viewModel }) {
 	return (
 		<WorkspaceScaffold
 			className="subject-select-layout subject-select-workspace"
-			contentClassName="subject-select-scroll"
 			header={header}
 			footer={footer}
 			overlay={overlay}

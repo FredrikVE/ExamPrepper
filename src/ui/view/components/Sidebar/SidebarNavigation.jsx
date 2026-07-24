@@ -1,12 +1,7 @@
 // src/ui/view/components/Sidebar/SidebarNavigation.jsx
-import { BarChart3, BookOpen, Home } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-import { NAV_ITEMS, NAV_SCREENS } from "../../../../navigation/navigation.js";
-
-const SIDEBAR_ICONS = {
-	"bar-chart-3": BarChart3,
-	home: Home
-};
+import { NAV_ITEMS } from "../../../../navigation/navigation.js";
+import { getSidebarIcon, shouldShowNavigationItem } from "./sidebarNavigationModel.js";
 
 const CLASS_NAMES = {
 	navigation: "sidebar-navigation",
@@ -24,10 +19,10 @@ export default function SidebarNavigation({ activeScreen, onChangeScreen, sectio
 	}
 
 	return (
-		<nav className={CLASS_NAMES.navigation} aria-label={t.sidebarLabel ?? "Eksamensnavigasjon"}>
+		<nav className={CLASS_NAMES.navigation} aria-label={t.sidebarLabel}>
 			{visibleItems.map((item) => {
-				const Icon = SIDEBAR_ICONS[item.iconKey] ?? BookOpen;
-				const label = t[item.labelKey] ?? item.fallbackLabel;
+				const Icon = getSidebarIcon(item.iconKey);
+				const label = t[item.labelKey];
 				const active = item.activeScreens.includes(activeScreen);
 
 				return <SidebarNavigationItem key={item.id} Icon={Icon} label={label} active={active} onClick={() => onChangeScreen(item.screen)} />;
@@ -51,12 +46,4 @@ function SidebarNavigationItem({ Icon, label, active, onClick }) {
 			<span>{label}</span>
 		</button>
 	);
-}
-
-function shouldShowNavigationItem(item, activeScreen) {
-	if (activeScreen === NAV_SCREENS.SUBJECTS) {
-		return item.screen !== NAV_SCREENS.SUBJECTS;
-	}
-
-	return true;
 }

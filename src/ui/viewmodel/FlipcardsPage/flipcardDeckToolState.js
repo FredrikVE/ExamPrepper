@@ -1,5 +1,6 @@
 // src/ui/viewmodel/FlipcardsPage/flipcardDeckToolState.js
 import { NAV_ITEMS, NAV_SCREENS } from "../../../navigation/navigation.js";
+import shuffleInPlace from "../Utils/shuffleInPlace.js";
 
 export const FLIPCARD_DECK_TOOLS = NAV_ITEMS.popOutMenuItems[NAV_SCREENS.FLIPCARDS].items;
 
@@ -23,10 +24,7 @@ export function createShuffledFlipcardIds(cards) {
 	const originalCardIds = cards.map((card) => card.id);
 	const shuffledCardIds = [...originalCardIds];
 
-	for (let index = shuffledCardIds.length - 1; index > 0; index -= 1) {
-		const swapIndex = Math.floor(Math.random() * (index + 1));
-		[shuffledCardIds[index], shuffledCardIds[swapIndex]] = [shuffledCardIds[swapIndex], shuffledCardIds[index]];
-	}
+	shuffleInPlace(shuffledCardIds, Math.random);
 
 	if (haveSameOrder(originalCardIds, shuffledCardIds)) {
 		return rotateCardIds(shuffledCardIds);

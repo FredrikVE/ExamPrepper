@@ -1,10 +1,11 @@
+import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
 // src/ui/viewmodel/LearningContentSelectPage/examFilters.js
 import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
 
 export { ALL_TOPIC_AREAS };
 
 export function filterExams(exams, searchTerm, topicAreaKey) {
-	const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+	const normalizedSearchTerm = normalizeSearchTerm(searchTerm);
 	const filteredExams = [];
 
 	for (const exam of exams) {

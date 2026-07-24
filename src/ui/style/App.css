@@ -3,6 +3,7 @@
 /* Global */
 @import "./Tokens.css";
 @import "./Global.css";
+@import "./AppErrorBoundary/index.css";
 
 /* Shared scaffold */
 @import "./WorkspaceScaffold/index.css";

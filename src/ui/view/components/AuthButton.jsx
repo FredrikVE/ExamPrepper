@@ -1,5 +1,6 @@
 // src/ui/view/components/AuthButton.jsx
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
+import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
 function UserAvatar(props) {
 	if (props.imageUrl) {
@@ -14,6 +15,7 @@ function UserAvatar(props) {
 }
 
 export default function AuthButton() {
+	const { t } = useLanguage();
 	const hasClerkKey = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
 	const { user } = useUser();
 	const userInitial = user?.firstName?.[0]
@@ -27,8 +29,8 @@ export default function AuthButton() {
 				<div className="sidebar-user-avatar">?</div>
 
 				<div className="sidebar-user-copy">
-					<p className="sidebar-user-name">Ikke innlogget</p>
-					<p className="sidebar-user-email">Clerk er ikke konfigurert</p>
+					<p className="sidebar-user-name">{t.authSignedOutLabel}</p>
+					<p className="sidebar-user-email">{t.authNotConfiguredMessage}</p>
 				</div>
 			</div>
 		);
@@ -42,8 +44,8 @@ export default function AuthButton() {
 						<div className="sidebar-user-avatar">?</div>
 
 						<div className="sidebar-user-copy">
-							<p className="sidebar-user-name">Ikke innlogget</p>
-							<p className="sidebar-user-email">Logg inn</p>
+							<p className="sidebar-user-name">{t.authSignedOutLabel}</p>
+							<p className="sidebar-user-email">{t.authSignInLabel}</p>
 						</div>
 					</button>
 				</SignInButton>
@@ -55,7 +57,7 @@ export default function AuthButton() {
 
 					<div className="sidebar-user-copy">
 						<p className="sidebar-user-name">
-							{user?.firstName ? `Hei, ${user.firstName}!` : "Innlogget"}
+							{user?.firstName ? t.authGreeting(user.firstName) : t.authSignedInLabel}
 						</p>
 					</div>
 

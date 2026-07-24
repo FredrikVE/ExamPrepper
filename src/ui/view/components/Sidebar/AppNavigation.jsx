@@ -29,10 +29,7 @@ export default function AppNavigation(props) {
 				onToggleMobileSubjectPicker={props.onToggleMobileSubjectPicker}
 				onCloseMobileSubjectPicker={props.onCloseMobileSubjectPicker}
 				showSubjectSwitcher={props.showSubjectSwitcher}
-				showBackButton={props.showBackButton}
-				backLabel={props.backLabel}
-				navigationLabel={props.navigationLabel}
-				onBack={props.onBack}
+				backContract={props.backContract}
 				subjectSwitcher={props.subjectSwitcher}
 				onSelectSubject={props.onSelectSubject}
 				isExamWorkMode={props.isExamWorkMode}

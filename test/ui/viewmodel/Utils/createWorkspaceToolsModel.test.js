@@ -4,8 +4,8 @@ import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/create
 
 const t = {
 	pageToolsWorkspaceTitle: "Velg læringsverktøy",
-	pageToolsSubjectWorkspaceTitle: "",
-	pageToolsWorkspaceSubtitle: "",
+	pageToolsSubjectWorkspaceTitle: null,
+	pageToolsWorkspaceSubtitle: null,
 	pageToolsWorkspaceActionsLabel: "Læringsverktøy",
 	pageToolsOpenLabel: "Åpne verktøymeny",
 	pageToolsCloseLabel: "Lukk verktøymeny",
@@ -21,7 +21,7 @@ describe("createWorkspaceToolsModel", () => {
 		const importMaterialsTool = tools.items.find((item) => item.id === "app-import-subject-materials");
 
 		expect(tools.title).toBe("Velg læringsverktøy");
-		expect(tools.subtitle).toBe("");
+		expect(tools.subtitle).toBeNull();
 		expect(tools.actionsLabel).toBe("Læringsverktøy");
 		expect(tools.openLabel).toBe("Åpne verktøymeny");
 		expect(tools.mobileHandleLabel).toBe("Verktøy");
@@ -36,7 +36,7 @@ describe("createWorkspaceToolsModel", () => {
 	test("uses only the actions defined for that page", () => {
 		const tools = createWorkspaceToolsModel({ pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SUBJECTS], t, topicAreaToolItems: [], activeTopicAreaKey: null });
 
-		expect(tools.title).toBe("");
+		expect(tools.title).toBeNull();
 		expect(tools.items.map((item) => item.id)).toEqual(["app-create-subject", "app-import-subject-materials"]);
 	});
 

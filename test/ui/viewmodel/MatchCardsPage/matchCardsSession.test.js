@@ -2,7 +2,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsConstants.js";
 import { canStartMatchCardsSession, createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSession.js";
-import { shuffleInPlace } from "../../../../src/ui/viewmodel/MatchCardsPage/shuffleInPlace.js";
+import shuffleInPlace from "../../../../src/ui/viewmodel/Utils/shuffleInPlace.js";
 import { createGlossaryEntries, keepOrderRandomNumber, reverseRandomNumber } from "./matchCardsTestFixtures.js";
 
 describe("matchCardsSession", () => {

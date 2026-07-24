@@ -26,6 +26,7 @@ export const translations = {
         subjectLoadingMessage: "Laster fag...",
         subjectErrorMessage: "Kunne ikke laste inn fag.",
 		subjectSwitcherEmptyLabel: "Ingen fag",
+		subjectSwitcherSelectLabel: "Velg fag",
         subjectMockExamCount: (count) => `${count} øveprøve${count === 1 ? "" : "r"}`,
         subjectAddPlaceholderCode: "OPPRETT FAG",
         subjectAddPlaceholderTitle: "Legg til nytt fag",
@@ -105,6 +106,7 @@ export const translations = {
         questionTypeFill: "Fyll inn",
         questionTypeMulti: "Flervalg",
         questionTypeSingle: "Ett riktig svar",
+        questionTypeUnknown: "Ukjent spørsmålstype",
         questionTypeDragDrop: "Dra og slipp",
         questionTypeDragCategorize: "Dra til kategori",
         questionTypeMatrixPlacement: "Matriseplassering",
@@ -278,8 +280,8 @@ export const translations = {
 
         // Page tools
         pageToolsWorkspaceTitle: "Velg læringsverktøy",
-        pageToolsSubjectWorkspaceTitle: "",
-        pageToolsWorkspaceSubtitle: "",
+        pageToolsSubjectWorkspaceTitle: null,
+        pageToolsWorkspaceSubtitle: null,
         pageToolsWorkspaceActionsLabel: "Læringsverktøy",
         pageToolsOpenLabel: "Åpne verktøymeny",
         pageToolsCloseLabel: "Lukk verktøymeny",
@@ -482,7 +484,21 @@ export const translations = {
         sidebarOpenNavigation: "Åpne navigasjon",
         sidebarCloseNavigation: "Lukk navigasjon",
         sidebarNavigationMenu: "Navigasjonsmeny",
-        sidebarMobileNavigation: "Mobilnavigasjon"
+        sidebarMobileNavigation: "Mobilnavigasjon",
+
+        // Auth
+        authSignedOutLabel: "Ikke innlogget",
+        authNotConfiguredMessage: "Clerk er ikke konfigurert",
+        authSignInLabel: "Logg inn",
+        authGreeting: (firstName) => `Hei, ${firstName}!`,
+        authSignedInLabel: "Innlogget",
+
+        // Root error fallback
+        appErrorTitle: "Noe gikk galt",
+        appErrorMessage: "Appen traff en uventet feil. Last siden på nytt for å fortsette.",
+        appErrorReloadLabel: "Last siden på nytt",
+        examLanguageUnavailableMessage: "Den valgte eksamenen er ikke tilgjengelig på dette språket. Velg en eksamen på nytt.",
+        examLanguageSyncErrorMessage: "Kunne ikke bytte språk for den valgte eksamenen. Velg en eksamen på nytt."
     },
 
     [LANGUAGES.EN]: {
@@ -501,6 +517,7 @@ export const translations = {
         subjectLoadingMessage: "Loading subjects...",
         subjectErrorMessage: "Could not load subjects.",
 		subjectSwitcherEmptyLabel: "No subjects",
+		subjectSwitcherSelectLabel: "Choose subject",
         subjectMockExamCount: (count) => `${count} practice exam${count === 1 ? "" : "s"}`,
         subjectAddPlaceholderCode: "CREATE SUBJECT",
         subjectAddPlaceholderTitle: "Add new subject",
@@ -580,6 +597,7 @@ export const translations = {
         questionTypeFill: "Fill in",
         questionTypeMulti: "Multiple choice",
         questionTypeSingle: "Single answer",
+        questionTypeUnknown: "Unknown question type",
         questionTypeDragDrop: "Drag and drop",
         questionTypeDragCategorize: "Category sort",
         questionTypeMatrixPlacement: "Matrix placement",
@@ -753,8 +771,8 @@ export const translations = {
 
         // Page tools
         pageToolsWorkspaceTitle: "Choose learning tools",
-        pageToolsSubjectWorkspaceTitle: "",
-        pageToolsWorkspaceSubtitle: "",
+        pageToolsSubjectWorkspaceTitle: null,
+        pageToolsWorkspaceSubtitle: null,
         pageToolsWorkspaceActionsLabel: "Learning tools",
         pageToolsOpenLabel: "Open tools menu",
         pageToolsCloseLabel: "Close tools menu",
@@ -957,6 +975,20 @@ export const translations = {
         sidebarOpenNavigation: "Open navigation",
         sidebarCloseNavigation: "Close navigation",
         sidebarNavigationMenu: "Navigation menu",
-        sidebarMobileNavigation: "Mobile navigation"
+        sidebarMobileNavigation: "Mobile navigation",
+
+        // Auth
+        authSignedOutLabel: "Not signed in",
+        authNotConfiguredMessage: "Clerk is not configured",
+        authSignInLabel: "Sign in",
+        authGreeting: (firstName) => `Hi, ${firstName}!`,
+        authSignedInLabel: "Signed in",
+
+        // Root error fallback
+        appErrorTitle: "Something went wrong",
+        appErrorMessage: "The app encountered an unexpected error. Reload the page to continue.",
+        appErrorReloadLabel: "Reload page",
+        examLanguageUnavailableMessage: "The selected exam is not available in this language. Choose an exam again.",
+        examLanguageSyncErrorMessage: "Could not switch language for the selected exam. Choose an exam again."
     }
 };

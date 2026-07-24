@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS } from "../../src/navigation/navigation.js";
+import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG } from "../../src/navigation/navigation.js";
 
 describe("navigation configuration", () => {
 	test("contains only the screens rendered by App", () => {
@@ -81,4 +81,38 @@ describe("navigation configuration", () => {
 			}
 		}
 	});
+	test("defines stable policy for every screen", () => {
+		expect(Object.keys(SCREEN_CONFIG).sort()).toEqual(Object.values(NAV_SCREENS).sort());
+
+		for (const screen of Object.values(NAV_SCREENS)) {
+			const screenConfig = getScreenConfig(screen);
+			expect(typeof screenConfig.requiresSubject).toBe("boolean");
+			expect(typeof screenConfig.requiresExam).toBe("boolean");
+			expect(typeof screenConfig.showsSubjectSwitcher).toBe("boolean");
+			expect(typeof screenConfig.pageClassName).toBe("string");
+			expect(typeof screenConfig.shellClassName).toBe("string");
+
+			if (screenConfig.backTo !== null) {
+				expect(Object.values(NAV_SCREENS)).toContain(screenConfig.backTo);
+			}
+		}
+	});
+
+	test("uses valid screen references in navigation items", () => {
+		const validScreens = Object.values(NAV_SCREENS);
+
+		for (const item of NAV_ITEMS.sidebarItems) {
+			expect(validScreens).toContain(item.screen);
+			expect(Array.isArray(item.hiddenOnScreens)).toBe(true);
+
+			for (const hiddenScreen of item.hiddenOnScreens) {
+				expect(validScreens).toContain(hiddenScreen);
+			}
+		}
+	});
+
+	test("fails clearly for an unknown screen", () => {
+		expect(() => getScreenConfig("missing-screen")).toThrow("Unknown navigation screen: missing-screen");
+	});
+
 });

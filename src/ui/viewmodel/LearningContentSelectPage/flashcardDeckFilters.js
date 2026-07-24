@@ -1,8 +1,9 @@
+import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
 // src/ui/viewmodel/LearningContentSelectPage/flashcardDeckFilters.js
 import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
 
 export function filterDeckSummaries(deckSummaries, searchTerm, topicAreaKey) {
-    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+    const normalizedSearchTerm = normalizeSearchTerm(searchTerm);
     const filteredDeckSummaries = [];
 
     for (const deckSummary of deckSummaries) {
