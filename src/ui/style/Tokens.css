@@ -235,8 +235,9 @@
 
     /* ── Mobile bottom sheet ──────────────────
        These linked dimensions must stay in sync across the docked sheet
-       and select-page scroll reserve. */
-    --mobile-sheet-peek-height: 122px;
+       and select-page scroll reserve. The shared sheet adds the device
+       safe-area to the visible peek height. */
+    --mobile-sheet-peek-height: 144px;
     --mobile-sheet-top-clearance: 54px;
     --mobile-sheet-scroll-reserve: 255px;
 
