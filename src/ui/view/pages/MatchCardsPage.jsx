@@ -8,6 +8,34 @@ import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold
 import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
+	let headerHeading = null;
+
+	if (viewModel.headerProgressBarModel !== null) {
+		headerHeading = (
+			<ProgressBar
+				variant={PROGRESS_BAR_VARIANTS.HEADER}
+				model={viewModel.headerProgressBarModel}
+			/>
+		);
+	}
+
+	let workspaceContent;
+
+	if (viewModel.isRoundComplete) {
+		workspaceContent = <MatchCardsRoundComplete viewModel={viewModel} />;
+	} else {
+		workspaceContent = (
+			<MatchCardsGrid
+				termSlots={viewModel.termSlots}
+				explanationSlots={viewModel.explanationSlots}
+				labels={viewModel.labels}
+				boardStyle={viewModel.boardStyle}
+				isInteractionLocked={viewModel.isInteractionLocked}
+				onSelectSlot={viewModel.handleSelectSlot}
+			/>
+		);
+	}
+
 	const header = (
 		<>
 			<div className="matchcards-ambient-light" aria-hidden="true" />
@@ -16,7 +44,7 @@ export default function MatchCardsPage({ viewModel }) {
 				appearance={HEADER_APPEARANCES.TRANSPARENT}
 				layout={HEADER_LAYOUTS.MATCHCARDS_PROGRESS}
 				backContract={viewModel.backContract}
-				heading={<ProgressBar variant={PROGRESS_BAR_VARIANTS.HEADER} model={viewModel.headerProgressBarModel} />}
+				heading={headerHeading}
 				tools={null}
 				trailing={null}
 			/>
@@ -32,18 +60,7 @@ export default function MatchCardsPage({ viewModel }) {
 			scrollToTopRequestId={null}
 		>
 			<WorkspaceState state={viewModel.workspaceState}>
-				{viewModel.isRoundComplete ? (
-					<MatchCardsRoundComplete viewModel={viewModel} />
-				) : (
-					<MatchCardsGrid
-						termSlots={viewModel.termSlots}
-						explanationSlots={viewModel.explanationSlots}
-						labels={viewModel.labels}
-						boardStyle={viewModel.boardStyle}
-						isInteractionLocked={viewModel.isInteractionLocked}
-						onSelectSlot={viewModel.handleSelectSlot}
-					/>
-				)}
+				{workspaceContent}
 			</WorkspaceState>
 		</WorkspaceScaffold>
 	);

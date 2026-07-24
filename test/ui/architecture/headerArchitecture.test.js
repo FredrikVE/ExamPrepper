@@ -54,6 +54,15 @@ describe("Header architecture", () => {
 		}
 	});
 
+	test("renders MatchCards header progress only when its model exists", () => {
+		const matchCardsPageSource = fs.readFileSync(path.join(PAGE_ROOT, "MatchCardsPage.jsx"), "utf8");
+
+		expect(matchCardsPageSource).toContain("let headerHeading = null;");
+		expect(matchCardsPageSource).toContain("if (viewModel.headerProgressBarModel !== null)");
+		expect(matchCardsPageSource).toContain("heading={headerHeading}");
+		expect(matchCardsPageSource).not.toContain("heading={<ProgressBar");
+	});
+
 	test("keeps Header selectors out of Page CSS", () => {
 		for (const pageStyleName of PAGE_STYLE_NAMES) {
 			const pageCss = readCssTree(path.join(PROJECT_ROOT, "src", "ui", "style", pageStyleName));
