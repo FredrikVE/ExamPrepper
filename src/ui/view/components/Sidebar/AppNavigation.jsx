@@ -11,10 +11,8 @@ export default function AppNavigation(props) {
 				isSettingsPresentationOpen={props.isSettingsPresentationOpen}
 				onOpenSettingsPresentation={props.onOpenSettingsPresentation}
 				showSubjectSwitcher={props.showSubjectSwitcher}
-				subjects={props.subjects}
-				selectedSubject={props.selectedSubject}
+				subjectSwitcher={props.subjectSwitcher}
 				onSelectSubject={props.onSelectSubject}
-				onShowAllSubjects={props.onShowAllSubjects}
 			/>
 
 			<MobileDropDownTopBar
@@ -31,15 +29,12 @@ export default function AppNavigation(props) {
 				onToggleMobileSubjectPicker={props.onToggleMobileSubjectPicker}
 				onCloseMobileSubjectPicker={props.onCloseMobileSubjectPicker}
 				showSubjectSwitcher={props.showSubjectSwitcher}
-				hasSelectedSubject={props.hasSelectedSubject}
 				showBackButton={props.showBackButton}
 				backLabel={props.backLabel}
 				navigationLabel={props.navigationLabel}
 				onBack={props.onBack}
-				subjects={props.subjects}
-				selectedSubject={props.selectedSubject}
+				subjectSwitcher={props.subjectSwitcher}
 				onSelectSubject={props.onSelectSubject}
-				onShowAllSubjects={props.onShowAllSubjects}
 				isExamWorkMode={props.isExamWorkMode}
 				examWorkStatusLabel={props.examWorkStatusLabel}
 				showExamSubmitAction={props.showExamSubmitAction}

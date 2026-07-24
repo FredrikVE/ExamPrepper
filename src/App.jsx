@@ -117,15 +117,12 @@ function AppContent() {
 					onToggleMobileSubjectPicker={navigationViewModel.toggleMobileSubjectPicker}
 					onCloseMobileSubjectPicker={navigationViewModel.closeMobileSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
-					hasSelectedSubject={Boolean(navigationViewModel.selectedSubjectId)}
 					showBackButton={navigationViewModel.showBackButton}
 					backLabel={navigationViewModel.backLabel}
 					navigationLabel={navigationViewModel.navigationLabel}
 					onBack={navigationViewModel.onBack}
-					subjects={subjectSelectPageViewModel.subjects}
-					selectedSubject={subjectSelectPageViewModel.selectedSubject}
+					subjectSwitcher={subjectSelectPageViewModel.subjectSwitcher}
 					onSelectSubject={navigationViewModel.selectSubject}
-					onShowAllSubjects={navigationViewModel.showAllSubjects}
 					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
 					examWorkStatusLabel={examWorkMode?.statusLabel ?? ""}
 					showExamSubmitAction={Boolean(examWorkMode?.canSubmit)}

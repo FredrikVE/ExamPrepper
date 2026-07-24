@@ -6,6 +6,7 @@ import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
+import { createSubjectSwitcherModel } from "./SubjectSelectPage/createSubjectSwitcherModel.js";
 
 
 export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive) {
@@ -50,6 +51,13 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		return findSubjectById(subjects, selectedSubjectId);
 	}, [subjects, selectedSubjectId]);
 
+	const subjectSwitcher = useMemo(() => {
+		return createSubjectSwitcherModel(subjects, selectedSubject, subjectLoad.status, subjectLoad.error, {
+			loading: t.subjectLoadingMessage,
+			empty: t.subjectSwitcherEmptyLabel
+		});
+	}, [selectedSubject, subjectLoad.error, subjectLoad.status, subjects, t.subjectLoadingMessage, t.subjectSwitcherEmptyLabel]);
+
 	const faculties = useMemo(() => {
 		return buildSubjectFaculties(subjects);
 	}, [subjects]);
@@ -65,7 +73,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 			loading: t.subjectLoadingMessage,
 			errorTitle: t.errorPrefix,
 			errorBody: subjectLoad.error,
-			emptyTitle: t.subjectEmptyMessage,
+			emptyTitle: subjects.length === 0 ? t.subjectSwitcherEmptyLabel : t.subjectEmptyMessage,
 			emptyBody: ""
 		},
 		errorAction: null
@@ -116,6 +124,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		// Data
 		subjects,
 		selectedSubject,
+		subjectSwitcher,
 		filteredSubjects,
 		faculties,
 		workspaceState,

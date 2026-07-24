@@ -14,16 +14,6 @@ import SettingsPanelContent from "../Settings/SettingsPanelContent.jsx";
 import useMobileMenuEscapeKey from "./useMobileMenuEscapeKey.js";
 import useSubmitConfirmFocus from "./useSubmitConfirmFocus.js";
 
-function resolveCurrentSubject(subjects, selectedSubject) {
-	return selectedSubject ??
-		subjects[0] ?? {
-			id: "in5431",
-			code: "IN5431",
-			name: "Exam Emulator",
-			icon: "clipboard",
-		};
-}
-
 function MobileDropdownContent(props) {
 	const {
 		submitActionButtonRef,
@@ -53,8 +43,7 @@ function MobileDropdownContent(props) {
 			>
 				{props.isMobileSubjectPickerOpen && (
 					<SubjectPickerDropdown
-						subjects={props.subjects}
-						currentSubjectId={props.currentSubject.id}
+						subjectSwitcher={props.subjectSwitcher}
 						onSelectSubject={props.onSelectSubject}
 						onClose={props.onCloseMobileSubjectPicker}
 					/>
@@ -154,7 +143,6 @@ export default function MobileDropDownTopBar(props) {
 		showExamSubmitConfirm ? "mobile-dropdown-backdrop-submit-confirm-open" : null
 	].filter(Boolean);
 
-	const currentSubject = resolveCurrentSubject(props.subjects, props.selectedSubject);
 	const topbarNavigationLabel = props.navigationLabel ?? t.sidebarMobileNavigation;
 	const topbarBackLabel = shouldShowSettingsTopbar
 		? t.settingsBackToMenu
@@ -230,7 +218,7 @@ export default function MobileDropDownTopBar(props) {
 				{showFlipcardsDeckPill && (
 					<div className="mobile-topbar-subject-picker mobile-topbar-subject-picker-flipcards">
 						<SubjectPickerButton
-							currentSubject={currentSubject}
+							subjectSwitcher={props.subjectSwitcher}
 							isOpen={props.isMobileSubjectPickerOpen}
 							onToggle={handleFlipcardsDeckPillClick}
 						/>
@@ -240,7 +228,7 @@ export default function MobileDropDownTopBar(props) {
 				{showPickerButton && (
 					<div className="mobile-topbar-subject-picker">
 						<SubjectPickerButton
-							currentSubject={currentSubject}
+							subjectSwitcher={props.subjectSwitcher}
 							isOpen={props.isMobileSubjectPickerOpen}
 							onToggle={props.onToggleMobileSubjectPicker}
 						/>
@@ -270,13 +258,10 @@ export default function MobileDropDownTopBar(props) {
 					onOpenSettingsPresentation={props.onOpenSettingsPresentation}
 					onCloseMobileDropDownTopBarMenu={props.onCloseMobileDropDownTopBarMenu}
 					onBackFromSettingsToMobileDropDownTopBarMenu={props.onBackFromSettingsToMobileDropDownTopBarMenu}
-					subjects={props.subjects}
-					currentSubject={currentSubject}
-					hasSelectedSubject={props.hasSelectedSubject}
+					subjectSwitcher={props.subjectSwitcher}
 					isMobileSubjectPickerOpen={props.isMobileSubjectPickerOpen}
 					onCloseMobileSubjectPicker={props.onCloseMobileSubjectPicker}
 					onSelectSubject={props.onSelectSubject}
-					onShowAllSubjects={props.onShowAllSubjects}
 					isExamWorkMode={props.isExamWorkMode}
 					showExamSubmitAction={props.showExamSubmitAction}
 					examSubmitLabel={props.examSubmitLabel}

@@ -12,11 +12,7 @@ export default function DesktopSideBar(props) {
 		<aside className="desktop-sidebar" aria-label={t.sidebarNavigationMenu}>
 			{props.showSubjectSwitcher && (
 				<>
-					<SidebarBrand
-						subjects={props.subjects}
-						selectedSubject={props.selectedSubject}
-						onSelectSubject={props.onSelectSubject}
-					/>
+					<SidebarBrand subjectSwitcher={props.subjectSwitcher} onSelectSubject={props.onSelectSubject} />
 
 					<div className="desktop-sidebar-divider" />
 				</>

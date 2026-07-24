@@ -47,6 +47,7 @@ function createT() {
 		subjectLoadingMessage: "Laster fag",
 		errorPrefix: "Feil",
 		subjectEmptyMessage: "Ingen fag funnet",
+		subjectSwitcherEmptyLabel: "Ingen fag",
 		pageToolsWorkspaceTitle: "Velg læringsverktøy",
 		pageToolsSubjectWorkspaceTitle: "",
 		pageToolsWorkspaceSubtitle: "",
@@ -144,7 +145,12 @@ describe("useSubjectSelectPageViewModel", () => {
 			body: "Kunne ikke hente fag",
 			action: null
 		});
-		expect(viewModel.subjectsLoading).toBeUndefined();
-		expect(viewModel.subjectsLoadError).toBeUndefined();
+		expect(viewModel.subjectSwitcher).toEqual({
+			kind: "error",
+			subjects: [],
+			currentSubject: null,
+			label: "Kunne ikke hente fag",
+			canOpen: false
+		});
 	});
 });
