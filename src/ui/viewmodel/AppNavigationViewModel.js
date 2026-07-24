@@ -1,6 +1,6 @@
 // src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
-import { NAV_SCREENS } from "../../navigation/navGraph.js";
+import { NAV_SCREENS } from "../../navigation/navigation.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";

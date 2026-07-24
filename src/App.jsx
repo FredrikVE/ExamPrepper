@@ -26,7 +26,7 @@ import GlossaryPage from "./ui/view/pages/GlossaryPage.jsx";
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
 
-import { NAV_SCREENS } from "./navigation/navGraph.js";
+import { NAV_SCREENS } from "./navigation/navigation.js";
 import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";

@@ -1,7 +1,7 @@
 // test/ui/GlossaryPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
-import { LEARNING_CONTENT_TYPES } from "../../src/navigation/learningContent.js";
+import { LEARNING_CONTENT_TYPES } from "../../src/navigation/navigation.js";
 import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
@@ -334,20 +334,10 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useState).toHaveBeenNthCalledWith(5, false);
 	});
 
-	test("keeps the learning-content tools trigger available in the glossary header", () => {
+	test("does not reuse the learning-content pop-out menu on the glossary page", () => {
 		const { viewModel } = createViewModel();
 
-		expect(viewModel.pageTools).toMatchObject({
-			id: "learning-content-select",
-			title: "Velg læringsverktøy",
-			openLabel: "Åpne verktøymeny"
-		});
-		expect(viewModel.pageTools.items).toEqual([
-			expect.objectContaining({
-				label: "Legg inn fagmateriale",
-				isDisabled: true
-			})
-		]);
+		expect(viewModel.pageTools).toBeNull();
 	});
 
 	test("loads all glossary entries once and topic areas for the active language", async () => {

@@ -1,31 +1,18 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
-import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../../navigation/pageTools.js";
+import { LEARNING_CONTENT_TYPES, NAV_ITEMS } from "../../navigation/navigation.js";
 import { ALL_TOPIC_AREAS } from "../../model/domain/utils/topicAreaFilters.js";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
-import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeTerms, filterEntriesByNormalizedSearchTerm, normalizeSearchTerm } from "./GlossaryPage/glossarySearchModel.js";
 import { applyGlossaryTopicAreaInteractionState, createGlossaryAllTopicAreaListItem, createGlossaryTopicAreaListItems, GLOSSARY_TOPIC_AREA_LIST_ID } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
 
-export default function useGlossaryPageViewModel(
-	getGlossaryEntriesForSubjectUseCase,
-	getTopicAreasUseCase,
-	subjectId,
-	selectedSubject,
-	initialTopicAreaKey,
-	language,
-	t,
-	isActive,
-	backContract,
-	onSelectContentType
-) {
+export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType) {
 	const [glossarySearchTerm, setGlossarySearchTerm] = useState("");
 	const [glossarySearchScope, setGlossarySearchScope] = useState(GLOSSARY_SEARCH_SCOPES.ALL);
 	const [selectedTopicAreaKeys, setSelectedTopicAreaKeys] = useState(null);
@@ -295,18 +282,11 @@ export default function useGlossaryPageViewModel(
 	]), [t.glossaryPageSearchScopeAllLabel, t.glossaryPageSearchScopeChaptersLabel, t.glossaryPageSearchScopeTermsLabel]);
 
 	const contentToggleEntries = useMemo(() => {
-		return LEARNING_CONTENT_ENTRIES.map((entry) => ({
+		return NAV_ITEMS.toggleButtonItems.map((entry) => ({
 			id: entry.id,
 			label: t[entry.labelKey],
-			isDisabled: false
+			isDisabled: entry.isDisabled
 		}));
-	}, [t]);
-
-	const pageTools = useMemo(() => {
-		return createWorkspaceToolsModel({
-			pageToolGroup: LEARNING_CONTENT_SELECT_PAGE_TOOLS,
-			t
-		});
 	}, [t]);
 
 	const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
@@ -451,7 +431,7 @@ export default function useGlossaryPageViewModel(
 		glossaryPanelHeading,
 		glossaryTableRows,
 		contentToggleEntries,
-		pageTools,
+		pageTools: null,
 		activeContentType: LEARNING_CONTENT_TYPES.GLOSSARY,
 
 		showBackButton: backContract.showBackButton,

@@ -1,6 +1,6 @@
 // test/ui/viewmodel/AppNavigationViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { NAV_SCREENS } from "../../../src/navigation/navGraph.js";
+import { NAV_SCREENS } from "../../../src/navigation/navigation.js";
 
 let hookState;
 let stateIndex;

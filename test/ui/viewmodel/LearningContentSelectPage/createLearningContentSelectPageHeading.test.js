@@ -1,7 +1,7 @@
 // test/ui/viewmodel/LearningContentSelectPage/createLearningContentSelectPageHeading.test.js
 import { describe, expect, jest, test } from "@jest/globals";
 import createLearningContentSelectPageHeading from "../../../../src/ui/viewmodel/LearningContentSelectPage/createLearningContentSelectPageHeading.js";
-import { LEARNING_CONTENT_TYPES } from "../../../../src/navigation/learningContent.js";
+import { LEARNING_CONTENT_TYPES } from "../../../../src/navigation/navigation.js";
 
 function createTranslations() {
 	return {

@@ -23,7 +23,7 @@ export default function GlossaryPage({ viewModel }) {
 			navigationLabel={viewModel.navigationLabel}
 			onBack={viewModel.onBack}
 			progressBarModel={null}
-			tools={viewModel.pageTools}
+			tools={null}
 			trailing={null}
 		/>
 	);

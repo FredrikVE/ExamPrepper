@@ -1,7 +1,7 @@
 // src/ui/view/components/Sidebar/MobileDropDownTopBar.jsx
 import { ChevronLeft, Menu } from "lucide-react";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
-import { NAV_SCREENS } from "../../../../navigation/navGraph.js";
+import { NAV_SCREENS } from "../../../../navigation/navigation.js";
 import { SubjectPickerButton, SubjectPickerDropdown } from "./MobileSubjectPicker.jsx";
 import SidebarNavigation from "./SidebarNavigation.jsx";
 import SidebarSettingsButton from "./SidebarSettingsButton.jsx";

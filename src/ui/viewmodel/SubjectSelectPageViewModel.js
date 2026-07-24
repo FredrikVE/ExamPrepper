@@ -1,6 +1,6 @@
 // src/ui/viewmodel/SubjectSelectPageViewModel.js
 import { useCallback, useMemo } from "react";
-import { SUBJECT_SELECT_PAGE_TOOLS } from "../../navigation/pageTools.js";
+import { NAV_ITEMS, NAV_SCREENS } from "../../navigation/navigation.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
@@ -105,8 +105,10 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
-			pageToolGroup: SUBJECT_SELECT_PAGE_TOOLS,
-			t
+			pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SUBJECTS],
+			t,
+			topicAreaToolItems: [],
+			activeTopicAreaKey: null
 		});
 	}, [t]);
 

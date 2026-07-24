@@ -1,8 +1,6 @@
 // src/ui/viewmodel/LearningContentSelectPageViewModel.js
 import { useCallback, useMemo, useState } from "react";
-import { LEARNING_CONTENT_SELECT_PAGE_TOOLS } from "../../navigation/pageTools.js";
-import { NAV_SCREENS } from "../../navigation/navGraph.js";
-import { LEARNING_CONTENT_ENTRIES, LEARNING_CONTENT_TYPES } from "../../navigation/learningContent.js";
+import { LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS } from "../../navigation/navigation.js";
 import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
@@ -14,23 +12,7 @@ import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
-export default function useLearningContentSelectPageViewModel(
-	getAvailableExamsUseCase,
-	getTopicAreasUseCase,
-	getFlipcardDeckSummariesUseCase,
-	language,
-	t,
-	selectedSubject,
-	onSelectExam,
-	onSelectFlipcardDeck,
-	onSelectMatchCardsDeck,
-	isActive,
-	onChangeScreen,
-	showBackButton,
-	backLabel,
-	navigationLabel,
-	onBack
-) {
+export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, showBackButton, backLabel, navigationLabel, onBack) {
 	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
 
 	const examSearchSheet = useSearchSheetModel({
@@ -139,21 +121,23 @@ export default function useLearningContentSelectPageViewModel(
 	}, [t, selectedSubject, activeContentType]);
 
 	const selectContentType = useCallback((contentTypeId) => {
-		if (!findContentTypeEntry(contentTypeId)) {
+		const contentType = findContentTypeEntry(contentTypeId);
+
+		if (!contentType) {
 			return;
 		}
 
 		resetSearchSheet(ALL_TOPIC_AREAS);
 
-		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
-			onChangeScreen(NAV_SCREENS.GLOSSARY);
+		if (contentType.targetScreen !== NAV_SCREENS.SELECT) {
+			onChangeScreen(contentType.targetScreen);
 			return;
 		}
 
-		setActiveContentType(contentTypeId);
+		setActiveContentType(contentType.id);
 
 		if (!isActive) {
-			onChangeScreen(NAV_SCREENS.SELECT);
+			onChangeScreen(contentType.targetScreen);
 		}
 	}, [isActive, onChangeScreen, resetSearchSheet]);
 
@@ -162,10 +146,10 @@ export default function useLearningContentSelectPageViewModel(
 	}, [changeTopicAreaKey]);
 
 	const contentToggleEntries = useMemo(() => {
-		return LEARNING_CONTENT_ENTRIES.map((entry) => ({
+		return NAV_ITEMS.toggleButtonItems.map((entry) => ({
 			id: entry.id,
 			label: t[entry.labelKey],
-			isDisabled: false
+			isDisabled: entry.isDisabled
 		}));
 	}, [t]);
 
@@ -289,7 +273,7 @@ export default function useLearningContentSelectPageViewModel(
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
-			pageToolGroup: LEARNING_CONTENT_SELECT_PAGE_TOOLS,
+			pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SELECT],
 			t,
 			topicAreaToolItems,
 			activeTopicAreaKey: topicAreaKey
@@ -375,71 +359,71 @@ export default function useLearningContentSelectPageViewModel(
 }
 
 function findContentTypeEntry(contentTypeId) {
-    for (const entry of LEARNING_CONTENT_ENTRIES) {
-        if (entry.id === contentTypeId) {
-            return entry;
-        }
-    }
+	for (const entry of NAV_ITEMS.toggleButtonItems) {
+		if (entry.id === contentTypeId) {
+			return entry;
+		}
+	}
 
-    return null;
+	return null;
 }
 
 function createExamSearchSuggestions(exams) {
-    const searchSuggestions = [];
+	const searchSuggestions = [];
 
-    for (const exam of exams) {
-        if (searchSuggestions.length >= SEARCH_SUGGESTION_LIMIT) {
-            break;
-        }
+	for (const exam of exams) {
+		if (searchSuggestions.length >= SEARCH_SUGGESTION_LIMIT) {
+			break;
+		}
 
-        searchSuggestions.push({
-            id: exam.id,
-            label: exam.title
-        });
-    }
+		searchSuggestions.push({
+			id: exam.id,
+			label: exam.title
+		});
+	}
 
-    return searchSuggestions;
+	return searchSuggestions;
 }
 
 function createDeckSearchSuggestions(deckSummaries) {
-    const searchSuggestions = [];
+	const searchSuggestions = [];
 
-    for (const deckSummary of deckSummaries) {
-        if (searchSuggestions.length >= SEARCH_SUGGESTION_LIMIT) {
-            break;
-        }
+	for (const deckSummary of deckSummaries) {
+		if (searchSuggestions.length >= SEARCH_SUGGESTION_LIMIT) {
+			break;
+		}
 
-        searchSuggestions.push({
-            id: deckSummary.topicAreaKey,
-            label: deckSummary.title
-        });
-    }
+		searchSuggestions.push({
+			id: deckSummary.topicAreaKey,
+			label: deckSummary.title
+		});
+	}
 
-    return searchSuggestions;
+	return searchSuggestions;
 }
 
 function createTopicAreaToolItems(params) {
-    const items = [
-        {
-            id: `topic-area-${ALL_TOPIC_AREAS}`,
-            topicAreaKey: ALL_TOPIC_AREAS,
-            iconKey: "list",
-            label: params.t.topicAreaAllLabel,
-            selectedStatusLabel: params.selectedStatusLabel,
-            onSelect: () => params.onSelectTopicArea(ALL_TOPIC_AREAS)
-        }
-    ];
+	const items = [
+		{
+			id: `topic-area-${ALL_TOPIC_AREAS}`,
+			topicAreaKey: ALL_TOPIC_AREAS,
+			iconKey: "list",
+			label: params.t.topicAreaAllLabel,
+			selectedStatusLabel: params.selectedStatusLabel,
+			onSelect: () => params.onSelectTopicArea(ALL_TOPIC_AREAS)
+		}
+	];
 
-    for (const topicArea of params.topicAreas) {
-        items.push({
-            id: `topic-area-${topicArea.key}`,
-            topicAreaKey: topicArea.key,
-            iconKey: topicArea.iconKey,
-            label: topicArea.label,
-            selectedStatusLabel: params.selectedStatusLabel,
-            onSelect: () => params.onSelectTopicArea(topicArea.key)
-        });
-    }
+	for (const topicArea of params.topicAreas) {
+		items.push({
+			id: `topic-area-${topicArea.key}`,
+			topicAreaKey: topicArea.key,
+			iconKey: topicArea.iconKey,
+			label: topicArea.label,
+			selectedStatusLabel: params.selectedStatusLabel,
+			onSelect: () => params.onSelectTopicArea(topicArea.key)
+		});
+	}
 
-    return items;
+	return items;
 }

@@ -1,25 +1,23 @@
 // src/ui/viewmodel/Utils/createWorkspaceToolsModel.js
 export default function createWorkspaceToolsModel(params) {
-	if (!params.pageToolGroup) {
+	if (params.pageToolGroup === null) {
 		return null;
 	}
 
 	const items = [];
-	const workspaceActionToolItems = params.pageToolGroup.items ?? [];
-	const topicAreaToolItems = params.topicAreaToolItems ?? [];
 
-	for (const toolItem of workspaceActionToolItems) {
+	for (const toolItem of params.pageToolGroup.items) {
 		items.push(createWorkspaceActionToolItemModel({ toolItem, t: params.t }));
 	}
 
-	for (const topicAreaToolItem of topicAreaToolItems) {
+	for (const topicAreaToolItem of params.topicAreaToolItems) {
 		items.push(createTopicAreaToolItemModel({ topicAreaToolItem, activeTopicAreaKey: params.activeTopicAreaKey }));
 	}
 
 	return {
 		id: params.pageToolGroup.id,
-		title: params.pageToolGroup.titleKey ? params.t[params.pageToolGroup.titleKey] : "",
-		subtitle: params.pageToolGroup.subtitleKey ? params.t[params.pageToolGroup.subtitleKey] : "",
+		title: params.t[params.pageToolGroup.titleKey],
+		subtitle: params.t[params.pageToolGroup.subtitleKey],
 		actionsLabel: params.t[params.pageToolGroup.actionsLabelKey],
 		openLabel: params.t.pageToolsOpenLabel,
 		closeLabel: params.t.pageToolsCloseLabel,
@@ -40,7 +38,7 @@ function createWorkspaceActionToolItemModel(params) {
 		statusLabel,
 		ariaLabel,
 		isDisabled: params.toolItem.isDisabled,
-		onSelect: params.toolItem.onSelect ?? null
+		onSelect: params.toolItem.onSelect
 	};
 }
 

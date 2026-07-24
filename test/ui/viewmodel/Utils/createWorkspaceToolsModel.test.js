@@ -1,9 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import {
-	LEARNING_CONTENT_SELECT_PAGE_TOOLS,
-	PAGE_TOOL_ITEM_IDS,
-	SUBJECT_SELECT_PAGE_TOOLS
-} from "../../../../src/navigation/pageTools.js";
+import { NAV_ITEMS, NAV_SCREENS } from "../../../../src/navigation/navigation.js";
 import createWorkspaceToolsModel from "../../../../src/ui/viewmodel/Utils/createWorkspaceToolsModel.js";
 
 const t = {
@@ -21,11 +17,8 @@ const t = {
 
 describe("createWorkspaceToolsModel", () => {
 	test("creates a renderable model from a direct page definition", () => {
-		const tools = createWorkspaceToolsModel({
-			pageToolGroup: LEARNING_CONTENT_SELECT_PAGE_TOOLS,
-			t
-		});
-		const importMaterialsTool = tools.items.find((item) => item.id === PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS);
+		const tools = createWorkspaceToolsModel({ pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SELECT], t, topicAreaToolItems: [], activeTopicAreaKey: null });
+		const importMaterialsTool = tools.items.find((item) => item.id === "app-import-subject-materials");
 
 		expect(tools.title).toBe("Velg læringsverktøy");
 		expect(tools.subtitle).toBe("");
@@ -41,19 +34,13 @@ describe("createWorkspaceToolsModel", () => {
 	});
 
 	test("uses only the actions defined for that page", () => {
-		const tools = createWorkspaceToolsModel({
-			pageToolGroup: SUBJECT_SELECT_PAGE_TOOLS,
-			t
-		});
+		const tools = createWorkspaceToolsModel({ pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SUBJECTS], t, topicAreaToolItems: [], activeTopicAreaKey: null });
 
 		expect(tools.title).toBe("");
-		expect(tools.items.map((item) => item.id)).toEqual([
-			PAGE_TOOL_ITEM_IDS.APP_CREATE_SUBJECT,
-			PAGE_TOOL_ITEM_IDS.APP_IMPORT_SUBJECT_MATERIALS
-		]);
+		expect(tools.items.map((item) => item.id)).toEqual(["app-create-subject", "app-import-subject-materials"]);
 	});
 
-	test("returns null without a page definition", () => {
-		expect(createWorkspaceToolsModel({ pageToolGroup: null, t })).toBeNull();
+	test("returns null for an explicitly missing page definition", () => {
+		expect(createWorkspaceToolsModel({ pageToolGroup: null, t, topicAreaToolItems: [], activeTopicAreaKey: null })).toBeNull();
 	});
 });

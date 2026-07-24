@@ -1,18 +1,9 @@
 // src/ui/viewmodel/AppNavigation/useSyncSelectedExamWithLanguage.js
 import { useEffect, useRef } from "react";
-import { NAV_SCREENS } from "../../../navigation/navGraph.js";
+import { NAV_SCREENS } from "../../../navigation/navigation.js";
 import resolveTranslatedExamId from "../Utils/resolveTranslatedExamId.js";
 
-export default function useSyncSelectedExamWithLanguage({
-	language,
-	activeScreen,
-	selectedExamId,
-	selectedSubjectId,
-	getExamByIdUseCase,
-	getExamByBaseIdAndLangUseCase,
-	onExamResolved,
-	onExamUnavailable
-}) {
+export default function useSyncSelectedExamWithLanguage({ language, activeScreen, selectedExamId, selectedSubjectId, getExamByIdUseCase, getExamByBaseIdAndLangUseCase, onExamResolved, onExamUnavailable }) {
 	const prevLanguageRef = useRef(language);
 
 	useEffect(() => {
