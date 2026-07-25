@@ -1,5 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { GLOSSARY_AUTOCOMPLETE_LIMIT, GLOSSARY_AUTOCOMPLETE_MIN_LENGTH, createGlossaryAutocompleteOptionId, createGlossaryAutocompleteSuggestions } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import { GLOSSARY_AUTOCOMPLETE_MIN_LENGTH, createGlossaryAutocompleteOptionId, createGlossaryAutocompleteSuggestions } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import { SEARCH_SUGGESTION_LIMIT } from "../../../src/ui/viewmodel/Search/searchSuggestionContract.js";
 import normalizeSearchTerm from "../../../src/ui/viewmodel/Utils/normalizeSearchTerm.js";
 
 const localizedEntries = [
@@ -101,7 +102,7 @@ describe("glossarySearchModel", () => {
 	test("limits suggestions to selected chapters and the shared result limit", () => {
 		const manyEntries = [];
 
-		for (let index = 0; index < GLOSSARY_AUTOCOMPLETE_LIMIT + 4; index += 1) {
+		for (let index = 0; index < SEARCH_SUGGESTION_LIMIT + 4; index += 1) {
 			manyEntries.push({
 				glossaryEntryKey: `network-${index}`,
 				topicAreaKey: index % 2 === 0 ? "networking" : "security-models",
@@ -117,7 +118,7 @@ describe("glossarySearchModel", () => {
 			topicAreaReferenceByKey
 		});
 
-		expect(suggestions.length).toBeLessThanOrEqual(GLOSSARY_AUTOCOMPLETE_LIMIT);
+		expect(suggestions.length).toBeLessThanOrEqual(SEARCH_SUGGESTION_LIMIT);
 		expect(suggestions.every((suggestion) => suggestion.topicAreaKey === "networking")).toBe(true);
 	});
 });

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { parse } from "@babel/parser";
 import { describe, expect, test } from "@jest/globals";
+import postcss from "postcss";
 
 const SEARCH_COMPONENT_DIRECTORY = path.resolve("src/ui/view/components/Search");
 const SEARCH_BACKDROP_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchBackdrop.jsx");
@@ -9,6 +10,9 @@ const SEARCH_SUGGESTION_LIST_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "Searc
 const SEARCH_FILTER_FIELD_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchFilterField.jsx");
 const LEGACY_GLOSSARY_SEARCH_FIELD_PATH = path.resolve("src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossarySearchField.jsx");
 const GLOSSARY_SEARCH_MODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPage/glossarySearchModel.js");
+const SEARCH_SUGGESTION_CONTRACT_PATH = path.resolve("src/ui/viewmodel/Search/searchSuggestionContract.js");
+const SHARED_SEARCH_SHEET_STYLE_PATH = path.resolve("src/ui/style/Search/search-sheet.css");
+const GLOSSARY_FOOTER_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/GlossaryFooter/glossary-footer.css");
 const GLOSSARY_VIEW_MODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPageViewModel.js");
 const GLOSSARY_TABLE_MODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPage/glossaryTableModel.js");
 const LEGACY_GLOSSARY_HIGHLIGHT_PATH = path.resolve("src/ui/view/components/GlossaryPage/Shared/HighlightedText.jsx");
@@ -21,6 +25,23 @@ const PAGE_PATHS = [
 
 function readSource(filePath) {
 	return fs.readFileSync(filePath, "utf8");
+}
+
+function readCssDeclarations(filePath, selector, property) {
+	const root = postcss.parse(readSource(filePath), { from: filePath });
+	const values = [];
+
+	root.walkRules((rule) => {
+		if (rule.selector !== selector) {
+			return;
+		}
+
+		rule.walkDecls(property, (declaration) => {
+			values.push(declaration.value);
+		});
+	});
+
+	return values;
 }
 
 function parseModule(filePath) {
@@ -115,6 +136,19 @@ describe("search experience SSOT", () => {
 			expect(imports.has("SearchFilterField")).toBe(true);
 			expect(containsJsxElement(consumerPath, "SearchFilterField")).toBe(true);
 		}
+	});
+
+	test("uses the shared six-result contract and shared popup height on Glossary", () => {
+		const suggestionContractSource = readSource(SEARCH_SUGGESTION_CONTRACT_PATH);
+		const glossaryModelSource = readSource(GLOSSARY_SEARCH_MODEL_PATH);
+		const sharedMaxHeights = readCssDeclarations(SHARED_SEARCH_SHEET_STYLE_PATH, ".search-sheet-list", "max-height");
+		const glossaryMaxHeights = readCssDeclarations(GLOSSARY_FOOTER_STYLE_PATH, ".glossary-search-footer .search-sheet-list", "max-height");
+
+		expect(suggestionContractSource).toContain("SEARCH_SUGGESTION_LIMIT = 6");
+		expect(glossaryModelSource).toContain("SEARCH_SUGGESTION_LIMIT");
+		expect(glossaryModelSource).not.toContain("GLOSSARY_AUTOCOMPLETE_LIMIT");
+		expect(sharedMaxHeights).toContain("min(46vh, 520px)");
+		expect(glossaryMaxHeights).toEqual([]);
 	});
 
 	test("keeps listbox mechanics in the shared suggestion renderer", () => {

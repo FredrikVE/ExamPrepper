@@ -27,10 +27,8 @@ jest.unstable_mockModule("react", () => ({
 	useState
 }));
 
-const {
-	SEARCH_SUGGESTION_LIMIT,
-	default: useSearchSheetModel
-} = await import("../../../../src/ui/viewmodel/Search/useSearchSheetModel.js");
+const { default: useSearchSheetModel } = await import("../../../../src/ui/viewmodel/Search/useSearchSheetModel.js");
+const { SEARCH_SUGGESTION_LIMIT } = await import("../../../../src/ui/viewmodel/Search/searchSuggestionContract.js");
 
 describe("useSearchSheetModel", () => {
 	beforeEach(() => {

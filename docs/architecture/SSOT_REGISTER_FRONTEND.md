@@ -87,7 +87,7 @@ Disse er canonical renderere eller templates. De er ikke automatisk state-SSOT-e
 | `normalizeSearchTerm(searchTerm)` | Streng string inn, trim + lower-case ut; ingen coercion |
 | `shuffleInPlace(items, random)` | In-place Fisher–Yates med eksplisitt RNG |
 
-Feature-policy som identisk-rekkefølge-rotasjon forblir lokal. Glossary eier terskel, rangering og kapittelavgrensning for autocomplete; den delte Search-familien eier ikke glossary-data. Glossary-tabell og mobilkort sender rå term- og forklaringstekst gjennom `FormattedText`; autocomplete skal ikke gjeninnføre inline søkemarkering i innholdet.
+Feature-policy som identisk-rekkefølge-rotasjon forblir lokal. `searchSuggestionContract.js` eier den delte seks-resultatgrensen, og `search-sheet.css` eier popupens høyde; feature-CSS overstyrer ikke disse. Glossary eier terskel, rangering og kapittelavgrensning for autocomplete; den delte Search-familien eier ikke glossary-data. Glossary-tabell og mobilkort sender rå term- og forklaringstekst gjennom `FormattedText`; autocomplete skal ikke gjeninnføre inline søkemarkering i innholdet.
 
 ## Feilkontrakter
 

@@ -6,8 +6,6 @@ const SEARCH_SHEET_MODES = {
 	FILTER_OPTIONS: "filterOptions"
 };
 
-export const SEARCH_SUGGESTION_LIMIT = 6;
-
 export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterValue, setFilterValue] = useState(defaultFilterValue);

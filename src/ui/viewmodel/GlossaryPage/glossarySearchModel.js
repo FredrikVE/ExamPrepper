@@ -1,8 +1,8 @@
 import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
+import { SEARCH_SUGGESTION_LIMIT } from "../Search/searchSuggestionContract.js";
 
 // src/ui/viewmodel/GlossaryPage/glossarySearchModel.js
 export const GLOSSARY_AUTOCOMPLETE_MIN_LENGTH = 1;
-export const GLOSSARY_AUTOCOMPLETE_LIMIT = 8;
 export const GLOSSARY_AUTOCOMPLETE_LIST_ID = "glossary-search-suggestions";
 
 export function createGlossaryAutocompleteSuggestions(params) {
@@ -36,7 +36,7 @@ export function createGlossaryAutocompleteSuggestions(params) {
 	const suggestions = [];
 
 	for (const rankedEntry of rankedEntries) {
-		if (suggestions.length >= GLOSSARY_AUTOCOMPLETE_LIMIT) {
+		if (suggestions.length >= SEARCH_SUGGESTION_LIMIT) {
 			break;
 		}
 

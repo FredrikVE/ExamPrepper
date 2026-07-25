@@ -291,6 +291,13 @@ describe("useGlossaryPageViewModel", () => {
 				label: "Pakke",
 				metaLabel: "Kapittel 2",
 				topicAreaKey: "networking"
+			},
+			{
+				id: "transport-layer",
+				optionId: createGlossaryAutocompleteOptionId("transport-layer"),
+				label: "Transportlag",
+				metaLabel: "Kapittel 2",
+				topicAreaKey: "networking"
 			}
 		]);
 		expect(viewModel.searchActiveDescendantId).toBe(createGlossaryAutocompleteOptionId("packet"));
