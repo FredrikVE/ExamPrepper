@@ -49,7 +49,7 @@ export default function FlipcardDeck(props) {
 				<Flipcard
 					key={props.activeCard.id}
 					cardId={props.activeCard.id}
-					term={props.activeCard.term}
+					termPresentation={props.activeCard.termPresentation}
 					definition={props.activeCard.definition}
 					isFlipped={props.isActiveCardFlipped}
 					label={props.labels.activeCardLabel(props.activeCardIndex + 1, props.cards.length)}

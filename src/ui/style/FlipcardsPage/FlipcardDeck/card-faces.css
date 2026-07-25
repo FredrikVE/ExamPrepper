@@ -83,9 +83,13 @@
 	transform: rotateY(180deg);
 }
 
-.flip-title,
-.flip-definition,
-.card-stack-title {
+.flip-title {
+	overflow-wrap: normal;
+	word-break: normal;
+	hyphens: manual;
+}
+
+.flip-definition {
 	overflow-wrap: anywhere;
 	word-break: normal;
 	hyphens: auto;
@@ -163,4 +167,17 @@
 	.card-face::before {
 		transition: none;
 	}
+}
+
+.flipcard-term-primary,
+.flipcard-term-parenthetical {
+	display: block;
+}
+
+.flipcard-term-parenthetical {
+	margin-top: 0.3em;
+	font-size: 0.48em;
+	font-weight: 800;
+	line-height: 1.12;
+	letter-spacing: -0.02em;
 }

@@ -1,4 +1,6 @@
 // src/ui/view/components/FlipcardsPage/FlipcardDeck/CardFaces.jsx
+import FlipcardTerm from "./FlipcardTerm.jsx";
+
 function getInnerClassName(isFlipped) {
 	if (isFlipped) {
 		return "card-faces-inner card-faces-inner-flipped";
@@ -7,8 +9,8 @@ function getInnerClassName(isFlipped) {
 	return "card-faces-inner";
 }
 
-function getTitleClassName(term) {
-	const compactTerm = String(term).replace(/\s+/g, "");
+function getTitleClassName(termPresentation) {
+	const compactTerm = termPresentation.primaryText.replace(/\s|\u00AD/gu, "");
 
 	if (compactTerm.length >= 18) {
 		return "flip-title flip-title-extra-long";
@@ -23,13 +25,13 @@ function getTitleClassName(term) {
 
 export default function CardFaces(props) {
 	const innerClassName = getInnerClassName(props.isFlipped);
-	const titleClassName = getTitleClassName(props.term);
+	const titleClassName = getTitleClassName(props.termPresentation);
 
 	return (
 		<div className="card-faces">
 			<div className={innerClassName}>
 				<div className="card-face card-face-front" aria-hidden={props.isFlipped}>
-					<span className={titleClassName}>{props.term}</span>
+					<FlipcardTerm className={titleClassName} presentation={props.termPresentation} />
 				</div>
 
 				<div className="card-face card-face-back" aria-hidden={!props.isFlipped}>

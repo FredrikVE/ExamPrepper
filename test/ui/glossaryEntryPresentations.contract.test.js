@@ -43,7 +43,11 @@ describe("GlossaryEntry presentation contract", () => {
 			id: glossaryEntry.glossaryEntryKey,
 			term: glossaryEntry.term.no,
 			definition: glossaryEntry.explanation.no,
-			topicAreaKey: glossaryEntry.topicAreaKey
+			topicAreaKey: glossaryEntry.topicAreaKey,
+			termPresentation: {
+				primaryText: glossaryEntry.term.no,
+				parentheticalText: null
+			}
 		});
 
 		expect(matchPair).toEqual({

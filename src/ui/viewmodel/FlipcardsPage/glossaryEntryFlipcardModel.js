@@ -1,13 +1,38 @@
 // src/ui/viewmodel/FlipcardsPage/glossaryEntryFlipcardModel.js
+import createFlipcardTermPresentation from "./createFlipcardTermPresentation.js";
+import { createNorwegianCompoundLexicon } from "./norwegianCompoundSegmentation.js";
+
 export function createFlipcardsFromGlossaryEntries(glossaryEntries, language) {
-	const flipcards = [];
+	const baseFlipcards = [];
+	const terms = [];
+	const supportingTexts = [];
 
 	for (const glossaryEntry of glossaryEntries) {
-		flipcards.push({
+		const term = resolveLocalizedGlossaryEntryText(glossaryEntry.term, language);
+		const definition = resolveLocalizedGlossaryEntryText(glossaryEntry.explanation, language);
+
+		baseFlipcards.push({
 			id: glossaryEntry.glossaryEntryKey,
-			term: resolveLocalizedGlossaryEntryText(glossaryEntry.term, language),
-			definition: resolveLocalizedGlossaryEntryText(glossaryEntry.explanation, language),
+			term,
+			definition,
 			topicAreaKey: glossaryEntry.topicAreaKey
+		});
+		terms.push(term);
+		supportingTexts.push(definition);
+	}
+
+	const compoundLexicon = language === "no"
+		? createNorwegianCompoundLexicon({
+			terms,
+			supportingTexts
+		})
+		: null;
+	const flipcards = [];
+
+	for (const baseFlipcard of baseFlipcards) {
+		flipcards.push({
+			...baseFlipcard,
+			termPresentation: createFlipcardTermPresentation(baseFlipcard.term, compoundLexicon)
 		});
 	}
 

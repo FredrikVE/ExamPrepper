@@ -1,3 +1,4 @@
+// test/ui/viewmodel/FlipcardsPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
@@ -49,9 +50,9 @@ const glossaryEntries = [
 ];
 
 const cards = [
-	{ id: "card-a", term: "A", definition: "A-definition", topicAreaKey: "kryptografi" },
-	{ id: "card-b", term: "B", definition: "B-definition", topicAreaKey: "kryptografi" },
-	{ id: "card-c", term: "C", definition: "C-definition", topicAreaKey: "iam" }
+	{ id: "card-a", term: "A", definition: "A-definition", topicAreaKey: "kryptografi", termPresentation: { primaryText: "A", parentheticalText: null } },
+	{ id: "card-b", term: "B", definition: "B-definition", topicAreaKey: "kryptografi", termPresentation: { primaryText: "B", parentheticalText: null } },
+	{ id: "card-c", term: "C", definition: "C-definition", topicAreaKey: "iam", termPresentation: { primaryText: "C", parentheticalText: null } }
 ];
 
 const topicAreas = [

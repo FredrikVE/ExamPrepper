@@ -159,7 +159,7 @@ export default function Flipcard(props) {
 					<span aria-hidden="true">✓</span>
 				</button>
 
-				<CardFaces term={props.term} definition={props.definition} isFlipped={props.isFlipped} />
+				<CardFaces termPresentation={props.termPresentation} definition={props.definition} isFlipped={props.isFlipped} />
 			</div>
 		</motion.article>
 	);
