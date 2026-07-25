@@ -32,7 +32,6 @@ export default function GlossaryFooter({
 	onFocusSearch,
 	onClearSearch,
 	onOpenFilterOptions,
-	onCloseFilterOptions,
 	onSelectFilterOption,
 	onMoveSearchSelectionDown,
 	onMoveSearchSelectionUp,
@@ -72,7 +71,6 @@ export default function GlossaryFooter({
 					onFocusSearch={onFocusSearch}
 					onClearSearch={onClearSearch}
 					onOpenFilterOptions={onOpenFilterOptions}
-					onCloseFilterOptions={onCloseFilterOptions}
 					onSelectFilterOption={onSelectFilterOption}
 					onMoveSearchSelectionDown={onMoveSearchSelectionDown}
 					onMoveSearchSelectionUp={onMoveSearchSelectionUp}

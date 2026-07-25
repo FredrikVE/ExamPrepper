@@ -33,7 +33,6 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		selectFilterOption: selectTopicAreaFilterOption,
 		openSearchSuggestions: openExamSearchSuggestions,
 		openFilterOptions: openTopicAreaOptions,
-		openFooterSheet: openExamFooterSheet,
 		changeFooterSheetOpen: changeExamFooterSheetOpen,
 		closeSearchSheet: closeExamSearchSheet
 	} = examSearchSheet;
@@ -235,18 +234,21 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 
 	const selectExam = useCallback((examId) => {
 		closeExamSearchSheet();
+		changeExamFooterSheetOpen(false);
 		onSelectExam(examId);
-	}, [closeExamSearchSheet, onSelectExam]);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectExam]);
 
 	const selectFlipcardDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
+		changeExamFooterSheetOpen(false);
 		onSelectFlipcardDeck(nextTopicAreaKey);
-	}, [closeExamSearchSheet, onSelectFlipcardDeck]);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectFlipcardDeck]);
 
 	const selectMatchCardsDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
+		changeExamFooterSheetOpen(false);
 		onSelectMatchCardsDeck(nextTopicAreaKey);
-	}, [closeExamSearchSheet, onSelectMatchCardsDeck]);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectMatchCardsDeck]);
 
 	const selectSearchSuggestion = useCallback((suggestionId) => {
 		if (isFlipcardsContentActive) {
@@ -344,7 +346,6 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		openExamSearchSuggestions,
 		openExamCategoryOptions: openTopicAreaOptions,
 		openTopicAreaOptions,
-		openExamFooterSheet,
 		changeExamFooterSheetOpen,
 		closeExamSearchSheet,
 		selectExam,

@@ -7,8 +7,7 @@
 	display: contents;
 }
 
-.page-tools-mobile-sheet-controls,
-.page-tools-mobile-sheet-search-content {
+.page-tools-mobile-sheet-controls {
 	display: grid;
 	gap: var(--space-2);
 	width: 100%;
@@ -31,9 +30,5 @@
 	.page-tools-mobile-sheet-controls > * {
 		width: 100%;
 		padding: 0;
-	}
-
-	.page-tools-mobile-sheet-search-content:empty {
-		display: none;
 	}
 }

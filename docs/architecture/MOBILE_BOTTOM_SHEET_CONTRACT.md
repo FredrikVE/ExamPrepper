@@ -1,8 +1,8 @@
 # Mobile bottom sheet-kontrakt
 
 Oppdatert: 2026-07-25
-Verifisert patch-base: `examprepper-frontend-safe-20260725-100551.zip`
-Base-SHA-256: `c8a0abfc9f24267ffe26d3417ff9b193b21905da4b588d78d4996c7ceb9f2e47`
+Verifisert patch-base: `examprepper-frontend-safe-20260725-130435.zip`
+Base-SHA-256: `fa5858e36dd20fbe213de529e1dc4955a2a38c92b2b017f0294b1e357518a7e2`
 
 ## Canonical eier
 
@@ -19,7 +19,8 @@ DockedMobileBottomSheet
 ├── safe-area
 ├── canonical peek-høyde
 ├── canonical grip-høyde
-├── peek- og expanded-slots
+├── peek-, docked-overlay- og expanded-slots
+├── docked overlay-plassering over peeken
 ├── expanded synlighet og inert-state
 ├── expanded scrollområde
 └── reduced-motion
@@ -33,8 +34,11 @@ GlossaryMobileChapterSheet
 FlipcardsMobileFooterSheet
 ```
 
-De eier innhold, feature-handlinger og lokal åpen-state. De eier ikke sheetets
-transform, collapsed-height, grip-geometri, scroll-policy eller skjulemekanisme.
+De eier innhold, feature-handlinger og lokal åpen-state. Søk og filter kan
+brukes i både docked og åpen tilstand uten å endre sheetets åpen-state. Bare
+grip, chevron og drag åpner eller lukker sheetet. Feature-komponentene eier
+ikke sheetets transform, collapsed-height, grip-geometri, overlay-plassering,
+scroll-policy eller skjulemekanisme.
 
 ## Slot-kontrakt
 
@@ -49,11 +53,17 @@ transform, collapsed-height, grip-geometri, scroll-policy eller skjulemekanisme.
 	closeLabel={closeLabel}
 	peekLabel={peekLabel}
 	peekContent={peekContent}
+	dockedOverlayContent={dockedOverlayContent}
 	expandedContent={expandedContent}
 />
 ```
 
 `peekContent` er synlig både når sheetet er docked og når det er åpent.
+
+`dockedOverlayContent` er en eksplisitt, valgfri overflate for interaktivt
+søk- og filterinnhold i docked tilstand. Den canonical komponenten plasserer
+overflaten over peeken. Når sheetet åpnes, renderer feature-komponenten det
+samme søk- eller filterinnholdet gjennom `expandedContent`.
 
 `expandedContent` forblir montert for stabil geometri. Når sheetet er docked,
 er slotten visuelt skjult, uten pointer-events, `aria-hidden` og `inert`. Når

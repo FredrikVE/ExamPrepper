@@ -155,7 +155,7 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-07-24 | Subject-switcher avledes én gang i `createSubjectSwitcherModel` og brukes av desktop og mobil. UI lager aldri et falskt fagobjekt. `empty` betyr ingen fag; `unselected` betyr fag finnes, men ingen er valgt. |
 | 2026-07-24 | «SSOT» reserveres for autoritativ state, policy, konfigurasjon eller token-eierskap. Delte renderere dokumenteres som canonical UI-implementasjoner, ikke som state-SSOT-er. |
 | 2026-07-24 | Komponentarkitekturen følger pragmatisk Atomic Design: UI-primitiver → sammensatte komponenter → feature-komponenter → app-shell/sidemal → Page. Nivåene beskriver ansvar og avhengighetsretning, ikke obligatoriske mapper. Lik markup alene er ikke grunnlag for konsolidering. |
-| 2026-07-25 | `DockedMobileBottomSheet` er canonical eier av docked geometri, safe-area, grip/drag, peek/expanded-slots, expanded synlighet og scroll. Feature-sheets eier innhold og handlinger, men overstyrer ikke `.mobile-bottom-sheet-*`-internals eller collapsed-height. |
+| 2026-07-25 | `DockedMobileBottomSheet` er canonical eier av docked geometri, safe-area, grip/drag, peek/docked-overlay/expanded-slots, expanded synlighet og scroll. Søk og filter endrer ikke sheetets åpen-state; bare grip, chevron og drag gjør det. Feature-sheets eier innhold og handlinger, men overstyrer ikke `.mobile-bottom-sheet-*`-internals eller collapsed-height. |
 | (backlog) | Navngitt z-indeksskala i `Tokens.css`. Rå app-lag i komponent-CSS fases ut; lokale stacking-verdier tokeniseres ikke automatisk. |
 
 ---
@@ -570,9 +570,11 @@ DockedMobileBottomSheet
 ```
 
 `DockedMobileBottomSheet` eier sheet-struktur og geometri. Den mottar eksplisitte
-`peekContent`- og `expandedContent`-slots. Peeken er alltid synlig; expanded-slotten
-er skjult, `aria-hidden` og `inert` når sheetet er docked, og synlig og scrollbart
-når sheetet er åpent. Feature-CSS overstyrer ikke interne
+`peekContent`-, `dockedOverlayContent`- og `expandedContent`-slots. Peeken er
+alltid synlig. Docked-overlay-slotten plasserer interaktivt søk-/filterinnhold
+over peeken uten å endre åpen-state. Expanded-slotten er skjult, `aria-hidden`
+og `inert` når sheetet er docked, og synlig og scrollbart når sheetet er
+åpent. Bare grip, chevron og drag endrer åpen-state. Feature-CSS overstyrer ikke interne
 `.mobile-bottom-sheet-*`-selectors eller lokal collapsed-height.
 `PageToolsMobileSheet` eier sidehandlinger.
 `GlossaryMobileChapterSheet` eier søk, filter og kapittelvalg.

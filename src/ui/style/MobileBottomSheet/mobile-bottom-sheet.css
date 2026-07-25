@@ -3,6 +3,33 @@
 	display: none;
 }
 
+.mobile-bottom-sheet-docked-overlay {
+	--mobile-sheet-docked-overlay-max-height: min(46svh, 420px);
+
+	position: absolute;
+	bottom: calc(var(--mobile-sheet-peek-height) + env(safe-area-inset-bottom) + var(--space-2));
+	left: 50%;
+	z-index: 1;
+	display: grid;
+	width: min(calc(100% - var(--space-4) - var(--space-4)), var(--mobile-sheet-content-max-width));
+	max-height: var(--mobile-sheet-docked-overlay-max-height);
+	overflow: hidden;
+	border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+	border-radius: var(--radius-lg);
+	background: color-mix(in srgb, var(--panel-strong) 96%, transparent);
+	box-shadow: var(--shadow-heavy);
+	backdrop-filter: var(--blur-panel);
+	pointer-events: auto;
+	transform: translateX(-50%);
+	-webkit-backdrop-filter: var(--blur-panel);
+}
+
+.mobile-bottom-sheet-docked-overlay > * {
+	width: 100%;
+	max-height: var(--mobile-sheet-docked-overlay-max-height);
+	margin: 0;
+}
+
 .mobile-bottom-sheet-popup {
 	box-sizing: border-box;
 	display: flex;

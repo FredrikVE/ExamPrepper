@@ -42,7 +42,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectFilterOption: selectFacultyFilterOption,
 		openSearchSuggestions: openSubjectSearchSuggestions,
 		openFilterOptions: openSubjectFacultyOptions,
-		openFooterSheet: openSubjectFooterSheet,
 		changeFooterSheetOpen: changeSubjectFooterSheetOpen,
 		closeSearchSheet: closeSubjectSearchSheet
 	} = subjectSearchSheet;
@@ -113,8 +112,9 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 
 	const selectSubject = useCallback((subjectId) => {
 		closeSubjectSearchSheet();
+		changeSubjectFooterSheetOpen(false);
 		onSelectSubject(subjectId);
-	}, [closeSubjectSearchSheet, onSelectSubject]);
+	}, [changeSubjectFooterSheetOpen, closeSubjectSearchSheet, onSelectSubject]);
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
@@ -160,7 +160,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectFacultyFilterOption,
 		openSubjectSearchSuggestions,
 		openSubjectFacultyOptions,
-		openSubjectFooterSheet,
 		changeSubjectFooterSheetOpen,
 		closeSubjectSearchSheet,
 		selectSubject

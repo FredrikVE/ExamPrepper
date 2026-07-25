@@ -16,7 +16,11 @@ export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
 
 	const renderSearchContent = () => {
-		if (!viewModel.isSearchSheetOpen) {
+		const hasSearchContent = viewModel.isFilterOptionsMode
+			? viewModel.facultyFilterOptions.length > 0
+			: viewModel.searchSuggestions.length > 0;
+
+		if (!viewModel.isSearchSheetOpen || !hasSearchContent) {
 			return null;
 		}
 
@@ -88,7 +92,6 @@ export default function SubjectSelectPage({ viewModel }) {
 				renderControls={renderSearchControls}
 				renderSearchContent={renderSearchContent}
 				isSheetOpen={viewModel.isFooterSheetOpen}
-				onOpenSheet={viewModel.openSubjectFooterSheet}
 				onSheetOpenChange={viewModel.changeSubjectFooterSheetOpen}
 			/>
 		</Footer>

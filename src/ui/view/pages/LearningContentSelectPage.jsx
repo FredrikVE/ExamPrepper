@@ -17,7 +17,11 @@ export default function LearningContentSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeExamSearchSheet);
 
 	const renderSearchContent = () => {
-		if (!viewModel.isSearchSheetOpen) {
+		const hasSearchContent = viewModel.isFilterOptionsMode
+			? viewModel.categoryFilterOptions.length > 0
+			: viewModel.searchSuggestions.length > 0;
+
+		if (!viewModel.isSearchSheetOpen || !hasSearchContent) {
 			return null;
 		}
 
@@ -130,7 +134,6 @@ export default function LearningContentSelectPage({ viewModel }) {
 				renderControls={renderSearchControls}
 				renderSearchContent={renderSearchContent}
 				isSheetOpen={viewModel.isFooterSheetOpen}
-				onOpenSheet={viewModel.openExamFooterSheet}
 				onSheetOpenChange={viewModel.changeExamFooterSheetOpen}
 			/>
 		</Footer>

@@ -65,6 +65,7 @@ export default function FlipcardsMobileFooterSheet(props) {
 				closeLabel={props.labels.closeToolMenuLabel}
 				peekLabel={props.labels.toolMenuLabel}
 				peekContent={peekContent}
+				dockedOverlayContent={null}
 				expandedContent={expandedContent}
 			/>
 		</div>

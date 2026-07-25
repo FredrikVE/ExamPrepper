@@ -57,7 +57,6 @@ export default function GlossaryPage({ viewModel }) {
 			onFocusSearch={viewModel.closeGlossarySearchFilterOptions}
 			onClearSearch={viewModel.clearGlossarySearch}
 			onOpenFilterOptions={viewModel.openGlossarySearchFilterOptions}
-			onCloseFilterOptions={viewModel.closeGlossarySearchFilterOptions}
 			onSelectFilterOption={viewModel.selectGlossarySearchScope}
 			onMoveSearchSelectionDown={viewModel.moveSearchSelectionDown}
 			onMoveSearchSelectionUp={viewModel.moveSearchSelectionUp}

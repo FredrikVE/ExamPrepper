@@ -21,6 +21,12 @@ export default function DockedMobileBottomSheet(props) {
 			data-dragging={dragInteraction.isDragging ? "true" : "false"}
 			style={{ "--mobile-bottom-sheet-drag-offset": `${dragInteraction.dragOffsetY}px` }}
 		>
+			{!props.isOpen && props.dockedOverlayContent !== null ? (
+				<div className="mobile-bottom-sheet-docked-overlay">
+					{props.dockedOverlayContent}
+				</div>
+			) : null}
+
 			<section id={props.contentId} className="mobile-bottom-sheet-popup" aria-label={props.peekLabel} role="region">
 				<div className="mobile-bottom-sheet-content">
 					<h2 className="sr-only">{props.title}</h2>

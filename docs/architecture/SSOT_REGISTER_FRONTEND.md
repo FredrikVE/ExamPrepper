@@ -58,7 +58,7 @@ Base-SHA-256: `f63c174ee8c18a046723f0d6c7a41c365fc3c66ebd3dc0c19204f165d06f315d`
 | `WorkspaceState` | Uttømmende rendering av loading/error/empty/content |
 | `Header` | Feature-fri, slot-basert app-shell-header og geometri |
 | `Footer` | Canonical app-shell-footer |
-| `DockedMobileBottomSheet` | Eneste dockede mobile bottom-sheet-implementasjon: struktur, peek/expanded-slots, drag, safe-area, synlighet og scroll |
+| `DockedMobileBottomSheet` | Eneste dockede mobile bottom-sheet-implementasjon: struktur, peek/docked-overlay/expanded-slots, drag, safe-area, synlighet og scroll |
 | `WorkSpaceCard` | Delt innholdsflate inni workspace |
 | `AppErrorBoundary` | Root-grense for uventet render-/lifecycle-crash |
 

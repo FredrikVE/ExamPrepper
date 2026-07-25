@@ -28,18 +28,14 @@ export default function PageToolsMobileFooterSheet(props) {
 	}
 
 	const sheetId = `page-tools-mobile-bottom-sheet-${props.tools.id}`;
+	const searchContent = props.renderSearchContent();
 	const peekContent = (
-		<>
-			<div className="page-tools-mobile-sheet-search-content">
-				{props.renderSearchContent()}
-			</div>
-
-			<div className="page-tools-mobile-sheet-controls" onFocusCapture={props.onOpenSheet} onPointerDownCapture={props.onOpenSheet}>
-				{props.renderControls()}
-			</div>
-		</>
+		<div className="page-tools-mobile-sheet-controls">
+			{props.renderControls()}
+		</div>
 	);
-	const expandedContent = (
+	const dockedOverlayContent = props.isSheetOpen ? null : searchContent;
+	const expandedContent = props.isSheetOpen && searchContent !== null ? searchContent : (
 		<ToolCardGrid
 			surface={TOOL_CARD_SURFACES.PAGE_TOOLS_MOBILE}
 			items={props.tools.items}
@@ -64,6 +60,7 @@ export default function PageToolsMobileFooterSheet(props) {
 				closeLabel={props.tools.closeLabel}
 				peekLabel={props.tools.mobileHandleLabel}
 				peekContent={peekContent}
+				dockedOverlayContent={dockedOverlayContent}
 				expandedContent={expandedContent}
 			/>
 		</div>

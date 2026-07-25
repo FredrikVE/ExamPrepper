@@ -142,6 +142,38 @@ function collectClassElementAttributes(filePath, className) {
 	return matches;
 }
 
+function containsIdentifierCall(ast, identifierName) {
+	let found = false;
+
+	visitAst(ast, (node) => {
+		if (
+			node.type === "CallExpression"
+			&& node.callee.type === "Identifier"
+			&& node.callee.name === identifierName
+		) {
+			found = true;
+		}
+	});
+
+	return found;
+}
+
+function containsJsxAttribute(ast, attributeName) {
+	let found = false;
+
+	visitAst(ast, (node) => {
+		if (
+			node.type === "JSXAttribute"
+			&& node.name.type === "JSXIdentifier"
+			&& node.name.name === attributeName
+		) {
+			found = true;
+		}
+	});
+
+	return found;
+}
+
 function containsPropsMember(node, propertyName) {
 	let found = false;
 
@@ -184,17 +216,23 @@ describe("DockedMobileBottomSheet SSOT", () => {
 		expect(popupHeight).toContain("var(--mobile-sheet-top-clearance)");
 	});
 
-	test("owns peek, expanded visibility, accessibility and scrolling", () => {
+	test("owns peek, docked overlay, expanded visibility, accessibility and scrolling", () => {
 		const peekElements = collectClassElementAttributes(DOCKED_SHEET_PATH, "mobile-bottom-sheet-peek-content");
+		const dockedOverlayElements = collectClassElementAttributes(DOCKED_SHEET_PATH, "mobile-bottom-sheet-docked-overlay");
 		const expandedElements = collectClassElementAttributes(DOCKED_SHEET_PATH, "mobile-bottom-sheet-expanded-content");
 
 		expect(peekElements).toHaveLength(1);
+		expect(dockedOverlayElements).toHaveLength(1);
 		expect(expandedElements).toHaveLength(1);
 		expect(containsPropsMember(peekElements[0].node, "peekContent")).toBe(true);
+		expect(containsPropsMember(dockedOverlayElements[0].node, "dockedOverlayContent")).toBe(true);
 		expect(containsPropsMember(expandedElements[0].node, "expandedContent")).toBe(true);
 		expect(expandedElements[0].attributeNames.has("aria-hidden")).toBe(true);
 		expect(expandedElements[0].attributeNames.has("inert")).toBe(true);
 
+		expect(readDeclaration(MOBILE_BOTTOM_SHEET_PATH, ".mobile-bottom-sheet-docked-overlay", "position")).toBe("absolute");
+		expect(readDeclaration(MOBILE_BOTTOM_SHEET_PATH, ".mobile-bottom-sheet-docked-overlay", "bottom")).toContain("var(--mobile-sheet-peek-height)");
+		expect(readDeclaration(MOBILE_BOTTOM_SHEET_PATH, ".mobile-bottom-sheet-docked-overlay", "pointer-events")).toBe("auto");
 		expect(readDeclaration(MOBILE_BOTTOM_SHEET_PATH, ".mobile-bottom-sheet-expanded-content", "visibility")).toBe("hidden");
 		expect(readDeclaration(MOBILE_BOTTOM_SHEET_PATH, ".mobile-bottom-sheet-expanded-content", "overflow-y")).toBe("auto");
 		expect(readDeclaration(
@@ -211,10 +249,22 @@ describe("DockedMobileBottomSheet SSOT", () => {
 			expect(attributeSets).toHaveLength(1);
 			expect(attributeSets[0].selfClosing).toBe(true);
 			expect(attributeSets[0].names.has("peekContent")).toBe(true);
+			expect(attributeSets[0].names.has("dockedOverlayContent")).toBe(true);
 			expect(attributeSets[0].names.has("expandedContent")).toBe(true);
 			expect(attributeSets[0].names.has("popupClassName")).toBe(false);
 			expect(attributeSets[0].names.has("contentClassName")).toBe(false);
 		}
+	});
+
+	test("keeps search and filter interaction independent from the open sheet state", () => {
+		const pageToolsAst = parseJsxFile(CONSUMER_PATHS[0]);
+		const glossaryAst = parseJsxFile(CONSUMER_PATHS[1]);
+
+		expect(containsPropsMember(pageToolsAst, "onOpenSheet")).toBe(false);
+		expect(containsJsxAttribute(pageToolsAst, "onFocusCapture")).toBe(false);
+		expect(containsJsxAttribute(pageToolsAst, "onPointerDownCapture")).toBe(false);
+		expect(containsIdentifierCall(glossaryAst, "setIsOpen")).toBe(false);
+		expect(containsJsxAttribute(glossaryAst, "onPointerDownCapture")).toBe(false);
 	});
 
 	test("keeps shared internals out of feature CSS", () => {
