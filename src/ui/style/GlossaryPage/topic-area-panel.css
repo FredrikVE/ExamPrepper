@@ -6,7 +6,6 @@
 	flex-direction: column;
 	overflow: hidden;
 	padding: 16px 10px 14px 16px;
-	border-right: 1px solid var(--line);
 }
 
 .glossary-topic-area-navigation {
@@ -41,12 +40,6 @@
 	box-shadow: none;
 	scrollbar-gutter: stable;
 	scrollbar-width: thin;
-}
-
-.glossary-topic-area-list--search {
-	grid-auto-rows: minmax(76px, auto);
-	align-content: start;
-	flex: 1;
 }
 
 .glossary-topic-area-button {
@@ -155,17 +148,11 @@
 	text-overflow: ellipsis;
 }
 
-.glossary-topic-area-item__subtitle,
-.glossary-topic-area-item__match-count {
+.glossary-topic-area-item__subtitle {
 	color: var(--text-muted);
 	font-size: 12px;
 	font-weight: 560;
 	line-height: 1.35;
-}
-
-.glossary-topic-area-item__match-count {
-	color: var(--accent);
-	font-weight: 700;
 }
 
 .glossary-topic-area-item__count {

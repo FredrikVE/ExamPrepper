@@ -9,10 +9,11 @@ import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerV
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import LearningContentHeader from "../components/LearningContentHeader/LearningContentHeader.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 
 export default function GlossaryPage({ viewModel }) {
-	useSearchSheetEscapeKey(viewModel.isSearchFilterOptionsOpen, viewModel.closeGlossarySearchFilterOptions);
+	useSearchSheetEscapeKey(viewModel.isSearchPopupOpen, viewModel.closeGlossarySearchPopup);
 
 	const presentationMode = usePresentationMode();
 	const isMobile = presentationMode === PRESENTATION_MODE.MOBILE;
@@ -36,16 +37,18 @@ export default function GlossaryPage({ viewModel }) {
 			searchLabel={viewModel.searchLabel}
 			searchClearLabel={viewModel.searchClearLabel}
 			searchKeyboardHint={viewModel.searchKeyboardHint}
-			searchSummaryLabel={viewModel.searchSummaryLabel}
-			searchScope={viewModel.glossarySearchScope}
-			searchScopeLabel={viewModel.searchScopeLabel}
-			searchScopeAriaLabel={viewModel.searchScopeAriaLabel}
-			searchScopeOptions={viewModel.searchScopeOptions}
+			searchSuggestionListAriaLabel={viewModel.searchSuggestionListAriaLabel}
+			chapterFilterValue={viewModel.chapterFilterValue}
+			chapterFilterLabel={viewModel.chapterFilterLabel}
+			searchFilterAriaLabel={viewModel.searchFilterAriaLabel}
+			chapterFilterOptions={viewModel.chapterFilterOptions}
+			isSearchPopupOpen={viewModel.isSearchPopupOpen}
 			isSearchFilterOptionsOpen={viewModel.isSearchFilterOptionsOpen}
+			isSearchAutocompleteActive={viewModel.isSearchAutocompleteActive}
 			isSearching={viewModel.isSearching}
-			isSearchComboboxActive={viewModel.isSearchComboboxActive}
+			autocompleteSuggestions={viewModel.autocompleteSuggestions}
+			autocompleteListId={viewModel.autocompleteListId}
 			searchActiveDescendantId={viewModel.searchActiveDescendantId}
-			topicAreaListId={viewModel.topicAreaListId}
 			allTopicAreaListItem={viewModel.allTopicAreaListItem}
 			topicAreaListItems={viewModel.topicAreaListItems}
 			topicAreaListAriaLabel={viewModel.pageTitle}
@@ -54,11 +57,12 @@ export default function GlossaryPage({ viewModel }) {
 			sheetOpenLabel={viewModel.mobileChapterSheetOpenLabel}
 			sheetCloseLabel={viewModel.mobileChapterSheetCloseLabel}
 			onSearchTermChange={viewModel.changeGlossarySearchTerm}
-			onFocusSearch={viewModel.closeGlossarySearchFilterOptions}
+			onFocusSearch={viewModel.focusGlossarySearch}
 			onClearSearch={viewModel.clearGlossarySearch}
+			onRequestClose={viewModel.closeGlossarySearchPopup}
 			onOpenFilterOptions={viewModel.openGlossarySearchFilterOptions}
-			onCloseFilterOptions={viewModel.closeGlossarySearchFilterOptions}
-			onSelectFilterOption={viewModel.selectGlossarySearchScope}
+			onSelectFilterOption={viewModel.selectGlossaryChapterFilter}
+			onSelectSearchSuggestion={viewModel.selectAutocompleteSuggestion}
 			onMoveSearchSelectionDown={viewModel.moveSearchSelectionDown}
 			onMoveSearchSelectionUp={viewModel.moveSearchSelectionUp}
 			onOpenSearchKeyboardSelection={viewModel.openSearchKeyboardSelection}
@@ -66,12 +70,20 @@ export default function GlossaryPage({ viewModel }) {
 		/>
 	) : null;
 
+	const overlay = (
+		<SearchBackdrop
+			isOpen={viewModel.isSearchPopupOpen}
+			closeLabel={viewModel.searchCloseLabel}
+			onClose={viewModel.closeGlossarySearchPopup}
+		/>
+	);
+
 	return (
 		<WorkspaceScaffold
 			className="learning-content-workspace glossary-workspace"
 			header={header}
 			footer={footer}
-			overlay={null}
+			overlay={overlay}
 			scrollToTopRequestId={null}
 		>
 			<section className="glossary-page" aria-labelledby="glossary-page-title">
@@ -90,8 +102,6 @@ export default function GlossaryPage({ viewModel }) {
 						<>
 							{!isMobile && (
 								<TopicAreaPanel
-									isSearching={viewModel.isSearching}
-									topicAreaListId={viewModel.topicAreaListId}
 									allTopicAreaListItem={viewModel.allTopicAreaListItem}
 									topicAreaListItems={viewModel.topicAreaListItems}
 									topicAreaListAriaLabel={viewModel.pageTitle}

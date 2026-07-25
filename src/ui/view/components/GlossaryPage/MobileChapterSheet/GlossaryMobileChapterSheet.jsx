@@ -1,142 +1,91 @@
 // src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx
 import { useState } from "react";
 import DockedMobileBottomSheet from "../../MobileBottomSheet/DockedMobileBottomSheet.jsx";
-import FilterOptionList from "../../Search/FilterOptionList.jsx";
-import GlossarySearchField from "../TopicAreaPanel/GlossarySearchField.jsx";
+import SearchSheetBody from "../../Search/SearchSheetBody.jsx";
+import SearchFilterField from "../../Search/SearchFilterField.jsx";
 import GlossaryTopicAreaNavigationList from "../TopicAreaPanel/GlossaryTopicAreaNavigationList.jsx";
-import GlossaryTopicAreaSearchList from "../TopicAreaPanel/GlossaryTopicAreaSearchList.jsx";
 
-const MOBILE_TOPIC_AREA_LIST_ID = "glossary-mobile-topic-area-list";
-
-export default function GlossaryMobileChapterSheet({
-	searchTerm,
-	searchPlaceholder,
-	searchLabel,
-	searchClearLabel,
-	searchKeyboardHint,
-	searchSummaryLabel,
-	searchScope,
-	searchScopeLabel,
-	searchScopeAriaLabel,
-	searchScopeOptions,
-	isSearchFilterOptionsOpen,
-	isSearching,
-	isSearchComboboxActive,
-	searchActiveDescendantId,
-	allTopicAreaListItem,
-	topicAreaListItems,
-	topicAreaListAriaLabel,
-	sheetTitle,
-	sheetSubtitle,
-	sheetOpenLabel,
-	sheetCloseLabel,
-	onSearchTermChange,
-	onFocusSearch,
-	onClearSearch,
-	onOpenFilterOptions,
-	onCloseFilterOptions,
-	onSelectFilterOption,
-	onMoveSearchSelectionDown,
-	onMoveSearchSelectionUp,
-	onOpenSearchKeyboardSelection,
-	onSelectTopicArea
-}) {
+export default function GlossaryMobileChapterSheet(props) {
 	const [isOpen, setIsOpen] = useState(false);
-
-	const openSheet = () => {
-		setIsOpen(true);
-	};
-
-	const focusSearch = () => {
-		setIsOpen(true);
-		onFocusSearch();
-	};
-
-	const changeSearchTerm = (nextSearchTerm) => {
-		setIsOpen(true);
-		onSearchTermChange(nextSearchTerm);
-	};
-
-	const openFilterOptions = () => {
-		setIsOpen(true);
-		onOpenFilterOptions();
-	};
-
-	const changeSheetOpen = (nextIsOpen) => {
-		setIsOpen(nextIsOpen);
-
-		if (!nextIsOpen) {
-			onCloseFilterOptions();
-		}
-	};
+	const hasSearchContent = props.isSearchFilterOptionsOpen
+		? props.chapterFilterOptions.length > 0
+		: props.autocompleteSuggestions.length > 0;
+	const searchContent = props.isSearchPopupOpen && hasSearchContent ? (
+		<SearchSheetBody
+			isFilterOptionsMode={props.isSearchFilterOptionsOpen}
+			searchSuggestions={props.autocompleteSuggestions}
+			suggestionListId={props.autocompleteListId}
+			suggestionListAriaLabel={props.searchSuggestionListAriaLabel}
+			activeSuggestionId={props.searchActiveDescendantId}
+			filterOptions={props.chapterFilterOptions}
+			selectedFilterValue={props.chapterFilterValue}
+			onSelectSearchSuggestion={props.onSelectSearchSuggestion}
+			onSelectFilterOption={props.onSelectFilterOption}
+		/>
+	) : null;
+	const peekContent = (
+		<div className="glossary-mobile-chapter-sheet__search">
+			<SearchFilterField
+				className={null}
+				searchTerm={props.searchTerm}
+				searchPlaceholder={props.searchPlaceholder}
+				searchLabel={props.searchLabel}
+				onSearchTermChange={props.onSearchTermChange}
+				onFocusSearch={props.onFocusSearch}
+				onRequestClose={props.onRequestClose}
+				filterButtonLabel={props.chapterFilterLabel}
+				filterButtonAriaLabel={props.searchFilterAriaLabel}
+				isFilterOptionsOpen={props.isSearchFilterOptionsOpen}
+				onOpenFilterOptions={props.onOpenFilterOptions}
+				clearAction={props.isSearching ? {
+					label: props.searchClearLabel,
+					onClear: props.onClearSearch
+				} : null}
+				autocomplete={{
+					isActive: props.isSearchAutocompleteActive,
+					isPopupOpen: props.isSearchPopupOpen,
+					listId: props.autocompleteListId,
+					activeDescendantId: props.searchActiveDescendantId,
+					descriptionId: "glossary-mobile-search-meta",
+					keyboardHint: isOpen ? props.searchKeyboardHint : null,
+					onMoveDown: props.onMoveSearchSelectionDown,
+					onMoveUp: props.onMoveSearchSelectionUp,
+					onSelectActive: props.onOpenSearchKeyboardSelection
+				}}
+			/>
+		</div>
+	);
+	const dockedOverlayContent = isOpen ? null : searchContent;
+	const expandedContent = isOpen && searchContent !== null ? (
+		<div className="glossary-mobile-chapter-sheet__body">
+			{searchContent}
+		</div>
+	) : (
+		<div className="glossary-mobile-chapter-sheet__body">
+			<GlossaryTopicAreaNavigationList
+				ariaLabel={props.topicAreaListAriaLabel}
+				allTopicAreaListItem={props.allTopicAreaListItem}
+				items={props.topicAreaListItems}
+				onSelectTopicArea={props.onSelectTopicArea}
+			/>
+		</div>
+	);
 
 	return (
-		<div className="glossary-mobile-chapter-sheet">
+		<div className="glossary-mobile-chapter-sheet" data-open={isOpen ? "true" : "false"}>
 			<DockedMobileBottomSheet
 				isOpen={isOpen}
-				onOpenChange={changeSheetOpen}
+				onOpenChange={setIsOpen}
 				contentId="glossary-mobile-chapter-sheet"
-				title={sheetTitle}
-				subtitle={sheetSubtitle}
-				openLabel={sheetOpenLabel}
-				closeLabel={sheetCloseLabel}
-				peekLabel={sheetTitle}
-				popupClassName="glossary-mobile-chapter-sheet__popup"
-				contentClassName="glossary-mobile-chapter-sheet__content"
-			>
-				<div
-					className="glossary-mobile-chapter-sheet__search"
-					onPointerDownCapture={openSheet}
-				>
-					<GlossarySearchField
-						searchTerm={searchTerm}
-						searchPlaceholder={searchPlaceholder}
-						searchLabel={searchLabel}
-						searchClearLabel={searchClearLabel}
-						searchKeyboardHint={searchKeyboardHint}
-						searchSummaryLabel={searchSummaryLabel}
-						searchScopeLabel={searchScopeLabel}
-						searchScopeAriaLabel={searchScopeAriaLabel}
-						isSearchFilterOptionsOpen={isSearchFilterOptionsOpen}
-						isSearching={isSearching}
-						isSearchComboboxActive={isOpen && !isSearchFilterOptionsOpen && isSearchComboboxActive}
-						searchActiveDescendantId={isOpen && !isSearchFilterOptionsOpen ? searchActiveDescendantId : null}
-						topicAreaListId={MOBILE_TOPIC_AREA_LIST_ID}
-						onSearchTermChange={changeSearchTerm}
-						onFocusSearch={focusSearch}
-						onClearSearch={onClearSearch}
-						onOpenFilterOptions={openFilterOptions}
-						onMoveSearchSelectionDown={onMoveSearchSelectionDown}
-						onMoveSearchSelectionUp={onMoveSearchSelectionUp}
-						onOpenSearchKeyboardSelection={onOpenSearchKeyboardSelection}
-					/>
-				</div>
-
-				<div className="glossary-mobile-chapter-sheet__body" aria-hidden={!isOpen} inert={!isOpen}>
-					{isSearchFilterOptionsOpen ? (
-						<FilterOptionList
-							filterOptions={searchScopeOptions}
-							selectedFilterValue={searchScope}
-							onSelectFilterOption={onSelectFilterOption}
-						/>
-					) : isSearching ? (
-						<GlossaryTopicAreaSearchList
-							listId={MOBILE_TOPIC_AREA_LIST_ID}
-							ariaLabel={topicAreaListAriaLabel}
-							allTopicAreaListItem={allTopicAreaListItem}
-							items={topicAreaListItems}
-							onSelectTopicArea={onSelectTopicArea}
-						/>
-					) : (
-						<GlossaryTopicAreaNavigationList
-							ariaLabel={topicAreaListAriaLabel}
-							allTopicAreaListItem={allTopicAreaListItem}
-							items={topicAreaListItems}
-							onSelectTopicArea={onSelectTopicArea}
-						/>
-					)}
-				</div>
-			</DockedMobileBottomSheet>
+				title={props.sheetTitle}
+				subtitle={props.sheetSubtitle}
+				openLabel={props.sheetOpenLabel}
+				closeLabel={props.sheetCloseLabel}
+				peekLabel={props.sheetTitle}
+				peekContent={peekContent}
+				dockedOverlayContent={dockedOverlayContent}
+				expandedContent={expandedContent}
+			/>
 		</div>
 	);
 }

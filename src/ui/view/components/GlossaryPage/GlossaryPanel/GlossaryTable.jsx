@@ -7,7 +7,7 @@ export default function GlossaryTable({ rows, termColumnHeader, explanationColum
 			<table className="glossary-table">
 				<colgroup>
 					<col className="glossary-table__term-column" />
-					<col />
+					<col className="glossary-table__explanation-column" />
 				</colgroup>
 				<thead>
 					<tr>

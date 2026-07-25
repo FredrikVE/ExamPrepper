@@ -6,8 +6,6 @@ const SEARCH_SHEET_MODES = {
 	FILTER_OPTIONS: "filterOptions"
 };
 
-export const SEARCH_SUGGESTION_LIMIT = 6;
-
 export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterValue, setFilterValue] = useState(defaultFilterValue);
@@ -23,7 +21,6 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 		setSearchTerm("");
 		setIsSearchSheetOpen(false);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
-		setIsFooterSheetOpen(false);
 	}, []);
 
 	const resetSearchSheet = useCallback((nextFilterValue = defaultFilterValue) => {
@@ -34,26 +31,18 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 		setIsFooterSheetOpen(false);
 	}, [defaultFilterValue]);
 
-	const openFooterSheet = useCallback(() => {
-		setIsFooterSheetOpen(true);
-	}, []);
-
 	const changeFooterSheetOpen = useCallback((nextIsOpen) => {
 		setIsFooterSheetOpen(nextIsOpen);
-
-		if (!nextIsOpen) {
-			closeSearchSheet();
-		}
-	}, [closeSearchSheet]);
+	}, []);
 
 	useEffect(() => {
 		if (!isActive) {
 			closeSearchSheet();
+			setIsFooterSheetOpen(false);
 		}
 	}, [isActive, closeSearchSheet]);
 
 	const openSearchSuggestions = useCallback(() => {
-		setIsFooterSheetOpen(true);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);
@@ -64,14 +53,12 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 			return;
 		}
 
-		setIsFooterSheetOpen(true);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.FILTER_OPTIONS);
 	}, [closeSearchSheet, isFilterOptionsMode, isSearchSheetOpen]);
 
 	const changeSearchTerm = useCallback((nextSearchTerm) => {
 		setSearchTerm(nextSearchTerm);
-		setIsFooterSheetOpen(true);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);
@@ -83,7 +70,6 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 
 	const selectFilterOption = useCallback((nextFilterValue) => {
 		setFilterValue(nextFilterValue);
-		setIsFooterSheetOpen(true);
 		setIsSearchSheetOpen(true);
 		setSearchSheetMode(SEARCH_SHEET_MODES.SEARCH_SUGGESTIONS);
 	}, []);
@@ -102,7 +88,6 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 		selectFilterOption,
 		openSearchSuggestions,
 		openFilterOptions,
-		openFooterSheet,
 		changeFooterSheetOpen,
 		closeSearchSheet
 	}), [
@@ -117,7 +102,6 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 		isSearchSheetOpen,
 		isSearchSuggestionsMode,
 		openFilterOptions,
-		openFooterSheet,
 		openSearchSuggestions,
 		resetSearchSheet,
 		searchTerm,

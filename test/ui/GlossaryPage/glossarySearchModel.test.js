@@ -1,104 +1,124 @@
-// test/ui/GlossaryPage/glossarySearchModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import { GLOSSARY_SEARCH_SCOPES, countEntryMatchesByTopicArea, countEntryMatchesByTopicAreaForNormalizedSearchTerm, doesGlossarySearchScopeIncludeChapters, doesGlossarySearchScopeIncludeTerms, entryMatchesSearchTerm, filterEntriesByNormalizedSearchTerm, filterEntriesBySearchTerm } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import { GLOSSARY_AUTOCOMPLETE_MIN_LENGTH, createGlossaryAutocompleteOptionId, createGlossaryAutocompleteSuggestions } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import { SEARCH_SUGGESTION_LIMIT } from "../../../src/ui/viewmodel/Search/searchSuggestionContract.js";
 import normalizeSearchTerm from "../../../src/ui/viewmodel/Utils/normalizeSearchTerm.js";
 
 const localizedEntries = [
-    {
-        glossaryEntryKey: "asymmetric-cryptography",
-        topicAreaKey: "cryptography",
-        term: "Asymmetrisk kryptografi",
-        explanation: "Bruker et offentlig og et privat nøkkelpar."
-    },
-    {
-        glossaryEntryKey: "access-control",
-        topicAreaKey: "security-models",
-        term: "Tilgangskontroll",
-        explanation: "Styrer hvem som får lese eller endre en ressurs."
-    },
-    {
-        glossaryEntryKey: "threat-model",
-        topicAreaKey: "security-models",
-        term: "Trusselmodell",
-        explanation: "Beskriver angripere, mål og mulige angrepsflater."
-    },
-    {
-        glossaryEntryKey: "isolation",
-        topicAreaKey: "operating-systems",
-        term: "Isolasjon",
-        explanation: "Skiller prosesser i særskilte minneområder."
-    }
+	{
+		glossaryEntryKey: "access-control",
+		topicAreaKey: "security-models",
+		term: "Tilgangskontroll",
+		explanation: "Styrer hvem som får lese eller endre en ressurs."
+	},
+	{
+		glossaryEntryKey: "control-plane",
+		topicAreaKey: "networking",
+		term: "Kontrollplan",
+		explanation: "Planlegger hvordan trafikk skal flyte."
+	},
+	{
+		glossaryEntryKey: "flow-control",
+		topicAreaKey: "networking",
+		term: "Flytkontroll",
+		explanation: "Regulerer datamengden mellom endepunkter."
+	},
+	{
+		glossaryEntryKey: "control",
+		topicAreaKey: "security-models",
+		term: "Kontroll",
+		explanation: "Et sikkerhetstiltak."
+	},
+	{
+		glossaryEntryKey: "threat-model",
+		topicAreaKey: "security-models",
+		term: "Trusselmodell",
+		explanation: "Beskriver angripere og angrepsflater."
+	}
 ];
 
+const topicAreaReferenceByKey = new Map([
+	["security-models", "Kapittel 1"],
+	["networking", "Kapittel 2"]
+]);
+
 describe("glossarySearchModel", () => {
+	test("normalizes surrounding whitespace and casing", () => {
+		expect(normalizeSearchTerm("  KONTROLL  ")).toBe("kontroll");
+	});
 
-    test("defines all as the combined chapter and term scope", () => {
-        expect(doesGlossarySearchScopeIncludeTerms(GLOSSARY_SEARCH_SCOPES.ALL)).toBe(true);
-        expect(doesGlossarySearchScopeIncludeChapters(GLOSSARY_SEARCH_SCOPES.ALL)).toBe(true);
-        expect(doesGlossarySearchScopeIncludeTerms(GLOSSARY_SEARCH_SCOPES.CHAPTERS)).toBe(false);
-        expect(doesGlossarySearchScopeIncludeChapters(GLOSSARY_SEARCH_SCOPES.TERMS)).toBe(false);
-    });
+	test("exposes autocomplete from the first normalized character", () => {
+		expect(GLOSSARY_AUTOCOMPLETE_MIN_LENGTH).toBe(1);
+		expect(createGlossaryAutocompleteSuggestions({
+			localizedEntries,
+			selectedTopicAreaKeys: new Set(["security-models", "networking"]),
+			normalizedSearchTerm: "k",
+			topicAreaReferenceByKey
+		}).map((suggestion) => suggestion.id)).toEqual([
+			"control",
+			"control-plane",
+			"flow-control",
+			"access-control"
+		]);
+		expect(createGlossaryAutocompleteSuggestions({
+			localizedEntries,
+			selectedTopicAreaKeys: new Set(["security-models", "networking"]),
+			normalizedSearchTerm: "",
+			topicAreaReferenceByKey
+		})).toEqual([]);
+	});
 
-    test("normalizes surrounding whitespace and casing", () => {
-        expect(normalizeSearchTerm("  KRYPTOGRAFI  ")).toBe("kryptografi");
-    });
+	test("ranks exact, leading, word-leading and contained term matches", () => {
+		const suggestions = createGlossaryAutocompleteSuggestions({
+			localizedEntries,
+			selectedTopicAreaKeys: new Set(["security-models", "networking"]),
+			normalizedSearchTerm: "kontroll",
+			topicAreaReferenceByKey
+		});
 
-    test("matches localized terms without case sensitivity", () => {
-        expect(entryMatchesSearchTerm(localizedEntries[0], "asymmetrisk")).toBe(true);
-        expect(filterEntriesBySearchTerm(localizedEntries, "TILGANG")).toEqual([
-            localizedEntries[1]
-        ]);
-    });
+		expect(suggestions.map((suggestion) => suggestion.id)).toEqual([
+			"control",
+			"control-plane",
+			"flow-control",
+			"access-control"
+		]);
+		expect(suggestions[0]).toEqual({
+			id: "control",
+			optionId: createGlossaryAutocompleteOptionId("control"),
+			label: "Kontroll",
+			metaLabel: "Kapittel 1",
+			topicAreaKey: "security-models"
+		});
+	});
 
-    test("matches localized explanations", () => {
-        expect(filterEntriesBySearchTerm(localizedEntries, "angrepsflater")).toEqual([
-            localizedEntries[2]
-        ]);
-    });
+	test("does not use explanation text as an autocomplete candidate", () => {
+		expect(createGlossaryAutocompleteSuggestions({
+			localizedEntries,
+			selectedTopicAreaKeys: new Set(["security-models", "networking"]),
+			normalizedSearchTerm: "angrepsflater",
+			topicAreaReferenceByKey
+		})).toEqual([]);
+	});
 
-    test("uses normalized variants without repeating normalization", () => {
-        expect(filterEntriesByNormalizedSearchTerm(localizedEntries, "tilgang")).toEqual([
-            localizedEntries[1]
-        ]);
-        expect(countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, "trussel")).toEqual(new Map([
-            ["security-models", 1]
-        ]));
-    });
+	test("limits suggestions to selected chapters and the shared result limit", () => {
+		const manyEntries = [];
 
-    test("returns all entries and counts for an empty search term", () => {
-        expect(filterEntriesBySearchTerm(localizedEntries, "   ")).toEqual(localizedEntries);
-        expect(countEntryMatchesByTopicArea(localizedEntries, "   ")).toEqual(new Map([
-            ["cryptography", 1],
-            ["security-models", 2],
-            ["operating-systems", 1]
-        ]));
-    });
+		for (let index = 0; index < SEARCH_SUGGESTION_LIMIT + 4; index += 1) {
+			manyEntries.push({
+				glossaryEntryKey: `network-${index}`,
+				topicAreaKey: index % 2 === 0 ? "networking" : "security-models",
+				term: `Nettverk ${index}`,
+				explanation: ""
+			});
+		}
 
-    test("counts matching entries per topic area", () => {
-        expect(countEntryMatchesByTopicArea(localizedEntries, "e")).toEqual(new Map([
-            ["cryptography", 1],
-            ["security-models", 2],
-            ["operating-systems", 1]
-        ]));
-    });
+		const suggestions = createGlossaryAutocompleteSuggestions({
+			localizedEntries: manyEntries,
+			selectedTopicAreaKeys: new Set(["networking"]),
+			normalizedSearchTerm: "nett",
+			topicAreaReferenceByKey
+		});
 
-    test("supports Norwegian letters", () => {
-        expect(filterEntriesBySearchTerm(localizedEntries, "nøkkelpar")).toEqual([
-            localizedEntries[0]
-        ]);
-        expect(filterEntriesBySearchTerm(localizedEntries, "får lese")).toEqual([
-            localizedEntries[1]
-        ]);
-        expect(filterEntriesBySearchTerm(localizedEntries, "mål og")).toEqual([
-            localizedEntries[2]
-        ]);
-        expect(filterEntriesBySearchTerm(localizedEntries, "særskilte")).toEqual([
-            localizedEntries[3]
-        ]);
-    });
-
-    test("returns no entries and no counts when the search has no matches", () => {
-        expect(filterEntriesBySearchTerm(localizedEntries, "kvantefysikk")).toEqual([]);
-        expect(countEntryMatchesByTopicArea(localizedEntries, "kvantefysikk")).toEqual(new Map());
-    });
+		expect(suggestions.length).toBeLessThanOrEqual(SEARCH_SUGGESTION_LIMIT);
+		expect(suggestions.every((suggestion) => suggestion.topicAreaKey === "networking")).toBe(true);
+	});
 });

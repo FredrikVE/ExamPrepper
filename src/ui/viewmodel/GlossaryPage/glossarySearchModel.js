@@ -1,64 +1,105 @@
 import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
+import { SEARCH_SUGGESTION_LIMIT } from "../Search/searchSuggestionContract.js";
 
 // src/ui/viewmodel/GlossaryPage/glossarySearchModel.js
-export const GLOSSARY_SEARCH_SCOPES = {
-	ALL: "all",
-	TERMS: "terms",
-	CHAPTERS: "chapters"
-};
+export const GLOSSARY_AUTOCOMPLETE_MIN_LENGTH = 1;
+export const GLOSSARY_AUTOCOMPLETE_LIST_ID = "glossary-search-suggestions";
 
-export function doesGlossarySearchScopeIncludeTerms(searchScope) {
-	return searchScope !== GLOSSARY_SEARCH_SCOPES.CHAPTERS;
-}
-
-export function doesGlossarySearchScopeIncludeChapters(searchScope) {
-	return searchScope !== GLOSSARY_SEARCH_SCOPES.TERMS;
-}
-
-export function entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm) {
-	if (!normalizedSearchTerm) {
-		return true;
+export function createGlossaryAutocompleteSuggestions(params) {
+	if (params.normalizedSearchTerm.length < GLOSSARY_AUTOCOMPLETE_MIN_LENGTH) {
+		return [];
 	}
 
-	return localizedEntry.term.toLowerCase().includes(normalizedSearchTerm)
-		|| localizedEntry.explanation.toLowerCase().includes(normalizedSearchTerm);
-}
+	const rankedEntries = [];
 
-export function topicAreaMatchesSearchTerm(topicArea, normalizedSearchTerm, chapterReference) {
-	if (!normalizedSearchTerm) {
-		return true;
-	}
-
-	return topicArea.label.toLowerCase().includes(normalizedSearchTerm)
-		|| String(topicArea.position).includes(normalizedSearchTerm)
-		|| chapterReference.toLowerCase().includes(normalizedSearchTerm);
-}
-
-export function filterEntriesByNormalizedSearchTerm(localizedEntries, normalizedSearchTerm) {
-	return localizedEntries.filter((localizedEntry) => (
-		entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm)
-	));
-}
-
-export function filterEntriesBySearchTerm(localizedEntries, searchTerm) {
-	return filterEntriesByNormalizedSearchTerm(localizedEntries, normalizeSearchTerm(searchTerm));
-}
-
-export function countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, normalizedSearchTerm) {
-	const matchCountsByTopicAreaKey = new Map();
-
-	for (const localizedEntry of localizedEntries) {
-		if (!entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm)) {
+	for (const localizedEntry of params.localizedEntries) {
+		if (!params.selectedTopicAreaKeys.has(localizedEntry.topicAreaKey)) {
 			continue;
 		}
 
-		const previousMatchCount = matchCountsByTopicAreaKey.get(localizedEntry.topicAreaKey) ?? 0;
-		matchCountsByTopicAreaKey.set(localizedEntry.topicAreaKey, previousMatchCount + 1);
+		const normalizedTerm = normalizeSearchTerm(localizedEntry.term);
+		const rank = resolveAutocompleteRank(normalizedTerm, params.normalizedSearchTerm);
+
+		if (rank === null) {
+			continue;
+		}
+
+		rankedEntries.push({
+			localizedEntry,
+			normalizedTerm,
+			rank
+		});
 	}
 
-	return matchCountsByTopicAreaKey;
+	rankedEntries.sort(compareAutocompleteEntries);
+
+	const suggestions = [];
+
+	for (const rankedEntry of rankedEntries) {
+		if (suggestions.length >= SEARCH_SUGGESTION_LIMIT) {
+			break;
+		}
+
+		const localizedEntry = rankedEntry.localizedEntry;
+
+		suggestions.push({
+			id: localizedEntry.glossaryEntryKey,
+			optionId: createGlossaryAutocompleteOptionId(localizedEntry.glossaryEntryKey),
+			label: localizedEntry.term,
+			metaLabel: params.topicAreaReferenceByKey.get(localizedEntry.topicAreaKey) ?? null,
+			topicAreaKey: localizedEntry.topicAreaKey
+		});
+	}
+
+	return suggestions;
 }
 
-export function countEntryMatchesByTopicArea(localizedEntries, searchTerm) {
-	return countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, normalizeSearchTerm(searchTerm));
+export function createGlossaryAutocompleteOptionId(glossaryEntryKey) {
+	return `glossary-search-option-${encodeURIComponent(glossaryEntryKey)}`;
+}
+
+function resolveAutocompleteRank(normalizedTerm, normalizedSearchTerm) {
+	if (normalizedTerm === normalizedSearchTerm) {
+		return 0;
+	}
+
+	if (normalizedTerm.startsWith(normalizedSearchTerm)) {
+		return 1;
+	}
+
+	const words = normalizedTerm.split(/\s+/u);
+
+	for (const word of words) {
+		if (word.startsWith(normalizedSearchTerm)) {
+			return 2;
+		}
+	}
+
+	if (normalizedTerm.includes(normalizedSearchTerm)) {
+		return 3;
+	}
+
+	return null;
+}
+
+function compareAutocompleteEntries(leftEntry, rightEntry) {
+	const rankDifference = leftEntry.rank - rightEntry.rank;
+
+	if (rankDifference !== 0) {
+		return rankDifference;
+	}
+
+	const lengthDifference = leftEntry.normalizedTerm.length - rightEntry.normalizedTerm.length;
+
+	if (lengthDifference !== 0) {
+		return lengthDifference;
+	}
+
+	const termDifference = leftEntry.normalizedTerm.localeCompare(rightEntry.normalizedTerm);
+
+	if (termDifference !== 0) {
+		return termDifference;
+	}
+
+	return leftEntry.localizedEntry.glossaryEntryKey.localeCompare(rightEntry.localizedEntry.glossaryEntryKey);
 }

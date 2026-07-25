@@ -3,7 +3,8 @@ import { useCallback, useMemo, useState } from "react";
 import { LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS } from "../../navigation/navigation.js";
 import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
-import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
+import useSearchSheetModel from "./Search/useSearchSheetModel.js";
+import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
 import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
 import { filterExams } from "./LearningContentSelectPage/examFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
@@ -33,7 +34,6 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		selectFilterOption: selectTopicAreaFilterOption,
 		openSearchSuggestions: openExamSearchSuggestions,
 		openFilterOptions: openTopicAreaOptions,
-		openFooterSheet: openExamFooterSheet,
 		changeFooterSheetOpen: changeExamFooterSheetOpen,
 		closeSearchSheet: closeExamSearchSheet
 	} = examSearchSheet;
@@ -235,18 +235,21 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 
 	const selectExam = useCallback((examId) => {
 		closeExamSearchSheet();
+		changeExamFooterSheetOpen(false);
 		onSelectExam(examId);
-	}, [closeExamSearchSheet, onSelectExam]);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectExam]);
 
 	const selectFlipcardDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
+		changeExamFooterSheetOpen(false);
 		onSelectFlipcardDeck(nextTopicAreaKey);
-	}, [closeExamSearchSheet, onSelectFlipcardDeck]);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectFlipcardDeck]);
 
 	const selectMatchCardsDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
+		changeExamFooterSheetOpen(false);
 		onSelectMatchCardsDeck(nextTopicAreaKey);
-	}, [closeExamSearchSheet, onSelectMatchCardsDeck]);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectMatchCardsDeck]);
 
 	const selectSearchSuggestion = useCallback((suggestionId) => {
 		if (isFlipcardsContentActive) {
@@ -344,7 +347,6 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		openExamSearchSuggestions,
 		openExamCategoryOptions: openTopicAreaOptions,
 		openTopicAreaOptions,
-		openExamFooterSheet,
 		changeExamFooterSheetOpen,
 		closeExamSearchSheet,
 		selectExam,

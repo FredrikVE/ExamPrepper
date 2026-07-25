@@ -27,10 +27,8 @@ jest.unstable_mockModule("react", () => ({
 	useState
 }));
 
-const {
-	SEARCH_SUGGESTION_LIMIT,
-	default: useSearchSheetModel
-} = await import("../../../../src/ui/viewmodel/Search/useSearchSheetModel.js");
+const { default: useSearchSheetModel } = await import("../../../../src/ui/viewmodel/Search/useSearchSheetModel.js");
+const { SEARCH_SUGGESTION_LIMIT } = await import("../../../../src/ui/viewmodel/Search/searchSuggestionContract.js");
 
 describe("useSearchSheetModel", () => {
 	beforeEach(() => {
@@ -58,7 +56,7 @@ describe("useSearchSheetModel", () => {
 		expect(viewModel.isFooterOpen).toBe(false);
 	});
 
-	test("closes the sheet when the owner page becomes inactive", () => {
+	test("closes search content and the footer sheet when the owner page becomes inactive", () => {
 		useSearchSheetModel({
 			isActive: false,
 			defaultFilterValue: "all"
@@ -70,7 +68,7 @@ describe("useSearchSheetModel", () => {
 		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 	});
 
-	test("toggles an already-open filter options sheet closed", () => {
+	test("toggles open filter options without changing the footer sheet state", () => {
 		stateValues.push("", "all", true, "filterOptions", true);
 
 		const viewModel = useSearchSheetModel({
@@ -83,10 +81,10 @@ describe("useSearchSheetModel", () => {
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
 		expect(stateSetters[2]).toHaveBeenCalledWith(false);
 		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+		expect(stateSetters[4]).not.toHaveBeenCalled();
 	});
 
-	test("opens the controlled footer sheet with search suggestions", () => {
+	test("opens search suggestions without expanding the footer sheet", () => {
 		const viewModel = useSearchSheetModel({
 			isActive: true,
 			defaultFilterValue: "all"
@@ -94,12 +92,39 @@ describe("useSearchSheetModel", () => {
 
 		viewModel.openSearchSuggestions();
 
-		expect(stateSetters[4]).toHaveBeenCalledWith(true);
 		expect(stateSetters[2]).toHaveBeenCalledWith(true);
 		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
+		expect(stateSetters[4]).not.toHaveBeenCalled();
 	});
 
-	test("closing the controlled footer sheet also closes search content", () => {
+	test("opens filter options without expanding the footer sheet", () => {
+		const viewModel = useSearchSheetModel({
+			isActive: true,
+			defaultFilterValue: "all"
+		});
+
+		viewModel.openFilterOptions();
+
+		expect(stateSetters[2]).toHaveBeenCalledWith(true);
+		expect(stateSetters[3]).toHaveBeenCalledWith("filterOptions");
+		expect(stateSetters[4]).not.toHaveBeenCalled();
+	});
+
+	test("changes the search term without expanding the footer sheet", () => {
+		const viewModel = useSearchSheetModel({
+			isActive: true,
+			defaultFilterValue: "all"
+		});
+
+		viewModel.changeSearchTerm("security");
+
+		expect(stateSetters[0]).toHaveBeenCalledWith("security");
+		expect(stateSetters[2]).toHaveBeenCalledWith(true);
+		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
+		expect(stateSetters[4]).not.toHaveBeenCalled();
+	});
+
+	test("closing the footer sheet preserves active search content for docked use", () => {
 		stateValues.push("term", "all", true, "searchSuggestions", true);
 
 		const viewModel = useSearchSheetModel({
@@ -110,12 +135,28 @@ describe("useSearchSheetModel", () => {
 		viewModel.changeFooterSheetOpen(false);
 
 		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[2]).not.toHaveBeenCalled();
+		expect(stateSetters[3]).not.toHaveBeenCalled();
+	});
+
+	test("closing search content preserves the footer sheet state", () => {
+		stateValues.push("term", "all", true, "searchSuggestions", true);
+
+		const viewModel = useSearchSheetModel({
+			isActive: true,
+			defaultFilterValue: "all"
+		});
+
+		viewModel.closeSearchSheet();
+
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
 		expect(stateSetters[2]).toHaveBeenCalledWith(false);
 		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
+		expect(stateSetters[4]).not.toHaveBeenCalled();
 	});
 
-	test("selects a filter option and returns to search suggestions mode", () => {
+	test("selects a filter option without expanding the footer sheet", () => {
 		const viewModel = useSearchSheetModel({
 			isActive: true,
 			defaultFilterValue: "all"
@@ -124,8 +165,21 @@ describe("useSearchSheetModel", () => {
 		viewModel.selectFilterOption("faculty");
 
 		expect(stateSetters[1]).toHaveBeenCalledWith("faculty");
-		expect(stateSetters[4]).toHaveBeenCalledWith(true);
 		expect(stateSetters[2]).toHaveBeenCalledWith(true);
 		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
+		expect(stateSetters[4]).not.toHaveBeenCalled();
+	});
+
+	test("keeps the footer presentation active while docked search content is open", () => {
+		stateValues.push("term", "all", true, "searchSuggestions", false);
+
+		const viewModel = useSearchSheetModel({
+			isActive: true,
+			defaultFilterValue: "all"
+		});
+
+		expect(viewModel.isFooterSheetOpen).toBe(false);
+		expect(viewModel.isSearchSheetOpen).toBe(true);
+		expect(viewModel.isFooterOpen).toBe(true);
 	});
 });

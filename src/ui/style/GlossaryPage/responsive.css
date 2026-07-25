@@ -20,10 +20,6 @@
 		grid-auto-rows: minmax(70px, 1fr);
 	}
 
-	.glossary-topic-area-list--search {
-		grid-auto-rows: minmax(70px, auto);
-	}
-
 	.glossary-topic-area-button {
 		min-height: 70px;
 	}
@@ -40,8 +36,6 @@
 	}
 
 	.glossary-page {
-		--glossary-mobile-sheet-collapsed-height: calc(144px + env(safe-area-inset-bottom));
-
 		min-height: 100%;
 		height: auto;
 		flex: 0 0 auto;
@@ -64,6 +58,10 @@
 	.glossary-panel {
 		height: auto;
 		overflow: visible;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
 		padding: 0;
 	}
 

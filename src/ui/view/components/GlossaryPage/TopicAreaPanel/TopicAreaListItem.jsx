@@ -12,9 +12,6 @@ export default function TopicAreaListItem({ item }) {
 				) : null}
 				<span className="glossary-topic-area-item__label">{item.label}</span>
 				<span className="glossary-topic-area-item__subtitle">{item.subtitle}</span>
-				{item.matchCountLabel ? (
-					<span className="glossary-topic-area-item__match-count">{item.matchCountLabel}</span>
-				) : null}
 			</span>
 
 			<span className="glossary-topic-area-item__count" aria-hidden="true">

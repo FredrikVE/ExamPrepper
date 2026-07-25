@@ -4,7 +4,8 @@ import { NAV_ITEMS, NAV_SCREENS } from "../../navigation/navigation.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
-import useSearchSheetModel, { SEARCH_SUGGESTION_LIMIT } from "./Search/useSearchSheetModel.js";
+import useSearchSheetModel from "./Search/useSearchSheetModel.js";
+import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 import { createSubjectSwitcherModel } from "./SubjectSelectPage/createSubjectSwitcherModel.js";
 
@@ -42,7 +43,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectFilterOption: selectFacultyFilterOption,
 		openSearchSuggestions: openSubjectSearchSuggestions,
 		openFilterOptions: openSubjectFacultyOptions,
-		openFooterSheet: openSubjectFooterSheet,
 		changeFooterSheetOpen: changeSubjectFooterSheetOpen,
 		closeSearchSheet: closeSubjectSearchSheet
 	} = subjectSearchSheet;
@@ -113,8 +113,9 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 
 	const selectSubject = useCallback((subjectId) => {
 		closeSubjectSearchSheet();
+		changeSubjectFooterSheetOpen(false);
 		onSelectSubject(subjectId);
-	}, [closeSubjectSearchSheet, onSelectSubject]);
+	}, [changeSubjectFooterSheetOpen, closeSubjectSearchSheet, onSelectSubject]);
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
@@ -160,7 +161,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		selectFacultyFilterOption,
 		openSubjectSearchSuggestions,
 		openSubjectFacultyOptions,
-		openSubjectFooterSheet,
 		changeSubjectFooterSheetOpen,
 		closeSubjectSearchSheet,
 		selectSubject

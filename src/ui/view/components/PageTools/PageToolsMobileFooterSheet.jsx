@@ -4,67 +4,65 @@ import DockedMobileBottomSheet from "../MobileBottomSheet/DockedMobileBottomShee
 import ToolCardGrid from "../ToolCard/ToolCardGrid.jsx";
 import { TOOL_CARD_SURFACES } from "../ToolCard/toolCardSurfaces.js";
 
-export default function PageToolsMobileFooterSheet({ tools, renderControls, renderSearchContent, isSheetOpen, onOpenSheet, onSheetOpenChange }) {
-    const closeSheet = useCallback(() => {
-        onSheetOpenChange(false);
-    }, [onSheetOpenChange]);
+export default function PageToolsMobileFooterSheet(props) {
+	const closeSheet = useCallback(() => {
+		props.onSheetOpenChange(false);
+	}, [props.onSheetOpenChange]);
 
-    const selectTool = useCallback((toolItem) => {
-        if (!toolItem.onSelect) {
-            return;
-        }
+	const selectTool = useCallback((toolItem) => {
+		if (!toolItem.onSelect) {
+			return;
+		}
 
-        toolItem.onSelect();
-        closeSheet();
-    }, [closeSheet]);
+		toolItem.onSelect();
+		closeSheet();
+	}, [closeSheet]);
 
-    if (!tools) {
-        return (
-            <div className="page-tools-mobile-inline-content">
-                {renderSearchContent()}
-                {renderControls()}
-            </div>
-        );
-    }
+	if (!props.tools) {
+		return (
+			<div className="page-tools-mobile-inline-content">
+				{props.renderSearchContent()}
+				{props.renderControls()}
+			</div>
+		);
+	}
 
-    const sheetId = `page-tools-mobile-bottom-sheet-${tools.id}`;
-    const searchContent = renderSearchContent();
+	const sheetId = `page-tools-mobile-bottom-sheet-${props.tools.id}`;
+	const searchContent = props.renderSearchContent();
+	const peekContent = (
+		<div className="page-tools-mobile-sheet-controls">
+			{props.renderControls()}
+		</div>
+	);
+	const dockedOverlayContent = props.isSheetOpen ? null : searchContent;
+	const expandedContent = props.isSheetOpen && searchContent !== null ? searchContent : (
+		<ToolCardGrid
+			surface={TOOL_CARD_SURFACES.PAGE_TOOLS_MOBILE}
+			items={props.tools.items}
+			onSelectItem={selectTool}
+		/>
+	);
 
-    return (
-        <div className="page-tools-mobile-footer-shell" data-open={isSheetOpen ? "true" : "false"}>
-            <div className="page-tools-mobile-inline-content">
-                {renderSearchContent()}
-                {renderControls()}
-            </div>
+	return (
+		<div className="page-tools-mobile-footer-shell">
+			<div className="page-tools-mobile-inline-content">
+				{props.renderSearchContent()}
+				{props.renderControls()}
+			</div>
 
-            <DockedMobileBottomSheet
-                isOpen={isSheetOpen}
-                onOpenChange={onSheetOpenChange}
-                contentId={sheetId}
-                title={tools.actionsLabel}
-                subtitle={tools.mobileHandleLabel}
-                openLabel={tools.openLabel}
-                closeLabel={tools.closeLabel}
-                peekLabel={tools.mobileHandleLabel}
-                popupClassName=""
-                contentClassName="page-tools-mobile-bottom-sheet-content"
-            >
-                {/* Forslagslisten ligger FØR kontrollene slik at autocomplete vokser
-                    oppover fra søkefeltet — samme rekkefølge som inline-varianten. */}
-                <div className="page-tools-mobile-sheet-search-content">
-                    {searchContent}
-                </div>
-
-                <div className="page-tools-mobile-sheet-controls" onFocusCapture={onOpenSheet} onPointerDownCapture={onOpenSheet}>
-                    {renderControls()}
-                </div>
-
-                <ToolCardGrid
-                    surface={TOOL_CARD_SURFACES.PAGE_TOOLS_MOBILE}
-                    items={tools.items}
-                    onSelectItem={selectTool}
-                />
-            </DockedMobileBottomSheet>
-        </div>
-    );
+			<DockedMobileBottomSheet
+				isOpen={props.isSheetOpen}
+				onOpenChange={props.onSheetOpenChange}
+				contentId={sheetId}
+				title={props.tools.actionsLabel}
+				subtitle={props.tools.mobileHandleLabel}
+				openLabel={props.tools.openLabel}
+				closeLabel={props.tools.closeLabel}
+				peekLabel={props.tools.mobileHandleLabel}
+				peekContent={peekContent}
+				dockedOverlayContent={dockedOverlayContent}
+				expandedContent={expandedContent}
+			/>
+		</div>
+	);
 }

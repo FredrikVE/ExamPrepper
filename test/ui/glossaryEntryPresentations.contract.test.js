@@ -27,15 +27,12 @@ const createLocalizedGlossaryEntry = (entry, language) => ({
 	position: entry.position
 });
 
-const joinSegments = (segments) => segments.map((segment) => segment.text).join("");
-
 describe("GlossaryEntry presentation contract", () => {
 	test("preserves one glossary entry key and texts across all three presentations", () => {
 		const flipcard = createFlipcardsFromGlossaryEntries([glossaryEntry], "no")[0];
 		const matchPair = createPairsFromGlossaryEntries([glossaryEntry])[0];
 		const tableRow = createGlossaryTableRows({
 			localizedEntries: [createLocalizedGlossaryEntry(glossaryEntry, "no")],
-			normalizedSearchTerm: "tillit",
 			topicAreaReferenceByKey: new Map([[
 				"security-architecture",
 				"Kapittel 1"
@@ -58,7 +55,7 @@ describe("GlossaryEntry presentation contract", () => {
 		expect(tableRow.glossaryEntryKey).toBe(glossaryEntry.glossaryEntryKey);
 		expect(tableRow.topicAreaKey).toBe(glossaryEntry.topicAreaKey);
 		expect(tableRow.topicAreaReference).toBe("Kapittel 1");
-		expect(joinSegments(tableRow.termSegments)).toBe(glossaryEntry.term.no);
-		expect(joinSegments(tableRow.explanationSegments)).toBe(glossaryEntry.explanation.no);
+		expect(tableRow.term).toBe(glossaryEntry.term.no);
+		expect(tableRow.explanation).toBe(glossaryEntry.explanation.no);
 	});
 });

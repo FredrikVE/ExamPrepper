@@ -1,41 +1,13 @@
-// src/ui/viewmodel/GlossaryPage/glossaryTopicAreaListModel.js
 import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
-import { doesGlossarySearchScopeIncludeChapters, doesGlossarySearchScopeIncludeTerms, topicAreaMatchesSearchTerm } from "./glossarySearchModel.js";
 
 export const GLOSSARY_TOPIC_AREA_LIST_ID = "glossary-topic-area-list";
 
-export function createGlossaryTopicAreaListItems({
-	topicAreas,
-	entriesByTopicAreaKey,
-	matchCountsByTopicAreaKey,
-	normalizedSearchTerm,
-	searchScope,
-	labels
-}) {
-	const isSearching = normalizedSearchTerm.length > 0;
-	const searchesTerms = doesGlossarySearchScopeIncludeTerms(searchScope);
-	const searchesChapters = doesGlossarySearchScopeIncludeChapters(searchScope);
+export function createGlossaryTopicAreaListItems({ topicAreas, entriesByTopicAreaKey, labels }) {
 	const topicAreaListItems = [];
 
 	for (const topicArea of topicAreas) {
 		const entries = entriesByTopicAreaKey.get(topicArea.key) ?? [];
 		const entryCount = entries.length;
-		const matchCount = searchesTerms
-			? matchCountsByTopicAreaKey.get(topicArea.key) ?? 0
-			: 0;
-		const matchesTopicAreaLabel = isSearching
-			&& searchesChapters
-			&& topicAreaMatchesSearchTerm(
-				topicArea,
-				normalizedSearchTerm,
-				labels.chapterReference(topicArea.position)
-			);
-
-		if (isSearching && !matchesTopicAreaLabel && matchCount === 0) {
-			continue;
-		}
-
-		const showsAllEntries = !isSearching || !searchesTerms || matchesTopicAreaLabel;
 
 		topicAreaListItems.push({
 			id: createGlossaryTopicAreaOptionId(topicArea.key),
@@ -44,15 +16,7 @@ export function createGlossaryTopicAreaListItems({
 			iconKey: topicArea.iconKey,
 			position: topicArea.position,
 			entryCount,
-			matchCount,
-			matchCountLabel: isSearching && matchCount > 0
-				? labels.chapterMatchCount(matchCount)
-				: null,
-			subtitle: isSearching && matchCount > 0
-				? labels.chapterSearchSubtitle(matchCount)
-				: labels.chapterSubtitle(entryCount),
-			matchesTopicAreaLabel,
-			showsAllEntries,
+			subtitle: labels.chapterSubtitle(entryCount),
 			isAllTopicAreas: false
 		});
 	}
@@ -60,30 +24,16 @@ export function createGlossaryTopicAreaListItems({
 	return topicAreaListItems;
 }
 
-export function createGlossaryAllTopicAreaListItem({
-	topicAreaCount,
-	selectedTopicAreaCount,
-	entryCount,
-	isSelected,
-	labels
-}) {
+export function createGlossaryAllTopicAreaListItem({ entryCount, isSelected, labels }) {
 	return {
 		id: createGlossaryTopicAreaOptionId(ALL_TOPIC_AREAS),
 		topicAreaKey: ALL_TOPIC_AREAS,
 		label: labels.allTopicAreas,
-		subtitle: isSelected
-			? labels.allTopicAreasSelected(topicAreaCount)
-			: labels.topicAreaSelection(selectedTopicAreaCount, topicAreaCount),
-		eyebrow: isSelected
-			? labels.allTopicAreasEyebrow
-			: labels.topicAreaSelectionEyebrow,
+		subtitle: labels.chapterSubtitle(entryCount),
+		eyebrow: null,
 		iconKey: "book-open",
 		position: 0,
 		entryCount,
-		matchCount: 0,
-		matchCountLabel: null,
-		matchesTopicAreaLabel: false,
-		showsAllEntries: true,
 		isAllTopicAreas: true,
 		isSelected,
 		isActive: isSelected,
@@ -92,12 +42,7 @@ export function createGlossaryAllTopicAreaListItem({
 	};
 }
 
-export function applyGlossaryTopicAreaInteractionState({
-	topicAreaListItems,
-	selectedTopicAreaKeys,
-	searchKeyboardIndex,
-	showsSelectionControls
-}) {
+export function applyGlossaryTopicAreaInteractionState({ topicAreaListItems, selectedTopicAreaKeys, searchKeyboardIndex, showsSelectionControls }) {
 	return topicAreaListItems.map((topicAreaListItem, topicAreaIndex) => {
 		const isSelected = selectedTopicAreaKeys.has(topicAreaListItem.topicAreaKey);
 

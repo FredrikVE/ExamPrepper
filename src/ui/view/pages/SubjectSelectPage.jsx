@@ -7,6 +7,7 @@ import Footer from "../components/Footer/Footer.jsx";
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
+import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
@@ -16,7 +17,11 @@ export default function SubjectSelectPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchSheetOpen, viewModel.closeSubjectSearchSheet);
 
 	const renderSearchContent = () => {
-		if (!viewModel.isSearchSheetOpen) {
+		const hasSearchContent = viewModel.isFilterOptionsMode
+			? viewModel.facultyFilterOptions.length > 0
+			: viewModel.searchSuggestions.length > 0;
+
+		if (!viewModel.isSearchSheetOpen || !hasSearchContent) {
 			return null;
 		}
 
@@ -24,6 +29,9 @@ export default function SubjectSelectPage({ viewModel }) {
 			<SearchSheetBody
 				isFilterOptionsMode={viewModel.isFilterOptionsMode}
 				searchSuggestions={viewModel.searchSuggestions}
+				suggestionListId={null}
+				suggestionListAriaLabel={null}
+				activeSuggestionId={null}
 				filterOptions={viewModel.facultyFilterOptions}
 				selectedFilterValue={viewModel.faculty}
 				onSelectSearchSuggestion={viewModel.selectSubject}
@@ -35,6 +43,7 @@ export default function SubjectSelectPage({ viewModel }) {
 	const renderSearchControls = () => (
 		<div className="subject-select-controls" aria-label={viewModel.t.subjectSelectControlsLabel}>
 			<SearchFilterField
+				className={null}
 				searchTerm={viewModel.searchTerm}
 				searchPlaceholder={viewModel.t.subjectSearchPlaceholder}
 				searchLabel={viewModel.t.subjectSearchLabel}
@@ -45,6 +54,8 @@ export default function SubjectSelectPage({ viewModel }) {
 				filterButtonAriaLabel={viewModel.t.subjectFacultyLabel}
 				isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
 				onOpenFilterOptions={viewModel.openSubjectFacultyOptions}
+				clearAction={null}
+				autocomplete={null}
 			/>
 		</div>
 	);
@@ -88,24 +99,18 @@ export default function SubjectSelectPage({ viewModel }) {
 				renderControls={renderSearchControls}
 				renderSearchContent={renderSearchContent}
 				isSheetOpen={viewModel.isFooterSheetOpen}
-				onOpenSheet={viewModel.openSubjectFooterSheet}
 				onSheetOpenChange={viewModel.changeSubjectFooterSheetOpen}
 			/>
 		</Footer>
 	);
 
-	const overlay = viewModel.isSearchSheetOpen ? (
-		<button
-			type="button"
-			className="search-backdrop search-backdrop-visible"
-			onMouseDown={(event) => {
-				event.preventDefault();
-			}}
-			onClick={viewModel.closeSubjectSearchSheet}
-			aria-label={viewModel.searchCloseLabel}
-			tabIndex={-1}
+	const overlay = (
+		<SearchBackdrop
+			isOpen={viewModel.isSearchSheetOpen}
+			closeLabel={viewModel.searchCloseLabel}
+			onClose={viewModel.closeSubjectSearchSheet}
 		/>
-	) : null;
+	);
 
 	return (
 		<WorkspaceScaffold

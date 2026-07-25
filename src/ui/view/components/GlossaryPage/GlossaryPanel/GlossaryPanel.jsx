@@ -6,7 +6,7 @@ import GlossaryTable from "./GlossaryTable.jsx";
 export default function GlossaryPanel({ heading, rows, termColumnHeader, explanationColumnHeader, emptyState, isMobile }) {
 	return (
 		<article className="glossary-panel">
-			<GlossaryPanelHeading heading={heading} />
+			{isMobile ? <GlossaryPanelHeading heading={heading} /> : null}
 			{emptyState !== null ? (
 				<section className="glossary-panel-empty" role="status">
 					<h2>{emptyState.title}</h2>

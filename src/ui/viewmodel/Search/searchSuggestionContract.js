@@ -1,0 +1,1 @@
+export const SEARCH_SUGGESTION_LIMIT = 6;

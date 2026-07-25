@@ -247,7 +247,7 @@ Regler:
 - Footer.jsx eier spacing for footerflaten.
 - Footer.jsx eier layering/z-index for footerflaten via tokens der tokens finnes.
 - Footer.jsx eier ikke PageTools-logikk.
-- Footer.jsx eier ikke MobileBottomSheet-mekanikk.
+- Footer.jsx eier ikke DockedMobileBottomSheet-mekanikk.
 - Footer.jsx eier ikke ProgressPager-mekanikk.
 - Footer.jsx får konkrete props.
 - Footer.jsx får aldri hele viewModel.
@@ -258,8 +258,9 @@ Footer-slots kan inneholde eksisterende mekanikk:
 ```txt
 Footer.jsx
 └── content slot
-    ├── PageToolsMobileFooterSheet -> MobileBottomSheet
-    ├── FlipcardsMobileFooterSheet -> MobileBottomSheet senere
+    ├── PageToolsMobileFooterSheet -> DockedMobileBottomSheet
+    ├── GlossaryMobileChapterSheet -> DockedMobileBottomSheet
+    ├── FlipcardsMobileFooterSheet -> DockedMobileBottomSheet
     └── ExamFooter -> ProgressPager senere
 ```
 
@@ -334,7 +335,7 @@ Regler som fortsatt gjelder:
 ```txt
 - Footer.jsx får ikke viewModel.
 - Footer.jsx eier ikke PageToolsMobileFooterSheet.
-- Footer.jsx eier ikke MobileBottomSheet-mekanikk.
+- Footer.jsx eier ikke DockedMobileBottomSheet-mekanikk.
 - Footer.jsx eier ikke ProgressPager.
 - Footer.jsx eier ikke search/filter-state.
 - Footer.jsx leser ikke route, pageName eller window.
