@@ -136,19 +136,14 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 
 	const allTopicAreaListItem = useMemo(() => {
 		return createGlossaryAllTopicAreaListItem({
-			topicAreaCount: topicAreas.length,
-			selectedTopicAreaCount,
 			entryCount: localizedEntries.length,
 			isSelected: isAllTopicAreasSelected,
 			labels: {
-				allTopicAreas: t.glossaryPageSelectAllChaptersLabel,
-				allTopicAreasEyebrow: t.glossaryPageAllChaptersEyebrow,
-				topicAreaSelectionEyebrow: t.glossaryPageChapterSelectionEyebrow,
-				allTopicAreasSelected: t.glossaryPageAllChaptersSelectedSummary,
-				topicAreaSelection: t.glossaryPageChapterSelectionSummary
+				allTopicAreas: t.glossaryPageAllChaptersHeading,
+				chapterSubtitle: t.glossaryPageChapterSubtitle
 			}
 		});
-	}, [isAllTopicAreasSelected, localizedEntries.length, selectedTopicAreaCount, t, topicAreas.length]);
+	}, [isAllTopicAreasSelected, localizedEntries.length, t.glossaryPageAllChaptersHeading, t.glossaryPageChapterSubtitle]);
 
 	const topicAreaReferenceByKey = useMemo(() => {
 		return createTopicAreaReferenceByKey(topicAreas, t.glossaryPageChapterReference);

@@ -56,11 +56,6 @@ const translations = {
 	glossaryPageChapterSubtitle: (entryCount) => `${entryCount} begreper`,
 	glossaryPageTermColumnHeader: "Begrep",
 	glossaryPageExplanationColumnHeader: "Forklaring",
-	glossaryPageSelectAllChaptersLabel: "Velg alle",
-	glossaryPageAllChaptersEyebrow: "Standardvisning",
-	glossaryPageChapterSelectionEyebrow: "Kapittelutvalg",
-	glossaryPageAllChaptersSelectedSummary: (count) => `Alle ${count} kapitler vises`,
-	glossaryPageChapterSelectionSummary: (selected, total) => `${selected} av ${total} valgt`,
 	glossaryPageAllChaptersHeading: "Alle kapitler",
 	glossaryPageSelectedChaptersHeading: (count) => `${count} valgte kapitler`,
 	glossaryPageChapterReference: (position) => `Kapittel ${position}`,
@@ -260,6 +255,14 @@ describe("useGlossaryPageViewModel", () => {
 
 		expect(viewModel.chapterFilterValue).toBe(ALL_TOPIC_AREAS);
 		expect(viewModel.chapterFilterLabel).toBe("Alle kapitler");
+		expect(viewModel.allTopicAreaListItem).toMatchObject({
+			label: "Alle kapitler",
+			subtitle: "4 begreper",
+			eyebrow: null,
+			entryCount: 4,
+			isAllTopicAreas: true,
+			isSelected: true
+		});
 		expect(viewModel.topicAreaListItems.map((item) => item.isSelected)).toEqual([true, true]);
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
 			"packet",

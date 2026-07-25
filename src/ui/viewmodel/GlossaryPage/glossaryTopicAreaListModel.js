@@ -24,17 +24,13 @@ export function createGlossaryTopicAreaListItems({ topicAreas, entriesByTopicAre
 	return topicAreaListItems;
 }
 
-export function createGlossaryAllTopicAreaListItem({ topicAreaCount, selectedTopicAreaCount, entryCount, isSelected, labels }) {
+export function createGlossaryAllTopicAreaListItem({ entryCount, isSelected, labels }) {
 	return {
 		id: createGlossaryTopicAreaOptionId(ALL_TOPIC_AREAS),
 		topicAreaKey: ALL_TOPIC_AREAS,
 		label: labels.allTopicAreas,
-		subtitle: isSelected
-			? labels.allTopicAreasSelected(topicAreaCount)
-			: labels.topicAreaSelection(selectedTopicAreaCount, topicAreaCount),
-		eyebrow: isSelected
-			? labels.allTopicAreasEyebrow
-			: labels.topicAreaSelectionEyebrow,
+		subtitle: labels.chapterSubtitle(entryCount),
+		eyebrow: null,
 		iconKey: "book-open",
 		position: 0,
 		entryCount,
