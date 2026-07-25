@@ -18,7 +18,7 @@ function collectSelectors(rule) {
 	const selectors = [];
 
 	selectorParser((root) => {
-		root.each((selector) => selectors.push(selector.toString()));
+		root.each((selector) => selectors.push(selector.toString().trim()));
 	}).processSync(rule.selector);
 
 	return selectors;
@@ -103,8 +103,8 @@ describe("Glossary desktop panel layout", () => {
 		const explanationColumn = readDeclarations(tableRoot, ".glossary-table__explanation-column");
 		const cell = readDeclarations(tableRoot, ".glossary-table th");
 
-		expect(workspace["--glossary-term-column-width"]).toBe("26%");
-		expect(workspace["--glossary-explanation-column-width"]).toBe("74%");
+		expect(workspace["--glossary-term-column-width"]).toBe("40%");
+		expect(workspace["--glossary-explanation-column-width"]).toBe("60%");
 		expect(termColumn.width).toBe("var(--glossary-term-column-width)");
 		expect(explanationColumn.width).toBe("var(--glossary-explanation-column-width)");
 		expect(table["table-layout"]).toBe("fixed");
