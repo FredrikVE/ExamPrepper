@@ -1,44 +1,10 @@
 /* src/ui/style/FlipcardsPage/FlipcardToolMenu/flipcards-footer-sheet.css */
 .flipcards-footer-sheet {
-	display: contents;
-}
-
-.flipcards-mobile-bottom-sheet-content {
-	gap: var(--space-4);
-}
-
-@media (max-width: 932px) {
-	.flipcards-footer-sheet {
-		--mobile-bottom-sheet-collapsed-visible-height: 130px;
-
-		position: fixed;
-		z-index: 55;
-		right: max(0px, env(safe-area-inset-right));
-		bottom: 0;
-		left: max(0px, env(safe-area-inset-left));
-		display: block;
-		overflow: visible;
-		pointer-events: none;
-	}
-
-	.flipcards-footer-sheet .mobile-bottom-sheet-root[data-has-peek="true"] .mobile-bottom-sheet-content {
-		overflow-y: hidden;
-	}
-
-	.flipcards-footer-sheet[data-open="true"] .mobile-bottom-sheet-root[data-has-peek="true"] .mobile-bottom-sheet-content {
-		overflow-y: auto;
-	}
-
-	.flipcards-footer-sheet .mobile-bottom-sheet-grip-control-docked {
-		min-height: 34px;
-		margin-bottom: 0;
-	}
-}
-
-.flipcards-footer-sheet .mobile-bottom-sheet-popup {
-	background:
+	--mobile-bottom-sheet-background:
 		radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 34%),
 		radial-gradient(circle at 18% 94%, rgba(16, 103, 255, 0.06), transparent 32%),
-		linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 98%, transparent), color-mix(in srgb, var(--panel-bg) 98%, transparent))
+		linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 98%, transparent), color-mix(in srgb, var(--panel-bg) 98%, transparent)),
 		var(--app-bg);
+
+	display: contents;
 }

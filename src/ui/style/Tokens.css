@@ -225,8 +225,7 @@
     --z-search-backdrop: 40;
     --z-workspace-footer-overlay: 50;
     --z-search-footer-content: 60;
-    --z-mobile-sheet-backdrop: 70;
-    --z-mobile-sheet-viewport: 71;
+    --z-docked-mobile-sheet: 71;
     --z-navigation-backdrop: 80;
     --z-navigation-panel: 90;
     --z-mobile-topbar: 100;
@@ -234,12 +233,15 @@
     --z-settings-dialog: 130;
 
     /* ── Mobile bottom sheet ──────────────────
-       These linked dimensions must stay in sync across the docked sheet
-       and select-page scroll reserve. The shared sheet adds the device
-       safe-area to the visible peek height. */
+       Docked geometry, safe-area clearance and page scroll reserve share
+       this canonical contract. Feature styles do not override these values. */
     --mobile-sheet-peek-height: 144px;
-    --mobile-sheet-top-clearance: 54px;
-    --mobile-sheet-scroll-reserve: 255px;
+    --mobile-sheet-grip-height: 28px;
+    --mobile-sheet-content-max-width: 560px;
+    --mobile-sheet-content-end-clearance: calc(var(--space-10) + env(safe-area-inset-bottom));
+    --mobile-sheet-top-clearance: calc(var(--mobile-topbar-height) + var(--space-2));
+    --mobile-sheet-scroll-clearance: calc(var(--space-12) + var(--space-7));
+    --mobile-sheet-scroll-reserve: calc(var(--mobile-sheet-peek-height) + var(--mobile-sheet-scroll-clearance));
 
     /* ── Mobile exam confirmation ───────────── */
     --exam-submit-confirmation-mobile-footer-clearance: calc(var(--space-12) + env(safe-area-inset-bottom));

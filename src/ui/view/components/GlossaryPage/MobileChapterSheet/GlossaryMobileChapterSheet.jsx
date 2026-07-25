@@ -8,39 +8,7 @@ import GlossaryTopicAreaSearchList from "../TopicAreaPanel/GlossaryTopicAreaSear
 
 const MOBILE_TOPIC_AREA_LIST_ID = "glossary-mobile-topic-area-list";
 
-export default function GlossaryMobileChapterSheet({
-	searchTerm,
-	searchPlaceholder,
-	searchLabel,
-	searchClearLabel,
-	searchKeyboardHint,
-	searchSummaryLabel,
-	searchScope,
-	searchScopeLabel,
-	searchScopeAriaLabel,
-	searchScopeOptions,
-	isSearchFilterOptionsOpen,
-	isSearching,
-	isSearchComboboxActive,
-	searchActiveDescendantId,
-	allTopicAreaListItem,
-	topicAreaListItems,
-	topicAreaListAriaLabel,
-	sheetTitle,
-	sheetSubtitle,
-	sheetOpenLabel,
-	sheetCloseLabel,
-	onSearchTermChange,
-	onFocusSearch,
-	onClearSearch,
-	onOpenFilterOptions,
-	onCloseFilterOptions,
-	onSelectFilterOption,
-	onMoveSearchSelectionDown,
-	onMoveSearchSelectionUp,
-	onOpenSearchKeyboardSelection,
-	onSelectTopicArea
-}) {
+export default function GlossaryMobileChapterSheet(props) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const openSheet = () => {
@@ -49,94 +17,94 @@ export default function GlossaryMobileChapterSheet({
 
 	const focusSearch = () => {
 		setIsOpen(true);
-		onFocusSearch();
+		props.onFocusSearch();
 	};
 
 	const changeSearchTerm = (nextSearchTerm) => {
 		setIsOpen(true);
-		onSearchTermChange(nextSearchTerm);
+		props.onSearchTermChange(nextSearchTerm);
 	};
 
 	const openFilterOptions = () => {
 		setIsOpen(true);
-		onOpenFilterOptions();
+		props.onOpenFilterOptions();
 	};
 
 	const changeSheetOpen = (nextIsOpen) => {
 		setIsOpen(nextIsOpen);
 
 		if (!nextIsOpen) {
-			onCloseFilterOptions();
+			props.onCloseFilterOptions();
 		}
 	};
 
+	const peekContent = (
+		<div className="glossary-mobile-chapter-sheet__search" onPointerDownCapture={openSheet}>
+			<GlossarySearchField
+				searchTerm={props.searchTerm}
+				searchPlaceholder={props.searchPlaceholder}
+				searchLabel={props.searchLabel}
+				searchClearLabel={props.searchClearLabel}
+				searchKeyboardHint={props.searchKeyboardHint}
+				searchSummaryLabel={props.searchSummaryLabel}
+				searchScopeLabel={props.searchScopeLabel}
+				searchScopeAriaLabel={props.searchScopeAriaLabel}
+				isSearchFilterOptionsOpen={props.isSearchFilterOptionsOpen}
+				isSearching={props.isSearching}
+				isSearchComboboxActive={isOpen && !props.isSearchFilterOptionsOpen && props.isSearchComboboxActive}
+				searchActiveDescendantId={isOpen && !props.isSearchFilterOptionsOpen ? props.searchActiveDescendantId : null}
+				topicAreaListId={MOBILE_TOPIC_AREA_LIST_ID}
+				onSearchTermChange={changeSearchTerm}
+				onFocusSearch={focusSearch}
+				onClearSearch={props.onClearSearch}
+				onOpenFilterOptions={openFilterOptions}
+				onMoveSearchSelectionDown={props.onMoveSearchSelectionDown}
+				onMoveSearchSelectionUp={props.onMoveSearchSelectionUp}
+				onOpenSearchKeyboardSelection={props.onOpenSearchKeyboardSelection}
+			/>
+		</div>
+	);
+	const expandedContent = (
+		<div className="glossary-mobile-chapter-sheet__body">
+			{props.isSearchFilterOptionsOpen ? (
+				<FilterOptionList
+					filterOptions={props.searchScopeOptions}
+					selectedFilterValue={props.searchScope}
+					onSelectFilterOption={props.onSelectFilterOption}
+				/>
+			) : props.isSearching ? (
+				<GlossaryTopicAreaSearchList
+					listId={MOBILE_TOPIC_AREA_LIST_ID}
+					ariaLabel={props.topicAreaListAriaLabel}
+					allTopicAreaListItem={props.allTopicAreaListItem}
+					items={props.topicAreaListItems}
+					onSelectTopicArea={props.onSelectTopicArea}
+				/>
+			) : (
+				<GlossaryTopicAreaNavigationList
+					ariaLabel={props.topicAreaListAriaLabel}
+					allTopicAreaListItem={props.allTopicAreaListItem}
+					items={props.topicAreaListItems}
+					onSelectTopicArea={props.onSelectTopicArea}
+				/>
+			)}
+		</div>
+	);
+
 	return (
-		<div className="glossary-mobile-chapter-sheet">
+		<div className="glossary-mobile-chapter-sheet" data-open={isOpen ? "true" : "false"}>
 			<DockedMobileBottomSheet
 				isOpen={isOpen}
 				onOpenChange={changeSheetOpen}
 				contentId="glossary-mobile-chapter-sheet"
-				title={sheetTitle}
-				subtitle={sheetSubtitle}
-				openLabel={sheetOpenLabel}
-				closeLabel={sheetCloseLabel}
-				peekLabel={sheetTitle}
-				popupClassName="glossary-mobile-chapter-sheet__popup"
-				contentClassName="glossary-mobile-chapter-sheet__content"
-			>
-				<div
-					className="glossary-mobile-chapter-sheet__search"
-					onPointerDownCapture={openSheet}
-				>
-					<GlossarySearchField
-						searchTerm={searchTerm}
-						searchPlaceholder={searchPlaceholder}
-						searchLabel={searchLabel}
-						searchClearLabel={searchClearLabel}
-						searchKeyboardHint={searchKeyboardHint}
-						searchSummaryLabel={searchSummaryLabel}
-						searchScopeLabel={searchScopeLabel}
-						searchScopeAriaLabel={searchScopeAriaLabel}
-						isSearchFilterOptionsOpen={isSearchFilterOptionsOpen}
-						isSearching={isSearching}
-						isSearchComboboxActive={isOpen && !isSearchFilterOptionsOpen && isSearchComboboxActive}
-						searchActiveDescendantId={isOpen && !isSearchFilterOptionsOpen ? searchActiveDescendantId : null}
-						topicAreaListId={MOBILE_TOPIC_AREA_LIST_ID}
-						onSearchTermChange={changeSearchTerm}
-						onFocusSearch={focusSearch}
-						onClearSearch={onClearSearch}
-						onOpenFilterOptions={openFilterOptions}
-						onMoveSearchSelectionDown={onMoveSearchSelectionDown}
-						onMoveSearchSelectionUp={onMoveSearchSelectionUp}
-						onOpenSearchKeyboardSelection={onOpenSearchKeyboardSelection}
-					/>
-				</div>
-
-				<div className="glossary-mobile-chapter-sheet__body" aria-hidden={!isOpen} inert={!isOpen}>
-					{isSearchFilterOptionsOpen ? (
-						<FilterOptionList
-							filterOptions={searchScopeOptions}
-							selectedFilterValue={searchScope}
-							onSelectFilterOption={onSelectFilterOption}
-						/>
-					) : isSearching ? (
-						<GlossaryTopicAreaSearchList
-							listId={MOBILE_TOPIC_AREA_LIST_ID}
-							ariaLabel={topicAreaListAriaLabel}
-							allTopicAreaListItem={allTopicAreaListItem}
-							items={topicAreaListItems}
-							onSelectTopicArea={onSelectTopicArea}
-						/>
-					) : (
-						<GlossaryTopicAreaNavigationList
-							ariaLabel={topicAreaListAriaLabel}
-							allTopicAreaListItem={allTopicAreaListItem}
-							items={topicAreaListItems}
-							onSelectTopicArea={onSelectTopicArea}
-						/>
-					)}
-				</div>
-			</DockedMobileBottomSheet>
+				title={props.sheetTitle}
+				subtitle={props.sheetSubtitle}
+				openLabel={props.sheetOpenLabel}
+				closeLabel={props.sheetCloseLabel}
+				peekLabel={props.sheetTitle}
+				peekContent={peekContent}
+				expandedContent={expandedContent}
+			/>
 		</div>
 	);
 }

@@ -6,42 +6,7 @@
 
 @media (max-width: 932px) {
 	.glossary-mobile-chapter-sheet {
-		--mobile-bottom-sheet-collapsed-visible-height: var(--glossary-mobile-sheet-collapsed-height);
-		position: fixed;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 60;
 		display: block;
-		pointer-events: none;
-	}
-
-	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root {
-		pointer-events: none;
-	}
-
-	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-popup {
-		pointer-events: auto;
-	}
-
-	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root[data-has-peek="true"] .glossary-mobile-chapter-sheet__popup {
-		border-color: color-mix(in srgb, var(--accent) 32%, var(--line));
-		padding-top: var(--space-1);
-		padding-bottom: calc(var(--space-7) + env(safe-area-inset-bottom));
-	}
-
-	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root[data-has-peek="true"] .glossary-mobile-chapter-sheet__content {
-		gap: 0;
-		max-width: 560px;
-	}
-
-	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-grip-control-docked {
-		min-height: 28px;
-		margin-bottom: 0;
-	}
-
-	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root:not([data-open="true"]) .glossary-mobile-chapter-sheet__body {
-		visibility: hidden;
 	}
 
 	.glossary-mobile-chapter-sheet__search {
@@ -61,17 +26,14 @@
 		font-size: 16px;
 	}
 
-	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root:not([data-open="true"]) .glossary-search-meta {
+	.glossary-mobile-chapter-sheet:not([data-open="true"]) .glossary-search-meta {
 		display: none;
 	}
 
 	.glossary-mobile-chapter-sheet__body {
 		display: flex;
 		min-height: 0;
-		flex: 1;
 		flex-direction: column;
-		overflow: hidden;
-		padding-bottom: var(--space-2);
 	}
 
 	.glossary-mobile-chapter-sheet .glossary-search-control {
@@ -108,7 +70,7 @@
 		gap: var(--space-3);
 		min-height: 0;
 		margin: 0;
-		padding: 0 0 var(--glossary-mobile-sheet-collapsed-height);
+		padding: 0 0 calc(var(--mobile-sheet-peek-height) + env(safe-area-inset-bottom));
 		overflow: visible;
 	}
 

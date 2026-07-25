@@ -40,8 +40,6 @@
 	}
 
 	.glossary-page {
-		--glossary-mobile-sheet-collapsed-height: calc(144px + env(safe-area-inset-bottom));
-
 		min-height: 100%;
 		height: auto;
 		flex: 0 0 auto;

@@ -1,6 +1,6 @@
 # SSOT-register — ExamPrepper frontend
 
-Oppdatert: 2026-07-24
+Oppdatert: 2026-07-25
 Verifisert base: `examprepper-frontend-safe-20260724-105708.zip`
 Base-SHA-256: `f63c174ee8c18a046723f0d6c7a41c365fc3c66ebd3dc0c19204f165d06f315d`
 
@@ -58,6 +58,7 @@ Base-SHA-256: `f63c174ee8c18a046723f0d6c7a41c365fc3c66ebd3dc0c19204f165d06f315d`
 | `WorkspaceState` | Uttømmende rendering av loading/error/empty/content |
 | `Header` | Feature-fri, slot-basert app-shell-header og geometri |
 | `Footer` | Canonical app-shell-footer |
+| `DockedMobileBottomSheet` | Eneste dockede mobile bottom-sheet-implementasjon: struktur, peek/expanded-slots, drag, safe-area, synlighet og scroll |
 | `WorkSpaceCard` | Delt innholdsflate inni workspace |
 | `AppErrorBoundary` | Root-grense for uventet render-/lifecycle-crash |
 
@@ -70,6 +71,7 @@ Disse er canonical renderere eller templates. De er ikke automatisk state-SSOT-e
 | `Tokens.css` | Delte designverdier, dark-mode-overstyringer og beviste globale lag |
 | Header-CSS + `headerVariants.js` | Header-geometri og eksplisitte appearance-/layout-varianter |
 | WorkspaceScaffold-CSS | Scaffoldstruktur og `.workspace-scaffold-body` |
+| MobileBottomSheet-CSS + mobile sheet-tokens | Docked geometri, viewportplassering, peek, expanded scroll og safe-area |
 | WorkSpaceCard-CSS | Delt card-surface, skygge og utvidelsespunkter |
 | Page-CSS | Sidespesifikk indre geometri; ikke Header- eller Scaffold-kjernepolicy |
 
