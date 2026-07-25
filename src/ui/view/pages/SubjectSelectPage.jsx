@@ -43,6 +43,7 @@ export default function SubjectSelectPage({ viewModel }) {
 	const renderSearchControls = () => (
 		<div className="subject-select-controls" aria-label={viewModel.t.subjectSelectControlsLabel}>
 			<SearchFilterField
+				className={null}
 				searchTerm={viewModel.searchTerm}
 				searchPlaceholder={viewModel.t.subjectSearchPlaceholder}
 				searchLabel={viewModel.t.subjectSearchLabel}
@@ -53,6 +54,8 @@ export default function SubjectSelectPage({ viewModel }) {
 				filterButtonAriaLabel={viewModel.t.subjectFacultyLabel}
 				isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
 				onOpenFilterOptions={viewModel.openSubjectFacultyOptions}
+				clearAction={null}
+				autocomplete={null}
 			/>
 		</div>
 	);

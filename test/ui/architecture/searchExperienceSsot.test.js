@@ -6,9 +6,12 @@ import { describe, expect, test } from "@jest/globals";
 const SEARCH_COMPONENT_DIRECTORY = path.resolve("src/ui/view/components/Search");
 const SEARCH_BACKDROP_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchBackdrop.jsx");
 const SEARCH_SUGGESTION_LIST_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchSuggestionList.jsx");
-const GLOSSARY_SEARCH_FIELD_PATH = path.resolve("src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossarySearchField.jsx");
+const SEARCH_FILTER_FIELD_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchFilterField.jsx");
+const LEGACY_GLOSSARY_SEARCH_FIELD_PATH = path.resolve("src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossarySearchField.jsx");
 const GLOSSARY_SEARCH_MODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPage/glossarySearchModel.js");
 const GLOSSARY_VIEW_MODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPageViewModel.js");
+const GLOSSARY_TABLE_MODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPage/glossaryTableModel.js");
+const LEGACY_GLOSSARY_HIGHLIGHT_PATH = path.resolve("src/ui/view/components/GlossaryPage/Shared/HighlightedText.jsx");
 const LEGACY_GLOSSARY_SEARCH_LIST_PATH = path.resolve("src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossaryTopicAreaSearchList.jsx");
 const PAGE_PATHS = [
 	path.resolve("src/ui/view/pages/SubjectSelectPage.jsx"),
@@ -91,14 +94,27 @@ describe("search experience SSOT", () => {
 		}
 	});
 
-	test("keeps the Glossary field on the shared search primitives", () => {
-		const source = readSource(GLOSSARY_SEARCH_FIELD_PATH);
+	test("uses one canonical search/filter field for standard search and Glossary autocomplete", () => {
+		const sharedFieldSource = readSource(SEARCH_FILTER_FIELD_PATH);
+		const glossaryConsumers = [
+			path.resolve("src/ui/view/components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx"),
+			path.resolve("src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx")
+		];
 
-		expect(source).toContain('from "../../Search/SearchField.jsx"');
-		expect(source).toContain('from "../../Search/SearchFilterControl.jsx"');
-		expect(source).toContain('className="search-filter-field glossary-search-field"');
-		expect(source).toContain('role="combobox"');
-		expect(source).toContain('aria-autocomplete="list"');
+		expect(fs.existsSync(LEGACY_GLOSSARY_SEARCH_FIELD_PATH)).toBe(false);
+		expect(sharedFieldSource).toContain("props.clearAction");
+		expect(sharedFieldSource).toContain("props.autocomplete");
+		expect(sharedFieldSource).toContain('role={autocomplete === null ? null : "combobox"}');
+		expect(sharedFieldSource).toContain('aria-autocomplete={autocomplete === null ? null : "list"}');
+		expect(sharedFieldSource).toContain('event.key === "ArrowDown"');
+		expect(sharedFieldSource).toContain('event.key === "Enter"');
+
+		for (const consumerPath of glossaryConsumers) {
+			const imports = collectImportedNames(consumerPath, "../../Search/SearchFilterField.jsx");
+
+			expect(imports.has("SearchFilterField")).toBe(true);
+			expect(containsJsxElement(consumerPath, "SearchFilterField")).toBe(true);
+		}
 	});
 
 	test("keeps listbox mechanics in the shared suggestion renderer", () => {
@@ -121,4 +137,18 @@ describe("search experience SSOT", () => {
 		expect(viewModelSource).not.toContain("GLOSSARY_SEARCH_SCOPES");
 		expect(fs.existsSync(LEGACY_GLOSSARY_SEARCH_LIST_PATH)).toBe(false);
 	});
+	test("keeps draft autocomplete input separate from committed glossary content", () => {
+		const modelSource = readSource(GLOSSARY_SEARCH_MODEL_PATH);
+		const viewModelSource = readSource(GLOSSARY_VIEW_MODEL_PATH);
+		const tableModelSource = readSource(GLOSSARY_TABLE_MODEL_PATH);
+
+		expect(modelSource).not.toContain("filterEntriesBySearchTerm");
+		expect(modelSource).not.toContain("countEntryMatchesByTopicArea");
+		expect(viewModelSource).toContain("selectedGlossaryEntryKey");
+		expect(viewModelSource).not.toContain("searchSummaryLabel");
+		expect(viewModelSource).not.toContain("filterEntriesByNormalizedSearchTerm");
+		expect(tableModelSource).not.toContain("normalizedSearchTerm");
+		expect(fs.existsSync(LEGACY_GLOSSARY_HIGHLIGHT_PATH)).toBe(false);
+	});
+
 });

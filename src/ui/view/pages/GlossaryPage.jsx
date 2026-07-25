@@ -37,7 +37,6 @@ export default function GlossaryPage({ viewModel }) {
 			searchLabel={viewModel.searchLabel}
 			searchClearLabel={viewModel.searchClearLabel}
 			searchKeyboardHint={viewModel.searchKeyboardHint}
-			searchSummaryLabel={viewModel.searchSummaryLabel}
 			searchSuggestionListAriaLabel={viewModel.searchSuggestionListAriaLabel}
 			chapterFilterValue={viewModel.chapterFilterValue}
 			chapterFilterLabel={viewModel.chapterFilterLabel}

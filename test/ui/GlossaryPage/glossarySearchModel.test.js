@@ -1,6 +1,5 @@
-// test/ui/GlossaryPage/glossarySearchModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import { GLOSSARY_AUTOCOMPLETE_LIMIT, GLOSSARY_AUTOCOMPLETE_MIN_LENGTH, countEntryMatchesByTopicArea, countEntryMatchesByTopicAreaForNormalizedSearchTerm, createGlossaryAutocompleteOptionId, createGlossaryAutocompleteSuggestions, entryMatchesSearchTerm, filterEntriesByNormalizedSearchTerm, filterEntriesBySearchTerm } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
+import { GLOSSARY_AUTOCOMPLETE_LIMIT, GLOSSARY_AUTOCOMPLETE_MIN_LENGTH, createGlossaryAutocompleteOptionId, createGlossaryAutocompleteSuggestions } from "../../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
 import normalizeSearchTerm from "../../../src/ui/viewmodel/Utils/normalizeSearchTerm.js";
 
 const localizedEntries = [
@@ -46,35 +45,6 @@ describe("glossarySearchModel", () => {
 		expect(normalizeSearchTerm("  KONTROLL  ")).toBe("kontroll");
 	});
 
-	test("searches terms without treating explanations as terms", () => {
-		expect(entryMatchesSearchTerm(localizedEntries[0], "tilgang")).toBe(true);
-		expect(filterEntriesBySearchTerm(localizedEntries, "angrepsflater")).toEqual([]);
-		expect(filterEntriesBySearchTerm(localizedEntries, "FLYTKONTROLL")).toEqual([
-			localizedEntries[2]
-		]);
-	});
-
-	test("uses normalized variants without repeating normalization", () => {
-		expect(filterEntriesByNormalizedSearchTerm(localizedEntries, "kontroll")).toEqual([
-			localizedEntries[0],
-			localizedEntries[1],
-			localizedEntries[2],
-			localizedEntries[3]
-		]);
-		expect(countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, "kontroll")).toEqual(new Map([
-			["security-models", 2],
-			["networking", 2]
-		]));
-	});
-
-	test("returns all entries and counts for an empty search term", () => {
-		expect(filterEntriesBySearchTerm(localizedEntries, "   ")).toEqual(localizedEntries);
-		expect(countEntryMatchesByTopicArea(localizedEntries, "   ")).toEqual(new Map([
-			["security-models", 3],
-			["networking", 2]
-		]));
-	});
-
 	test("exposes autocomplete from the first normalized character", () => {
 		expect(GLOSSARY_AUTOCOMPLETE_MIN_LENGTH).toBe(1);
 		expect(createGlossaryAutocompleteSuggestions({
@@ -96,7 +66,7 @@ describe("glossarySearchModel", () => {
 		})).toEqual([]);
 	});
 
-	test("ranks exact, leading, word-leading and contained matches", () => {
+	test("ranks exact, leading, word-leading and contained term matches", () => {
 		const suggestions = createGlossaryAutocompleteSuggestions({
 			localizedEntries,
 			selectedTopicAreaKeys: new Set(["security-models", "networking"]),
@@ -117,6 +87,15 @@ describe("glossarySearchModel", () => {
 			metaLabel: "Kapittel 1",
 			topicAreaKey: "security-models"
 		});
+	});
+
+	test("does not use explanation text as an autocomplete candidate", () => {
+		expect(createGlossaryAutocompleteSuggestions({
+			localizedEntries,
+			selectedTopicAreaKeys: new Set(["security-models", "networking"]),
+			normalizedSearchTerm: "angrepsflater",
+			topicAreaReferenceByKey
+		})).toEqual([]);
 	});
 
 	test("limits suggestions to selected chapters and the shared result limit", () => {
@@ -140,10 +119,5 @@ describe("glossarySearchModel", () => {
 
 		expect(suggestions.length).toBeLessThanOrEqual(GLOSSARY_AUTOCOMPLETE_LIMIT);
 		expect(suggestions.every((suggestion) => suggestion.topicAreaKey === "networking")).toBe(true);
-	});
-
-	test("returns no entries and no counts when the search has no matches", () => {
-		expect(filterEntriesBySearchTerm(localizedEntries, "kvantefysikk")).toEqual([]);
-		expect(countEntryMatchesByTopicArea(localizedEntries, "kvantefysikk")).toEqual(new Map());
 	});
 });

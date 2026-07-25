@@ -14,18 +14,10 @@
 		flex: 0 0 auto;
 	}
 
-	.glossary-mobile-chapter-sheet:not([data-open="true"]) .glossary-search-meta {
-		display: none;
-	}
-
 	.glossary-mobile-chapter-sheet__body {
 		display: flex;
 		min-height: 0;
 		flex-direction: column;
-	}
-
-	.glossary-mobile-chapter-sheet .glossary-search-control {
-		flex: 0 0 auto;
 	}
 
 	.glossary-mobile-chapter-sheet .glossary-topic-area-navigation {

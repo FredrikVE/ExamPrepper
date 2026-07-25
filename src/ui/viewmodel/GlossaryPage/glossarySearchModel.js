@@ -5,43 +5,6 @@ export const GLOSSARY_AUTOCOMPLETE_MIN_LENGTH = 1;
 export const GLOSSARY_AUTOCOMPLETE_LIMIT = 8;
 export const GLOSSARY_AUTOCOMPLETE_LIST_ID = "glossary-search-suggestions";
 
-export function entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm) {
-	if (!normalizedSearchTerm) {
-		return true;
-	}
-
-	return normalizeSearchTerm(localizedEntry.term).includes(normalizedSearchTerm);
-}
-
-export function filterEntriesByNormalizedSearchTerm(localizedEntries, normalizedSearchTerm) {
-	return localizedEntries.filter((localizedEntry) => (
-		entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm)
-	));
-}
-
-export function filterEntriesBySearchTerm(localizedEntries, searchTerm) {
-	return filterEntriesByNormalizedSearchTerm(localizedEntries, normalizeSearchTerm(searchTerm));
-}
-
-export function countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, normalizedSearchTerm) {
-	const matchCountsByTopicAreaKey = new Map();
-
-	for (const localizedEntry of localizedEntries) {
-		if (!entryMatchesSearchTerm(localizedEntry, normalizedSearchTerm)) {
-			continue;
-		}
-
-		const previousMatchCount = matchCountsByTopicAreaKey.get(localizedEntry.topicAreaKey) ?? 0;
-		matchCountsByTopicAreaKey.set(localizedEntry.topicAreaKey, previousMatchCount + 1);
-	}
-
-	return matchCountsByTopicAreaKey;
-}
-
-export function countEntryMatchesByTopicArea(localizedEntries, searchTerm) {
-	return countEntryMatchesByTopicAreaForNormalizedSearchTerm(localizedEntries, normalizeSearchTerm(searchTerm));
-}
-
 export function createGlossaryAutocompleteSuggestions(params) {
 	if (params.normalizedSearchTerm.length < GLOSSARY_AUTOCOMPLETE_MIN_LENGTH) {
 		return [];

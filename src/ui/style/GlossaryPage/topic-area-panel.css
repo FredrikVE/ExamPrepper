@@ -149,17 +149,11 @@
 	text-overflow: ellipsis;
 }
 
-.glossary-topic-area-item__subtitle,
-.glossary-topic-area-item__match-count {
+.glossary-topic-area-item__subtitle {
 	color: var(--text-muted);
 	font-size: 12px;
 	font-weight: 560;
 	line-height: 1.35;
-}
-
-.glossary-topic-area-item__match-count {
-	color: var(--accent);
-	font-weight: 700;
 }
 
 .glossary-topic-area-item__count {

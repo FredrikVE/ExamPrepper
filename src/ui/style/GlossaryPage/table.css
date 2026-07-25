@@ -67,12 +67,6 @@
 	}
 }
 
-.glossary-search-mark {
-	padding: 0 2px;
-	border-radius: 3px;
-	background: color-mix(in srgb, var(--accent) 34%, transparent);
-	color: inherit;
-}
 
 .glossary-table-term {
 	display: block;

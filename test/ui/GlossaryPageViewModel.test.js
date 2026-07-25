@@ -53,10 +53,7 @@ const translations = {
 	glossaryPageAutocompleteAriaLabel: "Begrepsforslag",
 	glossaryPageSearchClearLabel: "Tøm",
 	glossaryPageSearchKeyboardHint: "Bruk piltastene",
-	glossaryPageSearchSummary: (chapterCount, matchCount) => `${chapterCount}/${matchCount}`,
-	glossaryPageChapterMatchCount: (matchCount) => `${matchCount} treff`,
 	glossaryPageChapterSubtitle: (entryCount) => `${entryCount} begreper`,
-	glossaryPageChapterSearchSubtitle: (matchCount) => `${matchCount} søketreff`,
 	glossaryPageTermColumnHeader: "Begrep",
 	glossaryPageExplanationColumnHeader: "Forklaring",
 	glossaryPageSelectAllChaptersLabel: "Velg alle",
@@ -73,8 +70,6 @@ const translations = {
 	glossaryPageNoEntriesBody: "Ingen begreper finnes.",
 	glossaryPageNoEntriesInSelectionTitle: "Ingen begreper i utvalget",
 	glossaryPageNoEntriesInSelectionBody: "Velg et annet kapittel.",
-	glossaryPageNoSearchResultsTitle: "Ingen treff",
-	glossaryPageNoSearchResultsBody: (searchTerm) => `Ingen begrepstreff for ${searchTerm}.`,
 	glossaryPageMobileChapterSheetTitle: "Velg kapitler",
 	glossaryPageMobileChapterSheetSubtitle: "Velg ett eller flere kapitler",
 	glossaryPageMobileChapterSheetOpenLabel: "Åpne kapittelvelger",
@@ -141,6 +136,7 @@ function createViewModel({
 	keyboardIndex = -1,
 	isSearchFilterOptionsOpen = false,
 	isSearchAutocompleteOpen = false,
+	selectedGlossaryEntryKey = null,
 	loadedGlossaryEntries = glossaryEntries,
 	loadedTopicAreas = topicAreas,
 	glossaryStatus = LOAD_STATUS.READY,
@@ -157,7 +153,7 @@ function createViewModel({
 	language = "no",
 	isActive = true
 } = {}) {
-	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen);
+	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey);
 	loadModelQueue = [
 		{
 			status: glossaryStatus,
@@ -234,12 +230,13 @@ describe("useGlossaryPageViewModel", () => {
 	test("owns term search, chapter selection, keyboard target, filter and autocomplete state", () => {
 		createViewModel();
 
-		expect(useState).toHaveBeenCalledTimes(5);
+		expect(useState).toHaveBeenCalledTimes(6);
 		expect(useState).toHaveBeenNthCalledWith(1, "");
 		expect(useState).toHaveBeenNthCalledWith(2, null);
 		expect(useState).toHaveBeenNthCalledWith(3, -1);
 		expect(useState).toHaveBeenNthCalledWith(4, false);
 		expect(useState).toHaveBeenNthCalledWith(5, false);
+		expect(useState).toHaveBeenNthCalledWith(6, null);
 	});
 
 	test("loads all glossary entries once and topic areas for the active language", async () => {
@@ -272,7 +269,7 @@ describe("useGlossaryPageViewModel", () => {
 		]);
 	});
 
-	test("searches only term labels inside the selected chapters", () => {
+	test("narrows autocomplete suggestions without filtering the glossary table while typing", () => {
 		const { viewModel } = createViewModel({
 			searchTerm: "p",
 			selectedTopicAreaKeys: new Set(["networking"]),
@@ -284,9 +281,9 @@ describe("useGlossaryPageViewModel", () => {
 			isSearching: true,
 			isSearchAutocompleteActive: true,
 			isSearchPopupOpen: true,
-			autocompleteListId: GLOSSARY_AUTOCOMPLETE_LIST_ID,
-			searchSummaryLabel: "1/1"
+			autocompleteListId: GLOSSARY_AUTOCOMPLETE_LIST_ID
 		});
+		expect(viewModel).not.toHaveProperty("searchSummaryLabel");
 		expect(viewModel.autocompleteSuggestions).toEqual([
 			{
 				id: "packet",
@@ -297,6 +294,19 @@ describe("useGlossaryPageViewModel", () => {
 			}
 		]);
 		expect(viewModel.searchActiveDescendantId).toBe(createGlossaryAutocompleteOptionId("packet"));
+		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
+			"packet",
+			"transport-layer"
+		]);
+	});
+
+	test("shows only a committed autocomplete result after selection", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "Pakke",
+			selectedTopicAreaKeys: new Set(["networking"]),
+			selectedGlossaryEntryKey: "packet"
+		});
+
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual(["packet"]);
 	});
 
@@ -347,6 +357,7 @@ describe("useGlossaryPageViewModel", () => {
 		expect(stateSetters[2]).toHaveBeenCalledWith(0);
 		expect(stateSetters[3]).toHaveBeenCalledWith(false);
 		expect(stateSetters[4]).toHaveBeenCalledWith(true);
+		expect(stateSetters[5]).toHaveBeenCalledWith(null);
 	});
 
 	test("the all-chapters filter restores the complete chapter set", () => {
@@ -364,6 +375,7 @@ describe("useGlossaryPageViewModel", () => {
 
 		viewModel.changeGlossarySearchTerm("  nøk  ");
 		expect(stateSetters[0]).toHaveBeenCalledWith("  nøk  ");
+		expect(stateSetters[5]).toHaveBeenCalledWith(null);
 		expect(stateSetters[2]).toHaveBeenCalledWith(0);
 		expect(stateSetters[3]).toHaveBeenCalledWith(false);
 		expect(stateSetters[4]).toHaveBeenCalledWith(true);
@@ -383,6 +395,7 @@ describe("useGlossaryPageViewModel", () => {
 		clearStateSetterCalls();
 		viewModel.clearGlossarySearch();
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
+		expect(stateSetters[5]).toHaveBeenCalledWith(null);
 		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 	});
 
@@ -414,6 +427,7 @@ describe("useGlossaryPageViewModel", () => {
 		viewModel.openSearchKeyboardSelection();
 
 		expect(stateSetters[0]).toHaveBeenCalledWith("Pakke");
+		expect(stateSetters[5]).toHaveBeenCalledWith("packet");
 		expectSetContents(stateSetters[1].mock.calls[0][0], ["networking"]);
 		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
 		expect(stateSetters[4]).toHaveBeenCalledWith(false);
@@ -428,6 +442,7 @@ describe("useGlossaryPageViewModel", () => {
 		const updateSelection = stateSetters[1].mock.calls[0][0];
 		expectSetContents(updateSelection(selectedKeys), ["cryptography", "networking"]);
 		expectSetContents(selectedKeys, ["cryptography"]);
+		expect(stateSetters[5]).toHaveBeenCalledWith(null);
 	});
 
 	test("resets the complete search contract when the subject changes", () => {
@@ -436,7 +451,8 @@ describe("useGlossaryPageViewModel", () => {
 			selectedTopicAreaKeys: new Set(["networking"]),
 			keyboardIndex: 1,
 			isSearchFilterOptionsOpen: true,
-			isSearchAutocompleteOpen: true
+			isSearchAutocompleteOpen: true,
+			selectedGlossaryEntryKey: "packet"
 		});
 
 		expect(stateSetters[0]).toHaveBeenCalledWith("");
@@ -444,6 +460,7 @@ describe("useGlossaryPageViewModel", () => {
 		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
 		expect(stateSetters[3]).toHaveBeenCalledWith(false);
 		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+		expect(stateSetters[5]).toHaveBeenCalledWith(null);
 	});
 
 	test("rebuilds localized rows for a language switch without reloading glossary entries", () => {
@@ -486,15 +503,16 @@ describe("useGlossaryPageViewModel", () => {
 		expect(viewModel.workspaceState).toEqual(expectedWorkspaceState);
 	});
 
-	test("returns a local no-result state for term searches", () => {
-		const { viewModel } = createViewModel({ searchTerm: "finnes-ikke" });
+	test("keeps the glossary content stable when autocomplete has no matches", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "finnes-ikke",
+			isSearchAutocompleteOpen: true
+		});
 
 		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
-		expect(viewModel.glossaryPanelEmptyState).toEqual({
-			kind: "no-search-results",
-			title: "Ingen treff",
-			body: "Ingen begrepstreff for finnes-ikke."
-		});
+		expect(viewModel.autocompleteSuggestions).toEqual([]);
+		expect(viewModel.glossaryPanelEmptyState).toBeNull();
+		expect(viewModel.glossaryTableRows).toHaveLength(glossaryEntries.length);
 	});
 
 	test("exposes the shared load-status and content-navigation contracts", () => {

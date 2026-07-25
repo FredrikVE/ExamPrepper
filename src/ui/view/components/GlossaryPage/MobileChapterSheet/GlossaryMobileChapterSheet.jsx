@@ -2,7 +2,7 @@
 import { useState } from "react";
 import DockedMobileBottomSheet from "../../MobileBottomSheet/DockedMobileBottomSheet.jsx";
 import SearchSheetBody from "../../Search/SearchSheetBody.jsx";
-import GlossarySearchField from "../TopicAreaPanel/GlossarySearchField.jsx";
+import SearchFilterField from "../../Search/SearchFilterField.jsx";
 import GlossaryTopicAreaNavigationList from "../TopicAreaPanel/GlossaryTopicAreaNavigationList.jsx";
 
 export default function GlossaryMobileChapterSheet(props) {
@@ -25,29 +25,33 @@ export default function GlossaryMobileChapterSheet(props) {
 	) : null;
 	const peekContent = (
 		<div className="glossary-mobile-chapter-sheet__search">
-			<GlossarySearchField
+			<SearchFilterField
+				className={null}
 				searchTerm={props.searchTerm}
 				searchPlaceholder={props.searchPlaceholder}
 				searchLabel={props.searchLabel}
-				searchClearLabel={props.searchClearLabel}
-				searchKeyboardHint={props.searchKeyboardHint}
-				searchSummaryLabel={props.searchSummaryLabel}
-				chapterFilterLabel={props.chapterFilterLabel}
-				searchFilterAriaLabel={props.searchFilterAriaLabel}
-				isSearchFilterOptionsOpen={props.isSearchFilterOptionsOpen}
-				isSearching={props.isSearching}
-				isSearchPopupOpen={props.isSearchPopupOpen}
-				isSearchAutocompleteActive={props.isSearchAutocompleteActive}
-				searchActiveDescendantId={props.searchActiveDescendantId}
-				autocompleteListId={props.autocompleteListId}
 				onSearchTermChange={props.onSearchTermChange}
 				onFocusSearch={props.onFocusSearch}
-				onClearSearch={props.onClearSearch}
 				onRequestClose={props.onRequestClose}
+				filterButtonLabel={props.chapterFilterLabel}
+				filterButtonAriaLabel={props.searchFilterAriaLabel}
+				isFilterOptionsOpen={props.isSearchFilterOptionsOpen}
 				onOpenFilterOptions={props.onOpenFilterOptions}
-				onMoveSearchSelectionDown={props.onMoveSearchSelectionDown}
-				onMoveSearchSelectionUp={props.onMoveSearchSelectionUp}
-				onOpenSearchKeyboardSelection={props.onOpenSearchKeyboardSelection}
+				clearAction={props.isSearching ? {
+					label: props.searchClearLabel,
+					onClear: props.onClearSearch
+				} : null}
+				autocomplete={{
+					isActive: props.isSearchAutocompleteActive,
+					isPopupOpen: props.isSearchPopupOpen,
+					listId: props.autocompleteListId,
+					activeDescendantId: props.searchActiveDescendantId,
+					descriptionId: "glossary-mobile-search-meta",
+					keyboardHint: isOpen ? props.searchKeyboardHint : null,
+					onMoveDown: props.onMoveSearchSelectionDown,
+					onMoveUp: props.onMoveSearchSelectionUp,
+					onSelectActive: props.onOpenSearchKeyboardSelection
+				}}
 			/>
 		</div>
 	);

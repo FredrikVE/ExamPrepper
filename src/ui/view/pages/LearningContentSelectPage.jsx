@@ -44,6 +44,7 @@ export default function LearningContentSelectPage({ viewModel }) {
 	const renderSearchControls = () => (
 		<div className="exam-select-controls">
 			<SearchFilterField
+				className={null}
 				searchTerm={viewModel.searchTerm}
 				searchPlaceholder={viewModel.searchPlaceholder}
 				searchLabel={viewModel.searchLabel}
@@ -54,6 +55,8 @@ export default function LearningContentSelectPage({ viewModel }) {
 				filterButtonAriaLabel={viewModel.categoryAriaLabel}
 				isFilterOptionsOpen={viewModel.isSearchSheetOpen && viewModel.isFilterOptionsMode}
 				onOpenFilterOptions={viewModel.openExamCategoryOptions}
+				clearAction={null}
+				autocomplete={null}
 			/>
 		</div>
 	);

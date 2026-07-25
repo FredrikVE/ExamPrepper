@@ -59,7 +59,8 @@ Base-SHA-256: `f63c174ee8c18a046723f0d6c7a41c365fc3c66ebd3dc0c19204f165d06f315d`
 | `Header` | Feature-fri, slot-basert app-shell-header og geometri |
 | `Footer` | Canonical app-shell-footer |
 | `DockedMobileBottomSheet` | Eneste dockede mobile bottom-sheet-implementasjon: struktur, peek/docked-overlay/expanded-slots, drag, safe-area, synlighet og scroll |
-| Search-komponentene | `SearchField`, `SearchFilterControl`, `SearchSuggestionList` og `SearchBackdrop` eier canonical felt-, filter-, listbox- og blur/backdrop-mekanikk |
+| Search-komponentene | `SearchFilterField` komponerer canonical felt, filter, clear-action og valgfri combobox-tastaturkontrakt; `SearchSuggestionList` og `SearchBackdrop` eier listbox og blur/backdrop |
+| `FormattedText` | Canonical renderer for `**fet tekst**` i produktinnhold |
 | `WorkSpaceCard` | Delt innholdsflate inni workspace |
 | `AppErrorBoundary` | Root-grense for uventet render-/lifecycle-crash |
 
@@ -73,7 +74,7 @@ Disse er canonical renderere eller templates. De er ikke automatisk state-SSOT-e
 | Header-CSS + `headerVariants.js` | Header-geometri og eksplisitte appearance-/layout-varianter |
 | WorkspaceScaffold-CSS | Scaffoldstruktur og `.workspace-scaffold-body` |
 | MobileBottomSheet-CSS + mobile sheet-tokens | Docked geometri, viewportplassering, peek, expanded scroll og safe-area |
-| Search-CSS | Delt søkefeltgeometri, popup-overflate, blur/backdrop, footer-lift og suggestion-rader |
+| Search-CSS | Delt søkefeltgeometri, clear-action, autocomplete-hint, popup-overflate, blur/backdrop, footer-lift og suggestion-rader |
 | WorkSpaceCard-CSS | Delt card-surface, skygge og utvidelsespunkter |
 | Page-CSS | Sidespesifikk indre geometri; ikke Header- eller Scaffold-kjernepolicy |
 
@@ -86,7 +87,7 @@ Disse er canonical renderere eller templates. De er ikke automatisk state-SSOT-e
 | `normalizeSearchTerm(searchTerm)` | Streng string inn, trim + lower-case ut; ingen coercion |
 | `shuffleInPlace(items, random)` | In-place Fisher–Yates med eksplisitt RNG |
 
-Feature-policy som identisk-rekkefølge-rotasjon forblir lokal. Glossary eier terskel, rangering og kapittelavgrensning for autocomplete; den delte Search-familien eier ikke glossary-data.
+Feature-policy som identisk-rekkefølge-rotasjon forblir lokal. Glossary eier terskel, rangering og kapittelavgrensning for autocomplete; den delte Search-familien eier ikke glossary-data. Glossary-tabell og mobilkort sender rå term- og forklaringstekst gjennom `FormattedText`; autocomplete skal ikke gjeninnføre inline søkemarkering i innholdet.
 
 ## Feilkontrakter
 

@@ -1,8 +1,8 @@
 // src/ui/view/components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx
 import Footer from "../../Footer/Footer.jsx";
+import SearchFilterField from "../../Search/SearchFilterField.jsx";
 import SearchSheetBody from "../../Search/SearchSheetBody.jsx";
 import GlossaryMobileChapterSheet from "../MobileChapterSheet/GlossaryMobileChapterSheet.jsx";
-import GlossarySearchField from "../TopicAreaPanel/GlossarySearchField.jsx";
 
 export default function GlossaryFooter(props) {
 	const hasSearchContent = props.isSearchFilterOptionsOpen
@@ -35,7 +35,6 @@ export default function GlossaryFooter(props) {
 					searchLabel={props.searchLabel}
 					searchClearLabel={props.searchClearLabel}
 					searchKeyboardHint={props.searchKeyboardHint}
-					searchSummaryLabel={props.searchSummaryLabel}
 					searchSuggestionListAriaLabel={props.searchSuggestionListAriaLabel}
 					chapterFilterValue={props.chapterFilterValue}
 					chapterFilterLabel={props.chapterFilterLabel}
@@ -72,29 +71,33 @@ export default function GlossaryFooter(props) {
 					{desktopSearchContent}
 
 					<div className="glossary-search-footer__controls">
-						<GlossarySearchField
+						<SearchFilterField
+							className={null}
 							searchTerm={props.searchTerm}
 							searchPlaceholder={props.searchPlaceholder}
 							searchLabel={props.searchLabel}
-							searchClearLabel={props.searchClearLabel}
-							searchKeyboardHint={props.searchKeyboardHint}
-							searchSummaryLabel={props.searchSummaryLabel}
-							chapterFilterLabel={props.chapterFilterLabel}
-							searchFilterAriaLabel={props.searchFilterAriaLabel}
-							isSearchFilterOptionsOpen={props.isSearchFilterOptionsOpen}
-							isSearching={props.isSearching}
-							isSearchPopupOpen={props.isSearchPopupOpen}
-							isSearchAutocompleteActive={props.isSearchAutocompleteActive}
-							searchActiveDescendantId={props.searchActiveDescendantId}
-							autocompleteListId={props.autocompleteListId}
 							onSearchTermChange={props.onSearchTermChange}
 							onFocusSearch={props.onFocusSearch}
-							onClearSearch={props.onClearSearch}
 							onRequestClose={props.onRequestClose}
+							filterButtonLabel={props.chapterFilterLabel}
+							filterButtonAriaLabel={props.searchFilterAriaLabel}
+							isFilterOptionsOpen={props.isSearchFilterOptionsOpen}
 							onOpenFilterOptions={props.onOpenFilterOptions}
-							onMoveSearchSelectionDown={props.onMoveSearchSelectionDown}
-							onMoveSearchSelectionUp={props.onMoveSearchSelectionUp}
-							onOpenSearchKeyboardSelection={props.onOpenSearchKeyboardSelection}
+							clearAction={props.isSearching ? {
+								label: props.searchClearLabel,
+								onClear: props.onClearSearch
+							} : null}
+							autocomplete={{
+								isActive: props.isSearchAutocompleteActive,
+								isPopupOpen: props.isSearchPopupOpen,
+								listId: props.autocompleteListId,
+								activeDescendantId: props.searchActiveDescendantId,
+								descriptionId: "glossary-desktop-search-meta",
+								keyboardHint: props.searchKeyboardHint,
+								onMoveDown: props.onMoveSearchSelectionDown,
+								onMoveUp: props.onMoveSearchSelectionUp,
+								onSelectActive: props.onOpenSearchKeyboardSelection
+							}}
 						/>
 					</div>
 				</div>
