@@ -156,6 +156,7 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-07-24 | «SSOT» reserveres for autoritativ state, policy, konfigurasjon eller token-eierskap. Delte renderere dokumenteres som canonical UI-implementasjoner, ikke som state-SSOT-er. |
 | 2026-07-24 | Komponentarkitekturen følger pragmatisk Atomic Design: UI-primitiver → sammensatte komponenter → feature-komponenter → app-shell/sidemal → Page. Nivåene beskriver ansvar og avhengighetsretning, ikke obligatoriske mapper. Lik markup alene er ikke grunnlag for konsolidering. |
 | 2026-07-25 | `DockedMobileBottomSheet` er canonical eier av docked geometri, safe-area, grip/drag, peek/docked-overlay/expanded-slots, expanded synlighet og scroll. Søk og filter endrer ikke sheetets åpen-state; bare grip, chevron og drag gjør det. Feature-sheets eier innhold og handlinger, men overstyrer ikke `.mobile-bottom-sheet-*`-internals eller collapsed-height. |
+| 2026-07-25 | Search-familien eier canonical søkefelt, filterkontroll, suggestion-listbox og blur/backdrop. Feature-ViewModels eier kandidater, rangering og filterpolicy. Glossary søker alltid etter begreper, viser autocomplete fra første normaliserte tegn og bruker kapitler som eneste søkefilter. |
 | (backlog) | Navngitt z-indeksskala i `Tokens.css`. Rå app-lag i komponent-CSS fases ut; lokale stacking-verdier tokeniseres ikke automatisk. |
 
 ---

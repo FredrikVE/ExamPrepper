@@ -7,6 +7,7 @@ import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import ExamGrid from "../components/LearningContentSelectPage/ExamGrid.jsx";
 import FlashcardDeckGrid from "../components/LearningContentSelectPage/FlashcardDeckGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
+import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
@@ -29,6 +30,9 @@ export default function LearningContentSelectPage({ viewModel }) {
 			<SearchSheetBody
 				isFilterOptionsMode={viewModel.isFilterOptionsMode}
 				searchSuggestions={viewModel.searchSuggestions}
+				suggestionListId={null}
+				suggestionListAriaLabel={null}
+				activeSuggestionId={null}
 				filterOptions={viewModel.categoryFilterOptions}
 				selectedFilterValue={viewModel.category}
 				onSelectSearchSuggestion={viewModel.selectSearchSuggestion}
@@ -139,18 +143,13 @@ export default function LearningContentSelectPage({ viewModel }) {
 		</Footer>
 	);
 
-	const overlay = viewModel.isSearchSheetOpen ? (
-		<button
-			type="button"
-			className="search-backdrop search-backdrop-visible"
-			onMouseDown={(event) => {
-				event.preventDefault();
-			}}
-			onClick={viewModel.closeExamSearchSheet}
-			aria-label={viewModel.searchCloseLabel}
-			tabIndex={-1}
+	const overlay = (
+		<SearchBackdrop
+			isOpen={viewModel.isSearchSheetOpen}
+			closeLabel={viewModel.searchCloseLabel}
+			onClose={viewModel.closeExamSearchSheet}
 		/>
-	) : null;
+	);
 
 	return (
 		<WorkspaceScaffold

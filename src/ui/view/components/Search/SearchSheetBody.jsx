@@ -1,29 +1,24 @@
-// src/ui/view/components/Search/SearchSheetBody.jsx
 import FilterOptionList from "./FilterOptionList.jsx";
 import SearchSuggestionList from "./SearchSuggestionList.jsx";
 
-export default function SearchSheetBody({
-	isFilterOptionsMode,
-	searchSuggestions,
-	filterOptions,
-	selectedFilterValue,
-	onSelectSearchSuggestion,
-	onSelectFilterOption
-}) {
-	if (isFilterOptionsMode) {
+export default function SearchSheetBody(props) {
+	if (props.isFilterOptionsMode) {
 		return (
 			<FilterOptionList
-				filterOptions={filterOptions}
-				selectedFilterValue={selectedFilterValue}
-				onSelectFilterOption={onSelectFilterOption}
+				filterOptions={props.filterOptions}
+				selectedFilterValue={props.selectedFilterValue}
+				onSelectFilterOption={props.onSelectFilterOption}
 			/>
 		);
 	}
 
 	return (
 		<SearchSuggestionList
-			suggestions={searchSuggestions}
-			onSelectSearchSuggestion={onSelectSearchSuggestion}
+			suggestions={props.searchSuggestions}
+			listId={props.suggestionListId}
+			ariaLabel={props.suggestionListAriaLabel}
+			activeSuggestionId={props.activeSuggestionId}
+			onSelectSearchSuggestion={props.onSelectSearchSuggestion}
 		/>
 	);
 }

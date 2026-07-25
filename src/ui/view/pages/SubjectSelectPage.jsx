@@ -7,6 +7,7 @@ import Footer from "../components/Footer/Footer.jsx";
 import SubjectSelectTopbar from "../components/SubjectSelectPage/SubjectSelectTopbar.jsx";
 import SubjectSelectGrid from "../components/SubjectSelectPage/SubjectSelectGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
+import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
 import SearchFilterField from "../components/Search/SearchFilterField.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 import PageToolsMobileFooterSheet from "../components/PageTools/PageToolsMobileFooterSheet.jsx";
@@ -28,6 +29,9 @@ export default function SubjectSelectPage({ viewModel }) {
 			<SearchSheetBody
 				isFilterOptionsMode={viewModel.isFilterOptionsMode}
 				searchSuggestions={viewModel.searchSuggestions}
+				suggestionListId={null}
+				suggestionListAriaLabel={null}
+				activeSuggestionId={null}
 				filterOptions={viewModel.facultyFilterOptions}
 				selectedFilterValue={viewModel.faculty}
 				onSelectSearchSuggestion={viewModel.selectSubject}
@@ -97,18 +101,13 @@ export default function SubjectSelectPage({ viewModel }) {
 		</Footer>
 	);
 
-	const overlay = viewModel.isSearchSheetOpen ? (
-		<button
-			type="button"
-			className="search-backdrop search-backdrop-visible"
-			onMouseDown={(event) => {
-				event.preventDefault();
-			}}
-			onClick={viewModel.closeSubjectSearchSheet}
-			aria-label={viewModel.searchCloseLabel}
-			tabIndex={-1}
+	const overlay = (
+		<SearchBackdrop
+			isOpen={viewModel.isSearchSheetOpen}
+			closeLabel={viewModel.searchCloseLabel}
+			onClose={viewModel.closeSubjectSearchSheet}
 		/>
-	) : null;
+	);
 
 	return (
 		<WorkspaceScaffold

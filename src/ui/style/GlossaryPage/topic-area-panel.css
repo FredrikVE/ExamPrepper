@@ -43,12 +43,6 @@
 	scrollbar-width: thin;
 }
 
-.glossary-topic-area-list--search {
-	grid-auto-rows: minmax(76px, auto);
-	align-content: start;
-	flex: 1;
-}
-
 .glossary-topic-area-button {
 	position: relative;
 	display: grid;

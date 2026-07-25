@@ -1,28 +1,26 @@
 // src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx
 import { useState } from "react";
 import DockedMobileBottomSheet from "../../MobileBottomSheet/DockedMobileBottomSheet.jsx";
-import FilterOptionList from "../../Search/FilterOptionList.jsx";
+import SearchSheetBody from "../../Search/SearchSheetBody.jsx";
 import GlossarySearchField from "../TopicAreaPanel/GlossarySearchField.jsx";
 import GlossaryTopicAreaNavigationList from "../TopicAreaPanel/GlossaryTopicAreaNavigationList.jsx";
-import GlossaryTopicAreaSearchList from "../TopicAreaPanel/GlossaryTopicAreaSearchList.jsx";
-
-const MOBILE_TOPIC_AREA_LIST_ID = "glossary-mobile-topic-area-list";
 
 export default function GlossaryMobileChapterSheet(props) {
 	const [isOpen, setIsOpen] = useState(false);
-	const searchResults = props.isSearchFilterOptionsOpen ? (
-		<FilterOptionList
-			filterOptions={props.searchScopeOptions}
-			selectedFilterValue={props.searchScope}
+	const hasSearchContent = props.isSearchFilterOptionsOpen
+		? props.chapterFilterOptions.length > 0
+		: props.autocompleteSuggestions.length > 0;
+	const searchContent = props.isSearchPopupOpen && hasSearchContent ? (
+		<SearchSheetBody
+			isFilterOptionsMode={props.isSearchFilterOptionsOpen}
+			searchSuggestions={props.autocompleteSuggestions}
+			suggestionListId={props.autocompleteListId}
+			suggestionListAriaLabel={props.searchSuggestionListAriaLabel}
+			activeSuggestionId={props.searchActiveDescendantId}
+			filterOptions={props.chapterFilterOptions}
+			selectedFilterValue={props.chapterFilterValue}
+			onSelectSearchSuggestion={props.onSelectSearchSuggestion}
 			onSelectFilterOption={props.onSelectFilterOption}
-		/>
-	) : props.isSearching ? (
-		<GlossaryTopicAreaSearchList
-			listId={MOBILE_TOPIC_AREA_LIST_ID}
-			ariaLabel={props.topicAreaListAriaLabel}
-			allTopicAreaListItem={props.allTopicAreaListItem}
-			items={props.topicAreaListItems}
-			onSelectTopicArea={props.onSelectTopicArea}
 		/>
 	) : null;
 	const peekContent = (
@@ -34,16 +32,18 @@ export default function GlossaryMobileChapterSheet(props) {
 				searchClearLabel={props.searchClearLabel}
 				searchKeyboardHint={props.searchKeyboardHint}
 				searchSummaryLabel={props.searchSummaryLabel}
-				searchScopeLabel={props.searchScopeLabel}
-				searchScopeAriaLabel={props.searchScopeAriaLabel}
+				chapterFilterLabel={props.chapterFilterLabel}
+				searchFilterAriaLabel={props.searchFilterAriaLabel}
 				isSearchFilterOptionsOpen={props.isSearchFilterOptionsOpen}
 				isSearching={props.isSearching}
-				isSearchComboboxActive={!props.isSearchFilterOptionsOpen && props.isSearchComboboxActive}
-				searchActiveDescendantId={!props.isSearchFilterOptionsOpen ? props.searchActiveDescendantId : null}
-				topicAreaListId={!props.isSearchFilterOptionsOpen ? MOBILE_TOPIC_AREA_LIST_ID : null}
+				isSearchPopupOpen={props.isSearchPopupOpen}
+				isSearchAutocompleteActive={props.isSearchAutocompleteActive}
+				searchActiveDescendantId={props.searchActiveDescendantId}
+				autocompleteListId={props.autocompleteListId}
 				onSearchTermChange={props.onSearchTermChange}
 				onFocusSearch={props.onFocusSearch}
 				onClearSearch={props.onClearSearch}
+				onRequestClose={props.onRequestClose}
 				onOpenFilterOptions={props.onOpenFilterOptions}
 				onMoveSearchSelectionDown={props.onMoveSearchSelectionDown}
 				onMoveSearchSelectionUp={props.onMoveSearchSelectionUp}
@@ -51,10 +51,10 @@ export default function GlossaryMobileChapterSheet(props) {
 			/>
 		</div>
 	);
-	const dockedOverlayContent = isOpen ? null : searchResults;
-	const expandedContent = isOpen && searchResults !== null ? (
+	const dockedOverlayContent = isOpen ? null : searchContent;
+	const expandedContent = isOpen && searchContent !== null ? (
 		<div className="glossary-mobile-chapter-sheet__body">
-			{searchResults}
+			{searchContent}
 		</div>
 	) : (
 		<div className="glossary-mobile-chapter-sheet__body">

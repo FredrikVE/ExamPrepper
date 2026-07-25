@@ -14,18 +14,6 @@
 		flex: 0 0 auto;
 	}
 
-	.glossary-mobile-chapter-sheet .glossary-search-field {
-		min-height: 56px;
-		border-color: var(--line-strong);
-		border-radius: var(--radius-md);
-		background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
-	}
-
-	.glossary-mobile-chapter-sheet .glossary-search-field__input {
-		height: 54px;
-		font-size: 16px;
-	}
-
 	.glossary-mobile-chapter-sheet:not([data-open="true"]) .glossary-search-meta {
 		display: none;
 	}

@@ -2,6 +2,7 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
 import { LEARNING_CONTENT_TYPES } from "../../src/navigation/navigation.js";
+import { GLOSSARY_AUTOCOMPLETE_LIST_ID, createGlossaryAutocompleteOptionId } from "../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
 import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
@@ -11,12 +12,8 @@ let loadModelQueue = [];
 
 const useState = jest.fn((initialValue) => {
 	const stateIndex = stateSetters.length;
-	const fallbackValue = typeof initialValue === "function"
-		? initialValue()
-		: initialValue;
-	const value = stateIndex in stateValues
-		? stateValues[stateIndex]
-		: fallbackValue;
+	const fallbackValue = typeof initialValue === "function" ? initialValue() : initialValue;
+	const value = stateIndex in stateValues ? stateValues[stateIndex] : fallbackValue;
 	const setter = jest.fn();
 
 	stateSetters.push(setter);
@@ -43,40 +40,20 @@ jest.unstable_mockModule("../../src/ui/viewmodel/LoadState/useLoadModel.js", () 
 const { default: useGlossaryPageViewModel } = await import(
 	"../../src/ui/viewmodel/GlossaryPageViewModel.js"
 );
-const {
-	createGlossaryTopicAreaListItems,
-	createGlossaryTopicAreaOptionId,
-	GLOSSARY_TOPIC_AREA_LIST_ID
-} = await import(
-	"../../src/ui/viewmodel/GlossaryPage/glossaryTopicAreaListModel.js"
-);
-const {
-	splitTextIntoHighlightSegments
-} = await import(
-	"../../src/ui/viewmodel/GlossaryPage/glossaryTableModel.js"
-);
-const {
-	GLOSSARY_SEARCH_SCOPES
-} = await import(
-	"../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js"
-);
 
 const translations = {
+	searchCloseLabel: "Lukk søk",
+	filterAllLabel: "Alle",
 	glossaryPageTitle: "Begrepslister",
 	glossaryPageSubtitle: (subjectCode) => `Sentrale begreper og definisjoner i ${subjectCode}`,
 	glossaryPageSubtitleFallback: "Sentrale begreper og definisjoner",
 	glossaryPageSearchLabel: "Søk i begrepslisten",
-	glossaryPageSearchAllPlaceholder: "Søk i alt",
-	glossaryPageSearchTermsPlaceholder: "Søk i begreper",
-	glossaryPageSearchChaptersPlaceholder: "Søk i kapitler",
-	glossaryPageSearchScopeAriaLabel: "Avgrens søket",
-	glossaryPageSearchScopeAllLabel: "Alt",
-	glossaryPageSearchScopeTermsLabel: "Begreper",
-	glossaryPageSearchScopeChaptersLabel: "Kapitler",
+	glossaryPageSearchPlaceholder: "Søk etter begrep",
+	glossaryPageChapterFilterAriaLabel: "Filtrer etter kapittel",
+	glossaryPageAutocompleteAriaLabel: "Begrepsforslag",
 	glossaryPageSearchClearLabel: "Tøm",
 	glossaryPageSearchKeyboardHint: "Bruk piltastene",
 	glossaryPageSearchSummary: (chapterCount, matchCount) => `${chapterCount}/${matchCount}`,
-	glossaryPageChapterSearchSummary: (chapterCount) => `${chapterCount} kapitler`,
 	glossaryPageChapterMatchCount: (matchCount) => `${matchCount} treff`,
 	glossaryPageChapterSubtitle: (entryCount) => `${entryCount} begreper`,
 	glossaryPageChapterSearchSubtitle: (matchCount) => `${matchCount} søketreff`,
@@ -97,9 +74,7 @@ const translations = {
 	glossaryPageNoEntriesInSelectionTitle: "Ingen begreper i utvalget",
 	glossaryPageNoEntriesInSelectionBody: "Velg et annet kapittel.",
 	glossaryPageNoSearchResultsTitle: "Ingen treff",
-	glossaryPageNoAllSearchResultsBody: (searchTerm) => `Ingen treff i alt for ${searchTerm}.`,
-	glossaryPageNoTermSearchResultsBody: (searchTerm) => `Ingen begrepstreff for ${searchTerm}.`,
-	glossaryPageNoChapterSearchResultsBody: (searchTerm) => `Ingen kapitteltreff for ${searchTerm}.`,
+	glossaryPageNoSearchResultsBody: (searchTerm) => `Ingen begrepstreff for ${searchTerm}.`,
 	glossaryPageMobileChapterSheetTitle: "Velg kapitler",
 	glossaryPageMobileChapterSheetSubtitle: "Velg ett eller flere kapitler",
 	glossaryPageMobileChapterSheetOpenLabel: "Åpne kapittelvelger",
@@ -111,15 +86,7 @@ const translations = {
 	contentToggleExamsLabel: "Eksamen",
 	contentToggleFlipcardsLabel: "Flipcards",
 	contentToggleMatchCardsLabel: "Begrepsmatch",
-	contentToggleGlossaryLabel: "Begrepslister",
-	pageToolsWorkspaceTitle: "Velg læringsverktøy",
-	pageToolsWorkspaceSubtitle: null,
-	pageToolsWorkspaceActionsLabel: "Læringsverktøy",
-	pageToolsOpenLabel: "Åpne verktøymeny",
-	pageToolsCloseLabel: "Lukk verktøymeny",
-	pageToolsMobileHandleLabel: "Verktøy",
-	pageToolsUnavailableLabel: "Kommer senere",
-	pageToolsImportSubjectMaterialsLabel: "Legg inn fagmateriale"
+	contentToggleGlossaryLabel: "Begrepslister"
 };
 
 const topicAreas = [
@@ -164,16 +131,16 @@ const glossaryEntries = [
 		topicAreaKey: "cryptography",
 		term: { no: "Asymmetrisk nøkkel", en: "Asymmetric key" },
 		explanation: { no: "Brukes i et nøkkelpar.", en: "Used in a key pair." },
-		position: 2
+		position: 1
 	}
 ];
 
 function createViewModel({
 	searchTerm = "",
-	searchScope = GLOSSARY_SEARCH_SCOPES.ALL,
 	selectedTopicAreaKeys = null,
 	keyboardIndex = -1,
 	isSearchFilterOptionsOpen = false,
+	isSearchAutocompleteOpen = false,
 	loadedGlossaryEntries = glossaryEntries,
 	loadedTopicAreas = topicAreas,
 	glossaryStatus = LOAD_STATUS.READY,
@@ -190,7 +157,7 @@ function createViewModel({
 	language = "no",
 	isActive = true
 } = {}) {
-	stateValues.push(searchTerm, searchScope, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen);
+	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen);
 	loadModelQueue = [
 		{
 			status: glossaryStatus,
@@ -212,15 +179,13 @@ function createViewModel({
 	const getTopicAreasUseCase = {
 		execute: jest.fn(async () => loadedTopicAreas)
 	};
-	const onBack = jest.fn();
 	const onSelectContentType = jest.fn();
 	const backContract = {
 		showBackButton: true,
 		backLabel: "Tilbake",
 		navigationLabel: "Navigasjon",
-		onBack
+		onBack: jest.fn()
 	};
-
 	const viewModel = useGlossaryPageViewModel(
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
@@ -238,14 +203,15 @@ function createViewModel({
 		backContract,
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
-		onBack,
 		onSelectContentType,
 		viewModel
 	};
 }
 
 function clearStateSetterCalls() {
-	stateSetters.forEach((stateSetter) => stateSetter.mockClear());
+	for (const stateSetter of stateSetters) {
+		stateSetter.mockClear();
+	}
 }
 
 function expectSetContents(actualSet, expectedValues) {
@@ -264,92 +230,23 @@ beforeEach(() => {
 	useLoadModel.mockClear();
 });
 
-describe("GlossaryPage presentation models", () => {
-	test("returns a localized subtitle with the selected subject code", () => {
-		const { viewModel } = createViewModel();
-
-		expect(viewModel.pageSubtitle).toBe(
-			"Sentrale begreper og definisjoner i IN2120"
-		);
-	});
-
-	test("returns the subtitle fallback without a selected subject code", () => {
-		const { viewModel } = createViewModel({
-			selectedSubject: {
-				id: "in2120",
-				name: "Informasjonssikkerhet"
-			}
-		});
-
-		expect(viewModel.pageSubtitle).toBe("Sentrale begreper og definisjoner");
-	});
-
-	test("escapes regular-expression characters and returns highlight segments as data", () => {
-		expect(splitTextIntoHighlightSegments("C++ og c++", "c++")).toEqual([
-			{ text: "C++", isMatch: true },
-			{ text: " og ", isMatch: false },
-			{ text: "c++", isMatch: true }
-		]);
-	});
-
-	test("keeps topic-area order and exposes a stable option id", () => {
-		const entriesByTopicAreaKey = new Map([
-			["networking", glossaryEntries.filter((entry) => entry.topicAreaKey === "networking")],
-			["cryptography", glossaryEntries.filter((entry) => entry.topicAreaKey === "cryptography")]
-		]);
-		const items = createGlossaryTopicAreaListItems({
-			topicAreas,
-			entriesByTopicAreaKey,
-			matchCountsByTopicAreaKey: new Map([
-				["networking", 2],
-				["cryptography", 2]
-			]),
-			normalizedSearchTerm: "",
-			searchScope: GLOSSARY_SEARCH_SCOPES.TERMS,
-			labels: {
-				chapterMatchCount: translations.glossaryPageChapterMatchCount,
-				chapterReference: translations.glossaryPageChapterReference,
-				chapterSubtitle: translations.glossaryPageChapterSubtitle,
-				chapterSearchSubtitle: translations.glossaryPageChapterSearchSubtitle
-			}
-		});
-
-		expect(items.map((item) => item.topicAreaKey)).toEqual([
-			"networking",
-			"cryptography"
-		]);
-		expect(items[0].id).toBe(createGlossaryTopicAreaOptionId("networking"));
-	});
-});
-
 describe("useGlossaryPageViewModel", () => {
-	test("owns search scope, chapter selection, keyboard state, and filter visibility", () => {
+	test("owns term search, chapter selection, keyboard target, filter and autocomplete state", () => {
 		createViewModel();
 
 		expect(useState).toHaveBeenCalledTimes(5);
 		expect(useState).toHaveBeenNthCalledWith(1, "");
-		expect(useState).toHaveBeenNthCalledWith(2, GLOSSARY_SEARCH_SCOPES.ALL);
-		expect(useState).toHaveBeenNthCalledWith(3, null);
-		expect(useState).toHaveBeenNthCalledWith(4, -1);
+		expect(useState).toHaveBeenNthCalledWith(2, null);
+		expect(useState).toHaveBeenNthCalledWith(3, -1);
+		expect(useState).toHaveBeenNthCalledWith(4, false);
 		expect(useState).toHaveBeenNthCalledWith(5, false);
 	});
 
-	test("does not reuse the learning-content pop-out menu on the glossary page", () => {
-		const { viewModel } = createViewModel();
-
-		expect(viewModel.pageTools).toBeNull();
-	});
-
 	test("loads all glossary entries once and topic areas for the active language", async () => {
-		const {
-			getGlossaryEntriesForSubjectUseCase,
-			getTopicAreasUseCase
-		} = createViewModel();
-		const glossaryLoadConfiguration = useLoadModel.mock.calls[0][0];
-		const topicAreaLoadConfiguration = useLoadModel.mock.calls[1][0];
+		const { getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase } = createViewModel();
 
-		await glossaryLoadConfiguration.execute();
-		await topicAreaLoadConfiguration.execute();
+		await useLoadModel.mock.calls[0][0].execute();
+		await useLoadModel.mock.calls[1][0].execute();
 
 		expect(getGlossaryEntriesForSubjectUseCase.execute).toHaveBeenCalledWith({
 			subjectId: "in2120",
@@ -361,182 +258,204 @@ describe("useGlossaryPageViewModel", () => {
 		});
 	});
 
-	test("does not call use cases while the page is inactive", async () => {
-		const {
-			getGlossaryEntriesForSubjectUseCase,
-			getTopicAreasUseCase
-		} = createViewModel({ isActive: false });
-
-		await expect(useLoadModel.mock.calls[0][0].execute()).resolves.toEqual([]);
-		await expect(useLoadModel.mock.calls[1][0].execute()).resolves.toEqual([]);
-		expect(getGlossaryEntriesForSubjectUseCase.execute).not.toHaveBeenCalled();
-		expect(getTopicAreasUseCase.execute).not.toHaveBeenCalled();
-	});
-
-	test("selects all chapters by default and preserves topic-area order in the table", () => {
+	test("selects all chapters by default and preserves chapter order in the table", () => {
 		const { viewModel } = createViewModel();
 
-		expect(viewModel.allTopicAreaListItem).toMatchObject({
-			topicAreaKey: ALL_TOPIC_AREAS,
-			isSelected: true,
-			subtitle: "Alle 2 kapitler vises"
-		});
+		expect(viewModel.chapterFilterValue).toBe(ALL_TOPIC_AREAS);
+		expect(viewModel.chapterFilterLabel).toBe("Alle kapitler");
 		expect(viewModel.topicAreaListItems.map((item) => item.isSelected)).toEqual([true, true]);
-		expect(viewModel.topicAreaListItems.map((item) => item.isActive)).toEqual([false, false]);
-		expect(viewModel.glossaryPanelHeading).toEqual({
-			title: "Alle kapitler",
-			subtitle: "4 begreper"
-		});
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
 			"packet",
 			"transport-layer",
 			"asymmetric-key",
 			"public-key"
 		]);
-		expect(viewModel.glossaryTableRows.map((row) => row.topicAreaReference)).toEqual([
-			"Kapittel 2",
-			"Kapittel 2",
-			"Kapittel 1",
-			"Kapittel 1"
-		]);
 	});
 
-	test("uses a valid initial chapter and falls back to all chapters for an unknown key", () => {
-		const selectedViewModel = createViewModel({
-			initialTopicAreaKey: "cryptography"
-		}).viewModel;
+	test("searches only term labels inside the selected chapters", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "p",
+			selectedTopicAreaKeys: new Set(["networking"]),
+			keyboardIndex: 0,
+			isSearchAutocompleteOpen: true
+		});
 
-		expect(selectedViewModel.topicAreaListItems.map((item) => item.isSelected)).toEqual([false, true]);
-		expect(selectedViewModel.topicAreaListItems.map((item) => item.isActive)).toEqual([false, true]);
-		expect(selectedViewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
-			"asymmetric-key",
-			"public-key"
+		expect(viewModel).toMatchObject({
+			isSearching: true,
+			isSearchAutocompleteActive: true,
+			isSearchPopupOpen: true,
+			autocompleteListId: GLOSSARY_AUTOCOMPLETE_LIST_ID,
+			searchSummaryLabel: "1/1"
+		});
+		expect(viewModel.autocompleteSuggestions).toEqual([
+			{
+				id: "packet",
+				optionId: createGlossaryAutocompleteOptionId("packet"),
+				label: "Pakke",
+				metaLabel: "Kapittel 2",
+				topicAreaKey: "networking"
+			}
 		]);
+		expect(viewModel.searchActiveDescendantId).toBe(createGlossaryAutocompleteOptionId("packet"));
+		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual(["packet"]);
+	});
+
+	test("keeps autocomplete closed for an empty normalized search term", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "   ",
+			isSearchAutocompleteOpen: true
+		});
+
+		expect(viewModel.autocompleteSuggestions).toEqual([]);
+		expect(viewModel.isSearchAutocompleteActive).toBe(false);
+		expect(viewModel.isSearchPopupOpen).toBe(false);
+		expect(viewModel.searchActiveDescendantId).toBeNull();
+	});
+
+	test("exposes chapters as the only filter options", () => {
+		const { viewModel } = createViewModel({
+			selectedTopicAreaKeys: new Set(["cryptography"]),
+			isSearchFilterOptionsOpen: true
+		});
+
+		expect(viewModel.chapterFilterOptions).toEqual([
+			{ id: ALL_TOPIC_AREAS, value: ALL_TOPIC_AREAS, label: "Alle kapitler" },
+			{ id: "networking", value: "networking", label: "Nettverk" },
+			{ id: "cryptography", value: "cryptography", label: "Kryptografi" }
+		]);
+		expect(viewModel).toMatchObject({
+			chapterFilterValue: "cryptography",
+			chapterFilterLabel: "Kryptografi",
+			isSearchPopupOpen: true,
+			isSearchFilterOptionsOpen: true
+		});
+		expect(viewModel).not.toHaveProperty("glossarySearchScope");
+		expect(viewModel).not.toHaveProperty("searchScopeOptions");
+	});
+
+	test("a chapter filter replaces the current selection and preserves a qualifying search", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "nøk",
+			selectedTopicAreaKeys: new Set(["networking"]),
+			isSearchFilterOptionsOpen: true
+		});
+		clearStateSetterCalls();
+
+		viewModel.selectGlossaryChapterFilter("cryptography");
+
+		expectSetContents(stateSetters[1].mock.calls[0][0], ["cryptography"]);
+		expect(stateSetters[2]).toHaveBeenCalledWith(0);
+		expect(stateSetters[3]).toHaveBeenCalledWith(false);
+		expect(stateSetters[4]).toHaveBeenCalledWith(true);
+	});
+
+	test("the all-chapters filter restores the complete chapter set", () => {
+		const { viewModel } = createViewModel({ selectedTopicAreaKeys: new Set(["cryptography"]) });
+		clearStateSetterCalls();
+
+		viewModel.selectGlossaryChapterFilter(ALL_TOPIC_AREAS);
+
+		expectSetContents(stateSetters[1].mock.calls[0][0], ["networking", "cryptography"]);
+	});
+
+	test("typing, focus, clear and popup close keep search and popup state separate", () => {
+		const { viewModel } = createViewModel({ searchTerm: "pak" });
+		clearStateSetterCalls();
+
+		viewModel.changeGlossarySearchTerm("  nøk  ");
+		expect(stateSetters[0]).toHaveBeenCalledWith("  nøk  ");
+		expect(stateSetters[2]).toHaveBeenCalledWith(0);
+		expect(stateSetters[3]).toHaveBeenCalledWith(false);
+		expect(stateSetters[4]).toHaveBeenCalledWith(true);
+
+		clearStateSetterCalls();
+		viewModel.focusGlossarySearch();
+		expect(stateSetters[3]).toHaveBeenCalledWith(false);
+		expect(stateSetters[4]).toHaveBeenCalledWith(true);
+
+		clearStateSetterCalls();
+		viewModel.closeGlossarySearchPopup();
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
+		expect(stateSetters[3]).toHaveBeenCalledWith(false);
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+
+		clearStateSetterCalls();
+		viewModel.clearGlossarySearch();
+		expect(stateSetters[0]).toHaveBeenCalledWith("");
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+	});
+
+	test("keyboard navigation wraps through autocomplete suggestions", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "nøk",
+			keyboardIndex: 0,
+			isSearchAutocompleteOpen: true
+		});
+		clearStateSetterCalls();
+
+		viewModel.moveSearchSelectionDown();
+		expect(stateSetters[2].mock.calls[0][0](0)).toBe(1);
+		expect(stateSetters[2].mock.calls[0][0](1)).toBe(0);
+
+		clearStateSetterCalls();
+		viewModel.moveSearchSelectionUp();
+		expect(stateSetters[2].mock.calls[0][0](0)).toBe(1);
+	});
+
+	test("selecting an autocomplete suggestion selects its chapter and closes the popup", () => {
+		const { viewModel } = createViewModel({
+			searchTerm: "pak",
+			keyboardIndex: 0,
+			isSearchAutocompleteOpen: true
+		});
+		clearStateSetterCalls();
+
+		viewModel.openSearchKeyboardSelection();
+
+		expect(stateSetters[0]).toHaveBeenCalledWith("Pakke");
+		expectSetContents(stateSetters[1].mock.calls[0][0], ["networking"]);
+		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+	});
+
+	test("chapter navigation remains a separate multi-select interaction", () => {
+		const selectedKeys = new Set(["cryptography"]);
+		const { viewModel } = createViewModel({ selectedTopicAreaKeys: selectedKeys });
+		clearStateSetterCalls();
+
+		viewModel.selectTopicArea("networking");
+		const updateSelection = stateSetters[1].mock.calls[0][0];
+		expectSetContents(updateSelection(selectedKeys), ["cryptography", "networking"]);
+		expectSetContents(selectedKeys, ["cryptography"]);
+	});
+
+	test("resets the complete search contract when the subject changes", () => {
+		createViewModel({
+			searchTerm: "nøkkel",
+			selectedTopicAreaKeys: new Set(["networking"]),
+			keyboardIndex: 1,
+			isSearchFilterOptionsOpen: true,
+			isSearchAutocompleteOpen: true
+		});
+
+		expect(stateSetters[0]).toHaveBeenCalledWith("");
+		expect(stateSetters[1]).toHaveBeenCalledWith(null);
+		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
+		expect(stateSetters[3]).toHaveBeenCalledWith(false);
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+	});
+
+	test("rebuilds localized rows for a language switch without reloading glossary entries", () => {
+		const norwegian = createViewModel({ language: "no" });
+		expect(norwegian.viewModel.glossaryTableRows[0].term).toBe("Pakke");
 
 		stateValues.length = 0;
 		stateSetters.length = 0;
 		useState.mockClear();
 
-		const fallbackViewModel = createViewModel({
-			initialTopicAreaKey: "unknown"
-		}).viewModel;
-
-		expect(fallbackViewModel.allTopicAreaListItem.isSelected).toBe(true);
-	});
-
-	test("filters only the selected chapters and keeps selection independent from search", () => {
-		const { viewModel } = createViewModel({
-			searchTerm: "trafikk",
-			selectedTopicAreaKeys: new Set(["networking"]),
-			keyboardIndex: 0
-		});
-
-		expect(viewModel).toMatchObject({
-			isSearching: true,
-			isSearchComboboxActive: true,
-			searchSummaryLabel: "1/1",
-			topicAreaListId: GLOSSARY_TOPIC_AREA_LIST_ID
-		});
-		expect(viewModel.searchActiveDescendantId).toBe(viewModel.topicAreaListItems[0].id);
-		expect(viewModel.topicAreaListItems[0]).toMatchObject({
-			topicAreaKey: "networking",
-			matchCount: 1,
-			subtitle: "1 søketreff",
-			isSelected: true,
-			showsSelectionControl: true
-		});
-		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
-			"packet"
-		]);
-	});
-
-	test("does not activate search mode for a whitespace-only search term", () => {
-		const { viewModel } = createViewModel({
-			searchTerm: "   ",
-			selectedTopicAreaKeys: new Set(["networking"]),
-			keyboardIndex: 0
-		});
-
-		expect(viewModel).toMatchObject({
-			isSearching: false,
-			isSearchComboboxActive: false,
-			searchActiveDescendantId: null,
-			searchSummaryLabel: ""
-		});
-		expect(viewModel.topicAreaListItems).toHaveLength(topicAreas.length);
-		expect(viewModel.topicAreaListItems.every((item) => !item.isKeyboardTarget)).toBe(true);
-	});
-
-	test("does not silently replace the chapter selection when search matches another chapter", () => {
-		const { viewModel } = createViewModel({
-			searchTerm: "offentlig",
-			selectedTopicAreaKeys: new Set(["networking"])
-		});
-
-		expect(viewModel.topicAreaListItems).toHaveLength(1);
-		expect(viewModel.topicAreaListItems[0]).toMatchObject({
-			topicAreaKey: "cryptography",
-			isSelected: false
-		});
-		expect(viewModel.glossaryTableRows).toEqual([]);
-		expect(viewModel.glossaryPanelEmptyState).toMatchObject({
-			kind: "no-search-results"
-		});
-	});
-
-	test("all search includes chapter matches and shows the complete matching chapter", () => {
-		const { viewModel } = createViewModel({
-			searchTerm: "kryptografi",
-			searchScope: GLOSSARY_SEARCH_SCOPES.ALL,
-			selectedTopicAreaKeys: new Set(["cryptography"])
-		});
-
-		expect(viewModel.topicAreaListItems[0]).toMatchObject({
-			topicAreaKey: "cryptography",
-			matchesTopicAreaLabel: true,
-			showsAllEntries: true,
-			matchCount: 0,
-			isSelected: true
-		});
-		expect(viewModel.searchSummaryLabel).toBe("1/0");
-		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
-			"asymmetric-key",
-			"public-key"
-		]);
-	});
-
-	test("chapter search matches chapter labels and shows the complete selected chapter", () => {
-		const { viewModel } = createViewModel({
-			searchTerm: "kryptografi",
-			searchScope: GLOSSARY_SEARCH_SCOPES.CHAPTERS,
-			selectedTopicAreaKeys: new Set(["cryptography"])
-		});
-
-		expect(viewModel.topicAreaListItems[0]).toMatchObject({
-			topicAreaKey: "cryptography",
-			matchesTopicAreaLabel: true,
-			showsAllEntries: true,
-			matchCount: 0,
-			matchCountLabel: null,
-			subtitle: "2 begreper",
-			isSelected: true
-		});
-		expect(viewModel.searchSummaryLabel).toBe("1 kapitler");
-		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
-			"asymmetric-key",
-			"public-key"
-		]);
-	});
-
-	test("normalizes an empty chapter selection back to all chapters", () => {
-		const { viewModel } = createViewModel({
-			selectedTopicAreaKeys: new Set()
-		});
-
-		expect(viewModel.allTopicAreaListItem.isSelected).toBe(true);
-		expect(viewModel.topicAreaListItems.map((item) => item.isSelected)).toEqual([true, true]);
-		expect(viewModel.glossaryTableRows).toHaveLength(glossaryEntries.length);
-		expect(viewModel.glossaryPanelEmptyState).toBeNull();
+		const english = createViewModel({ language: "en" });
+		expect(english.viewModel.glossaryTableRows[0].term).toBe("Packet");
 	});
 
 	test.each([
@@ -561,197 +480,25 @@ describe("useGlossaryPageViewModel", () => {
 				body: "Ingen begreper finnes.",
 				action: null
 			}
-		},
-		{
-			name: "search without results",
-			loadedTopicAreas: topicAreas,
-			loadedGlossaryEntries: glossaryEntries,
-			searchTerm: "finnes-ikke",
-			expectedWorkspaceState: {
-				kind: WORKSPACE_STATE_KINDS.CONTENT
-			},
-			expectedPanelKind: "no-search-results"
 		}
-	])("returns the $name empty state", ({
-		loadedTopicAreas,
-		loadedGlossaryEntries,
-		searchTerm = "",
-		expectedWorkspaceState,
-		expectedPanelKind = null
-	}) => {
-		const { viewModel } = createViewModel({
-			loadedTopicAreas,
-			loadedGlossaryEntries,
-			searchTerm
-		});
-
+	])("returns the $name empty state", ({ loadedTopicAreas, loadedGlossaryEntries, expectedWorkspaceState }) => {
+		const { viewModel } = createViewModel({ loadedTopicAreas, loadedGlossaryEntries });
 		expect(viewModel.workspaceState).toEqual(expectedWorkspaceState);
-
-		if (expectedPanelKind !== null) {
-			expect(viewModel.glossaryPanelEmptyState).toMatchObject({
-				kind: expectedPanelKind
-			});
-		}
 	});
 
-	test("rebuilds localized rows for a language switch without reloading glossary entries", () => {
-		const norwegian = createViewModel({ language: "no" });
+	test("returns a local no-result state for term searches", () => {
+		const { viewModel } = createViewModel({ searchTerm: "finnes-ikke" });
 
-		expect(norwegian.viewModel.glossaryTableRows[0].term).toBe("Pakke");
-		expect(norwegian.getGlossaryEntriesForSubjectUseCase.execute).not.toHaveBeenCalled();
-
-		stateValues.length = 0;
-		stateSetters.length = 0;
-		useState.mockClear();
-
-		const english = createViewModel({ language: "en" });
-
-		expect(english.viewModel.glossaryTableRows[0].term).toBe("Packet");
-		expect(english.getGlossaryEntriesForSubjectUseCase.execute).not.toHaveBeenCalled();
-	});
-
-	test("resets search, scope, chapter selection, keyboard state, and filter visibility when the subject contract changes", () => {
-		createViewModel({
-			searchTerm: "nøkkel",
-			searchScope: GLOSSARY_SEARCH_SCOPES.CHAPTERS,
-			selectedTopicAreaKeys: new Set(["networking"]),
-			keyboardIndex: 1,
-			isSearchFilterOptionsOpen: true,
-			initialTopicAreaKey: "cryptography",
-			subjectId: "in2120"
+		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
+		expect(viewModel.glossaryPanelEmptyState).toEqual({
+			kind: "no-search-results",
+			title: "Ingen treff",
+			body: "Ingen begrepstreff for finnes-ikke."
 		});
-
-		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[1]).toHaveBeenCalledWith(GLOSSARY_SEARCH_SCOPES.ALL);
-		expect(stateSetters[2]).toHaveBeenCalledWith(null);
-		expect(stateSetters[3]).toHaveBeenCalledWith(-1);
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 	});
 
-	test("first chapter selection replaces the all-chapters default", () => {
-		const { viewModel } = createViewModel();
-		clearStateSetterCalls();
-
-		viewModel.selectTopicArea("cryptography");
-
-		const updateSelection = stateSetters[2].mock.calls[0][0];
-		expectSetContents(updateSelection(null), ["cryptography"]);
-	});
-
-	test("subsequent chapter selections add and remove keys without mutating the previous Set", () => {
-		const selectedKeys = new Set(["cryptography"]);
-		const { viewModel } = createViewModel({ selectedTopicAreaKeys: selectedKeys });
-		clearStateSetterCalls();
-
-		viewModel.selectTopicArea("networking");
-		const addSelection = stateSetters[2].mock.calls[0][0];
-		const addedKeys = addSelection(selectedKeys);
-		expectSetContents(addedKeys, ["cryptography", "networking"]);
-		expectSetContents(selectedKeys, ["cryptography"]);
-
-		clearStateSetterCalls();
-		viewModel.selectTopicArea("cryptography");
-		const removeSelection = stateSetters[2].mock.calls[0][0];
-		expectSetContents(removeSelection(selectedKeys), ["networking", "cryptography"]);
-	});
-
-	test("the all-chapters item restores the complete selection", () => {
-		const { viewModel } = createViewModel({
-			selectedTopicAreaKeys: new Set(["cryptography"])
-		});
-		clearStateSetterCalls();
-
-		viewModel.selectTopicArea(ALL_TOPIC_AREAS);
-
-		expectSetContents(stateSetters[2].mock.calls[0][0], ["networking", "cryptography"]);
-		expect(stateSetters[3]).toHaveBeenCalledWith(-1);
-	});
-
-	test("exposes all, term, and chapter search scopes and keeps filter state in the ViewModel", () => {
-		const { viewModel } = createViewModel({
-			searchTerm: "kryptografi",
-			isSearchFilterOptionsOpen: true
-		});
-		clearStateSetterCalls();
-
-		expect(viewModel.searchScopeOptions).toEqual([
-			{ id: GLOSSARY_SEARCH_SCOPES.ALL, value: GLOSSARY_SEARCH_SCOPES.ALL, label: "Alt" },
-			{ id: GLOSSARY_SEARCH_SCOPES.TERMS, value: GLOSSARY_SEARCH_SCOPES.TERMS, label: "Begreper" },
-			{ id: GLOSSARY_SEARCH_SCOPES.CHAPTERS, value: GLOSSARY_SEARCH_SCOPES.CHAPTERS, label: "Kapitler" }
-		]);
-		expect(viewModel).toMatchObject({
-			glossarySearchScope: GLOSSARY_SEARCH_SCOPES.ALL,
-			searchScopeLabel: "Alt",
-			searchPlaceholder: "Søk i alt",
-			isSearchFilterOptionsOpen: true
-		});
-
-		viewModel.selectGlossarySearchScope(GLOSSARY_SEARCH_SCOPES.CHAPTERS);
-		expect(stateSetters[1]).toHaveBeenCalledWith(GLOSSARY_SEARCH_SCOPES.CHAPTERS);
-		expect(stateSetters[3]).toHaveBeenCalledWith(0);
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
-
-		clearStateSetterCalls();
-		viewModel.openGlossarySearchFilterOptions();
-		expect(stateSetters[4].mock.calls[0][0](false)).toBe(true);
-		expect(stateSetters[4].mock.calls[0][0](true)).toBe(false);
-
-		clearStateSetterCalls();
-		viewModel.closeGlossarySearchFilterOptions();
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
-	});
-
-	test("exposes named handlers and content navigation without leaking setters", () => {
-		const { onSelectContentType, viewModel } = createViewModel({
-			searchTerm: "e",
-			selectedTopicAreaKeys: new Set(["networking"]),
-			keyboardIndex: 0
-		});
-		clearStateSetterCalls();
-
-		viewModel.changeGlossarySearchTerm("  pakke  ");
-		expect(stateSetters[0]).toHaveBeenCalledWith("  pakke  ");
-		expect(stateSetters[3]).toHaveBeenCalledWith(0);
-
-		clearStateSetterCalls();
-		viewModel.clearGlossarySearch();
-		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[2]).not.toHaveBeenCalled();
-		expect(stateSetters[3]).toHaveBeenCalledWith(-1);
-
-		clearStateSetterCalls();
-		viewModel.moveSearchSelectionDown();
-		expect(stateSetters[3].mock.calls[0][0](-1)).toBe(0);
-		expect(stateSetters[3].mock.calls[0][0](0)).toBe(1);
-		expect(stateSetters[3].mock.calls[0][0](1)).toBe(0);
-
-		clearStateSetterCalls();
-		viewModel.moveSearchSelectionUp();
-		expect(stateSetters[3].mock.calls[0][0](-1)).toBe(1);
-		expect(stateSetters[3].mock.calls[0][0](0)).toBe(1);
-		expect(stateSetters[3].mock.calls[0][0](1)).toBe(0);
-
-		clearStateSetterCalls();
-		viewModel.openSearchKeyboardSelection();
-		expect(stateSetters[2]).toHaveBeenCalledWith(expect.any(Function));
-
-		viewModel.selectContentType(LEARNING_CONTENT_TYPES.EXAMS);
-		expect(onSelectContentType).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
-
-		onSelectContentType.mockClear();
-		viewModel.selectContentType(LEARNING_CONTENT_TYPES.GLOSSARY);
-		expect(onSelectContentType).not.toHaveBeenCalled();
-		expect(viewModel.activeContentType).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
-		expect(viewModel.contentToggleEntries.map((entry) => entry.id)).toEqual([
-			LEARNING_CONTENT_TYPES.EXAMS,
-			LEARNING_CONTENT_TYPES.FLIPCARDS,
-			LEARNING_CONTENT_TYPES.MATCHCARDS,
-			LEARNING_CONTENT_TYPES.GLOSSARY
-		]);
-	});
-
-	test("exposes the shared load-status contract without a page-specific load union", () => {
-		const { backContract, viewModel } = createViewModel({
+	test("exposes the shared load-status and content-navigation contracts", () => {
+		const { backContract, onSelectContentType, viewModel } = createViewModel({
 			glossaryStatus: LOAD_STATUS.ERROR,
 			glossaryError: "Prøv igjen."
 		});
@@ -764,15 +511,17 @@ describe("useGlossaryPageViewModel", () => {
 				action: null
 			},
 			shouldShowWorkspaceFooter: false,
-			glossaryPanelEmptyState: null,
 			backContract,
 			changeGlossarySearchTerm: expect.any(Function),
-			clearGlossarySearch: expect.any(Function),
-			openGlossarySearchFilterOptions: expect.any(Function),
-			closeGlossarySearchFilterOptions: expect.any(Function),
-			selectGlossarySearchScope: expect.any(Function),
+			focusGlossarySearch: expect.any(Function),
+			closeGlossarySearchPopup: expect.any(Function),
+			selectGlossaryChapterFilter: expect.any(Function),
+			selectAutocompleteSuggestion: expect.any(Function),
 			selectTopicArea: expect.any(Function),
 			selectContentType: expect.any(Function)
 		});
+
+		viewModel.selectContentType(LEARNING_CONTENT_TYPES.EXAMS);
+		expect(onSelectContentType).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
 	});
 });

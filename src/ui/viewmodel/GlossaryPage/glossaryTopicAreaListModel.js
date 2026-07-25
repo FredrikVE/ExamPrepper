@@ -1,41 +1,15 @@
 // src/ui/viewmodel/GlossaryPage/glossaryTopicAreaListModel.js
 import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
-import { doesGlossarySearchScopeIncludeChapters, doesGlossarySearchScopeIncludeTerms, topicAreaMatchesSearchTerm } from "./glossarySearchModel.js";
 
 export const GLOSSARY_TOPIC_AREA_LIST_ID = "glossary-topic-area-list";
 
-export function createGlossaryTopicAreaListItems({
-	topicAreas,
-	entriesByTopicAreaKey,
-	matchCountsByTopicAreaKey,
-	normalizedSearchTerm,
-	searchScope,
-	labels
-}) {
-	const isSearching = normalizedSearchTerm.length > 0;
-	const searchesTerms = doesGlossarySearchScopeIncludeTerms(searchScope);
-	const searchesChapters = doesGlossarySearchScopeIncludeChapters(searchScope);
+export function createGlossaryTopicAreaListItems({ topicAreas, entriesByTopicAreaKey, matchCountsByTopicAreaKey, isSearching, labels }) {
 	const topicAreaListItems = [];
 
 	for (const topicArea of topicAreas) {
 		const entries = entriesByTopicAreaKey.get(topicArea.key) ?? [];
 		const entryCount = entries.length;
-		const matchCount = searchesTerms
-			? matchCountsByTopicAreaKey.get(topicArea.key) ?? 0
-			: 0;
-		const matchesTopicAreaLabel = isSearching
-			&& searchesChapters
-			&& topicAreaMatchesSearchTerm(
-				topicArea,
-				normalizedSearchTerm,
-				labels.chapterReference(topicArea.position)
-			);
-
-		if (isSearching && !matchesTopicAreaLabel && matchCount === 0) {
-			continue;
-		}
-
-		const showsAllEntries = !isSearching || !searchesTerms || matchesTopicAreaLabel;
+		const matchCount = matchCountsByTopicAreaKey.get(topicArea.key) ?? 0;
 
 		topicAreaListItems.push({
 			id: createGlossaryTopicAreaOptionId(topicArea.key),
@@ -51,8 +25,6 @@ export function createGlossaryTopicAreaListItems({
 			subtitle: isSearching && matchCount > 0
 				? labels.chapterSearchSubtitle(matchCount)
 				: labels.chapterSubtitle(entryCount),
-			matchesTopicAreaLabel,
-			showsAllEntries,
 			isAllTopicAreas: false
 		});
 	}
@@ -60,13 +32,7 @@ export function createGlossaryTopicAreaListItems({
 	return topicAreaListItems;
 }
 
-export function createGlossaryAllTopicAreaListItem({
-	topicAreaCount,
-	selectedTopicAreaCount,
-	entryCount,
-	isSelected,
-	labels
-}) {
+export function createGlossaryAllTopicAreaListItem({ topicAreaCount, selectedTopicAreaCount, entryCount, isSelected, labels }) {
 	return {
 		id: createGlossaryTopicAreaOptionId(ALL_TOPIC_AREAS),
 		topicAreaKey: ALL_TOPIC_AREAS,
@@ -82,8 +48,6 @@ export function createGlossaryAllTopicAreaListItem({
 		entryCount,
 		matchCount: 0,
 		matchCountLabel: null,
-		matchesTopicAreaLabel: false,
-		showsAllEntries: true,
 		isAllTopicAreas: true,
 		isSelected,
 		isActive: isSelected,
@@ -92,12 +56,7 @@ export function createGlossaryAllTopicAreaListItem({
 	};
 }
 
-export function applyGlossaryTopicAreaInteractionState({
-	topicAreaListItems,
-	selectedTopicAreaKeys,
-	searchKeyboardIndex,
-	showsSelectionControls
-}) {
+export function applyGlossaryTopicAreaInteractionState({ topicAreaListItems, selectedTopicAreaKeys, searchKeyboardIndex, showsSelectionControls }) {
 	return topicAreaListItems.map((topicAreaListItem, topicAreaIndex) => {
 		const isSelected = selectedTopicAreaKeys.has(topicAreaListItem.topicAreaKey);
 
