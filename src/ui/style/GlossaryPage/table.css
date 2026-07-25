@@ -2,11 +2,12 @@
 .glossary-table-scroll {
 	min-width: 0;
 	min-height: 0;
+	height: 100%;
 	flex: 1;
 	overflow: auto;
 	overscroll-behavior: contain;
-	border: 1px solid var(--line);
-	border-radius: 14px;
+	border: 0;
+	border-radius: inherit;
 	background: color-mix(in srgb, var(--panel-strong) 42%, transparent);
 	scrollbar-gutter: stable;
 	scrollbar-width: thin;
@@ -22,9 +23,17 @@
 	width: var(--glossary-term-column-width);
 }
 
+.glossary-table__explanation-column {
+	width: var(--glossary-explanation-column-width);
+}
+
 .glossary-table th,
 .glossary-table td {
-	padding: 13px 16px;
+	min-width: 0;
+	padding: 13px clamp(var(--space-2), 1.25vw, var(--space-4));
+	overflow-wrap: anywhere;
+	word-break: normal;
+	hyphens: auto;
 	border-bottom: 1px solid var(--line);
 	vertical-align: top;
 	text-align: left;
@@ -70,6 +79,7 @@
 
 .glossary-table-term {
 	display: block;
+	min-width: 0;
 }
 
 .glossary-table-topic-area-reference,

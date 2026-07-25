@@ -1,7 +1,8 @@
 /* src/ui/style/GlossaryPage/page.css */
 .glossary-workspace {
 	--glossary-sidebar-width: minmax(315px, 32%);
-	--glossary-term-column-width: 27%;
+	--glossary-term-column-width: 40%;
+	--glossary-explanation-column-width: 60%;
 	--glossary-footer-overlay-space: 104px;
 }
 
@@ -34,13 +35,16 @@
 	min-width: 0;
 	min-height: 0;
 	flex: 1;
+	gap: var(--space-3);
 	margin: 0 auto;
-	overflow: hidden;
+	overflow: visible;
+}
+
+.glossary-topic-area-panel,
+.glossary-panel {
 	border: 1px solid var(--line-strong);
 	border-radius: var(--radius-lg);
-	background:
-		radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 22rem),
-		color-mix(in srgb, var(--panel-bg) 88%, transparent);
+	background: color-mix(in srgb, var(--panel-bg) 88%, transparent);
 	box-shadow: var(--shadow-card), inset 0 1px 0 color-mix(in srgb, var(--text-main) 3%, transparent);
 }
 
