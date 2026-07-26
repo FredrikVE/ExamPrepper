@@ -17,24 +17,33 @@ function UserAvatar(props) {
 export default function AuthButton() {
 	const { t } = useLanguage();
 	const hasClerkKey = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+
+	if (!hasClerkKey) {
+		return <UnconfiguredAuthButton t={t} />;
+	}
+
+	return <ConfiguredAuthButton t={t} />;
+}
+
+function UnconfiguredAuthButton({ t }) {
+	return (
+		<div className="sidebar-user-card">
+			<div className="sidebar-user-avatar">?</div>
+
+			<div className="sidebar-user-copy">
+				<p className="sidebar-user-name">{t.authSignedOutLabel}</p>
+				<p className="sidebar-user-email">{t.authNotConfiguredMessage}</p>
+			</div>
+		</div>
+	);
+}
+
+function ConfiguredAuthButton({ t }) {
 	const { user } = useUser();
 	const userInitial = user?.firstName?.[0]
 		?? user?.username?.[0]
 		?? user?.primaryEmailAddress?.emailAddress?.[0]
 		?? "?";
-
-	if (!hasClerkKey) {
-		return (
-			<div className="sidebar-user-card">
-				<div className="sidebar-user-avatar">?</div>
-
-				<div className="sidebar-user-copy">
-					<p className="sidebar-user-name">{t.authSignedOutLabel}</p>
-					<p className="sidebar-user-email">{t.authNotConfiguredMessage}</p>
-				</div>
-			</div>
-		);
-	}
 
 	return (
 		<>
