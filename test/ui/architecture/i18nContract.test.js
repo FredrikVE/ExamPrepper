@@ -1,3 +1,4 @@
+// test/ui/architecture/i18nContract.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
