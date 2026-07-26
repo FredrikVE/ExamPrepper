@@ -194,6 +194,24 @@ describe("useAppNavigationViewModel", () => {
 		]);
 	});
 
+	test("tilbake fra ordlisten går direkte til fagoversikten", () => {
+		setNavigationState({
+			activeScreen: NAV_SCREENS.GLOSSARY,
+			selectedSubjectId: "inf1010",
+			selectedExamId: "old-exam",
+			selectedTopicAreaKey: "loops"
+		});
+
+		createViewModel().goBack();
+
+		expect(hookState.slice(0, 4)).toEqual([
+			NAV_SCREENS.SUBJECTS,
+			null,
+			null,
+			null
+		]);
+	});
+
 	test("tilbake fra innholdsvalg går til fagoversikten", () => {
 		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
 

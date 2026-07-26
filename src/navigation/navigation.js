@@ -53,7 +53,7 @@ export const SCREEN_CONFIG = {
 	[NAV_SCREENS.GLOSSARY]: {
 		requiresSubject: true,
 		requiresExam: false,
-		backTo: NAV_SCREENS.SELECT,
+		backTo: NAV_SCREENS.SUBJECTS,
 		showsSubjectSwitcher: true,
 		pageClassName: "exam-select-page",
 		shellClassName: "exam-select-shell"

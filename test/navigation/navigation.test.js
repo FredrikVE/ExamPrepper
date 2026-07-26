@@ -56,6 +56,10 @@ describe("navigation configuration", () => {
 		expect(NAV_ITEMS.popOutMenuItems[NAV_SCREENS.GLOSSARY]).toBeUndefined();
 	});
 
+	test("routes Glossary back directly to SubjectSelectPage", () => {
+		expect(getScreenConfig(NAV_SCREENS.GLOSSARY).backTo).toBe(NAV_SCREENS.SUBJECTS);
+	});
+
 	test("uses direct ids and explicit action properties", () => {
 		expect(NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SUBJECTS].items.map((item) => item.id)).toEqual([
 			"app-create-subject",
