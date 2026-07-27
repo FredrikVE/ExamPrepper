@@ -1,383 +1,401 @@
 # SSOT-register — ExamPrepper frontend
 
-Oppdatert: 2026-07-25
+Oppdatert: 2026-07-26
 Type: dokumentasjon / analyse
-Analysert snapshot: `examprepper-frontend-safe-20260725-204408.zip`
-SHA-256: `dfe39d6136575f26a832408f9560e736a6bf324767e1cb49ae74ae929c3bc282`
+Analysert snapshot: `examprepper-frontend-safe-20260726-145114.zip` (inkluderer patch 41)
 
 ## Formål
 
-Dokumentet registrerer hvilke moduler som faktisk er **single source of truth** i dagens frontend, hvilke delte implementasjoner som bare er canonical UI, hvilke avledninger som har én eier, og hvilke åpne kanaler som fortsatt kan skape drift.
+Register over hva som faktisk er single source of truth i frontenden nå, hva som fortsatt burde vært det, og hvilke SSOT-funn fra forrige runde som er lukket — sett mot kodegrunnlaget og den eksplisitt oppførte patchen, ikke mot minnet om tidligere tilstander.
 
-«SSOT» brukes her bare om autoritativ state, policy, konfigurasjon eller token-eierskap. En delt React-komponent er ikke automatisk state-SSOT; den beskrives som en **canonical UI-implementasjon** når den eier rendering, struktur eller geometri.
+Dokumentet skiller fire roller, fordi «SSOT» ellers blir synonymt med «gjenbrukt kode»:
 
-Denne revisjonen erstatter analysen fra 2026-07-23. Den gamle revisjonen beskrev blant annet `navGraph.js`, `navReducer.js`, separate navigation-registre, en konkurrerende Statistics-header og en svakere Search-/MobileBottomSheet-kontrakt. Disse forholdene gjelder ikke lenger.
+- **Autoritative registre og runtime-SSOT** — én eier per policy eller state.
+- **Canonical implementasjoner** — eneste implementasjon av en delt UI-flate eller infrastrukturmekanisme; eier implementasjonen, ikke autoritativ state eller policy.
+- **Delte utilities og avledninger** — konverterer input til resultat; eier ingenting.
+- **CSS- og token-eiere** — eier styling-kontrakter.
 
-## Base og verifiseringstype
+Listen over canonical implementasjoner dekker de viktigste delte flatene og mekanismene, ikke hver enkelt. Den er kuratert, ikke uttømmende.
 
-```txt
-Opplastet zip:        examprepper-frontend-safe-20260725-204408.zip
-SHA-256:              dfe39d6136575f26a832408f9560e736a6bf324767e1cb49ae74ae929c3bc282
-Zip-interne mtimes:   2026-07-25 20:42:24
-Filer i snapshotet:   703
-Pages:                7
-JS/JSX i src/ + test/: 476
-CSS-filer:            182
-Jest-testfiler:       114
-Git metadata:         .git er ikke med i zipen; branch/commit er ikke verifisert
-```
-
-Statisk verifisering utført mot en ny uttrekking til tom katalog:
+## Base og verifisering
 
 ```txt
-Relative JS/JSX-importer: 845 analysert, 0 uløste
-node --check:              alle .js-filer i src/ og test/ bestått
-Produksjonsmoduler uten importører:
-  - src/main.jsx (forventet entry point)
-  - src/ui/view/components/Shared/WorkSpaceCard/WorkSpaceCard.jsx
+Snapshot:      examprepper-frontend-safe-20260726-145114.zip
+sha256:        bcb0a2b5e9ccd8c3630612bf99cde39e9c564d56d212419ffa9ea0769560b0df
+Filer:         702
+JS/JSX:        475 i src/ + test/
+Jest-filer:    114
+
+Snapshotet inkluderer patch 41:
+- WorkSpaceCard.jsx finnes ikke.
+- Null JS/JSX-importer eller <WorkSpaceCard>-bruk gjenstår.
+- workspace-card.css og QuestionCard sin direkte .workspace-card-bruk er beholdt.
+
+Verifisering for denne registerrevisjonen:
+- Statisk kontroll av filtre, WorkSpaceCard-fravær og workspace-card-konsumenter.
+- Registerinnholdet bygger på post-patch-41-inventaren, der base-snapshotet hadde
+  648 beståtte / 9 hoppede tester i 113 suites før patchen.
+- Full Jest-suite, Vite-build og device-QA er ikke kjørt på nytt i denne dokumentrevisjonen.
 ```
 
-`npm ci` fullførte ikke i analysevinduet, og denne revisjonen fremstiller derfor ikke Jest- eller Vite-resultater som om de ble kjørt her. Browser-/device-QA er heller ikke utført i denne analysen.
+## Notasjon
 
-## Klassifisering
-
-| Kategori | Betydning |
-|---|---|
-| Streng runtime-SSOT | Eier autoritativ runtime-state eller en beslutningsregel som muterer state |
-| Autoritativt register | Eier statiske ID-er, konfigurasjon, mappinger eller kontraktverdier |
-| CSS-/token-eier | Eier delt geometri, theme-verdi eller dokumentert global lagrelasjon |
-| Canonical UI-implementasjon | Delt renderer, primitive eller app-shell som eier struktur og mekanikk |
-| Avledet presentasjonsmodell | Én ren eller lokalt komponert avledning som Views konsumerer |
+```txt
+<X/>   React-komponent      X{}    konstant-map / enum
+useX() hook                 class X klasse
+X()    ren funksjon         --x:   CSS custom property
+```
 
 ---
 
-## Strenge runtime-SSOT-er
+## Den store endringen siden forrige runde
 
-| Eier | SSOT for | Fil / grense | Bevis og avgrensning |
+Hele `src/navigation/` er kollapset til **én fil**: `navigation.js` (230 linjer). `navGraph.js`, `navItems.js`, `pageTools.js` og `learningContent.js` finnes ikke lenger. Overgangsfunksjonene (`resolveNavigation`, `resolveScreenEntry`, `resolveBackNavigation`, hele reducer-sporet) er borte.
+
+Navigasjonen er nå ren **data + ett oppslag**:
+
+- `NAV_SCREENS{}` — de sju skjermene
+- `SCREEN_CONFIG{}` — én node per skjerm med `requiresSubject`, `requiresExam`, `backTo`, `showsSubjectSwitcher`, `pageClassName`, `shellClassName`
+- `getScreenConfig()` — eneste funksjon; **kaster** på ukjent skjerm i stedet for å falle tilbake stille
+- `LEARNING_CONTENT_TYPES{}`, `NAV_ITEMS{}` (sidebar, toggle-knapper, pop-out-menyer)
+
+Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-settere. Det er en bevisst retningsendring — se «Vurdering» til slutt.
+
+---
+
+## Autoritative registre og runtime-SSOT
+
+Én autoritet eier hver beslutning. Dette er kjernen av «SSOT» — ikke gjenbrukt kode, men eneste kilde for en policy eller state.
+
+| Komponent | SSOT for | Fil | Bevis |
 |---|---|---|---|
-| `useAppNavigationViewModel()` | `activeScreen`, valgt fag, valgt eksamen, valgt topic area, navigation-overlays og eksplisitte navigasjonshandlinger | `src/ui/viewmodel/AppNavigationViewModel.js` | Runtime-state ligger her; stabil skjermpolicy slås opp i `SCREEN_CONFIG`. ViewModelen beholder eksplisitte nullstillinger og sideeffekter |
-| `backContract` | Om back-knappen vises, labels og handler gjennom app-shell-kjeden | `AppNavigationViewModel → App → Page ViewModel → Page → Header` | Én objektskontrakt; de tidligere flate back-feltene er fjernet |
-| `useLoadModel()` | Teknisk status, data, feil og reload for én asynkron ressurs | `src/ui/viewmodel/LoadState/useLoadModel.js` | Views importerer ikke `LOAD_STATUS`; page-state avledes videre gjennom `createWorkspaceState()` |
-| `LanguageProvider` / `useLanguage()` | Aktivt språk, translation-map, locale og datofatering | `src/i18n/LanguageContext.jsx` | Én Context-eier; lagring i `localStorage` er providerens eksplisitte browser-grense |
-| `ThemeProvider` / `useTheme()` | Aktivt light/dark-tema | `src/ui/theme/ThemeContext.jsx` | Provider eier runtime-state og synkronisering mot `<html class="dark">` |
-| `SettingsProvider` / `useSettings()` | Brukerinnstillinger, per nå randomisering av svaralternativer | `src/ui/settings/SettingsContext.jsx` | Én Context-eier og én lagringskanal |
-| Auth-token-provider | Aktiv asynkron tokenleverandør for datasource-laget | `src/auth/AuthTokenProvider.js` + `AuthTokenBridge.jsx` | Datasources får token gjennom én aktiv providerkanal |
-| Side-ViewModels | Sidedata, sidehandlinger og domeneavledning for sin Page | `src/ui/viewmodel/*PageViewModel.js` | Hver Page mottar én Page-ViewModel; lokal visuell state kan fortsatt ligge i avgrensede komponenter/hooks |
+| `useAppNavigationViewModel()` | Core route-/selection-state (`activeScreen`, tre valg-id-er, språksynk-feil) + route-handlingene | `viewmodel/AppNavigationViewModel.js` | Eneste eier av core route-state. Komponerer mobile/settings-undermodellene og bygger avledede chrome-/back-kontrakter |
+| `useMobileDropDownTopBarModel()` | Mobilmeny- og subject-picker-state | `viewmodel/AppNavigation/useMobileDropDownTopBarModel.js` | Eneste eier av de to mobile overlay-state-verdiene; komponeres av `useAppNavigationViewModel()` |
+| `useSettingsPresentationModel()` | Settings-presentasjonens open-state og modus | `viewmodel/AppNavigation/useSettingsPresentationModel.js` | Eneste eier av de to settings-state-verdiene; lukker settings ved presentation-mode-bytte |
+| `NAV_SCREENS{}` `SCREEN_CONFIG{}` `getScreenConfig()` | Skjerm-ID-er, seks deklarative skjermegenskaper, deklarert tilbake-mål og chrome | `src/navigation/navigation.js` | 10 importører. `getScreenConfig` er produksjonsaksessoren og kaster på ukjent skjerm. Låst av `navigation.test.js` + `AppNavigationViewModel.test.js` |
+| `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` | Sidebar, toggle-knapper, pop-out-menyer og innholdstyper | `src/navigation/navigation.js` | Samme fil driver `<SidebarNavigation/>`, `<ToggleButtonRow/>` og verktøymenyene |
+| `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | 7 importører. (`createWorkspaceState()` er avledningen — se «utilities») |
+| `LOAD_STATUS{}` `useLoadModel()` | Ressursstatus-enum + reaktiv innlastingstilstand | `viewmodel/LoadState/` | `LOAD_STATUS`: 6 importører. `useLoadModel`: 7. (`combineLoadStatuses()` er avledningen — se «utilities») |
+| `translations{}` `LANGUAGES{}` | Autoritativt språkregister og produkttekst | `src/i18n/translations.js` | 20 importører. `i18nContract` låser NO↔EN-paritet, typeparitet, ikke-tomme verdier og navigasjonens tekstnøkler. Lokale `fallbackLabel`-kanaler er fjernet; testen skanner ikke all JSX for hardkodet tekst |
+| `<LanguageProvider/>` `useLanguage()` | Aktivt språk + språkbytte (runtime) | `src/i18n/LanguageContext.jsx` | Én provider. Eier reaktiv språk-state; registeret over er den statiske teksten |
+| `<ThemeProvider/>` `useTheme()` | Aktivt tema + DOM-klassen `.dark` | `ui/theme/ThemeContext.jsx` | Én provider, reaktiv theme-state |
+| `<SettingsProvider/>` `useSettings()` | Aktive brukerinnstillinger | `ui/settings/SettingsContext.jsx` | Én provider, reaktiv settings-state |
+| `AuthTokenProvider`-modulen (`setAuthTokenProvider()` `getActiveAuthToken()`) | Aktiv token-henter for transportlaget | `src/auth/AuthTokenProvider.js` | Modulglobal bro — ikke en React-provider. Injiseres i datakildene via `dependencies.js` |
+| `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Tiltenkt autoritativt register — men fem direkte strengsammenligninger (`"single"`/`"multi"`/`"fill"`) omgår det fortsatt, se «burde vært SSOT». Ikke fullt håndhevet ennå |
+| `QUESTION_CONFIG{}` | Konfigurasjonsgrenser for spørsmålstyper (i dag: `FILL_MAX_LENGTH`) | `src/constants/QuestionConfig.js` | Egen fil, egen beslutning — ikke type-ID-er |
+| `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop-modus + breakpoint-tall | `ui/presentation/` | 6 importører. `932`/`933` låst av `appBreakpointContract` |
+| `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `ApiDataSource` |
+| `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
 
-`AppNavigationViewModel` er ikke et statisk navigation-register. Den eier runtime-state og handlinger; `navigation.js` eier stabil policy.
+## Canonical implementasjoner
 
----
+Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke autoritativ state eller policy. «Kanonisk» betyr én implementasjon av kontrakten, ikke SSOT i streng forstand. Der en renderer har en tilhørende presentasjonsavledning, er begge listet med rolle.
 
-## Autoritative registre og policy-eiere
-
-| Eier | Autoritet | Fil | Bevis / status |
+| Komponent | Eier | Fil | Bruk |
 |---|---|---|---|
-| `NAV_SCREENS{}` `SCREEN_CONFIG{}` `getScreenConfig()` | Skjerm-ID-er, `requiresSubject`, `requiresExam`, `backTo`, subject-switcher-policy og page/shell-klasser | `src/navigation/navigation.js` | 10 produksjonsimportører. Alle sju skjermer har config; ukjent skjerm kaster |
-| `LEARNING_CONTENT_TYPES{}` `NAV_ITEMS{}` | Innholdstyper, sidebar-items, toggle-items og page-tool-konfigurasjon | `src/navigation/navigation.js` | Tidligere `navItems.js`, `learningContent.js` og `pageTools.js` er konsolidert uten `navGraph` eller reducer |
-| `translations{}` `LANGUAGES{}` | Norsk/engelsk produkttekst og translation keys | `src/i18n/translations.js` | Key-/type-paritet, ikke-tomme strenger og config-referanser er testlåst |
-| `dependencies{}` | Miljøvalidering, base-URL-er og konkret dependency graph | `src/di/dependencies.js` | Eneste instansieringssted for DataSources, Repositories og Use Cases |
-| `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Ukjent type håndteres eksplisitt; det er bevisst ikke innført et globalt renderer-/graderingsregister |
-| `QUESTION_CONFIG{}` | Delte spørsmålskonstanter | `src/constants/QuestionConfig.js` | Foreløpig blant annet maksimal fill-lengde |
-| Topic-area-filtermodulen | `ALL_TOPIC_AREAS` og canonical topic-area-oppslag | `src/model/domain/utils/topicAreaFilters.js` | Delt av relevante filtre og modeller |
-| `PRESENTATION_MODE{}` / `APP_MOBILE_QUERY` | Synkronisert JS-kontrakt for appens 932/933-grense | `src/ui/presentation/presentationMode.js` | Seks produksjonsimportører; CSS-literals er kontrollert av PostCSS-test og eksplisitt allowlist for lokale breakpoints |
-| `HEADER_APPEARANCES{}` `HEADER_LAYOUTS{}` | Gyldige Header-varianter og klasseoppløsning | `src/ui/view/components/Header/headerVariants.js` | Ukjent variant kaster; alle Pages må velge appearance/layout eksplisitt |
-| `PROGRESS_BAR_VARIANTS{}` | Gyldige ProgressBar-renderingsvarianter | `src/ui/view/components/Shared/ProgressBar/progressBarVariants.js` | Header-spesifikk geometri uttrykkes av komponentens egen variant, ikke Header-descendant-CSS |
-| `SEARCH_SUGGESTION_LIMIT` | Delt maksimal suggestions-lengde | `src/ui/viewmodel/Search/searchSuggestionContract.js` | Tre produksjonskonsumenter: SubjectSelect, LearningContentSelect og Glossary; verdien er `6` |
+| `<WorkspaceScaffold/>` | Sidestillas | `components/WorkspaceScaffold/` | Alle 7 sider. Låst av `workspaceArchitecture` + `workspaceContentContract` |
+| `<WorkspaceState/>` | Rendring av page-state | `components/WorkspaceState/` | 7 importører |
+| `<Header/>` + slot-komponenter | Scaffold-header, struktur og utseende | `components/Header/` | Alle 7 sider, Statistics inkludert. `headerArchitecture` krever at hver side velger appearance, layout og slots eksplisitt |
+| `<Footer/>` | Footer-skall | `components/Footer/` | Direkte av `SubjectSelectPage` og `LearningContentSelectPage`; komponert av `<GlossaryFooter/>` |
+| `<ProgressBar/>` (renderer) + `buildProgressBarModel()` (presentasjonsavledning) | Lineær fremdrift | `components/Shared/ProgressBar/` | Direkte importører: `MobileDropDownTopBar`, `ExamPage`, `MatchCardsPage` |
+| `<ProgressPager/>` (renderer) + `createProgressPagerEntries()` (presentasjonsavledning) | Punkt/side-paginering | `components/ProgressPager/` | `ExamFooter`, `FlipcardsStudySurface`, `FlipcardsMobileFooterSheet` |
+| `<FormattedText/>` (renderer) + `createFormattedTextSegments()` (presentasjonsavledning) | Tekst-rendering | `components/Shared/FormattedText.jsx` | 40 importører — mest delte fil |
+| `<DockedMobileBottomSheet/>` | Mobil bottom-sheet-geometri (docked/expanded, drag, grip, inert) | `components/MobileBottomSheet/` | 3 feature-konsumenter: `PageToolsMobileFooterSheet`, `FlipcardsMobileFooterSheet`, `GlossaryMobileChapterSheet` |
+| `<DesktopPopOutMenu/>` | Desktop pop-out-struktur og lagmekanikk | `components/DesktopPopOutMenu/` | PageTools- og Flipcards-verktøymenyene |
+| Search-familien (`<SearchField/>` m.fl.) | Søkefelt, filter, backdrop, forslag | `components/Search/` | Delt av SubjectSelect, LearningContentSelect, Glossary |
+| `<ToolCardGrid/>` `<ToolCard/>` | Verktøykort-flate | `components/ToolCard/` | PageTools + Flipcards |
+| `<AppErrorBoundary/>` | Root render-crash-grense | `components/AppErrorBoundary/` | Rot-nivå recovery |
+| `class ApiDataSource` | Canonical HTTP-transportbase (URL-bygging, fetch, auth-header, JSON, feilmapping) | `model/datasource/ApiDataSource.js` | Alle 5 datakilder arver. Eier **ikke** base-URL — den injiseres fra `dependencies.js` |
 
----
+## Delte utilities og avledninger
 
-## Avledede presentasjonsmodeller
-
-| Eier | Kontrakt | Fil / konsument |
-|---|---|---|
-| `createWorkspaceState()` | Teknisk load-state + empty-regel → uttømmende `loading/error/empty/content` | `src/ui/viewmodel/WorkspaceState/`; rendres av `WorkspaceState` på alle sju Pages |
-| `createSubjectSwitcherModel()` | `loading`, `error`, `empty`, `unselected`, `ready` for desktop og mobil | `src/ui/viewmodel/SubjectSelectPage/createSubjectSwitcherModel.js` |
-| `buildProgressBarModel()` | Ferdig progressmodell til delt ProgressBar | To produksjonsimportører + enhetstest |
-| Glossary-searchmodellen | Autocomplete-terskel, eksakt/start/ordstart/contains-rangering og kapittelavgrensning | `src/ui/viewmodel/GlossaryPage/glossarySearchModel.js` |
-| Glossary-tabell-/topic-modeller | Ferdige rader, topic-area-presentasjon, counts og selection | `src/ui/viewmodel/GlossaryPage/` |
-| `createFlipcardTermPresentation()` | Hovedbegrep, separat avsluttende parentesforklaring og myke delingspunkter | `src/ui/viewmodel/FlipcardsPage/createFlipcardTermPresentation.js` |
-| Norsk sammensetningssegmentering | Feature-spesifikk, vocabulary-avledet heuristikk for kontrollerte soft-hyphen-punkter på Flipcards | `src/ui/viewmodel/FlipcardsPage/norwegianCompoundSegmentation.js` |
-| Page-ViewModels | Labels, booleans, callback-kontrakter, CSS-klasser og side-spesifikk presentasjon | `src/ui/viewmodel/*PageViewModel.js` |
-
-Den norske sammensetningssegmenteringen er **ikke** et generelt norsk språk-SSOT. Den bygger et lokalt leksikon fra den innlastede Flipcards-bunken og støttetekstene, og brukes bare til Flipcard-presentasjon.
-
----
-
-## Canonical UI-implementasjoner
-
-| Komponent | Canonical for | Fil | Bevis / avgrensning |
+| Komponent | Gjør | Fil | Konsumenter |
 |---|---|---|---|
-| `<WorkspaceScaffold/>` | Ytre workspace-skall, header/body/footer-overlay/overlay-slots og scrollflate | `src/ui/view/components/WorkspaceScaffold/WorkspaceScaffold.jsx` | Direkte importert av alle sju Pages. Ingen legacy-scaffold finnes |
-| `<WorkspaceState/>` | Page-level rendering av loading/error/empty/content | `src/ui/view/components/WorkspaceState/WorkspaceState.jsx` | Direkte importert av alle sju Pages; Views importerer ikke `LOAD_STATUS` |
-| `<Header/>` | Feature-fri, slot-basert app-shell-header | `src/ui/view/components/Header/` | Direkte importert av alle sju Pages, inkludert Statistics. Header-CSS refererer ikke til feature-komponenter eller `.progress-bar` |
-| `<Footer/>` | Delt footer-skall | `src/ui/view/components/Footer/Footer.jsx` | Tre direkte produksjonskonsumenter; andre sider kan bruke null/andre scaffold-slots |
-| `<DockedMobileBottomSheet/>` | Docked sheet-struktur, grip/drag, peek, docked overlay, expanded visibility, safe-area og scroll | `src/ui/view/components/MobileBottomSheet/` | Tre feature-konsumenter: PageTools, Glossary og Flipcards. Ingen konkurrerende `MobileBottomSheet.jsx` |
-| Search-familien | Feltmekanikk, filterkontroll, clear-action, valgfri combobox-tastaturkontrakt, listbox og blur/backdrop | `src/ui/view/components/Search/` | `SearchFilterField` har fire produksjonsimportører; `SearchBackdrop` brukes av tre Pages. Glossary bruker samme mekanikk med egen autocomplete-policy |
-| `<FormattedText/>` + `createFormattedTextSegments()` | Canonical rendering av produkttekst med `**fet tekst**` | `src/ui/view/components/Shared/FormattedText.jsx`, `src/ui/presentation/formattedText.js` | 40 direkte produksjonsimportører. Glossary-tabell og mobilkort går gjennom samme renderer |
-| `<ProgressBar/>` | Delt fremdriftsindikator | `src/ui/view/components/Shared/ProgressBar/` | Tre produksjonsimportører; modell bygges i ViewModel-laget |
-| `<ProgressPager/>` | Delt dot-/pager-komposisjon og primitiver | `src/ui/view/components/ProgressPager/` | Tre produksjonsimportører; test hindrer feature-spesifikke wrapperkopier |
-| `<LearningContentHeader/>` | Delt heading for læringsinnholdssider | `src/ui/view/components/LearningContentHeader/` | Nøyaktig to produksjonskonsumenter, testlåst |
-| `<ToolCardGrid/>` / `<ToolCard/>` | Delt verktøykort-rendering | `src/ui/view/components/ToolCard/` | Fire produksjonsimportører; data/policy kommer fra feature-/navigation-modeller |
-| `<DesktopPopOutMenu/>` | Delt desktop pop-out-mekanikk | `src/ui/view/components/DesktopPopOutMenu/` | To produksjonskonsumenter; intern 81/82/83-stige er bevisst lokal |
-| `<AppErrorBoundary/>` | Root-grense for uventet render-/lifecycle-crash | `src/ui/view/components/AppErrorBoundary/` | Montert én gang i `App`; reload-policy ligger i composition root |
+| `backContract` | Avleder rutenavigasjonens tilbake-UI fra aktiv `SCREEN_CONFIG`, labels og `goBack()` | `viewmodel/AppNavigationViewModel.js` | Ett konstruksjonssted og én kontraktform; ny objektverdi per render. Sendes til page-VM-er, Header og `MobileDropDownTopBar`. Settings har en separat lokal tilbakehandling |
+| `createWorkspaceState()` | Avleder page-state fra load-status, empty-status og labels | `viewmodel/WorkspaceState/` | 7 — eier ingen state, konverterer input til resultat |
+| `combineLoadStatuses()` | Avleder samlet status fra flere ressursstatuser | `viewmodel/LoadState/combineLoadStatuses.js` | 5 — ren avledning |
+| `normalizeSearchTerm()` | Søkenormalisering | `viewmodel/Utils/normalizeSearchTerm.js` | 5 produksjonsimportører |
+| `shuffleInPlace(items, randomNumber)` | Fisher-Yates med injisert RNG | `viewmodel/Utils/shuffleInPlace.js` | 4 moduler: `answerOptionOrder`, `matchCardsSlots`, `matchCardsSession`, `flipcardDeckToolState`. `Math.random` sendes inn, ikke gjentatt |
 
-### WorkSpaceCard-presisering
+## CSS- og token-eiere
 
-`workspace-card.css` er fortsatt canonical eier av den delte visuelle kortflaten, og `QuestionCard` adopterer kontrakten gjennom klassekomposisjon (`workspace-card question-card`).
-
-`src/ui/view/components/Shared/WorkSpaceCard/WorkSpaceCard.jsx` har derimot **ingen produksjons- eller testimportører** i snapshotet. React-komponenten skal derfor ikke listes som en bekreftet canonical renderer før den enten tas i bruk eller slettes. Den faktiske SSOT-en i dag er CSS-kontrakten, ikke den ubrukte wrapperkomponenten.
+| Eier | Kontrakt | Fil | Bevis |
+|---|---|---|---|
+| `:root{}` `--space-*` `--z-*` | Designtokens og lagstige | `style/Tokens.css` | Global-lag låst av `globalLayerPolicy` |
+| `--scaffold-header-height` `--scaffold-inset` | Scaffoldets geometri-hooks | `style/WorkspaceScaffold/workspace-scaffold.css` | Erklært på `.workspace-scaffold`, null fallbacks. Låst av `scaffoldTokenOwnership` |
+| `workspace-card` (CSS) | Navngitt kort-flate | `style/Shared/WorkSpaceCard/workspace-card.css` | Brukes av **kun `QuestionCard`**. React-wrapperen `WorkSpaceCard.jsx` er slettet i patch 41; CSS-klassen beholdes som lokal kortflate, ikke dokumentert app-bred canonical primitive |
 
 ---
 
-## CSS- og token-eierskap
+## Lukket siden forrige runde
 
-| Eier | Autoritet | Status |
-|---|---|---|
-| `src/ui/style/App.css` | Eneste CSS-entry point og importrekkefølge | Importerer Tokens, globalt stilark, alle Pages og delte UI-mapper én gang |
-| `Tokens.css` | Delte designverdier, dark-mode-overstyringer og beviste globale lag | `.dark`-eierskap ligger her; globale z-relasjoner er navngitt, lokale stacking contexts forblir lokale |
-| Header-CSS + `headerVariants.js` | Header-geometri og appearance/layout-varianter | Page-CSS eier ikke `.scaffold-header*` |
-| WorkspaceScaffold-CSS | Scaffoldstruktur, slots og `.workspace-scaffold-body` | `contentClassName`-escape hatch er fjernet; page-padding ligger i wrappers inne i `children` |
-| MobileBottomSheet-CSS + mobile-sheet-tokens | Docked geometri, topbar-clearance, peek, overlay, expanded-scroll og safe-area | Feature-CSS kan ikke overstyre `.mobile-bottom-sheet-*`; dokumentert background custom property er eneste visuelle feature-hook |
-| Search-CSS | Feltgeometri, clear-action, autocomplete-hint, popuphøyde, suggestions, blur/backdrop og footer-lift | Feature-CSS kan ikke sette egen suggestion-limit eller popuphøyde |
-| `workspace-card.css` | Delt card-surface, skygge, inset-highlight og ambient glow | Konsumeres via klassekomposisjon; se presiseringen om ubrukt React-wrapper |
-| GlossaryPage-CSS | Lokal desktoplayout og tabellkontrakt | To selvstendige sibling-kort; term/forklaring er eksplisitt `40% / 60%`; språklig orddeling og overflow-beskyttelse er lokal |
-| FlipcardDeck-CSS | Lokal kortgeometri og termpresentasjon | Begrep bruker `hyphens: manual`; bare ViewModel-genererte soft hyphens kan bryte begrepet. Forklaringer bruker `hyphens: auto` |
+Forrige inventory hadde disse i «burde vært SSOT». De er nå løst — de fleste med en håndhevende test:
 
-### Global lagstige
-
-Bare relasjoner som er bevist på tvers av komponenter er sentralisert i `Tokens.css`:
-
-```txt
-  1  --z-app-content
- 30  --z-scaffold-header
- 40  --z-search-backdrop
- 50  --z-workspace-footer-overlay
- 60  --z-search-footer-content
- 71  --z-docked-mobile-sheet
- 80  --z-navigation-backdrop
- 90  --z-navigation-panel
-100  --z-mobile-topbar
-110  --z-exam-submit-confirmation
-130  --z-settings-dialog
-```
-
-Lokale verdier i kort, drag-and-drop, Flipcards, sticky table headings og `DesktopPopOutMenu` er ikke tokenisert bare fordi de er numerisk like andre verdier.
-
----
-
-## Utilities med dokumentert delt eierskap
-
-| Eier | Kontrakt | Produksjonsbruk |
-|---|---|---:|
-| `normalizeSearchTerm(searchTerm)` | String inn → trim + locale-uavhengig lower-case; ingen skjult domenepolicy | 5 importører |
-| `shuffleInPlace(items, random)` | In-place Fisher–Yates med eksplisitt RNG | 4 importører |
-| `createFormattedTextSegments(text)` | Parser prosjektets avgrensede `**bold**`-kontrakt | Brukes av `FormattedText` og MatchCards-presentasjon |
-| `SEARCH_SUGGESTION_LIMIT` | Felles maksimum på seks forslag | 3 importører |
-
-Feature-policy for identisk rekkefølge, autocomplete-rangering, search commitment eller norsk sammensetningsanalyse forblir lokal og bygges på de delte utility-kontraktene.
-
----
-
-## Søkekontrakten
-
-Søk er nå delt på mekanikknivå, men feature-policy er avgrenset:
-
-```txt
-SearchFilterField
-├── input/ref
-├── filterkontroll
-├── clear-action
-├── Escape
-├── valgfri combobox-ARIA
-└── ArrowUp / ArrowDown / Enter
-
-SearchBackdrop
-└── canonical blur, lag og klikk-utenfor
-
-SearchSuggestionList / SearchSheetBody
-└── canonical listbox, option-rader og popup-overflate
-```
-
-SubjectSelect og LearningContentSelect bruker standard search-sheet-policy. Glossary bruker de samme canonical komponentene, men ViewModelen eier:
-
-- forslag fra første tegn,
-- eksakt/start/ordstart/contains-rangering,
-- kapittelfilter,
-- aktivt forslag,
-- draft input versus valgt/committed begrep.
-
-Glossary-input filtrerer ikke lenger tabellen i sanntid. Tabellen endres først når et autocomplete-forslag velges. Dette er en feature-policy, ikke en parallell Search-implementasjon.
-
----
-
-## MobileBottomSheet-kontrakten
-
-`DockedMobileBottomSheet` er eneste canonical docked sheet-implementasjon:
-
-```txt
-Docked:
-- grip synlig
-- peekContent aktivt
-- dockedOverlayContent kan brukes til søk/filter
-- expandedContent skjult, inert og uten pointer-events
-
-Åpen:
-- grip synlig
-- peekContent fortsatt aktivt
-- expandedContent synlig og scrollbart
-```
-
-Bare grip, chevron og drag endrer åpen-state. Søk og filter kan brukes i både docked og åpen tilstand uten å åpne sheetet automatisk.
-
-Feature-komponentene forblir separate fordi de har ulike data og endringsårsaker:
-
-```txt
-PageToolsMobileFooterSheet
-GlossaryMobileChapterSheet
-FlipcardsMobileFooterSheet
-```
-
-Dette er ikke et SSOT-brudd; de deler mekanikken, men eier hver sin feature.
-
----
-
-## Feilkontrakter
-
-| Livsløp | Eier |
+| Tidligere funn | Status nå |
 |---|---|
-| Page-load | `useLoadModel → createWorkspaceState → WorkspaceState` |
-| Root render-/lifecycle-crash | `AppErrorBoundary` + recovery-callback i composition root |
-| Exam-language unavailable | Lokal språksynk-kontrakt med egen i18n-produkttekst |
-| Teknisk exam-language-sync-feil | Lokal språksynk-kontrakt, dev-logg og egen produkttekst |
-| Exam submit-feil | Lokal action-state og i18n-produkttekst |
+| `shouldShowSubjectSwitcher` som `||`-kjede i ViewModel | Flyttet til `SCREEN_CONFIG.showsSubjectSwitcher` |
+| Søkenormalisering duplisert i 4 moduler | `normalizeSearchTerm()` |
+| Tre shuffle-implementasjoner | Én `shuffleInPlace` med injisert RNG |
+| `--scaffold-*` udefinert / feil eier | Erklært på scaffoldet, låst av test |
+| Header-varianter som per-side-CSS | `headerArchitecture`-test krever eksplisitt appearance/layout/slots; MatchCards-reglene ute av `progress-bar.css` |
+| Breakpoint 932 spredt uten kilde | `appBreakpointContract` med allowlist for lokale terskler |
+| z-index uten lagstige | `globalLayerPolicy` binder hver global deltaker til et token |
+| `fallbackLabel`-kanaler ved siden av i18n | `i18nContract` avviser lokale fallback-kanaler |
+| Navigasjonens resolver/reducer-oppblåsning | Hele resolver-sporet slettet; `navigation.js` er ren data |
+| Ubrukt `WorkSpaceCard.jsx`-wrapper | React-komponenten er slettet i patch 41. `workspace-card.css` og `QuestionCard` sin direkte klassebruk er beholdt |
 
-Det finnes ingen global error store. Teknisk `error.message` brukes ikke som produkttekst.
+Arkitektur-testmappen gikk fra 2 til 11 filer. Det er den største enkeltendringen i SSOT-disiplin: funnene er ikke bare ryddet, de er gjort til stående garantier.
 
----
+## Andre lukkede korrekthetsfunn
 
-## Verifisert som ikke-brudd
+Rettelser som ikke berørte noen SSOT-eier — tatt med for sporbarhet.
 
-| Ser ut som duplisering | Faktisk kontrakt |
+| Funn | Status nå |
 |---|---|
-| Standard søk vs Glossary-autocomplete | Samme `SearchFilterField`, backdrop, popup og listbox; bare rangering/commit-policy er feature-spesifikk |
-| PageTools-, Glossary- og Flipcards-sheet | Separate feature-komponenter over samme `DockedMobileBottomSheet`-primitive |
-| `ProgressBar` vs `ProgressPager` | Ulike presentasjonskontrakter: lineær progress versus punkt-/sidepager |
-| `DesktopPopOutMenu` og mobile bottom sheet | Ulike viewport-/interaksjonsmekanismer; deler feature-data, ikke shell-implementasjon |
-| `QuestionCard` med `workspace-card`-klasse | Bevisst CSS-komposisjon. React-wrapperen er ubrukt, men CSS-kontrakten er canonical |
-| Norsk Flipcard-segmentering vs vanlig CSS-hyphenation | Begrep bruker kontrollerte soft hyphens; forklaring bruker browserens språkbaserte auto-hyphenation |
-| Lokale icon maps | Feature-lokale registre er tillatt; et globalt ikonregister er ikke automatisk en bedre SSOT |
+| `AuthButton` kalte `useUser()` i en rendergren der `ClerkProvider` ikke var garantert (når nøkkelen mangler rendrer `ClerkAppProvider` appen uten provider) | `AuthButton` velger nå konfigurert/ukonfigurert underkomponent før noen Clerk-hook brukes; `useUser()` finnes bare i `ConfiguredAuthButton`. Provider-precondition-brudd, ikke Rules-of-Hooks-brudd. **Ingen ny auth-konfigurasjons-SSOT ble innført** — `AuthTokenProvider`-raden står uendret |
 
 ---
 
-## Løst siden revisjonen 2026-07-23
+## Fortsatt burde vært SSOT
 
-| Tidligere funn | Dagens løsning |
+| I dag | Foreslått | Hvor spredt | Omfang |
+|---|---|---|---|
+| Rå spørsmålstype-strenger (`"single"`, `"multi"`, `"fill"`) | Importer `QUESTION_TYPES` og sammenlign mot konstantene | `transformAnswersForApi.js:29,34`, `FeedbackPanel.jsx:10,238`, `AnswerLabelFormatter.js:8` | 5 forekomster i 3 filer |
+| Gjentatt semantisk fargeverdi brukt av flere uavhengige komponenter | Semantisk `Tokens.css`-variabel — men bare ved dokumentert gjenbruk | Utgangspunkt: 93 hex-forekomster i 22 CSS-filer utenfor `Tokens.css`. Dette er inventory, ikke 93 brudd — lokale paletter, grafserier og dekorative bakgrunner er legitime | opportunistisk |
+
+Den nye toppsaken er de rå spørsmålstype-strengene: `QUESTION_TYPES` er ment å eie type-ID-ene, men fem steder sammenligner mot rå strenger i stedet for konstantene. Å bytte dem ut gjør `QUESTION_TYPES` til faktisk SSOT for type-ID-ene — et lite, avgrenset tiltak.
+
+Et **globalt `QUESTION_TYPE_REGISTRY`** anbefales derimot ikke nå. Filene som forgrener på type håndterer ulike beslutninger — presentasjon, besvart-status, randomisering, layout, transportformat, domenegradering. Ett register som samler dem ville koblet transport til layout til domeneadferd, og blitt en større code smell enn dagens avgrensede funksjoner. Innfør et register først når to eller flere moduler faktisk deler samme mapping.
+
+**Navigasjonsnullstillingene** er flyttet til «Observert gjeld uten anbefalt tiltak» under — de hører ikke hjemme her, siden ingen refaktorering anbefales.
+
+---
+
+## Observert gjeld uten anbefalt tiltak
+
+Duplisering som er reell, men der riktig beslutning ved dagens omfang er å la den stå.
+
+| Observasjon | Status |
 |---|---|
-| `NAV_GRAPH` + `navReducer` + flere navigation-filer | Fjernet. `navigation.js` eier stabil config; `AppNavigationViewModel` eier eksplisitt runtime-state og handlinger |
-| Lokale screen-sets og separat subject-switcher-policy | Flyttet til `SCREEN_CONFIG` |
-| Parallelle back-felter | Én canonical `backContract` |
-| Header-varianter skjult i Page-CSS | Eksplisitte `HEADER_APPEARANCES`/`HEADER_LAYOUTS`; Header er feature-fri |
-| Statistics med konkurrerende header | Statistics bruker canonical Header |
-| `contentClassName` som dynamisk scaffold-kanal | Fjernet; page-geometri ligger i wrappers inni `children` |
-| Utestet 932/933-drift | Synkronisert JS/CSS-kontrakt og PostCSS-arkitekturtest |
-| Tilfeldige globale z-index-verdier | Bare beviste app-lag er sentralisert i semantiske tokens |
-| Duplisert søkenormalisering | `normalizeSearchTerm()` |
-| Tre Fisher–Yates-varianter | `shuffleInPlace(items, random)` |
-| Fragmentert Search-opplevelse | Canonical Search-familie med backdrop, filterfield, suggestion-list og felles seks-resultatgrense |
-| Fragmentert docked bottom-sheet-geometri | Canonical `DockedMobileBottomSheet` med eksplisitte slots og accessibility-state |
-| Glossary live-filtrerte tabellen under typing | Draft autocomplete er separert fra committed content |
-| Glossary mistet `**bold**`-rendering | Term og forklaring rendres igjen gjennom `FormattedText` |
-| Flipcard-begreper fikk vilkårlige bokstavbrudd | ViewModel-genererte soft hyphens + `hyphens: manual` |
-| Root crash-recovery manglet | `AppErrorBoundary` |
-| Fragmentert error-livsløp | Page-load, root crash, language sync og submit er separate kontrakter |
-| Hardkodede navigation fallback-labels | Fjernet; i18n-registeret er autoritativt |
-| Ukjent spørsmålstype kunne falle inn i choice-adferd | Eksplisitt unknown-type-presentasjon |
+| Inline nullstillingsregler og caller-forutsetning i `AppNavigationViewModel` | `changeScreen(FLIPCARDS)` beholder emneområdet mens `selectFlipcardDeck(key)` setter det. `selectExam(examId)` håndhever ikke `requiresSubject`, men forutsetter at kalleren bare eksponerer handlingen etter valgt fag. Dagens eksplisitte callbacks er lesbare, men caller-premisset bør enten testlåses sterkere eller erstattes med en subject-guard i en egen navigasjonspatch. Ikke innfør generisk `clears`-metadata nå; vurder en lokal next-state-modell først når overgangslogikken vokser betydelig |
 
 ---
 
-## Kontrakter som uttrykkelig ikke er innført
+## Bevisst lokal policy — ikke SSOT-kandidat nå
 
-- `navGraph.js` eller `navReducer.js`,
-- global navigation reducer,
-- parallelle lokale screen-sets,
-- global error store,
-- globalt ikonregister uten målt gevinst,
-- global z-index-policy basert bare på tallstørrelse,
-- runtime resize-state som erstatning for CSS media queries,
-- grading i UI-laget,
-- `QUESTION_TYPE_REGISTRY` uten dokumentert beslutningsgevinst,
-- compatibility fields mellom gammel og ny kontrakt,
-- en universell norsk språkservice basert på Flipcards-heuristikken.
+Gjentatt kode som med vilje *ikke* er sentralisert, dokumentert her så en senere SSOT-gjennomgang ikke feilflagger den.
+
+| Observasjon | Beslutning |
+|---|---|
+| `ClerkAppProvider`, `AuthButton` og Statistics-grenen i `App.jsx` sjekker `VITE_CLERK_PUBLISHABLE_KEY` lokalt (3 steder) | Beholdes. Hvert sted beskytter sin egen rendergrense, og regelen er en identisk, triviell boolsk sjekk uten delt validerings-, normaliserings- eller fallback-policy. `AUTH_CONFIG` eller en `isClerkConfigured()`-helper innføres først dersom regelen faktisk blir mer kompleks eller begynner å drifte. Samsvarer med dokumentets SSOT-definisjon: én autoritet per reell policy, ikke sentralisering av enhver gjentatt linje |
 
 ---
 
-## Gjenstående avgrenset gjeld
+## Hvordan navigasjonen fungerer
 
-### 1. Ubrukt `WorkSpaceCard`-komponent
+Navigasjonens eierskap er delt i to lag, med `App.jsx` som en separat rendergrense:
 
-`src/ui/view/components/Shared/WorkSpaceCard/WorkSpaceCard.jsx` er eneste produksjonsmodul uten importører utover entry pointet `main.jsx`. Enten bør wrapperen tas i faktisk bruk av en legitim konsument, eller slettes. `workspace-card.css` kan fortsatt være canonical CSS-kontrakt uten React-wrapperen.
+```text
+src/navigation/navigation.js
+  statisk, deklarativ policy
+  NAV_SCREENS, SCREEN_CONFIG, getScreenConfig, NAV_ITEMS, LEARNING_CONTENT_TYPES
 
-### 2. Ulik icon-key-feilpolicy
+src/ui/viewmodel/AppNavigationViewModel.js
+  core route-/selection-state: useState × 5
+  mobile topbar-state: useMobileDropDownTopBarModel (useState × 2)
+  settings-state: useSettingsPresentationModel (useState × 2)
+  route-handlinger, språksynk og avledede chrome-/back-kontrakter
 
-Sidebarens lokale ikonoppslag kaster ved ukjent key. `SubjectIcon` normaliserer legacy keys og faller tilbake til `clipboard`; `ToolCard` faller tilbake til `List`. Dette er ikke et argument for et globalt ikonregister, men de tre lokale kontraktene bør dokumentere om silent fallback eller tydelig feil er ønsket.
+src/App.jsx
+  rendergrense: activeScreen → Page, med eksplisitte persistensunntak
+```
 
-### 3. Eldre signatur- og parameterstil
+### Statisk, deklarativ policy (`navigation.js`)
 
-Det finnes fortsatt:
+`SCREEN_CONFIG` har én node per skjerm i `NAV_SCREENS`. Hver node eier seks deklarative egenskaper — og bare disse:
 
-- Page-ViewModels med mange posisjonelle parametre,
-- produksjonsfunksjoner med default-parametre,
-- eldre space-innrykk og vertikale signaturer,
-- enkelte state-booleans navngitt etter View-komponenter.
+```js
+[NAV_SCREENS.EXAM]: {
+	requiresSubject: true,
+	requiresExam: true,
+	backTo: NAV_SCREENS.SELECT,
+	showsSubjectSwitcher: true,
+	pageClassName: "exam-page",
+	shellClassName: "exam-shell"
+}
+```
 
-Dette er stil-/kontraktsgjeld og bør ikke blandes inn i funksjonelle featurepatcher.
+Betydningen er:
 
-### 4. Rå fargeliteraler utenfor `Tokens.css`
+- `requiresSubject` / `requiresExam`: deklarative krav som `changeScreen()` håndhever.
+- `backTo`: deklarert tilbake-mål. Faktisk utfall går gjennom målskjermens guards.
+- `showsSubjectSwitcher`, `pageClassName`, `shellClassName`: app-chrome for skjermen.
 
-Statisk inventory finner 93 hex-literalforekomster fordelt på 22 CSS-filer utenfor `Tokens.css`. Flere er lokale illustrasjons-/statuspaletter, men semantisk delte verdier bør flyttes opportunistisk til tokens når filene røres. En blind global migrering anbefales ikke.
+`SCREEN_CONFIG` er dermed SSOT for disse seks egenskapene, men **ikke** for all overgangssemantikk. Preconditions i dedikerte callbacks, nullstillinger og sideeffekter eies fortsatt av ViewModelen.
 
-### 5. `AppNavigationViewModel` er fortsatt bred
+`getScreenConfig(screen)` er produksjonsaksessoren. Den kaster på ukjent skjerm i stedet for å falle tilbake stille, fordi en ukjent skjerm er en programmeringsfeil.
 
-ViewModelen returnerer fortsatt en flat kontrakt som kombinerer navigation-state, overlay-state og språksynk. Eierskapet er korrekt, men oppdeling i interne undermodeller kan vurderes dersom filen får ny endringsbelastning. Returen bør ikke grupperes bare for estetikk.
+`NAV_ITEMS` eier navigasjonsdata for tre menyflater, ikke runtime-state: `sidebarItems`, `toggleButtonItems` og `popOutMenuItems`.
 
-### 6. Navnekonsistens
+### Runtime-state og overganger (`AppNavigationViewModel`)
 
-`WorkspaceScaffold` og `WorkSpaceCard` bruker ulik kapitalisering. Dette er kosmetisk gjeld og bør ikke kombineres med funksjonell endring.
+Core route-/selection-state består av fem direkte state-verdier:
 
-### 7. Runtime-verifisering
+```js
+activeScreen
+selectedSubjectId
+selectedExamId
+selectedTopicAreaKey
+examLanguageSyncError
+```
 
-Denne revisjonen har ikke kjørt full Jest-suite, Vite-build eller browser-QA. Følgende må fortsatt verifiseres i prosjektets eget installerte miljø:
+App-shell-presentasjon eies i tillegg av to lokale undermodeller:
 
-- desktop/mobil,
-- light/dark,
-- norsk/engelsk,
-- søk, blur, autocomplete og filter,
-- docked/åpen MobileBottomSheet,
-- Header-/overlay-lag,
-- Glossary desktoplayout,
-- Flipcard soft-hyphen-presentasjon.
+```text
+useMobileDropDownTopBarModel
+  isMobileDropDownTopBarMenuOpen
+  isMobileSubjectPickerOpen
 
----
+useSettingsPresentationModel
+  isSettingsPresentationOpen
+  settingsPresentationMode
+```
 
-## Prioritert videre arbeid
+`closeNavigationOverlays()` samler lukking av settings, mobilmeny og mobil subject-picker.
 
-1. **Avklar `WorkSpaceCard.jsx`.** Slett den døde wrapperen eller adopter den der semantikken faktisk passer.
-2. **Kjør full CI og browser-QA mot dette snapshotet.** Dokumenter resultatene uten å gjenbruke eldre tall.
-3. **Dokumenter lokal icon-key-policy.** Behold lokale registre, men velg bevisst fail-fast versus fallback per kontrakt.
-4. **Migrer signatur-/default-parametergjeld i dedikerte patcher.** Ikke bland med featurearbeid.
-5. **Tokeniser semantisk delte farger opportunistisk.** Behold ekte lokale paletter lokalt.
-6. **Vurder AppNavigation-undermodeller bare ved konkret endringspress.** Ikke opprett ny reducer eller navGraph.
+De fleste brukerinitierte route-overgangene følger samme overordnede sekvens: valider preconditions, oppdater relevante valg, sett skjerm og lukk overlays. Mønsteret er ikke identisk; hver callback eier egne preconditions og nullstillingsregler, mens `goBack()` og språksynk er egne varianter.
 
----
+`changeScreen(nextScreen)` er fellesinngangen for deklarative skjermbytter. Den leser guards fra config, men nullstillingsreglene er hardkodet etter skjermnavn:
 
-## Metodens begrensning
+```js
+const changeScreen = useCallback((nextScreen) => {
+	const nextScreenConfig = getScreenConfig(nextScreen);
 
-Registeret bygger på:
+	if (nextScreenConfig.requiresExam && !selectedExamId) return;
+	if (nextScreenConfig.requiresSubject && !selectedSubjectId) {
+		showAllSubjects();
+		return;
+	}
+	if (nextScreen === NAV_SCREENS.SUBJECTS) {
+		showAllSubjects();
+		return;
+	}
 
-- relativ importgraf for JS/JSX,
-- tekst- og strukturinspeksjon av React-kontrakter,
-- CSS selector-/custom-property-inventory,
-- eksisterende arkitekturtester og dokumenterte kontrakter,
-- `node --check` for `.js`-filer.
+	setExamLanguageSyncError(null);
+	if (nextScreen !== NAV_SCREENS.EXAM) setSelectedExamId(null);
+	if (nextScreen === NAV_SCREENS.SELECT || nextScreen === NAV_SCREENS.GLOSSARY) {
+		setSelectedTopicAreaKey(null);
+	}
 
-Importgrafen kan bevise importører og døde moduler, men ikke runtime-adferd eller faktisk computed CSS. CSS-inventory kan finne eierskap og overstyringskanaler, men ikke bevise visuell korrekthet i nettleseren. Derfor må full Jest/Vite og browser-QA behandles som en separat verifikasjonsfase.
+	setActiveScreen(nextScreen);
+	closeNavigationOverlays();
+}, [closeNavigationOverlays, selectedExamId, selectedSubjectId, showAllSubjects]);
+```
+
+De dedikerte handlingene (`selectSubject`, `selectExam`, `selectFlipcardDeck`, `selectMatchCardsDeck`, `showAllSubjects`) håndhever sin egen overgang. Eksempel: `selectExam` vokter `!examId`, men re-validerer ikke `requiresSubject`; den stoler på at kalleren bare tilbys etter at fag er valgt.
+
+Det finnes også en konkret overgangsdivergens: `selectFlipcardDeck(key)` setter `selectedTopicAreaKey`, mens `changeScreen(FLIPCARDS)` beholder eksisterende verdi. Dette er ufarlig med dagens kallere, men viser hvorfor inline-nullstillinger er dokumentert som overgangsgjeld.
+
+`goBack()` slår opp aktiv skjerms `backTo`. `SUBJECTS` delegeres til `showAllSubjects()`; andre mål sendes gjennom `changeScreen()`, og får dermed målskjermens guards og nullstillinger.
+
+### Delsystem: språkdrevet eksamen-resynk
+
+`useSyncSelectedExamWithLanguage` kjører ved siden av de manuelle overgangene. Når språk faktisk endres mens EXAM er aktiv og en eksamen er valgt, forsøker hooken å finne språkekvivalenten:
+
+```text
+onExamResolved
+  oppdaterer selectedExamId og selectedSubjectId uten å lukke overlays
+
+onExamUnavailable
+  går til SELECT og setter examLanguageSyncError
+
+onExamSyncFailed
+  går til SELECT og setter examLanguageSyncError
+```
+
+Dette er den eneste route-utløseren som ikke starter med en direkte brukerhandling. Endringer i språk- eller eksamenshåndtering må derfor vurdere denne stien eksplisitt.
+
+### Avledet chrome og tilbakekontrakt
+
+ViewModelen leser aktiv config og avleder:
+
+```js
+const activeScreenConfig = getScreenConfig(activeScreen);
+const shouldShowSubjectSwitcher = activeScreenConfig.showsSubjectSwitcher;
+const pageClassName = activeScreenConfig.pageClassName;
+const shellClassName = activeScreenConfig.shellClassName;
+const showBackButton = activeScreenConfig.backTo !== null;
+
+const backContract = {
+	showBackButton,
+	backLabel: params.backLabel,
+	navigationLabel: params.navigationLabel,
+	onBack: goBack
+};
+```
+
+`backContract` er ikke en egen SSOT. Det er en avledet app-shell-kontrakt med ett konstruksjonssted og én form; en ny objektverdi opprettes per render. Den er den felles kontrakten for **rutenavigasjonens** tilbakehandling. Settings-presentasjonen har en separat lokal tilbakehandling som `MobileDropDownTopBar` velger når settings er åpen.
+
+### Rendergrensen (`App.jsx`)
+
+`App.jsx` bruker `pageClassName` / `shellClassName` og mapper `activeScreen` til hovedflater. De fleste Pages monteres betinget:
+
+```jsx
+{activeScreen === NAV_SCREENS.EXAM && <ExamPageWrapper />}
+{activeScreen === NAV_SCREENS.FLIPCARDS && <FlipcardsPageWrapper />}
+```
+
+`GlossaryPageWrapper` er det dokumenterte unntaket: den er persistent montert og får `isActive`. Det bevarer Glossary-data og lokal state mellom skjermbytter. Betinget mounting er standard; persistent mounting skal bare brukes når bevart state eller cache er et eksplisitt krav.
+
+Handlingene (`selectExam`, `selectFlipcardDeck`, `changeScreen`, osv.) sendes ned som props. `App.jsx` eier render-mappingen, ikke beregningen av neste state.
+
+## Slik legger du til en ny skjerm
+
+Eksempel: en ny `SUMMARY`-skjerm som krever valgt fag.
+
+1. **`NAV_SCREENS`** — legg til `SUMMARY: "summary"`.
+2. **`SCREEN_CONFIG`** — legg til de seks deklarative egenskapene. Dette er eneste sted disse seks egenskapene defineres; overgangspreconditions og nullstillinger hører fortsatt hjemme i ViewModelen.
+   ```js
+   [NAV_SCREENS.SUMMARY]: {
+	   requiresSubject: true,
+	   requiresExam: false,
+	   backTo: NAV_SCREENS.SELECT,
+	   showsSubjectSwitcher: true,
+	   pageClassName: "exam-select-page",
+	   shellClassName: "exam-select-shell"
+   }
+   ```
+   Chrome-klassene er inline strenger. Gjenbruk en eksisterende kombinasjon med mindre skjermen trenger et nytt utseende; samsvaret er konvensjon, ikke en kompilatorgaranti.
+3. **i18n** — legg til tekstnøkler i begge språk i `translations.js`.
+4. **ViewModel** — bruk `changeScreen(NAV_SCREENS.SUMMARY)` dersom det er nok. Ved en dedikert callback:
+   - håndhev målskjermens `requiresSubject` / `requiresExam`, eller deleger selve skjermbyttet gjennom `changeScreen()`;
+   - et caller-reachability-unntak må være uttrykkelig og testlåst; dagens `selectExam` er dokumentert overgangsgjeld fordi den forutsetter valgt fag hos kalleren;
+   - definer callbackens nullstillinger og sideeffekter eksplisitt;
+   - test at ugyldig state ikke kan aktivere skjermen.
+5. **`App.jsx`** — legg til rendergrenen og send inn nødvendige handlinger. Bruk betinget mounting som standard; bruk persistent mounting med `isActive` bare ved dokumentert behov.
+6. **Page** — bygg på `<WorkspaceScaffold/>`, `<WorkspaceState/>` og `<Header/>` etter den eksisterende page-kontrakten.
+7. **Meny, valgfritt** — legg oppføringen i riktig del av `NAV_ITEMS` dersom skjermen skal være direkte tilgjengelig derfra.
+8. **Tester** — utvid `navigation.test.js` og `AppNavigationViewModel.test.js` med config, guards, ugyldig state, overgangsresultat og eventuell persistens.
+
+### Fallgruve ved `backTo`
+
+`goBack()` sender ikke direkte til `backTo`; målet går gjennom `changeScreen()` og målskjermens guards. `OVERVIEW` kan nås uten valgt fag, men peker til `SELECT`, som krever fag. Tilbake fra OVERVIEW uten valgt fag ender derfor på SUBJECTS via guarden.
+
+`navigation.test.js` låser allerede config-kompletthet, felttyper, gyldige skjermreferanser og at ukjent skjerm kaster. Den identifiserte luken er **nåbarhet/forventet redirect for `backTo`**. Nye asymmetrier bør enten unngås eller låses med en eksplisitt test; en generell «må ikke være strengere»-regel kan ikke legges inn uten å håndtere dagens OVERVIEW-unntak.
+
+Du trenger fortsatt ingen dispatcher, action-typer eller adapter. Legg til deklarativ skjermdata, en overgang bare når nødvendig, og en rendergren.
+
+## Hvor grensen for dagens design går
+
+Den flate modellen passer dagens omfang: sju skjermer, enkle deklarative guards og overgangsregler som fortsatt er lesbare som eksplisitte callbacks.
+
+En tyngre overgangsmodell blir først berettiget når én eller flere av disse oppstår:
+
+- nullstillings- og precondition-reglene blir mange nok til at dedikerte callbacks driver fra hverandre;
+- samme handling kan gi flere mulige mål basert på ekstern eller historisk state;
+- deklarative guards må håndheves universelt på tvers av alle innganger;
+- neste state må beregnes og testes som én komplett verdi fremfor flere imperative settere.
+
+Det er da `AppNavigationViewModel` og next-state-beregningen som først blir presset. `App.jsx` kan fortsatt beholde enkel `activeScreen`-mapping så lenge overgangsmodellen produserer én aktiv skjerm.
+
+Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i ViewModelen og rendering i `App.jsx`. Utvid ved å legge til en node og en gren, ikke ved å innføre et rammeverk.
