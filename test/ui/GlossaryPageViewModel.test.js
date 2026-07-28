@@ -74,6 +74,11 @@ const translations = {
 	glossaryPageLoadingTitle: "Laster",
 	contentToggleAriaLabel: "Velg læringsverktøy",
 	contentToggleExamsLabel: "Eksamen",
+	contentToggleLearningPathLabel: "Sti",
+	contentTogglePracticeLabel: "Øve",
+	contentToggleTestsLabel: "Tester",
+	contentToggleChapterTestsLabel: "Kapittelprøver",
+	contentToggleBackLabel: "Tilbake",
 	contentToggleFlipcardsLabel: "Flipcards",
 	contentToggleMatchCardsLabel: "Begrepsmatch",
 	contentToggleGlossaryLabel: "Begrepslister"
@@ -232,6 +237,43 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useState).toHaveBeenNthCalledWith(4, false);
 		expect(useState).toHaveBeenNthCalledWith(5, false);
 		expect(useState).toHaveBeenNthCalledWith(6, null);
+	});
+
+	test("returns the glossary-aware mobile toggle-button contract", () => {
+		const { viewModel } = createViewModel();
+		const [learningPathItem, practiceItem, testsItem] = viewModel.mobileToggleButtonItems;
+
+		expect(viewModel.activeContentType).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
+		expect(viewModel.contentToggleBackLabel).toBe("Tilbake");
+		expect(viewModel.mobileToggleButtonItems).toHaveLength(3);
+		expect(learningPathItem).toEqual({
+			id: "learning-path",
+			label: "Sti",
+			contentTypeId: null,
+			isDisabled: true,
+			isActive: false,
+			entries: []
+		});
+		expect(practiceItem).toMatchObject({
+			id: "practice",
+			label: "Øve",
+			isDisabled: false,
+			isActive: true
+		});
+		expect(practiceItem.entries).toEqual(viewModel.contentToggleEntries.slice(1));
+		expect(testsItem).toMatchObject({
+			id: "tests",
+			contentTypeId: null,
+			isActive: false
+		});
+		expect(testsItem.entries).toEqual([
+			{
+				id: "chapter-tests",
+				label: "Kapittelprøver",
+				isDisabled: true
+			},
+			viewModel.contentToggleEntries[0]
+		]);
 	});
 
 	test("loads all glossary entries once and topic areas for the active language", async () => {

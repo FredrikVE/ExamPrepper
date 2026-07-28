@@ -93,6 +93,11 @@ function createT() {
 		pageToolsCurriculumFigureLabel: "Lag pensum-oversiktsfigur",
 		pageToolsAiExamLabel: "Lag AI-generert øveeksamen",
 		contentToggleExamsLabel: "Eksamener",
+		contentToggleLearningPathLabel: "Sti",
+		contentTogglePracticeLabel: "Øve",
+		contentToggleTestsLabel: "Tester",
+		contentToggleChapterTestsLabel: "Kapittelprøver",
+		contentToggleBackLabel: "Tilbake",
 		contentToggleFlipcardsLabel: "Flipcards",
 		contentToggleMatchCardsLabel: "Begrepsmatch",
 		contentToggleGlossaryLabel: "Begrepslister",
@@ -200,6 +205,69 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 
+
+	test("returns resolved mobile toggle-button items for the active content type", () => {
+		const { viewModel } = createViewModel();
+		const [learningPathItem, practiceItem, testsItem] = viewModel.mobileToggleButtonItems;
+
+		expect(viewModel.contentToggleBackLabel).toBe("Tilbake");
+		expect(viewModel.mobileToggleButtonItems).toHaveLength(3);
+		expect(learningPathItem).toEqual({
+			id: "learning-path",
+			label: "Sti",
+			contentTypeId: null,
+			isDisabled: true,
+			isActive: false,
+			entries: []
+		});
+		expect(practiceItem).toMatchObject({
+			id: "practice",
+			label: "Øve",
+			contentTypeId: null,
+			isDisabled: false,
+			isActive: false
+		});
+		expect(practiceItem.entries).toEqual(viewModel.contentToggleEntries.slice(1));
+		expect(testsItem).toMatchObject({
+			id: "tests",
+			label: "Tester",
+			contentTypeId: null,
+			isDisabled: false,
+			isActive: true
+		});
+		expect(testsItem.entries).toEqual([
+			{
+				id: "chapter-tests",
+				label: "Kapittelprøver",
+				isDisabled: true
+			},
+			viewModel.contentToggleEntries[0]
+		]);
+	});
+
+	test("marks the practice group active for every practice content type", () => {
+		const practiceContentTypeIds = [
+			LEARNING_CONTENT_TYPES.FLIPCARDS,
+			LEARNING_CONTENT_TYPES.MATCHCARDS,
+			LEARNING_CONTENT_TYPES.GLOSSARY
+		];
+
+		for (const contentTypeId of practiceContentTypeIds) {
+			useState.mockImplementationOnce(() => {
+				const setter = jest.fn();
+				stateSetters.push(setter);
+
+				return [contentTypeId, setter];
+			});
+
+			const { viewModel } = createViewModel();
+			const practiceItem = viewModel.mobileToggleButtonItems[1];
+			const testsItem = viewModel.mobileToggleButtonItems[2];
+
+			expect(practiceItem.isActive).toBe(true);
+			expect(testsItem.isActive).toBe(false);
+		}
+	});
 
 	test("uses match-card-specific empty text", () => {
 		useState.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.MATCHCARDS, jest.fn()]);

@@ -57,7 +57,7 @@ Navigasjonen er nå ren **data + ett oppslag**:
 - `NAV_SCREENS{}` — de sju skjermene
 - `SCREEN_CONFIG{}` — én node per skjerm med `requiresSubject`, `requiresExam`, `backTo`, `showsSubjectSwitcher`, `pageClassName`, `shellClassName`
 - `getScreenConfig()` — eneste funksjon; **kaster** på ukjent skjerm i stedet for å falle tilbake stille
-- `LEARNING_CONTENT_TYPES{}`, `NAV_ITEMS{}` (sidebar, toggle-knapper, pop-out-menyer)
+- `LEARNING_CONTENT_TYPES{}`, `NAV_ITEMS{}` (sidebar, desktop-toggle, mobilgrupper, pop-out-menyer)
 
 Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-settere. Det er en bevisst retningsendring — se «Vurdering» til slutt.
 
@@ -73,7 +73,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `useMobileDropDownTopBarModel()` | Mobilmeny- og subject-picker-state | `viewmodel/AppNavigation/useMobileDropDownTopBarModel.js` | Eneste eier av de to mobile overlay-state-verdiene; komponeres av `useAppNavigationViewModel()` |
 | `useSettingsPresentationModel()` | Settings-presentasjonens open-state og modus | `viewmodel/AppNavigation/useSettingsPresentationModel.js` | Eneste eier av de to settings-state-verdiene; lukker settings ved presentation-mode-bytte |
 | `NAV_SCREENS{}` `SCREEN_CONFIG{}` `getScreenConfig()` | Skjerm-ID-er, seks deklarative skjermegenskaper, deklarert tilbake-mål og chrome | `src/navigation/navigation.js` | 10 importører. `getScreenConfig` er produksjonsaksessoren og kaster på ukjent skjerm. Låst av `navigation.test.js` + `AppNavigationViewModel.test.js` |
-| `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` | Sidebar, toggle-knapper, pop-out-menyer og innholdstyper | `src/navigation/navigation.js` | Samme fil driver `<SidebarNavigation/>`, `<ToggleButtonRow/>` og verktøymenyene |
+| `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` | Sidebar, desktop-toggle, mobilgrupper, mobile-only underoppføringer, pop-out-menyer og innholdstyper | `src/navigation/navigation.js` | `mobileToggleButtonItems` eier mobilrekkefølge og gruppering; `mobileToggleEntryItems` eier underoppføringer uten innholdstype. Page-ViewModelene resolver labels, entries og aktiv status før `<ToggleButtonRow/>` rendrer |
 | `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | 7 importører. (`createWorkspaceState()` er avledningen — se «utilities») |
 | `LOAD_STATUS{}` `useLoadModel()` | Ressursstatus-enum + reaktiv innlastingstilstand | `viewmodel/LoadState/` | `LOAD_STATUS`: 6 importører. `useLoadModel`: 7. (`combineLoadStatuses()` er avledningen — se «utilities») |
 | `translations{}` `LANGUAGES{}` | Autoritativt språkregister og produkttekst | `src/i18n/translations.js` | 20 importører. `i18nContract` låser NO↔EN-paritet, typeparitet, ikke-tomme verdier og navigasjonens tekstnøkler. Lokale `fallbackLabel`-kanaler er fjernet; testen skanner ikke all JSX for hardkodet tekst |
@@ -83,7 +83,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `AuthTokenProvider`-modulen (`setAuthTokenProvider()` `getActiveAuthToken()`) | Aktiv token-henter for transportlaget | `src/auth/AuthTokenProvider.js` | Modulglobal bro — ikke en React-provider. Injiseres i datakildene via `dependencies.js` |
 | `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Tiltenkt autoritativt register — men fem direkte strengsammenligninger (`"single"`/`"multi"`/`"fill"`) omgår det fortsatt, se «burde vært SSOT». Ikke fullt håndhevet ennå |
 | `QUESTION_CONFIG{}` | Konfigurasjonsgrenser for spørsmålstyper (i dag: `FILL_MAX_LENGTH`) | `src/constants/QuestionConfig.js` | Egen fil, egen beslutning — ikke type-ID-er |
-| `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop-modus + breakpoint-tall | `ui/presentation/` | 6 importører. `932`/`933` låst av `appBreakpointContract` |
+| `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop-modus + breakpoint-tall | `ui/presentation/` | 7 importører. `932`/`933` låst av `appBreakpointContract` |
 | `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `ApiDataSource` |
 | `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
 
@@ -99,6 +99,7 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 | `<Footer/>` | Footer-skall | `components/Footer/` | Direkte av `SubjectSelectPage` og `LearningContentSelectPage`; komponert av `<GlossaryFooter/>` |
 | `<ProgressBar/>` (renderer) + `buildProgressBarModel()` (presentasjonsavledning) | Lineær fremdrift | `components/Shared/ProgressBar/` | Direkte importører: `MobileDropDownTopBar`, `ExamPage`, `MatchCardsPage` |
 | `<ProgressPager/>` (renderer) + `createProgressPagerEntries()` (presentasjonsavledning) | Punkt/side-paginering | `components/ProgressPager/` | `ExamFooter`, `FlipcardsStudySurface`, `FlipcardsMobileFooterSheet` |
+| `<ToggleButtonRow/>` | Responsiv innholdstypevelger og variantvalg | `components/ToggleButtonRow/` | Én offentlig fasade brukt av `LearningContentHeader`; desktop beholder tablist-kontrakten, mobil eier lokal disclosure/Escape/fokus og aktiverer første enabled gruppe-entry når ingen gruppe-entry allerede er aktiv. Låst av `toggleButtonRowArchitecture` og hook-test |
 | `<FormattedText/>` (renderer) + `createFormattedTextSegments()` (presentasjonsavledning) | Tekst-rendering | `components/Shared/FormattedText.jsx` | 40 importører — mest delte fil |
 | `<DockedMobileBottomSheet/>` | Mobil bottom-sheet-geometri (docked/expanded, drag, grip, inert) | `components/MobileBottomSheet/` | 3 feature-konsumenter: `PageToolsMobileFooterSheet`, `FlipcardsMobileFooterSheet`, `GlossaryMobileChapterSheet` |
 | `<DesktopPopOutMenu/>` | Desktop pop-out-struktur og lagmekanikk | `components/DesktopPopOutMenu/` | PageTools- og Flipcards-verktøymenyene |

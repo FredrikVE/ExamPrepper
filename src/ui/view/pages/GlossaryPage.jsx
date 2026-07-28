@@ -95,6 +95,8 @@ export default function GlossaryPage({ viewModel }) {
 					activeEntryId={viewModel.activeContentType}
 					onSelectEntry={viewModel.selectContentType}
 					ariaLabel={viewModel.contentToggleAriaLabel}
+					mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
+					contentToggleBackLabel={viewModel.contentToggleBackLabel}
 				/>
 
 				<div className="glossary-page__content">

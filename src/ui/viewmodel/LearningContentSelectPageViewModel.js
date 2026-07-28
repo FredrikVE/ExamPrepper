@@ -153,6 +153,25 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		}));
 	}, [t]);
 
+	const mobileToggleButtonItems = [];
+
+	for (const item of NAV_ITEMS.mobileToggleButtonItems) {
+		const entries = [];
+
+		for (const entryId of item.entryIds) {
+			entries.push(findMobileToggleEntry(contentToggleEntries, entryId, t));
+		}
+
+		mobileToggleButtonItems.push({
+			id: item.id,
+			label: t[item.labelKey],
+			contentTypeId: item.contentTypeId,
+			isDisabled: item.isDisabled,
+			isActive: isMobileToggleButtonItemActive(item, activeContentType),
+			entries
+		});
+	}
+
 	const visibleExams = useMemo(() => {
 		return filterExams(exams, searchTerm, topicAreaKey);
 	}, [exams, searchTerm, topicAreaKey]);
@@ -306,6 +325,8 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		// Innholdstyper
 		activeContentType,
 		contentToggleEntries,
+		mobileToggleButtonItems,
+		contentToggleBackLabel: t.contentToggleBackLabel,
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 		isExamsContentActive,
 		isFlipcardsContentActive,
@@ -356,6 +377,40 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		selectTopicAreaKey,
 		selectSearchSuggestion
 	};
+}
+
+function findMobileToggleEntry(entries, entryId, t) {
+	for (const entry of entries) {
+		if (entry.id === entryId) {
+			return entry;
+		}
+	}
+
+	for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
+		if (entry.id === entryId) {
+			return {
+				id: entry.id,
+				label: t[entry.labelKey],
+				isDisabled: entry.isDisabled
+			};
+		}
+	}
+
+	throw new Error(`Unknown mobile toggle entry: ${String(entryId)}`);
+}
+
+function isMobileToggleButtonItemActive(item, activeContentType) {
+	if (item.contentTypeId !== null) {
+		return item.contentTypeId === activeContentType;
+	}
+
+	for (const entryId of item.entryIds) {
+		if (entryId === activeContentType) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function findContentTypeEntry(contentTypeId) {

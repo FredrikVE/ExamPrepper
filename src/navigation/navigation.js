@@ -150,6 +150,45 @@ export const NAV_ITEMS = {
 		}
 	],
 
+	mobileToggleEntryItems: [
+		{
+			id: "chapter-tests",
+			labelKey: "contentToggleChapterTestsLabel",
+			isDisabled: true
+		}
+	],
+
+	mobileToggleButtonItems: [
+		{
+			id: "learning-path",
+			labelKey: "contentToggleLearningPathLabel",
+			contentTypeId: null,
+			entryIds: [],
+			isDisabled: true
+		},
+		{
+			id: "practice",
+			labelKey: "contentTogglePracticeLabel",
+			contentTypeId: null,
+			entryIds: [
+				LEARNING_CONTENT_TYPES.FLIPCARDS,
+				LEARNING_CONTENT_TYPES.MATCHCARDS,
+				LEARNING_CONTENT_TYPES.GLOSSARY
+			],
+			isDisabled: false
+		},
+		{
+			id: "tests",
+			labelKey: "contentToggleTestsLabel",
+			contentTypeId: null,
+			entryIds: [
+				"chapter-tests",
+				LEARNING_CONTENT_TYPES.EXAMS
+			],
+			isDisabled: false
+		}
+	],
+
 	popOutMenuItems: {
 		[NAV_SCREENS.SUBJECTS]: {
 			id: "subject-select",

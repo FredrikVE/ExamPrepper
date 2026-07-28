@@ -75,6 +75,8 @@ export default function LearningContentSelectPage({ viewModel }) {
 				activeEntryId={viewModel.activeContentType}
 				onSelectEntry={viewModel.selectContentType}
 				ariaLabel={viewModel.contentToggleAriaLabel}
+				mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
+				contentToggleBackLabel={viewModel.contentToggleBackLabel}
 			/>
 
 			<WorkspaceState state={viewModel.workspaceState}>

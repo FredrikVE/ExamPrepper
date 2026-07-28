@@ -1,7 +1,7 @@
 # FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
-<!-- Versjon: 2.6 — Sist oppdatert: 2026-07-26 -->
-<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.5 -->
+<!-- Versjon: 2.7 — Sist oppdatert: 2026-07-27 -->
+<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.6 -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
@@ -43,7 +43,7 @@ Dokumentet skiller derfor fire roller:
 | Område | Autoritativ eier | Eier | Brukskrav |
 |---|---|---|---|
 | Navigasjon: statisk policy | `NAV_SCREENS`, `SCREEN_CONFIG`, `getScreenConfig()` | `src/navigation/navigation.js` | Skjerm-ID-er og de seks stabile skjermegenskapene defineres bare her. |
-| Navigasjon: menydata | `NAV_ITEMS`, `LEARNING_CONTENT_TYPES` | `src/navigation/navigation.js` | Sidebar, toggle-knapper og pop-out-menyer bygges fra disse registrene. |
+| Navigasjon: menydata | `NAV_ITEMS`, `LEARNING_CONTENT_TYPES` | `src/navigation/navigation.js` | Sidebar, desktop-toggle, mobilgrupper og pop-out-menyer bygges fra disse registrene. Page-ViewModelene resolver mobilpolicyen til ferdige labels, entries og aktiv status. |
 | Navigasjon: runtime | `useAppNavigationViewModel()` | `src/ui/viewmodel/AppNavigationViewModel.js` | Eier route-/selection-state, overganger, språksynk og avledet chrome/back. |
 | Mobil navigasjon | `useMobileDropDownTopBarModel()` | `src/ui/viewmodel/AppNavigation/` | Eier mobilmeny og subject-picker-state; brukes gjennom appens navigasjons-ViewModel. |
 | Settings-presentasjon | `useSettingsPresentationModel()` | `src/ui/viewmodel/AppNavigation/` | Eier open-state og presentasjonsmodus for settings. |
@@ -74,6 +74,7 @@ føres i SSOT-registeret. Ny kode skal alltid bruke `QUESTION_TYPES`.
 | Footer-skall | `<Footer/>` | Delte footere komponerer denne; den inlines ikke per side. |
 | Lineær fremdrift | `<ProgressBar/>` | Renderer den canonical lineære fremdriftsflaten. |
 | Punkt-/sidepaginering | `<ProgressPager/>` | Ikke bygg konkurrerende pager-renderere i feature-komponenter. |
+| Responsiv innholdstypevelger | `<ToggleButtonRow/>` | Eneste offentlige inngang. Fasaden velger desktop-/mobilvariant; mobilvarianten eier lokal disclosure, defaultvalg innen en åpnet gruppe og DOM-fokus. |
 | Formatert produkttekst | `<FormattedText/>` | Markup-kontrakten rendres ett sted. |
 | Mobil bottom sheet | `<DockedMobileBottomSheet/>` | Eier docked/expanded-geometri, drag, grip, inert og slots. |
 | Desktop pop-out | `<DesktopPopOutMenu/>` | Eier delt struktur og lagmekanikk. |
@@ -108,16 +109,12 @@ føres i SSOT-registeret. Ny kode skal alltid bruke `QUESTION_TYPES`.
 
 ## Endringslogg
 
-### 2.5 → 2.6
+### 2.6 → 2.7
 
-- Sluttrevisjonen presiserer caller-reachability i dedikerte navigasjonshandlinger, tekniske navn,
-  legitim lokal duplisering og utvidbarhet på tvers av selvstendige spørsmålstype-eiere.
-- En tidlig, obligatorisk oversikt skiller autoritative SSOT-er, canonical implementasjoner, rene avledninger og CSS-/token-eiere.
-- Navigasjonskapittelet beskriver den implementerte modellen: `SCREEN_CONFIG` som deklarativ policy, `getScreenConfig()` som fail-fast-oppslag, eksplisitte overganger i `AppNavigationViewModel` og render-mapping i `App.jsx`.
-- Den slettede React-wrapperen `WorkSpaceCard.jsx` er fjernet fra komponentarkitekturen. `.workspace-card` dokumenteres som en lokal CSS-flate for `QuestionCard`.
-- Breakpoint- og globale z-index-kontrakter beskrives som implementerte og testlåste.
-- SSOT-gjeld skilles fra generell kode- og stilgjeld.
-- State-eierskap, testkrav, Search-eierskap, DI-wiring og lasttilstand er presisert for intern konsistens.
+- `ToggleButtonRow` er dokumentert som canonical responsiv fasade med interne desktop- og mobilvarianter.
+- `NAV_ITEMS.mobileToggleButtonItems` eier statisk mobilstruktur, og `NAV_ITEMS.mobileToggleEntryItems` eier mobile-only underoppføringer som ikke er innholdstyper. Page-ViewModelene resolver begge til ferdige presentasjonsmodeller.
+- Mobilvarianten eier lokal disclosure-, Escape- og fokusmekanikk. Når en gruppe åpnes uten aktiv underoppføring, aktiveres første enabled entry fra den autoritative rekkefølgen; breakpoint-valget eies av fasaden gjennom `usePresentationMode()`.
+- Arkitekturtesten låser offentlig inngang, importgrenser, CSS-entry og fravær av lokal breakpoint- og temadrift.
 
 Eldre versjonshistorikk ligger i git. Erstattede modeller og gamle filnavn skal ikke kopieres inn i dette normative dokumentet.
 
@@ -161,6 +158,7 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-07-25 | Search-familien eier canonical felt-, filter-, suggestion-, listbox- og tilgjengelighetsmekanikk. Feature-ViewModelen eier kandidater, rangering, aktiveringspolicy og feature-spesifikke filterregler. |
 | 2026-07-26 | Globale app-lag bruker navngitte `--z-*`-tokens fra `Tokens.css` og er låst av `globalLayerPolicy`. Lokale stacking contexts kan beholde lokale verdier når de ikke deltar i appens globale lagstige. |
 | 2026-07-26 | Appens responsive grense er en synkronisert JS/CSS-kontrakt: `APP_MOBILE_MAX_WIDTH = 932`, desktop starter på `933`, og `appBreakpointContract` håndhever de tillatte verdiene og en eksplisitt allowlist for lokale terskler. |
+| 2026-07-27 | `<ToggleButtonRow/>` er canonical responsiv innholdstypevelger. `navigation.js` eier statisk desktop- og mobilpolicy; Page-ViewModelene leverer ferdige mobilitems; fasaden velger presentasjonsvariant; mobilvarianten eier bare lokal disclosure, Escape og DOM-fokus. |
 
 ---
 

@@ -47,6 +47,70 @@ describe("navigation configuration", () => {
 		}
 	});
 
+	test("defines the mobile toggle-button policy with complete content reachability", () => {
+		expect(NAV_ITEMS.mobileToggleButtonItems.map((item) => item.id)).toEqual([
+			"learning-path",
+			"practice",
+			"tests"
+		]);
+		expect(NAV_ITEMS.mobileToggleEntryItems).toEqual([
+			{
+				id: "chapter-tests",
+				labelKey: "contentToggleChapterTestsLabel",
+				isDisabled: true
+			}
+		]);
+
+		const mobileItemIds = NAV_ITEMS.mobileToggleButtonItems.map((item) => item.id);
+		const mobileEntryIds = NAV_ITEMS.mobileToggleEntryItems.map((item) => item.id);
+		const toggleButtonItemIds = NAV_ITEMS.toggleButtonItems.map((item) => item.id);
+		const reachableContentTypeIds = [];
+
+		expect(new Set(mobileItemIds).size).toBe(mobileItemIds.length);
+		expect(new Set(mobileEntryIds).size).toBe(mobileEntryIds.length);
+
+		for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
+			expect(entry).toEqual(expect.objectContaining({
+				labelKey: expect.any(String),
+				isDisabled: true
+			}));
+		}
+
+		for (const item of NAV_ITEMS.mobileToggleButtonItems) {
+			expect(item).toEqual(expect.objectContaining({
+				labelKey: expect.any(String),
+				entryIds: expect.any(Array),
+				isDisabled: expect.any(Boolean)
+			}));
+
+			if (!item.isDisabled) {
+				expect(item.contentTypeId !== null || item.entryIds.length > 0).toBe(true);
+			}
+
+			if (item.contentTypeId !== null) {
+				expect(toggleButtonItemIds).toContain(item.contentTypeId);
+				reachableContentTypeIds.push(item.contentTypeId);
+			}
+
+			for (const entryId of item.entryIds) {
+				if (toggleButtonItemIds.includes(entryId)) {
+					reachableContentTypeIds.push(entryId);
+					continue;
+				}
+
+				expect(mobileEntryIds).toContain(entryId);
+			}
+		}
+
+		expect(NAV_ITEMS.mobileToggleButtonItems[2]).toEqual(expect.objectContaining({
+			id: "tests",
+			contentTypeId: null,
+			entryIds: ["chapter-tests", LEARNING_CONTENT_TYPES.EXAMS]
+		}));
+		expect(reachableContentTypeIds.sort()).toEqual(Object.values(LEARNING_CONTENT_TYPES).sort());
+		expect(new Set(reachableContentTypeIds).size).toBe(reachableContentTypeIds.length);
+	});
+
 	test("keeps pop-out menu definitions separate from glossary navigation", () => {
 		expect(Object.keys(NAV_ITEMS.popOutMenuItems)).toEqual([
 			NAV_SCREENS.SUBJECTS,
