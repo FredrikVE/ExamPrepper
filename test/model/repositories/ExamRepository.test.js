@@ -15,6 +15,7 @@ describe("ExamRepository", () => {
             title: "Norsk eksamen",
             description: "Beskrivelse",
             modeLabel: "FULL ØVEKSAMEN",
+            testType: "exam",
             estimatedMinutes: "45–60",
             duration: "2 timer",
             durationMinutes: 120,
@@ -27,6 +28,7 @@ describe("ExamRepository", () => {
             subjectId: "in5431",
             lang: "en",
             title: "English exam",
+            testType: "exam",
             sortOrder: 10,
             questions: [{ id: 3 }]
         },
@@ -68,6 +70,7 @@ describe("ExamRepository", () => {
             subjectId: "in5431",
             lang: "no",
             modeLabel: "FULL ØVEKSAMEN",
+            testType: "exam",
             estimatedMinutes: "45–60",
             sortOrder: 20,
             questionCount: 2
@@ -81,6 +84,15 @@ describe("ExamRepository", () => {
         });
 
         expect(result[0].questionCount).toBe(7);
+    });
+
+    test("uses null when testType is missing", async () => {
+        const result = await repository.getAvailableExams({
+            subjectId: "in2000",
+            language: "no"
+        });
+
+        expect(result[0].testType).toBeNull();
     });
 
     test("returns all exams when filters are omitted", async () => {

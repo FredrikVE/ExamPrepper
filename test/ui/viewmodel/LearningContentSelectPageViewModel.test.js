@@ -1,7 +1,7 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
-import { LEARNING_CONTENT_TYPES, NAV_SCREENS } from "../../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
 
 const stateSetters = [];
 let loadModelQueue = [];
@@ -49,6 +49,8 @@ function createT() {
 		selectSubtitle: (subjectCode) => `Velg en øvingsprøve for ${subjectCode}.`,
 		selectExamsSubtitle: (subjectCode) => `Velg en øvingsprøve for ${subjectCode}.`,
 		selectExamsSubtitleFallback: "Velg en øvingsprøve.",
+		selectChapterTestsSubtitle: (subjectCode) => `Velg en kapitteltest for ${subjectCode}.`,
+		selectChapterTestsSubtitleFallback: "Velg en kapitteltest.",
 		selectFlipcardsSubtitle: (subjectCode) => `Velg Flipcards for ${subjectCode}.`,
 		selectFlipcardsSubtitleFallback: "Velg Flipcards.",
 		selectMatchCardsSubtitle: (subjectCode) => `Velg Begrepsmatch for ${subjectCode}.`,
@@ -56,12 +58,15 @@ function createT() {
 		selectGlossariesSubtitle: (subjectCode) => `Øv på nøkkelbegreper og definisjoner for ${subjectCode}.`,
 		selectGlossariesSubtitleFallback: "Øv på nøkkelbegreper og definisjoner.",
 		selectExamsTitle: "Velg eksamen",
+		selectChapterTestsTitle: "Velg kapitteltest",
 		selectFlipcardsTitle: "Velg flipcards",
 		selectMatchCardsTitle: "Velg begrepsmatch",
 		selectGlossaryTitle: "Velg begrepsliste",
 		selectLoadingMessage: "Laster eksamener",
 		selectEmptyTitle: "Ingen eksamener",
 		selectEmptyMessage: "Ingen eksamener funnet",
+		selectChapterTestsEmptyTitle: "Ingen kapitteltester",
+		selectChapterTestsEmptyMessage: "Ingen kapitteltester funnet",
 		selectPracticeExamLabel: "Øvingsprøve",
 		selectQuestionLabel: "spørsmål",
 		selectMinuteLabel: "min",
@@ -94,13 +99,14 @@ function createT() {
 		pageToolsAiExamLabel: "Lag AI-generert øveeksamen",
 		contentToggleExamsLabel: "Eksamener",
 		contentToggleLearningPathLabel: "Sti",
+		contentToggleLearningPathDesktopLabel: "Læringsti",
 		contentTogglePracticeLabel: "Øve",
 		contentToggleTestsLabel: "Tester",
-		contentToggleChapterTestsLabel: "Kapittelprøver",
+		contentToggleChapterTestsLabel: "Kapitteltester",
 		contentToggleBackLabel: "Tilbake",
 		contentToggleFlipcardsLabel: "Flipcards",
 		contentToggleMatchCardsLabel: "Begrepsmatch",
-		contentToggleGlossaryLabel: "Begrepslister",
+		contentToggleGlossaryLabel: "Begrepsliste",
 		contentToggleAriaLabel: "Velg innholdstype",
 		flipcardsSearchPlaceholder: "Søk i flipcard-bunker",
 		matchCardsSearchPlaceholder: "Søk i begrepsmatch-bunker",
@@ -121,7 +127,7 @@ function createT() {
 
 function createViewModel(params = {}) {
 	loadModelQueue = [
-		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() },
+		{ status: LOAD_STATUS.READY, data: params.exams ?? [], error: null, reload: jest.fn() },
 		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() },
 		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() }
 	];
@@ -227,7 +233,23 @@ describe("useLearningContentSelectPageViewModel", () => {
 			isDisabled: false,
 			isActive: false
 		});
-		expect(practiceItem.entries).toEqual(viewModel.contentToggleEntries.slice(1));
+		expect(practiceItem.entries).toEqual([
+			{
+				id: LEARNING_CONTENT_TYPES.FLIPCARDS,
+				label: "Flipcards",
+				isDisabled: false
+			},
+			{
+				id: LEARNING_CONTENT_TYPES.MATCHCARDS,
+				label: "Begrepsmatch",
+				isDisabled: false
+			},
+			{
+				id: LEARNING_CONTENT_TYPES.GLOSSARY,
+				label: "Begrepsliste",
+				isDisabled: false
+			}
+		]);
 		expect(testsItem).toMatchObject({
 			id: "tests",
 			label: "Tester",
@@ -237,12 +259,101 @@ describe("useLearningContentSelectPageViewModel", () => {
 		});
 		expect(testsItem.entries).toEqual([
 			{
-				id: "chapter-tests",
-				label: "Kapittelprøver",
-				isDisabled: true
+				id: TEST_TYPES.CHAPTER_TEST,
+				label: "Kapitteltester",
+				isDisabled: false
 			},
-			viewModel.contentToggleEntries[0]
+			{
+				id: LEARNING_CONTENT_TYPES.EXAMS,
+				label: "Eksamener",
+				isDisabled: false
+			}
 		]);
+	});
+
+	test("shows exams by default and exposes the exam button as active on desktop and mobile", () => {
+		const { viewModel } = createViewModel({
+			exams: [
+				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: [] },
+				{ id: "exam", title: "Eksamen", testType: TEST_TYPES.EXAM, topicAreaKeys: [] }
+			]
+		});
+
+		expect(viewModel.selectedTestType).toBe(TEST_TYPES.EXAM);
+		expect(viewModel.desktopActiveEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
+		expect(viewModel.mobileActiveEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
+		expect(viewModel.visibleExams.map((exam) => exam.id)).toEqual(["exam"]);
+	});
+
+	test("keeps the disabled desktop learning-path entry inert", () => {
+		const { viewModel, changeScreen } = createViewModel();
+
+		viewModel.selectContentType("learning-path");
+
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[1]).not.toHaveBeenCalled();
+		expect(changeScreen).not.toHaveBeenCalled();
+	});
+
+	test("selects the desktop or mobile chapter-test entry through the shared content handler", () => {
+		const { viewModel } = createViewModel();
+
+		viewModel.selectContentType(TEST_TYPES.CHAPTER_TEST);
+
+		expect(stateSetters[1]).toHaveBeenCalledWith(TEST_TYPES.CHAPTER_TEST);
+		expect(stateSetters[0]).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
+	});
+
+	test("selects the desktop or mobile exam entry through the shared content handler", () => {
+		const { viewModel } = createViewModel();
+
+		viewModel.selectContentType(LEARNING_CONTENT_TYPES.EXAMS);
+
+		expect(stateSetters[1]).toHaveBeenCalledWith(TEST_TYPES.EXAM);
+		expect(stateSetters[0]).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
+	});
+
+	test("filters visible exams by the selected mobile test type", () => {
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
+
+		const { viewModel } = createViewModel({
+			exams: [
+				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: [] },
+				{ id: "exam", title: "Eksamen", testType: TEST_TYPES.EXAM, topicAreaKeys: [] }
+			]
+		});
+
+		expect(viewModel.desktopActiveEntryId).toBe(TEST_TYPES.CHAPTER_TEST);
+		expect(viewModel.mobileActiveEntryId).toBe(TEST_TYPES.CHAPTER_TEST);
+		expect(viewModel.visibleExams.map((exam) => exam.id)).toEqual(["chapter"]);
+	});
+
+	test("uses chapter-test heading and empty-state copy while the chapter button is active", () => {
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
+
+		const { viewModel } = createViewModel();
+
+		expect(viewModel.title).toBe("Velg kapitteltest");
+		expect(viewModel.subtitle).toBe("Velg en kapitteltest for IN5431.");
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.EMPTY,
+			title: "Ingen kapitteltester",
+			body: "Ingen kapitteltester funnet",
+			action: null
+		});
+	});
+
+	test("clears the test type when a desktop content type is selected", () => {
+		const { viewModel } = createViewModel();
+
+		viewModel.selectContentType(LEARNING_CONTENT_TYPES.FLIPCARDS);
+
+		expect(stateSetters[1]).toHaveBeenCalledWith(null);
+		expect(stateSetters[0]).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.FLIPCARDS);
 	});
 
 	test("marks the practice group active for every practice content type", () => {

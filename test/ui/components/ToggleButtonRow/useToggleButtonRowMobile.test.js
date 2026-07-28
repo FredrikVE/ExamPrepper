@@ -1,6 +1,6 @@
 // test/ui/components/ToggleButtonRow/useToggleButtonRowMobile.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LEARNING_CONTENT_TYPES } from "../../../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../../../src/navigation/navigation.js";
 
 let expandedGroupId = null;
 let refIndex = 0;
@@ -50,9 +50,9 @@ const practiceEntries = [
 ];
 const testEntries = [
 	{
-		id: "chapter-tests",
-		label: "Kapittelprøver",
-		isDisabled: true
+		id: TEST_TYPES.CHAPTER_TEST,
+		label: "Kapitteltester",
+		isDisabled: false
 	},
 	{
 		id: LEARNING_CONTENT_TYPES.EXAMS,
@@ -158,25 +158,36 @@ describe("useToggleButtonRowMobile", () => {
 		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
 	});
 
-	test("opens tests, selects Exams and ignores the disabled chapter-tests entry", () => {
+	test("opens tests, selects the first test type and keeps the group expanded", () => {
 		const onSelectEntry = jest.fn();
 		const collapsedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.GLOSSARY);
 
 		collapsedInteraction.selectItem(items[2]);
 
 		expect(expandedGroupId).toBe("tests");
-		expect(onSelectEntry).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
+		expect(onSelectEntry).toHaveBeenCalledWith(TEST_TYPES.CHAPTER_TEST);
 
-		const expandedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.EXAMS);
+		const expandedInteraction = renderInteraction(onSelectEntry, TEST_TYPES.CHAPTER_TEST);
 
 		expect(expandedInteraction.expandedItem).toBe(items[2]);
-		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
-		expandedInteraction.selectEntry(testEntries[0]);
-		expect(onSelectEntry).toHaveBeenCalledTimes(1);
+		expect(expandedInteraction.expandedActiveEntryId).toBe(TEST_TYPES.CHAPTER_TEST);
 
 		expandedInteraction.selectEntry(testEntries[1]);
 		expect(onSelectEntry).toHaveBeenNthCalledWith(2, LEARNING_CONTENT_TYPES.EXAMS);
 		expect(setExpandedGroupId).not.toHaveBeenCalledWith(null);
+	});
+
+	test("preserves the active exam test type when the tests group opens", () => {
+		const onSelectEntry = jest.fn();
+		const collapsedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.EXAMS);
+
+		collapsedInteraction.selectItem(items[2]);
+
+		expect(onSelectEntry).not.toHaveBeenCalled();
+
+		const expandedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.EXAMS);
+
+		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
 	});
 
 	test("closes on Escape and restores focus to the opening group button", () => {

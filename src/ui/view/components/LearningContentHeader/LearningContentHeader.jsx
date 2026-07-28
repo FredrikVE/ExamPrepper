@@ -17,6 +17,7 @@ export default function LearningContentHeader(props) {
 			<ToggleButtonRow
 				entries={props.entries}
 				activeEntryId={props.activeEntryId}
+				mobileActiveEntryId={props.mobileActiveEntryId}
 				onSelectEntry={props.onSelectEntry}
 				ariaLabel={props.ariaLabel}
 				mobileItems={props.mobileToggleButtonItems}

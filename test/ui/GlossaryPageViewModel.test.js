@@ -1,7 +1,7 @@
 // test/ui/GlossaryPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
-import { LEARNING_CONTENT_TYPES } from "../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../src/navigation/navigation.js";
 import { GLOSSARY_AUTOCOMPLETE_LIST_ID, createGlossaryAutocompleteOptionId } from "../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
 import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
@@ -75,13 +75,14 @@ const translations = {
 	contentToggleAriaLabel: "Velg læringsverktøy",
 	contentToggleExamsLabel: "Eksamen",
 	contentToggleLearningPathLabel: "Sti",
+	contentToggleLearningPathDesktopLabel: "Læringsti",
 	contentTogglePracticeLabel: "Øve",
 	contentToggleTestsLabel: "Tester",
-	contentToggleChapterTestsLabel: "Kapittelprøver",
+	contentToggleChapterTestsLabel: "Kapitteltester",
 	contentToggleBackLabel: "Tilbake",
 	contentToggleFlipcardsLabel: "Flipcards",
 	contentToggleMatchCardsLabel: "Begrepsmatch",
-	contentToggleGlossaryLabel: "Begrepslister"
+	contentToggleGlossaryLabel: "Begrepsliste"
 };
 
 const topicAreas = [
@@ -260,7 +261,23 @@ describe("useGlossaryPageViewModel", () => {
 			isDisabled: false,
 			isActive: true
 		});
-		expect(practiceItem.entries).toEqual(viewModel.contentToggleEntries.slice(1));
+		expect(practiceItem.entries).toEqual([
+			{
+				id: LEARNING_CONTENT_TYPES.FLIPCARDS,
+				label: "Flipcards",
+				isDisabled: false
+			},
+			{
+				id: LEARNING_CONTENT_TYPES.MATCHCARDS,
+				label: "Begrepsmatch",
+				isDisabled: false
+			},
+			{
+				id: LEARNING_CONTENT_TYPES.GLOSSARY,
+				label: "Begrepsliste",
+				isDisabled: false
+			}
+		]);
 		expect(testsItem).toMatchObject({
 			id: "tests",
 			contentTypeId: null,
@@ -268,11 +285,15 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		expect(testsItem.entries).toEqual([
 			{
-				id: "chapter-tests",
-				label: "Kapittelprøver",
-				isDisabled: true
+				id: TEST_TYPES.CHAPTER_TEST,
+				label: "Kapitteltester",
+				isDisabled: false
 			},
-			viewModel.contentToggleEntries[0]
+			{
+				id: LEARNING_CONTENT_TYPES.EXAMS,
+				label: "Eksamen",
+				isDisabled: false
+			}
 		]);
 	});
 

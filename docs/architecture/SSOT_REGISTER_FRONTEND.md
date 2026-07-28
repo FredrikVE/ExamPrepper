@@ -57,7 +57,7 @@ Navigasjonen er nå ren **data + ett oppslag**:
 - `NAV_SCREENS{}` — de sju skjermene
 - `SCREEN_CONFIG{}` — én node per skjerm med `requiresSubject`, `requiresExam`, `backTo`, `showsSubjectSwitcher`, `pageClassName`, `shellClassName`
 - `getScreenConfig()` — eneste funksjon; **kaster** på ukjent skjerm i stedet for å falle tilbake stille
-- `LEARNING_CONTENT_TYPES{}`, `NAV_ITEMS{}` (sidebar, desktop-toggle, mobilgrupper, pop-out-menyer)
+- `LEARNING_CONTENT_TYPES{}`, `TEST_TYPES{}`, `NAV_ITEMS{}` (sidebar, seks desktopvalg, mobilgrupper, testtypeoppføringer og pop-out-menyer)
 
 Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-settere. Det er en bevisst retningsendring — se «Vurdering» til slutt.
 
@@ -73,7 +73,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `useMobileDropDownTopBarModel()` | Mobilmeny- og subject-picker-state | `viewmodel/AppNavigation/useMobileDropDownTopBarModel.js` | Eneste eier av de to mobile overlay-state-verdiene; komponeres av `useAppNavigationViewModel()` |
 | `useSettingsPresentationModel()` | Settings-presentasjonens open-state og modus | `viewmodel/AppNavigation/useSettingsPresentationModel.js` | Eneste eier av de to settings-state-verdiene; lukker settings ved presentation-mode-bytte |
 | `NAV_SCREENS{}` `SCREEN_CONFIG{}` `getScreenConfig()` | Skjerm-ID-er, seks deklarative skjermegenskaper, deklarert tilbake-mål og chrome | `src/navigation/navigation.js` | 10 importører. `getScreenConfig` er produksjonsaksessoren og kaster på ukjent skjerm. Låst av `navigation.test.js` + `AppNavigationViewModel.test.js` |
-| `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` | Sidebar, desktop-toggle, mobilgrupper, mobile-only underoppføringer, pop-out-menyer og innholdstyper | `src/navigation/navigation.js` | `mobileToggleButtonItems` eier mobilrekkefølge og gruppering; `mobileToggleEntryItems` eier underoppføringer uten innholdstype. Page-ViewModelene resolver labels, entries og aktiv status før `<ToggleButtonRow/>` rendrer |
+| `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` `TEST_TYPES{}` | Sidebar, seks desktopvalg, mobilgrupper, testtypeoppføringer, pop-out-menyer og stabile identiteter | `src/navigation/navigation.js` | `toggleButtonItems` eier desktoprekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`. `Læringsti` er deklarert deaktivert. De to testoppføringene peker til `LEARNING_CONTENT_TYPES.EXAMS` med hver sin `testType`; mobilgruppen `Tester` gjenbruker dem |
 | `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | 7 importører. (`createWorkspaceState()` er avledningen — se «utilities») |
 | `LOAD_STATUS{}` `useLoadModel()` | Ressursstatus-enum + reaktiv innlastingstilstand | `viewmodel/LoadState/` | `LOAD_STATUS`: 6 importører. `useLoadModel`: 7. (`combineLoadStatuses()` er avledningen — se «utilities») |
 | `translations{}` `LANGUAGES{}` | Autoritativt språkregister og produkttekst | `src/i18n/translations.js` | 20 importører. `i18nContract` låser NO↔EN-paritet, typeparitet, ikke-tomme verdier og navigasjonens tekstnøkler. Lokale `fallbackLabel`-kanaler er fjernet; testen skanner ikke all JSX for hardkodet tekst |
@@ -199,7 +199,7 @@ Navigasjonens eierskap er delt i to lag, med `App.jsx` som en separat rendergren
 ```text
 src/navigation/navigation.js
   statisk, deklarativ policy
-  NAV_SCREENS, SCREEN_CONFIG, getScreenConfig, NAV_ITEMS, LEARNING_CONTENT_TYPES
+  NAV_SCREENS, SCREEN_CONFIG, getScreenConfig, NAV_ITEMS, LEARNING_CONTENT_TYPES, TEST_TYPES
 
 src/ui/viewmodel/AppNavigationViewModel.js
   core route-/selection-state: useState × 5
@@ -236,7 +236,13 @@ Betydningen er:
 
 `getScreenConfig(screen)` er produksjonsaksessoren. Den kaster på ukjent skjerm i stedet for å falle tilbake stille, fordi en ukjent skjerm er en programmeringsfeil.
 
-`NAV_ITEMS` eier navigasjonsdata for tre menyflater, ikke runtime-state: `sidebarItems`, `toggleButtonItems` og `popOutMenuItems`.
+`NAV_ITEMS` eier navigasjonsdata, ikke runtime-state: `sidebarItems`, `toggleButtonItems`, `mobileToggleEntryItems`, `mobileToggleButtonItems` og `popOutMenuItems`. `TEST_TYPES` eier klassifikasjonene `chapter-test` og `exam`. Desktoprekkefølgen er `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`. `Læringsti` har ingen innholdstype eller target og er deaktivert. `Kapitteltester` og `Eksamener` peker begge til `LEARNING_CONTENT_TYPES.EXAMS`, og mobilgruppen `Tester` gjenbruker de samme testoppføringene. `mobileToggleEntryItems` er tom og beholdes kun som et eksplisitt utvidelsespunkt for fremtidige mobile-only oppføringer. Det opprettes ingen ny skjerm eller læringsinnholdstype.
+
+### Testtypefilter på læringsinnholdssiden
+
+`useLearningContentSelectPageViewModel()` eier `selectedTestType`. Den eksisterende `selectContentType()`-handleren resolver de fem aktive desktopoppføringene og de samme oppføringene når de brukes i mobilgruppen; den deaktiverte `Læringsti`-oppføringen ignoreres. `filterExams()` mottar `selectedTestType` som eksplisitt input og kombinerer det med søk og emneområde.
+
+`activeContentType` forblir den tekniske innholdstypen. ViewModelen avleder `desktopActiveEntryId` og `mobileActiveEntryId` fra `activeContentType` og `selectedTestType`, slik at både desktopknappen og den åpne mobilgruppen markerer riktig valg uten å opprette en ny innholdstype. Når brukeren velger et fag, åpner `AppNavigationViewModel` `NAV_SCREENS.GLOSSARY`, slik at `Begrepsliste` er valgt som første aktive læringsflate.
 
 ### Runtime-state og overganger (`AppNavigationViewModel`)
 

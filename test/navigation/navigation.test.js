@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG } from "../../src/navigation/navigation.js";
+import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG, TEST_TYPES } from "../../src/navigation/navigation.js";
 
 describe("navigation configuration", () => {
 	test("contains only the screens rendered by App", () => {
@@ -26,15 +26,30 @@ describe("navigation configuration", () => {
 		expect(NAV_ITEMS.sidebarItems.some((item) => item.screen === NAV_SCREENS.FLIPCARDS)).toBe(false);
 	});
 
-	test("defines every toggle-button item once", () => {
+	test("defines the desktop learning-content order and disabled learning path", () => {
 		expect(NAV_ITEMS.toggleButtonItems.map((item) => item.id)).toEqual([
-			LEARNING_CONTENT_TYPES.EXAMS,
+			"learning-path",
+			LEARNING_CONTENT_TYPES.GLOSSARY,
 			LEARNING_CONTENT_TYPES.FLIPCARDS,
 			LEARNING_CONTENT_TYPES.MATCHCARDS,
-			LEARNING_CONTENT_TYPES.GLOSSARY
+			TEST_TYPES.CHAPTER_TEST,
+			LEARNING_CONTENT_TYPES.EXAMS
 		]);
 
-		for (const item of NAV_ITEMS.toggleButtonItems) {
+		expect(NAV_ITEMS.toggleButtonItems[0]).toEqual({
+			id: "learning-path",
+			contentTypeId: null,
+			testType: null,
+			labelKey: "contentToggleLearningPathDesktopLabel",
+			titleKey: null,
+			subtitleKey: null,
+			subtitleFallbackKey: null,
+			searchPlaceholderKey: null,
+			targetScreen: null,
+			isDisabled: true
+		});
+
+		for (const item of NAV_ITEMS.toggleButtonItems.slice(1)) {
 			expect(item).toEqual(expect.objectContaining({
 				labelKey: expect.any(String),
 				titleKey: expect.any(String),
@@ -42,39 +57,41 @@ describe("navigation configuration", () => {
 				subtitleFallbackKey: expect.any(String),
 				searchPlaceholderKey: expect.any(String),
 				targetScreen: expect.any(String),
-				isDisabled: expect.any(Boolean)
+				isDisabled: false
 			}));
 		}
+
+		expect(NAV_ITEMS.toggleButtonItems.slice(-2)).toEqual([
+			expect.objectContaining({
+				id: TEST_TYPES.CHAPTER_TEST,
+				contentTypeId: LEARNING_CONTENT_TYPES.EXAMS,
+				testType: TEST_TYPES.CHAPTER_TEST
+			}),
+			expect.objectContaining({
+				id: LEARNING_CONTENT_TYPES.EXAMS,
+				contentTypeId: LEARNING_CONTENT_TYPES.EXAMS,
+				testType: TEST_TYPES.EXAM
+			})
+		]);
 	});
 
 	test("defines the mobile toggle-button policy with complete content reachability", () => {
+		expect(TEST_TYPES).toEqual({
+			CHAPTER_TEST: "chapter-test",
+			EXAM: "exam"
+		});
 		expect(NAV_ITEMS.mobileToggleButtonItems.map((item) => item.id)).toEqual([
 			"learning-path",
 			"practice",
 			"tests"
 		]);
-		expect(NAV_ITEMS.mobileToggleEntryItems).toEqual([
-			{
-				id: "chapter-tests",
-				labelKey: "contentToggleChapterTestsLabel",
-				isDisabled: true
-			}
-		]);
+		expect(NAV_ITEMS.mobileToggleEntryItems).toEqual([]);
 
 		const mobileItemIds = NAV_ITEMS.mobileToggleButtonItems.map((item) => item.id);
-		const mobileEntryIds = NAV_ITEMS.mobileToggleEntryItems.map((item) => item.id);
 		const toggleButtonItemIds = NAV_ITEMS.toggleButtonItems.map((item) => item.id);
-		const reachableContentTypeIds = [];
+		const reachableContentTypeIds = new Set();
 
 		expect(new Set(mobileItemIds).size).toBe(mobileItemIds.length);
-		expect(new Set(mobileEntryIds).size).toBe(mobileEntryIds.length);
-
-		for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
-			expect(entry).toEqual(expect.objectContaining({
-				labelKey: expect.any(String),
-				isDisabled: true
-			}));
-		}
 
 		for (const item of NAV_ITEMS.mobileToggleButtonItems) {
 			expect(item).toEqual(expect.objectContaining({
@@ -88,27 +105,22 @@ describe("navigation configuration", () => {
 			}
 
 			if (item.contentTypeId !== null) {
-				expect(toggleButtonItemIds).toContain(item.contentTypeId);
-				reachableContentTypeIds.push(item.contentTypeId);
+				reachableContentTypeIds.add(item.contentTypeId);
 			}
 
 			for (const entryId of item.entryIds) {
-				if (toggleButtonItemIds.includes(entryId)) {
-					reachableContentTypeIds.push(entryId);
-					continue;
-				}
-
-				expect(mobileEntryIds).toContain(entryId);
+				expect(toggleButtonItemIds).toContain(entryId);
+				const entry = NAV_ITEMS.toggleButtonItems.find((candidate) => candidate.id === entryId);
+				reachableContentTypeIds.add(entry.contentTypeId ?? entry.id);
 			}
 		}
 
 		expect(NAV_ITEMS.mobileToggleButtonItems[2]).toEqual(expect.objectContaining({
 			id: "tests",
 			contentTypeId: null,
-			entryIds: ["chapter-tests", LEARNING_CONTENT_TYPES.EXAMS]
+			entryIds: [TEST_TYPES.CHAPTER_TEST, LEARNING_CONTENT_TYPES.EXAMS]
 		}));
-		expect(reachableContentTypeIds.sort()).toEqual(Object.values(LEARNING_CONTENT_TYPES).sort());
-		expect(new Set(reachableContentTypeIds).size).toBe(reachableContentTypeIds.length);
+		expect([...reachableContentTypeIds].sort()).toEqual(Object.values(LEARNING_CONTENT_TYPES).sort());
 	});
 
 	test("keeps pop-out menu definitions separate from glossary navigation", () => {

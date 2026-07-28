@@ -85,6 +85,11 @@ export const LEARNING_CONTENT_TYPES = {
 	GLOSSARY: "glossary"
 };
 
+export const TEST_TYPES = {
+	CHAPTER_TEST: "chapter-test",
+	EXAM: "exam"
+};
+
 export const NAV_ITEMS = {
 	sidebarItems: [
 		{
@@ -109,13 +114,25 @@ export const NAV_ITEMS = {
 
 	toggleButtonItems: [
 		{
-			id: LEARNING_CONTENT_TYPES.EXAMS,
-			labelKey: "contentToggleExamsLabel",
-			titleKey: "selectExamsTitle",
-			subtitleKey: "selectExamsSubtitle",
-			subtitleFallbackKey: "selectExamsSubtitleFallback",
-			searchPlaceholderKey: "examSearchPlaceholder",
-			targetScreen: NAV_SCREENS.SELECT,
+			id: "learning-path",
+			contentTypeId: null,
+			testType: null,
+			labelKey: "contentToggleLearningPathDesktopLabel",
+			titleKey: null,
+			subtitleKey: null,
+			subtitleFallbackKey: null,
+			searchPlaceholderKey: null,
+			targetScreen: null,
+			isDisabled: true
+		},
+		{
+			id: LEARNING_CONTENT_TYPES.GLOSSARY,
+			labelKey: "contentToggleGlossaryLabel",
+			titleKey: "selectGlossaryTitle",
+			subtitleKey: "selectGlossariesSubtitle",
+			subtitleFallbackKey: "selectGlossariesSubtitleFallback",
+			searchPlaceholderKey: "glossarySearchPlaceholder",
+			targetScreen: NAV_SCREENS.GLOSSARY,
 			isDisabled: false
 		},
 		{
@@ -139,24 +156,32 @@ export const NAV_ITEMS = {
 			isDisabled: false
 		},
 		{
-			id: LEARNING_CONTENT_TYPES.GLOSSARY,
-			labelKey: "contentToggleGlossaryLabel",
-			titleKey: "selectGlossaryTitle",
-			subtitleKey: "selectGlossariesSubtitle",
-			subtitleFallbackKey: "selectGlossariesSubtitleFallback",
-			searchPlaceholderKey: "glossarySearchPlaceholder",
-			targetScreen: NAV_SCREENS.GLOSSARY,
+			id: TEST_TYPES.CHAPTER_TEST,
+			contentTypeId: LEARNING_CONTENT_TYPES.EXAMS,
+			testType: TEST_TYPES.CHAPTER_TEST,
+			labelKey: "contentToggleChapterTestsLabel",
+			titleKey: "selectChapterTestsTitle",
+			subtitleKey: "selectChapterTestsSubtitle",
+			subtitleFallbackKey: "selectChapterTestsSubtitleFallback",
+			searchPlaceholderKey: "examSearchPlaceholder",
+			targetScreen: NAV_SCREENS.SELECT,
+			isDisabled: false
+		},
+		{
+			id: LEARNING_CONTENT_TYPES.EXAMS,
+			contentTypeId: LEARNING_CONTENT_TYPES.EXAMS,
+			testType: TEST_TYPES.EXAM,
+			labelKey: "contentToggleExamsLabel",
+			titleKey: "selectExamsTitle",
+			subtitleKey: "selectExamsSubtitle",
+			subtitleFallbackKey: "selectExamsSubtitleFallback",
+			searchPlaceholderKey: "examSearchPlaceholder",
+			targetScreen: NAV_SCREENS.SELECT,
 			isDisabled: false
 		}
 	],
 
-	mobileToggleEntryItems: [
-		{
-			id: "chapter-tests",
-			labelKey: "contentToggleChapterTestsLabel",
-			isDisabled: true
-		}
-	],
+	mobileToggleEntryItems: [],
 
 	mobileToggleButtonItems: [
 		{
@@ -182,7 +207,7 @@ export const NAV_ITEMS = {
 			labelKey: "contentToggleTestsLabel",
 			contentTypeId: null,
 			entryIds: [
-				"chapter-tests",
+				TEST_TYPES.CHAPTER_TEST,
 				LEARNING_CONTENT_TYPES.EXAMS
 			],
 			isDisabled: false

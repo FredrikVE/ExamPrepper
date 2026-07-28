@@ -74,7 +74,7 @@ export default function useAppNavigationViewModel(params) {
 		setSelectedSubjectId(subjectId);
 		setSelectedExamId(null);
 		setSelectedTopicAreaKey(null);
-		setActiveScreen(NAV_SCREENS.SELECT);
+		setActiveScreen(NAV_SCREENS.GLOSSARY);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays]);
 

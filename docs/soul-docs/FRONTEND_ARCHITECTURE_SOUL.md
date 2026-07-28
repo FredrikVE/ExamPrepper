@@ -43,7 +43,7 @@ Dokumentet skiller derfor fire roller:
 | Område | Autoritativ eier | Eier | Brukskrav |
 |---|---|---|---|
 | Navigasjon: statisk policy | `NAV_SCREENS`, `SCREEN_CONFIG`, `getScreenConfig()` | `src/navigation/navigation.js` | Skjerm-ID-er og de seks stabile skjermegenskapene defineres bare her. |
-| Navigasjon: menydata | `NAV_ITEMS`, `LEARNING_CONTENT_TYPES` | `src/navigation/navigation.js` | Sidebar, desktop-toggle, mobilgrupper og pop-out-menyer bygges fra disse registrene. Page-ViewModelene resolver mobilpolicyen til ferdige labels, entries og aktiv status. |
+| Navigasjon: menydata | `NAV_ITEMS`, `LEARNING_CONTENT_TYPES`, `TEST_TYPES` | `src/navigation/navigation.js` | Sidebar, seks desktopvalg, mobilgrupper og pop-out-menyer bygges fra disse registrene. Desktoprekkefølgen er `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`; `Læringsti` er deaktivert og uten target. `Kapitteltester` og `Eksamener` mapper begge til `LEARNING_CONTENT_TYPES.EXAMS`, med hver sin `testType`; de er ikke nye skjermer eller innholdstyper. |
 | Navigasjon: runtime | `useAppNavigationViewModel()` | `src/ui/viewmodel/AppNavigationViewModel.js` | Eier route-/selection-state, overganger, språksynk og avledet chrome/back. |
 | Mobil navigasjon | `useMobileDropDownTopBarModel()` | `src/ui/viewmodel/AppNavigation/` | Eier mobilmeny og subject-picker-state; brukes gjennom appens navigasjons-ViewModel. |
 | Settings-presentasjon | `useSettingsPresentationModel()` | `src/ui/viewmodel/AppNavigation/` | Eier open-state og presentasjonsmodus for settings. |
@@ -112,7 +112,7 @@ føres i SSOT-registeret. Ny kode skal alltid bruke `QUESTION_TYPES`.
 ### 2.6 → 2.7
 
 - `ToggleButtonRow` er dokumentert som canonical responsiv fasade med interne desktop- og mobilvarianter.
-- `NAV_ITEMS.mobileToggleButtonItems` eier statisk mobilstruktur, og `NAV_ITEMS.mobileToggleEntryItems` eier mobile-only underoppføringer som ikke er innholdstyper. Page-ViewModelene resolver begge til ferdige presentasjonsmodeller.
+- `NAV_ITEMS.toggleButtonItems` eier de delte testtypeoppføringene for desktop, og `NAV_ITEMS.mobileToggleButtonItems` gjenbruker dem i mobilgruppen `Tester`. `mobileToggleEntryItems` er reservert for faktiske mobile-only oppføringer og er tom i denne kontrakten.
 - Mobilvarianten eier lokal disclosure-, Escape- og fokusmekanikk. Når en gruppe åpnes uten aktiv underoppføring, aktiveres første enabled entry fra den autoritative rekkefølgen; breakpoint-valget eies av fasaden gjennom `usePresentationMode()`.
 - Arkitekturtesten låser offentlig inngang, importgrenser, CSS-entry og fravær av lokal breakpoint- og temadrift.
 
@@ -640,8 +640,11 @@ NAV_SCREENS
 SCREEN_CONFIG
 getScreenConfig
 LEARNING_CONTENT_TYPES
+TEST_TYPES
 NAV_ITEMS.sidebarItems
 NAV_ITEMS.toggleButtonItems
+NAV_ITEMS.mobileToggleEntryItems
+NAV_ITEMS.mobileToggleButtonItems
 NAV_ITEMS.popOutMenuItems
 ```
 
@@ -668,8 +671,13 @@ Dedikerte callback-preconditions, nullstillinger og sideeffekter eies av ViewMod
 `getScreenConfig(screen)` er eneste produksjonsaksessor og kaster på ukjent skjerm. Ukjent skjerm
 er en programmeringsfeil; stille fallback er forbudt.
 
-`NAV_ITEMS` eier data for de tre konkrete menyflatene. Menydata er ikke runtime-state. Glossarys
-dynamiske søk og kapittel-sheet hører fortsatt til Glossary-featuret, ikke til pop-out-registeret.
+`NAV_ITEMS` eier data for sidebar, seks desktopoppføringer, mobile underoppføringer, mobilgrupper og pop-out-menyer. Menydata er ikke runtime-state. `toggleButtonItems` låser rekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`; `Læringsti` er deaktivert. `TEST_TYPES` eier `chapter-test` og `exam`; de to testoppføringene mapper begge til `LEARNING_CONTENT_TYPES.EXAMS`, og mobilgruppen gjenbruker dem. Glossarys dynamiske søk og kapittel-sheet hører fortsatt til Glossary-featuret, ikke til pop-out-registeret.
+
+### Testtypefilter i `LearningContentSelectPageViewModel`
+
+`useLearningContentSelectPageViewModel()` eier `selectedTestType`. Den eksisterende `selectContentType()`-handleren resolver både vanlige innholdstyper og testtypeoppføringene fra `navigation.js`, uavhengig av om valget kommer fra desktop eller mobil. `filterExams()` er en ren avledning og mottar testtype som input; den skal ikke klassifisere fra tittel, ID eller `modeLabel`.
+
+`activeContentType` er fortsatt teknisk innholdstype. ViewModelen avleder både `desktopActiveEntryId` og `mobileActiveEntryId` fra `activeContentType` og `selectedTestType`, slik at riktig testtype markeres på begge presentasjonsflater uten en ny runtime-eier. Fagvalg åpner `NAV_SCREENS.GLOSSARY`; dermed er `Begrepsliste` den første aktive desktopoppføringen etter at et fag er valgt.
 
 ### Runtime-state og overganger i `AppNavigationViewModel`
 

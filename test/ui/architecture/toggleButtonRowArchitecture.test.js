@@ -105,6 +105,7 @@ describe("ToggleButtonRow architecture", () => {
 		expect(facadeSource).toContain("PRESENTATION_MODE.MOBILE");
 		expect(facadeSource).toContain("<ToggleButtonRowDesktop");
 		expect(facadeSource).toContain("<ToggleButtonRowMobile");
+		expect(facadeSource).toContain("props.mobileActiveEntryId ?? props.activeEntryId");
 		expect(desktopSource).not.toContain("usePresentationMode");
 		expect(mobileSource).not.toContain("usePresentationMode");
 	});
