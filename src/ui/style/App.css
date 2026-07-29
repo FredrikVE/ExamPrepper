@@ -18,6 +18,7 @@
 @import "./GlossaryPage/index.css";
 
 /* Shared UI */
+@import "./QuestionCard/index.css";
 @import "./WorkspaceState/index.css";
 @import "./Shared/index.css";
 @import "./ToggleButtonRow/index.css";

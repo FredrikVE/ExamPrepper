@@ -1,6 +1,6 @@
 // test/ui/QuestionCard/sequenceOrderAnswerLogic.test.js
 import { describe, expect, test } from "@jest/globals";
-import { getAvailableSequenceItems, getCorrectSequenceOrder, normalizeSequenceOrderAnswer, placeSequenceItemAtIndex, removeSequenceItem } from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Utils/sequenceOrderAnswerLogic.js";
+import { getAvailableSequenceItems, getCorrectSequenceOrder, normalizeSequenceOrderAnswer, placeSequenceItemAtIndex, removeSequenceItem } from "../../../src/ui/view/components/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Utils/sequenceOrderAnswerLogic.js";
 
 const question = {
     items: [

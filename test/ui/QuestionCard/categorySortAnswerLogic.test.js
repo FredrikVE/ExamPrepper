@@ -1,6 +1,6 @@
 // test/ui/QuestionCard/categorySortAnswerLogic.test.js
 import { describe, expect, test } from "@jest/globals";
-import { getCorrectCategoryId, getExpectedCategoryItemIds, isItemCorrectlyPlaced } from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/CategorySort/Utils/categorySortAnswerLogic.js";
+import { getCorrectCategoryId, getExpectedCategoryItemIds, isItemCorrectlyPlaced } from "../../../src/ui/view/components/QuestionCard/QuestionTypes/DragDrop/CategorySort/Utils/categorySortAnswerLogic.js";
 
 describe("categorySortAnswerLogic", () => {
     test("uses item correctCategoryId when persisted API question has no correctAnswer map", () => {

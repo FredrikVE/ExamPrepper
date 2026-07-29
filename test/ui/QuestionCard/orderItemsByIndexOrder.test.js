@@ -1,6 +1,6 @@
 // test/ui/QuestionCard/orderItemsByIndexOrder.test.js
 import { describe, expect, test } from "@jest/globals";
-import orderItemsByIndexOrder from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/Shared/Utils/orderItemsByIndexOrder.js";
+import orderItemsByIndexOrder from "../../../src/ui/view/components/QuestionCard/QuestionTypes/DragDrop/Shared/Utils/orderItemsByIndexOrder.js";
 
 const sourceItems = [
     { id: "a", label: "A" },

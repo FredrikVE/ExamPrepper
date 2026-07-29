@@ -1,4 +1,5 @@
 // src/ui/viewmodel/Utils/transformAnswersForApi.js
+import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
 
 /**
  * Transforms internal frontend answers (option indices) to API-compatible
@@ -26,12 +27,12 @@ export default function transformAnswersForApi(questions, answers) {
 			continue;
 		}
 
-		if (question.type === "single") {
+		if (question.type === QUESTION_TYPES.SINGLE) {
 			apiAnswers[questionId] = resolveOptionId(question.options, answer);
 			continue;
 		}
 
-		if (question.type === "multi") {
+		if (question.type === QUESTION_TYPES.MULTI) {
 			apiAnswers[questionId] = Array.isArray(answer)
 				? answer.map((index) => resolveOptionId(question.options, index))
 				: answer;

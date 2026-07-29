@@ -1,0 +1,65 @@
+/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/Shared/Dnd/dnd.css */
+.dnd-drag-overlay {
+	pointer-events: none;
+}
+
+.dnd-drag-grip-icon {
+	display: block;
+	width: 20px;
+	height: 20px;
+	color: currentColor;
+	stroke: currentColor;
+}
+
+.dnd-clear-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	line-height: 0;
+	border-radius: var(--radius-full);
+	cursor: pointer;
+}
+
+.dnd-clear-button-icon {
+	display: block;
+	width: var(--dnd-clear-button-icon-size, 16px);
+	height: var(--dnd-clear-button-icon-size, 16px);
+	flex: 0 0 auto;
+	pointer-events: none;
+}
+
+:where(
+	.drag-drop-card,
+	.drag-drop-selected-pill,
+	.table-match-mobile-card,
+	.drag-categorize-item-card,
+	.drag-categorize-placed-card,
+	.matrix-placement-item-card,
+	.matrix-placement-placed-card,
+	.sequence-order-item-card,
+	.sequence-order-placed-card
+):not(:disabled) {
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+@media (pointer: coarse) {
+	:where(
+		.drag-drop-card,
+		.drag-drop-selected-pill,
+		.table-match-mobile-card,
+		.drag-categorize-item-card,
+		.drag-categorize-placed-card,
+		.matrix-placement-item-card,
+		.matrix-placement-placed-card,
+		.sequence-order-item-card,
+		.sequence-order-placed-card
+	):not(:disabled):active {
+		outline: 2px solid var(--dnd-touch-press-ring);
+		outline-offset: 2px;
+		filter: saturate(1.05) brightness(1.03);
+	}
+}

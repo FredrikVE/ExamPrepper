@@ -1,0 +1,31 @@
+/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/question.css */
+.matrix-placement-question {
+    --matrix-placement-card-border: var(--dnd-card-border);
+    --matrix-placement-card-bg: var(--dnd-card-bg);
+    --matrix-placement-card-shadow: var(--dnd-card-shadow);
+    --matrix-placement-grip-bg: var(--dnd-grip);
+    --matrix-placement-placed-border: var(--dnd-active-border);
+    --matrix-placement-placed-bg: var(--dnd-active-bg);
+    --matrix-placement-placed-color: var(--dnd-on-active);
+    --matrix-placement-placed-shadow: var(--dnd-active-shadow);
+    --matrix-placement-placed-grip-bg: var(--dnd-on-active-muted);
+    --matrix-placement-placeholder-border: var(--dnd-drop-muted-border);
+    --matrix-placement-placeholder-bg: var(--dnd-drop-muted-bg);
+
+    display: grid;
+    gap: 16px;
+    container-type: inline-size;
+}
+
+
+.matrix-placement-layout {
+    display: grid;
+    grid-template-columns: minmax(190px, 280px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: stretch;
+    min-width: 0;
+}
+
+.matrix-placement-layout-no-bank {
+    grid-template-columns: minmax(0, 1fr);
+}
