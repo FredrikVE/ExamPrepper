@@ -13,7 +13,7 @@ import normalizeSearchTerm from "./Utils/normalizeSearchTerm.js";
 import { applyGlossaryTopicAreaInteractionState, createGlossaryAllTopicAreaListItem, createGlossaryTopicAreaListItems } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
 
-export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType) {
+export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType, expandedMobileToggleButtonGroupId, openMobileToggleButtonGroup, closeMobileToggleButtonGroup) {
 	const [glossarySearchTerm, setGlossarySearchTerm] = useState("");
 	const [selectedTopicAreaKeys, setSelectedTopicAreaKeys] = useState(null);
 	const [searchKeyboardIndex, setSearchKeyboardIndex] = useState(-1);
@@ -257,6 +257,8 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 		t
 	});
 
+	const activeContentType = LEARNING_CONTENT_TYPES.GLOSSARY;
+
 	const contentToggleEntries = useMemo(() => {
 		return NAV_ITEMS.toggleButtonItems.map((entry) => ({
 			id: entry.id,
@@ -264,6 +266,25 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 			isDisabled: entry.isDisabled
 		}));
 	}, [t]);
+
+	const mobileToggleButtonItems = [];
+
+	for (const item of NAV_ITEMS.mobileToggleButtonItems) {
+		const entries = [];
+
+		for (const entryId of item.entryIds) {
+			entries.push(findMobileToggleEntry(contentToggleEntries, entryId, t));
+		}
+
+		mobileToggleButtonItems.push({
+			id: item.id,
+			label: t[item.labelKey],
+			contentTypeId: item.contentTypeId,
+			isDisabled: item.isDisabled,
+			isActive: isMobileToggleButtonItemActive(item, activeContentType),
+			entries
+		});
+	}
 
 	const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
 		const shouldOpenAutocomplete = normalizeSearchTerm(nextSearchTerm).length >= GLOSSARY_AUTOCOMPLETE_MIN_LENGTH;
@@ -425,6 +446,7 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 		mobileChapterSheetOpenLabel: t.glossaryPageMobileChapterSheetOpenLabel,
 		mobileChapterSheetCloseLabel: t.glossaryPageMobileChapterSheetCloseLabel,
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
+		contentToggleBackLabel: t.contentToggleBackLabel,
 
 		workspaceState,
 		shouldShowWorkspaceFooter,
@@ -446,8 +468,13 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 		glossaryPanelHeading,
 		glossaryTableRows,
 		contentToggleEntries,
+		mobileToggleButtonItems,
+		expandedMobileToggleButtonGroupId,
+		mobileActiveEntryId: activeContentType,
+		openMobileToggleButtonGroup,
+		closeMobileToggleButtonGroup,
 		pageTools: null,
-		activeContentType: LEARNING_CONTENT_TYPES.GLOSSARY,
+		activeContentType,
 
 		backContract,
 
@@ -464,6 +491,40 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 		selectTopicArea,
 		selectContentType
 	};
+}
+
+function findMobileToggleEntry(entries, entryId, t) {
+	for (const entry of entries) {
+		if (entry.id === entryId) {
+			return entry;
+		}
+	}
+
+	for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
+		if (entry.id === entryId) {
+			return {
+				id: entry.id,
+				label: t[entry.labelKey],
+				isDisabled: entry.isDisabled
+			};
+		}
+	}
+
+	throw new Error(`Unknown mobile toggle entry: ${String(entryId)}`);
+}
+
+function isMobileToggleButtonItemActive(item, activeContentType) {
+	if (item.contentTypeId !== null) {
+		return item.contentTypeId === activeContentType;
+	}
+
+	for (const entryId of item.entryIds) {
+		if (entryId === activeContentType) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function createGlossaryPageSubtitle(t, selectedSubject) {

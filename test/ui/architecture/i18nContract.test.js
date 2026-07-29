@@ -22,7 +22,7 @@ function collectTranslationKeys(value, keys) {
 	}
 
 	for (const [property, child] of Object.entries(value)) {
-		if (isTranslationKeyProperty(property)) {
+		if (isTranslationKeyProperty(property) && typeof child === "string") {
 			keys.add(child);
 		}
 		collectTranslationKeys(child, keys);

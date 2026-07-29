@@ -1,29 +1,33 @@
 // src/ui/view/components/ToggleButtonRow/ToggleButtonRow.jsx
-export default function ToggleButtonRow({ entries, activeEntryId, onSelectEntry, ariaLabel }) {
-	const buttons = [];
+import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
+import usePresentationMode from "../../../presentation/usePresentationMode.js";
+import ToggleButtonRowDesktop from "./ToggleButtonRowDesktop.jsx";
+import ToggleButtonRowMobile from "./ToggleButtonRowMobile.jsx";
 
-	for (const entry of entries) {
-		const isActive = entry.id === activeEntryId;
+export default function ToggleButtonRow(props) {
+	const presentationMode = usePresentationMode();
 
-		buttons.push(
-			<button
-				key={entry.id}
-				type="button"
-				className="toggle-button-row-button"
-				role="tab"
-				aria-selected={isActive}
-				data-active={isActive ? "true" : "false"}
-				disabled={entry.isDisabled}
-				onClick={() => onSelectEntry(entry.id)}
-			>
-				{entry.label}
-			</button>
+	if (presentationMode === PRESENTATION_MODE.MOBILE) {
+		return (
+			<ToggleButtonRowMobile
+				items={props.mobileItems}
+				activeEntryId={props.mobileActiveEntryId}
+				expandedGroupId={props.expandedMobileGroupId}
+				onOpenGroup={props.onOpenMobileGroup}
+				onCloseGroup={props.onCloseMobileGroup}
+				onSelectEntry={props.onSelectEntry}
+				backLabel={props.mobileBackLabel}
+				ariaLabel={props.ariaLabel}
+			/>
 		);
 	}
 
 	return (
-		<div className="toggle-button-row" role="tablist" aria-label={ariaLabel}>
-			{buttons}
-		</div>
+		<ToggleButtonRowDesktop
+			entries={props.entries}
+			activeEntryId={props.activeEntryId}
+			onSelectEntry={props.onSelectEntry}
+			ariaLabel={props.ariaLabel}
+		/>
 	);
 }

@@ -103,7 +103,7 @@ describe("useAppNavigationViewModel", () => {
 		expect(viewModel.examLanguageSyncError).toBeNull();
 	});
 
-	test("valg av fag går direkte til innholdsvalg og nullstiller gamle valg", () => {
+	test("valg av fag åpner begrepslisten og nullstiller gamle valg", () => {
 		setNavigationState({
 			activeScreen: NAV_SCREENS.EXAM,
 			selectedSubjectId: "old-subject",
@@ -114,7 +114,7 @@ describe("useAppNavigationViewModel", () => {
 		createViewModel().selectSubject("inf1010");
 
 		expect(hookState.slice(0, 4)).toEqual([
-			NAV_SCREENS.SELECT,
+			NAV_SCREENS.GLOSSARY,
 			"inf1010",
 			null,
 			null

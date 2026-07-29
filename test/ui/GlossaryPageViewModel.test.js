@@ -1,7 +1,7 @@
 // test/ui/GlossaryPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
-import { LEARNING_CONTENT_TYPES } from "../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../src/navigation/navigation.js";
 import { GLOSSARY_AUTOCOMPLETE_LIST_ID, createGlossaryAutocompleteOptionId } from "../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
 import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
@@ -74,9 +74,15 @@ const translations = {
 	glossaryPageLoadingTitle: "Laster",
 	contentToggleAriaLabel: "Velg læringsverktøy",
 	contentToggleExamsLabel: "Eksamen",
+	contentToggleLearningPathLabel: "Sti",
+	contentToggleLearningPathDesktopLabel: "Læringsti",
+	contentTogglePracticeLabel: "Øve",
+	contentToggleTestsLabel: "Tester",
+	contentToggleChapterTestsLabel: "Kapitteltester",
+	contentToggleBackLabel: "Tilbake",
 	contentToggleFlipcardsLabel: "Flipcards",
 	contentToggleMatchCardsLabel: "Begrepsmatch",
-	contentToggleGlossaryLabel: "Begrepslister"
+	contentToggleGlossaryLabel: "Begrepsliste"
 };
 
 const topicAreas = [
@@ -146,7 +152,8 @@ function createViewModel({
 	},
 	initialTopicAreaKey = null,
 	language = "no",
-	isActive = true
+	isActive = true,
+	expandedMobileToggleButtonGroupId = null
 } = {}) {
 	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey);
 	loadModelQueue = [
@@ -171,6 +178,8 @@ function createViewModel({
 		execute: jest.fn(async () => loadedTopicAreas)
 	};
 	const onSelectContentType = jest.fn();
+	const onOpenMobileToggleButtonGroup = jest.fn();
+	const onCloseMobileToggleButtonGroup = jest.fn();
 	const backContract = {
 		showBackButton: true,
 		backLabel: "Tilbake",
@@ -187,7 +196,10 @@ function createViewModel({
 		translations,
 		isActive,
 		backContract,
-		onSelectContentType
+		onSelectContentType,
+		expandedMobileToggleButtonGroupId,
+		onOpenMobileToggleButtonGroup,
+		onCloseMobileToggleButtonGroup
 	);
 
 	return {
@@ -195,6 +207,8 @@ function createViewModel({
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		onSelectContentType,
+		onOpenMobileToggleButtonGroup,
+		onCloseMobileToggleButtonGroup,
 		viewModel
 	};
 }
@@ -232,6 +246,79 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useState).toHaveBeenNthCalledWith(4, false);
 		expect(useState).toHaveBeenNthCalledWith(5, false);
 		expect(useState).toHaveBeenNthCalledWith(6, null);
+	});
+
+	test("returns the glossary-aware mobile toggle-button contract", () => {
+		const { viewModel } = createViewModel();
+		const [learningPathItem, practiceItem, testsItem] = viewModel.mobileToggleButtonItems;
+
+		expect(viewModel.activeContentType).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
+		expect(viewModel.contentToggleBackLabel).toBe("Tilbake");
+		expect(viewModel.mobileToggleButtonItems).toHaveLength(3);
+		expect(learningPathItem).toEqual({
+			id: "learning-path",
+			label: "Sti",
+			contentTypeId: null,
+			isDisabled: true,
+			isActive: false,
+			entries: []
+		});
+		expect(practiceItem).toMatchObject({
+			id: "practice",
+			label: "Øve",
+			isDisabled: false,
+			isActive: true
+		});
+		expect(practiceItem.entries).toEqual([
+			{
+				id: LEARNING_CONTENT_TYPES.GLOSSARY,
+				label: "Begrepsliste",
+				isDisabled: false
+			},
+			{
+				id: LEARNING_CONTENT_TYPES.FLIPCARDS,
+				label: "Flipcards",
+				isDisabled: false
+			},
+			{
+				id: LEARNING_CONTENT_TYPES.MATCHCARDS,
+				label: "Begrepsmatch",
+				isDisabled: false
+			}
+		]);
+		expect(testsItem).toMatchObject({
+			id: "tests",
+			contentTypeId: null,
+			isActive: false
+		});
+		expect(testsItem.entries).toEqual([
+			{
+				id: TEST_TYPES.CHAPTER_TEST,
+				label: "Kapitteltester",
+				isDisabled: false
+			},
+			{
+				id: LEARNING_CONTENT_TYPES.EXAMS,
+				label: "Eksamen",
+				isDisabled: false
+			}
+		]);
+	});
+
+
+	test("reuses the shared mobile disclosure state across the glossary route", () => {
+		const {
+			onOpenMobileToggleButtonGroup,
+			onCloseMobileToggleButtonGroup,
+			viewModel
+		} = createViewModel({
+			expandedMobileToggleButtonGroupId: "practice"
+		});
+
+		expect(viewModel.expandedMobileToggleButtonGroupId).toBe("practice");
+		expect(viewModel.mobileActiveEntryId).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
+		expect(viewModel.openMobileToggleButtonGroup).toBe(onOpenMobileToggleButtonGroup);
+		expect(viewModel.closeMobileToggleButtonGroup).toBe(onCloseMobileToggleButtonGroup);
 	});
 
 	test("loads all glossary entries once and topic areas for the active language", async () => {

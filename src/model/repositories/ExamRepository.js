@@ -232,6 +232,7 @@ export default class ExamRepository {
             title: exam.title,
             description: exam.description,
             modeLabel: exam.modeLabel,
+            testType: exam.testType ?? null,
             estimatedMinutes: exam.estimatedMinutes,
             duration: exam.duration,
             durationMinutes: exam.durationMinutes,

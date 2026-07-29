@@ -20,7 +20,7 @@
 /* Shared UI */
 @import "./WorkspaceState/index.css";
 @import "./Shared/index.css";
-@import "./ToggleButtonRow/ToggleButtonRow.css";
+@import "./ToggleButtonRow/index.css";
 @import "./LearningContentHeader/index.css";
 @import "./Search/index.css";
 @import "./DesktopPopOutMenu/index.css";

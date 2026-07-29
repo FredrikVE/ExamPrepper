@@ -1,11 +1,12 @@
 // test/ui/viewmodel/LearningContentSelectPage/createLearningContentSelectPageHeading.test.js
 import { describe, expect, jest, test } from "@jest/globals";
 import createLearningContentSelectPageHeading from "../../../../src/ui/viewmodel/LearningContentSelectPage/createLearningContentSelectPageHeading.js";
-import { LEARNING_CONTENT_TYPES } from "../../../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../../../src/navigation/navigation.js";
 
 function createTranslations() {
 	return {
 		selectExamsTitle: "Velg eksamen",
+		selectChapterTestsTitle: "Velg kapitteltest",
 		selectFlipcardsTitle: "Velg flipcards",
 		selectMatchCardsTitle: "Velg begrepsmatch",
 		selectGlossaryTitle: "Velg begrepsliste",
@@ -13,6 +14,8 @@ function createTranslations() {
 		selectSubtitleFallback: "Velg en øvingsprøve for å starte",
 		selectExamsSubtitle: jest.fn((subjectCode) => `Velg en øvingsprøve for ${subjectCode}`),
 		selectExamsSubtitleFallback: "Velg en øvingsprøve for å starte",
+		selectChapterTestsSubtitle: jest.fn((subjectCode) => `Velg en kapitteltest for ${subjectCode}`),
+		selectChapterTestsSubtitleFallback: "Velg en kapitteltest for å starte",
 		selectFlipcardsSubtitle: jest.fn((subjectCode) => `Velg Flipcards for ${subjectCode}`),
 		selectFlipcardsSubtitleFallback: "Velg Flipcards for å starte",
 		selectMatchCardsSubtitle: jest.fn((subjectCode) => `Velg Begrepsmatch for ${subjectCode}`),
@@ -32,6 +35,9 @@ function createEnglishTranslations() {
 	return {
 		...createTranslations(),
 		selectExamsTitle: "Choose exam",
+		selectChapterTestsTitle: "Choose chapter test",
+		selectChapterTestsSubtitle: jest.fn((subjectCode) => `Choose a chapter test for ${subjectCode}`),
+		selectChapterTestsSubtitleFallback: "Choose a chapter test to begin",
 		selectFlipcardsTitle: "Choose flipcards",
 		selectMatchCardsTitle: "Choose concept match",
 		selectGlossaryTitle: "Choose glossary"
@@ -51,8 +57,20 @@ describe("createLearningContentSelectPageHeading", () => {
 		expect(t.selectExamsSubtitle).toHaveBeenCalledWith("IN5431");
 	});
 
+	test("creates the chapter-test heading from translations", () => {
+		const t = createTranslations();
+		const heading = createLearningContentSelectPageHeading(t, { code: "IN5431" }, TEST_TYPES.CHAPTER_TEST);
+
+		expect(heading).toEqual({
+			title: "Velg kapitteltest",
+			subtitle: "Velg en kapitteltest for IN5431"
+		});
+		expect(t.selectChapterTestsSubtitle).toHaveBeenCalledWith("IN5431");
+	});
+
 	test("returns localized title for each active content type", () => {
 		const cases = [
+			{ activeContentType: TEST_TYPES.CHAPTER_TEST, noTitle: "Velg kapitteltest", enTitle: "Choose chapter test" },
 			{ activeContentType: LEARNING_CONTENT_TYPES.EXAMS, noTitle: "Velg eksamen", enTitle: "Choose exam" },
 			{ activeContentType: LEARNING_CONTENT_TYPES.FLIPCARDS, noTitle: "Velg flipcards", enTitle: "Choose flipcards" },
 			{ activeContentType: LEARNING_CONTENT_TYPES.MATCHCARDS, noTitle: "Velg begrepsmatch", enTitle: "Choose concept match" },

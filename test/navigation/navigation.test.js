@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG } from "../../src/navigation/navigation.js";
+import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG, TEST_TYPES } from "../../src/navigation/navigation.js";
 
 describe("navigation configuration", () => {
 	test("contains only the screens rendered by App", () => {
@@ -26,25 +26,113 @@ describe("navigation configuration", () => {
 		expect(NAV_ITEMS.sidebarItems.some((item) => item.screen === NAV_SCREENS.FLIPCARDS)).toBe(false);
 	});
 
-	test("defines every toggle-button item once", () => {
+	test("defines the desktop learning-content order and disabled learning path", () => {
 		expect(NAV_ITEMS.toggleButtonItems.map((item) => item.id)).toEqual([
-			LEARNING_CONTENT_TYPES.EXAMS,
+			"learning-path",
+			LEARNING_CONTENT_TYPES.GLOSSARY,
 			LEARNING_CONTENT_TYPES.FLIPCARDS,
 			LEARNING_CONTENT_TYPES.MATCHCARDS,
-			LEARNING_CONTENT_TYPES.GLOSSARY
+			TEST_TYPES.CHAPTER_TEST,
+			LEARNING_CONTENT_TYPES.EXAMS
 		]);
 
-		for (const item of NAV_ITEMS.toggleButtonItems) {
+		expect(NAV_ITEMS.toggleButtonItems[0]).toEqual({
+			id: "learning-path",
+			contentTypeId: null,
+			testType: null,
+			labelKey: "contentToggleLearningPathDesktopLabel",
+			titleKey: null,
+			subtitleKey: null,
+			subtitleFallbackKey: null,
+			searchPlaceholderKey: null,
+			targetScreen: null,
+			isDisabled: true
+		});
+
+		for (const item of NAV_ITEMS.toggleButtonItems.slice(1)) {
 			expect(item).toEqual(expect.objectContaining({
+				contentTypeId: expect.any(String),
 				labelKey: expect.any(String),
 				titleKey: expect.any(String),
 				subtitleKey: expect.any(String),
 				subtitleFallbackKey: expect.any(String),
 				searchPlaceholderKey: expect.any(String),
 				targetScreen: expect.any(String),
+				isDisabled: false
+			}));
+			expect(Object.hasOwn(item, "testType")).toBe(true);
+			expect([null, ...Object.values(TEST_TYPES)]).toContain(item.testType);
+		}
+
+		expect(NAV_ITEMS.toggleButtonItems.slice(-2)).toEqual([
+			expect.objectContaining({
+				id: TEST_TYPES.CHAPTER_TEST,
+				contentTypeId: LEARNING_CONTENT_TYPES.EXAMS,
+				testType: TEST_TYPES.CHAPTER_TEST
+			}),
+			expect.objectContaining({
+				id: LEARNING_CONTENT_TYPES.EXAMS,
+				contentTypeId: LEARNING_CONTENT_TYPES.EXAMS,
+				testType: TEST_TYPES.EXAM
+			})
+		]);
+	});
+
+	test("defines the mobile toggle-button policy with complete content reachability", () => {
+		expect(TEST_TYPES).toEqual({
+			CHAPTER_TEST: "chapter-test",
+			EXAM: "exam"
+		});
+		expect(NAV_ITEMS.mobileToggleButtonItems.map((item) => item.id)).toEqual([
+			"learning-path",
+			"practice",
+			"tests"
+		]);
+		expect(NAV_ITEMS.mobileToggleEntryItems).toEqual([]);
+
+		const mobileItemIds = NAV_ITEMS.mobileToggleButtonItems.map((item) => item.id);
+		const toggleButtonItemIds = NAV_ITEMS.toggleButtonItems.map((item) => item.id);
+		const reachableContentTypeIds = new Set();
+
+		expect(new Set(mobileItemIds).size).toBe(mobileItemIds.length);
+
+		for (const item of NAV_ITEMS.mobileToggleButtonItems) {
+			expect(item).toEqual(expect.objectContaining({
+				labelKey: expect.any(String),
+				entryIds: expect.any(Array),
 				isDisabled: expect.any(Boolean)
 			}));
+
+			if (!item.isDisabled) {
+				expect(item.contentTypeId !== null || item.entryIds.length > 0).toBe(true);
+			}
+
+			if (item.contentTypeId !== null) {
+				reachableContentTypeIds.add(item.contentTypeId);
+			}
+
+			for (const entryId of item.entryIds) {
+				expect(toggleButtonItemIds).toContain(entryId);
+				const entry = NAV_ITEMS.toggleButtonItems.find((candidate) => candidate.id === entryId);
+				reachableContentTypeIds.add(entry.contentTypeId);
+			}
 		}
+
+		expect(NAV_ITEMS.mobileToggleButtonItems[1]).toEqual(expect.objectContaining({
+			id: "practice",
+			contentTypeId: null,
+			entryIds: [
+				LEARNING_CONTENT_TYPES.GLOSSARY,
+				LEARNING_CONTENT_TYPES.FLIPCARDS,
+				LEARNING_CONTENT_TYPES.MATCHCARDS
+			]
+		}));
+		expect(NAV_ITEMS.mobileToggleButtonItems[2]).toEqual(expect.objectContaining({
+			id: "tests",
+			contentTypeId: null,
+			entryIds: [TEST_TYPES.CHAPTER_TEST, LEARNING_CONTENT_TYPES.EXAMS]
+		}));
+		expect([...reachableContentTypeIds].sort()).toEqual(Object.values(LEARNING_CONTENT_TYPES).sort());
 	});
 
 	test("keeps pop-out menu definitions separate from glossary navigation", () => {

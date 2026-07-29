@@ -1,0 +1,130 @@
+/* src/ui/style/ToggleButtonRow/toggle-button-row-mobile.css */
+.toggle-button-row-mobile {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	gap: calc(var(--space-1) / 2);
+	width: max-content;
+	max-width: 100%;
+	min-width: 0;
+	margin: 22px auto 18px;
+	padding: var(--space-1);
+	overflow-x: auto;
+	color: var(--segmented-control-inactive-text);
+	background:
+		linear-gradient(180deg, color-mix(in srgb, var(--text-main) 1.5%, transparent), transparent),
+		var(--segmented-control-bg);
+	border: 1px solid var(--segmented-control-border);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-card);
+	scrollbar-width: none;
+}
+
+.toggle-button-row-mobile::-webkit-scrollbar {
+	display: none;
+}
+
+.toggle-button-row-mobile__button,
+.toggle-button-row-mobile__back {
+	flex: 0 0 auto;
+	min-width: 0;
+	height: 46px;
+	border: 0;
+	border-radius: var(--radius-xs);
+	color: var(--segmented-control-inactive-text);
+	background: transparent;
+	font: inherit;
+	font-size: 16px;
+	font-weight: 750;
+	letter-spacing: -0.015em;
+	white-space: nowrap;
+	cursor: pointer;
+	transition:
+		background var(--transition-normal),
+		box-shadow var(--transition-normal),
+		color var(--transition-fast),
+		opacity var(--transition-normal),
+		transform var(--transition-normal);
+}
+
+.toggle-button-row-mobile__button {
+	max-width: 220px;
+	padding: 0 var(--space-8);
+}
+
+.toggle-button-row-mobile__back {
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 42px;
+	padding: 0;
+	color: var(--text-main);
+	background: color-mix(in srgb, var(--text-main) 3.5%, transparent);
+}
+
+.toggle-button-row-mobile__back svg {
+	width: var(--space-7);
+	height: var(--space-7);
+}
+
+.toggle-button-row-mobile__button:not(:disabled):active,
+.toggle-button-row-mobile__back:active {
+	transform: scale(0.975);
+}
+
+.toggle-button-row-mobile__button:not([data-active="true"]):not(:disabled):hover,
+.toggle-button-row-mobile__button:not([data-active="true"]):not(:disabled):focus-visible,
+.toggle-button-row-mobile__back:hover,
+.toggle-button-row-mobile__back:focus-visible {
+	color: var(--text-main);
+	background: color-mix(in srgb, var(--text-main) 4.5%, transparent);
+}
+
+.toggle-button-row-mobile__button[data-active="true"] {
+	color: var(--segmented-control-active-text);
+	background: var(--segmented-control-active-bg);
+	box-shadow: var(--segmented-control-active-shadow);
+}
+
+.toggle-button-row-mobile__button[data-active="true"]:not(:disabled):hover,
+.toggle-button-row-mobile__button[data-active="true"]:not(:disabled):focus-visible {
+	color: var(--segmented-control-active-text);
+	background: var(--segmented-control-active-bg-hover);
+}
+
+.toggle-button-row-mobile__button:disabled {
+	cursor: not-allowed;
+	opacity: 0.48;
+}
+
+.toggle-button-row-mobile__button:focus-visible,
+.toggle-button-row-mobile__back:focus-visible {
+	outline: 2px solid var(--button-focus-ring);
+	outline-offset: 1px;
+}
+
+.toggle-button-row-mobile[data-expanded="true"] .toggle-button-row-mobile__button,
+.toggle-button-row-mobile[data-expanded="true"] .toggle-button-row-mobile__back {
+	animation: toggle-button-row-mobile-reveal var(--transition-normal);
+}
+
+@keyframes toggle-button-row-mobile-reveal {
+	from {
+		opacity: 0;
+		transform: translateX(-8px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.toggle-button-row-mobile__button,
+	.toggle-button-row-mobile__back {
+		animation: none;
+		transition: none;
+	}
+}

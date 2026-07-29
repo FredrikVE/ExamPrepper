@@ -202,6 +202,9 @@ function AppContent() {
 					isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
 					backContract={navigationViewModel.backContract}
 					onSelectContentType={learningContentSelectPageViewModel.selectContentType}
+					expandedMobileToggleButtonGroupId={learningContentSelectPageViewModel.expandedMobileToggleButtonGroupId}
+					onOpenMobileToggleButtonGroup={learningContentSelectPageViewModel.openMobileToggleButtonGroup}
+					onCloseMobileToggleButtonGroup={learningContentSelectPageViewModel.closeMobileToggleButtonGroup}
 				/>
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
@@ -324,7 +327,7 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 	);
 }
 
-function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType }) {
+function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType, expandedMobileToggleButtonGroupId, onOpenMobileToggleButtonGroup, onCloseMobileToggleButtonGroup }) {
 	const glossaryPageViewModel = useGlossaryPageViewModel(
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
@@ -335,7 +338,10 @@ function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, 
 		t,
 		isActive,
 		backContract,
-		onSelectContentType
+		onSelectContentType,
+		expandedMobileToggleButtonGroupId,
+		onOpenMobileToggleButtonGroup,
+		onCloseMobileToggleButtonGroup
 	);
 
 	if (!isActive) {

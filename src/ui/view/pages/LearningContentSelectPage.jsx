@@ -72,9 +72,15 @@ export default function LearningContentSelectPage({ viewModel }) {
 				subtitle={viewModel.subtitle}
 				titleId="learning-content-page-title"
 				entries={viewModel.contentToggleEntries}
-				activeEntryId={viewModel.activeContentType}
+				activeEntryId={viewModel.desktopActiveEntryId}
+				mobileActiveEntryId={viewModel.mobileActiveEntryId}
 				onSelectEntry={viewModel.selectContentType}
 				ariaLabel={viewModel.contentToggleAriaLabel}
+				mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
+				expandedMobileToggleButtonGroupId={viewModel.expandedMobileToggleButtonGroupId}
+				onOpenMobileToggleButtonGroup={viewModel.openMobileToggleButtonGroup}
+				onCloseMobileToggleButtonGroup={viewModel.closeMobileToggleButtonGroup}
+				contentToggleBackLabel={viewModel.contentToggleBackLabel}
 			/>
 
 			<WorkspaceState state={viewModel.workspaceState}>
