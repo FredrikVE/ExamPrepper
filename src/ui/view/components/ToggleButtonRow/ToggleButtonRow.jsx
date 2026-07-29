@@ -11,7 +11,10 @@ export default function ToggleButtonRow(props) {
 		return (
 			<ToggleButtonRowMobile
 				items={props.mobileItems}
-				activeEntryId={props.mobileActiveEntryId ?? props.activeEntryId}
+				activeEntryId={props.mobileActiveEntryId}
+				expandedGroupId={props.expandedMobileGroupId}
+				onOpenGroup={props.onOpenMobileGroup}
+				onCloseGroup={props.onCloseMobileGroup}
 				onSelectEntry={props.onSelectEntry}
 				backLabel={props.mobileBackLabel}
 				ariaLabel={props.ariaLabel}

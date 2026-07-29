@@ -16,6 +16,7 @@ import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage) {
 	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
 	const [selectedTestType, setSelectedTestType] = useState(TEST_TYPES.EXAM);
+	const [expandedMobileToggleButtonGroupId, setExpandedMobileToggleButtonGroupId] = useState(null);
 
 	const examSearchSheet = useSearchSheetModel({
 		isActive,
@@ -125,19 +126,18 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 	const selectContentType = useCallback((entryId) => {
 		const toggleEntry = findToggleEntryConfig(entryId);
 
-		if (toggleEntry?.isDisabled) {
+		if (toggleEntry === null || toggleEntry.isDisabled) {
 			return;
 		}
 
-		const contentTypeId = toggleEntry?.contentTypeId ?? entryId;
-		const contentType = findContentTypeEntry(contentTypeId);
-
-		if (!contentType) {
-			return;
+		if (toggleEntry.contentTypeId === null) {
+			throw new Error(`Enabled toggle entry is missing contentTypeId: ${String(entryId)}`);
 		}
+
+		const contentType = getContentTypeEntry(toggleEntry.contentTypeId);
 
 		resetSearchSheet(ALL_TOPIC_AREAS);
-		setSelectedTestType(toggleEntry?.testType ?? null);
+		setSelectedTestType(toggleEntry.testType);
 
 		if (contentType.targetScreen !== NAV_SCREENS.SELECT) {
 			onChangeScreen(contentType.targetScreen);
@@ -150,6 +150,20 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 			onChangeScreen(contentType.targetScreen);
 		}
 	}, [isActive, onChangeScreen, resetSearchSheet]);
+
+	const openMobileToggleButtonGroup = useCallback((groupId) => {
+		const group = findMobileToggleButtonGroup(groupId);
+
+		if (group === null || group.isDisabled || group.entryIds.length === 0) {
+			return;
+		}
+
+		setExpandedMobileToggleButtonGroupId(group.id);
+	}, []);
+
+	const closeMobileToggleButtonGroup = useCallback(() => {
+		setExpandedMobileToggleButtonGroupId(null);
+	}, []);
 
 	const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
 		changeTopicAreaKey(nextTopicAreaKey);
@@ -263,9 +277,9 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 	}, [topicAreas, topicAreaKey, t.filterAllLabel]);
 
 	const searchPlaceholder = useMemo(() => {
-		const activeEntry = findContentTypeEntry(activeContentType);
+		const activeEntry = getContentTypeEntry(activeContentType);
 
-		return t[activeEntry?.searchPlaceholderKey] ?? t.examSearchPlaceholder;
+		return t[activeEntry.searchPlaceholderKey];
 	}, [activeContentType, t]);
 
 	const selectExam = useCallback((examId) => {
@@ -345,6 +359,7 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		mobileActiveEntryId,
 		contentToggleEntries,
 		mobileToggleButtonItems,
+		expandedMobileToggleButtonGroupId,
 		contentToggleBackLabel: t.contentToggleBackLabel,
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 		isExamsContentActive,
@@ -393,9 +408,21 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
 		selectContentType,
+		openMobileToggleButtonGroup,
+		closeMobileToggleButtonGroup,
 		selectTopicAreaKey,
 		selectSearchSuggestion
 	};
+}
+
+function findMobileToggleButtonGroup(groupId) {
+	for (const group of NAV_ITEMS.mobileToggleButtonItems) {
+		if (group.id === groupId) {
+			return group;
+		}
+	}
+
+	return null;
 }
 
 function findMobileToggleEntry(entries, entryId, t) {
@@ -430,7 +457,7 @@ function isMobileToggleButtonItemActive(item, activeContentType, selectedTestTyp
 
 		const toggleEntry = findToggleEntryConfig(entryId);
 
-		if (toggleEntry?.contentTypeId === activeContentType) {
+		if (toggleEntry !== null && toggleEntry.contentTypeId === activeContentType) {
 			return true;
 		}
 	}
@@ -466,14 +493,14 @@ function resolveActiveToggleEntryId(activeContentType, selectedTestType) {
 	return LEARNING_CONTENT_TYPES.EXAMS;
 }
 
-function findContentTypeEntry(contentTypeId) {
+function getContentTypeEntry(contentTypeId) {
 	for (const entry of NAV_ITEMS.toggleButtonItems) {
 		if (entry.id === contentTypeId) {
 			return entry;
 		}
 	}
 
-	return null;
+	throw new Error(`Unknown learning content type: ${String(contentTypeId)}`);
 }
 
 function createExamSearchSuggestions(exams) {

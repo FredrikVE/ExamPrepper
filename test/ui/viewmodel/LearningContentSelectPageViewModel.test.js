@@ -235,6 +235,11 @@ describe("useLearningContentSelectPageViewModel", () => {
 		});
 		expect(practiceItem.entries).toEqual([
 			{
+				id: LEARNING_CONTENT_TYPES.GLOSSARY,
+				label: "Begrepsliste",
+				isDisabled: false
+			},
+			{
 				id: LEARNING_CONTENT_TYPES.FLIPCARDS,
 				label: "Flipcards",
 				isDisabled: false
@@ -242,11 +247,6 @@ describe("useLearningContentSelectPageViewModel", () => {
 			{
 				id: LEARNING_CONTENT_TYPES.MATCHCARDS,
 				label: "Begrepsmatch",
-				isDisabled: false
-			},
-			{
-				id: LEARNING_CONTENT_TYPES.GLOSSARY,
-				label: "Begrepsliste",
 				isDisabled: false
 			}
 		]);
@@ -269,6 +269,23 @@ describe("useLearningContentSelectPageViewModel", () => {
 				isDisabled: false
 			}
 		]);
+	});
+
+
+	test("keeps a mobile group expanded until the explicit close action", () => {
+		const { viewModel } = createViewModel();
+
+		expect(viewModel.expandedMobileToggleButtonGroupId).toBeNull();
+
+		viewModel.openMobileToggleButtonGroup("practice");
+		viewModel.selectContentType(LEARNING_CONTENT_TYPES.GLOSSARY);
+
+		expect(stateSetters[2]).toHaveBeenCalledWith("practice");
+		expect(stateSetters[2]).not.toHaveBeenCalledWith(null);
+
+		viewModel.closeMobileToggleButtonGroup();
+
+		expect(stateSetters[2]).toHaveBeenCalledWith(null);
 	});
 
 	test("shows exams by default and exposes the exam button as active on desktop and mobile", () => {

@@ -5,10 +5,12 @@ import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../../../src/navigation/n
 let expandedGroupId = null;
 let refIndex = 0;
 const refs = [];
-const setExpandedGroupId = jest.fn((nextExpandedGroupId) => {
+const onOpenGroup = jest.fn((nextExpandedGroupId) => {
 	expandedGroupId = nextExpandedGroupId;
 });
-const useState = jest.fn(() => [expandedGroupId, setExpandedGroupId]);
+const onCloseGroup = jest.fn(() => {
+	expandedGroupId = null;
+});
 const useEffect = jest.fn((effect) => effect());
 const useRef = jest.fn((initialValue) => {
 	const currentRefIndex = refIndex;
@@ -23,8 +25,7 @@ const useRef = jest.fn((initialValue) => {
 
 jest.unstable_mockModule("react", () => ({
 	useEffect,
-	useRef,
-	useState
+	useRef
 }));
 
 const { default: useToggleButtonRowMobile } = await import(
@@ -33,6 +34,11 @@ const { default: useToggleButtonRowMobile } = await import(
 
 const practiceEntries = [
 	{
+		id: LEARNING_CONTENT_TYPES.GLOSSARY,
+		label: "Begrepsliste",
+		isDisabled: false
+	},
+	{
 		id: LEARNING_CONTENT_TYPES.FLIPCARDS,
 		label: "Flipcards",
 		isDisabled: false
@@ -40,11 +46,6 @@ const practiceEntries = [
 	{
 		id: LEARNING_CONTENT_TYPES.MATCHCARDS,
 		label: "Begrepsmatch",
-		isDisabled: false
-	},
-	{
-		id: LEARNING_CONTENT_TYPES.GLOSSARY,
-		label: "Begrepslister",
 		isDisabled: false
 	}
 ];
@@ -93,6 +94,9 @@ function renderInteraction(onSelectEntry, activeEntryId = LEARNING_CONTENT_TYPES
 	return useToggleButtonRowMobile({
 		items,
 		activeEntryId,
+		expandedGroupId,
+		onOpenGroup,
+		onCloseGroup,
 		onSelectEntry
 	});
 }
@@ -101,8 +105,8 @@ beforeEach(() => {
 	expandedGroupId = null;
 	refIndex = 0;
 	refs.length = 0;
-	setExpandedGroupId.mockClear();
-	useState.mockClear();
+	onOpenGroup.mockClear();
+	onCloseGroup.mockClear();
 	useEffect.mockClear();
 	useRef.mockClear();
 });
@@ -123,48 +127,53 @@ describe("useToggleButtonRowMobile", () => {
 
 		interaction.selectItem(items[0]);
 
-		expect(expandedGroupId).toBeNull();
+		expect(onOpenGroup).not.toHaveBeenCalled();
 		expect(onSelectEntry).not.toHaveBeenCalled();
 	});
 
-	test("opens practice, selects Flipcards by default and focuses the back button", () => {
+	test("opens practice in desktop order, selects Begrepsliste by default and focuses the close button", () => {
 		const onSelectEntry = jest.fn();
 		const collapsedInteraction = renderInteraction(onSelectEntry);
 
 		collapsedInteraction.selectItem(items[1]);
 
-		expect(expandedGroupId).toBe("practice");
-		expect(onSelectEntry).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.FLIPCARDS);
+		expect(practiceEntries.map((entry) => entry.id)).toEqual([
+			LEARNING_CONTENT_TYPES.GLOSSARY,
+			LEARNING_CONTENT_TYPES.FLIPCARDS,
+			LEARNING_CONTENT_TYPES.MATCHCARDS
+		]);
+		expect(onOpenGroup).toHaveBeenCalledWith("practice");
+		expect(onSelectEntry).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.GLOSSARY);
 
-		const focusBackButton = jest.fn();
-		refs[0].current = { focus: focusBackButton };
-		const expandedInteraction = renderInteraction(onSelectEntry);
+		const focusCloseButton = jest.fn();
+		refs[0].current = { focus: focusCloseButton };
+		const expandedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.GLOSSARY);
 
 		expect(expandedInteraction.expandedItem).toBe(items[1]);
-		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.FLIPCARDS);
-		expect(focusBackButton).toHaveBeenCalledTimes(1);
+		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
+		expect(focusCloseButton).toHaveBeenCalledTimes(1);
 	});
 
 	test("preserves an active practice entry when the group opens", () => {
 		const onSelectEntry = jest.fn();
-		const collapsedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.GLOSSARY);
+		const collapsedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.FLIPCARDS);
 
 		collapsedInteraction.selectItem(items[1]);
 
 		expect(onSelectEntry).not.toHaveBeenCalled();
 
-		const expandedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.GLOSSARY);
+		const expandedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.FLIPCARDS);
 
-		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
+		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.FLIPCARDS);
 	});
 
-	test("opens tests, selects the first test type and keeps the group expanded", () => {
+	test("keeps tests expanded when another test type is selected", () => {
 		const onSelectEntry = jest.fn();
 		const collapsedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.GLOSSARY);
 
 		collapsedInteraction.selectItem(items[2]);
 
-		expect(expandedGroupId).toBe("tests");
+		expect(onOpenGroup).toHaveBeenCalledWith("tests");
 		expect(onSelectEntry).toHaveBeenCalledWith(TEST_TYPES.CHAPTER_TEST);
 
 		const expandedInteraction = renderInteraction(onSelectEntry, TEST_TYPES.CHAPTER_TEST);
@@ -173,8 +182,10 @@ describe("useToggleButtonRowMobile", () => {
 		expect(expandedInteraction.expandedActiveEntryId).toBe(TEST_TYPES.CHAPTER_TEST);
 
 		expandedInteraction.selectEntry(testEntries[1]);
+
 		expect(onSelectEntry).toHaveBeenNthCalledWith(2, LEARNING_CONTENT_TYPES.EXAMS);
-		expect(setExpandedGroupId).not.toHaveBeenCalledWith(null);
+		expect(expandedGroupId).toBe("tests");
+		expect(onCloseGroup).not.toHaveBeenCalled();
 	});
 
 	test("preserves the active exam test type when the tests group opens", () => {
@@ -190,24 +201,26 @@ describe("useToggleButtonRowMobile", () => {
 		expect(expandedInteraction.expandedActiveEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
 	});
 
-	test("closes on Escape and restores focus to the opening group button", () => {
+	test("closes only through the explicit close action and restores focus", () => {
 		const onSelectEntry = jest.fn();
 		const collapsedInteraction = renderInteraction(onSelectEntry);
 		collapsedInteraction.selectItem(items[1]);
-		const expandedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.FLIPCARDS);
-		const preventDefault = jest.fn();
+		const expandedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.GLOSSARY);
 
 		expect(expandedInteraction.resolveItemButtonRef("practice")).toBe(refs[1]);
 		expect(expandedInteraction.resolveItemButtonRef("tests")).toBeNull();
 
 		const restoreFocus = jest.fn();
 		refs[1].current = { focus: restoreFocus };
-		expandedInteraction.closeExpandedGroupOnEscape({
-			key: "Escape",
-			preventDefault
-		});
 
-		expect(preventDefault).toHaveBeenCalledTimes(1);
+		expandedInteraction.selectEntry(practiceEntries[1]);
+
+		expect(expandedGroupId).toBe("practice");
+		expect(onCloseGroup).not.toHaveBeenCalled();
+
+		expandedInteraction.collapseGroup();
+
+		expect(onCloseGroup).toHaveBeenCalledTimes(1);
 		expect(expandedGroupId).toBeNull();
 
 		const restoredInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.FLIPCARDS);
@@ -217,22 +230,7 @@ describe("useToggleButtonRowMobile", () => {
 		expect(restoredInteraction.resolveItemButtonRef("practice")).toBeNull();
 	});
 
-	test("does not close on unrelated keys", () => {
-		const interaction = renderInteraction(jest.fn());
-		interaction.selectItem(items[1]);
-		const expandedInteraction = renderInteraction(jest.fn(), LEARNING_CONTENT_TYPES.FLIPCARDS);
-		const preventDefault = jest.fn();
-
-		expandedInteraction.closeExpandedGroupOnEscape({
-			key: "Enter",
-			preventDefault
-		});
-
-		expect(expandedGroupId).toBe("practice");
-		expect(preventDefault).not.toHaveBeenCalled();
-	});
-
-	test("fails clearly when expanded state references an unknown item", () => {
+	test("fails clearly when controlled expanded state references an unknown item", () => {
 		expandedGroupId = "missing";
 
 		expect(() => renderInteraction(jest.fn())).toThrow(

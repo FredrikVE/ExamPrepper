@@ -100,12 +100,15 @@ describe("ToggleButtonRow architecture", () => {
 		const facadeSource = readSource(FACADE_PATH);
 		const desktopSource = readSource(DESKTOP_PATH);
 		const mobileSource = readSource(MOBILE_PATH);
-
 		expect(facadeSource).toContain("usePresentationMode()");
 		expect(facadeSource).toContain("PRESENTATION_MODE.MOBILE");
 		expect(facadeSource).toContain("<ToggleButtonRowDesktop");
 		expect(facadeSource).toContain("<ToggleButtonRowMobile");
-		expect(facadeSource).toContain("props.mobileActiveEntryId ?? props.activeEntryId");
+		expect(facadeSource).toContain("activeEntryId={props.mobileActiveEntryId}");
+		expect(facadeSource).not.toContain("?? props.activeEntryId");
+		expect(facadeSource).toContain("expandedGroupId={props.expandedMobileGroupId}");
+		expect(facadeSource).toContain("onOpenGroup={props.onOpenMobileGroup}");
+		expect(facadeSource).toContain("onCloseGroup={props.onCloseMobileGroup}");
 		expect(desktopSource).not.toContain("usePresentationMode");
 		expect(mobileSource).not.toContain("usePresentationMode");
 	});
@@ -140,6 +143,9 @@ describe("ToggleButtonRow architecture", () => {
 		expect(mobileSource).toContain('role="group"');
 		expect(mobileSource).toContain("aria-current={");
 		expect(mobileSource).toContain("interaction.backButtonRef");
+		expect(mobileSource).toContain("onClick={interaction.collapseGroup}");
+		expect(mobileSource).not.toContain("onKeyDown");
+		expect(readSource(INTERACTION_PATH)).not.toContain("Escape");
 		expect(mobileSource).not.toContain("<nav");
 		expect(mobileSource).not.toContain("aria-expanded");
 	});

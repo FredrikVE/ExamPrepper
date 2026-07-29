@@ -6,6 +6,9 @@ export default function ToggleButtonRowMobile(props) {
 	const interaction = useToggleButtonRowMobile({
 		items: props.items,
 		activeEntryId: props.activeEntryId,
+		expandedGroupId: props.expandedGroupId,
+		onOpenGroup: props.onOpenGroup,
+		onCloseGroup: props.onCloseGroup,
 		onSelectEntry: props.onSelectEntry
 	});
 	const buttons = [];
@@ -67,7 +70,6 @@ export default function ToggleButtonRowMobile(props) {
 			role="group"
 			aria-label={props.ariaLabel}
 			data-expanded={interaction.expandedItem === null ? "false" : "true"}
-			onKeyDown={interaction.closeExpandedGroupOnEscape}
 		>
 			{buttons}
 		</div>

@@ -152,7 +152,8 @@ function createViewModel({
 	},
 	initialTopicAreaKey = null,
 	language = "no",
-	isActive = true
+	isActive = true,
+	expandedMobileToggleButtonGroupId = null
 } = {}) {
 	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey);
 	loadModelQueue = [
@@ -177,6 +178,8 @@ function createViewModel({
 		execute: jest.fn(async () => loadedTopicAreas)
 	};
 	const onSelectContentType = jest.fn();
+	const onOpenMobileToggleButtonGroup = jest.fn();
+	const onCloseMobileToggleButtonGroup = jest.fn();
 	const backContract = {
 		showBackButton: true,
 		backLabel: "Tilbake",
@@ -193,7 +196,10 @@ function createViewModel({
 		translations,
 		isActive,
 		backContract,
-		onSelectContentType
+		onSelectContentType,
+		expandedMobileToggleButtonGroupId,
+		onOpenMobileToggleButtonGroup,
+		onCloseMobileToggleButtonGroup
 	);
 
 	return {
@@ -201,6 +207,8 @@ function createViewModel({
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
 		onSelectContentType,
+		onOpenMobileToggleButtonGroup,
+		onCloseMobileToggleButtonGroup,
 		viewModel
 	};
 }
@@ -263,6 +271,11 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		expect(practiceItem.entries).toEqual([
 			{
+				id: LEARNING_CONTENT_TYPES.GLOSSARY,
+				label: "Begrepsliste",
+				isDisabled: false
+			},
+			{
 				id: LEARNING_CONTENT_TYPES.FLIPCARDS,
 				label: "Flipcards",
 				isDisabled: false
@@ -270,11 +283,6 @@ describe("useGlossaryPageViewModel", () => {
 			{
 				id: LEARNING_CONTENT_TYPES.MATCHCARDS,
 				label: "Begrepsmatch",
-				isDisabled: false
-			},
-			{
-				id: LEARNING_CONTENT_TYPES.GLOSSARY,
-				label: "Begrepsliste",
 				isDisabled: false
 			}
 		]);
@@ -295,6 +303,22 @@ describe("useGlossaryPageViewModel", () => {
 				isDisabled: false
 			}
 		]);
+	});
+
+
+	test("reuses the shared mobile disclosure state across the glossary route", () => {
+		const {
+			onOpenMobileToggleButtonGroup,
+			onCloseMobileToggleButtonGroup,
+			viewModel
+		} = createViewModel({
+			expandedMobileToggleButtonGroupId: "practice"
+		});
+
+		expect(viewModel.expandedMobileToggleButtonGroupId).toBe("practice");
+		expect(viewModel.mobileActiveEntryId).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
+		expect(viewModel.openMobileToggleButtonGroup).toBe(onOpenMobileToggleButtonGroup);
+		expect(viewModel.closeMobileToggleButtonGroup).toBe(onCloseMobileToggleButtonGroup);
 	});
 
 	test("loads all glossary entries once and topic areas for the active language", async () => {

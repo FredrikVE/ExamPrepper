@@ -112,8 +112,8 @@ føres i SSOT-registeret. Ny kode skal alltid bruke `QUESTION_TYPES`.
 ### 2.6 → 2.7
 
 - `ToggleButtonRow` er dokumentert som canonical responsiv fasade med interne desktop- og mobilvarianter.
-- `NAV_ITEMS.toggleButtonItems` eier de delte testtypeoppføringene for desktop, og `NAV_ITEMS.mobileToggleButtonItems` gjenbruker dem i mobilgruppen `Tester`. `mobileToggleEntryItems` er reservert for faktiske mobile-only oppføringer og er tom i denne kontrakten.
-- Mobilvarianten eier lokal disclosure-, Escape- og fokusmekanikk. Når en gruppe åpnes uten aktiv underoppføring, aktiveres første enabled entry fra den autoritative rekkefølgen; breakpoint-valget eies av fasaden gjennom `usePresentationMode()`.
+- `NAV_ITEMS.toggleButtonItems` eier de delte testtypeoppføringene for desktop. Alle oppføringer har eksplisitt `contentTypeId` og `testType`; fravær er `null`, aldri et utelatt felt. `NAV_ITEMS.mobileToggleButtonItems` gjenbruker dem i mobilgruppen `Tester`. `mobileToggleEntryItems` er reservert for faktiske mobile-only oppføringer og er tom i denne kontrakten.
+- `LearningContentSelectPageViewModel` eier mobilens åpne gruppe som ordinær `useState` og deler en komplett, påkrevd kontrakt med Glossary-ruten. Mobilvarianten eier kun DOM-fokus og den eksplisitte lukkeknappen; Escape og valg av underoppføring lukker ikke gruppen. Kontrakten bruker ikke optional-parametre eller fallback mellom desktop- og mobilidentitet. Når en gruppe åpnes uten aktiv underoppføring, aktiveres første enabled entry fra den autoritative rekkefølgen; breakpoint-valget eies av fasaden gjennom `usePresentationMode()`.
 - Arkitekturtesten låser offentlig inngang, importgrenser, CSS-entry og fravær av lokal breakpoint- og temadrift.
 
 Eldre versjonshistorikk ligger i git. Erstattede modeller og gamle filnavn skal ikke kopieres inn i dette normative dokumentet.
@@ -158,7 +158,8 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-07-25 | Search-familien eier canonical felt-, filter-, suggestion-, listbox- og tilgjengelighetsmekanikk. Feature-ViewModelen eier kandidater, rangering, aktiveringspolicy og feature-spesifikke filterregler. |
 | 2026-07-26 | Globale app-lag bruker navngitte `--z-*`-tokens fra `Tokens.css` og er låst av `globalLayerPolicy`. Lokale stacking contexts kan beholde lokale verdier når de ikke deltar i appens globale lagstige. |
 | 2026-07-26 | Appens responsive grense er en synkronisert JS/CSS-kontrakt: `APP_MOBILE_MAX_WIDTH = 932`, desktop starter på `933`, og `appBreakpointContract` håndhever de tillatte verdiene og en eksplisitt allowlist for lokale terskler. |
-| 2026-07-27 | `<ToggleButtonRow/>` er canonical responsiv innholdstypevelger. `navigation.js` eier statisk desktop- og mobilpolicy; Page-ViewModelene leverer ferdige mobilitems; fasaden velger presentasjonsvariant; mobilvarianten eier bare lokal disclosure, Escape og DOM-fokus. |
+| 2026-07-27 | `<ToggleButtonRow/>` er canonical responsiv innholdstypevelger. `navigation.js` eier statisk desktop- og mobilpolicy; Page-ViewModelene leverer ferdige mobilitems; fasaden velger presentasjonsvariant. |
+| 2026-07-29 | `LearningContentSelectPageViewModel` eier `expandedMobileToggleButtonGroupId` som ordinær `useState` og deler en komplett, påkrevd disclosure-kontrakt med Glossary-ruten. Mobilvarianten eier DOM-fokus; bare den eksplisitte lukkeknappen lukker gruppen. Mobilgruppenes underoppføringer følger desktopens relative rekkefølge. |
 
 ---
 

@@ -13,7 +13,7 @@ import normalizeSearchTerm from "./Utils/normalizeSearchTerm.js";
 import { applyGlossaryTopicAreaInteractionState, createGlossaryAllTopicAreaListItem, createGlossaryTopicAreaListItems } from "./GlossaryPage/glossaryTopicAreaListModel.js";
 import { createGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
 
-export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType) {
+export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType, expandedMobileToggleButtonGroupId, openMobileToggleButtonGroup, closeMobileToggleButtonGroup) {
 	const [glossarySearchTerm, setGlossarySearchTerm] = useState("");
 	const [selectedTopicAreaKeys, setSelectedTopicAreaKeys] = useState(null);
 	const [searchKeyboardIndex, setSearchKeyboardIndex] = useState(-1);
@@ -469,6 +469,10 @@ export default function useGlossaryPageViewModel(getGlossaryEntriesForSubjectUse
 		glossaryTableRows,
 		contentToggleEntries,
 		mobileToggleButtonItems,
+		expandedMobileToggleButtonGroupId,
+		mobileActiveEntryId: activeContentType,
+		openMobileToggleButtonGroup,
+		closeMobileToggleButtonGroup,
 		pageTools: null,
 		activeContentType,
 

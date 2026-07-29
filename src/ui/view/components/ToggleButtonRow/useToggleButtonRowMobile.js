@@ -1,13 +1,12 @@
 // src/ui/view/components/ToggleButtonRow/useToggleButtonRowMobile.js
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-export default function useToggleButtonRowMobile(params) {
-	const [expandedGroupId, setExpandedGroupId] = useState(null);
+export default function useToggleButtonRowMobile({ items, activeEntryId, expandedGroupId, onOpenGroup, onCloseGroup, onSelectEntry }) {
 	const backButtonRef = useRef(null);
 	const restoreFocusButtonRef = useRef(null);
 	const restoreFocusItemIdRef = useRef(null);
-	const expandedItem = findExpandedItem(params.items, expandedGroupId);
-	const expandedActiveEntryId = resolveExpandedActiveEntryId(expandedItem, params.activeEntryId);
+	const expandedItem = findExpandedItem(items, expandedGroupId);
+	const expandedActiveEntryId = resolveExpandedActiveEntryId(expandedItem, activeEntryId);
 
 	useEffect(() => {
 		if (expandedGroupId !== null) {
@@ -30,13 +29,13 @@ export default function useToggleButtonRowMobile(params) {
 
 		if (item.entries.length > 0) {
 			restoreFocusItemIdRef.current = item.id;
-			setExpandedGroupId(item.id);
+			onOpenGroup(item.id);
 
-			if (!containsEntryId(item.entries, params.activeEntryId)) {
+			if (!containsEntryId(item.entries, activeEntryId)) {
 				const firstEnabledEntry = findFirstEnabledEntry(item.entries);
 
 				if (firstEnabledEntry !== null) {
-					params.onSelectEntry(firstEnabledEntry.id);
+					onSelectEntry(firstEnabledEntry.id);
 				}
 			}
 
@@ -44,7 +43,7 @@ export default function useToggleButtonRowMobile(params) {
 		}
 
 		if (item.contentTypeId !== null) {
-			params.onSelectEntry(item.contentTypeId);
+			onSelectEntry(item.contentTypeId);
 		}
 	};
 
@@ -53,20 +52,16 @@ export default function useToggleButtonRowMobile(params) {
 			return;
 		}
 
-		params.onSelectEntry(entry.id);
+		onSelectEntry(entry.id);
 	};
 
 	const collapseGroup = () => {
-		setExpandedGroupId(null);
-	};
-
-	const closeExpandedGroupOnEscape = (event) => {
-		if (event.key !== "Escape" || expandedGroupId === null) {
+		if (expandedGroupId === null) {
 			return;
 		}
 
-		event.preventDefault();
-		collapseGroup();
+		restoreFocusItemIdRef.current = expandedGroupId;
+		onCloseGroup();
 	};
 
 	const resolveItemButtonRef = (itemId) => {
@@ -84,7 +79,6 @@ export default function useToggleButtonRowMobile(params) {
 		selectItem,
 		selectEntry,
 		collapseGroup,
-		closeExpandedGroupOnEscape,
 		resolveItemButtonRef
 	};
 }

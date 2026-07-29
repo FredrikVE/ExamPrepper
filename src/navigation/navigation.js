@@ -127,6 +127,8 @@ export const NAV_ITEMS = {
 		},
 		{
 			id: LEARNING_CONTENT_TYPES.GLOSSARY,
+			contentTypeId: LEARNING_CONTENT_TYPES.GLOSSARY,
+			testType: null,
 			labelKey: "contentToggleGlossaryLabel",
 			titleKey: "selectGlossaryTitle",
 			subtitleKey: "selectGlossariesSubtitle",
@@ -137,6 +139,8 @@ export const NAV_ITEMS = {
 		},
 		{
 			id: LEARNING_CONTENT_TYPES.FLIPCARDS,
+			contentTypeId: LEARNING_CONTENT_TYPES.FLIPCARDS,
+			testType: null,
 			labelKey: "contentToggleFlipcardsLabel",
 			titleKey: "selectFlipcardsTitle",
 			subtitleKey: "selectFlipcardsSubtitle",
@@ -147,6 +151,8 @@ export const NAV_ITEMS = {
 		},
 		{
 			id: LEARNING_CONTENT_TYPES.MATCHCARDS,
+			contentTypeId: LEARNING_CONTENT_TYPES.MATCHCARDS,
+			testType: null,
 			labelKey: "contentToggleMatchCardsLabel",
 			titleKey: "selectMatchCardsTitle",
 			subtitleKey: "selectMatchCardsSubtitle",
@@ -196,9 +202,9 @@ export const NAV_ITEMS = {
 			labelKey: "contentTogglePracticeLabel",
 			contentTypeId: null,
 			entryIds: [
+				LEARNING_CONTENT_TYPES.GLOSSARY,
 				LEARNING_CONTENT_TYPES.FLIPCARDS,
-				LEARNING_CONTENT_TYPES.MATCHCARDS,
-				LEARNING_CONTENT_TYPES.GLOSSARY
+				LEARNING_CONTENT_TYPES.MATCHCARDS
 			],
 			isDisabled: false
 		},

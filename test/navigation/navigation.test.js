@@ -51,6 +51,7 @@ describe("navigation configuration", () => {
 
 		for (const item of NAV_ITEMS.toggleButtonItems.slice(1)) {
 			expect(item).toEqual(expect.objectContaining({
+				contentTypeId: expect.any(String),
 				labelKey: expect.any(String),
 				titleKey: expect.any(String),
 				subtitleKey: expect.any(String),
@@ -59,6 +60,8 @@ describe("navigation configuration", () => {
 				targetScreen: expect.any(String),
 				isDisabled: false
 			}));
+			expect(Object.hasOwn(item, "testType")).toBe(true);
+			expect([null, ...Object.values(TEST_TYPES)]).toContain(item.testType);
 		}
 
 		expect(NAV_ITEMS.toggleButtonItems.slice(-2)).toEqual([
@@ -111,10 +114,19 @@ describe("navigation configuration", () => {
 			for (const entryId of item.entryIds) {
 				expect(toggleButtonItemIds).toContain(entryId);
 				const entry = NAV_ITEMS.toggleButtonItems.find((candidate) => candidate.id === entryId);
-				reachableContentTypeIds.add(entry.contentTypeId ?? entry.id);
+				reachableContentTypeIds.add(entry.contentTypeId);
 			}
 		}
 
+		expect(NAV_ITEMS.mobileToggleButtonItems[1]).toEqual(expect.objectContaining({
+			id: "practice",
+			contentTypeId: null,
+			entryIds: [
+				LEARNING_CONTENT_TYPES.GLOSSARY,
+				LEARNING_CONTENT_TYPES.FLIPCARDS,
+				LEARNING_CONTENT_TYPES.MATCHCARDS
+			]
+		}));
 		expect(NAV_ITEMS.mobileToggleButtonItems[2]).toEqual(expect.objectContaining({
 			id: "tests",
 			contentTypeId: null,
