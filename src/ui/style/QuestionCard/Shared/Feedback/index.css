@@ -1,0 +1,4 @@
+/* src/ui/style/QuestionCard/Shared/Feedback/index.css */
+@import "./feedback.css";
+@import "./FeedbackPanel/index.css";
+@import "./ResultBadge/index.css";

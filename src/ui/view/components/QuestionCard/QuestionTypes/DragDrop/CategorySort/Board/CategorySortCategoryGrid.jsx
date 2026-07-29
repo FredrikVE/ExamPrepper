@@ -1,0 +1,62 @@
+// src/ui/view/components/QuestionCard/QuestionTypes/DragDrop/CategorySort/Board/CategorySortCategoryGrid.jsx
+import { getExpectedCategoryItemIds, getPlacedItemIds, getSafeArray } from "../Utils/categorySortAnswerLogic.js";
+import CategorySortCategoryColumn from "./CategorySortCategoryColumn.jsx";
+
+export default function CategorySortCategoryGrid(props) {
+    const categories = getSafeArray(props.question?.categories);
+    const categoryCount = Math.max(categories.length, 1);
+    const placedItemIds = getPlacedItemIds(props.safeAnswer);
+    const className = getCategoryGridClassName(categoryCount);
+
+    return (
+        <div
+            className={className}
+            style={{ "--drag-categorize-category-count": String(categoryCount) }}
+        >
+            {categories.map((category) => (
+                <CategorySortCategoryColumn
+                    key={category.id}
+                    question={props.question}
+                    category={category}
+                    itemIds={props.safeAnswer[category.id]}
+                    unansweredSlotCount={getUnansweredSlotCount({
+                        categoryId: category.id,
+                        question: props.question,
+                        placedItemIds,
+                        feedbackMode: props.feedbackMode
+                    })}
+                    itemsById={props.itemsById}
+                    feedbackMode={props.feedbackMode}
+                    selectedItemId={props.selectedItemId}
+                    expandedItemId={props.expandedItemId}
+                    accept={props.accept}
+                    categoryDropTargetIdPrefix={props.categoryDropTargetIdPrefix}
+                    onCategoryClick={() => props.onCategoryClick(category.id)}
+                    onItemSelect={props.onItemSelect}
+                    onItemRemove={props.onItemRemove}
+                    onToggleExpanded={props.onToggleExpanded}
+                    t={props.t}
+                />
+            ))}
+        </div>
+    );
+}
+
+function getUnansweredSlotCount({ categoryId, question, placedItemIds, feedbackMode }) {
+    if (!feedbackMode) {
+        return 0;
+    }
+
+    return getExpectedCategoryItemIds(question, categoryId)
+        .filter((itemId) => !placedItemIds.has(itemId)).length;
+}
+
+function getCategoryGridClassName(categoryCount) {
+    let className = "drag-categorize-category-grid";
+
+    if (categoryCount > 4) {
+        className += " drag-categorize-category-grid-transposable";
+    }
+
+    return className;
+}

@@ -1,6 +1,6 @@
 // test/ui/QuestionCard/matrixPlacementAnswerLogic.test.js
 import { describe, expect, test } from "@jest/globals";
-import { getMatrixAxis, getMatrixQuadrantsForDisplay, normalizeMatrixPlacementAnswer, placeItemInQuadrant } from "../../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Utils/matrixPlacementAnswerLogic.js";
+import { getMatrixAxis, getMatrixQuadrantsForDisplay, normalizeMatrixPlacementAnswer, placeItemInQuadrant } from "../../../src/ui/view/components/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/Utils/matrixPlacementAnswerLogic.js";
 
 describe("matrixPlacementAnswerLogic", () => {
 

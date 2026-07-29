@@ -1,0 +1,864 @@
+/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/CategorySort/category-sort.css */
+.drag-categorize-question {
+    display: grid;
+    gap: 16px;
+}
+
+.drag-categorize-question .drag-drop-summary {
+    justify-self: end;
+}
+
+.drag-categorize-item-bank {
+    --drag-categorize-bank-card-min-width: 180px;
+    --drag-categorize-bank-card-max-width: 300px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-strong) 76%, transparent);
+    box-shadow: 0 10px 28px rgba(18, 38, 63, 0.04);
+    padding: 14px 16px;
+}
+
+.drag-categorize-item-bank-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.drag-categorize-item-bank-title {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 0.98rem;
+    font-weight: 950;
+}
+
+.drag-categorize-item-bank-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-soft);
+}
+
+.drag-categorize-item-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.drag-categorize-item-card,
+.drag-categorize-placed-card {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 50px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-strong) 94%, transparent);
+    color: var(--text-main);
+    cursor: grab;
+    box-shadow: 0 8px 18px rgba(18, 38, 63, 0.06);
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.84rem;
+    font-weight: 850;
+    line-height: 1.22;
+    transition:
+        border-color var(--transition-fast),
+        background var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.drag-categorize-item-card-text,
+.drag-categorize-placed-card-text {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+    text-wrap: pretty;
+}
+
+.drag-categorize-item-card {
+    inline-size: fit-content;
+    min-inline-size: min(100%, var(--drag-categorize-bank-card-min-width));
+    max-inline-size: min(100%, var(--drag-categorize-bank-card-max-width));
+    flex: 0 1 auto;
+}
+
+.drag-categorize-item-card-short {
+    --drag-categorize-bank-card-min-width: 170px;
+    --drag-categorize-bank-card-max-width: 220px;
+}
+
+.drag-categorize-item-card-medium {
+    --drag-categorize-bank-card-min-width: 210px;
+    --drag-categorize-bank-card-max-width: 280px;
+}
+
+.drag-categorize-item-card-long {
+    --drag-categorize-bank-card-min-width: 260px;
+    --drag-categorize-bank-card-max-width: 320px;
+}
+
+.drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-min-width: 300px;
+    --drag-categorize-bank-card-max-width: 360px;
+}
+
+.drag-categorize-item-card:hover,
+.drag-categorize-item-card:focus-visible,
+.drag-categorize-placed-card:hover,
+.drag-categorize-placed-card:focus-visible {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+    outline: none;
+}
+
+.drag-categorize-item-card:active,
+.drag-categorize-placed-card:active {
+    cursor: grabbing;
+}
+
+.drag-categorize-item-card-selected,
+.drag-categorize-placed-card-selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.drag-categorize-item-card-dragging,
+.drag-categorize-placed-card-dragging {
+    opacity: 0.46;
+    transform: scale(0.985);
+}
+
+.drag-categorize-drag-overlay-card {
+    inline-size: max-content;
+    max-inline-size: min(280px, 82vw);
+    opacity: 0.96;
+    pointer-events: none;
+    transform: rotate(-1deg);
+}
+
+.drag-categorize-item-list-over {
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--accent-soft) 32%, transparent);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.drag-categorize-item-card-disabled {
+    cursor: default;
+}
+
+.drag-categorize-item-card-disabled:hover,
+.drag-categorize-item-card-disabled:focus-visible {
+    transform: none;
+    border-color: var(--line);
+    box-shadow: none;
+}
+
+.drag-categorize-item-card-grip,
+.drag-categorize-placed-card-grip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 18px;
+    flex: 0 0 auto;
+    color: var(--drag-categorize-grip-bg);
+    opacity: 0.72;
+}
+
+.drag-categorize-placed-card-grip {
+    margin-top: 2px;
+}
+
+.drag-categorize-item-bank-hint {
+    margin: 12px 0 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.drag-categorize-category-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        var(--drag-categorize-category-count, 4),
+        minmax(var(--drag-categorize-category-min-width, 190px), 1fr)
+    );
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--panel-strong) 74%, transparent);
+    --drag-categorize-placed-font-size: 0.8rem;
+    --drag-categorize-placed-line-height: 1.22;
+    --drag-categorize-placed-padding: 10px 34px 10px 10px;
+    --drag-categorize-placed-gap: 8px;
+    --drag-categorize-placed-grip-width: 16px;
+}
+
+.drag-categorize-category-column {
+    min-width: 0;
+    border-right: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+}
+
+.drag-categorize-category-column:last-child {
+    border-right: 0;
+}
+
+.drag-categorize-category-header {
+    display: grid;
+    min-height: 56px;
+    place-items: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    background: var(--drag-categorize-category-header-bg);
+    color: var(--text-main);
+    padding: 12px 14px;
+    text-align: center;
+    font-size: 0.86rem;
+    font-weight: 950;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+    text-wrap: balance;
+}
+
+
+.drag-categorize-drop-zone {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    min-height: 138px;
+    padding: 12px 14px 14px;
+    cursor: pointer;
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.drag-categorize-drop-zone:focus-visible,
+.drag-categorize-drop-zone-over {
+    background: color-mix(in srgb, var(--accent-soft) 36%, transparent);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    outline: none;
+}
+
+.drag-categorize-placed-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--drag-categorize-placed-grip-width) minmax(0, 1fr);
+    align-items: start;
+    min-height: 56px;
+    gap: var(--drag-categorize-placed-gap);
+    background: color-mix(in srgb, var(--panel-strong) 88%, transparent);
+    box-shadow: 0 8px 18px rgba(18, 38, 63, 0.05);
+    padding: var(--drag-categorize-placed-padding);
+    font-size: var(--drag-categorize-placed-font-size);
+    line-height: var(--drag-categorize-placed-line-height);
+}
+
+.drag-categorize-placed-card-remove {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.drag-categorize-placed-card-remove:hover,
+.drag-categorize-placed-card-remove:focus-visible {
+    background: var(--danger-soft);
+    color: var(--danger-text);
+    outline: none;
+}
+
+.drag-categorize-empty-slot {
+    display: grid;
+    min-height: 46px;
+    place-items: center;
+    border: 1px dashed color-mix(in srgb, var(--accent) 34%, var(--line));
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-bg) 72%, transparent);
+    color: var(--text-soft);
+    font-size: 0.86rem;
+    font-weight: 850;
+}
+
+.drag-categorize-drop-zone:not(.drag-categorize-drop-zone-empty) .drag-categorize-empty-slot {
+    min-height: 42px;
+    opacity: 0.72;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-long {
+    --drag-categorize-bank-card-max-width: 340px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-max-width: 380px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-category-grid {
+    --drag-categorize-category-min-width: 220px;
+    --drag-categorize-placed-font-size: clamp(0.68rem, 0.62rem + 0.22vw, 0.76rem);
+    --drag-categorize-placed-line-height: 1.14;
+    --drag-categorize-placed-padding: 9px 30px 9px 8px;
+    --drag-categorize-placed-gap: 6px;
+    --drag-categorize-placed-grip-width: 14px;
+}
+
+.exam-workspace-extra-wide-question-mode .drag-categorize-item-card-extra-long {
+    --drag-categorize-bank-card-max-width: 420px;
+}
+
+.exam-workspace-extra-wide-question-mode .drag-categorize-category-grid {
+    --drag-categorize-category-min-width: 240px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-category-header {
+    min-height: 52px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    line-height: 1.13;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-drop-zone {
+    gap: 9px;
+    padding: 10px 12px 12px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card {
+    min-height: 48px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-grip {
+    width: 15px;
+    height: 15px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-placed-card-remove {
+    right: 5px;
+    width: 21px;
+    height: 21px;
+    --dnd-clear-button-icon-size: 14px;
+}
+
+.exam-workspace-dense-drag-categorize-mode .drag-categorize-empty-slot {
+    min-height: 42px;
+    font-size: 0.8rem;
+}
+
+.drag-categorize-question-feedback .drag-categorize-item-bank {
+    padding: 14px 16px;
+}
+
+.drag-categorize-item-bank-feedback .drag-categorize-feedback-card {
+    flex: 0 1 auto;
+    inline-size: fit-content;
+    min-inline-size: min(100%, 240px);
+    max-inline-size: min(100%, 520px);
+}
+
+.drag-categorize-item-bank-feedback .drag-categorize-feedback-title {
+    max-inline-size: 46ch;
+}
+
+.drag-categorize-empty-slot-feedback {
+    border-color: color-mix(in srgb, var(--danger) 22%, var(--line));
+    background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+    color: var(--text-soft);
+    font-style: italic;
+}
+
+.drag-categorize-question-feedback .drag-categorize-drop-zone {
+    min-height: 130px;
+}
+
+.drag-categorize-feedback-card {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-strong) 72%, transparent);
+}
+
+.drag-categorize-feedback-card-correct {
+    border-color: var(--success-border);
+    background: color-mix(in srgb, var(--success-soft) 62%, var(--panel-strong));
+}
+
+.drag-categorize-feedback-card-wrong {
+    border-color: var(--danger-border);
+    background: color-mix(in srgb, var(--danger-soft) 62%, var(--panel-strong));
+}
+
+.drag-categorize-feedback-main {
+    display: grid;
+    min-height: 52px;
+    gap: 8px;
+    padding: 10px 12px;
+}
+
+.drag-categorize-feedback-title-row,
+.drag-categorize-feedback-actions {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 8px;
+}
+
+.drag-categorize-feedback-title-row {
+    align-items: flex-start;
+}
+
+.drag-categorize-feedback-actions {
+    justify-content: center;
+    padding-top: 6px;
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.drag-categorize-feedback-title {
+    overflow-wrap: anywhere;
+    color: var(--text-main);
+    font-size: 0.88rem;
+    font-weight: 950;
+    line-height: 1.25;
+}
+
+.drag-categorize-feedback-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+}
+
+.drag-categorize-feedback-card-correct .drag-categorize-feedback-icon,
+.drag-categorize-feedback-card-correct .drag-categorize-feedback-status,
+.drag-categorize-feedback-card-correct .drag-drop-feedback-expand {
+    color: var(--success-text);
+}
+
+.drag-categorize-feedback-card-wrong .drag-categorize-feedback-icon,
+.drag-categorize-feedback-card-wrong .drag-categorize-feedback-status,
+.drag-categorize-feedback-card-wrong .drag-drop-feedback-expand {
+    color: var(--danger-text);
+}
+
+.drag-categorize-feedback-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 950;
+}
+
+@media (max-width: 1600px) {
+    .drag-categorize-category-grid-transposable {
+        display: block;
+        overflow-x: visible;
+        overflow-y: visible;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-column {
+        display: grid;
+        grid-template-columns: minmax(170px, 230px) minmax(0, 1fr);
+        border-right: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-column:last-child {
+        border-bottom: 0;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-header {
+        min-height: 100%;
+        border-right: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+        border-bottom: 0;
+        padding: 14px 12px;
+        font-size: 0.78rem;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-drop-zone {
+        min-height: 78px;
+        padding: 12px 14px;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-drop-zone-empty {
+        align-content: center;
+    }
+}
+
+@media (max-width: 880px) {
+    .drag-categorize-category-grid-transposable .drag-categorize-category-column {
+        display: block;
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-category-header {
+        min-height: 48px;
+        border-right: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    }
+
+    .drag-categorize-category-grid-transposable .drag-categorize-drop-zone {
+        min-height: 96px;
+    }
+}
+
+@media (max-width: 1180px) {
+    .drag-categorize-item-card-long,
+    .drag-categorize-item-card-extra-long {
+        --drag-categorize-bank-card-max-width: 420px;
+    }
+}
+
+@media (max-width: 760px) {
+    .drag-categorize-question .drag-drop-summary {
+        justify-self: stretch;
+    }
+
+    .drag-categorize-item-card,
+    .drag-categorize-item-bank-feedback .drag-categorize-feedback-card {
+        inline-size: 100%;
+        max-inline-size: 100%;
+    }
+}
+
+
+@media (min-width: 933px) {
+    .drag-categorize-item-card {
+        inline-size: fit-content(var(--drag-categorize-bank-card-max-width));
+    }
+
+    .drag-categorize-item-bank-placeholder {
+        inline-size: min(100%, 220px);
+        flex: 0 1 220px;
+    }
+}
+
+/* CategorySort SSOT card language and mobile board layout */
+.drag-categorize-question {
+    --drag-categorize-board-border: var(--dnd-board-border);
+    --drag-categorize-board-bg: var(--dnd-board-bg);
+    --drag-categorize-category-header-bg: var(--dnd-board-header-bg);
+    --drag-categorize-card-border: var(--dnd-card-border);
+    --drag-categorize-card-bg: var(--dnd-card-bg);
+    --drag-categorize-card-shadow: var(--dnd-card-shadow);
+    --drag-categorize-grip-bg: var(--dnd-grip);
+    --drag-categorize-drop-border: var(--dnd-drop-border);
+    --drag-categorize-drop-over-border: var(--dnd-drop-over-border);
+    --drag-categorize-drop-bg: var(--dnd-drop-bg);
+    --drag-categorize-placed-border: var(--dnd-active-border);
+    --drag-categorize-placed-bg: var(--dnd-active-bg-compact);
+    --drag-categorize-placed-color: var(--dnd-on-active);
+    --drag-categorize-placed-shadow: var(--dnd-active-shadow-compact);
+    --drag-categorize-placed-hover-ring: var(--dnd-active-hover-ring);
+    --drag-categorize-placed-grip-bg: var(--dnd-on-active-muted);
+}
+
+.drag-categorize-item-bank {
+    background: var(--drag-categorize-board-bg);
+}
+
+.drag-categorize-item-list {
+    align-items: stretch;
+}
+
+.drag-categorize-item-card,
+.drag-categorize-placed-card {
+    position: relative;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    border-color: var(--drag-categorize-card-border);
+    background: var(--drag-categorize-card-bg);
+    box-shadow: var(--drag-categorize-card-shadow);
+}
+
+
+.drag-categorize-placed-card {
+    border: 2px solid var(--drag-categorize-placed-border);
+    border-radius: 12px;
+    background: var(--drag-categorize-placed-bg);
+    box-shadow: var(--drag-categorize-placed-shadow);
+    color: var(--drag-categorize-placed-color);
+    font-weight: 950;
+}
+
+.drag-categorize-placed-card:hover,
+.drag-categorize-placed-card:focus-visible,
+.drag-categorize-placed-card-selected {
+    border-color: color-mix(in srgb, var(--drag-categorize-placed-border) 82%, white);
+    background: var(--drag-categorize-placed-bg);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+        0 0 0 4px var(--drag-categorize-placed-hover-ring),
+        var(--drag-categorize-placed-shadow);
+    color: var(--drag-categorize-placed-color);
+}
+
+.drag-categorize-placed-card-grip {
+    color: var(--drag-categorize-placed-grip-bg);
+}
+
+.drag-categorize-placed-card-remove {
+    background: var(--dnd-active-clear-bg);
+    color: var(--dnd-on-active);
+}
+
+.drag-categorize-placed-card-remove:hover,
+.drag-categorize-placed-card-remove:focus-visible {
+    background: var(--dnd-active-clear-bg-hover);
+    color: var(--dnd-on-active);
+}
+
+.drag-categorize-item-bank-placeholder {
+    display: grid;
+    min-height: 50px;
+    place-items: center;
+    border: 1px dashed color-mix(in srgb, var(--accent) 62%, var(--line));
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--accent-soft) 22%, transparent);
+    color: var(--text-muted);
+    padding: 10px 12px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 850;
+    line-height: 1.25;
+}
+
+.drag-categorize-item-list-over .drag-categorize-item-bank-placeholder {
+    border-color: var(--drag-categorize-drop-over-border);
+    background: color-mix(in srgb, var(--accent-soft) 56%, transparent);
+    color: var(--accent);
+}
+
+@media (max-width: 932px) {
+    .drag-categorize-question:not(.drag-categorize-question-feedback) {
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.55fr);
+        gap: 18px;
+        align-items: start;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-grid {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        border: 1px solid var(--drag-categorize-board-border);
+        border-radius: 17px;
+        background: var(--drag-categorize-board-bg);
+        padding: 20px 14px 16px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        overflow: visible;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-column,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-column:last-child {
+        overflow: hidden;
+        border: 1px solid var(--drag-categorize-board-border);
+        border-radius: 13px;
+        background: color-mix(in srgb, var(--panel-strong) 64%, transparent);
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-header {
+        display: block;
+        min-height: 0;
+        border: 0;
+        background: transparent;
+        padding: 16px 14px 10px;
+        text-align: left;
+        font-size: 0.88rem;
+        line-height: 1.25;
+        letter-spacing: 0.05em;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-drop-zone {
+        gap: 10px;
+        min-height: 0;
+        padding: 0 14px 12px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-empty-slot {
+        min-height: 62px;
+        border: 2px dashed var(--drag-categorize-drop-border);
+        border-radius: 11px;
+        background: var(--drag-categorize-drop-bg);
+        color: var(--text-muted);
+        font-size: 0.86rem;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-drop-zone-over .drag-categorize-empty-slot,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-drop-zone:focus-visible .drag-categorize-empty-slot {
+        border-color: var(--drag-categorize-drop-over-border);
+        background: color-mix(in srgb, var(--accent-soft) 48%, transparent);
+        box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-list {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        min-width: 0;
+        max-width: 100%;
+        gap: 12px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank-placeholder {
+        inline-size: 100%;
+        min-inline-size: 0;
+        max-inline-size: 100%;
+        min-height: 78px;
+        box-sizing: border-box;
+        border-radius: 13px;
+        overflow: hidden;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card {
+        display: grid;
+        grid-template-columns: 10px minmax(0, 1fr);
+        align-items: center;
+        gap: 8px;
+        padding: 14px 12px;
+        font-size: 0.84rem;
+        line-height: 1.3;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card-text {
+        min-width: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: normal;
+        hyphens: auto;
+        text-wrap: pretty;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card-grip {
+        position: static;
+        width: 10px;
+        height: 15px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card {
+        grid-template-columns: 16px minmax(0, 1fr) 24px;
+        align-items: center;
+        min-height: 68px;
+        border-radius: 11px;
+        padding: 12px 10px 12px 14px;
+        font-size: 0.86rem;
+        line-height: 1.25;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-remove {
+        position: static;
+        transform: none;
+    }
+}
+
+@media (max-width: 680px) {
+    .drag-categorize-question:not(.drag-categorize-question-feedback) {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.22fr);
+        gap: 12px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-grid {
+        padding: 16px 10px 12px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank-title,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-header {
+        font-size: 0.78rem;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank-placeholder {
+        min-height: 70px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card {
+        font-size: 0.76rem;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card {
+        grid-template-columns: 9px minmax(0, 1fr);
+        gap: 7px;
+        padding-inline: 10px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank-hint {
+        font-size: 0.68rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .drag-categorize-question:not(.drag-categorize-question-feedback) {
+        grid-template-columns: minmax(0, 1.04fr) minmax(0, 1.18fr);
+        gap: 10px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-category-grid {
+        padding: 14px 8px 10px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card,
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-bank-placeholder {
+        min-height: 64px;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card {
+        grid-template-columns: 8px minmax(0, 1fr);
+        gap: 6px;
+        padding-inline: 9px;
+        font-size: 0.72rem;
+        line-height: 1.28;
+    }
+
+    .drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-item-card-grip {
+        width: 8px;
+    }
+}
+
+/* Placed cards share the global DnD active-card language. */
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card {
+    border-color: var(--drag-categorize-placed-border);
+    background: var(--drag-categorize-placed-bg);
+    box-shadow: var(--drag-categorize-placed-shadow);
+}
+
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card:hover,
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card:focus-visible,
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-selected {
+    border-color: color-mix(in srgb, var(--drag-categorize-placed-border) 82%, white);
+    background: var(--drag-categorize-placed-bg);
+    box-shadow:
+        0 0 0 4px var(--drag-categorize-placed-hover-ring),
+        var(--drag-categorize-placed-shadow);
+}
+
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-remove {
+    background: color-mix(in srgb, var(--dnd-on-active) 18%, transparent);
+    color: var(--dnd-on-active);
+}
+
+.drag-categorize-question:not(.drag-categorize-question-feedback) .drag-categorize-placed-card-grip {
+    color: var(--dnd-on-active-muted);
+}

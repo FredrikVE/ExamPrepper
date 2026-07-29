@@ -1,7 +1,7 @@
 // test/utils/questionUtils.test.js
 import { describe, expect, test } from "@jest/globals";
-import { isInlineBlankPart, splitPromptByInlineBlank } from "../../src/ui/view/components/ExamPage/QuestionCard/QuestionTypes/FillBlankInputField/Utils/fillBlankPromptUtils.js";
-import { getExtendedExplanationImages, getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/ExamPage/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";
+import { isInlineBlankPart, splitPromptByInlineBlank } from "../../src/ui/view/components/QuestionCard/QuestionTypes/FillBlankInputField/Utils/fillBlankPromptUtils.js";
+import { getExtendedExplanationImages, getExtendedExplanationPoints, hasExtendedExplanation } from "../../src/ui/view/components/QuestionCard/AnswerCard/Utils/answerOptionCardView.js";
 import { getQuestionViewState, isDropdownFillQuestion, isFillQuestion, isMatrixPlacementQuestion, isRadioButtonGridQuestion, hasInlineFillBlank } from "../../src/ui/viewmodel/Utils/questionCardViewState.js";
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";
 

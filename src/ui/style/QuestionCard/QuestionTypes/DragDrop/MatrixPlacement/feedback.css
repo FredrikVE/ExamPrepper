@@ -1,0 +1,155 @@
+/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/MatrixPlacement/feedback.css */
+.matrix-placement-answer-key-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    border: 1px dashed color-mix(in srgb, var(--text-main) 72%, var(--line));
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--success-soft) 20%, var(--panel-strong));
+    color: var(--text-main);
+    padding: 10px 12px;
+}
+
+.matrix-placement-answer-key-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.matrix-placement-answer-key-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    color: color-mix(in srgb, var(--success-text) 82%, var(--text-muted));
+}
+
+.matrix-placement-answer-key-title {
+    min-width: 0;
+    overflow-wrap: break-word;
+    color: var(--text-main);
+    font-size: 0.82rem;
+    font-weight: 900;
+    line-height: 1.25;
+}
+
+.matrix-placement-answer-key-pill {
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--success-soft) 32%, var(--panel-strong));
+    color: color-mix(in srgb, var(--success-text) 76%, var(--text-muted));
+    padding: 4px 8px;
+    font-size: 0.68rem;
+    font-weight: 950;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.matrix-placement-feedback-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xs);
+    background: color-mix(in srgb, var(--panel-strong) 90%, transparent);
+    color: var(--text-main);
+    box-shadow: 0 8px 18px rgba(18, 38, 63, 0.05);
+    overflow: hidden;
+}
+
+.matrix-placement-feedback-card-correct {
+    border-color: var(--success-border);
+    background: color-mix(in srgb, var(--success-soft) 62%, var(--panel-strong));
+}
+
+.matrix-placement-feedback-card-wrong {
+    border-color: var(--danger-border);
+    background: color-mix(in srgb, var(--danger-soft) 62%, var(--panel-strong));
+}
+
+.matrix-placement-feedback-card-unanswered {
+    border-style: dashed;
+    border-color: var(--warning-border);
+    background: color-mix(in srgb, var(--warning-soft) 44%, var(--panel-strong));
+}
+
+.matrix-placement-feedback-card-user-placement {
+    border-color: color-mix(in srgb, var(--accent) 78%, #2563eb);
+    box-shadow:
+        0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent),
+        0 8px 18px rgba(18, 38, 63, 0.06);
+}
+
+.matrix-placement-feedback-card-user-placement.matrix-placement-feedback-card-correct,
+.matrix-placement-feedback-card-user-placement.matrix-placement-feedback-card-wrong {
+    border-width: 2px;
+}
+
+.matrix-placement-feedback-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+}
+
+.matrix-placement-feedback-title-row,
+.matrix-placement-feedback-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.matrix-placement-feedback-actions {
+    justify-content: flex-end;
+}
+
+.matrix-placement-feedback-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+}
+
+.matrix-placement-feedback-card-correct .matrix-placement-feedback-icon,
+.matrix-placement-feedback-card-correct .matrix-placement-feedback-status {
+    color: var(--success-text);
+}
+
+.matrix-placement-feedback-card-wrong .matrix-placement-feedback-icon,
+.matrix-placement-feedback-card-wrong .matrix-placement-feedback-status {
+    color: var(--danger-text);
+}
+
+.matrix-placement-feedback-card-unanswered .matrix-placement-feedback-icon,
+.matrix-placement-feedback-card-unanswered .matrix-placement-feedback-status {
+    color: var(--warning-text);
+}
+
+.matrix-placement-feedback-title {
+    min-width: 0;
+    overflow-wrap: break-word;
+    color: var(--text-main);
+    font-size: 0.82rem;
+    font-weight: 900;
+    line-height: 1.25;
+}
+
+.matrix-placement-feedback-status {
+    font-size: 0.72rem;
+    font-weight: 950;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.matrix-placement-feedback-explanation .drag-drop-feedback-explanation {
+    border-top: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+}
+
+.matrix-placement-feedback-selected-answer {
+    margin: 0;
+    border-top: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+    padding: 12px 14px 0;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    line-height: 1.45;
+}

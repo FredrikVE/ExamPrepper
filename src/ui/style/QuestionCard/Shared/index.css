@@ -1,0 +1,5 @@
+/* src/ui/style/QuestionCard/Shared/index.css */
+@import "./base.css";
+@import "./header.css";
+@import "./prompt.css";
+@import "./Feedback/index.css";

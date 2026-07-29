@@ -1,0 +1,405 @@
+/* src/ui/style/QuestionCard/QuestionTypes/DragDrop/TableMatch/table-match-mobile.css */
+.table-match-mobile-board {
+	display: none;
+}
+
+@media (max-width: 932px) {
+	.table-match-desktop-board {
+		display: none;
+	}
+
+	.table-match-mobile-board {
+		--table-match-mobile-column-border: var(--dnd-board-border);
+		--table-match-mobile-column-bg: var(--dnd-board-bg);
+		--table-match-mobile-card-border: var(--dnd-card-border);
+		--table-match-mobile-card-bg: var(--dnd-card-bg);
+		--table-match-mobile-card-shadow: var(--dnd-card-shadow);
+		--table-match-mobile-card-hover-bg: var(--dnd-card-hover-bg);
+		--table-match-mobile-card-hover-shadow: var(--dnd-card-hover-shadow);
+		--table-match-mobile-overlay-shadow: var(--dnd-overlay-shadow);
+		--table-match-mobile-grip-bg: var(--dnd-grip);
+		--table-match-mobile-target-border: var(--dnd-target-border);
+		--table-match-mobile-target-bg: var(--dnd-target-bg);
+		--table-match-mobile-target-hover-bg: var(--dnd-target-hover-bg);
+		--table-match-mobile-drop-border: var(--dnd-drop-border);
+		--table-match-mobile-drop-bg: var(--dnd-drop-target-bg);
+		--table-match-mobile-drop-hover-bg: var(--dnd-drop-target-hover-bg);
+		--table-match-mobile-filled-border: var(--dnd-active-border);
+		--table-match-mobile-filled-bg: transparent;
+		--table-match-mobile-filled-card-bg: var(--dnd-active-bg);
+		--table-match-mobile-filled-card-color: var(--dnd-on-active);
+		--table-match-mobile-filled-shadow: var(--dnd-active-shadow);
+		--table-match-mobile-filled-card-inset: var(--dnd-active-inset);
+		--table-match-mobile-filled-grip-bg: var(--dnd-on-active-muted);
+		--table-match-mobile-filled-clear-bg: var(--dnd-active-clear-bg);
+		--table-match-mobile-filled-clear-color: var(--dnd-on-active);
+		--table-match-mobile-clear-bg: var(--dnd-clear-bg);
+
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.35fr);
+		gap: 18px;
+		margin-bottom: 20px;
+		-webkit-user-select: none;
+		user-select: none;
+	}
+
+
+	.table-match-mobile-column {
+		box-sizing: border-box;
+		min-width: 0;
+		border: 1px solid var(--table-match-mobile-column-border);
+		border-radius: 17px;
+		background: var(--table-match-mobile-column-bg);
+		padding: 20px 14px 16px;
+	}
+
+	.table-match-mobile-column-title {
+		margin: 0 0 16px 4px;
+		color: var(--text-main);
+		font-size: 1rem;
+		font-weight: 950;
+		line-height: 1;
+	}
+
+	.table-match-mobile-card-list,
+	.table-match-mobile-target-list {
+		display: grid;
+		gap: 12px;
+	}
+
+	.table-match-mobile-card-list-over {
+		border-radius: 13px;
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+	}
+
+	.table-match-mobile-card {
+		box-sizing: border-box;
+		position: relative;
+		min-width: 0;
+		max-width: 100%;
+		-webkit-user-select: none;
+		user-select: none;
+		touch-action: none;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		width: 100%;
+		min-height: 72px;
+		border: 1px solid var(--table-match-mobile-card-border);
+		border-radius: 13px;
+		background: var(--table-match-mobile-card-bg);
+		box-shadow: var(--table-match-mobile-card-shadow);
+		color: var(--text-main);
+		cursor: grab;
+		padding: 16px 44px 16px 14px;
+		text-align: left;
+		font-size: 0.98rem;
+		font-weight: 850;
+		line-height: 1.35;
+		transition:
+			border-color var(--transition-fast),
+			background var(--transition-fast),
+			box-shadow var(--transition-fast),
+			transform var(--transition-fast);
+	}
+
+	.table-match-mobile-card:hover,
+	.table-match-mobile-card:focus-visible,
+	.table-match-mobile-card-selected {
+		border-color: color-mix(in srgb, var(--accent) 78%, rgba(155, 101, 255, 0.8));
+		background: var(--table-match-mobile-card-hover-bg);
+		box-shadow: var(--table-match-mobile-card-hover-shadow);
+		outline: none;
+		transform: translateY(-1px);
+	}
+
+	.table-match-mobile-card:active {
+		cursor: grabbing;
+	}
+
+	.table-match-mobile-card-dragging {
+		border-style: dashed;
+		opacity: 0.35;
+		transform: none;
+	}
+
+	.dnd-drag-overlay .table-match-mobile-card {
+		width: 100%;
+		min-height: inherit;
+		box-shadow: var(--table-match-mobile-overlay-shadow);
+		border-color: color-mix(in srgb, var(--accent) 82%, rgba(155, 101, 255, 0.8));
+		cursor: grabbing;
+		transform: scale(1.03);
+	}
+
+	.table-match-mobile-card-text {
+		min-width: 0;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.table-match-mobile-card-grip {
+		position: absolute;
+		right: 16px;
+		top: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 34px;
+		color: var(--table-match-mobile-grip-bg);
+		opacity: 0.78;
+		transform: translateY(-50%);
+	}
+
+	.table-match-mobile-target-card {
+		box-sizing: border-box;
+		min-width: 0;
+		border: 1px solid var(--table-match-mobile-target-border);
+		border-radius: 13px;
+		background: var(--table-match-mobile-target-bg);
+		box-shadow: var(--table-match-mobile-card-shadow);
+		cursor: pointer;
+		padding: 18px 14px 14px;
+		transition:
+			border-color var(--transition-fast),
+			background var(--transition-fast),
+			box-shadow var(--transition-fast);
+	}
+
+	.table-match-mobile-target-card:hover,
+	.table-match-mobile-target-card:focus-visible,
+	.table-match-mobile-target-card-over {
+		border-color: var(--dnd-drop-over-border);
+		background: var(--table-match-mobile-target-hover-bg);
+		box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
+		outline: none;
+	}
+
+	.table-match-mobile-target-description {
+		min-width: 0;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+		color: var(--text-main);
+		font-size: 1rem;
+		font-weight: 700;
+		line-height: 1.45;
+	}
+
+	.table-match-mobile-drop-zone {
+		box-sizing: border-box;
+		display: grid;
+		min-width: 0;
+		max-width: 100%;
+		-webkit-user-select: none;
+		user-select: none;
+		place-items: center;
+		min-height: 60px;
+		margin-top: 14px;
+		border: 2px dashed var(--table-match-mobile-drop-border);
+		border-radius: 11px;
+		background: var(--table-match-mobile-drop-bg);
+		color: var(--text-muted);
+		cursor: pointer;
+		padding: 8px 12px;
+		text-align: center;
+		transition:
+			border-color var(--transition-fast),
+			background var(--transition-fast),
+			box-shadow var(--transition-fast);
+	}
+
+	.table-match-mobile-drop-zone:hover,
+	.table-match-mobile-drop-zone:focus-visible,
+	.table-match-mobile-drop-zone-armed,
+	.table-match-mobile-drop-zone-over {
+		border-color: var(--dnd-drop-over-border);
+		background: var(--table-match-mobile-drop-hover-bg);
+		box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
+		outline: none;
+	}
+
+	.table-match-mobile-drop-zone-filled {
+		display: flex;
+		align-items: stretch;
+		min-height: 72px;
+		border: 0;
+		background: var(--table-match-mobile-filled-bg);
+		box-shadow: none;
+		padding: 0;
+		text-align: left;
+	}
+
+	.table-match-mobile-filled-target {
+		position: relative;
+		display: flex;
+		align-items: stretch;
+		width: 100%;
+		min-height: inherit;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card {
+		width: 100%;
+		min-height: inherit;
+		border: 2px solid var(--table-match-mobile-filled-border);
+		border-radius: 11px;
+		background: var(--table-match-mobile-filled-card-bg);
+		box-shadow:
+			var(--table-match-mobile-filled-card-inset),
+			var(--table-match-mobile-filled-shadow);
+		color: var(--table-match-mobile-filled-card-color);
+		padding: 16px 78px 16px 16px;
+		font-size: 0.94rem;
+		font-weight: 950;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card:hover,
+	.table-match-mobile-filled-target .table-match-mobile-card:focus-visible {
+		border-color: color-mix(in srgb, var(--table-match-mobile-filled-border) 82%, white);
+		background: var(--table-match-mobile-filled-card-bg);
+		box-shadow:
+			var(--table-match-mobile-filled-card-inset),
+			0 0 0 4px color-mix(in srgb, var(--accent) 26%, transparent),
+			var(--table-match-mobile-filled-shadow);
+		transform: none;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card-grip {
+		right: 46px;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card-grip {
+		color: var(--table-match-mobile-filled-grip-bg);
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-clear-button {
+		border: 1px solid rgba(255, 255, 255, 0.22);
+		background: var(--table-match-mobile-filled-clear-bg);
+		color: var(--table-match-mobile-filled-clear-color);
+	}
+
+	.table-match-mobile-clear-button {
+		position: absolute;
+		right: 10px;
+		top: 50%;
+		width: 30px;
+		height: 30px;
+		border: 0;
+		background: var(--table-match-mobile-clear-bg);
+		color: var(--text-muted);
+		transform: translateY(-50%);
+	}
+
+	.table-match-mobile-clear-button:hover,
+	.table-match-mobile-clear-button:focus-visible {
+		background: var(--danger-soft);
+		color: var(--danger-text);
+		outline: none;
+	}
+
+
+	.table-match-mobile-drop-label {
+		font-size: 0.94rem;
+		font-weight: 900;
+		line-height: 1.35;
+	}
+}
+
+@media (max-width: 680px) {
+	.table-match-mobile-board {
+		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+		gap: 12px;
+	}
+
+	.table-match-mobile-column {
+		padding: 16px 10px 12px;
+	}
+
+	.table-match-mobile-column-title {
+		font-size: 0.88rem;
+	}
+
+	.table-match-mobile-card {
+		min-height: 64px;
+		padding: 13px 34px 13px 10px;
+		font-size: 0.82rem;
+	}
+
+	.table-match-mobile-card-grip {
+		right: 10px;
+		width: 18px;
+		height: 28px;
+	}
+
+	.table-match-mobile-target-card {
+		padding: 14px 10px 10px;
+	}
+
+	.table-match-mobile-target-description {
+		font-size: 0.86rem;
+	}
+
+	.table-match-mobile-drop-zone {
+		min-height: 54px;
+		padding: 7px 9px;
+	}
+
+	.table-match-mobile-drop-zone-filled {
+		min-height: 66px;
+		padding: 0;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card {
+		min-height: inherit;
+	}
+
+	.table-match-mobile-drop-label {
+		font-size: 0.82rem;
+	}
+}
+
+@media (max-width: 420px) {
+	.table-match-mobile-board {
+		gap: 10px;
+	}
+
+	.table-match-mobile-column {
+		padding: 14px 8px 10px;
+	}
+
+	.table-match-mobile-card,
+	.table-match-mobile-filled-target .table-match-mobile-card {
+		min-height: 58px;
+		padding: 12px 30px 12px 9px;
+		font-size: 0.76rem;
+	}
+
+	.table-match-mobile-drop-zone-filled {
+		min-height: 58px;
+		padding: 0;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card {
+		min-height: inherit;
+		padding-right: 52px;
+	}
+
+	.table-match-mobile-filled-target .table-match-mobile-card-grip {
+		right: 33px;
+	}
+
+	.table-match-mobile-clear-button {
+		right: 6px;
+		width: 26px;
+		height: 26px;
+	}
+
+	.table-match-mobile-target-card {
+		padding: 12px 8px 8px;
+	}
+
+	.table-match-mobile-target-description {
+		font-size: 0.8rem;
+	}
+}

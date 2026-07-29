@@ -1,0 +1,77 @@
+// src/ui/view/components/QuestionCard/QuestionTypes/ChoiceShared/ChoiceOptionList.jsx
+import isOptionSelected from "./Utils/isOptionSelected.js";
+import AnswerOptionCard from "../../AnswerCard/AnswerOptionCard.jsx";
+import ChoiceSelectableOption from "./ChoiceSelectableOption.jsx";
+
+export default function ChoiceOptionList({ question, answer, answerOptionOrder, submitted, showAllFeedback, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, inputType, t }) {
+    const feedbackMode = submitted && showAllFeedback;
+    const optionItems = createOptionDisplayItems(question, answerOptionOrder);
+
+    const listClassName = feedbackMode
+        ? "question-card-option-list question-card-answer-card-list"
+        : "question-card-option-list";
+
+    return (
+        <div className={listClassName}>
+            {optionItems.map(({ option, optionIndex, displayIndex }) => {
+                const selected = isOptionSelected(inputType, answer, optionIndex);
+
+                if (feedbackMode) {
+                    return (
+                        <AnswerOptionCard
+                            key={optionIndex}
+                            questionId={question.id}
+                            option={option}
+                            optionIndex={optionIndex}
+                            displayIndex={displayIndex}
+                            isSelected={selected}
+                            isExpanded={expandedAnswerOptionIndexes.includes(optionIndex)}
+                            onToggleExpanded={() => onToggleAnswerOptionExpanded(question.id, optionIndex)}
+                            t={t}
+                        />
+                    );
+                }
+
+                return (
+                    <ChoiceSelectableOption
+                        key={optionIndex}
+                        question={question}
+                        option={option}
+                        optionIndex={optionIndex}
+                        displayIndex={displayIndex}
+                        isSelected={selected}
+                        submitted={submitted}
+                        inputType={inputType}
+                        onSingleAnswer={onSingleAnswer}
+                        onToggleMultiAnswer={onToggleMultiAnswer}
+                    />
+                );
+            })}
+        </div>
+    );
+}
+
+function createOptionDisplayItems(question, answerOptionOrder) {
+    const fallbackOrder = question.options.map((_, index) => index);
+    const order = isValidOptionOrder(answerOptionOrder, question.options.length)
+        ? answerOptionOrder
+        : fallbackOrder;
+
+    return order.map((optionIndex, displayIndex) => ({
+        option: question.options[optionIndex],
+        optionIndex,
+        displayIndex
+    }));
+}
+
+function isValidOptionOrder(answerOptionOrder, optionCount) {
+    if (!Array.isArray(answerOptionOrder) || answerOptionOrder.length !== optionCount) {
+        return false;
+    }
+
+    const uniqueIndexes = new Set(answerOptionOrder);
+
+    return answerOptionOrder.every((index) => {
+        return Number.isInteger(index) && index >= 0 && index < optionCount;
+    }) && uniqueIndexes.size === optionCount;
+}

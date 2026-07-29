@@ -1,7 +1,7 @@
 # FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
-<!-- Versjon: 2.7 — Sist oppdatert: 2026-07-27 -->
-<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.6 -->
+<!-- Versjon: 2.8 — Sist oppdatert: 2026-07-29 -->
+<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.7 -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
@@ -60,9 +60,9 @@ Dokumentet skiller derfor fire roller:
 | Dependency injection | `dependencies.js`-modulen / DI-wiringen | `src/di/dependencies.js` | Eneste sted som leser API-base-URL og instansierer konkrete data-/domeneavhengigheter. |
 | Emneområdefiltrering | `ALL_TOPIC_AREAS`, `findTopicAreaByKey()` | `src/model/domain/utils/topicAreaFilters.js` | Bruk register og oppslag; ikke opprett lokale varianter. |
 
-`QUESTION_TYPES` er den tiltenkte autoriteten, men eldre kode har fortsatt rå
-spørsmålstypesammenligninger som omgår registeret. Eksakte forekomster og filer
-føres i SSOT-registeret. Ny kode skal alltid bruke `QUESTION_TYPES`.
+`QUESTION_TYPES` er autoriteten for spørsmålstype-ID-er. Produksjonskode skal bruke
+konstantene når den tar beslutninger basert på spørsmålstype; rå typeverdier er
+forbudt i `QuestionCard`-kapabiliteten og API-transformasjonen og håndheves av arkitekturtest.
 
 ### Canonical implementasjoner som skal gjenbrukes
 
@@ -76,12 +76,25 @@ føres i SSOT-registeret. Ny kode skal alltid bruke `QUESTION_TYPES`.
 | Punkt-/sidepaginering | `<ProgressPager/>` | Ikke bygg konkurrerende pager-renderere i feature-komponenter. |
 | Responsiv innholdstypevelger | `<ToggleButtonRow/>` | Eneste offentlige inngang. Fasaden velger desktop-/mobilvariant; mobilvarianten eier lokal disclosure, defaultvalg innen en åpnet gruppe og DOM-fokus. |
 | Formatert produkttekst | `<FormattedText/>` | Markup-kontrakten rendres ett sted. |
+| Spørsmålsflate og oppgavetyper | `<QuestionCard/>` | Eneste offentlige inngang til oppgavetyper. Læringsmoduser velger spørsmål, eier svarstate og bestemmer rettingstidspunkt; de implementerer ikke egne oppgaverenderere. |
 | Mobil bottom sheet | `<DockedMobileBottomSheet/>` | Eier docked/expanded-geometri, drag, grip, inert og slots. |
 | Desktop pop-out | `<DesktopPopOutMenu/>` | Eier delt struktur og lagmekanikk. |
 | Søk | Search-familien i `components/Search/` | Felt, filter, backdrop, forslag og listbox-mekanikk gjenbrukes; feature-VM eier rangering/policy. |
 | Verktøykort | `<ToolCardGrid/>`, `<ToolCard/>` | Brukes for den dokumenterte verktøykort-flaten. |
 | Root render-crash | `<AppErrorBoundary/>` | App-roten har én recovery-grense; page-load-feil går fortsatt gjennom WorkspaceState. |
 | HTTP-requestmekanikk | `class ApiDataSource` | Alle API-datakilder arver requestmekanismen; base-URL eies av `dependencies.js`. |
+
+#### Eierskap for spørsmålskapabiliteten
+
+`QuestionCard` er en delt kapabilitet. Den eies ikke av `ExamPage`, `LearningPath` eller en annen
+læringsmodus. `ExamPage` er en konsument av `QuestionCard`; at eksamener og kapitteltester i dag
+bruker samme testside, endrer ikke eierskapet.
+
+Læringsmodusen eier valg og rekkefølge av spørsmål, svarstate, rettingstidspunkt, fremdrift, resultat
+og navigasjon. `QuestionCard` eier valg av oppgaverenderer, oppgaveinteraksjon og presentasjon av
+fasit og spørsmålsfeedback. Fremtidige læringsmoduser importerer `QuestionCard.jsx` og importerer
+ikke interne komponenter under `QuestionTypes`. Modusvariasjon uttrykkes gjennom eksplisitt state
+og callbacks, ikke gjennom `isExam`, `isChapterTest`, `isLearningPath` eller tilsvarende modusflagg.
 
 ### Delte avledninger og utilities
 
@@ -109,6 +122,13 @@ føres i SSOT-registeret. Ny kode skal alltid bruke `QUESTION_TYPES`.
 
 ## Endringslogg
 
+### 2.7 → 2.8
+
+- `QuestionCard` er flyttet ut av `ExamPage` og etablert som delt kapabilitet med én offentlig inngang.
+- `QuestionTypes`, spørsmålsinteraksjon og feedback eies av `QuestionCard`; læringsmodusene eier øktflyt, svarstate, rettingstidspunkt og navigasjon.
+- `QUESTION_TYPES` er faktisk SSOT for typeavgjørelser i `QuestionCard` og API-transformasjonen.
+- `questionCardArchitecture` låser offentlig inngang, page-uavhengighet, CSS-entry, ExamPage-konsumering og fravær av rå typeavgjørelser.
+
 ### 2.6 → 2.7
 
 - `ToggleButtonRow` er dokumentert som canonical responsiv fasade med interne desktop- og mobilvarianter.
@@ -135,6 +155,7 @@ ikke historisk dagbok; historikken bor i git.
 |---|---|
 | 2026-05 | MVVM-lagdeling med manuell DI via `dependencies.js`. Én ViewModel per side; app-shell-kapabiliteter kan ha egne ViewModels. |
 | 2026-05 | CSS-mapper speiler komponentmapper. `App.css` er eneste CSS-entry point. |
+| 2026-07-29 | `QuestionCard` er en delt kapabilitet på `components/QuestionCard/`, ikke eid av `ExamPage`, `LearningPath` eller en annen læringsmodus. Eksterne konsumenter importerer bare `QuestionCard.jsx`; `App.css` er eneste CSS-entry. |
 | 2026-06, presisert 2026-07-24 | `Header.jsx` og `Footer.jsx` er canonical app-shell-implementasjoner for desktop-header og footer. De skal ikke inlines eller dupliseres som konkurrerende app-shell. Semantiske innholdsheadere er tillatt. |
 | 2026-06, erstattet 2026-07-26 | `src/navigation/navigation.js` eier `NAV_SCREENS`, `SCREEN_CONFIG`, `getScreenConfig`, `NAV_ITEMS` og `LEARNING_CONTENT_TYPES`. `SCREEN_CONFIG` eier bare `requiresSubject`, `requiresExam`, `backTo`, `showsSubjectSwitcher`, `pageClassName` og `shellClassName`. `AppNavigationViewModel` eier runtime-state, preconditions, nullstillinger, sideeffekter og eksplisitte overganger. `App.jsx` eier bare render-mapping og dokumenterte persistensunntak. |
 | 2026-06 | Tabs for innrykk i all JS/JSX/CSS. |
@@ -201,9 +222,9 @@ migreringsregelen og registreres i målrettede patcher; de skal ikke feilaktig o
 
 ### Faktisk SSOT-gjeld
 
-- **Rå spørsmålstype-strenger:** eldre kode har fortsatt rå spørsmålstypesammenligninger som omgår `QUESTION_TYPES`. Eksakte forekomster og filer føres i SSOT-registeret.
-  De erstattes med konstante imports i en liten, separat patch. Det opprettes ikke et globalt
-  `QUESTION_TYPE_REGISTRY` før minst to moduler faktisk deler samme mapping.
+Det finnes ingen åpen SSOT-gjeld for spørsmålstype-ID-er. `QUESTION_TYPES` brukes i de
+dokumenterte typeavgjørelsene og kontrakten håndheves av `questionCardArchitecture`. Et globalt
+`QUESTION_TYPE_REGISTRY` innføres fortsatt ikke før minst to moduler faktisk deler samme mapping.
 
 ### Bevisste avgrensninger
 
@@ -1236,7 +1257,7 @@ Første linje i hver kildefil, relativ sti fra prosjektroten, mellomrom etter `/
 ```
 
 ```css
-/* src/ui/style/ExamPage/QuestionCard/index.css */
+/* src/ui/style/QuestionCard/index.css */
 ```
 
 Kommentaren oppdateres når filen flyttes — feil sti villeder aktivt.

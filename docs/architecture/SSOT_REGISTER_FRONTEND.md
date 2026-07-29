@@ -1,8 +1,8 @@
 # SSOT-register — ExamPrepper frontend
 
-Oppdatert: 2026-07-26
+Oppdatert: 2026-07-29
 Type: dokumentasjon / analyse
-Analysert snapshot: `examprepper-frontend-safe-20260726-145114.zip` (inkluderer patch 41)
+Analysert snapshot: `examprepper-frontend-safe-20260729-115916.zip` + QuestionCard-patch 1–4
 
 ## Formål
 
@@ -20,22 +20,25 @@ Listen over canonical implementasjoner dekker de viktigste delte flatene og meka
 ## Base og verifisering
 
 ```txt
-Snapshot:      examprepper-frontend-safe-20260726-145114.zip
-sha256:        bcb0a2b5e9ccd8c3630612bf99cde39e9c564d56d212419ffa9ea0769560b0df
-Filer:         702
-JS/JSX:        475 i src/ + test/
-Jest-filer:    114
+Snapshot:      examprepper-frontend-safe-20260729-115916.zip
+Zip sha256:    4824ecce609ea01cd9abc227fbf5075e1163632156b283a66b2fe828ab043067
+Zip commit:    0db6760d4c967394e64934cd75437ec5cba18fb5
+Patchstatus:   QuestionCard-patch 1–4 anvendt
+Filer:         713
+JS/JSX:        483 i src/ + test/
+Jest-filer:    119
 
-Snapshotet inkluderer patch 41:
-- WorkSpaceCard.jsx finnes ikke.
-- Null JS/JSX-importer eller <WorkSpaceCard>-bruk gjenstår.
-- workspace-card.css og QuestionCard sin direkte .workspace-card-bruk er beholdt.
+Snapshotet og patchserien etablerer:
+- `QuestionCard` og tilhørende CSS på kapabilitetsnivå, utenfor `ExamPage`.
+- Én offentlig komponentinngang og én global CSS-entry.
+- `QUESTION_TYPES` i alle dokumenterte typeavgjørelser i `QuestionCard` og API-transformasjonen.
+- En AST-/PostCSS-basert `questionCardArchitecture`-test.
 
 Verifisering for denne registerrevisjonen:
-- Statisk kontroll av filtre, WorkSpaceCard-fravær og workspace-card-konsumenter.
-- Registerinnholdet bygger på post-patch-41-inventaren, der base-snapshotet hadde
-  648 beståtte / 9 hoppede tester i 113 suites før patchen.
-- Full Jest-suite, Vite-build og device-QA er ikke kjørt på nytt i denne dokumentrevisjonen.
+- `git diff --check`, relativ importoppløsning og `node --check` for alle `.js`-filer.
+- Statisk kontroll av gamle stier, offentlig inngang, CSS-entry og rå typeavgjørelser.
+- Full Jest-suite og Vite-build er ikke kjørt i denne dokumentrevisjonen fordi dependency-installasjonen
+  ikke fullførte i patchmiljøet.
 ```
 
 ## Notasjon
@@ -81,7 +84,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `<ThemeProvider/>` `useTheme()` | Aktivt tema + DOM-klassen `.dark` | `ui/theme/ThemeContext.jsx` | Én provider, reaktiv theme-state |
 | `<SettingsProvider/>` `useSettings()` | Aktive brukerinnstillinger | `ui/settings/SettingsContext.jsx` | Én provider, reaktiv settings-state |
 | `AuthTokenProvider`-modulen (`setAuthTokenProvider()` `getActiveAuthToken()`) | Aktiv token-henter for transportlaget | `src/auth/AuthTokenProvider.js` | Modulglobal bro — ikke en React-provider. Injiseres i datakildene via `dependencies.js` |
-| `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Tiltenkt autoritativt register — men fem direkte strengsammenligninger (`"single"`/`"multi"`/`"fill"`) omgår det fortsatt, se «burde vært SSOT». Ikke fullt håndhevet ennå |
+| `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Autoritativt register brukt av `QuestionCard`, grading og API-transformasjon. Rå typeavgjørelser i `QuestionCard` og `transformAnswersForApi.js` avvises av `questionCardArchitecture` |
 | `QUESTION_CONFIG{}` | Konfigurasjonsgrenser for spørsmålstyper (i dag: `FILL_MAX_LENGTH`) | `src/constants/QuestionConfig.js` | Egen fil, egen beslutning — ikke type-ID-er |
 | `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop-modus + breakpoint-tall | `ui/presentation/` | 7 importører. `932`/`933` låst av `appBreakpointContract` |
 | `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `ApiDataSource` |
@@ -101,12 +104,25 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 | `<ProgressPager/>` (renderer) + `createProgressPagerEntries()` (presentasjonsavledning) | Punkt/side-paginering | `components/ProgressPager/` | `ExamFooter`, `FlipcardsStudySurface`, `FlipcardsMobileFooterSheet` |
 | `<ToggleButtonRow/>` | Responsiv innholdstypevelger og variantvalg | `components/ToggleButtonRow/` | Én offentlig fasade brukt av `LearningContentHeader`; desktop beholder tablist-kontrakten. Eksisterende `LearningContentSelectPageViewModel` eier mobilens åpne gruppe slik at disclosure-state overlever route-bytte til Begrepsliste; mobilvarianten eier DOM-fokus og kan bare lukke gruppen via den eksplisitte lukkeknappen. Låst av `toggleButtonRowArchitecture`, mobilkontrakttest og hook-test |
 | `<FormattedText/>` (renderer) + `createFormattedTextSegments()` (presentasjonsavledning) | Tekst-rendering | `components/Shared/FormattedText.jsx` | 40 importører — mest delte fil |
+| `<QuestionCard/>` | Spørsmålsflate, valg av oppgaverenderer, oppgaveinteraksjon og feedback | `components/QuestionCard/QuestionCard.jsx` | Offentlig fasade for `ExamPage` og fremtidige læringsmoduser. Interne `QuestionTypes` importeres ikke direkte utenfra; låst av `questionCardArchitecture` |
 | `<DockedMobileBottomSheet/>` | Mobil bottom-sheet-geometri (docked/expanded, drag, grip, inert) | `components/MobileBottomSheet/` | 3 feature-konsumenter: `PageToolsMobileFooterSheet`, `FlipcardsMobileFooterSheet`, `GlossaryMobileChapterSheet` |
 | `<DesktopPopOutMenu/>` | Desktop pop-out-struktur og lagmekanikk | `components/DesktopPopOutMenu/` | PageTools- og Flipcards-verktøymenyene |
 | Search-familien (`<SearchField/>` m.fl.) | Søkefelt, filter, backdrop, forslag | `components/Search/` | Delt av SubjectSelect, LearningContentSelect, Glossary |
 | `<ToolCardGrid/>` `<ToolCard/>` | Verktøykort-flate | `components/ToolCard/` | PageTools + Flipcards |
 | `<AppErrorBoundary/>` | Root render-crash-grense | `components/AppErrorBoundary/` | Rot-nivå recovery |
 | `class ApiDataSource` | Canonical HTTP-transportbase (URL-bygging, fetch, auth-header, JSON, feilmapping) | `model/datasource/ApiDataSource.js` | Alle 5 datakilder arver. Eier **ikke** base-URL — den injiseres fra `dependencies.js` |
+
+### Eierskap for spørsmål og øktflyt
+
+| Beslutning / kontrakt | Eier | Konsumenter |
+|---|---|---|
+| Oppgavetype-ID-er | `QUESTION_TYPES` | `QuestionCard`, grading, API-transformasjon |
+| Valg av oppgaverenderer | `QuestionCard` og `getQuestionViewState()` | Alle læringsmoduser gjennom `QuestionCard.jsx` |
+| Oppgaveinteraksjon og feedback | `QuestionCard/QuestionTypes` og `QuestionCard/Shared/Feedback` | `ExamPage`, fremtidig `LearningSessionPage` |
+| Øktflyt, svarstate, rettingstidspunkt, fremdrift og navigasjon | Den enkelte læringsmodus | Ikke `QuestionCard` |
+
+`ExamPage` er en konsument, ikke eier. Fremtidige læringsmoduser stopper ved fasaden og innfører
+ikke egne oppgaverenderere eller modusflagg i `QuestionCard`.
 
 ## Delte utilities og avledninger
 
@@ -144,8 +160,10 @@ Forrige inventory hadde disse i «burde vært SSOT». De er nå løst — de fle
 | `fallbackLabel`-kanaler ved siden av i18n | `i18nContract` avviser lokale fallback-kanaler |
 | Navigasjonens resolver/reducer-oppblåsning | Hele resolver-sporet slettet; `navigation.js` er ren data |
 | Ubrukt `WorkSpaceCard.jsx`-wrapper | React-komponenten er slettet i patch 41. `workspace-card.css` og `QuestionCard` sin direkte klassebruk er beholdt |
+| `QuestionCard` eid av `ExamPage`-mappen | Komponent- og CSS-treet er flyttet til `components/QuestionCard/` og `style/QuestionCard/`; `ExamPage` importerer bare fasaden |
+| Rå spørsmålstype-strenger (`"single"`, `"multi"`, `"fill"`) | Erstattet med `QUESTION_TYPES`; arkitekturtesten avviser nye rå typeavgjørelser i de avtalte områdene |
 
-Arkitektur-testmappen gikk fra 2 til 11 filer. Det er den største enkeltendringen i SSOT-disiplin: funnene er ikke bare ryddet, de er gjort til stående garantier.
+Arkitektur-testmappen har nå 14 filer. Det er den største enkeltendringen i SSOT-disiplin: funnene er ikke bare ryddet, de er gjort til stående garantier.
 
 ## Andre lukkede korrekthetsfunn
 
@@ -161,10 +179,7 @@ Rettelser som ikke berørte noen SSOT-eier — tatt med for sporbarhet.
 
 | I dag | Foreslått | Hvor spredt | Omfang |
 |---|---|---|---|
-| Rå spørsmålstype-strenger (`"single"`, `"multi"`, `"fill"`) | Importer `QUESTION_TYPES` og sammenlign mot konstantene | `transformAnswersForApi.js:29,34`, `FeedbackPanel.jsx:10,238`, `AnswerLabelFormatter.js:8` | 5 forekomster i 3 filer |
 | Gjentatt semantisk fargeverdi brukt av flere uavhengige komponenter | Semantisk `Tokens.css`-variabel — men bare ved dokumentert gjenbruk | Utgangspunkt: 93 hex-forekomster i 22 CSS-filer utenfor `Tokens.css`. Dette er inventory, ikke 93 brudd — lokale paletter, grafserier og dekorative bakgrunner er legitime | opportunistisk |
-
-Den nye toppsaken er de rå spørsmålstype-strengene: `QUESTION_TYPES` er ment å eie type-ID-ene, men fem steder sammenligner mot rå strenger i stedet for konstantene. Å bytte dem ut gjør `QUESTION_TYPES` til faktisk SSOT for type-ID-ene — et lite, avgrenset tiltak.
 
 Et **globalt `QUESTION_TYPE_REGISTRY`** anbefales derimot ikke nå. Filene som forgrener på type håndterer ulike beslutninger — presentasjon, besvart-status, randomisering, layout, transportformat, domenegradering. Ett register som samler dem ville koblet transport til layout til domeneadferd, og blitt en større code smell enn dagens avgrensede funksjoner. Innfør et register først når to eller flere moduler faktisk deler samme mapping.
 
