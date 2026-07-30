@@ -4,14 +4,22 @@ import createModuleStatus from "../../../src/ui/viewmodel/LearningPath/createMod
 
 describe("createModuleStatus", () => {
 	test.each([
-		[{ masteryPercent: 0, isCurrent: false, isCompleted: false, isUnlocked: false }, "locked"],
-		[{ masteryPercent: 100, isCurrent: false, isCompleted: true, isUnlocked: true }, "strong"],
-		[{ masteryPercent: 0, isCurrent: true, isCompleted: false, isUnlocked: true }, "active"],
-		[{ masteryPercent: 80, isCurrent: false, isCompleted: false, isUnlocked: true }, "strong"],
-		[{ masteryPercent: 55, isCurrent: false, isCompleted: false, isUnlocked: true }, "medium"],
-		[{ masteryPercent: 25, isCurrent: false, isCompleted: false, isUnlocked: true }, "weak"],
-		[{ masteryPercent: 0, isCurrent: false, isCompleted: false, isUnlocked: true }, "notStarted"]
-	])("returns a finished presentation status", (input, expected) => {
-		expect(createModuleStatus(input).statusKey).toBe(expected);
+		[{ masteryPercent: 0, isCurrent: false, isUnlocked: false }, "locked", "lock"],
+		[{ masteryPercent: 0, isCurrent: true, isUnlocked: true }, "active", "play"],
+		[{ masteryPercent: 80, isCurrent: false, isUnlocked: true }, "strong", "check"],
+		[{ masteryPercent: 55, isCurrent: false, isUnlocked: true }, "medium", "trending"],
+		[{ masteryPercent: 49.67, isCurrent: false, isUnlocked: true }, "weak", "repeat"],
+		[{ masteryPercent: 0, isCurrent: false, isUnlocked: true }, "notStarted", null]
+	])("maps mastery to the prototype status and icon", (input, expectedStatus, expectedIcon) => {
+		const result = createModuleStatus(input);
+
+		expect(result.statusKey).toBe(expectedStatus);
+		expect(result.iconKey).toBe(expectedIcon);
+	});
+
+	test("does not promote a low-mastery completed module to a green check", () => {
+		const result = createModuleStatus({ masteryPercent: 49.67, isCurrent: false, isUnlocked: true });
+
+		expect(result).toEqual({ statusKey: "weak", appearance: "weak", iconKey: "repeat" });
 	});
 });

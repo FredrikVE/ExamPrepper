@@ -4,8 +4,7 @@ import createMasteryAppearance from "./createMasteryAppearance.js";
 import createModuleStatus from "./createModuleStatus.js";
 
 export default function createLearningPathModuleModel({ module, resumableSession, expandedModuleId, startingModuleId, t }) {
-	const isCompleted = module.progress.completedRounds >= 3;
-	const status = createModuleStatus({ masteryPercent: module.progress.masteryPercent, isCurrent: module.availability.isCurrent, isCompleted, isUnlocked: module.availability.isUnlocked });
+	const status = createModuleStatus({ masteryPercent: module.progress.masteryPercent, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
 	const hasModuleActivity = module.progress.completedRounds > 0 || module.progress.lastSessionAt !== null || resumableSession?.moduleId === module.id;
 	const actionModel = createLearningPathActionModel({ module, resumableSession, startingModuleId, t });
