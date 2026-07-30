@@ -7,7 +7,6 @@ export const SESSION_ACTIONS = {
 	ANSWER_CHANGED: "answerChanged",
 	ANSWER_CHECKED: "answerChecked",
 	CONTINUED: "continued",
-	REWARD_DISMISSED: "rewardDismissed",
 	SUBMIT_STARTED: "submitStarted",
 	SUBMIT_SUCCEEDED: "submitSucceeded",
 	SUBMIT_FAILED: "submitFailed",
@@ -30,8 +29,6 @@ export default function sessionReducer(state, action) {
 			return applyAnswerChecked(state, action);
 		case SESSION_ACTIONS.CONTINUED:
 			return { ...state, status: LEARNING_SESSION_STATES.ANSWERING, currentIndex: state.currentIndex + 1, pendingRewardKind: null, scrollToTopRequestId: state.scrollToTopRequestId + 1 };
-		case SESSION_ACTIONS.REWARD_DISMISSED:
-			return { ...state, pendingRewardKind: null };
 		case SESSION_ACTIONS.SUBMIT_STARTED:
 			return { ...state, status: LEARNING_SESSION_STATES.SUBMITTING, submitStatus: "submitting", submitErrorMessage: null };
 		case SESSION_ACTIONS.SUBMIT_SUCCEEDED:
@@ -48,7 +45,8 @@ export default function sessionReducer(state, action) {
 function applyAnswerChecked(state, action) {
 	const results = { ...state.resultsBySessionQuestionId, [action.sessionQuestionId]: action.result };
 	const nextCombo = action.result.isCorrect ? state.combo + 1 : 0;
-	const rewardKind = nextCombo > 0 && nextCombo % 3 === 0 ? "combo" : null;
+	const hasNextQuestion = state.currentIndex < state.questions.length - 1;
+	const rewardKind = hasNextQuestion && nextCombo > 0 && nextCombo % 3 === 0 ? "combo" : null;
 	return { ...state, status: LEARNING_SESSION_STATES.CHECKED, resultsBySessionQuestionId: results, combo: nextCombo, xp: state.xp + action.result.pointsAwarded * 10, pendingRewardKind: rewardKind };
 }
 

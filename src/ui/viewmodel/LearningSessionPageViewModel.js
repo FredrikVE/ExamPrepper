@@ -82,7 +82,6 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		dispatch({ type: SESSION_ACTIONS.CONTINUED });
 	}, [currentResult, state.currentIndex, state.questions.length, submitSession]);
 
-	const dismissReward = useCallback(() => dispatch({ type: SESSION_ACTIONS.REWARD_DISMISSED }), []);
 	const answer = currentQuestion === null ? null : state.answersBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null;
 	const questionCardModel = currentQuestion === null ? null : { question: currentQuestion.question, questionNumber: state.currentIndex + 1, answer, answerOptionOrder: state.answerOptionOrderBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null, submitted: currentResult !== null, showAllFeedback: currentResult !== null, correct: currentResult?.isCorrect ?? false, fillMatchType: currentResult?.fillMatchType ?? null, expandedAnswerOptionIndexes: [], onToggleAnswerOptionExpanded: () => {}, onSingleAnswer: setSingleAnswer, onToggleMultiAnswer: toggleMultiAnswer, onDropdownFillAnswer: selectObjectAnswer, onRadioButtonGridAnswer: selectObjectAnswer, onMultipleBlankAnswer: selectObjectAnswer };
 	const answerReady = currentQuestion !== null && isQuestionAnswered(currentQuestion.question, answer);
@@ -95,5 +94,5 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	const sessionResultModel = state.submitResult === null ? null : { score: state.submitResult.score, moduleProgress: state.submitResult.moduleProgress, title: t.learningSessionResultTitle, backLabel: t.learningSessionBackToPathLabel, onBack: backContract.onBack };
 	const headerModel = state.modulePosition === null ? null : { title: t.learningSessionModuleTitle(state.modulePosition, state.moduleTitle), counterLabel: t.learningSessionQuestionCounter(Math.min(state.currentIndex + 1, state.questions.length), state.questions.length), roundLabel: t.learningSessionRoundLabel(state.round) };
 
-	return { workspaceState, backContract, headerModel, progressBarModel, questionCardModel, currentQuestionRenderKey, questionFocusLabel: t.learningSessionQuestionFocusLabel, actionPanelModel, sessionResultModel, rewardModel: createRewardModel({ pendingRewardKind: state.pendingRewardKind, t, onDismiss: dismissReward }), scrollToTopRequestId: state.scrollToTopRequestId, isSessionComplete };
+	return { workspaceState, backContract, headerModel, progressBarModel, questionCardModel, currentQuestionRenderKey, questionFocusLabel: t.learningSessionQuestionFocusLabel, actionPanelModel, sessionResultModel, rewardModel: createRewardModel({ pendingRewardKind: state.pendingRewardKind, combo: state.combo, xp: state.xp, t, onContinue: continueSession }), scrollToTopRequestId: state.scrollToTopRequestId, isSessionComplete };
 }

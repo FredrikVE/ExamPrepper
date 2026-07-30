@@ -1,8 +1,19 @@
 //src/ui/viewmodel/LearningSession/createRewardModel.js
-export default function createRewardModel({ pendingRewardKind, t, onDismiss }) {
+export default function createRewardModel({ pendingRewardKind, combo, xp, t, onContinue }) {
 	if (pendingRewardKind === null) {
 		return null;
 	}
 
-	return { title: t.learningSessionRewardTitle, body: t.learningSessionRewardBody, dismissLabel: t.learningSessionRewardDismissLabel, onDismiss };
+	return {
+		title: t.learningSessionRewardTitle,
+		body: t.learningSessionRewardBody,
+		closeLabel: t.learningSessionRewardCloseLabel,
+		statsLabel: t.learningSessionRewardStatsLabel,
+		comboValue: String(combo),
+		comboLabel: t.learningSessionRewardComboLabel,
+		xpValue: `${xp} XP`,
+		xpLabel: t.learningSessionRewardXpLabel,
+		dismissLabel: t.learningSessionRewardDismissLabel,
+		onContinue
+	};
 }

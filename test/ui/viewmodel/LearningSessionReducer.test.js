@@ -31,4 +31,20 @@ describe("learning session reducer", () => {
 		expect(state.status).toBe("completed");
 	});
 
+	test("opens a combo reward only when another question remains", () => {
+		const questions = Array.from({ length: 4 }, (_value, index) => ({ sessionQuestionId: `q${index + 1}`, question: { options: [] } }));
+		const state = { ...createInitialSessionState(), questions, currentIndex: 2, combo: 2, xp: 20 };
+		const nextState = sessionReducer(state, { type: SESSION_ACTIONS.ANSWER_CHECKED, sessionQuestionId: "q3", result: { isCorrect: true, pointsAwarded: 1, maxPoints: 1 } });
+
+		expect(nextState).toMatchObject({ combo: 3, xp: 30, pendingRewardKind: "combo" });
+	});
+
+	test("does not interrupt the final question with a combo reward", () => {
+		const questions = Array.from({ length: 3 }, (_value, index) => ({ sessionQuestionId: `q${index + 1}`, question: { options: [] } }));
+		const state = { ...createInitialSessionState(), questions, currentIndex: 2, combo: 2, xp: 20 };
+		const nextState = sessionReducer(state, { type: SESSION_ACTIONS.ANSWER_CHECKED, sessionQuestionId: "q3", result: { isCorrect: true, pointsAwarded: 1, maxPoints: 1 } });
+
+		expect(nextState).toMatchObject({ combo: 3, xp: 30, pendingRewardKind: null });
+	});
+
 });
