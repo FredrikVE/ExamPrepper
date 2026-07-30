@@ -1,4 +1,4 @@
-// test/utils/answerUtils.test.js
+//test/utils/answerUtils.test.js
 import { describe, expect, test } from "@jest/globals";
 import normalizeAnswer from "../../src/model/domain/utils/normalizeAnswer.js";
 import getOptionLetter from "../../src/ui/view/components/QuestionCard/QuestionTypes/ChoiceShared/Utils/getOptionLetter.js";
@@ -33,8 +33,24 @@ describe("answer utils", () => {
         expect(isOptionSelected("checkbox", [1, 3], 2)).toBe(false);
     });
 
-    test("getAnswerLabel returns answerKey for fill question", () => {
-        expect(getAnswerLabel({ type: QUESTION_TYPES.FILL, answerKey: "technology" })).toBe("technology");
+    test("getAnswerLabel returns the first domain answer for fill questions", () => {
+        expect(getAnswerLabel({
+            type: QUESTION_TYPES.FILL,
+            answers: ["sårbarhet", "svakhet"],
+            answerKey: "legacy-answer"
+        })).toBe("sårbarhet");
+    });
+
+    test("getAnswerLabel supports raw acceptedAnswers and legacy answerKey", () => {
+        expect(getAnswerLabel({
+            type: QUESTION_TYPES.FILL,
+            acceptedAnswers: ["konfidensialitet"]
+        })).toBe("konfidensialitet");
+
+        expect(getAnswerLabel({
+            type: QUESTION_TYPES.FILL,
+            answerKey: "technology"
+        })).toBe("technology");
     });
 
     test("AnswerLabelFormatter formats correct options", () => {
