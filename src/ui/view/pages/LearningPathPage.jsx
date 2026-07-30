@@ -2,11 +2,11 @@
 import Header from "../components/Header/Header.jsx";
 import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import LearningContentHeader from "../components/LearningContentHeader/LearningContentHeader.jsx";
-import ContinuePanel from "../components/LearningPathPage/ContinuePanel.jsx";
-import ModuleTrack from "../components/LearningPathPage/ModuleTrack.jsx";
+import ContinueLearningPanel from "../components/LearningPathPage/ContinueLearningPanel.jsx";
+import LearningPathRoadmap from "../components/LearningPathPage/LearningPathRoadmap.jsx";
+import useLearningPathScrollAdapter from "../components/LearningPathPage/useLearningPathScrollAdapter.js";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
-import useLearningPathScrollAdapter from "../components/LearningPathPage/useLearningPathScrollAdapter.js";
 
 export default function LearningPathPage({ viewModel }) {
 	const scrollAdapter = useLearningPathScrollAdapter({ scrollRequest: viewModel.scrollRequest });
@@ -17,9 +17,9 @@ export default function LearningPathPage({ viewModel }) {
 			<WorkspaceState state={viewModel.workspaceState}>
 				<div className="learning-path-page-content">
 					<LearningContentHeader {...viewModel.contentHeaderModel} />
-					<ContinuePanel {...viewModel.continuePanelModel} />
+					<ContinueLearningPanel model={viewModel.continuePanelModel} onPressed={viewModel.onContinue} />
 					{viewModel.startSessionError === null ? null : <p className="learning-path-error" role="alert">{viewModel.startSessionError}</p>}
-					<ModuleTrack {...viewModel.moduleTrackModel} registerModuleElement={scrollAdapter.registerModuleElement} />
+					<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onStartModule={viewModel.onStartModule} registerModuleElement={scrollAdapter.registerModuleElement} />
 				</div>
 			</WorkspaceState>
 		</WorkspaceScaffold>

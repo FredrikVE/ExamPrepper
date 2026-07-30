@@ -1,0 +1,131 @@
+/*src/ui/style/LearningPathPage/learning-path-module-card.css*/
+.learning-path-module-card,
+.learning-path-exam-gate {
+	box-sizing: border-box;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	width: 100%;
+	min-height: 108px;
+	border: 1px solid var(--learning-path-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-4) var(--space-6);
+	background: linear-gradient(135deg, color-mix(in srgb, var(--learning-path-panel) 94%, transparent), var(--learning-path-panel-soft));
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, white 1.2%, transparent), 0 18px 45px color-mix(in srgb, black 10%, transparent);
+	color: inherit;
+	text-align: left;
+}
+
+button.learning-path-module-card {
+	font: inherit;
+	cursor: pointer;
+	transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+button.learning-path-module-card:hover:not(:disabled),
+button.learning-path-module-card:focus-visible {
+	transform: translateY(-2px);
+	border-color: color-mix(in srgb, var(--line-strong) 88%, var(--accent));
+	outline: none;
+}
+
+.learning-path-module-card--active {
+	border-color: var(--learning-path-active);
+	background: linear-gradient(135deg, color-mix(in srgb, var(--accent-soft) 46%, var(--panel-strong)), var(--learning-path-panel-soft));
+	box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent), 0 0 26px color-mix(in srgb, var(--accent) 18%, transparent), inset 0 0 30px color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.learning-path-module-card:disabled,
+.learning-path-exam-gate--locked {
+	cursor: not-allowed;
+	opacity: 0.46;
+	filter: saturate(0.55);
+}
+
+.learning-path-module-card__copy {
+	display: grid;
+	gap: var(--space-1);
+	min-width: 0;
+}
+
+.learning-path-module-card__eyebrow {
+	color: var(--text-muted);
+	font-size: 0.82rem;
+	font-weight: 700;
+}
+
+.learning-path-module-card--active .learning-path-module-card__eyebrow {
+	color: color-mix(in srgb, var(--accent) 76%, var(--text-main));
+}
+
+.learning-path-module-card__title {
+	display: block;
+	margin: 0;
+	color: var(--text-main);
+	font-size: clamp(1.05rem, 1.5vw, 1.24rem);
+	font-weight: 650;
+	line-height: 1.18;
+	letter-spacing: -0.025em;
+}
+
+.learning-path-module-card__status {
+	display: block;
+	color: var(--text-main);
+	font-size: 0.88rem;
+	font-weight: 650;
+}
+
+.learning-path-module-card__trailing {
+	display: flex;
+	align-items: center;
+	gap: var(--space-5);
+	margin-left: var(--space-5);
+}
+
+.learning-path-module-card__chevron,
+.learning-path-exam-gate > svg {
+	width: 22px;
+	height: 22px;
+	color: var(--text-muted);
+}
+
+.learning-path-mastery-ring {
+	position: relative;
+	width: 46px;
+	height: 46px;
+	flex: 0 0 auto;
+}
+
+.learning-path-mastery-ring svg {
+	width: 100%;
+	height: 100%;
+	transform: rotate(-90deg);
+}
+
+.learning-path-mastery-ring circle {
+	fill: none;
+	stroke-width: 3.2;
+}
+
+.learning-path-mastery-ring__background {
+	stroke: color-mix(in srgb, var(--text-main) 9%, transparent);
+}
+
+.learning-path-mastery-ring__value {
+	stroke: var(--text-muted);
+	stroke-linecap: round;
+}
+
+.learning-path-mastery-ring--active .learning-path-mastery-ring__value { stroke: var(--learning-path-active); }
+.learning-path-mastery-ring--strong .learning-path-mastery-ring__value { stroke: var(--learning-path-strong); }
+.learning-path-mastery-ring--medium .learning-path-mastery-ring__value { stroke: var(--learning-path-medium); }
+.learning-path-mastery-ring--weak .learning-path-mastery-ring__value { stroke: var(--learning-path-weak); }
+
+.learning-path-mastery-ring > span {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	font-size: 0.66rem;
+	font-weight: 800;
+}

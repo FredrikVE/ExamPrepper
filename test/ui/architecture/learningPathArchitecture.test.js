@@ -60,4 +60,28 @@ describe("LearningPath architecture", () => {
 		expect(pathComponents).not.toMatch(/createModuleStatus|masteryPercent\s*[<>=]/);
 		expect(sessionComponents).not.toMatch(/useState|useReducer|answersBySessionQuestionId|resultsBySessionQuestionId/);
 	});
+	test("keeps LearningPath components presentation-only and preserves compact prop signatures", () => {
+		const componentFiles = collectFiles(path.resolve("src/ui/view/components/LearningPathPage"));
+		for (const filePath of componentFiles) {
+			const source = fs.readFileSync(filePath, "utf8");
+			expect(source).not.toMatch(/\bfetch\s*\(|Repository|DataSource|availability\.isUnlocked|masteryPercent\s*[<>=]/);
+			expect(source).not.toMatch(/function\s+\w+\s*\(\{\s*\n/);
+		}
+	});
+
+	test("keeps the canonical QuestionCard as the LearningSession renderer", () => {
+		const pageSource = fs.readFileSync(path.resolve("src/ui/view/pages/LearningSessionPage.jsx"), "utf8");
+		expect(pageSource).toContain('import QuestionCard from "../components/QuestionCard/QuestionCard.jsx"');
+		expect(pageSource).not.toMatch(/dangerouslySetInnerHTML|innerHTML/);
+	});
+
+	test("accounts for the scaffold header in LearningPath geometry and scrolling", () => {
+		const pageCss = fs.readFileSync(path.resolve("src/ui/style/LearningPathPage/learning-path.css"), "utf8");
+		const roadmapCss = fs.readFileSync(path.resolve("src/ui/style/LearningPathPage/learning-path-roadmap.css"), "utf8");
+		const scrollSource = fs.readFileSync(path.resolve("src/ui/view/components/LearningPathPage/useLearningPathScrollAdapter.js"), "utf8");
+		expect(pageCss).toContain("var(--learning-content-page-top)");
+		expect(roadmapCss).toContain("var(--scaffold-header-height)");
+		expect(scrollSource).toContain('block: "nearest"');
+	});
+
 });

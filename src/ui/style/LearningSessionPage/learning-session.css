@@ -1,11 +1,49 @@
 /*src/ui/style/LearningSessionPage/learning-session.css*/
+.learning-session-workspace .workspace-scaffold-body {
+	padding: calc(var(--scaffold-header-height) + var(--space-5)) var(--scaffold-inset) var(--space-8);
+}
 
 .learning-session-content {
 	display: grid;
 	gap: var(--space-5);
-	width: min(100%, var(--exam-content-max-width));
+	width: min(100%, 1000px);
 	margin: 0 auto;
-	padding: var(--space-6) 0;
+}
+
+.learning-session-heading {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--space-4);
+	flex-wrap: wrap;
+}
+
+.learning-session-heading h1 {
+	margin: 0;
+	font-size: clamp(1.25rem, 2vw, 1.55rem);
+	font-weight: 850;
+	letter-spacing: -0.03em;
+}
+
+.learning-session-heading p,
+.learning-session-heading > strong {
+	margin: var(--space-1) 0 0;
+	color: var(--text-muted);
+	font-size: 0.88rem;
+	font-weight: 750;
+}
+
+.learning-session-stage {
+	min-height: 440px;
+	border: 1px solid var(--line);
+	border-radius: calc(var(--radius-lg) + 8px);
+	padding: clamp(var(--space-5), 3vw, var(--space-8));
+	background: radial-gradient(circle at 100% 0, color-mix(in srgb, var(--accent-soft) 64%, transparent), transparent 40%), linear-gradient(155deg, color-mix(in srgb, var(--panel-strong) 96%, var(--accent-soft)), var(--panel-bg));
+	box-shadow: 0 24px 60px color-mix(in srgb, black 28%, transparent);
+}
+
+.learning-session-stage > div:focus {
+	outline: none;
 }
 
 .learning-session-action-panel,
@@ -24,7 +62,71 @@
 	gap: var(--space-4);
 }
 
+.learning-session-action-panel h2,
+.learning-session-action-panel p {
+	margin: 0;
+}
+
+.learning-session-action-panel p {
+	margin-top: var(--space-2);
+	color: var(--text-muted);
+}
+
+.learning-session-primary,
+.learning-session-result__back {
+	min-height: 48px;
+	border: 0;
+	border-radius: var(--radius-md);
+	padding: 0 var(--space-5);
+	background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 88%, white), var(--accent));
+	box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 28%, transparent);
+	color: white;
+	font: inherit;
+	font-weight: 800;
+	cursor: pointer;
+}
+
+.learning-session-primary--success {
+	background: linear-gradient(180deg, color-mix(in srgb, var(--success) 86%, white), var(--success));
+}
+
+.learning-session-primary:disabled {
+	cursor: not-allowed;
+	opacity: 0.55;
+}
+
+.learning-session-result {
+	display: grid;
+	gap: var(--space-3);
+	justify-items: start;
+}
+
+.learning-session-result h2,
+.learning-session-result p {
+	margin: 0;
+}
+
 .learning-session-reward {
 	width: min(90vw, 420px);
 	margin: auto;
+}
+
+@media (max-width: 720px) {
+	.learning-session-workspace .workspace-scaffold-body {
+		padding: calc(var(--mobile-topbar-height) + var(--space-4)) var(--space-4) var(--space-6);
+	}
+
+	.learning-session-stage {
+		min-height: 0;
+		padding: var(--space-4);
+	}
+
+	.learning-session-action-panel {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.learning-session-primary {
+		width: 100%;
+	}
 }

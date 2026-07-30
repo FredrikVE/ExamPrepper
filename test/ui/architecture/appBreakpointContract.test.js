@@ -12,6 +12,7 @@ const LOCAL_WIDTH_FEATURE_ALLOWLIST = {
 	"max-width:410": "matrix-placement compact phone fit",
 	"max-width:420": "drag-and-drop compact phone fit",
 	"max-width:430": "mobile sidebar control fit",
+	"max-width:460": "LearningPath mastery ring compaction",
 	"max-width:480": "small-phone component compaction",
 	"max-width:520": "compact pager and menu layouts",
 	"max-width:560": "learning-content card copy fit",

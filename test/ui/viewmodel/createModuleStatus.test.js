@@ -4,11 +4,13 @@ import createModuleStatus from "../../../src/ui/viewmodel/LearningPath/createMod
 
 describe("createModuleStatus", () => {
 	test.each([
-		[{ masteryPercent: 0, isActive: false, isCompleted: false, isLocked: true }, "locked"],
-		[{ masteryPercent: 100, isActive: false, isCompleted: true, isLocked: false }, "completed"],
-		[{ masteryPercent: 0, isActive: true, isCompleted: false, isLocked: false }, "active"],
-		[{ masteryPercent: 25, isActive: false, isCompleted: false, isLocked: false }, "progress"],
-		[{ masteryPercent: 0, isActive: false, isCompleted: false, isLocked: false }, "notStarted"]
+		[{ masteryPercent: 0, isCurrent: false, isCompleted: false, isUnlocked: false }, "locked"],
+		[{ masteryPercent: 100, isCurrent: false, isCompleted: true, isUnlocked: true }, "strong"],
+		[{ masteryPercent: 0, isCurrent: true, isCompleted: false, isUnlocked: true }, "active"],
+		[{ masteryPercent: 80, isCurrent: false, isCompleted: false, isUnlocked: true }, "strong"],
+		[{ masteryPercent: 55, isCurrent: false, isCompleted: false, isUnlocked: true }, "medium"],
+		[{ masteryPercent: 25, isCurrent: false, isCompleted: false, isUnlocked: true }, "weak"],
+		[{ masteryPercent: 0, isCurrent: false, isCompleted: false, isUnlocked: true }, "notStarted"]
 	])("returns a finished presentation status", (input, expected) => {
 		expect(createModuleStatus(input).statusKey).toBe(expected);
 	});

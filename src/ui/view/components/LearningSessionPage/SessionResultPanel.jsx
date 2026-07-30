@@ -5,7 +5,7 @@ export default function SessionResultPanel({ title, score, moduleProgress, backL
 			<h2 id="learning-session-result-title">{title}</h2>
 			<p>{score.earnedPoints} / {score.availablePoints} · {score.percentage}%</p>
 			<p>{moduleProgress.masteryPercent}%</p>
-			<button type="button" onClick={onBack}>{backLabel}</button>
+			<button className="learning-session-result__back" type="button" onClick={onBack}>{backLabel}</button>
 		</section>
 	);
 }

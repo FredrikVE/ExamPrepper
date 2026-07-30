@@ -23,7 +23,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 			}
 		}).catch(() => {
 			if (isCurrent) {
-				dispatch({ type: SESSION_ACTIONS.SUBMIT_FAILED, errorMessage: t.learningSessionLoadErrorMessage });
+				dispatch({ type: SESSION_ACTIONS.LOAD_FAILED, errorMessage: t.learningSessionLoadErrorMessage });
 			}
 		});
 
@@ -93,6 +93,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	const workspaceState = createWorkspaceState({ loadStatus, isEmpty: false, labels: { loading: t.learningSessionLoadingMessage, errorTitle: t.errorPrefix, errorBody: state.submitErrorMessage ?? t.learningSessionLoadErrorMessage, emptyTitle: "", emptyBody: "" }, errorAction: null });
 	const progressBarModel = state.questions.length === 0 ? null : buildProgressBarModel({ totalSteps: state.questions.length, currentStep: Math.min(state.currentIndex + 1, state.questions.length), ariaLabel: t.learningSessionProgressAriaLabel, startLabel: t.learningSessionProgressStartLabel, formatStepLabel: t.learningSessionProgressStepLabel, onActivateStep: null });
 	const sessionResultModel = state.submitResult === null ? null : { score: state.submitResult.score, moduleProgress: state.submitResult.moduleProgress, title: t.learningSessionResultTitle, backLabel: t.learningSessionBackToPathLabel, onBack: backContract.onBack };
+	const headerModel = state.modulePosition === null ? null : { title: t.learningSessionModuleTitle(state.modulePosition, state.moduleTitle), counterLabel: t.learningSessionQuestionCounter(Math.min(state.currentIndex + 1, state.questions.length), state.questions.length), roundLabel: t.learningSessionRoundLabel(state.round) };
 
-	return { workspaceState, backContract, progressBarModel, questionCardModel, currentQuestionRenderKey, questionFocusLabel: t.learningSessionQuestionFocusLabel, actionPanelModel, sessionResultModel, rewardModel: createRewardModel({ pendingRewardKind: state.pendingRewardKind, t, onDismiss: dismissReward }), scrollToTopRequestId: state.scrollToTopRequestId, isSessionComplete };
+	return { workspaceState, backContract, headerModel, progressBarModel, questionCardModel, currentQuestionRenderKey, questionFocusLabel: t.learningSessionQuestionFocusLabel, actionPanelModel, sessionResultModel, rewardModel: createRewardModel({ pendingRewardKind: state.pendingRewardKind, t, onDismiss: dismissReward }), scrollToTopRequestId: state.scrollToTopRequestId, isSessionComplete };
 }

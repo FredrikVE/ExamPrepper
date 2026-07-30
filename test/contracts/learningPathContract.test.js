@@ -35,12 +35,19 @@ describe("LearningPath P04 transport contract", () => {
 
 		expect(learningPathResponse.subjectId).toBe("in2120");
 		expect(learningPathResponse.modules).toHaveLength(1);
+		expect(learningPathResponse.activeModuleId).toBe("11111111-1111-4111-8111-111111111111");
+		expect(learningPathResponse.resumableSession).toBeNull();
+		expect(learningPathResponse.modules[0].availability).toEqual({ isUnlocked: true, isCurrent: true, lockReason: null });
+		expect(learningPathResponse.modules[0].topics).toHaveLength(2);
+		expect(learningPathResponse.examGate).toEqual({ isUnlocked: false, requiredCompletedRounds: 3 });
 		expect(startSessionCommand).toEqual({
 			subjectId: "in2120",
 			moduleId: "11111111-1111-4111-8111-111111111111",
 			lang: "no",
 			round: 2
 		});
+		expect(learningSessionResponse.modulePosition).toBe(1);
+		expect(learningSessionResponse.moduleTitle).toBe("Grunnbegreper");
 		expect(learningSessionResponse.questionCount).toBe(learningSessionResponse.questions.length);
 		expect(submitSessionResponse.status).toBe("completed");
 		expect(submitSessionResponse.score).toEqual({

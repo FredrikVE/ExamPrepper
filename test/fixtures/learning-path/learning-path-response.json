@@ -1,5 +1,7 @@
 {
 	"subjectId": "in2120",
+	"activeModuleId": "11111111-1111-4111-8111-111111111111",
+	"resumableSession": null,
 	"modules": [
 		{
 			"id": "11111111-1111-4111-8111-111111111111",
@@ -7,9 +9,22 @@
 			"position": 1,
 			"title": "Grunnbegreper",
 			"description": "Bygg et sikkert fundament før du går videre.",
-			"topicLabels": [
-				"Sikkerhetsbegreper",
-				"Grunnprinsipper"
+			"availability": {
+				"isUnlocked": true,
+				"isCurrent": true,
+				"lockReason": null
+			},
+			"topics": [
+				{
+					"key": "sikkerhetsbegreper",
+					"label": "Sikkerhetsbegreper",
+					"masteryPercent": null
+				},
+				{
+					"key": "grunnprinsipper",
+					"label": "Grunnprinsipper",
+					"masteryPercent": null
+				}
 			],
 			"progress": {
 				"masteryPercent": 67.5,
@@ -18,5 +33,9 @@
 				"lastSessionAt": "2026-07-29T12:00:00Z"
 			}
 		}
-	]
+	],
+	"examGate": {
+		"isUnlocked": false,
+		"requiredCompletedRounds": 3
+	}
 }

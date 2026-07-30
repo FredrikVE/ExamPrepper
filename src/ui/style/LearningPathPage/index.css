@@ -1,2 +1,6 @@
 /*src/ui/style/LearningPathPage/index.css*/
 @import "./learning-path.css";
+@import "./learning-path-roadmap.css";
+@import "./learning-path-module-card.css";
+@import "./learning-path-module-detail.css";
+@import "./learning-path-responsive.css";

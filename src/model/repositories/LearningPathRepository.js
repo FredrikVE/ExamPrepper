@@ -12,7 +12,13 @@ export default class LearningPathRepository {
 		const response = await this.learningPathDataSource.getLearningPath({ subjectId, language });
 		validateLearningPathResponse(response);
 
-		return { subjectId: response.subjectId, modules: response.modules.map(toLearningModule) };
+		return {
+			subjectId: response.subjectId,
+			activeModuleId: response.activeModuleId,
+			resumableSession: response.resumableSession === null ? null : { ...response.resumableSession },
+			modules: response.modules.map(toLearningModule),
+			examGate: { ...response.examGate }
+		};
 	}
 
 	async startLearningSession(command) {
@@ -39,15 +45,35 @@ export default class LearningPathRepository {
 }
 
 function validateLearningPathResponse(response) {
-	if (!response || typeof response.subjectId !== "string" || !Array.isArray(response.modules)) {
+	if (!response || typeof response.subjectId !== "string" || !isNullableString(response.activeModuleId) || !isValidResumableSession(response.resumableSession) || !Array.isArray(response.modules) || !isValidExamGate(response.examGate)) {
 		throw new Error(INVALID_LEARNING_PATH_RESPONSE);
 	}
 
 	for (const module of response.modules) {
-		if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !Array.isArray(module.topicLabels) || !module.progress || !Number.isFinite(module.progress.masteryPercent) || !Number.isInteger(module.progress.completedRounds) || !Number.isInteger(module.progress.nextRound)) {
+		if (!isValidLearningModule(module)) {
 			throw new Error(INVALID_LEARNING_PATH_RESPONSE);
 		}
 	}
+}
+
+function isValidLearningModule(module) {
+	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !module.progress || !Number.isFinite(module.progress.masteryPercent) || !Number.isInteger(module.progress.completedRounds) || !Number.isInteger(module.progress.nextRound)) {
+		return false;
+	}
+
+	return module.topics.every((topic) => topic && typeof topic.key === "string" && typeof topic.label === "string" && (topic.masteryPercent === null || Number.isFinite(topic.masteryPercent)));
+}
+
+function isValidResumableSession(session) {
+	return session === null || Boolean(session && typeof session.sessionId === "string" && typeof session.moduleId === "string" && Number.isInteger(session.currentQuestionPosition) && Number.isInteger(session.questionCount));
+}
+
+function isValidExamGate(examGate) {
+	return Boolean(examGate && typeof examGate.isUnlocked === "boolean" && Number.isInteger(examGate.requiredCompletedRounds));
+}
+
+function isNullableString(value) {
+	return value === null || typeof value === "string";
 }
 
 function toLearningModule(module) {
@@ -57,13 +83,14 @@ function toLearningModule(module) {
 		position: module.position,
 		title: module.title,
 		description: module.description,
-		topicLabels: [...module.topicLabels],
+		availability: { ...module.availability },
+		topics: module.topics.map((topic) => ({ ...topic })),
 		progress: { ...module.progress }
 	};
 }
 
 function toLearningSession(response) {
-	if (!response || typeof response.sessionId !== "string" || typeof response.moduleId !== "string" || !Number.isInteger(response.round) || !Number.isInteger(response.questionCount) || !Array.isArray(response.questions)) {
+	if (!response || typeof response.sessionId !== "string" || typeof response.moduleId !== "string" || !Number.isInteger(response.modulePosition) || typeof response.moduleTitle !== "string" || !Number.isInteger(response.round) || !Number.isInteger(response.questionCount) || !Array.isArray(response.questions)) {
 		throw new Error(INVALID_LEARNING_SESSION_RESPONSE);
 	}
 
@@ -76,7 +103,7 @@ function toLearningSession(response) {
 		questions.push({ sessionQuestionId: entry.sessionQuestionId, position: entry.position, question: toLearningQuestion(entry.question) });
 	}
 
-	return { sessionId: response.sessionId, moduleId: response.moduleId, round: response.round, questionCount: response.questionCount, questions };
+	return { sessionId: response.sessionId, moduleId: response.moduleId, modulePosition: response.modulePosition, moduleTitle: response.moduleTitle, round: response.round, questionCount: response.questionCount, questions };
 }
 
 function toLearningQuestion(question) {

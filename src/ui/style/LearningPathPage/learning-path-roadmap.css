@@ -1,0 +1,111 @@
+/*src/ui/style/LearningPathPage/learning-path-roadmap.css*/
+.learning-path-roadmap {
+	position: relative;
+	display: grid;
+	row-gap: var(--space-4);
+	padding-bottom: var(--space-2);
+}
+
+.learning-path-roadmap::before {
+	position: absolute;
+	top: 56px;
+	bottom: 56px;
+	left: 41px;
+	width: 2px;
+	content: "";
+	background: repeating-linear-gradient(to bottom, var(--learning-path-connector) 0 9px, transparent 9px 17px);
+	filter: drop-shadow(0 0 6px color-mix(in srgb, white 10%, transparent));
+}
+
+.learning-path-step {
+	position: relative;
+	display: grid;
+	grid-template-columns: 82px minmax(0, 1fr);
+	column-gap: 28px;
+	row-gap: var(--space-3);
+	align-items: center;
+	scroll-margin-top: calc(var(--scaffold-header-height) + var(--space-5));
+}
+
+.learning-path-step--active::after {
+	position: absolute;
+	top: 54px;
+	left: 58px;
+	z-index: 1;
+	width: 38px;
+	height: 2px;
+	content: "";
+	background: repeating-linear-gradient(to right, color-mix(in srgb, var(--text-main) 74%, transparent) 0 9px, transparent 9px 16px);
+	filter: drop-shadow(0 0 5px color-mix(in srgb, white 14%, transparent));
+}
+
+.learning-path-step__node {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	justify-content: center;
+	align-self: start;
+	padding-top: 27px;
+}
+
+.learning-path-step__node::before {
+	position: absolute;
+	top: 22px;
+	left: 50%;
+	z-index: -1;
+	width: 68px;
+	height: 68px;
+	border-radius: 50%;
+	content: "";
+	transform: translateX(-50%);
+	background: var(--shell-bg);
+}
+
+.learning-path-node {
+	display: grid;
+	place-items: center;
+	width: 58px;
+	height: 58px;
+	border: 2px solid color-mix(in srgb, var(--line-strong) 72%, transparent);
+	border-radius: 50%;
+	background: color-mix(in srgb, var(--panel-strong) 92%, transparent);
+	box-shadow: inset 0 0 22px color-mix(in srgb, var(--accent) 12%, transparent);
+	color: var(--text-muted);
+	font-size: 17px;
+	font-weight: 900;
+}
+
+.learning-path-node svg {
+	width: 26px;
+	height: 26px;
+}
+
+.learning-path-node--active {
+	border-color: var(--learning-path-active);
+	background: radial-gradient(circle, color-mix(in srgb, var(--accent) 42%, transparent), color-mix(in srgb, var(--accent) 22%, var(--panel-strong)) 68%);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent), 0 0 28px color-mix(in srgb, var(--accent) 46%, transparent), inset 0 0 24px color-mix(in srgb, var(--accent) 28%, transparent);
+	color: white;
+}
+
+.learning-path-node--strong {
+	border-color: color-mix(in srgb, var(--learning-path-strong) 45%, transparent);
+	background: color-mix(in srgb, var(--learning-path-strong) 16%, var(--panel-strong));
+	color: var(--learning-path-strong);
+}
+
+.learning-path-node--medium {
+	border-color: color-mix(in srgb, var(--learning-path-medium) 48%, transparent);
+	background: color-mix(in srgb, var(--learning-path-medium) 14%, var(--panel-strong));
+	color: var(--learning-path-medium);
+}
+
+.learning-path-node--weak {
+	border-color: color-mix(in srgb, var(--learning-path-weak) 48%, transparent);
+	background: color-mix(in srgb, var(--learning-path-weak) 14%, var(--panel-strong));
+	color: var(--learning-path-weak);
+}
+
+.learning-path-node--locked {
+	opacity: 0.48;
+	filter: saturate(0.55);
+}

@@ -25,10 +25,24 @@ describe("LearningPathRepository", () => {
 		const reloaded = await repository.getLearningSession(session.sessionId);
 		const result = await repository.submitLearningSession({ sessionId: session.sessionId, answers: [] });
 
+		expect(pathModel.activeModuleId).toBe(pathModel.modules[0].id);
+		expect(pathModel.resumableSession).toBeNull();
+		expect(pathModel.modules[0].availability).toEqual({ isUnlocked: true, isCurrent: true, lockReason: null });
+		expect(pathModel.modules[0].topics[0]).toEqual({ key: "sikkerhetsbegreper", label: "Sikkerhetsbegreper", masteryPercent: null });
 		expect(pathModel.modules[0].progress.masteryPercent).toBe(67.5);
+		expect(pathModel.examGate).toEqual({ isUnlocked: false, requiredCompletedRounds: 3 });
+		expect(session).toEqual(expect.objectContaining({ modulePosition: 1, moduleTitle: "Grunnbegreper" }));
 		expect(session.questions[0].sessionQuestionId).toBeTruthy();
 		expect(reloaded.questions).toEqual(session.questions);
 		expect(result.score.earnedPoints).toBe(8.5);
+	});
+
+	test("rejects a learning path without backend-owned availability", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.modules[0].availability;
+		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
+
+		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
 
 	test("rejects a session question without sessionQuestionId", async () => {
@@ -40,7 +54,7 @@ describe("LearningPathRepository", () => {
 	});
 
 	test("maps backend practice options to the canonical QuestionCard shape", async () => {
-		const dataSource = { getLearningSession: async () => ({ sessionId: "s", moduleId: "m", round: 1, questionCount: 1, questions: [{ sessionQuestionId: "sq", position: 1, question: { id: "q", type: "single", points: 1, acceptedAnswers: [], options: [{ id: "a", isCorrect: true, feedback: "Riktig" }] } }] }) };
+		const dataSource = { getLearningSession: async () => ({ sessionId: "s", moduleId: "m", modulePosition: 1, moduleTitle: "Module", round: 1, questionCount: 1, questions: [{ sessionQuestionId: "sq", position: 1, question: { id: "q", type: "single", points: 1, acceptedAnswers: [], options: [{ id: "a", isCorrect: true, feedback: "Riktig" }] } }] }) };
 		const repository = new LearningPathRepository(dataSource);
 		const session = await repository.getLearningSession("s");
 		expect(session.questions[0].question.options[0]).toMatchObject({ correct: true, why: "Riktig" });

@@ -35,7 +35,7 @@ export default function useLearningPathScrollAdapter({ scrollRequest }) {
 
 		resolveScrollContainer(target);
 		const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
-		target.scrollIntoView({ block: "start", inline: "nearest", behavior: prefersReducedMotion ? "auto" : scrollRequest.behavior });
+		target.scrollIntoView({ block: "nearest", inline: "nearest", behavior: prefersReducedMotion ? "auto" : scrollRequest.behavior });
 	}, [scrollRequest]);
 
 	return { registerModuleElement };
