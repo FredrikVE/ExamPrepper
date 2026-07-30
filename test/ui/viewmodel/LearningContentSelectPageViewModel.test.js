@@ -1,3 +1,4 @@
+//test/ui/viewmodel/LearningContentSelectPageViewModel.test.js
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
@@ -219,10 +220,10 @@ describe("useLearningContentSelectPageViewModel", () => {
 		expect(viewModel.contentToggleBackLabel).toBe("Tilbake");
 		expect(viewModel.mobileToggleButtonItems).toHaveLength(3);
 		expect(learningPathItem).toEqual({
-			id: "learning-path",
+			id: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			label: "Sti",
-			contentTypeId: null,
-			isDisabled: true,
+			contentTypeId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
+			isDisabled: false,
 			isActive: false,
 			entries: []
 		});
@@ -302,14 +303,14 @@ describe("useLearningContentSelectPageViewModel", () => {
 		expect(viewModel.visibleExams.map((exam) => exam.id)).toEqual(["exam"]);
 	});
 
-	test("keeps the disabled desktop learning-path entry inert", () => {
+	test("navigates through the enabled desktop learning-path entry", () => {
 		const { viewModel, changeScreen } = createViewModel();
 
 		viewModel.selectContentType("learning-path");
 
 		expect(stateSetters[0]).not.toHaveBeenCalled();
 		expect(stateSetters[1]).not.toHaveBeenCalled();
-		expect(changeScreen).not.toHaveBeenCalled();
+		expect(changeScreen).toHaveBeenCalledWith(NAV_SCREENS.LEARNING_PATH);
 	});
 
 	test("selects the desktop or mobile chapter-test entry through the shared content handler", () => {

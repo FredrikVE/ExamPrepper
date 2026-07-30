@@ -1,4 +1,4 @@
-// src/ui/viewmodel/ExamPageViewModel.js
+//src/ui/viewmodel/ExamPageViewModel.js
 import { useCallback, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
@@ -21,7 +21,7 @@ function formatExamProgressStepLabel(stepNumber, totalSteps) {
 	return `${stepNumber}/${totalSteps}`;
 }
 
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, backContract) {
+export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, backContract }) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [answers, setAnswers] = useState({});
@@ -125,6 +125,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const currentQuestionIndex = clampExamQuestionIndex(rawCurrentQuestionIndex, visibleQuestionCount);
 
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
+	const currentQuestionRenderKey = currentQuestion?.id ?? null;
 
 	const workspaceClassName = useMemo(() => {
 		return deriveWorkspaceClassName(currentQuestion, submitted, isSubmitConfirmOpen);
@@ -356,15 +357,35 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
 	}, []);
 
+	const questionCardModel = currentQuestion === null ? null : {
+		question: currentQuestion,
+		questionNumber: currentQuestionNumber,
+		answer: answers[currentQuestion.id] ?? null,
+		answerOptionOrder: currentAnswerOptionOrder,
+		submitted,
+		showAllFeedback,
+		correct: currentQuestionIsCorrect,
+		fillMatchType: currentQuestionFillMatchType,
+		expandedAnswerOptionIndexes,
+		onToggleAnswerOptionExpanded: toggleAnswerOptionExpanded,
+		onSingleAnswer: setSingleAnswer,
+		onToggleMultiAnswer: toggleMultiAnswer,
+		onDropdownFillAnswer: selectDropdownFillAnswer,
+		onRadioButtonGridAnswer: selectRadioButtonGridAnswer,
+		onMultipleBlankAnswer: selectDropdownFillAnswer
+	};
+
 	return {
 		questions,
 		visibleQuestions,
 		currentQuestion,
+		currentQuestionRenderKey,
 		currentQuestionIndex,
 		currentQuestionNumber,
 		currentQuestionIsCorrect,
 		currentQuestionFillMatchType,
 		answers,
+		questionCardModel,
 
 		workspaceState,
 		shouldShowExamChrome,

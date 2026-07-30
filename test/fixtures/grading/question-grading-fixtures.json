@@ -1,0 +1,394 @@
+[
+	{
+		"id": "single-correct-01",
+		"question": {
+			"id": "single-1",
+			"type": "single",
+			"points": 1,
+			"options": [
+				{
+					"id": "a",
+					"isCorrect": false
+				},
+				{
+					"id": "b",
+					"isCorrect": true
+				}
+			]
+		},
+		"answer": "b",
+		"expected": {
+			"isCorrect": true,
+			"pointsAwarded": 1,
+			"maxPoints": 1
+		}
+	},
+	{
+		"id": "multi-wrong-01",
+		"question": {
+			"id": "multi-1",
+			"type": "multi",
+			"points": 2,
+			"options": [
+				{
+					"id": "a",
+					"isCorrect": true
+				},
+				{
+					"id": "b",
+					"isCorrect": true
+				},
+				{
+					"id": "c",
+					"isCorrect": false
+				}
+			]
+		},
+		"answer": [
+			"a"
+		],
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 0,
+			"maxPoints": 2
+		}
+	},
+	{
+		"id": "fill-normalized-01",
+		"question": {
+			"id": "fill-1",
+			"type": "fill",
+			"points": 1,
+			"acceptedAnswers": [
+				"konfidensialitet"
+			]
+		},
+		"answer": "  KONFIDENSIALITET  ",
+		"expected": {
+			"isCorrect": true,
+			"pointsAwarded": 1,
+			"maxPoints": 1
+		}
+	},
+	{
+		"id": "drag-drop-partial-01",
+		"question": {
+			"id": "drag-1",
+			"type": "dragDrop",
+			"points": 3,
+			"cards": [
+				{
+					"id": "c1"
+				},
+				{
+					"id": "c2"
+				},
+				{
+					"id": "c3"
+				}
+			],
+			"targets": [
+				{
+					"id": "t1"
+				},
+				{
+					"id": "t2"
+				},
+				{
+					"id": "t3"
+				}
+			],
+			"correctMatches": [
+				{
+					"cardId": "c1",
+					"targetId": "t1"
+				},
+				{
+					"cardId": "c2",
+					"targetId": "t2"
+				},
+				{
+					"cardId": "c3",
+					"targetId": "t3"
+				}
+			]
+		},
+		"answer": {
+			"c1": "t1",
+			"c2": "wrong",
+			"c3": "t3"
+		},
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 2,
+			"maxPoints": 3
+		}
+	},
+	{
+		"id": "categorize-partial-01",
+		"question": {
+			"id": "cat-1",
+			"type": "drag-categorize",
+			"points": 4,
+			"categories": [
+				{
+					"id": "a"
+				},
+				{
+					"id": "b"
+				}
+			],
+			"items": [
+				{
+					"id": "i1",
+					"correctCategoryId": "a"
+				},
+				{
+					"id": "i2",
+					"correctCategoryId": "a"
+				},
+				{
+					"id": "i3",
+					"correctCategoryId": "b"
+				},
+				{
+					"id": "i4",
+					"correctCategoryId": "b"
+				}
+			]
+		},
+		"answer": {
+			"i1": "a",
+			"i2": "a",
+			"i3": "a"
+		},
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 2,
+			"maxPoints": 4
+		}
+	},
+	{
+		"id": "matrix-partial-01",
+		"question": {
+			"id": "matrix-1",
+			"type": "matrix-placement",
+			"points": 3,
+			"quadrants": [
+				{
+					"id": "q1"
+				},
+				{
+					"id": "q2"
+				}
+			],
+			"items": [
+				{
+					"id": "i1",
+					"correctQuadrantId": "q1"
+				},
+				{
+					"id": "i2",
+					"correctQuadrantId": "q2"
+				},
+				{
+					"id": "i3",
+					"correctQuadrantId": "q2"
+				}
+			]
+		},
+		"answer": {
+			"i1": "q1",
+			"i2": "wrong",
+			"i3": "q2"
+		},
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 2,
+			"maxPoints": 3
+		}
+	},
+	{
+		"id": "sequence-partial-01",
+		"question": {
+			"id": "seq-1",
+			"type": "SequenceOrder",
+			"points": 3,
+			"items": [
+				{
+					"id": "a",
+					"correctPosition": 1
+				},
+				{
+					"id": "b",
+					"correctPosition": 2
+				},
+				{
+					"id": "c",
+					"correctPosition": 3
+				}
+			]
+		},
+		"answer": [
+			"a",
+			"c",
+			"b"
+		],
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 1,
+			"maxPoints": 3
+		}
+	},
+	{
+		"id": "dropdown-partial-decimal-01",
+		"question": {
+			"id": "drop-1",
+			"type": "dropdownFill",
+			"points": 3,
+			"options": [
+				{
+					"id": "x",
+					"label": "X"
+				},
+				{
+					"id": "y",
+					"label": "Y"
+				}
+			],
+			"items": [
+				{
+					"id": "a",
+					"correctOptionId": "x"
+				},
+				{
+					"id": "b",
+					"correctOptionId": "y"
+				}
+			]
+		},
+		"answer": {
+			"a": "x",
+			"b": "wrong"
+		},
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 1.5,
+			"maxPoints": 3
+		}
+	},
+	{
+		"id": "radio-partial-01",
+		"question": {
+			"id": "radio-1",
+			"type": "radioButtonGrid",
+			"points": 3,
+			"columns": [
+				{
+					"id": "x"
+				},
+				{
+					"id": "y"
+				}
+			],
+			"rows": [
+				{
+					"id": "a",
+					"correctColumnId": "x"
+				},
+				{
+					"id": "b",
+					"correctColumnId": "y"
+				},
+				{
+					"id": "c",
+					"correctColumnId": "x"
+				}
+			]
+		},
+		"answer": {
+			"a": "x",
+			"b": "wrong",
+			"c": "x"
+		},
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 2,
+			"maxPoints": 3
+		}
+	},
+	{
+		"id": "tap-multiple-blank-partial-01",
+		"question": {
+			"id": "tap-1",
+			"type": "tapToFillMultipleBlank",
+			"points": 4,
+			"options": [
+				{
+					"id": "a",
+					"label": "A"
+				},
+				{
+					"id": "b",
+					"label": "B"
+				}
+			],
+			"items": [
+				{
+					"id": "one",
+					"correctOptionId": "a"
+				},
+				{
+					"id": "two",
+					"correctOptionId": "b"
+				}
+			]
+		},
+		"answer": {
+			"one": "a",
+			"two": "a"
+		},
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 2,
+			"maxPoints": 4
+		}
+	},
+	{
+		"id": "write-multiple-blank-normalized-partial-01",
+		"question": {
+			"id": "write-1",
+			"type": "writeToFillMultipleBlank",
+			"points": 4,
+			"options": [
+				{
+					"id": "a",
+					"label": "Access control"
+				},
+				{
+					"id": "b",
+					"label": "Risk analysis"
+				}
+			],
+			"items": [
+				{
+					"id": "one",
+					"correctOptionId": "a"
+				},
+				{
+					"id": "two",
+					"correctOptionId": "b"
+				}
+			]
+		},
+		"answer": {
+			"one": "  ACCESS   CONTROL ",
+			"two": "wrong"
+		},
+		"expected": {
+			"isCorrect": false,
+			"pointsAwarded": 2,
+			"maxPoints": 4
+		}
+	}
+]

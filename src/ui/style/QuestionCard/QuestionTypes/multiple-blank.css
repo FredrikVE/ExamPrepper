@@ -1,0 +1,8 @@
+/*src/ui/style/QuestionCard/QuestionTypes/multiple-blank.css*/
+.multiple-blank-question { display: grid; gap: var(--space-4); }
+.multiple-blank-item { padding: var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-md); }
+.multiple-blank-options { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.multiple-blank-option { padding: var(--space-2) var(--space-3); border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: inherit; }
+.multiple-blank-option.is-selected, .multiple-blank-option.is-correct { border-color: var(--accent); background: var(--accent-soft); }
+
+.multiple-blank-input { width: 100%; min-height: 44px; padding: var(--space-2) var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: inherit; font: inherit; }

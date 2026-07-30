@@ -1,0 +1,30 @@
+/*src/ui/style/LearningSessionPage/learning-session.css*/
+
+.learning-session-content {
+	display: grid;
+	gap: var(--space-5);
+	width: min(100%, var(--exam-content-max-width));
+	margin: 0 auto;
+	padding: var(--space-6) 0;
+}
+
+.learning-session-action-panel,
+.learning-session-result,
+.learning-session-reward {
+	padding: var(--space-5);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	background: var(--panel-strong);
+}
+
+.learning-session-action-panel {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-4);
+}
+
+.learning-session-reward {
+	width: min(90vw, 420px);
+	margin: auto;
+}

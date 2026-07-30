@@ -1,0 +1,22 @@
+{
+	"subjectId": "in2120",
+	"modules": [
+		{
+			"id": "11111111-1111-4111-8111-111111111111",
+			"moduleKey": "grunnbegreper",
+			"position": 1,
+			"title": "Grunnbegreper",
+			"description": "Bygg et sikkert fundament før du går videre.",
+			"topicLabels": [
+				"Sikkerhetsbegreper",
+				"Grunnprinsipper"
+			],
+			"progress": {
+				"masteryPercent": 67.5,
+				"completedRounds": 1,
+				"nextRound": 2,
+				"lastSessionAt": "2026-07-29T12:00:00Z"
+			}
+		}
+	]
+}

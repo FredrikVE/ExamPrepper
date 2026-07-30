@@ -1,3 +1,4 @@
+<!--docs/soul-docs/QUESTION_TYPE_SOUL.md-->
 # QUESTION_TYPE_SOUL.md — Regler for valg av oppgavetype i ExamPrepper
 
 <!-- Sist oppdatert: 2026-05-29 -->
@@ -1818,3 +1819,7 @@ Den viktigste regelen:
 Start med hva studenten skal lære.
 Ikke start med hvilken komponent du har lyst til å bruke.
 ```
+
+## LearningPath-flerfelttyper — 2026-07-29
+
+`tapToFillMultipleBlank` bruker eksplisitte valg per felt. `writeToFillMultipleBlank` bruker tekst per felt og normaliserer Unicode NFKC, ytre/multiple mellomrom og bokstavstørrelse; fuzzy matching brukes ikke. Begge typene støtter delpoeng og inngår i det delte grading-fixture-korpuset.

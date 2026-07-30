@@ -1,10 +1,12 @@
-// src/ui/view/components/QuestionCard/QuestionCard.jsx
+//src/ui/view/components/QuestionCard/QuestionCard.jsx
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 import { getQuestionViewState } from "../../../viewmodel/Utils/questionCardViewState.js";
 import FeedbackPanel from "./Shared/Feedback/FeedbackPanel/FeedbackPanel.jsx";
 import FillBlankInputFieldQuestion from "./QuestionTypes/FillBlankInputField/FillBlankInputFieldQuestion.jsx";
 import DropdownFillQuestion from "./QuestionTypes/DropdownFill/DropdownFillQuestion.jsx";
 import RadioButtonGridQuestion from "./QuestionTypes/RadioButtonGrid/RadioButtonGridQuestion.jsx";
+import TapToFillMultipleBlankQuestion from "./QuestionTypes/TapToFillMultipleBlank/TapToFillMultipleBlankQuestion.jsx";
+import WriteToFillMultipleBlankQuestion from "./QuestionTypes/WriteToFillMultipleBlank/WriteToFillMultipleBlankQuestion.jsx";
 import CategorySortQuestion from "./QuestionTypes/DragDrop/CategorySort/Question/CategorySortQuestion.jsx";
 import TableMatchQuestion from "./QuestionTypes/DragDrop/TableMatch/Question/TableMatchQuestion.jsx";
 import MatrixPlacementQuestion from "./QuestionTypes/DragDrop/MatrixPlacement/Question/MatrixPlacementQuestion.jsx";
@@ -16,7 +18,7 @@ import QuestionFeedback from "./Shared/Feedback/QuestionFeedback.jsx";
 import QuestionHeader from "./Shared/QuestionHeader/QuestionHeader.jsx";
 
 
-export default function QuestionCard({ question, questionNumber, answer, answerOptionOrder, submitted, showAllFeedback, correct, fillMatchType, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, onDropdownFillAnswer, onRadioButtonGridAnswer }) {
+export default function QuestionCard({ question, questionNumber, answer, answerOptionOrder, submitted, showAllFeedback, correct, fillMatchType, expandedAnswerOptionIndexes = [], onToggleAnswerOptionExpanded, onSingleAnswer, onToggleMultiAnswer, onDropdownFillAnswer, onRadioButtonGridAnswer, onMultipleBlankAnswer }) {
     const { t } = useLanguage();
     const answerText = String(answer ?? "");
 
@@ -76,6 +78,15 @@ export default function QuestionCard({ question, questionNumber, answer, answerO
                         onDropdownFillAnswer={onDropdownFillAnswer}
                         t={t}
                     />
+                ) : null}
+
+
+                {viewState.shouldShowTapToFillMultipleBlank ? (
+                    <TapToFillMultipleBlankQuestion question={question} answer={answer} submitted={submitted} showAllFeedback={showAllFeedback} onMultipleBlankAnswer={onMultipleBlankAnswer} t={t} />
+                ) : null}
+
+                {viewState.shouldShowWriteToFillMultipleBlank ? (
+                    <WriteToFillMultipleBlankQuestion question={question} answer={answer} submitted={submitted} onMultipleBlankAnswer={onMultipleBlankAnswer} t={t} />
                 ) : null}
 
                 {viewState.shouldShowRadioButtonGrid ? (

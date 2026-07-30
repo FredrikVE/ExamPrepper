@@ -1,4 +1,4 @@
-// src/ui/viewmodel/AppNavigationViewModel.js
+//src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
 import { getScreenConfig, NAV_SCREENS } from "../../navigation/navigation.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
@@ -10,6 +10,7 @@ export default function useAppNavigationViewModel(params) {
 	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 	const [selectedExamId, setSelectedExamId] = useState(null);
 	const [selectedTopicAreaKey, setSelectedTopicAreaKey] = useState(null);
+	const [selectedLearningSessionId, setSelectedLearningSessionId] = useState(null);
 	const [examLanguageSyncError, setExamLanguageSyncError] = useState(null);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
@@ -35,6 +36,7 @@ export default function useAppNavigationViewModel(params) {
 		setSelectedSubjectId(null);
 		setSelectedExamId(null);
 		setSelectedTopicAreaKey(null);
+		setSelectedLearningSessionId(null);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays]);
 
@@ -59,6 +61,10 @@ export default function useAppNavigationViewModel(params) {
 
 		if (nextScreen !== NAV_SCREENS.EXAM) {
 			setSelectedExamId(null);
+		}
+
+		if (nextScreen !== NAV_SCREENS.LEARNING_SESSION) {
+			setSelectedLearningSessionId(null);
 		}
 
 		if (nextScreen === NAV_SCREENS.SELECT || nextScreen === NAV_SCREENS.GLOSSARY) {
@@ -114,6 +120,18 @@ export default function useAppNavigationViewModel(params) {
 		setActiveScreen(NAV_SCREENS.MATCHCARDS);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays, selectedSubjectId, showAllSubjects]);
+
+	const openLearningSession = useCallback((sessionId) => {
+		if (!sessionId || !selectedSubjectId) {
+			return;
+		}
+
+		setExamLanguageSyncError(null);
+		setSelectedExamId(null);
+		setSelectedLearningSessionId(sessionId);
+		setActiveScreen(NAV_SCREENS.LEARNING_SESSION);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays, selectedSubjectId]);
 
 	const goBack = useCallback(() => {
 		const activeScreenConfig = getScreenConfig(activeScreen);
@@ -177,6 +195,7 @@ export default function useAppNavigationViewModel(params) {
 		selectedSubjectId,
 		selectedExamId,
 		selectedTopicAreaKey,
+		selectedLearningSessionId,
 		examLanguageSyncError,
 		shouldShowSubjectSwitcher,
 		backContract,
@@ -201,6 +220,7 @@ export default function useAppNavigationViewModel(params) {
 		selectExam,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
+		openLearningSession,
 		goBack
 	};
 }

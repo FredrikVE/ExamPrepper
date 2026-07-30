@@ -1,0 +1,70 @@
+/*src/ui/style/LearningPathPage/learning-path.css*/
+
+.learning-path-workspace .workspace-scaffold-body {
+	padding: var(--space-6);
+}
+
+.learning-path-page-content {
+	width: min(100%, 960px);
+	margin: 0 auto;
+}
+
+.learning-path-continue-panel {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-4);
+	margin: var(--space-6) 0;
+	padding: var(--space-5);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	background: var(--panel-strong);
+}
+
+.learning-path-module-track {
+	display: grid;
+	gap: var(--space-4);
+}
+
+.learning-path-module-card {
+	scroll-margin-top: var(--space-4);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	background: var(--panel-strong);
+	overflow: hidden;
+}
+
+.learning-path-module-summary {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--space-4);
+	width: 100%;
+	padding: var(--space-5);
+	border: 0;
+	background: transparent;
+	color: inherit;
+	text-align: left;
+}
+
+.learning-path-module-position {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 999px;
+	background: var(--accent-soft);
+}
+
+.learning-path-module-heading {
+	display: grid;
+	gap: var(--space-1);
+}
+
+.learning-path-module-details {
+	padding: 0 var(--space-5) var(--space-5);
+}
+
+.learning-path-error {
+	color: var(--danger);
+}

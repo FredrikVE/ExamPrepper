@@ -1,3 +1,4 @@
+<!--docs/soul-docs/FRONTEND_ARCHITECTURE_SOUL.md-->
 # FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
 <!-- Versjon: 2.8 — Sist oppdatert: 2026-07-29 -->
@@ -1717,3 +1718,7 @@ commit-meldinger, dokumentasjon.
 > Objekt over fire parametre. To kjedede transformasjoner blir løkke.
 > KISS: sentraliser reell policy og delt semantikk, ikke enhver lik linje eller lik overflate.
 > Ingenting i View henter forretningsdata selv.
+
+## Implementert LearningPath-kontrakt — 2026-07-29
+
+`LearningPathPage` og `LearningSessionPage` har hver sin Page-ViewModel. Bare Page mottar hele `viewModel`; featurekomponentene mottar ferdige modeller og callbacks. `QuestionCard` brukes gjennom canonical fasade med eksplisitt React-`key` fra `currentQuestionRenderKey`. Frontend bruker `sessionQuestionId` som øktidentitet og inneholder ingen selection-, mastery- eller gradingpolicy som konkurrerer med backend.

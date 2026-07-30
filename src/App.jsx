@@ -1,4 +1,4 @@
-// src/App.jsx
+//src/App.jsx
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 
@@ -14,6 +14,8 @@ import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.j
 import useFlipcardsPageViewModel from "./ui/viewmodel/FlipcardsPageViewModel.js";
 import useMatchCardsPageViewModel from "./ui/viewmodel/MatchCardsPageViewModel.js";
 import useGlossaryPageViewModel from "./ui/viewmodel/GlossaryPageViewModel.js";
+import useLearningPathPageViewModel from "./ui/viewmodel/LearningPathPageViewModel.js";
+import useLearningSessionPageViewModel from "./ui/viewmodel/LearningSessionPageViewModel.js";
 
 import SubjectSelectPage from "./ui/view/pages/SubjectSelectPage.jsx";
 import LearningContentSelectPage from "./ui/view/pages/LearningContentSelectPage.jsx";
@@ -22,6 +24,8 @@ import StatisticsPage from "./ui/view/pages/StatisticsPage.jsx";
 import FlipcardsPage from "./ui/view/pages/FlipcardsPage.jsx";
 import MatchCardsPage from "./ui/view/pages/MatchCardsPage.jsx";
 import GlossaryPage from "./ui/view/pages/GlossaryPage.jsx";
+import LearningPathPage from "./ui/view/pages/LearningPathPage.jsx";
+import LearningSessionPage from "./ui/view/pages/LearningSessionPage.jsx";
 
 import AppNavigation from "./ui/view/components/Sidebar/AppNavigation.jsx";
 import SettingsPresentation from "./ui/view/components/Settings/SettingsPresentation.jsx";
@@ -29,7 +33,7 @@ import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoun
 import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
 import { NAV_SCREENS } from "./navigation/navigation.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, submitExamAttemptUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -158,6 +162,14 @@ function AppContent() {
 					<LearningContentSelectPage viewModel={learningContentSelectPageViewModel} />
 				)}
 
+				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_PATH && (
+					<LearningPathPageWrapper selectedSubject={subjectSelectPageViewModel.selectedSubject} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} contentSelectViewModel={learningContentSelectPageViewModel} onLearningSessionStarted={navigationViewModel.openLearningSession} />
+				)}
+
+				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_SESSION && (
+					<LearningSessionPageWrapper sessionId={navigationViewModel.selectedLearningSessionId} t={t} isActive={true} backContract={navigationViewModel.backContract} />
+				)}
+
 				{navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
 					<ExamPageWrapper
 						examId={navigationViewModel.selectedExamId}
@@ -226,8 +238,32 @@ function AppContent() {
 	);
 }
 
+function LearningPathPageWrapper({ selectedSubject, language, t, isActive, backContract, contentSelectViewModel, onLearningSessionStarted }) {
+	const contentToggleContract = {
+		entries: contentSelectViewModel.contentToggleEntries,
+		activeEntryId: "learning-path",
+		mobileActiveEntryId: "learning-path",
+		onSelectEntry: contentSelectViewModel.selectContentType,
+		ariaLabel: contentSelectViewModel.contentToggleAriaLabel,
+		mobileToggleButtonItems: contentSelectViewModel.mobileToggleButtonItems,
+		expandedMobileToggleButtonGroupId: contentSelectViewModel.expandedMobileToggleButtonGroupId,
+		onOpenMobileToggleButtonGroup: contentSelectViewModel.openMobileToggleButtonGroup,
+		onCloseMobileToggleButtonGroup: contentSelectViewModel.closeMobileToggleButtonGroup,
+		contentToggleBackLabel: contentSelectViewModel.contentToggleBackLabel
+	};
+	const viewModel = useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted });
+
+	return <LearningPathPage viewModel={viewModel} />;
+}
+
+function LearningSessionPageWrapper({ sessionId, t, isActive, backContract }) {
+	const viewModel = useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, t, isActive, backContract });
+
+	return <LearningSessionPage viewModel={viewModel} />;
+}
+
 function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef }) {
-	const examPageViewModel = useExamPageViewModel(
+	const examPageViewModel = useExamPageViewModel({
 		getExamQuestionsUseCase,
 		gradeAnswerUseCase,
 		calculateExamScoreUseCase,
@@ -236,7 +272,7 @@ function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChan
 		language,
 		t,
 		backContract
-	);
+	});
 
 	useEffect(() => {
 		examWorkModeActionsRef.current = {

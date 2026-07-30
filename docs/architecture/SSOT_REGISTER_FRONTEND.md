@@ -1,3 +1,4 @@
+<!--docs/architecture/SSOT_REGISTER_FRONTEND.md-->
 # SSOT-register — ExamPrepper frontend
 
 Oppdatert: 2026-07-29
@@ -421,3 +422,14 @@ En tyngre overgangsmodell blir først berettiget når én eller flere av disse o
 Det er da `AppNavigationViewModel` og next-state-beregningen som først blir presset. `App.jsx` kan fortsatt beholde enkel `activeScreen`-mapping så lenge overgangsmodellen produserer én aktiv skjerm.
 
 Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i ViewModelen og rendering i `App.jsx`. Utvid ved å legge til en node og en gren, ikke ved å innføre et rammeverk.
+
+## LearningPath — implementert eierskap 2026-07-29
+
+| Ansvar | Autoritativ eier |
+|---|---|
+| LearningPath-sidepolicy | `useLearningPathPageViewModel` |
+| LearningSession-state og UI-mekanikk | `useLearningSessionPageViewModel` + `sessionReducer` |
+| Transport og mapping | `ApiLearningPathDataSource` + `LearningPathRepository` |
+| Spørsmålsrendring | canonical `QuestionCard` |
+| Sessionidentitet i frontend | `sessionQuestionId` |
+| Navigasjon | `navigation.js` + `AppNavigationViewModel` |

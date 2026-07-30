@@ -1,4 +1,4 @@
-// src/model/domain/GradeAnswerUseCase.js
+//src/model/domain/GradeAnswerUseCase.js
 import normalizeAnswer from "./utils/normalizeAnswer.js";
 import getCorrectIndexes from "./utils/getCorrectIndexes.js";
 import { isFuzzyMatch } from "./utils/fuzzyMatch.js";
@@ -39,8 +39,12 @@ export default class GradeAnswerUseCase {
             return this.#isSequenceOrderAnswerFullyCorrect(question, answer);
         }
 
-        if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+        if (question.type === QUESTION_TYPES.DROPDOWN_FILL || question.type === QUESTION_TYPES.TAP_TO_FILL_MULTIPLE_BLANK) {
             return this.#isDropdownFillAnswerFullyCorrect(question, answer);
+        }
+
+        if (question.type === QUESTION_TYPES.WRITE_TO_FILL_MULTIPLE_BLANK) {
+            return this.#isWriteToFillMultipleBlankAnswerFullyCorrect(question, answer);
         }
 
         if (question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
@@ -71,8 +75,12 @@ export default class GradeAnswerUseCase {
             return this.#getSequenceOrderQuestionScore(question, answer);
         }
 
-        if (question.type === QUESTION_TYPES.DROPDOWN_FILL) {
+        if (question.type === QUESTION_TYPES.DROPDOWN_FILL || question.type === QUESTION_TYPES.TAP_TO_FILL_MULTIPLE_BLANK) {
             return this.#getDropdownFillQuestionScore(question, answer);
+        }
+
+        if (question.type === QUESTION_TYPES.WRITE_TO_FILL_MULTIPLE_BLANK) {
+            return this.#getWriteToFillMultipleBlankQuestionScore(question, answer);
         }
 
         if (question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
@@ -399,6 +407,56 @@ export default class GradeAnswerUseCase {
         const rawScore = question.points * (stats.correct / items.length);
 
         return Number(rawScore.toFixed(2));
+    }
+
+    #isWriteToFillMultipleBlankAnswerFullyCorrect(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+
+        if (items.length === 0) {
+            return false;
+        }
+
+        const stats = this.#getWriteToFillMultipleBlankStats(question, answer);
+        return stats.correct === items.length;
+    }
+
+    #getWriteToFillMultipleBlankQuestionScore(question, answer) {
+        const items = Array.isArray(question?.items) ? question.items : [];
+
+        if (items.length === 0) {
+            return 0;
+        }
+
+        const stats = this.#getWriteToFillMultipleBlankStats(question, answer);
+        const rawScore = question.points * (stats.correct / items.length);
+        return Number(rawScore.toFixed(2));
+    }
+
+    #getWriteToFillMultipleBlankStats(question, answer) {
+        const safeAnswer = this.#isPlainObject(answer) ? answer : {};
+        const optionLabelById = new Map((question?.options ?? []).map((option) => [option.id, option.label]));
+        const stats = { correct: 0, wrong: 0, unanswered: 0 };
+
+        for (const item of question?.items ?? []) {
+            const submittedValue = String(safeAnswer[item.id] ?? "");
+            if (submittedValue.trim() === "") {
+                stats.unanswered += 1;
+                continue;
+            }
+
+            const expectedValue = optionLabelById.get(item.correctOptionId) ?? "";
+            if (this.#normalizeWrittenBlankValue(submittedValue) === this.#normalizeWrittenBlankValue(expectedValue)) {
+                stats.correct += 1;
+            } else {
+                stats.wrong += 1;
+            }
+        }
+
+        return stats;
+    }
+
+    #normalizeWrittenBlankValue(value) {
+        return String(value).normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase();
     }
 
     #isRadioButtonGridAnswerFullyCorrect(question, answer) {

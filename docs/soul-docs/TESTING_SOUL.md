@@ -1,3 +1,4 @@
+<!--docs/soul-docs/TESTING_SOUL.md-->
 # TESTING_SOUL.md
 
 ## Formål
@@ -382,3 +383,7 @@ Workflow-filer, eksakte kommandoer og nåværende CI-status dokumenteres i `docs
 # Kort oppsummert
 
 Velg tester ut fra risiko. Bruk laveste nivå som gir troverdig tillit. Testgrensene følger arkitekturen: Use Cases er primærgrensen for forretningslogikk, Repositories testes med Fakes, DataSources testes med integrasjonstester, ViewModels testes med injiserte Use Cases, og Playwright brukes til få viktige flyter. CI kjører automatiserte kontroller ved endringer. La teststrukturen følge arkitekturen. Test observerbar oppførsel.
+
+## LearningPath-testgrenser — 2026-07-29
+
+Kontrakttestene under `test/contracts/` bruker representative payloads fra `test/fixtures/`. Repository og DataSource testes separat. Session-reducer og Page-ViewModels testes for state og avledninger. Frontend og backend leser samme grading-fixture-korpus og sammenligner `isCorrect`, `pointsAwarded` og `maxPoints`. Arkitekturgater håndhever Page-/ViewModel-eierskap, canonical `QuestionCard`-bruk og at testdata ikke legges i en rotmappe kalt `contracts/`.

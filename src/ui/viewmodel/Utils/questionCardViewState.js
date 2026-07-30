@@ -1,4 +1,4 @@
-// src/ui/viewmodel/Utils/questionCardViewState.js
+//src/ui/viewmodel/Utils/questionCardViewState.js
 import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
 
 const INLINE_FILL_BLANK_PATTERN = /_{3,}/;
@@ -34,6 +34,14 @@ export function isRadioButtonGridQuestion(question) {
 	return question?.type === QUESTION_TYPES.RADIO_BUTTON_GRID;
 }
 
+export function isTapToFillMultipleBlankQuestion(question) {
+	return question?.type === QUESTION_TYPES.TAP_TO_FILL_MULTIPLE_BLANK;
+}
+
+export function isWriteToFillMultipleBlankQuestion(question) {
+	return question?.type === QUESTION_TYPES.WRITE_TO_FILL_MULTIPLE_BLANK;
+}
+
 export function hasInlineFillBlank(question) {
 	return question?.type === QUESTION_TYPES.FILL && INLINE_FILL_BLANK_PATTERN.test(question?.prompt ?? "");
 }
@@ -48,6 +56,8 @@ export function getQuestionTypeLabel(type, t) {
 	if (type === QUESTION_TYPES.SEQUENCE_ORDER) return t.questionTypeSequenceOrder;
 	if (type === QUESTION_TYPES.DROPDOWN_FILL) return t.questionTypeDropdownFill;
 	if (type === QUESTION_TYPES.RADIO_BUTTON_GRID) return t.questionTypeRadioButtonGrid;
+	if (type === QUESTION_TYPES.TAP_TO_FILL_MULTIPLE_BLANK) return t.questionTypeTapToFillMultipleBlank;
+	if (type === QUESTION_TYPES.WRITE_TO_FILL_MULTIPLE_BLANK) return t.questionTypeWriteToFillMultipleBlank;
 
 	return t.questionTypeUnknown;
 }
@@ -57,6 +67,8 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
 	const dragDropQuestion = isDragDropQuestion(question);
 	const dropdownFillQuestion = isDropdownFillQuestion(question);
 	const radioButtonGridQuestion = isRadioButtonGridQuestion(question);
+	const tapToFillMultipleBlankQuestion = isTapToFillMultipleBlankQuestion(question);
+	const writeToFillMultipleBlankQuestion = isWriteToFillMultipleBlankQuestion(question);
 	const inlineFillBlank = hasInlineFillBlank(question);
 	const feedbackMode = Boolean(submitted && showAllFeedback);
 	const isSingleChoice = question?.type === QUESTION_TYPES.SINGLE;
@@ -76,6 +88,8 @@ export function getQuestionViewState({ question, submitted, showAllFeedback, cor
 		shouldShowSequenceOrder: isSequenceOrderQuestion(question),
 		shouldShowDropdownFill: dropdownFillQuestion,
 		shouldShowRadioButtonGrid: radioButtonGridQuestion,
+		shouldShowTapToFillMultipleBlank: tapToFillMultipleBlankQuestion,
+		shouldShowWriteToFillMultipleBlank: writeToFillMultipleBlankQuestion,
 		shouldShowWarning: Boolean(submitted && !showAllFeedback && !correct),
 		shouldShowFillInput: fillQuestion && !inlineFillBlank,
 		shouldShowFillFeedback: feedbackMode && fillQuestion,

@@ -1,4 +1,4 @@
-// test/ui/GlossaryPageViewModel.test.js
+//test/ui/GlossaryPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
 import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../src/navigation/navigation.js";
@@ -256,10 +256,10 @@ describe("useGlossaryPageViewModel", () => {
 		expect(viewModel.contentToggleBackLabel).toBe("Tilbake");
 		expect(viewModel.mobileToggleButtonItems).toHaveLength(3);
 		expect(learningPathItem).toEqual({
-			id: "learning-path",
+			id: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			label: "Sti",
-			contentTypeId: null,
-			isDisabled: true,
+			contentTypeId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
+			isDisabled: false,
 			isActive: false,
 			entries: []
 		});

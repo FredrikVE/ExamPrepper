@@ -1,4 +1,4 @@
-// src/ui/view/components/WorkspaceScaffold/WorkspaceScaffold.jsx
+//src/ui/view/components/WorkspaceScaffold/WorkspaceScaffold.jsx
 import { useEffect, useRef } from "react";
 
 export default function WorkspaceScaffold(props) {
@@ -40,6 +40,7 @@ export default function WorkspaceScaffold(props) {
 
 const scrollWorkspaceBodyToTop = (bodyRef) => {
 	window.requestAnimationFrame(() => {
-		bodyRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+		const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
+		bodyRef.current?.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
 	});
 };

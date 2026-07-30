@@ -1,14 +1,16 @@
-// src/di/dependencies.js
+//src/di/dependencies.js
 import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
 import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
 import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
 import ApiGlossaryDataSource from "../model/datasource/ApiGlossaryDataSource.js";
 import ApiExamAttemptDataSource from "../model/datasource/ApiExamAttemptDataSource.js";
+import ApiLearningPathDataSource from "../model/datasource/ApiLearningPathDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
 import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
 import GlossaryRepository from "../model/repositories/GlossaryRepository.js";
+import LearningPathRepository from "../model/repositories/LearningPathRepository.js";
 
 import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js";
 import GetAvailableExamsUseCase from "../model/domain/GetAvailableExamsUseCase.js";
@@ -19,6 +21,10 @@ import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLan
 import GetGlossaryEntriesForSubjectUseCase from "../model/domain/GetGlossaryEntriesForSubjectUseCase.js";
 import GetTopicAreasUseCase from "../model/domain/GetTopicAreasUseCase.js";
 import GetFlipcardDeckSummariesUseCase from "../model/domain/GetFlipcardDeckSummariesUseCase.js";
+import GetLearningPathUseCase from "../model/domain/GetLearningPathUseCase.js";
+import StartLearningSessionUseCase from "../model/domain/StartLearningSessionUseCase.js";
+import GetLearningSessionUseCase from "../model/domain/GetLearningSessionUseCase.js";
+import SubmitLearningSessionUseCase from "../model/domain/SubmitLearningSessionUseCase.js";
 
 import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
@@ -58,12 +64,14 @@ const examAttemptDataSource = new ApiExamAttemptDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken
 });
+const learningPathDataSource = new ApiLearningPathDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 
 // Repositories
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
 const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
 const glossaryRepository = new GlossaryRepository(glossaryDataSource);
+const learningPathRepository = new LearningPathRepository(learningPathDataSource);
 
 // Use cases
 const gradeAnswerUseCase = new GradeAnswerUseCase();
@@ -79,6 +87,10 @@ const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository)
 const getGlossaryEntriesForSubjectUseCase = new GetGlossaryEntriesForSubjectUseCase(glossaryRepository);
 const getTopicAreasUseCase = new GetTopicAreasUseCase(subjectRepository);
 const getFlipcardDeckSummariesUseCase = new GetFlipcardDeckSummariesUseCase(glossaryRepository, subjectRepository);
+const getLearningPathUseCase = new GetLearningPathUseCase(learningPathRepository);
+const startLearningSessionUseCase = new StartLearningSessionUseCase(learningPathRepository);
+const getLearningSessionUseCase = new GetLearningSessionUseCase(learningPathRepository);
+const submitLearningSessionUseCase = new SubmitLearningSessionUseCase(learningPathRepository);
 
 // Export
 export {
@@ -94,5 +106,9 @@ export {
     getMyStatisticsUseCase,
     getGlossaryEntriesForSubjectUseCase,
     getTopicAreasUseCase,
-    getFlipcardDeckSummariesUseCase
+    getFlipcardDeckSummariesUseCase,
+    getLearningPathUseCase,
+    startLearningSessionUseCase,
+    getLearningSessionUseCase,
+    submitLearningSessionUseCase
 };

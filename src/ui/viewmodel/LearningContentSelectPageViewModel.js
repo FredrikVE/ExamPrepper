@@ -1,4 +1,4 @@
-// src/ui/viewmodel/LearningContentSelectPageViewModel.js
+//src/ui/viewmodel/LearningContentSelectPageViewModel.js
 import { useCallback, useMemo, useState } from "react";
 import { LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
 import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
@@ -136,14 +136,13 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 
 		const contentType = getContentTypeEntry(toggleEntry.contentTypeId);
 
-		resetSearchSheet(ALL_TOPIC_AREAS);
-		setSelectedTestType(toggleEntry.testType);
-
 		if (contentType.targetScreen !== NAV_SCREENS.SELECT) {
 			onChangeScreen(contentType.targetScreen);
 			return;
 		}
 
+		resetSearchSheet(ALL_TOPIC_AREAS);
+		setSelectedTestType(toggleEntry.testType);
 		setActiveContentType(contentType.id);
 
 		if (!isActive) {

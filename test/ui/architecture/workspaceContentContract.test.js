@@ -1,3 +1,4 @@
+//test/ui/architecture/workspaceContentContract.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
@@ -99,7 +100,7 @@ function collectCssRules() {
 describe("WorkspaceScaffold content contract", () => {
 	test("does not expose or consume a dynamic content class escape hatch", () => {
 		const consumers = findWorkspaceScaffoldAttributes();
-		expect(consumers).toHaveLength(7);
+		expect(consumers).toHaveLength(9);
 
 		for (const consumer of consumers) {
 			expect(consumer.attributeNames).not.toContain("contentClassName");

@@ -1,4 +1,4 @@
-// src/navigation/navigation.js
+//src/navigation/navigation.js
 export const NAV_SCREENS = {
 	SUBJECTS: "subjects",
 	SELECT: "select",
@@ -6,7 +6,9 @@ export const NAV_SCREENS = {
 	FLIPCARDS: "flipcards",
 	MATCHCARDS: "matchcards",
 	GLOSSARY: "glossary",
-	OVERVIEW: "overview"
+	OVERVIEW: "overview",
+	LEARNING_PATH: "learningPath",
+	LEARNING_SESSION: "learningSession"
 };
 
 export const SCREEN_CONFIG = {
@@ -58,6 +60,22 @@ export const SCREEN_CONFIG = {
 		pageClassName: "exam-select-page",
 		shellClassName: "exam-select-shell"
 	},
+	[NAV_SCREENS.LEARNING_PATH]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.SELECT,
+		showsSubjectSwitcher: true,
+		pageClassName: "exam-select-page",
+		shellClassName: "exam-select-shell"
+	},
+	[NAV_SCREENS.LEARNING_SESSION]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.LEARNING_PATH,
+		showsSubjectSwitcher: false,
+		pageClassName: "exam-page",
+		shellClassName: "exam-shell"
+	},
 	[NAV_SCREENS.OVERVIEW]: {
 		requiresSubject: false,
 		requiresExam: false,
@@ -82,7 +100,8 @@ export const LEARNING_CONTENT_TYPES = {
 	EXAMS: "exams",
 	FLIPCARDS: "flipcards",
 	MATCHCARDS: "matchcards",
-	GLOSSARY: "glossary"
+	GLOSSARY: "glossary",
+	LEARNING_PATH: "learning-path"
 };
 
 export const TEST_TYPES = {
@@ -114,16 +133,16 @@ export const NAV_ITEMS = {
 
 	toggleButtonItems: [
 		{
-			id: "learning-path",
-			contentTypeId: null,
+			id: LEARNING_CONTENT_TYPES.LEARNING_PATH,
+			contentTypeId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			testType: null,
 			labelKey: "contentToggleLearningPathDesktopLabel",
 			titleKey: null,
 			subtitleKey: null,
 			subtitleFallbackKey: null,
 			searchPlaceholderKey: null,
-			targetScreen: null,
-			isDisabled: true
+			targetScreen: NAV_SCREENS.LEARNING_PATH,
+			isDisabled: false
 		},
 		{
 			id: LEARNING_CONTENT_TYPES.GLOSSARY,
@@ -191,11 +210,11 @@ export const NAV_ITEMS = {
 
 	mobileToggleButtonItems: [
 		{
-			id: "learning-path",
+			id: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			labelKey: "contentToggleLearningPathLabel",
-			contentTypeId: null,
+			contentTypeId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			entryIds: [],
-			isDisabled: true
+			isDisabled: false
 		},
 		{
 			id: "practice",

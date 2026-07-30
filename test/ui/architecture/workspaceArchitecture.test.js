@@ -1,4 +1,4 @@
-// test/ui/architecture/workspaceArchitecture.test.js
+//test/ui/architecture/workspaceArchitecture.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
@@ -147,7 +147,8 @@ describe("workspace architecture", () => {
 		expect(learningContentHeaderFiles).toHaveLength(1);
 		expect(learningContentHeaderImports.map(({ filePath }) => filePath).sort()).toEqual([
 			"src/ui/view/pages/GlossaryPage.jsx",
-			"src/ui/view/pages/LearningContentSelectPage.jsx"
+			"src/ui/view/pages/LearningContentSelectPage.jsx",
+			"src/ui/view/pages/LearningPathPage.jsx"
 		]);
 	});
 });
