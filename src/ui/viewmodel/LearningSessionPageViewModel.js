@@ -7,6 +7,7 @@ import { updateObjectAnswerSelection, updateSingleAnswerSelection, toggleMultiAn
 import createRewardModel from "./LearningSession/createRewardModel.js";
 import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "./LearningSession/sessionReducer.js";
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
+import transformLearningSessionAnswersForApi from "./QuestionSession/transformLearningSessionAnswersForApi.js";
 
 export default function useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, t, isActive, backContract }) {
 	const [state, dispatch] = useReducer(sessionReducer, undefined, createInitialSessionState);
@@ -63,7 +64,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	const submitSession = useCallback(async () => {
 		if (state.sessionId === null || state.submitStatus === "submitting" || state.submitStatus === "succeeded") return;
 		dispatch({ type: SESSION_ACTIONS.SUBMIT_STARTED });
-		const answers = Object.entries(state.answersBySessionQuestionId).map(([sessionQuestionId, answer]) => ({ sessionQuestionId, answer }));
+		const answers = transformLearningSessionAnswersForApi(state.questions, state.answersBySessionQuestionId);
 		try {
 			const result = await submitLearningSessionUseCase.execute({ sessionId: state.sessionId, answers });
 			dispatch({ type: SESSION_ACTIONS.SUBMIT_SUCCEEDED, result });
