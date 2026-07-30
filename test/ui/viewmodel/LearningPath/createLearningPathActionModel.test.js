@@ -28,6 +28,12 @@ describe("createLearningPathActionModel", () => {
 		expect(model).toMatchObject({ intent: "start", moduleId: "module-1", sessionId: null, label: "Start 1", isDisabled: false });
 	});
 
+	test("restarts a completed module at round one", () => {
+		const module = createModule({ progress: { completedRounds: 3, nextRound: 3 } });
+		const model = createLearningPathActionModel({ module, resumableSession: null, startingModuleId: null, t });
+		expect(model).toMatchObject({ intent: "restart", moduleId: "module-1", sessionId: null, round: 1, label: "Retry", isDisabled: false });
+	});
+
 	test("disables a locked module", () => {
 		const module = createModule({ availability: { isUnlocked: false } });
 		const model = createLearningPathActionModel({ module, resumableSession: null, startingModuleId: null, t });

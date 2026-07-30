@@ -23,6 +23,15 @@ describe("LearningPath action contract", () => {
 		expect(page).not.toMatch(/onStartModule|onContinue=/);
 	});
 
+	test("uses the action round so completed modules restart from round one", () => {
+		const actionModel = read("src/ui/viewmodel/LearningPath/createLearningPathActionModel.js");
+		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
+		expect(actionModel).toContain('intent: isCompleted ? "restart" : "start"');
+		expect(actionModel).toContain("round: isCompleted ? 1 : module.progress.nextRound");
+		expect(viewModel).toContain("round: actionModel.round");
+		expect(viewModel).toContain("await startSession(actionModel)");
+	});
+
 	test("passes the complete action model from module detail", () => {
 		const detail = read("src/ui/view/components/LearningPathPage/LearningPathModuleDetail.jsx");
 		const step = read("src/ui/view/components/LearningPathPage/LearningPathStep.jsx");

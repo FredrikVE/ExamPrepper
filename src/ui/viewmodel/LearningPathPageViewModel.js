@@ -30,16 +30,16 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 		setScrollRequestId((currentId) => currentId + 1);
 	}, [learningPath.modules]);
 
-	const startSession = useCallback(async (moduleId) => {
-		if (!moduleId || startingModuleId !== null || selectedSubject === null) return;
-		const module = learningPath.modules.find((candidate) => candidate.id === moduleId);
+	const startSession = useCallback(async (actionModel) => {
+		if (actionModel === null || !actionModel.moduleId || !Number.isInteger(actionModel.round) || startingModuleId !== null || selectedSubject === null) return;
+		const module = learningPath.modules.find((candidate) => candidate.id === actionModel.moduleId);
 		if (!module?.availability.isUnlocked) return;
 
-		setStartingModuleId(moduleId);
+		setStartingModuleId(actionModel.moduleId);
 		setStartSessionError(null);
 
 		try {
-			const session = await startLearningSessionUseCase.execute({ subjectId: selectedSubject.id, moduleId, language, round: module.progress.nextRound });
+			const session = await startLearningSessionUseCase.execute({ subjectId: selectedSubject.id, moduleId: actionModel.moduleId, language, round: actionModel.round });
 			onLearningSessionStarted(session.sessionId);
 		} catch (_error) {
 			setStartSessionError(t.learningPathStartErrorMessage);
@@ -57,7 +57,7 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 			onLearningSessionStarted(actionModel.sessionId);
 			return;
 		}
-		await startSession(actionModel.moduleId);
+		await startSession(actionModel);
 	}, [onLearningSessionStarted, startSession]);
 
 	const workspaceState = createWorkspaceState({

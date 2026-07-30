@@ -359,7 +359,7 @@ export const translations = {
         learningPathTopicProgressLabel: (percentage) => `${percentage}%`,
         learningPathStartRoundLabel: (round) => `Start runde ${round}`,
         learningPathContinueRoundLabel: (round) => `Fortsett runde ${round}`,
-        learningPathRetryModuleLabel: "Ta på nytt",
+        learningPathRetryModuleLabel: "Ta modulen på nytt",
         learningPathStatusActiveRound: (round) => `Pågår · runde ${round} av 3`,
         learningPathStatusStrongRound: (round) => `Sitter · runde ${round} av 3`,
         learningPathStatusMediumRound: (round) => `Underveis · runde ${round} av 3`,

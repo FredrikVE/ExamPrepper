@@ -15,12 +15,14 @@ export default function createLearningPathActionModel({ module, resumableSession
 		};
 	}
 
+	const isCompleted = module.progress.completedRounds >= 3;
+
 	return {
-		intent: "start",
+		intent: isCompleted ? "restart" : "start",
 		moduleId: module.id,
 		sessionId: null,
-		round: module.progress.nextRound,
-		label: module.progress.completedRounds >= 3 ? t.learningPathRetryModuleLabel : t.learningPathStartRoundLabel(module.progress.nextRound),
+		round: isCompleted ? 1 : module.progress.nextRound,
+		label: isCompleted ? t.learningPathRetryModuleLabel : t.learningPathStartRoundLabel(module.progress.nextRound),
 		isDisabled: !module.availability.isUnlocked || startingModuleId !== null,
 		isPending: isStarting
 	};
