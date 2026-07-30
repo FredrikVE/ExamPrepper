@@ -14,6 +14,7 @@ const t = {
 	learningPathStatusNotStartedRound: (round) => `Not started ${round}`,
 	learningPathDetailHeading: "Progress",
 	learningPathNoTopicProgressLabel: "Not started",
+	learningPathTopicNotMeasuredLabel: "Not measured",
 	learningPathTopicProgressLabel: (percentage) => `${percentage}%`,
 	learningPathRetryModuleLabel: "Retry",
 	learningPathStartRoundLabel: (round) => `Start ${round}`,
@@ -40,4 +41,33 @@ describe("createLearningPathRoadmapModel", () => {
 		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: 55, appearance: "medium" });
 		expect(model.entries[1]).toMatchObject({ kind: "examGate", appearance: "locked" });
 	});
+	test("does not call a previously attempted topic not started when topic scoring is unavailable", () => {
+		const startedPath = {
+			...learningPath,
+			modules: [{
+				...learningPath.modules[0],
+				topics: [{ key: "topic", label: "Topic", masteryPercent: null }]
+			}]
+		};
+
+		const model = createLearningPathRoadmapModel({ learningPath: startedPath, expandedModuleId: "module-1", startingModuleId: null, t });
+
+		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: null, percentageLabel: "Not measured" });
+	});
+
+	test("keeps not started for a topic before the module has any activity", () => {
+		const untouchedPath = {
+			...learningPath,
+			modules: [{
+				...learningPath.modules[0],
+				topics: [{ key: "topic", label: "Topic", masteryPercent: null }],
+				progress: { masteryPercent: 0, completedRounds: 0, nextRound: 1, lastSessionAt: null }
+			}]
+		};
+
+		const model = createLearningPathRoadmapModel({ learningPath: untouchedPath, expandedModuleId: "module-1", startingModuleId: null, t });
+
+		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: null, percentageLabel: "Not started" });
+	});
+
 });

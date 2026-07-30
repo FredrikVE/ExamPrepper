@@ -7,6 +7,7 @@ export default function createLearningPathModuleModel({ module, resumableSession
 	const isCompleted = module.progress.completedRounds >= 3;
 	const status = createModuleStatus({ masteryPercent: module.progress.masteryPercent, isCurrent: module.availability.isCurrent, isCompleted, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
+	const hasModuleActivity = module.progress.completedRounds > 0 || module.progress.lastSessionAt !== null || resumableSession?.moduleId === module.id;
 	const actionModel = createLearningPathActionModel({ module, resumableSession, startingModuleId, t });
 
 	return {
@@ -47,13 +48,18 @@ export default function createLearningPathModuleModel({ module, resumableSession
 				key: topic.key,
 				label: topic.label,
 				percentage: topic.masteryPercent,
-				percentageLabel: topic.masteryPercent === null ? t.learningPathNoTopicProgressLabel : t.learningPathTopicProgressLabel(topic.masteryPercent),
+				percentageLabel: createTopicProgressLabel({ masteryPercent: topic.masteryPercent, hasModuleActivity, t }),
 				appearance: createMasteryAppearance(topic.masteryPercent ?? 0)
 			})),
 			actionModel
 		} : null,
 		actionModel
 	};
+}
+
+function createTopicProgressLabel({ masteryPercent, hasModuleActivity, t }) {
+	if (masteryPercent !== null) return t.learningPathTopicProgressLabel(masteryPercent);
+	return hasModuleActivity ? t.learningPathTopicNotMeasuredLabel : t.learningPathNoTopicProgressLabel;
 }
 
 function createStatusLabel({ statusKey, round, t }) {
