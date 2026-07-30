@@ -1,7 +1,7 @@
-//src/model/datasource/ApiLearningPathDataSource.js
-import ApiDataSource from "./ApiDataSource.js";
+//src/model/datasource/LearningPathDataSource.js
+import DataSource from "./DataSource.js";
 
-export default class ApiLearningPathDataSource extends ApiDataSource {
+export default class LearningPathDataSource extends DataSource {
 	async getLearningPath({ subjectId, language }) {
 		return await this.get(`/subjects/${encodeURIComponent(subjectId)}/learning-path?lang=${encodeURIComponent(language)}`);
 	}

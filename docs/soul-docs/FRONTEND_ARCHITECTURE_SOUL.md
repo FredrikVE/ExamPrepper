@@ -83,7 +83,7 @@ forbudt i `QuestionCard`-kapabiliteten og API-transformasjonen og håndheves av 
 | Søk | Search-familien i `components/Search/` | Felt, filter, backdrop, forslag og listbox-mekanikk gjenbrukes; feature-VM eier rangering/policy. |
 | Verktøykort | `<ToolCardGrid/>`, `<ToolCard/>` | Brukes for den dokumenterte verktøykort-flaten. |
 | Root render-crash | `<AppErrorBoundary/>` | App-roten har én recovery-grense; page-load-feil går fortsatt gjennom WorkspaceState. |
-| HTTP-requestmekanikk | `class ApiDataSource` | Alle API-datakilder arver requestmekanismen; base-URL eies av `dependencies.js`. |
+| HTTP-requestmekanikk | `class DataSource` | Alle API-datakilder arver requestmekanismen; base-URL eies av `dependencies.js`. |
 
 #### Eierskap for spørsmålskapabiliteten
 
@@ -263,7 +263,7 @@ blir mer kompleks.
 - Ingen forretningslogikk; returnerer parsede transportdata/DTO-er, aldri `Response`
 - Brukerpreferanser i `localStorage` er et eksplisitt Context-unntak, ikke en DataSource
 - Instansieres i `dependencies.js` — aldri andre steder
-- Felles HTTP-mekanikk arves fra `ApiDataSource`
+- Felles HTTP-mekanikk arves fra `DataSource`
 
 ### 2. Repository-laget — `src/model/repositories/`
 
@@ -1064,7 +1064,7 @@ importere fra `model/`, eie state andre komponenter utenfor eget tre trenger.
 | Undermodell | React hooks, rene konstanter, modeller i samme kapabilitet | View-komponenter, `dependencies.js`, andre siders ViewModels |
 | Use Case | Repository via konstruktør, andre Use Cases via konstruktør | ViewModel, View |
 | Repository | DataSource via konstruktør | Use Cases, ViewModel, View |
-| DataSource | Felles `ApiDataSource`, transportdata og plattform-API | Repository, Use Cases, ViewModel, View |
+| DataSource | Felles `DataSource`, transportdata og plattform-API | Repository, Use Cases, ViewModel, View |
 | `dependencies.js` | Alle konkrete implementasjoner og runtime-konfigurasjon | UI-beslutninger og domeneregler |
 
 Atomic Design presiserer importretningen inne i View-laget:
@@ -1118,7 +1118,7 @@ trenge en default for å overleve.
 
 ---
 
-## Backend — ApiDataSource er HTTP-grensen
+## Backend — DataSource er HTTP-grensen
 
 Backend eksisterer: Express/TypeScript på Render, PostgreSQL via Neon og
 Clerk-JWT-auth. Frontendens DataSource-klasser er HTTP-grensen.
@@ -1145,7 +1145,7 @@ kun én fysisk fil alltid endres.
 - token-provider som injiseres,
 - valg av konkret implementasjon.
 
-`ApiDataSource` eier:
+`DataSource` eier:
 
 - URL-sammensetting fra injisert base-URL,
 - auth-header fra injisert token-funksjon,
@@ -1159,14 +1159,14 @@ kan være offentlig, sender wiring `null` eksplisitt.
 ### Canonical baseklasse for HTTP
 
 ```js
-// src/model/datasource/ApiDataSource.js
-export default class ApiDataSource {
+// src/model/datasource/DataSource.js
+export default class DataSource {
 	#baseUrl;
 	#getToken;
 
 	constructor({ baseUrl, getToken }) {
 		if (!baseUrl) {
-			throw new Error("ApiDataSource requires baseUrl");
+			throw new Error("DataSource requires baseUrl");
 		}
 
 		this.#baseUrl = baseUrl.replace(/\/$/, "");
@@ -1331,7 +1331,7 @@ Portaler (`createPortal`) er utveien for overlays.
 
 | Spørsmål | Svar |
 |---|---|
-| Henter HTTP/transportdata | Konkret DataSource via `ApiDataSource` |
+| Henter HTTP/transportdata | Konkret DataSource via `DataSource` |
 | Validerer base-URL-er og wirer konkrete instanser | `dependencies.js` |
 | Mapper DTO-er og kombinerer kilder til domeneobjekter | Repository |
 | Beriker domeneobjekter med bilder | Repository |
@@ -1701,7 +1701,7 @@ commit-meldinger, dokumentasjon.
 > Start med tabellen over autoritative eiere. Bruk eksisterende SSOT/canonical implementasjon før du lager noe nytt.
 > Låste beslutninger trumfer brødtekst. Oppdater SOUL og SSOT-registeret i samme arkitekturpatch.
 > DataSource kjenner transport. Repository mapper til domene. Use Case eier én regel.
-> `dependencies.js` eier runtime-konfigurasjon og konkret wiring; `ApiDataSource` eier requestmekanikk.
+> `dependencies.js` eier runtime-konfigurasjon og konkret wiring; `DataSource` eier requestmekanikk.
 > Page- og forretningsstate eies bak ViewModelens kontraktpunkt; provider-state og lokal interaksjonsstate har egne avgrensede eiere.
 > Komponenter følger pragmatisk Atomic Design; Page komponerer app-shell/feature, som komponerer lavere nivåer.
 > Page forgrener og fordeler ferdige modeller. Komponenter mottar og rendrer.

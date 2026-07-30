@@ -1,7 +1,7 @@
-// src/model/datasource/ApiConceptImageDataSource.js
-import ApiDataSource from "./ApiDataSource.js";
+//src/model/datasource/ConceptImageDataSource.js
+import DataSource from "./DataSource.js";
 
-export default class ApiConceptImageDataSource extends ApiDataSource {
+export default class ConceptImageDataSource extends DataSource {
     #catalogPromisesBySubjectId;
     #imageBaseUrl;
 

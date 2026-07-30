@@ -1,9 +1,9 @@
-// src/model/datasource/ApiGlossaryDataSource.js
-import ApiDataSource from "./ApiDataSource.js";
+//src/model/datasource/GlossaryDataSource.js
+import DataSource from "./DataSource.js";
 
 const INVALID_GLOSSARY_RESPONSE_MESSAGE = "Invalid glossary response";
 
-export default class ApiGlossaryDataSource extends ApiDataSource {
+export default class GlossaryDataSource extends DataSource {
 	async fetchGlossaryEntriesBySubject({ subjectId }) {
 		const response = await this.get(`/subjects/${encodeURIComponent(subjectId)}/glossary`);
 		return validateGlossaryResponse(response);

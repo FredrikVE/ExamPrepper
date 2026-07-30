@@ -1,9 +1,9 @@
-// src/model/datasource/ApiDataSource.js
-export default class ApiDataSource {
+//src/model/datasource/DataSource.js
+export default class DataSource {
 	#baseUrl;
 
 	constructor({ baseUrl, getToken = null }) {
-		if (!baseUrl) throw new Error("ApiDataSource requires baseUrl");
+		if (!baseUrl) throw new Error("DataSource requires baseUrl");
 		this.#baseUrl = baseUrl.replace(/\/$/, "");
 		this.getToken = getToken;
 	}

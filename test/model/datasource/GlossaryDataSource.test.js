@@ -1,6 +1,6 @@
-// test/model/datasource/ApiGlossaryDataSource.test.js
+//test/model/datasource/GlossaryDataSource.test.js
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
-import ApiGlossaryDataSource from "../../../src/model/datasource/ApiGlossaryDataSource.js";
+import GlossaryDataSource from "../../../src/model/datasource/GlossaryDataSource.js";
 
 const glossaryEntries = [
 	{
@@ -20,7 +20,7 @@ function createResponse({ status = 200, payload }) {
 	};
 }
 
-describe("ApiGlossaryDataSource", () => {
+describe("GlossaryDataSource", () => {
 	let originalFetch;
 
 	beforeEach(() => {
@@ -36,7 +36,7 @@ describe("ApiGlossaryDataSource", () => {
 		global.fetch.mockResolvedValue(createResponse({
 			payload: { glossaryEntries }
 		}));
-		const dataSource = new ApiGlossaryDataSource({
+		const dataSource = new GlossaryDataSource({
 			baseUrl: "https://api.example.test/"
 		});
 
@@ -58,7 +58,7 @@ describe("ApiGlossaryDataSource", () => {
 		global.fetch.mockResolvedValue(createResponse({
 			payload: { glossaryEntries }
 		}));
-		const dataSource = new ApiGlossaryDataSource({
+		const dataSource = new GlossaryDataSource({
 			baseUrl: "https://api.example.test"
 		});
 
@@ -81,7 +81,7 @@ describe("ApiGlossaryDataSource", () => {
 			status,
 			payload: { error: errorMessage }
 		}));
-		const dataSource = new ApiGlossaryDataSource({
+		const dataSource = new GlossaryDataSource({
 			baseUrl: "https://api.example.test"
 		});
 
@@ -97,7 +97,7 @@ describe("ApiGlossaryDataSource", () => {
 		{ glossaryEntries: [{ glossaryEntryKey: "incomplete" }] }
 	])("rejects an invalid glossary response shape", async (payload) => {
 		global.fetch.mockResolvedValue(createResponse({ payload }));
-		const dataSource = new ApiGlossaryDataSource({
+		const dataSource = new GlossaryDataSource({
 			baseUrl: "https://api.example.test"
 		});
 

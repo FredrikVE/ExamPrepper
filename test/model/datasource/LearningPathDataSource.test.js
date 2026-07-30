@@ -1,15 +1,15 @@
-//test/model/datasource/ApiLearningPathDataSource.test.js
+//test/model/datasource/LearningPathDataSource.test.js
 import { afterEach, describe, expect, jest, test } from "@jest/globals";
-import ApiLearningPathDataSource from "../../../src/model/datasource/ApiLearningPathDataSource.js";
+import LearningPathDataSource from "../../../src/model/datasource/LearningPathDataSource.js";
 
 afterEach(() => {
 	jest.restoreAllMocks();
 });
 
-describe("ApiLearningPathDataSource", () => {
+describe("LearningPathDataSource", () => {
 	test("uses the four P04 endpoints", async () => {
 		const fetchMock = jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => "{}" });
-		const dataSource = new ApiLearningPathDataSource({ baseUrl: "https://example.test/api", getToken: null });
+		const dataSource = new LearningPathDataSource({ baseUrl: "https://example.test/api", getToken: null });
 
 		await dataSource.getLearningPath({ subjectId: "in2120", language: "no" });
 		await dataSource.startLearningSession({ subjectId: "in2120", moduleId: "m1", language: "no", round: 1 });

@@ -1,7 +1,7 @@
-// src/model/datasource/ApiExamQuestionDataSource.js
-import ApiDataSource from "./ApiDataSource.js";
+//src/model/datasource/ExamQuestionDataSource.js
+import DataSource from "./DataSource.js";
 
-export default class ApiExamQuestionDataSource extends ApiDataSource {
+export default class ExamQuestionDataSource extends DataSource {
 	#subjectsPath = "/subjects";
 	#examsPath = "/exams";
 	#subjectExamsPathSuffix = "/exams";

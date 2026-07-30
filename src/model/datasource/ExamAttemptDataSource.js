@@ -1,7 +1,7 @@
-// src/model/datasource/ApiExamAttemptDataSource.js
-import ApiDataSource from "./ApiDataSource.js";
+//src/model/datasource/ExamAttemptDataSource.js
+import DataSource from "./DataSource.js";
 
-export default class ApiExamAttemptDataSource extends ApiDataSource {
+export default class ExamAttemptDataSource extends DataSource {
 	async submitAttempt({ examId, lang, durationSeconds, answers }) {
 		return await this.post("/exam-attempts", { examId, lang, durationSeconds, answers });
 	}

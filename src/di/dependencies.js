@@ -1,10 +1,10 @@
 //src/di/dependencies.js
-import ApiSubjectDataSource from "../model/datasource/ApiSubjectDataSource.js";
-import ApiExamQuestionDataSource from "../model/datasource/ApiExamQuestionDataSource.js";
-import ApiConceptImageDataSource from "../model/datasource/ApiConceptImageDataSource.js";
-import ApiGlossaryDataSource from "../model/datasource/ApiGlossaryDataSource.js";
-import ApiExamAttemptDataSource from "../model/datasource/ApiExamAttemptDataSource.js";
-import ApiLearningPathDataSource from "../model/datasource/ApiLearningPathDataSource.js";
+import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
+import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
+import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
+import GlossaryDataSource from "../model/datasource/GlossaryDataSource.js";
+import ExamAttemptDataSource from "../model/datasource/ExamAttemptDataSource.js";
+import LearningPathDataSource from "../model/datasource/LearningPathDataSource.js";
 
 import ExamRepository from "../model/repositories/ExamRepository.js";
 import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
@@ -49,22 +49,22 @@ const apiBaseUrl = requiredEnv("VITE_API_BASE_URL");
 const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
-const subjectDataSource = new ApiSubjectDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
-const examQuestionDataSource = new ApiExamQuestionDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
-const conceptImageDataSource = new ApiConceptImageDataSource({
+const subjectDataSource = new SubjectDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const examQuestionDataSource = new ExamQuestionDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const conceptImageDataSource = new ConceptImageDataSource({
     baseUrl: apiBaseUrl,
     imageBaseUrl,
     getToken: getActiveAuthToken
 });
-const glossaryDataSource = new ApiGlossaryDataSource({
+const glossaryDataSource = new GlossaryDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken
 });
-const examAttemptDataSource = new ApiExamAttemptDataSource({
+const examAttemptDataSource = new ExamAttemptDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken
 });
-const learningPathDataSource = new ApiLearningPathDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const learningPathDataSource = new LearningPathDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 
 // Repositories
 const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);

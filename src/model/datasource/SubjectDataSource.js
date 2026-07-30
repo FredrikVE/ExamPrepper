@@ -1,7 +1,7 @@
-// src/model/datasource/ApiSubjectDataSource.js
-import ApiDataSource from "./ApiDataSource.js";
+//src/model/datasource/SubjectDataSource.js
+import DataSource from "./DataSource.js";
 
-export default class ApiSubjectDataSource extends ApiDataSource {
+export default class SubjectDataSource extends DataSource {
 	async fetchSubjects() {
 		return await this.get("/subjects");
 	}

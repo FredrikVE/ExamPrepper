@@ -88,7 +88,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Autoritativt register brukt av `QuestionCard`, grading og API-transformasjon. Rå typeavgjørelser i `QuestionCard` og `transformAnswersForApi.js` avvises av `questionCardArchitecture` |
 | `QUESTION_CONFIG{}` | Konfigurasjonsgrenser for spørsmålstyper (i dag: `FILL_MAX_LENGTH`) | `src/constants/QuestionConfig.js` | Egen fil, egen beslutning — ikke type-ID-er |
 | `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop-modus + breakpoint-tall | `ui/presentation/` | 7 importører. `932`/`933` låst av `appBreakpointContract` |
-| `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `ApiDataSource` |
+| `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `DataSource` |
 | `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
 
 ## Canonical implementasjoner
@@ -111,7 +111,7 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 | Search-familien (`<SearchField/>` m.fl.) | Søkefelt, filter, backdrop, forslag | `components/Search/` | Delt av SubjectSelect, LearningContentSelect, Glossary |
 | `<ToolCardGrid/>` `<ToolCard/>` | Verktøykort-flate | `components/ToolCard/` | PageTools + Flipcards |
 | `<AppErrorBoundary/>` | Root render-crash-grense | `components/AppErrorBoundary/` | Rot-nivå recovery |
-| `class ApiDataSource` | Canonical HTTP-transportbase (URL-bygging, fetch, auth-header, JSON, feilmapping) | `model/datasource/ApiDataSource.js` | Alle 5 datakilder arver. Eier **ikke** base-URL — den injiseres fra `dependencies.js` |
+| `class DataSource` | Canonical HTTP-transportbase (URL-bygging, fetch, auth-header, JSON, feilmapping) | `model/datasource/DataSource.js` | Alle konkrete datakilder arver. Eier **ikke** base-URL — den injiseres fra `dependencies.js` |
 
 ### Eierskap for spørsmål og øktflyt
 
@@ -429,7 +429,7 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 |---|---|
 | LearningPath-sidepolicy | `useLearningPathPageViewModel` |
 | LearningSession-state og UI-mekanikk | `useLearningSessionPageViewModel` + `sessionReducer` |
-| Transport og mapping | `ApiLearningPathDataSource` + `LearningPathRepository` |
+| Transport og mapping | `LearningPathDataSource` + `LearningPathRepository` |
 | Spørsmålsrendring | canonical `QuestionCard` |
 | Sessionidentitet i frontend | `sessionQuestionId` |
 | Navigasjon | `navigation.js` + `AppNavigationViewModel` |
