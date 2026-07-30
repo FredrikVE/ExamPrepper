@@ -7,20 +7,25 @@ const t = {
 	learningPathResumeBody: (position, title, question) => `${position}:${title}:${question}`,
 	learningPathResumeLabel: "Resume path",
 	learningPathContinueTitle: "Continue",
-	learningPathContinueBody: (position, title) => `${position}:${title}`,
-	learningPathStartRoundLabel: (round) => `Start ${round}`
+	learningPathContinueBody: (position, title) => `${position}:${title}`
 };
 
-const activeModule = { id: "module-1", position: 1, title: "Concepts", availability: { isUnlocked: true }, progress: { nextRound: 2 } };
+function createEntry(actionModel) {
+	return { id: "module-1", position: 1, title: "Concepts", actionModel };
+}
 
 describe("createContinueLearningModel", () => {
-	test("resumes an existing active session", () => {
-		const model = createContinueLearningModel({ activeModule, resumableSession: { sessionId: "session-1", moduleId: "module-1", currentQuestionPosition: 2, questionCount: 6 }, isStarting: false, t });
-		expect(model).toMatchObject({ intent: "resume", sessionId: "session-1", description: "1:Concepts:3", buttonLabel: "Resume path" });
+	test("reuses the active module resume action", () => {
+		const actionModel = { intent: "resume", moduleId: "module-1", sessionId: "session-1", isDisabled: false };
+		const model = createContinueLearningModel({ activeEntry: createEntry(actionModel), resumableSession: { sessionId: "session-1", moduleId: "module-1", currentQuestionPosition: 2, questionCount: 6 }, t });
+		expect(model).toMatchObject({ description: "1:Concepts:3", buttonLabel: "Resume path" });
+		expect(model.actionModel).toBe(actionModel);
 	});
 
-	test("starts the backend-provided active module when no session can be resumed", () => {
-		const model = createContinueLearningModel({ activeModule, resumableSession: null, isStarting: false, t });
-		expect(model).toMatchObject({ intent: "start", moduleId: "module-1", description: "1:Concepts", buttonLabel: "Start 2" });
+	test("reuses the active module start action", () => {
+		const actionModel = { intent: "start", moduleId: "module-1", sessionId: null, isDisabled: false };
+		const model = createContinueLearningModel({ activeEntry: createEntry(actionModel), resumableSession: null, t });
+		expect(model).toMatchObject({ description: "1:Concepts", buttonLabel: "Resume path" });
+		expect(model.actionModel).toBe(actionModel);
 	});
 });

@@ -17,9 +17,9 @@ export default function LearningPathPage({ viewModel }) {
 			<WorkspaceState state={viewModel.workspaceState}>
 				<div className="learning-path-page-content">
 					<LearningContentHeader {...viewModel.contentHeaderModel} />
-					<ContinueLearningPanel model={viewModel.continuePanelModel} onPressed={viewModel.onContinue} />
+					<ContinueLearningPanel model={viewModel.continuePanelModel} onActionPressed={viewModel.onLearningPathAction} />
 					{viewModel.startSessionError === null ? null : <p className="learning-path-error" role="alert">{viewModel.startSessionError}</p>}
-					<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onStartModule={viewModel.onStartModule} registerModuleElement={scrollAdapter.registerModuleElement} />
+					<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onActionPressed={viewModel.onLearningPathAction} registerModuleElement={scrollAdapter.registerModuleElement} />
 				</div>
 			</WorkspaceState>
 		</WorkspaceScaffold>

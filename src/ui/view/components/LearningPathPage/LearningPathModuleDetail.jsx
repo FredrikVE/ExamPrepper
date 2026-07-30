@@ -2,7 +2,7 @@
 import { ArrowRight } from "lucide-react";
 import LearningPathTopicProgressRow from "./LearningPathTopicProgressRow.jsx";
 
-export default function LearningPathModuleDetail({ model, onStartPressed }) {
+export default function LearningPathModuleDetail({ model, onActionPressed }) {
 	return (
 		<section className="learning-path-module-detail" aria-labelledby={model.headingId}>
 			<h3 id={model.headingId}>{model.heading}</h3>
@@ -11,8 +11,8 @@ export default function LearningPathModuleDetail({ model, onStartPressed }) {
 				{model.topics.map((topic) => <LearningPathTopicProgressRow key={topic.key} model={topic} />)}
 			</div>
 			<div className="learning-path-module-detail__actions">
-				<button type="button" className="learning-path-module-detail__start" disabled={model.actionModel.isDisabled} onClick={onStartPressed}>
-					<span>{model.actionModel.isStarting ? "…" : model.actionModel.label}</span>
+				<button type="button" className="learning-path-module-detail__start" disabled={model.actionModel.isDisabled} onClick={() => onActionPressed(model.actionModel)}>
+					<span>{model.actionModel.isPending ? "…" : model.actionModel.label}</span>
 					<ArrowRight aria-hidden="true" />
 				</button>
 			</div>

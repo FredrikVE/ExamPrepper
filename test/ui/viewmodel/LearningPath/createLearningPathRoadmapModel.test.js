@@ -17,6 +17,7 @@ const t = {
 	learningPathTopicProgressLabel: (percentage) => `${percentage}%`,
 	learningPathRetryModuleLabel: "Retry",
 	learningPathStartRoundLabel: (round) => `Start ${round}`,
+	learningPathContinueRoundLabel: (round) => `Continue ${round}`,
 	learningPathExamTitle: "Exam",
 	learningPathExamUnlockedLabel: "Unlocked",
 	learningPathExamLockedLabel: (rounds) => `Locked ${rounds}`,
@@ -35,7 +36,7 @@ describe("createLearningPathRoadmapModel", () => {
 	test("builds presentation-only module and exam entries", () => {
 		const model = createLearningPathRoadmapModel({ learningPath, expandedModuleId: "module-1", startingModuleId: null, t });
 		expect(model.entries).toHaveLength(2);
-		expect(model.entries[0]).toMatchObject({ kind: "module", appearance: "active", nodeModel: { iconKey: "play" }, cardModel: { statusLabel: "Active 2", isExpanded: true }, detailModel: { heading: "Progress" } });
+		expect(model.entries[0]).toMatchObject({ kind: "module", position: 1, title: "Concepts", appearance: "active", nodeModel: { iconKey: "play" }, cardModel: { statusLabel: "Active 2", isExpanded: true }, detailModel: { heading: "Progress" } });
 		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: 55, appearance: "medium" });
 		expect(model.entries[1]).toMatchObject({ kind: "examGate", appearance: "locked" });
 	});

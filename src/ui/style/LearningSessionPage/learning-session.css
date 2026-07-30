@@ -34,19 +34,17 @@
 }
 
 .learning-session-stage {
-	min-height: 440px;
-	border: 1px solid var(--line);
-	border-radius: calc(var(--radius-lg) + 8px);
-	padding: clamp(var(--space-5), 3vw, var(--space-8));
-	background: radial-gradient(circle at 100% 0, color-mix(in srgb, var(--accent-soft) 64%, transparent), transparent 40%), linear-gradient(155deg, color-mix(in srgb, var(--panel-strong) 96%, var(--accent-soft)), var(--panel-bg));
-	box-shadow: 0 24px 60px color-mix(in srgb, black 28%, transparent);
+	min-width: 0;
+}
+
+.learning-session-stage > div {
+	min-width: 0;
 }
 
 .learning-session-stage > div:focus {
 	outline: none;
 }
 
-.learning-session-action-panel,
 .learning-session-result,
 .learning-session-reward {
 	padding: var(--space-5);
@@ -56,10 +54,15 @@
 }
 
 .learning-session-action-panel {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	display: grid;
 	gap: var(--space-4);
+}
+
+.learning-session-action-panel__feedback {
+	padding: var(--space-4) var(--space-5);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	background: var(--panel-strong);
 }
 
 .learning-session-action-panel h2,
@@ -74,20 +77,33 @@
 
 .learning-session-primary,
 .learning-session-result__back {
-	min-height: 48px;
+	min-height: 56px;
 	border: 0;
-	border-radius: var(--radius-md);
+	border-radius: var(--radius-lg);
 	padding: 0 var(--space-5);
-	background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 88%, white), var(--accent));
-	box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 28%, transparent);
+	background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, white), var(--accent));
+	box-shadow: 0 14px 28px color-mix(in srgb, var(--accent) 28%, transparent);
 	color: white;
 	font: inherit;
 	font-weight: 800;
 	cursor: pointer;
 }
 
+.learning-session-primary {
+	width: 100%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-3);
+}
+
+.learning-session-primary svg {
+	width: 19px;
+	height: 19px;
+}
+
 .learning-session-primary--success {
-	background: linear-gradient(180deg, color-mix(in srgb, var(--success) 86%, white), var(--success));
+	background: linear-gradient(135deg, color-mix(in srgb, var(--success) 86%, white), var(--success));
 }
 
 .learning-session-primary:disabled {
@@ -114,19 +130,5 @@
 @media (max-width: 720px) {
 	.learning-session-workspace .workspace-scaffold-body {
 		padding: calc(var(--mobile-topbar-height) + var(--space-4)) var(--space-4) var(--space-6);
-	}
-
-	.learning-session-stage {
-		min-height: 0;
-		padding: var(--space-4);
-	}
-
-	.learning-session-action-panel {
-		align-items: stretch;
-		flex-direction: column;
-	}
-
-	.learning-session-primary {
-		width: 100%;
 	}
 }

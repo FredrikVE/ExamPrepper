@@ -22,7 +22,6 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 
 	const loadModel = useLoadModel({ execute: executeLoad, emptyData: { ...EMPTY_LEARNING_PATH, subjectId: subjectId ?? "" }, errorMessage: t.learningPathLoadErrorMessage, resourceKey, isEnabled: isActive && subjectId !== null, onLoaded: null });
 	const learningPath = loadModel.data;
-	const activeModule = learningPath.modules.find((module) => module.id === learningPath.activeModuleId) ?? null;
 
 	const toggleModule = useCallback((moduleId) => {
 		const module = learningPath.modules.find((candidate) => candidate.id === moduleId);
@@ -50,14 +49,16 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 	}, [language, learningPath.modules, onLearningSessionStarted, selectedSubject, startLearningSessionUseCase, startingModuleId, t.learningPathStartErrorMessage]);
 
 	const roadmapModel = createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingModuleId, t });
-	const continueModel = createContinueLearningModel({ activeModule, resumableSession: learningPath.resumableSession, isStarting: startingModuleId !== null, t });
-	const continueLearning = useCallback(() => {
-		if (continueModel.intent === "resume" && continueModel.sessionId !== null) {
-			onLearningSessionStarted(continueModel.sessionId);
+	const activeEntry = roadmapModel.entries.find((entry) => entry.kind === "module" && entry.id === learningPath.activeModuleId) ?? null;
+	const continueModel = createContinueLearningModel({ activeEntry, resumableSession: learningPath.resumableSession, t });
+	const executeLearningPathAction = useCallback(async (actionModel) => {
+		if (actionModel === null || actionModel.isDisabled) return;
+		if (actionModel.intent === "resume" && actionModel.sessionId !== null) {
+			onLearningSessionStarted(actionModel.sessionId);
 			return;
 		}
-		if (continueModel.intent === "start" && continueModel.moduleId !== null) startSession(continueModel.moduleId);
-	}, [continueModel, onLearningSessionStarted, startSession]);
+		await startSession(actionModel.moduleId);
+	}, [onLearningSessionStarted, startSession]);
 
 	const workspaceState = createWorkspaceState({
 		loadStatus: loadModel.status,
@@ -74,8 +75,7 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 		continuePanelModel: continueModel,
 		roadmapModel,
 		onModuleToggle: toggleModule,
-		onStartModule: startSession,
-		onContinue: continueLearning,
+		onLearningPathAction: executeLearningPathAction,
 		scrollRequest: expandedModuleId === null ? null : { requestId: scrollRequestId, targetModuleId: expandedModuleId, behavior: "smooth" },
 		startSessionState: { isStarting: startingModuleId !== null, moduleId: startingModuleId, errorMessage: startSessionError },
 		startSessionError

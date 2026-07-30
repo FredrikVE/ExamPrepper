@@ -1,28 +1,15 @@
 //src/ui/viewmodel/LearningPath/createContinueLearningModel.js
-export default function createContinueLearningModel({ activeModule, resumableSession, isStarting, t }) {
-	if (activeModule === null) return { isVisible: false, title: "", description: "", buttonLabel: "", intent: null, moduleId: null, sessionId: null, isDisabled: true };
+export default function createContinueLearningModel({ activeEntry, resumableSession, t }) {
+	if (activeEntry === null) return { isVisible: false, title: "", description: "", buttonLabel: "", actionModel: null };
 
-	if (resumableSession !== null && resumableSession.moduleId === activeModule.id) {
-		return {
-			isVisible: true,
-			title: t.learningPathResumeTitle,
-			description: t.learningPathResumeBody(activeModule.position, activeModule.title, resumableSession.currentQuestionPosition + 1),
-			buttonLabel: t.learningPathResumeLabel,
-			intent: "resume",
-			moduleId: activeModule.id,
-			sessionId: resumableSession.sessionId,
-			isDisabled: false
-		};
-	}
-
+	const isResume = activeEntry.actionModel.intent === "resume";
 	return {
 		isVisible: true,
-		title: t.learningPathContinueTitle,
-		description: t.learningPathContinueBody(activeModule.position, activeModule.title),
-		buttonLabel: t.learningPathStartRoundLabel(activeModule.progress.nextRound),
-		intent: "start",
-		moduleId: activeModule.id,
-		sessionId: null,
-		isDisabled: isStarting || !activeModule.availability.isUnlocked
+		title: isResume ? t.learningPathResumeTitle : t.learningPathContinueTitle,
+		description: isResume
+			? t.learningPathResumeBody(activeEntry.position, activeEntry.title, resumableSession.currentQuestionPosition + 1)
+			: t.learningPathContinueBody(activeEntry.position, activeEntry.title),
+		buttonLabel: t.learningPathResumeLabel,
+		actionModel: activeEntry.actionModel
 	};
 }

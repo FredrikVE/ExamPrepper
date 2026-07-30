@@ -1,8 +1,160 @@
 /*src/ui/style/QuestionCard/QuestionTypes/multiple-blank.css*/
-.multiple-blank-question { display: grid; gap: var(--space-4); }
-.multiple-blank-item { padding: var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-md); }
-.multiple-blank-options { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.multiple-blank-option { padding: var(--space-2) var(--space-3); border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: inherit; }
-.multiple-blank-option.is-selected, .multiple-blank-option.is-correct { border-color: var(--accent); background: var(--accent-soft); }
+.tap-multiple-blank {
+	display: grid;
+	gap: var(--space-5);
+}
 
-.multiple-blank-input { width: 100%; min-height: 44px; padding: var(--space-2) var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); color: inherit; font: inherit; }
+.tap-multiple-blank__sentences {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.tap-multiple-blank__sentence {
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 10px;
+	font-size: clamp(1.15rem, 2vw, 1.55rem);
+	line-height: 1.9;
+}
+
+.tap-multiple-blank__blank {
+	min-width: 165px;
+	min-height: 40px;
+	padding: 0 10px;
+	border: 0;
+	border-bottom: 2.5px solid var(--accent);
+	border-radius: 4px 4px 0 0;
+	color: inherit;
+	background: transparent;
+	font: inherit;
+	font-size: 1.1rem;
+	font-weight: 650;
+	line-height: 36px;
+	text-align: center;
+	cursor: pointer;
+	transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.tap-multiple-blank__blank--active,
+.tap-multiple-blank__blank:focus-visible {
+	outline: none;
+	border-bottom-color: var(--accent);
+	background: color-mix(in srgb, var(--accent) 8%, transparent);
+	box-shadow: 0 8px 18px -14px var(--accent);
+}
+
+.tap-multiple-blank__blank:disabled {
+	cursor: default;
+}
+
+.tap-multiple-blank__divider {
+	height: 1px;
+	background: var(--line);
+}
+
+.tap-multiple-blank__options {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.tap-multiple-blank__option {
+	min-height: 44px;
+	padding: 11px 18px;
+	border: 1px solid var(--line);
+	border-radius: 14px;
+	color: inherit;
+	background: color-mix(in srgb, var(--panel) 82%, transparent);
+	font: inherit;
+	font-weight: 650;
+	cursor: pointer;
+	transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.tap-multiple-blank__option:hover:not(:disabled),
+.tap-multiple-blank__option:focus-visible {
+	outline: none;
+	transform: translateY(-2px);
+	border-color: var(--accent);
+	background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+}
+
+.tap-multiple-blank__option:disabled {
+	opacity: 0.38;
+	cursor: default;
+}
+
+.tap-multiple-blank__option--correct {
+	border-color: var(--success, #4edb9b);
+}
+
+.write-multiple-blank {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.write-multiple-blank__sentence {
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 10px;
+	font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+	line-height: 1.9;
+}
+
+.write-multiple-blank__input {
+	width: 190px;
+	min-width: 190px;
+	height: 44px;
+	padding: 0 8px 4px;
+	border: 0;
+	border-bottom: 2.5px solid var(--accent);
+	border-radius: 0;
+	outline: 0;
+	color: inherit;
+	background: transparent;
+	font: inherit;
+	font-size: 1.1rem;
+	font-weight: 650;
+	line-height: 1;
+	text-align: center;
+	caret-color: currentColor;
+	transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.write-multiple-blank__input--long {
+	width: 240px;
+	min-width: 240px;
+}
+
+.write-multiple-blank__input:focus {
+	border-bottom-color: color-mix(in srgb, var(--accent) 72%, white);
+	box-shadow: 0 8px 18px -14px var(--accent);
+}
+
+.write-multiple-blank__input:disabled {
+	cursor: default;
+	opacity: 0.82;
+}
+
+@media (max-width: 720px) {
+	.tap-multiple-blank__sentence,
+	.write-multiple-blank__sentence {
+		font-size: 1rem;
+		line-height: 1.75;
+	}
+
+	.tap-multiple-blank__blank,
+	.write-multiple-blank__input {
+		min-width: 120px;
+		width: 120px;
+	}
+
+	.write-multiple-blank__input--long {
+		min-width: 155px;
+		width: 155px;
+	}
+}

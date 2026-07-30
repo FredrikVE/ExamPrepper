@@ -2,12 +2,12 @@
 import LearningPathExamGate from "./LearningPathExamGate.jsx";
 import LearningPathStep from "./LearningPathStep.jsx";
 
-export default function LearningPathRoadmap({ model, onModuleToggle, onStartModule, registerModuleElement }) {
+export default function LearningPathRoadmap({ model, onModuleToggle, onActionPressed, registerModuleElement }) {
 	return (
 		<section className="learning-path-roadmap" aria-label={model.accessibleLabel}>
 			{model.entries.map((entry) => entry.kind === "examGate"
 				? <LearningPathExamGate key={entry.id} model={entry} />
-				: <LearningPathStep key={entry.id} model={entry} onModuleToggle={onModuleToggle} onStartModule={onStartModule} registerModuleElement={registerModuleElement} />)}
+				: <LearningPathStep key={entry.id} model={entry} onModuleToggle={onModuleToggle} onActionPressed={onActionPressed} registerModuleElement={registerModuleElement} />)}
 		</section>
 	);
 }

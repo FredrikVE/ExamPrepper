@@ -1,16 +1,19 @@
 //src/ui/viewmodel/LearningPath/createLearningPathModuleModel.js
+import createLearningPathActionModel from "./createLearningPathActionModel.js";
 import createMasteryAppearance from "./createMasteryAppearance.js";
 import createModuleStatus from "./createModuleStatus.js";
 
-export default function createLearningPathModuleModel({ module, expandedModuleId, startingModuleId, t }) {
+export default function createLearningPathModuleModel({ module, resumableSession, expandedModuleId, startingModuleId, t }) {
 	const isCompleted = module.progress.completedRounds >= 3;
 	const status = createModuleStatus({ masteryPercent: module.progress.masteryPercent, isCurrent: module.availability.isCurrent, isCompleted, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
-	const isStartDisabled = !module.availability.isUnlocked || startingModuleId !== null;
+	const actionModel = createLearningPathActionModel({ module, resumableSession, startingModuleId, t });
 
 	return {
 		kind: "module",
 		id: module.id,
+		position: module.position,
+		title: module.title,
 		appearance: status.appearance,
 		nextRound: module.progress.nextRound,
 		nodeModel: {
@@ -47,12 +50,9 @@ export default function createLearningPathModuleModel({ module, expandedModuleId
 				percentageLabel: topic.masteryPercent === null ? t.learningPathNoTopicProgressLabel : t.learningPathTopicProgressLabel(topic.masteryPercent),
 				appearance: createMasteryAppearance(topic.masteryPercent ?? 0)
 			})),
-			actionModel: {
-				label: isCompleted ? t.learningPathRetryModuleLabel : t.learningPathStartRoundLabel(module.progress.nextRound),
-				isDisabled: isStartDisabled,
-				isStarting: startingModuleId === module.id
-			}
-		} : null
+			actionModel
+		} : null,
+		actionModel
 	};
 }
 

@@ -1,7 +1,7 @@
 //src/ui/view/components/LearningPathPage/ContinueLearningPanel.jsx
 import { ArrowRight } from "lucide-react";
 
-export default function ContinueLearningPanel({ model, onPressed }) {
+export default function ContinueLearningPanel({ model, onActionPressed }) {
 	if (!model.isVisible) return null;
 
 	return (
@@ -10,7 +10,7 @@ export default function ContinueLearningPanel({ model, onPressed }) {
 				<h2 id="learning-path-continue-title">{model.title}</h2>
 				<p>{model.description}</p>
 			</div>
-			<button type="button" className="learning-path-continue-action" disabled={model.isDisabled} onClick={onPressed}>
+			<button type="button" className="learning-path-continue-action" disabled={model.actionModel.isDisabled} onClick={() => onActionPressed(model.actionModel)}>
 				<span>{model.buttonLabel}</span>
 				<ArrowRight aria-hidden="true" />
 			</button>
