@@ -7,7 +7,7 @@ function createSessionQuestion(sessionQuestionId, question) {
 }
 
 describe("transformLearningSessionAnswersForApi", () => {
-	test("converts single and multi choice indices to backend option IDs", () => {
+	test("converts frontend answer shapes to the backend grading contract", () => {
 		const questions = [
 			createSessionQuestion("session-single", {
 				id: "question-single",
@@ -18,17 +18,31 @@ describe("transformLearningSessionAnswersForApi", () => {
 				id: "question-multi",
 				type: "multi",
 				options: [{ id: "multi-a" }, { id: "multi-b" }, { id: "multi-c" }]
+			}),
+			createSessionQuestion("session-drag", {
+				id: "question-drag",
+				type: "dragDrop",
+				targets: [{ id: "target-a" }, { id: "target-b" }],
+				cards: [{ id: "card-a" }, { id: "card-b" }]
+			}),
+			createSessionQuestion("session-category", {
+				id: "question-category",
+				type: "drag-categorize"
 			})
 		];
 
 		const result = transformLearningSessionAnswersForApi(questions, {
 			"session-single": 1,
-			"session-multi": [0, 2]
+			"session-multi": [0, 2],
+			"session-drag": { "target-a": "card-a", "target-b": "card-b" },
+			"session-category": { "category-a": ["item-a", "item-b"], "category-b": ["item-c"] }
 		});
 
 		expect(result).toEqual([
 			{ sessionQuestionId: "session-single", answer: "single-b" },
-			{ sessionQuestionId: "session-multi", answer: ["multi-a", "multi-c"] }
+			{ sessionQuestionId: "session-multi", answer: ["multi-a", "multi-c"] },
+			{ sessionQuestionId: "session-drag", answer: { "card-a": "target-a", "card-b": "target-b" } },
+			{ sessionQuestionId: "session-category", answer: { "item-a": "category-a", "item-b": "category-a", "item-c": "category-b" } }
 		]);
 	});
 
@@ -57,23 +71,31 @@ describe("transformLearningSessionAnswersForApi", () => {
 		]);
 	});
 
-	test("passes non-choice answers and unknown session questions through unchanged", () => {
+	test("passes API-compatible and unknown answers through unchanged", () => {
 		const answer = { blankA: "sårbarhet" };
 		const questions = [
 			createSessionQuestion("session-fill", {
 				id: "question-fill",
 				type: "writeToFillMultipleBlank",
 				options: null
+			}),
+			createSessionQuestion("session-drag", {
+				id: "question-drag",
+				type: "dragDrop",
+				targets: [{ id: "target-a" }],
+				cards: [{ id: "card-a" }]
 			})
 		];
 
 		const result = transformLearningSessionAnswersForApi(questions, {
 			"session-fill": answer,
+			"session-drag": { "card-a": "target-a" },
 			"unknown-session": "unchanged"
 		});
 
 		expect(result).toEqual([
 			{ sessionQuestionId: "session-fill", answer },
+			{ sessionQuestionId: "session-drag", answer: { "card-a": "target-a" } },
 			{ sessionQuestionId: "unknown-session", answer: "unchanged" }
 		]);
 	});
