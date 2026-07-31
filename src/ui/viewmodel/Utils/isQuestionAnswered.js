@@ -2,6 +2,10 @@
 import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
 
 export default function isQuestionAnswered(question, answer) {
+	if (answer === null || answer === undefined) {
+		return false;
+	}
+
 	if (question.type === QUESTION_TYPES.MULTI) {
 		return Array.isArray(answer) && answer.length > 0;
 	}

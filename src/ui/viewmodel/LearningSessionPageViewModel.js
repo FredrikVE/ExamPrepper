@@ -5,6 +5,7 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import { updateObjectAnswerSelection, updateSingleAnswerSelection, toggleMultiAnswerSelection } from "./QuestionSession/updateAnswers.js";
 import createRewardModel from "./LearningSession/createRewardModel.js";
+import createSessionResultModel from "./LearningSession/createSessionResultModel.js";
 import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "./LearningSession/sessionReducer.js";
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import transformLearningSessionAnswersForApi from "./QuestionSession/transformLearningSessionAnswersForApi.js";
@@ -92,8 +93,8 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	const loadStatus = state.sessionId !== null ? LOAD_STATUS.READY : state.submitErrorMessage === null ? LOAD_STATUS.LOADING : LOAD_STATUS.ERROR;
 	const workspaceState = createWorkspaceState({ loadStatus, isEmpty: false, labels: { loading: t.learningSessionLoadingMessage, errorTitle: t.errorPrefix, errorBody: state.submitErrorMessage ?? t.learningSessionLoadErrorMessage, emptyTitle: "", emptyBody: "" }, errorAction: null });
 	const progressBarModel = state.questions.length === 0 ? null : buildProgressBarModel({ totalSteps: state.questions.length, currentStep: Math.min(state.currentIndex + 1, state.questions.length), ariaLabel: t.learningSessionProgressAriaLabel, startLabel: t.learningSessionProgressStartLabel, formatStepLabel: t.learningSessionProgressStepLabel, onActivateStep: null });
-	const sessionResultModel = state.submitResult === null ? null : { score: state.submitResult.score, moduleProgress: state.submitResult.moduleProgress, title: t.learningSessionResultTitle, backLabel: t.learningSessionBackToPathLabel, onBack: backContract.onBack };
-	const headerModel = state.modulePosition === null ? null : { title: t.learningSessionModuleTitle(state.modulePosition, state.moduleTitle), counterLabel: t.learningSessionQuestionCounter(Math.min(state.currentIndex + 1, state.questions.length), state.questions.length), roundLabel: t.learningSessionRoundLabel(state.round) };
+	const sessionResultModel = state.submitResult === null ? null : createSessionResultModel({ score: state.submitResult.score, moduleProgress: state.submitResult.moduleProgress, round: state.round, moduleTitle: state.moduleTitle, t, onBack: backContract.onBack });
+	const headerModel = state.modulePosition === null ? null : { title: t.learningSessionModuleTitle(state.modulePosition, state.moduleTitle), counterLabel: state.submitResult === null ? t.learningSessionQuestionCounter(Math.min(state.currentIndex + 1, state.questions.length), state.questions.length) : t.learningSessionResultHeaderLabel, roundLabel: t.learningSessionRoundLabel(state.round) };
 
 	return { workspaceState, backContract, headerModel, progressBarModel, questionCardModel, currentQuestionRenderKey, questionFocusLabel: t.learningSessionQuestionFocusLabel, actionPanelModel, sessionResultModel, rewardModel: createRewardModel({ pendingRewardKind: state.pendingRewardKind, combo: state.combo, xp: state.xp, t, onContinue: continueSession }), scrollToTopRequestId: state.scrollToTopRequestId, isSessionComplete };
 }

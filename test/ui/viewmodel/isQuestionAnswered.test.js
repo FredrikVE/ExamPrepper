@@ -19,6 +19,10 @@ describe("isQuestionAnswered", () => {
             expect(isQuestionAnswered(question, undefined)).toBe(false);
         });
 
+        test("returns false when answer is null", () => {
+            expect(isQuestionAnswered(question, null)).toBe(false);
+        });
+
         test("returns false when answer is empty string", () => {
             expect(isQuestionAnswered(question, "")).toBe(false);
         });
@@ -65,6 +69,10 @@ describe("isQuestionAnswered", () => {
 
         test("returns false when answer is undefined", () => {
             expect(isQuestionAnswered(question, undefined)).toBe(false);
+        });
+
+        test("returns false when answer is null", () => {
+            expect(isQuestionAnswered(question, null)).toBe(false);
         });
     });
 
