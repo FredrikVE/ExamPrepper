@@ -1,5 +1,5 @@
 //src/ui/view/components/LearningSessionPage/SessionResultPanel.jsx
-import { ArrowRight, Check, RotateCcw, TrendingUp } from "lucide-react";
+import { ArrowRight, Check, LogOut, RotateCcw, TrendingUp } from "lucide-react";
 
 function ResultMark({ appearance }) {
 	if (appearance === "strong") return <Check aria-hidden="true" />;
@@ -7,7 +7,7 @@ function ResultMark({ appearance }) {
 	return <RotateCcw aria-hidden="true" />;
 }
 
-export default function SessionResultPanel({ appearance, eyebrow, title, body, statsLabel, pointsValue, pointsLabel, roundScoreValue, roundScoreLabel, moduleMasteryValue, moduleMasteryPercent, moduleMasteryLabel, nextStepBody, continueLabel, onContinue }) {
+export default function SessionResultPanel({ appearance, eyebrow, title, body, statsLabel, pointsValue, pointsLabel, roundScoreValue, roundScoreLabel, moduleMasteryValue, moduleMasteryPercent, moduleMasteryLabel, nextStepLabel, nextStepBody, primaryLabel, secondaryLabel, isPrimaryDisabled, isSecondaryDisabled, actionErrorMessage, onPrimary, onSecondary }) {
 	return (
 		<section className={`learning-session-result learning-session-result--${appearance}`} aria-labelledby="learning-session-result-title">
 			<div className="learning-session-result__intro">
@@ -39,13 +39,24 @@ export default function SessionResultPanel({ appearance, eyebrow, title, body, s
 				<div className="learning-session-result__module-progress-track" aria-hidden="true">
 					<span style={{ width: `${moduleMasteryPercent}%` }} />
 				</div>
+				<strong className="learning-session-result__next-step-label">{nextStepLabel}</strong>
 				<p>{nextStepBody}</p>
 			</div>
 
-			<button className="learning-session-result__continue" type="button" onClick={onContinue}>
-				<span>{continueLabel}</span>
-				<ArrowRight aria-hidden="true" />
-			</button>
+			{actionErrorMessage !== null && <p className="learning-session-result__action-error" role="alert">{actionErrorMessage}</p>}
+
+			<div className={`learning-session-result__actions${secondaryLabel === null ? " learning-session-result__actions--single" : ""}`}>
+				{secondaryLabel !== null && (
+					<button className="learning-session-result__secondary" type="button" disabled={isSecondaryDisabled} onClick={onSecondary}>
+						<LogOut aria-hidden="true" />
+						<span>{secondaryLabel}</span>
+					</button>
+				)}
+				<button className="learning-session-result__continue" type="button" disabled={isPrimaryDisabled} onClick={onPrimary}>
+					<span>{primaryLabel}</span>
+					<ArrowRight aria-hidden="true" />
+				</button>
+			</div>
 		</section>
 	);
 }

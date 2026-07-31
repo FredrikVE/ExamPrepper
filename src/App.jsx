@@ -167,7 +167,7 @@ function AppContent() {
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_SESSION && (
-					<LearningSessionPageWrapper sessionId={navigationViewModel.selectedLearningSessionId} t={t} isActive={true} backContract={navigationViewModel.backContract} />
+					<LearningSessionPageWrapper subjectId={navigationViewModel.selectedSubjectId} language={language} sessionId={navigationViewModel.selectedLearningSessionId} t={t} isActive={true} backContract={navigationViewModel.backContract} onLearningSessionStarted={navigationViewModel.openLearningSession} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
@@ -256,8 +256,8 @@ function LearningPathPageWrapper({ selectedSubject, language, t, isActive, backC
 	return <LearningPathPage viewModel={viewModel} />;
 }
 
-function LearningSessionPageWrapper({ sessionId, t, isActive, backContract }) {
-	const viewModel = useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, t, isActive, backContract });
+function LearningSessionPageWrapper({ subjectId, language, sessionId, t, isActive, backContract, onLearningSessionStarted }) {
+	const viewModel = useLearningSessionPageViewModel({ getLearningSessionUseCase, startLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, subjectId, language, sessionId, t, isActive, backContract, onLearningSessionStarted });
 
 	return <LearningSessionPage viewModel={viewModel} />;
 }

@@ -104,7 +104,7 @@ describe("useAppNavigationViewModel", () => {
 		expect(viewModel.examLanguageSyncError).toBeNull();
 	});
 
-	test("valg av fag åpner begrepslisten og nullstiller gamle valg", () => {
+	test("valg av fag åpner Læringsstien og nullstiller gamle valg", () => {
 		setNavigationState({
 			activeScreen: NAV_SCREENS.EXAM,
 			selectedSubjectId: "old-subject",
@@ -115,7 +115,7 @@ describe("useAppNavigationViewModel", () => {
 		createViewModel().selectSubject("inf1010");
 
 		expect(hookState.slice(0, 4)).toEqual([
-			NAV_SCREENS.GLOSSARY,
+			NAV_SCREENS.LEARNING_PATH,
 			"inf1010",
 			null,
 			null
@@ -207,6 +207,20 @@ describe("useAppNavigationViewModel", () => {
 
 		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.SUBJECTS,
+			null,
+			null,
+			null
+		]);
+	});
+
+	test("tilbake fra Læringsstien går direkte til fagoversikten", () => {
+		setNavigationState({ activeScreen: NAV_SCREENS.LEARNING_PATH, selectedSubjectId: "inf1010" });
+
+		createViewModel().goBack();
+
+		expect(hookState.slice(0, 5)).toEqual([
+			NAV_SCREENS.SUBJECTS,
+			null,
 			null,
 			null,
 			null

@@ -6,11 +6,13 @@ import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import { updateObjectAnswerSelection, updateSingleAnswerSelection, toggleMultiAnswerSelection } from "./QuestionSession/updateAnswers.js";
 import createRewardModel from "./LearningSession/createRewardModel.js";
 import createSessionResultModel from "./LearningSession/createSessionResultModel.js";
+import createNextRoundStartCommand from "./LearningSession/createNextRoundStartCommand.js";
+import shouldShowSessionActionPanel from "./LearningSession/shouldShowSessionActionPanel.js";
 import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "./LearningSession/sessionReducer.js";
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import transformLearningSessionAnswersForApi from "./QuestionSession/transformLearningSessionAnswersForApi.js";
 
-export default function useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, t, isActive, backContract }) {
+export default function useLearningSessionPageViewModel({ getLearningSessionUseCase, startLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, subjectId, language, sessionId, t, isActive, backContract, onLearningSessionStarted }) {
 	const [state, dispatch] = useReducer(sessionReducer, undefined, createInitialSessionState);
 
 	useEffect(() => {
@@ -84,16 +86,35 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		dispatch({ type: SESSION_ACTIONS.CONTINUED });
 	}, [currentResult, state.currentIndex, state.questions.length, submitSession]);
 
+	const continueToNextRound = useCallback(async () => {
+		if (state.submitResult === null || state.nextRoundStartStatus === "starting") return;
+		const command = createNextRoundStartCommand({ subjectId, moduleId: state.moduleId, language, currentRound: state.round, nextRound: state.submitResult.moduleProgress.nextRound });
+		if (command === null) {
+			dispatch({ type: SESSION_ACTIONS.NEXT_ROUND_START_FAILED, errorMessage: t.learningSessionNextRoundStartErrorMessage });
+			return;
+		}
+
+		dispatch({ type: SESSION_ACTIONS.NEXT_ROUND_START_STARTED });
+		try {
+			const session = await startLearningSessionUseCase.execute(command);
+			dispatch({ type: SESSION_ACTIONS.SESSION_RESTARTED });
+			onLearningSessionStarted(session.sessionId);
+		} catch (_error) {
+			dispatch({ type: SESSION_ACTIONS.NEXT_ROUND_START_FAILED, errorMessage: t.learningSessionNextRoundStartErrorMessage });
+		}
+	}, [language, onLearningSessionStarted, startLearningSessionUseCase, state.moduleId, state.nextRoundStartStatus, state.round, state.submitResult, subjectId, t.learningSessionNextRoundStartErrorMessage]);
+
 	const answer = currentQuestion === null ? null : state.answersBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null;
 	const questionCardModel = currentQuestion === null ? null : { question: currentQuestion.question, questionNumber: state.currentIndex + 1, answer, answerOptionOrder: state.answerOptionOrderBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null, submitted: currentResult !== null, showAllFeedback: currentResult !== null, correct: currentResult?.isCorrect ?? false, fillMatchType: currentResult?.fillMatchType ?? null, expandedAnswerOptionIndexes: [], onToggleAnswerOptionExpanded: () => {}, onSingleAnswer: setSingleAnswer, onToggleMultiAnswer: toggleMultiAnswer, onDropdownFillAnswer: selectObjectAnswer, onRadioButtonGridAnswer: selectObjectAnswer, onMultipleBlankAnswer: selectObjectAnswer };
 	const answerReady = currentQuestion !== null && isQuestionAnswered(currentQuestion.question, answer);
 	const primaryAction = isSessionComplete ? submitSession : currentResult === null ? checkAnswer : continueSession;
 	const primaryLabel = isSessionComplete && state.submitStatus === "failed" ? t.learningSessionRetryLabel : currentResult === null ? t.learningSessionCheckLabel : state.currentIndex >= state.questions.length - 1 ? t.learningSessionFinishLabel : t.learningSessionContinueLabel;
-	const actionPanelModel = state.submitResult === null ? { feedbackAppearance: currentResult === null ? "neutral" : currentResult.isCorrect ? "correct" : "incorrect", feedbackTitle: currentResult === null ? null : currentResult.isCorrect ? t.learningSessionCorrectTitle : t.learningSessionIncorrectTitle, feedbackBody: state.submitErrorMessage, primaryLabel, primaryAppearance: currentResult !== null && currentResult.isCorrect ? "success" : "primary", isPrimaryDisabled: isSessionComplete ? state.submitStatus === "submitting" : currentResult === null ? !answerReady : state.submitStatus === "submitting", onPrimaryPressed: primaryAction } : null;
+	const showActionPanel = shouldShowSessionActionPanel({ submitResult: state.submitResult, isSessionComplete, submitStatus: state.submitStatus });
+	const actionPanelModel = showActionPanel ? { feedbackAppearance: currentResult === null ? "neutral" : currentResult.isCorrect ? "correct" : "incorrect", feedbackTitle: currentResult === null ? null : currentResult.isCorrect ? t.learningSessionCorrectTitle : t.learningSessionIncorrectTitle, feedbackBody: state.submitErrorMessage, primaryLabel, primaryAppearance: currentResult !== null && currentResult.isCorrect ? "success" : "primary", isPrimaryDisabled: isSessionComplete ? state.submitStatus === "submitting" : currentResult === null ? !answerReady : state.submitStatus === "submitting", onPrimaryPressed: primaryAction } : null;
 	const loadStatus = state.sessionId !== null ? LOAD_STATUS.READY : state.submitErrorMessage === null ? LOAD_STATUS.LOADING : LOAD_STATUS.ERROR;
 	const workspaceState = createWorkspaceState({ loadStatus, isEmpty: false, labels: { loading: t.learningSessionLoadingMessage, errorTitle: t.errorPrefix, errorBody: state.submitErrorMessage ?? t.learningSessionLoadErrorMessage, emptyTitle: "", emptyBody: "" }, errorAction: null });
 	const progressBarModel = state.questions.length === 0 ? null : buildProgressBarModel({ totalSteps: state.questions.length, currentStep: Math.min(state.currentIndex + 1, state.questions.length), ariaLabel: t.learningSessionProgressAriaLabel, startLabel: t.learningSessionProgressStartLabel, formatStepLabel: t.learningSessionProgressStepLabel, onActivateStep: null });
-	const sessionResultModel = state.submitResult === null ? null : createSessionResultModel({ score: state.submitResult.score, moduleProgress: state.submitResult.moduleProgress, round: state.round, moduleTitle: state.moduleTitle, t, onBack: backContract.onBack });
+	const sessionResultModel = state.submitResult === null ? null : createSessionResultModel({ score: state.submitResult.score, moduleProgress: state.submitResult.moduleProgress, round: state.round, moduleTitle: state.moduleTitle, t, onBack: backContract.onBack, onContinueToNextRound: continueToNextRound, isStartingNextRound: state.nextRoundStartStatus === "starting", nextRoundErrorMessage: state.nextRoundStartErrorMessage });
 	const headerModel = state.modulePosition === null ? null : { title: t.learningSessionModuleTitle(state.modulePosition, state.moduleTitle), counterLabel: state.submitResult === null ? t.learningSessionQuestionCounter(Math.min(state.currentIndex + 1, state.questions.length), state.questions.length) : t.learningSessionResultHeaderLabel, roundLabel: t.learningSessionRoundLabel(state.round) };
 
 	return { workspaceState, backContract, headerModel, progressBarModel, questionCardModel, currentQuestionRenderKey, questionFocusLabel: t.learningSessionQuestionFocusLabel, actionPanelModel, sessionResultModel, rewardModel: createRewardModel({ pendingRewardKind: state.pendingRewardKind, combo: state.combo, xp: state.xp, t, onContinue: continueSession }), scrollToTopRequestId: state.scrollToTopRequestId, isSessionComplete };

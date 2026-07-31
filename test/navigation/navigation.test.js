@@ -147,8 +147,9 @@ describe("navigation configuration", () => {
 		expect(NAV_ITEMS.popOutMenuItems[NAV_SCREENS.GLOSSARY]).toBeUndefined();
 	});
 
-	test("routes Glossary back directly to SubjectSelectPage", () => {
+	test("routes Glossary and LearningPath back directly to SubjectSelectPage", () => {
 		expect(getScreenConfig(NAV_SCREENS.GLOSSARY).backTo).toBe(NAV_SCREENS.SUBJECTS);
+		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH).backTo).toBe(NAV_SCREENS.SUBJECTS);
 	});
 
 	test("uses direct ids and explicit action properties", () => {

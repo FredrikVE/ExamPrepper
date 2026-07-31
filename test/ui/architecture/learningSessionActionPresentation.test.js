@@ -10,4 +10,11 @@ describe("LearningSession action presentation", () => {
 		expect(source).toContain("<ArrowRight aria-hidden=\"true\" />");
 		expect(source.match(/learning-session-primary/g)).toHaveLength(2);
 	});
+
+	test("removes the question action during the final submit transition", () => {
+		const source = fs.readFileSync(path.resolve("src/ui/viewmodel/LearningSessionPageViewModel.js"), "utf8");
+		expect(source).toContain("shouldShowSessionActionPanel");
+		expect(source).toContain("const showActionPanel");
+		expect(source).toContain("const actionPanelModel = showActionPanel ?");
+	});
 });

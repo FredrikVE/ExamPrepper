@@ -47,4 +47,12 @@ describe("learning session reducer", () => {
 		expect(nextState).toMatchObject({ combo: 3, xp: 30, pendingRewardKind: null });
 	});
 
+	test("keeps the completed result visible when starting the next round fails", () => {
+		const completed = { ...createInitialSessionState(), submitResult: { score: {}, moduleProgress: {} }, nextRoundStartStatus: "starting" };
+		const failed = sessionReducer(completed, { type: SESSION_ACTIONS.NEXT_ROUND_START_FAILED, errorMessage: "temporary" });
+		expect(failed.submitResult).toBe(completed.submitResult);
+		expect(failed.nextRoundStartStatus).toBe("failed");
+		expect(failed.nextRoundStartErrorMessage).toBe("temporary");
+	});
+
 });

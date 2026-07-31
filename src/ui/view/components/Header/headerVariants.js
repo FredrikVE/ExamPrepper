@@ -7,6 +7,7 @@ export const HEADER_APPEARANCES = {
 export const HEADER_LAYOUTS = {
 	DEFAULT: "default",
 	EXAM_PROGRESS: "exam-progress",
+	FULL_PROGRESS: "full-progress",
 	MATCHCARDS_PROGRESS: "matchcards-progress",
 	PAGE_TITLE: "page-title"
 };
@@ -19,6 +20,7 @@ const HEADER_APPEARANCE_CLASS_NAMES = {
 const HEADER_LAYOUT_CLASS_NAMES = {
 	[HEADER_LAYOUTS.DEFAULT]: "scaffold-header--layout-default",
 	[HEADER_LAYOUTS.EXAM_PROGRESS]: "scaffold-header--layout-exam-progress",
+	[HEADER_LAYOUTS.FULL_PROGRESS]: "scaffold-header--layout-full-progress",
 	[HEADER_LAYOUTS.MATCHCARDS_PROGRESS]: "scaffold-header--layout-matchcards-progress",
 	[HEADER_LAYOUTS.PAGE_TITLE]: "scaffold-header--layout-page-title"
 };

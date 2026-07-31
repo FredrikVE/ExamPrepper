@@ -1,5 +1,5 @@
 //test/ui/viewmodel/LearningSession/createSessionResultModel.test.js
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, jest, test } from "@jest/globals";
 import createSessionResultModel from "../../../../src/ui/viewmodel/LearningSession/createSessionResultModel.js";
 
 const t = {
@@ -16,19 +16,26 @@ const t = {
 	learningSessionResultPointsLabel: "points this round",
 	learningSessionResultRoundScoreLabel: "round score",
 	learningSessionResultModuleMasteryLabel: "module mastery",
+	learningSessionResultNextStepLabel: "Next step",
 	learningSessionResultAllRoundsCompleteBody: "All rounds complete",
 	learningSessionResultNextRoundBody: (nextRound) => `Next round ${nextRound}`,
+	learningSessionResultContinueRoundLabel: (nextRound) => `Continue to round ${nextRound}`,
+	learningSessionResultStartingRoundLabel: (nextRound) => `Starting round ${nextRound}`,
+	learningSessionResultEndSessionLabel: "End session",
 	learningSessionResultContinuePathLabel: "Continue path"
 };
 
-function createModel({ percentage, completedRounds = 2, nextRound = 3 }) {
+function createModel({ percentage, round = 2, completedRounds = 2, nextRound = 3, isStartingNextRound = false, nextRoundErrorMessage = null } = {}) {
 	return createSessionResultModel({
 		score: { earnedPoints: 9, availablePoints: 12, percentage },
 		moduleProgress: { masteryPercent: 88.1, completedRounds, nextRound },
-		round: 2,
+		round,
 		moduleTitle: "Protocols",
 		t,
-		onBack: () => {}
+		onBack: jest.fn(),
+		onContinueToNextRound: jest.fn(),
+		isStartingNextRound,
+		nextRoundErrorMessage
 	});
 }
 
@@ -52,11 +59,41 @@ describe("createSessionResultModel", () => {
 		expect(model.roundScoreLabel).toBe("round score");
 		expect(model.moduleMasteryValue).toBe("88.1 %");
 		expect(model.moduleMasteryLabel).toBe("module mastery");
+		expect(model.nextStepLabel).toBe("Next step");
 		expect(model.nextStepBody).toBe("Next round 3");
 	});
 
-	test("explains when all three rounds are complete", () => {
-		const model = createModel({ percentage: 75, completedRounds: 3, nextRound: 1 });
+	test("offers an explicit pause choice between ending and continuing to the next round", () => {
+		const onBack = jest.fn();
+		const onContinueToNextRound = jest.fn();
+		const model = createSessionResultModel({
+			score: { earnedPoints: 12, availablePoints: 12, percentage: 100 },
+			moduleProgress: { masteryPercent: 66.67, completedRounds: 2, nextRound: 3 },
+			round: 2,
+			moduleTitle: "Protocols",
+			t,
+			onBack,
+			onContinueToNextRound
+		});
+
+		expect(model.primaryLabel).toBe("Continue to round 3");
+		expect(model.secondaryLabel).toBe("End session");
+		expect(model.onPrimary).toBe(onContinueToNextRound);
+		expect(model.onSecondary).toBe(onBack);
+	});
+
+	test("uses a pending label and exposes start failures without leaving the pause screen", () => {
+		const model = createModel({ percentage: 75, isStartingNextRound: true, nextRoundErrorMessage: "temporary" });
+		expect(model.primaryLabel).toBe("Starting round 3");
+		expect(model.isPrimaryDisabled).toBe(true);
+		expect(model.isSecondaryDisabled).toBe(true);
+		expect(model.actionErrorMessage).toBe("temporary");
+	});
+
+	test("returns to the learning path after round three", () => {
+		const model = createModel({ percentage: 75, round: 3, completedRounds: 3, nextRound: 1 });
 		expect(model.nextStepBody).toBe("All rounds complete");
+		expect(model.primaryLabel).toBe("Continue path");
+		expect(model.secondaryLabel).toBeNull();
 	});
 });

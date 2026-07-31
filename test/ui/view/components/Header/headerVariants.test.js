@@ -9,6 +9,12 @@ describe("createHeaderClassName", () => {
 		);
 	});
 
+	test("exposes a full-width progress layout for work screens without trailing tools", () => {
+		expect(createHeaderClassName(HEADER_APPEARANCES.DEFAULT, HEADER_LAYOUTS.FULL_PROGRESS)).toBe(
+			"scaffold-header scaffold-header--appearance-default scaffold-header--layout-full-progress"
+		);
+	});
+
 	test("fails for an unknown appearance", () => {
 		expect(() => createHeaderClassName("missing", HEADER_LAYOUTS.DEFAULT)).toThrow("Unknown Header appearance: missing");
 	});

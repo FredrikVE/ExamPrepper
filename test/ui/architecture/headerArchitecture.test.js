@@ -7,8 +7,8 @@ const PROJECT_ROOT = process.cwd();
 const HEADER_SOURCE_PATH = path.join(PROJECT_ROOT, "src", "ui", "view", "components", "Header", "Header.jsx");
 const HEADER_STYLE_ROOT = path.join(PROJECT_ROOT, "src", "ui", "style", "Header");
 const PAGE_ROOT = path.join(PROJECT_ROOT, "src", "ui", "view", "pages");
-const PAGE_STYLE_NAMES = ["ExamPage", "FlipcardsPage", "GlossaryPage", "LearningContentSelectPage", "MatchCardsPage", "StatisticsPage", "SubjectSelectPage"];
-const HEADER_PAGE_NAMES = ["ExamPage.jsx", "FlipcardsPage.jsx", "GlossaryPage.jsx", "LearningContentSelectPage.jsx", "MatchCardsPage.jsx", "StatisticsPage.jsx", "SubjectSelectPage.jsx"];
+const PAGE_STYLE_NAMES = ["ExamPage", "FlipcardsPage", "GlossaryPage", "LearningContentSelectPage", "LearningSessionPage", "MatchCardsPage", "StatisticsPage", "SubjectSelectPage"];
+const HEADER_PAGE_NAMES = ["ExamPage.jsx", "FlipcardsPage.jsx", "GlossaryPage.jsx", "LearningContentSelectPage.jsx", "LearningSessionPage.jsx", "MatchCardsPage.jsx", "StatisticsPage.jsx", "SubjectSelectPage.jsx"];
 
 function readCssTree(directoryPath) {
 	let cssSource = "";
@@ -61,6 +61,16 @@ describe("Header architecture", () => {
 		expect(matchCardsPageSource).toContain("if (viewModel.headerProgressBarModel !== null)");
 		expect(matchCardsPageSource).toContain("heading={headerHeading}");
 		expect(matchCardsPageSource).not.toContain("heading={<ProgressBar");
+	});
+
+	test("lets LearningSession progress fill the symmetric header center column", () => {
+		const learningSessionPageSource = fs.readFileSync(path.join(PAGE_ROOT, "LearningSessionPage.jsx"), "utf8");
+		const headerCss = readCssTree(HEADER_STYLE_ROOT);
+
+		expect(learningSessionPageSource).toContain("layout={HEADER_LAYOUTS.FULL_PROGRESS}");
+		expect(learningSessionPageSource).not.toContain("layout={HEADER_LAYOUTS.EXAM_PROGRESS}");
+		expect(headerCss).toContain(".scaffold-header--layout-full-progress");
+		expect(headerCss).toMatch(/scaffold-header--layout-full-progress[\s\S]*grid-template-columns:\s*64px minmax\(0, 1fr\) 64px/);
 	});
 
 	test("keeps Header selectors out of Page CSS", () => {

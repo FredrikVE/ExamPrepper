@@ -266,6 +266,13 @@
 	box-shadow: 0 0 14px color-mix(in srgb, var(--learning-session-result-accent) 35%, transparent);
 }
 
+.learning-session-result__next-step-label {
+	margin-top: var(--space-1);
+	color: var(--text-main);
+	font-size: 0.82rem;
+	font-weight: 800;
+}
+
 .learning-session-result__module-progress p {
 	margin: 0;
 	color: var(--text-muted);
@@ -274,23 +281,63 @@
 	line-height: 1.5;
 }
 
-.learning-session-result__continue {
+.learning-session-result__action-error {
 	width: min(100%, 480px);
+	margin: calc(var(--space-3) * -1) 0 0;
+	padding: var(--space-3) var(--space-4);
+	border: 1px solid color-mix(in srgb, var(--danger) 34%, transparent);
+	border-radius: var(--radius-md);
+	color: color-mix(in srgb, var(--danger) 72%, white);
+	background: color-mix(in srgb, var(--danger-soft) 72%, transparent);
+	font-size: 0.84rem;
+	font-weight: 680;
+	line-height: 1.45;
+}
+
+.learning-session-result__actions {
+	display: grid;
+	grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+	gap: var(--space-3);
+	width: min(100%, 480px);
+}
+
+.learning-session-result__actions--single {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.learning-session-result__secondary,
+.learning-session-result__continue {
 	min-height: 62px;
-	border: 0;
 	border-radius: var(--radius-lg);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: var(--space-3);
+	font: inherit;
+	font-size: 0.94rem;
+	font-weight: 820;
+	cursor: pointer;
+	transition: transform var(--transition-normal), filter var(--transition-normal), border-color var(--transition-normal), background var(--transition-normal);
+}
+
+.learning-session-result__secondary {
+	border: 1px solid var(--line-strong);
+	color: var(--text-main);
+	background: color-mix(in srgb, white 3%, transparent);
+}
+
+.learning-session-result__secondary:hover {
+	transform: translateY(-2px);
+	border-color: color-mix(in srgb, var(--text-muted) 52%, transparent);
+	background: color-mix(in srgb, white 6%, transparent);
+}
+
+.learning-session-result__continue {
+	width: 100%;
+	border: 0;
 	color: white;
 	background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, white), var(--accent));
 	box-shadow: 0 14px 30px color-mix(in srgb, var(--accent) 30%, transparent);
-	font: inherit;
-	font-size: 1rem;
-	font-weight: 820;
-	cursor: pointer;
-	transition: transform var(--transition-normal), filter var(--transition-normal);
 }
 
 .learning-session-result__continue:hover {
@@ -298,9 +345,28 @@
 	filter: brightness(1.07);
 }
 
+.learning-session-result__secondary svg,
 .learning-session-result__continue svg {
 	width: 20px;
 	height: 20px;
+}
+
+.learning-session-result__secondary:disabled,
+.learning-session-result__continue:disabled {
+	cursor: wait;
+	opacity: 0.58;
+	transform: none;
+	filter: none;
+}
+
+@media (max-width: 620px) {
+	.learning-session-result__actions {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.learning-session-result__continue {
+		order: -1;
+	}
 }
 
 .learning-session-reward {

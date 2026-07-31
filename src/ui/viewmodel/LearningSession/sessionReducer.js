@@ -10,11 +10,13 @@ export const SESSION_ACTIONS = {
 	SUBMIT_STARTED: "submitStarted",
 	SUBMIT_SUCCEEDED: "submitSucceeded",
 	SUBMIT_FAILED: "submitFailed",
+	NEXT_ROUND_START_STARTED: "nextRoundStartStarted",
+	NEXT_ROUND_START_FAILED: "nextRoundStartFailed",
 	SESSION_RESTARTED: "sessionRestarted"
 };
 
 export function createInitialSessionState() {
-	return { status: LEARNING_SESSION_STATES.LOADING, sessionId: null, moduleId: null, modulePosition: null, moduleTitle: "", round: null, questions: [], currentIndex: 0, answersBySessionQuestionId: {}, resultsBySessionQuestionId: {}, answerOptionOrderBySessionQuestionId: {}, combo: 0, xp: 0, pendingRewardKind: null, submitStatus: "idle", submitErrorMessage: null, submitResult: null, scrollToTopRequestId: 0 };
+	return { status: LEARNING_SESSION_STATES.LOADING, sessionId: null, moduleId: null, modulePosition: null, moduleTitle: "", round: null, questions: [], currentIndex: 0, answersBySessionQuestionId: {}, resultsBySessionQuestionId: {}, answerOptionOrderBySessionQuestionId: {}, combo: 0, xp: 0, pendingRewardKind: null, submitStatus: "idle", submitErrorMessage: null, submitResult: null, nextRoundStartStatus: "idle", nextRoundStartErrorMessage: null, scrollToTopRequestId: 0 };
 }
 
 export default function sessionReducer(state, action) {
@@ -35,6 +37,10 @@ export default function sessionReducer(state, action) {
 			return { ...state, status: LEARNING_SESSION_STATES.COMPLETED, submitStatus: "succeeded", submitErrorMessage: null, submitResult: action.result };
 		case SESSION_ACTIONS.SUBMIT_FAILED:
 			return { ...state, status: LEARNING_SESSION_STATES.ERROR, submitStatus: "failed", submitErrorMessage: action.errorMessage };
+		case SESSION_ACTIONS.NEXT_ROUND_START_STARTED:
+			return { ...state, nextRoundStartStatus: "starting", nextRoundStartErrorMessage: null };
+		case SESSION_ACTIONS.NEXT_ROUND_START_FAILED:
+			return { ...state, nextRoundStartStatus: "failed", nextRoundStartErrorMessage: action.errorMessage };
 		case SESSION_ACTIONS.SESSION_RESTARTED:
 			return createInitialSessionState();
 		default:

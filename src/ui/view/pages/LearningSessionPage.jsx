@@ -21,7 +21,7 @@ export default function LearningSessionPage({ viewModel }) {
 	}, [viewModel.currentQuestionRenderKey]);
 
 	const heading = viewModel.progressBarModel === null ? null : <ProgressBar variant={PROGRESS_BAR_VARIANTS.HEADER} model={viewModel.progressBarModel} />;
-	const header = <Header appearance={HEADER_APPEARANCES.DEFAULT} layout={HEADER_LAYOUTS.EXAM_PROGRESS} backContract={viewModel.backContract} heading={heading} tools={null} trailing={null} />;
+	const header = <Header appearance={HEADER_APPEARANCES.DEFAULT} layout={HEADER_LAYOUTS.FULL_PROGRESS} backContract={viewModel.backContract} heading={heading} tools={null} trailing={null} />;
 	const overlay = viewModel.rewardModel === null ? null : <SessionRewardCard {...viewModel.rewardModel} />;
 
 	return (

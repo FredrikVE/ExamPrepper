@@ -80,7 +80,7 @@ export default function useAppNavigationViewModel(params) {
 		setSelectedSubjectId(subjectId);
 		setSelectedExamId(null);
 		setSelectedTopicAreaKey(null);
-		setActiveScreen(NAV_SCREENS.GLOSSARY);
+		setActiveScreen(NAV_SCREENS.LEARNING_PATH);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays]);
 

@@ -4,8 +4,12 @@ import { LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, getScreenConfig } from 
 
 describe("LearningPath navigation contract", () => {
 	test("registers complete path and session screen configs", () => {
-		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH)).toEqual({ requiresSubject: true, requiresExam: false, backTo: NAV_SCREENS.SELECT, showsSubjectSwitcher: true, pageClassName: "exam-select-page", shellClassName: "exam-select-shell" });
+		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH)).toEqual({ requiresSubject: true, requiresExam: false, backTo: NAV_SCREENS.SUBJECTS, showsSubjectSwitcher: true, pageClassName: "exam-select-page", shellClassName: "exam-select-shell" });
 		expect(getScreenConfig(NAV_SCREENS.LEARNING_SESSION)).toEqual({ requiresSubject: true, requiresExam: false, backTo: NAV_SCREENS.LEARNING_PATH, showsSubjectSwitcher: false, pageClassName: "exam-page", shellClassName: "exam-shell" });
+	});
+
+	test("returns from LearningPath directly to SubjectSelectPage", () => {
+		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH).backTo).toBe(NAV_SCREENS.SUBJECTS);
 	});
 
 	test("enables both LearningPath entries and keeps them direct", () => {

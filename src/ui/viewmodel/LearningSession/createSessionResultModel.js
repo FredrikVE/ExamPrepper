@@ -44,11 +44,17 @@ function resolveCopy({ percentage, round, moduleTitle, t }) {
 	};
 }
 
-export default function createSessionResultModel({ score, moduleProgress, round, moduleTitle, t, onBack }) {
+function resolveNextRound(round, moduleProgress) {
+	const nextRound = moduleProgress.nextRound;
+	return Number.isInteger(nextRound) && nextRound === round + 1 && nextRound <= 3 ? nextRound : null;
+}
+
+export default function createSessionResultModel({ score, moduleProgress, round, moduleTitle, t, onBack, onContinueToNextRound, isStartingNextRound = false, nextRoundErrorMessage = null }) {
 	const percentage = normalizeMetric(score.percentage);
 	const masteryPercent = normalizeMetric(moduleProgress.masteryPercent);
 	const copy = resolveCopy({ percentage, round, moduleTitle, t });
-	const allRoundsComplete = moduleProgress.completedRounds >= 3;
+	const nextRound = resolveNextRound(round, moduleProgress);
+	const canContinueToNextRound = nextRound !== null;
 
 	return {
 		appearance: resolveAppearance(percentage),
@@ -63,9 +69,15 @@ export default function createSessionResultModel({ score, moduleProgress, round,
 		moduleMasteryValue: `${masteryPercent} %`,
 		moduleMasteryPercent: Math.min(100, Math.max(0, masteryPercent)),
 		moduleMasteryLabel: t.learningSessionResultModuleMasteryLabel,
-		nextStepBody: allRoundsComplete ? t.learningSessionResultAllRoundsCompleteBody : t.learningSessionResultNextRoundBody(moduleProgress.nextRound),
-		continueLabel: t.learningSessionResultContinuePathLabel,
-		onContinue: onBack
+		nextStepLabel: t.learningSessionResultNextStepLabel,
+		nextStepBody: canContinueToNextRound ? t.learningSessionResultNextRoundBody(nextRound) : t.learningSessionResultAllRoundsCompleteBody,
+		primaryLabel: canContinueToNextRound ? isStartingNextRound ? t.learningSessionResultStartingRoundLabel(nextRound) : t.learningSessionResultContinueRoundLabel(nextRound) : t.learningSessionResultContinuePathLabel,
+		secondaryLabel: canContinueToNextRound ? t.learningSessionResultEndSessionLabel : null,
+		isPrimaryDisabled: isStartingNextRound,
+		isSecondaryDisabled: isStartingNextRound,
+		actionErrorMessage: nextRoundErrorMessage,
+		onPrimary: canContinueToNextRound ? onContinueToNextRound : onBack,
+		onSecondary: canContinueToNextRound ? onBack : null
 	};
 }
 
