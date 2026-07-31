@@ -7,6 +7,7 @@ import { APP_DESKTOP_MIN_WIDTH, APP_MOBILE_MAX_WIDTH, APP_MOBILE_QUERY } from ".
 const STYLE_DIRECTORY = path.resolve("src/ui/style");
 const WIDTH_FEATURE_PATTERN = /\((min|max)-width:\s*(\d+)px\)/g;
 const LOCAL_WIDTH_FEATURE_ALLOWLIST = {
+	"max-width:280": "ProgressPager ultracompact container fit",
 	"max-width:380": "very narrow flipcard and toggle controls",
 	"max-width:385": "matrix-placement minimum phone fit",
 	"max-width:410": "matrix-placement compact phone fit",
@@ -16,7 +17,9 @@ const LOCAL_WIDTH_FEATURE_ALLOWLIST = {
 	"max-width:480": "small-phone component compaction",
 	"max-width:520": "compact pager and menu layouts",
 	"max-width:560": "learning-content card copy fit",
+	"max-width:620": "LearningSession result action stacking",
 	"max-width:640": "compact typography and question controls",
+	"max-width:660": "MatrixPlacement single-column container fit",
 	"max-width:680": "drag-and-drop single-column transition",
 	"max-width:700": "question-card and pager compaction",
 	"max-width:720": "progress and learning-content density",
