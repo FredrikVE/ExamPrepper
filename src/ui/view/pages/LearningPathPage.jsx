@@ -14,14 +14,19 @@ export default function LearningPathPage({ viewModel }) {
 
 	return (
 		<WorkspaceScaffold className="learning-content-workspace learning-path-workspace" header={header} footer={null} overlay={null} scrollToTopRequestId={null}>
-			<WorkspaceState state={viewModel.workspaceState}>
+			<div className="learning-path-page">
+				<LearningContentHeader {...viewModel.contentHeaderModel} />
+
 				<div className="learning-path-page-content">
-					<LearningContentHeader {...viewModel.contentHeaderModel} />
-					<ContinueLearningPanel model={viewModel.continuePanelModel} onActionPressed={viewModel.onLearningPathAction} />
-					{viewModel.startSessionError === null ? null : <p className="learning-path-error" role="alert">{viewModel.startSessionError}</p>}
-					<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onActionPressed={viewModel.onLearningPathAction} registerModuleElement={scrollAdapter.registerModuleElement} />
+					<WorkspaceState state={viewModel.workspaceState}>
+						<div className="learning-path-page-state-content">
+							<ContinueLearningPanel model={viewModel.continuePanelModel} onActionPressed={viewModel.onLearningPathAction} />
+							{viewModel.startSessionError === null ? null : <p className="learning-path-error" role="alert">{viewModel.startSessionError}</p>}
+							<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onActionPressed={viewModel.onLearningPathAction} registerModuleElement={scrollAdapter.registerModuleElement} />
+						</div>
+					</WorkspaceState>
 				</div>
-			</WorkspaceState>
+			</div>
 		</WorkspaceScaffold>
 	);
 }

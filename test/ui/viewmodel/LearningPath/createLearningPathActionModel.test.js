@@ -8,7 +8,7 @@ const t = {
 	learningPathStartRoundLabel: (round) => `Start ${round}`
 };
 
-function createModule(overrides = {}) {
+function createModule(overrides) {
 	return {
 		id: "module-1",
 		availability: { isUnlocked: true },
@@ -19,12 +19,12 @@ function createModule(overrides = {}) {
 
 describe("createLearningPathActionModel", () => {
 	test("resumes the active session for the same module", () => {
-		const model = createLearningPathActionModel({ module: createModule(), resumableSession: { sessionId: "session-1", moduleId: "module-1" }, startingModuleId: null, t });
+		const model = createLearningPathActionModel({ module: createModule({}), resumableSession: { sessionId: "session-1", moduleId: "module-1" }, startingModuleId: null, t });
 		expect(model).toEqual({ intent: "resume", moduleId: "module-1", sessionId: "session-1", round: 1, label: "Continue 1", isDisabled: false, isPending: false });
 	});
 
 	test("starts the module when there is no matching active session", () => {
-		const model = createLearningPathActionModel({ module: createModule(), resumableSession: null, startingModuleId: null, t });
+		const model = createLearningPathActionModel({ module: createModule({}), resumableSession: null, startingModuleId: null, t });
 		expect(model).toMatchObject({ intent: "start", moduleId: "module-1", sessionId: null, label: "Start 1", isDisabled: false });
 	});
 

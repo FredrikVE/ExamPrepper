@@ -25,7 +25,7 @@ const t = {
 	learningSessionResultContinuePathLabel: "Continue path"
 };
 
-function createModel({ percentage, round = 2, completedRounds = 2, nextRound = 3, isStartingNextRound = false, nextRoundErrorMessage = null } = {}) {
+function createModel(percentage, round, completedRounds, nextRound, isStartingNextRound, nextRoundErrorMessage) {
 	return createSessionResultModel({
 		score: { earnedPoints: 9, availablePoints: 12, percentage },
 		moduleProgress: { masteryPercent: 88.1, completedRounds, nextRound },
@@ -46,13 +46,13 @@ describe("createSessionResultModel", () => {
 		[75, "medium", "Round completed"],
 		[54.99, "weak", "Almost there"]
 	])("maps %s percent to %s presentation", (percentage, appearance, title) => {
-		const model = createModel({ percentage });
+		const model = createModel(percentage, 2, 2, 3, false, null);
 		expect(model.appearance).toBe(appearance);
 		expect(model.title).toBe(title);
 	});
 
 	test("labels score, module mastery and the next round explicitly", () => {
-		const model = createModel({ percentage: 75 });
+		const model = createModel(75, 2, 2, 3, false, null);
 		expect(model.pointsValue).toBe("9 / 12");
 		expect(model.pointsLabel).toBe("points this round");
 		expect(model.roundScoreValue).toBe("75 %");
@@ -83,7 +83,7 @@ describe("createSessionResultModel", () => {
 	});
 
 	test("uses a pending label and exposes start failures without leaving the pause screen", () => {
-		const model = createModel({ percentage: 75, isStartingNextRound: true, nextRoundErrorMessage: "temporary" });
+		const model = createModel(75, 2, 2, 3, true, "temporary");
 		expect(model.primaryLabel).toBe("Starting round 3");
 		expect(model.isPrimaryDisabled).toBe(true);
 		expect(model.isSecondaryDisabled).toBe(true);
@@ -91,7 +91,7 @@ describe("createSessionResultModel", () => {
 	});
 
 	test("returns to the learning path after round three", () => {
-		const model = createModel({ percentage: 75, round: 3, completedRounds: 3, nextRound: 1 });
+		const model = createModel(75, 3, 3, 1, false, null);
 		expect(model.nextStepBody).toBe("All rounds complete");
 		expect(model.primaryLabel).toBe("Continue path");
 		expect(model.secondaryLabel).toBeNull();

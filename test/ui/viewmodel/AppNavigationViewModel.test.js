@@ -64,14 +64,7 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/AppNavigation/useSyncSelecte
 
 const { default: useAppNavigationViewModel } = await import("../../../src/ui/viewmodel/AppNavigationViewModel.js");
 
-function setNavigationState({
-	activeScreen = NAV_SCREENS.SUBJECTS,
-	selectedSubjectId = null,
-	selectedExamId = null,
-	selectedTopicAreaKey = null,
-	selectedLearningSessionId = null,
-	examLanguageSyncError = null
-} = {}) {
+function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError) {
 	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError];
 }
 
@@ -89,7 +82,7 @@ function createViewModel() {
 }
 
 beforeEach(() => {
-	setNavigationState();
+	setNavigationState(NAV_SCREENS.SUBJECTS, null, null, null, null, null);
 	jest.clearAllMocks();
 });
 
@@ -105,12 +98,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("valg av fag åpner Læringsstien og nullstiller gamle valg", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "old-subject",
-			selectedExamId: "old-exam",
-			selectedTopicAreaKey: "old-topic"
-		});
+		setNavigationState(NAV_SCREENS.EXAM, "old-subject", "old-exam", "old-topic", null, null);
 
 		createViewModel().selectSubject("inf1010");
 
@@ -123,7 +111,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("valg av eksamen går direkte til eksamensskjermen", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
 		createViewModel().selectExam("exam-2");
 
@@ -136,11 +124,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("valg av flipcard-bunke beholder fag og lagrer topic area", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.SELECT,
-			selectedSubjectId: "inf1010",
-			selectedExamId: "old-exam"
-		});
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", "old-exam", null, null, null);
 
 		createViewModel().selectFlipcardDeck("loops");
 
@@ -164,7 +148,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("eksamensskjermen kan ikke åpnes uten valgt eksamen", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
 		createViewModel().changeScreen(NAV_SCREENS.EXAM);
 
@@ -172,18 +156,14 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("ukjent skjerm feiler tydelig", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
 		expect(() => createViewModel().changeScreen("missing-screen")).toThrow("Unknown navigation screen: missing-screen");
 		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
 	});
 
 	test("tilbake fra arbeidsskjerm går til innholdsvalg", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.FLIPCARDS,
-			selectedSubjectId: "inf1010",
-			selectedTopicAreaKey: "loops"
-		});
+		setNavigationState(NAV_SCREENS.FLIPCARDS, "inf1010", null, "loops", null, null);
 
 		createViewModel().goBack();
 
@@ -196,12 +176,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("tilbake fra ordlisten går direkte til fagoversikten", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.GLOSSARY,
-			selectedSubjectId: "inf1010",
-			selectedExamId: "old-exam",
-			selectedTopicAreaKey: "loops"
-		});
+		setNavigationState(NAV_SCREENS.GLOSSARY, "inf1010", "old-exam", "loops", null, null);
 
 		createViewModel().goBack();
 
@@ -214,7 +189,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("tilbake fra Læringsstien går direkte til fagoversikten", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.LEARNING_PATH, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "inf1010", null, null, null, null);
 
 		createViewModel().goBack();
 
@@ -228,7 +203,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("tilbake fra innholdsvalg går til fagoversikten", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
 		createViewModel().goBack();
 
@@ -249,11 +224,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("språksynk oppdaterer valg uten å lukke overlays", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "inf1000",
-			selectedExamId: "exam-1"
-		});
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "exam-1", null, null, null);
 		createViewModel();
 
 		const onExamResolved = useSyncSelectedExamWithLanguage.mock.calls[0][0].onExamResolved;
@@ -267,11 +238,7 @@ describe("useAppNavigationViewModel", () => {
 
 
 	test("skiller utilgjengelig eksamen fra teknisk språksynkfeil", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "inf1000",
-			selectedExamId: "exam-1"
-		});
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "exam-1", null, null, null);
 		createViewModel();
 
 		const syncContract = useSyncSelectedExamWithLanguage.mock.calls[0][0];
@@ -280,11 +247,7 @@ describe("useAppNavigationViewModel", () => {
 		expect(hookState[2]).toBeNull();
 		expect(hookState[5]).toBe("Eksamen finnes ikke på språket.");
 
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "inf1000",
-			selectedExamId: "exam-1"
-		});
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "exam-1", null, null, null);
 		createViewModel();
 		useSyncSelectedExamWithLanguage.mock.calls.at(-1)[0].onExamSyncFailed();
 		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
@@ -293,7 +256,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("opens a persisted learning session only when a subject is selected", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.LEARNING_PATH, selectedSubjectId: "in2120" });
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "in2120", null, null, null, null);
 
 		createViewModel().openLearningSession("session-1");
 
@@ -303,7 +266,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("clears selected learning session outside the session screen", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.LEARNING_SESSION, selectedSubjectId: "in2120", selectedLearningSessionId: "session-1" });
+		setNavigationState(NAV_SCREENS.LEARNING_SESSION, "in2120", null, null, "session-1", null);
 
 		createViewModel().changeScreen(NAV_SCREENS.LEARNING_PATH);
 
@@ -321,7 +284,7 @@ describe("useAppNavigationViewModel", () => {
 		[NAV_SCREENS.LEARNING_SESSION, "exam-page", "exam-shell", true],
 		[NAV_SCREENS.OVERVIEW, "exam-select-page", "exam-select-shell", true]
 	])("deriverer enkel chrome for %s", (screen, pageClassName, shellClassName, showBackButton) => {
-		setNavigationState({ activeScreen: screen, selectedSubjectId: "inf1000" });
+		setNavigationState(screen, "inf1000", null, null, null, null);
 
 		const viewModel = createViewModel();
 
@@ -346,7 +309,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("opens a persisted learning session only when a subject is selected", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.LEARNING_PATH, selectedSubjectId: "in2120" });
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "in2120", null, null, null, null);
 
 		createViewModel().openLearningSession("session-1");
 
@@ -356,7 +319,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("clears selected learning session outside the session screen", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.LEARNING_SESSION, selectedSubjectId: "in2120", selectedLearningSessionId: "session-1" });
+		setNavigationState(NAV_SCREENS.LEARNING_SESSION, "in2120", null, null, "session-1", null);
 
 		createViewModel().changeScreen(NAV_SCREENS.LEARNING_PATH);
 
@@ -374,7 +337,7 @@ describe("useAppNavigationViewModel", () => {
 		[NAV_SCREENS.LEARNING_SESSION, false],
 		[NAV_SCREENS.OVERVIEW, false]
 	])("fagbytteren vises på %s: %s", (screen, expected) => {
-		setNavigationState({ activeScreen: screen });
+		setNavigationState(screen, null, null, null, null, null);
 		expect(createViewModel().shouldShowSubjectSwitcher).toBe(expected);
 	});
 });

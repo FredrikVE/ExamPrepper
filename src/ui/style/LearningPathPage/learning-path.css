@@ -14,6 +14,11 @@
 	padding: var(--learning-content-page-top) var(--learning-content-page-inline) var(--space-8);
 }
 
+.learning-path-page {
+	width: 100%;
+	min-width: 0;
+}
+
 .learning-path-page-content {
 	width: min(100%, 950px);
 	margin: 0 auto;
