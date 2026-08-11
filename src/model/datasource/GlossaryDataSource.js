@@ -52,7 +52,7 @@ function validateGlossaryOverviewResponse(response) {
 	}
 
 	for (const concept of response.concepts) {
-		if (!isGlossaryConceptDto(concept)) {
+		if (!isGlossaryOverviewConceptDto(concept)) {
 			throw new Error(INVALID_GLOSSARY_RESPONSE_MESSAGE);
 		}
 	}
@@ -86,8 +86,20 @@ function validateGlossaryNetworkResponse(response) {
 	return response;
 }
 
+function isGlossaryOverviewConceptDto(concept) {
+	return isGlossaryConceptDto(concept)
+		&& Number.isInteger(concept.directNeighborCount)
+		&& concept.directNeighborCount >= 0
+		&& Array.isArray(concept.directNeighborGlossaryKeys)
+		&& concept.directNeighborGlossaryKeys.every(isGlossaryEntryKey);
+}
+
 function isGlossaryConceptDto(concept) {
 	return isGlossaryEntryDto(concept) && isConceptMasteryDtoOrNull(concept.mastery);
+}
+
+function isGlossaryEntryKey(glossaryEntryKey) {
+	return typeof glossaryEntryKey === "string" && glossaryEntryKey.length > 0;
 }
 
 function isGlossaryEntryDto(glossaryEntry) {

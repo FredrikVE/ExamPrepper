@@ -4,7 +4,11 @@ import GetGlossaryOverviewUseCase from "../../../src/model/domain/GetGlossaryOve
 
 describe("GetGlossaryOverviewUseCase", () => {
 	test("loads the canonical overview for one subject", async () => {
-		const concepts = [{ glossaryEntryKey: "tls" }];
+		const concepts = [{
+			glossaryEntryKey: "tls",
+			directNeighborCount: 2,
+			directNeighborGlossaryKeys: ["tcp", "udp"]
+		}];
 		const repository = {
 			getGlossaryOverview: jest.fn().mockResolvedValue(concepts)
 		};

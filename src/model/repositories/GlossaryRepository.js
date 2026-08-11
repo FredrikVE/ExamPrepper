@@ -28,7 +28,7 @@ export default class GlossaryRepository {
 		const concepts = [];
 
 		for (const concept of response.concepts) {
-			concepts.push(this.#toGlossaryConcept(concept));
+			concepts.push(this.#toGlossaryOverviewConcept(concept));
 		}
 
 		return concepts;
@@ -68,6 +68,14 @@ export default class GlossaryRepository {
 		}
 
 		return glossaryEntries;
+	}
+
+	#toGlossaryOverviewConcept(rawConcept) {
+		return {
+			...this.#toGlossaryConcept(rawConcept),
+			directNeighborCount: rawConcept.directNeighborCount,
+			directNeighborGlossaryKeys: [...rawConcept.directNeighborGlossaryKeys]
+		};
 	}
 
 	#toGlossaryConcept(rawConcept) {

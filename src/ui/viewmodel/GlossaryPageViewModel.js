@@ -609,6 +609,8 @@ function localizeGlossaryEntries(glossaryEntries, language) {
 		term: resolveLocalizedText(glossaryEntry.term, language),
 		explanation: resolveLocalizedText(glossaryEntry.explanation, language),
 		position: glossaryEntry.position,
+		directNeighborCount: glossaryEntry.directNeighborCount,
+		directNeighborGlossaryKeys: glossaryEntry.directNeighborGlossaryKeys,
 		mastery: glossaryEntry.mastery
 	}));
 }

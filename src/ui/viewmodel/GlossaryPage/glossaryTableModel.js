@@ -8,6 +8,8 @@ export function createGlossaryTableRows({ localizedEntries, topicAreaReferenceBy
 		topicAreaReference: topicAreaReferenceByKey.get(localizedEntry.topicAreaKey) ?? "",
 		term: localizedEntry.term,
 		explanation: localizedEntry.explanation,
+		directNeighborCount: localizedEntry.directNeighborCount,
+		directNeighborGlossaryKeys: localizedEntry.directNeighborGlossaryKeys,
 		mastery: createGlossaryMasteryPresentation(localizedEntry.mastery, formatDate, t)
 	}));
 }

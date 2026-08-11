@@ -130,6 +130,8 @@ const glossaryEntries = [
 		term: { no: "Transportlag", en: "Transport layer" },
 		explanation: { no: "Flytter data mellom endepunkter.", en: "Moves data between endpoints." },
 		position: 2,
+		directNeighborCount: 2,
+		directNeighborGlossaryKeys: ["packet", "public-key"],
 		mastery: {
 			status: "progress",
 			score: 0.75,
@@ -152,6 +154,8 @@ const glossaryEntries = [
 		term: { no: "Offentlig nøkkel", en: "Public key" },
 		explanation: { no: "Kan deles med andre.", en: "Can be shared with others." },
 		position: 2,
+		directNeighborCount: 1,
+		directNeighborGlossaryKeys: ["transport-layer"],
 		mastery: null
 	},
 	{
@@ -160,6 +164,8 @@ const glossaryEntries = [
 		term: { no: "Pakke", en: "Packet" },
 		explanation: { no: "En avgrenset enhet med nettverkstrafikk.", en: "A bounded unit of network traffic." },
 		position: 1,
+		directNeighborCount: 1,
+		directNeighborGlossaryKeys: ["transport-layer"],
 		mastery: null
 	},
 	{
@@ -168,6 +174,8 @@ const glossaryEntries = [
 		term: { no: "Asymmetrisk nøkkel", en: "Asymmetric key" },
 		explanation: { no: "Brukes i et nøkkelpar.", en: "Used in a key pair." },
 		position: 1,
+		directNeighborCount: 0,
+		directNeighborGlossaryKeys: [],
 		mastery: null
 	}
 ];
@@ -667,6 +675,16 @@ describe("useGlossaryPageViewModel", () => {
 		expect(viewModel.autocompleteSuggestions).toEqual([]);
 		expect(viewModel.glossaryPanelEmptyState).toBeNull();
 		expect(viewModel.glossaryTableRows).toHaveLength(glossaryEntries.length);
+	});
+
+	test("preserves the direct-neighbor summary in the glossary table model", () => {
+		const { viewModel } = createViewModel();
+		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
+
+		expect(transportLayer).toMatchObject({
+			directNeighborCount: 2,
+			directNeighborGlossaryKeys: ["packet", "public-key"]
+		});
 	});
 
 	test("renders canonical mastery fields in the glossary table model", () => {

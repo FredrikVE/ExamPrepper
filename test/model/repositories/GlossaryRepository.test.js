@@ -42,6 +42,8 @@ describe("GlossaryRepository", () => {
 			term: { no: "Konfidensialitet", en: "Confidentiality" },
 			explanation: { no: "Norsk", en: "English" },
 			position: 4,
+			directNeighborCount: 2,
+			directNeighborGlossaryKeys: ["kap1-integritet", "kap2-aes"],
 			mastery: null
 		};
 		const relation = {
@@ -75,6 +77,8 @@ describe("GlossaryRepository", () => {
 		expect(overview[0]).toMatchObject({
 			id: "kap1-konfidensialitet",
 			glossaryEntryKey: "kap1-konfidensialitet",
+			directNeighborCount: 2,
+			directNeighborGlossaryKeys: ["kap1-integritet", "kap2-aes"],
 			mastery: null
 		});
 		expect(network.relations).toEqual([relation]);

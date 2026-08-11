@@ -108,6 +108,8 @@ describe("GlossaryDataSource", () => {
 	test("fetches the canonical glossary overview with optional mastery", async () => {
 		const concepts = [{
 			...glossaryEntries[0],
+			directNeighborCount: 1,
+			directNeighborGlossaryKeys: ["kap2-aes"],
 			mastery: {
 				status: "understood",
 				score: 0.9,
@@ -136,6 +138,24 @@ describe("GlossaryDataSource", () => {
 			expect.objectContaining({ method: "GET" })
 		);
 		expect(response).toEqual({ subjectId: "in2120", concepts });
+	});
+
+	test.each([
+		{ directNeighborCount: 1 },
+		{ directNeighborGlossaryKeys: [] },
+		{ directNeighborCount: -1, directNeighborGlossaryKeys: [] },
+		{ directNeighborCount: 1.5, directNeighborGlossaryKeys: [] },
+		{ directNeighborCount: 0, directNeighborGlossaryKeys: {} },
+		{ directNeighborCount: 1, directNeighborGlossaryKeys: [""] },
+		{ directNeighborCount: 1, directNeighborGlossaryKeys: [42] }
+	])("rejects an overview concept with an invalid direct-neighbor summary", async (summary) => {
+		const concept = { ...glossaryEntries[0], mastery: null, ...summary };
+		global.fetch.mockResolvedValue(createResponse({
+			payload: { subjectId: "in2120", concepts: [concept] }
+		}));
+		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test" });
+
+		await expect(dataSource.fetchGlossaryOverview({ subjectId: "in2120" })).rejects.toThrow("Invalid glossary response");
 	});
 
 	test("fetches and validates a typed glossary network", async () => {
