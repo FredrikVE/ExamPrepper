@@ -4,10 +4,11 @@ import createMasteryAppearance from "./createMasteryAppearance.js";
 import createModuleStatus from "./createModuleStatus.js";
 
 export default function createLearningPathModuleModel({ module, resumableSession, nextActivity, expandedModuleId, startingModuleId, t }) {
-	const status = createModuleStatus({ masteryPercent: module.progress.masteryPercent, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
+	const status = createModuleStatus({ completedRounds: module.progress.completedRounds, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
 	const hasModuleActivity = module.progress.completedRounds > 0 || module.progress.lastSessionAt !== null || resumableSession?.moduleId === module.id;
 	const actionModel = createLearningPathActionModel({ module, resumableSession, nextActivity, startingModuleId, t });
+	const activeRound = resolveActiveRound(module.id, resumableSession, nextActivity);
 
 	return {
 		kind: "module",
@@ -15,7 +16,6 @@ export default function createLearningPathModuleModel({ module, resumableSession
 		position: module.position,
 		title: module.title,
 		appearance: status.appearance,
-		nextRound: module.progress.nextRound,
 		nodeModel: {
 			appearance: status.appearance,
 			iconKey: status.iconKey,
@@ -27,7 +27,7 @@ export default function createLearningPathModuleModel({ module, resumableSession
 			id: module.id,
 			eyebrow: t.learningPathPartLabel(module.position),
 			title: module.title,
-			statusLabel: createStatusLabel({ statusKey: status.statusKey, round: module.progress.nextRound, t }),
+			statusLabel: createStatusLabel({ statusKey: status.statusKey, round: activeRound, t }),
 			appearance: status.appearance,
 			isCurrentStep: module.availability.isCurrent,
 			isExpanded,
@@ -61,11 +61,16 @@ function createTopicProgressLabel({ masteryPercent, hasModuleActivity, t }) {
 	return hasModuleActivity ? t.learningPathTopicNotMeasuredLabel : t.learningPathNoTopicProgressLabel;
 }
 
+function resolveActiveRound(moduleId, resumableSession, nextActivity) {
+	if (resumableSession !== null && resumableSession.moduleId === moduleId) return resumableSession.round;
+	if (nextActivity !== null && nextActivity.kind === "start-round" && nextActivity.moduleId === moduleId) return nextActivity.round;
+	return null;
+}
+
 function createStatusLabel({ statusKey, round, t }) {
-	if (statusKey === "active") return t.learningPathStatusActiveRound(round);
-	if (statusKey === "strong") return t.learningPathStatusStrongRound(round);
-	if (statusKey === "medium") return t.learningPathStatusMediumRound(round);
-	if (statusKey === "weak") return t.learningPathStatusWeakRound(round);
+	if (statusKey === "active") return round === null ? t.learningPathStatusActive : t.learningPathStatusActiveRound(round);
+	if (statusKey === "completed") return t.learningPathStatusCompleted;
+	if (statusKey === "progress") return t.learningPathStatusProgress;
 	if (statusKey === "locked") return t.learningPathStatusLocked;
-	return t.learningPathStatusNotStartedRound(round);
+	return t.learningPathStatusNotStarted;
 }

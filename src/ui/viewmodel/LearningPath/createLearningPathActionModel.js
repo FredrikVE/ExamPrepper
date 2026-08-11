@@ -8,8 +8,8 @@ export default function createLearningPathActionModel({ module, resumableSession
 			intent: "resume",
 			moduleId: module.id,
 			sessionId: resumableSession.sessionId,
-			round: module.progress.nextRound,
-			label: t.learningPathContinueRoundLabel(module.progress.nextRound),
+			round: resumableSession.round,
+			label: t.learningPathContinueRoundLabel(resumableSession.round),
 			isDisabled: false,
 			isPending: false
 		};
@@ -27,15 +27,5 @@ export default function createLearningPathActionModel({ module, resumableSession
 		};
 	}
 
-	const isCompleted = module.progress.completedRounds >= 3;
-
-	return {
-		intent: isCompleted ? "restart" : "start",
-		moduleId: module.id,
-		sessionId: null,
-		round: isCompleted ? 1 : module.progress.nextRound,
-		label: isCompleted ? t.learningPathRetryModuleLabel : t.learningPathStartRoundLabel(module.progress.nextRound),
-		isDisabled: !module.availability.isUnlocked || startingModuleId !== null,
-		isPending: isStarting
-	};
+	return null;
 }

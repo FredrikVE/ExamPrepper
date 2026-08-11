@@ -78,4 +78,24 @@ describe("LearningPathRepository", () => {
 		expect(result.nextActivity.focus).toBe("repair");
 	});
 
+	test("maps resumable session round as the resume action source", async () => {
+		const response = readFixture("learning-path-response.json");
+		response.resumableSession = { sessionId: "session-1", moduleId: response.modules[0].id, round: 2, currentQuestionPosition: 2, questionCount: 6 };
+		response.nextActivity = { kind: "resume-session", moduleId: response.modules[0].id, sessionId: "session-1" };
+		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
+
+		const result = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(result.resumableSession.round).toBe(2);
+	});
+
+	test("rejects resumable session state without its persisted round", async () => {
+		const response = readFixture("learning-path-response.json");
+		response.resumableSession = { sessionId: "session-1", moduleId: response.modules[0].id, currentQuestionPosition: 2, questionCount: 6 };
+		response.nextActivity = { kind: "resume-session", moduleId: response.modules[0].id, sessionId: "session-1" };
+		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
+
+		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+	});
+
 });

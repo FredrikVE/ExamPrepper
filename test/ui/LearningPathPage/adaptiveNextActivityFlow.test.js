@@ -13,16 +13,11 @@ const t = {
 	learningPathMasteryLabel: (percentage) => `${percentage}%`,
 	learningPathToggleDetailsLabel: (title) => `Toggle ${title}`,
 	learningPathStatusActiveRound: (round) => `Active ${round}`,
-	learningPathStatusStrongRound: (round) => `Strong ${round}`,
-	learningPathStatusMediumRound: (round) => `Medium ${round}`,
-	learningPathStatusWeakRound: (round) => `Weak ${round}`,
 	learningPathStatusLocked: "Locked",
-	learningPathStatusNotStartedRound: (round) => `Not started ${round}`,
 	learningPathDetailHeading: "Progress",
 	learningPathNoTopicProgressLabel: "Not started",
 	learningPathTopicNotMeasuredLabel: "Not measured",
 	learningPathTopicProgressLabel: (percentage) => `${percentage}%`,
-	learningPathRetryModuleLabel: "Retry",
 	learningPathStartRoundLabel: (round) => `Start ${round}`,
 	learningPathContinueRoundLabel: (round) => `Continue ${round}`,
 	learningPathExamTitle: "Exam",
@@ -32,8 +27,6 @@ const t = {
 	learningPathResumeTitle: "Resume",
 	learningPathResumeBody: () => "Resume body",
 	learningPathResumeLabel: "Resume",
-	learningPathContinueTitle: "Continue",
-	learningPathContinueBody: () => "Continue body",
 	learningPathAdaptiveTitle: "Adaptive",
 	learningPathAdaptiveInitialExposureBody: () => "Initial exposure",
 	learningPathAdaptivePracticeBody: () => "Practice",
@@ -46,7 +39,7 @@ describe("adaptive next activity frontend flow", () => {
 	test("preserves the backend repair focus and round through repository and presentation", async () => {
 		const response = JSON.parse(fs.readFileSync(path.resolve("test/fixtures/learning-path/learning-path-response.json"), "utf8"));
 		response.nextActivity = { kind: "start-round", moduleId: response.modules[0].id, round: 1, focus: "repair" };
-		response.modules[0].progress = { ...response.modules[0].progress, completedRounds: 3, nextRound: 3 };
+		response.modules[0].progress = { ...response.modules[0].progress, completedRounds: 3 };
 		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: null, submitSessionResponse: null });
 		const learningPath = await new GetLearningPathUseCase(new LearningPathRepository(dataSource)).execute({ subjectId: "in2120", language: "no" });
 		const roadmap = createLearningPathRoadmapModel({ learningPath, expandedModuleId: learningPath.activeModuleId, startingModuleId: null, t });

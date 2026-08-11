@@ -10,12 +10,14 @@ export default function LearningPathModuleDetail({ model, onActionPressed }) {
 			<div className="learning-path-module-detail__topics">
 				{model.topics.map((topic) => <LearningPathTopicProgressRow key={topic.key} model={topic} />)}
 			</div>
-			<div className="learning-path-module-detail__actions">
-				<button type="button" className="learning-path-module-detail__start" disabled={model.actionModel.isDisabled} onClick={() => onActionPressed(model.actionModel)}>
-					<span>{model.actionModel.isPending ? "…" : model.actionModel.label}</span>
-					<ArrowRight aria-hidden="true" />
-				</button>
-			</div>
+			{model.actionModel === null ? null : (
+				<div className="learning-path-module-detail__actions">
+					<button type="button" className="learning-path-module-detail__start" disabled={model.actionModel.isDisabled} onClick={() => onActionPressed(model.actionModel)}>
+						<span>{model.actionModel.isPending ? "…" : model.actionModel.label}</span>
+						<ArrowRight aria-hidden="true" />
+					</button>
+				</div>
+			)}
 		</section>
 	);
 }

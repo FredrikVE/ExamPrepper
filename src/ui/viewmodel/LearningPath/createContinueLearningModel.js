@@ -1,6 +1,6 @@
 //src/ui/viewmodel/LearningPath/createContinueLearningModel.js
 export default function createContinueLearningModel({ activeEntry, resumableSession, nextActivity, t }) {
-	if (activeEntry === null) return { isVisible: false, title: "", description: "", buttonLabel: "", actionModel: null };
+	if (activeEntry === null || activeEntry.actionModel === null) return { isVisible: false, title: "", description: "", buttonLabel: "", actionModel: null };
 
 	const isResume = activeEntry.actionModel.intent === "resume";
 	if (isResume) {
@@ -9,8 +9,8 @@ export default function createContinueLearningModel({ activeEntry, resumableSess
 
 	return {
 		isVisible: true,
-		title: nextActivity === null ? t.learningPathContinueTitle : t.learningPathAdaptiveTitle,
-		description: nextActivity === null ? t.learningPathContinueBody(activeEntry.position, activeEntry.title) : createAdaptiveDescription(nextActivity.focus, activeEntry, t),
+		title: t.learningPathAdaptiveTitle,
+		description: createAdaptiveDescription(nextActivity.focus, activeEntry, t),
 		buttonLabel: activeEntry.actionModel.label,
 		actionModel: activeEntry.actionModel
 	};

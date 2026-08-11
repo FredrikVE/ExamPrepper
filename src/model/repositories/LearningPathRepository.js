@@ -58,7 +58,7 @@ function validateLearningPathResponse(response) {
 }
 
 function isValidLearningModule(module) {
-	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !module.progress || !Number.isFinite(module.progress.masteryPercent) || !Number.isInteger(module.progress.completedRounds) || !Number.isInteger(module.progress.nextRound)) {
+	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !module.progress || !Number.isFinite(module.progress.masteryPercent) || !Number.isInteger(module.progress.completedRounds)) {
 		return false;
 	}
 
@@ -66,7 +66,7 @@ function isValidLearningModule(module) {
 }
 
 function isValidResumableSession(session) {
-	return session === null || Boolean(session && typeof session.sessionId === "string" && typeof session.moduleId === "string" && Number.isInteger(session.currentQuestionPosition) && Number.isInteger(session.questionCount));
+	return session === null || Boolean(session && typeof session.sessionId === "string" && typeof session.moduleId === "string" && Number.isInteger(session.round) && Number.isInteger(session.currentQuestionPosition) && Number.isInteger(session.questionCount));
 }
 
 function isValidNextActivity(activity) {
