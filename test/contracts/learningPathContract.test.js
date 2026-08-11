@@ -37,6 +37,7 @@ describe("LearningPath P04 transport contract", () => {
 		expect(learningPathResponse.modules).toHaveLength(1);
 		expect(learningPathResponse.activeModuleId).toBe("11111111-1111-4111-8111-111111111111");
 		expect(learningPathResponse.resumableSession).toBeNull();
+		expect(learningPathResponse.nextActivity).toEqual({ kind: "start-round", moduleId: "11111111-1111-4111-8111-111111111111", round: 2, focus: "progression" });
 		expect(learningPathResponse.modules[0].availability).toEqual({ isUnlocked: true, isCurrent: true, lockReason: null });
 		expect(learningPathResponse.modules[0].topics).toHaveLength(2);
 		expect(learningPathResponse.examGate).toEqual({ isUnlocked: false, requiredCompletedRounds: 3 });

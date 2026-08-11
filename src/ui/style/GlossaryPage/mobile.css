@@ -107,6 +107,18 @@
 	.glossary-entry-card__topic-area-reference {
 		margin-top: 0;
 	}
+
+	.glossary-entry-card__section--tools {
+		grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+		gap: var(--space-3);
+	}
+
+	.glossary-entry-card__section--tools > div {
+		display: grid;
+		align-content: start;
+		gap: var(--space-2);
+		min-width: 0;
+	}
 }
 
 @media (max-width: 932px) {

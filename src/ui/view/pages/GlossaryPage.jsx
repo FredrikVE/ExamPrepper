@@ -120,8 +120,19 @@ export default function GlossaryPage({ viewModel }) {
 								rows={viewModel.glossaryTableRows}
 								termColumnHeader={viewModel.termColumnHeader}
 								explanationColumnHeader={viewModel.explanationColumnHeader}
+								connectionsColumnHeader={viewModel.connectionsColumnHeader}
+								masteryColumnHeader={viewModel.masteryColumnHeader}
+								openNetworkLabel={viewModel.openNetworkLabel}
 								emptyState={viewModel.glossaryPanelEmptyState}
 								isMobile={isMobile}
+								network={viewModel.glossaryNetwork}
+								isNetworkLoading={viewModel.isGlossaryNetworkLoading}
+								networkError={viewModel.glossaryNetworkError}
+								networkTitle={viewModel.networkTitle}
+								networkInstructions={viewModel.networkInstructions}
+								networkCloseLabel={viewModel.networkCloseLabel}
+								onOpenNetwork={viewModel.selectGlossaryNetworkConcept}
+								onCloseNetwork={viewModel.closeGlossaryNetwork}
 							/>
 						</>
 					</WorkspaceState>

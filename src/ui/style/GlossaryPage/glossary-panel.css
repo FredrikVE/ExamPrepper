@@ -72,3 +72,36 @@
 .glossary-panel-empty p {
 	margin: 0;
 }
+
+.glossary-panel__content {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	min-width: 0;
+	min-height: 0;
+	height: 100%;
+	gap: var(--space-3);
+}
+
+.glossary-panel__content--network-open {
+	grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
+}
+
+@media (max-width: 1180px) and (min-width: 933px) {
+	.glossary-panel__content--network-open {
+		grid-template-columns: minmax(0, 1fr);
+		overflow: auto;
+	}
+
+	.glossary-panel__content--network-open .concept-network {
+		min-height: 420px;
+	}
+}
+
+@media (max-width: 932px) {
+	.glossary-panel__content,
+	.glossary-panel__content--network-open {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		height: auto;
+	}
+}

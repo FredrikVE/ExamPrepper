@@ -1,8 +1,10 @@
 /* src/ui/style/GlossaryPage/page.css */
 .glossary-workspace {
 	--glossary-sidebar-width: minmax(315px, 32%);
-	--glossary-term-column-width: 40%;
-	--glossary-explanation-column-width: 60%;
+	--glossary-term-column-width: 22%;
+	--glossary-explanation-column-width: 40%;
+	--glossary-connections-column-width: 14%;
+	--glossary-mastery-column-width: 24%;
 	--glossary-footer-overlay-space: 104px;
 }
 

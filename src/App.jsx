@@ -33,7 +33,7 @@ import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoun
 import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
 import { NAV_SCREENS } from "./navigation/navigation.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -210,6 +210,7 @@ function AppContent() {
 					selectedSubject={subjectSelectPageViewModel.selectedSubject}
 					initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
 					language={language}
+					formatDate={formatDate}
 					t={t}
 					isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
 					backContract={navigationViewModel.backContract}
@@ -363,22 +364,24 @@ function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, is
 	);
 }
 
-function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType, expandedMobileToggleButtonGroupId, onOpenMobileToggleButtonGroup, onCloseMobileToggleButtonGroup }) {
-	const glossaryPageViewModel = useGlossaryPageViewModel(
-		getGlossaryEntriesForSubjectUseCase,
+function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, language, formatDate, t, isActive, backContract, onSelectContentType, expandedMobileToggleButtonGroupId, onOpenMobileToggleButtonGroup, onCloseMobileToggleButtonGroup }) {
+	const glossaryPageViewModel = useGlossaryPageViewModel({
+		getGlossaryOverviewUseCase,
+		getGlossaryNetworkUseCase,
 		getTopicAreasUseCase,
 		subjectId,
 		selectedSubject,
 		initialTopicAreaKey,
 		language,
+		formatDate,
 		t,
 		isActive,
 		backContract,
 		onSelectContentType,
 		expandedMobileToggleButtonGroupId,
-		onOpenMobileToggleButtonGroup,
-		onCloseMobileToggleButtonGroup
-	);
+		openMobileToggleButtonGroup: onOpenMobileToggleButtonGroup,
+		closeMobileToggleButtonGroup: onCloseMobileToggleButtonGroup
+	});
 
 	if (!isActive) {
 		return null;

@@ -16,6 +16,7 @@ export default class LearningPathRepository {
 			subjectId: response.subjectId,
 			activeModuleId: response.activeModuleId,
 			resumableSession: response.resumableSession === null ? null : { ...response.resumableSession },
+			nextActivity: response.nextActivity === null ? null : { ...response.nextActivity },
 			modules: response.modules.map(toLearningModule),
 			examGate: { ...response.examGate }
 		};
@@ -45,7 +46,7 @@ export default class LearningPathRepository {
 }
 
 function validateLearningPathResponse(response) {
-	if (!response || typeof response.subjectId !== "string" || !isNullableString(response.activeModuleId) || !isValidResumableSession(response.resumableSession) || !Array.isArray(response.modules) || !isValidExamGate(response.examGate)) {
+	if (!response || typeof response.subjectId !== "string" || !isNullableString(response.activeModuleId) || !isValidResumableSession(response.resumableSession) || !isValidNextActivity(response.nextActivity) || !Array.isArray(response.modules) || !isValidExamGate(response.examGate)) {
 		throw new Error(INVALID_LEARNING_PATH_RESPONSE);
 	}
 
@@ -66,6 +67,14 @@ function isValidLearningModule(module) {
 
 function isValidResumableSession(session) {
 	return session === null || Boolean(session && typeof session.sessionId === "string" && typeof session.moduleId === "string" && Number.isInteger(session.currentQuestionPosition) && Number.isInteger(session.questionCount));
+}
+
+function isValidNextActivity(activity) {
+	if (activity === null) return true;
+	if (!activity || typeof activity.moduleId !== "string") return false;
+	if (activity.kind === "resume-session") return typeof activity.sessionId === "string";
+	if (activity.kind !== "start-round" || !Number.isInteger(activity.round)) return false;
+	return activity.focus === "initial-exposure" || activity.focus === "practice" || activity.focus === "progression" || activity.focus === "revisit" || activity.focus === "repair";
 }
 
 function isValidExamGate(examGate) {

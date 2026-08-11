@@ -27,6 +27,14 @@
 	width: var(--glossary-explanation-column-width);
 }
 
+.glossary-table__connections-column {
+	width: var(--glossary-connections-column-width);
+}
+
+.glossary-table__mastery-column {
+	width: var(--glossary-mastery-column-width);
+}
+
 .glossary-table th,
 .glossary-table td {
 	min-width: 0;
@@ -95,4 +103,12 @@
 	font-size: 10px;
 	font-weight: 750;
 	line-height: 1.2;
+}
+
+.glossary-table__connections-cell {
+	vertical-align: middle;
+}
+
+.glossary-table__mastery-cell {
+	vertical-align: middle;
 }

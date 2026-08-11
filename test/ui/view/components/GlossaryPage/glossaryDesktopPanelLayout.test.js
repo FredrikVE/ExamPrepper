@@ -1,3 +1,4 @@
+//test/ui/view/components/GlossaryPage/glossaryDesktopPanelLayout.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
@@ -94,19 +95,25 @@ describe("Glossary desktop panel layout", () => {
 		expect(tableScroll["border-radius"]).toBe("inherit");
 	});
 
-	test("keeps the explanation column wider while containing long glossary terms", () => {
+	test("keeps the four-column glossary layout while containing long glossary terms", () => {
 		const pageRoot = parseStyle(PAGE_STYLE_PATH);
 		const tableRoot = parseStyle(TABLE_STYLE_PATH);
 		const workspace = readDeclarations(pageRoot, ".glossary-workspace");
 		const table = readDeclarations(tableRoot, ".glossary-table");
 		const termColumn = readDeclarations(tableRoot, ".glossary-table__term-column");
 		const explanationColumn = readDeclarations(tableRoot, ".glossary-table__explanation-column");
+		const connectionsColumn = readDeclarations(tableRoot, ".glossary-table__connections-column");
+		const masteryColumn = readDeclarations(tableRoot, ".glossary-table__mastery-column");
 		const cell = readDeclarations(tableRoot, ".glossary-table th");
 
-		expect(workspace["--glossary-term-column-width"]).toBe("40%");
-		expect(workspace["--glossary-explanation-column-width"]).toBe("60%");
+		expect(workspace["--glossary-term-column-width"]).toBe("22%");
+		expect(workspace["--glossary-explanation-column-width"]).toBe("40%");
+		expect(workspace["--glossary-connections-column-width"]).toBe("14%");
+		expect(workspace["--glossary-mastery-column-width"]).toBe("24%");
 		expect(termColumn.width).toBe("var(--glossary-term-column-width)");
 		expect(explanationColumn.width).toBe("var(--glossary-explanation-column-width)");
+		expect(connectionsColumn.width).toBe("var(--glossary-connections-column-width)");
+		expect(masteryColumn.width).toBe("var(--glossary-mastery-column-width)");
 		expect(table["table-layout"]).toBe("fixed");
 		expect(cell["min-width"]).toBe("0");
 		expect(cell["overflow-wrap"]).toBe("anywhere");

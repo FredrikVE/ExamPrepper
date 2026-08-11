@@ -27,6 +27,7 @@ describe("LearningPathRepository", () => {
 
 		expect(pathModel.activeModuleId).toBe(pathModel.modules[0].id);
 		expect(pathModel.resumableSession).toBeNull();
+		expect(pathModel.nextActivity).toEqual({ kind: "start-round", moduleId: pathModel.modules[0].id, round: 2, focus: "progression" });
 		expect(pathModel.modules[0].availability).toEqual({ isUnlocked: true, isCurrent: true, lockReason: null });
 		expect(pathModel.modules[0].topics[0]).toEqual({ key: "sikkerhetsbegreper", label: "Sikkerhetsbegreper", masteryPercent: null });
 		expect(pathModel.modules[0].progress.masteryPercent).toBe(67.5);
@@ -35,6 +36,14 @@ describe("LearningPathRepository", () => {
 		expect(session.questions[0].sessionQuestionId).toBeTruthy();
 		expect(reloaded.questions).toEqual(session.questions);
 		expect(result.score.earnedPoints).toBe(8.5);
+	});
+
+	test("rejects a learning path without backend-owned next activity", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.nextActivity;
+		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
+
+		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
 
 	test("rejects a learning path without backend-owned availability", async () => {
@@ -59,4 +68,14 @@ describe("LearningPathRepository", () => {
 		const session = await repository.getLearningSession("s");
 		expect(session.questions[0].question.options[0]).toMatchObject({ correct: true, why: "Riktig" });
 	});
+	test("accepts backend repair focus as part of the adaptive contract", async () => {
+		const response = readFixture("learning-path-response.json");
+		response.nextActivity.focus = "repair";
+		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
+
+		const result = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(result.nextActivity.focus).toBe("repair");
+	});
+
 });

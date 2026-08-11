@@ -3,11 +3,11 @@ import createLearningPathActionModel from "./createLearningPathActionModel.js";
 import createMasteryAppearance from "./createMasteryAppearance.js";
 import createModuleStatus from "./createModuleStatus.js";
 
-export default function createLearningPathModuleModel({ module, resumableSession, expandedModuleId, startingModuleId, t }) {
+export default function createLearningPathModuleModel({ module, resumableSession, nextActivity, expandedModuleId, startingModuleId, t }) {
 	const status = createModuleStatus({ masteryPercent: module.progress.masteryPercent, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
 	const hasModuleActivity = module.progress.completedRounds > 0 || module.progress.lastSessionAt !== null || resumableSession?.moduleId === module.id;
-	const actionModel = createLearningPathActionModel({ module, resumableSession, startingModuleId, t });
+	const actionModel = createLearningPathActionModel({ module, resumableSession, nextActivity, startingModuleId, t });
 
 	return {
 		kind: "module",

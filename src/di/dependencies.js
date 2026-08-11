@@ -19,6 +19,8 @@ import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
 import GetExamByIdUseCase from "../model/domain/GetExamByIdUseCase.js";
 import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
 import GetGlossaryEntriesForSubjectUseCase from "../model/domain/GetGlossaryEntriesForSubjectUseCase.js";
+import GetGlossaryOverviewUseCase from "../model/domain/GetGlossaryOverviewUseCase.js";
+import GetGlossaryNetworkUseCase from "../model/domain/GetGlossaryNetworkUseCase.js";
 import GetTopicAreasUseCase from "../model/domain/GetTopicAreasUseCase.js";
 import GetFlipcardDeckSummariesUseCase from "../model/domain/GetFlipcardDeckSummariesUseCase.js";
 import GetLearningPathUseCase from "../model/domain/GetLearningPathUseCase.js";
@@ -85,6 +87,8 @@ const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCa
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
 const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
 const getGlossaryEntriesForSubjectUseCase = new GetGlossaryEntriesForSubjectUseCase(glossaryRepository);
+const getGlossaryOverviewUseCase = new GetGlossaryOverviewUseCase(glossaryRepository);
+const getGlossaryNetworkUseCase = new GetGlossaryNetworkUseCase(glossaryRepository);
 const getTopicAreasUseCase = new GetTopicAreasUseCase(subjectRepository);
 const getFlipcardDeckSummariesUseCase = new GetFlipcardDeckSummariesUseCase(glossaryRepository, subjectRepository);
 const getLearningPathUseCase = new GetLearningPathUseCase(learningPathRepository);
@@ -105,6 +109,8 @@ export {
     submitExamAttemptUseCase,
     getMyStatisticsUseCase,
     getGlossaryEntriesForSubjectUseCase,
+    getGlossaryOverviewUseCase,
+    getGlossaryNetworkUseCase,
     getTopicAreasUseCase,
     getFlipcardDeckSummariesUseCase,
     getLearningPathUseCase,

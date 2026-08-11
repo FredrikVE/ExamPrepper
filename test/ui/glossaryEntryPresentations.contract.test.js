@@ -24,7 +24,8 @@ const createLocalizedGlossaryEntry = (entry, language) => ({
 	topicAreaKey: entry.topicAreaKey,
 	term: entry.term[language],
 	explanation: entry.explanation[language],
-	position: entry.position
+	position: entry.position,
+	mastery: null
 });
 
 describe("GlossaryEntry presentation contract", () => {
@@ -36,7 +37,17 @@ describe("GlossaryEntry presentation contract", () => {
 			topicAreaReferenceByKey: new Map([[
 				"security-architecture",
 				"Kapittel 1"
-			]])
+			]]),
+			formatDate: () => "",
+			t: {
+				glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
+				glossaryPageMasteryNoScoreLabel: "Ingen score",
+				glossaryPageMasteryCorrectIncorrectLabel: (correctCount, incorrectCount) => `${correctCount}/${incorrectCount}`,
+				glossaryPageMasteryNeverPracticedLabel: "Ikke øvd ennå",
+				glossaryPageDifficultyEasyLabel: "Lett",
+				glossaryPageDifficultyMediumLabel: "Middels",
+				glossaryPageDifficultyHardLabel: "Vanskelig"
+			}
 		})[0];
 
 		expect(flipcard).toEqual({

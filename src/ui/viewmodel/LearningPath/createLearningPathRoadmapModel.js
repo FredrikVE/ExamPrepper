@@ -2,7 +2,7 @@
 import createLearningPathModuleModel from "./createLearningPathModuleModel.js";
 
 export default function createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingModuleId, t }) {
-	const entries = learningPath.modules.map((module) => createLearningPathModuleModel({ module, resumableSession: learningPath.resumableSession, expandedModuleId, startingModuleId, t }));
+	const entries = learningPath.modules.map((module) => createLearningPathModuleModel({ module, resumableSession: learningPath.resumableSession, nextActivity: learningPath.nextActivity, expandedModuleId, startingModuleId, t }));
 	entries.push({
 		kind: "examGate",
 		id: "learning-path-exam-gate",

@@ -56,6 +56,29 @@ const translations = {
 	glossaryPageChapterSubtitle: (entryCount) => `${entryCount} begreper`,
 	glossaryPageTermColumnHeader: "Begrep",
 	glossaryPageExplanationColumnHeader: "Forklaring",
+	glossaryPageConnectionsColumnHeader: "Koblinger",
+	glossaryPageMasteryColumnHeader: "Mestring",
+	glossaryPageOpenNetworkLabel: "Vis nettverk",
+	glossaryPageNetworkTitle: "Fagnettverk",
+	glossaryPageNetworkInstructions: "Velg nabo",
+	glossaryPageNetworkCloseLabel: "Lukk nettverk",
+	glossaryPageNetworkErrorMessage: "Kunne ikke laste fagnettverket.",
+	glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
+	glossaryPageMasteryPracticeLabel: "Øve mer",
+	glossaryPageMasteryProgressLabel: "Underveis",
+	glossaryPageMasteryUnderstoodLabel: "Forstått",
+	glossaryPageMasteryNoScoreLabel: "Ingen score",
+	glossaryPageMasteryScoreLabel: (scorePercent) => `${scorePercent}%`,
+	glossaryPageMasteryCorrectIncorrectLabel: (correctCount, incorrectCount) => `${correctCount} riktig · ${incorrectCount} galt`,
+	glossaryPageMasteryNeverPracticedLabel: "Ikke øvd ennå",
+	glossaryPageMasteryLastPracticedLabel: (dateLabel) => `Sist øvd ${dateLabel}`,
+	glossaryPageDifficultyEasyLabel: "Lett",
+	glossaryPageDifficultyMediumLabel: "Middels",
+	glossaryPageDifficultyHardLabel: "Vanskelig",
+	glossaryPageRelationRelatedLabel: "Relatert",
+	glossaryPageRelationContrastsWithLabel: "Kontrast",
+	glossaryPageRelationPrerequisiteLabel: "Forutsetning",
+	glossaryPageRelationPartOfLabel: "Del av",
 	glossaryPageAllChaptersHeading: "Alle kapitler",
 	glossaryPageSelectedChaptersHeading: (count) => `${count} valgte kapitler`,
 	glossaryPageChapterReference: (position) => `Kapittel ${position}`,
@@ -106,28 +129,46 @@ const glossaryEntries = [
 		topicAreaKey: "networking",
 		term: { no: "Transportlag", en: "Transport layer" },
 		explanation: { no: "Flytter data mellom endepunkter.", en: "Moves data between endpoints." },
-		position: 2
+		position: 2,
+		mastery: {
+			status: "progress",
+			score: 0.75,
+			evidenceCount: 4,
+			correctCount: 3,
+			incorrectCount: 1,
+			easyCorrect: 1,
+			easyIncorrect: 0,
+			mediumCorrect: 2,
+			mediumIncorrect: 1,
+			hardCorrect: 0,
+			hardIncorrect: 0,
+			lastEvidenceAt: "2026-08-10T10:00:00.000Z",
+			policyVersion: 1
+		}
 	},
 	{
 		glossaryEntryKey: "public-key",
 		topicAreaKey: "cryptography",
 		term: { no: "Offentlig nøkkel", en: "Public key" },
 		explanation: { no: "Kan deles med andre.", en: "Can be shared with others." },
-		position: 2
+		position: 2,
+		mastery: null
 	},
 	{
 		glossaryEntryKey: "packet",
 		topicAreaKey: "networking",
 		term: { no: "Pakke", en: "Packet" },
 		explanation: { no: "En avgrenset enhet med nettverkstrafikk.", en: "A bounded unit of network traffic." },
-		position: 1
+		position: 1,
+		mastery: null
 	},
 	{
 		glossaryEntryKey: "asymmetric-key",
 		topicAreaKey: "cryptography",
 		term: { no: "Asymmetrisk nøkkel", en: "Asymmetric key" },
 		explanation: { no: "Brukes i et nøkkelpar.", en: "Used in a key pair." },
-		position: 1
+		position: 1,
+		mastery: null
 	}
 ];
 
@@ -138,10 +179,13 @@ function createViewModel({
 	isSearchFilterOptionsOpen = false,
 	isSearchAutocompleteOpen = false,
 	selectedGlossaryEntryKey = null,
+	networkCenterGlossaryEntryKey = null,
 	loadedGlossaryEntries = glossaryEntries,
 	loadedTopicAreas = topicAreas,
+	loadedNetwork = null,
 	glossaryStatus = LOAD_STATUS.READY,
 	topicAreaStatus = LOAD_STATUS.READY,
+	networkStatus = LOAD_STATUS.READY,
 	glossaryError = null,
 	topicAreaError = null,
 	subjectId = "in2120",
@@ -155,7 +199,7 @@ function createViewModel({
 	isActive = true,
 	expandedMobileToggleButtonGroupId = null
 } = {}) {
-	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey);
+	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey, networkCenterGlossaryEntryKey);
 	loadModelQueue = [
 		{
 			status: glossaryStatus,
@@ -168,11 +212,20 @@ function createViewModel({
 			data: loadedTopicAreas,
 			error: topicAreaError,
 			reload: jest.fn()
+		},
+		{
+			status: networkStatus,
+			data: loadedNetwork,
+			error: networkStatus === LOAD_STATUS.ERROR ? "Kunne ikke laste fagnettverket." : null,
+			reload: jest.fn()
 		}
 	];
 
-	const getGlossaryEntriesForSubjectUseCase = {
+	const getGlossaryOverviewUseCase = {
 		execute: jest.fn(async () => loadedGlossaryEntries)
+	};
+	const getGlossaryNetworkUseCase = {
+		execute: jest.fn(async () => loadedNetwork)
 	};
 	const getTopicAreasUseCase = {
 		execute: jest.fn(async () => loadedTopicAreas)
@@ -186,25 +239,29 @@ function createViewModel({
 		navigationLabel: "Navigasjon",
 		onBack: jest.fn()
 	};
-	const viewModel = useGlossaryPageViewModel(
-		getGlossaryEntriesForSubjectUseCase,
+	const formatDate = jest.fn(() => "10.08.2026");
+	const viewModel = useGlossaryPageViewModel({
+		getGlossaryOverviewUseCase,
+		getGlossaryNetworkUseCase,
 		getTopicAreasUseCase,
 		subjectId,
 		selectedSubject,
 		initialTopicAreaKey,
 		language,
-		translations,
+		formatDate,
+		t: translations,
 		isActive,
 		backContract,
 		onSelectContentType,
 		expandedMobileToggleButtonGroupId,
-		onOpenMobileToggleButtonGroup,
-		onCloseMobileToggleButtonGroup
-	);
+		openMobileToggleButtonGroup: onOpenMobileToggleButtonGroup,
+		closeMobileToggleButtonGroup: onCloseMobileToggleButtonGroup
+	});
 
 	return {
 		backContract,
-		getGlossaryEntriesForSubjectUseCase,
+		getGlossaryOverviewUseCase,
+		getGlossaryNetworkUseCase,
 		getTopicAreasUseCase,
 		onSelectContentType,
 		onOpenMobileToggleButtonGroup,
@@ -239,13 +296,14 @@ describe("useGlossaryPageViewModel", () => {
 	test("owns term search, chapter selection, keyboard target, filter and autocomplete state", () => {
 		createViewModel();
 
-		expect(useState).toHaveBeenCalledTimes(6);
+		expect(useState).toHaveBeenCalledTimes(7);
 		expect(useState).toHaveBeenNthCalledWith(1, "");
 		expect(useState).toHaveBeenNthCalledWith(2, null);
 		expect(useState).toHaveBeenNthCalledWith(3, -1);
 		expect(useState).toHaveBeenNthCalledWith(4, false);
 		expect(useState).toHaveBeenNthCalledWith(5, false);
 		expect(useState).toHaveBeenNthCalledWith(6, null);
+		expect(useState).toHaveBeenNthCalledWith(7, null);
 	});
 
 	test("returns the glossary-aware mobile toggle-button contract", () => {
@@ -321,15 +379,14 @@ describe("useGlossaryPageViewModel", () => {
 		expect(viewModel.closeMobileToggleButtonGroup).toBe(onCloseMobileToggleButtonGroup);
 	});
 
-	test("loads all glossary entries once and topic areas for the active language", async () => {
-		const { getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase } = createViewModel();
+	test("loads the canonical glossary overview once and topic areas for the active language", async () => {
+		const { getGlossaryOverviewUseCase, getTopicAreasUseCase } = createViewModel();
 
 		await useLoadModel.mock.calls[0][0].execute();
 		await useLoadModel.mock.calls[1][0].execute();
 
-		expect(getGlossaryEntriesForSubjectUseCase.execute).toHaveBeenCalledWith({
-			subjectId: "in2120",
-			topicAreaKey: ALL_TOPIC_AREAS
+		expect(getGlossaryOverviewUseCase.execute).toHaveBeenCalledWith({
+			subjectId: "in2120"
 		});
 		expect(getTopicAreasUseCase.execute).toHaveBeenCalledWith({
 			subjectId: "in2120",
@@ -610,6 +667,61 @@ describe("useGlossaryPageViewModel", () => {
 		expect(viewModel.autocompleteSuggestions).toEqual([]);
 		expect(viewModel.glossaryPanelEmptyState).toBeNull();
 		expect(viewModel.glossaryTableRows).toHaveLength(glossaryEntries.length);
+	});
+
+	test("renders canonical mastery fields in the glossary table model", () => {
+		const { viewModel } = createViewModel();
+		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
+
+		expect(transportLayer.mastery).toEqual({
+			status: "progress",
+			statusLabel: "Underveis",
+			scoreLabel: "75%",
+			correctIncorrectLabel: "3 riktig · 1 galt",
+			difficultyItems: [
+				{ label: "Lett", correctCount: 1, incorrectCount: 0, totalCount: 1 },
+				{ label: "Middels", correctCount: 2, incorrectCount: 1, totalCount: 3 },
+				{ label: "Vanskelig", correctCount: 0, incorrectCount: 0, totalCount: 0 }
+			],
+			lastPracticedLabel: "Sist øvd 10.08.2026"
+		});
+	});
+
+	test("loads a typed concept network only for the selected stable glossary key", async () => {
+		const loadedNetwork = {
+			subjectId: "in2120",
+			center: glossaryEntries[0],
+			nodes: [glossaryEntries[2]],
+			relations: [{
+				subjectId: "in2120",
+				sourceGlossaryKey: "packet",
+				targetGlossaryKey: "transport-layer",
+				type: "prerequisite"
+			}],
+			limit: 8,
+			depth: 1
+		};
+		const { getGlossaryNetworkUseCase, viewModel } = createViewModel({
+			networkCenterGlossaryEntryKey: "transport-layer",
+			loadedNetwork
+		});
+
+		await useLoadModel.mock.calls[2][0].execute();
+
+		expect(getGlossaryNetworkUseCase.execute).toHaveBeenCalledWith({
+			subjectId: "in2120",
+			glossaryEntryKey: "transport-layer"
+		});
+		expect(viewModel.glossaryNetwork.center.term).toBe("Transportlag");
+		expect(viewModel.glossaryNetwork.nodes[0].term).toBe("Pakke");
+		expect(viewModel.glossaryNetwork.relations[0]).toMatchObject({
+			type: "prerequisite",
+			label: "Forutsetning",
+			isDirectional: true
+		});
+
+		viewModel.selectGlossaryNetworkConcept("packet");
+		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
 	});
 
 	test("exposes the shared load-status and content-navigation contracts", () => {

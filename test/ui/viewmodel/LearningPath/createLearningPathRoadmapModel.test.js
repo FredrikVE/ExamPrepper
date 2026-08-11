@@ -29,6 +29,7 @@ const learningPath = {
 	subjectId: "in2120",
 	activeModuleId: "module-1",
 	resumableSession: null,
+	nextActivity: null,
 	modules: [{ id: "module-1", moduleKey: "concepts", position: 1, title: "Concepts", description: "Description", availability: { isUnlocked: true, isCurrent: true, lockReason: null }, topics: [{ key: "topic", label: "Topic", masteryPercent: 55 }], progress: { masteryPercent: 55, completedRounds: 1, nextRound: 2, lastSessionAt: null } }],
 	examGate: { isUnlocked: false, requiredCompletedRounds: 3 }
 };
@@ -68,6 +69,19 @@ describe("createLearningPathRoadmapModel", () => {
 		const model = createLearningPathRoadmapModel({ learningPath: untouchedPath, expandedModuleId: "module-1", startingModuleId: null, t });
 
 		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: null, percentageLabel: "Not started" });
+	});
+
+	test("binds the active module action to the backend next activity", () => {
+		const adaptivePath = {
+			...learningPath,
+			nextActivity: { kind: "start-round", moduleId: "module-1", round: 1, focus: "practice" },
+			modules: [{ ...learningPath.modules[0], progress: { masteryPercent: 55, completedRounds: 3, nextRound: 3, lastSessionAt: null } }]
+		};
+
+		const model = createLearningPathRoadmapModel({ learningPath: adaptivePath, expandedModuleId: "module-1", startingModuleId: null, t });
+
+		expect(model.entries[0].actionModel).toMatchObject({ intent: "start", round: 1, label: "Start 1" });
+		expect(model.entries[0].detailModel.actionModel).toBe(model.entries[0].actionModel);
 	});
 
 });

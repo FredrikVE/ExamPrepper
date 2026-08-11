@@ -5,7 +5,7 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import createContinueLearningModel from "./LearningPath/createContinueLearningModel.js";
 import createLearningPathRoadmapModel from "./LearningPath/createLearningPathRoadmapModel.js";
 
-const EMPTY_LEARNING_PATH = Object.freeze({ subjectId: "", activeModuleId: null, resumableSession: null, modules: [], examGate: { isUnlocked: false, requiredCompletedRounds: 3 } });
+const EMPTY_LEARNING_PATH = Object.freeze({ subjectId: "", activeModuleId: null, resumableSession: null, nextActivity: null, modules: [], examGate: { isUnlocked: false, requiredCompletedRounds: 3 } });
 
 export default function useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted }) {
 	const [expandedModuleId, setExpandedModuleId] = useState(null);
@@ -50,7 +50,7 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 
 	const roadmapModel = createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingModuleId, t });
 	const activeEntry = roadmapModel.entries.find((entry) => entry.kind === "module" && entry.id === learningPath.activeModuleId) ?? null;
-	const continueModel = createContinueLearningModel({ activeEntry, resumableSession: learningPath.resumableSession, t });
+	const continueModel = createContinueLearningModel({ activeEntry, resumableSession: learningPath.resumableSession, nextActivity: learningPath.nextActivity, t });
 	const executeLearningPathAction = useCallback(async (actionModel) => {
 		if (actionModel === null || actionModel.isDisabled) return;
 		if (actionModel.intent === "resume" && actionModel.sessionId !== null) {

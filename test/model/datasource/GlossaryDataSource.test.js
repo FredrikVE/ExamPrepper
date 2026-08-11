@@ -105,4 +105,67 @@ describe("GlossaryDataSource", () => {
 			subjectId: "in2120"
 		})).rejects.toThrow("Invalid glossary response");
 	});
+	test("fetches the canonical glossary overview with optional mastery", async () => {
+		const concepts = [{
+			...glossaryEntries[0],
+			mastery: {
+				status: "understood",
+				score: 0.9,
+				evidenceCount: 5,
+				correctCount: 4,
+				incorrectCount: 1,
+				easyCorrect: 1,
+				easyIncorrect: 0,
+				mediumCorrect: 2,
+				mediumIncorrect: 1,
+				hardCorrect: 1,
+				hardIncorrect: 0,
+				lastEvidenceAt: "2026-08-10T10:00:00.000Z",
+				policyVersion: 1
+			}
+		}];
+		global.fetch.mockResolvedValue(createResponse({
+			payload: { subjectId: "in2120", concepts }
+		}));
+		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test" });
+
+		const response = await dataSource.fetchGlossaryOverview({ subjectId: "in2120" });
+
+		expect(global.fetch).toHaveBeenCalledWith(
+			"https://api.example.test/subjects/in2120/glossary/overview",
+			expect.objectContaining({ method: "GET" })
+		);
+		expect(response).toEqual({ subjectId: "in2120", concepts });
+	});
+
+	test("fetches and validates a typed glossary network", async () => {
+		const center = { ...glossaryEntries[0], mastery: null };
+		const payload = {
+			subjectId: "in2120",
+			center,
+			nodes: [center],
+			relations: [{
+				subjectId: "in2120",
+				sourceGlossaryKey: "kap1-konfidensialitet",
+				targetGlossaryKey: "kap1-integritet",
+				type: "related"
+			}],
+			limit: 8,
+			depth: 1
+		};
+		global.fetch.mockResolvedValue(createResponse({ payload }));
+		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test" });
+
+		const response = await dataSource.fetchGlossaryNetwork({
+			subjectId: "in 2120",
+			glossaryEntryKey: "kap1/konfidensialitet"
+		});
+
+		expect(global.fetch).toHaveBeenCalledWith(
+			"https://api.example.test/subjects/in%202120/glossary/kap1%2Fkonfidensialitet/network",
+			expect.objectContaining({ method: "GET" })
+		);
+		expect(response).toEqual(payload);
+	});
+
 });
