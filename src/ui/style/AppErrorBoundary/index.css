@@ -1,3 +1,4 @@
+/* src/ui/style/AppErrorBoundary/index.css */
 .app-error-fallback {
 	box-sizing: border-box;
 	display: grid;
@@ -35,16 +36,22 @@
 .app-error-fallback__button {
 	margin-top: var(--space-6);
 	padding: 12px 20px;
-	border: 1px solid color-mix(in srgb, var(--accent) 58%, var(--line-strong));
+	border: 1px solid var(--button-primary-border);
 	border-radius: var(--radius-sm);
-	background: var(--accent);
-	color: var(--text-on-accent);
+	background: var(--button-primary-bg);
+	box-shadow: var(--button-primary-shadow);
+	color: var(--button-primary-text);
 	font: inherit;
 	font-weight: 700;
 	cursor: pointer;
+	transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.app-error-fallback__button:hover {
+	background: var(--button-primary-bg-hover);
 }
 
 .app-error-fallback__button:focus-visible {
-	outline: 3px solid color-mix(in srgb, var(--accent) 42%, transparent);
+	outline: 3px solid var(--button-focus-ring);
 	outline-offset: 3px;
 }
