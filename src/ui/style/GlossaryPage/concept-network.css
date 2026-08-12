@@ -145,9 +145,11 @@ button.concept-network__node:focus-visible {
 }
 
 .concept-network__node > span:not(.glossary-mastery-badge):not(.concept-network__node-meta) {
+	margin-top: 4px;
 	color: var(--text-soft);
-	font-size: 9px;
-	font-weight: 700;
+	font-size: 10px;
+	font-weight: 620;
+	line-height: 1.25;
 }
 
 .concept-network__node--center > span:not(.glossary-mastery-badge):not(.concept-network__node-meta) {
