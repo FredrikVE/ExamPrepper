@@ -232,8 +232,7 @@ button.concept-network__node:focus-visible {
 	line-height: 1.4;
 }
 
-.glossary-entry-details .concept-network,
-.glossary-entry-details .concept-network--inline-status {
+.glossary-entry-card__details .concept-network {
 	margin-top: 7px;
 	border: 0;
 	border-top: 1px solid var(--line);
@@ -242,12 +241,12 @@ button.concept-network__node:focus-visible {
 	padding: 17px 0 0;
 }
 
-.glossary-entry-details .concept-network__header h3 {
+.glossary-entry-card__details .glossary-detail__section-heading {
 	font-size: 13px;
 	font-weight: 800;
 }
 
-.glossary-entry-details .concept-network__canvas {
+.glossary-entry-card__details .concept-network__canvas {
 	min-height: 285px;
 	margin-top: 13px;
 	border: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
@@ -256,7 +255,7 @@ button.concept-network__node:focus-visible {
 	isolation: isolate;
 }
 
-.glossary-entry-details .concept-network__canvas::before {
+.glossary-entry-card__details .concept-network__canvas::before {
 	position: absolute;
 	inset: 0;
 	z-index: -1;
@@ -267,36 +266,20 @@ button.concept-network__node:focus-visible {
 	mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
 }
 
-.concept-network__inline-heading {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	color: var(--text-main);
-	font-size: 13px;
-}
 
-.concept-network__inline-heading svg {
-	color: var(--accent);
-}
 
-.concept-network--inline-status p {
-	margin: 5px 0 0;
-	color: var(--text-soft);
-	font-size: 12px;
-	font-weight: 500;
-}
 
 @media (max-width: 1280px) and (min-width: 933px) {
-	.glossary-entry-details .concept-network__canvas {
+	.glossary-entry-card__details .concept-network__canvas {
 		min-height: 310px;
 	}
 
-	.glossary-entry-details .concept-network__node {
+	.glossary-entry-card__details .concept-network__node {
 		width: min(138px, 25%);
 		font-size: 11px;
 	}
 
-	.glossary-entry-details .concept-network__node--center {
+	.glossary-entry-card__details .concept-network__node--center {
 		width: min(158px, 29%);
 	}
 }

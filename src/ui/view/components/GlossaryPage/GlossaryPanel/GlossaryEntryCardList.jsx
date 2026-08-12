@@ -1,9 +1,9 @@
 // src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryEntryCardList.jsx
 import { ChevronDown } from "lucide-react";
+import GlossaryDetailContent from "../DetailModal/GlossaryDetailContent.jsx";
 import FormattedText from "../../Shared/FormattedText.jsx";
-import GlossaryEntryDetails from "./GlossaryEntryDetails.jsx";
 
-export default function GlossaryEntryCardList({ rows, termLabel, explanationLabel, importanceLabel }) {
+export default function GlossaryEntryCardList({ rows, termLabel, explanationLabel, directNeighborLabel, detailPresentation }) {
 	return (
 		<dl className="glossary-entry-card-list">
 			{rows.map((row) => (
@@ -20,26 +20,16 @@ export default function GlossaryEntryCardList({ rows, termLabel, explanationLabe
 					</div>
 
 					<div className="glossary-entry-card__section glossary-entry-card__section--tools">
-						<span className="glossary-entry-card__label">{importanceLabel}</span>
-						<button
-							type="button"
-							className={row.mobileDisclosure.className}
-							aria-expanded={row.mobileDisclosure.ariaExpanded}
-							aria-controls={row.mobileDisclosure.controlsId}
-							aria-label={row.mobileDisclosure.label}
-							title={row.mobileDisclosure.label}
-							onClick={row.mobileDisclosure.onActivate}
-							onKeyDown={row.mobileDisclosure.onKeyDown}
-							ref={row.mobileDisclosure.ref}
-						>
-							<span className="glossary-entry-card__importance-count" aria-hidden="true">{row.mobileDisclosure.count}</span>
-							<ChevronDown className="glossary-entry-card__importance-chevron" size={20} strokeWidth={2} aria-hidden="true" />
+						<span className="glossary-entry-card__label">{directNeighborLabel}</span>
+						<button type="button" className={row.mobileDisclosure.className} aria-expanded={row.mobileDisclosure.ariaExpanded} aria-controls={row.mobileDisclosure.controlsId} aria-label={row.mobileDisclosure.label} title={row.mobileDisclosure.label} onClick={row.mobileDisclosure.onActivate} onKeyDown={row.mobileDisclosure.onKeyDown} ref={row.mobileDisclosure.ref}>
+							<span className="glossary-entry-card__direct-neighbor-count" aria-hidden="true">{row.mobileDisclosure.count}</span>
+							<ChevronDown className="glossary-entry-card__direct-neighbor-chevron" size={20} strokeWidth={2} aria-hidden="true" />
 						</button>
 					</div>
 
-					{row.details !== null ? (
-						<div className="glossary-entry-card__details" id={row.details.id}>
-							<GlossaryEntryDetails details={row.details} />
+					{row.isExpanded && detailPresentation !== null ? (
+						<div className="glossary-entry-card__details" id={row.detailsId}>
+							<GlossaryDetailContent model={detailPresentation} isInteractive={false} />
 						</div>
 					) : null}
 				</div>

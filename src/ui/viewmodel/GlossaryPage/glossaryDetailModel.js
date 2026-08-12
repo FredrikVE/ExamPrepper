@@ -1,5 +1,6 @@
 // src/ui/viewmodel/GlossaryPage/glossaryDetailModel.js
 import { createGlossaryDetailNavigationPresentation } from "./glossaryDetailNavigationModel.js";
+import { requireGlossaryEntry, requireTopicArea, requireTopicAreaReference } from "./glossaryLookups.js";
 import { GLOSSARY_NETWORK_DISPLAY_KIND } from "./glossaryNetworkModel.js";
 
 export function createGlossaryDetailPresentation(params) {
@@ -99,34 +100,4 @@ function createGlossaryDetailNetworkPresentation(params) {
 		secondaryAssociationLabel: params.t.glossaryPageNetworkSecondaryAssociationLabel,
 		limitNote: overflowCount > 0 ? params.t.glossaryPageNetworkLimitLabel(overflowCount) : null
 	};
-}
-
-function requireGlossaryEntry(localizedEntryByKey, glossaryEntryKey, role) {
-	const entry = localizedEntryByKey.get(glossaryEntryKey);
-
-	if (!entry) {
-		throw new Error(`Missing glossary overview entry for ${role}: ${glossaryEntryKey}`);
-	}
-
-	return entry;
-}
-
-function requireTopicArea(topicAreaByKey, topicAreaKey) {
-	const topicArea = topicAreaByKey.get(topicAreaKey);
-
-	if (!topicArea) {
-		throw new Error(`Missing topic area for glossary detail: ${topicAreaKey}`);
-	}
-
-	return topicArea;
-}
-
-function requireTopicAreaReference(topicAreaReferenceByKey, topicAreaKey) {
-	const topicAreaReference = topicAreaReferenceByKey.get(topicAreaKey);
-
-	if (topicAreaReference === undefined) {
-		throw new Error(`Missing topic area reference for glossary detail: ${topicAreaKey}`);
-	}
-
-	return topicAreaReference;
 }

@@ -20,13 +20,6 @@ const localizedEntryByKey = new Map([
 ]);
 
 describe("glossaryDetailNavigationModel", () => {
-	test("returns no navigation presentation without an active detail entry", () => {
-		expect(createGlossaryDetailNavigationPresentation(createNavigationInput({
-			activeGlossaryEntryKey: null,
-			trailKeys: []
-		}))).toBeNull();
-	});
-
 	test("maps the first visible entry to the beginning of the sequence", () => {
 		expect(createGlossaryDetailNavigationPresentation(createNavigationInput({
 			activeGlossaryEntryKey: "aes",
@@ -143,7 +136,7 @@ describe("glossaryDetailNavigationModel", () => {
 		expect(() => createGlossaryDetailNavigationPresentation(createNavigationInput({
 			activeGlossaryEntryKey: "mac",
 			trailKeys: ["missing-entry"]
-		}))).toThrow("Missing glossary overview entry for detail navigation: missing-entry");
+		}))).toThrow("Missing glossary overview entry for detail navigation trail: missing-entry");
 	});
 });
 

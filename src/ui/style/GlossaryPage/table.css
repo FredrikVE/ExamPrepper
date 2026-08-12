@@ -48,8 +48,8 @@
 	width: auto;
 }
 
-.glossary-table__importance-column {
-	width: var(--glossary-importance-column-width);
+.glossary-table__connections-column {
+	width: var(--glossary-connections-column-width);
 }
 
 .glossary-table th,
@@ -77,7 +77,7 @@
 	text-transform: none;
 }
 
-.glossary-table thead .glossary-table__importance-header {
+.glossary-table thead .glossary-table__connections-header {
 	padding: 0;
 	text-align: center;
 	white-space: nowrap;
@@ -105,7 +105,7 @@
 	transition: color 150ms ease, background 150ms ease, box-shadow 150ms ease;
 }
 
-.glossary-table__importance-header .glossary-table__sort-button {
+.glossary-table__connections-header .glossary-table__sort-button {
 	justify-content: center;
 	gap: 4px;
 	padding-inline: 5px;
@@ -247,64 +247,11 @@
 	color: var(--text-main);
 }
 
-.glossary-table__importance-cell {
+.glossary-table__connections-cell {
 	padding: 5px 8px !important;
 	border-left: 1px solid color-mix(in srgb, var(--line) 52%, transparent);
 	vertical-align: middle !important;
 	text-align: center !important;
-}
-
-.glossary-entry-details {
-	display: flex;
-	align-items: stretch;
-	flex-direction: column;
-	gap: 11px;
-	padding: 16px 17px 17px;
-	border: 1px solid var(--line);
-	border-radius: 11px;
-	background: color-mix(in srgb, var(--panel-strong) 68%, transparent);
-}
-
-.glossary-entry-details__associations-heading {
-	display: inline-flex;
-	align-items: center;
-	align-self: flex-start;
-	gap: 8px;
-	min-height: 24px;
-	color: var(--text-muted);
-	font-size: 12px;
-	font-weight: 760;
-	white-space: nowrap;
-}
-
-.glossary-entry-details__associations-heading svg {
-	color: var(--accent);
-}
-
-.glossary-entry-details__chips {
-	display: flex;
-	min-width: 0;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 8px;
-	padding-top: 1px;
-}
-
-.glossary-entry-details__chip {
-	display: inline-flex;
-	min-height: 30px;
-	align-items: center;
-	padding: 5px 10px;
-	border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
-	border-radius: 9px;
-	background: color-mix(in srgb, var(--accent) 12%, transparent);
-	color: var(--text-main);
-	font-size: 12px;
-	font-weight: 650;
-}
-
-.glossary-entry-details__network {
-	min-width: 0;
 }
 
 .glossary-table tbody tr:last-child td,

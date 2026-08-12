@@ -1,5 +1,8 @@
 // src/ui/viewmodel/GlossaryPage/glossaryNetworkModel.js
+import { DIRECTED_GLOSSARY_RELATION_TYPES, GLOSSARY_RELATION_TYPE } from "../../../constants/GlossaryContracts.js";
+import { resolveLocalizedText } from "../../../model/domain/utils/localizedText.js";
 import { LOAD_STATUS } from "../LoadState/loadStatus.js";
+import { requireTopicAreaReference } from "./glossaryLookups.js";
 import { createGlossaryMasteryPresentation } from "./glossaryMasteryModel.js";
 
 export const GLOSSARY_NETWORK_DISPLAY_KIND = Object.freeze({
@@ -7,6 +10,23 @@ export const GLOSSARY_NETWORK_DISPLAY_KIND = Object.freeze({
 	LOADING: "loading",
 	ERROR: "error",
 	CONTENT: "content"
+});
+
+export const GLOSSARY_NETWORK_NODE_KIND = Object.freeze({
+	CENTER: "CENTER",
+	NEIGHBOR: "NEIGHBOR"
+});
+
+export const GLOSSARY_NETWORK_EDGE_ROLE = Object.freeze({
+	DIRECT: "DIRECT",
+	SECONDARY: "SECONDARY"
+});
+
+const RELATION_LABEL_KEY = Object.freeze({
+	[GLOSSARY_RELATION_TYPE.RELATED]: "glossaryPageRelationRelatedLabel",
+	[GLOSSARY_RELATION_TYPE.CONTRASTS_WITH]: "glossaryPageRelationContrastsWithLabel",
+	[GLOSSARY_RELATION_TYPE.PREREQUISITE]: "glossaryPageRelationPrerequisiteLabel",
+	[GLOSSARY_RELATION_TYPE.PART_OF]: "glossaryPageRelationPartOfLabel"
 });
 
 const CENTER_POSITION = Object.freeze({ x: 50, y: 50 });
@@ -21,24 +41,15 @@ const NEIGHBOR_POSITIONS = Object.freeze([
 	Object.freeze({ x: 23, y: 24 })
 ]);
 
-export function createGlossaryNetworkPresentation({ network, language, topicAreaReferenceByKey, formatDate, t }) {
+export function createGlossaryNetworkPresentation({ network, language, topicAreaReferenceByKey, t }) {
 	if (network === null) {
 		return null;
 	}
 
-	const center = createNetworkNode(network.center, CENTER_POSITION, true, language, topicAreaReferenceByKey, formatDate, t);
+	const center = createNetworkNode(network.center, CENTER_POSITION, true, language, topicAreaReferenceByKey, t);
 	const nodes = [];
-	const neighborLimit = Math.min(network.limit, NEIGHBOR_POSITIONS.length);
-	for (let index = 0; index < network.nodes.length && index < neighborLimit; index += 1) {
-		nodes.push(createNetworkNode(
-			network.nodes[index],
-			NEIGHBOR_POSITIONS[index],
-			false,
-			language,
-			topicAreaReferenceByKey,
-			formatDate,
-			t
-		));
+	for (let index = 0; index < network.nodes.length && index < NEIGHBOR_POSITIONS.length; index += 1) {
+		nodes.push(createNetworkNode(network.nodes[index], NEIGHBOR_POSITIONS[index], false, language, topicAreaReferenceByKey, t));
 	}
 
 	const visibleNodeByKey = createVisibleNodeByKey(center, nodes);
@@ -49,14 +60,14 @@ export function createGlossaryNetworkPresentation({ network, language, topicArea
 	for (const relation of network.relations) {
 		const source = visibleNodeByKey.get(relation.sourceGlossaryKey);
 		const target = visibleNodeByKey.get(relation.targetGlossaryKey);
-		if (!source || !target) {
+		if (source === undefined || target === undefined) {
 			continue;
 		}
 
 		const edgeRole = relation.sourceGlossaryKey === center.glossaryEntryKey || relation.targetGlossaryKey === center.glossaryEntryKey
-			? "DIRECT"
-			: "SECONDARY";
-		const isDirectional = relation.type === "prerequisite" || relation.type === "part-of";
+			? GLOSSARY_NETWORK_EDGE_ROLE.DIRECT
+			: GLOSSARY_NETWORK_EDGE_ROLE.SECONDARY;
+		const isDirectional = DIRECTED_GLOSSARY_RELATION_TYPES.includes(relation.type);
 		const key = `${relation.sourceGlossaryKey}:${relation.type}:${relation.targetGlossaryKey}`;
 
 		edges.push({
@@ -65,8 +76,7 @@ export function createGlossaryNetworkPresentation({ network, language, topicArea
 			targetPosition: target.position,
 			edgeRole,
 			relationType: relation.type,
-			isDirectional,
-			markerEnd: isDirectional ? "url(#concept-network-arrow)" : undefined
+			isDirectional
 		});
 		relationItems.push({
 			key,
@@ -75,7 +85,7 @@ export function createGlossaryNetworkPresentation({ network, language, topicArea
 			targetTerm: target.term
 		});
 
-		if (edgeRole === "SECONDARY") {
+		if (edgeRole === GLOSSARY_NETWORK_EDGE_ROLE.SECONDARY) {
 			hasSecondaryEdges = true;
 		}
 	}
@@ -101,20 +111,14 @@ export function createGlossaryNetworkDisplay({ expandedGlossaryEntryKey, loadSta
 	}
 
 	if (loadStatus === LOAD_STATUS.ERROR) {
-		return Object.freeze({
-			kind: GLOSSARY_NETWORK_DISPLAY_KIND.ERROR,
-			message: error
-		});
+		return Object.freeze({ kind: GLOSSARY_NETWORK_DISPLAY_KIND.ERROR, message: error });
 	}
 
 	if (network === null) {
 		throw new Error("Glossary network load is ready without network data.");
 	}
 
-	return Object.freeze({
-		kind: GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT,
-		model: network
-	});
+	return Object.freeze({ kind: GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT, model: network });
 }
 
 function createVisibleNodeByKey(center, nodes) {
@@ -125,36 +129,24 @@ function createVisibleNodeByKey(center, nodes) {
 	return nodeByKey;
 }
 
-function createNetworkNode(concept, position, isCenter, language, topicAreaReferenceByKey, formatDate, t) {
+function createNetworkNode(concept, position, isCenter, language, topicAreaReferenceByKey, t) {
 	return {
-		kind: isCenter ? "CENTER" : "NEIGHBOR",
+		kind: isCenter ? GLOSSARY_NETWORK_NODE_KIND.CENTER : GLOSSARY_NETWORK_NODE_KIND.NEIGHBOR,
 		className: isCenter ? "concept-network__node concept-network__node--center" : "concept-network__node",
 		style: { left: `${position.x}%`, top: `${position.y}%` },
 		glossaryEntryKey: concept.glossaryEntryKey,
 		topicAreaKey: concept.topicAreaKey,
 		term: resolveLocalizedText(concept.term, language),
-		chapterLabel: topicAreaReferenceByKey.get(concept.topicAreaKey) ?? "",
-		mastery: createGlossaryMasteryPresentation(concept.mastery, formatDate, t),
+		chapterLabel: requireTopicAreaReference(topicAreaReferenceByKey, concept.topicAreaKey),
+		mastery: createGlossaryMasteryPresentation(concept.mastery, t),
 		position
 	};
 }
 
 function resolveRelationLabel(type, t) {
-	if (type === "contrasts-with") {
-		return t.glossaryPageRelationContrastsWithLabel;
+	const labelKey = RELATION_LABEL_KEY[type];
+	if (labelKey === undefined) {
+		throw new Error(`Unknown glossary relation type: ${String(type)}`);
 	}
-	if (type === "prerequisite") {
-		return t.glossaryPageRelationPrerequisiteLabel;
-	}
-	if (type === "part-of") {
-		return t.glossaryPageRelationPartOfLabel;
-	}
-	return t.glossaryPageRelationRelatedLabel;
-}
-
-function resolveLocalizedText(localizedText, language) {
-	return localizedText?.[language]
-		?? localizedText?.no
-		?? localizedText?.en
-		?? "";
+	return t[labelKey];
 }

@@ -1,7 +1,7 @@
 // src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableRow.jsx
 import { ChevronDown } from "lucide-react";
 import FormattedText from "../../Shared/FormattedText.jsx";
-import ImportanceBars from "./ImportanceBars.jsx";
+import DirectNeighborMeter from "./DirectNeighborMeter.jsx";
 
 export default function GlossaryTableRow({ row }) {
 	return (
@@ -24,8 +24,8 @@ export default function GlossaryTableRow({ row }) {
 					<ChevronDown size={19} strokeWidth={2.25} aria-hidden="true" />
 				</button>
 			</td>
-			<td className="glossary-table__importance-cell">
-				<ImportanceBars model={row.importance} />
+			<td className="glossary-table__connections-cell">
+				<DirectNeighborMeter model={row.directNeighborLevel} />
 			</td>
 		</tr>
 	);

@@ -551,17 +551,34 @@ Regler:
 ### GlossaryPage / Fagnettverk
 
 `useGlossaryPageViewModel()` eier glossary-feature-state og all GlossaryPage-spesifikk UI-mekanikk.
-`expandedGlossaryEntryKey` er eneste expansion-state for et åpnet begrep. Nettverkslasting bruker
-canonical `useLoadModel()` og `glossaryNetworkDisplay` er en ren avledning av expansion-key,
-load-status og data/error. Rad-/disclosure-handlers, sorteringshandlinger, graph-navigasjon,
-kapittel-sheet open-state og registrering av React-ref-er eies av ViewModelen. Imperativt fokus/scroll
-som er nødvendig for tilgjengelig navigasjon utføres i ViewModelen via React-ref-er til elementer
-som React selv eier. Glossary-komponentene mottar ferdige presentation models og callbacks, rendrer
-deklarativt og oppretter ikke konkurrerende feature-state eller event-policy. De manipulerer heller
-ikke DOM-struktur med `document`, `querySelector` eller `innerHTML`. Canonical delte mekanismer
-som Search og `DockedMobileBottomSheet` beholder sitt dokumenterte interne eierskap. Desktop detail-row og
-mobil expanded card bruker samme `expandedGlossaryEntryKey` og samme ferdige `row.details`-modell; mobil
-oppretter ikke en separat network-surface, bottom sheet eller mobile-only expansion-state.
+`expandedGlossaryEntryKey` er eneste expansion-state og sannhet om hvilket begrep som har aktiv detalj.
+Nettverkslasting bruker canonical `useLoadModel()` og `glossaryNetworkDisplay` er en ren avledning av
+expansion-key, load-status og data/error. `glossaryDetailPresentation`, bygget av
+`createGlossaryDetailPresentation()`, er eneste presentasjonsmodell for begrepsdetaljen. Den konsumeres
+av to flater: `GlossaryDetailModal` på desktop og expanded card i `GlossaryEntryCardList` på mobil.
+`row.details` og en separat inline nettverksmodell finnes ikke; tabellmodellen avhenger ikke av
+nettverkets load-status.
+
+Desktop og mobil kan binde samme rene detaljmodell til ulik ViewModel-eid interaksjonspolicy når
+produktadferden faktisk er ulik. Desktop graph/chip-navigasjon endrer ikke Search eller kapittelutvalg
+og kan derfor vise «utenfor utvalget». Mobil beholder expanded-card-policyen, inkludert nødvendig
+utvidelse av kapittelutvalget og mobil focus/scroll-policy. Dette er to bindinger over én modell, ikke
+to konkurrerende detaljmodeller.
+
+Rad-/disclosure-handlers, sorteringshandlinger, graph-navigasjon, kapittel-sheet open-state og
+registrering av React-ref-er eies av ViewModelen. Imperativt fokus/scroll som er nødvendig for
+tilgjengelig navigasjon utføres i ViewModelen via React-ref-er til elementer som React selv eier.
+Glossary-komponentene mottar ferdige presentation models og callbacks, rendrer deklarativt og
+oppretter ikke konkurrerende feature-state eller event-policy. De manipulerer heller ikke DOM-struktur
+med `document`, `querySelector` eller `innerHTML`. Canonical delte mekanismer som Search og
+`DockedMobileBottomSheet` beholder sitt dokumenterte interne eierskap. Mobilflaten er fortsatt expanded
+card; eventuell overgang til modal/sheet på mobil er en separat produktbeslutning.
+
+Glossary-kontrakten er fail-fast: alle `glossaryEntry.topicAreaKey` skal referere en kjent `topicArea`,
+og brudd kaster i alle miljøer. `MASTERY_STATUS` og `GLOSSARY_RELATION_TYPE` er autoritative registre
+for DTO-validering og presentasjonsmapping; ukjente enum-verdier kaster også etter boundary-validering.
+Tekniske navn beskriver dataene: `directNeighborCount` er råverdien og `directNeighborLevel` er den
+avledede visuelle kategorien. Produktlabelen «Viktighet» / «Importance» lever kun i i18n.
 
 ### Atomic Design og state-eierskap
 

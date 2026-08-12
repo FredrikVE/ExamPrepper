@@ -1,9 +1,10 @@
-//src/model/datasource/GlossaryDataSource.js
+// src/model/datasource/GlossaryDataSource.js
+import { GLOSSARY_RELATION_TYPES, MASTERY_STATUSES } from "../../constants/GlossaryContracts.js";
 import DataSource from "./DataSource.js";
 
 const INVALID_GLOSSARY_RESPONSE_MESSAGE = "Invalid glossary response";
-const GLOSSARY_RELATION_TYPES = new Set(["related", "contrasts-with", "prerequisite", "part-of"]);
-const MASTERY_STATUSES = new Set(["not-assessed", "practice", "progress", "understood"]);
+const VALID_GLOSSARY_RELATION_TYPES = new Set(GLOSSARY_RELATION_TYPES);
+const VALID_MASTERY_STATUSES = new Set(MASTERY_STATUSES);
 
 export default class GlossaryDataSource extends DataSource {
 	async fetchGlossaryEntriesBySubject({ subjectId }) {
@@ -117,7 +118,7 @@ function isConceptMasteryDtoOrNull(mastery) {
 	}
 
 	return Boolean(mastery)
-		&& MASTERY_STATUSES.has(mastery.status)
+		&& VALID_MASTERY_STATUSES.has(mastery.status)
 		&& (mastery.score === null || Number.isFinite(mastery.score))
 		&& Number.isInteger(mastery.evidenceCount)
 		&& Number.isInteger(mastery.correctCount)
@@ -137,7 +138,7 @@ function isGlossaryRelationDto(relation) {
 		&& typeof relation.subjectId === "string"
 		&& typeof relation.sourceGlossaryKey === "string"
 		&& typeof relation.targetGlossaryKey === "string"
-		&& GLOSSARY_RELATION_TYPES.has(relation.type);
+		&& VALID_GLOSSARY_RELATION_TYPES.has(relation.type);
 }
 
 function isLocalizedText(localizedText) {

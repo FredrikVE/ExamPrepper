@@ -1,5 +1,8 @@
 // src/ui/view/components/GlossaryPage/ConceptNetwork/ConceptNetwork.jsx
+import { GLOSSARY_NETWORK_NODE_KIND } from "../../../../viewmodel/GlossaryPage/glossaryNetworkModel.js";
 import MasteryBadge from "../Mastery/MasteryBadge.jsx";
+
+const EDGE_MARKER_END = "url(#concept-network-arrow)";
 
 export default function ConceptNetwork({ model, title, instructions, centerLabel, emptyLabel, directAssociationLabel, secondaryAssociationLabel }) {
 	if (model === null) {
@@ -7,13 +10,8 @@ export default function ConceptNetwork({ model, title, instructions, centerLabel
 	}
 
 	return (
-		<section className="concept-network" aria-labelledby={`concept-network-title-${model.center.glossaryEntryKey}`}>
-			<header className="concept-network__header">
-				<div>
-					<h3 id={`concept-network-title-${model.center.glossaryEntryKey}`}>{title}</h3>
-					{instructions !== null ? <p>{instructions}</p> : null}
-				</div>
-			</header>
+		<section className="concept-network" aria-label={title}>
+			{instructions !== null ? <p className="concept-network__description">{instructions}</p> : null}
 
 			{model.nodes.length === 0 ? (
 				<div className="concept-network__empty" role="status">
@@ -38,7 +36,7 @@ export default function ConceptNetwork({ model, title, instructions, centerLabel
 									className="concept-network__edge"
 									data-edge-role={edge.edgeRole}
 									data-relation-type={edge.relationType}
-									markerEnd={edge.markerEnd}
+									markerEnd={edge.isDirectional ? EDGE_MARKER_END : null}
 								/>
 							))}
 						</svg>
@@ -76,7 +74,7 @@ export default function ConceptNetwork({ model, title, instructions, centerLabel
 }
 
 function NetworkNode({ node, centerLabel }) {
-	if (node.kind === "CENTER") {
+	if (node.kind === GLOSSARY_NETWORK_NODE_KIND.CENTER) {
 		return (
 			<div className={node.className} data-mastery-status={node.mastery.status} style={node.style} aria-hidden="true">
 				<span className="concept-network__node-meta">{centerLabel}</span>

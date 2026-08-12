@@ -11,6 +11,7 @@ import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFi
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { createContentToggleEntries, createMobileToggleButtonItems, findToggleEntryConfig } from "./Shared/contentToggleModel.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage) {
@@ -168,32 +169,13 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		changeTopicAreaKey(nextTopicAreaKey);
 	}, [changeTopicAreaKey]);
 
-	const contentToggleEntries = useMemo(() => {
-		return NAV_ITEMS.toggleButtonItems.map((entry) => ({
-			id: entry.id,
-			label: t[entry.labelKey],
-			isDisabled: entry.isDisabled
-		}));
-	}, [t]);
-
-	const mobileToggleButtonItems = [];
-
-	for (const item of NAV_ITEMS.mobileToggleButtonItems) {
-		const entries = [];
-
-		for (const entryId of item.entryIds) {
-			entries.push(findMobileToggleEntry(contentToggleEntries, entryId, t));
-		}
-
-		mobileToggleButtonItems.push({
-			id: item.id,
-			label: t[item.labelKey],
-			contentTypeId: item.contentTypeId,
-			isDisabled: item.isDisabled,
-			isActive: isMobileToggleButtonItemActive(item, activeContentType, selectedTestType),
-			entries
-		});
-	}
+	const contentToggleEntries = useMemo(() => createContentToggleEntries(t), [t]);
+	const mobileToggleButtonItems = useMemo(() => createMobileToggleButtonItems({
+		contentToggleEntries,
+		activeContentType,
+		selectedTestType,
+		t
+	}), [activeContentType, contentToggleEntries, selectedTestType, t]);
 
 	const visibleExams = useMemo(() => {
 		return filterExams(exams, searchTerm, topicAreaKey, selectedTestType);
@@ -418,62 +400,6 @@ function findMobileToggleButtonGroup(groupId) {
 	for (const group of NAV_ITEMS.mobileToggleButtonItems) {
 		if (group.id === groupId) {
 			return group;
-		}
-	}
-
-	return null;
-}
-
-function findMobileToggleEntry(entries, entryId, t) {
-	for (const entry of entries) {
-		if (entry.id === entryId) {
-			return entry;
-		}
-	}
-
-	for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
-		if (entry.id === entryId) {
-			return {
-				id: entry.id,
-				label: t[entry.labelKey],
-				isDisabled: entry.isDisabled
-			};
-		}
-	}
-
-	throw new Error(`Unknown mobile toggle entry: ${String(entryId)}`);
-}
-
-function isMobileToggleButtonItemActive(item, activeContentType, selectedTestType) {
-	if (item.contentTypeId !== null) {
-		return item.contentTypeId === activeContentType;
-	}
-
-	for (const entryId of item.entryIds) {
-		if (entryId === activeContentType || entryId === selectedTestType) {
-			return true;
-		}
-
-		const toggleEntry = findToggleEntryConfig(entryId);
-
-		if (toggleEntry !== null && toggleEntry.contentTypeId === activeContentType) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function findToggleEntryConfig(entryId) {
-	for (const entry of NAV_ITEMS.toggleButtonItems) {
-		if (entry.id === entryId) {
-			return entry;
-		}
-	}
-
-	for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
-		if (entry.id === entryId) {
-			return entry;
 		}
 	}
 

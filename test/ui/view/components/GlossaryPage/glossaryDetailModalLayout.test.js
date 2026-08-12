@@ -51,15 +51,17 @@ describe("Glossary detail modal layout", () => {
 	test("keeps the sheet composition modular without section-wrapper fragmentation", () => {
 		const sheetSource = readSource("GlossaryDetailSheet.jsx");
 		const headerSource = readSource("GlossaryDetailHeader.jsx");
+		const contentSource = readSource("GlossaryDetailContent.jsx");
 		const networkSource = readSource("GlossaryDetailNetworkSection.jsx");
 		const navigationSource = readSource("GlossaryDetailNavigation.jsx");
 
 		expect(sheetSource).toContain('className="glossary-detail-modal__sheet" inert={!model.isInteractive}');
 		expect(sheetSource).toContain("<GlossaryDetailHeader model={model.header} />");
-		expect(sheetSource).toContain("<GlossaryDetailNetworkSection model={model.network} />");
+		expect(sheetSource).toContain("<GlossaryDetailContent model={model} isInteractive={model.isInteractive} />");
+		expect(contentSource).toContain("<GlossaryDetailNetworkSection model={model.network} />");
 		expect(sheetSource).toContain("<GlossaryDetailNavigation model={model.navigation} />");
 		expect(sheetSource).toContain("<FormattedText text={model.explanation.text} />");
-		expect(sheetSource).toContain("onClick={item.onActivate}");
+		expect(contentSource).toContain("onClick={item.onActivate}");
 		expect(headerSource).toContain("<Dialog.Title");
 		expect(headerSource).toContain("<Dialog.Description");
 		expect(headerSource).toContain("<Dialog.Close");

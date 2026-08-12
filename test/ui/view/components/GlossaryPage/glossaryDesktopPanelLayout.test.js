@@ -95,7 +95,7 @@ describe("Glossary desktop panel layout", () => {
 		expect(tableScroll["border-radius"]).toBe("14px");
 	});
 
-	test("gives the desktop table a wide explanation column and fixed importance column", () => {
+	test("gives the desktop table a wide explanation column and fixed connections column", () => {
 		const pageRoot = parseStyle(PAGE_STYLE_PATH);
 		const tableRoot = parseStyle(TABLE_STYLE_PATH);
 		const workspace = readDeclarations(pageRoot, ".glossary-workspace");
@@ -103,15 +103,15 @@ describe("Glossary desktop panel layout", () => {
 		const table = readDeclarations(tableRoot, ".glossary-table");
 		const termColumn = readDeclarations(tableRoot, ".glossary-table__term-column");
 		const explanationColumn = readDeclarations(tableRoot, ".glossary-table__explanation-column");
-		const importanceColumn = readDeclarations(tableRoot, ".glossary-table__importance-column");
+		const connectionsColumn = readDeclarations(tableRoot, ".glossary-table__connections-column");
 		const cell = readDeclarations(tableRoot, ".glossary-table th");
 
 		expect(content["max-width"]).toBe("1480px");
 		expect(workspace["--glossary-term-column-width"]).toBe("27%");
-		expect(workspace["--glossary-importance-column-width"]).toBe("106px");
+		expect(workspace["--glossary-connections-column-width"]).toBe("106px");
 		expect(termColumn.width).toBe("var(--glossary-term-column-width)");
 		expect(explanationColumn.width).toBe("auto");
-		expect(importanceColumn.width).toBe("var(--glossary-importance-column-width)");
+		expect(connectionsColumn.width).toBe("var(--glossary-connections-column-width)");
 		expect(table["table-layout"]).toBe("fixed");
 		expect(cell["min-width"]).toBe("0");
 		expect(cell["overflow-wrap"]).toBe("anywhere");
@@ -120,11 +120,11 @@ describe("Glossary desktop panel layout", () => {
 		expect(cell.padding).toBe("13px 16px");
 	});
 
-	test("positions the desktop detail trigger in explanation while importance stays a metric surface", () => {
+	test("positions the desktop detail trigger in explanation while direct-neighbor metric stays a metric surface", () => {
 		const tableRoot = parseStyle(TABLE_STYLE_PATH);
 		const explanationCell = readDeclarations(tableRoot, ".glossary-table__explanation-cell");
 		const detailTrigger = readDeclarations(tableRoot, ".glossary-table__detail-trigger");
-		const importanceCell = readDeclarations(tableRoot, ".glossary-table__importance-cell");
+		const connectionsCell = readDeclarations(tableRoot, ".glossary-table__connections-cell");
 
 		expect(explanationCell.position).toBe("relative");
 		expect(explanationCell["padding-bottom"]).toBe("38px");
@@ -133,7 +133,7 @@ describe("Glossary desktop panel layout", () => {
 		expect(detailTrigger.bottom).toBe("3px");
 		expect(detailTrigger.width).toBe("44px");
 		expect(detailTrigger.height).toBe("32px");
-		expect(importanceCell["text-align"]).toBe("center");
+		expect(connectionsCell["text-align"]).toBe("center");
 	});
 
 	test("keeps the mobile glossary surface unframed", () => {

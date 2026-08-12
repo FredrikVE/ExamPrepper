@@ -3,7 +3,7 @@ import GlossaryPanelHeading from "./GlossaryPanelHeading.jsx";
 import GlossaryEntryCardList from "./GlossaryEntryCardList.jsx";
 import GlossaryTable from "./GlossaryTable.jsx";
 
-export default function GlossaryPanel({ heading, rows, tableHeaders, termColumnHeader, explanationColumnHeader, importanceColumnHeader, emptyState, isMobile }) {
+export default function GlossaryPanel({ heading, rows, tableHeaders, termColumnHeader, explanationColumnHeader, directNeighborColumnHeader, detailPresentation, emptyState, isMobile }) {
 	const glossaryContent = emptyState !== null ? (
 		<section className="glossary-panel-empty" role="status">
 			<h2>{emptyState.title}</h2>
@@ -14,7 +14,8 @@ export default function GlossaryPanel({ heading, rows, tableHeaders, termColumnH
 			rows={rows}
 			termLabel={termColumnHeader}
 			explanationLabel={explanationColumnHeader}
-			importanceLabel={importanceColumnHeader}
+			directNeighborLabel={directNeighborColumnHeader}
+			detailPresentation={detailPresentation}
 		/>
 	) : (
 		<GlossaryTable headers={tableHeaders} rows={rows} />

@@ -13,7 +13,7 @@ import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 
 export default function GlossaryPage({ viewModel }) {
-	useSearchSheetEscapeKey(viewModel.isSearchPopupOpen, viewModel.closeGlossarySearchPopup);
+	useSearchSheetEscapeKey(viewModel.search.isPopupOpen, viewModel.search.onRequestClose);
 
 	const isMobile = viewModel.presentationMode === PRESENTATION_MODE.MOBILE;
 
@@ -31,24 +31,8 @@ export default function GlossaryPage({ viewModel }) {
 	const footer = viewModel.shouldShowWorkspaceFooter ? (
 		<GlossaryFooter
 			isMobile={isMobile}
-			searchTerm={viewModel.glossarySearchTerm}
-			searchPlaceholder={viewModel.searchPlaceholder}
-			searchLabel={viewModel.searchLabel}
-			searchClearLabel={viewModel.searchClearLabel}
-			searchKeyboardHint={viewModel.searchKeyboardHint}
+			search={viewModel.search}
 			mobileSearchKeyboardHint={viewModel.mobileChapterSheetSearchKeyboardHint}
-			searchSuggestionListAriaLabel={viewModel.searchSuggestionListAriaLabel}
-			chapterFilterValue={viewModel.chapterFilterValue}
-			chapterFilterLabel={viewModel.chapterFilterLabel}
-			searchFilterAriaLabel={viewModel.searchFilterAriaLabel}
-			chapterFilterOptions={viewModel.chapterFilterOptions}
-			isSearchPopupOpen={viewModel.isSearchPopupOpen}
-			isSearchFilterOptionsOpen={viewModel.isSearchFilterOptionsOpen}
-			isSearchAutocompleteActive={viewModel.isSearchAutocompleteActive}
-			isSearching={viewModel.isSearching}
-			autocompleteSuggestions={viewModel.autocompleteSuggestions}
-			autocompleteListId={viewModel.autocompleteListId}
-			searchActiveDescendantId={viewModel.searchActiveDescendantId}
 			allTopicAreaListItem={viewModel.allTopicAreaListItem}
 			topicAreaListItems={viewModel.topicAreaListItems}
 			topicAreaListAriaLabel={viewModel.pageTitle}
@@ -58,24 +42,14 @@ export default function GlossaryPage({ viewModel }) {
 			sheetCloseLabel={viewModel.mobileChapterSheetCloseLabel}
 			isMobileChapterSheetOpen={viewModel.isMobileChapterSheetOpen}
 			onMobileChapterSheetOpenChange={viewModel.changeMobileChapterSheetOpen}
-			onSearchTermChange={viewModel.changeGlossarySearchTerm}
-			onFocusSearch={viewModel.focusGlossarySearch}
-			onClearSearch={viewModel.clearGlossarySearch}
-			onRequestClose={viewModel.closeGlossarySearchPopup}
-			onOpenFilterOptions={viewModel.openGlossarySearchFilterOptions}
-			onSelectFilterOption={viewModel.selectGlossaryChapterFilter}
-			onSelectSearchSuggestion={viewModel.selectAutocompleteSuggestion}
-			onMoveSearchSelectionDown={viewModel.moveSearchSelectionDown}
-			onMoveSearchSelectionUp={viewModel.moveSearchSelectionUp}
-			onOpenSearchKeyboardSelection={viewModel.openSearchKeyboardSelection}
 		/>
 	) : null;
 
 	const overlay = (
 		<SearchBackdrop
-			isOpen={viewModel.isSearchPopupOpen}
-			closeLabel={viewModel.searchCloseLabel}
-			onClose={viewModel.closeGlossarySearchPopup}
+			isOpen={viewModel.search.isPopupOpen}
+			closeLabel={viewModel.search.closeLabel}
+			onClose={viewModel.search.onRequestClose}
 		/>
 	);
 
@@ -122,7 +96,8 @@ export default function GlossaryPage({ viewModel }) {
 									tableHeaders={viewModel.glossaryTableHeaders}
 									termColumnHeader={viewModel.termColumnHeader}
 									explanationColumnHeader={viewModel.explanationColumnHeader}
-									importanceColumnHeader={viewModel.importanceColumnHeader}
+									directNeighborColumnHeader={viewModel.directNeighborColumnHeader}
+									detailPresentation={viewModel.glossaryMobileDetailPresentation}
 									emptyState={viewModel.glossaryPanelEmptyState}
 									isMobile={isMobile}
 								/>

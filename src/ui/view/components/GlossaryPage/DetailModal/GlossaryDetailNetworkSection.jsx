@@ -4,26 +4,24 @@ import { GLOSSARY_NETWORK_DISPLAY_KIND } from "../../../../viewmodel/GlossaryPag
 import ConceptNetwork from "../ConceptNetwork/ConceptNetwork.jsx";
 
 export default function GlossaryDetailNetworkSection({ model }) {
-	if (model.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.LOADING) {
-		return (
-			<section className="glossary-detail-modal__network glossary-detail-modal__network--status" role="status">
-				<DetailNetworkHeading label={model.heading} />
-				<p>{model.display.message}</p>
-			</section>
-		);
-	}
+	return (
+		<section className={resolveNetworkSectionClassName(model.display.kind)} role={resolveNetworkSectionRole(model.display.kind)}>
+			<h3 className="glossary-detail__section-heading">
+				<Network size={21} strokeWidth={1.9} aria-hidden="true" />
+				<span>{model.heading}</span>
+			</h3>
+			<NetworkBody model={model} />
+		</section>
+	);
+}
 
-	if (model.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.ERROR) {
-		return (
-			<section className="glossary-detail-modal__network glossary-detail-modal__network--status" role="alert">
-				<DetailNetworkHeading label={model.heading} />
-				<p>{model.display.message}</p>
-			</section>
-		);
+function NetworkBody({ model }) {
+	if (model.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.LOADING || model.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.ERROR) {
+		return <p>{model.display.message}</p>;
 	}
 
 	return (
-		<section className="glossary-detail-modal__network">
+		<>
 			<ConceptNetwork
 				model={model.display.model}
 				title={model.heading}
@@ -34,15 +32,22 @@ export default function GlossaryDetailNetworkSection({ model }) {
 				secondaryAssociationLabel={model.display.secondaryAssociationLabel}
 			/>
 			{model.display.limitNote !== null ? <p className="concept-network__limit-note">{model.display.limitNote}</p> : null}
-		</section>
+		</>
 	);
 }
 
-function DetailNetworkHeading({ label }) {
-	return (
-		<h3 className="glossary-detail-modal__section-heading">
-			<Network size={21} strokeWidth={1.9} aria-hidden="true" />
-			<span>{label}</span>
-		</h3>
-	);
+function resolveNetworkSectionClassName(kind) {
+	return kind === GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT
+		? "glossary-detail__network"
+		: "glossary-detail__network glossary-detail__network--status";
+}
+
+function resolveNetworkSectionRole(kind) {
+	if (kind === GLOSSARY_NETWORK_DISPLAY_KIND.LOADING) {
+		return "status";
+	}
+	if (kind === GLOSSARY_NETWORK_DISPLAY_KIND.ERROR) {
+		return "alert";
+	}
+	return null;
 }

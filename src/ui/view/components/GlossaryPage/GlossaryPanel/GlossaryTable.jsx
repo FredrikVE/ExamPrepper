@@ -15,7 +15,7 @@ export default function GlossaryTable({ headers, rows }) {
 				<colgroup>
 					<col className="glossary-table__term-column" />
 					<col className="glossary-table__explanation-column" />
-					<col className="glossary-table__importance-column" />
+					<col className="glossary-table__connections-column" />
 				</colgroup>
 				<thead>
 					<tr>

@@ -1,9 +1,7 @@
 // src/ui/viewmodel/GlossaryPage/glossaryDetailNavigationModel.js
-export function createGlossaryDetailNavigationPresentation(params) {
-	if (params.activeGlossaryEntryKey === null) {
-		return null;
-	}
+import { requireGlossaryEntry } from "./glossaryLookups.js";
 
+export function createGlossaryDetailNavigationPresentation(params) {
 	const currentIndex = params.visibleGlossaryEntryKeys.indexOf(params.activeGlossaryEntryKey);
 	const isInSequence = currentIndex !== -1;
 	const previousGlossaryEntryKey = isInSequence && currentIndex > 0
@@ -17,7 +15,7 @@ export function createGlossaryDetailNavigationPresentation(params) {
 		: params.trailKeys[params.trailKeys.length - 1];
 	const trailBackEntry = trailBackGlossaryEntryKey === null
 		? null
-		: requireGlossaryEntry(params.localizedEntryByKey, trailBackGlossaryEntryKey);
+		: requireGlossaryEntry(params.localizedEntryByKey, trailBackGlossaryEntryKey, "detail navigation trail");
 
 	return {
 		trailBack: trailBackEntry === null
@@ -43,14 +41,4 @@ export function createGlossaryDetailNavigationPresentation(params) {
 			}
 		}
 	};
-}
-
-function requireGlossaryEntry(localizedEntryByKey, glossaryEntryKey) {
-	const localizedEntry = localizedEntryByKey.get(glossaryEntryKey);
-
-	if (!localizedEntry) {
-		throw new Error(`Missing glossary overview entry for detail navigation: ${glossaryEntryKey}`);
-	}
-
-	return localizedEntry;
 }

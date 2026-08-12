@@ -21,10 +21,10 @@ describe("glossaryTableModel", () => {
 		[6, 4],
 		[7, 4],
 		[20, 4]
-	])("maps %i direct neighbors to importance presentation level %i", (directNeighborCount, expectedLevel) => {
+	])("maps %i direct neighbors to direct-neighbor presentation level %i", (directNeighborCount, expectedLevel) => {
 		const rows = createGlossaryTableRows(createTableModelInput(directNeighborCount));
 
-		expect(rows[0].importance).toEqual({
+		expect(rows[0].directNeighborLevel).toEqual({
 			value: directNeighborCount,
 			level: expectedLevel,
 			ariaLabel: directNeighborCount === 1
@@ -37,27 +37,22 @@ describe("glossaryTableModel", () => {
 
 		expect(rows[0].detailTriggerLabel).toBe("Åpne detaljvisning for Aktivt begrep");
 		expect(rows[0].disclosureLabel).toBe("Vis 2 assosierte begreper for Aktivt begrep");
-		expect(rows[0].details).toBeNull();
+		expect(rows[0]).not.toHaveProperty("details");
 	});
 
 });
 
 function createTableModelInput(directNeighborCount) {
 	const glossaryEntry = createGlossaryEntry("active", "Aktivt begrep", directNeighborCount);
-	const localizedEntryByKey = new Map([[glossaryEntry.glossaryEntryKey, glossaryEntry]]);
-
 	for (let index = 0; index < directNeighborCount; index += 1) {
 		const neighbor = createGlossaryEntry(`neighbor-${index + 1}`, `Nabo ${index + 1}`, 0);
 		glossaryEntry.directNeighborGlossaryKeys.push(neighbor.glossaryEntryKey);
-		localizedEntryByKey.set(neighbor.glossaryEntryKey, neighbor);
 	}
 
 	return {
 		localizedEntries: [glossaryEntry],
-		localizedEntryByKey,
 		topicAreaReferenceByKey: new Map([[glossaryEntry.topicAreaKey, "Kapittel 1"]]),
 		expandedGlossaryEntryKey: null,
-		networkDisplay: { kind: "hidden" },
 		t
 	};
 }

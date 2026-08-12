@@ -7,33 +7,72 @@ import { GLOSSARY_AUTOCOMPLETE_LIST_ID, createGlossaryAutocompleteOptionId } fro
 import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
-const stateValues = [];
-const stateSetters = [];
+const setGlossarySearchTerm = jest.fn();
+const setSelectedTopicAreaKeys = jest.fn();
+const setSearchKeyboardIndex = jest.fn();
+const setIsSearchFilterOptionsOpen = jest.fn();
+const setIsSearchAutocompleteOpen = jest.fn();
+const setSearchNarrowedGlossaryEntryKey = jest.fn();
+const setExpandedGlossaryEntryKey = jest.fn();
+const setGlossaryTableSort = jest.fn();
+const setIsMobileChapterSheetOpen = jest.fn();
+const setGlossaryDetailTrailKeys = jest.fn();
+const setGlossaryDetailRenderSnapshot = jest.fn();
+const stateSetters = [
+	setGlossarySearchTerm,
+	setSelectedTopicAreaKeys,
+	setSearchKeyboardIndex,
+	setIsSearchFilterOptionsOpen,
+	setIsSearchAutocompleteOpen,
+	setSearchNarrowedGlossaryEntryKey,
+	setExpandedGlossaryEntryKey,
+	setGlossaryTableSort,
+	setIsMobileChapterSheetOpen,
+	setGlossaryDetailTrailKeys,
+	setGlossaryDetailRenderSnapshot
+];
 let loadModelQueue = [];
+let currentTableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" };
+let currentMobileChapterSheetOpen = false;
+let currentDetailRefs = null;
 
 const useState = jest.fn((initialValue) => {
-	const stateIndex = stateSetters.length;
-	const fallbackValue = typeof initialValue === "function" ? initialValue() : initialValue;
-	const value = stateIndex in stateValues ? stateValues[stateIndex] : fallbackValue;
-	const setter = jest.fn();
+	if (typeof initialValue === "object" && initialValue !== null && "key" in initialValue) {
+		return [currentTableSort, setGlossaryTableSort];
+	}
 
-	stateSetters.push(setter);
+	if (initialValue === false) {
+		return [currentMobileChapterSheetOpen, setIsMobileChapterSheetOpen];
+	}
 
-	return [value, setter];
+	throw new Error(`Unexpected page ViewModel useState initial value: ${String(initialValue)}`);
 });
-
 const useEffect = jest.fn((effect) => effect());
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
-const useRef = jest.fn((initialValue) => ({ current: initialValue }));
 const useLoadModel = jest.fn(() => loadModelQueue.shift());
 const usePresentationMode = jest.fn(() => PRESENTATION_MODE.DESKTOP);
+const useGlossarySearchModel = jest.fn();
+const useGlossaryTopicAreaSelectionModel = jest.fn();
+const useGlossaryDetailModel = jest.fn();
+const useGlossaryDetailPresentationModeSync = jest.fn();
+
+function resolveMobileGlossaryDetailEntryKey(params) {
+	if (params.activeGlossaryEntryKey !== null && params.visibleGlossaryEntryKeys.includes(params.activeGlossaryEntryKey)) {
+		return params.activeGlossaryEntryKey;
+	}
+
+	if (params.originGlossaryEntryKey !== null && params.visibleGlossaryEntryKeys.includes(params.originGlossaryEntryKey)) {
+		return params.originGlossaryEntryKey;
+	}
+
+	return null;
+}
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
 	useEffect,
 	useMemo,
-	useRef,
 	useState
 }));
 
@@ -45,7 +84,21 @@ jest.unstable_mockModule("../../src/ui/presentation/usePresentationMode.js", () 
 	default: usePresentationMode
 }));
 
-const { default: useGlossaryPageViewModel, resolveMobileGlossaryDetailEntryKey } = await import(
+jest.unstable_mockModule("../../src/ui/viewmodel/GlossaryPage/useGlossarySearchModel.js", () => ({
+	default: useGlossarySearchModel
+}));
+
+jest.unstable_mockModule("../../src/ui/viewmodel/GlossaryPage/useGlossaryTopicAreaSelectionModel.js", () => ({
+	default: useGlossaryTopicAreaSelectionModel
+}));
+
+jest.unstable_mockModule("../../src/ui/viewmodel/GlossaryPage/useGlossaryDetailModel.js", () => ({
+	default: useGlossaryDetailModel,
+	useGlossaryDetailPresentationModeSync,
+	resolveMobileGlossaryDetailEntryKey
+}));
+
+const { default: useGlossaryPageViewModel } = await import(
 	"../../src/ui/viewmodel/GlossaryPageViewModel.js"
 );
 
@@ -64,12 +117,9 @@ const translations = {
 	glossaryPageChapterSubtitle: (entryCount) => `${entryCount} begreper`,
 	glossaryPageTermColumnHeader: "Begrep",
 	glossaryPageExplanationColumnHeader: "Forklaring",
-	glossaryPageImportanceColumnHeader: "Viktighet",
 	glossaryPageTableSortAscendingLabel: (label) => `Sorter ${label} stigende`,
 	glossaryPageTableSortDescendingLabel: (label) => `Sorter ${label} synkende`,
-	glossaryPageConnectionsColumnHeader: "Koblinger",
-	glossaryPageMasteryColumnHeader: "Mestring",
-	glossaryPageOpenNetworkLabel: "Vis nettverk",
+	glossaryPageConnectionsColumnHeader: "Viktighet",
 	glossaryPageSingleAssociationLabel: "1 assosiert begrep",
 	glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
 	glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
@@ -95,9 +145,6 @@ const translations = {
 	glossaryPageNetworkDirectAssociationLabel: "Direkte assosiasjon",
 	glossaryPageNetworkSecondaryAssociationLabel: "Kobling mellom relaterte begreper",
 	glossaryPageNetworkLimitLabel: (count) => `${count} ekstra`,
-	glossaryPageNetworkTitle: "Fagnettverk",
-	glossaryPageNetworkInstructions: "Velg nabo",
-	glossaryPageNetworkCloseLabel: "Lukk nettverk",
 	glossaryPageNetworkErrorMessage: "Kunne ikke laste fagnettverket.",
 	glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
 	glossaryPageMasteryPracticeLabel: "Øve mer",
@@ -216,13 +263,54 @@ const glossaryEntries = [
 	}
 ];
 
+function createDetailRefs(presentationMode) {
+	const rowElements = { current: new Map() };
+	const disclosureElements = { current: new Map() };
+	const detailTriggerElements = { current: new Map() };
+
+	return {
+		origin: { current: null },
+		titleFocusRequest: { current: null },
+		previousPresentationMode: { current: presentationMode },
+		titleElement: { current: null },
+		detailTriggerElements,
+		resolveRowRef: createElementRefResolver(rowElements),
+		resolveDisclosureRef: createElementRefResolver(disclosureElements),
+		resolveDetailTriggerRef: createElementRefResolver(detailTriggerElements),
+		rowElements,
+		disclosureElements
+	};
+}
+
+function createElementRefResolver(elementByKeyRef) {
+	const refByKey = new Map();
+
+	return jest.fn((glossaryEntryKey) => {
+		const cachedRef = refByKey.get(glossaryEntryKey);
+		if (cachedRef !== undefined) {
+			return cachedRef;
+		}
+
+		const elementRef = (element) => {
+			if (element === null) {
+				elementByKeyRef.current.delete(glossaryEntryKey);
+				return;
+			}
+
+			elementByKeyRef.current.set(glossaryEntryKey, element);
+		};
+		refByKey.set(glossaryEntryKey, elementRef);
+		return elementRef;
+	});
+}
+
 function createViewModel({
 	searchTerm = "",
 	selectedTopicAreaKeys = null,
 	keyboardIndex = -1,
 	isSearchFilterOptionsOpen = false,
 	isSearchAutocompleteOpen = false,
-	selectedGlossaryEntryKey = null,
+	searchNarrowedGlossaryEntryKey = null,
 	expandedGlossaryEntryKey = null,
 	tableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" },
 	loadedGlossaryEntries = glossaryEntries,
@@ -248,7 +336,41 @@ function createViewModel({
 	glossaryDetailRenderSnapshot = null,
 	presentationMode = PRESENTATION_MODE.DESKTOP
 } = {}) {
-	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey, expandedGlossaryEntryKey, tableSort, isMobileChapterSheetOpen, glossaryDetailTrailKeys, glossaryDetailRenderSnapshot);
+	currentTableSort = tableSort;
+	currentMobileChapterSheetOpen = isMobileChapterSheetOpen;
+	currentDetailRefs = createDetailRefs(presentationMode);
+	useGlossarySearchModel.mockReturnValue({
+		glossarySearchTerm: searchTerm,
+		setGlossarySearchTerm,
+		searchKeyboardIndex: keyboardIndex,
+		setSearchKeyboardIndex,
+		isSearchFilterOptionsOpen,
+		setIsSearchFilterOptionsOpen,
+		isSearchAutocompleteOpen,
+		setIsSearchAutocompleteOpen,
+		searchNarrowedGlossaryEntryKey,
+		setSearchNarrowedGlossaryEntryKey
+	});
+	useGlossaryTopicAreaSelectionModel.mockReturnValue({
+		selectedTopicAreaKeys,
+		setSelectedTopicAreaKeys
+	});
+	useGlossaryDetailModel.mockReturnValue({
+		expandedGlossaryEntryKey,
+		setExpandedGlossaryEntryKey,
+		glossaryDetailTrailKeys,
+		setGlossaryDetailTrailKeys,
+		glossaryDetailRenderSnapshot,
+		setGlossaryDetailRenderSnapshot,
+		glossaryDetailOriginEntryKeyRef: currentDetailRefs.origin,
+		glossaryDetailTitleFocusRequestKeyRef: currentDetailRefs.titleFocusRequest,
+		previousPresentationModeRef: currentDetailRefs.previousPresentationMode,
+		glossaryDetailTitleElementRef: currentDetailRefs.titleElement,
+		glossaryDetailTriggerElementByKey: currentDetailRefs.detailTriggerElements,
+		resolveGlossaryRowRef: currentDetailRefs.resolveRowRef,
+		resolveGlossaryDisclosureRef: currentDetailRefs.resolveDisclosureRef,
+		resolveGlossaryDetailTriggerRef: currentDetailRefs.resolveDetailTriggerRef
+	});
 	const resolvedNetworkStatus = networkStatus ?? (loadedNetwork === null ? LOAD_STATUS.LOADING : LOAD_STATUS.READY);
 
 	loadModelQueue = [
@@ -290,7 +412,6 @@ function createViewModel({
 		navigationLabel: "Navigasjon",
 		onBack: jest.fn()
 	};
-	const formatDate = jest.fn(() => "10.08.2026");
 	usePresentationMode.mockReturnValue(presentationMode);
 	const viewModel = useGlossaryPageViewModel({
 		getGlossaryOverviewUseCase,
@@ -300,7 +421,6 @@ function createViewModel({
 		selectedSubject,
 		initialTopicAreaKey,
 		language,
-		formatDate,
 		t: translations,
 		isActive,
 		backContract,
@@ -334,41 +454,31 @@ function expectSetContents(actualSet, expectedValues) {
 }
 
 beforeEach(() => {
-	stateValues.length = 0;
-	stateSetters.length = 0;
 	loadModelQueue = [];
+	currentTableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" };
+	currentMobileChapterSheetOpen = false;
+	currentDetailRefs = null;
+	clearStateSetterCalls();
 	useState.mockClear();
 	useEffect.mockClear();
 	useMemo.mockClear();
 	useCallback.mockClear();
-	useRef.mockClear();
 	useLoadModel.mockClear();
 	usePresentationMode.mockReset();
 	usePresentationMode.mockReturnValue(PRESENTATION_MODE.DESKTOP);
+	useGlossarySearchModel.mockReset();
+	useGlossaryTopicAreaSelectionModel.mockReset();
+	useGlossaryDetailModel.mockReset();
+	useGlossaryDetailPresentationModeSync.mockClear();
 });
 
 describe("useGlossaryPageViewModel", () => {
-	test("owns glossary UI state and React refs in the page ViewModel", () => {
+	test("composes private state models behind the page ViewModel contract", () => {
 		createViewModel();
 
-		expect(useState).toHaveBeenCalledTimes(11);
-		expect(useState).toHaveBeenNthCalledWith(1, "");
-		expect(useState).toHaveBeenNthCalledWith(2, null);
-		expect(useState).toHaveBeenNthCalledWith(3, -1);
-		expect(useState).toHaveBeenNthCalledWith(4, false);
-		expect(useState).toHaveBeenNthCalledWith(5, false);
-		expect(useState).toHaveBeenNthCalledWith(6, null);
-		expect(useState).toHaveBeenNthCalledWith(7, null);
-		expect(useState).toHaveBeenNthCalledWith(8, { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" });
-		expect(useState).toHaveBeenNthCalledWith(9, false);
-		expect(useState).toHaveBeenNthCalledWith(10, []);
-		expect(useState).toHaveBeenNthCalledWith(11, null);
-		expect(useRef).toHaveBeenCalledTimes(7);
-		expect(useRef).toHaveBeenNthCalledWith(3, null);
-		expect(useRef).toHaveBeenNthCalledWith(4, null);
-		expect(useRef).toHaveBeenNthCalledWith(5, PRESENTATION_MODE.DESKTOP);
-		expect(useRef).toHaveBeenNthCalledWith(6, null);
-		expect(useRef).toHaveBeenNthCalledWith(7, expect.any(Map));
+		expect(useGlossarySearchModel).toHaveBeenCalledWith({ resetKey: "in2120:null" });
+		expect(useGlossaryTopicAreaSelectionModel).toHaveBeenCalledWith({ resetKey: "in2120:null" });
+		expect(useGlossaryDetailModel).toHaveBeenCalledWith({ presentationMode: PRESENTATION_MODE.DESKTOP, resetKey: "in2120:null" });
 	});
 
 	test("returns the glossary-aware mobile toggle-button contract", () => {
@@ -462,8 +572,8 @@ describe("useGlossaryPageViewModel", () => {
 	test("selects all chapters by default and sorts the most important concepts first", () => {
 		const { viewModel } = createViewModel();
 
-		expect(viewModel.chapterFilterValue).toBe(ALL_TOPIC_AREAS);
-		expect(viewModel.chapterFilterLabel).toBe("Alle kapitler");
+		expect(viewModel.search.filterValue).toBe(ALL_TOPIC_AREAS);
+		expect(viewModel.search.filterLabel).toBe("Alle kapitler");
 		expect(viewModel.allTopicAreaListItem).toMatchObject({
 			label: "Alle kapitler",
 			subtitle: "4 begreper",
@@ -495,14 +605,14 @@ describe("useGlossaryPageViewModel", () => {
 			isSearchAutocompleteOpen: true
 		});
 
-		expect(viewModel).toMatchObject({
+		expect(viewModel.search).toMatchObject({
 			isSearching: true,
-			isSearchAutocompleteActive: true,
-			isSearchPopupOpen: true,
-			autocompleteListId: GLOSSARY_AUTOCOMPLETE_LIST_ID
+			isAutocompleteActive: true,
+			isPopupOpen: true,
+			listId: GLOSSARY_AUTOCOMPLETE_LIST_ID
 		});
 		expect(viewModel).not.toHaveProperty("searchSummaryLabel");
-		expect(viewModel.autocompleteSuggestions).toEqual([
+		expect(viewModel.search.suggestions).toEqual([
 			{
 				id: "packet",
 				optionId: createGlossaryAutocompleteOptionId("packet"),
@@ -518,7 +628,7 @@ describe("useGlossaryPageViewModel", () => {
 				topicAreaKey: "networking"
 			}
 		]);
-		expect(viewModel.searchActiveDescendantId).toBe(createGlossaryAutocompleteOptionId("packet"));
+		expect(viewModel.search.activeDescendantId).toBe(createGlossaryAutocompleteOptionId("packet"));
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
 			"transport-layer",
 			"packet"
@@ -529,7 +639,7 @@ describe("useGlossaryPageViewModel", () => {
 		const { viewModel } = createViewModel({
 			searchTerm: "Pakke",
 			selectedTopicAreaKeys: new Set(["networking"]),
-			selectedGlossaryEntryKey: "packet"
+			searchNarrowedGlossaryEntryKey: "packet"
 		});
 
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual(["packet"]);
@@ -541,10 +651,10 @@ describe("useGlossaryPageViewModel", () => {
 			isSearchAutocompleteOpen: true
 		});
 
-		expect(viewModel.autocompleteSuggestions).toEqual([]);
-		expect(viewModel.isSearchAutocompleteActive).toBe(false);
-		expect(viewModel.isSearchPopupOpen).toBe(false);
-		expect(viewModel.searchActiveDescendantId).toBeNull();
+		expect(viewModel.search.suggestions).toEqual([]);
+		expect(viewModel.search.isAutocompleteActive).toBe(false);
+		expect(viewModel.search.isPopupOpen).toBe(false);
+		expect(viewModel.search.activeDescendantId).toBeNull();
 	});
 
 	test("exposes chapters as the only filter options", () => {
@@ -553,16 +663,16 @@ describe("useGlossaryPageViewModel", () => {
 			isSearchFilterOptionsOpen: true
 		});
 
-		expect(viewModel.chapterFilterOptions).toEqual([
+		expect(viewModel.search.filterOptions).toEqual([
 			{ id: ALL_TOPIC_AREAS, value: ALL_TOPIC_AREAS, label: "Alle kapitler" },
 			{ id: "networking", value: "networking", label: "Nettverk" },
 			{ id: "cryptography", value: "cryptography", label: "Kryptografi" }
 		]);
-		expect(viewModel).toMatchObject({
-			chapterFilterValue: "cryptography",
-			chapterFilterLabel: "Kryptografi",
-			isSearchPopupOpen: true,
-			isSearchFilterOptionsOpen: true
+		expect(viewModel.search).toMatchObject({
+			filterValue: "cryptography",
+			filterLabel: "Kryptografi",
+			isPopupOpen: true,
+			isFilterOptionsMode: true
 		});
 		expect(viewModel).not.toHaveProperty("glossarySearchScope");
 		expect(viewModel).not.toHaveProperty("searchScopeOptions");
@@ -576,52 +686,52 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		clearStateSetterCalls();
 
-		viewModel.selectGlossaryChapterFilter("cryptography");
+		viewModel.search.onSelectFilterOption("cryptography");
 
-		expectSetContents(stateSetters[1].mock.calls[0][0], ["cryptography"]);
-		expect(stateSetters[2]).toHaveBeenCalledWith(0);
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(stateSetters[4]).toHaveBeenCalledWith(true);
-		expect(stateSetters[5]).toHaveBeenCalledWith(null);
+		expectSetContents(setSelectedTopicAreaKeys.mock.calls[0][0], ["cryptography"]);
+		expect(setSearchKeyboardIndex).toHaveBeenCalledWith(0);
+		expect(setIsSearchFilterOptionsOpen).toHaveBeenCalledWith(false);
+		expect(setIsSearchAutocompleteOpen).toHaveBeenCalledWith(true);
+		expect(setSearchNarrowedGlossaryEntryKey).toHaveBeenCalledWith(null);
 	});
 
 	test("the all-chapters filter restores the complete chapter set", () => {
 		const { viewModel } = createViewModel({ selectedTopicAreaKeys: new Set(["cryptography"]) });
 		clearStateSetterCalls();
 
-		viewModel.selectGlossaryChapterFilter(ALL_TOPIC_AREAS);
+		viewModel.search.onSelectFilterOption(ALL_TOPIC_AREAS);
 
-		expectSetContents(stateSetters[1].mock.calls[0][0], ["networking", "cryptography"]);
+		expectSetContents(setSelectedTopicAreaKeys.mock.calls[0][0], ["networking", "cryptography"]);
 	});
 
 	test("typing, focus, clear and popup close keep search and popup state separate", () => {
 		const { viewModel } = createViewModel({ searchTerm: "pak" });
 		clearStateSetterCalls();
 
-		viewModel.changeGlossarySearchTerm("  nøk  ");
-		expect(stateSetters[0]).toHaveBeenCalledWith("  nøk  ");
-		expect(stateSetters[5]).toHaveBeenCalledWith(null);
-		expect(stateSetters[2]).toHaveBeenCalledWith(0);
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(stateSetters[4]).toHaveBeenCalledWith(true);
+		viewModel.search.onChangeTerm("  nøk  ");
+		expect(setGlossarySearchTerm).toHaveBeenCalledWith("  nøk  ");
+		expect(setSearchNarrowedGlossaryEntryKey).toHaveBeenCalledWith(null);
+		expect(setSearchKeyboardIndex).toHaveBeenCalledWith(0);
+		expect(setIsSearchFilterOptionsOpen).toHaveBeenCalledWith(false);
+		expect(setIsSearchAutocompleteOpen).toHaveBeenCalledWith(true);
 
 		clearStateSetterCalls();
-		viewModel.focusGlossarySearch();
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(stateSetters[4]).toHaveBeenCalledWith(true);
+		viewModel.search.onFocus();
+		expect(setIsSearchFilterOptionsOpen).toHaveBeenCalledWith(false);
+		expect(setIsSearchAutocompleteOpen).toHaveBeenCalledWith(true);
 
 		clearStateSetterCalls();
-		viewModel.closeGlossarySearchPopup();
-		expect(stateSetters[0]).not.toHaveBeenCalled();
-		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+		viewModel.search.onRequestClose();
+		expect(setGlossarySearchTerm).not.toHaveBeenCalled();
+		expect(setSearchKeyboardIndex).toHaveBeenCalledWith(-1);
+		expect(setIsSearchFilterOptionsOpen).toHaveBeenCalledWith(false);
+		expect(setIsSearchAutocompleteOpen).toHaveBeenCalledWith(false);
 
 		clearStateSetterCalls();
-		viewModel.clearGlossarySearch();
-		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[5]).toHaveBeenCalledWith(null);
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+		viewModel.search.onClear();
+		expect(setGlossarySearchTerm).toHaveBeenCalledWith("");
+		expect(setSearchNarrowedGlossaryEntryKey).toHaveBeenCalledWith(null);
+		expect(setIsSearchAutocompleteOpen).toHaveBeenCalledWith(false);
 	});
 
 	test("keyboard navigation wraps through autocomplete suggestions", () => {
@@ -632,13 +742,13 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		clearStateSetterCalls();
 
-		viewModel.moveSearchSelectionDown();
-		expect(stateSetters[2].mock.calls[0][0](0)).toBe(1);
-		expect(stateSetters[2].mock.calls[0][0](1)).toBe(0);
+		viewModel.search.onMoveDown();
+		expect(setSearchKeyboardIndex.mock.calls[0][0](0)).toBe(1);
+		expect(setSearchKeyboardIndex.mock.calls[0][0](1)).toBe(0);
 
 		clearStateSetterCalls();
-		viewModel.moveSearchSelectionUp();
-		expect(stateSetters[2].mock.calls[0][0](0)).toBe(1);
+		viewModel.search.onMoveUp();
+		expect(setSearchKeyboardIndex.mock.calls[0][0](0)).toBe(1);
 	});
 
 	test("selecting an autocomplete suggestion selects its chapter and closes the popup", () => {
@@ -649,13 +759,13 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		clearStateSetterCalls();
 
-		viewModel.openSearchKeyboardSelection();
+		viewModel.search.onSelectActive();
 
-		expect(stateSetters[0]).toHaveBeenCalledWith("Pakke");
-		expect(stateSetters[5]).toHaveBeenCalledWith("packet");
-		expectSetContents(stateSetters[1].mock.calls[0][0], ["networking"]);
-		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+		expect(setGlossarySearchTerm).toHaveBeenCalledWith("Pakke");
+		expect(setSearchNarrowedGlossaryEntryKey).toHaveBeenCalledWith("packet");
+		expectSetContents(setSelectedTopicAreaKeys.mock.calls[0][0], ["networking"]);
+		expect(setSearchKeyboardIndex).toHaveBeenCalledWith(-1);
+		expect(setIsSearchAutocompleteOpen).toHaveBeenCalledWith(false);
 	});
 
 	test("chapter navigation remains a separate multi-select interaction", () => {
@@ -664,43 +774,16 @@ describe("useGlossaryPageViewModel", () => {
 		clearStateSetterCalls();
 
 		viewModel.selectTopicArea("networking");
-		const updateSelection = stateSetters[1].mock.calls[0][0];
+		const updateSelection = setSelectedTopicAreaKeys.mock.calls[0][0];
 		expectSetContents(updateSelection(selectedKeys), ["cryptography", "networking"]);
 		expectSetContents(selectedKeys, ["cryptography"]);
-		expect(stateSetters[5]).toHaveBeenCalledWith(null);
-	});
-
-	test("resets the complete search contract when the subject changes", () => {
-		createViewModel({
-			searchTerm: "nøkkel",
-			selectedTopicAreaKeys: new Set(["networking"]),
-			keyboardIndex: 1,
-			isSearchFilterOptionsOpen: true,
-			isSearchAutocompleteOpen: true,
-			selectedGlossaryEntryKey: "packet"
-		});
-
-		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[1]).toHaveBeenCalledWith(null);
-		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
-		expect(stateSetters[5]).toHaveBeenCalledWith(null);
-		expect(stateSetters[7]).toHaveBeenCalledWith({
-			key: "DIRECT_NEIGHBOR_COUNT",
-			direction: "DESCENDING"
-		});
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(useRef.mock.results[2].value.current).toBeNull();
-		expect(useRef.mock.results[3].value.current).toBeNull();
+		expect(setSearchNarrowedGlossaryEntryKey).toHaveBeenCalledWith(null);
 	});
 
 	test("rebuilds localized rows for a language switch without reloading glossary entries", () => {
 		const norwegian = createViewModel({ language: "no" });
 		expect(norwegian.viewModel.glossaryTableRows[0].term).toBe("Transportlag");
 
-		stateValues.length = 0;
-		stateSetters.length = 0;
 		useState.mockClear();
 
 		const english = createViewModel({ language: "en" });
@@ -742,19 +825,24 @@ describe("useGlossaryPageViewModel", () => {
 		});
 
 		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
-		expect(viewModel.autocompleteSuggestions).toEqual([]);
+		expect(viewModel.search.suggestions).toEqual([]);
 		expect(viewModel.glossaryPanelEmptyState).toBeNull();
 		expect(viewModel.glossaryTableRows).toHaveLength(glossaryEntries.length);
 	});
 
-	test("preserves the direct-neighbor summary in the glossary table model", () => {
+	test("preserves direct-neighbor count and level without neighbor-key detail data in table rows", () => {
 		const { viewModel } = createViewModel();
 		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
 
 		expect(transportLayer).toMatchObject({
 			directNeighborCount: 2,
-			directNeighborGlossaryKeys: ["packet", "public-key"]
+			directNeighborLevel: {
+				value: 2,
+				level: 2,
+				ariaLabel: "2 assosierte begreper"
+			}
 		});
+		expect(transportLayer).not.toHaveProperty("directNeighborGlossaryKeys");
 	});
 
 	test("sorts by direct-neighbor count through ViewModel-owned table state", () => {
@@ -769,14 +857,14 @@ describe("useGlossaryPageViewModel", () => {
 			"asymmetric-key"
 		]);
 		viewModel.changeGlossaryTableSort("DIRECT_NEIGHBOR_COUNT");
-		expect(stateSetters[7]).toHaveBeenCalledWith(expect.any(Function));
+		expect(setGlossaryTableSort).toHaveBeenCalledWith(expect.any(Function));
 	});
 
 	test("prepares table header interaction and accessibility in the page ViewModel", () => {
 		const { viewModel } = createViewModel({
 			tableSort: { key: "TERM", direction: "ASCENDING" }
 		});
-		const [termHeader, explanationHeader, importanceHeader] = viewModel.glossaryTableHeaders;
+		const [termHeader, explanationHeader, connectionsHeader] = viewModel.glossaryTableHeaders;
 
 		expect(termHeader).toMatchObject({
 			key: "TERM",
@@ -792,7 +880,7 @@ describe("useGlossaryPageViewModel", () => {
 			className: "",
 			isSortable: false
 		});
-		expect(importanceHeader).toMatchObject({
+		expect(connectionsHeader).toMatchObject({
 			key: "DIRECT_NEIGHBOR_COUNT",
 			isSortable: true,
 			ariaSort: "none",
@@ -800,8 +888,8 @@ describe("useGlossaryPageViewModel", () => {
 		});
 
 		clearStateSetterCalls();
-		importanceHeader.onActivate();
-		expect(stateSetters[7]).toHaveBeenCalledWith(expect.any(Function));
+		connectionsHeader.onActivate();
+		expect(setGlossaryTableSort).toHaveBeenCalledWith(expect.any(Function));
 	});
 
 	test("prepares desktop modal activation and existing mobile disclosure mechanics in the page ViewModel", () => {
@@ -832,7 +920,7 @@ describe("useGlossaryPageViewModel", () => {
 				onActivate: expect.any(Function)
 			},
 			mobileDisclosure: {
-				className: "glossary-entry-card__importance-toggle",
+				className: "glossary-entry-card__direct-neighbor-toggle",
 				count: 2,
 				ariaExpanded: true,
 				controlsId: "glossary-details-transport-layer",
@@ -846,50 +934,50 @@ describe("useGlossaryPageViewModel", () => {
 		clearStateSetterCalls();
 		transportLayer.onActivate({ target: rowTarget });
 		expect(rowTarget.closest).toHaveBeenCalledWith('button, a, input, select, textarea, [role="button"]');
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("transport-layer");
 
 		clearStateSetterCalls();
 		transportLayer.onActivate({ target: interactiveTarget });
-		expect(stateSetters[9]).not.toHaveBeenCalled();
-		expect(stateSetters[6]).not.toHaveBeenCalled();
+		expect(setGlossaryDetailTrailKeys).not.toHaveBeenCalled();
+		expect(setExpandedGlossaryEntryKey).not.toHaveBeenCalled();
 
 		clearStateSetterCalls();
 		transportLayer.detailTrigger.onActivate();
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("transport-layer");
 
 		clearStateSetterCalls();
 		transportLayer.mobileDisclosure.onKeyDown(escapeEvent);
 		expect(escapeEvent.preventDefault).toHaveBeenCalledTimes(1);
 		expect(escapeEvent.stopPropagation).toHaveBeenCalledTimes(1);
-		expect(stateSetters[6]).toHaveBeenCalledWith(null);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith(null);
 
 		clearStateSetterCalls();
 		const mobileDisclosureEvent = { stopPropagation: jest.fn() };
 		transportLayer.mobileDisclosure.onActivate(mobileDisclosureEvent);
 		expect(mobileDisclosureEvent.stopPropagation).toHaveBeenCalledTimes(1);
-		expect(stateSetters[6]).toHaveBeenCalledWith(expect.any(Function));
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith(expect.any(Function));
 	});
 
 	test("opens glossary detail from the table without mutating page context", () => {
 		const { viewModel } = createViewModel({
 			glossaryDetailTrailKeys: ["public-key"]
 		});
-		const originRef = useRef.mock.results[2].value;
-		const titleFocusRequestRef = useRef.mock.results[3].value;
+		const originRef = currentDetailRefs.origin;
+		const titleFocusRequestRef = currentDetailRefs.titleFocusRequest;
 		clearStateSetterCalls();
 
 		viewModel.openGlossaryDetailFromTable("transport-layer");
 
 		expect(originRef.current).toBe("transport-layer");
 		expect(titleFocusRequestRef.current).toBeNull();
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
-		expect(stateSetters[0]).not.toHaveBeenCalled();
-		expect(stateSetters[1]).not.toHaveBeenCalled();
-		expect(stateSetters[5]).not.toHaveBeenCalled();
-		expect(stateSetters[7]).not.toHaveBeenCalled();
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("transport-layer");
+		expect(setGlossarySearchTerm).not.toHaveBeenCalled();
+		expect(setSelectedTopicAreaKeys).not.toHaveBeenCalled();
+		expect(setSearchNarrowedGlossaryEntryKey).not.toHaveBeenCalled();
+		expect(setGlossaryTableSort).not.toHaveBeenCalled();
 	});
 
 	test("rejects an unknown glossary detail entry opened from the table", () => {
@@ -904,22 +992,22 @@ describe("useGlossaryPageViewModel", () => {
 			expandedGlossaryEntryKey: "transport-layer",
 			glossaryDetailTrailKeys: ["packet"]
 		});
-		const titleFocusRequestRef = useRef.mock.results[3].value;
+		const titleFocusRequestRef = currentDetailRefs.titleFocusRequest;
 		clearStateSetterCalls();
 
 		viewModel.exploreGlossaryDetailConcept("public-key");
 
-		const updateTrail = stateSetters[9].mock.calls[0][0];
+		const updateTrail = setGlossaryDetailTrailKeys.mock.calls[0][0];
 		expect(updateTrail(["packet"])).toEqual(["packet", "transport-layer"]);
 		expect(titleFocusRequestRef.current).toBe("public-key");
-		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
-		expect(stateSetters[0]).not.toHaveBeenCalled();
-		expect(stateSetters[1]).not.toHaveBeenCalled();
-		expect(stateSetters[2]).not.toHaveBeenCalled();
-		expect(stateSetters[3]).not.toHaveBeenCalled();
-		expect(stateSetters[4]).not.toHaveBeenCalled();
-		expect(stateSetters[5]).not.toHaveBeenCalled();
-		expect(stateSetters[7]).not.toHaveBeenCalled();
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("public-key");
+		expect(setGlossarySearchTerm).not.toHaveBeenCalled();
+		expect(setSelectedTopicAreaKeys).not.toHaveBeenCalled();
+		expect(setSearchKeyboardIndex).not.toHaveBeenCalled();
+		expect(setIsSearchFilterOptionsOpen).not.toHaveBeenCalled();
+		expect(setIsSearchAutocompleteOpen).not.toHaveBeenCalled();
+		expect(setSearchNarrowedGlossaryEntryKey).not.toHaveBeenCalled();
+		expect(setGlossaryTableSort).not.toHaveBeenCalled();
 	});
 
 	test("rejects exploration without an active detail entry and unknown targets", () => {
@@ -927,10 +1015,7 @@ describe("useGlossaryPageViewModel", () => {
 		expect(() => inactive.viewModel.exploreGlossaryDetailConcept("packet"))
 			.toThrow("Cannot explore glossary detail without an active detail entry.");
 
-		stateValues.length = 0;
-		stateSetters.length = 0;
 		useState.mockClear();
-		useRef.mockClear();
 		const active = createViewModel({ expandedGlossaryEntryKey: "transport-layer" });
 		expect(() => active.viewModel.exploreGlossaryDetailConcept("missing-entry"))
 			.toThrow("Cannot navigate to unknown glossary entry: missing-entry");
@@ -945,8 +1030,8 @@ describe("useGlossaryPageViewModel", () => {
 
 		viewModel.exploreGlossaryDetailConcept("transport-layer");
 
-		expect(stateSetters[9]).not.toHaveBeenCalled();
-		expect(stateSetters[6]).not.toHaveBeenCalled();
+		expect(setGlossaryDetailTrailKeys).not.toHaveBeenCalled();
+		expect(setExpandedGlossaryEntryKey).not.toHaveBeenCalled();
 	});
 
 	test("navigates back through the exploration trail and requests title focus", () => {
@@ -954,15 +1039,15 @@ describe("useGlossaryPageViewModel", () => {
 			expandedGlossaryEntryKey: "transport-layer",
 			glossaryDetailTrailKeys: ["asymmetric-key", "public-key"]
 		});
-		const titleFocusRequestRef = useRef.mock.results[3].value;
+		const titleFocusRequestRef = currentDetailRefs.titleFocusRequest;
 		clearStateSetterCalls();
 
 		viewModel.navigateBackGlossaryDetailTrail();
 
-		const updateTrail = stateSetters[9].mock.calls[0][0];
+		const updateTrail = setGlossaryDetailTrailKeys.mock.calls[0][0];
 		expect(updateTrail(["asymmetric-key", "public-key"])).toEqual(["asymmetric-key"]);
 		expect(titleFocusRequestRef.current).toBe("public-key");
-		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("public-key");
 	});
 
 	test("keeps trail back inert when no exploration history exists", () => {
@@ -974,8 +1059,8 @@ describe("useGlossaryPageViewModel", () => {
 
 		viewModel.navigateBackGlossaryDetailTrail();
 
-		expect(stateSetters[9]).not.toHaveBeenCalled();
-		expect(stateSetters[6]).not.toHaveBeenCalled();
+		expect(setGlossaryDetailTrailKeys).not.toHaveBeenCalled();
+		expect(setExpandedGlossaryEntryKey).not.toHaveBeenCalled();
 	});
 
 	test("navigates previous and next through the current sorted visible table sequence", () => {
@@ -984,18 +1069,18 @@ describe("useGlossaryPageViewModel", () => {
 			glossaryDetailTrailKeys: ["public-key"],
 			tableSort: { key: "TERM", direction: "ASCENDING" }
 		});
-		const titleFocusRequestRef = useRef.mock.results[3].value;
+		const titleFocusRequestRef = currentDetailRefs.titleFocusRequest;
 		clearStateSetterCalls();
 
 		viewModel.openPreviousGlossaryDetail();
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("public-key");
 		expect(titleFocusRequestRef.current).toBe("public-key");
 
 		clearStateSetterCalls();
 		viewModel.openNextGlossaryDetail();
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("transport-layer");
 		expect(titleFocusRequestRef.current).toBe("transport-layer");
 	});
 
@@ -1010,8 +1095,8 @@ describe("useGlossaryPageViewModel", () => {
 		viewModel.openPreviousGlossaryDetail();
 		viewModel.openNextGlossaryDetail();
 
-		expect(stateSetters[9]).not.toHaveBeenCalled();
-		expect(stateSetters[6]).not.toHaveBeenCalled();
+		expect(setGlossaryDetailTrailKeys).not.toHaveBeenCalled();
+		expect(setExpandedGlossaryEntryKey).not.toHaveBeenCalled();
 	});
 
 	test("closes glossary detail while retaining the origin for later focus restoration", () => {
@@ -1019,112 +1104,18 @@ describe("useGlossaryPageViewModel", () => {
 			expandedGlossaryEntryKey: "transport-layer",
 			glossaryDetailTrailKeys: ["packet"]
 		});
-		const originRef = useRef.mock.results[2].value;
-		const titleFocusRequestRef = useRef.mock.results[3].value;
+		const originRef = currentDetailRefs.origin;
+		const titleFocusRequestRef = currentDetailRefs.titleFocusRequest;
 		viewModel.openGlossaryDetailFromTable("transport-layer");
 		clearStateSetterCalls();
 		titleFocusRequestRef.current = "public-key";
 
 		viewModel.closeGlossaryDetail();
 
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith(null);
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith(null);
 		expect(titleFocusRequestRef.current).toBeNull();
 		expect(originRef.current).toBe("transport-layer");
-	});
-
-	test("resolves the mobile detail target from active, origin or no visible fallback", () => {
-		expect(resolveMobileGlossaryDetailEntryKey({
-			activeGlossaryEntryKey: "packet",
-			originGlossaryEntryKey: "transport-layer",
-			visibleGlossaryEntryKeys: ["packet", "transport-layer"]
-		})).toBe("packet");
-
-		expect(resolveMobileGlossaryDetailEntryKey({
-			activeGlossaryEntryKey: "public-key",
-			originGlossaryEntryKey: "packet",
-			visibleGlossaryEntryKeys: ["packet", "transport-layer"]
-		})).toBe("packet");
-
-		expect(resolveMobileGlossaryDetailEntryKey({
-			activeGlossaryEntryKey: "public-key",
-			originGlossaryEntryKey: "asymmetric-key",
-			visibleGlossaryEntryKeys: ["packet", "transport-layer"]
-		})).toBeNull();
-	});
-
-	test("reconciles an out-of-sequence desktop detail to its visible origin when switching to mobile", () => {
-		createViewModel({
-			selectedTopicAreaKeys: new Set(["networking"]),
-			expandedGlossaryEntryKey: "public-key",
-			glossaryDetailTrailKeys: ["transport-layer"],
-			presentationMode: PRESENTATION_MODE.MOBILE
-		});
-		const originRef = useRef.mock.results[2].value;
-		const titleFocusRequestRef = useRef.mock.results[3].value;
-		const previousPresentationModeRef = useRef.mock.results[4].value;
-		originRef.current = "packet";
-		titleFocusRequestRef.current = "public-key";
-		previousPresentationModeRef.current = PRESENTATION_MODE.DESKTOP;
-		clearStateSetterCalls();
-
-		const responsiveEffect = useEffect.mock.calls[3][0];
-		responsiveEffect();
-
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
-		expect(titleFocusRequestRef.current).toBeNull();
-		expect(originRef.current).toBeNull();
-	});
-
-	test("keeps a visible active detail through desktop to mobile and closes when no visible fallback exists", () => {
-		createViewModel({
-			selectedTopicAreaKeys: new Set(["networking"]),
-			expandedGlossaryEntryKey: "packet",
-			presentationMode: PRESENTATION_MODE.MOBILE
-		});
-		useRef.mock.results[4].value.current = PRESENTATION_MODE.DESKTOP;
-		clearStateSetterCalls();
-		useEffect.mock.calls[3][0]();
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).not.toHaveBeenCalled();
-
-		stateValues.length = 0;
-		stateSetters.length = 0;
-		useState.mockClear();
-		useRef.mockClear();
-		useEffect.mockClear();
-		createViewModel({
-			selectedTopicAreaKeys: new Set(["networking"]),
-			expandedGlossaryEntryKey: "public-key",
-			presentationMode: PRESENTATION_MODE.MOBILE
-		});
-		useRef.mock.results[2].value.current = "asymmetric-key";
-		useRef.mock.results[4].value.current = PRESENTATION_MODE.DESKTOP;
-		clearStateSetterCalls();
-		useEffect.mock.calls[3][0]();
-		expect(stateSetters[6]).toHaveBeenCalledWith(null);
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-	});
-
-	test("opens the corresponding desktop detail from mobile state without resetting the active key", () => {
-		const { viewModel } = createViewModel({
-			expandedGlossaryEntryKey: "packet",
-			glossaryDetailTrailKeys: ["transport-layer"],
-			presentationMode: PRESENTATION_MODE.DESKTOP
-		});
-		const originRef = useRef.mock.results[2].value;
-		const previousPresentationModeRef = useRef.mock.results[4].value;
-		previousPresentationModeRef.current = PRESENTATION_MODE.MOBILE;
-		clearStateSetterCalls();
-
-		useEffect.mock.calls[3][0]();
-
-		expect(viewModel.presentationMode).toBe(PRESENTATION_MODE.DESKTOP);
-		expect(viewModel.isGlossaryDetailModalOpen).toBe(true);
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).not.toHaveBeenCalled();
-		expect(originRef.current).toBe("packet");
 	});
 
 	test("derives modal open state from desktop presentation mode and the active detail key", () => {
@@ -1134,10 +1125,7 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		expect(desktop.viewModel.isGlossaryDetailModalOpen).toBe(true);
 
-		stateValues.length = 0;
-		stateSetters.length = 0;
 		useState.mockClear();
-		useRef.mockClear();
 		useEffect.mockClear();
 		const mobile = createViewModel({
 			expandedGlossaryEntryKey: "packet",
@@ -1151,18 +1139,18 @@ describe("useGlossaryPageViewModel", () => {
 			expandedGlossaryEntryKey: "transport-layer",
 			presentationMode: PRESENTATION_MODE.DESKTOP
 		});
-		const titleElementRef = useRef.mock.results[5].value;
-		const triggerElementByKeyRef = useRef.mock.results[6].value;
+		const titleElementRef = currentDetailRefs.titleElement;
+		const triggerElementByKeyRef = currentDetailRefs.detailTriggerElements;
 		const triggerElement = { focus: jest.fn() };
 
+		const transportLayerRow = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
+		transportLayerRow.detailTrigger.ref(triggerElement);
 		viewModel.openGlossaryDetailFromTable("transport-layer");
-		viewModel.registerGlossaryDetailTriggerElement("transport-layer", triggerElement);
 
 		expect(triggerElementByKeyRef.current.get("transport-layer")).toBe(triggerElement);
-		expect(viewModel.glossaryDetailPresentation.header.titleRef).toBe(titleElementRef);
+		expect(viewModel.glossaryDetailModal.content.header.titleRef).toBe(titleElementRef);
 		expect(viewModel.glossaryDetailModal).toMatchObject({
 			isOpen: true,
-			content: viewModel.glossaryDetailPresentation,
 			initialFocus: titleElementRef,
 			finalFocus: expect.any(Function),
 			onOpenChange: expect.any(Function),
@@ -1171,70 +1159,12 @@ describe("useGlossaryPageViewModel", () => {
 		expect(viewModel.glossaryDetailModal.finalFocus()).toBe(triggerElement);
 	});
 
-	test("keeps disclosure focus and row scrolling mobile-only after the desktop cutover", () => {
-		createViewModel({
-			expandedGlossaryEntryKey: "transport-layer",
-			presentationMode: PRESENTATION_MODE.DESKTOP
-		});
-		const rowElementByKeyRef = useRef.mock.results[0].value;
-		const disclosureElementByKeyRef = useRef.mock.results[1].value;
-		const rowElement = { scrollIntoView: jest.fn() };
-		const disclosureElement = { focus: jest.fn() };
-		rowElementByKeyRef.current.set("transport-layer", rowElement);
-		disclosureElementByKeyRef.current.set("transport-layer", disclosureElement);
-
-		const disclosureFocusEffect = useEffect.mock.calls[1][0];
-		disclosureFocusEffect();
-
-		expect(disclosureElement.focus).not.toHaveBeenCalled();
-		expect(rowElement.scrollIntoView).not.toHaveBeenCalled();
-	});
-
-	test("retains disclosure focus and row scrolling for the existing mobile expanded card", () => {
-		createViewModel({
-			expandedGlossaryEntryKey: "transport-layer",
-			presentationMode: PRESENTATION_MODE.MOBILE
-		});
-		const rowElementByKeyRef = useRef.mock.results[0].value;
-		const disclosureElementByKeyRef = useRef.mock.results[1].value;
-		const rowElement = { scrollIntoView: jest.fn() };
-		const disclosureElement = { focus: jest.fn() };
-		rowElementByKeyRef.current.set("transport-layer", rowElement);
-		disclosureElementByKeyRef.current.set("transport-layer", disclosureElement);
-
-		const disclosureFocusEffect = useEffect.mock.calls[1][0];
-		disclosureFocusEffect();
-
-		expect(disclosureElement.focus).toHaveBeenCalledWith({ preventScroll: true });
-		expect(rowElement.scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "nearest" });
-	});
-
-	test("moves focus to the new detail title after internal desktop navigation", () => {
-		createViewModel({
-			expandedGlossaryEntryKey: "transport-layer",
-			presentationMode: PRESENTATION_MODE.DESKTOP
-		});
-		const titleFocusRequestRef = useRef.mock.results[3].value;
-		const titleElementRef = useRef.mock.results[5].value;
-		const titleElement = { focus: jest.fn() };
-		titleFocusRequestRef.current = "transport-layer";
-		titleElementRef.current = titleElement;
-
-		const titleFocusEffect = useEffect.mock.calls[2][0];
-		titleFocusEffect();
-
-		expect(titleElement.focus).toHaveBeenCalledWith({ preventScroll: true });
-		expect(titleFocusRequestRef.current).toBeNull();
-	});
-
 	test("does not restore a desktop trigger when final focus resolves outside desktop mode", () => {
 		const { viewModel } = createViewModel({
 			expandedGlossaryEntryKey: "transport-layer",
 			presentationMode: PRESENTATION_MODE.MOBILE
 		});
-		const triggerElement = { focus: jest.fn() };
 		viewModel.openGlossaryDetailFromTable("transport-layer");
-		viewModel.registerGlossaryDetailTriggerElement("transport-layer", triggerElement);
 
 		expect(viewModel.glossaryDetailModal.finalFocus()).toBe(false);
 	});
@@ -1254,16 +1184,16 @@ describe("useGlossaryPageViewModel", () => {
 			expandedGlossaryEntryKey: "transport-layer",
 			glossaryDetailTrailKeys: ["packet"]
 		});
-		const originRef = useRef.mock.results[2].value;
+		const originRef = currentDetailRefs.origin;
 		viewModel.openGlossaryDetailFromTable("transport-layer");
 		clearStateSetterCalls();
 
 		viewModel.glossaryDetailModal.onOpenChange(true);
-		expect(stateSetters[6]).not.toHaveBeenCalled();
+		expect(setExpandedGlossaryEntryKey).not.toHaveBeenCalled();
 
 		viewModel.glossaryDetailModal.onOpenChange(false);
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith(null);
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith(null);
 		expect(originRef.current).toBe("transport-layer");
 
 		viewModel.glossaryDetailModal.onOpenChangeComplete(false);
@@ -1276,8 +1206,8 @@ describe("useGlossaryPageViewModel", () => {
 			presentationMode: PRESENTATION_MODE.DESKTOP
 		});
 
-		expect(viewModel.glossaryDetailPresentation.isInteractive).toBe(true);
-		expect(stateSetters[10]).toHaveBeenCalledWith(viewModel.glossaryDetailPresentation);
+		expect(viewModel.glossaryDetailPresentation).not.toHaveProperty("isInteractive");
+		expect(setGlossaryDetailRenderSnapshot).toHaveBeenCalledWith(expect.objectContaining({ isInteractive: true }));
 	});
 
 	test("renders a retained close snapshot as noninteractive content while the modal is closed", () => {
@@ -1306,10 +1236,10 @@ describe("useGlossaryPageViewModel", () => {
 		clearStateSetterCalls();
 
 		viewModel.glossaryDetailModal.onOpenChange(false);
-		expect(stateSetters[10]).not.toHaveBeenCalledWith(null);
+		expect(setGlossaryDetailRenderSnapshot).not.toHaveBeenCalledWith(null);
 
 		viewModel.glossaryDetailModal.onOpenChangeComplete(false);
-		expect(stateSetters[10]).toHaveBeenCalledWith(null);
+		expect(setGlossaryDetailRenderSnapshot).toHaveBeenCalledWith(null);
 	});
 
 	test("binds modal-local graph, association, trail and sequence interactions without mutating page context", () => {
@@ -1326,7 +1256,9 @@ describe("useGlossaryPageViewModel", () => {
 			}
 		});
 
-		expect(viewModel.glossaryDetailPresentation).toMatchObject({
+		const modalPresentation = viewModel.glossaryDetailModal.content;
+
+		expect(modalPresentation).toMatchObject({
 			header: {
 				title: "Transportlag",
 				trailBack: {
@@ -1354,29 +1286,29 @@ describe("useGlossaryPageViewModel", () => {
 		});
 
 		clearStateSetterCalls();
-		viewModel.glossaryDetailPresentation.network.display.model.nodes[0].onActivate();
-		expect(stateSetters[9]).toHaveBeenCalledWith(expect.any(Function));
-		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
-		expect(stateSetters[0]).not.toHaveBeenCalled();
-		expect(stateSetters[1]).not.toHaveBeenCalled();
-		expect(stateSetters[5]).not.toHaveBeenCalled();
-		expect(stateSetters[7]).not.toHaveBeenCalled();
+		modalPresentation.network.display.model.nodes[0].onActivate();
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith(expect.any(Function));
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("packet");
+		expect(setGlossarySearchTerm).not.toHaveBeenCalled();
+		expect(setSelectedTopicAreaKeys).not.toHaveBeenCalled();
+		expect(setSearchNarrowedGlossaryEntryKey).not.toHaveBeenCalled();
+		expect(setGlossaryTableSort).not.toHaveBeenCalled();
 
 		clearStateSetterCalls();
-		const publicKeyAssociation = viewModel.glossaryDetailPresentation.associations.items.find((item) => item.glossaryEntryKey === "public-key");
+		const publicKeyAssociation = modalPresentation.associations.items.find((item) => item.glossaryEntryKey === "public-key");
 		publicKeyAssociation.onActivate();
-		expect(stateSetters[9]).toHaveBeenCalledWith(expect.any(Function));
-		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith(expect.any(Function));
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("public-key");
 
 		clearStateSetterCalls();
-		viewModel.glossaryDetailPresentation.header.trailBack.onActivate();
-		expect(stateSetters[9]).toHaveBeenCalledWith(expect.any(Function));
-		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+		modalPresentation.header.trailBack.onActivate();
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith(expect.any(Function));
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("public-key");
 
 		clearStateSetterCalls();
-		viewModel.glossaryDetailPresentation.navigation.next.onActivate();
-		expect(stateSetters[9]).toHaveBeenCalledWith([]);
-		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
+		modalPresentation.navigation.next.onActivate();
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("packet");
 	});
 
 	test("owns mobile chapter-sheet open state in GlossaryPageViewModel", () => {
@@ -1387,41 +1319,16 @@ describe("useGlossaryPageViewModel", () => {
 
 		clearStateSetterCalls();
 		viewModel.changeMobileChapterSheetOpen(false);
-		expect(stateSetters[8]).toHaveBeenCalledWith(false);
+		expect(setIsMobileChapterSheetOpen).toHaveBeenCalledWith(false);
 	});
 
-	test("builds inline detail presentation from overview neighbor keys", () => {
-		const { viewModel } = createViewModel({
-			expandedGlossaryEntryKey: "transport-layer",
-			loadedNetwork: {
-				subjectId: "in2120",
-				center: glossaryEntries[0],
-				nodes: [glossaryEntries[2]],
-				relations: [],
-				limit: 8,
-				depth: 1
-			}
-		});
-		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
+	test("keeps table rows independent of network presentation state", () => {
+		const { viewModel } = createViewModel({ expandedGlossaryEntryKey: "transport-layer" });
 
-		expect(transportLayer).toMatchObject({
-			isExpanded: true,
-			detailsId: "glossary-details-transport-layer",
-			directNeighborCount: 2,
-			directNeighbors: [
-				{ glossaryEntryKey: "packet", term: "Pakke" },
-				{ glossaryEntryKey: "public-key", term: "Offentlig nøkkel" }
-			],
-			details: {
-				id: "glossary-details-transport-layer",
-				associationsHeading: "Assosiert med",
-				network: {
-					kind: "content",
-					title: "Sammenhengsgraf"
-				}
-			}
-		});
-		expect(transportLayer.disclosureLabel).toContain("Skjul 2 assosierte begreper");
+		for (const row of viewModel.glossaryTableRows) {
+			expect(row).not.toHaveProperty("details");
+		}
+		expect(viewModel.glossaryMobileDetailPresentation).not.toBeNull();
 	});
 
 	test("does not expose system mastery as glossary table-row presentation", () => {
@@ -1456,20 +1363,19 @@ describe("useGlossaryPageViewModel", () => {
 			subjectId: "in2120",
 			glossaryEntryKey: "transport-layer"
 		});
-		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
-		expect(transportLayer.details.network).toMatchObject({
+		expect(viewModel.glossaryMobileDetailPresentation.network.display).toMatchObject({
 			kind: "content",
 			model: {
 				center: { term: "Transportlag" },
-				nodes: [{ term: "Pakke" }]
+				nodes: [{ term: "Pakke", onActivate: expect.any(Function) }]
 			}
 		});
-		expect(transportLayer.details.network.model.edges[0]).toMatchObject({
+		expect(viewModel.glossaryMobileDetailPresentation.network.display.model.edges[0]).toMatchObject({
 			relationType: "prerequisite",
 			isDirectional: true,
 			edgeRole: "DIRECT"
 		});
-		expect(transportLayer.details.network.model.relationItems[0]).toEqual({
+		expect(viewModel.glossaryMobileDetailPresentation.network.display.model.relationItems[0]).toEqual({
 			key: "packet:prerequisite:transport-layer",
 			sourceTerm: "Pakke",
 			label: "Forutsetning",
@@ -1477,14 +1383,14 @@ describe("useGlossaryPageViewModel", () => {
 		});
 
 		viewModel.selectGlossaryNetworkConcept("packet");
-		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
-		expect(stateSetters[1]).toHaveBeenCalledWith(expect.any(Function));
-		expect(stateSetters[1].mock.calls.at(-1)[0](new Set(["cryptography"]))).toEqual(new Set(["cryptography", "networking"]));
-		expect(stateSetters[5]).toHaveBeenCalledWith(null);
-		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
+		expect(setGlossarySearchTerm).toHaveBeenCalledWith("");
+		expect(setSearchKeyboardIndex).toHaveBeenCalledWith(-1);
+		expect(setIsSearchFilterOptionsOpen).toHaveBeenCalledWith(false);
+		expect(setIsSearchAutocompleteOpen).toHaveBeenCalledWith(false);
+		expect(setSelectedTopicAreaKeys).toHaveBeenCalledWith(expect.any(Function));
+		expect(setSelectedTopicAreaKeys.mock.calls.at(-1)[0](new Set(["cryptography"]))).toEqual(new Set(["cryptography", "networking"]));
+		expect(setSearchNarrowedGlossaryEntryKey).toHaveBeenCalledWith(null);
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("packet");
 	});
 
 	test("exposes the shared load-status and content-navigation contracts", () => {
@@ -1502,11 +1408,13 @@ describe("useGlossaryPageViewModel", () => {
 			},
 			shouldShowWorkspaceFooter: false,
 			backContract,
-			changeGlossarySearchTerm: expect.any(Function),
-			focusGlossarySearch: expect.any(Function),
-			closeGlossarySearchPopup: expect.any(Function),
-			selectGlossaryChapterFilter: expect.any(Function),
-			selectAutocompleteSuggestion: expect.any(Function),
+			search: {
+				onChangeTerm: expect.any(Function),
+				onFocus: expect.any(Function),
+				onRequestClose: expect.any(Function),
+				onSelectFilterOption: expect.any(Function),
+				onSelectSuggestion: expect.any(Function)
+			},
 			selectTopicArea: expect.any(Function),
 			selectContentType: expect.any(Function)
 		});
