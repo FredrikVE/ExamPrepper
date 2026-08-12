@@ -224,7 +224,7 @@ function createViewModel({
 	isSearchAutocompleteOpen = false,
 	selectedGlossaryEntryKey = null,
 	expandedGlossaryEntryKey = null,
-	tableSort = { key: null, direction: "ASCENDING" },
+	tableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" },
 	loadedGlossaryEntries = glossaryEntries,
 	loadedTopicAreas = topicAreas,
 	loadedNetwork = null,
@@ -459,7 +459,7 @@ describe("useGlossaryPageViewModel", () => {
 		});
 	});
 
-	test("selects all chapters by default and preserves chapter order in the table", () => {
+	test("selects all chapters by default and sorts the most important concepts first", () => {
 		const { viewModel } = createViewModel();
 
 		expect(viewModel.chapterFilterValue).toBe(ALL_TOPIC_AREAS);
@@ -474,11 +474,17 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		expect(viewModel.topicAreaListItems.map((item) => item.isSelected)).toEqual([true, true]);
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
-			"packet",
 			"transport-layer",
-			"asymmetric-key",
-			"public-key"
+			"packet",
+			"public-key",
+			"asymmetric-key"
 		]);
+		expect(viewModel.glossaryTableHeaders[2]).toMatchObject({
+			key: "DIRECT_NEIGHBOR_COUNT",
+			ariaSort: "descending",
+			sortIconKind: "DESCENDING",
+			actionLabel: "Sorter Viktighet stigende"
+		});
 	});
 
 	test("narrows autocomplete suggestions without filtering the glossary table while typing", () => {
@@ -514,8 +520,8 @@ describe("useGlossaryPageViewModel", () => {
 		]);
 		expect(viewModel.searchActiveDescendantId).toBe(createGlossaryAutocompleteOptionId("packet"));
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
-			"packet",
-			"transport-layer"
+			"transport-layer",
+			"packet"
 		]);
 	});
 
@@ -680,6 +686,10 @@ describe("useGlossaryPageViewModel", () => {
 		expect(stateSetters[3]).toHaveBeenCalledWith(false);
 		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 		expect(stateSetters[5]).toHaveBeenCalledWith(null);
+		expect(stateSetters[7]).toHaveBeenCalledWith({
+			key: "DIRECT_NEIGHBOR_COUNT",
+			direction: "DESCENDING"
+		});
 		expect(stateSetters[9]).toHaveBeenCalledWith([]);
 		expect(useRef.mock.results[2].value.current).toBeNull();
 		expect(useRef.mock.results[3].value.current).toBeNull();
@@ -687,14 +697,14 @@ describe("useGlossaryPageViewModel", () => {
 
 	test("rebuilds localized rows for a language switch without reloading glossary entries", () => {
 		const norwegian = createViewModel({ language: "no" });
-		expect(norwegian.viewModel.glossaryTableRows[0].term).toBe("Pakke");
+		expect(norwegian.viewModel.glossaryTableRows[0].term).toBe("Transportlag");
 
 		stateValues.length = 0;
 		stateSetters.length = 0;
 		useState.mockClear();
 
 		const english = createViewModel({ language: "en" });
-		expect(english.viewModel.glossaryTableRows[0].term).toBe("Packet");
+		expect(english.viewModel.glossaryTableRows[0].term).toBe("Transport layer");
 	});
 
 	test.each([

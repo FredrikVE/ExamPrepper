@@ -17,10 +17,11 @@
 	justify-content: center;
 	gap: 7px;
 	padding: 8px 14px;
-	border: 1px solid var(--button-secondary-border);
+	border: 1px solid var(--button-primary-border);
 	border-radius: var(--radius-sm);
-	color: var(--text-main);
-	background: var(--button-secondary-bg);
+	color: var(--button-primary-text);
+	background: var(--button-primary-bg);
+	box-shadow: var(--button-primary-shadow);
 	font: inherit;
 	font-size: 14px;
 	font-weight: 760;
@@ -36,8 +37,8 @@
 }
 
 .glossary-detail-modal__navigation-button:hover:not(:disabled) {
-	border-color: var(--button-secondary-border-hover);
-	background: var(--button-secondary-bg-hover);
+	border-color: var(--button-primary-border);
+	background: var(--button-primary-bg-hover);
 }
 
 .glossary-detail-modal__navigation-button:focus-visible {

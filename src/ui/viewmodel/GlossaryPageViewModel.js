@@ -43,8 +43,8 @@ export default function useGlossaryPageViewModel({
 	const [selectedGlossaryEntryKey, setSelectedGlossaryEntryKey] = useState(null);
 	const [expandedGlossaryEntryKey, setExpandedGlossaryEntryKey] = useState(null);
 	const [glossaryTableSort, setGlossaryTableSort] = useState({
-		key: null,
-		direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
+		key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+		direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 	});
 	const [isMobileChapterSheetOpen, setIsMobileChapterSheetOpen] = useState(false);
 	const [glossaryDetailTrailKeys, setGlossaryDetailTrailKeys] = useState([]);
@@ -66,8 +66,8 @@ export default function useGlossaryPageViewModel({
 		setSelectedGlossaryEntryKey(null);
 		setExpandedGlossaryEntryKey(null);
 		setGlossaryTableSort({
-			key: null,
-			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
+			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 		});
 		setIsMobileChapterSheetOpen(false);
 		setGlossaryDetailTrailKeys([]);
