@@ -9,6 +9,7 @@ const PAGE_ROOT = path.join(SOURCE_ROOT, "ui", "view", "pages");
 const COMPONENT_ROOT = path.join(SOURCE_ROOT, "ui", "view", "components");
 const STYLE_ROOT = path.join(SOURCE_ROOT, "ui", "style");
 const SOURCE_EXTENSIONS = new Set([".js", ".jsx"]);
+const LEARNING_CONTENT_PAGE_STYLE_NAMES = ["GlossaryPage", "LearningContentSelectPage", "LearningPathPage"];
 const IMPORT_SOURCE_PATTERN = /(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"']+)["']/g;
 
 const listSourceFiles = (directoryPath) => {
@@ -54,6 +55,25 @@ const findImportsFromSource = (sourceFragment, directoryPath) => {
 const findFilesNamed = (fileName, directoryPath) => (
 	listSourceFiles(directoryPath).filter((sourceFilePath) => path.basename(sourceFilePath) === fileName)
 );
+
+const readCssTree = (directoryPath) => {
+	let cssSource = "";
+
+	for (const entry of fs.readdirSync(directoryPath, { withFileTypes: true })) {
+		const entryPath = path.join(directoryPath, entry.name);
+
+		if (entry.isDirectory()) {
+			cssSource += readCssTree(entryPath);
+			continue;
+		}
+
+		if (path.extname(entry.name) === ".css") {
+			cssSource += fs.readFileSync(entryPath, "utf8");
+		}
+	}
+
+	return cssSource;
+};
 
 describe("workspace architecture", () => {
 	test("has exactly one WorkspaceScaffold implementation", () => {
@@ -150,5 +170,13 @@ describe("workspace architecture", () => {
 			"src/ui/view/pages/LearningContentSelectPage.jsx",
 			"src/ui/view/pages/LearningPathPage.jsx"
 		]);
+	});
+
+	test("keeps LearningContentHeader geometry in its canonical stylesheet", () => {
+		for (const pageStyleName of LEARNING_CONTENT_PAGE_STYLE_NAMES) {
+			const pageCss = readCssTree(path.join(STYLE_ROOT, pageStyleName));
+
+			expect(pageCss).not.toContain(".learning-content-header");
+		}
 	});
 });

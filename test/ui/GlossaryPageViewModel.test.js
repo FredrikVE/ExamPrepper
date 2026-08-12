@@ -359,7 +359,7 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useState).toHaveBeenNthCalledWith(5, false);
 		expect(useState).toHaveBeenNthCalledWith(6, null);
 		expect(useState).toHaveBeenNthCalledWith(7, null);
-		expect(useState).toHaveBeenNthCalledWith(8, { key: null, direction: "ASCENDING" });
+		expect(useState).toHaveBeenNthCalledWith(8, { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" });
 		expect(useState).toHaveBeenNthCalledWith(9, false);
 		expect(useState).toHaveBeenNthCalledWith(10, []);
 		expect(useState).toHaveBeenNthCalledWith(11, null);
@@ -1374,7 +1374,7 @@ describe("useGlossaryPageViewModel", () => {
 		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
 
 		clearStateSetterCalls();
-		viewModel.glossaryDetailPresentation.navigation.previous.onActivate();
+		viewModel.glossaryDetailPresentation.navigation.next.onActivate();
 		expect(stateSetters[9]).toHaveBeenCalledWith([]);
 		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
 	});
