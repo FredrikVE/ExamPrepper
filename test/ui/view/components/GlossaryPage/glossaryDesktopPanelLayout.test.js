@@ -62,64 +62,62 @@ function readDeclarations(root, selector, mediaQuery = null) {
 }
 
 describe("Glossary desktop panel layout", () => {
-	test("renders the topic navigation and glossary table as separate sibling cards", () => {
+	test("renders the topic navigation and glossary table inside one shared workspace card", () => {
 		const pageRoot = parseStyle(PAGE_STYLE_PATH);
 		const content = readDeclarations(pageRoot, ".glossary-page__content");
 		const topicCard = readDeclarations(pageRoot, ".glossary-topic-area-panel");
 		const glossaryCard = readDeclarations(pageRoot, ".glossary-panel");
 
-		expect(content.gap).toBe("var(--space-3)");
-		expect(content.border).toBeUndefined();
-		expect(content["border-radius"]).toBeUndefined();
-		expect(content.background).toBeUndefined();
-		expect(content["box-shadow"]).toBeUndefined();
+		expect(content.gap).toBe("0");
+		expect(content.border).toBe("1px solid var(--line-strong)");
+		expect(content["border-radius"]).toBe("var(--radius-lg)");
+		expect(content.background).toContain("var(--panel-bg)");
+		expect(content["box-shadow"]).toContain("var(--shadow-card)");
 
 		for (const card of [topicCard, glossaryCard]) {
-			expect(card.border).toBe("1px solid var(--line-strong)");
-			expect(card["border-radius"]).toBe("var(--radius-lg)");
-			expect(card.background).toContain("var(--panel-bg)");
-			expect(card["box-shadow"]).toContain("var(--shadow-card)");
+			expect(card.border).toBe("0");
+			expect(card["border-radius"]).toBe("0");
+			expect(card.background).toBe("transparent");
+			expect(card["box-shadow"]).toBe("none");
 		}
 	});
 
-	test("stretches the glossary table to the same desktop bounds as the topic panel", () => {
+	test("uses the chapter divider and inset table frame from the prototype", () => {
 		const panel = readDeclarations(parseStyle(PANEL_STYLE_PATH), ".glossary-panel");
 		const topicPanel = readDeclarations(parseStyle(TOPIC_AREA_STYLE_PATH), ".glossary-topic-area-panel");
 		const tableScroll = readDeclarations(parseStyle(TABLE_STYLE_PATH), ".glossary-table-scroll");
 
 		expect(panel.height).toBe("100%");
-		expect(panel.padding).toBe("0");
-		expect(topicPanel["border-right"]).toBeUndefined();
+		expect(panel.padding).toBe("18px 14px 14px");
+		expect(topicPanel["border-right"]).toBe("1px solid var(--line)");
 		expect(tableScroll.height).toBe("100%");
-		expect(tableScroll.border).toBe("0");
-		expect(tableScroll["border-radius"]).toBe("inherit");
+		expect(tableScroll.border).toBe("1px solid var(--line)");
+		expect(tableScroll["border-radius"]).toBe("14px");
 	});
 
-	test("keeps the four-column glossary layout while containing long glossary terms", () => {
+	test("gives the desktop table a wide explanation column and fixed importance column", () => {
 		const pageRoot = parseStyle(PAGE_STYLE_PATH);
 		const tableRoot = parseStyle(TABLE_STYLE_PATH);
 		const workspace = readDeclarations(pageRoot, ".glossary-workspace");
+		const content = readDeclarations(pageRoot, ".glossary-page__content");
 		const table = readDeclarations(tableRoot, ".glossary-table");
 		const termColumn = readDeclarations(tableRoot, ".glossary-table__term-column");
 		const explanationColumn = readDeclarations(tableRoot, ".glossary-table__explanation-column");
-		const connectionsColumn = readDeclarations(tableRoot, ".glossary-table__connections-column");
-		const masteryColumn = readDeclarations(tableRoot, ".glossary-table__mastery-column");
+		const importanceColumn = readDeclarations(tableRoot, ".glossary-table__importance-column");
 		const cell = readDeclarations(tableRoot, ".glossary-table th");
 
-		expect(workspace["--glossary-term-column-width"]).toBe("22%");
-		expect(workspace["--glossary-explanation-column-width"]).toBe("40%");
-		expect(workspace["--glossary-connections-column-width"]).toBe("14%");
-		expect(workspace["--glossary-mastery-column-width"]).toBe("24%");
+		expect(content["max-width"]).toBe("1480px");
+		expect(workspace["--glossary-term-column-width"]).toBe("27%");
+		expect(workspace["--glossary-importance-column-width"]).toBe("106px");
 		expect(termColumn.width).toBe("var(--glossary-term-column-width)");
-		expect(explanationColumn.width).toBe("var(--glossary-explanation-column-width)");
-		expect(connectionsColumn.width).toBe("var(--glossary-connections-column-width)");
-		expect(masteryColumn.width).toBe("var(--glossary-mastery-column-width)");
+		expect(explanationColumn.width).toBe("auto");
+		expect(importanceColumn.width).toBe("var(--glossary-importance-column-width)");
 		expect(table["table-layout"]).toBe("fixed");
 		expect(cell["min-width"]).toBe("0");
 		expect(cell["overflow-wrap"]).toBe("anywhere");
 		expect(cell["word-break"]).toBe("normal");
 		expect(cell.hyphens).toBe("auto");
-		expect(cell.padding).toContain("clamp(var(--space-2), 1.25vw, var(--space-4))");
+		expect(cell.padding).toBe("13px 16px");
 	});
 
 	test("keeps the mobile glossary surface unframed", () => {

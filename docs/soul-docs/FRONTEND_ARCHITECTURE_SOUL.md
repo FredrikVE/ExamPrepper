@@ -548,6 +548,21 @@ Regler:
 - Avleder ikke nye verdier fra domeneobjekter.
 - Skal hovedsakelig være lesbar komposisjon, ikke en ny ViewModel skrevet i JSX.
 
+### GlossaryPage / Fagnettverk
+
+`useGlossaryPageViewModel()` eier glossary-feature-state og all GlossaryPage-spesifikk UI-mekanikk.
+`expandedGlossaryEntryKey` er eneste expansion-state for et åpnet begrep. Nettverkslasting bruker
+canonical `useLoadModel()` og `glossaryNetworkDisplay` er en ren avledning av expansion-key,
+load-status og data/error. Rad-/disclosure-handlers, sorteringshandlinger, graph-navigasjon,
+kapittel-sheet open-state og registrering av React-ref-er eies av ViewModelen. Imperativt fokus/scroll
+som er nødvendig for tilgjengelig navigasjon utføres i ViewModelen via React-ref-er til elementer
+som React selv eier. Glossary-komponentene mottar ferdige presentation models og callbacks, rendrer
+deklarativt og oppretter ikke konkurrerende feature-state eller event-policy. De manipulerer heller
+ikke DOM-struktur med `document`, `querySelector` eller `innerHTML`. Canonical delte mekanismer
+som Search og `DockedMobileBottomSheet` beholder sitt dokumenterte interne eierskap. Desktop detail-row og
+mobil expanded card bruker samme `expandedGlossaryEntryKey` og samme ferdige `row.details`-modell; mobil
+oppretter ikke en separat network-surface, bottom sheet eller mobile-only expansion-state.
+
 ### Atomic Design og state-eierskap
 
 Atomic Design endrer ikke MVVM-regelen:

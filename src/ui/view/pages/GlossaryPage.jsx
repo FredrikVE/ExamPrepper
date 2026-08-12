@@ -37,6 +37,7 @@ export default function GlossaryPage({ viewModel }) {
 			searchLabel={viewModel.searchLabel}
 			searchClearLabel={viewModel.searchClearLabel}
 			searchKeyboardHint={viewModel.searchKeyboardHint}
+			mobileSearchKeyboardHint={viewModel.mobileChapterSheetSearchKeyboardHint}
 			searchSuggestionListAriaLabel={viewModel.searchSuggestionListAriaLabel}
 			chapterFilterValue={viewModel.chapterFilterValue}
 			chapterFilterLabel={viewModel.chapterFilterLabel}
@@ -56,6 +57,8 @@ export default function GlossaryPage({ viewModel }) {
 			sheetSubtitle={viewModel.mobileChapterSheetSubtitle}
 			sheetOpenLabel={viewModel.mobileChapterSheetOpenLabel}
 			sheetCloseLabel={viewModel.mobileChapterSheetCloseLabel}
+			isMobileChapterSheetOpen={viewModel.isMobileChapterSheetOpen}
+			onMobileChapterSheetOpenChange={viewModel.changeMobileChapterSheetOpen}
 			onSearchTermChange={viewModel.changeGlossarySearchTerm}
 			onFocusSearch={viewModel.focusGlossarySearch}
 			onClearSearch={viewModel.clearGlossarySearch}
@@ -66,7 +69,6 @@ export default function GlossaryPage({ viewModel }) {
 			onMoveSearchSelectionDown={viewModel.moveSearchSelectionDown}
 			onMoveSearchSelectionUp={viewModel.moveSearchSelectionUp}
 			onOpenSearchKeyboardSelection={viewModel.openSearchKeyboardSelection}
-			onSelectTopicArea={viewModel.selectTopicArea}
 		/>
 	) : null;
 
@@ -111,28 +113,18 @@ export default function GlossaryPage({ viewModel }) {
 									allTopicAreaListItem={viewModel.allTopicAreaListItem}
 									topicAreaListItems={viewModel.topicAreaListItems}
 									topicAreaListAriaLabel={viewModel.pageTitle}
-									onSelectTopicArea={viewModel.selectTopicArea}
 								/>
 							)}
 
 							<GlossaryPanel
 								heading={viewModel.glossaryPanelHeading}
 								rows={viewModel.glossaryTableRows}
+								tableHeaders={viewModel.glossaryTableHeaders}
 								termColumnHeader={viewModel.termColumnHeader}
 								explanationColumnHeader={viewModel.explanationColumnHeader}
-								connectionsColumnHeader={viewModel.connectionsColumnHeader}
-								masteryColumnHeader={viewModel.masteryColumnHeader}
-								openNetworkLabel={viewModel.openNetworkLabel}
+								importanceColumnHeader={viewModel.importanceColumnHeader}
 								emptyState={viewModel.glossaryPanelEmptyState}
 								isMobile={isMobile}
-								network={viewModel.glossaryNetwork}
-								isNetworkLoading={viewModel.isGlossaryNetworkLoading}
-								networkError={viewModel.glossaryNetworkError}
-								networkTitle={viewModel.networkTitle}
-								networkInstructions={viewModel.networkInstructions}
-								networkCloseLabel={viewModel.networkCloseLabel}
-								onOpenNetwork={viewModel.selectGlossaryNetworkConcept}
-								onCloseNetwork={viewModel.closeGlossaryNetwork}
 							/>
 						</>
 					</WorkspaceState>

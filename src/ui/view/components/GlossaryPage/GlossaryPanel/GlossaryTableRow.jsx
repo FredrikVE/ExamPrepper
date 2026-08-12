@@ -1,26 +1,32 @@
 // src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableRow.jsx
+import { ChevronDown } from "lucide-react";
 import FormattedText from "../../Shared/FormattedText.jsx";
-import MasteryEvidenceSummary from "../Mastery/MasteryEvidenceSummary.jsx";
 
-export default function GlossaryTableRow({ row, openNetworkLabel, onOpenNetwork }) {
+export default function GlossaryTableRow({ row }) {
 	return (
-		<tr>
+		<tr className={row.className} onClick={row.onActivate} ref={row.ref}>
 			<th scope="row">
 				<span className="glossary-table-term"><FormattedText text={row.term} /></span>
 				<span className="glossary-table-topic-area-reference">{row.topicAreaReference}</span>
 			</th>
-			<td><FormattedText text={row.explanation} /></td>
-			<td className="glossary-table__connections-cell">
+			<td className="glossary-table__explanation-cell">
+				<FormattedText text={row.explanation} />
+			</td>
+			<td className="glossary-table__importance-cell">
 				<button
 					type="button"
-					className="glossary-network-open-button"
-					onClick={() => onOpenNetwork(row.glossaryEntryKey)}
+					className={row.disclosure.className}
+					aria-expanded={row.disclosure.ariaExpanded}
+					aria-controls={row.disclosure.controlsId}
+					aria-label={row.disclosure.label}
+					title={row.disclosure.label}
+					onClick={row.disclosure.onActivate}
+					onKeyDown={row.disclosure.onKeyDown}
+					ref={row.disclosure.ref}
 				>
-					{openNetworkLabel}
+					<span className="glossary-table__importance-count" aria-hidden="true">{row.disclosure.count}</span>
+					<ChevronDown className="glossary-table__importance-chevron" size={20} strokeWidth={2} aria-hidden="true" />
 				</button>
-			</td>
-			<td className="glossary-table__mastery-cell">
-				<MasteryEvidenceSummary mastery={row.mastery} />
 			</td>
 		</tr>
 	);

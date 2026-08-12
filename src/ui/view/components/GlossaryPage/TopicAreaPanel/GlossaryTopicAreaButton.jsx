@@ -1,7 +1,7 @@
 // src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossaryTopicAreaButton.jsx
 import TopicAreaListItem from "./TopicAreaListItem.jsx";
 
-export default function GlossaryTopicAreaButton({ item, usesOptionSemantics, onSelectTopicArea }) {
+export default function GlossaryTopicAreaButton({ item, usesOptionSemantics }) {
 	return (
 		<button
 			id={item.id}
@@ -14,7 +14,7 @@ export default function GlossaryTopicAreaButton({ item, usesOptionSemantics, onS
 			data-all-topic-areas={item.isAllTopicAreas ? "true" : "false"}
 			data-keyboard-target={item.isKeyboardTarget ? "true" : "false"}
 			data-shows-selection-control={item.showsSelectionControl ? "true" : "false"}
-			onClick={() => onSelectTopicArea(item.topicAreaKey)}
+			onClick={item.onActivate}
 		>
 			<TopicAreaListItem item={item} />
 		</button>

@@ -1,12 +1,13 @@
 // src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryEntryCardList.jsx
+import { ChevronDown } from "lucide-react";
 import FormattedText from "../../Shared/FormattedText.jsx";
-import MasteryEvidenceSummary from "../Mastery/MasteryEvidenceSummary.jsx";
+import GlossaryEntryDetails from "./GlossaryEntryDetails.jsx";
 
-export default function GlossaryEntryCardList({ rows, termLabel, explanationLabel, connectionsLabel, masteryLabel, openNetworkLabel, onOpenNetwork }) {
+export default function GlossaryEntryCardList({ rows, termLabel, explanationLabel, importanceLabel }) {
 	return (
 		<dl className="glossary-entry-card-list">
 			{rows.map((row) => (
-				<div key={row.glossaryEntryKey} className="glossary-entry-card">
+				<div key={row.glossaryEntryKey} className={row.mobileClassName} ref={row.ref}>
 					<div className="glossary-entry-card__section">
 						<span className="glossary-entry-card__label">{termLabel}</span>
 						<dt className="glossary-entry-card__term"><FormattedText text={row.term} /></dt>
@@ -19,21 +20,28 @@ export default function GlossaryEntryCardList({ rows, termLabel, explanationLabe
 					</div>
 
 					<div className="glossary-entry-card__section glossary-entry-card__section--tools">
-						<div>
-							<span className="glossary-entry-card__label">{connectionsLabel}</span>
-							<button
-								type="button"
-								className="glossary-network-open-button"
-								onClick={() => onOpenNetwork(row.glossaryEntryKey)}
-							>
-								{openNetworkLabel}
-							</button>
-						</div>
-						<div>
-							<span className="glossary-entry-card__label">{masteryLabel}</span>
-							<MasteryEvidenceSummary mastery={row.mastery} />
-						</div>
+						<span className="glossary-entry-card__label">{importanceLabel}</span>
+						<button
+							type="button"
+							className={row.mobileDisclosure.className}
+							aria-expanded={row.mobileDisclosure.ariaExpanded}
+							aria-controls={row.mobileDisclosure.controlsId}
+							aria-label={row.mobileDisclosure.label}
+							title={row.mobileDisclosure.label}
+							onClick={row.mobileDisclosure.onActivate}
+							onKeyDown={row.mobileDisclosure.onKeyDown}
+							ref={row.mobileDisclosure.ref}
+						>
+							<span className="glossary-entry-card__importance-count" aria-hidden="true">{row.mobileDisclosure.count}</span>
+							<ChevronDown className="glossary-entry-card__importance-chevron" size={20} strokeWidth={2} aria-hidden="true" />
+						</button>
 					</div>
+
+					{row.details !== null ? (
+						<div className="glossary-entry-card__details" id={row.details.id}>
+							<GlossaryEntryDetails details={row.details} />
+						</div>
+					) : null}
 				</div>
 			))}
 		</dl>

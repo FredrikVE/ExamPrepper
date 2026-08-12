@@ -30,11 +30,13 @@ export default function GlossaryFooter(props) {
 		>
 			{props.isMobile ? (
 				<GlossaryMobileChapterSheet
+					isOpen={props.isMobileChapterSheetOpen}
+					onOpenChange={props.onMobileChapterSheetOpenChange}
 					searchTerm={props.searchTerm}
 					searchPlaceholder={props.searchPlaceholder}
 					searchLabel={props.searchLabel}
 					searchClearLabel={props.searchClearLabel}
-					searchKeyboardHint={props.searchKeyboardHint}
+					searchKeyboardHint={props.mobileSearchKeyboardHint}
 					searchSuggestionListAriaLabel={props.searchSuggestionListAriaLabel}
 					chapterFilterValue={props.chapterFilterValue}
 					chapterFilterLabel={props.chapterFilterLabel}
@@ -64,7 +66,6 @@ export default function GlossaryFooter(props) {
 					onMoveSearchSelectionDown={props.onMoveSearchSelectionDown}
 					onMoveSearchSelectionUp={props.onMoveSearchSelectionUp}
 					onOpenSearchKeyboardSelection={props.onOpenSearchKeyboardSelection}
-					onSelectTopicArea={props.onSelectTopicArea}
 				/>
 			) : (
 				<div className="glossary-search-footer__content">

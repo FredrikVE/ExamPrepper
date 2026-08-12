@@ -24,12 +24,14 @@ const useState = jest.fn((initialValue) => {
 const useEffect = jest.fn((effect) => effect());
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
+const useRef = jest.fn((initialValue) => ({ current: initialValue }));
 const useLoadModel = jest.fn(() => loadModelQueue.shift());
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState
 }));
 
@@ -56,9 +58,26 @@ const translations = {
 	glossaryPageChapterSubtitle: (entryCount) => `${entryCount} begreper`,
 	glossaryPageTermColumnHeader: "Begrep",
 	glossaryPageExplanationColumnHeader: "Forklaring",
+	glossaryPageImportanceColumnHeader: "Viktighet",
+	glossaryPageTableSortAscendingLabel: (label) => `Sorter ${label} stigende`,
+	glossaryPageTableSortDescendingLabel: (label) => `Sorter ${label} synkende`,
 	glossaryPageConnectionsColumnHeader: "Koblinger",
 	glossaryPageMasteryColumnHeader: "Mestring",
 	glossaryPageOpenNetworkLabel: "Vis nettverk",
+	glossaryPageSingleAssociationLabel: "1 assosiert begrep",
+	glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
+	glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
+	glossaryPageHideAssociationsLabel: (label, term) => `Skjul ${label} for ${term}`,
+	glossaryPageAssociatedWithLabel: "Assosiert med",
+	glossaryPageNoAssociationsLabel: "Ingen assosierte begreper er lagt til.",
+	glossaryPageNetworkInlineTitle: "Sammenhengsgraf",
+	glossaryPageNetworkInlineInstructions: "Valgt begrep står i sentrum.",
+	glossaryPageNetworkCenterLabel: "Valgt begrep",
+	glossaryPageNetworkEmptyLabel: "Ingen koblinger.",
+	glossaryPageNetworkLoadingLabel: "Laster sammenhengsgraf …",
+	glossaryPageNetworkDirectAssociationLabel: "Direkte assosiasjon",
+	glossaryPageNetworkSecondaryAssociationLabel: "Kobling mellom relaterte begreper",
+	glossaryPageNetworkLimitLabel: (count) => `${count} ekstra`,
 	glossaryPageNetworkTitle: "Fagnettverk",
 	glossaryPageNetworkInstructions: "Velg nabo",
 	glossaryPageNetworkCloseLabel: "Lukk nettverk",
@@ -187,7 +206,8 @@ function createViewModel({
 	isSearchFilterOptionsOpen = false,
 	isSearchAutocompleteOpen = false,
 	selectedGlossaryEntryKey = null,
-	networkCenterGlossaryEntryKey = null,
+	expandedGlossaryEntryKey = null,
+	tableSort = { key: null, direction: "ASCENDING" },
 	loadedGlossaryEntries = glossaryEntries,
 	loadedTopicAreas = topicAreas,
 	loadedNetwork = null,
@@ -205,9 +225,10 @@ function createViewModel({
 	initialTopicAreaKey = null,
 	language = "no",
 	isActive = true,
-	expandedMobileToggleButtonGroupId = null
+	expandedMobileToggleButtonGroupId = null,
+	isMobileChapterSheetOpen = false
 } = {}) {
-	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey, networkCenterGlossaryEntryKey);
+	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey, expandedGlossaryEntryKey, tableSort, isMobileChapterSheetOpen);
 	loadModelQueue = [
 		{
 			status: glossaryStatus,
@@ -297,14 +318,15 @@ beforeEach(() => {
 	useEffect.mockClear();
 	useMemo.mockClear();
 	useCallback.mockClear();
+	useRef.mockClear();
 	useLoadModel.mockClear();
 });
 
 describe("useGlossaryPageViewModel", () => {
-	test("owns term search, chapter selection, keyboard target, filter and autocomplete state", () => {
+	test("owns glossary UI state and React refs in the page ViewModel", () => {
 		createViewModel();
 
-		expect(useState).toHaveBeenCalledTimes(7);
+		expect(useState).toHaveBeenCalledTimes(9);
 		expect(useState).toHaveBeenNthCalledWith(1, "");
 		expect(useState).toHaveBeenNthCalledWith(2, null);
 		expect(useState).toHaveBeenNthCalledWith(3, -1);
@@ -312,6 +334,9 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useState).toHaveBeenNthCalledWith(5, false);
 		expect(useState).toHaveBeenNthCalledWith(6, null);
 		expect(useState).toHaveBeenNthCalledWith(7, null);
+		expect(useState).toHaveBeenNthCalledWith(8, { key: null, direction: "ASCENDING" });
+		expect(useState).toHaveBeenNthCalledWith(9, false);
+		expect(useRef).toHaveBeenCalledTimes(2);
 	});
 
 	test("returns the glossary-aware mobile toggle-button contract", () => {
@@ -687,22 +712,165 @@ describe("useGlossaryPageViewModel", () => {
 		});
 	});
 
-	test("renders canonical mastery fields in the glossary table model", () => {
+	test("sorts by direct-neighbor count through ViewModel-owned table state", () => {
+		const { viewModel } = createViewModel({
+			tableSort: { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" }
+		});
+
+		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
+			"transport-layer",
+			"packet",
+			"public-key",
+			"asymmetric-key"
+		]);
+		viewModel.changeGlossaryTableSort("DIRECT_NEIGHBOR_COUNT");
+		expect(stateSetters[7]).toHaveBeenCalledWith(expect.any(Function));
+	});
+
+	test("prepares table header interaction and accessibility in the page ViewModel", () => {
+		const { viewModel } = createViewModel({
+			tableSort: { key: "TERM", direction: "ASCENDING" }
+		});
+		const [termHeader, explanationHeader, importanceHeader] = viewModel.glossaryTableHeaders;
+
+		expect(termHeader).toMatchObject({
+			key: "TERM",
+			isSortable: true,
+			ariaSort: "ascending",
+			sortIconKind: "ASCENDING",
+			actionLabel: "Sorter Begrep synkende",
+			onActivate: expect.any(Function)
+		});
+		expect(explanationHeader).toEqual({
+			key: "EXPLANATION",
+			label: "Forklaring",
+			className: "",
+			isSortable: false
+		});
+		expect(importanceHeader).toMatchObject({
+			key: "DIRECT_NEIGHBOR_COUNT",
+			isSortable: true,
+			ariaSort: "none",
+			sortIconKind: "UNSORTED"
+		});
+
+		clearStateSetterCalls();
+		importanceHeader.onActivate();
+		expect(stateSetters[7]).toHaveBeenCalledWith(expect.any(Function));
+	});
+
+	test("prepares row, disclosure and mobile activation mechanics in the page ViewModel", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			loadedNetwork: {
+				subjectId: "in2120",
+				center: glossaryEntries[0],
+				nodes: [glossaryEntries[2]],
+				relations: [],
+				limit: 8,
+				depth: 1
+			}
+		});
+		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
+		const disclosureEvent = { stopPropagation: jest.fn() };
+		const escapeEvent = { key: "Escape", preventDefault: jest.fn(), stopPropagation: jest.fn() };
+
+		expect(transportLayer).toMatchObject({
+			className: "glossary-table-row glossary-table-row--expanded",
+			mobileClassName: "glossary-entry-card glossary-entry-card--expanded",
+			ref: expect.any(Function),
+			onActivate: expect.any(Function),
+			disclosure: {
+				count: 2,
+				ariaExpanded: true,
+				controlsId: "glossary-details-transport-layer",
+				ref: expect.any(Function),
+				onActivate: expect.any(Function),
+				onKeyDown: expect.any(Function)
+			},
+			mobileDisclosure: {
+				className: "glossary-entry-card__importance-toggle",
+				count: 2,
+				ariaExpanded: true,
+				controlsId: "glossary-details-transport-layer",
+				ref: expect.any(Function),
+				onActivate: expect.any(Function),
+				onKeyDown: expect.any(Function)
+			}
+		});
+
+		clearStateSetterCalls();
+		transportLayer.onActivate();
+		expect(stateSetters[6]).toHaveBeenCalledWith(expect.any(Function));
+
+		clearStateSetterCalls();
+		transportLayer.disclosure.onActivate(disclosureEvent);
+		expect(disclosureEvent.stopPropagation).toHaveBeenCalledTimes(1);
+		expect(stateSetters[6]).toHaveBeenCalledWith(expect.any(Function));
+
+		clearStateSetterCalls();
+		transportLayer.disclosure.onKeyDown(escapeEvent);
+		expect(escapeEvent.preventDefault).toHaveBeenCalledTimes(1);
+		expect(escapeEvent.stopPropagation).toHaveBeenCalledTimes(1);
+		expect(stateSetters[6]).toHaveBeenCalledWith(null);
+
+		clearStateSetterCalls();
+		const mobileDisclosureEvent = { stopPropagation: jest.fn() };
+		transportLayer.mobileDisclosure.onActivate(mobileDisclosureEvent);
+		expect(mobileDisclosureEvent.stopPropagation).toHaveBeenCalledTimes(1);
+		expect(stateSetters[6]).toHaveBeenCalledWith(expect.any(Function));
+	});
+
+	test("owns mobile chapter-sheet open state in GlossaryPageViewModel", () => {
+		const { viewModel } = createViewModel({ isMobileChapterSheetOpen: true });
+
+		expect(viewModel.isMobileChapterSheetOpen).toBe(true);
+		expect(viewModel.mobileChapterSheetSearchKeyboardHint).toBe("Bruk piltastene");
+
+		clearStateSetterCalls();
+		viewModel.changeMobileChapterSheetOpen(false);
+		expect(stateSetters[8]).toHaveBeenCalledWith(false);
+	});
+
+	test("builds inline detail presentation from overview neighbor keys", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			loadedNetwork: {
+				subjectId: "in2120",
+				center: glossaryEntries[0],
+				nodes: [glossaryEntries[2]],
+				relations: [],
+				limit: 8,
+				depth: 1
+			}
+		});
+		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
+
+		expect(transportLayer).toMatchObject({
+			isExpanded: true,
+			detailsId: "glossary-details-transport-layer",
+			directNeighborCount: 2,
+			directNeighbors: [
+				{ glossaryEntryKey: "packet", term: "Pakke" },
+				{ glossaryEntryKey: "public-key", term: "Offentlig nøkkel" }
+			],
+			details: {
+				id: "glossary-details-transport-layer",
+				associationsHeading: "Assosiert med",
+				network: {
+					kind: "content",
+					title: "Sammenhengsgraf"
+				}
+			}
+		});
+		expect(transportLayer.disclosureLabel).toContain("Skjul 2 assosierte begreper");
+	});
+
+	test("does not expose system mastery as glossary table-row presentation", () => {
 		const { viewModel } = createViewModel();
 		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
 
-		expect(transportLayer.mastery).toEqual({
-			status: "progress",
-			statusLabel: "Underveis",
-			scoreLabel: "75%",
-			correctIncorrectLabel: "3 riktig · 1 galt",
-			difficultyItems: [
-				{ label: "Lett", correctCount: 1, incorrectCount: 0, totalCount: 1 },
-				{ label: "Middels", correctCount: 2, incorrectCount: 1, totalCount: 3 },
-				{ label: "Vanskelig", correctCount: 0, incorrectCount: 0, totalCount: 0 }
-			],
-			lastPracticedLabel: "Sist øvd 10.08.2026"
-		});
+		expect(transportLayer).not.toHaveProperty("mastery");
 	});
 
 	test("loads a typed concept network only for the selected stable glossary key", async () => {
@@ -720,7 +888,7 @@ describe("useGlossaryPageViewModel", () => {
 			depth: 1
 		};
 		const { getGlossaryNetworkUseCase, viewModel } = createViewModel({
-			networkCenterGlossaryEntryKey: "transport-layer",
+			expandedGlossaryEntryKey: "transport-layer",
 			loadedNetwork
 		});
 
@@ -730,15 +898,34 @@ describe("useGlossaryPageViewModel", () => {
 			subjectId: "in2120",
 			glossaryEntryKey: "transport-layer"
 		});
-		expect(viewModel.glossaryNetwork.center.term).toBe("Transportlag");
-		expect(viewModel.glossaryNetwork.nodes[0].term).toBe("Pakke");
-		expect(viewModel.glossaryNetwork.relations[0]).toMatchObject({
-			type: "prerequisite",
+		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
+		expect(transportLayer.details.network).toMatchObject({
+			kind: "content",
+			model: {
+				center: { term: "Transportlag" },
+				nodes: [{ term: "Pakke" }]
+			}
+		});
+		expect(transportLayer.details.network.model.edges[0]).toMatchObject({
+			relationType: "prerequisite",
+			isDirectional: true,
+			edgeRole: "DIRECT"
+		});
+		expect(transportLayer.details.network.model.relationItems[0]).toEqual({
+			key: "packet:prerequisite:transport-layer",
+			sourceTerm: "Pakke",
 			label: "Forutsetning",
-			isDirectional: true
+			targetTerm: "Transportlag"
 		});
 
 		viewModel.selectGlossaryNetworkConcept("packet");
+		expect(stateSetters[0]).toHaveBeenCalledWith("");
+		expect(stateSetters[2]).toHaveBeenCalledWith(-1);
+		expect(stateSetters[3]).toHaveBeenCalledWith(false);
+		expect(stateSetters[4]).toHaveBeenCalledWith(false);
+		expect(stateSetters[1]).toHaveBeenCalledWith(expect.any(Function));
+		expect(stateSetters[1].mock.calls.at(-1)[0](new Set(["cryptography"]))).toEqual(new Set(["cryptography", "networking"]));
+		expect(stateSetters[5]).toHaveBeenCalledWith(null);
 		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
 	});
 

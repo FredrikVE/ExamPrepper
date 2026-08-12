@@ -16,7 +16,9 @@ const glossaryEntry = Object.freeze({
 		no: "Ingen forespørsel får tillit uten eksplisitt verifisering.",
 		en: "No request is trusted without explicit verification."
 	}),
-	position: 1
+	position: 1,
+	directNeighborCount: 0,
+	directNeighborGlossaryKeys: []
 });
 
 const createLocalizedGlossaryEntry = (entry, language) => ({
@@ -25,6 +27,8 @@ const createLocalizedGlossaryEntry = (entry, language) => ({
 	term: entry.term[language],
 	explanation: entry.explanation[language],
 	position: entry.position,
+	directNeighborCount: entry.directNeighborCount,
+	directNeighborGlossaryKeys: entry.directNeighborGlossaryKeys,
 	mastery: null
 });
 
@@ -32,21 +36,21 @@ describe("GlossaryEntry presentation contract", () => {
 	test("preserves one glossary entry key and texts across all three presentations", () => {
 		const flipcard = createFlipcardsFromGlossaryEntries([glossaryEntry], "no")[0];
 		const matchPair = createPairsFromGlossaryEntries([glossaryEntry])[0];
+		const localizedGlossaryEntry = createLocalizedGlossaryEntry(glossaryEntry, "no");
 		const tableRow = createGlossaryTableRows({
-			localizedEntries: [createLocalizedGlossaryEntry(glossaryEntry, "no")],
+			localizedEntries: [localizedGlossaryEntry],
+			localizedEntryByKey: new Map([[glossaryEntry.glossaryEntryKey, localizedGlossaryEntry]]),
 			topicAreaReferenceByKey: new Map([[
 				"security-architecture",
 				"Kapittel 1"
 			]]),
-			formatDate: () => "",
+			expandedGlossaryEntryKey: null,
+			networkDisplay: { kind: "hidden" },
 			t: {
-				glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
-				glossaryPageMasteryNoScoreLabel: "Ingen score",
-				glossaryPageMasteryCorrectIncorrectLabel: (correctCount, incorrectCount) => `${correctCount}/${incorrectCount}`,
-				glossaryPageMasteryNeverPracticedLabel: "Ikke øvd ennå",
-				glossaryPageDifficultyEasyLabel: "Lett",
-				glossaryPageDifficultyMediumLabel: "Middels",
-				glossaryPageDifficultyHardLabel: "Vanskelig"
+				glossaryPageSingleAssociationLabel: "1 assosiert begrep",
+				glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
+				glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
+				glossaryPageHideAssociationsLabel: (label, term) => `Skjul ${label} for ${term}`
 			}
 		})[0];
 

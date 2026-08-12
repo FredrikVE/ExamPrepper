@@ -6,7 +6,7 @@
 	height: 100%;
 	flex-direction: column;
 	overflow: hidden;
-	padding: 0;
+	padding: 18px 14px 14px;
 }
 
 .glossary-panel-heading {
@@ -74,32 +74,15 @@
 }
 
 .glossary-panel__content {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr);
+	display: flex;
 	min-width: 0;
 	min-height: 0;
 	height: 100%;
-	gap: var(--space-3);
-}
-
-.glossary-panel__content--network-open {
-	grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
-}
-
-@media (max-width: 1180px) and (min-width: 933px) {
-	.glossary-panel__content--network-open {
-		grid-template-columns: minmax(0, 1fr);
-		overflow: auto;
-	}
-
-	.glossary-panel__content--network-open .concept-network {
-		min-height: 420px;
-	}
+	flex-direction: column;
 }
 
 @media (max-width: 932px) {
-	.glossary-panel__content,
-	.glossary-panel__content--network-open {
+	.glossary-panel__content {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		height: auto;

@@ -1,12 +1,10 @@
 // src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx
-import { useState } from "react";
 import DockedMobileBottomSheet from "../../MobileBottomSheet/DockedMobileBottomSheet.jsx";
 import SearchSheetBody from "../../Search/SearchSheetBody.jsx";
 import SearchFilterField from "../../Search/SearchFilterField.jsx";
 import GlossaryTopicAreaNavigationList from "../TopicAreaPanel/GlossaryTopicAreaNavigationList.jsx";
 
 export default function GlossaryMobileChapterSheet(props) {
-	const [isOpen, setIsOpen] = useState(false);
 	const hasSearchContent = props.isSearchFilterOptionsOpen
 		? props.chapterFilterOptions.length > 0
 		: props.autocompleteSuggestions.length > 0;
@@ -47,7 +45,7 @@ export default function GlossaryMobileChapterSheet(props) {
 					listId: props.autocompleteListId,
 					activeDescendantId: props.searchActiveDescendantId,
 					descriptionId: "glossary-mobile-search-meta",
-					keyboardHint: isOpen ? props.searchKeyboardHint : null,
+					keyboardHint: props.searchKeyboardHint,
 					onMoveDown: props.onMoveSearchSelectionDown,
 					onMoveUp: props.onMoveSearchSelectionUp,
 					onSelectActive: props.onOpenSearchKeyboardSelection
@@ -55,8 +53,8 @@ export default function GlossaryMobileChapterSheet(props) {
 			/>
 		</div>
 	);
-	const dockedOverlayContent = isOpen ? null : searchContent;
-	const expandedContent = isOpen && searchContent !== null ? (
+	const dockedOverlayContent = props.isOpen ? null : searchContent;
+	const expandedContent = props.isOpen && searchContent !== null ? (
 		<div className="glossary-mobile-chapter-sheet__body">
 			{searchContent}
 		</div>
@@ -66,16 +64,15 @@ export default function GlossaryMobileChapterSheet(props) {
 				ariaLabel={props.topicAreaListAriaLabel}
 				allTopicAreaListItem={props.allTopicAreaListItem}
 				items={props.topicAreaListItems}
-				onSelectTopicArea={props.onSelectTopicArea}
 			/>
 		</div>
 	);
 
 	return (
-		<div className="glossary-mobile-chapter-sheet" data-open={isOpen ? "true" : "false"}>
+		<div className="glossary-mobile-chapter-sheet" data-open={props.isOpen ? "true" : "false"}>
 			<DockedMobileBottomSheet
-				isOpen={isOpen}
-				onOpenChange={setIsOpen}
+				isOpen={props.isOpen}
+				onOpenChange={props.onOpenChange}
 				contentId="glossary-mobile-chapter-sheet"
 				title={props.sheetTitle}
 				subtitle={props.sheetSubtitle}
