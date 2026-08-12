@@ -2,6 +2,7 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
 import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../src/navigation/navigation.js";
+import { PRESENTATION_MODE } from "../../src/ui/presentation/presentationMode.js";
 import { GLOSSARY_AUTOCOMPLETE_LIST_ID, createGlossaryAutocompleteOptionId } from "../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
 import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
@@ -26,6 +27,7 @@ const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
 const useRef = jest.fn((initialValue) => ({ current: initialValue }));
 const useLoadModel = jest.fn(() => loadModelQueue.shift());
+const usePresentationMode = jest.fn(() => PRESENTATION_MODE.DESKTOP);
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
@@ -39,7 +41,11 @@ jest.unstable_mockModule("../../src/ui/viewmodel/LoadState/useLoadModel.js", () 
 	default: useLoadModel
 }));
 
-const { default: useGlossaryPageViewModel } = await import(
+jest.unstable_mockModule("../../src/ui/presentation/usePresentationMode.js", () => ({
+	default: usePresentationMode
+}));
+
+const { default: useGlossaryPageViewModel, resolveMobileGlossaryDetailEntryKey } = await import(
 	"../../src/ui/viewmodel/GlossaryPageViewModel.js"
 );
 
@@ -68,8 +74,19 @@ const translations = {
 	glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
 	glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
 	glossaryPageHideAssociationsLabel: (label, term) => `Skjul ${label} for ${term}`,
+	glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`,
 	glossaryPageAssociatedWithLabel: "Assosiert med",
 	glossaryPageNoAssociationsLabel: "Ingen assosierte begreper er lagt til.",
+	glossaryPageDetailBackLabel: (term) => `Tilbake til ${term}`,
+	glossaryPageDetailPositionLabel: (position, total) => `${position} av ${total}`,
+	glossaryPageDetailOutsideSelectionLabel: "Utenfor utvalget",
+	glossaryPageDetailPreviousLabel: "Forrige",
+	glossaryPageDetailNextLabel: "Neste",
+	glossaryPageDetailSubtitle: (chapterReference, chapterLabel, associationLabel) => `${chapterReference} · ${chapterLabel} · ${associationLabel}`,
+	glossaryPageDetailCloseLabel: "Lukk detaljvisningen",
+	glossaryPageDetailExplanationHeading: "Forklaring",
+	glossaryPageDetailNetworkHeading: "Plass i pensum",
+	glossaryPageDetailNavigationAriaLabel: "Naviger mellom begreper",
 	glossaryPageNetworkInlineTitle: "Sammenhengsgraf",
 	glossaryPageNetworkInlineInstructions: "Valgt begrep står i sentrum.",
 	glossaryPageNetworkCenterLabel: "Valgt begrep",
@@ -213,7 +230,7 @@ function createViewModel({
 	loadedNetwork = null,
 	glossaryStatus = LOAD_STATUS.READY,
 	topicAreaStatus = LOAD_STATUS.READY,
-	networkStatus = LOAD_STATUS.READY,
+	networkStatus = null,
 	glossaryError = null,
 	topicAreaError = null,
 	subjectId = "in2120",
@@ -226,9 +243,14 @@ function createViewModel({
 	language = "no",
 	isActive = true,
 	expandedMobileToggleButtonGroupId = null,
-	isMobileChapterSheetOpen = false
+	isMobileChapterSheetOpen = false,
+	glossaryDetailTrailKeys = [],
+	glossaryDetailRenderSnapshot = null,
+	presentationMode = PRESENTATION_MODE.DESKTOP
 } = {}) {
-	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey, expandedGlossaryEntryKey, tableSort, isMobileChapterSheetOpen);
+	stateValues.push(searchTerm, selectedTopicAreaKeys, keyboardIndex, isSearchFilterOptionsOpen, isSearchAutocompleteOpen, selectedGlossaryEntryKey, expandedGlossaryEntryKey, tableSort, isMobileChapterSheetOpen, glossaryDetailTrailKeys, glossaryDetailRenderSnapshot);
+	const resolvedNetworkStatus = networkStatus ?? (loadedNetwork === null ? LOAD_STATUS.LOADING : LOAD_STATUS.READY);
+
 	loadModelQueue = [
 		{
 			status: glossaryStatus,
@@ -243,9 +265,9 @@ function createViewModel({
 			reload: jest.fn()
 		},
 		{
-			status: networkStatus,
+			status: resolvedNetworkStatus,
 			data: loadedNetwork,
-			error: networkStatus === LOAD_STATUS.ERROR ? "Kunne ikke laste fagnettverket." : null,
+			error: resolvedNetworkStatus === LOAD_STATUS.ERROR ? "Kunne ikke laste fagnettverket." : null,
 			reload: jest.fn()
 		}
 	];
@@ -269,6 +291,7 @@ function createViewModel({
 		onBack: jest.fn()
 	};
 	const formatDate = jest.fn(() => "10.08.2026");
+	usePresentationMode.mockReturnValue(presentationMode);
 	const viewModel = useGlossaryPageViewModel({
 		getGlossaryOverviewUseCase,
 		getGlossaryNetworkUseCase,
@@ -320,13 +343,15 @@ beforeEach(() => {
 	useCallback.mockClear();
 	useRef.mockClear();
 	useLoadModel.mockClear();
+	usePresentationMode.mockReset();
+	usePresentationMode.mockReturnValue(PRESENTATION_MODE.DESKTOP);
 });
 
 describe("useGlossaryPageViewModel", () => {
 	test("owns glossary UI state and React refs in the page ViewModel", () => {
 		createViewModel();
 
-		expect(useState).toHaveBeenCalledTimes(9);
+		expect(useState).toHaveBeenCalledTimes(11);
 		expect(useState).toHaveBeenNthCalledWith(1, "");
 		expect(useState).toHaveBeenNthCalledWith(2, null);
 		expect(useState).toHaveBeenNthCalledWith(3, -1);
@@ -336,7 +361,14 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useState).toHaveBeenNthCalledWith(7, null);
 		expect(useState).toHaveBeenNthCalledWith(8, { key: null, direction: "ASCENDING" });
 		expect(useState).toHaveBeenNthCalledWith(9, false);
-		expect(useRef).toHaveBeenCalledTimes(2);
+		expect(useState).toHaveBeenNthCalledWith(10, []);
+		expect(useState).toHaveBeenNthCalledWith(11, null);
+		expect(useRef).toHaveBeenCalledTimes(7);
+		expect(useRef).toHaveBeenNthCalledWith(3, null);
+		expect(useRef).toHaveBeenNthCalledWith(4, null);
+		expect(useRef).toHaveBeenNthCalledWith(5, PRESENTATION_MODE.DESKTOP);
+		expect(useRef).toHaveBeenNthCalledWith(6, null);
+		expect(useRef).toHaveBeenNthCalledWith(7, expect.any(Map));
 	});
 
 	test("returns the glossary-aware mobile toggle-button contract", () => {
@@ -648,6 +680,9 @@ describe("useGlossaryPageViewModel", () => {
 		expect(stateSetters[3]).toHaveBeenCalledWith(false);
 		expect(stateSetters[4]).toHaveBeenCalledWith(false);
 		expect(stateSetters[5]).toHaveBeenCalledWith(null);
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(useRef.mock.results[2].value.current).toBeNull();
+		expect(useRef.mock.results[3].value.current).toBeNull();
 	});
 
 	test("rebuilds localized rows for a language switch without reloading glossary entries", () => {
@@ -759,7 +794,7 @@ describe("useGlossaryPageViewModel", () => {
 		expect(stateSetters[7]).toHaveBeenCalledWith(expect.any(Function));
 	});
 
-	test("prepares row, disclosure and mobile activation mechanics in the page ViewModel", () => {
+	test("prepares desktop modal activation and existing mobile disclosure mechanics in the page ViewModel", () => {
 		const { viewModel } = createViewModel({
 			expandedGlossaryEntryKey: "transport-layer",
 			loadedNetwork: {
@@ -772,21 +807,19 @@ describe("useGlossaryPageViewModel", () => {
 			}
 		});
 		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
-		const disclosureEvent = { stopPropagation: jest.fn() };
+		const rowTarget = { closest: jest.fn(() => null) };
+		const interactiveTarget = { closest: jest.fn(() => ({ tagName: "BUTTON" })) };
 		const escapeEvent = { key: "Escape", preventDefault: jest.fn(), stopPropagation: jest.fn() };
 
 		expect(transportLayer).toMatchObject({
-			className: "glossary-table-row glossary-table-row--expanded",
+			className: "glossary-table-row",
 			mobileClassName: "glossary-entry-card glossary-entry-card--expanded",
 			ref: expect.any(Function),
 			onActivate: expect.any(Function),
-			disclosure: {
-				count: 2,
-				ariaExpanded: true,
-				controlsId: "glossary-details-transport-layer",
+			detailTrigger: {
+				label: "Åpne detaljvisning for Transportlag",
 				ref: expect.any(Function),
-				onActivate: expect.any(Function),
-				onKeyDown: expect.any(Function)
+				onActivate: expect.any(Function)
 			},
 			mobileDisclosure: {
 				className: "glossary-entry-card__importance-toggle",
@@ -798,18 +831,26 @@ describe("useGlossaryPageViewModel", () => {
 				onKeyDown: expect.any(Function)
 			}
 		});
+		expect(transportLayer).not.toHaveProperty("disclosure");
 
 		clearStateSetterCalls();
-		transportLayer.onActivate();
-		expect(stateSetters[6]).toHaveBeenCalledWith(expect.any(Function));
+		transportLayer.onActivate({ target: rowTarget });
+		expect(rowTarget.closest).toHaveBeenCalledWith('button, a, input, select, textarea, [role="button"]');
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
 
 		clearStateSetterCalls();
-		transportLayer.disclosure.onActivate(disclosureEvent);
-		expect(disclosureEvent.stopPropagation).toHaveBeenCalledTimes(1);
-		expect(stateSetters[6]).toHaveBeenCalledWith(expect.any(Function));
+		transportLayer.onActivate({ target: interactiveTarget });
+		expect(stateSetters[9]).not.toHaveBeenCalled();
+		expect(stateSetters[6]).not.toHaveBeenCalled();
 
 		clearStateSetterCalls();
-		transportLayer.disclosure.onKeyDown(escapeEvent);
+		transportLayer.detailTrigger.onActivate();
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
+
+		clearStateSetterCalls();
+		transportLayer.mobileDisclosure.onKeyDown(escapeEvent);
 		expect(escapeEvent.preventDefault).toHaveBeenCalledTimes(1);
 		expect(escapeEvent.stopPropagation).toHaveBeenCalledTimes(1);
 		expect(stateSetters[6]).toHaveBeenCalledWith(null);
@@ -819,6 +860,513 @@ describe("useGlossaryPageViewModel", () => {
 		transportLayer.mobileDisclosure.onActivate(mobileDisclosureEvent);
 		expect(mobileDisclosureEvent.stopPropagation).toHaveBeenCalledTimes(1);
 		expect(stateSetters[6]).toHaveBeenCalledWith(expect.any(Function));
+	});
+
+	test("opens glossary detail from the table without mutating page context", () => {
+		const { viewModel } = createViewModel({
+			glossaryDetailTrailKeys: ["public-key"]
+		});
+		const originRef = useRef.mock.results[2].value;
+		const titleFocusRequestRef = useRef.mock.results[3].value;
+		clearStateSetterCalls();
+
+		viewModel.openGlossaryDetailFromTable("transport-layer");
+
+		expect(originRef.current).toBe("transport-layer");
+		expect(titleFocusRequestRef.current).toBeNull();
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[1]).not.toHaveBeenCalled();
+		expect(stateSetters[5]).not.toHaveBeenCalled();
+		expect(stateSetters[7]).not.toHaveBeenCalled();
+	});
+
+	test("rejects an unknown glossary detail entry opened from the table", () => {
+		const { viewModel } = createViewModel();
+
+		expect(() => viewModel.openGlossaryDetailFromTable("missing-entry"))
+			.toThrow("Cannot open unknown glossary entry: missing-entry");
+	});
+
+	test("pushes the active entry onto the exploration trail without changing page context", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			glossaryDetailTrailKeys: ["packet"]
+		});
+		const titleFocusRequestRef = useRef.mock.results[3].value;
+		clearStateSetterCalls();
+
+		viewModel.exploreGlossaryDetailConcept("public-key");
+
+		const updateTrail = stateSetters[9].mock.calls[0][0];
+		expect(updateTrail(["packet"])).toEqual(["packet", "transport-layer"]);
+		expect(titleFocusRequestRef.current).toBe("public-key");
+		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[1]).not.toHaveBeenCalled();
+		expect(stateSetters[2]).not.toHaveBeenCalled();
+		expect(stateSetters[3]).not.toHaveBeenCalled();
+		expect(stateSetters[4]).not.toHaveBeenCalled();
+		expect(stateSetters[5]).not.toHaveBeenCalled();
+		expect(stateSetters[7]).not.toHaveBeenCalled();
+	});
+
+	test("rejects exploration without an active detail entry and unknown targets", () => {
+		const inactive = createViewModel();
+		expect(() => inactive.viewModel.exploreGlossaryDetailConcept("packet"))
+			.toThrow("Cannot explore glossary detail without an active detail entry.");
+
+		stateValues.length = 0;
+		stateSetters.length = 0;
+		useState.mockClear();
+		useRef.mockClear();
+		const active = createViewModel({ expandedGlossaryEntryKey: "transport-layer" });
+		expect(() => active.viewModel.exploreGlossaryDetailConcept("missing-entry"))
+			.toThrow("Cannot navigate to unknown glossary entry: missing-entry");
+	});
+
+	test("does not add a trail entry when exploration selects the active concept", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			glossaryDetailTrailKeys: ["packet"]
+		});
+		clearStateSetterCalls();
+
+		viewModel.exploreGlossaryDetailConcept("transport-layer");
+
+		expect(stateSetters[9]).not.toHaveBeenCalled();
+		expect(stateSetters[6]).not.toHaveBeenCalled();
+	});
+
+	test("navigates back through the exploration trail and requests title focus", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			glossaryDetailTrailKeys: ["asymmetric-key", "public-key"]
+		});
+		const titleFocusRequestRef = useRef.mock.results[3].value;
+		clearStateSetterCalls();
+
+		viewModel.navigateBackGlossaryDetailTrail();
+
+		const updateTrail = stateSetters[9].mock.calls[0][0];
+		expect(updateTrail(["asymmetric-key", "public-key"])).toEqual(["asymmetric-key"]);
+		expect(titleFocusRequestRef.current).toBe("public-key");
+		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+	});
+
+	test("keeps trail back inert when no exploration history exists", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			glossaryDetailTrailKeys: []
+		});
+		clearStateSetterCalls();
+
+		viewModel.navigateBackGlossaryDetailTrail();
+
+		expect(stateSetters[9]).not.toHaveBeenCalled();
+		expect(stateSetters[6]).not.toHaveBeenCalled();
+	});
+
+	test("navigates previous and next through the current sorted visible table sequence", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "packet",
+			glossaryDetailTrailKeys: ["public-key"],
+			tableSort: { key: "TERM", direction: "ASCENDING" }
+		});
+		const titleFocusRequestRef = useRef.mock.results[3].value;
+		clearStateSetterCalls();
+
+		viewModel.openPreviousGlossaryDetail();
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+		expect(titleFocusRequestRef.current).toBe("public-key");
+
+		clearStateSetterCalls();
+		viewModel.openNextGlossaryDetail();
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith("transport-layer");
+		expect(titleFocusRequestRef.current).toBe("transport-layer");
+	});
+
+	test("keeps sequence navigation inert outside the visible table sequence", () => {
+		const { viewModel } = createViewModel({
+			selectedTopicAreaKeys: new Set(["networking"]),
+			expandedGlossaryEntryKey: "public-key",
+			glossaryDetailTrailKeys: ["packet"]
+		});
+		clearStateSetterCalls();
+
+		viewModel.openPreviousGlossaryDetail();
+		viewModel.openNextGlossaryDetail();
+
+		expect(stateSetters[9]).not.toHaveBeenCalled();
+		expect(stateSetters[6]).not.toHaveBeenCalled();
+	});
+
+	test("closes glossary detail while retaining the origin for later focus restoration", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			glossaryDetailTrailKeys: ["packet"]
+		});
+		const originRef = useRef.mock.results[2].value;
+		const titleFocusRequestRef = useRef.mock.results[3].value;
+		viewModel.openGlossaryDetailFromTable("transport-layer");
+		clearStateSetterCalls();
+		titleFocusRequestRef.current = "public-key";
+
+		viewModel.closeGlossaryDetail();
+
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith(null);
+		expect(titleFocusRequestRef.current).toBeNull();
+		expect(originRef.current).toBe("transport-layer");
+	});
+
+	test("resolves the mobile detail target from active, origin or no visible fallback", () => {
+		expect(resolveMobileGlossaryDetailEntryKey({
+			activeGlossaryEntryKey: "packet",
+			originGlossaryEntryKey: "transport-layer",
+			visibleGlossaryEntryKeys: ["packet", "transport-layer"]
+		})).toBe("packet");
+
+		expect(resolveMobileGlossaryDetailEntryKey({
+			activeGlossaryEntryKey: "public-key",
+			originGlossaryEntryKey: "packet",
+			visibleGlossaryEntryKeys: ["packet", "transport-layer"]
+		})).toBe("packet");
+
+		expect(resolveMobileGlossaryDetailEntryKey({
+			activeGlossaryEntryKey: "public-key",
+			originGlossaryEntryKey: "asymmetric-key",
+			visibleGlossaryEntryKeys: ["packet", "transport-layer"]
+		})).toBeNull();
+	});
+
+	test("reconciles an out-of-sequence desktop detail to its visible origin when switching to mobile", () => {
+		createViewModel({
+			selectedTopicAreaKeys: new Set(["networking"]),
+			expandedGlossaryEntryKey: "public-key",
+			glossaryDetailTrailKeys: ["transport-layer"],
+			presentationMode: PRESENTATION_MODE.MOBILE
+		});
+		const originRef = useRef.mock.results[2].value;
+		const titleFocusRequestRef = useRef.mock.results[3].value;
+		const previousPresentationModeRef = useRef.mock.results[4].value;
+		originRef.current = "packet";
+		titleFocusRequestRef.current = "public-key";
+		previousPresentationModeRef.current = PRESENTATION_MODE.DESKTOP;
+		clearStateSetterCalls();
+
+		const responsiveEffect = useEffect.mock.calls[3][0];
+		responsiveEffect();
+
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
+		expect(titleFocusRequestRef.current).toBeNull();
+		expect(originRef.current).toBeNull();
+	});
+
+	test("keeps a visible active detail through desktop to mobile and closes when no visible fallback exists", () => {
+		createViewModel({
+			selectedTopicAreaKeys: new Set(["networking"]),
+			expandedGlossaryEntryKey: "packet",
+			presentationMode: PRESENTATION_MODE.MOBILE
+		});
+		useRef.mock.results[4].value.current = PRESENTATION_MODE.DESKTOP;
+		clearStateSetterCalls();
+		useEffect.mock.calls[3][0]();
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).not.toHaveBeenCalled();
+
+		stateValues.length = 0;
+		stateSetters.length = 0;
+		useState.mockClear();
+		useRef.mockClear();
+		useEffect.mockClear();
+		createViewModel({
+			selectedTopicAreaKeys: new Set(["networking"]),
+			expandedGlossaryEntryKey: "public-key",
+			presentationMode: PRESENTATION_MODE.MOBILE
+		});
+		useRef.mock.results[2].value.current = "asymmetric-key";
+		useRef.mock.results[4].value.current = PRESENTATION_MODE.DESKTOP;
+		clearStateSetterCalls();
+		useEffect.mock.calls[3][0]();
+		expect(stateSetters[6]).toHaveBeenCalledWith(null);
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+	});
+
+	test("opens the corresponding desktop detail from mobile state without resetting the active key", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "packet",
+			glossaryDetailTrailKeys: ["transport-layer"],
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+		const originRef = useRef.mock.results[2].value;
+		const previousPresentationModeRef = useRef.mock.results[4].value;
+		previousPresentationModeRef.current = PRESENTATION_MODE.MOBILE;
+		clearStateSetterCalls();
+
+		useEffect.mock.calls[3][0]();
+
+		expect(viewModel.presentationMode).toBe(PRESENTATION_MODE.DESKTOP);
+		expect(viewModel.isGlossaryDetailModalOpen).toBe(true);
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).not.toHaveBeenCalled();
+		expect(originRef.current).toBe("packet");
+	});
+
+	test("derives modal open state from desktop presentation mode and the active detail key", () => {
+		const desktop = createViewModel({
+			expandedGlossaryEntryKey: "packet",
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+		expect(desktop.viewModel.isGlossaryDetailModalOpen).toBe(true);
+
+		stateValues.length = 0;
+		stateSetters.length = 0;
+		useState.mockClear();
+		useRef.mockClear();
+		useEffect.mockClear();
+		const mobile = createViewModel({
+			expandedGlossaryEntryKey: "packet",
+			presentationMode: PRESENTATION_MODE.MOBILE
+		});
+		expect(mobile.viewModel.isGlossaryDetailModalOpen).toBe(false);
+	});
+
+	test("prepares controlled modal focus lifecycle in the page ViewModel", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+		const titleElementRef = useRef.mock.results[5].value;
+		const triggerElementByKeyRef = useRef.mock.results[6].value;
+		const triggerElement = { focus: jest.fn() };
+
+		viewModel.openGlossaryDetailFromTable("transport-layer");
+		viewModel.registerGlossaryDetailTriggerElement("transport-layer", triggerElement);
+
+		expect(triggerElementByKeyRef.current.get("transport-layer")).toBe(triggerElement);
+		expect(viewModel.glossaryDetailPresentation.header.titleRef).toBe(titleElementRef);
+		expect(viewModel.glossaryDetailModal).toMatchObject({
+			isOpen: true,
+			content: viewModel.glossaryDetailPresentation,
+			initialFocus: titleElementRef,
+			finalFocus: expect.any(Function),
+			onOpenChange: expect.any(Function),
+			onOpenChangeComplete: expect.any(Function)
+		});
+		expect(viewModel.glossaryDetailModal.finalFocus()).toBe(triggerElement);
+	});
+
+	test("keeps disclosure focus and row scrolling mobile-only after the desktop cutover", () => {
+		createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+		const rowElementByKeyRef = useRef.mock.results[0].value;
+		const disclosureElementByKeyRef = useRef.mock.results[1].value;
+		const rowElement = { scrollIntoView: jest.fn() };
+		const disclosureElement = { focus: jest.fn() };
+		rowElementByKeyRef.current.set("transport-layer", rowElement);
+		disclosureElementByKeyRef.current.set("transport-layer", disclosureElement);
+
+		const disclosureFocusEffect = useEffect.mock.calls[1][0];
+		disclosureFocusEffect();
+
+		expect(disclosureElement.focus).not.toHaveBeenCalled();
+		expect(rowElement.scrollIntoView).not.toHaveBeenCalled();
+	});
+
+	test("retains disclosure focus and row scrolling for the existing mobile expanded card", () => {
+		createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.MOBILE
+		});
+		const rowElementByKeyRef = useRef.mock.results[0].value;
+		const disclosureElementByKeyRef = useRef.mock.results[1].value;
+		const rowElement = { scrollIntoView: jest.fn() };
+		const disclosureElement = { focus: jest.fn() };
+		rowElementByKeyRef.current.set("transport-layer", rowElement);
+		disclosureElementByKeyRef.current.set("transport-layer", disclosureElement);
+
+		const disclosureFocusEffect = useEffect.mock.calls[1][0];
+		disclosureFocusEffect();
+
+		expect(disclosureElement.focus).toHaveBeenCalledWith({ preventScroll: true });
+		expect(rowElement.scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "nearest" });
+	});
+
+	test("moves focus to the new detail title after internal desktop navigation", () => {
+		createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+		const titleFocusRequestRef = useRef.mock.results[3].value;
+		const titleElementRef = useRef.mock.results[5].value;
+		const titleElement = { focus: jest.fn() };
+		titleFocusRequestRef.current = "transport-layer";
+		titleElementRef.current = titleElement;
+
+		const titleFocusEffect = useEffect.mock.calls[2][0];
+		titleFocusEffect();
+
+		expect(titleElement.focus).toHaveBeenCalledWith({ preventScroll: true });
+		expect(titleFocusRequestRef.current).toBeNull();
+	});
+
+	test("does not restore a desktop trigger when final focus resolves outside desktop mode", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.MOBILE
+		});
+		const triggerElement = { focus: jest.fn() };
+		viewModel.openGlossaryDetailFromTable("transport-layer");
+		viewModel.registerGlossaryDetailTriggerElement("transport-layer", triggerElement);
+
+		expect(viewModel.glossaryDetailModal.finalFocus()).toBe(false);
+	});
+
+	test("uses false instead of default focus restoration when the origin trigger is unavailable", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+		viewModel.openGlossaryDetailFromTable("transport-layer");
+
+		expect(viewModel.glossaryDetailModal.finalFocus()).toBe(false);
+	});
+
+	test("routes controlled dialog close requests through the ViewModel and clears origin after completion", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			glossaryDetailTrailKeys: ["packet"]
+		});
+		const originRef = useRef.mock.results[2].value;
+		viewModel.openGlossaryDetailFromTable("transport-layer");
+		clearStateSetterCalls();
+
+		viewModel.glossaryDetailModal.onOpenChange(true);
+		expect(stateSetters[6]).not.toHaveBeenCalled();
+
+		viewModel.glossaryDetailModal.onOpenChange(false);
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith(null);
+		expect(originRef.current).toBe("transport-layer");
+
+		viewModel.glossaryDetailModal.onOpenChangeComplete(false);
+		expect(originRef.current).toBeNull();
+	});
+
+	test("retains the latest open detail presentation as the modal close snapshot", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+
+		expect(viewModel.glossaryDetailPresentation.isInteractive).toBe(true);
+		expect(stateSetters[10]).toHaveBeenCalledWith(viewModel.glossaryDetailPresentation);
+	});
+
+	test("renders a retained close snapshot as noninteractive content while the modal is closed", () => {
+		const retainedPresentation = {
+			isInteractive: true,
+			header: { title: "HMAC" }
+		};
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: null,
+			glossaryDetailRenderSnapshot: retainedPresentation,
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+
+		expect(viewModel.glossaryDetailModal.isOpen).toBe(false);
+		expect(viewModel.glossaryDetailModal.content).toEqual({
+			...retainedPresentation,
+			isInteractive: false
+		});
+	});
+
+	test("clears the retained close snapshot only after the dialog close transition completes", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			presentationMode: PRESENTATION_MODE.DESKTOP
+		});
+		clearStateSetterCalls();
+
+		viewModel.glossaryDetailModal.onOpenChange(false);
+		expect(stateSetters[10]).not.toHaveBeenCalledWith(null);
+
+		viewModel.glossaryDetailModal.onOpenChangeComplete(false);
+		expect(stateSetters[10]).toHaveBeenCalledWith(null);
+	});
+
+	test("binds modal-local graph, association, trail and sequence interactions without mutating page context", () => {
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			glossaryDetailTrailKeys: ["public-key"],
+			loadedNetwork: {
+				subjectId: "in2120",
+				center: glossaryEntries[0],
+				nodes: [glossaryEntries[2]],
+				relations: [],
+				limit: 8,
+				depth: 1
+			}
+		});
+
+		expect(viewModel.glossaryDetailPresentation).toMatchObject({
+			header: {
+				title: "Transportlag",
+				trailBack: {
+					targetGlossaryEntryKey: "public-key",
+					onActivate: expect.any(Function)
+				}
+			},
+			network: {
+				display: {
+				kind: "content",
+					model: {
+						nodes: [{ glossaryEntryKey: "packet", onActivate: expect.any(Function) }]
+					}
+				}
+			},
+			associations: {
+				items: expect.arrayContaining([
+					expect.objectContaining({ glossaryEntryKey: "public-key", onActivate: expect.any(Function) })
+				])
+			},
+			navigation: {
+				previous: expect.objectContaining({ onActivate: expect.any(Function) }),
+				next: expect.objectContaining({ onActivate: expect.any(Function) })
+			}
+		});
+
+		clearStateSetterCalls();
+		viewModel.glossaryDetailPresentation.network.display.model.nodes[0].onActivate();
+		expect(stateSetters[9]).toHaveBeenCalledWith(expect.any(Function));
+		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
+		expect(stateSetters[0]).not.toHaveBeenCalled();
+		expect(stateSetters[1]).not.toHaveBeenCalled();
+		expect(stateSetters[5]).not.toHaveBeenCalled();
+		expect(stateSetters[7]).not.toHaveBeenCalled();
+
+		clearStateSetterCalls();
+		const publicKeyAssociation = viewModel.glossaryDetailPresentation.associations.items.find((item) => item.glossaryEntryKey === "public-key");
+		publicKeyAssociation.onActivate();
+		expect(stateSetters[9]).toHaveBeenCalledWith(expect.any(Function));
+		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+
+		clearStateSetterCalls();
+		viewModel.glossaryDetailPresentation.header.trailBack.onActivate();
+		expect(stateSetters[9]).toHaveBeenCalledWith(expect.any(Function));
+		expect(stateSetters[6]).toHaveBeenCalledWith("public-key");
+
+		clearStateSetterCalls();
+		viewModel.glossaryDetailPresentation.navigation.previous.onActivate();
+		expect(stateSetters[9]).toHaveBeenCalledWith([]);
+		expect(stateSetters[6]).toHaveBeenCalledWith("packet");
 	});
 
 	test("owns mobile chapter-sheet open state in GlossaryPageViewModel", () => {

@@ -1,0 +1,56 @@
+/* src/ui/style/GlossaryPage/importance-bars.css */
+.glossary-importance-bars {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 28px;
+}
+
+.glossary-importance-bars__visual {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.glossary-importance-bars__value {
+	min-width: 18px;
+	color: var(--text-main);
+	font-size: 15px;
+	font-weight: 800;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+	text-align: right;
+}
+
+.glossary-importance-bars__meter {
+	display: inline-flex;
+	height: 14px;
+	align-items: flex-end;
+	gap: 3px;
+}
+
+.glossary-importance-bars__bar {
+	width: 4px;
+	border-radius: 2px;
+	background: var(--line);
+}
+
+.glossary-importance-bars__bar:nth-child(1) {
+	height: 5px;
+}
+
+.glossary-importance-bars__bar:nth-child(2) {
+	height: 8px;
+}
+
+.glossary-importance-bars__bar:nth-child(3) {
+	height: 11px;
+}
+
+.glossary-importance-bars__bar:nth-child(4) {
+	height: 14px;
+}
+
+.glossary-importance-bars__bar--filled {
+	background: var(--accent);
+}

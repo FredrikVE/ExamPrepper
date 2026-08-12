@@ -1,0 +1,162 @@
+/* src/ui/style/GlossaryPage/DetailModal/modal-content.css */
+.glossary-detail-modal__sheet {
+	display: flex;
+	min-height: 0;
+	flex: 1;
+	flex-direction: column;
+}
+
+.glossary-detail-modal__header {
+	display: flex;
+	flex: none;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--space-6);
+	padding: 24px 26px 20px;
+	border-bottom: 1px solid var(--line);
+}
+
+.glossary-detail-modal__header-main {
+	min-width: 0;
+}
+
+.glossary-detail-modal__trail-back {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	margin: 0 0 8px;
+	padding: 4px 7px;
+	border: 0;
+	border-radius: var(--radius-xs);
+	color: var(--accent);
+	background: transparent;
+	font: inherit;
+	font-size: 13px;
+	font-weight: 750;
+	cursor: pointer;
+}
+
+.glossary-detail-modal__trail-back:hover {
+	background: var(--accent-soft);
+}
+
+.glossary-detail-modal__trail-back:focus-visible,
+.glossary-detail-modal__close:focus-visible,
+.glossary-detail-modal__association:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+}
+
+.glossary-detail-modal__title {
+	margin: 0;
+	color: var(--text-main);
+	font-size: clamp(26px, 3vw, 38px);
+	font-weight: 900;
+	line-height: 1.08;
+	letter-spacing: -0.035em;
+}
+
+.glossary-detail-modal__subtitle {
+	margin: 8px 0 0;
+	color: var(--text-muted);
+	font-size: 14px;
+	font-weight: 650;
+	line-height: 1.4;
+}
+
+.glossary-detail-modal__close {
+	display: grid;
+	width: 42px;
+	height: 42px;
+	flex: none;
+	place-items: center;
+	padding: 0;
+	border: 1px solid var(--button-secondary-border);
+	border-radius: var(--radius-sm);
+	color: var(--button-secondary-icon);
+	background: var(--button-secondary-bg);
+	cursor: pointer;
+}
+
+.glossary-detail-modal__close:hover {
+	border-color: var(--button-secondary-border-hover);
+	background: var(--button-secondary-bg-hover);
+}
+
+.glossary-detail-modal__body {
+	display: grid;
+	min-height: 0;
+	flex: 1;
+	gap: 28px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding: 26px;
+}
+
+.glossary-detail-modal__section-heading {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	margin: 0 0 12px;
+	color: var(--text-main);
+	font-size: 17px;
+	font-weight: 850;
+	line-height: 1.25;
+}
+
+.glossary-detail-modal__section-heading svg {
+	color: var(--accent);
+}
+
+.glossary-detail-modal__explanation-content {
+	padding: 18px 20px;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	color: var(--text-main);
+	background: var(--panel-bg);
+	font-size: 16px;
+	line-height: 1.65;
+}
+
+.glossary-detail-modal__network {
+	min-width: 0;
+}
+
+.glossary-detail-modal__network--status {
+	padding: 18px 20px;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	background: var(--panel-bg);
+}
+
+.glossary-detail-modal__network--status p,
+.glossary-detail-modal__associations-empty {
+	margin: 0;
+	color: var(--text-muted);
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.glossary-detail-modal__association-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.glossary-detail-modal__association {
+	min-height: 36px;
+	padding: 7px 12px;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-full);
+	color: var(--text-main);
+	background: var(--panel-bg);
+	font: inherit;
+	font-size: 13px;
+	font-weight: 720;
+	cursor: pointer;
+}
+
+.glossary-detail-modal__association:hover {
+	border-color: var(--button-secondary-border-hover);
+	background: var(--accent-soft);
+}

@@ -9,7 +9,6 @@ const GLOSSARY_VIEWMODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPageViewM
 const GLOSSARY_PANEL_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryPanel.jsx");
 const GLOSSARY_TABLE_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTable.jsx");
 const GLOSSARY_TABLE_ROW_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableRow.jsx");
-const GLOSSARY_TABLE_DETAILS_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableDetails.jsx");
 const GLOSSARY_ENTRY_DETAILS_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryEntryDetails.jsx");
 const GLOSSARY_ENTRY_CARD_LIST_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryEntryCardList.jsx");
 const GLOSSARY_MOBILE_CHAPTER_SHEET_PATH = path.resolve("src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx");
@@ -42,6 +41,7 @@ describe("Glossary React architecture", () => {
 	});
 
 	test("keeps GlossaryPage-specific UI mechanics in GlossaryPageViewModel", () => {
+		const pageSource = readSource(GLOSSARY_PAGE_PATH);
 		const viewModelSource = readSource(GLOSSARY_VIEWMODEL_PATH);
 
 		for (const filePath of collectJsxFiles(GLOSSARY_COMPONENT_DIRECTORY)) {
@@ -51,13 +51,20 @@ describe("Glossary React architecture", () => {
 
 		expect(viewModelSource).toContain("const [expandedGlossaryEntryKey, setExpandedGlossaryEntryKey] = useState(null)");
 		expect(viewModelSource).toContain("const [isMobileChapterSheetOpen, setIsMobileChapterSheetOpen] = useState(false)");
+		expect(viewModelSource).toContain("const [glossaryDetailRenderSnapshot, setGlossaryDetailRenderSnapshot] = useState(null)");
 		expect(viewModelSource).toContain("const glossaryRowElementByKey = useRef(new Map())");
 		expect(viewModelSource).toContain("const glossaryDisclosureElementByKey = useRef(new Map())");
+		expect(viewModelSource).toContain("const glossaryDetailTitleElementRef = useRef(null)");
+		expect(viewModelSource).toContain("const glossaryDetailTriggerElementByKey = useRef(new Map())");
 		expect(viewModelSource).toContain("event.stopPropagation()");
 		expect(viewModelSource).toContain("event.preventDefault()");
 		expect(viewModelSource).toContain('event.key !== "Escape"');
 		expect(viewModelSource).toContain("scrollIntoView");
 		expect(viewModelSource).toContain("focus({ preventScroll: true })");
+		expect(viewModelSource).toContain("const presentationMode = usePresentationMode()");
+		expect(viewModelSource).toContain("if (presentationMode !== PRESENTATION_MODE.MOBILE)");
+		expect(viewModelSource).toContain("return false;");
+		expect(pageSource).not.toContain("usePresentationMode");
 	});
 
 	test("renders table rows from prepared callbacks instead of local interaction policy", () => {
@@ -69,8 +76,10 @@ describe("Glossary React architecture", () => {
 		expect(tableSource).not.toContain("GLOSSARY_TABLE_SORT_DIRECTIONS");
 		expect(tableSource).not.toContain("onSort(");
 		expect(rowSource).toContain("onClick={row.onActivate}");
-		expect(rowSource).toContain("onClick={row.disclosure.onActivate}");
-		expect(rowSource).toContain("onKeyDown={row.disclosure.onKeyDown}");
+		expect(rowSource).toContain("onClick={row.detailTrigger.onActivate}");
+		expect(rowSource).toContain("ref={row.detailTrigger.ref}");
+		expect(rowSource).toContain('aria-haspopup="dialog"');
+		expect(rowSource).not.toContain("row.disclosure");
 		expect(rowSource).not.toMatch(/stopPropagation|preventDefault|event\.key|toggleNetwork/);
 		expect(cardSource).toContain("onClick={row.mobileDisclosure.onActivate}");
 		expect(cardSource).toContain("onKeyDown={row.mobileDisclosure.onKeyDown}");
@@ -80,13 +89,12 @@ describe("Glossary React architecture", () => {
 		expect(topicAreaButtonSource).not.toContain("onSelectTopicArea");
 	});
 
-	test("renders the same prepared detail model inside the expanded mobile card", () => {
+	test("keeps the prepared inline detail model only for the existing mobile expanded card", () => {
 		const panelSource = readSource(GLOSSARY_PANEL_PATH);
-		const tableDetailsSource = readSource(GLOSSARY_TABLE_DETAILS_PATH);
 		const entryDetailsSource = readSource(GLOSSARY_ENTRY_DETAILS_PATH);
 		const cardSource = readSource(GLOSSARY_ENTRY_CARD_LIST_PATH);
 
-		expect(tableDetailsSource).toContain("<GlossaryEntryDetails details={details} />");
+		expect(fs.existsSync(path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableDetails.jsx"))).toBe(false);
 		expect(cardSource).toContain("<GlossaryEntryDetails details={row.details} />");
 		expect(cardSource).toContain("aria-controls={row.mobileDisclosure.controlsId}");
 		expect(cardSource).toContain("id={row.details.id}");
@@ -95,17 +103,36 @@ describe("Glossary React architecture", () => {
 		expect(panelSource).not.toContain("networkDisplay");
 	});
 
-	test("renders the network inline as a React detail row", () => {
+	test("cuts desktop detail rendering over from inline rows to the modal sheet", () => {
+		const pageSource = readSource(GLOSSARY_PAGE_PATH);
 		const tableSource = readSource(GLOSSARY_TABLE_PATH);
-		const panelSource = readSource(GLOSSARY_PANEL_PATH);
 		const rowSource = readSource(GLOSSARY_TABLE_ROW_PATH);
 
-		expect(tableSource).toContain("<GlossaryTableDetails");
-		expect(tableSource).toContain("details={row.details}");
-		expect(panelSource).not.toContain("glossary-panel__content--network-open");
-		expect(rowSource).toContain("aria-expanded={row.disclosure.ariaExpanded}");
-		expect(rowSource).toContain("aria-controls={row.disclosure.controlsId}");
+		expect(pageSource).toContain("<GlossaryDetailModal model={viewModel.glossaryDetailModal} />");
+		expect(tableSource).not.toContain("GlossaryTableDetails");
+		expect(tableSource).not.toContain("row.details");
+		expect(rowSource).toContain("<ImportanceBars model={row.importance} />");
+		expect(rowSource).toContain('className="glossary-table__detail-trigger"');
+		expect(rowSource).not.toContain("aria-expanded");
+		expect(rowSource).not.toContain("aria-controls");
 		expect(rowSource).not.toContain("MasteryEvidenceSummary");
+	});
+
+	test("locks the desktop modal cutover without Search or visualization-library creep", () => {
+		const pageSource = readSource(GLOSSARY_PAGE_PATH);
+		const viewModelSource = readSource(GLOSSARY_VIEWMODEL_PATH);
+		const glossarySources = [pageSource, viewModelSource];
+
+		for (const filePath of collectJsxFiles(GLOSSARY_COMPONENT_DIRECTORY)) {
+			glossarySources.push(readSource(filePath));
+		}
+
+		const combinedSource = glossarySources.join("\n");
+		expect(pageSource).toContain("<GlossaryDetailModal model={viewModel.glossaryDetailModal} />");
+		expect(viewModelSource).toContain("presentationMode === PRESENTATION_MODE.DESKTOP && expandedGlossaryEntryKey !== null");
+		expect(viewModelSource).not.toMatch(/useState\([^\n]*isModalOpen|setIsModalOpen|ModalManager|GlossaryModalContext|ModalService/);
+		expect(viewModelSource).not.toContain("glossarySearchScope");
+		expect(combinedSource).not.toMatch(/ReactFlow|react-flow|reactflow|Recharts|recharts/);
 	});
 
 	test("keeps graph-node activation prepared by the ViewModel", () => {

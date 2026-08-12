@@ -11,7 +11,7 @@ export default function ConceptNetwork({ model, title, instructions, centerLabel
 			<header className="concept-network__header">
 				<div>
 					<h3 id={`concept-network-title-${model.center.glossaryEntryKey}`}>{title}</h3>
-					<p>{instructions}</p>
+					{instructions !== null ? <p>{instructions}</p> : null}
 				</div>
 			</header>
 

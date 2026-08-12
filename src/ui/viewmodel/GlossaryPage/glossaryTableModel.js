@@ -11,6 +11,8 @@ export const GLOSSARY_TABLE_SORT_DIRECTIONS = Object.freeze({
 	DESCENDING: "DESCENDING"
 });
 
+const GLOSSARY_IMPORTANCE_MAX_LEVEL = 4;
+
 export function createGlossaryTableRows({ localizedEntries, localizedEntryByKey, topicAreaReferenceByKey, expandedGlossaryEntryKey, networkDisplay, t }) {
 	return localizedEntries.map((localizedEntry) => {
 		const isExpanded = localizedEntry.glossaryEntryKey === expandedGlossaryEntryKey;
@@ -28,12 +30,17 @@ export function createGlossaryTableRows({ localizedEntries, localizedEntryByKey,
 			explanation: localizedEntry.explanation,
 			directNeighborCount: localizedEntry.directNeighborCount,
 			directNeighborGlossaryKeys: localizedEntry.directNeighborGlossaryKeys,
+			importance: createGlossaryImportancePresentation({
+				directNeighborCount: localizedEntry.directNeighborCount,
+				ariaLabel: associationLabel
+			}),
 			directNeighbors,
 			isExpanded,
 			detailsId,
 			disclosureLabel: isExpanded
 				? t.glossaryPageHideAssociationsLabel(associationLabel, localizedEntry.term)
 				: t.glossaryPageShowAssociationsLabel(associationLabel, localizedEntry.term),
+			detailTriggerLabel: t.glossaryPageOpenDetailLabel(localizedEntry.term),
 			details: isExpanded
 				? createGlossaryTableDetailsPresentation({
 					detailsId,
@@ -44,6 +51,34 @@ export function createGlossaryTableRows({ localizedEntries, localizedEntryByKey,
 				: null
 		};
 	});
+}
+
+function createGlossaryImportancePresentation({ directNeighborCount, ariaLabel }) {
+	return {
+		value: directNeighborCount,
+		level: getGlossaryImportanceLevel(directNeighborCount),
+		ariaLabel
+	};
+}
+
+function getGlossaryImportanceLevel(directNeighborCount) {
+	if (directNeighborCount === 0) {
+		return 0;
+	}
+
+	if (directNeighborCount === 1) {
+		return 1;
+	}
+
+	if (directNeighborCount <= 3) {
+		return 2;
+	}
+
+	if (directNeighborCount <= 5) {
+		return 3;
+	}
+
+	return GLOSSARY_IMPORTANCE_MAX_LEVEL;
 }
 
 export function sortGlossaryTableRows({ rows, sortKey, sortDirection, language }) {

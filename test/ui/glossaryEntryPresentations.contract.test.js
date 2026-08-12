@@ -50,7 +50,8 @@ describe("GlossaryEntry presentation contract", () => {
 				glossaryPageSingleAssociationLabel: "1 assosiert begrep",
 				glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
 				glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
-				glossaryPageHideAssociationsLabel: (label, term) => `Skjul ${label} for ${term}`
+				glossaryPageHideAssociationsLabel: (label, term) => `Skjul ${label} for ${term}`,
+				glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`
 			}
 		})[0];
 

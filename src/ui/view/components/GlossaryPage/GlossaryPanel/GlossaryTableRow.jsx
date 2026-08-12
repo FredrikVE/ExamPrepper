@@ -1,6 +1,7 @@
 // src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableRow.jsx
 import { ChevronDown } from "lucide-react";
 import FormattedText from "../../Shared/FormattedText.jsx";
+import ImportanceBars from "./ImportanceBars.jsx";
 
 export default function GlossaryTableRow({ row }) {
 	return (
@@ -11,22 +12,20 @@ export default function GlossaryTableRow({ row }) {
 			</th>
 			<td className="glossary-table__explanation-cell">
 				<FormattedText text={row.explanation} />
-			</td>
-			<td className="glossary-table__importance-cell">
 				<button
 					type="button"
-					className={row.disclosure.className}
-					aria-expanded={row.disclosure.ariaExpanded}
-					aria-controls={row.disclosure.controlsId}
-					aria-label={row.disclosure.label}
-					title={row.disclosure.label}
-					onClick={row.disclosure.onActivate}
-					onKeyDown={row.disclosure.onKeyDown}
-					ref={row.disclosure.ref}
+					className="glossary-table__detail-trigger"
+					aria-haspopup="dialog"
+					aria-label={row.detailTrigger.label}
+					title={row.detailTrigger.label}
+					onClick={row.detailTrigger.onActivate}
+					ref={row.detailTrigger.ref}
 				>
-					<span className="glossary-table__importance-count" aria-hidden="true">{row.disclosure.count}</span>
-					<ChevronDown className="glossary-table__importance-chevron" size={20} strokeWidth={2} aria-hidden="true" />
+					<ChevronDown size={19} strokeWidth={2.25} aria-hidden="true" />
 				</button>
+			</td>
+			<td className="glossary-table__importance-cell">
+				<ImportanceBars model={row.importance} />
 			</td>
 		</tr>
 	);

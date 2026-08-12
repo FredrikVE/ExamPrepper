@@ -1,6 +1,6 @@
 // src/ui/view/pages/GlossaryPage.jsx
 import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
-import usePresentationMode from "../../presentation/usePresentationMode.js";
+import GlossaryDetailModal from "../components/GlossaryPage/DetailModal/GlossaryDetailModal.jsx";
 import GlossaryFooter from "../components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx";
 import GlossaryPanel from "../components/GlossaryPage/GlossaryPanel/GlossaryPanel.jsx";
 import TopicAreaPanel from "../components/GlossaryPage/TopicAreaPanel/TopicAreaPanel.jsx";
@@ -15,8 +15,7 @@ import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKe
 export default function GlossaryPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.isSearchPopupOpen, viewModel.closeGlossarySearchPopup);
 
-	const presentationMode = usePresentationMode();
-	const isMobile = presentationMode === PRESENTATION_MODE.MOBILE;
+	const isMobile = viewModel.presentationMode === PRESENTATION_MODE.MOBILE;
 
 	const header = (
 		<Header
@@ -81,55 +80,59 @@ export default function GlossaryPage({ viewModel }) {
 	);
 
 	return (
-		<WorkspaceScaffold
-			className="learning-content-workspace glossary-workspace"
-			header={header}
-			footer={footer}
-			overlay={overlay}
-			scrollToTopRequestId={null}
-		>
-			<section className="glossary-page" aria-labelledby="glossary-page-title">
-				<LearningContentHeader
-					title={viewModel.pageTitle}
-					subtitle={viewModel.pageSubtitle}
-					titleId="glossary-page-title"
-					entries={viewModel.contentToggleEntries}
-					activeEntryId={viewModel.activeContentType}
-					mobileActiveEntryId={viewModel.mobileActiveEntryId}
-					onSelectEntry={viewModel.selectContentType}
-					ariaLabel={viewModel.contentToggleAriaLabel}
-					mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
-					expandedMobileToggleButtonGroupId={viewModel.expandedMobileToggleButtonGroupId}
-					onOpenMobileToggleButtonGroup={viewModel.openMobileToggleButtonGroup}
-					onCloseMobileToggleButtonGroup={viewModel.closeMobileToggleButtonGroup}
-					contentToggleBackLabel={viewModel.contentToggleBackLabel}
-				/>
+		<>
+			<WorkspaceScaffold
+				className="learning-content-workspace glossary-workspace"
+				header={header}
+				footer={footer}
+				overlay={overlay}
+				scrollToTopRequestId={null}
+			>
+				<section className="glossary-page" aria-labelledby="glossary-page-title">
+					<LearningContentHeader
+						title={viewModel.pageTitle}
+						subtitle={viewModel.pageSubtitle}
+						titleId="glossary-page-title"
+						entries={viewModel.contentToggleEntries}
+						activeEntryId={viewModel.activeContentType}
+						mobileActiveEntryId={viewModel.mobileActiveEntryId}
+						onSelectEntry={viewModel.selectContentType}
+						ariaLabel={viewModel.contentToggleAriaLabel}
+						mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
+						expandedMobileToggleButtonGroupId={viewModel.expandedMobileToggleButtonGroupId}
+						onOpenMobileToggleButtonGroup={viewModel.openMobileToggleButtonGroup}
+						onCloseMobileToggleButtonGroup={viewModel.closeMobileToggleButtonGroup}
+						contentToggleBackLabel={viewModel.contentToggleBackLabel}
+					/>
 
-				<div className="glossary-page__content">
-					<WorkspaceState state={viewModel.workspaceState}>
-						<>
-							{!isMobile && (
-								<TopicAreaPanel
-									allTopicAreaListItem={viewModel.allTopicAreaListItem}
-									topicAreaListItems={viewModel.topicAreaListItems}
-									topicAreaListAriaLabel={viewModel.pageTitle}
+					<div className="glossary-page__content">
+						<WorkspaceState state={viewModel.workspaceState}>
+							<>
+								{!isMobile && (
+									<TopicAreaPanel
+										allTopicAreaListItem={viewModel.allTopicAreaListItem}
+										topicAreaListItems={viewModel.topicAreaListItems}
+										topicAreaListAriaLabel={viewModel.pageTitle}
+									/>
+								)}
+
+								<GlossaryPanel
+									heading={viewModel.glossaryPanelHeading}
+									rows={viewModel.glossaryTableRows}
+									tableHeaders={viewModel.glossaryTableHeaders}
+									termColumnHeader={viewModel.termColumnHeader}
+									explanationColumnHeader={viewModel.explanationColumnHeader}
+									importanceColumnHeader={viewModel.importanceColumnHeader}
+									emptyState={viewModel.glossaryPanelEmptyState}
+									isMobile={isMobile}
 								/>
-							)}
+							</>
+						</WorkspaceState>
+					</div>
+				</section>
+			</WorkspaceScaffold>
 
-							<GlossaryPanel
-								heading={viewModel.glossaryPanelHeading}
-								rows={viewModel.glossaryTableRows}
-								tableHeaders={viewModel.glossaryTableHeaders}
-								termColumnHeader={viewModel.termColumnHeader}
-								explanationColumnHeader={viewModel.explanationColumnHeader}
-								importanceColumnHeader={viewModel.importanceColumnHeader}
-								emptyState={viewModel.glossaryPanelEmptyState}
-								isMobile={isMobile}
-							/>
-						</>
-					</WorkspaceState>
-				</div>
-			</section>
-		</WorkspaceScaffold>
+			<GlossaryDetailModal model={viewModel.glossaryDetailModal} />
+		</>
 	);
 }

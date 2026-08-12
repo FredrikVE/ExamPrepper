@@ -120,6 +120,22 @@ describe("Glossary desktop panel layout", () => {
 		expect(cell.padding).toBe("13px 16px");
 	});
 
+	test("positions the desktop detail trigger in explanation while importance stays a metric surface", () => {
+		const tableRoot = parseStyle(TABLE_STYLE_PATH);
+		const explanationCell = readDeclarations(tableRoot, ".glossary-table__explanation-cell");
+		const detailTrigger = readDeclarations(tableRoot, ".glossary-table__detail-trigger");
+		const importanceCell = readDeclarations(tableRoot, ".glossary-table__importance-cell");
+
+		expect(explanationCell.position).toBe("relative");
+		expect(explanationCell["padding-bottom"]).toBe("38px");
+		expect(detailTrigger.position).toBe("absolute");
+		expect(detailTrigger.left).toBe("50%");
+		expect(detailTrigger.bottom).toBe("3px");
+		expect(detailTrigger.width).toBe("44px");
+		expect(detailTrigger.height).toBe("32px");
+		expect(importanceCell["text-align"]).toBe("center");
+	});
+
 	test("keeps the mobile glossary surface unframed", () => {
 		const mobilePanel = readDeclarations(parseStyle(RESPONSIVE_STYLE_PATH), ".glossary-panel", "(max-width: 932px)");
 

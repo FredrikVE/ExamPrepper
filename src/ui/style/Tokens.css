@@ -31,6 +31,7 @@
     --shell-bg: rgba(255, 255, 255, 0.94);
     --panel-bg: rgba(255, 255, 255, 0.88);
     --panel-strong: #ffffff;
+	--modal-backdrop-bg: rgba(15, 23, 42, 0.62);
 	--workspace-ambient-glow:
 		radial-gradient(circle at 92% 12%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 22rem),
 		radial-gradient(circle at 46% 4%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 18rem);
@@ -230,6 +231,8 @@
     --z-navigation-panel: 90;
     --z-mobile-topbar: 100;
     --z-exam-submit-confirmation: 110;
+	--z-modal-backdrop: 120;
+	--z-modal-dialog: 121;
     --z-settings-dialog: 130;
 
     /* ── Mobile bottom sheet ──────────────────
@@ -255,6 +258,7 @@
     --shell-bg: rgba(4, 16, 31, 0.96);
     --panel-bg: rgba(7, 22, 42, 0.78);
     --panel-strong: rgba(8, 22, 40, 0.92);
+	--modal-backdrop-bg: rgba(2, 7, 17, 0.7);
 
     /* ── Shared dark-mode-ready component surfaces ─── */
     --feedback-explanation-correct-bg: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, var(--panel-strong)), color-mix(in srgb, var(--panel-bg) 88%, var(--panel-strong)));

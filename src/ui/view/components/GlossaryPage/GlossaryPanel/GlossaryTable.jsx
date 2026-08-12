@@ -1,7 +1,5 @@
 // src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTable.jsx
-import { Fragment } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import GlossaryTableDetails from "./GlossaryTableDetails.jsx";
 import GlossaryTableRow from "./GlossaryTableRow.jsx";
 
 const SORT_ICON_COMPONENT_BY_KIND = Object.freeze({
@@ -28,10 +26,7 @@ export default function GlossaryTable({ headers, rows }) {
 				</thead>
 				<tbody>
 					{rows.map((row) => (
-						<Fragment key={row.glossaryEntryKey}>
-							<GlossaryTableRow row={row} />
-							{row.details !== null ? <GlossaryTableDetails details={row.details} /> : null}
-						</Fragment>
+						<GlossaryTableRow key={row.glossaryEntryKey} row={row} />
 					))}
 				</tbody>
 			</table>
