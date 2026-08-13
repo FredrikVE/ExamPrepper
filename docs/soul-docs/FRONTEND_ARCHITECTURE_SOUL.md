@@ -264,6 +264,7 @@ blir mer kompleks.
 - Brukerpreferanser i `localStorage` er et eksplisitt Context-unntak, ikke en DataSource
 - Instansieres i `dependencies.js` — aldri andre steder
 - Felles HTTP-mekanikk arves fra `DataSource`
+- `ExamDataSource` og `ChapterTestDataSource` validerer den dokumenterte shared TestSet-shapen og sin egen scoped `testType` ved list/detail-boundaryen; kontraktbrudd kastes som teknisk DataSource-feil og filtreres eller normaliseres ikke bort
 
 ### 2. Repository-laget — `src/model/repositories/`
 
@@ -728,9 +729,11 @@ er en programmeringsfeil; stille fallback er forbudt.
 
 `NAV_ITEMS` eier data for sidebar, seks desktopoppføringer, mobile underoppføringer, mobilgrupper og pop-out-menyer. Menydata er ikke runtime-state. `toggleButtonItems` låser rekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`; `Læringsti` er deaktivert. `TEST_TYPES` eier `chapter-test` og `exam`; de to testoppføringene mapper begge til `LEARNING_CONTENT_TYPES.EXAMS`, og mobilgruppen gjenbruker dem. Glossarys dynamiske søk og kapittel-sheet hører fortsatt til Glossary-featuret, ikke til pop-out-registeret.
 
-### Testtypefilter i `LearningContentSelectPageViewModel`
+### Scoped TestSet-porter i `LearningContentSelectPageViewModel`
 
-`useLearningContentSelectPageViewModel()` eier `selectedTestType`. Den eksisterende `selectContentType()`-handleren resolver både vanlige innholdstyper og testtypeoppføringene fra `navigation.js`, uavhengig av om valget kommer fra desktop eller mobil. `filterExams()` er en ren avledning og mottar testtype som input; den skal ikke klassifisere fra tittel, ID eller `modeLabel`.
+`useLearningContentSelectPageViewModel()` eier `selectedTestType`. Den eksisterende `selectContentType()`-handleren resolver både vanlige innholdstyper og testtypeoppføringene fra `navigation.js`, uavhengig av om valget kommer fra desktop eller mobil. `selectedTestType` velger den eksplisitt injiserte Exam- eller ChapterTest-use-case-porten; ViewModelen klassifiserer ikke returnerte DTO-er.
+
+Backend eier ressursinvarianten: `/exams` returnerer bare Exams og `/chapter-tests` bare ChapterTests. Frontendens `ExamDataSource` og `ChapterTestDataSource` eier hver sin transportgrense og den delte DTO-shapen er dokumentert i `docs/architecture/SCOPED_TEST_SET_TRANSPORT_CONTRACT.md`. `filterTestSets()` eier bare lokal søk- og emneområdefiltrering etter at riktig scoped port er valgt.
 
 `activeContentType` er fortsatt teknisk innholdstype. ViewModelen avleder både `desktopActiveEntryId` og `mobileActiveEntryId` fra `activeContentType` og `selectedTestType`, slik at riktig testtype markeres på begge presentasjonsflater uten en ny runtime-eier. Fagvalg åpner `NAV_SCREENS.GLOSSARY`; dermed er `Begrepsliste` den første aktive desktopoppføringen etter at et fag er valgt.
 

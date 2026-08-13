@@ -1,16 +1,19 @@
 // src/model/datasource/ExamDataSource.js
 import DataSource from "./DataSource.js";
+import { validateExamTestSet, validateExamTestSetList } from "./validateScopedTestSetTransport.js";
 
 export default class ExamDataSource extends DataSource {
     #subjectsPath = "/subjects";
     #examsPath = "/exams";
 
     async fetchTestSetsBySubject({ subjectId, language } = {}) {
-        return await this.get(this.#buildSubjectExamsPath(subjectId, language));
+        const response = await this.get(this.#buildSubjectExamsPath(subjectId, language));
+        return validateExamTestSetList(response);
     }
 
     async fetchTestSetById(examId) {
-        return await this.get(`${this.#examsPath}/${encodeURIComponent(examId)}`);
+        const response = await this.get(`${this.#examsPath}/${encodeURIComponent(examId)}`);
+        return validateExamTestSet(response);
     }
 
     #buildSubjectExamsPath(subjectId, language) {

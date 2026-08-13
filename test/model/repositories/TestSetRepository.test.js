@@ -7,58 +7,69 @@ describe("TestSetRepository", () => {
     let questionDataSource;
     let repository;
 
-    const exams = [
+    const testSets = [
         {
             id: "exam-no",
             baseId: "exam",
             subjectId: "in5431",
+            testType: "exam",
             lang: "no",
             title: "Norsk eksamen",
             description: "Beskrivelse",
             modeLabel: "FULL ØVEKSAMEN",
-            testType: "exam",
             estimatedMinutes: "45–60",
-            duration: "2 timer",
-            durationMinutes: 120,
             sortOrder: 20,
             questionCount: 2,
-            questions: [{ id: 1 }, { id: 2 }]
+            topicAreaKeys: ["topic-a"]
         },
         {
             id: "exam-en",
             baseId: "exam",
             subjectId: "in5431",
+            testType: "exam",
             lang: "en",
             title: "English exam",
-            testType: "exam",
+            description: null,
+            modeLabel: null,
+            estimatedMinutes: null,
             sortOrder: 10,
             questionCount: 1,
-            questions: [{ id: 3 }]
+            topicAreaKeys: []
         },
         {
             id: "other-subject",
             baseId: "other",
             subjectId: "in2000",
+            testType: "exam",
             lang: "no",
             title: "Other exam",
+            description: null,
+            modeLabel: null,
+            estimatedMinutes: null,
             sortOrder: 30,
             questionCount: 7,
-            questions: []
+            topicAreaKeys: []
         }
     ];
+
+    const questionsByTestSetId = {
+        "exam-no": [{ id: 1 }, { id: 2 }],
+        "exam-en": [{ id: 3 }],
+        "other-subject": []
+    };
 
     beforeEach(() => {
         dataSource = {
             fetchTestSetsBySubject: jest.fn(({ subjectId, language }) => Promise.resolve(
-                exams.filter((exam) => exam.subjectId === subjectId && (!language || exam.lang === language))
+                testSets.filter((testSet) => testSet.subjectId === subjectId && (!language || testSet.lang === language))
             )),
             fetchTestSetById: jest.fn((testSetId) => Promise.resolve(
-                exams.find((exam) => exam.id === testSetId) ?? null
+                testSets.find((testSet) => testSet.id === testSetId) ?? null
             ))
         };
         questionDataSource = {
             fetchPracticeQuestions: jest.fn((testSetId) => Promise.resolve(
-                exams.find((exam) => exam.id === testSetId)?.questions ?? []
+                questionsByTestSetId[testSetId] ?? []
             ))
         };
 
@@ -101,7 +112,7 @@ describe("TestSetRepository", () => {
     test("retries scoped list requests after failures", async () => {
         dataSource.fetchTestSetsBySubject
             .mockRejectedValueOnce(new Error("network down"))
-            .mockResolvedValueOnce([exams[0]]);
+            .mockResolvedValueOnce([testSets[0]]);
 
         await expect(repository.getAvailableTestSets({ subjectId: "in5431", language: "no" }))
             .rejects.toThrow("network down");
@@ -130,15 +141,15 @@ describe("TestSetRepository", () => {
         const secondRequest = repository.getTestSetById("exam-no");
         expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(1);
 
-        deferredTestSet.resolve(exams[0]);
-        await expect(Promise.all([firstRequest, secondRequest])).resolves.toEqual([exams[0], exams[0]]);
+        deferredTestSet.resolve(testSets[0]);
+        await expect(Promise.all([firstRequest, secondRequest])).resolves.toEqual([testSets[0], testSets[0]]);
 
         dataSource.fetchTestSetById
             .mockRejectedValueOnce(new Error("detail failed"))
-            .mockResolvedValueOnce(exams[1]);
+            .mockResolvedValueOnce(testSets[1]);
 
         await expect(repository.getTestSetById("exam-en")).rejects.toThrow("detail failed");
-        await expect(repository.getTestSetById("exam-en")).resolves.toBe(exams[1]);
+        await expect(repository.getTestSetById("exam-en")).resolves.toBe(testSets[1]);
     });
 
     test("finds translated test set through the scoped subject-language cache", async () => {
@@ -148,7 +159,7 @@ describe("TestSetRepository", () => {
             subjectId: "in5431"
         });
 
-        expect(result).toBe(exams[1]);
+        expect(result).toBe(testSets[1]);
         expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledWith({
             subjectId: "in5431",
             language: "en"

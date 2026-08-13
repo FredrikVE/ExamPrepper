@@ -2,6 +2,21 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import ExamDataSource from "../../../src/model/datasource/ExamDataSource.js";
 
+const examDto = {
+    id: "exam-no",
+    baseId: "exam",
+    subjectId: "in2120",
+    testType: "exam",
+    lang: "no",
+    title: "Eksamen",
+    description: null,
+    modeLabel: null,
+    estimatedMinutes: null,
+    questionCount: 3,
+    sortOrder: 10,
+    topicAreaKeys: []
+};
+
 function createResponse(payload) {
     return {
         ok: true,
@@ -24,8 +39,8 @@ describe("ExamDataSource", () => {
 
     test("owns the Exam list and detail endpoints", async () => {
         global.fetch
-            .mockResolvedValueOnce(createResponse([{ id: "exam-no" }]))
-            .mockResolvedValueOnce(createResponse({ id: "exam-no" }));
+            .mockResolvedValueOnce(createResponse([examDto]))
+            .mockResolvedValueOnce(createResponse(examDto));
 
         const dataSource = new ExamDataSource({
             baseUrl: "https://api.example.test"
@@ -34,8 +49,8 @@ describe("ExamDataSource", () => {
         await expect(dataSource.fetchTestSetsBySubject({
             subjectId: "in2120",
             language: "no"
-        })).resolves.toEqual([{ id: "exam-no" }]);
-        await expect(dataSource.fetchTestSetById("exam/no")).resolves.toEqual({ id: "exam-no" });
+        })).resolves.toEqual([examDto]);
+        await expect(dataSource.fetchTestSetById("exam/no")).resolves.toEqual(examDto);
 
         expect(dataSource.fetchAllTestSets).toBeUndefined();
         expect(dataSource.fetchQuestions).toBeUndefined();

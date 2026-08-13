@@ -1,16 +1,19 @@
 // src/model/datasource/ChapterTestDataSource.js
 import DataSource from "./DataSource.js";
+import { validateChapterTest, validateChapterTestList } from "./validateScopedTestSetTransport.js";
 
 export default class ChapterTestDataSource extends DataSource {
     #subjectsPath = "/subjects";
     #chapterTestsPath = "/chapter-tests";
 
     async fetchTestSetsBySubject({ subjectId, language } = {}) {
-        return await this.get(this.#buildSubjectChapterTestsPath(subjectId, language));
+        const response = await this.get(this.#buildSubjectChapterTestsPath(subjectId, language));
+        return validateChapterTestList(response);
     }
 
     async fetchTestSetById(chapterTestId) {
-        return await this.get(`${this.#chapterTestsPath}/${encodeURIComponent(chapterTestId)}`);
+        const response = await this.get(`${this.#chapterTestsPath}/${encodeURIComponent(chapterTestId)}`);
+        return validateChapterTest(response);
     }
 
     #buildSubjectChapterTestsPath(subjectId, language) {

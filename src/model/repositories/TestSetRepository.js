@@ -250,11 +250,9 @@ export default class TestSetRepository {
             modeLabel: testSet.modeLabel,
             testType: testSet.testType ?? null,
             estimatedMinutes: testSet.estimatedMinutes,
-            duration: testSet.duration,
-            durationMinutes: testSet.durationMinutes,
             sortOrder: testSet.sortOrder,
-            questionCount: testSet.questionCount ?? testSet.questions?.length ?? 0,
-            topicAreaKeys: Array.isArray(testSet.topicAreaKeys) ? testSet.topicAreaKeys : []
+            questionCount: testSet.questionCount,
+            topicAreaKeys: [...testSet.topicAreaKeys]
         };
     }
 }
