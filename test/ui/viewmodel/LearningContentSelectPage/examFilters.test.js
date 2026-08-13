@@ -3,7 +3,8 @@ import { describe, expect, test } from "@jest/globals";
 import { TEST_TYPES } from "../../../../src/navigation/navigation.js";
 import {
 	ALL_TOPIC_AREAS,
-	filterExams
+	filterExams,
+	filterExamsByTestType
 } from "../../../../src/ui/viewmodel/LearningContentSelectPage/examFilters.js";
 
 const exams = [
@@ -37,6 +38,11 @@ const exams = [
 ];
 
 describe("filterExams", () => {
+
+	test("selects the active test type before search and topic filtering", () => {
+		expect(filterExamsByTestType(exams, TEST_TYPES.CHAPTER_TEST)
+			.map((exam) => exam.id)).toEqual(["chapter-security"]);
+	});
 	test("shows all tests when selectedTestType is null", () => {
 		expect(filterExams(exams, "", ALL_TOPIC_AREAS, null)).toHaveLength(4);
 	});

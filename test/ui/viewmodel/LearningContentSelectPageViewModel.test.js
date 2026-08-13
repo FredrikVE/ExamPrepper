@@ -68,6 +68,8 @@ function createT() {
 		selectEmptyMessage: "Ingen eksamener funnet",
 		selectChapterTestsEmptyTitle: "Ingen kapitteltester",
 		selectChapterTestsEmptyMessage: "Ingen kapitteltester funnet",
+		selectFilteredEmptyTitle: "Ingen treff",
+		selectFilteredEmptyMessage: "Prøv et annet søk eller fagområde",
 		selectPracticeExamLabel: "Øvingsprøve",
 		selectQuestionLabel: "spørsmål",
 		selectMinuteLabel: "min",
@@ -361,6 +363,67 @@ describe("useLearningContentSelectPageViewModel", () => {
 			kind: WORKSPACE_STATE_KINDS.EMPTY,
 			title: "Ingen kapitteltester",
 			body: "Ingen kapitteltester funnet",
+			action: null
+		});
+	});
+
+	test("shows filtered-empty copy when chapter tests exist but search has no matches", () => {
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()])
+			.mockImplementationOnce(() => [null, jest.fn()])
+			.mockImplementationOnce(() => ["finnes-ikke", jest.fn()]);
+
+		const { viewModel } = createViewModel({
+			exams: [
+				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: ["security"] }
+			]
+		});
+
+		expect(viewModel.visibleExams).toEqual([]);
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.EMPTY,
+			title: "Ingen treff",
+			body: "Prøv et annet søk eller fagområde",
+			action: null
+		});
+	});
+
+	test("shows filtered-empty copy when chapter tests exist but topic filter has no matches", () => {
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()])
+			.mockImplementationOnce(() => [null, jest.fn()])
+			.mockImplementationOnce(() => ["", jest.fn()])
+			.mockImplementationOnce(() => ["governance", jest.fn()]);
+
+		const { viewModel } = createViewModel({
+			exams: [
+				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: ["security"] }
+			]
+		});
+
+		expect(viewModel.visibleExams).toEqual([]);
+		expect(viewModel.workspaceState.title).toBe("Ingen treff");
+	});
+
+	test("keeps the genuine empty copy when the active test type has no content", () => {
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.EXAM, jest.fn()])
+			.mockImplementationOnce(() => [null, jest.fn()])
+			.mockImplementationOnce(() => ["kapittel", jest.fn()]);
+
+		const { viewModel } = createViewModel({
+			exams: [
+				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: [] }
+			]
+		});
+
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.EMPTY,
+			title: "Ingen eksamener",
+			body: "Ingen eksamener funnet",
 			action: null
 		});
 	});

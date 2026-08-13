@@ -6,7 +6,7 @@ import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel from "./Search/useSearchSheetModel.js";
 import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
 import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
-import { filterExams } from "./LearningContentSelectPage/examFilters.js";
+import { filterExams, filterExamsByTestType } from "./LearningContentSelectPage/examFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
@@ -177,6 +177,10 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		t
 	}), [activeContentType, contentToggleEntries, selectedTestType, t]);
 
+	const contentForActiveTestType = useMemo(() => {
+		return filterExamsByTestType(exams, selectedTestType);
+	}, [exams, selectedTestType]);
+
 	const visibleExams = useMemo(() => {
 		return filterExams(exams, searchTerm, topicAreaKey, selectedTestType);
 	}, [exams, searchTerm, selectedTestType, topicAreaKey]);
@@ -192,17 +196,26 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
 
 	const activeContentItems = isExamsContentActive ? visibleExams : visibleFlipcardDecks;
+	const isExamFilterActive = searchTerm.trim().length > 0 || topicAreaKey !== ALL_TOPIC_AREAS;
+	const isFilteredToNothing = isExamsContentActive
+		&& isExamFilterActive
+		&& contentForActiveTestType.length > 0
+		&& visibleExams.length === 0;
 	const activeEmptyTitle = isExamsContentActive
-		? selectedTestType === TEST_TYPES.CHAPTER_TEST
-			? t.selectChapterTestsEmptyTitle
-			: t.selectEmptyTitle
+		? isFilteredToNothing
+			? t.selectFilteredEmptyTitle
+			: selectedTestType === TEST_TYPES.CHAPTER_TEST
+				? t.selectChapterTestsEmptyTitle
+				: t.selectEmptyTitle
 		: isMatchCardsContentActive
 			? t.matchCardsDeckEmptyTitle
 			: t.deckEmptyTitle;
 	const activeEmptyBody = isExamsContentActive
-		? selectedTestType === TEST_TYPES.CHAPTER_TEST
-			? t.selectChapterTestsEmptyMessage
-			: t.selectEmptyMessage
+		? isFilteredToNothing
+			? t.selectFilteredEmptyMessage
+			: selectedTestType === TEST_TYPES.CHAPTER_TEST
+				? t.selectChapterTestsEmptyMessage
+				: t.selectEmptyMessage
 		: isMatchCardsContentActive
 			? t.matchCardsDeckEmptyMessage
 			: t.deckEmptyMessage;

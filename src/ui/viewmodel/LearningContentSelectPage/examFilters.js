@@ -4,14 +4,15 @@ import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js
 
 export { ALL_TOPIC_AREAS };
 
+export function filterExamsByTestType(exams, selectedTestType = null) {
+	return exams.filter((exam) => examMatchesTestType(exam, selectedTestType));
+}
+
 export function filterExams(exams, searchTerm, topicAreaKey, selectedTestType = null) {
 	const normalizedSearchTerm = normalizeSearchTerm(searchTerm);
 	const filteredExams = [];
 
-	for (const exam of exams) {
-		if (!examMatchesTestType(exam, selectedTestType)) {
-			continue;
-		}
+	for (const exam of filterExamsByTestType(exams, selectedTestType)) {
 
 		if (!examMatchesTopicArea(exam, topicAreaKey)) {
 			continue;
