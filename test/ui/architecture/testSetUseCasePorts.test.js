@@ -17,6 +17,14 @@ describe("test-set use-case ports", () => {
         expect(dependenciesSource).toContain("const getChapterTestByBaseIdAndLangUseCase = new GetTestSetByBaseIdAndLangUseCase(chapterTestRepository);");
     });
 
+    test("injects the explicit list ports into the learning-content ViewModel", () => {
+        const appSource = fs.readFileSync(path.resolve("src/App.jsx"), "utf8");
+
+        expect(appSource).toContain("useLearningContentSelectPageViewModel({");
+        expect(appSource).toContain("getAvailableExamsUseCase,\n\t\tgetAvailableChapterTestsUseCase,");
+        expect(appSource).toContain("onSelectTestSet: navigationViewModel.selectExam");
+    });
+
     test("does not keep Exam-named implementations for shared test-set reads", () => {
         const domainDirectory = path.resolve("src/model/domain");
         for (const filename of [

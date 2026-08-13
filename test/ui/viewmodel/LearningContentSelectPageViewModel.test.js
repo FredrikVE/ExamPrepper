@@ -23,9 +23,13 @@ const useEffect = jest.fn((effect) => {
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
 const useLoadModel = jest.fn((params) => {
-	params.execute();
+	const loadModel = loadModelQueue.shift();
 
-	return loadModelQueue.shift();
+	if (params.isEnabled) {
+		params.execute();
+	}
+
+	return loadModel;
 });
 
 jest.unstable_mockModule("react", () => ({
@@ -45,6 +49,7 @@ function createT() {
 	return {
 		sidebarBack: "Tilbake",
 		sidebarMobileNavigation: "Navigasjon",
+		errorPrefix: "Feil",
 		selectErrorMessage: "Kunne ikke hente eksamener",
 		selectSubtitleFallback: "Velg en øvingsprøve.",
 		selectSubtitle: (subjectCode) => `Velg en øvingsprøve for ${subjectCode}.`,
@@ -130,10 +135,30 @@ function createT() {
 
 function createViewModel(params = {}) {
 	loadModelQueue = [
-		{ status: LOAD_STATUS.READY, data: params.exams ?? [], error: null, reload: jest.fn() },
-		{ status: LOAD_STATUS.READY, data: params.chapterTests ?? [], error: null, reload: jest.fn() },
-		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() },
-		{ status: LOAD_STATUS.READY, data: [], error: null, reload: jest.fn() }
+		{
+			status: params.examLoadStatus ?? LOAD_STATUS.READY,
+			data: params.exams ?? [],
+			error: params.examLoadError ?? null,
+			reload: jest.fn()
+		},
+		{
+			status: params.chapterTestLoadStatus ?? LOAD_STATUS.READY,
+			data: params.chapterTests ?? [],
+			error: params.chapterTestLoadError ?? null,
+			reload: jest.fn()
+		},
+		{
+			status: params.topicAreaLoadStatus ?? LOAD_STATUS.READY,
+			data: params.topicAreas ?? [],
+			error: params.topicAreaLoadError ?? null,
+			reload: jest.fn()
+		},
+		{
+			status: params.flipcardDeckLoadStatus ?? LOAD_STATUS.READY,
+			data: params.flipcardDecks ?? [],
+			error: params.flipcardDeckLoadError ?? null,
+			reload: jest.fn()
+		}
 	];
 	const getAvailableExamsUseCase = {
 		execute: jest.fn().mockResolvedValue([])
@@ -149,7 +174,7 @@ function createViewModel(params = {}) {
 	};
 	const goBack = jest.fn();
 	const changeScreen = jest.fn();
-	const selectExam = jest.fn();
+	const onSelectTestSet = jest.fn();
 	const selectFlipcardDeck = jest.fn();
 	const selectMatchCardsDeck = jest.fn();
 
@@ -159,22 +184,22 @@ function createViewModel(params = {}) {
 		navigationLabel: params.navigationLabel ?? "Navigasjon",
 		onBack: goBack
 	};
-	const viewModel = useLearningContentSelectPageViewModel(
+	const viewModel = useLearningContentSelectPageViewModel({
 		getAvailableExamsUseCase,
 		getAvailableChapterTestsUseCase,
 		getTopicAreasUseCase,
 		getFlipcardDeckSummariesUseCase,
-		"nb",
-		createT(),
-		{ id: "in5431", code: "IN5431" },
-		selectExam,
-		selectFlipcardDeck,
-		selectMatchCardsDeck,
-		params.isActive ?? true,
-		changeScreen,
+		language: "nb",
+		t: createT(),
+		selectedSubject: { id: "in5431", code: "IN5431" },
+		onSelectTestSet,
+		onSelectFlipcardDeck: selectFlipcardDeck,
+		onSelectMatchCardsDeck: selectMatchCardsDeck,
+		isActive: params.isActive ?? true,
+		onChangeScreen: changeScreen,
 		backContract,
-		params.actionErrorMessage ?? null
-	);
+		actionErrorMessage: params.actionErrorMessage ?? null
+	});
 
 	return {
 		getAvailableExamsUseCase,
@@ -183,7 +208,7 @@ function createViewModel(params = {}) {
 		getFlipcardDeckSummariesUseCase,
 		goBack,
 		changeScreen,
-		selectExam,
+		onSelectTestSet,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
 		viewModel
@@ -209,8 +234,8 @@ describe("useLearningContentSelectPageViewModel", () => {
 		expect(getAvailableChapterTestsUseCase.execute).not.toHaveBeenCalled();
 	});
 
-	test("loads exams while the page is active", () => {
-		const { getAvailableExamsUseCase } = createViewModel({
+	test("loads only exams while the Exam test type is active", () => {
+		const { getAvailableExamsUseCase, getAvailableChapterTestsUseCase } = createViewModel({
 			isActive: true
 		});
 
@@ -218,13 +243,36 @@ describe("useLearningContentSelectPageViewModel", () => {
 			subjectId: "in5431",
 			language: "nb"
 		});
+		expect(getAvailableChapterTestsUseCase.execute).not.toHaveBeenCalled();
 	});
 
-	test("loads chapter tests through the explicit scoped port", () => {
-		const { getAvailableChapterTestsUseCase } = createViewModel({
+	test("does not load either test-set port while a deck content type is active", () => {
+		useState.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.FLIPCARDS, jest.fn()]);
+
+		const {
+			getAvailableExamsUseCase,
+			getAvailableChapterTestsUseCase,
+			getFlipcardDeckSummariesUseCase
+		} = createViewModel({ isActive: true });
+
+		expect(getAvailableExamsUseCase.execute).not.toHaveBeenCalled();
+		expect(getAvailableChapterTestsUseCase.execute).not.toHaveBeenCalled();
+		expect(getFlipcardDeckSummariesUseCase.execute).toHaveBeenCalledWith({
+			subjectId: "in5431",
+			language: "nb"
+		});
+	});
+
+	test("loads only chapter tests while the ChapterTest test type is active", () => {
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
+
+		const { getAvailableExamsUseCase, getAvailableChapterTestsUseCase } = createViewModel({
 			isActive: true
 		});
 
+		expect(getAvailableExamsUseCase.execute).not.toHaveBeenCalled();
 		expect(getAvailableChapterTestsUseCase.execute).toHaveBeenCalledWith({
 			subjectId: "in5431",
 			language: "nb"
@@ -322,7 +370,7 @@ describe("useLearningContentSelectPageViewModel", () => {
 		expect(viewModel.selectedTestType).toBe(TEST_TYPES.EXAM);
 		expect(viewModel.desktopActiveEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
 		expect(viewModel.mobileActiveEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
-		expect(viewModel.visibleExams.map((exam) => exam.id)).toEqual(["exam"]);
+		expect(viewModel.visibleTestSets.map((testSet) => testSet.id)).toEqual(["exam"]);
 	});
 
 	test("navigates through the enabled desktop learning-path entry", () => {
@@ -353,7 +401,7 @@ describe("useLearningContentSelectPageViewModel", () => {
 		expect(stateSetters[0]).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
 	});
 
-	test("filters visible exams by the selected mobile test type", () => {
+	test("uses the ChapterTest scoped load when the ChapterTest entry is active", () => {
 		useState
 			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
 			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
@@ -369,10 +417,10 @@ describe("useLearningContentSelectPageViewModel", () => {
 
 		expect(viewModel.desktopActiveEntryId).toBe(TEST_TYPES.CHAPTER_TEST);
 		expect(viewModel.mobileActiveEntryId).toBe(TEST_TYPES.CHAPTER_TEST);
-		expect(viewModel.visibleExams.map((exam) => exam.id)).toEqual(["chapter"]);
+		expect(viewModel.visibleTestSets.map((testSet) => testSet.id)).toEqual(["chapter"]);
 	});
 
-	test("does not source chapter tests from the legacy mixed exam catalog", () => {
+	test("does not source ChapterTests from the inactive Exam port", () => {
 		useState
 			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
 			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
@@ -383,7 +431,7 @@ describe("useLearningContentSelectPageViewModel", () => {
 			]
 		});
 
-		expect(viewModel.visibleExams).toEqual([]);
+		expect(viewModel.visibleTestSets).toEqual([]);
 	});
 
 	test("uses chapter-test heading and empty-state copy while the chapter button is active", () => {
@@ -416,7 +464,7 @@ describe("useLearningContentSelectPageViewModel", () => {
 			]
 		});
 
-		expect(viewModel.visibleExams).toEqual([]);
+		expect(viewModel.visibleTestSets).toEqual([]);
 		expect(viewModel.workspaceState).toEqual({
 			kind: WORKSPACE_STATE_KINDS.EMPTY,
 			title: "Ingen treff",
@@ -439,8 +487,37 @@ describe("useLearningContentSelectPageViewModel", () => {
 			]
 		});
 
-		expect(viewModel.visibleExams).toEqual([]);
+		expect(viewModel.visibleTestSets).toEqual([]);
 		expect(viewModel.workspaceState.title).toBe("Ingen treff");
+	});
+
+	test("ignores an inactive ChapterTest load error while Exams are active", () => {
+		const { viewModel } = createViewModel({
+			chapterTestLoadStatus: LOAD_STATUS.ERROR,
+			chapterTestLoadError: "Kapittelprøver feilet"
+		});
+
+		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.EMPTY);
+	});
+
+	test("uses the active ChapterTest load error in page status", () => {
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
+
+		const { viewModel } = createViewModel({
+			examLoadStatus: LOAD_STATUS.ERROR,
+			examLoadError: "Eksamen feilet",
+			chapterTestLoadStatus: LOAD_STATUS.ERROR,
+			chapterTestLoadError: "Kapittelprøver feilet"
+		});
+
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.ERROR,
+			title: "Feil",
+			body: "Kapittelprøver feilet",
+			action: null
+		});
 	});
 
 	test("keeps the genuine empty copy when the active test type has no content", () => {
@@ -536,15 +613,19 @@ describe("useLearningContentSelectPageViewModel", () => {
 		});
 	});
 	test("propagates the scoped test type when a chapter test is selected", () => {
-		const { selectExam, viewModel } = createViewModel({
+		useState
+			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
+			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
+
+		const { onSelectTestSet, viewModel } = createViewModel({
 			chapterTests: [
-				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: [] }
+				{ id: "chapter", title: "Kapittel", topicAreaKeys: [] }
 			]
 		});
 
-		viewModel.selectExam("chapter");
+		viewModel.selectTestSet("chapter");
 
-		expect(selectExam).toHaveBeenCalledWith("chapter", TEST_TYPES.CHAPTER_TEST);
+		expect(onSelectTestSet).toHaveBeenCalledWith("chapter", TEST_TYPES.CHAPTER_TEST);
 	});
 
 	test("selects a flipcard deck through the public ViewModel handler", () => {

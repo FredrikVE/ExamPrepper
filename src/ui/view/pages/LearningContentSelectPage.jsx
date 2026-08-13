@@ -4,7 +4,7 @@ import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerV
 import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
-import ExamGrid from "../components/LearningContentSelectPage/ExamGrid.jsx";
+import TestSetGrid from "../components/LearningContentSelectPage/TestSetGrid.jsx";
 import FlashcardDeckGrid from "../components/LearningContentSelectPage/FlashcardDeckGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
 import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
@@ -85,9 +85,9 @@ export default function LearningContentSelectPage({ viewModel }) {
 
 			<WorkspaceState state={viewModel.workspaceState}>
 				<>
-					{viewModel.isExamsContentActive && (
-						<ExamGrid
-							exams={viewModel.visibleExams}
+					{viewModel.isTestSetContentActive && (
+						<TestSetGrid
+							testSets={viewModel.visibleTestSets}
 							practiceExamLabel={viewModel.practiceExamLabel}
 							questionLabel={viewModel.questionLabel}
 							minuteLabel={viewModel.minuteLabel}
@@ -95,7 +95,7 @@ export default function LearningContentSelectPage({ viewModel }) {
 							addPlaceholderTitle={viewModel.addPlaceholderTitle}
 							addPlaceholderDescription={viewModel.addPlaceholderDescription}
 							addPlaceholderNote={viewModel.addPlaceholderNote}
-							onSelectExam={viewModel.selectExam}
+							onSelectTestSet={viewModel.selectTestSet}
 						/>
 					)}
 

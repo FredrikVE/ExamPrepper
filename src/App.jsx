@@ -104,22 +104,22 @@ function AppContent() {
 		navigationViewModel.backContract
 	);
 
-	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(
+	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel({
 		getAvailableExamsUseCase,
 		getAvailableChapterTestsUseCase,
 		getTopicAreasUseCase,
 		getFlipcardDeckSummariesUseCase,
 		language,
 		t,
-		subjectSelectPageViewModel.selectedSubject,
-		navigationViewModel.selectExam,
-		navigationViewModel.selectFlipcardDeck,
-		navigationViewModel.selectMatchCardsDeck,
-		navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
-		navigationViewModel.changeScreen,
-		navigationViewModel.backContract,
-		navigationViewModel.examLanguageSyncError
-	);
+		selectedSubject: subjectSelectPageViewModel.selectedSubject,
+		onSelectTestSet: navigationViewModel.selectExam,
+		onSelectFlipcardDeck: navigationViewModel.selectFlipcardDeck,
+		onSelectMatchCardsDeck: navigationViewModel.selectMatchCardsDeck,
+		isActive: navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
+		onChangeScreen: navigationViewModel.changeScreen,
+		backContract: navigationViewModel.backContract,
+		actionErrorMessage: navigationViewModel.examLanguageSyncError
+	});
 
 
 	return (
