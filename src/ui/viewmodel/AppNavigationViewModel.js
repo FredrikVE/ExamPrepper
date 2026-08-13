@@ -1,6 +1,6 @@
 //src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
-import { getScreenConfig, NAV_SCREENS } from "../../navigation/navigation.js";
+import { getScreenConfig, NAV_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
@@ -12,6 +12,7 @@ export default function useAppNavigationViewModel(params) {
 	const [selectedTopicAreaKey, setSelectedTopicAreaKey] = useState(null);
 	const [selectedLearningSessionId, setSelectedLearningSessionId] = useState(null);
 	const [examLanguageSyncError, setExamLanguageSyncError] = useState(null);
+	const [selectedExamTestType, setSelectedExamTestType] = useState(null);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
@@ -35,6 +36,7 @@ export default function useAppNavigationViewModel(params) {
 		setActiveScreen(NAV_SCREENS.SUBJECTS);
 		setSelectedSubjectId(null);
 		setSelectedExamId(null);
+		setSelectedExamTestType(null);
 		setSelectedTopicAreaKey(null);
 		setSelectedLearningSessionId(null);
 		closeNavigationOverlays();
@@ -61,6 +63,7 @@ export default function useAppNavigationViewModel(params) {
 
 		if (nextScreen !== NAV_SCREENS.EXAM) {
 			setSelectedExamId(null);
+			setSelectedExamTestType(null);
 		}
 
 		if (nextScreen !== NAV_SCREENS.LEARNING_SESSION) {
@@ -79,18 +82,24 @@ export default function useAppNavigationViewModel(params) {
 		setExamLanguageSyncError(null);
 		setSelectedSubjectId(subjectId);
 		setSelectedExamId(null);
+		setSelectedExamTestType(null);
 		setSelectedTopicAreaKey(null);
 		setActiveScreen(NAV_SCREENS.LEARNING_PATH);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays]);
 
-	const selectExam = useCallback((examId) => {
+	const selectExam = useCallback((examId, testType) => {
 		if (!examId) {
 			return;
 		}
 
+		if (testType !== TEST_TYPES.EXAM && testType !== TEST_TYPES.CHAPTER_TEST) {
+			throw new Error(`Unknown selected test type: ${String(testType)}`);
+		}
+
 		setExamLanguageSyncError(null);
 		setSelectedExamId(examId);
+		setSelectedExamTestType(testType);
 		setActiveScreen(NAV_SCREENS.EXAM);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays]);
@@ -103,6 +112,7 @@ export default function useAppNavigationViewModel(params) {
 
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
+		setSelectedExamTestType(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.FLIPCARDS);
 		closeNavigationOverlays();
@@ -116,6 +126,7 @@ export default function useAppNavigationViewModel(params) {
 
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
+		setSelectedExamTestType(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.MATCHCARDS);
 		closeNavigationOverlays();
@@ -128,6 +139,7 @@ export default function useAppNavigationViewModel(params) {
 
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
+		setSelectedExamTestType(null);
 		setSelectedLearningSessionId(sessionId);
 		setActiveScreen(NAV_SCREENS.LEARNING_SESSION);
 		closeNavigationOverlays();
@@ -165,13 +177,15 @@ export default function useAppNavigationViewModel(params) {
 		setExamLanguageSyncError(params.examSyncFailedMessage);
 	}, [changeScreen, params.examSyncFailedMessage]);
 
+	const selectedTestSetReadPort = resolveSelectedTestSetReadPort(params, selectedExamTestType);
+
 	useSyncSelectedExamWithLanguage({
 		language: params.language,
 		activeScreen,
 		selectedExamId,
 		selectedSubjectId,
-		getExamByIdUseCase: params.getExamByIdUseCase,
-		getExamByBaseIdAndLangUseCase: params.getExamByBaseIdAndLangUseCase,
+		getExamByIdUseCase: selectedTestSetReadPort?.getByIdUseCase,
+		getExamByBaseIdAndLangUseCase: selectedTestSetReadPort?.getByBaseIdAndLangUseCase,
 		onExamResolved: resolveSyncedExam,
 		onExamUnavailable: handleSyncedExamUnavailable,
 		onExamSyncFailed: handleSyncedExamSyncFailed
@@ -194,6 +208,7 @@ export default function useAppNavigationViewModel(params) {
 		activeScreen,
 		selectedSubjectId,
 		selectedExamId,
+		selectedExamTestType,
 		selectedTopicAreaKey,
 		selectedLearningSessionId,
 		examLanguageSyncError,
@@ -223,4 +238,26 @@ export default function useAppNavigationViewModel(params) {
 		openLearningSession,
 		goBack
 	};
+}
+
+function resolveSelectedTestSetReadPort(params, testType) {
+	if (testType === null) {
+		return null;
+	}
+
+	if (testType === TEST_TYPES.CHAPTER_TEST) {
+		return {
+			getByIdUseCase: params.getChapterTestByIdUseCase,
+			getByBaseIdAndLangUseCase: params.getChapterTestByBaseIdAndLangUseCase
+		};
+	}
+
+	if (testType === TEST_TYPES.EXAM) {
+		return {
+			getByIdUseCase: params.getExamByIdUseCase,
+			getByBaseIdAndLangUseCase: params.getExamByBaseIdAndLangUseCase
+		};
+	}
+
+	throw new Error(`Unknown selected test type: ${String(testType)}`);
 }

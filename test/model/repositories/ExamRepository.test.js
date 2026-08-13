@@ -4,6 +4,7 @@ import ExamRepository from "../../../src/model/repositories/ExamRepository.js";
 
 describe("ExamRepository", () => {
     let dataSource;
+    let questionDataSource;
     let repository;
 
     const exams = [
@@ -46,16 +47,18 @@ describe("ExamRepository", () => {
 
     beforeEach(() => {
         dataSource = {
-            fetchAllExams: jest.fn().mockResolvedValue(exams),
-            fetchExamById: jest.fn((examId) => Promise.resolve(
+            fetchAllTestSets: jest.fn().mockResolvedValue(exams),
+            fetchTestSetById: jest.fn((examId) => Promise.resolve(
                 exams.find((exam) => exam.id === examId) ?? null
-            )),
-            fetchExamByBaseIdAndLang: jest.fn((baseId, language) => Promise.resolve(
-                exams.find((exam) => exam.baseId === baseId && exam.lang === language) ?? null
+            ))
+        };
+        questionDataSource = {
+            fetchPracticeQuestions: jest.fn((examId) => Promise.resolve(
+                exams.find((exam) => exam.id === examId)?.questions ?? []
             ))
         };
 
-        repository = new ExamRepository(dataSource);
+        repository = new ExamRepository(dataSource, questionDataSource);
     });
 
     test("filters available exams by subject and language", async () => {
@@ -108,11 +111,11 @@ describe("ExamRepository", () => {
             language: "en"
         });
 
-        expect(dataSource.fetchAllExams).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchAllTestSets).toHaveBeenCalledTimes(1);
     });
 
     test("retries all exams list requests after failures", async () => {
-        dataSource.fetchAllExams
+        dataSource.fetchAllTestSets
             .mockRejectedValueOnce(new Error("network down"))
             .mockResolvedValueOnce(exams);
 
@@ -120,7 +123,7 @@ describe("ExamRepository", () => {
         const result = await repository.getAllExams();
 
         expect(result).toBe(exams);
-        expect(dataSource.fetchAllExams).toHaveBeenCalledTimes(2);
+        expect(dataSource.fetchAllTestSets).toHaveBeenCalledTimes(2);
     });
 
     test("sorts available exams by explicit sortOrder", async () => {
@@ -145,19 +148,19 @@ describe("ExamRepository", () => {
 
         expect(firstResult).toEqual([{ id: 1 }, { id: 2 }]);
         expect(secondResult).toEqual([{ id: 1 }, { id: 2 }]);
-        expect(dataSource.fetchExamById).toHaveBeenCalledTimes(1);
-        expect(dataSource.fetchExamById).toHaveBeenCalledWith("exam-no");
+        expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchTestSetById).toHaveBeenCalledWith("exam-no");
     });
 
     test("dedupes parallel exam requests by exam id", async () => {
         const deferredExam = createDeferred();
-        dataSource.fetchExamById.mockReset();
-        dataSource.fetchExamById.mockReturnValue(deferredExam.promise);
+        dataSource.fetchTestSetById.mockReset();
+        dataSource.fetchTestSetById.mockReturnValue(deferredExam.promise);
 
         const firstRequest = repository.getExamById("exam-no");
         const secondRequest = repository.getExamById("exam-no");
 
-        expect(dataSource.fetchExamById).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(1);
 
         deferredExam.resolve(exams[0]);
 
@@ -168,7 +171,7 @@ describe("ExamRepository", () => {
     });
 
     test("retries exam requests after failures", async () => {
-        dataSource.fetchExamById
+        dataSource.fetchTestSetById
             .mockRejectedValueOnce(new Error("exam request failed"))
             .mockResolvedValueOnce(exams[0]);
 
@@ -176,7 +179,7 @@ describe("ExamRepository", () => {
         const result = await repository.getExamById("exam-no");
 
         expect(result).toBe(exams[0]);
-        expect(dataSource.fetchExamById).toHaveBeenCalledTimes(2);
+        expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(2);
     });
 
     test("hydrates answer options with subject-scoped concept images", async () => {
@@ -204,9 +207,11 @@ describe("ExamRepository", () => {
         };
 
         const localDataSource = {
-            fetchAllExams: jest.fn().mockResolvedValue([examWithImage]),
-            fetchExamById: jest.fn().mockResolvedValue(examWithImage),
-            fetchExamByBaseIdAndLang: jest.fn()
+            fetchAllTestSets: jest.fn().mockResolvedValue([examWithImage]),
+            fetchTestSetById: jest.fn().mockResolvedValue(examWithImage)
+        };
+        const localQuestionDataSource = {
+            fetchPracticeQuestions: jest.fn().mockResolvedValue(examWithImage.questions)
         };
 
         const conceptImageDataSource = {
@@ -221,7 +226,7 @@ describe("ExamRepository", () => {
             ])
         };
 
-        const localRepository = new ExamRepository(localDataSource, conceptImageDataSource);
+        const localRepository = new ExamRepository(localDataSource, localQuestionDataSource, conceptImageDataSource);
 
         const result = await localRepository.getExamQuestions("exam-with-image");
 
@@ -250,12 +255,62 @@ describe("ExamRepository", () => {
         expect(result).toEqual([]);
     });
 
+    test("maps the canonical practice response without legacy correctness fallbacks", async () => {
+        questionDataSource.fetchPracticeQuestions.mockResolvedValueOnce([
+            {
+                id: "single-1",
+                type: "single",
+                options: [
+                    { id: "a", isCorrect: true, feedback: "Riktig" },
+                    { id: "b", isCorrect: false }
+                ]
+            },
+            {
+                id: "fill-1",
+                type: "fill",
+                acceptedAnswers: ["COBIT"]
+            }
+        ]);
+
+        const result = await repository.getExamQuestions("exam-no");
+
+        expect(result[0].options[0]).toMatchObject({
+            isCorrect: true,
+            correct: true,
+            feedback: "Riktig",
+            why: "Riktig"
+        });
+        expect(result[0].options[1]).toMatchObject({
+            isCorrect: false,
+            correct: false
+        });
+        expect(result[0].options[1]).not.toHaveProperty("why");
+        expect(result[1]).toMatchObject({
+            acceptedAnswers: ["COBIT"],
+            answers: ["COBIT"]
+        });
+    });
+
+    test("rejects missing canonical correctness instead of treating it as false", async () => {
+        questionDataSource.fetchPracticeQuestions.mockResolvedValueOnce([
+            {
+                id: "single-invalid",
+                type: "single",
+                options: [{ id: "a", feedback: "Manglende correctness" }]
+            }
+        ]);
+
+        await expect(repository.getExamQuestions("exam-no")).rejects.toThrow(
+            "Invalid canonical practice question single-invalid: option a requires isCorrect"
+        );
+    });
+
     test("finds exam by base id and language through cached exam list", async () => {
         const result = await repository.getExamByBaseIdAndLang("exam", "en");
 
         expect(result).toMatchObject({ id: "exam-en" });
-        expect(dataSource.fetchAllExams).toHaveBeenCalledTimes(1);
-        expect(dataSource.fetchExamByBaseIdAndLang).not.toHaveBeenCalled();
+        expect(dataSource.fetchAllTestSets).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchTestSetById).not.toHaveBeenCalledWith("exam-en");
     });
 });
 

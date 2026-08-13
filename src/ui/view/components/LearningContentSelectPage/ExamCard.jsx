@@ -16,7 +16,7 @@ export default function ExamCard({ exam, index, practiceExamLabel, questionLabel
             <button
                 type="button"
                 className="exam-select-card-action"
-                onClick={() => onSelectExam(exam.id)}
+                onClick={() => onSelectExam(exam.id, exam.testType)}
                 aria-labelledby={`${titleId} ${descriptionId}`}
             />
 

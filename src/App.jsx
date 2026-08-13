@@ -32,8 +32,8 @@ import SettingsPresentation from "./ui/view/components/Settings/SettingsPresenta
 import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoundary.jsx";
 import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
-import { NAV_SCREENS } from "./navigation/navigation.js";
-import { calculateExamScoreUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
+import { NAV_SCREENS, TEST_TYPES } from "./navigation/navigation.js";
+import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -73,6 +73,8 @@ function AppContent() {
 		language,
 		getExamByIdUseCase,
 		getExamByBaseIdAndLangUseCase,
+		getChapterTestByIdUseCase,
+		getChapterTestByBaseIdAndLangUseCase,
 		backLabel: t.sidebarBack,
 		navigationLabel: t.sidebarMobileNavigation,
 		examUnavailableMessage: t.examLanguageUnavailableMessage,
@@ -104,6 +106,7 @@ function AppContent() {
 
 	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel(
 		getAvailableExamsUseCase,
+		getAvailableChapterTestsUseCase,
 		getTopicAreasUseCase,
 		getFlipcardDeckSummariesUseCase,
 		language,
@@ -173,6 +176,7 @@ function AppContent() {
 				{navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
 					<ExamPageWrapper
 						examId={navigationViewModel.selectedExamId}
+						testType={navigationViewModel.selectedExamTestType}
 						language={language}
 						t={t}
 						backContract={navigationViewModel.backContract}
@@ -262,9 +266,10 @@ function LearningSessionPageWrapper({ subjectId, language, sessionId, t, isActiv
 	return <LearningSessionPage viewModel={viewModel} />;
 }
 
-function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef }) {
+function ExamPageWrapper({ examId, testType, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef }) {
+	const testSetQuestionsUseCase = getQuestionsUseCaseForTestType(testType);
 	const examPageViewModel = useExamPageViewModel({
-		getExamQuestionsUseCase,
+		getExamQuestionsUseCase: testSetQuestionsUseCase,
 		gradeAnswerUseCase,
 		calculateExamScoreUseCase,
 		submitExamAttemptUseCase,
@@ -319,6 +324,18 @@ function ExamPageWrapper({ examId, language, t, backContract, onExamWorkModeChan
 	return (
 		<ExamPage viewModel={examPageViewModel} />
 	);
+}
+
+function getQuestionsUseCaseForTestType(testType) {
+	if (testType === TEST_TYPES.CHAPTER_TEST) {
+		return getChapterTestQuestionsUseCase;
+	}
+
+	if (testType === TEST_TYPES.EXAM) {
+		return getExamQuestionsUseCase;
+	}
+
+	throw new Error(`Unknown selected test type: ${String(testType)}`);
 }
 
 function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {

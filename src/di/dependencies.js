@@ -1,6 +1,7 @@
 //src/di/dependencies.js
 import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
-import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
+import TestSetDataSource from "../model/datasource/TestSetDataSource.js";
+import TestSetQuestionDataSource from "../model/datasource/TestSetQuestionDataSource.js";
 import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
 import GlossaryDataSource from "../model/datasource/GlossaryDataSource.js";
 import ExamAttemptDataSource from "../model/datasource/ExamAttemptDataSource.js";
@@ -52,7 +53,28 @@ const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
 const subjectDataSource = new SubjectDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
-const examQuestionDataSource = new ExamQuestionDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const examDataSource = new TestSetDataSource({
+    baseUrl: apiBaseUrl,
+    getToken: getActiveAuthToken,
+    collectionPath: "/exams",
+    subjectCollectionPathSuffix: "/exams"
+});
+const examQuestionDataSource = new TestSetQuestionDataSource({
+    baseUrl: apiBaseUrl,
+    getToken: getActiveAuthToken,
+    collectionPath: "/exams"
+});
+const chapterTestDataSource = new TestSetDataSource({
+    baseUrl: apiBaseUrl,
+    getToken: getActiveAuthToken,
+    collectionPath: "/chapter-tests",
+    subjectCollectionPathSuffix: "/chapter-tests"
+});
+const chapterTestQuestionDataSource = new TestSetQuestionDataSource({
+    baseUrl: apiBaseUrl,
+    getToken: getActiveAuthToken,
+    collectionPath: "/chapter-tests"
+});
 const conceptImageDataSource = new ConceptImageDataSource({
     baseUrl: apiBaseUrl,
     imageBaseUrl,
@@ -69,7 +91,8 @@ const examAttemptDataSource = new ExamAttemptDataSource({
 const learningPathDataSource = new LearningPathDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 
 // Repositories
-const examRepository = new ExamRepository(examQuestionDataSource, conceptImageDataSource);
+const examRepository = new ExamRepository(examDataSource, examQuestionDataSource, conceptImageDataSource);
+const chapterTestRepository = new ExamRepository(chapterTestDataSource, chapterTestQuestionDataSource, conceptImageDataSource);
 const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
 const glossaryRepository = new GlossaryRepository(glossaryDataSource);
@@ -78,11 +101,15 @@ const learningPathRepository = new LearningPathRepository(learningPathDataSource
 // Use cases
 const gradeAnswerUseCase = new GradeAnswerUseCase();
 const getExamQuestionsUseCase = new GetExamQuestionsUseCase(examRepository);
+const getChapterTestQuestionsUseCase = new GetExamQuestionsUseCase(chapterTestRepository);
 const getAvailableExamsUseCase = new GetAvailableExamsUseCase(examRepository);
+const getAvailableChapterTestsUseCase = new GetAvailableExamsUseCase(chapterTestRepository);
 const getAvailableSubjectsUseCase = new GetAvailableSubjectsUseCase(subjectRepository);
 const getSubjectByIdUseCase = new GetSubjectByIdUseCase(subjectRepository);
 const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepository);
 const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
+const getChapterTestByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(chapterTestRepository);
+const getChapterTestByIdUseCase = new GetExamByIdUseCase(chapterTestRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
 const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
@@ -99,11 +126,15 @@ const submitLearningSessionUseCase = new SubmitLearningSessionUseCase(learningPa
 // Export
 export {
     getExamQuestionsUseCase,
+    getChapterTestQuestionsUseCase,
     getAvailableExamsUseCase,
+    getAvailableChapterTestsUseCase,
     getAvailableSubjectsUseCase,
     getSubjectByIdUseCase,
     getExamByIdUseCase,
     getExamByBaseIdAndLangUseCase,
+    getChapterTestByIdUseCase,
+    getChapterTestByBaseIdAndLangUseCase,
     gradeAnswerUseCase,
     calculateExamScoreUseCase,
     submitExamAttemptUseCase,

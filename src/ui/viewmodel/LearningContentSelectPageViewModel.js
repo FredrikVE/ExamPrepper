@@ -14,7 +14,7 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { createContentToggleEntries, createMobileToggleButtonItems, findToggleEntryConfig } from "./Shared/contentToggleModel.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
-export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage) {
+export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getAvailableChapterTestsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage) {
 	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
 	const [selectedTestType, setSelectedTestType] = useState(TEST_TYPES.EXAM);
 	const [expandedMobileToggleButtonGroupId, setExpandedMobileToggleButtonGroupId] = useState(null);
@@ -56,6 +56,17 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		});
 	}, [getAvailableExamsUseCase, isActive, subjectId, language]);
 
+	const executeChapterTestLoad = useCallback(() => {
+		if (!isActive || !subjectId) {
+			return Promise.resolve([]);
+		}
+
+		return getAvailableChapterTestsUseCase.execute({
+			subjectId,
+			language
+		});
+	}, [getAvailableChapterTestsUseCase, isActive, subjectId, language]);
+
 	const executeTopicAreaLoad = useCallback(() => {
 		if (!isActive || !subjectId) {
 			return Promise.resolve([]);
@@ -87,6 +98,15 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		onLoaded: null
 	});
 
+	const chapterTestLoad = useLoadModel({
+		execute: executeChapterTestLoad,
+		emptyData: [],
+		errorMessage: t.selectErrorMessage,
+		resourceKey: loadResourceKey,
+		isEnabled: isLoadEnabled,
+		onLoaded: null
+	});
+
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
@@ -105,16 +125,23 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		onLoaded: null
 	});
 
-	const exams = examLoad.data;
+	const legacyExamCatalog = examLoad.data;
+	const chapterTests = chapterTestLoad.data;
+	const exams = useMemo(() => {
+		const ordinaryExams = filterExamsByTestType(legacyExamCatalog, TEST_TYPES.EXAM);
+		return [...ordinaryExams, ...chapterTests];
+	}, [chapterTests, legacyExamCatalog]);
 	const topicAreas = topicAreaLoad.data;
 	const flipcardDeckSummaries = flipcardDeckLoad.data;
 	const pageStatus = combineLoadStatuses([
 		examLoad.status,
+		chapterTestLoad.status,
 		topicAreaLoad.status,
 		flipcardDeckLoad.status
 	]);
 	const pageErrorMessage = resolveFirstLoadError([
 		examLoad,
+		chapterTestLoad,
 		topicAreaLoad,
 		flipcardDeckLoad
 	], t.selectErrorMessage);
@@ -276,11 +303,18 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		return t[activeEntry.searchPlaceholderKey];
 	}, [activeContentType, t]);
 
-	const selectExam = useCallback((examId) => {
+	const selectExam = useCallback((examId, testType) => {
+		const selectedExam = exams.find((exam) => exam.id === examId);
+		const resolvedTestType = testType ?? selectedExam?.testType;
+
+		if (resolvedTestType !== TEST_TYPES.EXAM && resolvedTestType !== TEST_TYPES.CHAPTER_TEST) {
+			throw new Error(`Unknown selected test type: ${String(resolvedTestType)}`);
+		}
+
 		closeExamSearchSheet();
 		changeExamFooterSheetOpen(false);
-		onSelectExam(examId);
-	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectExam]);
+		onSelectExam(examId, resolvedTestType);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, exams, onSelectExam]);
 
 	const selectFlipcardDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();

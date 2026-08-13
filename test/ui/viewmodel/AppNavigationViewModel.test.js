@@ -1,6 +1,6 @@
 //test/ui/viewmodel/AppNavigationViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { NAV_SCREENS } from "../../../src/navigation/navigation.js";
+import { NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
 
 let hookState;
 let stateIndex;
@@ -64,9 +64,14 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/AppNavigation/useSyncSelecte
 
 const { default: useAppNavigationViewModel } = await import("../../../src/ui/viewmodel/AppNavigationViewModel.js");
 
-function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError) {
-	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError];
+function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null) {
+	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType];
 }
+
+const examByIdUseCase = { id: "exam-by-id" };
+const examByBaseIdAndLangUseCase = { id: "exam-by-base-lang" };
+const chapterTestByIdUseCase = { id: "chapter-by-id" };
+const chapterTestByBaseIdAndLangUseCase = { id: "chapter-by-base-lang" };
 
 function createViewModel() {
 	stateIndex = 0;
@@ -74,8 +79,10 @@ function createViewModel() {
 		backLabel: "Tilbake",
 		navigationLabel: "Navigasjon",
 		language: "nb",
-		getExamByIdUseCase: {},
-		getExamByBaseIdAndLangUseCase: {},
+		getExamByIdUseCase: examByIdUseCase,
+		getExamByBaseIdAndLangUseCase: examByBaseIdAndLangUseCase,
+		getChapterTestByIdUseCase: chapterTestByIdUseCase,
+		getChapterTestByBaseIdAndLangUseCase: chapterTestByBaseIdAndLangUseCase,
 		examUnavailableMessage: "Eksamen finnes ikke på språket.",
 		examSyncFailedMessage: "Kunne ikke synkronisere eksamen."
 	});
@@ -93,6 +100,7 @@ describe("useAppNavigationViewModel", () => {
 		expect(viewModel.activeScreen).toBe(NAV_SCREENS.SUBJECTS);
 		expect(viewModel.selectedSubjectId).toBeNull();
 		expect(viewModel.selectedExamId).toBeNull();
+		expect(viewModel.selectedExamTestType).toBeNull();
 		expect(viewModel.selectedTopicAreaKey).toBeNull();
 		expect(viewModel.examLanguageSyncError).toBeNull();
 	});
@@ -113,7 +121,7 @@ describe("useAppNavigationViewModel", () => {
 	test("valg av eksamen går direkte til eksamensskjermen", () => {
 		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
-		createViewModel().selectExam("exam-2");
+		createViewModel().selectExam("exam-2", TEST_TYPES.EXAM);
 
 		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.EXAM,
@@ -121,6 +129,7 @@ describe("useAppNavigationViewModel", () => {
 			"exam-2",
 			null
 		]);
+		expect(hookState[6]).toBe(TEST_TYPES.EXAM);
 	});
 
 	test("valg av flipcard-bunke beholder fag og lagrer topic area", () => {
@@ -221,6 +230,16 @@ describe("useAppNavigationViewModel", () => {
 		expect(closeSettingsPresentation).toHaveBeenCalledTimes(1);
 		expect(closeMobileDropDownTopBarMenu).toHaveBeenCalledTimes(1);
 		expect(closeMobileSubjectPicker).toHaveBeenCalledTimes(1);
+	});
+
+	test("språksynk bruker den eksplisitte ChapterTest-read-porten", () => {
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "chapter-1", null, null, null, TEST_TYPES.CHAPTER_TEST);
+		createViewModel();
+
+		const syncContract = useSyncSelectedExamWithLanguage.mock.calls[0][0];
+
+		expect(syncContract.getExamByIdUseCase).toBe(chapterTestByIdUseCase);
+		expect(syncContract.getExamByBaseIdAndLangUseCase).toBe(chapterTestByBaseIdAndLangUseCase);
 	});
 
 	test("språksynk oppdaterer valg uten å lukke overlays", () => {
