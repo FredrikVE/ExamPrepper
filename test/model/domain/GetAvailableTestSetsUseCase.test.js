@@ -1,41 +1,41 @@
-// test/model/domain/GetAvailableExamsUseCase.test.js
+// test/model/domain/GetAvailableTestSetsUseCase.test.js
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import GetAvailableExamsUseCase from "../../../src/model/domain/GetAvailableExamsUseCase.js";
+import GetAvailableTestSetsUseCase from "../../../src/model/domain/GetAvailableTestSetsUseCase.js";
 
-describe("GetAvailableExamsUseCase", () => {
-    let examRepository;
+describe("GetAvailableTestSetsUseCase", () => {
+    let testSetRepository;
     let useCase;
 
     beforeEach(() => {
-        examRepository = {
-            getAvailableExams: jest.fn()
+        testSetRepository = {
+            getAvailableTestSets: jest.fn()
         };
 
-        useCase = new GetAvailableExamsUseCase(examRepository);
+        useCase = new GetAvailableTestSetsUseCase(testSetRepository);
     });
 
     test("returns empty list when subjectId is missing", async () => {
         const result = await useCase.execute({ language: "no" });
 
         expect(result).toEqual([]);
-        expect(examRepository.getAvailableExams).not.toHaveBeenCalled();
+        expect(testSetRepository.getAvailableTestSets).not.toHaveBeenCalled();
     });
 
     test("passes subjectId and language to repository", async () => {
-        examRepository.getAvailableExams.mockResolvedValue([
+        testSetRepository.getAvailableTestSets.mockResolvedValue([
             { id: "exam-1", questionCount: 10 }
         ]);
 
         await useCase.execute({ subjectId: "in5431", language: "no" });
 
-        expect(examRepository.getAvailableExams).toHaveBeenCalledWith({
+        expect(testSetRepository.getAvailableTestSets).toHaveBeenCalledWith({
             subjectId: "in5431",
             language: "no"
         });
     });
 
-    test("filters out exams without questions", async () => {
-        examRepository.getAvailableExams.mockResolvedValue([
+    test("filters out testSets without questions", async () => {
+        testSetRepository.getAvailableTestSets.mockResolvedValue([
             { id: "empty-exam", questionCount: 0 },
             { id: "real-exam", questionCount: 25 }
         ]);

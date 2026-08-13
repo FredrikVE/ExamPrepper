@@ -1,24 +1,25 @@
 //src/di/dependencies.js
 import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
-import TestSetDataSource from "../model/datasource/TestSetDataSource.js";
+import ExamDataSource from "../model/datasource/ExamDataSource.js";
+import ChapterTestDataSource from "../model/datasource/ChapterTestDataSource.js";
 import TestSetQuestionDataSource from "../model/datasource/TestSetQuestionDataSource.js";
 import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
 import GlossaryDataSource from "../model/datasource/GlossaryDataSource.js";
 import ExamAttemptDataSource from "../model/datasource/ExamAttemptDataSource.js";
 import LearningPathDataSource from "../model/datasource/LearningPathDataSource.js";
 
-import ExamRepository from "../model/repositories/ExamRepository.js";
+import TestSetRepository from "../model/repositories/TestSetRepository.js";
 import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
 import GlossaryRepository from "../model/repositories/GlossaryRepository.js";
 import LearningPathRepository from "../model/repositories/LearningPathRepository.js";
 
-import GetExamQuestionsUseCase from "../model/domain/GetExamQuestionsUseCase.js";
-import GetAvailableExamsUseCase from "../model/domain/GetAvailableExamsUseCase.js";
+import GetTestSetQuestionsUseCase from "../model/domain/GetTestSetQuestionsUseCase.js";
+import GetAvailableTestSetsUseCase from "../model/domain/GetAvailableTestSetsUseCase.js";
 import GetAvailableSubjectsUseCase from "../model/domain/GetAvailableSubjectsUseCase.js";
 import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
-import GetExamByIdUseCase from "../model/domain/GetExamByIdUseCase.js";
-import GetExamByBaseIdAndLangUseCase from "../model/domain/GetExamByBaseIdAndLangUseCase.js";
+import GetTestSetByIdUseCase from "../model/domain/GetTestSetByIdUseCase.js";
+import GetTestSetByBaseIdAndLangUseCase from "../model/domain/GetTestSetByBaseIdAndLangUseCase.js";
 import GetGlossaryEntriesForSubjectUseCase from "../model/domain/GetGlossaryEntriesForSubjectUseCase.js";
 import GetGlossaryOverviewUseCase from "../model/domain/GetGlossaryOverviewUseCase.js";
 import GetGlossaryNetworkUseCase from "../model/domain/GetGlossaryNetworkUseCase.js";
@@ -53,22 +54,18 @@ const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
 const subjectDataSource = new SubjectDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
-const examDataSource = new TestSetDataSource({
+const examDataSource = new ExamDataSource({
     baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken,
-    collectionPath: "/exams",
-    subjectCollectionPathSuffix: "/exams"
+    getToken: getActiveAuthToken
 });
 const examQuestionDataSource = new TestSetQuestionDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken,
     collectionPath: "/exams"
 });
-const chapterTestDataSource = new TestSetDataSource({
+const chapterTestDataSource = new ChapterTestDataSource({
     baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken,
-    collectionPath: "/chapter-tests",
-    subjectCollectionPathSuffix: "/chapter-tests"
+    getToken: getActiveAuthToken
 });
 const chapterTestQuestionDataSource = new TestSetQuestionDataSource({
     baseUrl: apiBaseUrl,
@@ -91,25 +88,25 @@ const examAttemptDataSource = new ExamAttemptDataSource({
 const learningPathDataSource = new LearningPathDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 
 // Repositories
-const examRepository = new ExamRepository(examDataSource, examQuestionDataSource, conceptImageDataSource);
-const chapterTestRepository = new ExamRepository(chapterTestDataSource, chapterTestQuestionDataSource, conceptImageDataSource);
+const examRepository = new TestSetRepository(examDataSource, examQuestionDataSource, conceptImageDataSource);
+const chapterTestRepository = new TestSetRepository(chapterTestDataSource, chapterTestQuestionDataSource, conceptImageDataSource);
 const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
-const subjectRepository = new SubjectRepository(subjectDataSource, examRepository);
+const subjectRepository = new SubjectRepository(subjectDataSource);
 const glossaryRepository = new GlossaryRepository(glossaryDataSource);
 const learningPathRepository = new LearningPathRepository(learningPathDataSource);
 
 // Use cases
 const gradeAnswerUseCase = new GradeAnswerUseCase();
-const getExamQuestionsUseCase = new GetExamQuestionsUseCase(examRepository);
-const getChapterTestQuestionsUseCase = new GetExamQuestionsUseCase(chapterTestRepository);
-const getAvailableExamsUseCase = new GetAvailableExamsUseCase(examRepository);
-const getAvailableChapterTestsUseCase = new GetAvailableExamsUseCase(chapterTestRepository);
+const getExamQuestionsUseCase = new GetTestSetQuestionsUseCase(examRepository);
+const getChapterTestQuestionsUseCase = new GetTestSetQuestionsUseCase(chapterTestRepository);
+const getAvailableExamsUseCase = new GetAvailableTestSetsUseCase(examRepository);
+const getAvailableChapterTestsUseCase = new GetAvailableTestSetsUseCase(chapterTestRepository);
 const getAvailableSubjectsUseCase = new GetAvailableSubjectsUseCase(subjectRepository);
 const getSubjectByIdUseCase = new GetSubjectByIdUseCase(subjectRepository);
-const getExamByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(examRepository);
-const getExamByIdUseCase = new GetExamByIdUseCase(examRepository);
-const getChapterTestByBaseIdAndLangUseCase = new GetExamByBaseIdAndLangUseCase(chapterTestRepository);
-const getChapterTestByIdUseCase = new GetExamByIdUseCase(chapterTestRepository);
+const getExamByBaseIdAndLangUseCase = new GetTestSetByBaseIdAndLangUseCase(examRepository);
+const getExamByIdUseCase = new GetTestSetByIdUseCase(examRepository);
+const getChapterTestByBaseIdAndLangUseCase = new GetTestSetByBaseIdAndLangUseCase(chapterTestRepository);
+const getChapterTestByIdUseCase = new GetTestSetByIdUseCase(chapterTestRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository);
 const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);

@@ -86,7 +86,7 @@ describe("useExamQuestionLoadModel", () => {
 
 		await flushPromises();
 
-		expect(execute).toHaveBeenCalledWith({ examId: "exam-1" });
+		expect(execute).toHaveBeenCalledWith({ testSetId: "exam-1" });
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(1, expect.any(Function));
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
 			status: LOAD_STATUS.READY,

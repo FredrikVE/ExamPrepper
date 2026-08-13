@@ -1,8 +1,8 @@
-// test/model/repositories/ExamRepository.test.js
+// test/model/repositories/TestSetRepository.test.js
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import ExamRepository from "../../../src/model/repositories/ExamRepository.js";
+import TestSetRepository from "../../../src/model/repositories/TestSetRepository.js";
 
-describe("ExamRepository", () => {
+describe("TestSetRepository", () => {
     let dataSource;
     let questionDataSource;
     let repository;
@@ -21,6 +21,7 @@ describe("ExamRepository", () => {
             duration: "2 timer",
             durationMinutes: 120,
             sortOrder: 20,
+            questionCount: 2,
             questions: [{ id: 1 }, { id: 2 }]
         },
         {
@@ -31,6 +32,7 @@ describe("ExamRepository", () => {
             title: "English exam",
             testType: "exam",
             sortOrder: 10,
+            questionCount: 1,
             questions: [{ id: 3 }]
         },
         {
@@ -47,22 +49,24 @@ describe("ExamRepository", () => {
 
     beforeEach(() => {
         dataSource = {
-            fetchAllTestSets: jest.fn().mockResolvedValue(exams),
-            fetchTestSetById: jest.fn((examId) => Promise.resolve(
-                exams.find((exam) => exam.id === examId) ?? null
+            fetchTestSetsBySubject: jest.fn(({ subjectId, language }) => Promise.resolve(
+                exams.filter((exam) => exam.subjectId === subjectId && (!language || exam.lang === language))
+            )),
+            fetchTestSetById: jest.fn((testSetId) => Promise.resolve(
+                exams.find((exam) => exam.id === testSetId) ?? null
             ))
         };
         questionDataSource = {
-            fetchPracticeQuestions: jest.fn((examId) => Promise.resolve(
-                exams.find((exam) => exam.id === examId)?.questions ?? []
+            fetchPracticeQuestions: jest.fn((testSetId) => Promise.resolve(
+                exams.find((exam) => exam.id === testSetId)?.questions ?? []
             ))
         };
 
-        repository = new ExamRepository(dataSource, questionDataSource);
+        repository = new TestSetRepository(dataSource, questionDataSource);
     });
 
-    test("filters available exams by subject and language", async () => {
-        const result = await repository.getAvailableExams({
+    test("loads only the requested subject and language scope", async () => {
+        const result = await repository.getAvailableTestSets({
             subjectId: "in5431",
             language: "no"
         });
@@ -72,114 +76,83 @@ describe("ExamRepository", () => {
             id: "exam-no",
             subjectId: "in5431",
             lang: "no",
-            modeLabel: "FULL ØVEKSAMEN",
             testType: "exam",
-            estimatedMinutes: "45–60",
-            sortOrder: 20,
             questionCount: 2
         });
-    });
-
-    test("uses explicit questionCount before questions length", async () => {
-        const result = await repository.getAvailableExams({
-            subjectId: "in2000",
-            language: "no"
-        });
-
-        expect(result[0].questionCount).toBe(7);
-    });
-
-    test("uses null when testType is missing", async () => {
-        const result = await repository.getAvailableExams({
-            subjectId: "in2000",
-            language: "no"
-        });
-
-        expect(result[0].testType).toBeNull();
-    });
-
-    test("returns all exams when filters are omitted", async () => {
-        const result = await repository.getAvailableExams();
-
-        expect(result).toHaveLength(3);
-    });
-
-    test("caches all exams list requests", async () => {
-        await repository.getAvailableExams();
-        await repository.getAvailableExams({
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledWith({
             subjectId: "in5431",
-            language: "en"
+            language: "no"
         });
-
-        expect(dataSource.fetchAllTestSets).toHaveBeenCalledTimes(1);
     });
 
-    test("retries all exams list requests after failures", async () => {
-        dataSource.fetchAllTestSets
+    test("requires a subject scope instead of falling back to a global catalog", async () => {
+        await expect(repository.getAvailableTestSets({ language: "no" })).resolves.toEqual([]);
+        expect(dataSource.fetchTestSetsBySubject).not.toHaveBeenCalled();
+    });
+
+    test("caches list requests per subject and language", async () => {
+        await repository.getAvailableTestSets({ subjectId: "in5431", language: "no" });
+        await repository.getAvailableTestSets({ subjectId: "in5431", language: "no" });
+        await repository.getAvailableTestSets({ subjectId: "in5431", language: "en" });
+
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledTimes(2);
+    });
+
+    test("retries scoped list requests after failures", async () => {
+        dataSource.fetchTestSetsBySubject
             .mockRejectedValueOnce(new Error("network down"))
-            .mockResolvedValueOnce(exams);
+            .mockResolvedValueOnce([exams[0]]);
 
-        await expect(repository.getAllExams()).rejects.toThrow("network down");
-        const result = await repository.getAllExams();
+        await expect(repository.getAvailableTestSets({ subjectId: "in5431", language: "no" }))
+            .rejects.toThrow("network down");
+        await expect(repository.getAvailableTestSets({ subjectId: "in5431", language: "no" }))
+            .resolves.toHaveLength(1);
 
-        expect(result).toBe(exams);
-        expect(dataSource.fetchAllTestSets).toHaveBeenCalledTimes(2);
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledTimes(2);
     });
 
-    test("sorts available exams by explicit sortOrder", async () => {
-        const result = await repository.getAvailableExams();
-
-        expect(result.map((exam) => exam.id)).toEqual([
-            "exam-en",
-            "exam-no",
-            "other-subject"
-        ]);
-    });
-
-    test("returns questions for exam", async () => {
-        const result = await repository.getExamQuestions("exam-no");
-
-        expect(result).toEqual([{ id: 1 }, { id: 2 }]);
-    });
-
-    test("caches exam requests by exam id", async () => {
-        const firstResult = await repository.getExamQuestions("exam-no");
-        const secondResult = await repository.getExamQuestions("exam-no");
+    test("returns questions for a test set and caches detail/question reads by id", async () => {
+        const firstResult = await repository.getTestSetQuestions("exam-no");
+        const secondResult = await repository.getTestSetQuestions("exam-no");
 
         expect(firstResult).toEqual([{ id: 1 }, { id: 2 }]);
         expect(secondResult).toEqual([{ id: 1 }, { id: 2 }]);
         expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(1);
-        expect(dataSource.fetchTestSetById).toHaveBeenCalledWith("exam-no");
+        expect(questionDataSource.fetchPracticeQuestions).toHaveBeenCalledTimes(1);
     });
 
-    test("dedupes parallel exam requests by exam id", async () => {
-        const deferredExam = createDeferred();
+    test("dedupes parallel detail requests and retries after failure", async () => {
+        const deferredTestSet = createDeferred();
         dataSource.fetchTestSetById.mockReset();
-        dataSource.fetchTestSetById.mockReturnValue(deferredExam.promise);
+        dataSource.fetchTestSetById.mockReturnValueOnce(deferredTestSet.promise);
 
-        const firstRequest = repository.getExamById("exam-no");
-        const secondRequest = repository.getExamById("exam-no");
-
+        const firstRequest = repository.getTestSetById("exam-no");
+        const secondRequest = repository.getTestSetById("exam-no");
         expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(1);
 
-        deferredExam.resolve(exams[0]);
+        deferredTestSet.resolve(exams[0]);
+        await expect(Promise.all([firstRequest, secondRequest])).resolves.toEqual([exams[0], exams[0]]);
 
-        await expect(Promise.all([firstRequest, secondRequest])).resolves.toEqual([
-            exams[0],
-            exams[0]
-        ]);
+        dataSource.fetchTestSetById
+            .mockRejectedValueOnce(new Error("detail failed"))
+            .mockResolvedValueOnce(exams[1]);
+
+        await expect(repository.getTestSetById("exam-en")).rejects.toThrow("detail failed");
+        await expect(repository.getTestSetById("exam-en")).resolves.toBe(exams[1]);
     });
 
-    test("retries exam requests after failures", async () => {
-        dataSource.fetchTestSetById
-            .mockRejectedValueOnce(new Error("exam request failed"))
-            .mockResolvedValueOnce(exams[0]);
+    test("finds translated test set through the scoped subject-language cache", async () => {
+        const result = await repository.getTestSetByBaseIdAndLang({
+            baseId: "exam",
+            language: "en",
+            subjectId: "in5431"
+        });
 
-        await expect(repository.getExamById("exam-no")).rejects.toThrow("exam request failed");
-        const result = await repository.getExamById("exam-no");
-
-        expect(result).toBe(exams[0]);
-        expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(2);
+        expect(result).toBe(exams[1]);
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledWith({
+            subjectId: "in5431",
+            language: "en"
+        });
     });
 
     test("hydrates answer options with subject-scoped concept images", async () => {
@@ -207,7 +180,7 @@ describe("ExamRepository", () => {
         };
 
         const localDataSource = {
-            fetchAllTestSets: jest.fn().mockResolvedValue([examWithImage]),
+            fetchTestSetsBySubject: jest.fn().mockResolvedValue([examWithImage]),
             fetchTestSetById: jest.fn().mockResolvedValue(examWithImage)
         };
         const localQuestionDataSource = {
@@ -226,9 +199,9 @@ describe("ExamRepository", () => {
             ])
         };
 
-        const localRepository = new ExamRepository(localDataSource, localQuestionDataSource, conceptImageDataSource);
+        const localRepository = new TestSetRepository(localDataSource, localQuestionDataSource, conceptImageDataSource);
 
-        const result = await localRepository.getExamQuestions("exam-with-image");
+        const result = await localRepository.getTestSetQuestions("exam-with-image");
 
         expect(conceptImageDataSource.getConceptImages).toHaveBeenCalledWith(
             ["operational-backbone"],
@@ -250,7 +223,7 @@ describe("ExamRepository", () => {
     });
 
     test("returns empty questions when exam is not found", async () => {
-        const result = await repository.getExamQuestions("missing");
+        const result = await repository.getTestSetQuestions("missing");
 
         expect(result).toEqual([]);
     });
@@ -272,7 +245,7 @@ describe("ExamRepository", () => {
             }
         ]);
 
-        const result = await repository.getExamQuestions("exam-no");
+        const result = await repository.getTestSetQuestions("exam-no");
 
         expect(result[0].options[0]).toMatchObject({
             isCorrect: true,
@@ -300,16 +273,16 @@ describe("ExamRepository", () => {
             }
         ]);
 
-        await expect(repository.getExamQuestions("exam-no")).rejects.toThrow(
+        await expect(repository.getTestSetQuestions("exam-no")).rejects.toThrow(
             "Invalid canonical practice question single-invalid: option a requires isCorrect"
         );
     });
 
     test("finds exam by base id and language through cached exam list", async () => {
-        const result = await repository.getExamByBaseIdAndLang("exam", "en");
+        const result = await repository.getTestSetByBaseIdAndLang({ baseId: "exam", language: "en", subjectId: "in5431" });
 
         expect(result).toMatchObject({ id: "exam-en" });
-        expect(dataSource.fetchAllTestSets).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledTimes(1);
         expect(dataSource.fetchTestSetById).not.toHaveBeenCalledWith("exam-en");
     });
 });

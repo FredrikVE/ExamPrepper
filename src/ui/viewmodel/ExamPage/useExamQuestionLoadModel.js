@@ -13,7 +13,7 @@ export default function useExamQuestionLoadModel({
 
 	const executeQuestionLoad = useCallback(() => {
 		return getExamQuestionsUseCase.execute({
-			examId
+			testSetId: examId
 		});
 	}, [examId, getExamQuestionsUseCase]);
 

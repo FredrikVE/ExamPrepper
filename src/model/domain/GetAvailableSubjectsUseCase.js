@@ -5,7 +5,7 @@ export default class GetAvailableSubjectsUseCase {
     }
 
     async execute({ language } = {}) {
-        const subjects = await this.subjectRepository.getSubjectsWithExamCount({
+        const subjects = await this.subjectRepository.getSubjectsWithPracticeTestCount({
             language
         });
 

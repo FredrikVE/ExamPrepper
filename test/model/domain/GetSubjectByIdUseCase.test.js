@@ -8,7 +8,7 @@ describe("GetSubjectByIdUseCase", () => {
 
     beforeEach(() => {
         subjectRepository = {
-            getSubjectByIdWithExamCount: jest.fn()
+            getSubjectByIdWithPracticeTestCount: jest.fn()
         };
 
         useCase = new GetSubjectByIdUseCase(subjectRepository);
@@ -18,28 +18,28 @@ describe("GetSubjectByIdUseCase", () => {
         const result = await useCase.execute({ language: "no" });
 
         expect(result).toBeNull();
-        expect(subjectRepository.getSubjectByIdWithExamCount).not.toHaveBeenCalled();
+        expect(subjectRepository.getSubjectByIdWithPracticeTestCount).not.toHaveBeenCalled();
     });
 
     test("accepts subject id as string", async () => {
-        subjectRepository.getSubjectByIdWithExamCount.mockResolvedValue({ id: "in5431" });
+        subjectRepository.getSubjectByIdWithPracticeTestCount.mockResolvedValue({ id: "in5431" });
 
         const result = await useCase.execute("in5431");
 
         expect(result).toEqual({ id: "in5431" });
-        expect(subjectRepository.getSubjectByIdWithExamCount).toHaveBeenCalledWith({
+        expect(subjectRepository.getSubjectByIdWithPracticeTestCount).toHaveBeenCalledWith({
             subjectId: "in5431",
             language: undefined
         });
     });
 
     test("accepts subject id and language as object", async () => {
-        subjectRepository.getSubjectByIdWithExamCount.mockResolvedValue({ id: "in5431", examCount: 3 });
+        subjectRepository.getSubjectByIdWithPracticeTestCount.mockResolvedValue({ id: "in5431", practiceTestCount: 3 });
 
         const result = await useCase.execute({ subjectId: "in5431", language: "en" });
 
-        expect(result).toEqual({ id: "in5431", examCount: 3 });
-        expect(subjectRepository.getSubjectByIdWithExamCount).toHaveBeenCalledWith({
+        expect(result).toEqual({ id: "in5431", practiceTestCount: 3 });
+        expect(subjectRepository.getSubjectByIdWithPracticeTestCount).toHaveBeenCalledWith({
             subjectId: "in5431",
             language: "en"
         });

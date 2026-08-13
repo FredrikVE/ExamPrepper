@@ -1,11 +1,11 @@
-// src/model/repositories/ExamRepository.js
-export default class ExamRepository {
+// src/model/repositories/TestSetRepository.js
+export default class TestSetRepository {
     #testSetDataSource;
     #testSetQuestionDataSource;
     #conceptImageDataSource;
-    #examPromisesById = new Map();
+    #testSetPromisesById = new Map();
     #questionPromisesById = new Map();
-    #allExamsPromise = null;
+    #testSetListPromisesByScope = new Map();
 
     constructor(testSetDataSource, testSetQuestionDataSource, conceptImageDataSource) {
         this.#testSetDataSource = testSetDataSource;
@@ -13,98 +13,110 @@ export default class ExamRepository {
         this.#conceptImageDataSource = conceptImageDataSource;
     }
 
-    async getAllExams() {
-        if (!this.#allExamsPromise) {
-            this.#allExamsPromise = this.#testSetDataSource.fetchAllTestSets()
-                .catch((fetchError) => {
-                    this.#allExamsPromise = null;
-                    throw fetchError;
-                });
-        }
-
-        return await this.#allExamsPromise;
-    }
-
-    async getAvailableExams({ subjectId, language } = {}) {
-        const exams = await this.getAllExams();
-
-        return exams
-            .filter((exam) => this.#matchesSubject(exam, subjectId))
-            .filter((exam) => this.#matchesLanguage(exam, language))
-            .sort((a, b) => this.#compareExamListOrder(a, b))
-            .map((exam) => this.#toExamListItem(exam));
-    }
-
-    async getExamById(examId) {
-        if (!examId) {
-            return null;
-        }
-
-        if (!this.#examPromisesById.has(examId)) {
-            const examPromise = this.#testSetDataSource.fetchTestSetById(examId)
-                .catch((fetchError) => {
-                    this.#examPromisesById.delete(examId);
-                    throw fetchError;
-                });
-
-            this.#examPromisesById.set(examId, examPromise);
-        }
-
-        return await this.#examPromisesById.get(examId);
-    }
-
-    async getExamQuestions(input) {
-        const { examId, language } = normalizeGetExamQuestionsInput(input);
-        const exam = await this.getExamById(examId);
-
-        if (!exam) {
+    async getAvailableTestSets({ subjectId, language } = {}) {
+        if (!subjectId) {
             return [];
         }
 
-        const questionDtos = await this.#getPracticeQuestionDtos(examId);
-        const questions = questionDtos.map(toDomainPracticeQuestion);
+        const testSets = await this.#getTestSetsBySubject({ subjectId, language });
 
-        return await this.#enrichQuestionsWithConceptImages(questions, {
-            examId: exam.id,
-            subjectId: exam.subjectId,
-            language: language ?? exam.lang
-        });
+        return [...testSets]
+            .sort((a, b) => this.#compareTestSetListOrder(a, b))
+            .map((testSet) => this.#toTestSetListItem(testSet));
     }
 
-    async #getPracticeQuestionDtos(examId) {
-        if (!this.#questionPromisesById.has(examId)) {
-            const questionPromise = this.#testSetQuestionDataSource.fetchPracticeQuestions(examId)
+    async #getTestSetsBySubject({ subjectId, language }) {
+        const cacheKey = `${subjectId}:${language ?? ""}`;
+
+        if (!this.#testSetListPromisesByScope.has(cacheKey)) {
+            const testSetListPromise = this.#testSetDataSource.fetchTestSetsBySubject({
+                subjectId,
+                language
+            }).catch((fetchError) => {
+                this.#testSetListPromisesByScope.delete(cacheKey);
+                throw fetchError;
+            });
+
+            this.#testSetListPromisesByScope.set(cacheKey, testSetListPromise);
+        }
+
+        return await this.#testSetListPromisesByScope.get(cacheKey);
+    }
+
+    async getTestSetById(testSetId) {
+        if (!testSetId) {
+            return null;
+        }
+
+        if (!this.#testSetPromisesById.has(testSetId)) {
+            const testSetPromise = this.#testSetDataSource.fetchTestSetById(testSetId)
                 .catch((fetchError) => {
-                    this.#questionPromisesById.delete(examId);
+                    this.#testSetPromisesById.delete(testSetId);
                     throw fetchError;
                 });
 
-            this.#questionPromisesById.set(examId, questionPromise);
+            this.#testSetPromisesById.set(testSetId, testSetPromise);
         }
 
-        return await this.#questionPromisesById.get(examId);
+        return await this.#testSetPromisesById.get(testSetId);
     }
 
-    async getExamByBaseIdAndLang(baseId, language) {
-        const exams = await this.getAllExams();
+    async getTestSetQuestions(input) {
+        const { testSetId, language } = normalizeGetTestSetQuestionsInput(input);
+        const testSet = await this.getTestSetById(testSetId);
 
-        return exams.find((exam) => {
-            return exam.baseId === baseId && exam.lang === language;
+        if (!testSet) {
+            return [];
+        }
+
+        const questionDtos = await this.#getPracticeQuestionDtos(testSetId);
+        const questions = questionDtos.map(toDomainPracticeQuestion);
+
+        return await this.#enrichQuestionsWithConceptImages(questions, {
+            testSetId: testSet.id,
+            subjectId: testSet.subjectId,
+            language: language ?? testSet.lang
+        });
+    }
+
+    async #getPracticeQuestionDtos(testSetId) {
+        if (!this.#questionPromisesById.has(testSetId)) {
+            const questionPromise = this.#testSetQuestionDataSource.fetchPracticeQuestions(testSetId)
+                .catch((fetchError) => {
+                    this.#questionPromisesById.delete(testSetId);
+                    throw fetchError;
+                });
+
+            this.#questionPromisesById.set(testSetId, questionPromise);
+        }
+
+        return await this.#questionPromisesById.get(testSetId);
+    }
+
+    async getTestSetByBaseIdAndLang({ baseId, language, subjectId } = {}) {
+        if (!baseId || !language || !subjectId) {
+            return null;
+        }
+
+        const testSets = await this.#getTestSetsBySubject({ subjectId, language });
+
+        return testSets.find((testSet) => {
+            return testSet.baseId === baseId && testSet.lang === language;
         }) ?? null;
     }
 
-    async #enrichQuestionsWithConceptImages(questions, examContext) {
+    async #enrichQuestionsWithConceptImages(questions, testSetContext) {
         return await Promise.all(
             questions.map((question) => {
-                return this.#enrichQuestionWithConceptImages(question, examContext);
+                return this.#enrichQuestionWithConceptImages(question, testSetContext);
             })
         );
     }
 
-    async #enrichQuestionWithConceptImages(question, examContext) {
+    async #enrichQuestionWithConceptImages(question, testSetContext) {
         const questionContext = {
-            ...examContext,
-            subjectId: question.subjectId ?? examContext.subjectId,
+            ...testSetContext,
+            subjectId: question.subjectId ?? testSetContext.subjectId,
             moduleId: question.moduleId,
             groupId: question.groupId
         };
@@ -216,23 +228,7 @@ export default class ExamRepository {
         };
     }
 
-    #matchesSubject(exam, subjectId) {
-        if (!subjectId) {
-            return true;
-        }
-
-        return exam.subjectId === subjectId;
-    }
-
-    #matchesLanguage(exam, language) {
-        if (!language) {
-            return true;
-        }
-
-        return exam.lang === language;
-    }
-
-    #compareExamListOrder(a, b) {
+    #compareTestSetListOrder(a, b) {
         const sortOrderA = a.sortOrder ?? Number.MAX_SAFE_INTEGER;
         const sortOrderB = b.sortOrder ?? Number.MAX_SAFE_INTEGER;
 
@@ -243,36 +239,36 @@ export default class ExamRepository {
         return String(a.title ?? "").localeCompare(String(b.title ?? ""));
     }
 
-    #toExamListItem(exam) {
+    #toTestSetListItem(testSet) {
         return {
-            id: exam.id,
-            subjectId: exam.subjectId,
-            baseId: exam.baseId,
-            lang: exam.lang,
-            title: exam.title,
-            description: exam.description,
-            modeLabel: exam.modeLabel,
-            testType: exam.testType ?? null,
-            estimatedMinutes: exam.estimatedMinutes,
-            duration: exam.duration,
-            durationMinutes: exam.durationMinutes,
-            sortOrder: exam.sortOrder,
-            questionCount: exam.questionCount ?? exam.questions?.length ?? 0,
-            topicAreaKeys: Array.isArray(exam.topicAreaKeys) ? exam.topicAreaKeys : []
+            id: testSet.id,
+            subjectId: testSet.subjectId,
+            baseId: testSet.baseId,
+            lang: testSet.lang,
+            title: testSet.title,
+            description: testSet.description,
+            modeLabel: testSet.modeLabel,
+            testType: testSet.testType ?? null,
+            estimatedMinutes: testSet.estimatedMinutes,
+            duration: testSet.duration,
+            durationMinutes: testSet.durationMinutes,
+            sortOrder: testSet.sortOrder,
+            questionCount: testSet.questionCount ?? testSet.questions?.length ?? 0,
+            topicAreaKeys: Array.isArray(testSet.topicAreaKeys) ? testSet.topicAreaKeys : []
         };
     }
 }
 
-function normalizeGetExamQuestionsInput(input) {
+function normalizeGetTestSetQuestionsInput(input) {
     if (typeof input === "string") {
         return {
-            examId: input,
+            testSetId: input,
             language: undefined
         };
     }
 
     return {
-        examId: input?.examId,
+        testSetId: input?.testSetId,
         language: input?.language
     };
 }

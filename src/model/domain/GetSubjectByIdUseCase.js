@@ -17,7 +17,7 @@ export default class GetSubjectByIdUseCase {
             return null;
         }
 
-        return await this.subjectRepository.getSubjectByIdWithExamCount({
+        return await this.subjectRepository.getSubjectByIdWithPracticeTestCount({
             subjectId,
             language
         });
