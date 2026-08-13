@@ -27,6 +27,15 @@ describe("test-set repository scope", () => {
 		expect(dependenciesSource).not.toContain("new TestSetDataSource(");
 	});
 
+	test("uses explicit Exam and ChapterTest question datasource classes", () => {
+		const dependenciesSource = fs.readFileSync(path.resolve("src/di/dependencies.js"), "utf8");
+
+		expect(fs.existsSync(path.resolve("src/model/datasource/TestSetQuestionDataSource.js"))).toBe(false);
+		expect(dependenciesSource).toContain("const examQuestionDataSource = new ExamQuestionDataSource(");
+		expect(dependenciesSource).toContain("const chapterTestQuestionDataSource = new ChapterTestQuestionDataSource(");
+		expect(dependenciesSource).not.toContain("new TestSetQuestionDataSource(");
+	});
+
 	test("wires Exam and ChapterTest as named instances of one repository implementation", () => {
 		const dependenciesSource = fs.readFileSync(path.resolve("src/di/dependencies.js"), "utf8");
 

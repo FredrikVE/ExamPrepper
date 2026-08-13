@@ -2,7 +2,8 @@
 import SubjectDataSource from "../model/datasource/SubjectDataSource.js";
 import ExamDataSource from "../model/datasource/ExamDataSource.js";
 import ChapterTestDataSource from "../model/datasource/ChapterTestDataSource.js";
-import TestSetQuestionDataSource from "../model/datasource/TestSetQuestionDataSource.js";
+import ExamQuestionDataSource from "../model/datasource/ExamQuestionDataSource.js";
+import ChapterTestQuestionDataSource from "../model/datasource/ChapterTestQuestionDataSource.js";
 import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
 import GlossaryDataSource from "../model/datasource/GlossaryDataSource.js";
 import ExamAttemptDataSource from "../model/datasource/ExamAttemptDataSource.js";
@@ -58,19 +59,17 @@ const examDataSource = new ExamDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken
 });
-const examQuestionDataSource = new TestSetQuestionDataSource({
+const examQuestionDataSource = new ExamQuestionDataSource({
     baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken,
-    collectionPath: "/exams"
+    getToken: getActiveAuthToken
 });
 const chapterTestDataSource = new ChapterTestDataSource({
     baseUrl: apiBaseUrl,
     getToken: getActiveAuthToken
 });
-const chapterTestQuestionDataSource = new TestSetQuestionDataSource({
+const chapterTestQuestionDataSource = new ChapterTestQuestionDataSource({
     baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken,
-    collectionPath: "/chapter-tests"
+    getToken: getActiveAuthToken
 });
 const conceptImageDataSource = new ConceptImageDataSource({
     baseUrl: apiBaseUrl,
