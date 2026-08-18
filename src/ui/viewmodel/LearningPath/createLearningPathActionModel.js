@@ -8,24 +8,41 @@ export default function createLearningPathActionModel({ module, resumableSession
 			intent: "resume",
 			moduleId: module.id,
 			sessionId: resumableSession.sessionId,
-			round: resumableSession.round,
-			label: t.learningPathContinueRoundLabel(resumableSession.round),
+			label: t.learningPathResumeLabel,
 			isDisabled: false,
 			isPending: false
 		};
 	}
 
-	if (nextActivity !== null && nextActivity.kind === "start-round" && nextActivity.moduleId === module.id) {
+	if (nextActivity !== null && nextActivity.moduleId === module.id && (nextActivity.kind === "start-authored-session" || nextActivity.kind === "start-adaptive-session")) {
 		return {
 			intent: "start",
 			moduleId: module.id,
 			sessionId: null,
-			round: nextActivity.round,
-			label: t.learningPathStartRoundLabel(nextActivity.round),
+			activityKind: nextActivity.kind === "start-adaptive-session" ? nextActivity.activityKind : "authored",
+			label: nextActivity.kind === "start-adaptive-session" ? adaptiveLabel(nextActivity.activityKind, t) : t.learningPathContinueLabel,
 			isDisabled: !module.availability.isUnlocked || startingModuleId !== null,
 			isPending: isStarting
 		};
 	}
 
+	if (module.availability.isCurrent && module.availability.isUnlocked) {
+		return {
+			intent: "start",
+			moduleId: module.id,
+			sessionId: null,
+			activityKind: null,
+			label: t.learningPathContinueLabel,
+			isDisabled: startingModuleId !== null,
+			isPending: isStarting
+		};
+	}
+
 	return null;
+}
+
+function adaptiveLabel(activityKind, t) {
+	if (activityKind === "review") return t.learningPathStartReviewLabel;
+	if (activityKind === "repair") return t.learningPathStartRepairLabel;
+	return t.learningPathStartCoverageLabel;
 }

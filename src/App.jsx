@@ -166,11 +166,11 @@ function AppContent() {
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_PATH && (
-					<LearningPathPageWrapper selectedSubject={subjectSelectPageViewModel.selectedSubject} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} contentSelectViewModel={learningContentSelectPageViewModel} onLearningSessionStarted={navigationViewModel.openLearningSession} />
+					<LearningPathPageWrapper selectedSubject={subjectSelectPageViewModel.selectedSubject} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} contentSelectViewModel={learningContentSelectPageViewModel} onLearningSessionStarted={navigationViewModel.openLearningSession} onChapterTestSelected={(baseId) => navigationViewModel.selectExam(baseId, TEST_TYPES.CHAPTER_TEST)} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_SESSION && (
-					<LearningSessionPageWrapper subjectId={navigationViewModel.selectedSubjectId} language={language} sessionId={navigationViewModel.selectedLearningSessionId} t={t} isActive={true} backContract={navigationViewModel.backContract} onLearningSessionStarted={navigationViewModel.openLearningSession} />
+					<LearningSessionPageWrapper sessionId={navigationViewModel.selectedLearningSessionId} t={t} isActive={true} backContract={navigationViewModel.backContract} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
@@ -242,7 +242,22 @@ function AppContent() {
 	);
 }
 
-function LearningPathPageWrapper({ selectedSubject, language, t, isActive, backContract, contentSelectViewModel, onLearningSessionStarted }) {
+function LearningPathPageWrapper(props) {
+	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+
+	if (!hasClerkAuth) {
+		return <LearningPathPageWithViewModel {...props} authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false, userId: null }} />;
+	}
+
+	return <AuthenticatedLearningPathPageWrapper {...props} />;
+}
+
+function AuthenticatedLearningPathPageWrapper(props) {
+	const { isLoaded, isSignedIn, userId } = useAuth();
+	return <LearningPathPageWithViewModel {...props} authState={{ hasClerkAuth: true, isLoaded, isSignedIn, userId: userId ?? null }} />;
+}
+
+function LearningPathPageWithViewModel({ selectedSubject, language, t, isActive, backContract, contentSelectViewModel, onLearningSessionStarted, onChapterTestSelected, authState }) {
 	const contentToggleContract = {
 		entries: contentSelectViewModel.contentToggleEntries,
 		activeEntryId: "learning-path",
@@ -255,13 +270,13 @@ function LearningPathPageWrapper({ selectedSubject, language, t, isActive, backC
 		onCloseMobileToggleButtonGroup: contentSelectViewModel.closeMobileToggleButtonGroup,
 		contentToggleBackLabel: contentSelectViewModel.contentToggleBackLabel
 	};
-	const viewModel = useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted });
+	const viewModel = useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted, onChapterTestSelected, authState });
 
 	return <LearningPathPage viewModel={viewModel} />;
 }
 
-function LearningSessionPageWrapper({ subjectId, language, sessionId, t, isActive, backContract, onLearningSessionStarted }) {
-	const viewModel = useLearningSessionPageViewModel({ getLearningSessionUseCase, startLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, subjectId, language, sessionId, t, isActive, backContract, onLearningSessionStarted });
+function LearningSessionPageWrapper({ sessionId, t, isActive, backContract }) {
+	const viewModel = useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, t, isActive, backContract });
 
 	return <LearningSessionPage viewModel={viewModel} />;
 }

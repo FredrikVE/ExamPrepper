@@ -1,7 +1,7 @@
 <!--test/fixtures/learning-path/README.md-->
 # LearningPath transport test fixtures
 
-P04 locks these endpoints:
+Learning Path V2 locks these endpoints:
 
 ```text
 GET  /api/subjects/:subjectId/learning-path?lang=:language
@@ -10,6 +10,8 @@ GET  /api/learning-sessions/:sessionId
 POST /api/learning-sessions/:sessionId/submit
 ```
 
-`sessionQuestionId` is the frontend identity for answers, results and answer-option order. The backend retains `(examId, questionKey)` as source identity and resolves it from `sessionQuestionId` during persistence.
+The Learning Path response is backend-owned `Module → Section → Session → ChapterTest`. Frontend renders that roadmap and does not calculate rounds, Session packing or the next authored Session locally.
 
-The four JSON files in this directory are representative test fixtures consumed by the contract and repository tests. They are not a production contract package. Frontend and backend copies must remain byte-identical until the repositories share one physical package.
+Starting a Learning Session sends only subject, module and language. Backend re-resolves the next activity and persists the selected authored/adaptive Session. `sessionQuestionId` remains the frontend identity for answers, results and answer-option order.
+
+The four JSON files in this directory are representative test fixtures consumed by the contract and repository tests. They are not a production contract package. Frontend and backend copies should remain byte-identical while both repositories keep local fixtures.

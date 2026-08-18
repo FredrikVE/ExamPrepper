@@ -7,7 +7,7 @@ describe("shouldShowSessionActionPanel", () => {
 		expect(shouldShowSessionActionPanel({ submitResult: null, isSessionComplete: false, submitStatus: "idle" })).toBe(true);
 	});
 
-	test("hides the stale question action while the completed round is submitted", () => {
+	test("hides the stale question action while the completed Session is submitted", () => {
 		expect(shouldShowSessionActionPanel({ submitResult: null, isSessionComplete: true, submitStatus: "submitting" })).toBe(false);
 	});
 

@@ -6,11 +6,11 @@ import { describe, expect, test } from "@jest/globals";
 const SESSION_HEADER_PATH = path.resolve("src/ui/view/components/LearningSessionPage/LearningSessionHeader.jsx");
 
 describe("LearningSessionHeader", () => {
-	test("renders module, round and question counter from the ViewModel", () => {
+	test("renders module, activity context and question counter from the ViewModel", () => {
 		const source = fs.readFileSync(SESSION_HEADER_PATH, "utf8");
 
 		expect(source).toContain("{model.title}");
-		expect(source).toContain("{model.roundLabel}");
+		expect(source).toContain("{model.contextLabel}");
 		expect(source).toContain("{model.counterLabel}");
 	});
 

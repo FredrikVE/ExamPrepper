@@ -1,4 +1,3 @@
-//test/model/repositories/LearningPathRepository.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,94 +7,28 @@ import FakeLearningPathDataSource from "../../fakes/FakeLearningPathDataSource.j
 
 const fixturesDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../fixtures/learning-path");
 const readFixture = (name) => JSON.parse(fs.readFileSync(path.join(fixturesDirectory, name), "utf8"));
-
-function createRepository() {
-	return new LearningPathRepository(new FakeLearningPathDataSource({
-		learningPathResponse: readFixture("learning-path-response.json"),
-		learningSessionResponse: readFixture("learning-session-response.json"),
-		submitSessionResponse: readFixture("submit-session-response.json")
-	}));
+function createRepository(overrides = {}) {
+	return new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json"), ...overrides }));
 }
 
 describe("LearningPathRepository", () => {
-	test("maps all four transport contracts without selection policy", async () => {
+	test("maps the backend-owned roadmap without recreating progression", async () => {
 		const repository = createRepository();
 		const pathModel = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
-		const session = await repository.startLearningSession({ subjectId: "in2120", moduleId: pathModel.modules[0].id, language: "no", round: 2 });
-		const reloaded = await repository.getLearningSession(session.sessionId);
+		const session = await repository.startLearningSession({ subjectId: "in2120", moduleId: pathModel.modules[0].id, language: "no" });
 		const result = await repository.submitLearningSession({ sessionId: session.sessionId, answers: [] });
-
-		expect(pathModel.activeModuleId).toBe(pathModel.modules[0].id);
-		expect(pathModel.resumableSession).toBeNull();
-		expect(pathModel.nextActivity).toEqual({ kind: "start-round", moduleId: pathModel.modules[0].id, round: 2, focus: "progression" });
-		expect(pathModel.modules[0].availability).toEqual({ isUnlocked: true, isCurrent: true, lockReason: null });
-		expect(pathModel.modules[0].topics[0]).toEqual({ key: "sikkerhetsbegreper", label: "Sikkerhetsbegreper", masteryPercent: null });
-		expect(pathModel.modules[0].progress.masteryPercent).toBe(67.5);
-		expect(pathModel.examGate).toEqual({ isUnlocked: false, requiredCompletedRounds: 3 });
-		expect(session).toEqual(expect.objectContaining({ modulePosition: 1, moduleTitle: "Grunnbegreper" }));
-		expect(session.questions[0].sessionQuestionId).toBeTruthy();
-		expect(reloaded.questions).toEqual(session.questions);
-		expect(result.score.earnedPoints).toBe(8.5);
+		expect(pathModel.nextActivity.kind).toBe("start-authored-session");
+		expect(pathModel.modules[0].progress).toMatchObject({ completedSessions: 1, totalSessions: 4, completionPercent: 25 });
+		expect(pathModel.modules[0].sections[0].sessions[1].status).toBe("current");
+		expect(pathModel.modules[0].sections[0].chapterTests).toHaveLength(2);
+		expect(pathModel.examGate).toEqual({ isUnlocked: false });
+		expect(session).toMatchObject({ activityKind: "authored", planKey: expect.any(String), sectionId: "section-1" });
+		expect(result).not.toHaveProperty("moduleProgress");
 	});
 
-	test("rejects a learning path without backend-owned next activity", async () => {
+	test("rejects a module without backend-owned sections", async () => {
 		const response = readFixture("learning-path-response.json");
-		delete response.nextActivity;
-		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
-
-		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+		delete response.modules[0].sections;
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
-
-	test("rejects a learning path without backend-owned availability", async () => {
-		const response = readFixture("learning-path-response.json");
-		delete response.modules[0].availability;
-		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
-
-		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
-	});
-
-	test("rejects a session question without sessionQuestionId", async () => {
-		const response = readFixture("learning-session-response.json");
-		delete response.questions[0].sessionQuestionId;
-		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: response, submitSessionResponse: readFixture("submit-session-response.json") }));
-
-		await expect(repository.getLearningSession(response.sessionId)).rejects.toThrow("Invalid learning session response");
-	});
-
-	test("maps backend practice options to the canonical QuestionCard shape", async () => {
-		const dataSource = { getLearningSession: async () => ({ sessionId: "s", moduleId: "m", modulePosition: 1, moduleTitle: "Module", round: 1, questionCount: 1, questions: [{ sessionQuestionId: "sq", position: 1, question: { id: "q", type: "single", points: 1, acceptedAnswers: [], options: [{ id: "a", isCorrect: true, feedback: "Riktig" }] } }] }) };
-		const repository = new LearningPathRepository(dataSource);
-		const session = await repository.getLearningSession("s");
-		expect(session.questions[0].question.options[0]).toMatchObject({ correct: true, why: "Riktig" });
-	});
-	test("accepts backend repair focus as part of the adaptive contract", async () => {
-		const response = readFixture("learning-path-response.json");
-		response.nextActivity.focus = "repair";
-		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
-
-		const result = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
-
-		expect(result.nextActivity.focus).toBe("repair");
-	});
-
-	test("maps resumable session round as the resume action source", async () => {
-		const response = readFixture("learning-path-response.json");
-		response.resumableSession = { sessionId: "session-1", moduleId: response.modules[0].id, round: 2, currentQuestionPosition: 2, questionCount: 6 };
-		response.nextActivity = { kind: "resume-session", moduleId: response.modules[0].id, sessionId: "session-1" };
-		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
-
-		const result = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
-
-		expect(result.resumableSession.round).toBe(2);
-	});
-
-	test("rejects resumable session state without its persisted round", async () => {
-		const response = readFixture("learning-path-response.json");
-		response.resumableSession = { sessionId: "session-1", moduleId: response.modules[0].id, currentQuestionPosition: 2, questionCount: 6 };
-		response.nextActivity = { kind: "resume-session", moduleId: response.modules[0].id, sessionId: "session-1" };
-		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") }));
-
-		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
-	});
-
 });

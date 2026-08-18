@@ -1,86 +1,66 @@
-//test/ui/viewmodel/LearningPath/createLearningPathRoadmapModel.test.js
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
 import createLearningPathRoadmapModel from "../../../../src/ui/viewmodel/LearningPath/createLearningPathRoadmapModel.js";
 
+const learningPath = JSON.parse(fs.readFileSync(path.resolve("test/fixtures/learning-path/learning-path-response.json"), "utf8"));
 const t = {
 	learningPathPartLabel: (position) => `Part ${position}`,
-	learningPathMasteryLabel: (percentage) => `${percentage}%`,
+	learningPathCompletionLabel: (percentage) => `${percentage}% complete`,
+	learningPathProgressStatus: (completed, total) => `${completed}/${total}`,
 	learningPathToggleDetailsLabel: (title) => `Toggle ${title}`,
-	learningPathStatusActiveRound: (round) => `Active ${round}`,
 	learningPathStatusActive: "Active",
 	learningPathStatusCompleted: "Completed",
 	learningPathStatusProgress: "Progress",
 	learningPathStatusLocked: "Locked",
 	learningPathStatusNotStarted: "Not started",
-	learningPathDetailHeading: "Progress",
-	learningPathNoTopicProgressLabel: "Not started",
-	learningPathTopicNotMeasuredLabel: "Not measured",
-	learningPathTopicProgressLabel: (percentage) => `${percentage}%`,
-	learningPathStartRoundLabel: (round) => `Start ${round}`,
-	learningPathContinueRoundLabel: (round) => `Continue ${round}`,
+	learningPathDetailHeading: "Sections",
+	learningPathResumeLabel: "Resume",
+	learningPathStartLabel: "Start",
+	learningPathStartReviewLabel: "Review",
+	learningPathStartRepairLabel: "Repair",
+	learningPathStartCoverageLabel: "Coverage",
+	learningPathSectionLabel: (position) => `Section ${position}`,
+	learningPathSectionProgressLabel: (completed, total) => `${completed}/${total}`,
+	learningPathSessionLabel: (position) => `Session ${position}`,
+	learningPathSessionQuestionCount: (count) => `${count} questions`,
+	learningPathSessionCompletedLabel: "Completed",
+	learningPathSessionCurrentLabel: "Next",
+	learningPathSessionAvailableLabel: "Ready",
+	learningPathChapterTestLabel: (position) => `Chapter test ${position}`,
+	learningPathChapterTestAvailableLabel: "Ready",
 	learningPathExamTitle: "Exam",
 	learningPathExamUnlockedLabel: "Unlocked",
-	learningPathExamLockedLabel: (rounds) => `Locked ${rounds}`,
+	learningPathExamLockedLabel: "Locked",
 	learningPathModulesLabel: "Modules"
 };
 
-const learningPath = {
-	subjectId: "in2120",
-	activeModuleId: "module-1",
-	resumableSession: null,
-	nextActivity: { kind: "start-round", moduleId: "module-1", round: 2, focus: "progression" },
-	modules: [{ id: "module-1", moduleKey: "concepts", position: 1, title: "Concepts", description: "Description", availability: { isUnlocked: true, isCurrent: true, lockReason: null }, topics: [{ key: "topic", label: "Topic", masteryPercent: 55 }], progress: { masteryPercent: 55, completedRounds: 1, lastSessionAt: null } }],
-	examGate: { isUnlocked: false, requiredCompletedRounds: 3 }
-};
-
 describe("createLearningPathRoadmapModel", () => {
-	test("builds presentation-only module and exam entries", () => {
-		const model = createLearningPathRoadmapModel({ learningPath, expandedModuleId: "module-1", startingModuleId: null, t });
-		expect(model.entries).toHaveLength(2);
-		expect(model.entries[0]).toMatchObject({ kind: "module", position: 1, title: "Concepts", appearance: "active", nodeModel: { iconKey: "play" }, cardModel: { statusLabel: "Active 2", isExpanded: true }, detailModel: { heading: "Progress" } });
-		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: 55, appearance: "medium" });
-		expect(model.entries[1]).toMatchObject({ kind: "examGate", appearance: "locked" });
+	test("renders backend-owned sections sessions and chapter tests", () => {
+		const model = createLearningPathRoadmapModel({ learningPath, expandedModuleId: learningPath.modules[0].id, startingModuleId: null, t });
+		const module = model.entries[0];
+		expect(module.detailModel.sections[0].sessions).toHaveLength(2);
+		expect(module.detailModel.sections[0].sessions[1]).toMatchObject({ status: "current", label: "Session 2" });
+		expect(module.detailModel.sections[0].chapterTests).toHaveLength(2);
+		expect(module.actionModel).toMatchObject({ intent: "start", activityKind: "authored" });
 	});
-	test("does not call a previously attempted topic not started when topic scoring is unavailable", () => {
-		const startedPath = {
+	test("preserves multiple IN5431-style ChapterTests in authored order", () => {
+		const chapterTests = [1, 2, 3, 4].map((position) => ({
+			baseId: `in5431-chapter-1${String.fromCharCode(96 + position)}-test`,
+			position,
+			status: "available"
+		}));
+		const in5431Shape = {
 			...learningPath,
-			modules: [{
-				...learningPath.modules[0],
-				topics: [{ key: "topic", label: "Topic", masteryPercent: null }]
-			}]
+			modules: learningPath.modules.map((module, moduleIndex) => moduleIndex === 0 ? {
+				...module,
+				sections: module.sections.map((section, sectionIndex) => sectionIndex === 0 ? { ...section, chapterTests } : section)
+			} : module)
 		};
 
-		const model = createLearningPathRoadmapModel({ learningPath: startedPath, expandedModuleId: "module-1", startingModuleId: null, t });
+		const model = createLearningPathRoadmapModel({ learningPath: in5431Shape, expandedModuleId: in5431Shape.modules[0].id, startingModuleId: null, t });
 
-		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: null, percentageLabel: "Not measured" });
-	});
-
-	test("keeps not started for a topic before the module has any activity", () => {
-		const untouchedPath = {
-			...learningPath,
-			modules: [{
-				...learningPath.modules[0],
-				topics: [{ key: "topic", label: "Topic", masteryPercent: null }],
-				progress: { masteryPercent: 0, completedRounds: 0, lastSessionAt: null }
-			}]
-		};
-
-		const model = createLearningPathRoadmapModel({ learningPath: untouchedPath, expandedModuleId: "module-1", startingModuleId: null, t });
-
-		expect(model.entries[0].detailModel.topics[0]).toMatchObject({ percentage: null, percentageLabel: "Not started" });
-	});
-
-	test("binds the active module action to the backend next activity", () => {
-		const adaptivePath = {
-			...learningPath,
-			nextActivity: { kind: "start-round", moduleId: "module-1", round: 1, focus: "practice" },
-			modules: [{ ...learningPath.modules[0], progress: { masteryPercent: 55, completedRounds: 3, lastSessionAt: null } }]
-		};
-
-		const model = createLearningPathRoadmapModel({ learningPath: adaptivePath, expandedModuleId: "module-1", startingModuleId: null, t });
-
-		expect(model.entries[0].actionModel).toMatchObject({ intent: "start", round: 1, label: "Start 1" });
-		expect(model.entries[0].detailModel.actionModel).toBe(model.entries[0].actionModel);
+		expect(model.entries[0].detailModel.sections[0].chapterTests.map((test) => test.baseId)).toEqual(chapterTests.map((test) => test.baseId));
 	});
 
 });

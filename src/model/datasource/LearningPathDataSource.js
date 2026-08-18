@@ -7,7 +7,7 @@ export default class LearningPathDataSource extends DataSource {
 	}
 
 	async startLearningSession(command) {
-		return await this.post("/learning-sessions", { subjectId: command.subjectId, moduleId: command.moduleId, lang: command.language, round: command.round });
+		return await this.post("/learning-sessions", { subjectId: command.subjectId, moduleId: command.moduleId, lang: command.language });
 	}
 
 	async getLearningSession(sessionId) {

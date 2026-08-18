@@ -2,6 +2,9 @@
 const INVALID_LEARNING_PATH_RESPONSE = "Invalid learning path response";
 const INVALID_LEARNING_SESSION_RESPONSE = "Invalid learning session response";
 const INVALID_LEARNING_SESSION_RESULT = "Invalid learning session result";
+const ACTIVITY_KINDS = new Set(["authored", "review", "repair", "coverage", "legacy-round"]);
+const SESSION_STATUSES = new Set(["completed", "current", "available", "locked"]);
+const CHAPTER_TEST_STATUSES = new Set(["available", "locked"]);
 
 export default class LearningPathRepository {
 	constructor(learningPathDataSource) {
@@ -11,7 +14,6 @@ export default class LearningPathRepository {
 	async getLearningPath({ subjectId, language }) {
 		const response = await this.learningPathDataSource.getLearningPath({ subjectId, language });
 		validateLearningPathResponse(response);
-
 		return {
 			subjectId: response.subjectId,
 			activeModuleId: response.activeModuleId,
@@ -23,67 +25,70 @@ export default class LearningPathRepository {
 	}
 
 	async startLearningSession(command) {
-		const response = await this.learningPathDataSource.startLearningSession(command);
-		return toLearningSession(response);
+		return toLearningSession(await this.learningPathDataSource.startLearningSession(command));
 	}
 
 	async getLearningSession(sessionId) {
-		const response = await this.learningPathDataSource.getLearningSession(sessionId);
-		return toLearningSession(response);
+		return toLearningSession(await this.learningPathDataSource.getLearningSession(sessionId));
 	}
 
 	async submitLearningSession({ sessionId, answers }) {
 		const response = await this.learningPathDataSource.submitLearningSession({ sessionId, answers });
 		validateSubmitResponse(response);
-
-		return {
-			sessionId: response.sessionId,
-			status: response.status,
-			score: { ...response.score },
-			moduleProgress: { ...response.moduleProgress }
-		};
+		return { sessionId: response.sessionId, status: response.status, score: { ...response.score } };
 	}
 }
 
 function validateLearningPathResponse(response) {
-	if (!response || typeof response.subjectId !== "string" || !isNullableString(response.activeModuleId) || !isValidResumableSession(response.resumableSession) || !isValidNextActivity(response.nextActivity) || !Array.isArray(response.modules) || !isValidExamGate(response.examGate)) {
-		throw new Error(INVALID_LEARNING_PATH_RESPONSE);
-	}
-
-	for (const module of response.modules) {
-		if (!isValidLearningModule(module)) {
-			throw new Error(INVALID_LEARNING_PATH_RESPONSE);
-		}
-	}
+	if (!response || typeof response.subjectId !== "string" || !isNullableString(response.activeModuleId) || !isValidResumableSession(response.resumableSession) || !isValidNextActivity(response.nextActivity) || !Array.isArray(response.modules) || !isValidExamGate(response.examGate)) throw new Error(INVALID_LEARNING_PATH_RESPONSE);
+	for (const module of response.modules) if (!isValidLearningModule(module)) throw new Error(INVALID_LEARNING_PATH_RESPONSE);
 }
 
 function isValidLearningModule(module) {
-	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !module.progress || !Number.isFinite(module.progress.masteryPercent) || !Number.isInteger(module.progress.completedRounds)) {
-		return false;
-	}
+	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !isValidModuleProgress(module.progress) || !Array.isArray(module.sections)) return false;
+	return module.topics.every((topic) => topic && typeof topic.key === "string" && typeof topic.label === "string" && (topic.masteryPercent === null || Number.isFinite(topic.masteryPercent))) && module.sections.every(isValidSection);
+}
 
-	return module.topics.every((topic) => topic && typeof topic.key === "string" && typeof topic.label === "string" && (topic.masteryPercent === null || Number.isFinite(topic.masteryPercent)));
+function isValidModuleProgress(progress) {
+	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent) && isNullableNumber(progress.performancePercent) && isNullableNumber(progress.coveragePercent) && isNullableString(progress.lastSessionAt));
+}
+
+function isValidSection(section) {
+	return Boolean(section && typeof section.id === "string" && typeof section.sectionKey === "string" && typeof section.chapterKey === "string" && Number.isInteger(section.position) && typeof section.label === "string" && isValidSectionProgress(section.progress) && Array.isArray(section.sessions) && section.sessions.every(isValidRoadmapSession) && Array.isArray(section.chapterTests) && section.chapterTests.every(isValidChapterTest));
+}
+
+function isValidSectionProgress(progress) {
+	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent));
+}
+
+function isValidRoadmapSession(session) {
+	return Boolean(session && typeof session.planKey === "string" && Number.isInteger(session.position) && Number.isInteger(session.questionCount) && SESSION_STATUSES.has(session.status));
+}
+
+function isValidChapterTest(test) {
+	return Boolean(test && typeof test.baseId === "string" && Number.isInteger(test.position) && CHAPTER_TEST_STATUSES.has(test.status));
 }
 
 function isValidResumableSession(session) {
-	return session === null || Boolean(session && typeof session.sessionId === "string" && typeof session.moduleId === "string" && Number.isInteger(session.round) && Number.isInteger(session.currentQuestionPosition) && Number.isInteger(session.questionCount));
+	return session === null || Boolean(session && typeof session.sessionId === "string" && typeof session.moduleId === "string" && ACTIVITY_KINDS.has(session.activityKind) && isNullableString(session.planKey) && isNullableString(session.sectionId) && Number.isInteger(session.currentQuestionPosition) && Number.isInteger(session.questionCount));
 }
 
 function isValidNextActivity(activity) {
 	if (activity === null) return true;
 	if (!activity || typeof activity.moduleId !== "string") return false;
 	if (activity.kind === "resume-session") return typeof activity.sessionId === "string";
-	if (activity.kind !== "start-round" || !Number.isInteger(activity.round)) return false;
-	return activity.focus === "initial-exposure" || activity.focus === "practice" || activity.focus === "progression" || activity.focus === "revisit" || activity.focus === "repair";
+	if (activity.kind === "start-authored-session") return typeof activity.sectionId === "string" && typeof activity.sectionKey === "string" && typeof activity.planKey === "string" && Number.isInteger(activity.sessionPosition) && Number.isInteger(activity.questionCount);
+	if (activity.kind === "start-adaptive-session") return ["review", "repair", "coverage"].includes(activity.activityKind) && Number.isInteger(activity.questionCount);
+	if (activity.kind === "chapter-test") return typeof activity.sectionId === "string" && typeof activity.baseId === "string";
+	return false;
 }
 
 function isValidExamGate(examGate) {
-	return Boolean(examGate && typeof examGate.isUnlocked === "boolean" && Number.isInteger(examGate.requiredCompletedRounds));
+	return Boolean(examGate && typeof examGate.isUnlocked === "boolean");
 }
 
-function isNullableString(value) {
-	return value === null || typeof value === "string";
-}
+function isNullableString(value) { return value === null || typeof value === "string"; }
+function isNullableNumber(value) { return value === null || Number.isFinite(value); }
 
 function toLearningModule(module) {
 	return {
@@ -94,46 +99,32 @@ function toLearningModule(module) {
 		description: module.description,
 		availability: { ...module.availability },
 		topics: module.topics.map((topic) => ({ ...topic })),
-		progress: { ...module.progress }
+		progress: { ...module.progress },
+		sections: module.sections.map((section) => ({
+			...section,
+			progress: { ...section.progress },
+			sessions: section.sessions.map((session) => ({ ...session })),
+			chapterTests: section.chapterTests.map((test) => ({ ...test }))
+		}))
 	};
 }
 
 function toLearningSession(response) {
-	if (!response || typeof response.sessionId !== "string" || typeof response.moduleId !== "string" || !Number.isInteger(response.modulePosition) || typeof response.moduleTitle !== "string" || !Number.isInteger(response.round) || !Number.isInteger(response.questionCount) || !Array.isArray(response.questions)) {
-		throw new Error(INVALID_LEARNING_SESSION_RESPONSE);
-	}
-
+	if (!response || typeof response.sessionId !== "string" || typeof response.moduleId !== "string" || !Number.isInteger(response.modulePosition) || typeof response.moduleTitle !== "string" || !ACTIVITY_KINDS.has(response.activityKind) || !isNullableString(response.planKey) || !isNullableString(response.sectionId) || !Number.isInteger(response.questionCount) || !Array.isArray(response.questions)) throw new Error(INVALID_LEARNING_SESSION_RESPONSE);
 	const questions = [];
 	for (const entry of response.questions) {
-		if (!entry || typeof entry.sessionQuestionId !== "string" || !Number.isFinite(entry.position) || !entry.question || typeof entry.question !== "object") {
-			throw new Error(INVALID_LEARNING_SESSION_RESPONSE);
-		}
-
+		if (!entry || typeof entry.sessionQuestionId !== "string" || !Number.isFinite(entry.position) || !entry.question || typeof entry.question !== "object") throw new Error(INVALID_LEARNING_SESSION_RESPONSE);
 		questions.push({ sessionQuestionId: entry.sessionQuestionId, position: entry.position, question: toLearningQuestion(entry.question) });
 	}
-
-	return { sessionId: response.sessionId, moduleId: response.moduleId, modulePosition: response.modulePosition, moduleTitle: response.moduleTitle, round: response.round, questionCount: response.questionCount, questions };
+	return { sessionId: response.sessionId, moduleId: response.moduleId, modulePosition: response.modulePosition, moduleTitle: response.moduleTitle, activityKind: response.activityKind, planKey: response.planKey, sectionId: response.sectionId, questionCount: response.questionCount, questions };
 }
 
 function toLearningQuestion(question) {
-	const mappedQuestion = {
-		...question,
-		answers: Array.isArray(question.answers) ? [...question.answers] : Array.isArray(question.acceptedAnswers) ? [...question.acceptedAnswers] : []
-	};
-
-	if (Array.isArray(question.options)) {
-		mappedQuestion.options = question.options.map((option) => ({
-			...option,
-			correct: option.correct ?? option.isCorrect ?? false,
-			why: option.why ?? option.feedback ?? ""
-		}));
-	}
-
+	const mappedQuestion = { ...question, answers: Array.isArray(question.answers) ? [...question.answers] : Array.isArray(question.acceptedAnswers) ? [...question.acceptedAnswers] : [] };
+	if (Array.isArray(question.options)) mappedQuestion.options = question.options.map((option) => ({ ...option, correct: option.correct ?? option.isCorrect ?? false, why: option.why ?? option.feedback ?? "" }));
 	return mappedQuestion;
 }
 
 function validateSubmitResponse(response) {
-	if (!response || typeof response.sessionId !== "string" || response.status !== "completed" || !response.score || !Number.isFinite(response.score.earnedPoints) || !Number.isFinite(response.score.availablePoints) || !Number.isFinite(response.score.percentage) || !response.moduleProgress || !Number.isFinite(response.moduleProgress.masteryPercent) || !Number.isInteger(response.moduleProgress.completedRounds) || !Number.isInteger(response.moduleProgress.nextRound)) {
-		throw new Error(INVALID_LEARNING_SESSION_RESULT);
-	}
+	if (!response || typeof response.sessionId !== "string" || response.status !== "completed" || !response.score || !Number.isFinite(response.score.earnedPoints) || !Number.isFinite(response.score.availablePoints) || !Number.isFinite(response.score.percentage)) throw new Error(INVALID_LEARNING_SESSION_RESULT);
 }

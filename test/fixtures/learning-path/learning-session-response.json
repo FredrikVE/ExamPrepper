@@ -3,7 +3,6 @@
 	"moduleId": "11111111-1111-4111-8111-111111111111",
 	"modulePosition": 1,
 	"moduleTitle": "Grunnbegreper",
-	"round": 2,
 	"questionCount": 6,
 	"questions": [
 		{
@@ -11,14 +10,12 @@
 			"position": 1,
 			"question": {
 				"id": "shared-question",
-				"examId": "in2120-exam-2025-no",
 				"type": "single",
 				"title": "Konfidensialitet",
 				"prompt": "Hvilket prinsipp begrenser tilgang til autoriserte personer?",
 				"source": "IN2120 2025",
 				"position": 1,
 				"points": 1,
-				"moduleId": "grunnbegreper",
 				"options": [
 					{
 						"id": "confidentiality",
@@ -42,14 +39,12 @@
 			"position": 2,
 			"question": {
 				"id": "shared-question",
-				"examId": "in2120-exam-2024-no",
 				"type": "single",
 				"title": "Integritet",
 				"prompt": "Hvilket prinsipp beskytter mot uautorisert endring?",
 				"source": "IN2120 2024",
 				"position": 3,
 				"points": 1,
-				"moduleId": "grunnbegreper",
 				"options": [
 					{
 						"id": "integrity",
@@ -73,14 +68,12 @@
 			"position": 3,
 			"question": {
 				"id": "q-multi-01",
-				"examId": "in2120-exam-2025-no",
 				"type": "multi",
 				"title": "Sikkerhetsmål",
 				"prompt": "Velg sikkerhetsmålene i CIA-triaden.",
 				"source": "IN2120 2025",
 				"position": 2,
 				"points": 3,
-				"moduleId": "grunnbegreper",
 				"options": [
 					{
 						"id": "confidentiality",
@@ -114,14 +107,12 @@
 			"position": 4,
 			"question": {
 				"id": "q-fill-01",
-				"examId": "in2120-exam-2023-no",
 				"type": "fill",
 				"title": "Fyll inn begrepet",
 				"prompt": "Beskyttelse mot uautorisert innsyn kalles ____.",
 				"source": "IN2120 2023",
 				"position": 4,
 				"points": 1,
-				"moduleId": "grunnbegreper",
 				"acceptedAnswers": [
 					"konfidensialitet"
 				]
@@ -132,14 +123,12 @@
 			"position": 5,
 			"question": {
 				"id": "q-sequence-01",
-				"examId": "in2120-exam-2024-no",
 				"type": "SequenceOrder",
 				"title": "Hendelseshåndtering",
 				"prompt": "Plasser stegene i riktig rekkefølge.",
 				"source": "IN2120 2024",
 				"position": 5,
 				"points": 3,
-				"moduleId": "grunnbegreper",
 				"items": [
 					{
 						"id": "detect",
@@ -167,14 +156,12 @@
 			"position": 6,
 			"question": {
 				"id": "q-dropdown-01",
-				"examId": "in2120-exam-2023-no",
 				"type": "dropdownFill",
 				"title": "Velg riktig sikkerhetsmål",
 				"prompt": "Velg begrep for hvert utsagn.",
 				"source": "IN2120 2023",
 				"position": 6,
 				"points": 2,
-				"moduleId": "grunnbegreper",
 				"options": [
 					{
 						"id": "confidentiality",
@@ -209,5 +196,8 @@
 				]
 			}
 		}
-	]
+	],
+	"activityKind": "authored",
+	"planKey": "authored:chapter-1:step-1:1-6",
+	"sectionId": "section-1"
 }

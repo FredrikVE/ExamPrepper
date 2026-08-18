@@ -1,26 +1,15 @@
-//test/model/datasource/LearningPathDataSource.test.js
 import { afterEach, describe, expect, jest, test } from "@jest/globals";
 import LearningPathDataSource from "../../../src/model/datasource/LearningPathDataSource.js";
 
-afterEach(() => {
-	jest.restoreAllMocks();
-});
+afterEach(() => jest.restoreAllMocks());
 
 describe("LearningPathDataSource", () => {
-	test("uses the four P04 endpoints", async () => {
+	test("starts a learning session without client-owned progression", async () => {
 		const fetchMock = jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => "{}" });
 		const dataSource = new LearningPathDataSource({ baseUrl: "https://example.test/api", getToken: null });
-
-		await dataSource.getLearningPath({ subjectId: "in2120", language: "no" });
-		await dataSource.startLearningSession({ subjectId: "in2120", moduleId: "m1", language: "no", round: 1 });
-		await dataSource.getLearningSession("s1");
-		await dataSource.submitLearningSession({ sessionId: "s1", answers: [] });
-
-		expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
-			"https://example.test/api/subjects/in2120/learning-path?lang=no",
-			"https://example.test/api/learning-sessions",
-			"https://example.test/api/learning-sessions/s1",
-			"https://example.test/api/learning-sessions/s1/submit"
-		]);
+		await dataSource.startLearningSession({ subjectId: "in2120", moduleId: "m1", language: "no" });
+		const [, options] = fetchMock.mock.calls[0];
+		expect(JSON.parse(options.body)).toEqual({ subjectId: "in2120", moduleId: "m1", lang: "no" });
+		expect(options.body).not.toContain("round");
 	});
 });

@@ -22,7 +22,7 @@ export default function LearningPathPage({ viewModel }) {
 						<div className="learning-path-page-state-content">
 							<ContinueLearningPanel model={viewModel.continuePanelModel} onActionPressed={viewModel.onLearningPathAction} />
 							{viewModel.startSessionError === null ? null : <p className="learning-path-error" role="alert">{viewModel.startSessionError}</p>}
-							<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onActionPressed={viewModel.onLearningPathAction} registerModuleElement={scrollAdapter.registerModuleElement} />
+							<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onActionPressed={viewModel.onLearningPathAction} onChapterTestSelected={viewModel.onChapterTestSelected} registerModuleElement={scrollAdapter.registerModuleElement} />
 						</div>
 					</WorkspaceState>
 				</div>

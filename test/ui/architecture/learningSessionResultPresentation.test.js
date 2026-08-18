@@ -8,15 +8,19 @@ function read(relativePath) {
 }
 
 describe("LearningSession result presentation", () => {
-	test("labels the round score and module mastery instead of rendering unexplained percentages", () => {
+	test("shows the completed Session result and returns progression ownership to Learning Path", () => {
 		const source = read("src/ui/view/components/LearningSessionPage/SessionResultPanel.jsx");
+		const model = read("src/ui/viewmodel/LearningSession/createSessionResultModel.js");
+
 		expect(source).toContain('className="learning-session-result__stats"');
 		expect(source).toContain('className="learning-session-result__module-progress"');
 		expect(source).toContain("pointsLabel");
-		expect(source).toContain("roundScoreLabel");
-		expect(source).toContain("moduleMasteryLabel");
+		expect(source).toContain("scoreLabel");
 		expect(source).toContain("nextStepBody");
 		expect(source).toContain("<ArrowRight aria-hidden=\"true\" />");
+		expect(model).toContain("learningSessionResultContinuePathBody");
+		expect(model).toContain("onPrimary: onBack");
+		expect(model).not.toMatch(/nextRound|roundScore|moduleMastery/);
 	});
 
 	test("uses score-dependent strong, medium and weak result appearances", () => {

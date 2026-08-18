@@ -1,27 +1,24 @@
 //src/ui/viewmodel/LearningPath/createContinueLearningModel.js
 export default function createContinueLearningModel({ activeEntry, resumableSession, nextActivity, t }) {
 	if (activeEntry === null || activeEntry.actionModel === null) return { isVisible: false, title: "", description: "", buttonLabel: "", actionModel: null };
-
-	const isResume = activeEntry.actionModel.intent === "resume";
-	if (isResume) {
-		return { isVisible: true, title: t.learningPathResumeTitle, description: t.learningPathResumeBody(activeEntry.position, activeEntry.title, resumableSession.currentQuestionPosition + 1), buttonLabel: t.learningPathResumeLabel, actionModel: activeEntry.actionModel };
+	if (activeEntry.actionModel.intent === "resume") {
+		return { isVisible: true, title: t.learningPathResumeTitle, description: t.learningPathResumeBody(activeEntry.position, activeEntry.title, resumableSession.currentQuestionPosition + 1), buttonLabel: t.learningPathContinueNowLabel, actionModel: activeEntry.actionModel };
 	}
 
 	return {
 		isVisible: true,
-		title: t.learningPathAdaptiveTitle,
-		description: createAdaptiveDescription(nextActivity.focus, activeEntry, t),
-		buttonLabel: activeEntry.actionModel.label,
+		title: t.learningPathContinueTitle,
+		description: describeNextActivity(nextActivity, activeEntry, t),
+		buttonLabel: t.learningPathContinueNowLabel,
 		actionModel: activeEntry.actionModel
 	};
 }
 
-function createAdaptiveDescription(focus, activeEntry, t) {
-	switch (focus) {
-		case "initial-exposure": return t.learningPathAdaptiveInitialExposureBody(activeEntry.position, activeEntry.title);
-		case "practice": return t.learningPathAdaptivePracticeBody(activeEntry.position, activeEntry.title);
-		case "progression": return t.learningPathAdaptiveProgressionBody(activeEntry.position, activeEntry.title);
-		case "revisit": return t.learningPathAdaptiveRevisitBody(activeEntry.position, activeEntry.title);
-		case "repair": return t.learningPathAdaptiveRepairBody(activeEntry.position, activeEntry.title);
+function describeNextActivity(nextActivity, activeEntry, t) {
+	if (nextActivity?.kind === "start-adaptive-session") {
+		if (nextActivity.activityKind === "review") return t.learningPathReviewBody(activeEntry.position, activeEntry.title);
+		if (nextActivity.activityKind === "repair") return t.learningPathRepairBody(activeEntry.position, activeEntry.title);
+		return t.learningPathCoverageBody(activeEntry.position, activeEntry.title);
 	}
+	return t.learningPathContinueBody(activeEntry.position, activeEntry.title);
 }

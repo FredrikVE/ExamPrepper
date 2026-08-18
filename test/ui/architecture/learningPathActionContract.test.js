@@ -1,44 +1,33 @@
-//test/ui/architecture/learningPathActionContract.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
-
-function read(relativePath) {
-	return fs.readFileSync(path.resolve(relativePath), "utf8");
-}
+const read = (relativePath) => fs.readFileSync(path.resolve(relativePath), "utf8");
 
 describe("LearningPath action contract", () => {
-	test("reuses the active roadmap entry action in the continue panel", () => {
-		const source = read("src/ui/viewmodel/LearningPath/createContinueLearningModel.js");
-		expect(source).toContain("actionModel: activeEntry.actionModel");
-		expect(source).not.toMatch(/startLearningSessionUseCase|moduleId\s*:\s*activeEntry\.id/);
-	});
-
-	test("routes both LearningPath entry points through one ViewModel handler", () => {
-		const page = read("src/ui/view/pages/LearningPathPage.jsx");
+	test("does not let frontend own authored progression", () => {
+		const dataSource = read("src/model/datasource/LearningPathDataSource.js");
 		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
-		expect(page.match(/onActionPressed=\{viewModel\.onLearningPathAction\}/g)).toHaveLength(2);
-		expect(viewModel).toContain("const executeLearningPathAction");
-		expect(viewModel).toContain("onLearningPathAction: executeLearningPathAction");
-		expect(page).not.toMatch(/onStartModule|onContinue=/);
+		const action = read("src/ui/viewmodel/LearningPath/createLearningPathActionModel.js");
+		expect(dataSource).not.toMatch(/round|planKey|sessionPosition/);
+		expect(viewModel).toContain("startLearningSessionUseCase.execute({ subjectId: selectedSubject.id, moduleId: actionModel.moduleId, language })");
+		expect(viewModel).not.toMatch(/completedRounds|nextRound|round:/);
+		expect(action).toContain('nextActivity.kind === "start-authored-session"');
+		expect(action).toContain('module.availability.isCurrent && module.availability.isUnlocked');
+		expect(action).not.toMatch(/planKey|sessionPosition|completedSessions/);
 	});
 
-	test("keeps LearningPath round ownership in backend contracts", () => {
-		const actionModel = read("src/ui/viewmodel/LearningPath/createLearningPathActionModel.js");
-		const repository = read("src/model/repositories/LearningPathRepository.js");
+	test("waits for auth before loading the actionable LearningPath", () => {
+		const app = read("src/App.jsx");
 		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
-		expect(actionModel).toContain("round: resumableSession.round");
-		expect(actionModel).toContain("round: nextActivity.round");
-		expect(actionModel).not.toContain("module.progress.nextRound");
-		expect(repository).not.toContain("module.progress.nextRound");
-		expect(viewModel).toContain("round: actionModel.round");
+		expect(app).toContain("AuthenticatedLearningPathPageWrapper");
+		expect(app).toContain("authState={{ hasClerkAuth: true, isLoaded, isSignedIn, userId: userId ?? null }}");
+		expect(viewModel).toContain("const canLoadLearningPath = isActive && subjectId !== null && isAuthLoaded");
+		expect(viewModel).toContain("${subjectId}:${language}:${isAuthLoaded ? authIdentity : \"auth-loading\"}");
 	});
 
-	test("passes the complete action model from module detail", () => {
-		const detail = read("src/ui/view/components/LearningPathPage/LearningPathModuleDetail.jsx");
-		const step = read("src/ui/view/components/LearningPathPage/LearningPathStep.jsx");
-		expect(detail).toContain("onActionPressed(model.actionModel)");
-		expect(step).toContain("onActionPressed={onActionPressed}");
-		expect(detail).not.toMatch(/onStartPressed|onStartModule/);
+	test("renders chapter tests from backend identities", () => {
+		const detail = read("src/ui/view/components/LearningPathPage/LearningPathSection.jsx");
+		expect(detail).toContain("model.chapterTests.map");
+		expect(detail).toContain("LearningPathChapterTestNode");
 	});
 });

@@ -1,57 +1,19 @@
-//test/ui/viewmodel/LearningPath/createContinueLearningModel.test.js
 import { describe, expect, test } from "@jest/globals";
 import createContinueLearningModel from "../../../../src/ui/viewmodel/LearningPath/createContinueLearningModel.js";
-
-const t = {
-	learningPathResumeTitle: "Resume",
-	learningPathResumeBody: (position, title, question) => `${position}:${title}:${question}`,
-	learningPathResumeLabel: "Resume path",
-	learningPathAdaptiveTitle: "Adaptive",
-	learningPathAdaptiveInitialExposureBody: (position, title) => `initial:${position}:${title}`,
-	learningPathAdaptivePracticeBody: (position, title) => `practice:${position}:${title}`,
-	learningPathAdaptiveProgressionBody: (position, title) => `progress:${position}:${title}`,
-	learningPathAdaptiveRevisitBody: (position, title) => `revisit:${position}:${title}`,
-	learningPathAdaptiveRepairBody: (position, title) => `repair:${position}:${title}`
-};
-
-function createEntry(actionModel) {
-	return { id: "module-1", position: 1, title: "Concepts", actionModel };
-}
+const t = { learningPathResumeTitle: "Resume", learningPathResumeBody: (p,t,q)=>`${p}:${t}:${q}`, learningPathResumeLabel: "Resume path", learningPathContinueTitle: "Continue where you left off", learningPathContinueBody: (p,t)=>`${p}:${t}:continue`, learningPathContinueNowLabel: "Continue now", learningPathNextActivityTitle: "Next", learningPathAuthoredSessionBody: ()=>"authored", learningPathReviewBody: ()=>"review", learningPathRepairBody: ()=>"repair", learningPathCoverageBody: ()=>"coverage" };
+const entry = (actionModel) => ({ position: 1, title: "Concepts", actionModel });
 
 describe("createContinueLearningModel", () => {
-	test("reuses the active module resume action", () => {
-		const actionModel = { intent: "resume", moduleId: "module-1", sessionId: "session-1", isDisabled: false };
-		const model = createContinueLearningModel({ activeEntry: createEntry(actionModel), resumableSession: { sessionId: "session-1", moduleId: "module-1", round: 2, currentQuestionPosition: 2, questionCount: 6 }, nextActivity: { kind: "resume-session", moduleId: "module-1", sessionId: "session-1" }, t });
-		expect(model).toMatchObject({ description: "1:Concepts:3", buttonLabel: "Resume path" });
-		expect(model.actionModel).toBe(actionModel);
+	test("presents the active backend module as the stable continue surface", () => {
+		const actionModel = { intent: "start", label: "Continue" };
+		expect(createContinueLearningModel({ activeEntry: entry(actionModel), resumableSession: null, nextActivity: { kind: "start-authored-session" }, t })).toMatchObject({ title: "Continue where you left off", description: "1:Concepts:continue", buttonLabel: "Continue now", actionModel });
 	});
-
-	test("reuses the active module start action", () => {
-		const actionModel = { intent: "start", moduleId: "module-1", sessionId: null, round: 1, label: "Start 1", isDisabled: false };
-		const nextActivity = { kind: "start-round", moduleId: "module-1", round: 1, focus: "initial-exposure" };
-		const model = createContinueLearningModel({ activeEntry: createEntry(actionModel), resumableSession: null, nextActivity, t });
-		expect(model).toMatchObject({ description: "initial:1:Concepts", buttonLabel: "Start 1" });
-		expect(model.actionModel).toBe(actionModel);
+	test("keeps the continue surface visible when the read response has no nextActivity", () => {
+		const actionModel = { intent: "start", label: "Continue" };
+		expect(createContinueLearningModel({ activeEntry: entry(actionModel), resumableSession: null, nextActivity: null, t })).toMatchObject({ isVisible: true, title: "Continue where you left off", description: "1:Concepts:continue", buttonLabel: "Continue now", actionModel });
 	});
-	test("uses the backend adaptive focus without recalculating mastery", () => {
-		const actionModel = { intent: "start", moduleId: "module-1", sessionId: null, round: 2, label: "Start 2", isDisabled: false };
-		const nextActivity = { kind: "start-round", moduleId: "module-1", round: 2, focus: "practice" };
-		const model = createContinueLearningModel({ activeEntry: createEntry(actionModel), resumableSession: null, nextActivity, t });
-
-		expect(model).toMatchObject({ title: "Adaptive", description: "practice:1:Concepts", buttonLabel: "Start 2" });
+	test("presents adaptive kind without deriving policy", () => {
+		const actionModel = { intent: "start", label: "Repair" };
+		expect(createContinueLearningModel({ activeEntry: entry(actionModel), resumableSession: null, nextActivity: { kind: "start-adaptive-session", activityKind: "repair" }, t }).description).toBe("repair");
 	});
-
-	test("presents backend repair focus without deriving prerequisite policy in the frontend", () => {
-		const actionModel = { intent: "start", moduleId: "module-1", sessionId: null, round: 2, label: "Start 2", isDisabled: false };
-		const nextActivity = { kind: "start-round", moduleId: "module-1", round: 2, focus: "repair" };
-		const model = createContinueLearningModel({ activeEntry: createEntry(actionModel), resumableSession: null, nextActivity, t });
-
-		expect(model).toMatchObject({ title: "Adaptive", description: "repair:1:Concepts", buttonLabel: "Start 2" });
-	});
-
-	test("hides the panel when backend provides no actionable activity", () => {
-		const model = createContinueLearningModel({ activeEntry: createEntry(null), resumableSession: null, nextActivity: null, t });
-		expect(model).toEqual({ isVisible: false, title: "", description: "", buttonLabel: "", actionModel: null });
-	});
-
 });
