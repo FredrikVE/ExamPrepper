@@ -41,7 +41,8 @@
 				"completionPercent": 25,
 				"performancePercent": 67.5,
 				"coveragePercent": 50,
-				"lastSessionAt": "2026-07-29T12:00:00Z"
+				"lastSessionAt": "2026-07-29T12:00:00Z",
+				"performanceBand": "progress"
 			},
 			"sections": [
 				{
@@ -60,13 +61,17 @@
 							"planKey": "authored:chapter-1:step-1:1-6",
 							"position": 1,
 							"questionCount": 6,
-							"status": "completed"
+							"status": "completed",
+							"performancePercent": 65.38,
+							"performanceBand": "progress"
 						},
 						{
 							"planKey": "authored:chapter-1:step-2:1-4",
 							"position": 2,
 							"questionCount": 4,
-							"status": "current"
+							"status": "current",
+							"performancePercent": null,
+							"performanceBand": "not-assessed"
 						}
 					],
 					"chapterTests": [

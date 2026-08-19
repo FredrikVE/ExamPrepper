@@ -46,6 +46,26 @@ describe("LearningPathRepository", () => {
 		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] })).rejects.toThrow("Invalid learning session result");
 	});
 
+	test("normalizes only a completely missing roadmap session performance pair", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.modules[0].sections[0].sessions[1].performancePercent;
+		delete response.modules[0].sections[0].sessions[1].performanceBand;
+		const pathModel = await createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" });
+		expect(pathModel.modules[0].sections[0].sessions[1]).toMatchObject({ performancePercent: null, performanceBand: "not-assessed" });
+	});
+
+	test("rejects a partial roadmap session performance pair", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.modules[0].sections[0].sessions[0].performanceBand;
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+	});
+
+	test("rejects module performance without its backend-owned band", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.modules[0].progress.performanceBand;
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+	});
+
 	test("rejects a module without backend-owned sections", async () => {
 		const response = readFixture("learning-path-response.json");
 		delete response.modules[0].sections;

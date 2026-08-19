@@ -5,7 +5,7 @@ const INVALID_LEARNING_SESSION_RESULT = "Invalid learning session result";
 const ACTIVITY_KINDS = new Set(["authored", "review", "repair", "coverage", "legacy-round"]);
 const SESSION_STATUSES = new Set(["completed", "current", "available", "locked"]);
 const CHAPTER_TEST_STATUSES = new Set(["available", "locked"]);
-const ASSESSMENT_BANDS = new Set(["practice", "progress", "understood", "not-assessed"]);
+const ASSESSMENT_BANDS = new Set(["practice", "progress", "understood"]);
 
 export default class LearningPathRepository {
 	constructor(learningPathDataSource) {
@@ -13,7 +13,7 @@ export default class LearningPathRepository {
 	}
 
 	async getLearningPath({ subjectId, language }) {
-		const response = await this.learningPathDataSource.getLearningPath({ subjectId, language });
+		const response = normalizeLearningPathResponse(await this.learningPathDataSource.getLearningPath({ subjectId, language }));
 		validateLearningPathResponse(response);
 		return {
 			subjectId: response.subjectId,
@@ -51,7 +51,34 @@ function isValidLearningModule(module) {
 }
 
 function isValidModuleProgress(progress) {
-	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent) && isNullableNumber(progress.performancePercent) && isNullableNumber(progress.coveragePercent) && isNullableString(progress.lastSessionAt));
+	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent) && isValidPerformancePair(progress.performancePercent, progress.performanceBand) && isNullableNumber(progress.coveragePercent) && isNullableString(progress.lastSessionAt));
+}
+
+function normalizeLearningPathResponse(response) {
+	if (!response || !Array.isArray(response.modules)) return response;
+	return {
+		...response,
+		modules: response.modules.map((module) => !module || !Array.isArray(module.sections) ? module : {
+			...module,
+			sections: module.sections.map((section) => !section || !Array.isArray(section.sessions) ? section : {
+				...section,
+				sessions: section.sessions.map(normalizeRoadmapSession)
+			})
+		})
+	};
+}
+
+function normalizeRoadmapSession(session) {
+	if (!session || typeof session !== "object") return session;
+	const percentMissing = session.performancePercent === undefined;
+	const bandMissing = session.performanceBand === undefined;
+	if (!percentMissing || !bandMissing) return session;
+	return { ...session, performancePercent: null, performanceBand: "not-assessed" };
+}
+
+function isValidPerformancePair(percentage, band) {
+	if (percentage === null) return band === "not-assessed";
+	return Number.isFinite(percentage) && percentage >= 0 && percentage <= 100 && ASSESSMENT_BANDS.has(band);
 }
 
 function isValidSection(section) {
@@ -63,7 +90,7 @@ function isValidSectionProgress(progress) {
 }
 
 function isValidRoadmapSession(session) {
-	return Boolean(session && typeof session.planKey === "string" && Number.isInteger(session.position) && Number.isInteger(session.questionCount) && SESSION_STATUSES.has(session.status));
+	return Boolean(session && typeof session.planKey === "string" && Number.isInteger(session.position) && Number.isInteger(session.questionCount) && SESSION_STATUSES.has(session.status) && isValidPerformancePair(session.performancePercent, session.performanceBand));
 }
 
 function isValidChapterTest(test) {
@@ -127,6 +154,6 @@ function toLearningQuestion(question) {
 }
 
 function validateSubmitResponse(response) {
-	if (!response || typeof response.sessionId !== "string" || response.status !== "completed" || !response.score || !Number.isFinite(response.score.earnedPoints) || !Number.isFinite(response.score.availablePoints) || !isNullableNumber(response.score.percentage) || !ASSESSMENT_BANDS.has(response.score.performanceBand)) throw new Error(INVALID_LEARNING_SESSION_RESULT);
+	if (!response || typeof response.sessionId !== "string" || response.status !== "completed" || !response.score || !Number.isFinite(response.score.earnedPoints) || !Number.isFinite(response.score.availablePoints) || !isNullableNumber(response.score.percentage) || !(response.score.performanceBand === "not-assessed" || ASSESSMENT_BANDS.has(response.score.performanceBand))) throw new Error(INVALID_LEARNING_SESSION_RESULT);
 	if ((response.score.percentage === null) !== (response.score.performanceBand === "not-assessed")) throw new Error(INVALID_LEARNING_SESSION_RESULT);
 }

@@ -1,10 +1,14 @@
-import { Check, Circle, Lock, Play } from "lucide-react";
+// src/ui/view/components/LearningPathPage/LearningPathSessionNode.jsx
+import { Check, Lock, Play } from "lucide-react";
+import LearningPathSessionScore from "./LearningPathSessionScore.jsx";
 
 export default function LearningPathSessionNode({ model }) {
-	const Icon = model.status === "completed" ? Check : model.status === "current" ? Play : model.status === "locked" ? Lock : Circle;
+	const Icon = model.iconKey === "check" ? Check : model.iconKey === "lock" ? Lock : Play;
 	return (
 		<li className={`learning-path-session-node learning-path-session-node--${model.appearance}`}>
-			<span className="learning-path-session-node__icon"><Icon aria-hidden="true" /></span>
+			{model.iconKey === "score"
+				? <LearningPathSessionScore model={model.scoreModel} />
+				: <span className="learning-path-session-node__icon"><Icon aria-hidden="true" /></span>}
 			<span className="learning-path-session-node__copy">
 				<strong>{model.label}</strong>
 				<small>{model.metaLabel}</small>

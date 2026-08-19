@@ -27,7 +27,7 @@ describe("LearningPathRoadmap", () => {
 		const masteryRingSource = readSource(MASTERY_RING_PATH);
 
 		expect(masteryRingSource).toContain('strokeDasharray={`${model.percentage} 100`}');
-		expect(masteryRingSource).toContain("{model.percentage}%");
+		expect(masteryRingSource).toContain("{model.displayValue}");
 		expect(masteryRingSource).toContain("aria-label={model.accessibleLabel}");
 	});
 });

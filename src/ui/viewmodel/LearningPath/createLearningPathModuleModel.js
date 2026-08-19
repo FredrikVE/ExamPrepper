@@ -1,12 +1,14 @@
 //src/ui/viewmodel/LearningPath/createLearningPathModuleModel.js
 import createLearningPathActionModel from "./createLearningPathActionModel.js";
 import createLearningPathSectionModel from "./createLearningPathSectionModel.js";
+import createLearningPathProgressModel from "./createLearningPathProgressModel.js";
 import createModuleStatus from "./createModuleStatus.js";
 
 export default function createLearningPathModuleModel({ module, resumableSession, nextActivity, expandedModuleId, startingModuleId, t }) {
 	const status = createModuleStatus({ completionPercent: module.progress.completionPercent, completedSessions: module.progress.completedSessions, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
 	const actionModel = createLearningPathActionModel({ module, resumableSession, nextActivity, startingModuleId, t });
+	const progressModel = createLearningPathProgressModel({ performancePercent: module.progress.performancePercent, performanceBand: module.progress.performanceBand, t });
 
 	return {
 		kind: "module",
@@ -24,7 +26,8 @@ export default function createLearningPathModuleModel({ module, resumableSession
 			isCurrentStep: module.availability.isCurrent,
 			isExpanded,
 			isDisabled: !module.availability.isUnlocked,
-			masteryRingModel: { percentage: module.progress.completionPercent, appearance: module.availability.isCurrent ? "active" : status.appearance, accessibleLabel: t.learningPathCompletionLabel(module.progress.completionPercent) },
+			progressModel,
+			masteryRingModel: progressModel,
 			chevronLabel: t.learningPathToggleDetailsLabel(module.title)
 		},
 		detailModel: isExpanded ? {

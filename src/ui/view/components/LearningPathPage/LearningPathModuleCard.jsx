@@ -1,6 +1,7 @@
 //src/ui/view/components/LearningPathPage/LearningPathModuleCard.jsx
 import { ChevronRight } from "lucide-react";
 import LearningPathMasteryRing from "./LearningPathMasteryRing.jsx";
+import LearningPathProgressRow from "./LearningPathProgressRow.jsx";
 
 export default function LearningPathModuleCard({ model, onPressed }) {
 	return (
@@ -9,6 +10,7 @@ export default function LearningPathModuleCard({ model, onPressed }) {
 				<span className="learning-path-module-card__eyebrow">{model.eyebrow}</span>
 				<span className="learning-path-module-card__title">{model.title}</span>
 				<span className="learning-path-module-card__status">{model.statusLabel}</span>
+				<LearningPathProgressRow model={model.progressModel} />
 			</span>
 			<span className="learning-path-module-card__trailing">
 				<LearningPathMasteryRing model={model.masteryRingModel} />

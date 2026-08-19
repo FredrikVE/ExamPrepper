@@ -8,7 +8,7 @@ export default function LearningPathMasteryRing({ model }) {
 				<circle className="learning-path-mastery-ring__background" cx="18" cy="18" r={RADIUS} />
 				<circle className="learning-path-mastery-ring__value" cx="18" cy="18" r={RADIUS} strokeDasharray={`${model.percentage} 100`} />
 			</svg>
-			<span>{model.percentage}%</span>
+			<span>{model.displayValue}</span>
 		</div>
 	);
 }

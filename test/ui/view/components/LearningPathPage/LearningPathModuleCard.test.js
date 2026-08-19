@@ -20,5 +20,6 @@ describe("LearningPathModuleCard", () => {
 
 		expect(source).toContain('import LearningPathMasteryRing from "./LearningPathMasteryRing.jsx";');
 		expect(source).toContain("<LearningPathMasteryRing model={model.masteryRingModel} />");
+		expect(source).toContain("<LearningPathProgressRow model={model.progressModel} />");
 	});
 });
