@@ -34,7 +34,7 @@ export default function createLearningPathModuleModel({ module, resumableSession
 			headingId: `learning-path-module-detail-${module.id}`,
 			heading: t.learningPathDetailHeading,
 			description: module.description,
-			sections: module.sections.map((section) => createLearningPathSectionModel({ section, t })),
+			sections: module.sections.map((section) => createLearningPathSectionModel({ section, moduleId: module.id, startingModuleId, t })),
 			actionModel
 		} : null,
 		actionModel

@@ -1,4 +1,4 @@
-//src/model/datasource/DataSource.js
+// src/model/datasource/DataSource.js
 export default class DataSource {
 	#baseUrl;
 
@@ -32,7 +32,11 @@ export default class DataSource {
 		const payload = text ? JSON.parse(text) : null;
 
 		if (!response.ok) {
-			throw new Error(payload?.error ?? `API request failed: ${response.status}`);
+			const error = new Error(payload?.message ?? payload?.error ?? `API request failed: ${response.status}`);
+			error.status = response.status;
+			error.code = typeof payload?.error === "string" ? payload.error : null;
+			error.payload = payload;
+			throw error;
 		}
 
 		return payload;

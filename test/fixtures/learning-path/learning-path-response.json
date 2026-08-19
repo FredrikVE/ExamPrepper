@@ -44,6 +44,7 @@
 				"lastSessionAt": "2026-07-29T12:00:00Z",
 				"performanceBand": "progress"
 			},
+			"currentRun": null,
 			"sections": [
 				{
 					"id": "section-1",
@@ -63,7 +64,8 @@
 							"questionCount": 6,
 							"status": "completed",
 							"performancePercent": 65.38,
-							"performanceBand": "progress"
+							"performanceBand": "progress",
+							"isStartable": true
 						},
 						{
 							"planKey": "authored:chapter-1:step-2:1-4",
@@ -71,7 +73,8 @@
 							"questionCount": 4,
 							"status": "current",
 							"performancePercent": null,
-							"performanceBand": "not-assessed"
+							"performanceBand": "not-assessed",
+							"isStartable": true
 						}
 					],
 					"chapterTests": [

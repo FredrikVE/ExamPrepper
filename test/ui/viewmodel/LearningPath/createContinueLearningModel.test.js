@@ -1,6 +1,7 @@
+// test/ui/viewmodel/LearningPath/createContinueLearningModel.test.js
 import { describe, expect, test } from "@jest/globals";
 import createContinueLearningModel from "../../../../src/ui/viewmodel/LearningPath/createContinueLearningModel.js";
-const t = { learningPathResumeTitle: "Resume", learningPathResumeBody: (p,t,q)=>`${p}:${t}:${q}`, learningPathResumeLabel: "Resume path", learningPathContinueTitle: "Continue where you left off", learningPathContinueBody: (p,t)=>`${p}:${t}:continue`, learningPathContinueNowLabel: "Continue now", learningPathNextActivityTitle: "Next", learningPathAuthoredSessionBody: ()=>"authored", learningPathReviewBody: ()=>"review", learningPathRepairBody: ()=>"repair", learningPathCoverageBody: ()=>"coverage" };
+const t = { learningPathResumeTitle: "Resume", learningPathResumeBody: (p,t,q)=>`${p}:${t}:${q}`, learningPathResumeLabel: "Resume path", learningPathContinueTitle: "Continue where you left off", learningPathContinueBody: (p,t)=>`${p}:${t}:continue`, learningPathContinueNowLabel: "Continue now", learningPathReviewBody: ()=>"review", learningPathRepairBody: ()=>"repair", learningPathCoverageBody: ()=>"coverage" };
 const entry = (actionModel) => ({ position: 1, title: "Concepts", actionModel });
 
 describe("createContinueLearningModel", () => {

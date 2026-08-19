@@ -1,4 +1,4 @@
-//src/model/datasource/LearningPathDataSource.js
+// src/model/datasource/LearningPathDataSource.js
 import DataSource from "./DataSource.js";
 
 export default class LearningPathDataSource extends DataSource {
@@ -7,7 +7,13 @@ export default class LearningPathDataSource extends DataSource {
 	}
 
 	async startLearningSession(command) {
-		return await this.post("/learning-sessions", { subjectId: command.subjectId, moduleId: command.moduleId, lang: command.language });
+		return await this.post("/learning-sessions", {
+			subjectId: command.subjectId,
+			moduleId: command.moduleId,
+			lang: command.language,
+			target: command.target ?? { kind: "module" },
+			discardActiveSession: command.discardActiveSession ?? false
+		});
 	}
 
 	async getLearningSession(sessionId) {

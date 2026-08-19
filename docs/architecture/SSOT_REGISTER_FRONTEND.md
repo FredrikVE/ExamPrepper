@@ -93,6 +93,9 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop-modus + breakpoint-tall | `ui/presentation/` | 7 importører. `932`/`933` låst av `appBreakpointContract` |
 | `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `DataSource` |
 | `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
+| Backend `performanceBand` | Assessment-klassifisering for LearningSession og LearningPath | `LearningPathRepository` validerer; ViewModels konsumerer | Frontend har ingen 40/55/80-klassifisering; `=== 100` er kun perfekt-score-presentasjon |
+| Backend `isStartable` | Om en authored LearningPath-økt kan velges/startes | `LearningPathRepository` → `createLearningPathSessionModel` | `isSelectable` er direkte avledet fra `session.isStartable`, aldri roadmap-status |
+| `--assessment-*` | Delte semantiske assessment-farger | `src/ui/style/Tokens.css` | LearningSession- og LearningPath-CSS konsumerer de samme tokenene |
 
 ## Canonical implementasjoner
 
@@ -438,3 +441,6 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 | Spørsmålsrendring | canonical `QuestionCard` |
 | Sessionidentitet i frontend | `sessionQuestionId` |
 | Navigasjon | `navigation.js` + `AppNavigationViewModel` |
+| Assessment-band i frontend | Backend `performanceBand`; frontend validerer og presenterer uten lokale prosentgrenser |
+| Authored starttillatelse | Backend `isStartable`; frontend avleder kun `isSelectable` direkte |
+| Assessment-farger | `Tokens.css` via `--assessment-*` |

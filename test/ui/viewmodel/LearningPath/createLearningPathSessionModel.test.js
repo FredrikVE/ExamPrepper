@@ -10,26 +10,31 @@ const t = {
 	learningPathSessionAvailableLabel: "Ready",
 	learningPathStatusLocked: "Locked",
 	learningPathSessionScoreLabel: (position, percentage) => `Session ${position}: ${percentage}% result`,
-	learningPathSessionNotAssessedScoreLabel: (position) => `Session ${position}: not assessed`
+	learningPathSessionNotAssessedScoreLabel: (position) => `Session ${position}: not assessed`,
+	learningPathSessionOpenLabel: (position) => `Start session ${position}`
 };
 
 function session(overrides = {}) {
-	return { planKey: "plan-1", position: 1, questionCount: 6, status: "completed", performancePercent: 65.38, performanceBand: "progress", ...overrides };
+	return { planKey: "plan-1", position: 1, questionCount: 6, status: "completed", performancePercent: 65.38, performanceBand: "progress", isStartable: true, ...overrides };
 }
+
+const options = (overrides = {}) => ({ session: session(), moduleId: "module-1", startingModuleId: null, t, ...overrides });
 
 describe("createLearningPathSessionModel", () => {
 	test("uses a score donut model for a completed assessed session", () => {
-		expect(createLearningPathSessionModel({ session: session(), t })).toMatchObject({ iconKey: "score", scoreModel: { percentage: 65.38, displayValue: "65%", appearance: "progress" } });
+		expect(createLearningPathSessionModel(options())).toMatchObject({ iconKey: "score", scoreModel: { percentage: 65.38, displayValue: "65%", appearance: "progress" } });
 	});
 
 	test("uses a check only for an exact raw 100 percent", () => {
-		expect(createLearningPathSessionModel({ session: session({ performancePercent: 100, performanceBand: "understood" }), t }).iconKey).toBe("check");
-		const rounded = createLearningPathSessionModel({ session: session({ performancePercent: 99.6, performanceBand: "understood" }), t });
+		expect(createLearningPathSessionModel(options({ session: session({ performancePercent: 100, performanceBand: "understood" }) })).iconKey).toBe("check");
+		const rounded = createLearningPathSessionModel(options({ session: session({ performancePercent: 99.6, performanceBand: "understood" }) }));
 		expect(rounded).toMatchObject({ iconKey: "score", scoreModel: { displayValue: "100%" } });
 	});
 
-	test("keeps current and locked sessions as non-interactive roadmap icons", () => {
-		expect(createLearningPathSessionModel({ session: session({ status: "current", performancePercent: null, performanceBand: "not-assessed" }), t }).iconKey).toBe("play");
-		expect(createLearningPathSessionModel({ session: session({ status: "locked", performancePercent: null, performanceBand: "not-assessed" }), t }).iconKey).toBe("lock");
+	test("takes selectability directly from backend isStartable", () => {
+		const selectable = createLearningPathSessionModel(options());
+		expect(selectable).toMatchObject({ isSelectable: true, actionModel: { target: { kind: "session", planKey: "plan-1" } } });
+		const locked = createLearningPathSessionModel(options({ session: session({ status: "locked", performancePercent: null, performanceBand: "not-assessed", isStartable: false }) }));
+		expect(locked).toMatchObject({ iconKey: "lock", isSelectable: false, actionModel: null });
 	});
 });

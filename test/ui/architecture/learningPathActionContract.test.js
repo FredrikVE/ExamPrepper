@@ -1,19 +1,39 @@
+// test/ui/architecture/learningPathActionContract.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
 const read = (relativePath) => fs.readFileSync(path.resolve(relativePath), "utf8");
 
 describe("LearningPath action contract", () => {
-	test("does not let frontend own authored progression", () => {
+	test("sends explicit backend-owned targets without recreating authored progression", () => {
 		const dataSource = read("src/model/datasource/LearningPathDataSource.js");
 		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
 		const action = read("src/ui/viewmodel/LearningPath/createLearningPathActionModel.js");
-		expect(dataSource).not.toMatch(/round|planKey|sessionPosition/);
-		expect(viewModel).toContain("startLearningSessionUseCase.execute({ subjectId: selectedSubject.id, moduleId: actionModel.moduleId, language })");
+		expect(dataSource).toContain("target: command.target ?? { kind: \"module\" }");
+		expect(dataSource).toContain("discardActiveSession: command.discardActiveSession ?? false");
+		expect(viewModel).toContain("target: actionModel.target ?? { kind: \"module\" }");
 		expect(viewModel).not.toMatch(/completedRounds|nextRound|round:/);
-		expect(action).toContain('nextActivity.kind === "start-authored-session"');
-		expect(action).toContain('module.availability.isCurrent && module.availability.isUnlocked');
-		expect(action).not.toMatch(/planKey|sessionPosition|completedSessions/);
+		expect(action).toContain('{ kind: "module-replay" }');
+		expect(action).not.toMatch(/planKey.*nextActivity|sessionPosition/);
+	});
+
+	test("takes session selectability from backend isStartable", () => {
+		const repository = read("src/model/repositories/LearningPathRepository.js");
+		const sessionModel = read("src/ui/viewmodel/LearningPath/createLearningPathSessionModel.js");
+		const sectionModel = read("src/ui/viewmodel/LearningPath/createLearningPathSectionModel.js");
+		expect(repository).toContain('typeof session.isStartable === "boolean"');
+		expect(sessionModel).toContain("const isSelectable = session.isStartable");
+		expect(sectionModel).toContain("section.sessions.some((session) => session.isStartable)");
+		expect(sessionModel).not.toMatch(/status\s*!==\s*["']locked["']/);
+	});
+
+	test("handles active-session conflicts explicitly instead of silently discarding", () => {
+		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
+		const dialog = read("src/ui/view/components/LearningPathPage/LearningPathSessionConflictDialog.jsx");
+		expect(viewModel).toContain('LEARNING_SESSION_RESUME_CONFLICT = "learning_session_resume_conflict"');
+		expect(viewModel).toContain("discardActiveSession: true");
+		expect(dialog).toContain("model.onContinue");
+		expect(dialog).toContain("model.onDiscard");
 	});
 
 	test("waits for auth before loading the actionable LearningPath", () => {

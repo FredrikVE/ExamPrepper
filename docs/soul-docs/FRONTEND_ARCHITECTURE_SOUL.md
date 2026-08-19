@@ -1757,3 +1757,7 @@ commit-meldinger, dokumentasjon.
 ## Implementert LearningPath-kontrakt — 2026-07-29
 
 `LearningPathPage` og `LearningSessionPage` har hver sin Page-ViewModel. Bare Page mottar hele `viewModel`; featurekomponentene mottar ferdige modeller og callbacks. `QuestionCard` brukes gjennom canonical fasade med eksplisitt React-`key` fra `currentQuestionRenderKey`. Frontend bruker `sessionQuestionId` som øktidentitet og inneholder ingen selection-, mastery- eller gradingpolicy som konkurrerer med backend.
+
+LearningPath- og LearningSession-frontenden klassifiserer aldri assessment-prosent. Backend sender `performanceBand`, repository-grensen validerer kontrakten, og ViewModels/React konsumerer bandet direkte. `=== 100` er tillatt som ren perfekt-score-presentasjon, men er ikke et assessment-threshold. Delte assessment-farger eies av `Tokens.css` gjennom `--assessment-*`.
+
+For authored LearningPath-sessions er backend `isStartable` eneste startautoritet. Frontend kan avlede `isSelectable = session.isStartable`, men skal aldri rekonstruere starttillatelse fra `status`, completion eller lokal rekkefølge. Targeted starts sender eksplisitt intent til backend; aktiv økt-konflikt vises som valg mellom å fortsette aktiv økt eller eksplisitt forkaste den.

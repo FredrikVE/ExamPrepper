@@ -1,4 +1,4 @@
-//src/ui/viewmodel/LearningPathPageViewModel.js
+// src/ui/viewmodel/LearningPathPageViewModel.js
 import { useCallback, useState } from "react";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
@@ -6,11 +6,13 @@ import createContinueLearningModel from "./LearningPath/createContinueLearningMo
 import createLearningPathRoadmapModel from "./LearningPath/createLearningPathRoadmapModel.js";
 
 const EMPTY_LEARNING_PATH = Object.freeze({ subjectId: "", activeModuleId: null, resumableSession: null, nextActivity: null, modules: [], examGate: { isUnlocked: false } });
+const LEARNING_SESSION_RESUME_CONFLICT = "learning_session_resume_conflict";
 
 export default function useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted, onChapterTestSelected, authState }) {
 	const [expandedModuleId, setExpandedModuleId] = useState(null);
 	const [startingModuleId, setStartingModuleId] = useState(null);
 	const [startSessionError, setStartSessionError] = useState(null);
+	const [sessionConflict, setSessionConflict] = useState(null);
 	const [scrollRequestId, setScrollRequestId] = useState(0);
 	const subjectId = selectedSubject === null ? null : selectedSubject.id;
 	const isAuthLoaded = authState?.isLoaded !== false;
@@ -33,16 +35,27 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 		setScrollRequestId((currentId) => currentId + 1);
 	}, [learningPath.modules]);
 
-	const startSession = useCallback(async (actionModel) => {
+	const startSession = useCallback(async (actionModel, { discardActiveSession = false } = {}) => {
 		if (actionModel === null || !actionModel.moduleId || startingModuleId !== null || selectedSubject === null) return;
 		const module = learningPath.modules.find((candidate) => candidate.id === actionModel.moduleId);
 		if (!module?.availability.isUnlocked) return;
 		setStartingModuleId(actionModel.moduleId);
 		setStartSessionError(null);
 		try {
-			const session = await startLearningSessionUseCase.execute({ subjectId: selectedSubject.id, moduleId: actionModel.moduleId, language });
+			const session = await startLearningSessionUseCase.execute({
+				subjectId: selectedSubject.id,
+				moduleId: actionModel.moduleId,
+				language,
+				target: actionModel.target ?? { kind: "module" },
+				discardActiveSession
+			});
 			onLearningSessionStarted(session.sessionId);
-		} catch (_error) {
+		} catch (error) {
+			const activeSessionId = error?.payload?.activeSessionId;
+			if (!discardActiveSession && error?.code === LEARNING_SESSION_RESUME_CONFLICT && typeof activeSessionId === "string") {
+				setSessionConflict({ activeSessionId, actionModel });
+				return;
+			}
 			setStartSessionError(t.learningPathStartErrorMessage);
 		} finally {
 			setStartingModuleId(null);
@@ -54,9 +67,25 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 	const continueModel = createContinueLearningModel({ activeEntry, resumableSession: learningPath.resumableSession, nextActivity: learningPath.nextActivity, t });
 	const executeLearningPathAction = useCallback(async (actionModel) => {
 		if (actionModel === null || actionModel.isDisabled) return;
-		if (actionModel.intent === "resume" && actionModel.sessionId !== null) { onLearningSessionStarted(actionModel.sessionId); return; }
+		if (actionModel.intent === "resume" && actionModel.sessionId !== null) {
+			onLearningSessionStarted(actionModel.sessionId);
+			return;
+		}
 		await startSession(actionModel);
 	}, [onLearningSessionStarted, startSession]);
+	const continueActiveSession = useCallback(() => {
+		if (sessionConflict === null) return;
+		const activeSessionId = sessionConflict.activeSessionId;
+		setSessionConflict(null);
+		onLearningSessionStarted(activeSessionId);
+	}, [onLearningSessionStarted, sessionConflict]);
+	const discardActiveSessionAndStart = useCallback(async () => {
+		if (sessionConflict === null) return;
+		const actionModel = sessionConflict.actionModel;
+		setSessionConflict(null);
+		await startSession(actionModel, { discardActiveSession: true });
+	}, [sessionConflict, startSession]);
+	const dismissSessionConflict = useCallback(() => setSessionConflict(null), []);
 
 	const workspaceState = createWorkspaceState({ loadStatus: loadModel.status, isEmpty: learningPath.modules.length === 0, labels: { loading: t.learningPathLoadingMessage, errorTitle: t.errorPrefix, errorBody: loadModel.error ?? t.learningPathLoadErrorMessage, emptyTitle: t.learningPathEmptyTitle, emptyBody: t.learningPathEmptyBody }, errorAction: null });
 
@@ -66,6 +95,17 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 		contentHeaderModel: { ...contentToggleContract, title: t.learningPathTitle, subtitle: selectedSubject === null ? t.learningPathSubtitleFallback : t.learningPathSubtitle(selectedSubject.code), titleId: "learning-path-title" },
 		continuePanelModel: continueModel,
 		roadmapModel,
+		sessionConflictDialogModel: {
+			isOpen: sessionConflict !== null,
+			title: t.learningPathConflictTitle,
+			body: t.learningPathConflictBody,
+			continueLabel: t.learningPathConflictContinueLabel,
+			discardLabel: t.learningPathConflictDiscardLabel,
+			cancelLabel: t.learningPathConflictCancelLabel,
+			onContinue: continueActiveSession,
+			onDiscard: discardActiveSessionAndStart,
+			onClose: dismissSessionConflict
+		},
 		onModuleToggle: toggleModule,
 		onLearningPathAction: executeLearningPathAction,
 		onChapterTestSelected,

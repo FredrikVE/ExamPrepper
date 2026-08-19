@@ -8,17 +8,60 @@
 }
 
 .learning-path-session-node {
-	display: grid;
-	grid-template-columns: 38px minmax(0, 1fr) auto;
-	align-items: center;
-	gap: var(--space-3);
-	min-height: 52px;
-	padding: 8px 10px;
+	min-width: 0;
 	border-radius: var(--radius-sm);
 	background: color-mix(in srgb, var(--panel-bg) 72%, transparent);
 }
 
-.learning-path-session-node__icon {
+.learning-path-session-node__content,
+.learning-path-session-node__button {
+	display: grid;
+	grid-template-columns: 38px minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--space-3);
+	width: 100%;
+	min-height: 52px;
+	box-sizing: border-box;
+	padding: 8px 10px;
+	border: 0;
+	border-radius: inherit;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+}
+
+.learning-path-session-node__button {
+	cursor: pointer;
+	transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.learning-path-session-node__button:hover,
+.learning-path-session-node__button:focus-visible {
+	background: color-mix(in srgb, var(--accent) 9%, transparent);
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent);
+	outline: none;
+}
+
+.learning-path-session-node__button:active {
+	transform: translateY(1px);
+}
+
+.learning-path-session-node__button:disabled {
+	cursor: wait;
+	opacity: 0.68;
+}
+
+.learning-path-session-node__visual {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+}
+
+.learning-path-session-node__icon,
+.learning-path-session-node__hover-play {
 	display: grid;
 	place-items: center;
 	width: 34px;
@@ -27,7 +70,30 @@
 	background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-.learning-path-session-node__icon svg { width: 17px; height: 17px; }
+.learning-path-session-node__hover-play {
+	position: absolute;
+	inset: 2px;
+	color: var(--accent);
+	opacity: 0;
+	transform: scale(0.82);
+	transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.learning-path-session-node--selectable .learning-path-session-node__button:hover .learning-path-session-node__hover-play,
+.learning-path-session-node--selectable .learning-path-session-node__button:focus-visible .learning-path-session-node__hover-play {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.learning-path-session-node--selectable .learning-path-session-node__button:hover .learning-path-session-score,
+.learning-path-session-node--selectable .learning-path-session-node__button:focus-visible .learning-path-session-score,
+.learning-path-session-node--selectable .learning-path-session-node__button:hover > .learning-path-session-node__visual > .learning-path-session-node__icon,
+.learning-path-session-node--selectable .learning-path-session-node__button:focus-visible > .learning-path-session-node__visual > .learning-path-session-node__icon {
+	opacity: 0.16;
+}
+
+.learning-path-session-node__icon svg,
+.learning-path-session-node__hover-play svg { width: 17px; height: 17px; }
 .learning-path-session-node__copy { display: grid; gap: 1px; }
 .learning-path-session-node__copy small,
 .learning-path-session-node__status { color: var(--text-muted); font-size: 0.75rem; }
@@ -44,6 +110,7 @@
 	height: 38px;
 	font-size: 0.6rem;
 	font-weight: 800;
+	transition: opacity 160ms ease;
 }
 
 .learning-path-session-score__ring {

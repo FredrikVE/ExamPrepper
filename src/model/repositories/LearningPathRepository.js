@@ -46,8 +46,12 @@ function validateLearningPathResponse(response) {
 }
 
 function isValidLearningModule(module) {
-	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !isValidModuleProgress(module.progress) || !Array.isArray(module.sections)) return false;
+	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isFinite(module.position) || typeof module.title !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !isValidModuleProgress(module.progress) || !isValidModuleRunProgress(module.currentRun) || !Array.isArray(module.sections)) return false;
 	return module.topics.every((topic) => topic && typeof topic.key === "string" && typeof topic.label === "string" && (topic.masteryPercent === null || Number.isFinite(topic.masteryPercent))) && module.sections.every(isValidSection);
+}
+
+function isValidModuleRunProgress(progress) {
+	return progress === null || Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions));
 }
 
 function isValidModuleProgress(progress) {
@@ -90,7 +94,7 @@ function isValidSectionProgress(progress) {
 }
 
 function isValidRoadmapSession(session) {
-	return Boolean(session && typeof session.planKey === "string" && Number.isInteger(session.position) && Number.isInteger(session.questionCount) && SESSION_STATUSES.has(session.status) && isValidPerformancePair(session.performancePercent, session.performanceBand));
+	return Boolean(session && typeof session.planKey === "string" && Number.isInteger(session.position) && Number.isInteger(session.questionCount) && typeof session.isStartable === "boolean" && SESSION_STATUSES.has(session.status) && isValidPerformancePair(session.performancePercent, session.performanceBand));
 }
 
 function isValidChapterTest(test) {
@@ -128,6 +132,7 @@ function toLearningModule(module) {
 		availability: { ...module.availability },
 		topics: module.topics.map((topic) => ({ ...topic })),
 		progress: { ...module.progress },
+		currentRun: module.currentRun === null ? null : { ...module.currentRun },
 		sections: module.sections.map((section) => ({
 			...section,
 			progress: { ...section.progress },

@@ -1,3 +1,4 @@
+// test/ui/LearningPathPage/adaptiveNextActivityFlow.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
@@ -5,7 +6,7 @@ import LearningPathRepository from "../../../src/model/repositories/LearningPath
 import FakeLearningPathDataSource from "../../fakes/FakeLearningPathDataSource.js";
 import createLearningPathActionModel from "../../../src/ui/viewmodel/LearningPath/createLearningPathActionModel.js";
 
-const t = { learningPathResumeLabel: "Resume", learningPathStartLabel: "Start", learningPathStartReviewLabel: "Review", learningPathStartRepairLabel: "Repair", learningPathStartCoverageLabel: "Coverage" };
+const t = { learningPathResumeLabel: "Resume", learningPathStartReviewLabel: "Review", learningPathStartRepairLabel: "Repair", learningPathStartCoverageLabel: "Coverage" };
 
 describe("adaptive next activity frontend flow", () => {
 	test("preserves backend adaptive kind without calculating it in frontend", async () => {

@@ -16,7 +16,7 @@ describe("LearningPath authored roadmap transport contract", () => {
 		expect(pathResponse.nextActivity).toMatchObject({ kind: "start-authored-session", planKey: expect.any(String), sectionId: expect.any(String) });
 		expect(pathResponse.modules[0].sections[0]).toMatchObject({ sectionKey: "chapter-1", sessions: expect.any(Array), chapterTests: expect.any(Array) });
 		expect(pathResponse.modules[0].sections[0].chapterTests).toHaveLength(2);
-		expect(startCommand).toEqual({ subjectId: "in2120", moduleId: "11111111-1111-4111-8111-111111111111", lang: "no" });
+		expect(startCommand).toEqual({ subjectId: "in2120", moduleId: "11111111-1111-4111-8111-111111111111", lang: "no", target: { kind: "module" }, discardActiveSession: false });
 		expect(startCommand).not.toHaveProperty("round");
 		expect(session).toMatchObject({ activityKind: "authored", planKey: expect.any(String), sectionId: "section-1" });
 		expect(session).not.toHaveProperty("round");

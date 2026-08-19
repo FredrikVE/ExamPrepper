@@ -27,6 +27,20 @@ describe("LearningPathRepository", () => {
 		expect(result).not.toHaveProperty("moduleProgress");
 	});
 
+	test("preserves backend-owned startability and current replay progress", async () => {
+		const response = readFixture("learning-path-response.json");
+		response.modules[0].currentRun = { completedSessions: 1, totalSessions: 4 };
+		const pathModel = await createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" });
+		expect(pathModel.modules[0].currentRun).toEqual({ completedSessions: 1, totalSessions: 4 });
+		expect(pathModel.modules[0].sections[0].sessions[0].isStartable).toBe(true);
+	});
+
+	test("rejects a roadmap session without backend-owned isStartable", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.modules[0].sections[0].sessions[0].isStartable;
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+	});
+
 	test("accepts the backend-owned submit assessment band", async () => {
 		const result = await createRepository().submitLearningSession({ sessionId: "session-1", answers: [] });
 		expect(result.score).toMatchObject({ percentage: 65.38, performanceBand: "progress" });

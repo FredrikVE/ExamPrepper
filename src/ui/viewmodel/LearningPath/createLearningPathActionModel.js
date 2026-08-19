@@ -1,16 +1,31 @@
-//src/ui/viewmodel/LearningPath/createLearningPathActionModel.js
+// src/ui/viewmodel/LearningPath/createLearningPathActionModel.js
 export default function createLearningPathActionModel({ module, resumableSession, nextActivity, startingModuleId, t }) {
 	const canResume = resumableSession !== null && resumableSession.moduleId === module.id;
 	const isStarting = startingModuleId === module.id;
+	const isHistoricallyComplete = module.progress.totalSessions > 0 && module.progress.completedSessions >= module.progress.totalSessions;
 
 	if (canResume) {
 		return {
 			intent: "resume",
 			moduleId: module.id,
 			sessionId: resumableSession.sessionId,
-			label: t.learningPathResumeLabel,
+			target: null,
+			label: module.currentRun === null ? t.learningPathResumeLabel : t.learningPathContinueReplayLabel(module.currentRun.completedSessions, module.currentRun.totalSessions),
 			isDisabled: false,
 			isPending: false
+		};
+	}
+
+	if (isHistoricallyComplete) {
+		return {
+			intent: "start",
+			moduleId: module.id,
+			sessionId: null,
+			target: { kind: "module-replay" },
+			activityKind: "authored",
+			label: module.currentRun === null ? t.learningPathReplayModuleLabel : t.learningPathContinueReplayLabel(module.currentRun.completedSessions, module.currentRun.totalSessions),
+			isDisabled: !module.availability.isUnlocked || startingModuleId !== null,
+			isPending: isStarting
 		};
 	}
 
@@ -19,6 +34,7 @@ export default function createLearningPathActionModel({ module, resumableSession
 			intent: "start",
 			moduleId: module.id,
 			sessionId: null,
+			target: { kind: "module" },
 			activityKind: nextActivity.kind === "start-adaptive-session" ? nextActivity.activityKind : "authored",
 			label: nextActivity.kind === "start-adaptive-session" ? adaptiveLabel(nextActivity.activityKind, t) : t.learningPathContinueLabel,
 			isDisabled: !module.availability.isUnlocked || startingModuleId !== null,
@@ -31,6 +47,7 @@ export default function createLearningPathActionModel({ module, resumableSession
 			intent: "start",
 			moduleId: module.id,
 			sessionId: null,
+			target: { kind: "module" },
 			activityKind: null,
 			label: t.learningPathContinueLabel,
 			isDisabled: startingModuleId !== null,

@@ -7,11 +7,12 @@ const NODE_PATH = path.resolve("src/ui/view/components/LearningPathPage/Learning
 const SCORE_PATH = path.resolve("src/ui/view/components/LearningPathPage/LearningPathSessionScore.jsx");
 
 describe("LearningPathSessionNode", () => {
-	test("renders ViewModel-owned icon state without making sessions interactive", () => {
+	test("makes only backend-startable sessions interactive", () => {
 		const source = fs.readFileSync(NODE_PATH, "utf8");
-		expect(source).toContain('model.iconKey === "score"');
-		expect(source).toContain("<LearningPathSessionScore");
-		expect(source).not.toMatch(/<button|onClick|onSelected/);
+		expect(source).toContain("model.isSelectable");
+		expect(source).toContain("<button");
+		expect(source).toContain("onSelected(model.actionModel)");
+		expect(source).toContain("learning-path-session-node__hover-play");
 	});
 
 	test("scopes donut rotation to the score ring class", () => {

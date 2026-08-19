@@ -61,13 +61,6 @@
 		grid-column: 1 / -1;
 	}
 
-	.learning-path-topic-progress {
-		grid-template-columns: 8px minmax(0, 1fr) 54px;
-	}
-
-	.learning-path-topic-progress__track {
-		display: none;
-	}
 }
 
 @media (max-width: 460px) {
