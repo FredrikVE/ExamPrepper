@@ -4,6 +4,7 @@
 	"score": {
 		"earnedPoints": 8.5,
 		"availablePoints": 13,
-		"percentage": 65.38
+		"percentage": 65.38,
+		"performanceBand": "progress"
 	}
 }

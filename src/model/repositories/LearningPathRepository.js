@@ -1,10 +1,11 @@
-//src/model/repositories/LearningPathRepository.js
+// src/model/repositories/LearningPathRepository.js
 const INVALID_LEARNING_PATH_RESPONSE = "Invalid learning path response";
 const INVALID_LEARNING_SESSION_RESPONSE = "Invalid learning session response";
 const INVALID_LEARNING_SESSION_RESULT = "Invalid learning session result";
 const ACTIVITY_KINDS = new Set(["authored", "review", "repair", "coverage", "legacy-round"]);
 const SESSION_STATUSES = new Set(["completed", "current", "available", "locked"]);
 const CHAPTER_TEST_STATUSES = new Set(["available", "locked"]);
+const ASSESSMENT_BANDS = new Set(["practice", "progress", "understood", "not-assessed"]);
 
 export default class LearningPathRepository {
 	constructor(learningPathDataSource) {
@@ -126,5 +127,6 @@ function toLearningQuestion(question) {
 }
 
 function validateSubmitResponse(response) {
-	if (!response || typeof response.sessionId !== "string" || response.status !== "completed" || !response.score || !Number.isFinite(response.score.earnedPoints) || !Number.isFinite(response.score.availablePoints) || !Number.isFinite(response.score.percentage)) throw new Error(INVALID_LEARNING_SESSION_RESULT);
+	if (!response || typeof response.sessionId !== "string" || response.status !== "completed" || !response.score || !Number.isFinite(response.score.earnedPoints) || !Number.isFinite(response.score.availablePoints) || !isNullableNumber(response.score.percentage) || !ASSESSMENT_BANDS.has(response.score.performanceBand)) throw new Error(INVALID_LEARNING_SESSION_RESULT);
+	if ((response.score.percentage === null) !== (response.score.performanceBand === "not-assessed")) throw new Error(INVALID_LEARNING_SESSION_RESULT);
 }

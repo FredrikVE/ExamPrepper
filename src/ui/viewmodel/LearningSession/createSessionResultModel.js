@@ -1,36 +1,38 @@
-//src/ui/viewmodel/LearningSession/createSessionResultModel.js
-const RESULT_APPEARANCES = Object.freeze({ STRONG: "strong", MEDIUM: "medium", WEAK: "weak" });
+// src/ui/viewmodel/LearningSession/createSessionResultModel.js
+const RESULT_APPEARANCES = Object.freeze({
+	PRACTICE: "practice",
+	PROGRESS: "progress",
+	UNDERSTOOD: "understood",
+	NOT_ASSESSED: "not-assessed"
+});
 
 function normalizeMetric(value) {
-	if (!Number.isFinite(value)) return 0;
+	if (value === null) return null;
+	if (!Number.isFinite(value)) return null;
 	return Math.round(value * 100) / 100;
 }
 
-function resolveAppearance(percentage) {
-	if (percentage >= 80) return RESULT_APPEARANCES.STRONG;
-	if (percentage >= 55) return RESULT_APPEARANCES.MEDIUM;
-	return RESULT_APPEARANCES.WEAK;
-}
-
-function resolveCopy({ percentage, moduleTitle, t }) {
+function resolveCopy({ percentage, performanceBand, moduleTitle, t }) {
 	if (percentage === 100) return { title: t.learningSessionResultPerfectTitle, body: t.learningSessionResultPerfectBody(moduleTitle) };
-	if (percentage >= 80) return { title: t.learningSessionResultStrongTitle, body: t.learningSessionResultStrongBody(moduleTitle) };
-	if (percentage >= 55) return { title: t.learningSessionResultMediumTitle, body: t.learningSessionResultMediumBody(moduleTitle) };
-	return { title: t.learningSessionResultWeakTitle, body: t.learningSessionResultWeakBody(moduleTitle) };
+	if (performanceBand === RESULT_APPEARANCES.UNDERSTOOD) return { title: t.learningSessionResultUnderstoodTitle, body: t.learningSessionResultUnderstoodBody(moduleTitle) };
+	if (performanceBand === RESULT_APPEARANCES.PROGRESS) return { title: t.learningSessionResultProgressTitle, body: t.learningSessionResultProgressBody(moduleTitle) };
+	if (performanceBand === RESULT_APPEARANCES.PRACTICE) return { title: t.learningSessionResultPracticeTitle, body: t.learningSessionResultPracticeBody(moduleTitle) };
+	return { title: t.learningSessionResultNotAssessedTitle, body: t.learningSessionResultNotAssessedBody(moduleTitle) };
 }
 
 export default function createSessionResultModel({ score, moduleTitle, t, onBack }) {
 	const percentage = normalizeMetric(score.percentage);
-	const copy = resolveCopy({ percentage, moduleTitle, t });
+	const appearance = score.performanceBand;
+	const copy = resolveCopy({ percentage, performanceBand: appearance, moduleTitle, t });
 	return {
-		appearance: resolveAppearance(percentage),
+		appearance,
 		eyebrow: t.learningSessionResultEyebrow,
 		title: copy.title,
 		body: copy.body,
 		statsLabel: t.learningSessionResultStatsLabel,
 		pointsValue: `${score.earnedPoints} / ${score.availablePoints}`,
 		pointsLabel: t.learningSessionResultPointsLabel,
-		scoreValue: `${percentage} %`,
+		scoreValue: percentage === null ? "—" : `${percentage} %`,
 		scoreLabel: t.learningSessionResultScoreLabel,
 		nextStepLabel: t.learningSessionResultNextStepLabel,
 		nextStepBody: t.learningSessionResultContinuePathBody,

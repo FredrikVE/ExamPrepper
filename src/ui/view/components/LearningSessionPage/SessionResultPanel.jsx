@@ -1,10 +1,11 @@
-//src/ui/view/components/LearningSessionPage/SessionResultPanel.jsx
-import { ArrowRight, Check, RotateCcw, TrendingUp } from "lucide-react";
+// src/ui/view/components/LearningSessionPage/SessionResultPanel.jsx
+import { ArrowRight, Check, CircleHelp, RotateCcw, TrendingUp } from "lucide-react";
 
 function ResultMark({ appearance }) {
-	if (appearance === "strong") return <Check aria-hidden="true" />;
-	if (appearance === "medium") return <TrendingUp aria-hidden="true" />;
-	return <RotateCcw aria-hidden="true" />;
+	if (appearance === "understood") return <Check aria-hidden="true" />;
+	if (appearance === "progress") return <TrendingUp aria-hidden="true" />;
+	if (appearance === "practice") return <RotateCcw aria-hidden="true" />;
+	return <CircleHelp aria-hidden="true" />;
 }
 
 export default function SessionResultPanel({ appearance, eyebrow, title, body, statsLabel, pointsValue, pointsLabel, scoreValue, scoreLabel, nextStepLabel, nextStepBody, primaryLabel, isPrimaryDisabled, actionErrorMessage, onPrimary }) {

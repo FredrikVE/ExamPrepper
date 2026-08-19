@@ -1,4 +1,4 @@
-/*src/ui/style/LearningSessionPage/learning-session.css*/
+/* src/ui/style/LearningSessionPage/learning-session.css */
 .learning-session-workspace .workspace-scaffold-body {
 	padding: calc(var(--scaffold-header-height) + var(--space-5)) var(--scaffold-inset) var(--space-8);
 }
@@ -121,19 +121,24 @@
 	text-align: center;
 }
 
-.learning-session-result--strong {
-	--learning-session-result-accent: var(--success);
-	--learning-session-result-soft: var(--success-soft);
+.learning-session-result--understood {
+	--learning-session-result-accent: var(--assessment-understood);
+	--learning-session-result-soft: color-mix(in srgb, var(--assessment-understood) 10%, transparent);
 }
 
-.learning-session-result--medium {
-	--learning-session-result-accent: var(--warning);
-	--learning-session-result-soft: var(--warning-soft);
+.learning-session-result--progress {
+	--learning-session-result-accent: var(--assessment-progress);
+	--learning-session-result-soft: color-mix(in srgb, var(--assessment-progress) 12%, transparent);
 }
 
-.learning-session-result--weak {
-	--learning-session-result-accent: var(--danger);
-	--learning-session-result-soft: var(--danger-soft);
+.learning-session-result--practice {
+	--learning-session-result-accent: var(--assessment-practice);
+	--learning-session-result-soft: color-mix(in srgb, var(--assessment-practice) 10%, transparent);
+}
+
+.learning-session-result--not-assessed {
+	--learning-session-result-accent: var(--assessment-not-assessed);
+	--learning-session-result-soft: color-mix(in srgb, var(--text-muted) 8%, transparent);
 }
 
 .learning-session-result__intro {

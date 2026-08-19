@@ -184,6 +184,12 @@
     --warning-border: rgba(245, 158, 11, 0.28);
     --warning-text: #92400e;
 
+    /* ── Assessment semantics ───────────────── */
+    --assessment-practice: var(--danger);
+    --assessment-progress: var(--warning);
+    --assessment-understood: var(--success);
+    --assessment-not-assessed: color-mix(in srgb, var(--text-muted) 40%, transparent);
+
     /* ── Flipcards (lys/mørk-par; scopet i FlipcardsPage avleder resten) ── */
     --flipcards-purple-soft: #5f55f7;
     --flipcards-green: #059669;

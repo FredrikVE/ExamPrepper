@@ -1,3 +1,4 @@
+// test/model/repositories/LearningPathRepository.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,6 +25,25 @@ describe("LearningPathRepository", () => {
 		expect(pathModel.examGate).toEqual({ isUnlocked: false });
 		expect(session).toMatchObject({ activityKind: "authored", planKey: expect.any(String), sectionId: "section-1" });
 		expect(result).not.toHaveProperty("moduleProgress");
+	});
+
+	test("accepts the backend-owned submit assessment band", async () => {
+		const result = await createRepository().submitLearningSession({ sessionId: "session-1", answers: [] });
+		expect(result.score).toMatchObject({ percentage: 65.38, performanceBand: "progress" });
+	});
+
+	test("accepts an explicit not-assessed submit result", async () => {
+		const response = readFixture("submit-session-response.json");
+		response.score.percentage = null;
+		response.score.performanceBand = "not-assessed";
+		const result = await createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] });
+		expect(result.score).toMatchObject({ percentage: null, performanceBand: "not-assessed" });
+	});
+
+	test("rejects a partial submit assessment pair", async () => {
+		const response = readFixture("submit-session-response.json");
+		response.score.percentage = null;
+		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] })).rejects.toThrow("Invalid learning session result");
 	});
 
 	test("rejects a module without backend-owned sections", async () => {

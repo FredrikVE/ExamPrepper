@@ -1,3 +1,4 @@
+// test/contracts/learningPathContract.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
@@ -19,7 +20,7 @@ describe("LearningPath authored roadmap transport contract", () => {
 		expect(startCommand).not.toHaveProperty("round");
 		expect(session).toMatchObject({ activityKind: "authored", planKey: expect.any(String), sectionId: "section-1" });
 		expect(session).not.toHaveProperty("round");
-		expect(submit).toEqual({ sessionId: "22222222-2222-4222-8222-222222222222", status: "completed", score: { earnedPoints: 8.5, availablePoints: 13, percentage: 65.38 } });
+		expect(submit).toEqual({ sessionId: "22222222-2222-4222-8222-222222222222", status: "completed", score: { earnedPoints: 8.5, availablePoints: 13, percentage: 65.38, performanceBand: "progress" } });
 	});
 
 	test("keeps answer identity on sessionQuestionId", () => {
