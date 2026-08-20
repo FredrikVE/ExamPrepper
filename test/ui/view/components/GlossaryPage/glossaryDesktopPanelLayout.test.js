@@ -136,6 +136,16 @@ describe("Glossary desktop panel layout", () => {
 		expect(connectionsCell["text-align"]).toBe("center");
 	});
 
+	test("collapses the desktop topic-area column and reserves canonical sheet space on narrow desktop", () => {
+		const responsiveRoot = parseStyle(RESPONSIVE_STYLE_PATH);
+		const narrowMedia = "(min-width: 933px) and (max-width: 1200px)";
+		const workspace = readDeclarations(responsiveRoot, ".glossary-workspace", narrowMedia);
+		const content = readDeclarations(responsiveRoot, ".glossary-page__content", narrowMedia);
+
+		expect(workspace["--glossary-footer-overlay-space"]).toBe("var(--mobile-sheet-scroll-reserve)");
+		expect(content["grid-template-columns"]).toBe("minmax(0, 1fr)");
+	});
+
 	test("keeps the mobile glossary surface unframed", () => {
 		const mobilePanel = readDeclarations(parseStyle(RESPONSIVE_STYLE_PATH), ".glossary-panel", "(max-width: 932px)");
 

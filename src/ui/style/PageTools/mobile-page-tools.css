@@ -13,7 +13,7 @@
 	width: 100%;
 }
 
-@media (max-width: 932px) {
+@media (max-width: 1200px) {
 	.page-tools-mobile-footer-shell {
 		display: grid;
 		width: 100%;

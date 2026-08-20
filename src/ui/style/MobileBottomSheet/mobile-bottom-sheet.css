@@ -1,6 +1,13 @@
 /* src/ui/style/MobileBottomSheet/mobile-bottom-sheet.css */
 .mobile-bottom-sheet-root {
+	position: fixed;
+	right: max(0px, env(safe-area-inset-right));
+	bottom: 0;
+	left: max(0px, env(safe-area-inset-left));
+	z-index: var(--z-docked-mobile-sheet);
 	display: none;
+	width: auto;
+	pointer-events: none;
 }
 
 .mobile-bottom-sheet-docked-overlay {
@@ -43,6 +50,32 @@
 	overflow: hidden;
 	overscroll-behavior: contain;
 	pointer-events: auto;
+	height: calc(100dvh - var(--mobile-sheet-top-clearance));
+	max-height: calc(100dvh - var(--mobile-sheet-top-clearance));
+	background: var(
+		--mobile-bottom-sheet-background,
+		radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
+		radial-gradient(circle at 18% 94%, rgba(47, 128, 255, 0.08), transparent 32%),
+		linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 96%, transparent), color-mix(in srgb, var(--panel-bg) 98%, transparent)),
+		var(--app-bg)
+	);
+	padding: var(--space-1) var(--space-4) calc(var(--space-7) + env(safe-area-inset-bottom));
+	touch-action: auto;
+	transform: translateY(calc(
+		100%
+		- var(--mobile-sheet-peek-height)
+		- env(safe-area-inset-bottom)
+		+ var(--mobile-bottom-sheet-drag-offset, 0px)
+	));
+	transition: transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.mobile-bottom-sheet-root[data-open="true"] .mobile-bottom-sheet-popup {
+	transform: translateY(var(--mobile-bottom-sheet-drag-offset, 0px));
+}
+
+.mobile-bottom-sheet-root[data-dragging="true"] .mobile-bottom-sheet-popup {
+	transition-duration: 0ms;
 }
 
 .mobile-bottom-sheet-content {
@@ -122,47 +155,18 @@
 
 @media (max-width: 932px) {
 	.mobile-bottom-sheet-root {
-		position: fixed;
-		right: max(0px, env(safe-area-inset-right));
-		bottom: 0;
-		left: max(0px, env(safe-area-inset-left));
-		z-index: var(--z-docked-mobile-sheet);
 		display: grid;
-		width: auto;
-		pointer-events: none;
-	}
-
-	.mobile-bottom-sheet-popup {
-		height: calc(100dvh - var(--mobile-sheet-top-clearance));
-		max-height: calc(100dvh - var(--mobile-sheet-top-clearance));
-		background: var(
-			--mobile-bottom-sheet-background,
-			radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
-			radial-gradient(circle at 18% 94%, rgba(47, 128, 255, 0.08), transparent 32%),
-			linear-gradient(180deg, color-mix(in srgb, var(--panel-strong) 96%, transparent), color-mix(in srgb, var(--panel-bg) 98%, transparent)),
-			var(--app-bg)
-		);
-		padding: var(--space-1) var(--space-4) calc(var(--space-7) + env(safe-area-inset-bottom));
-		touch-action: auto;
-		transform: translateY(calc(
-			100%
-			- var(--mobile-sheet-peek-height)
-			- env(safe-area-inset-bottom)
-			+ var(--mobile-bottom-sheet-drag-offset, 0px)
-		));
-		transition: transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
-	}
-
-	.mobile-bottom-sheet-root[data-open="true"] .mobile-bottom-sheet-popup {
-		transform: translateY(var(--mobile-bottom-sheet-drag-offset, 0px));
-	}
-
-	.mobile-bottom-sheet-root[data-dragging="true"] .mobile-bottom-sheet-popup {
-		transition-duration: 0ms;
 	}
 }
 
-@media (prefers-reduced-motion: reduce) and (max-width: 932px) {
+@media (min-width: 933px) and (max-width: 1200px) {
+	.page-tools-mobile-footer-shell .mobile-bottom-sheet-root,
+	.glossary-mobile-chapter-sheet .mobile-bottom-sheet-root {
+		display: grid;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 1200px) {
 	.mobile-bottom-sheet-popup,
 	.mobile-bottom-sheet-grip-control {
 		transition: none;

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
 import postcss from "postcss";
+import { APP_COMPACT_SHELL_QUERY, APP_FULL_DESKTOP_MIN_WIDTH, APP_NARROW_DESKTOP_MAX_WIDTH } from "../../../src/ui/presentation/appShellMode.js";
 import { APP_DESKTOP_MIN_WIDTH, APP_MOBILE_MAX_WIDTH, APP_MOBILE_QUERY } from "../../../src/ui/presentation/presentationMode.js";
 
 const STYLE_DIRECTORY = path.resolve("src/ui/style");
@@ -81,21 +82,26 @@ function collectWidthFeatures() {
 }
 
 describe("app breakpoint contract", () => {
-	test("exports the synchronized JavaScript boundary", () => {
+	test("exports the synchronized JavaScript boundaries", () => {
 		expect(APP_MOBILE_MAX_WIDTH).toBe(932);
 		expect(APP_DESKTOP_MIN_WIDTH).toBe(933);
 		expect(APP_MOBILE_QUERY).toBe("(max-width: 932px)");
 		expect(APP_DESKTOP_MIN_WIDTH).toBe(APP_MOBILE_MAX_WIDTH + 1);
+		expect(APP_NARROW_DESKTOP_MAX_WIDTH).toBe(1200);
+		expect(APP_FULL_DESKTOP_MIN_WIDTH).toBe(1201);
+		expect(APP_COMPACT_SHELL_QUERY).toBe("(max-width: 1200px)");
+		expect(APP_FULL_DESKTOP_MIN_WIDTH).toBe(APP_NARROW_DESKTOP_MAX_WIDTH + 1);
+		expect(APP_NARROW_DESKTOP_MAX_WIDTH).toBeGreaterThan(APP_DESKTOP_MIN_WIDTH);
 	});
 
-	test("uses only the canonical values for app mobile and desktop boundaries", () => {
+	test("uses only canonical directions for app presentation and shell boundaries", () => {
 		for (const feature of collectWidthFeatures()) {
-			if (feature.width === APP_MOBILE_MAX_WIDTH) {
+			if (feature.width === APP_MOBILE_MAX_WIDTH || feature.width === APP_NARROW_DESKTOP_MAX_WIDTH) {
 				expect(feature.operator).toBe("max");
 				continue;
 			}
 
-			if (feature.width === APP_DESKTOP_MIN_WIDTH) {
+			if (feature.width === APP_DESKTOP_MIN_WIDTH || feature.width === APP_FULL_DESKTOP_MIN_WIDTH) {
 				expect(feature.operator).toBe("min");
 			}
 		}
@@ -103,7 +109,12 @@ describe("app breakpoint contract", () => {
 
 	test("keeps every component-local width threshold on an explicit allowlist", () => {
 		for (const feature of collectWidthFeatures()) {
-			if (feature.width === APP_MOBILE_MAX_WIDTH || feature.width === APP_DESKTOP_MIN_WIDTH) {
+			const isAppBoundary = feature.width === APP_MOBILE_MAX_WIDTH
+				|| feature.width === APP_DESKTOP_MIN_WIDTH
+				|| feature.width === APP_NARROW_DESKTOP_MAX_WIDTH
+				|| feature.width === APP_FULL_DESKTOP_MIN_WIDTH;
+
+			if (isAppBoundary) {
 				continue;
 			}
 

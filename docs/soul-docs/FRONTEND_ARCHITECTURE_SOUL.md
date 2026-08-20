@@ -1,8 +1,8 @@
 <!--docs/soul-docs/FRONTEND_ARCHITECTURE_SOUL.md-->
 # FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
-<!-- Versjon: 2.8 — Sist oppdatert: 2026-07-29 -->
-<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.7 -->
+<!-- Versjon: 2.9 — Sist oppdatert: 2026-08-20 -->
+<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.8 -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
@@ -47,7 +47,7 @@ Dokumentet skiller derfor fire roller:
 | Navigasjon: menydata | `NAV_ITEMS`, `LEARNING_CONTENT_TYPES`, `TEST_TYPES` | `src/navigation/navigation.js` | Sidebar, seks desktopvalg, mobilgrupper og pop-out-menyer bygges fra disse registrene. Desktoprekkefølgen er `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`; `Læringsti` er deaktivert og uten target. `Kapitteltester` og `Eksamener` mapper begge til `LEARNING_CONTENT_TYPES.EXAMS`, med hver sin `testType`; de er ikke nye skjermer eller innholdstyper. |
 | Navigasjon: runtime | `useAppNavigationViewModel()` | `src/ui/viewmodel/AppNavigationViewModel.js` | Eier route-/selection-state, overganger, språksynk og avledet chrome/back. |
 | Mobil navigasjon | `useMobileDropDownTopBarModel()` | `src/ui/viewmodel/AppNavigation/` | Eier mobilmeny og subject-picker-state; brukes gjennom appens navigasjons-ViewModel. |
-| Settings-presentasjon | `useSettingsPresentationModel()` | `src/ui/viewmodel/AppNavigation/` | Eier open-state og presentasjonsmodus for settings. |
+| Settings-presentasjon | `useSettingsPresentationModel()` | `src/ui/viewmodel/AppNavigation/` | Eier open-state og presentasjonsmodus for settings; sheet/sidebar følger app-shell-modus, ikke feature-presentasjonsmodus. |
 | Teknisk lastestatus | `LOAD_STATUS`, `useLoadModel()` | `src/ui/viewmodel/LoadState/` | Views importerer ikke `LOAD_STATUS`; Page-ViewModel bruker load-modellen. |
 | Page-state | `WORKSPACE_STATE_KINDS` | `src/ui/viewmodel/WorkspaceState/` | Loading/error/empty/content uttrykkes med denne unionen. |
 | Produkttekst | `translations`, `LANGUAGES` | `src/i18n/translations.js` | All produkttekst og alle config-refererte tekstnøkler kommer herfra. |
@@ -57,7 +57,8 @@ Dokumentet skiller derfor fire roller:
 | Auth-token til transport | `setAuthTokenProvider()`, `getActiveAuthToken()` | `src/auth/AuthTokenProvider.js` | Modulbro, ikke React-provider; injiseres i transportlaget. |
 | Spørsmålstype-ID-er | `QUESTION_TYPES` | `src/constants/QuestionTypes.js` | Sammenlign mot konstantene, aldri rå `"single"`/`"multi"`/`"fill"`-strenger. |
 | Spørsmålskonfigurasjon | `QUESTION_CONFIG` | `src/constants/QuestionConfig.js` | Konfigurasjonsgrenser holdes separat fra type-ID-er. |
-| Mobil/desktop-modus | `PRESENTATION_MODE`, `APP_MOBILE_MAX_WIDTH`, `APP_DESKTOP_MIN_WIDTH`, `usePresentationMode()` | `src/ui/presentation/` | Breakpoint endres i JS, CSS og kontrakttest i samme patch. |
+| Mobil/desktop-modus | `PRESENTATION_MODE`, `APP_MOBILE_MAX_WIDTH`, `APP_DESKTOP_MIN_WIDTH`, `usePresentationMode()` | `src/ui/presentation/` | Eier feature-presentasjon: mobil til og med `932`, desktop fra `933`. Breakpoint endres i JS, CSS og kontrakttest i samme patch. |
+| App-shell-modus | `APP_SHELL_MODE`, `APP_NARROW_DESKTOP_MAX_WIDTH`, `APP_FULL_DESKTOP_MIN_WIDTH`, `APP_COMPACT_SHELL_QUERY`, `useAppShellMode()` | `src/ui/presentation/` | Eier chrome-grensen: compact shell til og med `1200`, full desktop-shell fra `1201`. Compact shell bruker eksisterende `MobileDropDownTopBar` uten å gjøre feature-presentasjonen mobil. |
 | Dependency injection | `dependencies.js`-modulen / DI-wiringen | `src/di/dependencies.js` | Eneste sted som leser API-base-URL og instansierer konkrete data-/domeneavhengigheter. |
 | Emneområdefiltrering | `ALL_TOPIC_AREAS`, `findTopicAreaByKey()` | `src/model/domain/utils/topicAreaFilters.js` | Bruk register og oppslag; ikke opprett lokale varianter. |
 
@@ -179,9 +180,10 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-07-25 | `DockedMobileBottomSheet` eier canonical bottom-sheet-geometri, slots, drag-/gripmekanikk, inert-kontrakt og scroll. Feature-sheets eier innhold og handlinger og overstyrer ikke komponentens interne kontrakt. |
 | 2026-07-25 | Search-familien eier canonical felt-, filter-, suggestion-, listbox- og tilgjengelighetsmekanikk. Feature-ViewModelen eier kandidater, rangering, aktiveringspolicy og feature-spesifikke filterregler. |
 | 2026-07-26 | Globale app-lag bruker navngitte `--z-*`-tokens fra `Tokens.css` og er låst av `globalLayerPolicy`. Lokale stacking contexts kan beholde lokale verdier når de ikke deltar i appens globale lagstige. |
-| 2026-07-26 | Appens responsive grense er en synkronisert JS/CSS-kontrakt: `APP_MOBILE_MAX_WIDTH = 932`, desktop starter på `933`, og `appBreakpointContract` håndhever de tillatte verdiene og en eksplisitt allowlist for lokale terskler. |
+| 2026-07-26 | Appens feature-presentasjonsgrense er en synkronisert JS/CSS-kontrakt: `APP_MOBILE_MAX_WIDTH = 932`, desktop starter på `933`, og `appBreakpointContract` håndhever de tillatte verdiene og en eksplisitt allowlist for lokale terskler. |
 | 2026-07-27 | `<ToggleButtonRow/>` er canonical responsiv innholdstypevelger. `navigation.js` eier statisk desktop- og mobilpolicy; Page-ViewModelene leverer ferdige mobilitems; fasaden velger presentasjonsvariant. |
 | 2026-07-29 | `LearningContentSelectPageViewModel` eier `expandedMobileToggleButtonGroupId` som ordinær `useState` og deler en komplett, påkrevd disclosure-kontrakt med Glossary-ruten. Mobilvarianten eier DOM-fokus; bare den eksplisitte lukkeknappen lukker gruppen. Mobilgruppenes underoppføringer følger desktopens relative rekkefølge. |
+| 2026-08-20 | App-shell har en separat compact/full-kontrakt: `APP_NARROW_DESKTOP_MAX_WIDTH = 1200`, full desktop-shell starter på `1201`. Intervallet `933–1200` beholder `PRESENTATION_MODE.DESKTOP`, men bruker `MobileDropDownTopBar`; PageTools og Glossary kan bruke canonical `DockedMobileBottomSheet` uten å bytte feature-presentasjon. |
 
 ---
 
@@ -868,8 +870,9 @@ ikke runtime-state-SSOT-er.
   handlinger, Header eier plassering og app-shell-struktur.
 - Header monteres via `WorkspaceScaffold` sin `header`-slot som søsken til
   scrollflaten.
-- Mobil app-shell eies av `MobileDropDownTopBar`; desktop-Header skjules ved samme
-  brytpunkt. Dette er en responsiv variant, ikke en konkurrerende desktop-header.
+- Compact app-shell eies av `MobileDropDownTopBar`; desktop-Header skjules ved app-shell-grensen.
+  Compact shell brukes både på ekte mobil og narrow desktop. Narrow desktop beholder
+  `PRESENTATION_MODE.DESKTOP`; dette er chrome-responsivitet, ikke mobil feature-presentasjon.
 - Footer monteres gjennom scaffoldets `footer`-slot når siden trenger den.
 
 Forbudet gjelder scaffold-ansvar, ikke HTML-taggen. Semantiske `<header>`-elementer
@@ -1333,19 +1336,28 @@ React-wrapperen ble slettet. Filen eier den lokale `.workspace-card`-flaten som 
 bruker. Mappen skal ikke brukes som argument for å opprette nye konsumenter eller gjeninnføre en
 komponentwrapper. En eventuell flytting/omdøping gjøres som en egen CSS-oppryddingspatch.
 
-### Brytpunktet — synkronisert JS/CSS-kontrakt
+### Brytpunktene — synkroniserte JS/CSS-kontrakter
 
-App-brytpunktet har to tekniske representasjoner fordi CSS ikke kan lese en
-JavaScript-konstant direkte:
+Appen har to separate responsive beslutninger fordi feature-presentasjon og app-shell ikke har samme
+endringsårsak. CSS kan ikke lese JavaScript-konstanter direkte, så begge har synkroniserte tekniske
+representasjoner:
 
-- JS: `APP_MOBILE_QUERY = "(max-width: 932px)"` i
-  `src/ui/presentation/presentationMode.js`
-- CSS: `max-width: 932px` og den komplementære `min-width: 933px`
+- Feature-presentasjon:
+  - JS: `APP_MOBILE_QUERY = "(max-width: 932px)"` i `src/ui/presentation/presentationMode.js`
+  - CSS: `max-width: 932px` og den komplementære `min-width: 933px`
+- App-shell:
+  - JS: `APP_COMPACT_SHELL_QUERY = "(max-width: 1200px)"` i `src/ui/presentation/appShellMode.js`
+  - CSS: `max-width: 1200px`; full desktop-shell starter på `1201px`
 
-Dette er en synkronisert kontrakt, ikke én fysisk SSOT. `appBreakpointContract` tillater bare
-932/933 for appgrensen og bruker en eksplisitt allowlist for lokale komponentterskler. Endres
-grensen, endres JS, CSS og testen i samme patch. En CSS custom property kan ikke brukes i en
-media-query condition og er ikke løsningen.
+`933–1200px` er narrow desktop: featurekode ser fortsatt `PRESENTATION_MODE.DESKTOP`, mens chrome
+bruker eksisterende `MobileDropDownTopBar`. PageTools og Glossary kan i dette intervallet bruke den canonical
+`DockedMobileBottomSheet` uten å aktivere øvrige mobile feature-regler. `1200` er valgt som egen
+app-shell-grense slik at eksisterende komponentlokale `1180px`-terskler fortsatt er lokale terskler.
+
+Dette er synkroniserte kontrakter, ikke én fysisk SSOT. `appBreakpointContract` låser 932/933 og
+1200/1201 og bruker en eksplisitt allowlist for lokale komponentterskler. Endres en appgrense, endres
+JS, CSS og testen i samme patch. En CSS custom property kan ikke brukes i en media-query condition
+og er ikke løsningen.
 
 ### Z-indeksskala — håndhevet global kontrakt
 
@@ -1748,7 +1760,7 @@ commit-meldinger, dokumentasjon.
 > Subject-switcher avledes én gang. Ingen falske fagobjekter; `empty` og `unselected` er ulike.
 > Search, DockedMobileBottomSheet, ProgressBar/Pager og FormattedText gjenbrukes gjennom sine canonical kontrakter.
 > CSS-mapper speiler normalt komponentmapper; det gamle WorkSpaceCard-stylenavnet er et dokumentert unntak.
-> App-brytpunktet 932/933 og globale `--z-*`-lag er testlåste kontrakter.
+> Feature-brytpunktet 932/933, app-shell-brytpunktet 1200/1201 og globale `--z-*`-lag er testlåste kontrakter.
 > Tabs. Horisontale imports/signaturer. Ingen valgfrie parametre i `src/`.
 > Objekt over fire parametre. To kjedede transformasjoner blir løkke.
 > KISS: sentraliser reell policy og delt semantikk, ikke enhver lik linje eller lik overflate.

@@ -4,7 +4,7 @@
 	display: none;
 }
 
-@media (max-width: 932px) {
+@media (max-width: 1200px) {
 	.glossary-mobile-chapter-sheet {
 		display: block;
 	}
@@ -45,6 +45,14 @@
 		box-shadow: inset 4px 0 0 var(--accent);
 	}
 
+	.glossary-mobile-chapter-sheet__body > .search-sheet-list {
+		width: 100%;
+		max-height: none;
+		padding-top: var(--space-2);
+	}
+}
+
+@media (max-width: 932px) {
 	.glossary-entry-card-list {
 		display: grid;
 		gap: var(--space-3);
@@ -222,13 +230,5 @@
 
 	.glossary-entry-card__details .concept-network__relation-list li {
 		flex-wrap: wrap;
-	}
-}
-
-@media (max-width: 932px) {
-	.glossary-mobile-chapter-sheet__body > .search-sheet-list {
-		width: 100%;
-		max-height: none;
-		padding-top: var(--space-2);
 	}
 }

@@ -3,10 +3,10 @@ import Footer from "../../Footer/Footer.jsx";
 import GlossarySearchPanel, { GlossarySearchPopup } from "../GlossarySearchPanel.jsx";
 import GlossaryMobileChapterSheet from "../MobileChapterSheet/GlossaryMobileChapterSheet.jsx";
 
-export default function GlossaryFooter({ isMobile, search, mobileSearchKeyboardHint, allTopicAreaListItem, topicAreaListItems, topicAreaListAriaLabel, sheetTitle, sheetSubtitle, sheetOpenLabel, sheetCloseLabel, isMobileChapterSheetOpen, onMobileChapterSheetOpenChange }) {
+export default function GlossaryFooter({ usesCompactShell, search, mobileSearchKeyboardHint, allTopicAreaListItem, topicAreaListItems, topicAreaListAriaLabel, sheetTitle, sheetSubtitle, sheetOpenLabel, sheetCloseLabel, isMobileChapterSheetOpen, onMobileChapterSheetOpenChange }) {
 	return (
-		<Footer isOpen={!isMobile && search.isPopupOpen} className="glossary-search-footer" openClassName="glossary-search-footer--popup-open">
-			{isMobile ? (
+		<Footer isOpen={!usesCompactShell && search.isPopupOpen} className="glossary-search-footer" openClassName="glossary-search-footer--popup-open">
+			{usesCompactShell ? (
 				<GlossaryMobileChapterSheet
 					isOpen={isMobileChapterSheetOpen}
 					onOpenChange={onMobileChapterSheetOpenChange}

@@ -121,7 +121,7 @@
 	}
 }
 
-@media (max-width: 932px) {
+@media (max-width: 1200px) {
 	.desktop-sidebar {
 		display: none;
 	}

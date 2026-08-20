@@ -12,6 +12,7 @@ const GLOSSARY_TABLE_ROW_PATH = path.resolve("src/ui/view/components/GlossaryPag
 const GLOSSARY_DETAIL_CONTENT_PATH = path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailContent.jsx");
 const GLOSSARY_ENTRY_CARD_LIST_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryEntryCardList.jsx");
 const GLOSSARY_MOBILE_CHAPTER_SHEET_PATH = path.resolve("src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx");
+const GLOSSARY_FOOTER_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx");
 const GLOSSARY_TOPIC_AREA_BUTTON_PATH = path.resolve("src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossaryTopicAreaButton.jsx");
 const CONCEPT_NETWORK_PATH = path.resolve("src/ui/view/components/GlossaryPage/ConceptNetwork/ConceptNetwork.jsx");
 
@@ -50,6 +51,7 @@ describe("Glossary React architecture", () => {
 		}
 
 		expect(pageSource).not.toContain("usePresentationMode");
+		expect(pageSource).not.toContain("useAppShellMode");
 		expect(pageSource).not.toMatch(/stopPropagation|preventDefault|scrollIntoView|addEventListener/);
 	});
 
@@ -123,6 +125,18 @@ describe("Glossary React architecture", () => {
 		expect(source).toContain("onClick={node.onActivate}");
 		expect(source).not.toContain("onSelectConcept");
 		expect(source).not.toMatch(/onClick=\{\(\) =>/);
+	});
+
+	test("uses the app-shell contract to switch Glossary footer chrome without switching feature presentation", () => {
+		const pageSource = readSource(GLOSSARY_PAGE_PATH);
+		const footerSource = readSource(GLOSSARY_FOOTER_PATH);
+
+		expect(pageSource).toContain("usesCompactShell={viewModel.usesCompactShell}");
+		expect(pageSource).toContain("!viewModel.usesCompactShell");
+		expect(pageSource).toContain("isMobile={isMobile}");
+		expect(footerSource).toContain("usesCompactShell ? (");
+		expect(footerSource).toContain("<GlossaryMobileChapterSheet");
+		expect(footerSource).toContain("<Footer");
 	});
 
 	test("keeps mobile chapter-sheet open state out of the component", () => {

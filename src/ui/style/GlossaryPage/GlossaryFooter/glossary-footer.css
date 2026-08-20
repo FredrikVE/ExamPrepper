@@ -40,14 +40,16 @@
 	}
 }
 
-@media (max-width: 932px) {
+@media (max-width: 1200px) {
 	.glossary-search-footer {
 		position: static;
-		z-index: 60;
+		z-index: var(--z-search-footer-content);
 		display: block;
 		height: 0;
 		flex: 0 0 0;
 		padding: 0;
+		border: 0;
+		border-radius: 0;
 		background: transparent;
 	}
 }

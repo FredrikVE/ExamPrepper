@@ -1,9 +1,10 @@
 <!--docs/architecture/SSOT_REGISTER_FRONTEND.md-->
 # SSOT-register — ExamPrepper frontend
 
-Oppdatert: 2026-07-29
+Oppdatert: 2026-08-20
 Type: dokumentasjon / analyse
-Analysert snapshot: `examprepper-frontend-safe-20260729-115916.zip` + QuestionCard-patch 1–4
+Registerbase: `examprepper-frontend-safe-20260729-115916.zip` + QuestionCard-patch 1–4
+Patchdelta 2026-08-20 verifisert mot `examprepper-frontend-safe-20260820-154421.zip`
 
 ## Formål
 
@@ -28,6 +29,12 @@ Patchstatus:   QuestionCard-patch 1–4 anvendt
 Filer:         713
 JS/JSX:        483 i src/ + test/
 Jest-filer:    119
+
+Patchdelta 2026-08-20:
+- Snapshot:    examprepper-frontend-safe-20260820-154421.zip
+- Zip sha256:  7f0776b4469bf3849b93636cdbb7445ac09c1a1291673a81588b9d53211dc939
+- Zip commit:  9af848d836acadfe268f909f6f3c4dfed2c45bc9
+- Endring:     separat compact/full app-shell-kontrakt for narrow desktop
 
 Snapshotet og patchserien etablerer:
 - `QuestionCard` og tilhørende CSS på kapabilitetsnivå, utenfor `ExamPage`.
@@ -75,7 +82,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 |---|---|---|---|
 | `useAppNavigationViewModel()` | Core route-/selection-state (`activeScreen`, tre valg-id-er, språksynk-feil) + route-handlingene | `viewmodel/AppNavigationViewModel.js` | Eneste eier av core route-state. Komponerer mobile/settings-undermodellene og bygger avledede chrome-/back-kontrakter |
 | `useMobileDropDownTopBarModel()` | Mobilmeny- og subject-picker-state | `viewmodel/AppNavigation/useMobileDropDownTopBarModel.js` | Eneste eier av de to mobile overlay-state-verdiene; komponeres av `useAppNavigationViewModel()` |
-| `useSettingsPresentationModel()` | Settings-presentasjonens open-state og modus | `viewmodel/AppNavigation/useSettingsPresentationModel.js` | Eneste eier av de to settings-state-verdiene; lukker settings ved presentation-mode-bytte |
+| `useSettingsPresentationModel()` | Settings-presentasjonens open-state og modus | `viewmodel/AppNavigation/useSettingsPresentationModel.js` | Eneste eier av de to settings-state-verdiene; sheet/sidebar følger app-shell-modus og settings lukkes ved shell-mode-bytte |
 | `NAV_SCREENS{}` `SCREEN_CONFIG{}` `getScreenConfig()` | Skjerm-ID-er, seks deklarative skjermegenskaper, deklarert tilbake-mål og chrome | `src/navigation/navigation.js` | 10 importører. `getScreenConfig` er produksjonsaksessoren og kaster på ukjent skjerm. Låst av `navigation.test.js` + `AppNavigationViewModel.test.js` |
 | `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` `TEST_TYPES{}` | Sidebar, seks desktopvalg, mobilgrupper, testtypeoppføringer, pop-out-menyer og stabile identiteter | `src/navigation/navigation.js` | `toggleButtonItems` eier desktoprekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`. `Læringsti` er deklarert deaktivert. De to testoppføringene peker til `LEARNING_CONTENT_TYPES.EXAMS` med hver sin `testType`; mobilgruppen `Tester` gjenbruker dem |
 | `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | 7 importører. (`createWorkspaceState()` er avledningen — se «utilities») |
@@ -90,7 +97,8 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `AuthTokenProvider`-modulen (`setAuthTokenProvider()` `getActiveAuthToken()`) | Aktiv token-henter for transportlaget | `src/auth/AuthTokenProvider.js` | Modulglobal bro — ikke en React-provider. Injiseres i datakildene via `dependencies.js` |
 | `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Autoritativt register brukt av `QuestionCard`, grading og API-transformasjon. Rå typeavgjørelser i `QuestionCard` og `transformAnswersForApi.js` avvises av `questionCardArchitecture` |
 | `QUESTION_CONFIG{}` | Konfigurasjonsgrenser for spørsmålstyper (i dag: `FILL_MAX_LENGTH`) | `src/constants/QuestionConfig.js` | Egen fil, egen beslutning — ikke type-ID-er |
-| `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop-modus + breakpoint-tall | `ui/presentation/` | 7 importører. `932`/`933` låst av `appBreakpointContract` |
+| `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop feature-presentasjon + breakpoint-tall | `ui/presentation/` | `932`/`933` låst av `appBreakpointContract`; narrow desktop forblir `PRESENTATION_MODE.DESKTOP` |
+| `APP_SHELL_MODE{}` `APP_NARROW_DESKTOP_MAX_WIDTH` `APP_FULL_DESKTOP_MIN_WIDTH` `APP_COMPACT_SHELL_QUERY` `useAppShellMode()` | Compact/full app-shell + shell-breakpoint | `ui/presentation/` | `1200`/`1201` låst av `appBreakpointContract`; compact shell bruker `MobileDropDownTopBar`, og PageTools/Glossary kan bruke canonical `DockedMobileBottomSheet` på narrow desktop uten å gjøre feature-presentasjonen mobil |
 | `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `DataSource` |
 | `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
 | Backend `performanceBand` | Assessment-klassifisering for LearningSession og LearningPath | `LearningPathRepository` validerer; ViewModels konsumerer | Frontend har ingen 40/55/80-klassifisering; `=== 100` er kun perfekt-score-presentasjon |

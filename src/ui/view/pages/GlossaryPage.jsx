@@ -30,7 +30,7 @@ export default function GlossaryPage({ viewModel }) {
 
 	const footer = viewModel.shouldShowWorkspaceFooter ? (
 		<GlossaryFooter
-			isMobile={isMobile}
+			usesCompactShell={viewModel.usesCompactShell}
 			search={viewModel.search}
 			mobileSearchKeyboardHint={viewModel.mobileChapterSheetSearchKeyboardHint}
 			allTopicAreaListItem={viewModel.allTopicAreaListItem}
@@ -82,7 +82,7 @@ export default function GlossaryPage({ viewModel }) {
 					<div className="glossary-page__content">
 						<WorkspaceState state={viewModel.workspaceState}>
 							<>
-								{!isMobile && (
+								{!viewModel.usesCompactShell && (
 									<TopicAreaPanel
 										allTopicAreaListItem={viewModel.allTopicAreaListItem}
 										topicAreaListItems={viewModel.topicAreaListItems}

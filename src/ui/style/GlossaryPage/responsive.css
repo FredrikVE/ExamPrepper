@@ -10,7 +10,17 @@
 	}
 }
 
-@media (max-height: 760px) and (min-width: 933px) {
+@media (min-width: 933px) and (max-width: 1200px) {
+	.glossary-workspace {
+		--glossary-footer-overlay-space: var(--mobile-sheet-scroll-reserve);
+	}
+
+	.glossary-page__content {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (max-height: 760px) and (min-width: 1201px) {
 	.glossary-page {
 		padding-bottom: 14px;
 	}

@@ -61,17 +61,7 @@
 	margin-bottom: 0;
 }
 
-@media (max-width: 932px) {
-	.exam-select-layout,
-	.exam-select-workspace {
-		min-height: 100vh;
-	}
-
-	.exam-select-workspace {
-		border-inline: 0;
-		border-radius: 0;
-	}
-
+@media (max-width: 1200px) {
 	.learning-content-select-page-content {
 		padding:
 			var(--learning-content-page-top)
@@ -91,6 +81,18 @@
 
 	.exam-select-controls {
 		width: 100%;
-		padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+		padding: var(--space-4) var(--space-6) calc(var(--space-4) + env(safe-area-inset-bottom));
+	}
+}
+
+@media (max-width: 932px) {
+	.exam-select-layout,
+	.exam-select-workspace {
+		min-height: 100vh;
+	}
+
+	.exam-select-workspace {
+		border-inline: 0;
+		border-radius: 0;
 	}
 }

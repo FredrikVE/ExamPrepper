@@ -6,6 +6,12 @@
     }
 }
 
+@media (max-width: 1200px) {
+    .exam-select-shell {
+        display: block;
+    }
+}
+
 @media (max-width: 932px) {
     .exam-select-page {
         padding: 0;

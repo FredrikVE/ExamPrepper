@@ -1,5 +1,7 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { APP_SHELL_MODE } from "../presentation/appShellMode.js";
+import useAppShellMode from "../presentation/useAppShellMode.js";
 import { PRESENTATION_MODE } from "../presentation/presentationMode.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { LEARNING_CONTENT_TYPES } from "../../navigation/navigation.js";
@@ -39,6 +41,7 @@ export default function useGlossaryPageViewModel({
 	openMobileToggleButtonGroup,
 	closeMobileToggleButtonGroup
 }) {
+	const appShellMode = useAppShellMode();
 	const presentationMode = usePresentationMode();
 	const resetKey = `${subjectId}:${initialTopicAreaKey}`;
 	const {
@@ -75,6 +78,12 @@ export default function useGlossaryPageViewModel({
 		direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 	});
 	const [isMobileChapterSheetOpen, setIsMobileChapterSheetOpen] = useState(false);
+
+	useEffect(() => {
+		if (appShellMode === APP_SHELL_MODE.FULL) {
+			setIsMobileChapterSheetOpen(false);
+		}
+	}, [appShellMode]);
 
 	useEffect(() => {
 		setGlossaryTableSort({
@@ -864,6 +873,7 @@ export default function useGlossaryPageViewModel({
 		contentToggleBackLabel: t.contentToggleBackLabel,
 
 		presentationMode,
+		usesCompactShell: appShellMode === APP_SHELL_MODE.COMPACT,
 		workspaceState,
 		shouldShowWorkspaceFooter,
 		glossaryPanelEmptyState,
