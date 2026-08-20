@@ -6,6 +6,7 @@ export default function createLearningPathProgressModel({ performancePercent, pe
 		percentage: performancePercent ?? 0,
 		displayPercentage,
 		displayValue,
+		compactDisplayValue: displayPercentage === null ? "–" : `${displayPercentage}%`,
 		appearance: performanceBand,
 		label: t.learningPathPerformanceTitle,
 		accessibleLabel: `${t.learningPathPerformanceTitle}: ${displayValue}`

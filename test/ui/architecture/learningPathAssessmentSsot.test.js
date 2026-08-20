@@ -8,6 +8,7 @@ const read = (relativePath) => fs.readFileSync(path.resolve(relativePath), "utf8
 const assessmentViewModels = [
 	"src/ui/viewmodel/LearningSession/createSessionResultModel.js",
 	"src/ui/viewmodel/LearningPath/createLearningPathProgressModel.js",
+	"src/ui/viewmodel/LearningPath/createLearningPathModuleNodeModel.js",
 	"src/ui/viewmodel/LearningPath/createLearningPathSessionModel.js"
 ];
 
@@ -36,11 +37,19 @@ describe("LearningPath assessment and start-authority SSOT", () => {
 	});
 
 	test("scopes donut rotation and assessment colors to canonical selectors and tokens", () => {
-		const pathCss = read("src/ui/style/LearningPathPage/learning-path-session-node.css");
+		const sessionNodeCss = read("src/ui/style/LearningPathPage/learning-path-session-node.css");
+		const moduleCardCss = read("src/ui/style/LearningPathPage/learning-path-module-card.css");
+		const roadmapCss = read("src/ui/style/LearningPathPage/learning-path-roadmap.css");
 		const sessionCss = read("src/ui/style/LearningSessionPage/learning-session.css");
-		expect(pathCss).toMatch(/\.learning-path-session-score__ring\s*\{[\s\S]*?transform:\s*rotate\(-90deg\)/);
-		expect(pathCss).not.toMatch(/(^|\n)\s*svg\s*\{[\s\S]*?rotate\(-90deg\)/);
-		expect(pathCss).toContain("var(--assessment-progress)");
+		expect(sessionNodeCss).toMatch(/\.learning-path-session-score__ring\s*\{[\s\S]*?transform:\s*rotate\(-90deg\)/);
+		expect(sessionNodeCss).not.toMatch(/(^|\n)\s*svg\s*\{[\s\S]*?rotate\(-90deg\)/);
+		for (const band of ["practice", "progress", "understood", "not-assessed"]) {
+			expect(moduleCardCss).toContain(`.learning-path-mastery-ring--${band} .learning-path-mastery-ring__value { stroke: var(--assessment-${band}); }`);
+		}
+		for (const band of ["practice", "progress", "understood"]) {
+			expect(roadmapCss).toContain(`var(--assessment-${band})`);
+		}
+		expect(sessionNodeCss).toContain("var(--assessment-progress)");
 		expect(sessionCss).toContain("var(--assessment-progress)");
 	});
 

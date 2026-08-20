@@ -1,4 +1,4 @@
-/*src/ui/style/LearningPathPage/learning-path-responsive.css*/
+/* src/ui/style/LearningPathPage/learning-path-responsive.css */
 @media (max-width: 720px) {
 	.learning-path-workspace .workspace-scaffold-body {
 		padding-right: var(--learning-content-page-inline);
@@ -37,7 +37,11 @@
 		height: 54px;
 	}
 
-	.learning-path-node {
+	.learning-path-node,
+	.learning-path-node--completed,
+	.learning-path-node--understood,
+	.learning-path-node--progress,
+	.learning-path-node--practice {
 		width: 46px;
 		height: 46px;
 	}
@@ -59,17 +63,16 @@
 
 	.learning-path-module-detail {
 		grid-column: 1 / -1;
+		padding: var(--space-5);
 	}
-
 }
 
 @media (max-width: 460px) {
-	.learning-path-mastery-ring {
-		width: 46px;
-		height: 46px;
-	}
-
 	.learning-path-module-card__chevron {
 		display: none;
+	}
+
+	.learning-path-progress-row {
+		grid-template-columns: auto minmax(72px, 1fr) auto;
 	}
 }

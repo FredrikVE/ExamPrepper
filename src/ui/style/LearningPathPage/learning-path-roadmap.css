@@ -1,4 +1,4 @@
-/*src/ui/style/LearningPathPage/learning-path-roadmap.css*/
+/* src/ui/style/LearningPathPage/learning-path-roadmap.css */
 .learning-path-roadmap {
 	position: relative;
 	display: grid;
@@ -14,7 +14,7 @@
 	width: 2px;
 	content: "";
 	background: repeating-linear-gradient(to bottom, var(--learning-path-connector) 0 9px, transparent 9px 17px);
-	filter: drop-shadow(0 0 6px color-mix(in srgb, white 10%, transparent));
+	filter: drop-shadow(0 0 6px color-mix(in srgb, var(--text-main) 10%, transparent));
 }
 
 .learning-path-step {
@@ -36,7 +36,7 @@
 	height: 2px;
 	content: "";
 	background: repeating-linear-gradient(to right, color-mix(in srgb, var(--text-main) 74%, transparent) 0 9px, transparent 9px 16px);
-	filter: drop-shadow(0 0 5px color-mix(in srgb, white 14%, transparent));
+	filter: drop-shadow(0 0 5px color-mix(in srgb, var(--text-main) 14%, transparent));
 }
 
 .learning-path-step__node {
@@ -84,19 +84,34 @@
 	border-color: var(--learning-path-active);
 	background: radial-gradient(circle, color-mix(in srgb, var(--accent) 42%, transparent), color-mix(in srgb, var(--accent) 22%, var(--panel-strong)) 68%);
 	box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent), 0 0 28px color-mix(in srgb, var(--accent) 46%, transparent), inset 0 0 24px color-mix(in srgb, var(--accent) 28%, transparent);
-	color: white;
+	color: var(--button-primary-text);
 }
 
-.learning-path-node--completed {
-	border-color: color-mix(in srgb, var(--success) 45%, transparent);
-	background: color-mix(in srgb, var(--success) 16%, var(--panel-strong));
-	color: var(--success);
+.learning-path-node--completed,
+.learning-path-node--understood,
+.learning-path-node--progress,
+.learning-path-node--practice {
+	width: 54px;
+	height: 54px;
+}
+
+.learning-path-node--completed,
+.learning-path-node--understood {
+	border-color: color-mix(in srgb, var(--assessment-understood) 45%, transparent);
+	background: color-mix(in srgb, var(--assessment-understood) 16%, var(--panel-strong));
+	color: var(--assessment-understood);
 }
 
 .learning-path-node--progress {
-	border-color: color-mix(in srgb, var(--warning) 48%, transparent);
-	background: color-mix(in srgb, var(--warning) 14%, var(--panel-strong));
-	color: var(--warning);
+	border-color: color-mix(in srgb, var(--assessment-progress) 48%, transparent);
+	background: color-mix(in srgb, var(--assessment-progress) 14%, var(--panel-strong));
+	color: var(--assessment-progress);
+}
+
+.learning-path-node--practice {
+	border-color: color-mix(in srgb, var(--assessment-practice) 48%, transparent);
+	background: color-mix(in srgb, var(--assessment-practice) 14%, var(--panel-strong));
+	color: var(--assessment-practice);
 }
 
 .learning-path-node--not-started {

@@ -1,11 +1,11 @@
 /* src/ui/style/LearningPathPage/learning-path-progress.css */
 .learning-path-progress-row {
 	display: grid;
-	grid-template-columns: auto minmax(72px, 1fr) auto;
+	grid-template-columns: auto minmax(110px, 1fr) auto;
 	align-items: center;
-	gap: var(--space-2);
-	margin-top: var(--space-1);
-	font-size: 0.75rem;
+	gap: var(--space-3);
+	margin-top: 0;
+	font-size: 0.76rem;
 }
 
 .learning-path-progress-row__label,
