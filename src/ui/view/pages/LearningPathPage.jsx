@@ -4,7 +4,6 @@ import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerV
 import LearningContentHeader from "../components/LearningContentHeader/LearningContentHeader.jsx";
 import ContinueLearningPanel from "../components/LearningPathPage/ContinueLearningPanel.jsx";
 import LearningPathRoadmap from "../components/LearningPathPage/LearningPathRoadmap.jsx";
-import LearningPathSessionConflictDialog from "../components/LearningPathPage/LearningPathSessionConflictDialog.jsx";
 import useLearningPathScrollAdapter from "../components/LearningPathPage/useLearningPathScrollAdapter.js";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
@@ -28,7 +27,6 @@ export default function LearningPathPage({ viewModel }) {
 					</WorkspaceState>
 				</div>
 			</div>
-			<LearningPathSessionConflictDialog model={viewModel.sessionConflictDialogModel} />
 		</WorkspaceScaffold>
 	);
 }

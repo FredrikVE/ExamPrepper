@@ -451,4 +451,5 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 | Navigasjon | `navigation.js` + `AppNavigationViewModel` |
 | Assessment-band i frontend | Backend `performanceBand`; frontend validerer og presenterer uten lokale prosentgrenser |
 | Authored starttillatelse | Backend `isStartable`; frontend avleder kun `isSelectable` direkte |
+| Aktiv LearningSession-navigasjon | Backend `resumableSession` / konfliktens `activeSessionId`; `useLearningPathPageViewModel` gjenopptar aktiv økt direkte og tilbyr ikke discard-valg |
 | Assessment-farger | `Tokens.css` via `--assessment-*` |

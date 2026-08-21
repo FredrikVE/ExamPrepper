@@ -12,6 +12,7 @@ describe("LearningPath action contract", () => {
 		expect(dataSource).toContain("target: command.target ?? { kind: \"module\" }");
 		expect(dataSource).toContain("discardActiveSession: command.discardActiveSession ?? false");
 		expect(viewModel).toContain("target: actionModel.target ?? { kind: \"module\" }");
+		expect(viewModel).toContain("discardActiveSession: false");
 		expect(viewModel).not.toMatch(/completedRounds|nextRound|round:/);
 		expect(action).toContain('{ kind: "module-replay" }');
 		expect(action).not.toMatch(/planKey.*nextActivity|sessionPosition/);
@@ -27,13 +28,19 @@ describe("LearningPath action contract", () => {
 		expect(sessionModel).not.toMatch(/status\s*!==\s*["']locked["']/);
 	});
 
-	test("handles active-session conflicts explicitly instead of silently discarding", () => {
+	test("always resumes the active LearningSession instead of offering a discard choice", () => {
 		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
-		const dialog = read("src/ui/view/components/LearningPathPage/LearningPathSessionConflictDialog.jsx");
+		const page = read("src/ui/view/pages/LearningPathPage.jsx");
+		const styles = read("src/ui/style/LearningPathPage/index.css");
 		expect(viewModel).toContain('LEARNING_SESSION_RESUME_CONFLICT = "learning_session_resume_conflict"');
-		expect(viewModel).toContain("discardActiveSession: true");
-		expect(dialog).toContain("model.onContinue");
-		expect(dialog).toContain("model.onDiscard");
+		expect(viewModel).toContain("if (learningPath.resumableSession !== null)");
+		expect(viewModel).toContain("onLearningSessionStarted(learningPath.resumableSession.sessionId)");
+		expect(viewModel).toContain("onLearningSessionStarted(activeSessionId)");
+		expect(viewModel).not.toContain("discardActiveSession: true");
+		expect(viewModel).not.toContain("sessionConflictDialogModel");
+		expect(page).not.toContain("LearningPathSessionConflictDialog");
+		expect(styles).not.toContain("learning-path-conflict-dialog.css");
+		expect(fs.existsSync(path.resolve("src/ui/view/components/LearningPathPage/LearningPathSessionConflictDialog.jsx"))).toBe(false);
 	});
 
 	test("waits for auth before loading the actionable LearningPath", () => {
