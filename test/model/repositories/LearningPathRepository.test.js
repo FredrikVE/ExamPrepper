@@ -86,3 +86,104 @@ describe("LearningPathRepository", () => {
 		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
 });
+
+describe("LearningPathRepository cache", () => {
+	test("caches the DataSource response by subject and language while returning fresh mapped objects", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+		const firstPath = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+		const secondPath = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(1);
+		expect(firstPath).not.toBe(secondPath);
+		expect(firstPath.modules[0]).not.toBe(secondPath.modules[0]);
+	});
+
+	test("deduplicates concurrent LearningPath reads for the same subject and language", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		const firstRead = repository.getLearningPath({ subjectId: "in2120", language: "no" });
+		const secondRead = repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		await Promise.all([firstRead, secondRead]);
+
+		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(1);
+	});
+
+	test("keeps separate cached responses for different subjects and languages", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+		await repository.getLearningPath({ subjectId: "in2120", language: "en" });
+		await repository.getLearningPath({ subjectId: "in2140", language: "no" });
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(3);
+	});
+
+	test("removes a failed LearningPath request so the next read retries", async () => {
+		let getLearningPathCalls = 0;
+		const dataSource = {
+			async getLearningPath() {
+				getLearningPathCalls += 1;
+
+				if (getLearningPathCalls === 1) {
+					throw new Error("temporary failure");
+				}
+
+				return readFixture("learning-path-response.json");
+			}
+		};
+		const repository = new LearningPathRepository(dataSource);
+
+		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("temporary failure");
+		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).resolves.toMatchObject({ subjectId: "in2120" });
+		expect(getLearningPathCalls).toBe(2);
+	});
+
+	test("clears cached LearningPath responses after starting a LearningSession", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+		await repository.startLearningSession({ subjectId: "in2120", moduleId: "module-1", language: "no" });
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(2);
+	});
+
+	test("clears cached LearningPath responses after submitting a LearningSession", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+		await repository.submitLearningSession({ sessionId: "session-1", answers: [] });
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(2);
+	});
+
+	test("does not clear cached LearningPath responses when only reading a LearningSession", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+		await repository.getLearningSession("session-1");
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(1);
+	});
+
+	test("clears cached LearningPath responses when authenticated user state is reset", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+		repository.clearLearningPathCache();
+		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(2);
+	});
+});

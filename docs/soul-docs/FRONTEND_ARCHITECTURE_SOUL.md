@@ -275,6 +275,7 @@ blir mer kompleks.
 - Eksponerer rene domeneobjekter — ikke rådata
 - Vet ingenting om use cases eller ViewModels
 - Mottar DataSource-instanser via konstruktøren (injisert fra `dependencies.js`)
+- Kan eie en privat in-memory read-cache når repositoryet selv eier både lesningen og mutasjonene som gjør dataene utdaterte. Cache og invalidation skal ikke lekke til Use Case, ViewModel eller View. Brukerspesifikk cache tømmes ved auth-provider-bytte via DI-wiring.
 
 ### 3. Domain-laget — `src/model/domain/`
 

@@ -8,25 +8,51 @@ const CHAPTER_TEST_STATUSES = new Set(["available", "locked"]);
 const ASSESSMENT_BANDS = new Set(["practice", "progress", "understood"]);
 
 export default class LearningPathRepository {
+	#learningPathResponsePromisesByKey = new Map();
+
 	constructor(learningPathDataSource) {
 		this.learningPathDataSource = learningPathDataSource;
 	}
 
 	async getLearningPath({ subjectId, language }) {
-		const response = normalizeLearningPathResponse(await this.learningPathDataSource.getLearningPath({ subjectId, language }));
-		validateLearningPathResponse(response);
-		return {
-			subjectId: response.subjectId,
-			activeModuleId: response.activeModuleId,
-			resumableSession: response.resumableSession === null ? null : { ...response.resumableSession },
-			nextActivity: response.nextActivity === null ? null : { ...response.nextActivity },
-			modules: response.modules.map(toLearningModule),
-			examGate: { ...response.examGate }
-		};
+		const cacheKey = `${subjectId}:${language}`;
+		let responsePromise = this.#learningPathResponsePromisesByKey.get(cacheKey);
+
+		if (responsePromise === undefined) {
+			responsePromise = this.learningPathDataSource.getLearningPath({ subjectId, language });
+			this.#learningPathResponsePromisesByKey.set(cacheKey, responsePromise);
+		}
+
+		try {
+			const response = normalizeLearningPathResponse(await responsePromise);
+			validateLearningPathResponse(response);
+
+			return {
+				subjectId: response.subjectId,
+				activeModuleId: response.activeModuleId,
+				resumableSession: response.resumableSession === null ? null : { ...response.resumableSession },
+				nextActivity: response.nextActivity === null ? null : { ...response.nextActivity },
+				modules: response.modules.map(toLearningModule),
+				examGate: { ...response.examGate }
+			};
+		}
+		catch (error) {
+			if (this.#learningPathResponsePromisesByKey.get(cacheKey) === responsePromise) {
+				this.#learningPathResponsePromisesByKey.delete(cacheKey);
+			}
+
+			throw error;
+		}
 	}
 
 	async startLearningSession(command) {
-		return toLearningSession(await this.learningPathDataSource.startLearningSession(command));
+
+		try {
+			return toLearningSession(await this.learningPathDataSource.startLearningSession(command));
+		}
+		finally {
+			this.#learningPathResponsePromisesByKey.clear();
+		}
 	}
 
 	async getLearningSession(sessionId) {
@@ -34,9 +60,20 @@ export default class LearningPathRepository {
 	}
 
 	async submitLearningSession({ sessionId, answers }) {
-		const response = await this.learningPathDataSource.submitLearningSession({ sessionId, answers });
-		validateSubmitResponse(response);
-		return { sessionId: response.sessionId, status: response.status, score: { ...response.score } };
+
+		try {
+			const response = await this.learningPathDataSource.submitLearningSession({ sessionId, answers });
+			validateSubmitResponse(response);
+
+			return { sessionId: response.sessionId, status: response.status, score: { ...response.score } };
+		}
+		finally {
+			this.#learningPathResponsePromisesByKey.clear();
+		}
+	}
+
+	clearLearningPathCache() {
+		this.#learningPathResponsePromisesByKey.clear();
 	}
 }
 

@@ -35,7 +35,7 @@ import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
 import SubmitExamAttemptUseCase from "../model/domain/SubmitExamAttemptUseCase.js";
 import GetMyStatisticsUseCase from "../model/domain/GetMyStatisticsUseCase.js";
-import { getActiveAuthToken } from "../auth/AuthTokenProvider.js";
+import { getActiveAuthToken, subscribeAuthTokenProviderChange } from "../auth/AuthTokenProvider.js";
 
 function requiredEnv(name) {
     const viteEnv = import.meta.env?.[name];
@@ -93,6 +93,7 @@ const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource);
 const glossaryRepository = new GlossaryRepository(glossaryDataSource);
 const learningPathRepository = new LearningPathRepository(learningPathDataSource);
+subscribeAuthTokenProviderChange(() => learningPathRepository.clearLearningPathCache());
 
 // Use cases
 const gradeAnswerUseCase = new GradeAnswerUseCase();
