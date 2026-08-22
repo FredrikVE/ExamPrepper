@@ -16,6 +16,9 @@ describe("test-set repository scope", () => {
 		expect(repositorySource).toContain("#testSetListPromisesByScope");
 		expect(repositorySource).toContain("subjectId");
 		expect(repositorySource).toContain("language");
+		expect(repositorySource).not.toContain("durationMinutes");
+		expect(repositorySource).not.toMatch(/\bduration:\s*testSet\.duration/);
+		expect(repositorySource).not.toContain("testSet.questions?.length");
 	});
 
 	test("uses explicit Exam and ChapterTest datasource classes", () => {

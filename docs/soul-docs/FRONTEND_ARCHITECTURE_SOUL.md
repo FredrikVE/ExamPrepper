@@ -738,7 +738,7 @@ er en programmeringsfeil; stille fallback er forbudt.
 
 `useLearningContentSelectPageViewModel()` eier `selectedTestType`. Den eksisterende `selectContentType()`-handleren resolver både vanlige innholdstyper og testtypeoppføringene fra `navigation.js`, uavhengig av om valget kommer fra desktop eller mobil. `selectedTestType` velger den eksplisitt injiserte Exam- eller ChapterTest-use-case-porten; ViewModelen klassifiserer ikke returnerte DTO-er.
 
-Backend eier ressursinvarianten: `/exams` returnerer bare Exams og `/chapter-tests` bare ChapterTests. Frontendens `ExamDataSource` og `ChapterTestDataSource` eier hver sin transportgrense og den delte DTO-shapen er dokumentert i `docs/architecture/SCOPED_TEST_SET_TRANSPORT_CONTRACT.md`. `filterTestSets()` eier bare lokal søk- og emneområdefiltrering etter at riktig scoped port er valgt.
+Backend eier ressursinvarianten: `/exams` returnerer bare Exams og `/chapter-tests` bare ChapterTests. `ExamDataSource` og `ChapterTestDataSource` eier kun sine respektive HTTP-endepunkter og returnerer transportresponsen uten å rekonstruere eller klassifisere TestSet-kontrakten. `filterTestSets()` eier bare lokal søk- og emneområdefiltrering etter at riktig scoped port er valgt.
 
 `activeContentType` er fortsatt teknisk innholdstype. ViewModelen avleder både `desktopActiveEntryId` og `mobileActiveEntryId` fra `activeContentType` og `selectedTestType`, slik at riktig testtype markeres på begge presentasjonsflater uten en ny runtime-eier. Fagvalg åpner `NAV_SCREENS.GLOSSARY`; dermed er `Begrepsliste` den første aktive desktopoppføringen etter at et fag er valgt.
 
