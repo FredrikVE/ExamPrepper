@@ -107,8 +107,8 @@
 	position: relative;
 	display: grid;
 	place-items: center;
-	width: 32px;
-	height: 32px;
+	width: var(--learning-path-score-donut-size);
+	height: var(--learning-path-score-donut-size);
 	font-size: 0.56rem;
 	font-weight: 800;
 	transition: opacity var(--transition-fast);

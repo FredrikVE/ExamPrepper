@@ -36,6 +36,7 @@ const createModel = (overrides = {}) => {
 		},
 		onExamSubmitted: jest.fn(),
 		onSubmitStarted: jest.fn(),
+		onAttemptSaved: jest.fn(),
 		...overrides
 	});
 };
@@ -68,10 +69,12 @@ describe("useExamSubmitModel", () => {
 		const execute = jest.fn(async () => savedAttempt);
 		const onExamSubmitted = jest.fn();
 		const onSubmitStarted = jest.fn();
+		const onAttemptSaved = jest.fn();
 		const viewModel = createModel({
 			submitExamAttemptUseCase: { execute },
 			onExamSubmitted,
-			onSubmitStarted
+			onSubmitStarted,
+			onAttemptSaved
 		});
 
 		await viewModel.submitExamAttempt({
@@ -99,6 +102,7 @@ describe("useExamSubmitModel", () => {
 		expect(stateSetters[2]).toHaveBeenCalledWith(true);
 		expect(stateSetters[1]).toHaveBeenCalledWith(null);
 		expect(stateSetters[0]).toHaveBeenCalledWith(savedAttempt);
+		expect(onAttemptSaved).toHaveBeenCalledTimes(1);
 		expect(stateSetters[2]).toHaveBeenLastCalledWith(false);
 	});
 
@@ -106,8 +110,10 @@ describe("useExamSubmitModel", () => {
 		const execute = jest.fn(async () => {
 			throw null;
 		});
+		const onAttemptSaved = jest.fn();
 		const viewModel = createModel({
-			submitExamAttemptUseCase: { execute }
+			submitExamAttemptUseCase: { execute },
+			onAttemptSaved
 		});
 
 		await viewModel.submitExamAttempt({
@@ -119,6 +125,7 @@ describe("useExamSubmitModel", () => {
 		});
 
 		expect(stateSetters[1]).toHaveBeenCalledWith("Kunne ikke lagre forsøket.");
+		expect(onAttemptSaved).not.toHaveBeenCalled();
 		expect(stateSetters[2]).toHaveBeenLastCalledWith(false);
 	});
 

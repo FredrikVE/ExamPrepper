@@ -21,7 +21,7 @@ function formatExamProgressStepLabel(stepNumber, totalSteps) {
 	return `${stepNumber}/${totalSteps}`;
 }
 
-export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, backContract }) {
+export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, backContract, onAttemptSaved }) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [answers, setAnswers] = useState({});
@@ -59,7 +59,8 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 		isSubmitted: submitted,
 		submitExamAttemptUseCase,
 		onExamSubmitted: markExamSubmitted,
-		onSubmitStarted: requestScrollToTop
+		onSubmitStarted: requestScrollToTop,
+		onAttemptSaved
 	});
 
 	/* SSOT for hard reset av eksamensforsøket: svar, submit-tilstand, feedback,

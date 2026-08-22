@@ -104,8 +104,9 @@
 	text-align: left;
 }
 
-.learning-path-chapter-test-node svg { width: 18px; height: 18px; }
-.learning-path-chapter-test-node span { display: grid; gap: 1px; }
+.learning-path-chapter-test-node__icon { display: grid; place-items: center; width: 32px; height: 32px; }
+.learning-path-chapter-test-node__icon svg { width: 18px; height: 18px; }
+.learning-path-chapter-test-node__content { display: grid; flex: 1; gap: 1px; min-width: 0; }
 .learning-path-chapter-test-node small { color: var(--text-muted); }
 .learning-path-chapter-test-node:disabled { opacity: 0.5; cursor: not-allowed; }
 

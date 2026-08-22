@@ -12,6 +12,9 @@
     --exam-content-width: 70%;
     --exam-content-max-width: 70%;
 
+    /* ── LearningPath ───────────────────────── */
+    --learning-path-score-donut-size: 36px;
+
     /* ── Spacing ───────────────────────────── */
     --space-1: 4px;
     --space-2: 8px;

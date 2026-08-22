@@ -78,7 +78,8 @@ const createViewModel = () => {
 		examId: "exam-1",
 		language: "no",
 		t: translations,
-		backContract: { onBack: jest.fn() }
+		backContract: { onBack: jest.fn() },
+		onAttemptSaved: jest.fn()
 	});
 };
 

@@ -183,6 +183,7 @@ function AppContent() {
 						onExamWorkModeChange={setExamWorkMode}
 						onHeaderProgressBarModelChange={setHeaderProgressBarModel}
 						examWorkModeActionsRef={examWorkModeActionsRef}
+						onAttemptSaved={navigationViewModel.completeExamAttempt}
 					/>
 				)}
 
@@ -281,7 +282,7 @@ function LearningSessionPageWrapper({ sessionId, t, isActive, backContract }) {
 	return <LearningSessionPage viewModel={viewModel} />;
 }
 
-function ExamPageWrapper({ examId, testType, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef }) {
+function ExamPageWrapper({ examId, testType, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef, onAttemptSaved }) {
 	const testSetQuestionsUseCase = getQuestionsUseCaseForTestType(testType);
 	const examPageViewModel = useExamPageViewModel({
 		getExamQuestionsUseCase: testSetQuestionsUseCase,
@@ -291,7 +292,8 @@ function ExamPageWrapper({ examId, testType, language, t, backContract, onExamWo
 		examId,
 		language,
 		t,
-		backContract
+		backContract,
+		onAttemptSaved
 	});
 
 	useEffect(() => {

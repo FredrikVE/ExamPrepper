@@ -82,7 +82,7 @@ function isValidRoadmapSession(session) {
 }
 
 function isValidChapterTest(test) {
-	return Boolean(test && typeof test.id === "string" && Number.isInteger(test.position) && CHAPTER_TEST_STATUSES.has(test.status));
+	return Boolean(test && typeof test.id === "string" && Number.isInteger(test.position) && CHAPTER_TEST_STATUSES.has(test.status) && isValidPerformancePair(test.performancePercent, test.performanceBand));
 }
 
 function isValidResumableSession(session) {
@@ -214,7 +214,9 @@ function toChapterTest(chapterTest) {
 	return {
 		id: chapterTest.id,
 		position: chapterTest.position,
-		status: chapterTest.status
+		status: chapterTest.status,
+		performancePercent: chapterTest.performancePercent,
+		performanceBand: chapterTest.performanceBand
 	};
 }
 

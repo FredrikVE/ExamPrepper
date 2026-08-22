@@ -55,6 +55,8 @@ describe("createLearningPathRoadmapModel", () => {
 		expect(module.detailModel.sections[0].sessions[0]).toMatchObject({ iconKey: "score", scoreModel: { percentage: 65.38, displayValue: "65%", appearance: "progress" } });
 		expect(module.detailModel.sections[0].sessions[1]).toMatchObject({ status: "current", iconKey: "play", label: "Session 2" });
 		expect(module.detailModel.sections[0].chapterTests).toHaveLength(2);
+		expect(module.detailModel.sections[0].chapterTests[0].scoreModel).toMatchObject({ percentage: 82.5, displayValue: "83%", appearance: "understood" });
+		expect(module.detailModel.sections[0].chapterTests[1].scoreModel).toBeNull();
 		expect(module.actionModel).toMatchObject({ intent: "start", activityKind: "authored" });
 	});
 	test("uses backend completion facts for module and section presentation", () => {
@@ -81,7 +83,9 @@ describe("createLearningPathRoadmapModel", () => {
 		const chapterTests = [1, 2, 3, 4].map((position) => ({
 			id: `in5431-chapter-1${String.fromCharCode(96 + position)}-test-no`,
 			position,
-			status: "available"
+			status: "available",
+			performancePercent: null,
+			performanceBand: "not-assessed"
 		}));
 		const in5431Shape = {
 			...learningPath,

@@ -103,7 +103,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
 | Backend `performanceBand` | Assessment-klassifisering for LearningSession og LearningPath | `LearningPathRepository` validerer; ViewModels konsumerer | Frontend har ingen 40/55/80-klassifisering; `=== 100` er kun perfekt-score-presentasjon |
 | Backend `isStartable` | Om en authored LearningPath-økt kan velges/startes | `LearningPathRepository` → `createLearningPathSessionModel` | `isSelectable` er direkte avledet fra `session.isStartable`, aldri roadmap-status |
-| LearningPath read-cache | Brukerspesifikk in-memory deduplisering av `getLearningPath` | `LearningPathRepository` | Privat Promise-`Map` per `subjectId + language`; tømmes ved start/submit av LearningSession og via repositoryets `clearUserState()` ved auth-provider-bytte. Ingen TTL og ingen cachekontrakt i UI-laget |
+| LearningPath read-cache | Brukerspesifikk in-memory deduplisering av `getLearningPath` | `LearningPathRepository` | Privat Promise-`Map` per `subjectId + language`; tømmes ved LearningSession-mutations, lagret Exam/ChapterTest-attempt og via repositoryets `clearUserState()` ved auth-provider-bytte. Ingen TTL og ingen cachekontrakt i UI-laget |
 | `--assessment-*` | Delte semantiske assessment-farger | `src/ui/style/Tokens.css` | LearningSession- og LearningPath-CSS konsumerer de samme tokenene |
 
 ## Canonical implementasjoner
@@ -453,6 +453,7 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 | Assessment-band i frontend | Backend `performanceBand`; frontend validerer og presenterer uten lokale prosentgrenser |
 | Authored starttillatelse | Backend `isStartable`; frontend avleder kun `isSelectable` direkte |
 | LearningPath completion | Backend `isComplete` for module/section; frontend validerer og presenterer uten å rekonstruere fra counts eller prosent |
+| ChapterTest-resultat i LearningPath | Backend `performancePercent` + `performanceBand` fra siste lagrede attempt; frontend validerer og viser samme score-donut som LearningSession uten lokal scoreklassifisering |
 | Module replay | Backend `isReplayAvailable`; frontend velger replay-action direkte fra feltet og rekonstruerer ikke fra historisk completion |
 | Neste LearningPath-aktivitet | Backend `nextActivity`; frontend lager ingen `isCurrent + isUnlocked` fallback-start når feltet er `null` |
 | Aktiv LearningSession-navigasjon | Backend `resumableSession` / konfliktens `activeSessionId`; `useLearningPathPageViewModel` gjenopptar aktiv økt direkte og tilbyr ikke discard-valg |

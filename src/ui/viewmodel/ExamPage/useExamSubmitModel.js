@@ -7,7 +7,8 @@ export default function useExamSubmitModel({
 	isSubmitted,
 	submitExamAttemptUseCase,
 	onExamSubmitted,
-	onSubmitStarted
+	onSubmitStarted,
+	onAttemptSaved
 }) {
 	const [savedAttempt, setSavedAttempt] = useState(null);
 	const [attemptSaveError, setAttemptSaveError] = useState(null);
@@ -33,6 +34,8 @@ export default function useExamSubmitModel({
 		setAttemptSaveError(null);
 		onSubmitStarted();
 
+		let attemptSaved = false;
+
 		try {
 			const attempt = await submitExamAttemptUseCase.execute({
 				examId,
@@ -42,6 +45,7 @@ export default function useExamSubmitModel({
 			});
 
 			setSavedAttempt(attempt);
+			attemptSaved = true;
 		} catch (submitError) {
 			if (import.meta.env?.DEV === true) {
 				console.error("[ExamSubmit] Submit failed", submitError);
@@ -51,7 +55,11 @@ export default function useExamSubmitModel({
 		} finally {
 			setAttemptSaving(false);
 		}
-	}, [attemptSaveErrorMessage, onExamSubmitted, onSubmitStarted, submitExamAttemptUseCase]);
+
+		if (attemptSaved) {
+			onAttemptSaved();
+		}
+	}, [attemptSaveErrorMessage, onAttemptSaved, onExamSubmitted, onSubmitStarted, submitExamAttemptUseCase]);
 
 	const openSubmitConfirmation = useCallback(() => {
 		setIsSubmitConfirmOpen(true);

@@ -13,6 +13,7 @@ export default function useAppNavigationViewModel(params) {
 	const [selectedLearningSessionId, setSelectedLearningSessionId] = useState(null);
 	const [examLanguageSyncError, setExamLanguageSyncError] = useState(null);
 	const [selectedExamTestType, setSelectedExamTestType] = useState(null);
+	const [examReturnScreen, setExamReturnScreen] = useState(null);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
@@ -37,6 +38,7 @@ export default function useAppNavigationViewModel(params) {
 		setSelectedSubjectId(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(null);
 		setSelectedLearningSessionId(null);
 		closeNavigationOverlays();
@@ -64,6 +66,7 @@ export default function useAppNavigationViewModel(params) {
 		if (nextScreen !== NAV_SCREENS.EXAM) {
 			setSelectedExamId(null);
 			setSelectedExamTestType(null);
+			setExamReturnScreen(null);
 		}
 
 		if (nextScreen !== NAV_SCREENS.LEARNING_SESSION) {
@@ -83,6 +86,7 @@ export default function useAppNavigationViewModel(params) {
 		setSelectedSubjectId(subjectId);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(null);
 		setActiveScreen(NAV_SCREENS.LEARNING_PATH);
 		closeNavigationOverlays();
@@ -100,9 +104,10 @@ export default function useAppNavigationViewModel(params) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(examId);
 		setSelectedExamTestType(testType);
+		setExamReturnScreen(activeScreen === NAV_SCREENS.LEARNING_PATH ? NAV_SCREENS.LEARNING_PATH : NAV_SCREENS.SELECT);
 		setActiveScreen(NAV_SCREENS.EXAM);
 		closeNavigationOverlays();
-	}, [closeNavigationOverlays]);
+	}, [activeScreen, closeNavigationOverlays]);
 
 	const selectFlipcardDeck = useCallback((topicAreaKey) => {
 		if (!selectedSubjectId) {
@@ -113,6 +118,7 @@ export default function useAppNavigationViewModel(params) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.FLIPCARDS);
 		closeNavigationOverlays();
@@ -127,6 +133,7 @@ export default function useAppNavigationViewModel(params) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.MATCHCARDS);
 		closeNavigationOverlays();
@@ -140,12 +147,20 @@ export default function useAppNavigationViewModel(params) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setExamReturnScreen(null);
 		setSelectedLearningSessionId(sessionId);
 		setActiveScreen(NAV_SCREENS.LEARNING_SESSION);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays, selectedSubjectId]);
 
 	const goBack = useCallback(() => {
+		if (activeScreen === NAV_SCREENS.EXAM && examReturnScreen !== null) {
+			changeScreen(examReturnScreen);
+
+			return;
+
+		}
+
 		const activeScreenConfig = getScreenConfig(activeScreen);
 
 		if (activeScreenConfig.backTo === null) {
@@ -158,7 +173,29 @@ export default function useAppNavigationViewModel(params) {
 		}
 
 		changeScreen(activeScreenConfig.backTo);
-	}, [activeScreen, changeScreen, showAllSubjects]);
+	}, [activeScreen, changeScreen, examReturnScreen, showAllSubjects]);
+
+	const completeExamAttempt = useCallback(() => {
+		if (activeScreen !== NAV_SCREENS.EXAM) {
+
+			return;
+
+		}
+
+		if (selectedExamTestType !== TEST_TYPES.CHAPTER_TEST) {
+
+			return;
+
+		}
+
+		if (examReturnScreen !== NAV_SCREENS.LEARNING_PATH) {
+
+			return;
+
+		}
+
+		changeScreen(NAV_SCREENS.LEARNING_PATH);
+	}, [activeScreen, changeScreen, examReturnScreen, selectedExamTestType]);
 
 	// Språkbytte skal oppdatere valgt eksamen uten å lukke åpne menyer.
 	const resolveSyncedExam = useCallback((examId, subjectId) => {
@@ -236,6 +273,7 @@ export default function useAppNavigationViewModel(params) {
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
 		openLearningSession,
+		completeExamAttempt,
 		goBack
 	};
 }

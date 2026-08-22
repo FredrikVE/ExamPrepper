@@ -23,9 +23,17 @@ describe("LearningPathRepository", () => {
 		expect(pathModel.modules[0].sections[0].progress).toMatchObject({ completedSessions: 1, totalSessions: 2, completionPercent: 50, isComplete: false });
 		expect(pathModel.modules[0].sections[0].sessions[1].status).toBe("current");
 		expect(pathModel.modules[0].sections[0].chapterTests).toHaveLength(2);
+		expect(pathModel.modules[0].sections[0].chapterTests[0]).toMatchObject({ performancePercent: 82.5, performanceBand: "understood" });
 		expect(pathModel.examGate).toEqual({ isUnlocked: false });
 		expect(session).toMatchObject({ activityKind: "authored", planKey: expect.any(String), sectionId: "section-1" });
 		expect(result).not.toHaveProperty("moduleProgress");
+	});
+
+	test("rejects a ChapterTest without backend-owned performance", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.modules[0].sections[0].chapterTests[0].performancePercent;
+
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
 
 	test("preserves backend-owned startability and current replay progress", async () => {

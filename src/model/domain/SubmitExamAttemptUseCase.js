@@ -1,10 +1,14 @@
 // src/model/domain/SubmitExamAttemptUseCase.js
 export default class SubmitExamAttemptUseCase {
-	constructor(examAttemptRepository) {
+	constructor(examAttemptRepository, learningPathRepository) {
 		this.examAttemptRepository = examAttemptRepository;
+		this.learningPathRepository = learningPathRepository;
 	}
 
 	async execute(command) {
-		return await this.examAttemptRepository.submitAttempt(command);
+		const attempt = await this.examAttemptRepository.submitAttempt(command);
+		this.learningPathRepository.clearUserState();
+
+		return attempt;
 	}
 }

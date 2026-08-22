@@ -64,8 +64,8 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/AppNavigation/useSyncSelecte
 
 const { default: useAppNavigationViewModel } = await import("../../../src/ui/viewmodel/AppNavigationViewModel.js");
 
-function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null) {
-	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType];
+function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null, examReturnScreen = null) {
+	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType, examReturnScreen];
 }
 
 const examByIdUseCase = { id: "exam-by-id" };
@@ -130,6 +130,42 @@ describe("useAppNavigationViewModel", () => {
 			null
 		]);
 		expect(hookState[6]).toBe(TEST_TYPES.EXAM);
+		expect(hookState[7]).toBe(NAV_SCREENS.SELECT);
+	});
+
+	test("ChapterTest valgt fra Læringsstien returnerer dit etter lagret forsøk", () => {
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "in2120", null, null, null, null);
+
+		createViewModel().selectExam("chapter-1-test-no", TEST_TYPES.CHAPTER_TEST);
+
+		expect(hookState[0]).toBe(NAV_SCREENS.EXAM);
+		expect(hookState[7]).toBe(NAV_SCREENS.LEARNING_PATH);
+
+		setNavigationState(NAV_SCREENS.EXAM, "in2120", "chapter-1-test-no", null, null, null, TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.LEARNING_PATH);
+
+		createViewModel().completeExamAttempt();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_PATH);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[6]).toBeNull();
+		expect(hookState[7]).toBeNull();
+	});
+
+	test("ChapterTest valgt fra innholdsvalg blir på resultatet etter lagret forsøk", () => {
+		setNavigationState(NAV_SCREENS.EXAM, "in2120", "chapter-1-test-no", null, null, null, TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.SELECT);
+
+		createViewModel().completeExamAttempt();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.EXAM);
+		expect(hookState[2]).toBe("chapter-1-test-no");
+	});
+
+	test("tilbake fra ChapterTest åpnet fra Læringsstien går tilbake til Læringsstien", () => {
+		setNavigationState(NAV_SCREENS.EXAM, "in2120", "chapter-1-test-no", null, null, null, TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.LEARNING_PATH);
+
+		createViewModel().goBack();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_PATH);
 	});
 
 	test("valg av flipcard-bunke beholder fag og lagrer topic area", () => {

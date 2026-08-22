@@ -82,12 +82,16 @@
 						{
 							"id": "chapter-1a-test-no",
 							"position": 1,
-							"status": "locked"
+							"status": "locked",
+							"performancePercent": 82.5,
+							"performanceBand": "understood"
 						},
 						{
 							"id": "chapter-1b-test-no",
 							"position": 2,
-							"status": "locked"
+							"status": "locked",
+							"performancePercent": null,
+							"performanceBand": "not-assessed"
 						}
 					]
 				}

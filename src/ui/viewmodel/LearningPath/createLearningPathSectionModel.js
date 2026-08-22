@@ -1,4 +1,5 @@
 // src/ui/viewmodel/LearningPath/createLearningPathSectionModel.js
+import createLearningPathProgressModel from "./createLearningPathProgressModel.js";
 import createLearningPathSessionModel from "./createLearningPathSessionModel.js";
 
 export default function createLearningPathSectionModel({ section, moduleId, startingModuleId, t }) {
@@ -30,7 +31,8 @@ export default function createLearningPathSectionModel({ section, moduleId, star
 			status: test.status,
 			label: t.learningPathChapterTestLabel(test.position),
 			statusLabel: test.status === "available" ? t.learningPathChapterTestAvailableLabel : t.learningPathStatusLocked,
-			isDisabled: test.status !== "available"
+			isDisabled: test.status !== "available",
+			scoreModel: test.performancePercent === null ? null : createLearningPathProgressModel({ performancePercent: test.performancePercent, performanceBand: test.performanceBand, t })
 		}))
 	};
 }
