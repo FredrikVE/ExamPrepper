@@ -80,12 +80,12 @@
 					],
 					"chapterTests": [
 						{
-							"baseId": "chapter-1a-test",
+							"id": "chapter-1a-test-no",
 							"position": 1,
 							"status": "locked"
 						},
 						{
-							"baseId": "chapter-1b-test",
+							"id": "chapter-1b-test-no",
 							"position": 2,
 							"status": "locked"
 						}

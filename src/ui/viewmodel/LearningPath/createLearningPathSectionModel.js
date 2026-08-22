@@ -25,7 +25,7 @@ export default function createLearningPathSectionModel({ section, moduleId, star
 			isPending: startingModuleId === moduleId
 		} : null,
 		chapterTests: section.chapterTests.map((test) => ({
-			baseId: test.baseId,
+			id: test.id,
 			position: test.position,
 			status: test.status,
 			label: t.learningPathChapterTestLabel(test.position),

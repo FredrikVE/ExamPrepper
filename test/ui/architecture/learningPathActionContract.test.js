@@ -55,9 +55,15 @@ describe("LearningPath action contract", () => {
 		expect(viewModel).toContain("${subjectId}:${language}:${isAuthLoaded ? authIdentity : \"auth-loading\"}");
 	});
 
-	test("renders chapter tests from backend identities", () => {
+	test("opens chapter tests using backend concrete ids", () => {
+		const app = read("src/App.jsx");
 		const detail = read("src/ui/view/components/LearningPathPage/LearningPathSection.jsx");
+		const node = read("src/ui/view/components/LearningPathPage/LearningPathChapterTestNode.jsx");
+
 		expect(detail).toContain("model.chapterTests.map");
-		expect(detail).toContain("LearningPathChapterTestNode");
+		expect(detail).toContain("key={test.id}");
+		expect(node).toContain("onSelected(model.id)");
+		expect(node).not.toContain("model.baseId");
+		expect(app).toContain("onChapterTestSelected={(chapterTestId) => navigationViewModel.selectExam(chapterTestId, TEST_TYPES.CHAPTER_TEST)}");
 	});
 });

@@ -82,7 +82,7 @@ function isValidRoadmapSession(session) {
 }
 
 function isValidChapterTest(test) {
-	return Boolean(test && typeof test.baseId === "string" && Number.isInteger(test.position) && CHAPTER_TEST_STATUSES.has(test.status));
+	return Boolean(test && typeof test.id === "string" && Number.isInteger(test.position) && CHAPTER_TEST_STATUSES.has(test.status));
 }
 
 function isValidResumableSession(session) {
@@ -212,7 +212,7 @@ function toRoadmapSession(session) {
 
 function toChapterTest(chapterTest) {
 	return {
-		baseId: chapterTest.baseId,
+		id: chapterTest.id,
 		position: chapterTest.position,
 		status: chapterTest.status
 	};

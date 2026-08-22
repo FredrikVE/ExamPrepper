@@ -79,7 +79,7 @@ describe("createLearningPathRoadmapModel", () => {
 
 	test("preserves multiple IN5431-style ChapterTests in authored order", () => {
 		const chapterTests = [1, 2, 3, 4].map((position) => ({
-			baseId: `in5431-chapter-1${String.fromCharCode(96 + position)}-test`,
+			id: `in5431-chapter-1${String.fromCharCode(96 + position)}-test-no`,
 			position,
 			status: "available"
 		}));
@@ -93,7 +93,7 @@ describe("createLearningPathRoadmapModel", () => {
 
 		const model = createLearningPathRoadmapModel({ learningPath: in5431Shape, expandedModuleId: in5431Shape.modules[0].id, startingModuleId: null, t });
 
-		expect(model.entries[0].detailModel.sections[0].chapterTests.map((test) => test.baseId)).toEqual(chapterTests.map((test) => test.baseId));
+		expect(model.entries[0].detailModel.sections[0].chapterTests.map((test) => test.id)).toEqual(chapterTests.map((test) => test.id));
 	});
 
 });

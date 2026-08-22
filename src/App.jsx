@@ -166,7 +166,7 @@ function AppContent() {
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_PATH && (
-					<LearningPathPageWrapper selectedSubject={subjectSelectPageViewModel.selectedSubject} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} contentSelectViewModel={learningContentSelectPageViewModel} onLearningSessionStarted={navigationViewModel.openLearningSession} onChapterTestSelected={(baseId) => navigationViewModel.selectExam(baseId, TEST_TYPES.CHAPTER_TEST)} />
+					<LearningPathPageWrapper selectedSubject={subjectSelectPageViewModel.selectedSubject} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} contentSelectViewModel={learningContentSelectPageViewModel} onLearningSessionStarted={navigationViewModel.openLearningSession} onChapterTestSelected={(chapterTestId) => navigationViewModel.selectExam(chapterTestId, TEST_TYPES.CHAPTER_TEST)} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_SESSION && (

@@ -16,7 +16,7 @@ export default function LearningPathSection({ model, onActionPressed, onChapterT
 					<span>{model.actionModel.isPending ? "…" : model.actionModel.label}</span><ArrowRight aria-hidden="true" />
 				</button>
 			)}
-			{model.chapterTests.length === 0 ? null : <div className="learning-path-section__tests">{model.chapterTests.map((test) => <LearningPathChapterTestNode key={test.baseId} model={test} onSelected={onChapterTestSelected} />)}</div>}
+			{model.chapterTests.length === 0 ? null : <div className="learning-path-section__tests">{model.chapterTests.map((test) => <LearningPathChapterTestNode key={test.id} model={test} onSelected={onChapterTestSelected} />)}</div>}
 		</section>
 	);
 }
