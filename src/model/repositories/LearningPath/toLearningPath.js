@@ -39,7 +39,7 @@ function validateLearningPathResponse(response) {
 }
 
 function isValidLearningModule(module) {
-	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isInteger(module.position) || typeof module.title !== "string" || typeof module.description !== "string" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !isValidModuleProgress(module.progress) || !isValidModuleRunProgress(module.currentRun) || !Array.isArray(module.sections)) {
+	if (!module || typeof module.id !== "string" || typeof module.moduleKey !== "string" || !Number.isInteger(module.position) || typeof module.title !== "string" || typeof module.description !== "string" || typeof module.isReplayAvailable !== "boolean" || !module.availability || typeof module.availability.isUnlocked !== "boolean" || typeof module.availability.isCurrent !== "boolean" || !isNullableString(module.availability.lockReason) || !Array.isArray(module.topics) || !isValidModuleProgress(module.progress) || !isValidModuleRunProgress(module.currentRun) || !Array.isArray(module.sections)) {
 		return false;
 	}
 
@@ -55,7 +55,7 @@ function isValidModuleRunProgress(progress) {
 }
 
 function isValidModuleProgress(progress) {
-	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent) && isValidPerformancePair(progress.performancePercent, progress.performanceBand) && isNullableNumber(progress.coveragePercent) && isNullableString(progress.lastSessionAt));
+	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent) && typeof progress.isComplete === "boolean" && isValidPerformancePair(progress.performancePercent, progress.performanceBand) && isNullableNumber(progress.coveragePercent) && isNullableString(progress.lastSessionAt));
 }
 
 function isValidPerformancePair(percentage, performanceBand) {
@@ -74,7 +74,7 @@ function isValidSection(section) {
 }
 
 function isValidSectionProgress(progress) {
-	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent));
+	return Boolean(progress && Number.isInteger(progress.completedSessions) && Number.isInteger(progress.totalSessions) && Number.isFinite(progress.completionPercent) && typeof progress.isComplete === "boolean");
 }
 
 function isValidRoadmapSession(session) {
@@ -136,6 +136,7 @@ function toLearningModule(module) {
 		position: module.position,
 		title: module.title,
 		description: module.description,
+		isReplayAvailable: module.isReplayAvailable,
 		availability: {
 			isUnlocked: module.availability.isUnlocked,
 			isCurrent: module.availability.isCurrent,
@@ -161,6 +162,7 @@ function toModuleProgress(progress) {
 		completedSessions: progress.completedSessions,
 		totalSessions: progress.totalSessions,
 		completionPercent: progress.completionPercent,
+		isComplete: progress.isComplete,
 		performancePercent: progress.performancePercent,
 		performanceBand: progress.performanceBand,
 		coveragePercent: progress.coveragePercent,
@@ -189,7 +191,8 @@ function toSection(section) {
 		progress: {
 			completedSessions: section.progress.completedSessions,
 			totalSessions: section.progress.totalSessions,
-			completionPercent: section.progress.completionPercent
+			completionPercent: section.progress.completionPercent,
+			isComplete: section.progress.isComplete
 		},
 		sessions: section.sessions.map(toRoadmapSession),
 		chapterTests: section.chapterTests.map(toChapterTest)

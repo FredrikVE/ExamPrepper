@@ -6,7 +6,7 @@ import createLearningPathSectionModel from "./createLearningPathSectionModel.js"
 import createModuleStatus from "./createModuleStatus.js";
 
 export default function createLearningPathModuleModel({ module, resumableSession, nextActivity, expandedModuleId, startingModuleId, t }) {
-	const status = createModuleStatus({ completionPercent: module.progress.completionPercent, completedSessions: module.progress.completedSessions, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
+	const status = createModuleStatus({ isComplete: module.progress.isComplete, completedSessions: module.progress.completedSessions, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
 	const actionModel = createLearningPathActionModel({ module, resumableSession, nextActivity, startingModuleId, t });
 	const progressModel = createLearningPathProgressModel({ performancePercent: module.progress.performancePercent, performanceBand: module.progress.performanceBand, t });

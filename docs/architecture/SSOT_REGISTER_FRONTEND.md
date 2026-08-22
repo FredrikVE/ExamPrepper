@@ -452,5 +452,8 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 | Navigasjon | `navigation.js` + `AppNavigationViewModel` |
 | Assessment-band i frontend | Backend `performanceBand`; frontend validerer og presenterer uten lokale prosentgrenser |
 | Authored starttillatelse | Backend `isStartable`; frontend avleder kun `isSelectable` direkte |
+| LearningPath completion | Backend `isComplete` for module/section; frontend validerer og presenterer uten å rekonstruere fra counts eller prosent |
+| Module replay | Backend `isReplayAvailable`; frontend velger replay-action direkte fra feltet og rekonstruerer ikke fra historisk completion |
+| Neste LearningPath-aktivitet | Backend `nextActivity`; frontend lager ingen `isCurrent + isUnlocked` fallback-start når feltet er `null` |
 | Aktiv LearningSession-navigasjon | Backend `resumableSession` / konfliktens `activeSessionId`; `useLearningPathPageViewModel` gjenopptar aktiv økt direkte og tilbyr ikke discard-valg |
 | Assessment-farger | `Tokens.css` via `--assessment-*` |

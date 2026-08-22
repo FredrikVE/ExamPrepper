@@ -13,7 +13,8 @@ describe("LearningPath action contract", () => {
 		expect(dataSource).toContain("discardActiveSession: command.discardActiveSession");
 		expect(dataSource).not.toContain("command.target ??");
 		expect(dataSource).not.toContain("command.discardActiveSession ??");
-		expect(viewModel).toContain("target: actionModel.target ?? { kind: \"module\" }");
+		expect(viewModel).toContain("target: actionModel.target");
+		expect(viewModel).not.toContain("target: actionModel.target ??");
 		expect(viewModel).toContain("discardActiveSession: false");
 		expect(viewModel).not.toMatch(/completedRounds|nextRound|round:/);
 		expect(action).toContain('{ kind: "module-replay" }');

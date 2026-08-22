@@ -57,6 +57,26 @@ describe("createLearningPathRoadmapModel", () => {
 		expect(module.detailModel.sections[0].chapterTests).toHaveLength(2);
 		expect(module.actionModel).toMatchObject({ intent: "start", activityKind: "authored" });
 	});
+	test("uses backend completion facts for module and section presentation", () => {
+		const backendComplete = {
+			...learningPath,
+			modules: learningPath.modules.map((module, moduleIndex) => moduleIndex === 0 ? {
+				...module,
+				availability: { ...module.availability, isCurrent: false },
+				progress: { ...module.progress, isComplete: true, completionPercent: 25, completedSessions: 1, totalSessions: 4 },
+				sections: module.sections.map((section, sectionIndex) => sectionIndex === 0 ? {
+					...section,
+					progress: { ...section.progress, isComplete: true, completedSessions: 1, totalSessions: 2 }
+				} : section)
+			} : module)
+		};
+
+		const model = createLearningPathRoadmapModel({ learningPath: backendComplete, expandedModuleId: backendComplete.modules[0].id, startingModuleId: null, t });
+
+		expect(model.entries[0]).toMatchObject({ appearance: "completed", cardModel: { statusLabel: "Completed" } });
+		expect(model.entries[0].detailModel.sections[0].actionModel).toMatchObject({ label: "Practice section" });
+	});
+
 	test("preserves multiple IN5431-style ChapterTests in authored order", () => {
 		const chapterTests = [1, 2, 3, 4].map((position) => ({
 			baseId: `in5431-chapter-1${String.fromCharCode(96 + position)}-test`,

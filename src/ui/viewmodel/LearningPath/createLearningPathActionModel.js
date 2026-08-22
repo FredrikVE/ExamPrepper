@@ -2,7 +2,6 @@
 export default function createLearningPathActionModel({ module, resumableSession, nextActivity, startingModuleId, t }) {
 	const canResume = resumableSession !== null && resumableSession.moduleId === module.id;
 	const isStarting = startingModuleId === module.id;
-	const isHistoricallyComplete = module.progress.totalSessions > 0 && module.progress.completedSessions >= module.progress.totalSessions;
 
 	if (canResume) {
 		return {
@@ -16,7 +15,7 @@ export default function createLearningPathActionModel({ module, resumableSession
 		};
 	}
 
-	if (isHistoricallyComplete) {
+	if (module.isReplayAvailable) {
 		return {
 			intent: "start",
 			moduleId: module.id,
@@ -38,19 +37,6 @@ export default function createLearningPathActionModel({ module, resumableSession
 			activityKind: nextActivity.kind === "start-adaptive-session" ? nextActivity.activityKind : "authored",
 			label: nextActivity.kind === "start-adaptive-session" ? adaptiveLabel(nextActivity.activityKind, t) : t.learningPathContinueLabel,
 			isDisabled: !module.availability.isUnlocked || startingModuleId !== null,
-			isPending: isStarting
-		};
-	}
-
-	if (module.availability.isCurrent && module.availability.isUnlocked) {
-		return {
-			intent: "start",
-			moduleId: module.id,
-			sessionId: null,
-			target: { kind: "module" },
-			activityKind: null,
-			label: t.learningPathContinueLabel,
-			isDisabled: startingModuleId !== null,
 			isPending: isStarting
 		};
 	}

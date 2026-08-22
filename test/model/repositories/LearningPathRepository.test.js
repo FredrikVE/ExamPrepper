@@ -19,7 +19,8 @@ describe("LearningPathRepository", () => {
 		const session = await repository.startLearningSession({ subjectId: "in2120", moduleId: pathModel.modules[0].id, language: "no" });
 		const result = await repository.submitLearningSession({ sessionId: session.sessionId, answers: [] });
 		expect(pathModel.nextActivity.kind).toBe("start-authored-session");
-		expect(pathModel.modules[0].progress).toMatchObject({ completedSessions: 1, totalSessions: 4, completionPercent: 25 });
+		expect(pathModel.modules[0]).toMatchObject({ isReplayAvailable: false, progress: { completedSessions: 1, totalSessions: 4, completionPercent: 25, isComplete: false } });
+		expect(pathModel.modules[0].sections[0].progress).toMatchObject({ completedSessions: 1, totalSessions: 2, completionPercent: 50, isComplete: false });
 		expect(pathModel.modules[0].sections[0].sessions[1].status).toBe("current");
 		expect(pathModel.modules[0].sections[0].chapterTests).toHaveLength(2);
 		expect(pathModel.examGate).toEqual({ isUnlocked: false });
@@ -85,6 +86,20 @@ describe("LearningPathRepository", () => {
 		const response = readFixture("learning-path-response.json");
 		delete response.modules[0].progress.performanceBand;
 		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+	});
+
+	test("rejects missing backend completion or replay authority", async () => {
+		const missingModuleCompletion = readFixture("learning-path-response.json");
+		delete missingModuleCompletion.modules[0].progress.isComplete;
+		await expect(createRepository({ learningPathResponse: missingModuleCompletion }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+
+		const missingSectionCompletion = readFixture("learning-path-response.json");
+		delete missingSectionCompletion.modules[0].sections[0].progress.isComplete;
+		await expect(createRepository({ learningPathResponse: missingSectionCompletion }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+
+		const missingReplayAvailability = readFixture("learning-path-response.json");
+		delete missingReplayAvailability.modules[0].isReplayAvailable;
+		await expect(createRepository({ learningPathResponse: missingReplayAvailability }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
 
 	test("rejects a module without backend-owned sections", async () => {

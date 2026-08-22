@@ -45,7 +45,7 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 				subjectId: selectedSubject.id,
 				moduleId: actionModel.moduleId,
 				language,
-				target: actionModel.target ?? { kind: "module" },
+				target: actionModel.target,
 				discardActiveSession: false
 			});
 			onLearningSessionStarted(session.sessionId);

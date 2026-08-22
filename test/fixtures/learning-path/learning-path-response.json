@@ -18,6 +18,7 @@
 			"position": 1,
 			"title": "Grunnbegreper",
 			"description": "Bygg et sikkert fundament før du går videre.",
+			"isReplayAvailable": false,
 			"availability": {
 				"isUnlocked": true,
 				"isCurrent": true,
@@ -39,6 +40,7 @@
 				"completedSessions": 1,
 				"totalSessions": 4,
 				"completionPercent": 25,
+				"isComplete": false,
 				"performancePercent": 67.5,
 				"coveragePercent": 50,
 				"lastSessionAt": "2026-07-29T12:00:00Z",
@@ -55,7 +57,8 @@
 					"progress": {
 						"completedSessions": 1,
 						"totalSessions": 2,
-						"completionPercent": 50
+						"completionPercent": 50,
+						"isComplete": false
 					},
 					"sessions": [
 						{

@@ -4,7 +4,7 @@ import createLearningPathSessionModel from "./createLearningPathSessionModel.js"
 export default function createLearningPathSectionModel({ section, moduleId, startingModuleId, t }) {
 	const sessions = section.sessions.map((session) => createLearningPathSessionModel({ session, moduleId, startingModuleId, t }));
 	const hasSelectableSession = section.sessions.some((session) => session.isStartable);
-	const isComplete = section.progress.totalSessions > 0 && section.progress.completedSessions >= section.progress.totalSessions;
+	const isComplete = section.progress.isComplete;
 
 	return {
 		id: section.id,

@@ -4,11 +4,11 @@ import createModuleStatus from "../../../src/ui/viewmodel/LearningPath/createMod
 
 describe("createModuleStatus", () => {
 	test.each([
-		[{ completionPercent: 0, completedSessions: 0, isCurrent: false, isUnlocked: false }, "locked", "lock"],
-		[{ completionPercent: 25, completedSessions: 1, isCurrent: true, isUnlocked: true }, "active", "play"],
-		[{ completionPercent: 100, completedSessions: 4, isCurrent: false, isUnlocked: true }, "completed", "check"],
-		[{ completionPercent: 25, completedSessions: 1, isCurrent: false, isUnlocked: true }, "progress", "trending"],
-		[{ completionPercent: 0, completedSessions: 0, isCurrent: false, isUnlocked: true }, "notStarted", null]
+		[{ isComplete: true, completedSessions: 4, isCurrent: false, isUnlocked: false }, "locked", "lock"],
+		[{ isComplete: true, completedSessions: 4, isCurrent: true, isUnlocked: true }, "active", "play"],
+		[{ isComplete: true, completedSessions: 1, isCurrent: false, isUnlocked: true }, "completed", "check"],
+		[{ isComplete: false, completedSessions: 1, isCurrent: false, isUnlocked: true }, "progress", "trending"],
+		[{ isComplete: false, completedSessions: 0, isCurrent: false, isUnlocked: true }, "notStarted", null]
 	])("maps lifecycle facts to module status", (input, expectedStatus, expectedIcon) => {
 		const result = createModuleStatus(input);
 
