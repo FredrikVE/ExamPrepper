@@ -1,4 +1,6 @@
 // src/model/repositories/TestSetRepository.js
+import toPracticeQuestion from "./questions/toPracticeQuestion.js";
+
 export default class TestSetRepository {
     #testSetDataSource;
     #testSetQuestionDataSource;
@@ -70,7 +72,7 @@ export default class TestSetRepository {
         }
 
         const questionDtos = await this.#getPracticeQuestionDtos(testSetId);
-        const questions = questionDtos.map(toDomainPracticeQuestion);
+        const questions = questionDtos.map(toPracticeQuestion);
 
         return await this.#enrichQuestionsWithConceptImages(questions, {
             testSetId: testSet.id,
@@ -213,7 +215,7 @@ export default class TestSetRepository {
             return { ...entry };
         }
 
-        const whyExtendedImages = await this.#conceptImageDataSource.getConceptImages(
+        const whyExtendedImages = await this.#conceptImageDataSource.fetchConceptImages(
             imageRefs,
             getImageLookupContext(context)
         );
@@ -302,43 +304,4 @@ function isPlainObject(value) {
     return Boolean(value)
         && typeof value === "object"
         && !Array.isArray(value);
-}
-
-function toDomainPracticeQuestion(question) {
-    const domainQuestion = { ...question };
-
-    if (question.type === "fill") {
-        if (!Array.isArray(question.acceptedAnswers)) {
-            throw new Error(`Invalid canonical practice question ${String(question.id)}: fill requires acceptedAnswers`);
-        }
-
-        domainQuestion.answers = [...question.acceptedAnswers];
-    }
-
-    if (question.type === "single" || question.type === "multi") {
-        if (!Array.isArray(question.options)) {
-            throw new Error(`Invalid canonical practice question ${String(question.id)}: ${question.type} requires options`);
-        }
-
-        domainQuestion.options = question.options.map((option) => toDomainAnswerOption(question, option));
-    }
-
-    return domainQuestion;
-}
-
-function toDomainAnswerOption(question, option) {
-    if (typeof option.isCorrect !== "boolean") {
-        throw new Error(`Invalid canonical practice question ${String(question.id)}: option ${String(option.id)} requires isCorrect`);
-    }
-
-    const domainOption = {
-        ...option,
-        correct: option.isCorrect
-    };
-
-    if (Object.hasOwn(option, "feedback")) {
-        domainOption.why = option.feedback;
-    }
-
-    return domainOption;
 }

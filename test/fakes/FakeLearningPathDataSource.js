@@ -7,23 +7,23 @@ export default class FakeLearningPathDataSource {
 		this.calls = [];
 	}
 
-	async getLearningPath(input) {
-		this.calls.push({ method: "getLearningPath", input });
+	async fetchLearningPath(input) {
+		this.calls.push({ method: "fetchLearningPath", input });
 		return structuredClone(this.learningPathResponse);
 	}
 
-	async startLearningSession(command) {
-		this.calls.push({ method: "startLearningSession", input: command });
+	async fetchStartLearningSession(command) {
+		this.calls.push({ method: "fetchStartLearningSession", input: command });
 		return structuredClone(this.learningSessionResponse);
 	}
 
-	async getLearningSession(sessionId) {
-		this.calls.push({ method: "getLearningSession", input: sessionId });
+	async fetchLearningSession(sessionId) {
+		this.calls.push({ method: "fetchLearningSession", input: sessionId });
 		return structuredClone(this.learningSessionResponse);
 	}
 
-	async submitLearningSession(command) {
-		this.calls.push({ method: "submitLearningSession", input: command });
+	async fetchSubmitLearningSession(command) {
+		this.calls.push({ method: "fetchSubmitLearningSession", input: command });
 		return structuredClone(this.submitSessionResponse);
 	}
 }

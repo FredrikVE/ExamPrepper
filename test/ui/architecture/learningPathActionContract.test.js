@@ -9,8 +9,10 @@ describe("LearningPath action contract", () => {
 		const dataSource = read("src/model/datasource/LearningPathDataSource.js");
 		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
 		const action = read("src/ui/viewmodel/LearningPath/createLearningPathActionModel.js");
-		expect(dataSource).toContain("target: command.target ?? { kind: \"module\" }");
-		expect(dataSource).toContain("discardActiveSession: command.discardActiveSession ?? false");
+		expect(dataSource).toContain("target: command.target");
+		expect(dataSource).toContain("discardActiveSession: command.discardActiveSession");
+		expect(dataSource).not.toContain("command.target ??");
+		expect(dataSource).not.toContain("command.discardActiveSession ??");
 		expect(viewModel).toContain("target: actionModel.target ?? { kind: \"module\" }");
 		expect(viewModel).toContain("discardActiveSession: false");
 		expect(viewModel).not.toMatch(/completedRounds|nextRound|round:/);
@@ -19,10 +21,10 @@ describe("LearningPath action contract", () => {
 	});
 
 	test("takes session selectability from backend isStartable", () => {
-		const repository = read("src/model/repositories/LearningPathRepository.js");
+		const mapper = read("src/model/repositories/LearningPath/toLearningPath.js");
 		const sessionModel = read("src/ui/viewmodel/LearningPath/createLearningPathSessionModel.js");
 		const sectionModel = read("src/ui/viewmodel/LearningPath/createLearningPathSectionModel.js");
-		expect(repository).toContain('typeof session.isStartable === "boolean"');
+		expect(mapper).toContain('typeof session.isStartable === "boolean"');
 		expect(sessionModel).toContain("const isSelectable = session.isStartable");
 		expect(sectionModel).toContain("section.sessions.some((session) => session.isStartable)");
 		expect(sessionModel).not.toMatch(/status\s*!==\s*["']locked["']/);

@@ -60,12 +60,19 @@ describe("LearningPathRepository", () => {
 		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] })).rejects.toThrow("Invalid learning session result");
 	});
 
-	test("normalizes only a completely missing roadmap session performance pair", async () => {
+	test("rejects an out-of-range submit percentage", async () => {
+		const response = readFixture("submit-session-response.json");
+		response.score.percentage = 500;
+
+		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] })).rejects.toThrow("Invalid learning session result");
+	});
+
+	test("rejects a roadmap session with a completely missing performance pair", async () => {
 		const response = readFixture("learning-path-response.json");
 		delete response.modules[0].sections[0].sessions[1].performancePercent;
 		delete response.modules[0].sections[0].sessions[1].performanceBand;
-		const pathModel = await createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" });
-		expect(pathModel.modules[0].sections[0].sessions[1]).toMatchObject({ performancePercent: null, performanceBand: "not-assessed" });
+
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
 
 	test("rejects a partial roadmap session performance pair", async () => {
@@ -85,6 +92,26 @@ describe("LearningPathRepository", () => {
 		delete response.modules[0].sections;
 		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});
+
+	test("does not leak unknown transport fields into the LearningPath model", async () => {
+		const response = readFixture("learning-path-response.json");
+		response.modules[0].transportOnly = "ignore";
+		response.modules[0].availability.transportOnly = "ignore";
+		response.modules[0].sections[0].sessions[0].transportOnly = "ignore";
+
+		const pathModel = await createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(pathModel.modules[0]).not.toHaveProperty("transportOnly");
+		expect(pathModel.modules[0].availability).not.toHaveProperty("transportOnly");
+		expect(pathModel.modules[0].sections[0].sessions[0]).not.toHaveProperty("transportOnly");
+	});
+
+	test("rejects missing canonical question correctness in LearningSession responses", async () => {
+		const response = readFixture("learning-session-response.json");
+		delete response.questions[0].question.options[0].isCorrect;
+
+		await expect(createRepository({ learningSessionResponse: response }).getLearningSession("session-1")).rejects.toThrow("Invalid canonical practice question shared-question: option confidentiality requires isCorrect");
+	});
 });
 
 describe("LearningPathRepository cache", () => {
@@ -94,7 +121,7 @@ describe("LearningPathRepository cache", () => {
 		const firstPath = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 		const secondPath = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 
-		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(1);
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(1);
 		expect(firstPath).not.toBe(secondPath);
 		expect(firstPath.modules[0]).not.toBe(secondPath.modules[0]);
 	});
@@ -108,7 +135,7 @@ describe("LearningPathRepository cache", () => {
 
 		await Promise.all([firstRead, secondRead]);
 
-		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(1);
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(1);
 	});
 
 	test("keeps separate cached responses for different subjects and languages", async () => {
@@ -120,16 +147,16 @@ describe("LearningPathRepository cache", () => {
 		await repository.getLearningPath({ subjectId: "in2140", language: "no" });
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 
-		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(3);
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(3);
 	});
 
 	test("removes a failed LearningPath request so the next read retries", async () => {
-		let getLearningPathCalls = 0;
+		let fetchLearningPathCalls = 0;
 		const dataSource = {
-			async getLearningPath() {
-				getLearningPathCalls += 1;
+			async fetchLearningPath() {
+				fetchLearningPathCalls += 1;
 
-				if (getLearningPathCalls === 1) {
+				if (fetchLearningPathCalls === 1) {
 					throw new Error("temporary failure");
 				}
 
@@ -140,7 +167,7 @@ describe("LearningPathRepository cache", () => {
 
 		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("temporary failure");
 		await expect(repository.getLearningPath({ subjectId: "in2120", language: "no" })).resolves.toMatchObject({ subjectId: "in2120" });
-		expect(getLearningPathCalls).toBe(2);
+		expect(fetchLearningPathCalls).toBe(2);
 	});
 
 	test("clears cached LearningPath responses after starting a LearningSession", async () => {
@@ -151,7 +178,7 @@ describe("LearningPathRepository cache", () => {
 		await repository.startLearningSession({ subjectId: "in2120", moduleId: "module-1", language: "no" });
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 
-		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(2);
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(2);
 	});
 
 	test("clears cached LearningPath responses after submitting a LearningSession", async () => {
@@ -162,7 +189,7 @@ describe("LearningPathRepository cache", () => {
 		await repository.submitLearningSession({ sessionId: "session-1", answers: [] });
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 
-		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(2);
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(2);
 	});
 
 	test("does not clear cached LearningPath responses when only reading a LearningSession", async () => {
@@ -173,7 +200,7 @@ describe("LearningPathRepository cache", () => {
 		await repository.getLearningSession("session-1");
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 
-		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(1);
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(1);
 	});
 
 	test("clears cached LearningPath responses when authenticated user state is reset", async () => {
@@ -181,9 +208,9 @@ describe("LearningPathRepository cache", () => {
 		const repository = new LearningPathRepository(dataSource);
 
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
-		repository.clearLearningPathCache();
+		repository.clearUserState();
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 
-		expect(dataSource.calls.filter((call) => call.method === "getLearningPath")).toHaveLength(2);
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(2);
 	});
 });

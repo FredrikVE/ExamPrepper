@@ -5,7 +5,7 @@ export default class ExamAttemptRepository {
 	}
 
 	async submitAttempt(command) {
-		return await this.examAttemptDataSource.submitAttempt(command);
+		return await this.examAttemptDataSource.fetchSubmitAttempt(command);
 	}
 
 	async getAttemptById(attemptId) {

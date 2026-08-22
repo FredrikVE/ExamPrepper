@@ -13,7 +13,7 @@ export default class ConceptImageDataSource extends DataSource {
         );
     }
 
-    async getConceptImageById(imageId, { subjectId, language } = {}) {
+    async fetchConceptImageById(imageId, { subjectId, language } = {}) {
         if (!subjectId || !imageId) {
             return null;
         }
@@ -28,7 +28,7 @@ export default class ConceptImageDataSource extends DataSource {
         return this.#toFrontendImage(entry, language);
     }
 
-    async getConceptImage({ subjectId, moduleId, groupId, imageId, language } = {}) {
+    async fetchConceptImage({ subjectId, moduleId, groupId, imageId, language } = {}) {
         if (!subjectId || !imageId) {
             return null;
         }
@@ -48,7 +48,7 @@ export default class ConceptImageDataSource extends DataSource {
         return this.#toFrontendImage(entry, language);
     }
 
-    async getConceptImages(imageRefs = [], context = {}) {
+    async fetchConceptImages(imageRefs = [], context = {}) {
         if (!Array.isArray(imageRefs) || imageRefs.length === 0) {
             return [];
         }
@@ -57,8 +57,8 @@ export default class ConceptImageDataSource extends DataSource {
 
         for (const imageRef of imageRefs) {
             const image = typeof imageRef === "string"
-                ? await this.getConceptImageById(imageRef, context)
-                : await this.getConceptImage({
+                ? await this.fetchConceptImageById(imageRef, context)
+                : await this.fetchConceptImage({
                     subjectId: imageRef.subjectId ?? context.subjectId,
                     moduleId: imageRef.moduleId ?? context.moduleId,
                     groupId: imageRef.groupId ?? context.groupId,

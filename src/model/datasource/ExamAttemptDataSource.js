@@ -2,7 +2,7 @@
 import DataSource from "./DataSource.js";
 
 export default class ExamAttemptDataSource extends DataSource {
-	async submitAttempt({ examId, lang, durationSeconds, answers }) {
+	async fetchSubmitAttempt({ examId, lang, durationSeconds, answers }) {
 		return await this.post("/exam-attempts", { examId, lang, durationSeconds, answers });
 	}
 

@@ -93,7 +93,7 @@ const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource);
 const glossaryRepository = new GlossaryRepository(glossaryDataSource);
 const learningPathRepository = new LearningPathRepository(learningPathDataSource);
-subscribeAuthTokenProviderChange(() => learningPathRepository.clearLearningPathCache());
+subscribeAuthTokenProviderChange(() => learningPathRepository.clearUserState());
 
 // Use cases
 const gradeAnswerUseCase = new GradeAnswerUseCase();

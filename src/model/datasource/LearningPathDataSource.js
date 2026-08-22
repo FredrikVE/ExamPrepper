@@ -2,25 +2,27 @@
 import DataSource from "./DataSource.js";
 
 export default class LearningPathDataSource extends DataSource {
-	async getLearningPath({ subjectId, language }) {
-		return await this.get(`/subjects/${encodeURIComponent(subjectId)}/learning-path?lang=${encodeURIComponent(language)}`);
+
+	fetchLearningPath({ subjectId, language }) {
+		return this.get(`/subjects/${encodeURIComponent(subjectId)}/learning-path?lang=${encodeURIComponent(language)}`);
 	}
 
-	async startLearningSession(command) {
-		return await this.post("/learning-sessions", {
+	fetchStartLearningSession(command) {
+		return this.post("/learning-sessions", {
 			subjectId: command.subjectId,
 			moduleId: command.moduleId,
 			lang: command.language,
-			target: command.target ?? { kind: "module" },
-			discardActiveSession: command.discardActiveSession ?? false
+			target: command.target,
+			discardActiveSession: command.discardActiveSession
 		});
 	}
 
-	async getLearningSession(sessionId) {
-		return await this.get(`/learning-sessions/${encodeURIComponent(sessionId)}`);
+	fetchLearningSession(sessionId) {
+		return this.get(`/learning-sessions/${encodeURIComponent(sessionId)}`);
 	}
 
-	async submitLearningSession({ sessionId, answers }) {
-		return await this.post(`/learning-sessions/${encodeURIComponent(sessionId)}/submit`, { answers });
+	fetchSubmitLearningSession({ sessionId, answers }) {
+		return this.post(`/learning-sessions/${encodeURIComponent(sessionId)}/submit`, { answers });
 	}
+
 }

@@ -282,6 +282,7 @@ blir mer kompleks.
 - Use Case-klasser med ett ansvar hver
 - `execute(...)` er inngangspunktet for den primære operasjonen
 - Mottar Repositories (eller andre Use Cases) via konstruktøren
+- Page-ViewModels utfører model-operasjoner gjennom Use Cases; de går aldri direkte til Repository eller DataSource.
 - Ingen UI-kjennskap, ingen React, ingen state
 
 **`execute()`-regelen, presisert:** tilleggsmetoder utover `execute()` er tillatt
@@ -1262,9 +1263,8 @@ Eksemplet viser kontrakten, ikke et krav om nøyaktig intern implementasjon.
 ### Regler for DataSource-implementasjon
 
 - Én DataSource-klasse per API-domene
-- Metodenavn beskriver operasjonen: `fetchExamById`, ikke `getFromApi`
-- Metodene er `async` og returnerer parsede transportdata/DTO eller `null`, aldri
-  rå `Response`
+- Alle offentlige feature-metoder på konkrete DataSource-klasser bruker `fetch*`; `DataSource`-basens `get`/`post` er transportmekanikk, ikke feature-API.
+- Metodene returnerer Promise med parsede transportdata/DTO eller `null`, aldri rå `Response`. Bruk `async` bare når metoden faktisk trenger `await` eller lokal control flow.
 - Repository mapper transportdata til domeneobjekter
 - Base-URL injiseres fra `dependencies.js`, aldri leses eller hardkodes i konkrete
   DataSource-klasser

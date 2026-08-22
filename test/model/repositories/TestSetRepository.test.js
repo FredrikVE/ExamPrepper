@@ -199,7 +199,7 @@ describe("TestSetRepository", () => {
         };
 
         const conceptImageDataSource = {
-            getConceptImages: jest.fn().mockReturnValue([
+            fetchConceptImages: jest.fn().mockReturnValue([
                 {
                     id: "operational-backbone",
                     src: "/subjects/in5431/designed-for-digital/d4d-building-blocks/operational-backbone.svg",
@@ -214,7 +214,7 @@ describe("TestSetRepository", () => {
 
         const result = await localRepository.getTestSetQuestions("exam-with-image");
 
-        expect(conceptImageDataSource.getConceptImages).toHaveBeenCalledWith(
+        expect(conceptImageDataSource.fetchConceptImages).toHaveBeenCalledWith(
             ["operational-backbone"],
             {
                 subjectId: "in5431",

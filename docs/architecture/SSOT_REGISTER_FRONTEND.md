@@ -103,7 +103,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
 | Backend `performanceBand` | Assessment-klassifisering for LearningSession og LearningPath | `LearningPathRepository` validerer; ViewModels konsumerer | Frontend har ingen 40/55/80-klassifisering; `=== 100` er kun perfekt-score-presentasjon |
 | Backend `isStartable` | Om en authored LearningPath-økt kan velges/startes | `LearningPathRepository` → `createLearningPathSessionModel` | `isSelectable` er direkte avledet fra `session.isStartable`, aldri roadmap-status |
-| LearningPath read-cache | Brukerspesifikk in-memory deduplisering av `getLearningPath` | `LearningPathRepository` | Privat Promise-`Map` per `subjectId + language`; tømmes ved start/submit av LearningSession og ved auth-provider-bytte. Ingen TTL og ingen cachekontrakt i UI-laget |
+| LearningPath read-cache | Brukerspesifikk in-memory deduplisering av `getLearningPath` | `LearningPathRepository` | Privat Promise-`Map` per `subjectId + language`; tømmes ved start/submit av LearningSession og via repositoryets `clearUserState()` ved auth-provider-bytte. Ingen TTL og ingen cachekontrakt i UI-laget |
 | `--assessment-*` | Delte semantiske assessment-farger | `src/ui/style/Tokens.css` | LearningSession- og LearningPath-CSS konsumerer de samme tokenene |
 
 ## Canonical implementasjoner

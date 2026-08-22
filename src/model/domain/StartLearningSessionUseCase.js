@@ -1,10 +1,12 @@
 //src/model/domain/StartLearningSessionUseCase.js
 export default class StartLearningSessionUseCase {
+	#learningPathRepository;
+
 	constructor(learningPathRepository) {
-		this.learningPathRepository = learningPathRepository;
+		this.#learningPathRepository = learningPathRepository;
 	}
 
 	execute(command) {
-		return this.learningPathRepository.startLearningSession(command);
+		return this.#learningPathRepository.startLearningSession(command);
 	}
 }
