@@ -27,13 +27,11 @@
 			"topics": [
 				{
 					"key": "sikkerhetsbegreper",
-					"label": "Sikkerhetsbegreper",
-					"masteryPercent": null
+					"label": "Sikkerhetsbegreper"
 				},
 				{
 					"key": "grunnprinsipper",
-					"label": "Grunnprinsipper",
-					"masteryPercent": null
+					"label": "Grunnprinsipper"
 				}
 			],
 			"progress": {

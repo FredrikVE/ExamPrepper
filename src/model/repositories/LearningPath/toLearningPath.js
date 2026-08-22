@@ -47,7 +47,7 @@ function isValidLearningModule(module) {
 }
 
 function isValidTopic(topic) {
-	return Boolean(topic && typeof topic.key === "string" && typeof topic.label === "string" && (topic.masteryPercent === null || Number.isFinite(topic.masteryPercent)));
+	return Boolean(topic && typeof topic.key === "string" && typeof topic.label === "string");
 }
 
 function isValidModuleRunProgress(progress) {
@@ -152,8 +152,7 @@ function toLearningModule(module) {
 function toTopic(topic) {
 	return {
 		key: topic.key,
-		label: topic.label,
-		masteryPercent: topic.masteryPercent
+		label: topic.label
 	};
 }
 

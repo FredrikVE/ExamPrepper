@@ -57,14 +57,14 @@ describe("LearningPath architecture", () => {
 	test("keeps module status and session answer state in ViewModels", () => {
 		const pathComponents = collectFiles(path.resolve("src/ui/view/components/LearningPathPage")).map((filePath) => fs.readFileSync(filePath, "utf8")).join("\n");
 		const sessionComponents = collectFiles(path.resolve("src/ui/view/components/LearningSessionPage")).map((filePath) => fs.readFileSync(filePath, "utf8")).join("\n");
-		expect(pathComponents).not.toMatch(/createModuleStatus|masteryPercent\s*[<>=]/);
+		expect(pathComponents).not.toMatch(/createModuleStatus/);
 		expect(sessionComponents).not.toMatch(/useState|useReducer|answersBySessionQuestionId|resultsBySessionQuestionId/);
 	});
 	test("keeps LearningPath components presentation-only and preserves compact prop signatures", () => {
 		const componentFiles = collectFiles(path.resolve("src/ui/view/components/LearningPathPage"));
 		for (const filePath of componentFiles) {
 			const source = fs.readFileSync(filePath, "utf8");
-			expect(source).not.toMatch(/\bfetch\s*\(|Repository|DataSource|availability\.isUnlocked|masteryPercent\s*[<>=]/);
+			expect(source).not.toMatch(/\bfetch\s*\(|Repository|DataSource|availability\.isUnlocked/);
 			expect(source).not.toMatch(/function\s+\w+\s*\(\{\s*\n/);
 		}
 	});
