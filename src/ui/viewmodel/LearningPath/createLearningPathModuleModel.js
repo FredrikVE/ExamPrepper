@@ -5,10 +5,10 @@ import createLearningPathProgressModel from "./createLearningPathProgressModel.j
 import createLearningPathSectionModel from "./createLearningPathSectionModel.js";
 import createModuleStatus from "./createModuleStatus.js";
 
-export default function createLearningPathModuleModel({ module, resumableSession, nextActivity, expandedModuleId, startingModuleId, t }) {
+export default function createLearningPathModuleModel({ module, resumableSession, nextActivity, expandedModuleId, startingActionKey, canStartLearningSessions, t }) {
 	const status = createModuleStatus({ isComplete: module.progress.isComplete, completedSessions: module.progress.completedSessions, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
-	const actionModel = createLearningPathActionModel({ module, resumableSession, nextActivity, startingModuleId, t });
+	const actionModel = createLearningPathActionModel({ module, resumableSession, nextActivity, startingActionKey, canStartLearningSessions, t });
 	const progressModel = createLearningPathProgressModel({ performancePercent: module.progress.performancePercent, performanceBand: module.progress.performanceBand, t });
 
 	return {
@@ -37,7 +37,7 @@ export default function createLearningPathModuleModel({ module, resumableSession
 			progressModel,
 			sectionsHeading: t.learningPathDetailHeading,
 			description: module.description,
-			sections: module.sections.map((section) => createLearningPathSectionModel({ section, moduleId: module.id, startingModuleId, t })),
+			sections: module.sections.map((section) => createLearningPathSectionModel({ section, moduleId: module.id, startingActionKey, canStartLearningSessions, t })),
 			actionModel
 		} : null,
 		actionModel

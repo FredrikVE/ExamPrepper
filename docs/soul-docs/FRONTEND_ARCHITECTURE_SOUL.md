@@ -1,8 +1,8 @@
 <!--docs/soul-docs/FRONTEND_ARCHITECTURE_SOUL.md-->
 # FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
-<!-- Versjon: 2.9 — Sist oppdatert: 2026-08-20 -->
-<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.8 -->
+<!-- Versjon: 2.10 — Sist oppdatert: 2026-08-24 -->
+<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.9 -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
@@ -61,6 +61,10 @@ Dokumentet skiller derfor fire roller:
 | App-shell-modus | `APP_SHELL_MODE`, `APP_NARROW_DESKTOP_MAX_WIDTH`, `APP_FULL_DESKTOP_MIN_WIDTH`, `APP_COMPACT_SHELL_QUERY`, `useAppShellMode()` | `src/ui/presentation/` | Eier chrome-grensen: compact shell til og med `1200`, full desktop-shell fra `1201`. Compact shell bruker eksisterende `MobileDropDownTopBar` uten å gjøre feature-presentasjonen mobil. |
 | Dependency injection | `dependencies.js`-modulen / DI-wiringen | `src/di/dependencies.js` | Eneste sted som leser API-base-URL og instansierer konkrete data-/domeneavhengigheter. |
 | Emneområdefiltrering | `ALL_TOPIC_AREAS`, `findTopicAreaByKey()` | `src/model/domain/utils/topicAreaFilters.js` | Bruk register og oppslag; ikke opprett lokale varianter. |
+| LearningPath authored startpolicy | Backend `isStartable` | `LearningPathRepository` validerer; LearningPath-ViewModel/presentasjonsmodeller konsumerer | `isStartable` eier læringspolicy. Auth er en separat runtime-precondition og endrer ikke feltets betydning. |
+| LearningPath neste aktivitet | Backend `nextActivity` | `LearningPathRepository` → LearningPath-ViewModel | Frontend presenterer backendvalget; den rekonstruerer ikke module-start fra lokal status/completion. |
+| LearningPath replay | Backend `isReplayAvailable` | `LearningPathRepository` → LearningPath-ViewModel | Replay er fallback når ingen `resumableSession` eller gjeldende `nextActivity` skal håndteres. |
+| Aktiv LearningSession fra LearningPath | Backend `resumableSession` / konfliktens `activeSessionId` | `useLearningPathPageViewModel()` | Aktiv økt har navigasjonsprioritet; frontend tilbyr ikke discard-valg. |
 
 `QUESTION_TYPES` er autoriteten for spørsmålstype-ID-er. Produksjonskode skal bruke
 konstantene når den tar beslutninger basert på spørsmålstype; rå typeverdier er
@@ -124,6 +128,15 @@ og callbacks, ikke gjennom `isExam`, `isChapterTest`, `isLearningPath` eller til
 
 ## Endringslogg
 
+### 2.9 → 2.10
+
+- LearningPath-handlinger har nå en eksplisitt normativ prioritet: `resumableSession → nextActivity → explicit replay → ingen start-action`.
+- Backend `isStartable` er presisert som autoritet for LearningPath-læringspolicy; autentisering er en separat runtime-precondition og skal ikke bygges inn i eller rekonstruere `isStartable`.
+- «Én ViewModel per side» er presisert til én offentlig Page-ViewModel-kontrakt per side; private undermodeller kan komponeres bak kontraktpunktet.
+- Testreglene skiller nå permanente negative arkitekturforbud fra historiske filnavn/migreringsrester, og defects skal låses med observerbar behavior før implementation-detail assertions fjernes.
+- Kodestil er klassifisert som utviklingskonvensjon, ikke arkitekturinvariant. Absolutte formatterings-/transformasjonsregler er myket opp slik at lesbarhet og kontraktgrenser styrer.
+- Gjeldende implementation drift dokumenteres i `SSOT_REGISTER_FRONTEND.md`; SOUL beskriver fortsatt målarkitekturen og skal ikke late som drift allerede er lukket.
+
 ### 2.7 → 2.8
 
 - `QuestionCard` er flyttet ut av `ExamPage` og etablert som delt kapabilitet med én offentlig inngang.
@@ -155,22 +168,17 @@ ikke historisk dagbok; historikken bor i git.
 
 | Dato | Beslutning |
 |---|---|
-| 2026-05 | MVVM-lagdeling med manuell DI via `dependencies.js`. Én ViewModel per side; app-shell-kapabiliteter kan ha egne ViewModels. |
+| 2026-05, presisert 2026-08-24 | MVVM-lagdeling med manuell DI via `dependencies.js`. Én offentlig Page-ViewModel-kontrakt per side; kontrakten kan komponere private undermodeller. App-shell-kapabiliteter kan ha egne ViewModels. |
 | 2026-05 | CSS-mapper speiler komponentmapper. `App.css` er eneste CSS-entry point. |
 | 2026-07-29 | `QuestionCard` er en delt kapabilitet på `components/QuestionCard/`, ikke eid av `ExamPage`, `LearningPath` eller en annen læringsmodus. Eksterne konsumenter importerer bare `QuestionCard.jsx`; `App.css` er eneste CSS-entry. |
-| 2026-08-20 | En backend-deklarert `resumableSession` har alltid prioritet for LearningPath-handlinger. Frontend gjenopptar aktiv økt direkte, tilbyr ikke discard-valg, og bruker `activeSessionId` fra en eventuell `learning_session_resume_conflict` som defensiv resume-fallback. |
+| 2026-08-24 | LearningPath action precedence er `resumableSession → nextActivity → explicit replay → ingen start-action`. Frontend gjenopptar aktiv økt direkte, tilbyr ikke discard-valg, og bruker `activeSessionId` fra en eventuell `learning_session_resume_conflict` som defensiv resume-fallback. |
+| 2026-08-24 | Backend `isStartable` er eneste autoritet for authored LearningPath-læringspolicy. Autentisering er en separat runtime-precondition (`isLoaded`/`isSignedIn`) for authenticated mutations og skal ikke bygges inn i eller rekonstruere `isStartable`. |
 | 2026-06, presisert 2026-07-24 | `Header.jsx` og `Footer.jsx` er canonical app-shell-implementasjoner for desktop-header og footer. De skal ikke inlines eller dupliseres som konkurrerende app-shell. Semantiske innholdsheadere er tillatt. |
 | 2026-06, erstattet 2026-07-26 | `src/navigation/navigation.js` eier `NAV_SCREENS`, `SCREEN_CONFIG`, `getScreenConfig`, `NAV_ITEMS` og `LEARNING_CONTENT_TYPES`. `SCREEN_CONFIG` eier bare `requiresSubject`, `requiresExam`, `backTo`, `showsSubjectSwitcher`, `pageClassName` og `shellClassName`. `AppNavigationViewModel` eier runtime-state, preconditions, nullstillinger, sideeffekter og eksplisitte overganger. `App.jsx` eier bare render-mapping og dokumenterte persistensunntak. |
-| 2026-06 | Tabs for innrykk i all JS/JSX/CSS. |
-| 2026-06, presisert 2026-07-05 | Ingen valgfrie parametre eller default-parametre i produksjonskode (`src/`). Fravær uttrykkes eksplisitt som `null`, `[]`, en navngitt no-op eller en diskriminert modell. Testbyggere og fixtures i `test/` er unntatt. |
-| 2026-07-24 | Imports, funksjonssignaturer og destrukturerte props står på én linje. Blir props-listen uleselig, mottar komponenten `props`; den vertikaliseres ikke i signaturen. Objektliteraler og argumentobjekter kan stå over flere linjer. |
-| 2026-06, presisert 2026-07-05 | Imperativ stil: eksplisitte `for`-løkker med `push`, navngitte predikater og komparatorer. To eller flere kjedede ledd er alltid løkke. Enkelt `.map()`/`.filter()`-ledd er tillatt der det er mer lesbart; JSX-rendring bruker `.map()`. |
 | 2026-06 | Ingen `.dark`-selektorer i komponent-CSS. Dark mode går utelukkende via tokens. |
 | 2026-07 | Back-kontrakten flyter som ett objekt (`backContract`), ikke som løse argumenter mellom app-shell og side-ViewModels. |
 | 2026-07, presisert 2026-07-26 | `LOAD_STATUS` og `useLoadModel` eier teknisk ressursstatus. `WORKSPACE_STATE_KINDS` eier page-state-unionen. `combineLoadStatuses` og `createWorkspaceState` er avledninger; `WorkspaceState` er canonical renderer. Views importerer ikke `LOAD_STATUS`. |
 | 2026-07-05 | Feiltekst til bruker er produkttekst fra i18n. Teknisk feilobjekt logges kun i dev og lekker ikke direkte til UI. |
-| 2026-07 | Flere enn fire hook-/konstruktørparametre, eller én boolean-parameter, utløser navngitt parameterobjekt. |
-| 2026-07 | State-booleans navngis etter funksjonen de styrer, ikke etter komponentnavnet som rendrer dem. |
 | 2026-07-07, presisert 2026-07-24 | `WorkspaceScaffold` i `components/WorkspaceScaffold/` er canonical eier av ytre workspace-skall, header-/footer-/overlay-slots og scrollflaten `.workspace-scaffold-body`. |
 | 2026-07-07, erstattet 2026-07-26 | React-wrapperen `WorkSpaceCard.jsx` er fjernet. `.workspace-card` i `style/Shared/WorkSpaceCard/workspace-card.css` er en navngitt lokal flate som brukes av `QuestionCard`, ikke en app-bred canonical primitive. En ny delt kortprimitive innføres bare ved dokumentert felles semantikk og kontrakt. |
 | 2026-07-07, presisert 2026-07-26 | WorkspaceScaffold-arv skjer med multiklasse + deklarerte scaffold-variabler. Sideklasser setter bare dokumenterte utvidelsespunkter og egen geometri; de redeklarerer ikke scaffoldets kjerneegenskaper. |
@@ -302,14 +310,14 @@ ikke en ny offentlig metode.
 
 ### 5. ViewModel-laget — `src/ui/viewmodel/`
 
-- Én ViewModel per side, skrevet som React hook (`use[PageNavn]ViewModel`)
+- Én offentlig Page-ViewModel-kontrakt per side, normalt skrevet som React hook (`use[PageNavn]ViewModel`)
+- Den offentlige Page-ViewModelen kan komponere private undermodeller; regelen gjelder kontraktpunktet, ikke antall filer
 - Mottar Use Case-instanser som parametere — aldri importert direkte inne i hooken
 - Eier all sidetilstand og returnerer ett objekt med state, avledede verdier og handlers
 - Ingen JSX, ingen DOM-referanser utover refs den eksponerer for scroll/fokus
 - Avledede presentasjonsverdier (labels, CSS-klassenavn) beregnes her — ikke i View
 
-**Parameterregel (låst 2026-07):** flere enn fire parametre, eller én boolean,
-utløser navngitt parameterobjekt. Alle felter påkrevde — ingen defaults.
+**Kontraktsregel:** offentlige ViewModel-kontrakter skal være eksplisitte. Når mange posisjonelle parametre eller booleans gjør kallstedet uklart, brukes et navngitt parameterobjekt. Fravær som har semantisk betydning uttrykkes eksplisitt.
 
 ```js
 // Feil — posisjonell boolean og løse kontraktfelter:
@@ -1434,132 +1442,44 @@ Portaler (`createPortal`) er utveien for overlays.
 
 ---
 
-## Kodestil
+## Utviklingskonvensjoner — ikke arkitekturinvarianter
 
-Låste regler (2026-06/07), gjelder all ny og endret kode:
+Reglene i denne seksjonen er prosjektets kodestil. De hjelper lesbarhet og konsistens, men de er ikke SSOT-eierskap eller dependency-arkitektur. Arkitekturtester skal derfor ikke håndheve formattering eller bestemte syntaksformer med brede source-søk.
 
 ### Tabs for innrykk
 
-All JS/JSX/CSS bruker tabs. Blandet innrykk i en fil rettes når filen røres.
+JS/JSX/CSS bruker tabs i prosjektet. Blandet innrykk i en fil kan rettes når filen røres, men stilendringer blandes ikke inn i en defect-patch uten at de er nødvendige for den endrede koden.
 
-### Horisontale imports og signaturer
+### Imports og signaturer
 
-Import-specifiers, funksjonsparametre og destrukturerte props står på én linje:
+Hold imports og signaturer kompakte når det er lesbart. Multiline imports eller parameterlister er tillatt når de gjør kontrakten lettere å skanne. En komponent bruker `props` når det faktisk gjør en stor prop-kontrakt klarere — ikke bare for å tilfredsstille en linjelengde- eller formatteringsregel.
 
-```js
-import { NAV_ITEMS, NAV_SCREENS, LEARNING_CONTENT_TYPES } from "../../navigation/navigation.js";
+Objektliteraler og navngitte argumentobjekter kan stå over flere linjer.
 
-export default function SubjectPickerButton({ subjectSwitcher, isOpen, onToggle }) {
-	// ...
-}
-```
+### Defaults og eksplisitt fravær
 
-Forbudt:
+Offentlige produksjonsgrenser — Page-ViewModels, komponentkontrakter, Use Cases, porter og andre delte API-er — skal ikke skjule semantisk fravær bak tilfeldige defaults. Bruk `null`, `[]`, en navngitt no-op eller en diskriminert modell når fraværet er del av kontrakten.
 
-```js
-import {
-	NAV_ITEMS,
-	NAV_SCREENS
-} from "../../navigation/navigation.js";
+Lokale, rene helpers kan bruke en default når den er en intern implementasjonsdetalj, ikke maskerer ugyldig input ved en boundary og gjør funksjonen tydeligere. Testbyggere og fixtures kan fortsatt bruke defaults når defaulten er del av testoppsettet.
 
-export default function SubjectPickerButton({
-	subjectSwitcher,
-	isOpen,
-	onToggle
-}) {
-}
-```
+### Parameterobjekter
 
-Blir props-signaturen for lang, bruk `props` og eksplisitte feltnavn i kroppen:
+Bruk navngitt parameterobjekt når mange posisjonelle parametre, særlig booleans, gjør kallstedet vanskelig å lese. «Flere enn fire» er en review-heuristikk, ikke en arkitekturinvariant. En naken boolean på et uklart kallsted er et signal om at kontrakten bør navngis.
 
-```js
-export default function MobileDropDownTopBar(props) {
-	return <button onClick={props.onToggleMenu}>{props.subjectSwitcher.label}</button>;
-}
-```
+### Transformasjoner og løkker
 
-Objektliteraler og navngitte argumentobjekter kan stå over flere linjer. Regelen
-gjelder imports og signaturer, ikke all multiline-kode.
+Velg formen som gjør mellomtilstand, domenegrener og feiltilfeller tydeligst.
 
-### Ingen valgfrie parametre med defaults (produksjonskode)
+- Bruk eksplisitt `for`-løkke når transformasjonen har flere steg, sideeffekter, domenegrener eller trenger navngitte mellomverdier.
+- Et kort `filter().map()` eller tilsvarende er tillatt når transformasjonen er lineær, ren og tydeligere enn en løkke.
+- Lange kjeder som skjuler kontrollflyt eller oppretter unødvendige mellomresultater bør erstattes med en eksplisitt løkke.
+- JSX-rendring bruker `.map()` som normalt React-idiom.
 
-```js
-// Forbudt:
-function useExamPageViewModel(..., showBackButton = false, onBack = null) { }
-
-// Riktig — alle parametre påkrevde; kalleren er eksplisitt:
-function useExamPageViewModel({ ..., backContract }) { }
-```
-
-Trengs et «tomt» tilfelle, sender kalleren det eksplisitt (`null`, `[]`, en
-navngitt no-op eller en diskriminert kontrakt). Fravær skal synes på kallstedet,
-ikke gjemmes i signaturen. Et objektfelt er enten påkrevd eller eksplisitt
-nullable; konsumenten skal ikke gjette om feltet finnes.
-
-**Scope:** forbudet gjelder all kode under `src/`. Testbyggere og fixtures
-under `test/` kan bruke defaults når defaulten er del av testoppsettet
-(`buildQuestion({ type = QUESTION_TYPES.SINGLE })`). Det finnes ikke noe
-«lokal helper»-unntak i produksjonskode — det er nøyaktig smutthullet
-regelen ble laget for å tette.
-
-### Parameterobjekt-terskelen
-
-Flere enn fire parametre, eller én boolean-parameter, utløser navngitt objekt.
-En naken `true` på et kallsted er alltid feil.
-
-### Imperativ stil
-
-Hovedregel: bruk imperativ stil — eksplisitte `for`-løkker med `push`,
-navngitte predikater og komparatorer — når transformasjonen har mer enn
-ett steg, domenegrener, sideeffekter eller behov for navngitte
-mellomverdier. Review-spørsmålet er «er dette lesbart og riktig?»,
-ikke «brukte du `.map()`?».
-
-Den harde, greppbare grensen: **to eller flere kjedede ledd er alltid
-løkke.** En kjede (`filter().map()`) skjuler mellomtilstandene og én løkke
-per ledd.
-
-```js
-// Forbudt — kjeding:
-const correctOptionIds = question.options
-	.filter((option) => option.correct)
-	.map((option) => option.id);
-
-// Riktig — imperativ med navngitt predikat:
-function isCorrectOption(option) {
-	return option.correct;
-}
-
-const correctOptionIds = [];
-for (const option of question.options) {
-	if (isCorrectOption(option)) {
-		correctOptionIds.push(option.id);
-	}
-}
-```
-
-Oppslagsstrukturer bygges imperativt:
-
-```js
-const questionsById = new Map();
-for (const question of questions) {
-	questionsById.set(question.id, question);
-}
-```
-
-Tillatt uten videre: JSX-rendring bruker `.map()` — det er Reacts idiom for
-lister, ikke databehandling. Ett enkelt `.map()`- eller `.filter()`-ledd uten
-kjeding er tillatt der det er mer lesbart enn løkken.
+Review-spørsmålet er «er dette lesbart og riktig?», ikke antall kjedede metodekall.
 
 ### Migreringsregel
 
-Gammel kode som bryter kodestil eller reviderte regler rettes **når filen
-likevel røres** — aldri som del av en featurepatch. Stil-migrering er alltid
-en egen patch med ett formål (jf. PATCH_SOULs «én patch — ett formål» og
-«ikke rydd i nærliggende kode»). En AI som leser eksisterende kode skal
-behandle dokumentet, ikke kodebasen, som fasit for ny kode.
-
----
+Gammel kode som bryter dagens utviklingskonvensjoner rettes når området faktisk trenger arbeid. En correctness-patch skal ikke bli en generell stilopprydding. Større stil-migrering gjøres som egen patch med ett formål.
 
 ## Navnekonvensjoner
 
@@ -1650,6 +1570,9 @@ Testen for et godt navn: ser du bare navnet — vet du nøyaktig hva det er?
   implementasjon, CSS-token-eierskap, screen-config, Header-kontrakt, i18n-paritet, globale lag,
   bottom-sheet/search-eierskap og breakpoint-drift. Når en slik test ikke gir verdi, brukes en fokusert
   adferdstest eller en eksplisitt begrunnelse.
+- En defect låses først med en regresjonstest på observerbar behavior. Source-string assertions, helpernavn, lokale variabelnavn, nøyaktige JSX-snutter og CSS-bredder skal ikke brukes som erstatning for behavior.
+- Negative arkitekturtester er legitime når de uttrykker et permanent kategoriforbud, for eksempel `View → DataSource`, `model → ui` eller lokale assessment-thresholds i frontend. Historiske filnavn og «OldFoo må fortsatt ikke finnes»-assertions er migreringshistorikk, ikke stående arkitektur.
+- Når en brittle test kolliderer med en correctness-patch, etableres riktig behavior-/kontraktsdekning først. Deretter fjernes bare assertions som beskytter implementation shape eller en dokumentert død kontrakt.
 - Atomic Design-grenser kan testlåses der mappene har tydelig ansvar: generelle
   primitiver importerer ikke feature-, Page-, ViewModel- eller model-lag; Pages
   importeres ikke av lavere komponentnivåer.
@@ -1724,24 +1647,9 @@ operasjonen ligger i en løkke, eller profilering viser faktisk treghet.
 
 ---
 
-## Skrivestil — unngå AI-slop
+## Dokumentasjonsavgrensning
 
-Gjelder all tekst en bot produserer i prosjektet: kommentarer, forklaringer,
-commit-meldinger, dokumentasjon.
-
-- Forbudte slop-markører: `crucial`, `robust`, `seamless`, `leverage`,
-  `ensure`, `comprehensive`, `it's worth noting`, `serves as`, `foster`,
-  `enhance`, `in order to`
-- Ikke blås opp enkle ting med «significant implications» — forklar konkret
-  hvorfor noe er viktig, eller la være
-- Ingen hengende «-ing»-fraser som late begrunnelser («...ensuring separation
-  of concerns»)
-- Ingen «not just X, but Y»-kontraster mot misforståelser ingen hadde
-- Ikke tre punkter av vane — bruk antallet som er riktig
-- Ikke start svar med anerkjennelse («Godt spørsmål!») — svar direkte
-- Ikke oppsummer det du nettopp sa
-- Commit-meldinger: hva og hvorfor, konkret.
-  `"Flytt workspaceClassName-beregning fra ExamPage til ExamPageViewModel"`
+Skrive-/commit-stil er contributor-konvensjon, ikke frontendarkitektur, og låses ikke i dette dokumentet. SOUL beskriver eierskap, dependency-retning, state, canonical implementasjoner og stabile cross-stack-kontrakter.
 
 ---
 
@@ -1763,17 +1671,32 @@ commit-meldinger, dokumentasjon.
 > Search, DockedMobileBottomSheet, ProgressBar/Pager og FormattedText gjenbrukes gjennom sine canonical kontrakter.
 > CSS-mapper speiler normalt komponentmapper; det gamle WorkSpaceCard-stylenavnet er et dokumentert unntak.
 > Feature-brytpunktet 932/933, app-shell-brytpunktet 1200/1201 og globale `--z-*`-lag er testlåste kontrakter.
-> Tabs. Horisontale imports/signaturer. Ingen valgfrie parametre i `src/`.
-> Objekt over fire parametre. To kjedede transformasjoner blir løkke.
+> Kodestil er en utviklingskonvensjon, ikke en arkitekturinvariant. Offentlige kontrakter uttrykker semantisk fravær eksplisitt.
+> Test behavior og dependency-retning; ikke lås formattering, helpernavn eller syntaksform.
 > KISS: sentraliser reell policy og delt semantikk, ikke enhver lik linje eller lik overflate.
 > Ingenting i View henter forretningsdata selv.
 
-## Implementert LearningPath-kontrakt — 2026-07-29
+## LearningPath-kontrakt — normativ 2026-08-24
 
-`LearningPathPage` og `LearningSessionPage` har hver sin Page-ViewModel. Bare Page mottar hele `viewModel`; featurekomponentene mottar ferdige modeller og callbacks. `QuestionCard` brukes gjennom canonical fasade med eksplisitt React-`key` fra `currentQuestionRenderKey`. Frontend bruker `sessionQuestionId` som øktidentitet og inneholder ingen selection-, mastery- eller gradingpolicy som konkurrerer med backend.
+`LearningPathPage` og `LearningSessionPage` har hver sin offentlige Page-ViewModel-kontrakt. Bare Page mottar hele `viewModel`; featurekomponentene mottar ferdige modeller og callbacks. `QuestionCard` brukes gjennom canonical fasade med eksplisitt React-`key` fra `currentQuestionRenderKey`. Frontend bruker `sessionQuestionId` som øktidentitet og inneholder ingen selection-, mastery- eller gradingpolicy som konkurrerer med backend.
 
 LearningPath- og LearningSession-frontenden klassifiserer aldri assessment-prosent. Backend sender `performanceBand`, repository-grensen validerer kontrakten, og ViewModels/React konsumerer bandet direkte. `=== 100` er tillatt som ren perfekt-score-presentasjon, men er ikke et assessment-threshold. Delte assessment-farger eies av `Tokens.css` gjennom `--assessment-*`.
 
-ChapterTest-noder i LearningPath følger samme regel: backend sender siste lagrede `performancePercent` + `performanceBand`, repositoryet validerer paret, og ViewModelen lager kun presentasjonsmodell for den samme score-donuten som brukes på LearningSession. Et lagret Exam/ChapterTest-attempt tømmer LearningPath-repositoryets eksisterende read-cache før siden leses på nytt.
+ChapterTest-noder i LearningPath følger samme regel: backend sender siste lagrede `performancePercent` + `performanceBand`, repositoryet validerer paret, og ViewModelen lager kun presentasjonsmodell for den samme score-donuten som brukes på LearningSession. Et lagret Exam/ChapterTest-attempt tømmer LearningPath-repositoryets read-cache før siden leses på nytt.
 
-For authored LearningPath-sessions er backend `isStartable` eneste startautoritet. Frontend kan avlede `isSelectable = session.isStartable`, men skal aldri rekonstruere starttillatelse fra `status`, completion eller lokal rekkefølge. Backend eier også `isComplete`, `isReplayAvailable` og `nextActivity`; frontend validerer og presenterer disse verdiene direkte og skal ikke rekonstruere completion fra counts/prosent, replay fra historisk completion eller module-start fra `isCurrent + isUnlocked`. En eksisterende `resumableSession` har alltid navigasjonsprioritet: LearningPath-handlinger gjenopptar den aktive økten direkte og tilbyr ikke forkasting i UI. Targeted start sendes først når ingen resumable session finnes; dersom backend likevel rapporterer `learning_session_resume_conflict`, navigerer ViewModelen direkte til `activeSessionId` uten konfliktmodal.
+For authored LearningPath-sessions er backend `isStartable` eneste autoritet for **læringspolicyen** om en authored session kan velges/startes. Frontend kan avlede `isSelectable = session.isStartable`, men skal aldri rekonstruere starttillatelse fra `status`, completion eller lokal rekkefølge. Autentisering er en separat runtime-precondition for authenticated mutations: `isLoaded` og `isSignedIn` kan avgjøre om en start-action kan utføres nå, men skal ikke endre betydningen av eller beregne en ny variant av `isStartable`.
+
+Backend eier også `isComplete`, `isReplayAvailable`, `nextActivity` og `resumableSession`. Når flere av disse signalene kan gi en handling, gjelder denne prioriteten:
+
+```text
+1. resumableSession
+2. nextActivity for den aktuelle modulen
+3. explicit module replay når replay er tilgjengelig og nextActivity ikke velger en aktivitet
+4. ingen start-action
+```
+
+`nextActivity` er backendens valg av neste progresjonsaktivitet og kan være authored eller adaptive. Frontend skal derfor ikke la `isReplayAvailable` overstyre et samtidig `nextActivity`. Replay er en eksplisitt fallback-mulighet, ikke en konkurrerende lokal progresjonspolicy.
+
+En eksisterende `resumableSession` har alltid navigasjonsprioritet: LearningPath-handlinger gjenopptar den aktive økten direkte og tilbyr ikke forkasting i UI. Targeted start sendes først når ingen resumable session finnes. Dersom backend likevel rapporterer `learning_session_resume_conflict`, navigerer ViewModelen direkte til `activeSessionId` uten konfliktmodal.
+
+SOUL beskriver denne kontrakten normativt. Eventuelle avvik i gjeldende kode skal stå som `DRIFT` i `SSOT_REGISTER_FRONTEND.md` frem til de er rettet og verifisert.

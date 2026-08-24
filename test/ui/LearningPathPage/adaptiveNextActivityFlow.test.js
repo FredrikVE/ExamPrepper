@@ -14,8 +14,8 @@ describe("adaptive next activity frontend flow", () => {
 		response.nextActivity = { kind: "start-adaptive-session", moduleId: response.modules[0].id, activityKind: "repair", questionCount: 4 };
 		const repository = new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: response, learningSessionResponse: null, submitSessionResponse: null }));
 		const pathModel = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
-		const action = createLearningPathActionModel({ module: pathModel.modules[0], resumableSession: null, nextActivity: pathModel.nextActivity, startingModuleId: null, t });
+		const action = createLearningPathActionModel({ module: pathModel.modules[0], resumableSession: null, nextActivity: pathModel.nextActivity, startingActionKey: null, canStartLearningSessions: true, t });
 		expect(pathModel.nextActivity.activityKind).toBe("repair");
-		expect(action).toMatchObject({ intent: "start", activityKind: "repair", label: "Repair" });
+		expect(action).toMatchObject({ intent: "start", target: { kind: "module" }, label: "Repair" });
 	});
 });

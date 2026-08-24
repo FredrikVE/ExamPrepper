@@ -1,14 +1,14 @@
 <!--docs/architecture/SSOT_REGISTER_FRONTEND.md-->
 # SSOT-register — ExamPrepper frontend
 
-Oppdatert: 2026-08-20
-Type: dokumentasjon / analyse
-Registerbase: `examprepper-frontend-safe-20260729-115916.zip` + QuestionCard-patch 1–4
-Patchdelta 2026-08-20 verifisert mot `examprepper-frontend-safe-20260820-154421.zip`
+Oppdatert: 2026-08-24
+Type: dokumentasjon / evidensregister
+Registerbase: `examprepper-frontend-safe-20260823-182809.zip`
+Registerstatus: statisk revisjon mot snapshot; ingen produksjonskode er endret i denne dokumentrevisjonen
 
 ## Formål
 
-Register over hva som faktisk er single source of truth i frontenden nå, hva som fortsatt burde vært det, og hvilke SSOT-funn fra forrige runde som er lukket — sett mot kodegrunnlaget og den eksplisitt oppførte patchen, ikke mot minnet om tidligere tilstander.
+Register over hva som faktisk eier state, policy, canonical implementasjoner og stylingkontrakter i det navngitte frontend-snapshotet. Normative kontrakter kommer fra SOUL; dette dokumentet viser evidens, åpen drift, akseptert lokal policy og gjeld mot den konkrete kodebasen — ikke mot minnet om tidligere tilstander.
 
 Dokumentet skiller fire roller, fordi «SSOT» ellers blir synonymt med «gjenbrukt kode»:
 
@@ -19,35 +19,34 @@ Dokumentet skiller fire roller, fordi «SSOT» ellers blir synonymt med «gjenbr
 
 Listen over canonical implementasjoner dekker de viktigste delte flatene og mekanismene, ikke hver enkelt. Den er kuratert, ikke uttømmende.
 
+Registeret skiller mellom normativ kontrakt og faktisk implementasjonsstatus. Statusverdier brukes slik:
+
+- **GREEN** — statisk evidens i gjeldende snapshot samsvarer med kontrakten.
+- **DRIFT** — kontrakten er kjent, men gjeldende kode avviker.
+- **DEBT** — implementasjonen kan være funksjonell, men evidens/testmekanismen eller eierskapet har dokumentert vedlikeholdsgjeld.
+- **UNVERIFIED** — revisjonen har ikke nok runtime-/testbevis til å klassifisere som GREEN.
+
+Et normativt utsagn fra SOUL skal aldri føres som «implementert» her dersom snapshotet viser drift.
+
 ## Base og verifisering
 
 ```txt
-Snapshot:      examprepper-frontend-safe-20260729-115916.zip
-Zip sha256:    4824ecce609ea01cd9abc227fbf5075e1163632156b283a66b2fe828ab043067
-Zip commit:    0db6760d4c967394e64934cd75437ec5cba18fb5
-Patchstatus:   QuestionCard-patch 1–4 anvendt
-Filer:         713
-JS/JSX:        483 i src/ + test/
-Jest-filer:    119
-
-Patchdelta 2026-08-20:
-- Snapshot:    examprepper-frontend-safe-20260820-154421.zip
-- Zip sha256:  7f0776b4469bf3849b93636cdbb7445ac09c1a1291673a81588b9d53211dc939
-- Zip commit:  9af848d836acadfe268f909f6f3c4dfed2c45bc9
-- Endring:     separat compact/full app-shell-kontrakt for narrow desktop
-
-Snapshotet og patchserien etablerer:
-- `QuestionCard` og tilhørende CSS på kapabilitetsnivå, utenfor `ExamPage`.
-- Én offentlig komponentinngang og én global CSS-entry.
-- `QUESTION_TYPES` i alle dokumenterte typeavgjørelser i `QuestionCard` og API-transformasjonen.
-- En AST-/PostCSS-basert `questionCardArchitecture`-test.
-
-Verifisering for denne registerrevisjonen:
-- `git diff --check`, relativ importoppløsning og `node --check` for alle `.js`-filer.
-- Statisk kontroll av gamle stier, offentlig inngang, CSS-entry og rå typeavgjørelser.
-- Full Jest-suite og Vite-build er ikke kjørt i denne dokumentrevisjonen fordi dependency-installasjonen
-  ikke fullførte i patchmiljøet.
+Snapshot:                  examprepper-frontend-safe-20260823-182809.zip
+Zip sha256:                fd1f0911a1ff347c69b72a45864577071b49b1223945f162d9c526576c86f581
+Zip commit:                ikke inkludert i snapshotet; ikke utledet
+Filer:                     896
+JS/JSX i src/ + test/:     640
+Jest-testfiler:            189
+Arkitekturtestfiler:       35
+Tester som leser src-kode: 53
 ```
+
+Verifisering i denne registerrevisjonen:
+
+- Snapshotet er skannet statisk for filinventar, testinventar og LearningPath-kontraktene som omtales under.
+- LearningPath action-modell, Page-ViewModel og tilhørende testmønstre er kontrollert mot den opplastede backend-/frontend-analysen.
+- Full Jest-suite og Vite-build er **ikke** kjørt i denne dokumentrevisjonen. Ingen gammel grønn teststatus gjenbrukes.
+- Antall tester eller arkitekturtester er ikke et kvalitetsmål. Arkitekturtester vurderes etter om de håndhever en stabil dependency-/policy-invariant uten implementation coupling.
 
 ## Notasjon
 
@@ -59,38 +58,36 @@ X()    ren funksjon         --x:   CSS custom property
 
 ---
 
-## Den store endringen siden forrige runde
+## Status for denne revisjonen
 
-Hele `src/navigation/` er kollapset til **én fil**: `navigation.js` (230 linjer). `navGraph.js`, `navItems.js`, `pageTools.js` og `learningContent.js` finnes ikke lenger. Overgangsfunksjonene (`resolveNavigation`, `resolveScreenEntry`, `resolveBackNavigation`, hele reducer-sporet) er borte.
+Denne revisjonen re-baserer evidensregisteret mot snapshotet fra 2026-08-23 og skiller eksplisitt mellom kontrakt og faktisk status.
 
-Navigasjonen er nå ren **data + ett oppslag**:
+De viktigste åpne avvikene er:
 
-- `NAV_SCREENS{}` — de sju skjermene
-- `SCREEN_CONFIG{}` — én node per skjerm med `requiresSubject`, `requiresExam`, `backTo`, `showsSubjectSwitcher`, `pageClassName`, `shellClassName`
-- `getScreenConfig()` — eneste funksjon; **kaster** på ukjent skjerm i stedet for å falle tilbake stille
-- `LEARNING_CONTENT_TYPES{}`, `TEST_TYPES{}`, `NAV_ITEMS{}` (sidebar, seks desktopvalg, mobilgrupper, testtypeoppføringer og pop-out-menyer)
-
-Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-settere. Det er en bevisst retningsendring — se «Vurdering» til slutt.
-
----
+| ID | Område | Status | Evidens / avvik |
+|---|---|---|---|
+| LP-01 | LearningPath action precedence | **UNVERIFIED** | Implementasjonen er korrigert til `resumableSession → nextActivity → replay → ingen action`, og en direkte behavior-probe bekrefter precedence-fiksen. Full Jest/build er ikke verifisert i denne patchen fordi dependency-installasjon ikke fullførte i miljøet. |
+| LP-02 | LearningPath auth-precondition | **UNVERIFIED** | `session.isStartable` forblir backend-eid læringspolicy, mens `canStartLearningSessions` nå er en separat auth/runtime-precondition for start-actions og handleren har defense-in-depth. Full Jest/build er ikke verifisert i miljøet. |
+| LP-05 | Resume question position | **DRIFT** | Frontend kan presentere «fra oppgave X», mens backendens persistente active-session-summary ikke gir en reelt oppdatert question-position i dagens implementasjon. |
+| TEST-01 | Architecture/source-test inventory | **DEBT** | Snapshotet har 35 arkitekturtester og 53 tester som leser produksjonssource direkte. Audit viser både legitime dependency-gater og implementation-detail-/migreringstester som skal ryddes inkrementelt. |
 
 ## Autoritative registre og runtime-SSOT
 
 Én autoritet eier hver beslutning. Dette er kjernen av «SSOT» — ikke gjenbrukt kode, men eneste kilde for en policy eller state.
 
-| Komponent | SSOT for | Fil | Bevis |
+| Komponent | SSOT for | Fil | Evidens / enforcement |
 |---|---|---|---|
 | `useAppNavigationViewModel()` | Core route-/selection-state (`activeScreen`, tre valg-id-er, språksynk-feil) + route-handlingene | `viewmodel/AppNavigationViewModel.js` | Eneste eier av core route-state. Komponerer mobile/settings-undermodellene og bygger avledede chrome-/back-kontrakter |
 | `useMobileDropDownTopBarModel()` | Mobilmeny- og subject-picker-state | `viewmodel/AppNavigation/useMobileDropDownTopBarModel.js` | Eneste eier av de to mobile overlay-state-verdiene; komponeres av `useAppNavigationViewModel()` |
 | `useSettingsPresentationModel()` | Settings-presentasjonens open-state og modus | `viewmodel/AppNavigation/useSettingsPresentationModel.js` | Eneste eier av de to settings-state-verdiene; sheet/sidebar følger app-shell-modus og settings lukkes ved shell-mode-bytte |
-| `NAV_SCREENS{}` `SCREEN_CONFIG{}` `getScreenConfig()` | Skjerm-ID-er, seks deklarative skjermegenskaper, deklarert tilbake-mål og chrome | `src/navigation/navigation.js` | 10 importører. `getScreenConfig` er produksjonsaksessoren og kaster på ukjent skjerm. Låst av `navigation.test.js` + `AppNavigationViewModel.test.js` |
+| `NAV_SCREENS{}` `SCREEN_CONFIG{}` `getScreenConfig()` | Skjerm-ID-er, seks deklarative skjermegenskaper, deklarert tilbake-mål og chrome | `src/navigation/navigation.js` | `getScreenConfig` er produksjonsaksessoren og kaster på ukjent skjerm. Låst av `navigation.test.js` + `AppNavigationViewModel.test.js` |
 | `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` `TEST_TYPES{}` | Sidebar, seks desktopvalg, mobilgrupper, testtypeoppføringer, pop-out-menyer og stabile identiteter | `src/navigation/navigation.js` | `toggleButtonItems` eier desktoprekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`. `Læringsti` er deklarert deaktivert. De to testoppføringene peker til `LEARNING_CONTENT_TYPES.EXAMS` med hver sin `testType`; mobilgruppen `Tester` gjenbruker dem |
-| `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | 7 importører. (`createWorkspaceState()` er avledningen — se «utilities») |
-| `LOAD_STATUS{}` `useLoadModel()` | Ressursstatus-enum + reaktiv innlastingstilstand | `viewmodel/LoadState/` | `LOAD_STATUS`: 6 importører. `useLoadModel`: 7. (`combineLoadStatuses()` er avledningen — se «utilities») |
+| `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | (`createWorkspaceState()` er avledningen — se «utilities») |
+| `LOAD_STATUS{}` `useLoadModel()` | Ressursstatus-enum + reaktiv innlastingstilstand | `viewmodel/LoadState/` | (`combineLoadStatuses()` er avledningen — se «utilities») |
 | `useGlossaryPageViewModel()` | Glossary feature-state og GlossaryPage-spesifikk UI-mekanikk: søk, kapittelutvalg, sortering, mobile chapter-sheet open-state og eneste expansion-state `expandedGlossaryEntryKey`; teknisk nettverksstatus eies fortsatt av `useLoadModel()` | `src/ui/viewmodel/GlossaryPageViewModel.js` | Eneste offentlige kontrakt mot View. Kan komponere private hooks under `viewmodel/GlossaryPage/`, men re-eksponerer navngitte felter. Eier rad/disclosure-handlers, desktop/mobile graph-bindinger, React-ref-registrering og focus/scroll-intent. `glossaryDetailPresentation` er én ren detaljmodell med desktop modal og mobil expanded card som to konsumenter |
 | `MASTERY_STATUS{}` `GLOSSARY_RELATION_TYPE{}` | Autoritative enum-verdier for Glossary mastery og relasjonstyper | `src/constants/GlossaryContracts.js` | `GlossaryDataSource` validerer mot registrene; mastery-/network-presentasjon mapper de samme verdiene og kaster på ukjent verdi |
 | `createGlossaryDetailPresentation()` | Eneste presentasjonsmodell for begrepsdetalj | `src/ui/viewmodel/GlossaryPage/glossaryDetailModel.js` | Konsumeres av desktop `GlossaryDetailModal` og mobil expanded card. Tabellrader eier ikke detalj-/nettverksmodell |
-| `translations{}` `LANGUAGES{}` | Autoritativt språkregister og produkttekst | `src/i18n/translations.js` | 20 importører. `i18nContract` låser NO↔EN-paritet, typeparitet, ikke-tomme verdier og navigasjonens tekstnøkler. Lokale `fallbackLabel`-kanaler er fjernet; testen skanner ikke all JSX for hardkodet tekst |
+| `translations{}` `LANGUAGES{}` | Autoritativt språkregister og produkttekst | `src/i18n/translations.js` | `i18nContract` låser NO↔EN-paritet, typeparitet, ikke-tomme verdier og navigasjonens tekstnøkler. Lokale `fallbackLabel`-kanaler er fjernet; testen skanner ikke all JSX for hardkodet tekst |
 | `<LanguageProvider/>` `useLanguage()` | Aktivt språk + språkbytte (runtime) | `src/i18n/LanguageContext.jsx` | Én provider. Eier reaktiv språk-state; registeret over er den statiske teksten |
 | `<ThemeProvider/>` `useTheme()` | Aktivt tema + DOM-klassen `.dark` | `ui/theme/ThemeContext.jsx` | Én provider, reaktiv theme-state |
 | `<SettingsProvider/>` `useSettings()` | Aktive brukerinnstillinger | `ui/settings/SettingsContext.jsx` | Én provider, reaktiv settings-state |
@@ -100,7 +97,7 @@ Overgangslogikken bor nå i `AppNavigationViewModel` som eksplisitte `useState`-
 | `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop feature-presentasjon + breakpoint-tall | `ui/presentation/` | `932`/`933` låst av `appBreakpointContract`; narrow desktop forblir `PRESENTATION_MODE.DESKTOP` |
 | `APP_SHELL_MODE{}` `APP_NARROW_DESKTOP_MAX_WIDTH` `APP_FULL_DESKTOP_MIN_WIDTH` `APP_COMPACT_SHELL_QUERY` `useAppShellMode()` | Compact/full app-shell + shell-breakpoint | `ui/presentation/` | `1200`/`1201` låst av `appBreakpointContract`; compact shell bruker `MobileDropDownTopBar`, og PageTools/Glossary kan bruke canonical `DockedMobileBottomSheet` på narrow desktop uten å gjøre feature-presentasjonen mobil |
 | `dependencies{}` | Manuell DI — eneste sted som leser `VITE_API_BASE_URL` og wirer datakilder | `src/di/dependencies.js` | Eneste instansieringssted. Leser appens base-URL og injiserer den i hver `DataSource` |
-| `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | 10 importører |
+| `ALL_TOPIC_AREAS` `findTopicAreaByKey()` | Emneområde-filtrering | `model/domain/utils/topicAreaFilters.js` | Brukes på tvers av feature-filtrering |
 | Backend `performanceBand` | Assessment-klassifisering for LearningSession og LearningPath | `LearningPathRepository` validerer; ViewModels konsumerer | Frontend har ingen 40/55/80-klassifisering; `=== 100` er kun perfekt-score-presentasjon |
 | Backend `isStartable` | Om en authored LearningPath-økt kan velges/startes | `LearningPathRepository` → `createLearningPathSessionModel` | `isSelectable` er direkte avledet fra `session.isStartable`, aldri roadmap-status |
 | LearningPath read-cache | Brukerspesifikk in-memory deduplisering av `getLearningPath` | `LearningPathRepository` | Privat Promise-`Map` per `subjectId + language`; tømmes ved LearningSession-mutations, lagret Exam/ChapterTest-attempt og via repositoryets `clearUserState()` ved auth-provider-bytte. Ingen TTL og ingen cachekontrakt i UI-laget |
@@ -112,15 +109,15 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 
 | Komponent | Eier | Fil | Bruk |
 |---|---|---|---|
-| `<WorkspaceScaffold/>` | Sidestillas | `components/WorkspaceScaffold/` | Alle 7 sider. Låst av `workspaceArchitecture` + `workspaceContentContract` |
+| `<WorkspaceScaffold/>` | Sidestillas | `components/WorkspaceScaffold/` | Hovedsidene bruker scaffoldet; dependency-/content-kontrakten håndheves av relevante arkitekturgater |
 | `<WorkspaceState/>` | Rendring av page-state | `components/WorkspaceState/` | 7 importører |
 | `<Header/>` + slot-komponenter | Scaffold-header, struktur og utseende | `components/Header/` | Alle 7 sider, Statistics inkludert. `headerArchitecture` krever at hver side velger appearance, layout og slots eksplisitt |
 | `<Footer/>` | Footer-skall | `components/Footer/` | Direkte av `SubjectSelectPage` og `LearningContentSelectPage`; komponert av `<GlossaryFooter/>` |
 | `<ProgressBar/>` (renderer) + `buildProgressBarModel()` (presentasjonsavledning) | Lineær fremdrift | `components/Shared/ProgressBar/` | Direkte importører: `MobileDropDownTopBar`, `ExamPage`, `MatchCardsPage` |
 | `<ProgressPager/>` (renderer) + `createProgressPagerEntries()` (presentasjonsavledning) | Punkt/side-paginering | `components/ProgressPager/` | `ExamFooter`, `FlipcardsStudySurface`, `FlipcardsMobileFooterSheet` |
 | `<ToggleButtonRow/>` | Responsiv innholdstypevelger og variantvalg | `components/ToggleButtonRow/` | Én offentlig fasade brukt av `LearningContentHeader`; desktop beholder tablist-kontrakten. Eksisterende `LearningContentSelectPageViewModel` eier mobilens åpne gruppe slik at disclosure-state overlever route-bytte til Begrepsliste; mobilvarianten eier DOM-fokus og kan bare lukke gruppen via den eksplisitte lukkeknappen. Låst av `toggleButtonRowArchitecture`, mobilkontrakttest og hook-test |
-| `<FormattedText/>` (renderer) + `createFormattedTextSegments()` (presentasjonsavledning) | Tekst-rendering | `components/Shared/FormattedText.jsx` | 40 importører — mest delte fil |
-| `<QuestionCard/>` | Spørsmålsflate, valg av oppgaverenderer, oppgaveinteraksjon og feedback | `components/QuestionCard/QuestionCard.jsx` | Offentlig fasade for `ExamPage` og fremtidige læringsmoduser. Interne `QuestionTypes` importeres ikke direkte utenfra; låst av `questionCardArchitecture` |
+| `<FormattedText/>` (renderer) + `createFormattedTextSegments()` (presentasjonsavledning) | Tekst-rendering | `components/Shared/FormattedText.jsx` | Delt renderer brukt på tvers av flere features |
+| `<QuestionCard/>` | Spørsmålsflate, valg av oppgaverenderer, oppgaveinteraksjon og feedback | `components/QuestionCard/QuestionCard.jsx` | Offentlig fasade for `ExamPage`, `LearningSessionPage` og andre læringsmoduser. Interne `QuestionTypes` importeres ikke direkte utenfra; låst av `questionCardArchitecture` |
 | `<DockedMobileBottomSheet/>` | Mobil bottom-sheet-geometri (docked/expanded, drag, grip, inert) | `components/MobileBottomSheet/` | 3 feature-konsumenter: `PageToolsMobileFooterSheet`, `FlipcardsMobileFooterSheet`, `GlossaryMobileChapterSheet` |
 | `<DesktopPopOutMenu/>` | Desktop pop-out-struktur og lagmekanikk | `components/DesktopPopOutMenu/` | PageTools- og Flipcards-verktøymenyene |
 | Search-familien (`<SearchField/>` m.fl.) | Søkefelt, filter, backdrop, forslag | `components/Search/` | Delt av SubjectSelect, LearningContentSelect, Glossary |
@@ -134,10 +131,10 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 |---|---|---|
 | Oppgavetype-ID-er | `QUESTION_TYPES` | `QuestionCard`, grading, API-transformasjon |
 | Valg av oppgaverenderer | `QuestionCard` og `getQuestionViewState()` | Alle læringsmoduser gjennom `QuestionCard.jsx` |
-| Oppgaveinteraksjon og feedback | `QuestionCard/QuestionTypes` og `QuestionCard/Shared/Feedback` | `ExamPage`, fremtidig `LearningSessionPage` |
+| Oppgaveinteraksjon og feedback | `QuestionCard/QuestionTypes` og `QuestionCard/Shared/Feedback` | `ExamPage`, `LearningSessionPage` |
 | Øktflyt, svarstate, rettingstidspunkt, fremdrift og navigasjon | Den enkelte læringsmodus | Ikke `QuestionCard` |
 
-`ExamPage` er en konsument, ikke eier. Fremtidige læringsmoduser stopper ved fasaden og innfører
+`ExamPage` og `LearningSessionPage` er konsumenter, ikke eiere. Læringsmoduser stopper ved fasaden og innfører
 ikke egne oppgaverenderere eller modusflagg i `QuestionCard`.
 
 ## Delte utilities og avledninger
@@ -145,14 +142,14 @@ ikke egne oppgaverenderere eller modusflagg i `QuestionCard`.
 | Komponent | Gjør | Fil | Konsumenter |
 |---|---|---|---|
 | `backContract` | Avleder rutenavigasjonens tilbake-UI fra aktiv `SCREEN_CONFIG`, labels og `goBack()` | `viewmodel/AppNavigationViewModel.js` | Ett konstruksjonssted og én kontraktform; ny objektverdi per render. Sendes til page-VM-er, Header og `MobileDropDownTopBar`. Settings har en separat lokal tilbakehandling |
-| `createWorkspaceState()` | Avleder page-state fra load-status, empty-status og labels | `viewmodel/WorkspaceState/` | 7 — eier ingen state, konverterer input til resultat |
-| `combineLoadStatuses()` | Avleder samlet status fra flere ressursstatuser | `viewmodel/LoadState/combineLoadStatuses.js` | 5 — ren avledning |
-| `normalizeSearchTerm()` | Søkenormalisering | `viewmodel/Utils/normalizeSearchTerm.js` | 5 produksjonsimportører |
-| `shuffleInPlace(items, randomNumber)` | Fisher-Yates med injisert RNG | `viewmodel/Utils/shuffleInPlace.js` | 4 moduler: `answerOptionOrder`, `matchCardsSlots`, `matchCardsSession`, `flipcardDeckToolState`. `Math.random` sendes inn, ikke gjentatt |
+| `createWorkspaceState()` | Avleder page-state fra load-status, empty-status og labels | `viewmodel/WorkspaceState/` | Eier ingen state; konverterer input til resultat |
+| `combineLoadStatuses()` | Avleder samlet status fra flere ressursstatuser | `viewmodel/LoadState/combineLoadStatuses.js` | Ren avledning |
+| `normalizeSearchTerm()` | Søkenormalisering | `viewmodel/Utils/normalizeSearchTerm.js` | Flere feature-konsumenter |
+| `shuffleInPlace(items, randomNumber)` | Fisher-Yates med injisert RNG | `viewmodel/Utils/shuffleInPlace.js` | `answerOptionOrder`, `matchCardsSlots`, `matchCardsSession` og `flipcardDeckToolState`. `Math.random` sendes inn, ikke gjentatt |
 
 ## CSS- og token-eiere
 
-| Eier | Kontrakt | Fil | Bevis |
+| Eier | Kontrakt | Fil | Evidens / enforcement |
 |---|---|---|---|
 | `:root{}` `--space-*` `--z-*` | Designtokens og lagstige | `style/Tokens.css` | Global-lag låst av `globalLayerPolicy` |
 | `--scaffold-header-height` `--scaffold-inset` | Scaffoldets geometri-hooks | `style/WorkspaceScaffold/workspace-scaffold.css` | Erklært på `.workspace-scaffold`, null fallbacks. Låst av `scaffoldTokenOwnership` |
@@ -160,38 +157,13 @@ ikke egne oppgaverenderere eller modusflagg i `QuestionCard`.
 
 ---
 
-## Lukket siden forrige runde
+## Historikk og lukkede migreringer
 
-Forrige inventory hadde disse i «burde vært SSOT». De er nå løst — de fleste med en håndhevende test:
+Detaljert migreringshistorikk, slettede filnavn og tidligere patchnummer hører hjemme i git/changelog, ikke som permanente negative kontrakter i evidensregisteret.
 
-| Tidligere funn | Status nå |
-|---|---|
-| `shouldShowSubjectSwitcher` som `||`-kjede i ViewModel | Flyttet til `SCREEN_CONFIG.showsSubjectSwitcher` |
-| Søkenormalisering duplisert i 4 moduler | `normalizeSearchTerm()` |
-| Tre shuffle-implementasjoner | Én `shuffleInPlace` med injisert RNG |
-| `--scaffold-*` udefinert / feil eier | Erklært på scaffoldet, låst av test |
-| Header-varianter som per-side-CSS | `headerArchitecture`-test krever eksplisitt appearance/layout/slots; MatchCards-reglene ute av `progress-bar.css` |
-| Breakpoint 932 spredt uten kilde | `appBreakpointContract` med allowlist for lokale terskler |
-| z-index uten lagstige | `globalLayerPolicy` binder hver global deltaker til et token |
-| `fallbackLabel`-kanaler ved siden av i18n | `i18nContract` avviser lokale fallback-kanaler |
-| Navigasjonens resolver/reducer-oppblåsning | Hele resolver-sporet slettet; `navigation.js` er ren data |
-| Ubrukt `WorkSpaceCard.jsx`-wrapper | React-komponenten er slettet i patch 41. `workspace-card.css` og `QuestionCard` sin direkte klassebruk er beholdt |
-| `QuestionCard` eid av `ExamPage`-mappen | Komponent- og CSS-treet er flyttet til `components/QuestionCard/` og `style/QuestionCard/`; `ExamPage` importerer bare fasaden |
-| Rå spørsmålstype-strenger (`"single"`, `"multi"`, `"fill"`) | Erstattet med `QUESTION_TYPES`; arkitekturtesten avviser nye rå typeavgjørelser i de avtalte områdene |
+Registeret beholder bare gjeldende eier, kontrakt, enforcement og åpen drift. En negativ test er stående evidens bare når den uttrykker et permanent kategori-/dependency-forbud; «gammel fil X må fortsatt ikke finnes» er ikke i seg selv en arkitekturinvariant.
 
-Arkitektur-testmappen har nå 14 filer. Det er den største enkeltendringen i SSOT-disiplin: funnene er ikke bare ryddet, de er gjort til stående garantier.
-
-## Andre lukkede korrekthetsfunn
-
-Rettelser som ikke berørte noen SSOT-eier — tatt med for sporbarhet.
-
-| Funn | Status nå |
-|---|---|
-| `AuthButton` kalte `useUser()` i en rendergren der `ClerkProvider` ikke var garantert (når nøkkelen mangler rendrer `ClerkAppProvider` appen uten provider) | `AuthButton` velger nå konfigurert/ukonfigurert underkomponent før noen Clerk-hook brukes; `useUser()` finnes bare i `ConfiguredAuthButton`. Provider-precondition-brudd, ikke Rules-of-Hooks-brudd. **Ingen ny auth-konfigurasjons-SSOT ble innført** — `AuthTokenProvider`-raden står uendret |
-
----
-
-## Fortsatt burde vært SSOT
+## Åpen SSOT-gjeld
 
 | I dag | Foreslått | Hvor spredt | Omfang |
 |---|---|---|---|
@@ -220,6 +192,28 @@ Gjentatt kode som med vilje *ikke* er sentralisert, dokumentert her så en sener
 | Observasjon | Beslutning |
 |---|---|
 | `ClerkAppProvider`, `AuthButton` og Statistics-grenen i `App.jsx` sjekker `VITE_CLERK_PUBLISHABLE_KEY` lokalt (3 steder) | Beholdes. Hvert sted beskytter sin egen rendergrense, og regelen er en identisk, triviell boolsk sjekk uten delt validerings-, normaliserings- eller fallback-policy. `AUTH_CONFIG` eller en `isClerkConfigured()`-helper innføres først dersom regelen faktisk blir mer kompleks eller begynner å drifte. Samsvarer med dokumentets SSOT-definisjon: én autoritet per reell policy, ikke sentralisering av enhver gjentatt linje |
+
+---
+
+## Test-evidens
+
+Arkitekturtestenes verdi vurderes etter invariant, ikke antall filer.
+
+**Stående negative regler kan for eksempel være:**
+
+- View importerer ikke DataSource/Repository/Use Case direkte.
+- model-laget importerer ikke ui-laget.
+- frontend implementerer ikke lokale assessment-thresholds når backend eier klassifiseringen.
+- private feature-submoduler importeres ikke utenfor eiergrensen.
+
+**Ikke stående arkitekturevidens:**
+
+- helper-/variabelnavn,
+- nøyaktige JSX-snutter,
+- CSS-bredder som bare beskriver dagens prototype,
+- gamle filnavn eller komponenter som ble slettet i en tidligere migrering.
+
+Når en source-basert test er eneste dekning av viktig behavior, etableres behavior-/kontraktsdekning før testen fjernes.
 
 ---
 
@@ -440,21 +434,44 @@ Det er da `AppNavigationViewModel` og next-state-beregningen som først blir pre
 
 Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i ViewModelen og rendering i `App.jsx`. Utvid ved å legge til en node og en gren, ikke ved å innføre et rammeverk.
 
-## LearningPath — implementert eierskap 2026-07-29
+## LearningPath — eierskap og faktisk status 2026-08-24
 
-| Ansvar | Autoritativ eier |
-|---|---|
-| LearningPath-sidepolicy | `useLearningPathPageViewModel` |
-| LearningSession-state og UI-mekanikk | `useLearningSessionPageViewModel` + `sessionReducer` |
-| Transport og mapping | `LearningPathDataSource` + `LearningPathRepository` |
-| Spørsmålsrendring | canonical `QuestionCard` |
-| Sessionidentitet i frontend | `sessionQuestionId` |
-| Navigasjon | `navigation.js` + `AppNavigationViewModel` |
-| Assessment-band i frontend | Backend `performanceBand`; frontend validerer og presenterer uten lokale prosentgrenser |
-| Authored starttillatelse | Backend `isStartable`; frontend avleder kun `isSelectable` direkte |
-| LearningPath completion | Backend `isComplete` for module/section; frontend validerer og presenterer uten å rekonstruere fra counts eller prosent |
-| ChapterTest-resultat i LearningPath | Backend `performancePercent` + `performanceBand` fra siste lagrede attempt; frontend validerer og viser samme score-donut som LearningSession uten lokal scoreklassifisering |
-| Module replay | Backend `isReplayAvailable`; frontend velger replay-action direkte fra feltet og rekonstruerer ikke fra historisk completion |
-| Neste LearningPath-aktivitet | Backend `nextActivity`; frontend lager ingen `isCurrent + isUnlocked` fallback-start når feltet er `null` |
-| Aktiv LearningSession-navigasjon | Backend `resumableSession` / konfliktens `activeSessionId`; `useLearningPathPageViewModel` gjenopptar aktiv økt direkte og tilbyr ikke discard-valg |
-| Assessment-farger | `Tokens.css` via `--assessment-*` |
+| Ansvar | Autoritativ eier | Status | Evidens / avvik i snapshot |
+|---|---|---|---|
+| LearningPath-sidepolicy | `useLearningPathPageViewModel` | **GREEN** | Page-ViewModel er offentlig kontrakt mot LearningPath-siden. |
+| LearningSession-state og UI-mekanikk | `useLearningSessionPageViewModel` + `sessionReducer` | **GREEN** | LearningSession eier øktflyt og svarstate; `QuestionCard` er renderer/interaksjonskapabilitet. |
+| Transport og mapping | `LearningPathDataSource` + `LearningPathRepository` | **GREEN** | Transport/mapping er avgrenset fra ViewModel/View. |
+| Spørsmålsrendring | canonical `QuestionCard` | **GREEN** | `LearningSessionPage` bruker den delte fasaden. |
+| Sessionidentitet i frontend | `sessionQuestionId` | **GREEN** | Brukes som frontend-identitet for session-spørsmål. |
+| Navigasjon | `navigation.js` + `AppNavigationViewModel` | **GREEN** | Statisk policy og runtime-navigasjon har separate eiere. |
+| Assessment-band | Backend `performanceBand` | **GREEN** | Frontend validerer/presenterer uten lokale 40/55/80-thresholds. |
+| Authored startpolicy | Backend `isStartable` | **UNVERIFIED (LP-02)** | `isSelectable` avledes fortsatt direkte fra `session.isStartable`; authenticated start er nå en separat `canStartLearningSessions`-precondition i actionflyten. Full Jest/build gjenstår før GREEN. |
+| LearningPath completion | Backend `isComplete` for module/section | **GREEN** | Frontend skal ikke rekonstruere completion fra counts eller prosent. |
+| ChapterTest-resultat | Backend `performancePercent` + `performanceBand` | **GREEN** | Frontend presenterer backend-resultatet uten lokal scoreklassifisering. |
+| Module replay | Backend `isReplayAvailable` | **UNVERIFIED (LP-01)** | Replay er flyttet til fallback etter et samtidig backend-eid `nextActivity`; full Jest/build gjenstår før GREEN. |
+| Neste LearningPath-aktivitet | Backend `nextActivity` | **UNVERIFIED (LP-01)** | Action-builderen prioriterer nå backendvalget foran replay; full Jest/build gjenstår før GREEN. |
+| Action precedence | Backend-signaler + frontend-orchestrering | **UNVERIFIED (LP-01)** | Implementasjonen følger nå den normative kontrakten `resumableSession → nextActivity → explicit replay → ingen action`; full Jest/build gjenstår før GREEN. |
+| Aktiv LearningSession-navigasjon | Backend `resumableSession` / konfliktens `activeSessionId` | **GREEN** | ViewModel gjenopptar aktiv økt direkte og bruker conflict-id som defensiv fallback. |
+| Resume question-position | Backend active-session-summary | **DRIFT (LP-05)** | Frontendcopy kan uttrykke en konkret question-position som dagens backend ikke persisterer reelt utover startverdien. |
+| Assessment-farger | `Tokens.css` via `--assessment-*` | **GREEN** | LearningPath/LearningSession bruker delte semantiske tokens. |
+
+### Action precedence som skal verifiseres etter patch 01
+
+```text
+1. resumableSession
+2. nextActivity for aktuell modul
+3. explicit replay når nextActivity ikke velger aktivitet
+4. ingen start-action
+```
+
+### Auth-precondition som skal verifiseres etter patch 02
+
+```text
+isStartable
+= backend-eid læringspolicy
+
+isLoaded / isSignedIn
+= separat frontend runtime-precondition for authenticated mutation
+```
+
+Registeret oppdateres fra `DRIFT` til `GREEN` først når den aktuelle patchen er implementert og verifisert mot den navngitte snapshot-/commit-basen.

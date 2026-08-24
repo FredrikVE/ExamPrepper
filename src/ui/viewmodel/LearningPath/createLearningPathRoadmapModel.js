@@ -1,8 +1,8 @@
 //src/ui/viewmodel/LearningPath/createLearningPathRoadmapModel.js
 import createLearningPathModuleModel from "./createLearningPathModuleModel.js";
 
-export default function createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingModuleId, t }) {
-	const entries = learningPath.modules.map((module) => createLearningPathModuleModel({ module, resumableSession: learningPath.resumableSession, nextActivity: learningPath.nextActivity, expandedModuleId, startingModuleId, t }));
+export default function createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingActionKey, canStartLearningSessions, t }) {
+	const entries = learningPath.modules.map((module) => createLearningPathModuleModel({ module, resumableSession: learningPath.resumableSession, nextActivity: learningPath.nextActivity, expandedModuleId, startingActionKey, canStartLearningSessions, t }));
 	entries.push({
 		kind: "examGate",
 		id: "learning-path-exam-gate",

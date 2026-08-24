@@ -1,11 +1,14 @@
 // src/ui/viewmodel/LearningPath/createLearningPathSectionModel.js
+import createLearningPathActionKey from "./createLearningPathActionKey.js";
 import createLearningPathProgressModel from "./createLearningPathProgressModel.js";
 import createLearningPathSessionModel from "./createLearningPathSessionModel.js";
 
-export default function createLearningPathSectionModel({ section, moduleId, startingModuleId, t }) {
-	const sessions = section.sessions.map((session) => createLearningPathSessionModel({ session, moduleId, startingModuleId, t }));
+export default function createLearningPathSectionModel({ section, moduleId, startingActionKey, canStartLearningSessions, t }) {
+	const sessions = section.sessions.map((session) => createLearningPathSessionModel({ session, moduleId, startingActionKey, canStartLearningSessions, t }));
 	const hasSelectableSession = section.sessions.some((session) => session.isStartable);
 	const isComplete = section.progress.isComplete;
+	const target = { kind: "section", sectionId: section.id };
+	const actionKey = createLearningPathActionKey({ moduleId, target });
 
 	return {
 		id: section.id,
@@ -17,13 +20,13 @@ export default function createLearningPathSectionModel({ section, moduleId, star
 		sessions,
 		actionModel: hasSelectableSession ? {
 			intent: "start",
+			actionKey,
 			moduleId,
 			sessionId: null,
-			target: { kind: "section", sectionId: section.id },
-			activityKind: "authored",
+			target,
 			label: isComplete ? t.learningPathPracticeSectionLabel : t.learningPathJumpToSectionLabel,
-			isDisabled: startingModuleId !== null,
-			isPending: startingModuleId === moduleId
+			isDisabled: !canStartLearningSessions || startingActionKey !== null,
+			isPending: startingActionKey === actionKey
 		} : null,
 		chapterTests: section.chapterTests.map((test) => ({
 			id: test.id,

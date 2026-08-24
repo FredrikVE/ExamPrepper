@@ -10,12 +10,14 @@ const LEARNING_SESSION_RESUME_CONFLICT = "learning_session_resume_conflict";
 
 export default function useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted, onChapterTestSelected, authState }) {
 	const [expandedModuleId, setExpandedModuleId] = useState(null);
-	const [startingModuleId, setStartingModuleId] = useState(null);
+	const [startingActionKey, setStartingActionKey] = useState(null);
 	const [startSessionError, setStartSessionError] = useState(null);
 	const [scrollRequestId, setScrollRequestId] = useState(0);
 	const subjectId = selectedSubject === null ? null : selectedSubject.id;
-	const isAuthLoaded = authState?.isLoaded !== false;
-	const authIdentity = authState?.isSignedIn === true ? authState.userId ?? "signed-in" : "signed-out";
+	const isAuthLoaded = authState.isLoaded;
+	const isSignedIn = authState.isSignedIn === true;
+	const canStartLearningSessions = isAuthLoaded && isSignedIn;
+	const authIdentity = isSignedIn ? authState.userId ?? "signed-in" : "signed-out";
 	const resourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}:${isAuthLoaded ? authIdentity : "auth-loading"}`;
 	const canLoadLearningPath = isActive && subjectId !== null && isAuthLoaded;
 
@@ -35,10 +37,10 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 	}, [learningPath.modules]);
 
 	const startSession = useCallback(async (actionModel) => {
-		if (actionModel === null || !actionModel.moduleId || startingModuleId !== null || selectedSubject === null) return;
+		if (actionModel === null || actionModel.moduleId === null || actionModel.actionKey === null || startingActionKey !== null || selectedSubject === null) return;
 		const module = learningPath.modules.find((candidate) => candidate.id === actionModel.moduleId);
 		if (!module?.availability.isUnlocked) return;
-		setStartingModuleId(actionModel.moduleId);
+		setStartingActionKey(actionModel.actionKey);
 		setStartSessionError(null);
 		try {
 			const session = await startLearningSessionUseCase.execute({
@@ -57,11 +59,11 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 			}
 			setStartSessionError(t.learningPathStartErrorMessage);
 		} finally {
-			setStartingModuleId(null);
+			setStartingActionKey(null);
 		}
-	}, [language, learningPath.modules, onLearningSessionStarted, selectedSubject, startLearningSessionUseCase, startingModuleId, t.learningPathStartErrorMessage]);
+	}, [language, learningPath.modules, onLearningSessionStarted, selectedSubject, startLearningSessionUseCase, startingActionKey, t.learningPathStartErrorMessage]);
 
-	const roadmapModel = createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingModuleId, t });
+	const roadmapModel = createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingActionKey, canStartLearningSessions, t });
 	const activeEntry = roadmapModel.entries.find((entry) => entry.kind === "module" && entry.id === learningPath.activeModuleId) ?? null;
 	const continueModel = createContinueLearningModel({ activeEntry, resumableSession: learningPath.resumableSession, nextActivity: learningPath.nextActivity, t });
 	const executeLearningPathAction = useCallback(async (actionModel) => {
@@ -74,8 +76,9 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 			onLearningSessionStarted(actionModel.sessionId);
 			return;
 		}
+		if (!canStartLearningSessions) return;
 		await startSession(actionModel);
-	}, [learningPath.resumableSession, onLearningSessionStarted, startSession]);
+	}, [canStartLearningSessions, learningPath.resumableSession, onLearningSessionStarted, startSession]);
 
 	const workspaceState = createWorkspaceState({ loadStatus: loadModel.status, isEmpty: learningPath.modules.length === 0, labels: { loading: t.learningPathLoadingMessage, errorTitle: t.errorPrefix, errorBody: loadModel.error ?? t.learningPathLoadErrorMessage, emptyTitle: t.learningPathEmptyTitle, emptyBody: t.learningPathEmptyBody }, errorAction: null });
 
@@ -89,7 +92,6 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 		onLearningPathAction: executeLearningPathAction,
 		onChapterTestSelected,
 		scrollRequest: expandedModuleId === null ? null : { requestId: scrollRequestId, targetModuleId: expandedModuleId, behavior: "smooth" },
-		startSessionState: { isStarting: startingModuleId !== null, moduleId: startingModuleId, errorMessage: startSessionError },
 		startSessionError
 	};
 }

@@ -46,7 +46,7 @@ const t = {
 
 describe("createLearningPathRoadmapModel", () => {
 	test("renders backend-owned sections sessions and chapter tests", () => {
-		const model = createLearningPathRoadmapModel({ learningPath, expandedModuleId: learningPath.modules[0].id, startingModuleId: null, t });
+		const model = createLearningPathRoadmapModel({ learningPath, expandedModuleId: learningPath.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t });
 		const module = model.entries[0];
 		expect(module.detailModel.sections[0].sessions).toHaveLength(2);
 		expect(module.cardModel).toMatchObject({ statusLabel: "Active", progressSummaryLabel: "1/4" });
@@ -57,7 +57,7 @@ describe("createLearningPathRoadmapModel", () => {
 		expect(module.detailModel.sections[0].chapterTests).toHaveLength(2);
 		expect(module.detailModel.sections[0].chapterTests[0].scoreModel).toMatchObject({ percentage: 82.5, displayValue: "83%", appearance: "understood" });
 		expect(module.detailModel.sections[0].chapterTests[1].scoreModel).toBeNull();
-		expect(module.actionModel).toMatchObject({ intent: "start", activityKind: "authored" });
+		expect(module.actionModel).toMatchObject({ intent: "start", target: { kind: "module" }, label: "Continue" });
 	});
 	test("uses backend completion facts for module and section presentation", () => {
 		const backendComplete = {
@@ -73,7 +73,7 @@ describe("createLearningPathRoadmapModel", () => {
 			} : module)
 		};
 
-		const model = createLearningPathRoadmapModel({ learningPath: backendComplete, expandedModuleId: backendComplete.modules[0].id, startingModuleId: null, t });
+		const model = createLearningPathRoadmapModel({ learningPath: backendComplete, expandedModuleId: backendComplete.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t });
 
 		expect(model.entries[0]).toMatchObject({ appearance: "completed", cardModel: { statusLabel: "Completed" } });
 		expect(model.entries[0].detailModel.sections[0].actionModel).toMatchObject({ label: "Practice section" });
@@ -95,7 +95,7 @@ describe("createLearningPathRoadmapModel", () => {
 			} : module)
 		};
 
-		const model = createLearningPathRoadmapModel({ learningPath: in5431Shape, expandedModuleId: in5431Shape.modules[0].id, startingModuleId: null, t });
+		const model = createLearningPathRoadmapModel({ learningPath: in5431Shape, expandedModuleId: in5431Shape.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t });
 
 		expect(model.entries[0].detailModel.sections[0].chapterTests.map((test) => test.id)).toEqual(chapterTests.map((test) => test.id));
 	});
