@@ -1,5 +1,5 @@
 // src/ui/viewmodel/LearningSession/sessionReducer.js
-import { LEARNING_SESSION_STATES } from "./LearningSessionStates.js";
+import { LEARNING_SESSION_REWARD_KINDS, LEARNING_SESSION_STATES, LEARNING_SESSION_SUBMIT_STATES } from "./LearningSessionStates.js";
 
 const COMBO_REWARD_INTERVAL = 3;
 const XP_PER_POINT = 10;
@@ -31,7 +31,7 @@ export function createInitialSessionState() {
 		combo: 0,
 		xp: 0,
 		pendingRewardKind: null,
-		submitStatus: "idle",
+		submitStatus: LEARNING_SESSION_SUBMIT_STATES.IDLE,
 		submitErrorMessage: null,
 		submitResult: null,
 		scrollToTopRequestId: 0
@@ -72,7 +72,7 @@ export default function sessionReducer(state, action) {
 			return {
 				...state,
 				status: LEARNING_SESSION_STATES.SUBMITTING,
-				submitStatus: "submitting",
+				submitStatus: LEARNING_SESSION_SUBMIT_STATES.SUBMITTING,
 				submitErrorMessage: null
 			};
 
@@ -80,7 +80,7 @@ export default function sessionReducer(state, action) {
 			return {
 				...state,
 				status: LEARNING_SESSION_STATES.COMPLETED,
-				submitStatus: "succeeded",
+				submitStatus: LEARNING_SESSION_SUBMIT_STATES.SUCCEEDED,
 				submitErrorMessage: null,
 				submitResult: action.result
 			};
@@ -89,7 +89,7 @@ export default function sessionReducer(state, action) {
 			return {
 				...state,
 				status: LEARNING_SESSION_STATES.ERROR,
-				submitStatus: "failed",
+				submitStatus: LEARNING_SESSION_SUBMIT_STATES.FAILED,
 				submitErrorMessage: action.errorMessage
 			};
 
@@ -164,7 +164,7 @@ function resolvePendingRewardKind({ currentIndex, questionCount, nextCombo }) {
 		return null;
 	}
 
-	return "combo";
+	return LEARNING_SESSION_REWARD_KINDS.COMBO;
 }
 
 function createAnswerOptionOrderMap(questions) {

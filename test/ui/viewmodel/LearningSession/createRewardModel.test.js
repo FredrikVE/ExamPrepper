@@ -17,6 +17,16 @@ describe("createRewardModel", () => {
 		expect(createRewardModel({ pendingRewardKind: null, combo: 0, xp: 0, t, onContinue: () => {} })).toBeNull();
 	});
 
+	test("fails fast for unknown reward kinds", () => {
+		expect(() => createRewardModel({
+			pendingRewardKind: "unexpected",
+			combo: 3,
+			xp: 40,
+			t,
+			onContinue: () => {}
+		})).toThrow("Unknown learning session reward kind: unexpected");
+	});
+
 	test("presents the current combo and earned XP", () => {
 		const onContinue = () => {};
 		const model = createRewardModel({ pendingRewardKind: "combo", combo: 3, xp: 40, t, onContinue });

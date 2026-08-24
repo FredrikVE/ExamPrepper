@@ -1,7 +1,13 @@
-//src/ui/viewmodel/LearningSession/createRewardModel.js
+// src/ui/viewmodel/LearningSession/createRewardModel.js
+import { LEARNING_SESSION_REWARD_KINDS } from "./LearningSessionStates.js";
+
 export default function createRewardModel({ pendingRewardKind, combo, xp, t, onContinue }) {
 	if (pendingRewardKind === null) {
 		return null;
+	}
+
+	if (pendingRewardKind !== LEARNING_SESSION_REWARD_KINDS.COMBO) {
+		throw new Error(`Unknown learning session reward kind: ${String(pendingRewardKind)}`);
 	}
 
 	return {
