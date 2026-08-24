@@ -3,19 +3,28 @@ export default class DataSource {
 	#baseUrl;
 
 	constructor({ baseUrl, getToken = null }) {
-		if (!baseUrl) throw new Error("DataSource requires baseUrl");
+		if (!baseUrl) {
+			throw new Error("DataSource requires baseUrl");
+		}
+
 		this.#baseUrl = baseUrl.replace(/\/$/, "");
 		this.getToken = getToken;
 	}
 
 	async get(path) {
-		return await this.#request(path, { method: "GET" });
+		return await this.#request(path, {
+			method: "GET"
+		});
 	}
 
 	async post(path, body) {
 		return await this.#request(path, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+
+			headers: {
+				"Content-Type": "application/json"
+			},
+
 			body: JSON.stringify(body)
 		});
 	}
@@ -23,23 +32,24 @@ export default class DataSource {
 	async #request(path, options) {
 		const authHeaders = await this.#getAuthHeaders();
 
+		const headers = {
+			Accept: "application/json",
+			...authHeaders,
+			...options.headers
+		};
+
 		const response = await fetch(`${this.#baseUrl}${path}`, {
 			...options,
-			headers: { Accept: "application/json", ...authHeaders, ...(options.headers ?? {}) }
+			headers
 		});
 
-		const text = await response.text();
-		const payload = text ? JSON.parse(text) : null;
+		const payload = await readPayload(response);
 
-		if (!response.ok) {
-			const error = new Error(payload?.message ?? payload?.error ?? `API request failed: ${response.status}`);
-			error.status = response.status;
-			error.code = typeof payload?.error === "string" ? payload.error : null;
-			error.payload = payload;
-			throw error;
+		if (response.ok) {
+			return payload;
 		}
 
-		return payload;
+		throw createRequestError(response, payload);
 	}
 
 	async #getAuthHeaders() {
@@ -53,6 +63,55 @@ export default class DataSource {
 			return {};
 		}
 
-		return { Authorization: `Bearer ${token}` };
+		return {
+			Authorization: `Bearer ${token}`
+		};
 	}
+}
+
+async function readPayload(response) {
+	const text = await response.text();
+
+	if (!text) {
+		return null;
+	}
+
+	try {
+		return JSON.parse(text);
+	}
+
+	catch (error) {
+		if (response.ok) {
+			throw error;
+		}
+
+		return null;
+	}
+}
+
+function createRequestError(response, payload) {
+	let message = `API request failed: ${response.status}`;
+	let code = null;
+
+	if (payload && typeof payload === "object") {
+		if (typeof payload.message === "string") {
+			message = payload.message;
+		}
+
+		else if (typeof payload.error === "string") {
+			message = payload.error;
+		}
+
+		if (typeof payload.error === "string") {
+			code = payload.error;
+		}
+	}
+
+	const error = new Error(message);
+
+	error.status = response.status;
+	error.code = code;
+	error.payload = payload;
+
+	return error;
 }
