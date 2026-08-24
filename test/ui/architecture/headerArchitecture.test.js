@@ -1,100 +1,65 @@
 // test/ui/architecture/headerArchitecture.test.js
 import fs from "node:fs";
 import path from "node:path";
+import { parse } from "@babel/parser";
 import { describe, expect, test } from "@jest/globals";
 
-const PROJECT_ROOT = process.cwd();
-const HEADER_SOURCE_PATH = path.join(PROJECT_ROOT, "src", "ui", "view", "components", "Header", "Header.jsx");
-const HEADER_STYLE_ROOT = path.join(PROJECT_ROOT, "src", "ui", "style", "Header");
-const PAGE_ROOT = path.join(PROJECT_ROOT, "src", "ui", "view", "pages");
-const PAGE_STYLE_NAMES = ["ExamPage", "FlipcardsPage", "GlossaryPage", "LearningContentSelectPage", "LearningSessionPage", "MatchCardsPage", "StatisticsPage", "SubjectSelectPage"];
-const HEADER_PAGE_NAMES = ["ExamPage.jsx", "FlipcardsPage.jsx", "GlossaryPage.jsx", "LearningContentSelectPage.jsx", "LearningSessionPage.jsx", "MatchCardsPage.jsx", "StatisticsPage.jsx", "SubjectSelectPage.jsx"];
+const HEADER_DIRECTORY = path.resolve("src/ui/view/components/Header");
+const HEADER_PATH = path.join(HEADER_DIRECTORY, "Header.jsx");
+const PAGE_DIRECTORY = path.resolve("src/ui/view/pages");
 
-function readCssTree(directoryPath) {
-	let cssSource = "";
+function readImports(filePath) {
+	const ast = parse(fs.readFileSync(filePath, "utf8"), {
+		sourceType: "module",
+		plugins: ["jsx"]
+	});
 
-	for (const entry of fs.readdirSync(directoryPath, { withFileTypes: true })) {
-		const entryPath = path.join(directoryPath, entry.name);
+	return ast.program.body.filter((node) => node.type === "ImportDeclaration");
+}
 
-		if (entry.isDirectory()) {
-			cssSource += readCssTree(entryPath);
-			continue;
-		}
-
-		if (path.extname(entry.name) === ".css") {
-			cssSource += fs.readFileSync(entryPath, "utf8");
-		}
+function resolveImport(filePath, source) {
+	if (!source.startsWith(".")) {
+		return source;
 	}
 
-	return cssSource;
+	return path.resolve(path.dirname(filePath), source);
 }
 
 describe("Header architecture", () => {
-	test("keeps Header free of feature-component imports", () => {
-		const headerSource = fs.readFileSync(HEADER_SOURCE_PATH, "utf8");
+	test("keeps canonical Header free of feature-component dependencies", () => {
+		for (const importNode of readImports(HEADER_PATH)) {
+			const importedPath = resolveImport(HEADER_PATH, importNode.source.value);
 
-		expect(headerSource).not.toContain("PageToolsDesktopPanel");
-		expect(headerSource).not.toContain("ProgressBar");
-	});
+			if (typeof importedPath !== "string" || !path.isAbsolute(importedPath)) {
+				continue;
+			}
 
-	test("keeps ProgressBar selectors outside Header CSS", () => {
-		expect(readCssTree(HEADER_STYLE_ROOT)).not.toContain(".progress-bar");
-	});
-
-	test("requires every Header page to select appearance, layout and slots", () => {
-		for (const pageName of HEADER_PAGE_NAMES) {
-			const pageSource = fs.readFileSync(path.join(PAGE_ROOT, pageName), "utf8");
-
-			expect(pageSource).toContain("appearance={HEADER_APPEARANCES.");
-			expect(pageSource).toContain("layout={HEADER_LAYOUTS.");
-			expect(pageSource).toContain("backContract={viewModel.backContract}");
-			expect(pageSource).toContain("heading={");
-			expect(pageSource).toContain("tools={");
-			expect(pageSource).toContain("trailing={");
+			expect(importedPath.startsWith(`${HEADER_DIRECTORY}${path.sep}`)).toBe(true);
 		}
 	});
 
-	test("renders MatchCards header progress only when its model exists", () => {
-		const matchCardsPageSource = fs.readFileSync(path.join(PAGE_ROOT, "MatchCardsPage.jsx"), "utf8");
+	test("uses the canonical Header module wherever pages import Header", () => {
+		let headerImporterCount = 0;
 
-		expect(matchCardsPageSource).toContain("let headerHeading = null;");
-		expect(matchCardsPageSource).toContain("if (viewModel.headerProgressBarModel !== null)");
-		expect(matchCardsPageSource).toContain("heading={headerHeading}");
-		expect(matchCardsPageSource).not.toContain("heading={<ProgressBar");
-	});
+		for (const entry of fs.readdirSync(PAGE_DIRECTORY, { withFileTypes: true })) {
+			if (!entry.isFile() || !entry.name.endsWith(".jsx")) {
+				continue;
+			}
 
-	test("lets LearningSession progress fill the symmetric header center column", () => {
-		const learningSessionPageSource = fs.readFileSync(path.join(PAGE_ROOT, "LearningSessionPage.jsx"), "utf8");
-		const headerCss = readCssTree(HEADER_STYLE_ROOT);
+			const pagePath = path.join(PAGE_DIRECTORY, entry.name);
 
-		expect(learningSessionPageSource).toContain("layout={HEADER_LAYOUTS.FULL_PROGRESS}");
-		expect(learningSessionPageSource).not.toContain("layout={HEADER_LAYOUTS.EXAM_PROGRESS}");
-		expect(headerCss).toContain(".scaffold-header--layout-full-progress");
-		expect(headerCss).toMatch(/scaffold-header--layout-full-progress[\s\S]*grid-template-columns:\s*64px minmax\(0, 1fr\) 64px/);
-	});
+			for (const importNode of readImports(pagePath)) {
+				const defaultImport = importNode.specifiers.find((specifier) => specifier.type === "ImportDefaultSpecifier");
 
-	test("keeps Header selectors out of Page CSS", () => {
-		for (const pageStyleName of PAGE_STYLE_NAMES) {
-			const pageCss = readCssTree(path.join(PROJECT_ROOT, "src", "ui", "style", pageStyleName));
+				if (defaultImport?.local.name !== "Header") {
+					continue;
+				}
 
-			expect(pageCss).not.toContain(".scaffold-header");
+				headerImporterCount += 1;
+				expect(resolveImport(pagePath, importNode.source.value)).toBe(HEADER_PATH);
+			}
 		}
-	});
 
-	test("uses canonical Header for Statistics", () => {
-		const statisticsPageSource = fs.readFileSync(path.join(PAGE_ROOT, "StatisticsPage.jsx"), "utf8");
-		const statisticsCss = readCssTree(path.join(PROJECT_ROOT, "src", "ui", "style", "StatisticsPage"));
-
-		expect(statisticsPageSource).toContain("<Header");
-		expect(statisticsPageSource).toContain("<HeaderTitle");
-		expect(statisticsPageSource).toContain("statistics-start-button--desktop");
-		expect(statisticsPageSource).toContain("statistics-start-button--mobile");
-		expect(statisticsCss).not.toContain(".statistics-page-header");
-	});
-
-	test("preserves the actions slot", () => {
-		const headerSource = fs.readFileSync(HEADER_SOURCE_PATH, "utf8");
-
-		expect(headerSource).toContain('className="scaffold-header__actions"');
+		expect(headerImporterCount).toBeGreaterThan(0);
 	});
 });

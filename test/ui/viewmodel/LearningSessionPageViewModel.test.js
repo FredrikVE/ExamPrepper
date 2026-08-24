@@ -22,10 +22,10 @@ const question = {
 	answers: ["discount rate"]
 };
 
-function createViewModel(gradeAnswerUseCase) {
+function createViewModel({ gradeAnswerUseCase, submitLearningSessionUseCase }) {
 	return useLearningSessionPageViewModel({
 		getLearningSessionUseCase: { execute: jest.fn() },
-		submitLearningSessionUseCase: { execute: jest.fn() },
+		submitLearningSessionUseCase,
 		gradeAnswerUseCase,
 		sessionId: "session-1",
 		t,
@@ -34,7 +34,7 @@ function createViewModel(gradeAnswerUseCase) {
 	});
 }
 
-describe("useLearningSessionPageViewModel checked answer result", () => {
+describe("useLearningSessionPageViewModel behavior", () => {
 	beforeEach(() => {
 		dispatch.mockClear();
 		useCallback.mockClear();
@@ -59,7 +59,10 @@ describe("useLearningSessionPageViewModel checked answer result", () => {
 			getFillMatchType: jest.fn(() => "fuzzy")
 		};
 
-		const viewModel = createViewModel(gradeAnswerUseCase);
+		const viewModel = createViewModel({
+			gradeAnswerUseCase,
+			submitLearningSessionUseCase: { execute: jest.fn() }
+		});
 
 		viewModel.actionPanelModel.onPrimaryPressed();
 
@@ -72,6 +75,56 @@ describe("useLearningSessionPageViewModel checked answer result", () => {
 				maxPoints: 1,
 				fillMatchType: "fuzzy"
 			}
+		});
+	});
+
+	test("serializes answers before submitting the LearningSession", () => {
+		const choiceQuestion = {
+			type: QUESTION_TYPES.SINGLE,
+			points: 1,
+			options: [
+				{ id: "option-a" },
+				{ id: "option-b" }
+			]
+		};
+
+		reducerState = {
+			...reducerState,
+			questions: [{ sessionQuestionId: "session-question-1", question: choiceQuestion }],
+			answersBySessionQuestionId: { "session-question-1": 1 },
+			resultsBySessionQuestionId: {
+				"session-question-1": {
+					isCorrect: true,
+					pointsAwarded: 1,
+					maxPoints: 1,
+					fillMatchType: "none"
+				}
+			}
+		};
+
+		const submitLearningSessionUseCase = {
+			execute: jest.fn(() => new Promise(() => {}))
+		};
+
+		const viewModel = createViewModel({
+			gradeAnswerUseCase: {
+				execute: jest.fn(),
+				getQuestionScore: jest.fn(),
+				getFillMatchType: jest.fn()
+			},
+			submitLearningSessionUseCase
+		});
+
+		viewModel.actionPanelModel.onPrimaryPressed();
+
+		expect(submitLearningSessionUseCase.execute).toHaveBeenCalledWith({
+			sessionId: "session-1",
+			answers: [
+				{
+					sessionQuestionId: "session-question-1",
+					answer: "option-b"
+				}
+			]
 		});
 	});
 });
