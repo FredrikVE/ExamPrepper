@@ -1,19 +1,27 @@
 // src/model/datasource/DataSource.js
+const JSON_MEDIA_TYPE = "application/json";
+
 export default class DataSource {
 	#baseUrl;
-	#getToken;
+	#readToken;
 
-	constructor({ baseUrl, getToken }) {
+	constructor(options) {
+		const { baseUrl } = options;
+
 		if (!baseUrl) {
 			throw new Error("DataSource requires baseUrl");
 		}
 
-		if (getToken !== null && typeof getToken !== "function") {
-			throw new Error("DataSource requires getToken to be a function or null");
-		}
-
 		this.#baseUrl = baseUrl.replace(/\/$/, "");
-		this.#getToken = getToken;
+		this.#readToken = readAnonymousToken;
+
+		if (Object.hasOwn(options, "getToken")) {
+			if (typeof options.getToken !== "function") {
+				throw new Error("DataSource getToken must be a function");
+			}
+
+			this.#readToken = options.getToken;
+		}
 	}
 
 	async get(path) {
@@ -28,7 +36,7 @@ export default class DataSource {
 			method: "POST",
 
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": JSON_MEDIA_TYPE
 			},
 
 			body: JSON.stringify(body)
@@ -39,7 +47,7 @@ export default class DataSource {
 		const authHeaders = await this.#getAuthHeaders();
 
 		const headers = {
-			Accept: "application/json",
+			Accept: JSON_MEDIA_TYPE,
 			...authHeaders,
 			...options.headers
 		};
@@ -59,27 +67,31 @@ export default class DataSource {
 	}
 
 	async #getAuthHeaders() {
-		if (this.#getToken === null) {
-			return {};
-		}
-
-		const token = await this.#getToken();
+		const token = await this.#readToken();
 
 		if (!token) {
 			return {};
 		}
 
-		return {
-			Authorization: `Bearer ${token}`
-		};
+		return createAuthorizationHeaders(token);
 	}
+}
+
+function readAnonymousToken() {
+	return undefined;
+}
+
+function createAuthorizationHeaders(token) {
+	return {
+		Authorization: `Bearer ${token}`
+	};
 }
 
 async function readPayload(response) {
 	const text = await response.text();
 
 	if (!text) {
-		return null;
+		return undefined;
 	}
 
 	try {
@@ -91,28 +103,13 @@ async function readPayload(response) {
 			throw error;
 		}
 
-		return null;
+		return undefined;
 	}
 }
 
 function createRequestError(response, payload) {
-	let message = `API request failed: ${response.status}`;
-	let code = null;
-
-	if (payload && typeof payload === "object") {
-		if (typeof payload.message === "string") {
-			message = payload.message;
-		}
-
-		else if (typeof payload.error === "string") {
-			message = payload.error;
-		}
-
-		if (typeof payload.error === "string") {
-			code = payload.error;
-		}
-	}
-
+	const message = resolveRequestErrorMessage(response, payload);
+	const code = resolveRequestErrorCode(payload);
 	const error = new Error(message);
 
 	error.status = response.status;
@@ -120,4 +117,36 @@ function createRequestError(response, payload) {
 	error.payload = payload;
 
 	return error;
+}
+
+function resolveRequestErrorMessage(response, payload) {
+	if (!isObjectPayload(payload)) {
+		return `API request failed: ${response.status}`;
+	}
+
+	if (typeof payload.message === "string") {
+		return payload.message;
+	}
+
+	if (typeof payload.error === "string") {
+		return payload.error;
+	}
+
+	return `API request failed: ${response.status}`;
+}
+
+function resolveRequestErrorCode(payload) {
+	if (!isObjectPayload(payload)) {
+		return undefined;
+	}
+
+	if (typeof payload.error === "string") {
+		return payload.error;
+	}
+
+	return undefined;
+}
+
+function isObjectPayload(value) {
+	return Boolean(value) && typeof value === "object";
 }

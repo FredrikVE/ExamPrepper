@@ -23,7 +23,7 @@ describe("SubjectDataSource", () => {
 	});
 
 	test("uses backend-owned practice-test count list and direct detail reads", async () => {
-		const dataSource = new SubjectDataSource({ baseUrl: "https://api.example.test", getToken: null });
+		const dataSource = new SubjectDataSource({ baseUrl: "https://api.example.test" });
 
 		await dataSource.fetchSubjects({ language: "no" });
 		await dataSource.fetchSubjectById({ subjectId: "in/2120", language: "en" });
@@ -35,7 +35,7 @@ describe("SubjectDataSource", () => {
 	});
 
 	test("omits the language query when language is not provided", async () => {
-		const dataSource = new SubjectDataSource({ baseUrl: "https://api.example.test", getToken: null });
+		const dataSource = new SubjectDataSource({ baseUrl: "https://api.example.test" });
 
 		await dataSource.fetchSubjects();
 		await dataSource.fetchSubjectById({ subjectId: "in2120" });

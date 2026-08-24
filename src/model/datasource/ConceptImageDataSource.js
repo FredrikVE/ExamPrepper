@@ -1,154 +1,219 @@
-//src/model/datasource/ConceptImageDataSource.js
+// src/model/datasource/ConceptImageDataSource.js
 import DataSource from "./DataSource.js";
 
+const FALLBACK_LANGUAGE_CODES = ["no", "en"];
+
 export default class ConceptImageDataSource extends DataSource {
-    #catalogPromisesBySubjectId;
-    #imageBaseUrl;
+	#catalogPromisesBySubjectId;
+	#imageBaseUrl;
 
-    constructor({ baseUrl, imageBaseUrl, getToken }) {
-        super({ baseUrl, getToken });
-        this.#catalogPromisesBySubjectId = new Map();
-        this.#imageBaseUrl = this.#normalizeBaseUrl(
-            imageBaseUrl ?? this.#deriveImageBaseUrl(baseUrl)
-        );
-    }
+	constructor({ baseUrl, imageBaseUrl }) {
+		super({ baseUrl });
 
-    async fetchConceptImageById(imageId, { subjectId, language } = {}) {
-        if (!subjectId || !imageId) {
-            return null;
-        }
+		if (!imageBaseUrl) {
+			throw new Error("ConceptImageDataSource requires imageBaseUrl");
+		}
 
-        const catalog = await this.#loadCatalog(subjectId);
-        const entry = catalog.byImageId.get(imageId);
+		this.#catalogPromisesBySubjectId = new Map();
+		this.#imageBaseUrl = normalizeBaseUrl(imageBaseUrl);
+	}
 
-        if (!entry) {
-            return null;
-        }
+	async fetchConceptImageById(imageId, context) {
+		const { subjectId, language } = context;
 
-        return this.#toFrontendImage(entry, language);
-    }
+		if (!subjectId || !imageId) {
+			return null;
+		}
 
-    async fetchConceptImage({ subjectId, moduleId, groupId, imageId, language } = {}) {
-        if (!subjectId || !imageId) {
-            return null;
-        }
+		const catalog = await this.#loadCatalog(subjectId);
+		const entry = catalog.byImageId.get(imageId);
 
-        const catalog = await this.#loadCatalog(subjectId);
-        const fullKey = moduleId && groupId
-            ? this.#toFullKey(moduleId, groupId, imageId)
-            : null;
-        const entry = fullKey
-            ? catalog.byFullKey.get(fullKey) ?? catalog.byImageId.get(imageId)
-            : catalog.byImageId.get(imageId);
+		if (!entry) {
+			return null;
+		}
 
-        if (!entry) {
-            return null;
-        }
+		return this.#toFrontendImage(entry, language);
+	}
 
-        return this.#toFrontendImage(entry, language);
-    }
+	async fetchConceptImage(input) {
+		const { subjectId, moduleId, groupId, imageId, language } = input;
 
-    async fetchConceptImages(imageRefs = [], context = {}) {
-        if (!Array.isArray(imageRefs) || imageRefs.length === 0) {
-            return [];
-        }
+		if (!subjectId || !imageId) {
+			return null;
+		}
 
-        const results = [];
+		const catalog = await this.#loadCatalog(subjectId);
+		let entry = catalog.byImageId.get(imageId);
 
-        for (const imageRef of imageRefs) {
-            const image = typeof imageRef === "string"
-                ? await this.fetchConceptImageById(imageRef, context)
-                : await this.fetchConceptImage({
-                    subjectId: imageRef.subjectId ?? context.subjectId,
-                    moduleId: imageRef.moduleId ?? context.moduleId,
-                    groupId: imageRef.groupId ?? context.groupId,
-                    imageId: imageRef.imageId,
-                    language: imageRef.language ?? context.language
-                });
+		if (moduleId && groupId) {
+			const fullKey = this.#toFullKey(moduleId, groupId, imageId);
+			const scopedEntry = catalog.byFullKey.get(fullKey);
 
-            if (image) {
-                results.push(image);
-            }
-        }
+			if (scopedEntry) {
+				entry = scopedEntry;
+			}
+		}
 
-        return results;
-    }
+		if (!entry) {
+			return null;
+		}
 
-    async #loadCatalog(subjectId) {
-        if (!this.#catalogPromisesBySubjectId.has(subjectId)) {
-            this.#catalogPromisesBySubjectId.set(subjectId, this.#fetchCatalog(subjectId));
-        }
+		return this.#toFrontendImage(entry, language);
+	}
 
-        return await this.#catalogPromisesBySubjectId.get(subjectId);
-    }
+	async fetchConceptImages(imageRefs, context) {
+		if (!Array.isArray(imageRefs)) {
+			throw new Error("ConceptImageDataSource requires imageRefs to be an array");
+		}
 
-    async #fetchCatalog(subjectId) {
-        const entries = await this.get(`/subjects/${encodeURIComponent(subjectId)}/concept-images`);
-        const byFullKey = new Map();
-        const byImageId = new Map();
+		if (imageRefs.length === 0) {
+			return [];
+		}
 
-        for (const entry of entries) {
-            byImageId.set(entry.imageId, entry);
-            byFullKey.set(
-                this.#toFullKey(entry.moduleId, entry.groupId, entry.imageId),
-                entry
-            );
-        }
+		const results = [];
 
-        return { byFullKey, byImageId };
-    }
+		for (const imageRef of imageRefs) {
+			let image;
 
-    #toFrontendImage(entry, language) {
-        return {
-            id: entry.imageId,
-            src: this.#toImageSrc(entry.src),
-            alt: this.#getLocalizedText(entry.alt, language, ""),
-            title: this.#getLocalizedText(entry.title, language, undefined),
-            caption: this.#getLocalizedText(entry.caption, language, undefined)
-        };
-    }
+			if (typeof imageRef === "string") {
+				image = await this.fetchConceptImageById(imageRef, context);
+			}
 
-    #toImageSrc(src) {
-        if (!src || /^https?:\/\//.test(src)) {
-            return src;
-        }
+			else {
+				const lookup = createImageLookup(imageRef, context);
+				image = await this.fetchConceptImage(lookup);
+			}
 
-        if (!this.#imageBaseUrl) {
-            return src;
-        }
+			if (image) {
+				results.push(image);
+			}
+		}
 
-        return `${this.#imageBaseUrl}${src.startsWith("/") ? src : `/${src}`}`;
-    }
+		return results;
+	}
 
-    #deriveImageBaseUrl(baseUrl) {
-        if (!baseUrl) {
-            return "";
-        }
+	async #loadCatalog(subjectId) {
+		if (!this.#catalogPromisesBySubjectId.has(subjectId)) {
+			this.#catalogPromisesBySubjectId.set(subjectId, this.#fetchCatalog(subjectId));
+		}
 
-        return baseUrl.replace(/\/api\/?$/, "");
-    }
+		return await this.#catalogPromisesBySubjectId.get(subjectId);
+	}
 
-    #normalizeBaseUrl(baseUrl) {
-        return baseUrl ? baseUrl.replace(/\/$/, "") : "";
-    }
+	async #fetchCatalog(subjectId) {
+		const entries = await this.get(`/subjects/${encodeURIComponent(subjectId)}/concept-images`);
+		const byFullKey = new Map();
+		const byImageId = new Map();
 
-    #toFullKey(moduleId, groupId, imageId) {
-        return `${moduleId}/${groupId}/${imageId}`;
-    }
+		for (const entry of entries) {
+			byImageId.set(entry.imageId, entry);
+			byFullKey.set(
+				this.#toFullKey(entry.moduleId, entry.groupId, entry.imageId),
+				entry
+			);
+		}
 
-    #getLocalizedText(value, language, fallbackValue) {
-        if (typeof value === "string") {
-            return value;
-        }
+		return {
+			byFullKey,
+			byImageId
+		};
+	}
 
-        if (!value || typeof value !== "object") {
-            return fallbackValue;
-        }
+	#toFrontendImage(entry, language) {
+		let alt = this.#findLocalizedText(entry.alt, language);
 
-        return value[language]
-            ?? value.no
-            ?? value.en
-            ?? Object.values(value).find((entry) => typeof entry === "string")
-            ?? fallbackValue;
-    }
+		if (alt === undefined) {
+			alt = "";
+		}
+
+		return {
+			id: entry.imageId,
+			src: this.#toImageSrc(entry.src),
+			alt,
+			title: this.#findLocalizedText(entry.title, language),
+			caption: this.#findLocalizedText(entry.caption, language)
+		};
+	}
+
+	#toImageSrc(src) {
+		if (!src || isAbsoluteHttpUrl(src)) {
+			return src;
+		}
+
+		let imagePath = src;
+
+		if (!imagePath.startsWith("/")) {
+			imagePath = `/${imagePath}`;
+		}
+
+		return `${this.#imageBaseUrl}${imagePath}`;
+	}
+
+	#toFullKey(moduleId, groupId, imageId) {
+		return `${moduleId}/${groupId}/${imageId}`;
+	}
+
+	#findLocalizedText(value, language) {
+		if (typeof value === "string") {
+			return value;
+		}
+
+		if (!value || typeof value !== "object") {
+			return undefined;
+		}
+
+		if (typeof value[language] === "string") {
+			return value[language];
+		}
+
+		for (const fallbackLanguage of FALLBACK_LANGUAGE_CODES) {
+			if (typeof value[fallbackLanguage] === "string") {
+				return value[fallbackLanguage];
+			}
+		}
+
+		for (const localizedValue of Object.values(value)) {
+			if (typeof localizedValue === "string") {
+				return localizedValue;
+			}
+		}
+
+		return undefined;
+	}
+}
+
+function createImageLookup(imageRef, context) {
+	const lookup = {
+		subjectId: context.subjectId,
+		moduleId: context.moduleId,
+		groupId: context.groupId,
+		imageId: imageRef.imageId,
+		language: context.language
+	};
+
+	if (typeof imageRef.subjectId === "string") {
+		lookup.subjectId = imageRef.subjectId;
+	}
+
+	if (typeof imageRef.moduleId === "string") {
+		lookup.moduleId = imageRef.moduleId;
+	}
+
+	if (typeof imageRef.groupId === "string") {
+		lookup.groupId = imageRef.groupId;
+	}
+
+	if (typeof imageRef.language === "string") {
+		lookup.language = imageRef.language;
+	}
+
+	return lookup;
+}
+
+function normalizeBaseUrl(baseUrl) {
+	return baseUrl.replace(/\/$/, "");
+}
+
+function isAbsoluteHttpUrl(src) {
+	return /^https?:\/\//.test(src);
 }

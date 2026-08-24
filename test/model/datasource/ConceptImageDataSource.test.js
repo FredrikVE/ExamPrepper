@@ -12,7 +12,10 @@ describe("ConceptImageDataSource", () => {
 			text: async () => "[]"
 		});
 
-		const dataSource = new ConceptImageDataSource({ baseUrl: "https://example.test/api", imageBaseUrl: "https://example.test", getToken: null });
+		const dataSource = new ConceptImageDataSource({
+			baseUrl: "https://example.test/api",
+			imageBaseUrl: "https://example.test"
+		});
 
 		await dataSource.fetchConceptImageById("image-1", {
 			subjectId: "subject-1",
@@ -28,5 +31,59 @@ describe("ConceptImageDataSource", () => {
 				}
 			}
 		);
+	});
+
+	test("requires an explicit image base URL", () => {
+		const createDataSource = () => {
+			return new ConceptImageDataSource({
+				baseUrl: "https://example.test/api"
+			});
+		};
+
+		expect(createDataSource).toThrow("ConceptImageDataSource requires imageBaseUrl");
+	});
+
+	test("uses scoped image identity and explicit localization fallback order", async () => {
+		jest.spyOn(globalThis, "fetch").mockResolvedValue({
+			ok: true,
+			status: 200,
+			text: async () => JSON.stringify([
+				{
+					imageId: "image-1",
+					moduleId: "module-a",
+					groupId: "group-a",
+					src: "images/scoped.png",
+					alt: {
+						no: "Norsk alt",
+						en: "English alt"
+					},
+					title: {
+						en: "English title"
+					},
+					caption: {}
+				}
+			])
+		});
+
+		const dataSource = new ConceptImageDataSource({
+			baseUrl: "https://example.test/api",
+			imageBaseUrl: "https://images.example.test/"
+		});
+
+		const image = await dataSource.fetchConceptImage({
+			subjectId: "subject-1",
+			moduleId: "module-a",
+			groupId: "group-a",
+			imageId: "image-1",
+			language: "sv"
+		});
+
+		expect(image).toEqual({
+			id: "image-1",
+			src: "https://images.example.test/images/scoped.png",
+			alt: "Norsk alt",
+			title: "English title",
+			caption: undefined
+		});
 	});
 });

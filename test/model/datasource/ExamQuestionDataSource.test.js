@@ -30,8 +30,7 @@ describe("ExamQuestionDataSource", () => {
         }];
         global.fetch.mockResolvedValue(createResponse(payload));
         const dataSource = new ExamQuestionDataSource({
-            baseUrl: "https://api.example.test",
-            getToken: null
+            baseUrl: "https://api.example.test"
         });
 
         const result = await dataSource.fetchPracticeQuestions("exam/1");
