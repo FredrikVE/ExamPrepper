@@ -72,6 +72,13 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		useLoadModel.mockClear();
 	});
 
+	test("keeps the optional-auth LearningPath load enabled for a signed-out user", () => {
+		renderViewModel({ authState: { isLoaded: true, isSignedIn: false, userId: null }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+
+		expect(useLoadModel).toHaveBeenCalledTimes(1);
+		expect(useLoadModel.mock.calls[0][0]).toMatchObject({ resourceKey: "in2120:no:signed-out", isEnabled: true });
+	});
+
 	test("keeps authored selectability but blocks anonymous LearningSession starts", async () => {
 		const execute = jest.fn();
 		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: false, userId: null }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
@@ -154,5 +161,23 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 
 		await viewModel.onLearningPathAction(viewModel.roadmapModel.entries[0].actionModel);
 		expect(onLearningSessionStarted).toHaveBeenCalledWith("session-conflict");
+	});
+
+	test("exposes the start error when a LearningSession start fails", async () => {
+		const execute = jest.fn().mockRejectedValue(new Error("network failed"));
+		const render = () => renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
+
+		const viewModel = render();
+		await viewModel.onLearningPathAction(viewModel.roadmapModel.entries[0].actionModel);
+
+		const failedViewModel = render();
+		expect(failedViewModel.startSessionError).toBe(t.learningPathStartErrorMessage);
+	});
+
+	test("fails fast for an unknown internal action intent", async () => {
+		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+		const action = { intent: "unknown", isDisabled: false };
+
+		await expect(viewModel.onLearningPathAction(action)).rejects.toThrow("Unknown LearningPath action intent 'unknown'");
 	});
 });
