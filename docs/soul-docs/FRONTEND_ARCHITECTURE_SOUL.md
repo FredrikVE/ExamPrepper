@@ -1,17 +1,18 @@
 <!--docs/soul-docs/FRONTEND_ARCHITECTURE_SOUL.md-->
 # FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
 
-<!-- Versjon: 2.10 — Sist oppdatert: 2026-08-24 -->
-<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.9 -->
+<!-- Versjon: 2.11 — Sist oppdatert: 2026-08-24 -->
+<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.10 -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
 kontraktene i dette dokumentet.
 
 `docs/documentation/SSOT_REGISTER_FRONTEND.md` er evidensregisteret som viser hva kodebasen faktisk
-bruker, hvilke importører og tester som finnes, og hva som fortsatt er gjeld. SOUL-dokumentet sier
-hvilke regler ny og endret kode skal følge. De to dokumentene oppdateres i samme arkitekturpatch når
-eierskap eller canonical implementasjoner endres.
+bruker og hvilke avvik som er observert. `docs/soul-docs/SSOT_COMPONENTS.md` er det korte registeret
+over canonical delte UI-kontrakter og deres offentlige innganger. SOUL-dokumentet sier hvilke regler
+ny og endret kode skal følge. Når et reelt eierskap eller en canonical kontrakt endres, oppdateres
+kode, relevante tester og det dokumentet som faktisk eier kontrakten i samme patch.
 
 Når du er i tvil om hvor noe hører hjemme: start med oversikten under, og bruk eksisterende eier før
 du oppretter ny state, ny policy, ny delt renderer, ny utility eller ny CSS-kontrakt.
@@ -52,14 +53,14 @@ Dokumentet skiller derfor fire roller:
 | Page-state | `WORKSPACE_STATE_KINDS` | `src/ui/viewmodel/WorkspaceState/` | Loading/error/empty/content uttrykkes med denne unionen. |
 | Produkttekst | `translations`, `LANGUAGES` | `src/i18n/translations.js` | All produkttekst og alle config-refererte tekstnøkler kommer herfra. |
 | Aktivt språk | `LanguageProvider`, `useLanguage()` | `src/i18n/LanguageContext.jsx` | Ingen konkurrerende språk-state. |
-| Aktivt tema | `ThemeProvider`, `useTheme()` | `src/ui/theme/ThemeContext.jsx` | Eier tema og `.dark` på DOM. |
+| Aktivt tema | `ThemeProvider`, `useTheme()` | `src/ui/theme/ThemeContext.jsx` | Eier reaktiv theme-state og `.dark` på DOM. Persistens eies separat av `themePreference.js`. |
 | Brukerinnstillinger | `SettingsProvider`, `useSettings()` | `src/ui/settings/SettingsContext.jsx` | Ingen lokal kopi av globale settings. |
 | Auth-token til transport | `setAuthTokenProvider()`, `getActiveAuthToken()` | `src/auth/AuthTokenProvider.js` | Modulbro, ikke React-provider; injiseres i transportlaget. |
 | Spørsmålstype-ID-er | `QUESTION_TYPES` | `src/constants/QuestionTypes.js` | Sammenlign mot konstantene, aldri rå `"single"`/`"multi"`/`"fill"`-strenger. |
 | Spørsmålskonfigurasjon | `QUESTION_CONFIG` | `src/constants/QuestionConfig.js` | Konfigurasjonsgrenser holdes separat fra type-ID-er. |
 | Mobil/desktop-modus | `PRESENTATION_MODE`, `APP_MOBILE_MAX_WIDTH`, `APP_DESKTOP_MIN_WIDTH`, `usePresentationMode()` | `src/ui/presentation/` | Eier feature-presentasjon: mobil til og med `932`, desktop fra `933`. Breakpoint endres i JS, CSS og kontrakttest i samme patch. |
 | App-shell-modus | `APP_SHELL_MODE`, `APP_NARROW_DESKTOP_MAX_WIDTH`, `APP_FULL_DESKTOP_MIN_WIDTH`, `APP_COMPACT_SHELL_QUERY`, `useAppShellMode()` | `src/ui/presentation/` | Eier chrome-grensen: compact shell til og med `1200`, full desktop-shell fra `1201`. Compact shell bruker eksisterende `MobileDropDownTopBar` uten å gjøre feature-presentasjonen mobil. |
-| Dependency injection | `dependencies.js`-modulen / DI-wiringen | `src/di/dependencies.js` | Eneste sted som leser API-base-URL og instansierer konkrete data-/domeneavhengigheter. |
+| Dependency injection | `dependencies.js`-modulen / DI-wiringen | `src/di/dependencies.js` | Eneste composition root. Leser påkrevd API-/image-base-URL, instansierer konkrete avhengigheter og velger eksplisitt hvilke DataSources som får auth-capability. |
 | Emneområdefiltrering | `ALL_TOPIC_AREAS`, `findTopicAreaByKey()` | `src/model/domain/utils/topicAreaFilters.js` | Bruk register og oppslag; ikke opprett lokale varianter. |
 | LearningPath authored startpolicy | Backend `isStartable` | `LearningPathRepository` validerer; LearningPath-ViewModel/presentasjonsmodeller konsumerer | `isStartable` eier læringspolicy. Auth er en separat runtime-precondition og endrer ikke feltets betydning. |
 | LearningPath neste aktivitet | Backend `nextActivity` | `LearningPathRepository` → LearningPath-ViewModel | Frontend presenterer backendvalget; den rekonstruerer ikke module-start fra lokal status/completion. |
@@ -82,7 +83,7 @@ forbudt i `QuestionCard`-kapabiliteten og API-transformasjonen og håndheves av 
 | Punkt-/sidepaginering | `<ProgressPager/>` | Ikke bygg konkurrerende pager-renderere i feature-komponenter. |
 | Responsiv innholdstypevelger | `<ToggleButtonRow/>` | Eneste offentlige inngang. Fasaden velger desktop-/mobilvariant; mobilvarianten eier lokal disclosure, defaultvalg innen en åpnet gruppe og DOM-fokus. |
 | Formatert produkttekst | `<FormattedText/>` | Markup-kontrakten rendres ett sted. |
-| Spørsmålsflate og oppgavetyper | `<QuestionCard/>` | Eneste offentlige inngang til oppgavetyper. Læringsmoduser velger spørsmål, eier svarstate og bestemmer rettingstidspunkt; de implementerer ikke egne oppgaverenderere. |
+| Spørsmålsflate og oppgavetyper | `<QuestionCard/>` | Eneste offentlige inngang til oppgavetyper. `QuestionCardContent` er intern renderer-router. Læringsmoduser velger spørsmål, eier svarstate og bestemmer rettingstidspunkt; de implementerer ikke egne oppgaverenderere. |
 | Mobil bottom sheet | `<DockedMobileBottomSheet/>` | Eier docked/expanded-geometri, drag, grip, inert og slots. |
 | Desktop pop-out | `<DesktopPopOutMenu/>` | Eier delt struktur og lagmekanikk. |
 | Søk | Search-familien i `components/Search/` | Felt, filter, backdrop, forslag og listbox-mekanikk gjenbrukes; feature-VM eier rangering/policy. |
@@ -128,6 +129,14 @@ og callbacks, ikke gjennom `isExam`, `isChapterTest`, `isLearningPath` eller til
 
 ## Endringslogg
 
+### 2.10 → 2.11
+
+- DataSource-auth er presisert som capability-wiring: public DataSources opprettes uten `getToken`; auth-aware DataSources får en faktisk token-funksjon. `getToken: null` er ikke en gyldig dependency-kontrakt.
+- Theme-persistens er skilt fra runtime-state: `ThemeContext` eier tema og DOM-klassen, mens `themePreference.js` eier robust `localStorage`-lesing og -skriving.
+- `QuestionCard` beholder én offentlig fasade; `QuestionCardContent` er den interne eksplisitte routeren for `QUESTION_TYPES`, ikke en ny offentlig capability.
+- Composition root har en smoke-test som skal fange ugyldig wiring/constructor-kontrakt før runtime.
+- `SSOT_COMPONENTS.md` er introdusert som kort register over canonical delte UI-kontrakter; SOUL-en beholder reglene og skal ikke duplisere hele komponentinventaret.
+
 ### 2.9 → 2.10
 
 - LearningPath-handlinger har nå en eksplisitt normativ prioritet: `resumableSession → nextActivity → explicit replay → ingen start-action`.
@@ -169,6 +178,9 @@ ikke historisk dagbok; historikken bor i git.
 | Dato | Beslutning |
 |---|---|
 | 2026-05, presisert 2026-08-24 | MVVM-lagdeling med manuell DI via `dependencies.js`. Én offentlig Page-ViewModel-kontrakt per side; kontrakten kan komponere private undermodeller. App-shell-kapabiliteter kan ha egne ViewModels. |
+| 2026-08-24 | Public DataSources wires uten auth-dependency. Auth-aware DataSources får `getToken` som en påkrevd funksjon når capability-en er til stede; eksplisitt `null`/`undefined` er ugyldig wiring. En token-funksjon kan returnere fravær av token når auth faktisk er optional eller bruker er utlogget. |
+| 2026-08-24 | `ThemeContext` eier reaktiv theme-state og `.dark` på dokumentroten. `themePreference.js` eier den feil-tolerante `localStorage`-grensen; storage-feil skal ikke knekke rendering. |
+| 2026-08-24 | `QuestionCard.jsx` er offentlig fasade for spørsmålskapabiliteten. `QuestionCardContent.jsx` er intern, eksplisitt type-router og importeres ikke som offentlig inngang av læringsmoduser. |
 | 2026-05 | CSS-mapper speiler komponentmapper. `App.css` er eneste CSS-entry point. |
 | 2026-07-29 | `QuestionCard` er en delt kapabilitet på `components/QuestionCard/`, ikke eid av `ExamPage`, `LearningPath` eller en annen læringsmodus. Eksterne konsumenter importerer bare `QuestionCard.jsx`; `App.css` er eneste CSS-entry. |
 | 2026-08-24 | LearningPath action precedence er `resumableSession → nextActivity → explicit replay → ingen start-action`. Frontend gjenopptar aktiv økt direkte, tilbyr ikke discard-valg, og bruker `activeSessionId` fra en eventuell `learning_session_resume_conflict` som defensiv resume-fallback. |
@@ -272,7 +284,7 @@ blir mer kompleks.
 
 - Det eneste model-laget som kjenner transport: HTTP-endepunkter, headers og rå payloads
 - Ingen forretningslogikk; returnerer parsede transportdata/DTO-er, aldri `Response`
-- Brukerpreferanser i `localStorage` er et eksplisitt Context-unntak, ikke en DataSource
+- Brukerpreferanser kan ha en liten eksplisitt storage-boundary ved siden av Contextet; `themePreference.js` er canonical eksempel. `localStorage` er ikke en DataSource og brukes ikke direkte i ViewModels, Views eller Use Cases
 - Instansieres i `dependencies.js` — aldri andre steder
 - Felles HTTP-mekanikk arves fra `DataSource`
 - `ExamDataSource` og `ChapterTestDataSource` validerer den dokumenterte shared TestSet-shapen og sin egen scoped `testType` ved list/detail-boundaryen; kontraktbrudd kastes som teknisk DataSource-feil og filtreres eller normaliseres ikke bort
@@ -303,6 +315,7 @@ ikke en ny offentlig metode.
 - Det eneste stedet applikasjonen wires sammen
 - Leser og validerer runtime-konfigurasjon som påkrevde `VITE_*`-verdier
 - Eier konkrete base-URL-er og sender dem eksplisitt til DataSources
+- Public DataSources opprettes uten `getToken`; auth-aware DataSources får en faktisk `getToken`-funksjon. Ikke bruk `null` som dependency-sentinel
 - Instansierer DataSources, Repositories og Use Cases i riktig rekkefølge
 - Eksporterer ferdige Use Case-instanser
 - Kan velge konkrete implementasjoner og validere konfigurasjon, men inneholder ingen
@@ -1202,60 +1215,27 @@ kun én fysisk fil alltid endres.
 - parsing av payload,
 - avvisning av ikke-OK responses.
 
-DataSource kjenner ikke Clerk. Den mottar `getToken` eksplisitt; dersom en kilde
-kan være offentlig, sender wiring `null` eksplisitt.
+DataSource kjenner ikke Clerk. Auth er en eksplisitt capability i wiring:
 
-### Canonical baseklasse for HTTP
+```text
+Public DataSource:
+{ baseUrl }
 
-```js
-// src/model/datasource/DataSource.js
-export default class DataSource {
-	#baseUrl;
-	#getToken;
-
-	constructor({ baseUrl, getToken }) {
-		if (!baseUrl) {
-			throw new Error("DataSource requires baseUrl");
-		}
-
-		this.#baseUrl = baseUrl.replace(/\/$/, "");
-		this.#getToken = getToken;
-	}
-
-	async get(path) {
-		return await this.#request(path, { method: "GET", headers: null, body: null });
-	}
-
-	async #request(path, request) {
-		const authHeaders = await this.#getAuthHeaders();
-		const requestHeaders = request.headers === null ? {} : request.headers;
-		const response = await fetch(`${this.#baseUrl}${path}`, {
-			method: request.method,
-			headers: { Accept: "application/json", ...authHeaders, ...requestHeaders },
-			body: request.body
-		});
-
-		const payload = await readPayload(response);
-
-		if (!response.ok) {
-			throw new Error(payload?.error ?? `API request failed: ${response.status}`);
-		}
-
-		return payload;
-	}
-
-	async #getAuthHeaders() {
-		if (this.#getToken === null) {
-			return {};
-		}
-
-		const token = await this.#getToken();
-		return token === null ? {} : { Authorization: `Bearer ${token}` };
-	}
-}
+Auth-aware DataSource:
+{ baseUrl, getToken }
 ```
 
-Eksemplet viser kontrakten, ikke et krav om nøyaktig intern implementasjon.
+Hvis `getToken`-feltet finnes, skal verdien være en funksjon. `getToken: null` og
+`getToken: undefined` er ugyldig dependency-wiring. Fravær av feltet betyr at den konkrete
+DataSource-instansen ikke har auth-capability. Selve token-funksjonen kan fortsatt returnere
+fravær av token når den autentiseringskontrakten tillater det.
+
+`DataSource` eier felles HTTP-mekanikk og bruker en intern anonym token-reader for public wiring.
+Det er en implementasjonsdetalj; public callers skal ikke sende en sentinel for å aktivere den.
+
+Request-grensen leser responsbody som tekst før eventuell JSON-parsing. Tom eller ikke-JSON body på
+en feilrespons skal fortsatt gi en teknisk request-feil med HTTP-status i stedet for at JSON-parsing
+skjuler den opprinnelige HTTP-feilen.
 
 ### Feilkontrakt
 
@@ -1419,7 +1399,9 @@ Portaler (`createPortal`) er utveien for overlays.
 | Lokal drag/drop-/gesture-state | Lokal hook i komponentmappen |
 | Instansierer side-ViewModels og velger Page | `App.jsx` |
 | Globale designverdier og semantiske layer-tokens | `Tokens.css` |
-| Aktivt språk/tema/settings | Tilhørende Context-provider |
+| Aktivt språk/settings | Tilhørende Context-provider |
+| Aktivt tema + `.dark` | `ThemeContext` |
+| Persistens av theme-preference | `src/ui/theme/themePreference.js` |
 | Dynamisk glossary chapter/search-sheet | Glossary-modell og Glossary-komponenter, ikke `NAV_ITEMS.popOutMenuItems` |
 
 ---
@@ -1437,8 +1419,8 @@ Portaler (`createPortal`) er utveien for overlays.
   Unntak: `.dark` på `document.documentElement` i `ThemeContext`.
 - Timere via `window.setInterval`/`clearInterval` i `useEffect` med cleanup;
   CSS-animasjoner foretrekkes fremfor JS
-- `localStorage` kun i Context-providers for brukerpreferanser; aldri i
-  ViewModels, komponenter eller Use Cases
+- `localStorage` brukes bare gjennom en navngitt preference/storage-boundary for brukerpreferanser;
+  `ThemeContext` bruker `themePreference.js`. ViewModels, Views og Use Cases leser/skriver ikke storage direkte
 
 ---
 
@@ -1580,8 +1562,8 @@ Testen for et godt navn: ser du bare navnet — vet du nøyaktig hva det er?
   faktisk avhengighetsretning og kontrakt, ikke filnavnet «atom» eller «organism».
 - React-komponenter render-enhetstestes ikke som standard i soloprosjektet. Rene
   helpers og lokale interaksjonshooks under komponentmapper kan enhetstestes.
-- Avhengigheter mockes manuelt og injiseres; tester importerer ikke konkrete
-  instanser fra `dependencies.js`.
+- Avhengigheter mockes manuelt og injiseres i vanlige unit-/ViewModel-tester; de skal ikke trekke inn composition root som skjult testdependency.
+- `dependencies.js` har derimot en eksplisitt composition smoke-test som importerer root-wiringen med gyldig test-config og fanger constructor-/DI-kontraktfeil.
 - Testbeskrivelser leser som setninger og relaterte tester grupperes med `describe`.
 - Testfiler har filbanekommentar som produksjonsfiler.
 - En arkitekturpatch godkjennes først når `git apply --check`, Jest og build er
@@ -1699,4 +1681,4 @@ Backend eier også `isComplete`, `isReplayAvailable`, `nextActivity` og `resumab
 
 En eksisterende `resumableSession` har alltid navigasjonsprioritet: LearningPath-handlinger gjenopptar den aktive økten direkte og tilbyr ikke forkasting i UI. Targeted start sendes først når ingen resumable session finnes. Dersom backend likevel rapporterer `learning_session_resume_conflict`, navigerer ViewModelen direkte til `activeSessionId` uten konfliktmodal.
 
-SOUL beskriver denne kontrakten normativt. Eventuelle avvik i gjeldende kode skal stå som `DRIFT` i `SSOT_REGISTER_FRONTEND.md` frem til de er rettet og verifisert.
+SOUL beskriver denne kontrakten normativt. Nye observerte avvik føres som `DRIFT` i `docs/documentation/SSOT_REGISTER_FRONTEND.md` frem til de er rettet og verifisert; lukkede sprintavvik beholdes ikke som permanent gjeldshistorikk.
