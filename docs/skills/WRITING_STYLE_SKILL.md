@@ -1,4 +1,4 @@
-# WRITING_STYLE_SOUL.md
+# WRITING_STYLE_SKILL.md
 
 <!-- Sist oppdatert 2026-05-30 -->
 
@@ -12,7 +12,7 @@ Teksten skal ikke høres ut som generert innhold.
 
 ## Hva dette dokumentet er
 
-Dette er en skrivestil-SOUL.
+Dette er en skrivestil-SKILL.
 
 Den gjelder for all tekst en AI-assistent produserer.
 
@@ -27,7 +27,7 @@ analyse av kode
 forslag til dokumentasjon
 ```
 
-Når skrivestil kolliderer med andre SOUL-dokumenter, gjelder denne rekkefølgen.
+Når skrivestil kolliderer med andre SKILL-dokumenter, gjelder denne rekkefølgen.
 
 ```txt
 Faglig korrekthet først.

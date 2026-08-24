@@ -1,14 +1,14 @@
-# PATCH_SOUL.md — Regler for AI-genererte patcher i ExamPrepper
+# PATCH_SKILL.md — Regler for AI-genererte patcher i ExamPrepper
 
 <!-- Sist oppdatert: 2026-05-29 -->
 
 Dette dokumentet beskriver hvordan en AI-assistent skal lage kodeendringer som patch-filer i ExamPrepper.
 
-Dette dokumentet **utfyller `ARCHITECTURE_SOUL.md`**.
+Dette dokumentet **utfyller `FRONTEND_ARCHITECTURE_SKILL.md`**.
 
-`ARCHITECTURE_SOUL.md` beskriver hvordan prosjektet skal være bygd.
-`PATCH_SOUL.md` beskriver hvordan endringer skal lages, testes og leveres.
-`QUESTION_TYPE_SOUL.md` beskriver hvordan spørsmålstyper skal velges og utformes.
+`FRONTEND_ARCHITECTURE_SKILL.md` beskriver hvordan prosjektet skal være bygd.
+`PATCH_SKILL.md` beskriver hvordan endringer skal lages, testes og leveres.
+`QUESTION_TYPE_SKILL.md` beskriver hvordan spørsmålstyper skal velges og utformes.
 
 Når du lager en patch: les dette først.
 
@@ -34,27 +34,27 @@ Før en patch leveres, skal assistenten minst gjøre dette:
 
 ---
 
-## 1. Forholdet mellom ARCHITECTURE_SOUL.md, PATCH_SOUL.md og brukerens instruksjon
+## 1. Forholdet mellom FRONTEND_ARCHITECTURE_SKILL.md, PATCH_SKILL.md og brukerens instruksjon
 
 Ved konflikt gjelder denne rekkefølgen:
 
 ```txt
-1. ARCHITECTURE_SOUL.md
+1. FRONTEND_ARCHITECTURE_SKILL.md
    → arkitektur, lagdeling, kodekvalitet og prosjektprinsipper
 
-2. PATCH_SOUL.md
+2. PATCH_SKILL.md
    → hvordan AI-assistenter skal lage, teste og levere patcher
 
 3. Brukerens konkrete instruksjon
    → så lenge den ikke bryter arkitekturreglene
 ```
 
-Brukerens instruksjon kan bare overstyre `PATCH_SOUL.md` hvis brukeren eksplisitt ber om et bevisst avvik.
+Brukerens instruksjon kan bare overstyre `PATCH_SKILL.md` hvis brukeren eksplisitt ber om et bevisst avvik.
 
 Eksempel:
 
 ```txt
-Lag en midlertidig hack-patch, jeg vet at dette bryter ARCHITECTURE_SOUL.md.
+Lag en midlertidig hack-patch, jeg vet at dette bryter FRONTEND_ARCHITECTURE_SKILL.md.
 ```
 
 Da kan assistenten gjøre et bevisst avvik, men avviket skal nevnes tydelig i svaret.
@@ -62,11 +62,11 @@ Da kan assistenten gjøre et bevisst avvik, men avviket skal nevnes tydelig i sv
 Eksempel:
 
 ```txt
-Merk: Denne patchen bryter normalt ARCHITECTURE_SOUL.md fordi den legger midlertidig logikk i View.
+Merk: Denne patchen bryter normalt FRONTEND_ARCHITECTURE_SKILL.md fordi den legger midlertidig logikk i View.
 Jeg gjør det bare fordi du eksplisitt ba om en midlertidig hack-patch.
 ```
 
-Hvis brukeren ikke eksplisitt ber om avvik, skal assistenten følge `ARCHITECTURE_SOUL.md` og `PATCH_SOUL.md`.
+Hvis brukeren ikke eksplisitt ber om avvik, skal assistenten følge `FRONTEND_ARCHITECTURE_SKILL.md` og `PATCH_SKILL.md`.
 
 ---
 
@@ -94,13 +94,13 @@ Hvis en endring kan deles i to meningsfulle patcher, skal den vanligvis deles.
 
 ---
 
-## 3. ARCHITECTURE_SOUL.md er arkitekturautoriteten
+## 3. FRONTEND_ARCHITECTURE_SKILL.md er arkitekturautoriteten
 
-`PATCH_SOUL.md` bestemmer **hvordan patchen lages**.
+`PATCH_SKILL.md` bestemmer **hvordan patchen lages**.
 
-`ARCHITECTURE_SOUL.md` bestemmer **hvor kode hører hjemme**.
+`FRONTEND_ARCHITECTURE_SKILL.md` bestemmer **hvor kode hører hjemme**.
 
-Assistenten skal derfor alltid følge disse prinsippene fra `ARCHITECTURE_SOUL.md`:
+Assistenten skal derfor alltid følge disse prinsippene fra `FRONTEND_ARCHITECTURE_SKILL.md`:
 
 ```txt
 DataSource → Repository → Domain Use Case → DI → ViewModel → View → Komponenter
@@ -118,7 +118,7 @@ Kortversjon:
 * Domenelogikk skal ikke ligge i `src/utils/`
 * Bilder skal flyte via data/repository, ikke hardkodes i View
 
-Hvis en vanlig patch krever brudd på `ARCHITECTURE_SOUL.md`, er patchen feil utformet.
+Hvis en vanlig patch krever brudd på `FRONTEND_ARCHITECTURE_SKILL.md`, er patchen feil utformet.
 
 Lag heller en mindre patch som følger arkitekturen.
 
@@ -545,9 +545,9 @@ Dokumentasjonspatcher endrer typisk:
 
 ```txt
 README.md
-ARCHITECTURE_SOUL.md
-PATCH_SOUL.md
-QUESTION_TYPE_SOUL.md
+FRONTEND_ARCHITECTURE_SKILL.md
+PATCH_SKILL.md
+QUESTION_TYPE_SKILL.md
 docs/**
 ```
 
@@ -666,9 +666,9 @@ Hvis det finnes tester som viser dataformatet for oppgavetypen, skal disse også
 
 ## 18. Valg av riktig spørsmålstype
 
-For valg av oppgavetype, følg `QUESTION_TYPE_SOUL.md`.
+For valg av oppgavetype, følg `QUESTION_TYPE_SKILL.md`.
 
-`PATCH_SOUL.md` eier ikke hele oppgavetype-regelverket. Dette dokumentet beskriver bare hvordan endringen skal pakkes og leveres som patch.
+`PATCH_SKILL.md` eier ikke hele oppgavetype-regelverket. Dette dokumentet beskriver bare hvordan endringen skal pakkes og leveres som patch.
 
 Kort huskeregel:
 
@@ -693,7 +693,7 @@ Bare faglig entydig rekkefølge = SequenceOrder
 
 Ikke bruk `SequenceOrder` for vurderingsbaserte rangeringer som “viktigst til minst viktig”.
 
-Hvis `QUESTION_TYPE_SOUL.md` og eksisterende kode er uenige, skal assistenten stoppe og nevne avviket før patchen lages.
+Hvis `QUESTION_TYPE_SKILL.md` og eksisterende kode er uenige, skal assistenten stoppe og nevne avviket før patchen lages.
 
 ---
 
@@ -1379,8 +1379,8 @@ Jeg kunne ikke kjøre npm test i dette miljøet fordi node_modules mangler.
 ## 37. Kortversjon
 
 ```txt
-Les ARCHITECTURE_SOUL.md først.
-Les QUESTION_TYPE_SOUL.md ved spørsmålstypevalg.
+Les FRONTEND_ARCHITECTURE_SKILL.md først.
+Les QUESTION_TYPE_SKILL.md ved spørsmålstypevalg.
 Inspiser faktisk prosjektstruktur.
 Endre minst mulig.
 Én patch — ett formål.

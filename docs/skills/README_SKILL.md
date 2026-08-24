@@ -1,4 +1,4 @@
-# README_SOUL.md — Regler for README og prosjektdokumentasjon
+# README_SKILL.md — Regler for README og prosjektdokumentasjon
 
 <!-- Sist oppdatert: 2026-05-30 -->
 
@@ -27,26 +27,26 @@ Detaljene hører hjemme i `docs/`.
 
 ## Hva dette dokumentet er
 
-Dette er en **documentation-authoring SOUL**.
+Dette er en **documentation-authoring SKILL**.
 
 ```txt
-ARCHITECTURE_SOUL.md
+FRONTEND_ARCHITECTURE_SKILL.md
 → Hvordan applikasjonen skal bygges
 
-PATCH_SOUL.md
+PATCH_SKILL.md
 → Hvordan endringer skal lages og leveres
 
-MERMAID_SOUL.md
+MERMAID_SKILL.md
 → Hvordan diagrammer skal lages og holdes forståelige
 
-QUESTION_TYPE_SOUL.md
+QUESTION_TYPE_SKILL.md
 → Hvordan oppgaver eller faglig innhold skal struktureres
 
-README_SOUL.md
+README_SKILL.md
 → Hvordan README og docs skal skrives, deles opp og kvalitetssikres
 ```
 
-`README_SOUL.md` bestemmer ikke arkitekturen i koden.
+`README_SKILL.md` bestemmer ikke arkitekturen i koden.
 
 Det bestemmer hvordan arkitektur, funksjoner, use cases, testing, sikkerhet, bilder, diagrammer og prosjektstruktur skal forklares.
 
@@ -110,30 +110,30 @@ README skal gi oversikt.
 
 ---
 
-## Plassering av README_SOUL.md
+## Plassering av README_SKILL.md
 
-Anbefalt plassering for SOUL-dokumenter er:
+Anbefalt plassering for SKILL-dokumenter er:
 
 ```txt
-docs/soul-docs/
+docs/skills/
 ```
 
 Eksempel:
 
 ```txt
-docs/soul-docs/
-├── README_SOUL.md
-├── ARCHITECTURE_SOUL.md
-├── PATCH_SOUL.md
-├── MERMAID_SOUL.md
-└── QUESTION_TYPE_SOUL.md
+docs/skills/
+├── README_SKILL.md
+├── FRONTEND_ARCHITECTURE_SKILL.md
+├── PATCH_SKILL.md
+├── MERMAID_SKILL.md
+└── QUESTION_TYPE_SKILL.md
 ```
 
 Dette holder prosjektroten ryddig.
 
-`README_SOUL.md` kan likevel ligge i prosjektroten hvis prosjektet bevisst ønsker at AI-assistenter eller utviklere skal finne filen raskere.
+`README_SKILL.md` kan likevel ligge i prosjektroten hvis prosjektet bevisst ønsker at AI-assistenter eller utviklere skal finne filen raskere.
 
-Hvis `README_SOUL.md` ligger i root, er det et bevisst unntak.
+Hvis `README_SKILL.md` ligger i root, er det et bevisst unntak.
 
 ---
 
@@ -294,12 +294,12 @@ docs/
 │   ├── diagrams/
 │   └── examples/
 │
-└── soul-docs/
-    ├── README_SOUL.md
-    ├── ARCHITECTURE_SOUL.md
-    ├── PATCH_SOUL.md
-    ├── MERMAID_SOUL.md
-    └── QUESTION_TYPE_SOUL.md
+└── skills/
+    ├── README_SKILL.md
+    ├── FRONTEND_ARCHITECTURE_SKILL.md
+    ├── PATCH_SKILL.md
+    ├── MERMAID_SKILL.md
+    └── QUESTION_TYPE_SKILL.md
 ```
 
 Prosjektspesifikke dokumenter kan legges til ved behov:
@@ -814,12 +814,12 @@ Når Mermaid endres, skal PNG regenereres.
 
 ---
 
-## MERMAID_SOUL.md vs MERMAID.md
+## MERMAID_SKILL.md vs MERMAID.md
 
 Skill mellom normative diagramregler og prosjektets konkrete diagrammer.
 
 ```txt
-docs/soul-docs/MERMAID_SOUL.md
+docs/skills/MERMAID_SKILL.md
 → Regler for hvordan diagrammer skal lages, avgrenses og vurderes.
 
 docs/architecture/MERMAID.md
@@ -829,9 +829,9 @@ docs/architecture/ARCHITECTURE.png
 → Rendret output som brukes i README.
 ```
 
-`MERMAID.md` skal ikke duplisere hele `MERMAID_SOUL.md`.
+`MERMAID.md` skal ikke duplisere hele `MERMAID_SKILL.md`.
 
-Hvis diagramreglene endres, oppdater `MERMAID_SOUL.md`.
+Hvis diagramreglene endres, oppdater `MERMAID_SKILL.md`.
 
 Hvis prosjektets diagram endres, oppdater `MERMAID.md`, `ARCHITECTURE.png` og eventuelt `ARCHITECTURE.md`.
 
@@ -1751,7 +1751,7 @@ git diff --check
 
 Hvis dokumentasjonen inneholder kommandoer, filstier, scripts eller diagrammer, skal de sjekkes mot faktisk prosjektstruktur.
 
-For detaljer om patch-leveranse, følg `PATCH_SOUL.md`.
+For detaljer om patch-leveranse, følg `PATCH_SKILL.md`.
 
 ---
 
@@ -1764,7 +1764,7 @@ Når en AI-assistent skal lage eller forbedre README:
 2. Inspiser faktisk filstruktur.
 3. Les package.json.
 4. Finn eksisterende docs-mapper.
-5. Finn arkitektur- eller SOUL-dokumenter.
+5. Finn arkitektur- eller SKILL-dokumenter.
 6. Identifiser hva som bør bli i root README.
 7. Identifiser hva som bør flyttes til docs.
 8. Lag kort hoved-README.

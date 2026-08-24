@@ -8,7 +8,7 @@ Registerstatus: statisk revisjon mot snapshot; ingen produksjonskode er endret i
 
 ## Formål
 
-Register over hva som faktisk eier state, policy, canonical implementasjoner og stylingkontrakter i det navngitte frontend-snapshotet. Normative kontrakter kommer fra SOUL; dette dokumentet viser evidens, åpen drift, akseptert lokal policy og gjeld mot den konkrete kodebasen — ikke mot minnet om tidligere tilstander.
+Register over hva som faktisk eier state, policy, canonical implementasjoner og stylingkontrakter i det navngitte frontend-snapshotet. Normative kontrakter kommer fra SKILL; dette dokumentet viser evidens, åpen drift, akseptert lokal policy og gjeld mot den konkrete kodebasen — ikke mot minnet om tidligere tilstander.
 
 Dokumentet skiller fire roller, fordi «SSOT» ellers blir synonymt med «gjenbrukt kode»:
 
@@ -26,7 +26,7 @@ Registeret skiller mellom normativ kontrakt og faktisk implementasjonsstatus. St
 - **DEBT** — implementasjonen kan være funksjonell, men evidens/testmekanismen eller eierskapet har dokumentert vedlikeholdsgjeld.
 - **UNVERIFIED** — revisjonen har ikke nok runtime-/testbevis til å klassifisere som GREEN.
 
-Et normativt utsagn fra SOUL skal aldri føres som «implementert» her dersom snapshotet viser drift.
+Et normativt utsagn fra SKILL skal aldri føres som «implementert» her dersom snapshotet viser drift.
 
 ## Base og verifisering
 

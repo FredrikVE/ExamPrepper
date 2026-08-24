@@ -1,4 +1,4 @@
-<!-- docs/soul-docs/SSOT_COMPONENTS.md -->
+<!-- docs/skills/SSOT_COMPONENTS.md -->
 # SSOT_COMPONENTS.md — Canonical komponentkontrakter i ExamPrepper frontend
 
 Oppdatert: 2026-08-24
@@ -6,7 +6,7 @@ Oppdatert: 2026-08-24
 Dette registeret viser hvilke delte UI-flater og mekanismer som allerede har en canonical implementasjon.
 Det er ikke et register over all React-kode, og «canonical» betyr ikke at komponenten eier domene- eller runtime-state.
 
-`FRONTEND_ARCHITECTURE_SOUL.md` eier reglene for lagdeling, state og dependency-retning.
+`FRONTEND_ARCHITECTURE_SKILL.md` eier reglene for lagdeling, state og dependency-retning.
 `SSOT_COMPONENTS.md` svarer på et smalere spørsmål:
 
 > Finnes det allerede en delt komponent eller mekanisme som eier denne UI-kontrakten?
@@ -91,7 +91,7 @@ Når en canonical komponentkontrakt faktisk endres:
 1. Endre eierimplementasjonen.
 2. Oppdater relevante behavior-/architecture-tester.
 3. Oppdater dette registeret dersom offentlig inngang, ansvar eller grense er endret.
-4. Oppdater `FRONTEND_ARCHITECTURE_SOUL.md` bare når selve arkitekturregelen endres.
+4. Oppdater `FRONTEND_ARCHITECTURE_SKILL.md` bare når selve arkitekturregelen endres.
 5. Ikke behold slettede komponentnavn eller patchnummer som permanent historikk; Git eier historikken.
 
 ## Kort sjekkliste

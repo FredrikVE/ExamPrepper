@@ -1,5 +1,5 @@
-<!--docs/soul-docs/TESTING_SOUL.md-->
-# TESTING_SOUL.md
+<!--docs/skills/TESTING_SKILL.md-->
+# TESTING_SKILL.md
 
 ## Formål
 
@@ -7,7 +7,7 @@ Dette dokumentet definerer hvordan ExamPrepper skal testes.
 
 Det tar konkrete standpunkt om testgrenser, testnivåer og ansvarsfordeling per arkitekturlag.
 
-Dokumentet kompletterer `ARCHITECTURE_SOUL.md`, som definerer lag, ansvar og avhengighetsretning.
+Dokumentet kompletterer `FRONTEND_ARCHITECTURE_SKILL.md`, som definerer lag, ansvar og avhengighetsretning.
 
 Prosjektspesifikke detaljer som testverktøy, testkommandoer, testfiler, teststatus og kjente hull dokumenteres i `docs/documentation/TESTING.md`.
 
@@ -16,10 +16,10 @@ Prosjektspesifikke detaljer som testverktøy, testkommandoer, testfiler, teststa
 ## Forholdet mellom dokumentene
 
 ```txt
-ARCHITECTURE_SOUL.md
+FRONTEND_ARCHITECTURE_SKILL.md
 → Definerer lag, ansvar og avhengighetsretning.
 
-TESTING_SOUL.md
+TESTING_SKILL.md
 → Definerer hvordan hvert lag og hver grense skal testes.
 
 docs/documentation/TESTING.md

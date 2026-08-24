@@ -1,10 +1,10 @@
-# QUESTION_WRITING_STYLE_SOUL.md
+# QUESTION_WRITING_STYLE_SKILL.md
 
 <!-- Sist oppdatert 2026-05-30 -->
 
 Dette dokumentet styrer hvordan tekstinnholdet i ExamPrepper-oppgaver skal formuleres.
 
-`QUESTION_TYPE_SOUL.md` styrer oppgavetype, datastruktur og hvordan nye oppgaver legges til.
+`QUESTION_TYPE_SKILL.md` styrer oppgavetype, datastruktur og hvordan nye oppgaver legges til.
 
 Dette dokumentet styrer språk, tone, kildenærhet og formulering.
 
@@ -46,7 +46,7 @@ Dette dokumentet gjelder ikke valg av oppgavetype.
 Det gjelder ikke appens datakontrakt.
 Det gjelder ikke komponentstruktur.
 
-Når du trenger regler for `type`, feltstruktur, scoring eller hvordan oppgaven legges inn i datafilene, bruk `QUESTION_TYPE_SOUL.md`.
+Når du trenger regler for `type`, feltstruktur, scoring eller hvordan oppgaven legges inn i datafilene, bruk `QUESTION_TYPE_SKILL.md`.
 
 ---
 

@@ -1,5 +1,5 @@
-<!--docs/soul-docs/QUESTION_TYPE_SOUL.md-->
-# QUESTION_TYPE_SOUL.md — Regler for valg av oppgavetype i ExamPrepper
+<!--docs/skills/QUESTION_TYPE_SKILL.md-->
+# QUESTION_TYPE_SKILL.md — Regler for valg av oppgavetype i ExamPrepper
 
 <!-- Sist oppdatert: 2026-05-29 -->
 
@@ -13,17 +13,17 @@ Når du lager en ny oppgave: start med fagstrukturen, ikke med komponenten.
 
 ## Hva dette dokumentet er
 
-Dette er en **content-authoring SOUL**.
+Dette er en **content-authoring SKILL**.
 
-`SOUL.md` beskriver hvordan applikasjonen skal bygges arkitektonisk.
+`FRONTEND_ARCHITECTURE_SKILL.md` beskriver hvordan applikasjonen skal bygges arkitektonisk.
 
-`QUESTION_TYPE_SOUL.md` beskriver hvordan oppgaver skal lages pedagogisk og datamessig.
+`QUESTION_TYPE_SKILL.md` beskriver hvordan oppgaver skal lages pedagogisk og datamessig.
 
 ```txt
-SOUL.md
+FRONTEND_ARCHITECTURE_SKILL.md
 → Hvordan koden skal organiseres
 
-QUESTION_TYPE_SOUL.md
+QUESTION_TYPE_SKILL.md
 → Hvordan oppgaver skal velges, struktureres og skrives
 ```
 

@@ -4,7 +4,7 @@
 
 # Frontend-arkitektur
 
-Prosjektet følger lagdelt MVVM med manuell dependency injection og pragmatisk Atomic Design. Det normative dokumentet er [`docs/soul-docs/FRONTEND_ARCHITECTURE_SOUL.md`](../soul-docs/FRONTEND_ARCHITECTURE_SOUL.md).
+Prosjektet følger lagdelt MVVM med manuell dependency injection og pragmatisk Atomic Design. Det normative dokumentet er [`docs/skills/FRONTEND_ARCHITECTURE_SKILL.md`](../skills/FRONTEND_ARCHITECTURE_SKILL.md).
 
 ![Arkitekturdiagram](./ARCHITECTURE.png)
 

@@ -1,4 +1,4 @@
-# MERMAID_SOUL.md — Regler for arkitekturdiagrammer i ExamPrepper
+# MERMAID_SKILL.md — Regler for arkitekturdiagrammer i ExamPrepper
 
 <!-- Sist oppdatert: 2026-05-29 -->
 
@@ -35,19 +35,19 @@ Hvis diagrammet blir en import-graf, har det feilet.
 
 ## Hva dette dokumentet er
 
-Dette er en **diagram-authoring SOUL**.
+Dette er en **diagram-authoring SKILL**.
 
 ```txt
-ARCHITECTURE_SOUL.md
+FRONTEND_ARCHITECTURE_SKILL.md
 → Hvordan applikasjonen skal bygges
 
-PATCH_SOUL.md
+PATCH_SKILL.md
 → Hvordan endringer skal lages og leveres
 
-QUESTION_TYPE_SOUL.md
+QUESTION_TYPE_SKILL.md
 → Hvordan oppgaver skal velges og struktureres
 
-MERMAID_SOUL.md
+MERMAID_SKILL.md
 → Hvordan arkitekturen skal visualiseres
 ```
 
@@ -849,7 +849,7 @@ En slik patch skal normalt bare endre:
 ```txt
 README.md
 docs/**
-MERMAID_SOUL.md
+MERMAID_SKILL.md
 ```
 
 Den skal ikke endre runtime-kode.

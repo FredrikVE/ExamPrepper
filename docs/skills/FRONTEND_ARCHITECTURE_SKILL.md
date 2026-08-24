@@ -1,16 +1,16 @@
-<!--docs/soul-docs/FRONTEND_ARCHITECTURE_SOUL.md-->
-# FRONTEND_ARCHITECTURE_SOUL.md — Arkitekturprinsipper for ExamPrepper frontend
+<!--docs/skills/FRONTEND_ARCHITECTURE_SKILL.md-->
+# FRONTEND_ARCHITECTURE_SKILL.md — Arkitekturprinsipper for ExamPrepper frontend
 
 <!-- Versjon: 2.11 — Sist oppdatert: 2026-08-24 -->
-<!-- Erstatter: FRONTEND_ARCHITECTURE_SOUL V2.10 -->
+<!-- Erstatter: FRONTEND_ARCHITECTURE_SKILL V2.10 -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
 kontraktene i dette dokumentet.
 
 `docs/documentation/SSOT_REGISTER_FRONTEND.md` er evidensregisteret som viser hva kodebasen faktisk
-bruker og hvilke avvik som er observert. `docs/soul-docs/SSOT_COMPONENTS.md` er det korte registeret
-over canonical delte UI-kontrakter og deres offentlige innganger. SOUL-dokumentet sier hvilke regler
+bruker og hvilke avvik som er observert. `docs/skills/SSOT_COMPONENTS.md` er det korte registeret
+over canonical delte UI-kontrakter og deres offentlige innganger. SKILL-dokumentet sier hvilke regler
 ny og endret kode skal følge. Når et reelt eierskap eller en canonical kontrakt endres, oppdateres
 kode, relevante tester og det dokumentet som faktisk eier kontrakten i samme patch.
 
@@ -38,7 +38,7 @@ Dokumentet skiller derfor fire roller:
 5. En utility er ikke et sted å flytte state. Den skal være ren og få alle avhengigheter som input.
 6. Lik lokal JSX er tillatt når semantikk, interaksjon eller endringsårsak er forskjellig. Ikke press ulike ansvar inn i samme komponent bare fordi markup eller styling ligner.
 7. En ny eier innføres først når det finnes et selvstendig ansvar, en autoritativ beslutning eller en faktisk delt kontrakt. Én konsument utelukker ikke en eier, men tekstlig likhet alene etablerer ikke en. Legg til en stabil kontrakttest når regelen kan uttrykkes presist; bruk ellers en fokusert adferdstest eller dokumenter hvorfor en arkitekturtest ikke gir verdi.
-8. Når eierskap eller en canonical kontrakt endres, oppdateres kode, relevante tester, SOUL og SSOT-registeret i samme arkitekturpatch.
+8. Når eierskap eller en canonical kontrakt endres, oppdateres kode, relevante tester, SKILL og SSOT-registeret i samme arkitekturpatch.
 
 ### Autoritative registre og runtime-SSOT
 
@@ -135,7 +135,7 @@ og callbacks, ikke gjennom `isExam`, `isChapterTest`, `isLearningPath` eller til
 - Theme-persistens er skilt fra runtime-state: `ThemeContext` eier tema og DOM-klassen, mens `themePreference.js` eier robust `localStorage`-lesing og -skriving.
 - `QuestionCard` beholder én offentlig fasade; `QuestionCardContent` er den interne eksplisitte routeren for `QUESTION_TYPES`, ikke en ny offentlig capability.
 - Composition root har en smoke-test som skal fange ugyldig wiring/constructor-kontrakt før runtime.
-- `SSOT_COMPONENTS.md` er introdusert som kort register over canonical delte UI-kontrakter; SOUL-en beholder reglene og skal ikke duplisere hele komponentinventaret.
+- `SSOT_COMPONENTS.md` er introdusert som kort register over canonical delte UI-kontrakter; SKILL-en beholder reglene og skal ikke duplisere hele komponentinventaret.
 
 ### 2.9 → 2.10
 
@@ -144,7 +144,7 @@ og callbacks, ikke gjennom `isExam`, `isChapterTest`, `isLearningPath` eller til
 - «Én ViewModel per side» er presisert til én offentlig Page-ViewModel-kontrakt per side; private undermodeller kan komponeres bak kontraktpunktet.
 - Testreglene skiller nå permanente negative arkitekturforbud fra historiske filnavn/migreringsrester, og defects skal låses med observerbar behavior før implementation-detail assertions fjernes.
 - Kodestil er klassifisert som utviklingskonvensjon, ikke arkitekturinvariant. Absolutte formatterings-/transformasjonsregler er myket opp slik at lesbarhet og kontraktgrenser styrer.
-- Gjeldende implementation drift dokumenteres i `SSOT_REGISTER_FRONTEND.md`; SOUL beskriver fortsatt målarkitekturen og skal ikke late som drift allerede er lukket.
+- Gjeldende implementation drift dokumenteres i `SSOT_REGISTER_FRONTEND.md`; SKILL beskriver fortsatt målarkitekturen og skal ikke late som drift allerede er lukket.
 
 ### 2.7 → 2.8
 
@@ -238,7 +238,7 @@ ViewModelen, som eksponerer ferdige verdier og handlinger nedover gjennom View-h
 SSOT-refaktoreringen har etablert stående kontrakter for navigasjon, Header, WorkspaceScaffold,
 lasttilstand, i18n, app-brytpunkt, globale lag, søkenormalisering, shuffle, root error boundary og
 de viktigste delte mobil-/søkemekanismene. Detaljert bevis, importører og testnavn ligger i
-`docs/documentation/SSOT_REGISTER_FRONTEND.md`; SOUL-dokumentet gjentar ikke flyktige testtall.
+`docs/documentation/SSOT_REGISTER_FRONTEND.md`; SKILL-dokumentet gjentar ikke flyktige testtall.
 
 Denne seksjonen er ikke en komplett teknisk gjeldsinventory. Eldre kode kan fortsatt bryte kodestil-
 eller signaturregler, blant annet forbudet mot default-parametre og kravet om tabs. Slike avvik følger
@@ -1631,14 +1631,14 @@ operasjonen ligger i en løkke, eller profilering viser faktisk treghet.
 
 ## Dokumentasjonsavgrensning
 
-Skrive-/commit-stil er contributor-konvensjon, ikke frontendarkitektur, og låses ikke i dette dokumentet. SOUL beskriver eierskap, dependency-retning, state, canonical implementasjoner og stabile cross-stack-kontrakter.
+Skrive-/commit-stil er contributor-konvensjon, ikke frontendarkitektur, og låses ikke i dette dokumentet. SKILL beskriver eierskap, dependency-retning, state, canonical implementasjoner og stabile cross-stack-kontrakter.
 
 ---
 
 ## Kortversjon
 
 > Start med tabellen over autoritative eiere. Bruk eksisterende SSOT/canonical implementasjon før du lager noe nytt.
-> Låste beslutninger trumfer brødtekst. Oppdater SOUL og SSOT-registeret i samme arkitekturpatch.
+> Låste beslutninger trumfer brødtekst. Oppdater SKILL og SSOT-registeret i samme arkitekturpatch.
 > DataSource kjenner transport. Repository mapper til domene. Use Case eier én regel.
 > `dependencies.js` eier runtime-konfigurasjon og konkret wiring; `DataSource` eier requestmekanikk.
 > Page- og forretningsstate eies bak ViewModelens kontraktpunkt; provider-state og lokal interaksjonsstate har egne avgrensede eiere.
@@ -1681,4 +1681,4 @@ Backend eier også `isComplete`, `isReplayAvailable`, `nextActivity` og `resumab
 
 En eksisterende `resumableSession` har alltid navigasjonsprioritet: LearningPath-handlinger gjenopptar den aktive økten direkte og tilbyr ikke forkasting i UI. Targeted start sendes først når ingen resumable session finnes. Dersom backend likevel rapporterer `learning_session_resume_conflict`, navigerer ViewModelen direkte til `activeSessionId` uten konfliktmodal.
 
-SOUL beskriver denne kontrakten normativt. Nye observerte avvik føres som `DRIFT` i `docs/documentation/SSOT_REGISTER_FRONTEND.md` frem til de er rettet og verifisert; lukkede sprintavvik beholdes ikke som permanent gjeldshistorikk.
+SKILL beskriver denne kontrakten normativt. Nye observerte avvik føres som `DRIFT` i `docs/documentation/SSOT_REGISTER_FRONTEND.md` frem til de er rettet og verifisert; lukkede sprintavvik beholdes ikke som permanent gjeldshistorikk.
