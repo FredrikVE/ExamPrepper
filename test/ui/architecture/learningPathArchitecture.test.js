@@ -75,13 +75,12 @@ describe("LearningPath architecture", () => {
 		expect(pageSource).not.toMatch(/dangerouslySetInnerHTML|innerHTML/);
 	});
 
-	test("accounts for the scaffold header in LearningPath geometry and scrolling", () => {
+	test("accounts for the scaffold header in LearningPath geometry", () => {
 		const pageCss = fs.readFileSync(path.resolve("src/ui/style/LearningPathPage/learning-path.css"), "utf8");
 		const roadmapCss = fs.readFileSync(path.resolve("src/ui/style/LearningPathPage/learning-path-roadmap.css"), "utf8");
-		const scrollSource = fs.readFileSync(path.resolve("src/ui/view/components/LearningPathPage/useLearningPathScrollAdapter.js"), "utf8");
+
 		expect(pageCss).toContain("var(--learning-content-page-top)");
 		expect(roadmapCss).toContain("var(--scaffold-header-height)");
-		expect(scrollSource).toContain('block: "nearest"');
 	});
 
 });

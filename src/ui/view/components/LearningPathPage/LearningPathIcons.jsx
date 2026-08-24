@@ -1,15 +1,30 @@
-//src/ui/view/components/LearningPathPage/LearningPathIcons.jsx
+// src/ui/view/components/LearningPathPage/LearningPathIcons.jsx
 import { Check, LockKeyhole, Play, Repeat2, TrendingUp } from "lucide-react";
 
-const ICONS = Object.freeze({
+const ICONS = {
 	check: Check,
 	lock: LockKeyhole,
 	play: Play,
 	repeat: Repeat2,
 	trending: TrendingUp
-});
+};
 
 export default function LearningPathStatusIcon({ iconKey, fallbackValue }) {
-	const Icon = iconKey === null ? null : ICONS[iconKey] ?? null;
-	return Icon === null ? <span aria-hidden="true">{fallbackValue}</span> : <Icon aria-hidden="true" />;
+	let Icon = null;
+
+	if (iconKey !== null) {
+		Icon = ICONS[iconKey] ?? null;
+	}
+
+	if (Icon === null) {
+		return (
+			<span aria-hidden="true">
+				{fallbackValue}
+			</span>
+		);
+	}
+
+	return (
+		<Icon aria-hidden="true" />
+	);
 }

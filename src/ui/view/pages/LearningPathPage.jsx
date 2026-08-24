@@ -9,20 +9,59 @@ import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 
 export default function LearningPathPage({ viewModel }) {
-	const scrollAdapter = useLearningPathScrollAdapter({ scrollRequest: viewModel.scrollRequest });
-	const header = <Header appearance={HEADER_APPEARANCES.DEFAULT} layout={HEADER_LAYOUTS.DEFAULT} backContract={viewModel.backContract} heading={null} tools={null} trailing={null} />;
+	const { registerModuleElement } = useLearningPathScrollAdapter({
+		scrollRequest: viewModel.scrollRequest
+	});
+
+	const header = (
+		<Header
+			appearance={HEADER_APPEARANCES.DEFAULT}
+			layout={HEADER_LAYOUTS.DEFAULT}
+			backContract={viewModel.backContract}
+			heading={null}
+			tools={null}
+			trailing={null}
+		/>
+	);
+
+	let startSessionError = null;
+
+	if (viewModel.startSessionError !== null) {
+		startSessionError = (
+			<p className="learning-path-error" role="alert">
+				{viewModel.startSessionError}
+			</p>
+		);
+	}
 
 	return (
-		<WorkspaceScaffold className="learning-content-workspace learning-path-workspace" header={header} footer={null} overlay={null} scrollToTopRequestId={null}>
+		<WorkspaceScaffold
+			className="learning-content-workspace learning-path-workspace"
+			header={header}
+			footer={null}
+			overlay={null}
+			scrollToTopRequestId={null}
+		>
 			<div className="learning-path-page">
 				<LearningContentHeader {...viewModel.contentHeaderModel} />
 
 				<div className="learning-path-page-content">
 					<WorkspaceState state={viewModel.workspaceState}>
 						<div className="learning-path-page-state-content">
-							<ContinueLearningPanel model={viewModel.continuePanelModel} onActionPressed={viewModel.onLearningPathAction} />
-							{viewModel.startSessionError === null ? null : <p className="learning-path-error" role="alert">{viewModel.startSessionError}</p>}
-							<LearningPathRoadmap model={viewModel.roadmapModel} onModuleToggle={viewModel.onModuleToggle} onActionPressed={viewModel.onLearningPathAction} onChapterTestSelected={viewModel.onChapterTestSelected} registerModuleElement={scrollAdapter.registerModuleElement} />
+							<ContinueLearningPanel
+								model={viewModel.continuePanelModel}
+								onActionPressed={viewModel.onLearningPathAction}
+							/>
+
+							{startSessionError}
+
+							<LearningPathRoadmap
+								model={viewModel.roadmapModel}
+								onModuleToggle={viewModel.onModuleToggle}
+								onActionPressed={viewModel.onLearningPathAction}
+								onChapterTestSelected={viewModel.onChapterTestSelected}
+								registerModuleElement={registerModuleElement}
+							/>
 						</div>
 					</WorkspaceState>
 				</div>
