@@ -1,29 +1,79 @@
 // src/ui/viewmodel/LearningSession/createSessionResultModel.js
-const RESULT_APPEARANCES = Object.freeze({
+const RESULT_APPEARANCES = {
 	PRACTICE: "practice",
 	PROGRESS: "progress",
 	UNDERSTOOD: "understood",
 	NOT_ASSESSED: "not-assessed"
-});
+};
 
-function normalizeMetric(value) {
-	if (value === null) return null;
-	if (!Number.isFinite(value)) return null;
+function normalizePercentage(value) {
+	if (value === null) {
+		return null;
+	}
+
+	if (!Number.isFinite(value)) {
+		throw new Error(`Invalid learning session percentage: ${String(value)}`);
+	}
+
 	return Math.round(value * 100) / 100;
 }
 
-function resolveCopy({ percentage, performanceBand, moduleTitle, t }) {
-	if (percentage === 100) return { title: t.learningSessionResultPerfectTitle, body: t.learningSessionResultPerfectBody(moduleTitle) };
-	if (performanceBand === RESULT_APPEARANCES.UNDERSTOOD) return { title: t.learningSessionResultUnderstoodTitle, body: t.learningSessionResultUnderstoodBody(moduleTitle) };
-	if (performanceBand === RESULT_APPEARANCES.PROGRESS) return { title: t.learningSessionResultProgressTitle, body: t.learningSessionResultProgressBody(moduleTitle) };
-	if (performanceBand === RESULT_APPEARANCES.PRACTICE) return { title: t.learningSessionResultPracticeTitle, body: t.learningSessionResultPracticeBody(moduleTitle) };
-	return { title: t.learningSessionResultNotAssessedTitle, body: t.learningSessionResultNotAssessedBody(moduleTitle) };
+function createResultCopy({ percentage, performanceBand, moduleTitle, t }) {
+	if (percentage === 100) {
+		return {
+			title: t.learningSessionResultPerfectTitle,
+			body: t.learningSessionResultPerfectBody(moduleTitle)
+		};
+	}
+
+	if (performanceBand === RESULT_APPEARANCES.UNDERSTOOD) {
+		return {
+			title: t.learningSessionResultUnderstoodTitle,
+			body: t.learningSessionResultUnderstoodBody(moduleTitle)
+		};
+	}
+
+	if (performanceBand === RESULT_APPEARANCES.PROGRESS) {
+		return {
+			title: t.learningSessionResultProgressTitle,
+			body: t.learningSessionResultProgressBody(moduleTitle)
+		};
+	}
+
+	if (performanceBand === RESULT_APPEARANCES.PRACTICE) {
+		return {
+			title: t.learningSessionResultPracticeTitle,
+			body: t.learningSessionResultPracticeBody(moduleTitle)
+		};
+	}
+
+	if (performanceBand === RESULT_APPEARANCES.NOT_ASSESSED) {
+		return {
+			title: t.learningSessionResultNotAssessedTitle,
+			body: t.learningSessionResultNotAssessedBody(moduleTitle)
+		};
+	}
+
+	throw new Error(`Unknown learning session performance band: ${String(performanceBand)}`);
 }
 
 export default function createSessionResultModel({ score, moduleTitle, t, onBack }) {
-	const percentage = normalizeMetric(score.percentage);
+	const percentage = normalizePercentage(score.percentage);
 	const appearance = score.performanceBand;
-	const copy = resolveCopy({ percentage, performanceBand: appearance, moduleTitle, t });
+
+	const copy = createResultCopy({
+		percentage,
+		performanceBand: appearance,
+		moduleTitle,
+		t
+	});
+
+	let scoreValue = "—";
+
+	if (percentage !== null) {
+		scoreValue = `${percentage} %`;
+	}
+
 	return {
 		appearance,
 		eyebrow: t.learningSessionResultEyebrow,
@@ -32,7 +82,7 @@ export default function createSessionResultModel({ score, moduleTitle, t, onBack
 		statsLabel: t.learningSessionResultStatsLabel,
 		pointsValue: `${score.earnedPoints} / ${score.availablePoints}`,
 		pointsLabel: t.learningSessionResultPointsLabel,
-		scoreValue: percentage === null ? "—" : `${percentage} %`,
+		scoreValue,
 		scoreLabel: t.learningSessionResultScoreLabel,
 		nextStepLabel: t.learningSessionResultNextStepLabel,
 		nextStepBody: t.learningSessionResultContinuePathBody,
@@ -42,5 +92,3 @@ export default function createSessionResultModel({ score, moduleTitle, t, onBack
 		onPrimary: onBack
 	};
 }
-
-export { RESULT_APPEARANCES };
