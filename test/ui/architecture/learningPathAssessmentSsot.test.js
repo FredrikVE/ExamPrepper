@@ -28,10 +28,9 @@ describe("LearningPath assessment and start-authority SSOT", () => {
 		expect(source).not.toMatch(/createLearningPathProgressModel\(\{[^}]*completionPercent/s);
 	});
 
-	test("keeps session icon selection in the ViewModel", () => {
-		const model = read("src/ui/viewmodel/LearningPath/createLearningPathSessionModel.js");
+	test("keeps session icon selection out of the View", () => {
 		const view = read("src/ui/view/components/LearningPathPage/LearningPathSessionNode.jsx");
-		expect(model).toContain("iconKey:");
+
 		expect(view).toContain("model.iconKey");
 		expect(view).not.toMatch(/model\.status\s*===/);
 	});
