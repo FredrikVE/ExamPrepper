@@ -6,10 +6,42 @@ import createLearningPathSectionModel from "./createLearningPathSectionModel.js"
 import createModuleStatus from "./createModuleStatus.js";
 
 export default function createLearningPathModuleModel({ module, resumableSession, nextActivity, expandedModuleId, startingActionKey, canStartLearningSessions, t }) {
-	const status = createModuleStatus({ isComplete: module.progress.isComplete, completedSessions: module.progress.completedSessions, isCurrent: module.availability.isCurrent, isUnlocked: module.availability.isUnlocked });
+	const status = createModuleStatus({
+		isComplete: module.progress.isComplete,
+		completedSessions: module.progress.completedSessions,
+		isCurrent: module.availability.isCurrent,
+		isUnlocked: module.availability.isUnlocked
+	});
+
 	const isExpanded = expandedModuleId === module.id && module.availability.isUnlocked;
-	const actionModel = createLearningPathActionModel({ module, resumableSession, nextActivity, startingActionKey, canStartLearningSessions, t });
-	const progressModel = createLearningPathProgressModel({ performancePercent: module.progress.performancePercent, performanceBand: module.progress.performanceBand, t });
+
+	const actionModel = createLearningPathActionModel({
+		module,
+		resumableSession,
+		nextActivity,
+		startingActionKey,
+		canStartLearningSessions,
+		t
+	});
+
+	const progressModel = createLearningPathProgressModel({
+		performancePercent: module.progress.performancePercent,
+		performanceBand: module.progress.performanceBand,
+		t
+	});
+
+	let detailModel = null;
+
+	if (isExpanded) {
+		detailModel = createModuleDetailModel({
+			module,
+			actionModel,
+			progressModel,
+			startingActionKey,
+			canStartLearningSessions,
+			t
+		});
+	}
 
 	return {
 		kind: "module",
@@ -17,12 +49,17 @@ export default function createLearningPathModuleModel({ module, resumableSession
 		position: module.position,
 		title: module.title,
 		appearance: status.appearance,
-		nodeModel: createLearningPathModuleNodeModel({ module, status, t }),
+
+		nodeModel: createLearningPathModuleNodeModel({
+			module,
+			status,
+			t
+		}),
+
 		cardModel: {
 			id: module.id,
 			eyebrow: t.learningPathPartLabel(module.position),
 			title: module.title,
-			statusLabel: createStatusLabel(status.statusKey, module.progress, t),
 			progressSummaryLabel: t.learningPathProgressStatus(module.progress.completedSessions, module.progress.totalSessions),
 			appearance: status.appearance,
 			isCurrentStep: module.availability.isCurrent,
@@ -31,23 +68,30 @@ export default function createLearningPathModuleModel({ module, resumableSession
 			masteryRingModel: progressModel,
 			chevronLabel: t.learningPathToggleDetailsLabel(module.title)
 		},
-		detailModel: isExpanded ? {
-			headingId: `learning-path-module-detail-${module.id}`,
-			heading: t.learningPathProgressHistoryHeading,
-			progressModel,
-			sectionsHeading: t.learningPathDetailHeading,
-			description: module.description,
-			sections: module.sections.map((section) => createLearningPathSectionModel({ section, moduleId: module.id, startingActionKey, canStartLearningSessions, t })),
-			actionModel
-		} : null,
+
+		detailModel,
 		actionModel
 	};
 }
 
-function createStatusLabel(statusKey, progress, t) {
-	if (statusKey === "active") return t.learningPathStatusActive;
-	if (statusKey === "completed") return t.learningPathStatusCompleted;
-	if (statusKey === "progress") return t.learningPathProgressStatus(progress.completedSessions, progress.totalSessions);
-	if (statusKey === "locked") return t.learningPathStatusLocked;
-	return t.learningPathStatusNotStarted;
+function createModuleDetailModel({ module, actionModel, progressModel, startingActionKey, canStartLearningSessions, t }) {
+	const sections = module.sections.map((section) => {
+		return createLearningPathSectionModel({
+			section,
+			moduleId: module.id,
+			startingActionKey,
+			canStartLearningSessions,
+			t
+		});
+	});
+
+	return {
+		headingId: `learning-path-module-detail-${module.id}`,
+		heading: t.learningPathProgressHistoryHeading,
+		progressModel,
+		sectionsHeading: t.learningPathDetailHeading,
+		description: module.description,
+		sections,
+		actionModel
+	};
 }

@@ -18,6 +18,12 @@ describe("createContinueLearningModel", () => {
 		const actionModel = { intent: "start", label: "Repair" };
 		expect(createContinueLearningModel({ activeEntry: entry(actionModel), nextActivity: { kind: "start-adaptive-session", activityKind: "repair" }, t }).description).toBe("repair");
 	});
+	test("fails fast for an unknown adaptive activity kind", () => {
+		const actionModel = { intent: "start", label: "Unknown" };
+
+		expect(() => createContinueLearningModel({ activeEntry: entry(actionModel), nextActivity: { kind: "start-adaptive-session", activityKind: "unknown" }, t })).toThrow("Unknown LearningPath adaptive activity 'unknown'");
+	});
+
 	test("does not claim an unpersisted question position when resuming", () => {
 		const actionModel = { intent: "resume", label: "Resume" };
 		const model = createContinueLearningModel({ activeEntry: entry(actionModel), nextActivity: null, t });

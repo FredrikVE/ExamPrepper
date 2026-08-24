@@ -4,11 +4,22 @@ import createLearningPathProgressModel from "./createLearningPathProgressModel.j
 import createLearningPathSessionModel from "./createLearningPathSessionModel.js";
 
 export default function createLearningPathSectionModel({ section, moduleId, startingActionKey, canStartLearningSessions, t }) {
-	const sessions = section.sessions.map((session) => createLearningPathSessionModel({ session, moduleId, startingActionKey, canStartLearningSessions, t }));
-	const hasSelectableSession = section.sessions.some((session) => session.isStartable);
-	const isComplete = section.progress.isComplete;
-	const target = { kind: "section", sectionId: section.id };
-	const actionKey = createLearningPathActionKey({ moduleId, target });
+	const sessions = section.sessions.map((session) => {
+		return createLearningPathSessionModel({
+			session,
+			moduleId,
+			startingActionKey,
+			canStartLearningSessions,
+			t
+		});
+	});
+
+	const chapterTests = section.chapterTests.map((chapterTest) => {
+		return createChapterTestModel({
+			chapterTest,
+			t
+		});
+	});
 
 	return {
 		id: section.id,
@@ -18,24 +29,84 @@ export default function createLearningPathSectionModel({ section, moduleId, star
 		eyebrow: t.learningPathSectionLabel(section.position),
 		progressLabel: t.learningPathSectionProgressLabel(section.progress.completedSessions, section.progress.totalSessions),
 		sessions,
-		actionModel: hasSelectableSession ? {
-			intent: "start",
-			actionKey,
+		actionModel: createSectionActionModel({
+			section,
 			moduleId,
-			sessionId: null,
-			target,
-			label: isComplete ? t.learningPathPracticeSectionLabel : t.learningPathJumpToSectionLabel,
-			isDisabled: !canStartLearningSessions || startingActionKey !== null,
-			isPending: startingActionKey === actionKey
-		} : null,
-		chapterTests: section.chapterTests.map((test) => ({
-			id: test.id,
-			position: test.position,
-			status: test.status,
-			label: t.learningPathChapterTestLabel(test.position),
-			statusLabel: test.status === "available" ? t.learningPathChapterTestAvailableLabel : t.learningPathStatusLocked,
-			isDisabled: test.status !== "available",
-			scoreModel: test.performancePercent === null ? null : createLearningPathProgressModel({ performancePercent: test.performancePercent, performanceBand: test.performanceBand, t })
-		}))
+			startingActionKey,
+			canStartLearningSessions,
+			t
+		}),
+		chapterTests
+	};
+}
+
+function createSectionActionModel({ section, moduleId, startingActionKey, canStartLearningSessions, t }) {
+	const hasStartableSession = section.sessions.some((session) => session.isStartable);
+
+	if (!hasStartableSession) {
+		return null;
+	}
+
+	const target = {
+		kind: "section",
+		sectionId: section.id
+	};
+
+	const actionKey = createLearningPathActionKey({
+		moduleId,
+		target
+	});
+
+	let label = t.learningPathJumpToSectionLabel;
+
+	if (section.progress.isComplete) {
+		label = t.learningPathPracticeSectionLabel;
+	}
+
+	return {
+		intent: "start",
+		actionKey,
+		moduleId,
+		sessionId: null,
+		target,
+		label,
+		isDisabled: !canStartLearningSessions || startingActionKey !== null,
+		isPending: startingActionKey === actionKey
+	};
+}
+
+function createChapterTestModel({ chapterTest, t }) {
+	let statusLabel;
+
+	if (chapterTest.status === "available") {
+		statusLabel = t.learningPathChapterTestAvailableLabel;
+	}
+
+	else if (chapterTest.status === "locked") {
+		statusLabel = t.learningPathStatusLocked;
+	}
+
+	else {
+		throw new Error(`Unknown LearningPath chapter test status '${chapterTest.status}'`);
+	}
+
+	let scoreModel = null;
+
+	if (chapterTest.performancePercent !== null) {
+		scoreModel = createLearningPathProgressModel({
+			performancePercent: chapterTest.performancePercent,
+			performanceBand: chapterTest.performanceBand,
+			t
+		});
+	}
+
+	return {
+		id: chapterTest.id,
+		position: chapterTest.position,
+		status: chapterTest.status,
+		label: t.learningPathChapterTestLabel(chapterTest.position),
+		statusLabel,
+		isDisabled: chapterTest.status !== "available",
+		scoreModel
 	};
 }

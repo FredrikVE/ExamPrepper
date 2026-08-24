@@ -1,12 +1,22 @@
 // src/ui/viewmodel/LearningPath/createLearningPathProgressModel.js
 export default function createLearningPathProgressModel({ performancePercent, performanceBand, t }) {
-	const displayPercentage = performancePercent === null ? null : Math.round(performancePercent);
-	const displayValue = displayPercentage === null ? t.learningPathPerformanceNotAssessedLabel : `${displayPercentage}%`;
+	let percentage = 0;
+	let displayPercentage = null;
+	let displayValue = t.learningPathPerformanceNotAssessedLabel;
+	let compactDisplayValue = "–";
+
+	if (performancePercent !== null) {
+		percentage = performancePercent;
+		displayPercentage = Math.round(performancePercent);
+		displayValue = `${displayPercentage}%`;
+		compactDisplayValue = `${displayPercentage}%`;
+	}
+
 	return {
-		percentage: performancePercent ?? 0,
+		percentage,
 		displayPercentage,
 		displayValue,
-		compactDisplayValue: displayPercentage === null ? "–" : `${displayPercentage}%`,
+		compactDisplayValue,
 		appearance: performanceBand,
 		label: t.learningPathPerformanceTitle,
 		accessibleLabel: `${t.learningPathPerformanceTitle}: ${displayValue}`

@@ -1,11 +1,4 @@
 // src/ui/viewmodel/LearningPath/createLearningPathModuleNodeModel.js
-const COMPLETED_PRESENTATION_BY_BAND = Object.freeze({
-	understood: Object.freeze({ appearance: "understood", iconKey: "check" }),
-	progress: Object.freeze({ appearance: "progress", iconKey: "trending" }),
-	practice: Object.freeze({ appearance: "practice", iconKey: "repeat" }),
-	"not-assessed": Object.freeze({ appearance: "completed", iconKey: "check" })
-});
-
 export default function createLearningPathModuleNodeModel({ module, status, t }) {
 	const baseModel = {
 		label: t.learningPathPartLabel(module.position),
@@ -14,12 +7,56 @@ export default function createLearningPathModuleNodeModel({ module, status, t })
 	};
 
 	if (status.statusKey === "active") {
-		return { ...baseModel, appearance: "active", iconKey: null };
+		return {
+			...baseModel,
+			appearance: "active",
+			iconKey: null
+		};
 	}
 
 	if (status.statusKey === "completed") {
-		return { ...baseModel, ...COMPLETED_PRESENTATION_BY_BAND[module.progress.performanceBand] };
+		const completedPresentation = createCompletedPresentation(module.progress.performanceBand);
+
+		return {
+			...baseModel,
+			...completedPresentation
+		};
 	}
 
-	return { ...baseModel, appearance: status.appearance, iconKey: status.iconKey };
+	return {
+		...baseModel,
+		appearance: status.appearance,
+		iconKey: status.iconKey
+	};
+}
+
+function createCompletedPresentation(performanceBand) {
+	switch (performanceBand) {
+		case "understood":
+			return {
+				appearance: "understood",
+				iconKey: "check"
+			};
+
+		case "progress":
+			return {
+				appearance: "progress",
+				iconKey: "trending"
+			};
+
+		case "practice":
+			return {
+				appearance: "practice",
+				iconKey: "repeat"
+			};
+
+		case "not-assessed":
+			return {
+				appearance: "completed",
+				iconKey: "check"
+			};
+
+		default:
+			throw new Error(`Unknown LearningPath performance band '${performanceBand}'`);
+	}
 }

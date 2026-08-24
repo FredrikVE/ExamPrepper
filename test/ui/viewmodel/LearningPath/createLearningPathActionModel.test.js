@@ -45,6 +45,10 @@ describe("createLearningPathActionModel", () => {
 		expect(createLearningPathActionModel({ module: replayUnavailable, resumableSession: null, nextActivity: null, startingActionKey: null, canStartLearningSessions: true, t })).toBeNull();
 	});
 
+	test("fails fast for an unknown adaptive activity kind", () => {
+		expect(() => createLearningPathActionModel({ module, resumableSession: null, nextActivity: { kind: "start-adaptive-session", moduleId: "module-1", activityKind: "unknown" }, startingActionKey: null, canStartLearningSessions: true, t })).toThrow("Unknown LearningPath adaptive activity 'unknown'");
+	});
+
 	test("does not synthesize a module start when backend nextActivity is null", () => {
 		expect(createLearningPathActionModel({ module, resumableSession: null, nextActivity: null, startingActionKey: null, canStartLearningSessions: true, t })).toBeNull();
 	});

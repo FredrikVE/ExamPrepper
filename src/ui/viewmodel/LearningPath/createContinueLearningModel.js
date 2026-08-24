@@ -1,4 +1,4 @@
-//src/ui/viewmodel/LearningPath/createContinueLearningModel.js
+// src/ui/viewmodel/LearningPath/createContinueLearningModel.js
 export default function createContinueLearningModel({ activeEntry, nextActivity, t }) {
 	if (activeEntry === null || activeEntry.actionModel === null) {
 		return {
@@ -14,10 +14,7 @@ export default function createContinueLearningModel({ activeEntry, nextActivity,
 		return {
 			isVisible: true,
 			title: t.learningPathResumeTitle,
-			description: t.learningPathResumeBody(
-				activeEntry.position,
-				activeEntry.title
-			),
+			description: t.learningPathResumeBody(activeEntry.position, activeEntry.title),
 			buttonLabel: t.learningPathContinueNowLabel,
 			actionModel: activeEntry.actionModel
 		};
@@ -26,18 +23,28 @@ export default function createContinueLearningModel({ activeEntry, nextActivity,
 	return {
 		isVisible: true,
 		title: t.learningPathContinueTitle,
-		description: describeNextActivity(nextActivity, activeEntry, t),
+		description: createNextActivityDescription({ nextActivity, activeEntry, t }),
 		buttonLabel: t.learningPathContinueNowLabel,
 		actionModel: activeEntry.actionModel
 	};
 }
 
-function describeNextActivity(nextActivity, activeEntry, t) {
-	if (nextActivity?.kind === "start-adaptive-session") {
-		if (nextActivity.activityKind === "review") return t.learningPathReviewBody(activeEntry.position, activeEntry.title);
-		if (nextActivity.activityKind === "repair") return t.learningPathRepairBody(activeEntry.position, activeEntry.title);
-		return t.learningPathCoverageBody(activeEntry.position, activeEntry.title);
+function createNextActivityDescription({ nextActivity, activeEntry, t }) {
+	if (nextActivity === null || nextActivity.kind !== "start-adaptive-session") {
+		return t.learningPathContinueBody(activeEntry.position, activeEntry.title);
 	}
 
-	return t.learningPathContinueBody(activeEntry.position, activeEntry.title);
+	switch (nextActivity.activityKind) {
+		case "review":
+			return t.learningPathReviewBody(activeEntry.position, activeEntry.title);
+
+		case "repair":
+			return t.learningPathRepairBody(activeEntry.position, activeEntry.title);
+
+		case "coverage":
+			return t.learningPathCoverageBody(activeEntry.position, activeEntry.title);
+
+		default:
+			throw new Error(`Unknown LearningPath adaptive activity '${nextActivity.activityKind}'`);
+	}
 }

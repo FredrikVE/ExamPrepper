@@ -15,10 +15,7 @@ const t = {
 	learningPathSessionScoreLabel: (position, percentage) => `Session ${position}: ${percentage}% result`,
 	learningPathSessionNotAssessedScoreLabel: (position) => `Session ${position}: not assessed`,
 	learningPathToggleDetailsLabel: (title) => `Toggle ${title}`,
-	learningPathStatusActive: "Active",
-	learningPathStatusCompleted: "Completed",
 	learningPathStatusLocked: "Locked",
-	learningPathStatusNotStarted: "Not started",
 	learningPathDetailHeading: "Sections",
 	learningPathResumeLabel: "Resume",
 	learningPathContinueLabel: "Continue",
@@ -50,7 +47,7 @@ describe("createLearningPathRoadmapModel", () => {
 		const model = createLearningPathRoadmapModel({ learningPath, expandedModuleId: learningPath.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t });
 		const module = model.entries[0];
 		expect(module.detailModel.sections[0].sessions).toHaveLength(2);
-		expect(module.cardModel).toMatchObject({ statusLabel: "Active", progressSummaryLabel: "1/4" });
+		expect(module.cardModel).toMatchObject({ progressSummaryLabel: "1/4", appearance: "active" });
 		expect(module.cardModel.masteryRingModel).toMatchObject({ percentage: 67.5, displayValue: "68%", compactDisplayValue: "68%", appearance: "progress" });
 		expect(module.detailModel).toMatchObject({ heading: "Progress and history", sectionsHeading: "Sections", progressModel: { percentage: 67.5, displayValue: "68%", appearance: "progress" } });
 		expect(module.detailModel.sections[0].sessions[0]).toMatchObject({ iconKey: "score", scoreModel: { percentage: 65.38, displayValue: "65%", appearance: "progress" } });
@@ -76,7 +73,7 @@ describe("createLearningPathRoadmapModel", () => {
 
 		const model = createLearningPathRoadmapModel({ learningPath: backendComplete, expandedModuleId: backendComplete.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t });
 
-		expect(model.entries[0]).toMatchObject({ appearance: "completed", cardModel: { statusLabel: "Completed" } });
+		expect(model.entries[0]).toMatchObject({ appearance: "completed", cardModel: { appearance: "completed" } });
 		expect(model.entries[0].detailModel.sections[0].actionModel).toMatchObject({ label: "Practice section" });
 	});
 
@@ -99,6 +96,13 @@ describe("createLearningPathRoadmapModel", () => {
 		const model = createLearningPathRoadmapModel({ learningPath: in5431Shape, expandedModuleId: in5431Shape.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t });
 
 		expect(model.entries[0].detailModel.sections[0].chapterTests.map((test) => test.id)).toEqual(chapterTests.map((test) => test.id));
+	});
+
+	test("fails fast for an unknown chapter test status", () => {
+		const invalidPath = structuredClone(learningPath);
+		invalidPath.modules[0].sections[0].chapterTests[0].status = "unknown";
+
+		expect(() => createLearningPathRoadmapModel({ learningPath: invalidPath, expandedModuleId: invalidPath.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t })).toThrow("Unknown LearningPath chapter test status 'unknown'");
 	});
 
 	test("presents the unlocked exam gate as informational status", () => {

@@ -25,6 +25,10 @@ describe("createLearningPathModuleNodeModel", () => {
 		expect(model).toEqual({ appearance, iconKey, label: "Part 2", value: 2, isCurrentStep: false });
 	});
 
+	test("fails fast for an unknown completed performance band", () => {
+		expect(() => createLearningPathModuleNodeModel({ module: moduleWithBand("unknown"), status: { statusKey: "completed", appearance: "completed", iconKey: "check" }, t })).toThrow("Unknown LearningPath performance band 'unknown'");
+	});
+
 	test("preserves lifecycle presentation for non-completed non-active modules", () => {
 		expect(createLearningPathModuleNodeModel({ module: moduleWithBand("not-assessed"), status: { statusKey: "locked", appearance: "locked", iconKey: "lock" }, t })).toEqual({
 			appearance: "locked", iconKey: "lock", label: "Part 2", value: 2, isCurrentStep: false

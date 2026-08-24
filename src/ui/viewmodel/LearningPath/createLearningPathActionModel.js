@@ -5,42 +5,57 @@ export default function createLearningPathActionModel({ module, resumableSession
 	const canResume = resumableSession !== null && resumableSession.moduleId === module.id;
 
 	if (canResume) {
-		return {
-			intent: "resume",
-			moduleId: module.id,
-			sessionId: resumableSession.sessionId,
-			target: null,
-			label: module.currentRun === null ? t.learningPathResumeLabel : t.learningPathContinueReplayLabel(module.currentRun.completedSessions, module.currentRun.totalSessions),
-			isDisabled: false,
-			isPending: false
-		};
+		return createResumeActionModel({ module, resumableSession, t });
 	}
 
-	if (nextActivity !== null && nextActivity.moduleId === module.id && (nextActivity.kind === "start-authored-session" || nextActivity.kind === "start-adaptive-session")) {
-		const target = { kind: "module" };
-		const actionKey = createLearningPathActionKey({ moduleId: module.id, target });
+	if (isBackendSelectedModuleStart({ moduleId: module.id, nextActivity })) {
+		const target = {
+			kind: "module"
+		};
+
+		const actionKey = createLearningPathActionKey({
+			moduleId: module.id,
+			target
+		});
+
+		let label = t.learningPathContinueLabel;
+
+		if (nextActivity.kind === "start-adaptive-session") {
+			label = createAdaptiveActionLabel({
+				activityKind: nextActivity.activityKind,
+				t
+			});
+		}
+
 		return {
 			intent: "start",
 			actionKey,
 			moduleId: module.id,
 			sessionId: null,
 			target,
-			label: nextActivity.kind === "start-adaptive-session" ? adaptiveLabel(nextActivity.activityKind, t) : t.learningPathContinueLabel,
+			label,
 			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || startingActionKey !== null,
 			isPending: startingActionKey === actionKey
 		};
 	}
 
 	if (module.isReplayAvailable) {
-		const target = { kind: "module-replay" };
-		const actionKey = createLearningPathActionKey({ moduleId: module.id, target });
+		const target = {
+			kind: "module-replay"
+		};
+
+		const actionKey = createLearningPathActionKey({
+			moduleId: module.id,
+			target
+		});
+
 		return {
 			intent: "start",
 			actionKey,
 			moduleId: module.id,
 			sessionId: null,
 			target,
-			label: module.currentRun === null ? t.learningPathReplayModuleLabel : t.learningPathContinueReplayLabel(module.currentRun.completedSessions, module.currentRun.totalSessions),
+			label: createReplayActionLabel({ module, t }),
 			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || startingActionKey !== null,
 			isPending: startingActionKey === actionKey
 		};
@@ -49,8 +64,52 @@ export default function createLearningPathActionModel({ module, resumableSession
 	return null;
 }
 
-function adaptiveLabel(activityKind, t) {
-	if (activityKind === "review") return t.learningPathStartReviewLabel;
-	if (activityKind === "repair") return t.learningPathStartRepairLabel;
-	return t.learningPathStartCoverageLabel;
+function createResumeActionModel({ module, resumableSession, t }) {
+	let label = t.learningPathResumeLabel;
+
+	if (module.currentRun !== null) {
+		label = t.learningPathContinueReplayLabel(module.currentRun.completedSessions, module.currentRun.totalSessions);
+	}
+
+	return {
+		intent: "resume",
+		moduleId: module.id,
+		sessionId: resumableSession.sessionId,
+		target: null,
+		label,
+		isDisabled: false,
+		isPending: false
+	};
+}
+
+function createReplayActionLabel({ module, t }) {
+	if (module.currentRun === null) {
+		return t.learningPathReplayModuleLabel;
+	}
+
+	return t.learningPathContinueReplayLabel(module.currentRun.completedSessions, module.currentRun.totalSessions);
+}
+
+function isBackendSelectedModuleStart({ moduleId, nextActivity }) {
+	if (nextActivity === null || nextActivity.moduleId !== moduleId) {
+		return false;
+	}
+
+	return nextActivity.kind === "start-authored-session" || nextActivity.kind === "start-adaptive-session";
+}
+
+function createAdaptiveActionLabel({ activityKind, t }) {
+	switch (activityKind) {
+		case "review":
+			return t.learningPathStartReviewLabel;
+
+		case "repair":
+			return t.learningPathStartRepairLabel;
+
+		case "coverage":
+			return t.learningPathStartCoverageLabel;
+
+		default:
+			throw new Error(`Unknown LearningPath adaptive activity '${activityKind}'`);
+	}
 }

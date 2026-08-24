@@ -45,6 +45,10 @@ describe("createLearningPathSessionModel", () => {
 		expect(other.actionModel).toMatchObject({ isDisabled: true, isPending: false });
 	});
 
+	test("fails fast for an unknown session status", () => {
+		expect(() => createLearningPathSessionModel(options({ session: session({ status: "unknown" }) }))).toThrow("Unknown LearningPath session status 'unknown'");
+	});
+
 	test("takes selectability directly from backend isStartable", () => {
 		const selectable = createLearningPathSessionModel(options());
 		expect(selectable).toMatchObject({ isSelectable: true, actionModel: { actionKey: "module:module-1:session:plan-1", target: { kind: "session", planKey: "plan-1" } } });

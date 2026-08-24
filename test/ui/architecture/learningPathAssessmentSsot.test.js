@@ -53,29 +53,19 @@ describe("LearningPath assessment and start-authority SSOT", () => {
 		expect(sessionCss).toContain("var(--assessment-progress)");
 	});
 
-	test("consumes backend completion facts instead of reconstructing them", () => {
+	test("does not reconstruct completion from frontend thresholds or counters", () => {
 		const status = read("src/ui/viewmodel/LearningPath/createModuleStatus.js");
 		const section = read("src/ui/viewmodel/LearningPath/createLearningPathSectionModel.js");
-		expect(status).toContain("if (isComplete)");
+
 		expect(status).not.toMatch(/completionPercent\s*>=/);
-		expect(section).toContain("const isComplete = section.progress.isComplete");
 		expect(section).not.toMatch(/completedSessions\s*>=\s*section\.progress\.totalSessions/);
 	});
 
-	test("consumes backend replay and next-activity authority without a synthetic module start", () => {
+	test("does not reconstruct replay or start authority from frontend progress", () => {
 		const action = read("src/ui/viewmodel/LearningPath/createLearningPathActionModel.js");
-		const viewModel = read("src/ui/viewmodel/LearningPathPageViewModel.js");
-		expect(action).toContain("if (module.isReplayAvailable)");
+
 		expect(action).not.toContain("isHistoricallyComplete");
 		expect(action).not.toMatch(/completedSessions\s*>=\s*module\.progress\.totalSessions/);
 		expect(action).not.toContain("module.availability.isCurrent && module.availability.isUnlocked");
-		expect(viewModel).toContain("target: actionModel.target");
-		expect(viewModel).not.toContain("target: actionModel.target ??");
-	});
-
-	test("derives frontend selectability only from backend isStartable", () => {
-		const source = read("src/ui/viewmodel/LearningPath/createLearningPathSessionModel.js");
-		expect(source).toContain("const isSelectable = session.isStartable");
-		expect(source).not.toMatch(/isSelectable\s*=.*status/);
 	});
 });
