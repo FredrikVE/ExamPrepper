@@ -1,4 +1,4 @@
-<!--docs/architecture/SSOT_REGISTER_FRONTEND.md-->
+<!--docs/documentation/SSOT_REGISTER_FRONTEND.md-->
 # SSOT-register — ExamPrepper frontend
 
 Oppdatert: 2026-08-24

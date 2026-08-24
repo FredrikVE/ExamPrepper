@@ -8,7 +8,7 @@ Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik de
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
 kontraktene i dette dokumentet.
 
-`docs/architecture/SSOT_REGISTER_FRONTEND.md` er evidensregisteret som viser hva kodebasen faktisk
+`docs/documentation/SSOT_REGISTER_FRONTEND.md` er evidensregisteret som viser hva kodebasen faktisk
 bruker, hvilke importører og tester som finnes, og hva som fortsatt er gjeld. SOUL-dokumentet sier
 hvilke regler ny og endret kode skal følge. De to dokumentene oppdateres i samme arkitekturpatch når
 eierskap eller canonical implementasjoner endres.
@@ -226,7 +226,7 @@ ViewModelen, som eksponerer ferdige verdier og handlinger nedover gjennom View-h
 SSOT-refaktoreringen har etablert stående kontrakter for navigasjon, Header, WorkspaceScaffold,
 lasttilstand, i18n, app-brytpunkt, globale lag, søkenormalisering, shuffle, root error boundary og
 de viktigste delte mobil-/søkemekanismene. Detaljert bevis, importører og testnavn ligger i
-`docs/architecture/SSOT_REGISTER_FRONTEND.md`; SOUL-dokumentet gjentar ikke flyktige testtall.
+`docs/documentation/SSOT_REGISTER_FRONTEND.md`; SOUL-dokumentet gjentar ikke flyktige testtall.
 
 Denne seksjonen er ikke en komplett teknisk gjeldsinventory. Eldre kode kan fortsatt bryte kodestil-
 eller signaturregler, blant annet forbudet mot default-parametre og kravet om tabs. Slike avvik følger
