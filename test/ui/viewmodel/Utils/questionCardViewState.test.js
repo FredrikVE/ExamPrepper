@@ -1,3 +1,4 @@
+// test/ui/viewmodel/Utils/questionCardViewState.test.js
 import { describe, expect, test } from "@jest/globals";
 import { QUESTION_TYPES } from "../../../../src/constants/QuestionTypes.js";
 import { getQuestionTypeLabel, getQuestionViewState } from "../../../../src/ui/viewmodel/Utils/questionCardViewState.js";
@@ -12,6 +13,8 @@ const labels = {
 	questionTypeSequenceOrder: "sequenceOrder",
 	questionTypeDropdownFill: "dropdownFill",
 	questionTypeRadioButtonGrid: "radioButtonGrid",
+	questionTypeTapToFillMultipleBlank: "tapToFillMultipleBlank",
+	questionTypeWriteToFillMultipleBlank: "writeToFillMultipleBlank",
 	questionTypeUnknown: "unknown"
 };
 
@@ -24,7 +27,9 @@ const expectedLabelsByQuestionType = new Map([
 	[QUESTION_TYPES.MATRIX_PLACEMENT, labels.questionTypeMatrixPlacement],
 	[QUESTION_TYPES.SEQUENCE_ORDER, labels.questionTypeSequenceOrder],
 	[QUESTION_TYPES.DROPDOWN_FILL, labels.questionTypeDropdownFill],
-	[QUESTION_TYPES.RADIO_BUTTON_GRID, labels.questionTypeRadioButtonGrid]
+	[QUESTION_TYPES.RADIO_BUTTON_GRID, labels.questionTypeRadioButtonGrid],
+	[QUESTION_TYPES.TAP_TO_FILL_MULTIPLE_BLANK, labels.questionTypeTapToFillMultipleBlank],
+	[QUESTION_TYPES.WRITE_TO_FILL_MULTIPLE_BLANK, labels.questionTypeWriteToFillMultipleBlank]
 ]);
 
 describe("questionCardViewState", () => {
@@ -39,40 +44,84 @@ describe("questionCardViewState", () => {
 		expect(getQuestionTypeLabel(null, labels)).toBe(labels.questionTypeUnknown);
 	});
 
-	test.each([
-		[QUESTION_TYPES.SINGLE, { shouldShowSingleOptions: true, shouldShowMultiOptions: false }],
-		[QUESTION_TYPES.MULTI, { shouldShowSingleOptions: false, shouldShowMultiOptions: true }],
-		[QUESTION_TYPES.FILL, { shouldShowFillInput: true, shouldShowOptions: false }],
-		[QUESTION_TYPES.DRAG_DROP, { shouldShowDragDrop: true, shouldShowOptions: false }],
-		[QUESTION_TYPES.DRAG_CATEGORIZE, { shouldShowDragCategorize: true, shouldShowOptions: false }],
-		[QUESTION_TYPES.MATRIX_PLACEMENT, { shouldShowMatrixPlacement: true, shouldShowPrompt: false }],
-		[QUESTION_TYPES.SEQUENCE_ORDER, { shouldShowSequenceOrder: true, shouldShowOptions: false }],
-		[QUESTION_TYPES.DROPDOWN_FILL, { shouldShowDropdownFill: true, shouldShowOptions: false }],
-		[QUESTION_TYPES.RADIO_BUTTON_GRID, { shouldShowRadioButtonGrid: true, shouldShowOptions: false }]
-	])("characterizes the presentation branch for %s", (questionType, expectedState) => {
+	test("builds shared presentation state before submit", () => {
 		const state = getQuestionViewState({
-			question: { type: questionType, prompt: "Prompt" },
+			question: {
+				type: QUESTION_TYPES.SINGLE,
+				source: "Lecture"
+			},
+			submitted: false,
+			showAllFeedback: true,
+			correct: false
+		});
+
+		expect(state).toEqual({
+			feedbackMode: false,
+			hasInlineFillBlank: false,
+			shouldShowPrompt: true,
+			shouldShowWarning: false,
+			shouldShowFillFeedback: false,
+			shouldShowSource: false
+		});
+	});
+
+	test("builds fill feedback state after submit", () => {
+		const state = getQuestionViewState({
+			question: {
+				type: QUESTION_TYPES.FILL,
+				prompt: "A ___ is B"
+			},
+			submitted: true,
+			showAllFeedback: true,
+			correct: true
+		});
+
+		expect(state).toEqual({
+			feedbackMode: true,
+			hasInlineFillBlank: true,
+			shouldShowPrompt: true,
+			shouldShowWarning: false,
+			shouldShowFillFeedback: true,
+			shouldShowSource: false
+		});
+	});
+
+	test("hides the shared prompt for matrix placement", () => {
+		const state = getQuestionViewState({
+			question: {
+				type: QUESTION_TYPES.MATRIX_PLACEMENT
+			},
 			submitted: false,
 			showAllFeedback: false,
 			correct: false
 		});
 
-		expect(state).toMatchObject(expectedState);
+		expect(state.shouldShowPrompt).toBe(false);
 	});
-	test("does not route an unknown question type through a choice renderer", () => {
-		const state = getQuestionViewState({
-			question: { type: "future-question-type", options: [{ id: "option-1" }] },
-			submitted: false,
+
+	test("shows warning without full feedback and source with full feedback", () => {
+		const question = {
+			type: QUESTION_TYPES.SINGLE,
+			source: "Lecture"
+		};
+
+		const warningState = getQuestionViewState({
+			question,
+			submitted: true,
 			showAllFeedback: false,
 			correct: false
 		});
 
-		expect(state).toMatchObject({
-			shouldShowOptions: false,
-			shouldShowMultiOptions: false,
-			shouldShowSingleOptions: false,
-			inputType: null
+		const feedbackState = getQuestionViewState({
+			question,
+			submitted: true,
+			showAllFeedback: true,
+			correct: false
 		});
-	});
 
+		expect(warningState.shouldShowWarning).toBe(true);
+		expect(warningState.shouldShowSource).toBe(false);
+		expect(feedbackState.shouldShowWarning).toBe(false);
+		expect(feedbackState.shouldShowSource).toBe(true);
+	});
 });
