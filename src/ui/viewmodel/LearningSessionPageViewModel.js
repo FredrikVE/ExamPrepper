@@ -6,6 +6,7 @@ import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import { updateObjectAnswerSelection, updateSingleAnswerSelection, toggleMultiAnswerSelection } from "./QuestionSession/updateAnswers.js";
 import createRewardModel from "./LearningSession/createRewardModel.js";
 import createSessionResultModel from "./LearningSession/createSessionResultModel.js";
+import createCheckedAnswerResult from "./LearningSession/createCheckedAnswerResult.js";
 import shouldShowSessionActionPanel from "./LearningSession/shouldShowSessionActionPanel.js";
 import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "./LearningSession/sessionReducer.js";
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
@@ -30,11 +31,20 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	const toggleMultiAnswer = useCallback((_questionId, selectedValue) => { if (currentQuestion !== null && currentResult === null) changeAnswers((answers) => toggleMultiAnswerSelection(answers, currentQuestion.sessionQuestionId, selectedValue)); }, [changeAnswers, currentQuestion, currentResult]);
 	const selectObjectAnswer = useCallback((_questionId, itemId, selectedValue) => { if (currentQuestion !== null && currentResult === null) changeAnswers((answers) => updateObjectAnswerSelection(answers, currentQuestion.sessionQuestionId, itemId, selectedValue)); }, [changeAnswers, currentQuestion, currentResult]);
 	const checkAnswer = useCallback(() => {
-		if (currentQuestion === null || currentResult !== null) return;
-		const id = currentQuestion.sessionQuestionId;
+		if (currentQuestion === null || currentResult !== null) {
+			return;
+		}
+
+		const sessionQuestionId = currentQuestion.sessionQuestionId;
 		const question = currentQuestion.question;
-		const answer = state.answersBySessionQuestionId[id] ?? null;
-		dispatch({ type: SESSION_ACTIONS.ANSWER_CHECKED, sessionQuestionId: id, result: { isCorrect: gradeAnswerUseCase.execute(question, answer), pointsAwarded: gradeAnswerUseCase.getQuestionScore(question, answer), maxPoints: question.points } });
+		const answer = state.answersBySessionQuestionId[sessionQuestionId] ?? null;
+		const result = createCheckedAnswerResult({ question, answer, gradeAnswerUseCase });
+
+		dispatch({
+			type: SESSION_ACTIONS.ANSWER_CHECKED,
+			sessionQuestionId,
+			result
+		});
 	}, [currentQuestion, currentResult, gradeAnswerUseCase, state.answersBySessionQuestionId]);
 	const submitSession = useCallback(async () => {
 		if (state.sessionId === null || state.submitStatus === "submitting" || state.submitStatus === "succeeded") return;

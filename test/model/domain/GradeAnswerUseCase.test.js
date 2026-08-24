@@ -344,6 +344,22 @@ describe("GradeAnswerUseCase", () => {
             });
         });
 
+	test("keeps only the latest item assigned to a quadrant", () => {
+		const answer = {
+			diversification: "low-standardization-low-integration",
+			coordination: "low-standardization-low-integration",
+			replication: "high-standardization-low-integration"
+		};
+
+		expect(useCase.getMatrixPlacementStats(question, answer)).toEqual({
+			correct: 1,
+			wrong: 1,
+			unanswered: 1
+		});
+
+		expect(useCase.getQuestionScore(question, answer)).toBe(1);
+	});
+
         test("does not allow a partial answer to count as fully correct", () => {
             expect(useCase.execute(question, {
                 diversification: "low-standardization-low-integration",

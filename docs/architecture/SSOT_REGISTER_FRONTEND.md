@@ -70,6 +70,8 @@ De viktigste åpne avvikene er:
 | LP-02 | LearningPath auth-precondition | **UNVERIFIED** | `session.isStartable` forblir backend-eid læringspolicy, mens `canStartLearningSessions` nå er en separat auth/runtime-precondition for start-actions og handleren har defense-in-depth. Full Jest/build er ikke verifisert i miljøet. |
 | LP-04 | LearningPath ExamGate semantics | **UNVERIFIED** | ExamGate er korrigert til en informasjonsflate: ulåst node bruker check-ikon, ChevronRight/click-affordance er fjernet, og copy sier at eksamen er tilgjengelig. Direkte behavior-probe bekrefter modellsemantikken; full Jest/build er ikke verifisert i dette miljøet. |
 | LP-05 | Resume question position | **UNVERIFIED** | Frontendcopy er korrigert til å resume på modulnivå uten å hevde en konkret question-position, og `createContinueLearningModel` avhenger ikke lenger av `resumableSession.currentQuestionPosition`. Direkte behavior-probe bekrefter copy-fiksen; full Jest/build er ikke verifisert i dette miljøet. |
+| LP-06 | LearningSession fuzzy fill feedback | **UNVERIFIED** | Checked-answer-resultatet bevarer nå `fillMatchType` fra `GradeAnswerUseCase`, slik at `QuestionCard` kan presentere fuzzy fill-feedback etter svarcheck. Full Jest/build er ikke verifisert i dette miljøet. |
+| LP-07 | Matrix placement grading normalization | **UNVERIFIED** | Domain-grading normaliserer nå matrix-svar med samme én-item-per-quadrant-semantikk som UI: en senere plassering erstatter tidligere occupant i samme quadrant. Full Jest/build er ikke verifisert i dette miljøet. |
 | TEST-01 | Architecture/source-test inventory | **DEBT** | Snapshotet har 35 arkitekturtester og 53 tester som leser produksjonssource direkte. Audit viser både legitime dependency-gater og implementation-detail-/migreringstester som skal ryddes inkrementelt. |
 
 ## Autoritative registre og runtime-SSOT
@@ -454,6 +456,8 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 | Action precedence | Backend-signaler + frontend-orchestrering | **UNVERIFIED (LP-01)** | Implementasjonen følger nå den normative kontrakten `resumableSession → nextActivity → explicit replay → ingen action`; full Jest/build gjenstår før GREEN. |
 | Aktiv LearningSession-navigasjon | Backend `resumableSession` / konfliktens `activeSessionId` | **GREEN** | ViewModel gjenopptar aktiv økt direkte og bruker conflict-id som defensiv fallback. |
 | Resume question-position | Backend active-session-summary | **IMPLEMENTED / UNVERIFIED (LP-05)** | Frontend presenterer ikke lenger en konkret question-position. Backendfeltet kan fortsatt eksistere i read-modellen, men brukes ikke som produktpåstand i resume-copy. Full verifikasjon av patchen gjenstår. |
+| Fuzzy fill-feedback | `GradeAnswerUseCase.getFillMatchType()` → checked-answer-resultat | **IMPLEMENTED / UNVERIFIED (LP-06)** | ViewModelens checked-resultat bevarer nå `fillMatchType`; `QuestionCard` konsumerer feltet fra samme result state. Full verifikasjon av patchen gjenstår. |
+| Matrix placement normalization | `GradeAnswerUseCase` | **IMPLEMENTED / UNVERIFIED (LP-07)** | Grading håndhever nå én item per quadrant og lar siste gyldige plassering erstatte tidligere occupant, likt QuestionCard-UI. Full verifikasjon av patchen gjenstår. |
 | Assessment-farger | `Tokens.css` via `--assessment-*` | **GREEN** | LearningPath/LearningSession bruker delte semantiske tokens. |
 
 ### Action precedence som skal verifiseres etter patch 01

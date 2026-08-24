@@ -532,6 +532,12 @@ export default class GradeAnswerUseCase {
                 continue;
             }
 
+            for (const existingItemId in normalizedAnswer) {
+                if (normalizedAnswer[existingItemId] === quadrantId) {
+                    delete normalizedAnswer[existingItemId];
+                }
+            }
+
             normalizedAnswer[itemId] = quadrantId;
         }
 
