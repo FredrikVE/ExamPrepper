@@ -25,7 +25,8 @@ describe("ChapterTestQuestionDataSource", () => {
     test("fetches canonical practice questions from the ChapterTest resource", async () => {
         global.fetch.mockResolvedValue(createResponse([]));
         const dataSource = new ChapterTestQuestionDataSource({
-            baseUrl: "https://api.example.test"
+            baseUrl: "https://api.example.test",
+            getToken: null
         });
 
         await dataSource.fetchPracticeQuestions("chapter/1");

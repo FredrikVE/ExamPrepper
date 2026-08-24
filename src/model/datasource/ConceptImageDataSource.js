@@ -5,8 +5,8 @@ export default class ConceptImageDataSource extends DataSource {
     #catalogPromisesBySubjectId;
     #imageBaseUrl;
 
-    constructor({ baseUrl, imageBaseUrl }) {
-        super({ baseUrl });
+    constructor({ baseUrl, imageBaseUrl, getToken }) {
+        super({ baseUrl, getToken });
         this.#catalogPromisesBySubjectId = new Map();
         this.#imageBaseUrl = this.#normalizeBaseUrl(
             imageBaseUrl ?? this.#deriveImageBaseUrl(baseUrl)

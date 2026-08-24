@@ -1,8 +1,8 @@
 // src/ui/theme/ThemeContext.jsx
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { readThemePreference, tryWriteThemePreference } from "./themePreference.js";
 
 const ThemeContext = createContext();
-const THEME_STORAGE_KEY = "theme";
 
 export function ThemeProvider({ children }) {
 	const [isDark, setIsDark] = useState(readInitialDarkMode);
@@ -12,17 +12,8 @@ export function ThemeProvider({ children }) {
 	}, []);
 
 	useEffect(() => {
-		const root = document.documentElement;
-
-		if (isDark) {
-			root.classList.add("dark");
-		}
-
-		else {
-			root.classList.remove("dark");
-		}
-
-		writeThemePreference(isDark);
+		applyDocumentTheme(isDark);
+		tryWriteThemePreference(isDark);
 	}, [isDark]);
 
 	return (
@@ -37,37 +28,27 @@ export function useTheme() {
 }
 
 function readInitialDarkMode() {
-	try {
-		const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+	const storedTheme = readThemePreference();
 
-		if (savedTheme !== null) {
-			return savedTheme === "dark";
-		}
+	if (storedTheme === "dark") {
+		return true;
 	}
 
-	catch {
-		// Storage unavailable. Use system preference.
+	if (storedTheme === "light") {
+		return false;
 	}
 
 	return window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
-function writeThemePreference(isDark) {
-	let theme;
+function applyDocumentTheme(isDark) {
+	const root = document.documentElement;
 
 	if (isDark) {
-		theme = "dark";
+		root.classList.add("dark");
 	}
 
 	else {
-		theme = "light";
-	}
-
-	try {
-		localStorage.setItem(THEME_STORAGE_KEY, theme);
-	}
-
-	catch {
-		// Runtime theme still remains active.
+		root.classList.remove("dark");
 	}
 }

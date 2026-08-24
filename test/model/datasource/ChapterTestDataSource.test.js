@@ -43,7 +43,8 @@ describe("ChapterTestDataSource", () => {
             .mockResolvedValueOnce(createResponse(chapterTestDto));
 
         const dataSource = new ChapterTestDataSource({
-            baseUrl: "https://api.example.test"
+            baseUrl: "https://api.example.test",
+            getToken: null
         });
 
         await expect(dataSource.fetchTestSetsBySubject({

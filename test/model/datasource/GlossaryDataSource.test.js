@@ -37,7 +37,8 @@ describe("GlossaryDataSource", () => {
 			payload: { glossaryEntries }
 		}));
 		const dataSource = new GlossaryDataSource({
-			baseUrl: "https://api.example.test/"
+			baseUrl: "https://api.example.test/",
+			getToken: null
 		});
 
 		const response = await dataSource.fetchGlossaryEntriesBySubject({
@@ -59,7 +60,8 @@ describe("GlossaryDataSource", () => {
 			payload: { glossaryEntries }
 		}));
 		const dataSource = new GlossaryDataSource({
-			baseUrl: "https://api.example.test"
+			baseUrl: "https://api.example.test",
+			getToken: null
 		});
 
 		await dataSource.fetchGlossaryEntriesBySubjectAndTopicArea({
@@ -82,7 +84,8 @@ describe("GlossaryDataSource", () => {
 			payload: { error: errorMessage }
 		}));
 		const dataSource = new GlossaryDataSource({
-			baseUrl: "https://api.example.test"
+			baseUrl: "https://api.example.test",
+			getToken: null
 		});
 
 		await expect(dataSource.fetchGlossaryEntriesBySubject({
@@ -98,7 +101,8 @@ describe("GlossaryDataSource", () => {
 	])("rejects an invalid glossary response shape", async (payload) => {
 		global.fetch.mockResolvedValue(createResponse({ payload }));
 		const dataSource = new GlossaryDataSource({
-			baseUrl: "https://api.example.test"
+			baseUrl: "https://api.example.test",
+			getToken: null
 		});
 
 		await expect(dataSource.fetchGlossaryEntriesBySubject({
@@ -129,7 +133,7 @@ describe("GlossaryDataSource", () => {
 		global.fetch.mockResolvedValue(createResponse({
 			payload: { subjectId: "in2120", concepts }
 		}));
-		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test" });
+		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test", getToken: null });
 
 		const response = await dataSource.fetchGlossaryOverview({ subjectId: "in2120" });
 
@@ -153,7 +157,7 @@ describe("GlossaryDataSource", () => {
 		global.fetch.mockResolvedValue(createResponse({
 			payload: { subjectId: "in2120", concepts: [concept] }
 		}));
-		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test" });
+		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test", getToken: null });
 
 		await expect(dataSource.fetchGlossaryOverview({ subjectId: "in2120" })).rejects.toThrow("Invalid glossary response");
 	});
@@ -174,7 +178,7 @@ describe("GlossaryDataSource", () => {
 			depth: 1
 		};
 		global.fetch.mockResolvedValue(createResponse({ payload }));
-		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test" });
+		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test", getToken: null });
 
 		const response = await dataSource.fetchGlossaryNetwork({
 			subjectId: "in 2120",

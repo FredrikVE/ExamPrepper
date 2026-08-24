@@ -1,19 +1,25 @@
 // src/model/datasource/DataSource.js
 export default class DataSource {
 	#baseUrl;
+	#getToken;
 
-	constructor({ baseUrl, getToken = null }) {
+	constructor({ baseUrl, getToken }) {
 		if (!baseUrl) {
 			throw new Error("DataSource requires baseUrl");
 		}
 
+		if (getToken !== null && typeof getToken !== "function") {
+			throw new Error("DataSource requires getToken to be a function or null");
+		}
+
 		this.#baseUrl = baseUrl.replace(/\/$/, "");
-		this.getToken = getToken;
+		this.#getToken = getToken;
 	}
 
 	async get(path) {
 		return await this.#request(path, {
-			method: "GET"
+			method: "GET",
+			headers: {}
 		});
 	}
 
@@ -53,11 +59,11 @@ export default class DataSource {
 	}
 
 	async #getAuthHeaders() {
-		if (!this.getToken) {
+		if (this.#getToken === null) {
 			return {};
 		}
 
-		const token = await this.getToken();
+		const token = await this.#getToken();
 
 		if (!token) {
 			return {};

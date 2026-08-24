@@ -54,27 +54,22 @@ const apiBaseUrl = requiredEnv("VITE_API_BASE_URL");
 const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
-const subjectDataSource = new SubjectDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const subjectDataSource = new SubjectDataSource({ baseUrl: apiBaseUrl });
 const examDataSource = new ExamDataSource({
-    baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken
+    baseUrl: apiBaseUrl
 });
 const examQuestionDataSource = new ExamQuestionDataSource({
-    baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken
+    baseUrl: apiBaseUrl
 });
 const chapterTestDataSource = new ChapterTestDataSource({
-    baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken
+    baseUrl: apiBaseUrl
 });
 const chapterTestQuestionDataSource = new ChapterTestQuestionDataSource({
-    baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken
+    baseUrl: apiBaseUrl
 });
 const conceptImageDataSource = new ConceptImageDataSource({
     baseUrl: apiBaseUrl,
-    imageBaseUrl,
-    getToken: getActiveAuthToken
+    imageBaseUrl
 });
 const glossaryDataSource = new GlossaryDataSource({
     baseUrl: apiBaseUrl,

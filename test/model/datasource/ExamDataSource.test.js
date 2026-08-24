@@ -43,7 +43,8 @@ describe("ExamDataSource", () => {
             .mockResolvedValueOnce(createResponse(examDto));
 
         const dataSource = new ExamDataSource({
-            baseUrl: "https://api.example.test"
+            baseUrl: "https://api.example.test",
+            getToken: null
         });
 
         await expect(dataSource.fetchTestSetsBySubject({
