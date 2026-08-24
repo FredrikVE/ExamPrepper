@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
+import { LANGUAGES, translations } from "../../../../src/i18n/translations.js";
 import createLearningPathRoadmapModel from "../../../../src/ui/viewmodel/LearningPath/createLearningPathRoadmapModel.js";
 
 const learningPath = JSON.parse(fs.readFileSync(path.resolve("test/fixtures/learning-path/learning-path-response.json"), "utf8"));
@@ -39,7 +40,7 @@ const t = {
 	learningPathChapterTestLabel: (position) => `Chapter test ${position}`,
 	learningPathChapterTestAvailableLabel: "Ready",
 	learningPathExamTitle: "Exam",
-	learningPathExamUnlockedLabel: "Unlocked",
+	learningPathExamUnlockedLabel: translations[LANGUAGES.EN].learningPathExamUnlockedLabel,
 	learningPathExamLockedLabel: "Locked",
 	learningPathModulesLabel: "Modules"
 };
@@ -98,6 +99,30 @@ describe("createLearningPathRoadmapModel", () => {
 		const model = createLearningPathRoadmapModel({ learningPath: in5431Shape, expandedModuleId: in5431Shape.modules[0].id, startingActionKey: null, canStartLearningSessions: true, t });
 
 		expect(model.entries[0].detailModel.sections[0].chapterTests.map((test) => test.id)).toEqual(chapterTests.map((test) => test.id));
+	});
+
+	test("presents the unlocked exam gate as informational status", () => {
+		const unlockedPath = {
+			...learningPath,
+			examGate: {
+				isUnlocked: true
+			}
+		};
+
+		const model = createLearningPathRoadmapModel({ learningPath: unlockedPath, expandedModuleId: null, startingActionKey: null, canStartLearningSessions: true, t });
+		const examGate = model.entries[model.entries.length - 1];
+
+		expect(examGate).toMatchObject({
+			kind: "examGate",
+			appearance: "active",
+			nodeModel: {
+				iconKey: "check"
+			},
+			cardModel: {
+				statusLabel: "Exam is available",
+				isDisabled: false
+			}
+		});
 	});
 
 });

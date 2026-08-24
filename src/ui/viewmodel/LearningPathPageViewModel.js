@@ -65,7 +65,7 @@ export default function useLearningPathPageViewModel({ getLearningPathUseCase, s
 
 	const roadmapModel = createLearningPathRoadmapModel({ learningPath, expandedModuleId, startingActionKey, canStartLearningSessions, t });
 	const activeEntry = roadmapModel.entries.find((entry) => entry.kind === "module" && entry.id === learningPath.activeModuleId) ?? null;
-	const continueModel = createContinueLearningModel({ activeEntry, resumableSession: learningPath.resumableSession, nextActivity: learningPath.nextActivity, t });
+	const continueModel = createContinueLearningModel({ activeEntry, nextActivity: learningPath.nextActivity, t });
 	const executeLearningPathAction = useCallback(async (actionModel) => {
 		if (actionModel === null || actionModel.isDisabled) return;
 		if (learningPath.resumableSession !== null) {

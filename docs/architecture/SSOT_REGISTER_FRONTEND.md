@@ -68,7 +68,8 @@ De viktigste åpne avvikene er:
 |---|---|---|---|
 | LP-01 | LearningPath action precedence | **UNVERIFIED** | Implementasjonen er korrigert til `resumableSession → nextActivity → replay → ingen action`, og en direkte behavior-probe bekrefter precedence-fiksen. Full Jest/build er ikke verifisert i denne patchen fordi dependency-installasjon ikke fullførte i miljøet. |
 | LP-02 | LearningPath auth-precondition | **UNVERIFIED** | `session.isStartable` forblir backend-eid læringspolicy, mens `canStartLearningSessions` nå er en separat auth/runtime-precondition for start-actions og handleren har defense-in-depth. Full Jest/build er ikke verifisert i miljøet. |
-| LP-05 | Resume question position | **DRIFT** | Frontend kan presentere «fra oppgave X», mens backendens persistente active-session-summary ikke gir en reelt oppdatert question-position i dagens implementasjon. |
+| LP-04 | LearningPath ExamGate semantics | **UNVERIFIED** | ExamGate er korrigert til en informasjonsflate: ulåst node bruker check-ikon, ChevronRight/click-affordance er fjernet, og copy sier at eksamen er tilgjengelig. Direkte behavior-probe bekrefter modellsemantikken; full Jest/build er ikke verifisert i dette miljøet. |
+| LP-05 | Resume question position | **UNVERIFIED** | Frontendcopy er korrigert til å resume på modulnivå uten å hevde en konkret question-position, og `createContinueLearningModel` avhenger ikke lenger av `resumableSession.currentQuestionPosition`. Direkte behavior-probe bekrefter copy-fiksen; full Jest/build er ikke verifisert i dette miljøet. |
 | TEST-01 | Architecture/source-test inventory | **DEBT** | Snapshotet har 35 arkitekturtester og 53 tester som leser produksjonssource direkte. Audit viser både legitime dependency-gater og implementation-detail-/migreringstester som skal ryddes inkrementelt. |
 
 ## Autoritative registre og runtime-SSOT
@@ -452,7 +453,7 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 | Neste LearningPath-aktivitet | Backend `nextActivity` | **UNVERIFIED (LP-01)** | Action-builderen prioriterer nå backendvalget foran replay; full Jest/build gjenstår før GREEN. |
 | Action precedence | Backend-signaler + frontend-orchestrering | **UNVERIFIED (LP-01)** | Implementasjonen følger nå den normative kontrakten `resumableSession → nextActivity → explicit replay → ingen action`; full Jest/build gjenstår før GREEN. |
 | Aktiv LearningSession-navigasjon | Backend `resumableSession` / konfliktens `activeSessionId` | **GREEN** | ViewModel gjenopptar aktiv økt direkte og bruker conflict-id som defensiv fallback. |
-| Resume question-position | Backend active-session-summary | **DRIFT (LP-05)** | Frontendcopy kan uttrykke en konkret question-position som dagens backend ikke persisterer reelt utover startverdien. |
+| Resume question-position | Backend active-session-summary | **IMPLEMENTED / UNVERIFIED (LP-05)** | Frontend presenterer ikke lenger en konkret question-position. Backendfeltet kan fortsatt eksistere i read-modellen, men brukes ikke som produktpåstand i resume-copy. Full verifikasjon av patchen gjenstår. |
 | Assessment-farger | `Tokens.css` via `--assessment-*` | **GREEN** | LearningPath/LearningSession bruker delte semantiske tokens. |
 
 ### Action precedence som skal verifiseres etter patch 01
