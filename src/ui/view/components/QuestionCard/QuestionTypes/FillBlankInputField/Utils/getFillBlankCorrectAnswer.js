@@ -1,20 +1,12 @@
-//src/ui/view/components/QuestionCard/QuestionTypes/FillBlankInputField/Utils/getFillBlankCorrectAnswer.js
+// src/ui/view/components/QuestionCard/QuestionTypes/FillBlankInputField/Utils/getFillBlankCorrectAnswer.js
 export default function getFillBlankCorrectAnswer(question) {
-    const domainAnswers = Array.isArray(question?.answers)
-        ? question.answers
-        : [];
-    const acceptedAnswers = Array.isArray(question?.acceptedAnswers)
-        ? question.acceptedAnswers
-        : [];
-    const candidates = [
-        ...domainAnswers,
-        ...acceptedAnswers,
-        question?.answerKey
-    ];
+	if (!Array.isArray(question?.acceptedAnswers)) {
+		return "";
+	}
 
-    const correctAnswer = candidates.find((candidate) => {
-        return typeof candidate === "string" && candidate.trim().length > 0;
-    });
+	const correctAnswer = question.acceptedAnswers.find((acceptedAnswer) => {
+		return typeof acceptedAnswer === "string" && acceptedAnswer.trim().length > 0;
+	});
 
-    return correctAnswer?.trim() ?? "";
+	return correctAnswer?.trim() ?? "";
 }

@@ -131,6 +131,21 @@ describe("LearningPathRepository", () => {
 		expect(pathModel.modules[0].sections[0].sessions[0]).not.toHaveProperty("transportOnly");
 	});
 
+	test("keeps canonical question fields in LearningSession responses", async () => {
+		const session = await createRepository().getLearningSession("session-1");
+		const choiceQuestion = session.questions[0].question;
+		const fillQuestion = session.questions[3].question;
+
+		expect(choiceQuestion.options[0]).toMatchObject({
+			isCorrect: true,
+			feedback: "Riktig."
+		});
+		expect(choiceQuestion.options[0]).not.toHaveProperty("correct");
+		expect(choiceQuestion.options[0]).not.toHaveProperty("why");
+		expect(fillQuestion.acceptedAnswers).toEqual(["konfidensialitet"]);
+		expect(fillQuestion).not.toHaveProperty("answers");
+	});
+
 	test("rejects missing canonical question correctness in LearningSession responses", async () => {
 		const response = readFixture("learning-session-response.json");
 		delete response.questions[0].question.options[0].isCorrect;

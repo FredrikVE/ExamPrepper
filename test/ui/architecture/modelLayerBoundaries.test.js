@@ -68,6 +68,14 @@ describe("model layer boundaries", () => {
 		expect(repositoryDirectories).toEqual([]);
 	});
 
+	test("keeps domain limited to Use Cases", () => {
+		const nonUseCaseFiles = collectSourceFiles(domainRoot)
+			.filter((filePath) => !path.basename(filePath).endsWith("UseCase.js"))
+			.map((filePath) => path.relative(domainRoot, filePath));
+
+		expect(nonUseCaseFiles).toEqual([]);
+	});
+
 	test("keeps ViewModels behind Use Cases instead of Repository or DataSource imports", () => {
 		expect(findForbiddenImports(viewModelRoot, ["model/repositories/", "model/datasource/"])).toEqual([]);
 	});

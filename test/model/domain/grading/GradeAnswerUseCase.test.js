@@ -14,9 +14,9 @@ describe("GradeAnswerUseCase", () => {
         const question = {
             type: QUESTION_TYPES.SINGLE,
             options: [
-                { text: "Wrong", correct: false },
-                { text: "Correct", correct: true },
-                { text: "Also wrong", correct: false }
+                { text: "Wrong", isCorrect: false },
+                { text: "Correct", isCorrect: true },
+                { text: "Also wrong", isCorrect: false }
             ]
         };
 
@@ -37,9 +37,9 @@ describe("GradeAnswerUseCase", () => {
         const question = {
             type: QUESTION_TYPES.MULTI,
             options: [
-                { text: "A", correct: true },
-                { text: "B", correct: false },
-                { text: "C", correct: true }
+                { text: "A", isCorrect: true },
+                { text: "B", isCorrect: false },
+                { text: "C", isCorrect: true }
             ]
         };
 
@@ -67,7 +67,7 @@ describe("GradeAnswerUseCase", () => {
     describe("fill in", () => {
         const question = {
             type: QUESTION_TYPES.FILL,
-            answers: ["Digitalization", "digital transformation"]
+            acceptedAnswers: ["Digitalization", "digital transformation"]
         };
 
         test("returns true for accepted answer", () => {
@@ -98,7 +98,7 @@ describe("GradeAnswerUseCase", () => {
     describe("fill in — getFillMatchType", () => {
         const question = {
             type: QUESTION_TYPES.FILL,
-            answers: ["diskonteringsrate", "discount rate"]
+            acceptedAnswers: ["diskonteringsrate", "discount rate"]
         };
 
         test("returns exact for exact match", () => {

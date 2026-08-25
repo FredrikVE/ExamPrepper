@@ -1,5 +1,5 @@
 // src/model/repositories/TestSetRepository.js
-import toPracticeQuestion from "../domain/questions/toPracticeQuestion.js";
+import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 export default class TestSetRepository {
     #testSetDataSource;
@@ -72,7 +72,7 @@ export default class TestSetRepository {
         }
 
         const questionDtos = await this.#getPracticeQuestionDtos(testSetId);
-        const questions = questionDtos.map(toPracticeQuestion);
+        const questions = questionDtos.map((questionDto) => this.#toPracticeQuestion(questionDto));
 
         return await this.#enrichQuestionsWithConceptImages(questions, {
             testSetId: testSet.id,
@@ -80,6 +80,40 @@ export default class TestSetRepository {
             language: language ?? testSet.lang
         });
     }
+
+	#toPracticeQuestion(question) {
+		if (question.type === QUESTION_TYPES.FILL) {
+			if (!Array.isArray(question.acceptedAnswers)) {
+				throw new Error(`Invalid canonical practice question ${String(question.id)}: fill requires acceptedAnswers`);
+			}
+
+			return {
+				...question,
+				acceptedAnswers: [...question.acceptedAnswers]
+			};
+		}
+
+		if (question.type === QUESTION_TYPES.SINGLE || question.type === QUESTION_TYPES.MULTI) {
+			if (!Array.isArray(question.options)) {
+				throw new Error(`Invalid canonical practice question ${String(question.id)}: ${question.type} requires options`);
+			}
+
+			return {
+				...question,
+				options: question.options.map((option) => this.#toPracticeAnswerOption(question, option))
+			};
+		}
+
+		return { ...question };
+	}
+
+	#toPracticeAnswerOption(question, option) {
+		if (typeof option.isCorrect !== "boolean") {
+			throw new Error(`Invalid canonical practice question ${String(question.id)}: option ${String(option.id)} requires isCorrect`);
+		}
+
+		return { ...option };
+	}
 
     async #getPracticeQuestionDtos(testSetId) {
         if (!this.#questionPromisesById.has(testSetId)) {

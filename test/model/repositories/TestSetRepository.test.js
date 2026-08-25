@@ -239,7 +239,7 @@ describe("TestSetRepository", () => {
         expect(result).toEqual([]);
     });
 
-    test("maps the canonical practice response without legacy correctness fallbacks", async () => {
+    test("keeps the canonical practice response without legacy aliases", async () => {
         questionDataSource.fetchPracticeQuestions.mockResolvedValueOnce([
             {
                 id: "single-1",
@@ -260,19 +260,18 @@ describe("TestSetRepository", () => {
 
         expect(result[0].options[0]).toMatchObject({
             isCorrect: true,
-            correct: true,
-            feedback: "Riktig",
-            why: "Riktig"
+            feedback: "Riktig"
         });
+        expect(result[0].options[0]).not.toHaveProperty("correct");
+        expect(result[0].options[0]).not.toHaveProperty("why");
         expect(result[0].options[1]).toMatchObject({
-            isCorrect: false,
-            correct: false
+            isCorrect: false
         });
-        expect(result[0].options[1]).not.toHaveProperty("why");
+        expect(result[0].options[1]).not.toHaveProperty("correct");
         expect(result[1]).toMatchObject({
-            acceptedAnswers: ["COBIT"],
-            answers: ["COBIT"]
+            acceptedAnswers: ["COBIT"]
         });
+        expect(result[1]).not.toHaveProperty("answers");
     });
 
     test("rejects missing canonical correctness instead of treating it as false", async () => {

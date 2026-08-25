@@ -247,12 +247,12 @@ function OptionFeedback({ question, selected, t }) {
 
                                 <span
                                     className={
-                                        option.correct
+                                        option.isCorrect
                                             ? "feedback-panel-option-correct"
                                             : "feedback-panel-option-wrong"
                                     }
                                 >
-                                    {option.correct
+                                    {option.isCorrect
                                         ? t.feedbackOptionCorrect
                                         : t.feedbackOptionWrong}
                                 </span>
@@ -265,7 +265,7 @@ function OptionFeedback({ question, selected, t }) {
                             </div>
 
                             <p className="feedback-panel-option-text">
-                                <FormattedText text={option.why} />
+                                <FormattedText text={option.feedback} />
                             </p>
                         </div>
                     );

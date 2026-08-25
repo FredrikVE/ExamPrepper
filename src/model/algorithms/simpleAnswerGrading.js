@@ -9,7 +9,7 @@ export function isSingleChoiceAnswerCorrect(question, answer) {
 		return false;
 	}
 
-	return selectedOption.correct === true;
+	return selectedOption.isCorrect === true;
 }
 
 export function isMultiChoiceAnswerCorrect(question, answer) {
@@ -30,7 +30,7 @@ export function getFillMatchType(question, answer) {
 		return "none";
 	}
 
-	const hasExactMatch = question.answers.some((acceptedAnswer) => {
+	const hasExactMatch = question.acceptedAnswers.some((acceptedAnswer) => {
 		return normalizeAnswer(acceptedAnswer) === normalizedAnswer;
 	});
 
@@ -38,7 +38,7 @@ export function getFillMatchType(question, answer) {
 		return "exact";
 	}
 
-	const hasFuzzyMatch = question.answers.some((acceptedAnswer) => {
+	const hasFuzzyMatch = question.acceptedAnswers.some((acceptedAnswer) => {
 		return isFuzzyMatch(normalizedAnswer, normalizeAnswer(acceptedAnswer));
 	});
 
@@ -65,7 +65,7 @@ function getSortedCorrectIndexes(question) {
 	const correctIndexes = [];
 
 	question.options.forEach((option, index) => {
-		if (option.correct) {
+		if (option.isCorrect) {
 			correctIndexes.push(index);
 		}
 	});

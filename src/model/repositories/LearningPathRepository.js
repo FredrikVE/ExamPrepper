@@ -1,5 +1,5 @@
 // src/model/repositories/LearningPathRepository.js
-import toPracticeQuestion from "../domain/questions/toPracticeQuestion.js";
+import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 
 const INVALID_LEARNING_PATH_RESPONSE = "Invalid learning path response";
 const INVALID_LEARNING_SESSION_RESPONSE = "Invalid learning session response";
@@ -463,8 +463,42 @@ export default class LearningPathRepository {
 		return {
 			sessionQuestionId: entry.sessionQuestionId,
 			position: entry.position,
-			question: toPracticeQuestion(entry.question)
+			question: this.#toPracticeQuestion(entry.question)
 		};
+	}
+
+	#toPracticeQuestion(question) {
+		if (question.type === QUESTION_TYPES.FILL) {
+			if (!Array.isArray(question.acceptedAnswers)) {
+				throw new Error(`Invalid canonical practice question ${String(question.id)}: fill requires acceptedAnswers`);
+			}
+
+			return {
+				...question,
+				acceptedAnswers: [...question.acceptedAnswers]
+			};
+		}
+
+		if (question.type === QUESTION_TYPES.SINGLE || question.type === QUESTION_TYPES.MULTI) {
+			if (!Array.isArray(question.options)) {
+				throw new Error(`Invalid canonical practice question ${String(question.id)}: ${question.type} requires options`);
+			}
+
+			return {
+				...question,
+				options: question.options.map((option) => this.#toPracticeAnswerOption(question, option))
+			};
+		}
+
+		return { ...question };
+	}
+
+	#toPracticeAnswerOption(question, option) {
+		if (typeof option.isCorrect !== "boolean") {
+			throw new Error(`Invalid canonical practice question ${String(question.id)}: option ${String(option.id)} requires isCorrect`);
+		}
+
+		return { ...option };
 	}
 
 	#toLearningSessionResult(response) {

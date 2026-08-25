@@ -1,4 +1,4 @@
-//test/contracts/gradingFixtureAdapter.js
+// test/contracts/gradingFixtureAdapter.js
 import { QUESTION_TYPES } from "../../src/constants/QuestionTypes.js";
 
 function getOptionIndex(question, optionId) {
@@ -14,7 +14,7 @@ function getOptionIndex(question, optionId) {
 function mapOptions(options) {
 	return options.map((option) => ({
 		id: option.id,
-		correct: option.isCorrect === true,
+		isCorrect: option.isCorrect === true,
 		label: option.label ?? null
 	}));
 }
@@ -82,7 +82,7 @@ export function mapGradingFixtureQuestionToFrontend(question) {
 			id: question.id,
 			type: question.type,
 			points: question.points,
-			answers: question.acceptedAnswers
+			acceptedAnswers: question.acceptedAnswers
 		};
 	}
 

@@ -1,3 +1,4 @@
+// test/ui/viewmodel/LearningSessionPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { QUESTION_TYPES } from "../../../src/constants/QuestionTypes.js";
 import { LANGUAGES, translations } from "../../../src/i18n/translations.js";
@@ -19,7 +20,7 @@ const t = translations[LANGUAGES.EN];
 const question = {
 	type: QUESTION_TYPES.FILL,
 	points: 1,
-	answers: ["discount rate"]
+	acceptedAnswers: ["discount rate"]
 };
 
 function createViewModel({ gradeAnswerUseCase, submitLearningSessionUseCase }) {
