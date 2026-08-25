@@ -1,4 +1,4 @@
-import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS } from "../../../constants/TopicAreas.js";
 
 export const GLOSSARY_TOPIC_AREA_LIST_ID = "glossary-topic-area-list";
 

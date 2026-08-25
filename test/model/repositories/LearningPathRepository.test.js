@@ -6,8 +6,10 @@ import { describe, expect, test } from "@jest/globals";
 import LearningPathRepository from "../../../src/model/repositories/LearningPathRepository.js";
 import FakeLearningPathDataSource from "../../fakes/FakeLearningPathDataSource.js";
 
+const EXPECTED_TRANSPORT_READ_COUNT = 1;
 const fixturesDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../fixtures/learning-path");
 const readFixture = (name) => JSON.parse(fs.readFileSync(path.join(fixturesDirectory, name), "utf8"));
+const SESSION_ID = readFixture("learning-session-response.json").sessionId;
 function createRepository(overrides = {}) {
 	return new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json"), ...overrides }));
 }
@@ -138,6 +140,70 @@ describe("LearningPathRepository", () => {
 });
 
 describe("LearningPathRepository cache", () => {
+	test("reuses the session returned by start without fetching it again", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+		const startedSession = await repository.startLearningSession({ subjectId: "in2120", moduleId: "module-1", language: "no" });
+		const loadedSession = await repository.getLearningSession(SESSION_ID);
+
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningSession")).toHaveLength(0);
+		expect(startedSession).not.toBe(loadedSession);
+		expect(loadedSession).toEqual(startedSession);
+	});
+
+	test("deduplicates concurrent LearningSession reads", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		const firstRead = repository.getLearningSession(SESSION_ID);
+		const secondRead = repository.getLearningSession(SESSION_ID);
+
+		await Promise.all([firstRead, secondRead]);
+
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningSession")).toHaveLength(EXPECTED_TRANSPORT_READ_COUNT);
+	});
+
+	test("removes a failed LearningSession read so the next read retries", async () => {
+		let fetchLearningSessionCalls = 0;
+		const dataSource = {
+			async fetchLearningSession() {
+				fetchLearningSessionCalls += 1;
+
+				if (fetchLearningSessionCalls === 1) {
+					throw new Error("temporary failure");
+				}
+
+				return readFixture("learning-session-response.json");
+			}
+		};
+		const repository = new LearningPathRepository(dataSource);
+
+		await expect(repository.getLearningSession(SESSION_ID)).rejects.toThrow("temporary failure");
+		await expect(repository.getLearningSession(SESSION_ID)).resolves.toMatchObject({ sessionId: SESSION_ID });
+		expect(fetchLearningSessionCalls).toBe(2);
+	});
+
+	test("clears cached LearningSession responses after submitting a LearningSession", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.getLearningSession(SESSION_ID);
+		await repository.submitLearningSession({ sessionId: SESSION_ID, answers: [] });
+		await repository.getLearningSession(SESSION_ID);
+
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningSession")).toHaveLength(2);
+	});
+
+	test("clears cached LearningSession responses when authenticated user state is reset", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.getLearningSession(SESSION_ID);
+		repository.clearUserState();
+		await repository.getLearningSession(SESSION_ID);
+
+		expect(dataSource.calls.filter((call) => call.method === "fetchLearningSession")).toHaveLength(2);
+	});
 	test("caches the DataSource response by subject and language while returning fresh mapped objects", async () => {
 		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
 		const repository = new LearningPathRepository(dataSource);

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { QUESTION_TYPES } from "../../../src/constants/QuestionTypes.js";
 import { LANGUAGES, translations } from "../../../src/i18n/translations.js";
-import { createInitialSessionState, SESSION_ACTIONS } from "../../../src/ui/viewmodel/LearningSession/sessionReducer.js";
+import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "../../../src/ui/viewmodel/LearningSession/sessionReducer.js";
 
 const dispatch = jest.fn();
 let reducerState;
@@ -34,22 +34,35 @@ function createViewModel({ gradeAnswerUseCase, submitLearningSessionUseCase }) {
 	});
 }
 
+function createLoadedReducerState(loadedQuestion = question) {
+	const state = sessionReducer(createInitialSessionState(), {
+		type: SESSION_ACTIONS.SESSION_LOADED,
+		session: {
+			sessionId: "session-1",
+			moduleId: "module-1",
+			modulePosition: 1,
+			moduleTitle: "Concepts",
+			activityKind: "authored",
+			questions: [{ sessionQuestionId: "session-question-1", question: loadedQuestion }]
+		}
+	});
+
+	return {
+		...state,
+		session: {
+			...state.session,
+			answersBySessionQuestionId: { "session-question-1": "discount rat" }
+		}
+	};
+}
+
 describe("useLearningSessionPageViewModel behavior", () => {
 	beforeEach(() => {
 		dispatch.mockClear();
 		useCallback.mockClear();
 		useEffect.mockClear();
 		useReducer.mockClear();
-
-		reducerState = {
-			...createInitialSessionState(),
-			sessionId: "session-1",
-			modulePosition: 1,
-			moduleTitle: "Concepts",
-			activityKind: "authored",
-			questions: [{ sessionQuestionId: "session-question-1", question }],
-			answersBySessionQuestionId: { "session-question-1": "discount rat" }
-		};
+		reducerState = createLoadedReducerState();
 	});
 
 	test("preserves fuzzy fill feedback in the checked answer result", () => {
@@ -78,6 +91,39 @@ describe("useLearningSessionPageViewModel behavior", () => {
 		});
 	});
 
+	test("keeps the final question and action panel visible while submit is pending", () => {
+		reducerState = {
+			status: "submitting",
+			session: {
+				...reducerState.session,
+				resultsBySessionQuestionId: {
+					"session-question-1": {
+						isCorrect: true,
+						pointsAwarded: 1,
+						maxPoints: 1,
+						fillMatchType: "fuzzy"
+					}
+				}
+			}
+		};
+
+		const viewModel = createViewModel({
+			gradeAnswerUseCase: {
+				execute: jest.fn(),
+				getQuestionScore: jest.fn(),
+				getFillMatchType: jest.fn()
+			},
+			submitLearningSessionUseCase: { execute: jest.fn() }
+		});
+
+		expect(viewModel.questionCardModel).not.toBeNull();
+		expect(viewModel.actionPanelModel).toMatchObject({
+			primaryLabel: t.learningSessionSubmittingLabel,
+			isPrimaryDisabled: true
+		});
+		expect(viewModel.isSessionComplete).toBe(false);
+	});
+
 	test("serializes answers before submitting the LearningSession", () => {
 		const choiceQuestion = {
 			type: QUESTION_TYPES.SINGLE,
@@ -88,16 +134,19 @@ describe("useLearningSessionPageViewModel behavior", () => {
 			]
 		};
 
+		reducerState = createLoadedReducerState(choiceQuestion);
 		reducerState = {
 			...reducerState,
-			questions: [{ sessionQuestionId: "session-question-1", question: choiceQuestion }],
-			answersBySessionQuestionId: { "session-question-1": 1 },
-			resultsBySessionQuestionId: {
-				"session-question-1": {
-					isCorrect: true,
-					pointsAwarded: 1,
-					maxPoints: 1,
-					fillMatchType: "none"
+			session: {
+				...reducerState.session,
+				answersBySessionQuestionId: { "session-question-1": 1 },
+				resultsBySessionQuestionId: {
+					"session-question-1": {
+						isCorrect: true,
+						pointsAwarded: 1,
+						maxPoints: 1,
+						fillMatchType: "none"
+					}
 				}
 			}
 		};
@@ -117,6 +166,12 @@ describe("useLearningSessionPageViewModel behavior", () => {
 
 		viewModel.actionPanelModel.onPrimaryPressed();
 
+		expect(dispatch).toHaveBeenCalledWith({
+			type: SESSION_ACTIONS.SUBMIT_STARTED
+		});
+		expect(dispatch).not.toHaveBeenCalledWith({
+			type: SESSION_ACTIONS.CONTINUED
+		});
 		expect(submitLearningSessionUseCase.execute).toHaveBeenCalledWith({
 			sessionId: "session-1",
 			answers: [

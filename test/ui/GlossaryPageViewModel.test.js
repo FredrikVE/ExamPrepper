@@ -1,6 +1,6 @@
 //test/ui/GlossaryPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { ALL_TOPIC_AREAS } from "../../src/model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS } from "../../src/constants/TopicAreas.js";
 import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../src/navigation/navigation.js";
 import { APP_SHELL_MODE } from "../../src/ui/presentation/appShellMode.js";
 import { PRESENTATION_MODE } from "../../src/ui/presentation/presentationMode.js";

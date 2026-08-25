@@ -1,12 +1,8 @@
 // src/ui/viewmodel/LearningSession/createLearningSessionActionPanelModel.js
-import { LEARNING_SESSION_SUBMIT_STATES } from "./LearningSessionStates.js";
+import { LEARNING_SESSION_STATES } from "./LearningSessionStates.js";
 
-export default function createLearningSessionActionPanelModel({ currentResult, isSessionComplete, isLastQuestion, answerReady, submitStatus, submitResult, submitErrorMessage, checkAnswer, continueSession, submitSession, t }) {
-	if (submitResult !== null) {
-		return null;
-	}
-
-	if (isSessionComplete && submitStatus !== LEARNING_SESSION_SUBMIT_STATES.FAILED) {
+export default function createLearningSessionActionPanelModel({ currentResult, isLastQuestion, answerReady, sessionStatus, feedbackBody, checkAnswer, continueSession, submitSession, t }) {
+	if (sessionStatus === LEARNING_SESSION_STATES.COMPLETED) {
 		return null;
 	}
 
@@ -17,10 +13,9 @@ export default function createLearningSessionActionPanelModel({ currentResult, i
 
 	const primaryAction = createPrimaryActionModel({
 		currentResult,
-		isSessionComplete,
 		isLastQuestion,
 		answerReady,
-		submitStatus,
+		sessionStatus,
 		checkAnswer,
 		continueSession,
 		submitSession,
@@ -30,7 +25,7 @@ export default function createLearningSessionActionPanelModel({ currentResult, i
 	return {
 		feedbackAppearance: feedback.appearance,
 		feedbackTitle: feedback.title,
-		feedbackBody: submitErrorMessage,
+		feedbackBody,
 		primaryLabel: primaryAction.label,
 		primaryAppearance: feedback.primaryAppearance,
 		isPrimaryDisabled: primaryAction.isDisabled,
@@ -62,11 +57,19 @@ function createFeedbackModel({ currentResult, t }) {
 	};
 }
 
-function createPrimaryActionModel({ currentResult, isSessionComplete, isLastQuestion, answerReady, submitStatus, checkAnswer, continueSession, submitSession, t }) {
-	if (isSessionComplete) {
+function createPrimaryActionModel({ currentResult, isLastQuestion, answerReady, sessionStatus, checkAnswer, continueSession, submitSession, t }) {
+	if (sessionStatus === LEARNING_SESSION_STATES.SUBMITTING) {
+		return {
+			label: t.learningSessionSubmittingLabel,
+			isDisabled: true,
+			onPressed: continueSession
+		};
+	}
+
+	if (sessionStatus === LEARNING_SESSION_STATES.SUBMIT_FAILED) {
 		return {
 			label: t.learningSessionRetryLabel,
-			isDisabled: submitStatus === LEARNING_SESSION_SUBMIT_STATES.SUBMITTING,
+			isDisabled: false,
 			onPressed: submitSession
 		};
 	}
@@ -82,14 +85,14 @@ function createPrimaryActionModel({ currentResult, isSessionComplete, isLastQues
 	if (isLastQuestion) {
 		return {
 			label: t.learningSessionFinishLabel,
-			isDisabled: submitStatus === LEARNING_SESSION_SUBMIT_STATES.SUBMITTING,
+			isDisabled: false,
 			onPressed: continueSession
 		};
 	}
 
 	return {
 		label: t.learningSessionContinueLabel,
-		isDisabled: submitStatus === LEARNING_SESSION_SUBMIT_STATES.SUBMITTING,
+		isDisabled: false,
 		onPressed: continueSession
 	};
 }

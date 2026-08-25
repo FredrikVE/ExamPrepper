@@ -1,5 +1,5 @@
 // src/ui/viewmodel/LearningSession/sessionReducer.js
-import { LEARNING_SESSION_REWARD_KINDS, LEARNING_SESSION_STATES, LEARNING_SESSION_SUBMIT_STATES } from "./LearningSessionStates.js";
+import { LEARNING_SESSION_REWARD_KINDS, LEARNING_SESSION_STATES } from "./LearningSessionStates.js";
 
 const COMBO_REWARD_INTERVAL = 3;
 const XP_PER_POINT = 10;
@@ -17,80 +17,53 @@ export const SESSION_ACTIONS = {
 
 export function createInitialSessionState() {
 	return {
-		status: LEARNING_SESSION_STATES.LOADING,
-		sessionId: null,
-		moduleId: null,
-		modulePosition: null,
-		moduleTitle: "",
-		activityKind: null,
-		questions: [],
-		currentIndex: 0,
-		answersBySessionQuestionId: {},
-		resultsBySessionQuestionId: {},
-		answerOptionOrderBySessionQuestionId: {},
-		combo: 0,
-		xp: 0,
-		pendingRewardKind: null,
-		submitStatus: LEARNING_SESSION_SUBMIT_STATES.IDLE,
-		submitErrorMessage: null,
-		submitResult: null,
-		scrollToTopRequestId: 0
+		status: LEARNING_SESSION_STATES.LOADING
 	};
 }
 
 export default function sessionReducer(state, action) {
 	switch (action.type) {
 		case SESSION_ACTIONS.SESSION_LOADED:
-			return createLoadedSessionState(action.session);
+			return {
+				status: LEARNING_SESSION_STATES.ANSWERING,
+				session: createLoadedSessionData(action.session)
+			};
 
 		case SESSION_ACTIONS.LOAD_FAILED:
 			return {
-				...state,
-				status: LEARNING_SESSION_STATES.ERROR,
-				submitErrorMessage: action.errorMessage
+				status: LEARNING_SESSION_STATES.LOAD_FAILED,
+				errorMessage: action.errorMessage
 			};
 
 		case SESSION_ACTIONS.ANSWER_CHANGED:
 			return {
 				...state,
-				answersBySessionQuestionId: action.answersBySessionQuestionId
+				session: {
+					...requireSessionData(state, action.type),
+					answersBySessionQuestionId: action.answersBySessionQuestionId
+				}
 			};
 
 		case SESSION_ACTIONS.ANSWER_CHECKED:
 			return applyAnswerChecked(state, action);
 
 		case SESSION_ACTIONS.CONTINUED:
-			return {
-				...state,
-				status: LEARNING_SESSION_STATES.ANSWERING,
-				currentIndex: state.currentIndex + 1,
-				pendingRewardKind: null,
-				scrollToTopRequestId: state.scrollToTopRequestId + 1
-			};
+			return applyContinued(state, action.type);
 
 		case SESSION_ACTIONS.SUBMIT_STARTED:
 			return {
-				...state,
 				status: LEARNING_SESSION_STATES.SUBMITTING,
-				submitStatus: LEARNING_SESSION_SUBMIT_STATES.SUBMITTING,
-				submitErrorMessage: null
+				session: requireSessionData(state, action.type)
 			};
 
 		case SESSION_ACTIONS.SUBMIT_SUCCEEDED:
-			return {
-				...state,
-				status: LEARNING_SESSION_STATES.COMPLETED,
-				submitStatus: LEARNING_SESSION_SUBMIT_STATES.SUCCEEDED,
-				submitErrorMessage: null,
-				submitResult: action.result
-			};
+			return applySubmitSucceeded(state, action);
 
 		case SESSION_ACTIONS.SUBMIT_FAILED:
 			return {
-				...state,
-				status: LEARNING_SESSION_STATES.ERROR,
-				submitStatus: LEARNING_SESSION_SUBMIT_STATES.FAILED,
-				submitErrorMessage: action.errorMessage
+				status: LEARNING_SESSION_STATES.SUBMIT_FAILED,
+				session: requireSessionData(state, action.type),
+				errorMessage: action.errorMessage
 			};
 
 		default:
@@ -98,47 +71,91 @@ export default function sessionReducer(state, action) {
 	}
 }
 
-function createLoadedSessionState(session) {
+function createLoadedSessionData(session) {
 	return {
-		...createInitialSessionState(),
-		status: LEARNING_SESSION_STATES.ANSWERING,
 		sessionId: session.sessionId,
 		moduleId: session.moduleId,
 		modulePosition: session.modulePosition,
 		moduleTitle: session.moduleTitle,
 		activityKind: session.activityKind,
 		questions: session.questions,
-		answerOptionOrderBySessionQuestionId: createAnswerOptionOrderMap(session.questions)
+		currentIndex: 0,
+		answersBySessionQuestionId: {},
+		resultsBySessionQuestionId: {},
+		answerOptionOrderBySessionQuestionId: createAnswerOptionOrderMap(session.questions),
+		combo: 0,
+		xp: 0,
+		pendingRewardKind: null,
+		scrollToTopRequestId: 0
+	};
+}
+
+function applyContinued(state, actionType) {
+	const session = requireSessionData(state, actionType);
+
+	return {
+		status: LEARNING_SESSION_STATES.ANSWERING,
+		session: {
+			...session,
+			currentIndex: session.currentIndex + 1,
+			pendingRewardKind: null,
+			scrollToTopRequestId: session.scrollToTopRequestId + 1
+		}
+	};
+}
+
+function applySubmitSucceeded(state, action) {
+	const session = requireSessionData(state, action.type);
+
+	return {
+		status: LEARNING_SESSION_STATES.COMPLETED,
+		session: {
+			...session,
+			currentIndex: session.questions.length,
+			pendingRewardKind: null
+		},
+		result: action.result
 	};
 }
 
 function applyAnswerChecked(state, action) {
+	const session = requireSessionData(state, action.type);
 	const resultsBySessionQuestionId = {
-		...state.resultsBySessionQuestionId,
+		...session.resultsBySessionQuestionId,
 		[action.sessionQuestionId]: action.result
 	};
 
 	const nextCombo = resolveNextCombo({
-		currentCombo: state.combo,
+		currentCombo: session.combo,
 		isCorrect: action.result.isCorrect
 	});
 
 	const pendingRewardKind = resolvePendingRewardKind({
-		currentIndex: state.currentIndex,
-		questionCount: state.questions.length,
+		currentIndex: session.currentIndex,
+		questionCount: session.questions.length,
 		nextCombo
 	});
 
 	const earnedXp = action.result.pointsAwarded * XP_PER_POINT;
 
 	return {
-		...state,
 		status: LEARNING_SESSION_STATES.CHECKED,
-		resultsBySessionQuestionId,
-		combo: nextCombo,
-		xp: state.xp + earnedXp,
-		pendingRewardKind
+		session: {
+			...session,
+			resultsBySessionQuestionId,
+			combo: nextCombo,
+			xp: session.xp + earnedXp,
+			pendingRewardKind
+		}
 	};
+}
+
+function requireSessionData(state, actionType) {
+	if (state.session === undefined) {
+		throw new Error(`Learning session action requires loaded session: ${String(actionType)}`);
+	}
+
+	return state.session;
 }
 
 function resolveNextCombo({ currentCombo, isCorrect }) {

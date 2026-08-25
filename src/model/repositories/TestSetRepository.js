@@ -1,5 +1,5 @@
 // src/model/repositories/TestSetRepository.js
-import toPracticeQuestion from "./questions/toPracticeQuestion.js";
+import toPracticeQuestion from "../domain/questions/toPracticeQuestion.js";
 
 export default class TestSetRepository {
     #testSetDataSource;

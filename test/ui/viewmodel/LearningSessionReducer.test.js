@@ -1,18 +1,10 @@
 import { describe, expect, test } from "@jest/globals";
 import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "../../../src/ui/viewmodel/LearningSession/sessionReducer.js";
 
-describe("learning session reducer", () => {
-	test("loads session metadata and resets transient session state", () => {
-		const previousState = {
-			...createInitialSessionState(),
-			combo: 3,
-			xp: 50,
-			pendingRewardKind: "combo",
-			submitStatus: "failed",
-			submitErrorMessage: "temporary"
-		};
-
-		const session = {
+function createLoadedState() {
+	return sessionReducer(createInitialSessionState(), {
+		type: SESSION_ACTIONS.SESSION_LOADED,
+		session: {
 			sessionId: "s1",
 			moduleId: "m1",
 			modulePosition: 1,
@@ -32,45 +24,74 @@ describe("learning session reducer", () => {
 					}
 				}
 			]
-		};
+		}
+	});
+}
 
-		const state = sessionReducer(previousState, {
-			type: SESSION_ACTIONS.SESSION_LOADED,
-			session
+describe("learning session reducer", () => {
+	test("represents loading without nullable session placeholders", () => {
+		expect(createInitialSessionState()).toEqual({
+			status: "loading"
+		});
+	});
+
+	test("represents load failure without pretending a session exists", () => {
+		const state = sessionReducer(createInitialSessionState(), {
+			type: SESSION_ACTIONS.LOAD_FAILED,
+			errorMessage: "Could not load"
 		});
 
-		expect(state).toMatchObject({
+		expect(state).toEqual({
+			status: "loadFailed",
+			errorMessage: "Could not load"
+		});
+	});
+
+	test("loads complete session data and resets transient state", () => {
+		const state = createLoadedState();
+
+		expect(state).toEqual({
 			status: "answering",
-			sessionId: "s1",
-			moduleId: "m1",
-			modulePosition: 1,
-			moduleTitle: "Concepts",
-			activityKind: "authored",
-			combo: 0,
-			xp: 0,
-			pendingRewardKind: null,
-			submitStatus: "idle",
-			submitErrorMessage: null,
-			answerOptionOrderBySessionQuestionId: {
-				q1: [0, 1],
-				q2: null
+			session: {
+				sessionId: "s1",
+				moduleId: "m1",
+				modulePosition: 1,
+				moduleTitle: "Concepts",
+				activityKind: "authored",
+				questions: expect.any(Array),
+				currentIndex: 0,
+				answersBySessionQuestionId: {},
+				resultsBySessionQuestionId: {},
+				answerOptionOrderBySessionQuestionId: {
+					q1: [0, 1],
+					q2: null
+				},
+				combo: 0,
+				xp: 0,
+				pendingRewardKind: null,
+				scrollToTopRequestId: 0
 			}
 		});
 
-		expect(state).not.toHaveProperty("round");
+		expect(state).not.toHaveProperty("submitStatus");
+		expect(state).not.toHaveProperty("submitResult");
+		expect(state).not.toHaveProperty("submitErrorMessage");
 	});
 
 	test("records checked answer, awards xp, and surfaces every third combo before the final question", () => {
+		const loaded = createLoadedState();
 		const state = {
-			...createInitialSessionState(),
-			status: "answering",
-			questions: [{}, {}, {}, {}],
-			currentIndex: 2,
-			combo: 2,
-			xp: 10,
-			resultsBySessionQuestionId: {
-				q1: {
-					isCorrect: true
+			...loaded,
+			session: {
+				...loaded.session,
+				questions: [{}, {}, {}, {}],
+				currentIndex: 2,
+				combo: 2,
+				xp: 10,
+				resultsBySessionQuestionId: {
+					q1: {
+						isCorrect: true
+					}
 				}
 			}
 		};
@@ -88,12 +109,14 @@ describe("learning session reducer", () => {
 
 		expect(checked).toMatchObject({
 			status: "checked",
-			combo: 3,
-			xp: 30,
-			pendingRewardKind: "combo"
+			session: {
+				combo: 3,
+				xp: 30,
+				pendingRewardKind: "combo"
+			}
 		});
 
-		expect(checked.resultsBySessionQuestionId).toEqual({
+		expect(checked.session.resultsBySessionQuestionId).toEqual({
 			q1: {
 				isCorrect: true
 			},
@@ -102,13 +125,16 @@ describe("learning session reducer", () => {
 	});
 
 	test("wrong checked answer resets combo without replacing previous results", () => {
+		const loaded = createLoadedState();
 		const state = {
-			...createInitialSessionState(),
-			questions: [{}, {}],
-			combo: 2,
-			resultsBySessionQuestionId: {
-				q1: {
-					isCorrect: true
+			...loaded,
+			session: {
+				...loaded.session,
+				combo: 2,
+				resultsBySessionQuestionId: {
+					q1: {
+						isCorrect: true
+					}
 				}
 			}
 		};
@@ -122,20 +148,23 @@ describe("learning session reducer", () => {
 			}
 		});
 
-		expect(checked.combo).toBe(0);
-		expect(checked.pendingRewardKind).toBeNull();
-		expect(checked.resultsBySessionQuestionId.q1).toEqual({
+		expect(checked.session.combo).toBe(0);
+		expect(checked.session.pendingRewardKind).toBeNull();
+		expect(checked.session.resultsBySessionQuestionId.q1).toEqual({
 			isCorrect: true
 		});
 	});
 
 	test("continues to the next question and clears pending reward state", () => {
+		const loaded = createLoadedState();
 		const state = {
-			...createInitialSessionState(),
 			status: "checked",
-			currentIndex: 1,
-			pendingRewardKind: "combo",
-			scrollToTopRequestId: 4
+			session: {
+				...loaded.session,
+				currentIndex: 0,
+				pendingRewardKind: "combo",
+				scrollToTopRequestId: 4
+			}
 		};
 
 		const continued = sessionReducer(state, {
@@ -144,32 +173,96 @@ describe("learning session reducer", () => {
 
 		expect(continued).toMatchObject({
 			status: "answering",
-			currentIndex: 2,
-			pendingRewardKind: null,
-			scrollToTopRequestId: 5
+			session: {
+				currentIndex: 1,
+				pendingRewardKind: null,
+				scrollToTopRequestId: 5
+			}
 		});
 	});
 
-	test("preserves answers on submit failure", () => {
-		const state = {
-			...createInitialSessionState(),
-			answersBySessionQuestionId: {
-				q1: "answer"
+	test("represents submit progress with the lifecycle status only", () => {
+		const state = sessionReducer(createLoadedState(), {
+			type: SESSION_ACTIONS.SUBMIT_STARTED
+		});
+
+		expect(state).toMatchObject({
+			status: "submitting",
+			session: {
+				sessionId: "s1"
+			}
+		});
+		expect(state).not.toHaveProperty("submitStatus");
+	});
+
+	test("completes the session only after submit succeeds", () => {
+		const submitting = sessionReducer(createLoadedState(), {
+			type: SESSION_ACTIONS.SUBMIT_STARTED
+		});
+		const result = {
+			score: {
+				percentage: 100
 			}
 		};
 
-		const failed = sessionReducer(state, {
+		const completed = sessionReducer(submitting, {
+			type: SESSION_ACTIONS.SUBMIT_SUCCEEDED,
+			result
+		});
+
+		expect(completed).toMatchObject({
+			status: "completed",
+			session: {
+				currentIndex: 2,
+				pendingRewardKind: null
+			},
+			result
+		});
+		expect(completed).not.toHaveProperty("submitResult");
+	});
+
+	test("preserves session data on submit failure and removes the error on retry", () => {
+		const loaded = createLoadedState();
+		const answered = {
+			...loaded,
+			session: {
+				...loaded.session,
+				answersBySessionQuestionId: {
+					q1: "answer"
+				}
+			}
+		};
+
+		const failed = sessionReducer(answered, {
 			type: SESSION_ACTIONS.SUBMIT_FAILED,
 			errorMessage: "failed"
 		});
 
 		expect(failed).toMatchObject({
-			status: "error",
-			submitStatus: "failed",
-			submitErrorMessage: "failed"
+			status: "submitFailed",
+			errorMessage: "failed",
+			session: {
+				answersBySessionQuestionId: {
+					q1: "answer"
+				}
+			}
 		});
 
-		expect(failed.answersBySessionQuestionId.q1).toBe("answer");
+		const retrying = sessionReducer(failed, {
+			type: SESSION_ACTIONS.SUBMIT_STARTED
+		});
+
+		expect(retrying.status).toBe("submitting");
+		expect(retrying).not.toHaveProperty("errorMessage");
+		expect(retrying.session.answersBySessionQuestionId.q1).toBe("answer");
+	});
+
+	test("fails fast when a session action is dispatched before loading", () => {
+		expect(() => {
+			sessionReducer(createInitialSessionState(), {
+				type: SESSION_ACTIONS.CONTINUED
+			});
+		}).toThrow("Learning session action requires loaded session: continued");
 	});
 
 	test("fails fast for unknown actions", () => {

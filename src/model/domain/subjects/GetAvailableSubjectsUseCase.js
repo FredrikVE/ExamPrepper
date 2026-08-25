@@ -1,0 +1,14 @@
+// src/model/domain/subjects/GetAvailableSubjectsUseCase.js
+export default class GetAvailableSubjectsUseCase {
+    constructor(subjectRepository) {
+        this.subjectRepository = subjectRepository;
+    }
+
+    async execute({ language } = {}) {
+        const subjects = await this.subjectRepository.getSubjectsWithPracticeTestCount({
+            language
+        });
+
+        return subjects.filter((subject) => subject.isVisible);
+    }
+}

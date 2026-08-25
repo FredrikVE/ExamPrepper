@@ -7,6 +7,7 @@ import { describe, expect, test } from "@jest/globals";
 const sourceRoot = path.resolve("src");
 const viewModelRoot = path.join(sourceRoot, "ui/viewmodel");
 const domainRoot = path.join(sourceRoot, "model/domain");
+const repositoryRoot = path.join(sourceRoot, "model/repositories");
 
 function collectSourceFiles(directoryPath) {
 	const files = [];
@@ -59,6 +60,14 @@ function findForbiddenImports(directoryPath, forbiddenSegments) {
 }
 
 describe("model layer boundaries", () => {
+	test("keeps repository implementations flat", () => {
+		const repositoryDirectories = fs.readdirSync(repositoryRoot, { withFileTypes: true })
+			.filter((entry) => entry.isDirectory())
+			.map((entry) => entry.name);
+
+		expect(repositoryDirectories).toEqual([]);
+	});
+
 	test("keeps ViewModels behind Use Cases instead of Repository or DataSource imports", () => {
 		expect(findForbiddenImports(viewModelRoot, ["model/repositories/", "model/datasource/"])).toEqual([]);
 	});

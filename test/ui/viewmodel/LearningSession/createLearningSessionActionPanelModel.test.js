@@ -1,7 +1,7 @@
 // test/ui/viewmodel/LearningSession/createLearningSessionActionPanelModel.test.js
 import { describe, expect, jest, test } from "@jest/globals";
 import createLearningSessionActionPanelModel from "../../../../src/ui/viewmodel/LearningSession/createLearningSessionActionPanelModel.js";
-import { LEARNING_SESSION_SUBMIT_STATES } from "../../../../src/ui/viewmodel/LearningSession/LearningSessionStates.js";
+import { LEARNING_SESSION_STATES } from "../../../../src/ui/viewmodel/LearningSession/LearningSessionStates.js";
 
 const t = {
 	learningSessionCorrectTitle: "Correct",
@@ -9,18 +9,17 @@ const t = {
 	learningSessionRetryLabel: "Retry",
 	learningSessionCheckLabel: "Check",
 	learningSessionFinishLabel: "Finish",
+	learningSessionSubmittingLabel: "Submitting",
 	learningSessionContinueLabel: "Continue"
 };
 
 function createModel(overrides = {}) {
 	return createLearningSessionActionPanelModel({
 		currentResult: null,
-		isSessionComplete: false,
 		isLastQuestion: false,
 		answerReady: true,
-		submitStatus: LEARNING_SESSION_SUBMIT_STATES.IDLE,
-		submitResult: null,
-		submitErrorMessage: null,
+		sessionStatus: LEARNING_SESSION_STATES.ANSWERING,
+		feedbackBody: null,
 		checkAnswer: jest.fn(),
 		continueSession: jest.fn(),
 		submitSession: jest.fn(),
@@ -69,20 +68,32 @@ describe("createLearningSessionActionPanelModel", () => {
 		});
 	});
 
-	test("hides the action panel while a completed session is submitting", () => {
-		expect(createModel({
-			isSessionComplete: true,
-			submitStatus: LEARNING_SESSION_SUBMIT_STATES.SUBMITTING
-		})).toBeNull();
+	test("keeps the final action visible and disabled while submit is pending", () => {
+		const continueSession = jest.fn();
+
+		const model = createModel({
+			currentResult: {
+				isCorrect: true
+			},
+			isLastQuestion: true,
+			sessionStatus: LEARNING_SESSION_STATES.SUBMITTING,
+			continueSession
+		});
+
+		expect(model).toMatchObject({
+			feedbackAppearance: "correct",
+			primaryLabel: "Submitting",
+			isPrimaryDisabled: true,
+			onPrimaryPressed: continueSession
+		});
 	});
 
 	test("creates only the retry action after submit failure", () => {
 		const submitSession = jest.fn();
 
 		const model = createModel({
-			isSessionComplete: true,
-			submitStatus: LEARNING_SESSION_SUBMIT_STATES.FAILED,
-			submitErrorMessage: "Submit failed",
+			sessionStatus: LEARNING_SESSION_STATES.SUBMIT_FAILED,
+			feedbackBody: "Submit failed",
 			submitSession
 		});
 
@@ -98,11 +109,7 @@ describe("createLearningSessionActionPanelModel", () => {
 
 	test("lets the result panel own actions after submit succeeds", () => {
 		expect(createModel({
-			isSessionComplete: true,
-			submitStatus: LEARNING_SESSION_SUBMIT_STATES.SUCCEEDED,
-			submitResult: {
-				score: {}
-			}
+			sessionStatus: LEARNING_SESSION_STATES.COMPLETED
 		})).toBeNull();
 	});
 });

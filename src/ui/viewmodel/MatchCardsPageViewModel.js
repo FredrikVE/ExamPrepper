@@ -1,6 +1,6 @@
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
@@ -92,7 +92,7 @@ export default function useMatchCardsPageViewModel({
 	], t.matchCardsErrorMessage);
 
 	const activeTopicArea = useMemo(() => {
-		return findTopicAreaByKey(topicAreas, topicAreaKey);
+		return topicAreas.find((topicArea) => topicArea.key === topicAreaKey) ?? null;
 	}, [topicAreas, topicAreaKey]);
 
 	const labels = useMemo(() => {

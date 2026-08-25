@@ -1,7 +1,7 @@
 // test/ui/GlossaryPage/glossaryContracts.test.js
 import { describe, expect, test } from "@jest/globals";
 import { GLOSSARY_RELATION_TYPE, MASTERY_STATUS } from "../../../src/constants/GlossaryContracts.js";
-import { resolveLocalizedText } from "../../../src/model/domain/utils/localizedText.js";
+import { resolveLocalizedText } from "../../../src/ui/viewmodel/GlossaryPage/resolveLocalizedText.js";
 import { createGlossaryMasteryPresentation } from "../../../src/ui/viewmodel/GlossaryPage/glossaryMasteryModel.js";
 import { createGlossaryNetworkPresentation } from "../../../src/ui/viewmodel/GlossaryPage/glossaryNetworkModel.js";
 

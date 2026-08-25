@@ -15,26 +15,26 @@ import SubjectRepository from "../model/repositories/SubjectRepository.js";
 import GlossaryRepository from "../model/repositories/GlossaryRepository.js";
 import LearningPathRepository from "../model/repositories/LearningPathRepository.js";
 
-import GetTestSetQuestionsUseCase from "../model/domain/GetTestSetQuestionsUseCase.js";
-import GetAvailableTestSetsUseCase from "../model/domain/GetAvailableTestSetsUseCase.js";
-import GetAvailableSubjectsUseCase from "../model/domain/GetAvailableSubjectsUseCase.js";
-import GetSubjectByIdUseCase from "../model/domain/GetSubjectByIdUseCase.js";
-import GetTestSetByIdUseCase from "../model/domain/GetTestSetByIdUseCase.js";
-import GetTestSetByBaseIdAndLangUseCase from "../model/domain/GetTestSetByBaseIdAndLangUseCase.js";
-import GetGlossaryEntriesForSubjectUseCase from "../model/domain/GetGlossaryEntriesForSubjectUseCase.js";
-import GetGlossaryOverviewUseCase from "../model/domain/GetGlossaryOverviewUseCase.js";
-import GetGlossaryNetworkUseCase from "../model/domain/GetGlossaryNetworkUseCase.js";
-import GetTopicAreasUseCase from "../model/domain/GetTopicAreasUseCase.js";
-import GetFlipcardDeckSummariesUseCase from "../model/domain/GetFlipcardDeckSummariesUseCase.js";
-import GetLearningPathUseCase from "../model/domain/GetLearningPathUseCase.js";
-import StartLearningSessionUseCase from "../model/domain/StartLearningSessionUseCase.js";
-import GetLearningSessionUseCase from "../model/domain/GetLearningSessionUseCase.js";
-import SubmitLearningSessionUseCase from "../model/domain/SubmitLearningSessionUseCase.js";
+import GetTestSetQuestionsUseCase from "../model/domain/testSets/GetTestSetQuestionsUseCase.js";
+import GetAvailableTestSetsUseCase from "../model/domain/testSets/GetAvailableTestSetsUseCase.js";
+import GetAvailableSubjectsUseCase from "../model/domain/subjects/GetAvailableSubjectsUseCase.js";
+import GetSubjectByIdUseCase from "../model/domain/subjects/GetSubjectByIdUseCase.js";
+import GetTestSetByIdUseCase from "../model/domain/testSets/GetTestSetByIdUseCase.js";
+import GetTestSetByBaseIdAndLangUseCase from "../model/domain/testSets/GetTestSetByBaseIdAndLangUseCase.js";
+import GetGlossaryEntriesForSubjectUseCase from "../model/domain/glossary/GetGlossaryEntriesForSubjectUseCase.js";
+import GetGlossaryOverviewUseCase from "../model/domain/glossary/GetGlossaryOverviewUseCase.js";
+import GetGlossaryNetworkUseCase from "../model/domain/glossary/GetGlossaryNetworkUseCase.js";
+import GetTopicAreasUseCase from "../model/domain/subjects/GetTopicAreasUseCase.js";
+import GetFlipcardDeckSummariesUseCase from "../model/domain/glossary/GetFlipcardDeckSummariesUseCase.js";
+import GetLearningPathUseCase from "../model/domain/learningPath/GetLearningPathUseCase.js";
+import StartLearningSessionUseCase from "../model/domain/learningPath/StartLearningSessionUseCase.js";
+import GetLearningSessionUseCase from "../model/domain/learningPath/GetLearningSessionUseCase.js";
+import SubmitLearningSessionUseCase from "../model/domain/learningPath/SubmitLearningSessionUseCase.js";
 
-import GradeAnswerUseCase from "../model/domain/GradeAnswerUseCase.js";
-import CalculateExamScoreUseCase from "../model/domain/CalculateExamScoreUseCase.js";
-import SubmitExamAttemptUseCase from "../model/domain/SubmitExamAttemptUseCase.js";
-import GetMyStatisticsUseCase from "../model/domain/GetMyStatisticsUseCase.js";
+import GradeAnswerUseCase from "../model/domain/grading/GradeAnswerUseCase.js";
+import CalculateExamScoreUseCase from "../model/domain/exams/CalculateExamScoreUseCase.js";
+import SubmitExamAttemptUseCase from "../model/domain/exams/SubmitExamAttemptUseCase.js";
+import GetMyStatisticsUseCase from "../model/domain/statistics/GetMyStatisticsUseCase.js";
 import { getActiveAuthToken, subscribeAuthTokenProviderChange } from "../auth/AuthTokenProvider.js";
 
 function requiredEnv(name) {

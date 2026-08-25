@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "@jest/globals";
-import GradeAnswerUseCase from "../../src/model/domain/GradeAnswerUseCase.js";
+import GradeAnswerUseCase from "../../src/model/domain/grading/GradeAnswerUseCase.js";
 import { mapGradingFixtureAnswerToFrontend, mapGradingFixtureQuestionToFrontend } from "./gradingFixtureAdapter.js";
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));

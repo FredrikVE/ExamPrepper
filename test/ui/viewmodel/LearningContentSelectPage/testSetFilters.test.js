@@ -1,6 +1,6 @@
 // test/ui/viewmodel/LearningContentSelectPage/testSetFilters.test.js
 import { describe, expect, test } from "@jest/globals";
-import { ALL_TOPIC_AREAS } from "../../../../src/model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS } from "../../../../src/constants/TopicAreas.js";
 import { filterTestSets } from "../../../../src/ui/viewmodel/LearningContentSelectPage/testSetFilters.js";
 
 const testSets = [

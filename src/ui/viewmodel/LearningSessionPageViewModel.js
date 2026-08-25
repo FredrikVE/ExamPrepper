@@ -11,7 +11,7 @@ import createLearningSessionQuestionCardModel from "./LearningSession/createLear
 import createLearningSessionActionPanelModel from "./LearningSession/createLearningSessionActionPanelModel.js";
 import createLearningSessionHeaderModel from "./LearningSession/createLearningSessionHeaderModel.js";
 import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "./LearningSession/sessionReducer.js";
-import { LEARNING_SESSION_SUBMIT_STATES } from "./LearningSession/LearningSessionStates.js";
+import { LEARNING_SESSION_STATES } from "./LearningSession/LearningSessionStates.js";
 import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
 import transformLearningSessionAnswersForApi from "./QuestionSession/transformLearningSessionAnswersForApi.js";
 
@@ -58,29 +58,36 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		};
 	}, [getLearningSessionUseCase, isActive, sessionId, t.learningSessionLoadErrorMessage]);
 
-	const currentQuestion = state.questions[state.currentIndex] ?? null;
-
+	const session = state.session ?? null;
+	let currentQuestion = null;
 	let currentQuestionRenderKey = null;
 	let currentResult = null;
 	let answer = null;
+	let isLastQuestion = false;
 
-	if (currentQuestion !== null) {
-		currentQuestionRenderKey = currentQuestion.sessionQuestionId;
-		currentResult = state.resultsBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null;
-		answer = state.answersBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null;
+	if (session !== null) {
+		currentQuestion = session.questions[session.currentIndex] ?? null;
+
+		if (currentQuestion !== null) {
+			currentQuestionRenderKey = currentQuestion.sessionQuestionId;
+			currentResult = session.resultsBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null;
+			answer = session.answersBySessionQuestionId[currentQuestion.sessionQuestionId] ?? null;
+			isLastQuestion = session.currentIndex >= session.questions.length - 1;
+		}
 	}
 
-	const isSessionComplete = state.questions.length > 0 && state.currentIndex >= state.questions.length;
-	const isLastQuestion = currentQuestion !== null && state.currentIndex >= state.questions.length - 1;
-
 	const changeAnswers = useCallback((updater) => {
-		const answersBySessionQuestionId = updater(state.answersBySessionQuestionId);
+		if (session === null) {
+			return;
+		}
+
+		const answersBySessionQuestionId = updater(session.answersBySessionQuestionId);
 
 		dispatch({
 			type: SESSION_ACTIONS.ANSWER_CHANGED,
 			answersBySessionQuestionId
 		});
-	}, [state.answersBySessionQuestionId]);
+	}, [session]);
 
 	const setSingleAnswer = useCallback((_questionId, selectedValue) => {
 		if (currentQuestion === null || currentResult !== null) {
@@ -126,13 +133,13 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	}, [changeAnswers, currentQuestion, currentResult]);
 
 	const checkAnswer = useCallback(() => {
-		if (currentQuestion === null || currentResult !== null) {
+		if (session === null || currentQuestion === null || currentResult !== null) {
 			return;
 		}
 
 		const sessionQuestionId = currentQuestion.sessionQuestionId;
 		const question = currentQuestion.question;
-		const currentAnswer = state.answersBySessionQuestionId[sessionQuestionId] ?? null;
+		const currentAnswer = session.answersBySessionQuestionId[sessionQuestionId] ?? null;
 
 		const result = createCheckedAnswerResult({
 			question,
@@ -145,18 +152,18 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 			sessionQuestionId,
 			result
 		});
-	}, [currentQuestion, currentResult, gradeAnswerUseCase, state.answersBySessionQuestionId]);
+	}, [currentQuestion, currentResult, gradeAnswerUseCase, session]);
 
 	const submitSession = useCallback(async () => {
-		if (state.sessionId === null) {
+		if (session === null) {
 			return;
 		}
 
-		if (state.submitStatus === LEARNING_SESSION_SUBMIT_STATES.SUBMITTING) {
+		if (state.status === LEARNING_SESSION_STATES.SUBMITTING) {
 			return;
 		}
 
-		if (state.submitStatus === LEARNING_SESSION_SUBMIT_STATES.SUCCEEDED) {
+		if (state.status === LEARNING_SESSION_STATES.COMPLETED) {
 			return;
 		}
 
@@ -166,12 +173,12 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 
 		try {
 			const answers = transformLearningSessionAnswersForApi(
-				state.questions,
-				state.answersBySessionQuestionId
+				session.questions,
+				session.answersBySessionQuestionId
 			);
 
 			const result = await submitLearningSessionUseCase.execute({
-				sessionId: state.sessionId,
+				sessionId: session.sessionId,
 				answers
 			});
 
@@ -187,88 +194,98 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 				errorMessage: t.learningSessionSubmitErrorMessage
 			});
 		}
-	}, [state.answersBySessionQuestionId, state.questions, state.sessionId, state.submitStatus, submitLearningSessionUseCase, t.learningSessionSubmitErrorMessage]);
+	}, [session, state.status, submitLearningSessionUseCase, t.learningSessionSubmitErrorMessage]);
 
 	const continueSession = useCallback(() => {
 		if (currentResult === null) {
 			return;
 		}
 
+		if (isLastQuestion) {
+			submitSession();
+			return;
+		}
+
 		dispatch({
 			type: SESSION_ACTIONS.CONTINUED
 		});
-
-		if (isLastQuestion) {
-			submitSession();
-		}
 	}, [currentResult, isLastQuestion, submitSession]);
 
-	const answerReady = currentQuestion !== null && isQuestionAnswered(currentQuestion.question, answer);
-
-	const questionCardModel = createLearningSessionQuestionCardModel({
-		currentQuestion,
-		currentResult,
-		currentIndex: state.currentIndex,
-		answer,
-		answerOptionOrderBySessionQuestionId: state.answerOptionOrderBySessionQuestionId,
-		setSingleAnswer,
-		toggleMultiAnswer,
-		selectObjectAnswer
-	});
-
-	const actionPanelModel = createLearningSessionActionPanelModel({
-		currentResult,
-		isSessionComplete,
-		isLastQuestion,
-		answerReady,
-		submitStatus: state.submitStatus,
-		submitResult: state.submitResult,
-		submitErrorMessage: state.submitErrorMessage,
-		checkAnswer,
-		continueSession,
-		submitSession,
-		t
-	});
-
-	const workspaceState = createLearningSessionWorkspaceState({
-		state,
-		t
-	});
-
-	const progressBarModel = createLearningSessionProgressBarModel({
-		currentIndex: state.currentIndex,
-		questionCount: state.questions.length,
-		t
-	});
-
+	const workspaceState = createLearningSessionWorkspaceState({ state, t });
+	let headerModel = null;
+	let progressBarModel = null;
+	let questionCardModel = null;
+	let actionPanelModel = null;
 	let sessionResultModel = null;
+	let rewardModel = null;
+	let scrollToTopRequestId = 0;
 
-	if (state.submitResult !== null) {
-		sessionResultModel = createSessionResultModel({
-			score: state.submitResult.score,
-			moduleTitle: state.moduleTitle,
-			t,
-			onBack: backContract.onBack
+	if (session !== null) {
+		const isSessionComplete = state.status === LEARNING_SESSION_STATES.COMPLETED;
+		const answerReady = currentQuestion !== null && isQuestionAnswered(currentQuestion.question, answer);
+		const submitResult = isSessionComplete ? state.result : null;
+		const feedbackBody = state.status === LEARNING_SESSION_STATES.SUBMIT_FAILED
+			? state.errorMessage
+			: null;
+
+		questionCardModel = createLearningSessionQuestionCardModel({
+			currentQuestion,
+			currentResult,
+			currentIndex: session.currentIndex,
+			answer,
+			answerOptionOrderBySessionQuestionId: session.answerOptionOrderBySessionQuestionId,
+			setSingleAnswer,
+			toggleMultiAnswer,
+			selectObjectAnswer
 		});
+
+		actionPanelModel = createLearningSessionActionPanelModel({
+			currentResult,
+			isLastQuestion,
+			answerReady,
+			sessionStatus: state.status,
+			feedbackBody,
+			checkAnswer,
+			continueSession,
+			submitSession,
+			t
+		});
+
+		progressBarModel = createLearningSessionProgressBarModel({
+			currentIndex: session.currentIndex,
+			questionCount: session.questions.length,
+			t
+		});
+
+		if (isSessionComplete) {
+			sessionResultModel = createSessionResultModel({
+				score: state.result.score,
+				moduleTitle: session.moduleTitle,
+				t,
+				onBack: backContract.onBack
+			});
+		}
+
+		headerModel = createLearningSessionHeaderModel({
+			modulePosition: session.modulePosition,
+			moduleTitle: session.moduleTitle,
+			activityKind: session.activityKind,
+			submitResult,
+			currentIndex: session.currentIndex,
+			questionCount: session.questions.length,
+			t
+		});
+
+		rewardModel = createRewardModel({
+			pendingRewardKind: session.pendingRewardKind,
+			combo: session.combo,
+			xp: session.xp,
+			t,
+			onContinue: continueSession
+		});
+
+		scrollToTopRequestId = session.scrollToTopRequestId;
 	}
-
-	const headerModel = createLearningSessionHeaderModel({
-		modulePosition: state.modulePosition,
-		moduleTitle: state.moduleTitle,
-		activityKind: state.activityKind,
-		submitResult: state.submitResult,
-		currentIndex: state.currentIndex,
-		questionCount: state.questions.length,
-		t
-	});
-
-	const rewardModel = createRewardModel({
-		pendingRewardKind: state.pendingRewardKind,
-		combo: state.combo,
-		xp: state.xp,
-		t,
-		onContinue: continueSession
-	});
 
 	return {
 		workspaceState,
@@ -281,26 +298,22 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		actionPanelModel,
 		sessionResultModel,
 		rewardModel,
-		scrollToTopRequestId: state.scrollToTopRequestId,
-		isSessionComplete
+		scrollToTopRequestId,
+		isSessionComplete: state.status === LEARNING_SESSION_STATES.COMPLETED
 	};
 }
 
 function createLearningSessionWorkspaceState({ state, t }) {
-	let loadStatus = LOAD_STATUS.LOADING;
-
-	if (state.sessionId !== null) {
-		loadStatus = LOAD_STATUS.READY;
-	}
-
-	if (state.sessionId === null && state.submitErrorMessage !== null) {
-		loadStatus = LOAD_STATUS.ERROR;
-	}
-
+	let loadStatus = LOAD_STATUS.READY;
 	let errorBody = t.learningSessionLoadErrorMessage;
 
-	if (state.submitErrorMessage !== null) {
-		errorBody = state.submitErrorMessage;
+	if (state.status === LEARNING_SESSION_STATES.LOADING) {
+		loadStatus = LOAD_STATUS.LOADING;
+	}
+
+	if (state.status === LEARNING_SESSION_STATES.LOAD_FAILED) {
+		loadStatus = LOAD_STATUS.ERROR;
+		errorBody = state.errorMessage;
 	}
 
 	return createWorkspaceState({

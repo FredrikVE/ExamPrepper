@@ -1,7 +1,6 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
-import { filterFlipcardsByTopicArea } from "../../model/domain/utils/filterFlipcardsByTopicArea.js";
+import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { createFlipcardsFromGlossaryEntries } from "./FlipcardsPage/glossaryEntryFlipcardModel.js";
@@ -152,7 +151,7 @@ export default function useFlipcardsPageViewModel(getGlossaryEntriesForSubjectUs
 	}, [deckKey]);
 
 	const activeTopicArea = useMemo(() => {
-		return findTopicAreaByKey(topicAreas, topicAreaKey);
+		return topicAreas.find((topicArea) => topicArea.key === topicAreaKey) ?? null;
 	}, [topicAreas, topicAreaKey]);
 
 	const labels = useMemo(() => {
@@ -535,4 +534,12 @@ function isTopicAreaDeckToolKey(deckToolKey) {
 
 function readTopicAreaKeyFromDeckToolKey(deckToolKey) {
 	return deckToolKey.slice(TOPIC_AREA_DECK_TOOL_PREFIX.length);
+}
+
+function filterFlipcardsByTopicArea(flipcards, topicAreaKey) {
+	if (!topicAreaKey || topicAreaKey === ALL_TOPIC_AREAS) {
+		return flipcards;
+	}
+
+	return flipcards.filter((flipcard) => flipcard.topicAreaKey === topicAreaKey);
 }

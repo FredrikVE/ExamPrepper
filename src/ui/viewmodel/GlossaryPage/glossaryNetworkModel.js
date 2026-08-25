@@ -1,6 +1,6 @@
 // src/ui/viewmodel/GlossaryPage/glossaryNetworkModel.js
 import { DIRECTED_GLOSSARY_RELATION_TYPES, GLOSSARY_RELATION_TYPE } from "../../../constants/GlossaryContracts.js";
-import { resolveLocalizedText } from "../../../model/domain/utils/localizedText.js";
+import { resolveLocalizedText } from "./resolveLocalizedText.js";
 import { LOAD_STATUS } from "../LoadState/loadStatus.js";
 import { requireTopicAreaReference } from "./glossaryLookups.js";
 import { createGlossaryMasteryPresentation } from "./glossaryMasteryModel.js";

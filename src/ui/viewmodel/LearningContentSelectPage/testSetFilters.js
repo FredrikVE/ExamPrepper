@@ -1,5 +1,5 @@
 // src/ui/viewmodel/LearningContentSelectPage/testSetFilters.js
-import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS } from "../../../constants/TopicAreas.js";
 import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
 
 export function filterTestSets(testSets, searchTerm, topicAreaKey) {

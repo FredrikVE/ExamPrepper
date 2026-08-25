@@ -5,7 +5,7 @@ import createLearningContentSelectPageHeading from "./LearningContentSelectPage/
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel from "./Search/useSearchSheetModel.js";
 import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
-import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
 import { filterTestSets } from "./LearningContentSelectPage/testSetFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
@@ -308,7 +308,7 @@ export default function useLearningContentSelectPageViewModel({
 			return t.filterAllLabel;
 		}
 
-		const topicArea = findTopicAreaByKey(topicAreas, topicAreaKey);
+		const topicArea = topicAreas.find((candidate) => candidate.key === topicAreaKey) ?? null;
 
 		return topicArea?.label ?? t.filterAllLabel;
 	}, [topicAreas, topicAreaKey, t.filterAllLabel]);

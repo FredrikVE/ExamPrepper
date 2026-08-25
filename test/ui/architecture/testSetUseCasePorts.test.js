@@ -26,7 +26,7 @@ describe("test-set use-case ports", () => {
     });
 
     test("does not keep Exam-named implementations for shared test-set reads", () => {
-        const domainDirectory = path.resolve("src/model/domain");
+        const domainDirectory = path.resolve("src/model/domain/testSets");
         for (const filename of [
             "GetAvailableExamsUseCase.js",
             "GetExamQuestionsUseCase.js",
@@ -48,7 +48,7 @@ describe("test-set use-case ports", () => {
             "GetTestSetByIdUseCase.js",
             "GetTestSetByBaseIdAndLangUseCase.js"
         ]) {
-            expect(fs.existsSync(path.resolve("src/model/domain", filename))).toBe(true);
+            expect(fs.existsSync(path.resolve("src/model/domain/testSets", filename))).toBe(true);
         }
     });
 });
