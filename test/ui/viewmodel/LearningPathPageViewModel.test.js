@@ -101,15 +101,31 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		expect(onLearningSessionStarted).toHaveBeenCalledWith("session-new");
 	});
 
-	test("resumes the active backend session before evaluating start auth", async () => {
+	test("executes the backend-selected resume action while signed out", async () => {
 		learningPath.resumableSession = { sessionId: "session-active", moduleId: learningPath.modules[0].id, currentQuestionPosition: 0 };
 		const execute = jest.fn();
 		const onLearningSessionStarted = jest.fn();
 		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: false, userId: null }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const action = viewModel.roadmapModel.entries[0].actionModel;
 
-		await viewModel.onLearningPathAction(viewModel.roadmapModel.entries[0].actionModel);
+		expect(action).toMatchObject({ intent: "resume", sessionId: "session-active", isDisabled: false });
+		await viewModel.onLearningPathAction(action);
 		expect(onLearningSessionStarted).toHaveBeenCalledWith("session-active");
 		expect(execute).not.toHaveBeenCalled();
+	});
+
+	test("does not let a resumable session hijack an explicit start action", async () => {
+		const execute = jest.fn().mockResolvedValue({ sessionId: "session-selected" });
+		const onLearningSessionStarted = jest.fn();
+		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const action = viewModel.roadmapModel.entries[0].actionModel;
+
+		learningPath.resumableSession = { sessionId: "session-other", moduleId: "module-other", currentQuestionPosition: 0 };
+
+		await viewModel.onLearningPathAction(action);
+		expect(execute).toHaveBeenCalledWith({ subjectId: "in2120", moduleId: learningPath.modules[0].id, language: "no", target: { kind: "module" }, discardActiveSession: false });
+		expect(onLearningSessionStarted).toHaveBeenCalledWith("session-selected");
+		expect(onLearningSessionStarted).not.toHaveBeenCalledWith("session-other");
 	});
 
 	test("tracks pending state by exact action identity while a session start is in flight", async () => {
@@ -153,14 +169,18 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		expect(viewModel).not.toHaveProperty("startSessionState");
 	});
 
-	test("navigates to the active session returned by a start conflict", async () => {
+	test("exposes the start error without navigating when a start conflict occurs", async () => {
 		const conflict = { code: "learning_session_resume_conflict", payload: { activeSessionId: "session-conflict" } };
 		const execute = jest.fn().mockRejectedValue(conflict);
 		const onLearningSessionStarted = jest.fn();
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const render = () => renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const viewModel = render();
 
 		await viewModel.onLearningPathAction(viewModel.roadmapModel.entries[0].actionModel);
-		expect(onLearningSessionStarted).toHaveBeenCalledWith("session-conflict");
+		expect(onLearningSessionStarted).not.toHaveBeenCalled();
+
+		const failedViewModel = render();
+		expect(failedViewModel.startSessionError).toBe(t.learningPathStartErrorMessage);
 	});
 
 	test("exposes the start error when a LearningSession start fails", async () => {

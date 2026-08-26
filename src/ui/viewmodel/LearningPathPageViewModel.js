@@ -5,8 +5,6 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import createContinueLearningModel from "./LearningPath/createContinueLearningModel.js";
 import createLearningPathRoadmapModel from "./LearningPath/createLearningPathRoadmapModel.js";
 
-const LEARNING_SESSION_RESUME_CONFLICT = "learning_session_resume_conflict";
-
 export default function useLearningPathPageViewModel(props) {
 	const { getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted, onChapterTestSelected, authState } = props;
 
@@ -116,14 +114,7 @@ export default function useLearningPathPageViewModel(props) {
 			onLearningSessionStarted(session.sessionId);
 		}
 
-		catch (error) {
-			const activeSessionId = resolveResumeConflictSessionId(error);
-
-			if (activeSessionId !== null) {
-				onLearningSessionStarted(activeSessionId);
-				return;
-			}
-
+		catch {
 			setStartSessionError(t.learningPathStartErrorMessage);
 		}
 
@@ -159,11 +150,6 @@ export default function useLearningPathPageViewModel(props) {
 			return;
 		}
 
-		if (learningPath.resumableSession !== null) {
-			onLearningSessionStarted(learningPath.resumableSession.sessionId);
-			return;
-		}
-
 		switch (actionModel.intent) {
 			case "resume":
 				if (typeof actionModel.sessionId !== "string") {
@@ -184,7 +170,7 @@ export default function useLearningPathPageViewModel(props) {
 			default:
 				throw new Error(`Unknown LearningPath action intent '${String(actionModel.intent)}'`);
 		}
-	}, [canStartLearningSessions, learningPath.resumableSession, onLearningSessionStarted, startLearningSession]);
+	}, [canStartLearningSessions, onLearningSessionStarted, startLearningSession]);
 
 	let workspaceErrorBody = t.learningPathLoadErrorMessage;
 
@@ -306,24 +292,4 @@ function findActiveModuleEntry({ entries, activeModuleId }) {
 	}
 
 	return activeEntry;
-}
-
-function resolveResumeConflictSessionId(error) {
-	if (error === null || typeof error !== "object") {
-		return null;
-	}
-
-	if (error.code !== LEARNING_SESSION_RESUME_CONFLICT) {
-		return null;
-	}
-
-	if (error.payload === null || typeof error.payload !== "object") {
-		return null;
-	}
-
-	if (typeof error.payload.activeSessionId !== "string") {
-		return null;
-	}
-
-	return error.payload.activeSessionId;
 }
