@@ -5,6 +5,7 @@ import createLearningPathActionModel from "../../../../src/ui/viewmodel/Learning
 const t = {
 	learningPathResumeLabel: "Resume",
 	learningPathContinueLabel: "Continue",
+	learningPathChapterTestStartLabel: "Start chapter test",
 	learningPathReplayModuleLabel: "Take again",
 	learningPathContinueReplayLabel: (completed, total) => `Replay ${completed}/${total}`
 };
@@ -17,6 +18,27 @@ describe("createLearningPathActionModel", () => {
 
 	test("starts the backend-selected authored activity through the module target", () => {
 		expect(createLearningPathActionModel({ module, resumableSession: null, nextActivity: { kind: "start-authored-session", moduleId: "module-1" }, startingActionKey: null, canStartLearningSessions: true, t })).toMatchObject({ intent: "start", actionKey: "module:module-1:start", target: { kind: "module" }, label: "Continue" });
+	});
+
+
+	test("opens the backend-selected ChapterTest with localized examId", () => {
+		const action = createLearningPathActionModel({ module, resumableSession: null, nextActivity: { kind: "chapter-test", moduleId: "module-1", sectionId: "section-1", examId: "chapter-1-test-no" }, startingActionKey: null, canStartLearningSessions: true, t });
+
+		expect(action).toEqual({ intent: "open-chapter-test", moduleId: "module-1", examId: "chapter-1-test-no", label: "Start chapter test", isDisabled: false, isPending: false });
+		expect(action).not.toHaveProperty("actionKey");
+	});
+
+	test("lets backend ChapterTest nextActivity win over replay availability", () => {
+		const replayAvailableModule = { ...module, isReplayAvailable: true };
+		const action = createLearningPathActionModel({ module: replayAvailableModule, resumableSession: null, nextActivity: { kind: "chapter-test", moduleId: "module-1", sectionId: "section-1", examId: "chapter-1-test-no" }, startingActionKey: null, canStartLearningSessions: true, t });
+
+		expect(action).toMatchObject({ intent: "open-chapter-test", examId: "chapter-1-test-no" });
+	});
+
+	test("keeps resume precedence over backend ChapterTest nextActivity", () => {
+		const action = createLearningPathActionModel({ module, resumableSession: { sessionId: "s1", moduleId: "module-1" }, nextActivity: { kind: "chapter-test", moduleId: "module-1", sectionId: "section-1", examId: "chapter-1-test-no" }, startingActionKey: null, canStartLearningSessions: true, t });
+
+		expect(action).toMatchObject({ intent: "resume", sessionId: "s1" });
 	});
 
 	test("lets backend authored nextActivity win over replay availability", () => {

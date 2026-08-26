@@ -1,4 +1,6 @@
 // src/ui/viewmodel/LearningPath/createLearningPathSectionModel.js
+import { LEARNING_PATH_ROADMAP_STATUS } from "../../../constants/LearningPathRoadmapStatus.js";
+import { LEARNING_PATH_ACTION_INTENT } from "./LearningPathActionIntent.js";
 import createLearningPathActionKey from "./createLearningPathActionKey.js";
 import createLearningPathProgressModel from "./createLearningPathProgressModel.js";
 import createLearningPathSessionModel from "./createLearningPathSessionModel.js";
@@ -64,7 +66,7 @@ function createSectionActionModel({ section, moduleId, startingActionKey, canSta
 	}
 
 	return {
-		intent: "start",
+		intent: LEARNING_PATH_ACTION_INTENT.START,
 		actionKey,
 		moduleId,
 		sessionId: null,
@@ -76,20 +78,6 @@ function createSectionActionModel({ section, moduleId, startingActionKey, canSta
 }
 
 function createChapterTestModel({ chapterTest, t }) {
-	let statusLabel;
-
-	if (chapterTest.status === "available") {
-		statusLabel = t.learningPathChapterTestAvailableLabel;
-	}
-
-	else if (chapterTest.status === "locked") {
-		statusLabel = t.learningPathStatusLocked;
-	}
-
-	else {
-		throw new Error(`Unknown LearningPath chapter test status '${chapterTest.status}'`);
-	}
-
 	let scoreModel = null;
 
 	if (chapterTest.performancePercent !== null) {
@@ -105,8 +93,27 @@ function createChapterTestModel({ chapterTest, t }) {
 		position: chapterTest.position,
 		status: chapterTest.status,
 		label: t.learningPathChapterTestLabel(chapterTest.position),
-		statusLabel,
-		isDisabled: chapterTest.status !== "available",
+		statusLabel: createChapterTestStatusLabel({ status: chapterTest.status, t }),
+		isDisabled: !chapterTest.isStartable,
 		scoreModel
 	};
+}
+
+function createChapterTestStatusLabel({ status, t }) {
+	switch (status) {
+		case LEARNING_PATH_ROADMAP_STATUS.COMPLETED:
+			return t.learningPathChapterTestCompletedLabel;
+
+		case LEARNING_PATH_ROADMAP_STATUS.CURRENT:
+			return t.learningPathChapterTestCurrentLabel;
+
+		case LEARNING_PATH_ROADMAP_STATUS.AVAILABLE:
+			return t.learningPathChapterTestAvailableLabel;
+
+		case LEARNING_PATH_ROADMAP_STATUS.LOCKED:
+			return t.learningPathStatusLocked;
+
+		default:
+			throw new Error(`Unknown LearningPath chapter test status '${status}'`);
+	}
 }

@@ -31,9 +31,54 @@ describe("LearningPathRepository", () => {
 		expect(result).not.toHaveProperty("moduleProgress");
 	});
 
+
+	test("accepts the full ChapterTest roadmap status contract", async () => {
+		for (const status of ["completed", "current", "available", "locked"]) {
+			const response = readFixture("learning-path-response.json");
+			response.modules[0].sections[0].chapterTests[0].status = status;
+
+			const pathModel = await createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" });
+
+			expect(pathModel.modules[0].sections[0].chapterTests[0].status).toBe(status);
+		}
+	});
+
+	test("maps ChapterTest nextActivity with localized examId", async () => {
+		const response = readFixture("learning-path-response.json");
+		response.nextActivity = {
+			kind: "chapter-test",
+			moduleId: response.modules[0].id,
+			sectionId: response.modules[0].sections[0].id,
+			examId: response.modules[0].sections[0].chapterTests[0].id
+		};
+
+		const pathModel = await createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" });
+
+		expect(pathModel.nextActivity).toEqual(response.nextActivity);
+	});
+
+	test("rejects baseId-only ChapterTest nextActivity", async () => {
+		const response = readFixture("learning-path-response.json");
+		response.nextActivity = {
+			kind: "chapter-test",
+			moduleId: response.modules[0].id,
+			sectionId: response.modules[0].sections[0].id,
+			baseId: "chapter-1a-test"
+		};
+
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+	});
+
 	test("rejects adaptive nextActivity at the repository boundary", async () => {
 		const response = readFixture("learning-path-response.json");
 		response.nextActivity = { kind: "start-adaptive-session", moduleId: response.modules[0].id, questionCount: 4 };
+
+		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
+	});
+
+	test("rejects a ChapterTest without backend-owned startability", async () => {
+		const response = readFixture("learning-path-response.json");
+		delete response.modules[0].sections[0].chapterTests[0].isStartable;
 
 		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
 	});

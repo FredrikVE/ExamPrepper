@@ -1,4 +1,6 @@
 // src/ui/viewmodel/LearningPath/createLearningPathSessionModel.js
+import { LEARNING_PATH_ROADMAP_STATUS } from "../../../constants/LearningPathRoadmapStatus.js";
+import { LEARNING_PATH_ACTION_INTENT } from "./LearningPathActionIntent.js";
 import createLearningPathActionKey from "./createLearningPathActionKey.js";
 
 export default function createLearningPathSessionModel({ session, moduleId, startingActionKey, canStartLearningSessions, t }) {
@@ -31,17 +33,17 @@ export default function createLearningPathSessionModel({ session, moduleId, star
 
 function createSessionAppearance(status) {
 	switch (status) {
-		case "completed":
-			return "completed";
+		case LEARNING_PATH_ROADMAP_STATUS.COMPLETED:
+			return LEARNING_PATH_ROADMAP_STATUS.COMPLETED;
 
-		case "current":
-			return "current";
+		case LEARNING_PATH_ROADMAP_STATUS.CURRENT:
+			return LEARNING_PATH_ROADMAP_STATUS.CURRENT;
 
-		case "available":
-			return "available";
+		case LEARNING_PATH_ROADMAP_STATUS.AVAILABLE:
+			return LEARNING_PATH_ROADMAP_STATUS.AVAILABLE;
 
-		case "locked":
-			return "locked";
+		case LEARNING_PATH_ROADMAP_STATUS.LOCKED:
+			return LEARNING_PATH_ROADMAP_STATUS.LOCKED;
 
 		default:
 			throw new Error(`Unknown LearningPath session status '${status}'`);
@@ -49,7 +51,7 @@ function createSessionAppearance(status) {
 }
 
 function createSessionIconKey(session) {
-	if (session.status === "completed") {
+	if (session.status === LEARNING_PATH_ROADMAP_STATUS.COMPLETED) {
 		if (session.performancePercent === 100) {
 			return "check";
 		}
@@ -57,7 +59,7 @@ function createSessionIconKey(session) {
 		return "score";
 	}
 
-	if (session.status === "locked") {
+	if (session.status === LEARNING_PATH_ROADMAP_STATUS.LOCKED) {
 		return "lock";
 	}
 
@@ -65,7 +67,7 @@ function createSessionIconKey(session) {
 }
 
 function createSessionScoreModel({ session, t }) {
-	if (session.status !== "completed") {
+	if (session.status !== LEARNING_PATH_ROADMAP_STATUS.COMPLETED) {
 		return null;
 	}
 
@@ -104,7 +106,7 @@ function createSessionActionModel({ session, moduleId, startingActionKey, canSta
 	});
 
 	return {
-		intent: "start",
+		intent: LEARNING_PATH_ACTION_INTENT.START,
 		actionKey,
 		moduleId,
 		sessionId: null,
@@ -117,16 +119,16 @@ function createSessionActionModel({ session, moduleId, startingActionKey, canSta
 
 function createSessionStatusLabel({ status, t }) {
 	switch (status) {
-		case "completed":
+		case LEARNING_PATH_ROADMAP_STATUS.COMPLETED:
 			return t.learningPathSessionCompletedLabel;
 
-		case "current":
+		case LEARNING_PATH_ROADMAP_STATUS.CURRENT:
 			return t.learningPathSessionCurrentLabel;
 
-		case "available":
+		case LEARNING_PATH_ROADMAP_STATUS.AVAILABLE:
 			return t.learningPathSessionAvailableLabel;
 
-		case "locked":
+		case LEARNING_PATH_ROADMAP_STATUS.LOCKED:
 			return t.learningPathStatusLocked;
 
 		default:

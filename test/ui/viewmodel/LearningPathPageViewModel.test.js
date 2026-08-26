@@ -7,6 +7,7 @@ import { LANGUAGES, translations } from "../../../src/i18n/translations.js";
 const stateValues = [];
 let stateCursor = 0;
 let learningPath;
+let onChapterTestSelected;
 
 const useState = jest.fn((initialValue) => {
 	const stateIndex = stateCursor;
@@ -46,7 +47,7 @@ function renderViewModel({ authState, startLearningSessionUseCase, onLearningSes
 		backContract: { onBack: jest.fn() },
 		contentToggleContract: {},
 		onLearningSessionStarted,
-		onChapterTestSelected: jest.fn(),
+		onChapterTestSelected,
 		authState
 	});
 }
@@ -67,6 +68,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		stateValues.length = 0;
 		stateCursor = 0;
 		learningPath = structuredClone(fixture);
+		onChapterTestSelected = jest.fn();
 		useState.mockClear();
 		useCallback.mockClear();
 		useLoadModel.mockClear();
@@ -126,6 +128,32 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		expect(execute).toHaveBeenCalledWith({ subjectId: "in2120", moduleId: learningPath.modules[0].id, language: "no", target: { kind: "module" }, discardActiveSession: false });
 		expect(onLearningSessionStarted).toHaveBeenCalledWith("session-selected");
 		expect(onLearningSessionStarted).not.toHaveBeenCalledWith("session-other");
+	});
+
+
+	test("opens backend-selected ChapterTest without starting a LearningSession", async () => {
+		learningPath.nextActivity = {
+			kind: "chapter-test",
+			moduleId: learningPath.modules[0].id,
+			sectionId: learningPath.modules[0].sections[0].id,
+			examId: "chapter-1a-test-no"
+		};
+		const execute = jest.fn();
+		const onLearningSessionStarted = jest.fn();
+		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const action = viewModel.roadmapModel.entries[0].actionModel;
+
+		expect(action).toMatchObject({ intent: "open-chapter-test", examId: "chapter-1a-test-no", isDisabled: false });
+		await viewModel.onLearningPathAction(action);
+		expect(onChapterTestSelected).toHaveBeenCalledWith("chapter-1a-test-no");
+		expect(execute).not.toHaveBeenCalled();
+		expect(onLearningSessionStarted).not.toHaveBeenCalled();
+	});
+
+	test("rejects ChapterTest action without examId", async () => {
+		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+
+		await expect(viewModel.onLearningPathAction({ intent: "open-chapter-test", moduleId: learningPath.modules[0].id, isDisabled: false })).rejects.toThrow("LearningPath chapter test action requires examId");
 	});
 
 	test("tracks pending state by exact action identity while a session start is in flight", async () => {

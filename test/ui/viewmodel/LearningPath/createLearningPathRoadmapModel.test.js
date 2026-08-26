@@ -32,7 +32,10 @@ const t = {
 	learningPathSessionCurrentLabel: "Next",
 	learningPathSessionAvailableLabel: "Ready",
 	learningPathChapterTestLabel: (position) => `Chapter test ${position}`,
+	learningPathChapterTestCompletedLabel: "Completed",
+	learningPathChapterTestCurrentLabel: "Next chapter test",
 	learningPathChapterTestAvailableLabel: "Ready",
+	learningPathChapterTestStartLabel: "Start chapter test",
 	learningPathExamTitle: "Exam",
 	learningPathExamUnlockedLabel: translations[LANGUAGES.EN].learningPathExamUnlockedLabel,
 	learningPathExamLockedLabel: "Locked",
@@ -78,6 +81,7 @@ describe("createLearningPathRoadmapModel", () => {
 		const chapterTests = [1, 2, 3, 4].map((position) => ({
 			id: `in5431-chapter-1${String.fromCharCode(96 + position)}-test-no`,
 			position,
+			isStartable: true,
 			status: "available",
 			performancePercent: null,
 			performanceBand: "not-assessed"

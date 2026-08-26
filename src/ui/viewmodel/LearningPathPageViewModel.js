@@ -2,6 +2,7 @@
 import { useCallback, useState } from "react";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { LEARNING_PATH_ACTION_INTENT } from "./LearningPath/LearningPathActionIntent.js";
 import createContinueLearningModel from "./LearningPath/createContinueLearningModel.js";
 import createLearningPathRoadmapModel from "./LearningPath/createLearningPathRoadmapModel.js";
 
@@ -151,7 +152,7 @@ export default function useLearningPathPageViewModel(props) {
 		}
 
 		switch (actionModel.intent) {
-			case "resume":
+			case LEARNING_PATH_ACTION_INTENT.RESUME:
 				if (typeof actionModel.sessionId !== "string") {
 					throw new Error("LearningPath resume action requires sessionId");
 				}
@@ -159,7 +160,7 @@ export default function useLearningPathPageViewModel(props) {
 				onLearningSessionStarted(actionModel.sessionId);
 				return;
 
-			case "start":
+			case LEARNING_PATH_ACTION_INTENT.START:
 				if (!canStartLearningSessions) {
 					return;
 				}
@@ -167,10 +168,18 @@ export default function useLearningPathPageViewModel(props) {
 				await startLearningSession(actionModel);
 				return;
 
+			case LEARNING_PATH_ACTION_INTENT.OPEN_CHAPTER_TEST:
+				if (typeof actionModel.examId !== "string") {
+					throw new Error("LearningPath chapter test action requires examId");
+				}
+
+				onChapterTestSelected(actionModel.examId);
+				return;
+
 			default:
 				throw new Error(`Unknown LearningPath action intent '${String(actionModel.intent)}'`);
 		}
-	}, [canStartLearningSessions, onLearningSessionStarted, startLearningSession]);
+	}, [canStartLearningSessions, onChapterTestSelected, onLearningSessionStarted, startLearningSession]);
 
 	let workspaceErrorBody = t.learningPathLoadErrorMessage;
 

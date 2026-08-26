@@ -1,12 +1,13 @@
 // src/model/repositories/LearningPathRepository.js
 import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
+import { LEARNING_PATH_ACTIVITY_KIND } from "../../constants/LearningPathActivityKind.js";
+import { LEARNING_PATH_ROADMAP_STATUSES } from "../../constants/LearningPathRoadmapStatus.js";
 
 const INVALID_LEARNING_PATH_RESPONSE = "Invalid learning path response";
 const INVALID_LEARNING_SESSION_RESPONSE = "Invalid learning session response";
 const INVALID_LEARNING_SESSION_RESULT = "Invalid learning session result";
 const NOT_ASSESSED = "not-assessed";
-const SESSION_STATUSES = new Set(["completed", "current", "available", "locked"]);
-const CHAPTER_TEST_STATUSES = new Set(["available", "locked"]);
+const ROADMAP_STATUSES = new Set(LEARNING_PATH_ROADMAP_STATUSES);
 const ASSESSMENT_BANDS = new Set(["practice", "progress", "understood"]);
 
 export default class LearningPathRepository {
@@ -278,7 +279,7 @@ export default class LearningPathRepository {
 			|| !Number.isInteger(session.position)
 			|| !Number.isInteger(session.questionCount)
 			|| typeof session.isStartable !== "boolean"
-			|| !SESSION_STATUSES.has(session.status)
+			|| !ROADMAP_STATUSES.has(session.status)
 			|| !this.#isValidPerformancePair(session.performancePercent, session.performanceBand)
 		) {
 			this.#throwInvalidLearningPath();
@@ -300,7 +301,8 @@ export default class LearningPathRepository {
 			!this.#isObject(chapterTest)
 			|| typeof chapterTest.id !== "string"
 			|| !Number.isInteger(chapterTest.position)
-			|| !CHAPTER_TEST_STATUSES.has(chapterTest.status)
+			|| typeof chapterTest.isStartable !== "boolean"
+			|| !ROADMAP_STATUSES.has(chapterTest.status)
 			|| !this.#isValidPerformancePair(chapterTest.performancePercent, chapterTest.performanceBand)
 		) {
 			this.#throwInvalidLearningPath();
@@ -309,6 +311,7 @@ export default class LearningPathRepository {
 		return {
 			id: chapterTest.id,
 			position: chapterTest.position,
+			isStartable: chapterTest.isStartable,
 			status: chapterTest.status,
 			performancePercent: chapterTest.performancePercent,
 			performanceBand: chapterTest.performanceBand
@@ -351,7 +354,7 @@ export default class LearningPathRepository {
 			this.#throwInvalidLearningPath();
 		}
 
-		if (activity.kind === "resume-session") {
+		if (activity.kind === LEARNING_PATH_ACTIVITY_KIND.RESUME_SESSION) {
 			if (typeof activity.sessionId !== "string") {
 				this.#throwInvalidLearningPath();
 			}
@@ -363,7 +366,7 @@ export default class LearningPathRepository {
 			};
 		}
 
-		if (activity.kind === "start-authored-session") {
+		if (activity.kind === LEARNING_PATH_ACTIVITY_KIND.START_AUTHORED_SESSION) {
 			if (
 				typeof activity.sectionId !== "string"
 				|| typeof activity.sectionKey !== "string"
@@ -385,8 +388,8 @@ export default class LearningPathRepository {
 			};
 		}
 
-		if (activity.kind === "chapter-test") {
-			if (typeof activity.sectionId !== "string" || typeof activity.baseId !== "string") {
+		if (activity.kind === LEARNING_PATH_ACTIVITY_KIND.CHAPTER_TEST) {
+			if (typeof activity.sectionId !== "string" || typeof activity.examId !== "string") {
 				this.#throwInvalidLearningPath();
 			}
 
@@ -394,7 +397,7 @@ export default class LearningPathRepository {
 				kind: activity.kind,
 				moduleId: activity.moduleId,
 				sectionId: activity.sectionId,
-				baseId: activity.baseId
+				examId: activity.examId
 			};
 		}
 

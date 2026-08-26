@@ -1,4 +1,6 @@
 // src/ui/viewmodel/LearningPath/createLearningPathActionModel.js
+import { LEARNING_PATH_ACTIVITY_KIND } from "../../../constants/LearningPathActivityKind.js";
+import { LEARNING_PATH_ACTION_INTENT } from "./LearningPathActionIntent.js";
 import createLearningPathActionKey from "./createLearningPathActionKey.js";
 
 export default function createLearningPathActionModel({ module, resumableSession, nextActivity, startingActionKey, canStartLearningSessions, t }) {
@@ -19,7 +21,7 @@ export default function createLearningPathActionModel({ module, resumableSession
 		});
 
 		return {
-			intent: "start",
+			intent: LEARNING_PATH_ACTION_INTENT.START,
 			actionKey,
 			moduleId: module.id,
 			sessionId: null,
@@ -27,6 +29,17 @@ export default function createLearningPathActionModel({ module, resumableSession
 			label: t.learningPathContinueLabel,
 			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || startingActionKey !== null,
 			isPending: startingActionKey === actionKey
+		};
+	}
+
+	if (isBackendSelectedChapterTest({ moduleId: module.id, nextActivity })) {
+		return {
+			intent: LEARNING_PATH_ACTION_INTENT.OPEN_CHAPTER_TEST,
+			moduleId: module.id,
+			examId: nextActivity.examId,
+			label: t.learningPathChapterTestStartLabel,
+			isDisabled: false,
+			isPending: false
 		};
 	}
 
@@ -41,7 +54,7 @@ export default function createLearningPathActionModel({ module, resumableSession
 		});
 
 		return {
-			intent: "start",
+			intent: LEARNING_PATH_ACTION_INTENT.START,
 			actionKey,
 			moduleId: module.id,
 			sessionId: null,
@@ -63,7 +76,7 @@ function createResumeActionModel({ module, resumableSession, t }) {
 	}
 
 	return {
-		intent: "resume",
+		intent: LEARNING_PATH_ACTION_INTENT.RESUME,
 		moduleId: module.id,
 		sessionId: resumableSession.sessionId,
 		target: null,
@@ -86,5 +99,13 @@ function isBackendSelectedModuleStart({ moduleId, nextActivity }) {
 		return false;
 	}
 
-	return nextActivity.kind === "start-authored-session";
+	return nextActivity.kind === LEARNING_PATH_ACTIVITY_KIND.START_AUTHORED_SESSION;
+}
+
+function isBackendSelectedChapterTest({ moduleId, nextActivity }) {
+	if (nextActivity === null || nextActivity.moduleId !== moduleId) {
+		return false;
+	}
+
+	return nextActivity.kind === LEARNING_PATH_ACTIVITY_KIND.CHAPTER_TEST;
 }
