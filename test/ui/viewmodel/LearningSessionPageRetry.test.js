@@ -11,8 +11,7 @@ describe("LearningSession submit retry", () => {
 				moduleId: "module-1",
 				modulePosition: 1,
 				moduleTitle: "Concepts",
-				activityKind: "authored",
-				questions: []
+					questions: []
 			}
 		});
 		const state = {

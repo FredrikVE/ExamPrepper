@@ -77,7 +77,6 @@ function createLoadedSessionData(session) {
 		moduleId: session.moduleId,
 		modulePosition: session.modulePosition,
 		moduleTitle: session.moduleTitle,
-		activityKind: session.activityKind,
 		questions: session.questions,
 		currentIndex: 0,
 		answersBySessionQuestionId: {},

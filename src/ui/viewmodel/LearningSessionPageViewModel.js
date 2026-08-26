@@ -269,7 +269,6 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		headerModel = createLearningSessionHeaderModel({
 			modulePosition: session.modulePosition,
 			moduleTitle: session.moduleTitle,
-			activityKind: session.activityKind,
 			submitResult,
 			currentIndex: session.currentIndex,
 			questionCount: session.questions.length,

@@ -5,8 +5,6 @@ const INVALID_LEARNING_PATH_RESPONSE = "Invalid learning path response";
 const INVALID_LEARNING_SESSION_RESPONSE = "Invalid learning session response";
 const INVALID_LEARNING_SESSION_RESULT = "Invalid learning session result";
 const NOT_ASSESSED = "not-assessed";
-const LEARNING_ACTIVITY_KINDS = new Set(["authored", "review", "repair", "coverage", "legacy-round"]);
-const ADAPTIVE_ACTIVITY_KINDS = new Set(["review", "repair", "coverage"]);
 const SESSION_STATUSES = new Set(["completed", "current", "available", "locked"]);
 const CHAPTER_TEST_STATUSES = new Set(["available", "locked"]);
 const ASSESSMENT_BANDS = new Set(["practice", "progress", "understood"]);
@@ -326,7 +324,6 @@ export default class LearningPathRepository {
 			!this.#isObject(session)
 			|| typeof session.sessionId !== "string"
 			|| typeof session.moduleId !== "string"
-			|| !LEARNING_ACTIVITY_KINDS.has(session.activityKind)
 			|| !this.#isNullableString(session.planKey)
 			|| !this.#isNullableString(session.sectionId)
 			|| !Number.isInteger(session.currentQuestionPosition)
@@ -338,7 +335,6 @@ export default class LearningPathRepository {
 		return {
 			sessionId: session.sessionId,
 			moduleId: session.moduleId,
-			activityKind: session.activityKind,
 			planKey: session.planKey,
 			sectionId: session.sectionId,
 			currentQuestionPosition: session.currentQuestionPosition,
@@ -389,22 +385,6 @@ export default class LearningPathRepository {
 			};
 		}
 
-		if (activity.kind === "start-adaptive-session") {
-			if (
-				!ADAPTIVE_ACTIVITY_KINDS.has(activity.activityKind)
-				|| !Number.isInteger(activity.questionCount)
-			) {
-				this.#throwInvalidLearningPath();
-			}
-
-			return {
-				kind: activity.kind,
-				moduleId: activity.moduleId,
-				activityKind: activity.activityKind,
-				questionCount: activity.questionCount
-			};
-		}
-
 		if (activity.kind === "chapter-test") {
 			if (typeof activity.sectionId !== "string" || typeof activity.baseId !== "string") {
 				this.#throwInvalidLearningPath();
@@ -428,7 +408,6 @@ export default class LearningPathRepository {
 			|| typeof response.moduleId !== "string"
 			|| !Number.isInteger(response.modulePosition)
 			|| typeof response.moduleTitle !== "string"
-			|| !LEARNING_ACTIVITY_KINDS.has(response.activityKind)
 			|| !this.#isNullableString(response.planKey)
 			|| !this.#isNullableString(response.sectionId)
 			|| !Number.isInteger(response.questionCount)
@@ -442,7 +421,6 @@ export default class LearningPathRepository {
 			moduleId: response.moduleId,
 			modulePosition: response.modulePosition,
 			moduleTitle: response.moduleTitle,
-			activityKind: response.activityKind,
 			planKey: response.planKey,
 			sectionId: response.sectionId,
 			questionCount: response.questionCount,

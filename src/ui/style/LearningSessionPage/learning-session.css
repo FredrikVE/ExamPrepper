@@ -25,7 +25,6 @@
 	letter-spacing: -0.03em;
 }
 
-.learning-session-heading p,
 .learning-session-heading > strong {
 	margin: var(--space-1) 0 0;
 	color: var(--text-muted);

@@ -1,8 +1,8 @@
 <!--docs/skills/FRONTEND_ARCHITECTURE_SKILL.md-->
 # FRONTEND_ARCHITECTURE_SKILL.md — Arkitekturprinsipper for ExamPrepper frontend
 
-<!-- Versjon: 2.11 — Sist oppdatert: 2026-08-24 -->
-<!-- Erstatter: FRONTEND_ARCHITECTURE_SKILL V2.10 -->
+<!-- Versjon: 2.12 — Sist oppdatert: 2026-08-26 -->
+<!-- Erstatter: FRONTEND_ARCHITECTURE_SKILL V2.11 -->
 
 Dette dokumentet beskriver arkitekturen slik den **skal** være — ikke slik den tilfeldigvis har blitt.
 Det er normativt: ved konflikt med eldre dokumentasjon gjelder de låste beslutningene og de gjeldende
@@ -1677,7 +1677,7 @@ Backend eier også `isComplete`, `isReplayAvailable`, `nextActivity` og `resumab
 4. ingen start-action
 ```
 
-`nextActivity` er backendens valg av neste progresjonsaktivitet og kan være authored eller adaptive. Frontend skal derfor ikke la `isReplayAvailable` overstyre et samtidig `nextActivity`. Replay er en eksplisitt fallback-mulighet, ikke en konkurrerende lokal progresjonspolicy.
+`nextActivity` er backendens valg av neste progresjonsaktivitet og kan starte eller gjenoppta authored læring eller peke til ChapterTest. Frontend skal derfor ikke la `isReplayAvailable` overstyre et samtidig `nextActivity`. Replay er en eksplisitt fallback-mulighet, ikke en konkurrerende lokal progresjonspolicy.
 
 En eksisterende `resumableSession` har alltid navigasjonsprioritet: LearningPath-handlinger gjenopptar den aktive økten direkte og tilbyr ikke forkasting i UI. Targeted start sendes først når ingen resumable session finnes. Dersom backend likevel rapporterer `learning_session_resume_conflict`, navigerer ViewModelen direkte til `activeSessionId` uten konfliktmodal.
 

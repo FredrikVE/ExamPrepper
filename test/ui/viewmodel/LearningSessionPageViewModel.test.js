@@ -43,7 +43,6 @@ function createLoadedReducerState(loadedQuestion = question) {
 			moduleId: "module-1",
 			modulePosition: 1,
 			moduleTitle: "Concepts",
-			activityKind: "authored",
 			questions: [{ sessionQuestionId: "session-question-1", question: loadedQuestion }]
 		}
 	});

@@ -6,11 +6,7 @@ export default function LearningSessionHeader({ model }) {
 
 	return (
 		<header className="learning-session-heading">
-			<div>
-				<h1>{model.title}</h1>
-				<p>{model.contextLabel}</p>
-			</div>
-
+			<h1>{model.title}</h1>
 			<strong>{model.counterLabel}</strong>
 		</header>
 	);

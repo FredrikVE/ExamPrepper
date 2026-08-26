@@ -18,22 +18,13 @@ export default function createLearningPathActionModel({ module, resumableSession
 			target
 		});
 
-		let label = t.learningPathContinueLabel;
-
-		if (nextActivity.kind === "start-adaptive-session") {
-			label = createAdaptiveActionLabel({
-				activityKind: nextActivity.activityKind,
-				t
-			});
-		}
-
 		return {
 			intent: "start",
 			actionKey,
 			moduleId: module.id,
 			sessionId: null,
 			target,
-			label,
+			label: t.learningPathContinueLabel,
 			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || startingActionKey !== null,
 			isPending: startingActionKey === actionKey
 		};
@@ -95,21 +86,5 @@ function isBackendSelectedModuleStart({ moduleId, nextActivity }) {
 		return false;
 	}
 
-	return nextActivity.kind === "start-authored-session" || nextActivity.kind === "start-adaptive-session";
-}
-
-function createAdaptiveActionLabel({ activityKind, t }) {
-	switch (activityKind) {
-		case "review":
-			return t.learningPathStartReviewLabel;
-
-		case "repair":
-			return t.learningPathStartRepairLabel;
-
-		case "coverage":
-			return t.learningPathStartCoverageLabel;
-
-		default:
-			throw new Error(`Unknown LearningPath adaptive activity '${activityKind}'`);
-	}
+	return nextActivity.kind === "start-authored-session";
 }

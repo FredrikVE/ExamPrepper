@@ -9,7 +9,6 @@ function createLoadedState() {
 			moduleId: "m1",
 			modulePosition: 1,
 			moduleTitle: "Concepts",
-			activityKind: "authored",
 			questions: [
 				{
 					sessionQuestionId: "q1",
@@ -57,8 +56,7 @@ describe("learning session reducer", () => {
 				moduleId: "m1",
 				modulePosition: 1,
 				moduleTitle: "Concepts",
-				activityKind: "authored",
-				questions: expect.any(Array),
+					questions: expect.any(Array),
 				currentIndex: 0,
 				answersBySessionQuestionId: {},
 				resultsBySessionQuestionId: {},

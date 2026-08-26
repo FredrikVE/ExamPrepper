@@ -147,7 +147,6 @@ export default function useLearningPathPageViewModel(props) {
 
 	const continueModel = createContinueLearningModel({
 		activeEntry,
-		nextActivity: learningPath.nextActivity,
 		t
 	});
 
