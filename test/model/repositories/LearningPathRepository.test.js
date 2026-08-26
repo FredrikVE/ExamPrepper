@@ -28,23 +28,14 @@ describe("LearningPathRepository", () => {
 		expect(pathModel.modules[0].sections[0].chapterTests[0]).toMatchObject({ performancePercent: 82.5, performanceBand: "understood" });
 		expect(pathModel.examGate).toEqual({ isUnlocked: false });
 		expect(session).toMatchObject({ planKey: expect.any(String), sectionId: "section-1" });
-		expect(session).not.toHaveProperty("activityKind");
 		expect(result).not.toHaveProperty("moduleProgress");
 	});
 
 	test("rejects adaptive nextActivity at the repository boundary", async () => {
 		const response = readFixture("learning-path-response.json");
-		response.nextActivity = { kind: "start-adaptive-session", moduleId: response.modules[0].id, activityKind: "repair", questionCount: 4 };
+		response.nextActivity = { kind: "start-adaptive-session", moduleId: response.modules[0].id, questionCount: 4 };
 
 		await expect(createRepository({ learningPathResponse: response }).getLearningPath({ subjectId: "in2120", language: "no" })).rejects.toThrow("Invalid learning path response");
-	});
-
-	test("ignores transitional session mode fields from transport", async () => {
-		const response = readFixture("learning-session-response.json");
-		response.activityKind = "legacy-round";
-		const session = await createRepository({ learningSessionResponse: response }).getLearningSession("session-1");
-
-		expect(session).not.toHaveProperty("activityKind");
 	});
 
 	test("rejects a ChapterTest without backend-owned performance", async () => {
