@@ -48,8 +48,7 @@
 }
 
 .learning-path-continue-action,
-.learning-path-module-detail__start,
-.learning-path-section__action {
+.learning-path-module-detail__start {
 	border: 1px solid var(--button-primary-border);
 	background: var(--button-primary-bg);
 	box-shadow: var(--button-primary-shadow);
@@ -76,15 +75,13 @@
 }
 
 .learning-path-continue-action:hover:not(:disabled),
-.learning-path-module-detail__start:hover:not(:disabled),
-.learning-path-section__action:hover:not(:disabled) {
+.learning-path-module-detail__start:hover:not(:disabled) {
 	background: var(--button-primary-bg-hover);
 	transform: translateY(-1px);
 }
 
 .learning-path-continue-action:focus-visible,
-.learning-path-module-detail__start:focus-visible,
-.learning-path-section__action:focus-visible {
+.learning-path-module-detail__start:focus-visible {
 	outline: 3px solid var(--button-focus-ring);
 	outline-offset: 2px;
 }
