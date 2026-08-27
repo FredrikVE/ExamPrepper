@@ -83,8 +83,8 @@
 }
 
 .learning-path-section__tests {
-	margin-top: var(--space-8);
-	padding: var(--space-5);
+	margin-top: var(--space-9);
+	padding: var(--space-6);
 	border: 1px solid transparent;
 	border-radius: var(--radius-sm);
 	transition: background var(--transition-fast), border-color var(--transition-fast);
@@ -97,9 +97,9 @@
 }
 
 .learning-path-section__tests-heading {
-	margin: 0 0 var(--space-3);
+	margin: 0 0 var(--space-4);
 	color: var(--text-soft);
-	font-size: 0.68rem;
+	font-size: 0.72rem;
 	font-weight: 800;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
@@ -108,22 +108,24 @@
 .learning-path-section__tests-grid {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--space-2);
+	gap: var(--space-3);
 }
 
 .learning-path-chapter-test-node {
+	--learning-path-score-donut-size: var(--learning-path-chapter-test-score-size);
 	display: grid;
-	grid-template-columns: 36px minmax(0, 1fr) 16px;
+	grid-template-columns: var(--learning-path-chapter-test-score-size) minmax(0, 1fr) 18px;
 	align-items: center;
-	gap: var(--space-2);
+	gap: var(--space-4);
 	box-sizing: border-box;
 	flex: 0 0 var(--learning-path-chapter-test-width);
 	width: var(--learning-path-chapter-test-width);
 	height: var(--learning-path-chapter-test-height);
-	padding: var(--space-2) var(--space-3);
-	border: 1px solid color-mix(in srgb, var(--line-strong) 64%, transparent);
-	border-radius: var(--radius-xs);
-	background: var(--panel-bg);
+	padding: var(--space-5);
+	border: 1px solid color-mix(in srgb, var(--line-strong) 88%, transparent);
+	border-radius: var(--radius-md);
+	background: color-mix(in srgb, var(--panel-strong) 76%, var(--accent-soft));
+	box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 5%, transparent);
 	color: var(--text-main);
 	font: inherit;
 	text-align: left;
@@ -154,13 +156,21 @@
 .learning-path-chapter-test-node__icon {
 	display: grid;
 	place-items: center;
-	width: 32px;
-	height: 32px;
+	width: var(--learning-path-chapter-test-score-size);
+	height: var(--learning-path-chapter-test-score-size);
 }
 
 .learning-path-chapter-test-node__icon svg {
-	width: 18px;
-	height: 18px;
+	width: 24px;
+	height: 24px;
+}
+
+.learning-path-chapter-test-node .learning-path-session-score {
+	font-size: 0.68rem;
+}
+
+.learning-path-chapter-test-node .learning-path-session-score circle {
+	stroke-width: 3.9;
 }
 
 .learning-path-chapter-test-node__content {
@@ -177,17 +187,18 @@
 }
 
 .learning-path-chapter-test-node__content strong {
-	font-size: 0.78rem;
+	font-size: 0.92rem;
+	font-weight: 700;
 }
 
 .learning-path-chapter-test-node small {
 	color: var(--text-muted);
-	font-size: 0.7rem;
+	font-size: 0.76rem;
 }
 
 .learning-path-chapter-test-node__chevron {
-	width: 16px;
-	height: 16px;
+	width: 18px;
+	height: 18px;
 	color: var(--text-soft);
 }
 

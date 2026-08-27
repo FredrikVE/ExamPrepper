@@ -10,8 +10,9 @@
 	--learning-path-item-hover-shadow: 0 8px 18px color-mix(in srgb, var(--accent) 10%, transparent);
 	--learning-path-item-locked-hover-bg: color-mix(in srgb, var(--accent) 4%, var(--panel-strong));
 	--learning-path-item-locked-hover-border: color-mix(in srgb, var(--accent) 22%, var(--line-strong));
-	--learning-path-chapter-test-width: 160px;
-	--learning-path-chapter-test-height: 76px;
+	--learning-path-chapter-test-width: 248px;
+	--learning-path-chapter-test-height: 112px;
+	--learning-path-chapter-test-score-size: 58px;
 }
 
 .learning-path-workspace .workspace-scaffold-body {
