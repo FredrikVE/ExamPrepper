@@ -106,9 +106,11 @@
 }
 
 .learning-path-section__tests-grid {
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: var(--space-3);
+	align-items: stretch;
+	justify-content: start;
 }
 
 .learning-path-chapter-test-node {
@@ -118,8 +120,7 @@
 	align-items: center;
 	gap: var(--space-4);
 	box-sizing: border-box;
-	flex: 0 0 var(--learning-path-chapter-test-width);
-	width: var(--learning-path-chapter-test-width);
+	width: 100%;
 	height: var(--learning-path-chapter-test-height);
 	padding: var(--space-5);
 	border: 1px solid color-mix(in srgb, var(--line-strong) 88%, transparent);
