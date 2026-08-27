@@ -22,7 +22,7 @@ function LearningPathSessionContent({ model }) {
 					? <LearningPathSessionScore model={model.scoreModel} />
 					: <span className="learning-path-session-node__icon"><Icon aria-hidden="true" /></span>}
 				{model.isSelectable ? (
-					<span className={`learning-path-session-node__hover-play${model.replayHoverLabel === null ? "" : " learning-path-session-node__hover-play--replay"}`} aria-hidden="true">
+					<span className="learning-path-session-node__hover-play" aria-hidden="true">
 						<Play />
 					</span>
 				) : null}
