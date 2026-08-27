@@ -73,6 +73,10 @@
 	}
 
 	.learning-path-progress-row {
-		grid-template-columns: auto minmax(72px, 1fr) auto;
+		grid-template-columns: 10px minmax(0, 1fr) 72px 42px;
+	}
+
+	.learning-path-progress-row__track {
+		width: 72px;
 	}
 }

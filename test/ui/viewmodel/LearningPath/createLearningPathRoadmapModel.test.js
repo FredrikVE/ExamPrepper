@@ -11,7 +11,7 @@ const t = {
 	learningPathProgressStatus: (completed, total) => `${completed}/${total}`,
 	learningPathPerformanceTitle: "Result",
 	learningPathPerformanceNotAssessedLabel: "Not assessed",
-	learningPathProgressHistoryHeading: "Progress and history",
+	learningPathModuleMasteryLabel: (title) => `Mastery of ${title}`,
 	learningPathSessionScoreLabel: (position, percentage) => `Session ${position}: ${percentage}% result`,
 	learningPathSessionNotAssessedScoreLabel: (position) => `Session ${position}: not assessed`,
 	learningPathToggleDetailsLabel: (title) => `Toggle ${title}`,
@@ -51,7 +51,7 @@ describe("createLearningPathRoadmapModel", () => {
 		expect(module.detailModel.sections[0].sessions).toHaveLength(2);
 		expect(module.cardModel).toMatchObject({ progressSummaryLabel: "1/4", appearance: "active" });
 		expect(module.cardModel.masteryRingModel).toMatchObject({ percentage: 67.5, displayValue: "68%", compactDisplayValue: "68%", appearance: "progress" });
-		expect(module.detailModel).toMatchObject({ heading: "Progress and history", sectionsHeading: "Sections", progressModel: { percentage: 67.5, displayValue: "68%", appearance: "progress" } });
+		expect(module.detailModel).toMatchObject({ sectionsHeading: "Sections", progressModel: { label: "Mastery of Grunnbegreper", percentage: 67.5, displayValue: "68%", appearance: "progress" } });
 		expect(module.detailModel.sections[0].sessions[0]).toMatchObject({ iconKey: "score", scoreModel: { percentage: 65.38, displayValue: "65%", appearance: "progress" } });
 		expect(module.detailModel.sections[0].sessions[1]).toMatchObject({ status: "current", iconKey: "play", label: "Session 2" });
 		expect(module.detailModel.sections[0]).toMatchObject({ chapterTestsHeading: "Chapter tests" });

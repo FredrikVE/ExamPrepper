@@ -85,10 +85,15 @@ function createModuleDetailModel({ module, actionModel, progressModel, startingA
 		});
 	});
 
+	const moduleMasteryLabel = t.learningPathModuleMasteryLabel(module.title);
+
 	return {
 		headingId: `learning-path-module-detail-${module.id}`,
-		heading: t.learningPathProgressHistoryHeading,
-		progressModel,
+		progressModel: {
+			...progressModel,
+			label: moduleMasteryLabel,
+			accessibleLabel: `${moduleMasteryLabel}: ${progressModel.displayValue}`
+		},
 		sectionsHeading: t.learningPathDetailHeading,
 		description: module.description,
 		sections,
