@@ -30,6 +30,7 @@ export default function createLearningPathSectionModel({ section, moduleId, star
 		label: section.label,
 		eyebrow: t.learningPathSectionLabel(section.position),
 		progressLabel: t.learningPathSectionProgressLabel(section.progress.completedSessions, section.progress.totalSessions),
+		chapterTestsHeading: t.learningPathChapterTestsHeading,
 		sessions,
 		actionModel: createSectionActionModel({
 			section,

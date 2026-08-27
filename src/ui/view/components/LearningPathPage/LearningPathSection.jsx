@@ -10,7 +10,14 @@ export default function LearningPathSection({ model, onActionPressed, onChapterT
 				<small>{model.progressLabel}</small>
 			</div>
 			<ul className="learning-path-section__sessions">{model.sessions.map((session) => <LearningPathSessionNode key={session.planKey} model={session} onSelected={onActionPressed} />)}</ul>
-			{model.chapterTests.length === 0 ? null : <div className="learning-path-section__tests">{model.chapterTests.map((test) => <LearningPathChapterTestNode key={test.id} model={test} onSelected={onChapterTestSelected} />)}</div>}
+			{model.chapterTests.length === 0 ? null : (
+				<div className="learning-path-section__tests">
+					<h5 className="learning-path-section__tests-heading">{model.chapterTestsHeading}</h5>
+					<div className="learning-path-section__tests-grid">
+						{model.chapterTests.map((test) => <LearningPathChapterTestNode key={test.id} model={test} onSelected={onChapterTestSelected} />)}
+					</div>
+				</div>
+			)}
 		</section>
 	);
 }

@@ -83,19 +83,35 @@
 }
 
 .learning-path-section__tests {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-	gap: var(--space-2);
-	margin-top: var(--space-3);
-	padding-top: var(--space-3);
+	margin-top: var(--space-8);
+	padding-top: var(--space-5);
 	border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
 }
 
-.learning-path-chapter-test-node {
+.learning-path-section__tests-heading {
+	margin: 0 0 var(--space-3);
+	color: var(--text-soft);
+	font-size: 0.68rem;
+	font-weight: 800;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.learning-path-section__tests-grid {
 	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+}
+
+.learning-path-chapter-test-node {
+	display: grid;
+	grid-template-columns: 36px minmax(0, 1fr) 16px;
 	align-items: center;
 	gap: var(--space-2);
-	min-height: 44px;
+	box-sizing: border-box;
+	flex: 0 0 var(--learning-path-chapter-test-width);
+	width: var(--learning-path-chapter-test-width);
+	height: var(--learning-path-chapter-test-height);
 	padding: var(--space-2) var(--space-3);
 	border: 1px solid color-mix(in srgb, var(--line-strong) 64%, transparent);
 	border-radius: var(--radius-xs);
@@ -104,8 +120,47 @@
 	text-align: left;
 }
 
-.learning-path-chapter-test-node__icon { display: grid; place-items: center; width: 32px; height: 32px; }
-.learning-path-chapter-test-node__icon svg { width: 18px; height: 18px; }
-.learning-path-chapter-test-node__content { display: grid; flex: 1; gap: 1px; min-width: 0; }
-.learning-path-chapter-test-node small { color: var(--text-muted); }
-.learning-path-chapter-test-node:disabled { opacity: 0.5; cursor: not-allowed; }
+.learning-path-chapter-test-node__icon {
+	display: grid;
+	place-items: center;
+	width: 32px;
+	height: 32px;
+}
+
+.learning-path-chapter-test-node__icon svg {
+	width: 18px;
+	height: 18px;
+}
+
+.learning-path-chapter-test-node__content {
+	display: grid;
+	gap: 2px;
+	min-width: 0;
+}
+
+.learning-path-chapter-test-node__content strong,
+.learning-path-chapter-test-node__content small {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.learning-path-chapter-test-node__content strong {
+	font-size: 0.78rem;
+}
+
+.learning-path-chapter-test-node small {
+	color: var(--text-muted);
+	font-size: 0.7rem;
+}
+
+.learning-path-chapter-test-node__chevron {
+	width: 16px;
+	height: 16px;
+	color: var(--text-soft);
+}
+
+.learning-path-chapter-test-node:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}

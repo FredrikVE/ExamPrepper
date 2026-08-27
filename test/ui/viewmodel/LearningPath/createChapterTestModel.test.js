@@ -5,6 +5,7 @@ import createLearningPathSectionModel from "../../../../src/ui/viewmodel/Learnin
 const t = {
 	learningPathSectionLabel: (position) => `Section ${position}`,
 	learningPathSectionProgressLabel: (completed, total) => `${completed}/${total}`,
+	learningPathChapterTestsHeading: "Chapter tests",
 	learningPathPracticeSectionLabel: "Practice section",
 	learningPathJumpToSectionLabel: "Jump to section",
 	learningPathChapterTestLabel: (position) => `Chapter test ${position}`,
@@ -51,6 +52,18 @@ function createModel(status, performancePercent = null, performanceBand = "not-a
 }
 
 describe("LearningPath ChapterTest presentation", () => {
+	test("provides the localized ChapterTest group heading", () => {
+		const model = createLearningPathSectionModel({
+			section: createSection("available"),
+			moduleId: "module-1",
+			startingActionKey: null,
+			canStartLearningSessions: true,
+			t
+		});
+
+		expect(model.chapterTestsHeading).toBe("Chapter tests");
+	});
+
 	test.each([
 		["completed", "Completed", false],
 		["current", "Next chapter test", false],

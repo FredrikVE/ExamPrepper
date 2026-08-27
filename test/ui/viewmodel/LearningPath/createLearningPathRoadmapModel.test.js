@@ -26,6 +26,7 @@ const t = {
 	learningPathSessionOpenLabel: (position) => `Start session ${position}`,
 	learningPathSectionLabel: (position) => `Section ${position}`,
 	learningPathSectionProgressLabel: (completed, total) => `${completed}/${total}`,
+	learningPathChapterTestsHeading: "Chapter tests",
 	learningPathSessionLabel: (position) => `Session ${position}`,
 	learningPathSessionQuestionCount: (count) => `${count} questions`,
 	learningPathSessionCompletedLabel: "Completed",
@@ -52,6 +53,7 @@ describe("createLearningPathRoadmapModel", () => {
 		expect(module.detailModel).toMatchObject({ heading: "Progress and history", sectionsHeading: "Sections", progressModel: { percentage: 67.5, displayValue: "68%", appearance: "progress" } });
 		expect(module.detailModel.sections[0].sessions[0]).toMatchObject({ iconKey: "score", scoreModel: { percentage: 65.38, displayValue: "65%", appearance: "progress" } });
 		expect(module.detailModel.sections[0].sessions[1]).toMatchObject({ status: "current", iconKey: "play", label: "Session 2" });
+		expect(module.detailModel.sections[0]).toMatchObject({ chapterTestsHeading: "Chapter tests" });
 		expect(module.detailModel.sections[0].chapterTests).toHaveLength(2);
 		expect(module.detailModel.sections[0].chapterTests[0].scoreModel).toMatchObject({ percentage: 82.5, displayValue: "83%", appearance: "understood" });
 		expect(module.detailModel.sections[0].chapterTests[1].scoreModel).toBeNull();

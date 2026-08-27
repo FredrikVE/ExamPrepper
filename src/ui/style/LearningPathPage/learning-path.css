@@ -5,6 +5,8 @@
 	--learning-path-border: color-mix(in srgb, var(--line-strong) 72%, transparent);
 	--learning-path-connector: color-mix(in srgb, var(--text-muted) 62%, transparent);
 	--learning-path-active: var(--accent);
+	--learning-path-chapter-test-width: 160px;
+	--learning-path-chapter-test-height: 76px;
 }
 
 .learning-path-workspace .workspace-scaffold-body {
