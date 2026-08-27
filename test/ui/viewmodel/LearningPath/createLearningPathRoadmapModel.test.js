@@ -24,6 +24,7 @@ const t = {
 	learningPathPracticeSectionLabel: "Practice section",
 	learningPathJumpToSectionLabel: "Jump to section",
 	learningPathSessionOpenLabel: (position) => `Start session ${position}`,
+	learningPathSessionReplayLabel: "Take session again",
 	learningPathSectionLabel: (position) => `Section ${position}`,
 	learningPathSectionProgressLabel: (completed, total) => `${completed}/${total}`,
 	learningPathChapterTestsHeading: "Chapter tests",

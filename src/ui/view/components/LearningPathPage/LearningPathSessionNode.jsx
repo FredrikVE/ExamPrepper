@@ -1,5 +1,5 @@
 // src/ui/view/components/LearningPathPage/LearningPathSessionNode.jsx
-import { Lock, Play } from "lucide-react";
+import { Lock, Play, RotateCcw } from "lucide-react";
 import LearningPathSessionScore from "./LearningPathSessionScore.jsx";
 
 export default function LearningPathSessionNode({ model, onSelected }) {
@@ -21,13 +21,25 @@ function LearningPathSessionContent({ model }) {
 				{model.iconKey === "score"
 					? <LearningPathSessionScore model={model.scoreModel} />
 					: <span className="learning-path-session-node__icon"><Icon aria-hidden="true" /></span>}
-				{model.isSelectable ? <span className="learning-path-session-node__hover-play" aria-hidden="true"><Play /></span> : null}
+				{model.isSelectable ? (
+					<span className={`learning-path-session-node__hover-play${model.replayHoverLabel === null ? "" : " learning-path-session-node__hover-play--replay"}`} aria-hidden="true">
+						<Play />
+					</span>
+				) : null}
 			</span>
 			<span className="learning-path-session-node__copy">
 				<strong>{model.label}</strong>
 				<small>{model.metaLabel}</small>
 			</span>
-			<span className="learning-path-session-node__status">{model.statusLabel}</span>
+			<span className={`learning-path-session-node__status-slot${model.replayHoverLabel === null ? "" : " learning-path-session-node__status-slot--replay"}`}>
+				<span className="learning-path-session-node__status">{model.statusLabel}</span>
+				{model.replayHoverLabel === null ? null : (
+					<span className="learning-path-session-node__replay-label" aria-hidden="true">
+						<span>{model.replayHoverLabel}</span>
+						<RotateCcw />
+					</span>
+				)}
+			</span>
 		</>
 	);
 }

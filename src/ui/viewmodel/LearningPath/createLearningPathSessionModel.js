@@ -7,6 +7,7 @@ export default function createLearningPathSessionModel({ session, moduleId, star
 	const appearance = createSessionAppearance(session.status);
 	const iconKey = createSessionIconKey(session);
 	const scoreModel = createSessionScoreModel({ session, t });
+	const replayHoverLabel = createSessionReplayHoverLabel({ session, t });
 	const actionModel = createSessionActionModel({
 		session,
 		moduleId,
@@ -23,6 +24,7 @@ export default function createLearningPathSessionModel({ session, moduleId, star
 		appearance,
 		iconKey,
 		scoreModel,
+		replayHoverLabel,
 		isSelectable: session.isStartable,
 		actionModel,
 		label: t.learningPathSessionLabel(session.position),
@@ -86,6 +88,18 @@ function createSessionScoreModel({ session, t }) {
 	};
 }
 
+function createSessionReplayHoverLabel({ session, t }) {
+	if (session.status !== LEARNING_PATH_ROADMAP_STATUS.COMPLETED) {
+		return null;
+	}
+
+	if (!session.isStartable) {
+		return null;
+	}
+
+	return t.learningPathSessionReplayLabel;
+}
+
 function createSessionActionModel({ session, moduleId, startingActionKey, canStartLearningSessions, t }) {
 	if (!session.isStartable) {
 		return null;
@@ -101,13 +115,19 @@ function createSessionActionModel({ session, moduleId, startingActionKey, canSta
 		target
 	});
 
+	let label = t.learningPathSessionOpenLabel(session.position);
+
+	if (session.status === LEARNING_PATH_ROADMAP_STATUS.COMPLETED) {
+		label = t.learningPathSessionReplayLabel;
+	}
+
 	return {
 		intent: LEARNING_PATH_ACTION_INTENT.START,
 		actionKey,
 		moduleId,
 		sessionId: null,
 		target,
-		label: t.learningPathSessionOpenLabel(session.position),
+		label,
 		isDisabled: !canStartLearningSessions || startingActionKey !== null,
 		isPending: startingActionKey === actionKey
 	};

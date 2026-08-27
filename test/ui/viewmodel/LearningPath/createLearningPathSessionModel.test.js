@@ -12,7 +12,8 @@ const t = {
 	learningPathStatusLocked: "Locked",
 	learningPathSessionScoreLabel: (position, percentage) => `Session ${position}: ${percentage}% result`,
 	learningPathSessionNotAssessedScoreLabel: (position) => `Session ${position}: not assessed`,
-	learningPathSessionOpenLabel: (position) => `Start session ${position}`
+	learningPathSessionOpenLabel: (position) => `Start session ${position}`,
+	learningPathSessionReplayLabel: "Take session again"
 };
 
 function session(overrides = {}) {
@@ -45,11 +46,16 @@ describe("createLearningPathSessionModel", () => {
 
 		expect(model).toMatchObject({
 			iconKey: "score",
+			replayHoverLabel: "Take session again",
 
 			scoreModel: {
 				percentage: 65.38,
 				displayValue: "65%",
 				appearance: "progress"
+			},
+
+			actionModel: {
+				label: "Take session again"
 			}
 		});
 	});
@@ -90,6 +96,32 @@ describe("createLearningPathSessionModel", () => {
 				displayValue: "100%"
 			}
 		});
+	});
+
+	test("shows replay hover copy only for completed startable sessions", () => {
+		const completed = createLearningPathSessionModel(options());
+		const current = createLearningPathSessionModel(
+			options({
+				session: session({
+					status: "current",
+					performancePercent: null,
+					performanceBand: "not-assessed"
+				})
+			})
+		);
+		const completedLocked = createLearningPathSessionModel(
+			options({
+				session: session({
+					isStartable: false
+				})
+			})
+		);
+
+		expect(completed.replayHoverLabel).toBe("Take session again");
+		expect(current.replayHoverLabel).toBeNull();
+		expect(current.actionModel.label).toBe("Start session 1");
+		expect(completedLocked.replayHoverLabel).toBeNull();
+		expect(completedLocked.actionModel).toBeNull();
 	});
 
 	test("keeps backend selectability while auth disables the runtime action", () => {
