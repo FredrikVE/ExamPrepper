@@ -1,5 +1,5 @@
 // src/ui/view/components/LearningPathPage/LearningPathSessionNode.jsx
-import { Check, Lock, Play } from "lucide-react";
+import { Lock, Play } from "lucide-react";
 import LearningPathSessionScore from "./LearningPathSessionScore.jsx";
 
 export default function LearningPathSessionNode({ model, onSelected }) {
@@ -14,7 +14,7 @@ export default function LearningPathSessionNode({ model, onSelected }) {
 }
 
 function LearningPathSessionContent({ model }) {
-	const Icon = model.iconKey === "check" ? Check : model.iconKey === "lock" ? Lock : Play;
+	const Icon = model.iconKey === "lock" ? Lock : Play;
 	return (
 		<>
 			<span className="learning-path-session-node__visual">

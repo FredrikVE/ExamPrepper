@@ -52,10 +52,6 @@ function createSessionAppearance(status) {
 
 function createSessionIconKey(session) {
 	if (session.status === LEARNING_PATH_ROADMAP_STATUS.COMPLETED) {
-		if (session.performancePercent === 100) {
-			return "check";
-		}
-
 		return "score";
 	}
 

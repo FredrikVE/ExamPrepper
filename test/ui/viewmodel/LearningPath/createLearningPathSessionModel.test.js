@@ -54,7 +54,7 @@ describe("createLearningPathSessionModel", () => {
 		});
 	});
 
-	test("uses a check only for an exact raw 100 percent", () => {
+	test("uses a score donut for exact and rounded 100 percent displays", () => {
 		const perfect = createLearningPathSessionModel(
 			options({
 				session: session({
@@ -64,7 +64,15 @@ describe("createLearningPathSessionModel", () => {
 			})
 		);
 
-		expect(perfect.iconKey).toBe("check");
+		expect(perfect).toMatchObject({
+			iconKey: "score",
+
+			scoreModel: {
+				percentage: 100,
+				displayValue: "100%",
+				appearance: "understood"
+			}
+		});
 
 		const rounded = createLearningPathSessionModel(
 			options({
