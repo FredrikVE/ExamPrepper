@@ -4,6 +4,7 @@ import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
 
 const GLOSSARY_STYLE_PATHS = [
+	path.resolve("src/ui/style/GlossaryPage/page.css"),
 	path.resolve("src/ui/style/GlossaryPage/table.css"),
 	path.resolve("src/ui/style/GlossaryPage/mastery.css"),
 	path.resolve("src/ui/style/GlossaryPage/responsive.css"),
@@ -44,6 +45,40 @@ describe("Glossary theme token ownership", () => {
 		expect(glossaryStyles).not.toMatch(/\.dark\b/);
 	});
 
+
+	test("keeps the full-desktop TopicAreaPanel width in Tokens.css", () => {
+		const pageStyles = readSource(path.resolve("src/ui/style/GlossaryPage/page.css"));
+		const responsiveStyles = readSource(path.resolve("src/ui/style/GlossaryPage/responsive.css"));
+		const tokens = readSource(TOKENS_PATH);
+
+		expect(tokens).toContain("--glossary-topic-area-panel-width: clamp(280px, 20vw, 300px);");
+		expect(pageStyles).toContain("grid-template-columns: var(--glossary-topic-area-panel-width) minmax(0, 1fr);");
+		expect(pageStyles).not.toContain("--glossary-sidebar-width");
+		expect(responsiveStyles).not.toContain("--glossary-sidebar-width");
+	});
+
+	test("keeps Glossary table density and scrollbar geometry in Tokens.css", () => {
+		const pageStyles = readSource(path.resolve("src/ui/style/GlossaryPage/page.css"));
+		const responsiveStyles = readSource(path.resolve("src/ui/style/GlossaryPage/responsive.css"));
+		const tableStyles = readSource(path.resolve("src/ui/style/GlossaryPage/table.css"));
+		const tokens = readSource(TOKENS_PATH);
+
+		for (const token of [
+			"--glossary-table-mastery-column-width: clamp(118px, 9vw, 132px);",
+			"--glossary-table-mastery-column-width-compact: clamp(112px, 12vw, 124px);",
+			"--glossary-table-scrollbar-size: 10px;"
+		]) {
+			expect(tokens).toContain(token);
+		}
+
+		expect(pageStyles).toContain("--glossary-mastery-column-width: var(--glossary-table-mastery-column-width);");
+		expect(responsiveStyles).toContain("--glossary-mastery-column-width: var(--glossary-table-mastery-column-width-compact);");
+		expect(tableStyles).toContain("width: var(--glossary-table-scrollbar-size);");
+		expect(tableStyles).toContain("height: var(--glossary-table-scrollbar-size);");
+		expect(tableStyles).toContain("scrollbar-width: auto;");
+		expect(tableStyles).toContain("touch-action: pan-y;");
+		expect(tableStyles).toContain("-webkit-overflow-scrolling: touch;");
+	});
 
 	test("keeps Glossary mastery icon geometry in Tokens.css and GlossaryPage CSS", () => {
 		const masteryScaleComponent = readSource(MASTERY_SCALE_COMPONENT_PATH);

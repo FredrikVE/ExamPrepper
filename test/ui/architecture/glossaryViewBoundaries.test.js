@@ -7,6 +7,8 @@ import { describe, expect, test } from "@jest/globals";
 const UI_ROOT = path.resolve("src/ui");
 const GLOSSARY_PAGE_VIEWMODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPageViewModel.js");
 const GLOSSARY_RELATIONS_COMPONENT_PATH = path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailRelations.jsx");
+const GLOSSARY_PANEL_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/glossary-panel.css");
+const GLOSSARY_RESPONSIVE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/responsive.css");
 const GLOSSARY_VIEW_ROOTS = [
 	path.resolve("src/ui/view/pages/GlossaryPage.jsx"),
 	path.resolve("src/ui/view/components/GlossaryPage")
@@ -127,6 +129,15 @@ describe("Glossary view boundaries", () => {
 				expect(FORBIDDEN_GLOSSARY_PRESENTATION_PATHS.has(importedPath)).toBe(false);
 			}
 		}
+	});
+
+	test("shows the Glossary panel heading only when TopicAreaPanel is hidden", () => {
+		const panelStyles = fs.readFileSync(GLOSSARY_PANEL_STYLE_PATH, "utf8");
+		const responsiveStyles = fs.readFileSync(GLOSSARY_RESPONSIVE_STYLE_PATH, "utf8");
+
+		expect(panelStyles).toMatch(/\.glossary-panel-heading\s*\{[^}]*display:\s*none;/s);
+		expect(responsiveStyles).toMatch(/@media \(max-width: 1320px\)[\s\S]*?\.glossary-topic-area-panel\s*\{[^}]*display:\s*none;/);
+		expect(responsiveStyles).toMatch(/@media \(max-width: 1320px\)[\s\S]*?\.glossary-panel-heading\s*\{[^}]*display:\s*flex;/);
 	});
 
 	test("keeps relation disclosure body and controller persistent in the DOM contract", () => {

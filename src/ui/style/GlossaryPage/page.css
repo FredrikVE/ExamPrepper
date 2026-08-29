@@ -1,9 +1,8 @@
 /* src/ui/style/GlossaryPage/page.css */
 .glossary-workspace {
-	--glossary-sidebar-width: minmax(315px, 32%);
 	--glossary-term-column-width: 27%;
 	--glossary-connections-column-width: 106px;
-	--glossary-mastery-column-width: clamp(156px, 13vw, 184px);
+	--glossary-mastery-column-width: var(--glossary-table-mastery-column-width);
 	--glossary-footer-overlay-space: 104px;
 }
 
@@ -30,7 +29,7 @@
 
 .glossary-page__content {
 	display: grid;
-	grid-template-columns: var(--glossary-sidebar-width) minmax(0, 1fr);
+	grid-template-columns: var(--glossary-topic-area-panel-width) minmax(0, 1fr);
 	width: 100%;
 	max-width: 1480px;
 	min-width: 0;

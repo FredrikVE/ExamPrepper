@@ -10,7 +10,7 @@
 }
 
 .glossary-panel-heading {
-	display: flex;
+	display: none;
 	align-items: center;
 	gap: 14px;
 	flex: 0 0 auto;

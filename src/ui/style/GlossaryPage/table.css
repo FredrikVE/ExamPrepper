@@ -5,18 +5,20 @@
 	height: 100%;
 	flex: 1;
 	overflow: auto;
-	overscroll-behavior: contain;
+	overscroll-behavior-y: contain;
+	-webkit-overflow-scrolling: touch;
+	touch-action: pan-y;
 	border: 1px solid var(--line);
 	border-radius: 14px;
 	background: color-mix(in srgb, var(--panel-strong) 42%, transparent);
 	scrollbar-gutter: stable;
-	scrollbar-width: thin;
-	scrollbar-color: color-mix(in srgb, var(--text-muted) 45%, transparent) transparent;
+	scrollbar-width: auto;
+	scrollbar-color: color-mix(in srgb, var(--text-muted) 52%, transparent) transparent;
 }
 
 .glossary-table-scroll::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
+	width: var(--glossary-table-scrollbar-size);
+	height: var(--glossary-table-scrollbar-size);
 }
 
 .glossary-table-scroll::-webkit-scrollbar-track {
@@ -25,7 +27,7 @@
 
 .glossary-table-scroll::-webkit-scrollbar-thumb {
 	border-radius: var(--radius-full);
-	background: color-mix(in srgb, var(--text-muted) 45%, transparent);
+	background: color-mix(in srgb, var(--text-muted) 52%, transparent);
 }
 
 @media (hover: hover) and (pointer: fine) {

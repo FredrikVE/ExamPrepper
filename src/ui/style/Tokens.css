@@ -16,6 +16,10 @@
     --learning-path-score-donut-size: 36px;
 
 	/* ── Glossary ───────────────────────────── */
+	--glossary-topic-area-panel-width: clamp(280px, 20vw, 300px);
+	--glossary-table-mastery-column-width: clamp(118px, 9vw, 132px);
+	--glossary-table-mastery-column-width-compact: clamp(112px, 12vw, 124px);
+	--glossary-table-scrollbar-size: 10px;
 	--glossary-mastery-selected-mark-size: 12px;
 	--glossary-mastery-selected-mark-stroke-width: 2.5;
 	--glossary-table-sort-icon-size: 16px;
