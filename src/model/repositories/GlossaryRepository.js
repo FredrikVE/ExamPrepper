@@ -41,6 +41,7 @@ export default class GlossaryRepository {
 		});
 		const nodes = [];
 		const relations = [];
+		const directRelations = [];
 
 		for (const node of response.nodes) {
 			nodes.push(this.#toGlossaryConcept(node));
@@ -50,11 +51,16 @@ export default class GlossaryRepository {
 			relations.push({ ...relation });
 		}
 
+		for (const relation of response.directRelations) {
+			directRelations.push({ ...relation });
+		}
+
 		return {
 			subjectId: response.subjectId,
 			center: this.#toGlossaryConcept(response.center),
 			nodes,
 			relations,
+			directRelations,
 			limit: response.limit,
 			depth: response.depth
 		};

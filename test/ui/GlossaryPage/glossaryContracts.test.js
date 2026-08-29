@@ -1,6 +1,8 @@
 // test/ui/GlossaryPage/glossaryContracts.test.js
 import { describe, expect, test } from "@jest/globals";
-import { GLOSSARY_RELATION_TYPE, MASTERY_STATUS } from "../../../src/constants/GlossaryContracts.js";
+import { CONCEPT_MASTERY_STATUS } from "../../../src/constants/ConceptMasteryStatus.js";
+import { GLOSSARY_NETWORK_EDGE_ROLE } from "../../../src/constants/GlossaryNetworkEdgeRole.js";
+import { GLOSSARY_RELATION_TYPE } from "../../../src/constants/GlossaryRelationType.js";
 import { resolveLocalizedText } from "../../../src/ui/viewmodel/GlossaryPage/resolveLocalizedText.js";
 import { createGlossaryMasteryPresentation } from "../../../src/ui/viewmodel/GlossaryPage/glossaryMasteryModel.js";
 import { createGlossaryNetworkPresentation } from "../../../src/ui/viewmodel/GlossaryPage/glossaryNetworkModel.js";
@@ -35,7 +37,7 @@ describe("glossary contracts", () => {
 	});
 
 	test("keeps every registered mastery status mapped", () => {
-		for (const status of Object.values(MASTERY_STATUS)) {
+		for (const status of Object.values(CONCEPT_MASTERY_STATUS)) {
 			expect(createGlossaryMasteryPresentation(createMastery(status), t).statusLabel).toEqual(expect.any(String));
 		}
 	});
@@ -48,6 +50,15 @@ describe("glossary contracts", () => {
 		for (const relationType of Object.values(GLOSSARY_RELATION_TYPE)) {
 			expect(() => createGlossaryNetworkPresentation(createNetworkInput(relationType))).not.toThrow();
 		}
+	});
+
+	test("consumes network edge role from the backend contract instead of inferring it", () => {
+		const presentation = createGlossaryNetworkPresentation(
+			createNetworkInput(GLOSSARY_RELATION_TYPE.RELATED, GLOSSARY_NETWORK_EDGE_ROLE.SECONDARY)
+		);
+
+		expect(presentation.edges[0].edgeRole).toBe(GLOSSARY_NETWORK_EDGE_ROLE.SECONDARY);
+		expect(presentation.hasSecondaryEdges).toBe(true);
 	});
 });
 
@@ -69,12 +80,13 @@ function createMastery(status) {
 	};
 }
 
-function createNetworkInput(relationType) {
+function createNetworkInput(relationType, edgeRole = GLOSSARY_NETWORK_EDGE_ROLE.DIRECT) {
 	return {
 		network: {
 			center: createConcept("center"),
 			nodes: [createConcept("neighbor")],
-			relations: [{ sourceGlossaryKey: "center", targetGlossaryKey: "neighbor", type: relationType }],
+			relations: [{ sourceGlossaryKey: "center", targetGlossaryKey: "neighbor", type: relationType, role: edgeRole }],
+			directRelations: [{ sourceGlossaryKey: "center", targetGlossaryKey: "neighbor", type: relationType }],
 			limit: 8,
 			depth: 1
 		},

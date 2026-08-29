@@ -1,5 +1,6 @@
 // src/ui/viewmodel/GlossaryPage/glossaryNetworkModel.js
-import { DIRECTED_GLOSSARY_RELATION_TYPES, GLOSSARY_RELATION_TYPE } from "../../../constants/GlossaryContracts.js";
+import { GLOSSARY_NETWORK_EDGE_ROLE } from "../../../constants/GlossaryNetworkEdgeRole.js";
+import { DIRECTED_GLOSSARY_RELATION_TYPES, GLOSSARY_RELATION_TYPE } from "../../../constants/GlossaryRelationType.js";
 import { resolveLocalizedText } from "./resolveLocalizedText.js";
 import { LOAD_STATUS } from "../LoadState/loadStatus.js";
 import { requireTopicAreaReference } from "./glossaryLookups.js";
@@ -15,11 +16,6 @@ export const GLOSSARY_NETWORK_DISPLAY_KIND = Object.freeze({
 export const GLOSSARY_NETWORK_NODE_KIND = Object.freeze({
 	CENTER: "CENTER",
 	NEIGHBOR: "NEIGHBOR"
-});
-
-export const GLOSSARY_NETWORK_EDGE_ROLE = Object.freeze({
-	DIRECT: "DIRECT",
-	SECONDARY: "SECONDARY"
 });
 
 const RELATION_LABEL_KEY = Object.freeze({
@@ -64,14 +60,14 @@ export function createGlossaryNetworkPresentation({ network, language, topicArea
 			continue;
 		}
 
-		const edgeRole = relation.sourceGlossaryKey === center.glossaryEntryKey || relation.targetGlossaryKey === center.glossaryEntryKey
-			? GLOSSARY_NETWORK_EDGE_ROLE.DIRECT
-			: GLOSSARY_NETWORK_EDGE_ROLE.SECONDARY;
+		const edgeRole = relation.role;
 		const isDirectional = DIRECTED_GLOSSARY_RELATION_TYPES.includes(relation.type);
 		const key = `${relation.sourceGlossaryKey}:${relation.type}:${relation.targetGlossaryKey}`;
 
 		edges.push({
 			key,
+			sourceGlossaryEntryKey: source.glossaryEntryKey,
+			targetGlossaryEntryKey: target.glossaryEntryKey,
 			sourcePosition: source.position,
 			targetPosition: target.position,
 			edgeRole,
@@ -81,7 +77,7 @@ export function createGlossaryNetworkPresentation({ network, language, topicArea
 		relationItems.push({
 			key,
 			sourceTerm: source.term,
-			label: resolveRelationLabel(relation.type, t),
+			label: resolveGlossaryRelationLabel(relation.type, t),
 			targetTerm: target.term
 		});
 
@@ -95,6 +91,7 @@ export function createGlossaryNetworkPresentation({ network, language, topicArea
 		nodes,
 		edges,
 		relationItems,
+		directRelations: network.directRelations.map((relation) => ({ ...relation })),
 		hasSecondaryEdges,
 		limit: network.limit,
 		depth: network.depth
@@ -143,7 +140,7 @@ function createNetworkNode(concept, position, isCenter, language, topicAreaRefer
 	};
 }
 
-function resolveRelationLabel(type, t) {
+export function resolveGlossaryRelationLabel(type, t) {
 	const labelKey = RELATION_LABEL_KEY[type];
 	if (labelKey === undefined) {
 		throw new Error(`Unknown glossary relation type: ${String(type)}`);

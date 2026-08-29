@@ -50,7 +50,14 @@ describe("GlossaryRepository", () => {
 			subjectId: "in2120",
 			sourceGlossaryKey: "kap1-konfidensialitet",
 			targetGlossaryKey: "kap1-integritet",
-			type: "contrasts-with"
+			type: "contrasts-with",
+			role: "DIRECT"
+		};
+		const directRelation = {
+			subjectId: "in2120",
+			sourceGlossaryKey: "kap1-konfidensialitet",
+			targetGlossaryKey: "kap2-aes",
+			type: "related"
 		};
 		const glossaryDataSource = {
 			fetchGlossaryOverview: jest.fn().mockResolvedValue({
@@ -62,6 +69,7 @@ describe("GlossaryRepository", () => {
 				center: concept,
 				nodes: [concept],
 				relations: [relation],
+				directRelations: [directRelation],
 				limit: 8,
 				depth: 1
 			})
@@ -82,6 +90,7 @@ describe("GlossaryRepository", () => {
 			mastery: null
 		});
 		expect(network.relations).toEqual([relation]);
+		expect(network.directRelations).toEqual([directRelation]);
 		expect(network.limit).toBe(8);
 		expect(network.depth).toBe(1);
 	});

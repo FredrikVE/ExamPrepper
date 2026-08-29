@@ -78,6 +78,28 @@ describe("DataSource auth capability", () => {
 });
 
 describe("DataSource HTTP payload handling", () => {
+	test("preserves structured API errors", async () => {
+		const payload = {
+			error: "subject_not_found",
+			message: "Subject not found"
+		};
+
+		jest.spyOn(globalThis, "fetch").mockResolvedValue({
+			ok: false,
+			status: 404,
+			text: async () => JSON.stringify(payload)
+		});
+
+		const dataSource = new DataSource({ baseUrl: "https://example.test" });
+
+		await expect(dataSource.get("/subjects/missing")).rejects.toMatchObject({
+			message: "Subject not found",
+			status: 404,
+			code: "subject_not_found",
+			payload
+		});
+	});
+
 	test("preserves the HTTP error when an error response is not JSON", async () => {
 		jest.spyOn(globalThis, "fetch").mockResolvedValue({
 			ok: false,

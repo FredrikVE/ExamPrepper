@@ -920,6 +920,20 @@ describe("useGlossaryPageViewModel", () => {
 				center: glossaryEntries[0],
 				nodes: [glossaryEntries[2]],
 				relations: [],
+				directRelations: [
+					{
+						subjectId: "in2120",
+						sourceGlossaryKey: "transport-layer",
+						targetGlossaryKey: "packet",
+						type: "related"
+					},
+					{
+						subjectId: "in2120",
+						sourceGlossaryKey: "transport-layer",
+						targetGlossaryKey: "public-key",
+						type: "related"
+					}
+				],
 				limit: 8,
 				depth: 1
 			}
@@ -1271,6 +1285,20 @@ describe("useGlossaryPageViewModel", () => {
 				center: glossaryEntries[0],
 				nodes: [glossaryEntries[2]],
 				relations: [],
+				directRelations: [
+					{
+						subjectId: "in2120",
+						sourceGlossaryKey: "transport-layer",
+						targetGlossaryKey: "packet",
+						type: "related"
+					},
+					{
+						subjectId: "in2120",
+						sourceGlossaryKey: "transport-layer",
+						targetGlossaryKey: "public-key",
+						type: "related"
+					}
+				],
 				limit: 8,
 				depth: 1
 			}
@@ -1367,8 +1395,23 @@ describe("useGlossaryPageViewModel", () => {
 				subjectId: "in2120",
 				sourceGlossaryKey: "packet",
 				targetGlossaryKey: "transport-layer",
-				type: "prerequisite"
+				type: "prerequisite",
+				role: "DIRECT"
 			}],
+			directRelations: [
+				{
+					subjectId: "in2120",
+					sourceGlossaryKey: "packet",
+					targetGlossaryKey: "transport-layer",
+					type: "prerequisite"
+				},
+				{
+					subjectId: "in2120",
+					sourceGlossaryKey: "transport-layer",
+					targetGlossaryKey: "public-key",
+					type: "related"
+				}
+			],
 			limit: 8,
 			depth: 1
 		};

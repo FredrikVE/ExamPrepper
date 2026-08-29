@@ -1,4 +1,4 @@
-//test/model/datasource/GlossaryDataSource.test.js
+// test/model/datasource/GlossaryDataSource.test.js
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import GlossaryDataSource from "../../../src/model/datasource/GlossaryDataSource.js";
 
@@ -12,11 +12,11 @@ const glossaryEntries = [
 	}
 ];
 
-function createResponse({ status = 200, payload }) {
+function createResponse({ payload }) {
 	return {
-		ok: status >= 200 && status < 300,
-		status,
-		text: jest.fn().mockResolvedValue(payload === null ? "" : JSON.stringify(payload))
+		ok: true,
+		status: 200,
+		text: jest.fn().mockResolvedValue(JSON.stringify(payload))
 	};
 }
 
@@ -73,38 +73,6 @@ describe("GlossaryDataSource", () => {
 		);
 	});
 
-	test.each([
-		[404, "Subject not found"],
-		[500, "Glossary unavailable"]
-	])("surfaces controlled API errors for status %i", async (status, errorMessage) => {
-		global.fetch.mockResolvedValue(createResponse({
-			status,
-			payload: { error: errorMessage }
-		}));
-		const dataSource = new GlossaryDataSource({
-			baseUrl: "https://api.example.test"
-		});
-
-		await expect(dataSource.fetchGlossaryEntriesBySubject({
-			subjectId: "in2120"
-		})).rejects.toThrow(errorMessage);
-	});
-
-	test.each([
-		null,
-		{},
-		{ glossaryEntries: {} },
-		{ glossaryEntries: [{ glossaryEntryKey: "incomplete" }] }
-	])("rejects an invalid glossary response shape", async (payload) => {
-		global.fetch.mockResolvedValue(createResponse({ payload }));
-		const dataSource = new GlossaryDataSource({
-			baseUrl: "https://api.example.test"
-		});
-
-		await expect(dataSource.fetchGlossaryEntriesBySubject({
-			subjectId: "in2120"
-		})).rejects.toThrow("Invalid glossary response");
-	});
 	test("fetches the canonical glossary overview with optional mastery", async () => {
 		const concepts = [{
 			...glossaryEntries[0],
@@ -140,31 +108,20 @@ describe("GlossaryDataSource", () => {
 		expect(response).toEqual({ subjectId: "in2120", concepts });
 	});
 
-	test.each([
-		{ directNeighborCount: 1 },
-		{ directNeighborGlossaryKeys: [] },
-		{ directNeighborCount: -1, directNeighborGlossaryKeys: [] },
-		{ directNeighborCount: 1.5, directNeighborGlossaryKeys: [] },
-		{ directNeighborCount: 0, directNeighborGlossaryKeys: {} },
-		{ directNeighborCount: 1, directNeighborGlossaryKeys: [""] },
-		{ directNeighborCount: 1, directNeighborGlossaryKeys: [42] }
-	])("rejects an overview concept with an invalid direct-neighbor summary", async (summary) => {
-		const concept = { ...glossaryEntries[0], mastery: null, ...summary };
-		global.fetch.mockResolvedValue(createResponse({
-			payload: { subjectId: "in2120", concepts: [concept] }
-		}));
-		const dataSource = new GlossaryDataSource({ baseUrl: "https://api.example.test" });
-
-		await expect(dataSource.fetchGlossaryOverview({ subjectId: "in2120" })).rejects.toThrow("Invalid glossary response");
-	});
-
-	test("fetches and validates a typed glossary network", async () => {
+	test("fetches and preserves the glossary network response", async () => {
 		const center = { ...glossaryEntries[0], mastery: null };
 		const payload = {
 			subjectId: "in2120",
 			center,
 			nodes: [center],
 			relations: [{
+				subjectId: "in2120",
+				sourceGlossaryKey: "kap1-konfidensialitet",
+				targetGlossaryKey: "kap1-integritet",
+				type: "related",
+				role: "DIRECT"
+			}],
+			directRelations: [{
 				subjectId: "in2120",
 				sourceGlossaryKey: "kap1-konfidensialitet",
 				targetGlossaryKey: "kap1-integritet",
