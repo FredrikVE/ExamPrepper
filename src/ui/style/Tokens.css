@@ -15,6 +15,10 @@
     /* ── LearningPath ───────────────────────── */
     --learning-path-score-donut-size: 36px;
 
+	/* ── Glossary ───────────────────────────── */
+	--glossary-mastery-selected-mark-size: 12px;
+	--glossary-mastery-selected-mark-stroke-width: 2.5;
+
     /* ── Spacing ───────────────────────────── */
     --space-1: 4px;
     --space-2: 8px;

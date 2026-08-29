@@ -29,6 +29,11 @@ const t = Object.freeze({
 	glossaryPageDetailRelationsShowAllLabel: (count) => `Vis alle ${count} relasjoner`,
 	glossaryPageDetailRelationsShowLessLabel: "Vis færre relasjoner",
 	glossaryPageDetailNavigationAriaLabel: "Naviger mellom begreper",
+	glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
+	glossaryPageMasteryPracticeLabel: "Øve mer",
+	glossaryPageMasteryProgressLabel: "Underveis",
+	glossaryPageMasteryUnderstoodLabel: "Forstått",
+	glossaryPageMasteryAriaLabel: (statusLabel) => `Vurdering: ${statusLabel}`,
 	glossaryPageRelationRelatedLabel: "Relatert",
 	glossaryPageRelationContrastsWithLabel: "Kontrast",
 	glossaryPageRelationPrerequisiteLabel: "Forutsetning",
@@ -40,7 +45,8 @@ const activeEntry = Object.freeze({
 	topicAreaKey: "cryptography",
 	term: "AES",
 	explanation: "Advanced Encryption Standard er en symmetrisk blokkchifferstandard.",
-	directNeighborGlossaryKeys: ["mac", "hash"]
+	directNeighborGlossaryKeys: ["mac", "hash"],
+	mastery: { status: "understood" }
 });
 
 const localizedEntryByKey = new Map([
@@ -132,6 +138,17 @@ describe("glossaryDetailModel", () => {
 			items: [
 				{ glossaryEntryKey: "mac", label: "MAC" },
 				{ glossaryEntryKey: "hash", label: "Hash" }
+			]
+		});
+		expect(presentation.mastery).toEqual({
+			status: "understood",
+			statusLabel: "Forstått",
+			ariaLabel: "Vurdering: Forstått",
+			isAssessed: true,
+			scaleItems: [
+				{ status: "practice", label: "Øve mer", isActive: false },
+				{ status: "progress", label: "Underveis", isActive: false },
+				{ status: "understood", label: "Forstått", isActive: true }
 			]
 		});
 		expect(presentation.relations).toEqual({
@@ -487,6 +504,7 @@ function createGlossaryEntry(glossaryEntryKey, term, directNeighborGlossaryKeys 
 		topicAreaKey: "cryptography",
 		term,
 		explanation: `${term} forklaring`,
-		directNeighborGlossaryKeys
+		directNeighborGlossaryKeys,
+		mastery: null
 	};
 }

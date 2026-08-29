@@ -1,6 +1,7 @@
 // src/ui/viewmodel/GlossaryPage/glossaryDetailModel.js
 import { createGlossaryDetailGraphPresentation } from "./glossaryDetailGraphModel.js";
 import { createGlossaryDetailNavigationPresentation } from "./glossaryDetailNavigationModel.js";
+import { createGlossaryMasteryPresentation } from "./glossaryMasteryModel.js";
 import { requireGlossaryEntry, requireTopicArea, requireTopicAreaReference } from "./glossaryLookups.js";
 import { GLOSSARY_NETWORK_DISPLAY_KIND, resolveGlossaryRelationLabel } from "./glossaryNetworkModel.js";
 
@@ -62,6 +63,7 @@ export function createGlossaryDetailPresentation(params) {
 			emptyLabel: params.t.glossaryPageNoAssociationsLabel,
 			items: associations
 		},
+		mastery: createGlossaryMasteryPresentation(activeEntry.mastery, params.t),
 		relations,
 		navigation: {
 			ariaLabel: params.t.glossaryPageDetailNavigationAriaLabel,

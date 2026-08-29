@@ -52,6 +52,10 @@
 	width: var(--glossary-connections-column-width);
 }
 
+.glossary-table__mastery-column {
+	width: 164px;
+}
+
 .glossary-table th,
 .glossary-table td {
 	min-width: 0;
@@ -81,6 +85,11 @@
 	padding: 0;
 	text-align: center;
 	white-space: nowrap;
+}
+
+.glossary-table__mastery-header,
+.glossary-table__mastery-cell {
+	text-align: center !important;
 }
 
 .glossary-table__sortable-header {

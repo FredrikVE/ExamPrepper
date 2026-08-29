@@ -7,7 +7,12 @@ const t = Object.freeze({
 	glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
 	glossaryPageShowAssociationsLabel: (associationLabel, term) => `Vis ${associationLabel} for ${term}`,
 	glossaryPageHideAssociationsLabel: (associationLabel, term) => `Skjul ${associationLabel} for ${term}`,
-	glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`
+	glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`,
+	glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
+	glossaryPageMasteryPracticeLabel: "Øve mer",
+	glossaryPageMasteryProgressLabel: "Underveis",
+	glossaryPageMasteryUnderstoodLabel: "Forstått",
+	glossaryPageMasteryAriaLabel: (statusLabel) => `Vurdering: ${statusLabel}`
 });
 
 describe("glossaryTableModel", () => {
@@ -32,6 +37,24 @@ describe("glossaryTableModel", () => {
 				: `${directNeighborCount} assosierte begreper`
 		});
 	});
+	test("preserves backend mastery as read-only row presentation", () => {
+		const input = createTableModelInput(2);
+		input.localizedEntries[0].mastery = { status: "progress" };
+		const rows = createGlossaryTableRows(input);
+
+		expect(rows[0].mastery).toEqual({
+			status: "progress",
+			statusLabel: "Underveis",
+			ariaLabel: "Vurdering: Underveis",
+			isAssessed: true,
+			scaleItems: [
+				{ status: "practice", label: "Øve mer", isActive: false },
+				{ status: "progress", label: "Underveis", isActive: true },
+				{ status: "understood", label: "Forstått", isActive: false }
+			]
+		});
+	});
+
 	test("prepares a semantic desktop detail-trigger label without changing mobile disclosure data", () => {
 		const rows = createGlossaryTableRows(createTableModelInput(2));
 
@@ -64,6 +87,7 @@ function createGlossaryEntry(glossaryEntryKey, term, directNeighborCount) {
 		term,
 		explanation: `${term} forklaring`,
 		directNeighborCount,
-		directNeighborGlossaryKeys: []
+		directNeighborGlossaryKeys: [],
+		mastery: null
 	};
 }

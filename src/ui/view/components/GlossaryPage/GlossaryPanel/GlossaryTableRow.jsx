@@ -2,6 +2,7 @@
 import { ChevronDown } from "lucide-react";
 import FormattedText from "../../Shared/FormattedText.jsx";
 import DirectNeighborMeter from "./DirectNeighborMeter.jsx";
+import MasteryBadge from "../Mastery/MasteryBadge.jsx";
 
 export default function GlossaryTableRow({ row }) {
 	return (
@@ -26,6 +27,9 @@ export default function GlossaryTableRow({ row }) {
 			</td>
 			<td className="glossary-table__connections-cell">
 				<DirectNeighborMeter model={row.directNeighborLevel} />
+			</td>
+			<td className="glossary-table__mastery-cell">
+				<MasteryBadge mastery={row.mastery} />
 			</td>
 		</tr>
 	);

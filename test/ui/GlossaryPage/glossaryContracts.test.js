@@ -12,6 +12,7 @@ const t = Object.freeze({
 	glossaryPageMasteryPracticeLabel: "Øv mer",
 	glossaryPageMasteryProgressLabel: "På vei",
 	glossaryPageMasteryUnderstoodLabel: "Forstått",
+	glossaryPageMasteryAriaLabel: (statusLabel) => `Vurdering: ${statusLabel}`,
 	glossaryPageMasteryNoScoreLabel: "Ingen score",
 	glossaryPageMasteryCorrectIncorrectLabel: (correct, incorrect) => `${correct}/${incorrect}`,
 	glossaryPageMasteryScoreLabel: (score) => `${score}%`,
@@ -40,6 +41,20 @@ describe("glossary contracts", () => {
 		for (const status of Object.values(CONCEPT_MASTERY_STATUS)) {
 			expect(createGlossaryMasteryPresentation(createMastery(status), t).statusLabel).toEqual(expect.any(String));
 		}
+	});
+
+	test("maps absent backend mastery to an explicit read-only not-assessed presentation", () => {
+		expect(createGlossaryMasteryPresentation(null, t)).toEqual({
+			status: CONCEPT_MASTERY_STATUS.NOT_ASSESSED,
+			statusLabel: "Ikke vurdert",
+			ariaLabel: "Vurdering: Ikke vurdert",
+			isAssessed: false,
+			scaleItems: [
+				{ status: CONCEPT_MASTERY_STATUS.PRACTICE, label: "Øv mer", isActive: false },
+				{ status: CONCEPT_MASTERY_STATUS.PROGRESS, label: "På vei", isActive: false },
+				{ status: CONCEPT_MASTERY_STATUS.UNDERSTOOD, label: "Forstått", isActive: false }
+			]
+		});
 	});
 
 	test("throws on unknown relation type instead of labelling it related", () => {

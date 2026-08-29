@@ -128,6 +128,8 @@ const translations = {
 	glossaryPageTableSortAscendingLabel: (label) => `Sorter ${label} stigende`,
 	glossaryPageTableSortDescendingLabel: (label) => `Sorter ${label} synkende`,
 	glossaryPageConnectionsColumnHeader: "Viktighet",
+	glossaryPageMasteryColumnHeader: "Vurdering",
+	glossaryPageMasteryAriaLabel: (statusLabel) => `Vurdering: ${statusLabel}`,
 	glossaryPageSingleAssociationLabel: "1 assosiert begrep",
 	glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
 	glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
@@ -870,12 +872,18 @@ describe("useGlossaryPageViewModel", () => {
 				value: 2,
 				level: 2,
 				ariaLabel: "2 assosierte begreper"
+			},
+			mastery: {
+				status: "progress",
+				statusLabel: "Underveis",
+				ariaLabel: "Vurdering: Underveis",
+				isAssessed: true
 			}
 		});
 		expect(transportLayer).not.toHaveProperty("directNeighborGlossaryKeys");
 	});
 
-	test("sorts by direct-neighbor count through ViewModel-owned table state", () => {
+	test("uses the locked default table sort and starts each sort key in its intended direction", () => {
 		const { viewModel } = createViewModel({
 			tableSort: { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" }
 		});
@@ -886,15 +894,34 @@ describe("useGlossaryPageViewModel", () => {
 			"public-key",
 			"asymmetric-key"
 		]);
+
+		clearStateSetterCalls();
+		viewModel.changeGlossaryTableSort("TERM");
+		const selectTermSort = setGlossaryTableSort.mock.calls[0][0];
+		expect(selectTermSort({ key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" })).toEqual({
+			key: "TERM",
+			direction: "ASCENDING"
+		});
+
+		clearStateSetterCalls();
 		viewModel.changeGlossaryTableSort("DIRECT_NEIGHBOR_COUNT");
-		expect(setGlossaryTableSort).toHaveBeenCalledWith(expect.any(Function));
+		const selectImportanceSort = setGlossaryTableSort.mock.calls[0][0];
+		expect(selectImportanceSort({ key: "TERM", direction: "ASCENDING" })).toEqual({
+			key: "DIRECT_NEIGHBOR_COUNT",
+			direction: "DESCENDING"
+		});
+
+		expect(selectImportanceSort({ key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" })).toEqual({
+			key: "DIRECT_NEIGHBOR_COUNT",
+			direction: "ASCENDING"
+		});
 	});
 
 	test("prepares table header interaction and accessibility in the page ViewModel", () => {
 		const { viewModel } = createViewModel({
 			tableSort: { key: "TERM", direction: "ASCENDING" }
 		});
-		const [termHeader, explanationHeader, connectionsHeader] = viewModel.glossaryTableHeaders;
+		const [termHeader, explanationHeader, connectionsHeader, masteryHeader] = viewModel.glossaryTableHeaders;
 
 		expect(termHeader).toMatchObject({
 			key: "TERM",
@@ -915,6 +942,12 @@ describe("useGlossaryPageViewModel", () => {
 			isSortable: true,
 			ariaSort: "none",
 			sortIconKind: "UNSORTED"
+		});
+		expect(masteryHeader).toEqual({
+			key: "MASTERY",
+			label: "Vurdering",
+			className: "glossary-table__mastery-header",
+			isSortable: false
 		});
 
 		clearStateSetterCalls();
@@ -1473,11 +1506,21 @@ describe("useGlossaryPageViewModel", () => {
 		expect(viewModel.glossaryMobileDetailPresentation).not.toBeNull();
 	});
 
-	test("does not expose system mastery as glossary table-row presentation", () => {
+	test("exposes backend mastery as read-only glossary table-row presentation", () => {
 		const { viewModel } = createViewModel();
 		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
 
-		expect(transportLayer).not.toHaveProperty("mastery");
+		expect(transportLayer.mastery).toEqual({
+			status: "progress",
+			statusLabel: "Underveis",
+			ariaLabel: "Vurdering: Underveis",
+			isAssessed: true,
+			scaleItems: [
+				{ status: "practice", label: "Øve mer", isActive: false },
+				{ status: "progress", label: "Underveis", isActive: true },
+				{ status: "understood", label: "Forstått", isActive: false }
+			]
+		});
 	});
 
 	test("loads a typed concept network only for the selected stable glossary key", async () => {

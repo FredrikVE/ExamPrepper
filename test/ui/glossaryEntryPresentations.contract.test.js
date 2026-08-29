@@ -51,7 +51,12 @@ describe("GlossaryEntry presentation contract", () => {
 				glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
 				glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
 				glossaryPageHideAssociationsLabel: (label, term) => `Skjul ${label} for ${term}`,
-				glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`
+				glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`,
+				glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
+				glossaryPageMasteryPracticeLabel: "Øve mer",
+				glossaryPageMasteryProgressLabel: "Underveis",
+				glossaryPageMasteryUnderstoodLabel: "Forstått",
+				glossaryPageMasteryAriaLabel: (statusLabel) => `Vurdering: ${statusLabel}`
 			}
 		})[0];
 

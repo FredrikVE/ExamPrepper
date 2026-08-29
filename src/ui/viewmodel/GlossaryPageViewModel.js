@@ -25,6 +25,11 @@ import useGlossarySearchModel from "./GlossaryPage/useGlossarySearchModel.js";
 import useGlossaryTopicAreaSelectionModel from "./GlossaryPage/useGlossaryTopicAreaSelectionModel.js";
 import useGlossaryDetailModel, { useGlossaryDetailPresentationModeSync } from "./GlossaryPage/useGlossaryDetailModel.js";
 
+const DEFAULT_GLOSSARY_TABLE_SORT = Object.freeze({
+	key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+	direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
+});
+
 export default function useGlossaryPageViewModel({
 	getGlossaryOverviewUseCase,
 	getGlossaryNetworkUseCase,
@@ -75,10 +80,7 @@ export default function useGlossaryPageViewModel({
 		resolveGlossaryDisclosureRef,
 		resolveGlossaryDetailTriggerRef
 	} = useGlossaryDetailModel({ presentationMode, resetKey });
-	const [glossaryTableSort, setGlossaryTableSort] = useState({
-		key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
-		direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
-	});
+	const [glossaryTableSort, setGlossaryTableSort] = useState(DEFAULT_GLOSSARY_TABLE_SORT);
 	const [isMobileChapterSheetOpen, setIsMobileChapterSheetOpen] = useState(false);
 
 	useEffect(() => {
@@ -88,10 +90,7 @@ export default function useGlossaryPageViewModel({
 	}, [appShellMode]);
 
 	useEffect(() => {
-		setGlossaryTableSort({
-			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
-			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
-		});
+		setGlossaryTableSort(DEFAULT_GLOSSARY_TABLE_SORT);
 		setIsMobileChapterSheetOpen(false);
 	}, [resetKey]);
 
@@ -565,17 +564,35 @@ export default function useGlossaryPageViewModel({
 
 		setGlossaryTableSort((currentSort) => {
 			if (currentSort.key !== sortKey) {
+				let direction;
+
+				if (sortKey === GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT) {
+					direction = GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING;
+				}
+
+				else {
+					direction = GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING;
+				}
+
 				return {
 					key: sortKey,
-					direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
+					direction
 				};
+			}
+
+			let direction;
+
+			if (currentSort.direction === GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING) {
+				direction = GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING;
+			}
+
+			else {
+				direction = GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING;
 			}
 
 			return {
 				key: sortKey,
-				direction: currentSort.direction === GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
-					? GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
-					: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
+				direction
 			};
 		});
 	}, []);
@@ -960,7 +977,13 @@ function createGlossaryTableHeaderPresentations({ tableSort, t, onSort }) {
 			tableSort,
 			onSort,
 			t
-		})
+		}),
+		{
+			key: "MASTERY",
+			label: t.glossaryPageMasteryColumnHeader,
+			className: "glossary-table__mastery-header",
+			isSortable: false
+		}
 	];
 }
 
@@ -1178,7 +1201,8 @@ function localizeGlossaryEntries(glossaryEntries, language) {
 		explanation: resolveLocalizedText(glossaryEntry.explanation, language),
 		position: glossaryEntry.position,
 		directNeighborCount: glossaryEntry.directNeighborCount,
-		directNeighborGlossaryKeys: glossaryEntry.directNeighborGlossaryKeys
+		directNeighborGlossaryKeys: glossaryEntry.directNeighborGlossaryKeys,
+		mastery: glossaryEntry.mastery
 	}));
 }
 

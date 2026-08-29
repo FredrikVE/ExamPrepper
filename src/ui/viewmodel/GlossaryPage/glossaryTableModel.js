@@ -1,6 +1,7 @@
 // src/ui/viewmodel/GlossaryPage/glossaryTableModel.js
 import { requireTopicAreaReference } from "./glossaryLookups.js";
 import { createDirectNeighborLevelPresentation } from "./directNeighborLevelModel.js";
+import { createGlossaryMasteryPresentation } from "./glossaryMasteryModel.js";
 
 export const GLOSSARY_TABLE_SORT_KEYS = Object.freeze({
 	TERM: "TERM",
@@ -30,6 +31,7 @@ export function createGlossaryTableRows({ localizedEntries, topicAreaReferenceBy
 			explanation: localizedEntry.explanation,
 			directNeighborCount: localizedEntry.directNeighborCount,
 			directNeighborLevel: createDirectNeighborLevelPresentation({ directNeighborCount: localizedEntry.directNeighborCount, ariaLabel: associationLabel }),
+			mastery: createGlossaryMasteryPresentation(localizedEntry.mastery, t),
 			isExpanded,
 			detailsId: `glossary-details-${localizedEntry.glossaryEntryKey}`,
 			disclosureLabel: isExpanded

@@ -8,17 +8,40 @@ const CONCEPT_MASTERY_STATUS_LABEL_KEY = Object.freeze({
 	[CONCEPT_MASTERY_STATUS.UNDERSTOOD]: "glossaryPageMasteryUnderstoodLabel"
 });
 
+const GLOSSARY_MASTERY_SCALE_STATUSES = Object.freeze([
+	CONCEPT_MASTERY_STATUS.PRACTICE,
+	CONCEPT_MASTERY_STATUS.PROGRESS,
+	CONCEPT_MASTERY_STATUS.UNDERSTOOD
+]);
+
 export function createGlossaryMasteryPresentation(mastery, t) {
+	let status;
+
 	if (mastery === null) {
-		return {
-			status: CONCEPT_MASTERY_STATUS.NOT_ASSESSED,
-			statusLabel: t.glossaryPageMasteryNotAssessedLabel
-		};
+		status = CONCEPT_MASTERY_STATUS.NOT_ASSESSED;
+	}
+
+	else {
+		status = mastery.status;
+	}
+
+	const statusLabel = resolveMasteryStatusLabel(status, t);
+	const scaleItems = [];
+
+	for (const scaleStatus of GLOSSARY_MASTERY_SCALE_STATUSES) {
+		scaleItems.push({
+			status: scaleStatus,
+			label: resolveMasteryStatusLabel(scaleStatus, t),
+			isActive: scaleStatus === status
+		});
 	}
 
 	return {
-		status: mastery.status,
-		statusLabel: resolveMasteryStatusLabel(mastery.status, t)
+		status,
+		statusLabel,
+		ariaLabel: t.glossaryPageMasteryAriaLabel(statusLabel),
+		isAssessed: status !== CONCEPT_MASTERY_STATUS.NOT_ASSESSED,
+		scaleItems
 	};
 }
 

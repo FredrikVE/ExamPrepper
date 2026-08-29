@@ -7,6 +7,7 @@ import FormattedText from "../../Shared/FormattedText.jsx";
 import GlossaryDetailModalContent from "./GlossaryDetailModalContent.jsx";
 import GlossaryDetailHeader from "./GlossaryDetailHeader.jsx";
 import GlossaryDetailNavigation from "./GlossaryDetailNavigation.jsx";
+import GlossaryMasteryScale from "../Mastery/GlossaryMasteryScale.jsx";
 
 export default function GlossaryDetailSheet({ model }) {
 	return (
@@ -31,7 +32,10 @@ export default function GlossaryDetailSheet({ model }) {
 				<GlossaryDetailModalContent model={model} />
 			</div>
 
-			<GlossaryDetailNavigation model={model.navigation} />
+			<div className="glossary-detail-modal__footer">
+				<GlossaryMasteryScale mastery={model.mastery} />
+				<GlossaryDetailNavigation model={model.navigation} />
+			</div>
 		</div>
 	);
 }
