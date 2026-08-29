@@ -40,6 +40,11 @@
 }
 
 @media (max-width: 932px) {
+	.glossary-workspace .workspace-scaffold-body {
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+
 	.glossary-page {
 		min-height: 100%;
 		height: auto;

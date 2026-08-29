@@ -10,6 +10,7 @@ const GLOSSARY_RELATIONS_COMPONENT_PATH = path.resolve("src/ui/view/components/G
 const GLOSSARY_PANEL_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/glossary-panel.css");
 const GLOSSARY_PAGE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/page.css");
 const GLOSSARY_RESPONSIVE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/responsive.css");
+const GLOSSARY_TABLE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/table.css");
 const GLOSSARY_VIEW_ROOTS = [
 	path.resolve("src/ui/view/pages/GlossaryPage.jsx"),
 	path.resolve("src/ui/view/components/GlossaryPage")
@@ -141,12 +142,19 @@ describe("Glossary view boundaries", () => {
 		expect(responsiveStyles).toMatch(/@media \(max-width: 1320px\)[\s\S]*?\.glossary-panel-heading\s*\{[^}]*display:\s*flex;/);
 	});
 
-	test("keeps WorkspaceScaffold as the Glossary scroll owner across responsive transitions", () => {
+	test("centers mastery badges within assessment table cells", () => {
+		const tableStyles = fs.readFileSync(GLOSSARY_TABLE_STYLE_PATH, "utf8");
+
+		expect(tableStyles).toMatch(/\.glossary-table__mastery-header,[\s\S]*?\.glossary-table__mastery-cell\s*\{[^}]*text-align:\s*center\s*!important;/);
+		expect(tableStyles).toMatch(/\.glossary-table__mastery-cell\s*\{[^}]*vertical-align:\s*middle\s*!important;/);
+	});
+
+	test("switches Glossary scroll ownership without retaining a hidden desktop offset", () => {
 		const pageStyles = fs.readFileSync(GLOSSARY_PAGE_STYLE_PATH, "utf8");
 		const responsiveStyles = fs.readFileSync(GLOSSARY_RESPONSIVE_STYLE_PATH, "utf8");
 
-		expect(pageStyles).not.toMatch(/\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow(?:-[xy])?:/s);
-		expect(responsiveStyles).not.toMatch(/\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow(?:-[xy])?:/s);
+		expect(pageStyles).toMatch(/\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow:\s*clip;/s);
+		expect(responsiveStyles).toMatch(/@media \(max-width: 932px\)[\s\S]*?\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow-x:\s*hidden;[^}]*overflow-y:\s*auto;/);
 		expect(responsiveStyles).toMatch(/@media \(max-width: 932px\)[\s\S]*?\.glossary-table-scroll\s*\{[^}]*height:\s*auto;[^}]*flex:\s*none;[^}]*overflow:\s*visible;[^}]*overscroll-behavior-y:\s*auto;[^}]*touch-action:\s*auto;/);
 	});
 

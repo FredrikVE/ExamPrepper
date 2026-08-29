@@ -94,6 +94,10 @@
 	text-align: center !important;
 }
 
+.glossary-table__mastery-cell {
+	vertical-align: middle !important;
+}
+
 .glossary-table__sortable-header {
 	padding: 0 !important;
 }
