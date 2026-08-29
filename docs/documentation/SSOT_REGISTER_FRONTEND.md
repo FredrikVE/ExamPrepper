@@ -1,10 +1,10 @@
 <!--docs/documentation/SSOT_REGISTER_FRONTEND.md-->
 # SSOT-register — ExamPrepper frontend
 
-Oppdatert: 2026-08-24
+Oppdatert: 2026-08-29
 Type: dokumentasjon / evidensregister
-Registerbase: `examprepper-frontend-safe-20260823-182809.zip`
-Registerstatus: statisk revisjon mot snapshot; ingen produksjonskode er endret i denne dokumentrevisjonen
+Registerbase: `examprepper-frontend-safe-20260829-103204.zip` + verifisert patchkjede `08–12b`
+Registerstatus: rebasert evidensregister mot ferdig KeyboardNavigation-tilstand; ingen produksjonskode er endret i denne dokumentrevisjonen
 
 ## Formål
 
@@ -31,21 +31,24 @@ Et normativt utsagn fra SKILL skal aldri føres som «implementert» her dersom 
 ## Base og verifisering
 
 ```txt
-Snapshot:                  examprepper-frontend-safe-20260823-182809.zip
-Zip sha256:                fd1f0911a1ff347c69b72a45864577071b49b1223945f162d9c526576c86f581
-Zip commit:                ikke inkludert i snapshotet; ikke utledet
-Filer:                     896
+Snapshot:                  examprepper-frontend-safe-20260829-103204.zip
+Post-snapshot state:       08, 09, 10, 11, 12 og 12b applyet i rekkefølge
+Zip sha256:                81aedcc6a312c02c4aba6bc0ca86dcee6f1a3fcdab4e4d7024fd8333ae0523b4
+Zip archive comment:       7ae4c9c46cf28874df4b37d43b16fc948dd7776f; `.git` mangler, derfor ikke verifisert som HEAD
+Filer:                     888
 JS/JSX i src/ + test/:     640
-Jest-testfiler:            189
-Arkitekturtestfiler:       35
-Tester som leser src-kode: 53
+Jest-testfiler:            175
+Arkitekturtestfiler:       23
+Tester som leser src-kode: 35
 ```
 
 Verifisering i denne registerrevisjonen:
 
-- Snapshotet er skannet statisk for filinventar, testinventar og LearningPath-kontraktene som omtales under.
-- LearningPath action-modell, Page-ViewModel og tilhørende testmønstre er kontrollert mot den opplastede backend-/frontend-analysen.
-- Full Jest-suite og Vite-build er **ikke** kjørt i denne dokumentrevisjonen. Ingen gammel grønn teststatus gjenbrukes.
+- Snapshotet er skannet statisk for filinventar, testinventar og KeyboardNavigation-eiergrensene.
+- Patchene `08`–`12b` er rekonstruert og kontrollert i rekkefølge mot snapshotet; `git apply --check` og `git diff --check` er grønne for den ferdige patchkjeden.
+- Full Jest-suite er verifisert grønn på den ferdige repo-tilstanden: 174 beståtte suites, 1 skipped; 1009 beståtte tester, 9 skipped.
+- Vite-produksjonsbuild er verifisert grønn på samme repo-tilstand.
+- Den grønne globale gaten brukes ikke alene til å omklassifisere andre feature-spesifikke revisjoner; slike statuser krever sin egen evidens.
 - Antall tester eller arkitekturtester er ikke et kvalitetsmål. Arkitekturtester vurderes etter om de håndhever en stabil dependency-/policy-invariant uten implementation coupling.
 
 ## Notasjon
@@ -60,19 +63,20 @@ X()    ren funksjon         --x:   CSS custom property
 
 ## Status for denne revisjonen
 
-Denne revisjonen re-baserer evidensregisteret mot snapshotet fra 2026-08-23 og skiller eksplisitt mellom kontrakt og faktisk status.
+Denne revisjonen re-baserer evidensregisteret mot snapshotet fra 2026-08-29 med KeyboardNavigation-patchkjeden `08`–`12b` applyet og verifisert, og skiller eksplisitt mellom kontrakt og faktisk status.
 
 De viktigste åpne avvikene er:
 
 | ID | Område | Status | Evidens / avvik |
 |---|---|---|---|
-| LP-01 | LearningPath action precedence | **UNVERIFIED** | Implementasjonen er korrigert til `resumableSession → nextActivity → replay → ingen action`, og en direkte behavior-probe bekrefter precedence-fiksen. Full Jest/build er ikke verifisert i denne patchen fordi dependency-installasjon ikke fullførte i miljøet. |
-| LP-02 | LearningPath auth-precondition | **UNVERIFIED** | `session.isStartable` forblir backend-eid læringspolicy, mens `canStartLearningSessions` nå er en separat auth/runtime-precondition for start-actions og handleren har defense-in-depth. Full Jest/build er ikke verifisert i miljøet. |
-| LP-04 | LearningPath ExamGate semantics | **UNVERIFIED** | ExamGate er korrigert til en informasjonsflate: ulåst node bruker check-ikon, ChevronRight/click-affordance er fjernet, og copy sier at eksamen er tilgjengelig. Direkte behavior-probe bekrefter modellsemantikken; full Jest/build er ikke verifisert i dette miljøet. |
-| LP-05 | Resume question position | **UNVERIFIED** | Frontendcopy er korrigert til å resume på modulnivå uten å hevde en konkret question-position, og `createContinueLearningModel` avhenger ikke lenger av `resumableSession.currentQuestionPosition`. Direkte behavior-probe bekrefter copy-fiksen; full Jest/build er ikke verifisert i dette miljøet. |
-| LP-06 | LearningSession fuzzy fill feedback | **UNVERIFIED** | Checked-answer-resultatet bevarer nå `fillMatchType` fra `GradeAnswerUseCase`, slik at `QuestionCard` kan presentere fuzzy fill-feedback etter svarcheck. Full Jest/build er ikke verifisert i dette miljøet. |
-| LP-07 | Matrix placement grading normalization | **UNVERIFIED** | Domain-grading normaliserer nå matrix-svar med samme én-item-per-quadrant-semantikk som UI: en senere plassering erstatter tidligere occupant i samme quadrant. Full Jest/build er ikke verifisert i dette miljøet. |
-| TEST-01 | Architecture/source-test inventory | **DEBT** | Snapshotet har 35 arkitekturtester og 53 tester som leser produksjonssource direkte. Audit viser både legitime dependency-gater og implementation-detail-/migreringstester som skal ryddes inkrementelt. |
+| LP-01 | LearningPath action precedence | **UNVERIFIED** | Implementasjonen er korrigert til `resumableSession → nextActivity → replay → ingen action`, og en tidligere direkte behavior-probe bekrefter precedence-fiksen. Global fullsuite/build er nå grønn; denne KeyboardNavigation-registerpatchen gjør ingen ny feature-spesifikk LearningPath-revisjon. |
+| LP-02 | LearningPath auth-precondition | **UNVERIFIED** | `session.isStartable` forblir backend-eid læringspolicy, mens `canStartLearningSessions` er en separat auth/runtime-precondition for start-actions og handleren har defense-in-depth. Global fullsuite/build er nå grønn; statusen beholdes til en egen LearningPath-revisjon. |
+| LP-04 | LearningPath ExamGate semantics | **UNVERIFIED** | ExamGate er korrigert til en informasjonsflate: ulåst node bruker check-ikon, ChevronRight/click-affordance er fjernet, og copy sier at eksamen er tilgjengelig. Tidligere direkte behavior-probe bekrefter modellsemantikken; global fullsuite/build er nå grønn, men feature-statusen revideres ikke her. |
+| LP-05 | Resume question position | **UNVERIFIED** | Frontendcopy er korrigert til å resume på modulnivå uten å hevde en konkret question-position, og `createContinueLearningModel` avhenger ikke lenger av `resumableSession.currentQuestionPosition`. Tidligere direkte behavior-probe bekrefter copy-fiksen; global fullsuite/build er nå grønn, men feature-statusen revideres ikke her. |
+| LP-06 | LearningSession fuzzy fill feedback | **UNVERIFIED** | Checked-answer-resultatet bevarer `fillMatchType` fra `GradeAnswerUseCase`, slik at `QuestionCard` kan presentere fuzzy fill-feedback etter svarcheck. Global fullsuite/build er nå grønn; statusen beholdes til en egen feature-revisjon. |
+| LP-07 | Matrix placement grading normalization | **UNVERIFIED** | Domain-grading normaliserer matrix-svar med samme én-item-per-quadrant-semantikk som UI: en senere plassering erstatter tidligere occupant i samme quadrant. Global fullsuite/build er nå grønn; statusen beholdes til en egen feature-revisjon. |
+| KB-01 | KeyboardNavigation ownership | **GREEN** | Global `keydown`-lifecycle har én canonical eier i `useKeyboardShortcuts()`, required-kontrakten håndheves av arkitekturtest, og feature-spesifikk tastemapping forblir lokal. Full suite/build er grønn etter `12b`. |
+| TEST-01 | Architecture/source-test inventory | **DEBT** | Den rebaserte tilstanden har 23 arkitekturtester og 35 tester som leser produksjonssource direkte. Audit viser både legitime dependency-gater og implementation-detail-/migreringstester som skal ryddes inkrementelt. |
 
 ## Autoritative registre og runtime-SSOT
 
@@ -88,7 +92,9 @@ De viktigste åpne avvikene er:
 | `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | (`createWorkspaceState()` er avledningen — se «utilities») |
 | `LOAD_STATUS{}` `useLoadModel()` | Ressursstatus-enum + reaktiv innlastingstilstand | `viewmodel/LoadState/` | (`combineLoadStatuses()` er avledningen — se «utilities») |
 | `useGlossaryPageViewModel()` | Glossary feature-state og GlossaryPage-spesifikk UI-mekanikk: søk, kapittelutvalg, sortering, mobile chapter-sheet open-state og eneste expansion-state `expandedGlossaryEntryKey`; teknisk nettverksstatus eies fortsatt av `useLoadModel()` | `src/ui/viewmodel/GlossaryPageViewModel.js` | Eneste offentlige kontrakt mot View. Kan komponere private hooks under `viewmodel/GlossaryPage/`, men re-eksponerer navngitte felter. Eier rad/disclosure-handlers, desktop/mobile graph-bindinger, React-ref-registrering og focus/scroll-intent. `glossaryDetailPresentation` er én ren detaljmodell med desktop modal og mobil expanded card som to konsumenter |
-| `MASTERY_STATUS{}` `GLOSSARY_RELATION_TYPE{}` | Autoritative enum-verdier for Glossary mastery og relasjonstyper | `src/constants/GlossaryContracts.js` | `GlossaryDataSource` validerer mot registrene; mastery-/network-presentasjon mapper de samme verdiene og kaster på ukjent verdi |
+| `CONCEPT_MASTERY_STATUS{}` | Autoritative mastery-statusverdier for glossary concepts | `src/constants/ConceptMasteryStatus.js` | Glossary-presentasjon konsumerer samme statuskontrakt |
+| `GLOSSARY_RELATION_TYPE{}` | Autoritative glossary-relasjonstyper og directed-relation-settet | `src/constants/GlossaryRelationType.js` | Relasjons- og grafpresentasjon konsumerer samme kontrakt |
+| `GLOSSARY_NETWORK_EDGE_ROLE{}` | Autoritative roller for projected glossary-network edges | `src/constants/GlossaryNetworkEdgeRole.js` | Network-presentasjonen bruker `DIRECT` / `SECONDARY` fra samme kontrakt |
 | `createGlossaryDetailPresentation()` | Eneste presentasjonsmodell for begrepsdetalj | `src/ui/viewmodel/GlossaryPage/glossaryDetailModel.js` | Konsumeres av desktop `GlossaryDetailModal` og mobil expanded card. Tabellrader eier ikke detalj-/nettverksmodell |
 | `translations{}` `LANGUAGES{}` | Autoritativt språkregister og produkttekst | `src/i18n/translations.js` | `i18nContract` låser NO↔EN-paritet, typeparitet, ikke-tomme verdier og navigasjonens tekstnøkler. Lokale `fallbackLabel`-kanaler er fjernet; testen skanner ikke all JSX for hardkodet tekst |
 | `<LanguageProvider/>` `useLanguage()` | Aktivt språk + språkbytte (runtime) | `src/i18n/LanguageContext.jsx` | Én provider. Eier reaktiv språk-state; registeret over er den statiske teksten |
@@ -127,6 +133,50 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 | `<ToolCardGrid/>` `<ToolCard/>` | Verktøykort-flate | `components/ToolCard/` | PageTools + Flipcards |
 | `<AppErrorBoundary/>` | Root render-crash-grense | `components/AppErrorBoundary/` | Rot-nivå recovery |
 | `class DataSource` | Canonical HTTP-transportbase (URL-bygging, fetch, auth-header, JSON, feilmapping) | `model/datasource/DataSource.js` | Alle konkrete datakilder arver. Eier **ikke** base-URL — den injiseres fra `dependencies.js` |
+| `useKeyboardShortcuts()` | Global `window`-basert `keydown` listener-lifecycle for View-laget | `src/ui/view/KeyboardNavigation/useKeyboardShortcuts.js` | Exam, Flipcards, Glossary, Search, Sidebar og dialogflater bruker den felles listener-mekanismen. Glossary binder den gjennom den tynne `KeyboardShortcutBinding`-adapteren. Hooken eier registrering og cleanup av global `keydown`; den eier ikke betydningen av tastene. Alle consumers sender `isEnabled` og `onKeyDown` eksplisitt; ingen parameter-defaults. |
+
+### KeyboardNavigation-eierskap
+
+`src/ui/view/KeyboardNavigation/` eier delt View-mekanikk for keyboard-interaksjon, ikke feature-spesifikk navigasjonspolicy.
+
+```text
+KeyboardNavigation
+├── useKeyboardShortcuts()
+│   └── global keydown listener lifecycle
+├── KeyboardShortcutBinding
+│   └── tynn View-adapter til den canonical hooken
+├── isShortcutEvent()
+│   └── repeat / modifiers / composition
+├── isEditableTarget()
+│   └── felles editable/form-targets
+└── isActivationKey()
+    └── Enter / Space activation
+```
+
+`isEditableTarget()` eier bare den delte target-klassifiseringen. Ekstra feature-spesifikke fokusregler, som Exam sin Enter-policy og Flipcards sin button/link-policy, forblir lokale.
+
+Feature-eierskapet forblir lokalt:
+
+```text
+ExamPage
+├── ArrowLeft  → forrige spørsmål
+├── ArrowRight → neste spørsmål
+└── Enter      → Exam-spesifikk nestehandling
+
+FlipcardsPage
+├── ArrowLeft   → practice
+├── ArrowRight  → mastered
+└── Enter/Space → flip
+
+GlossaryPage
+├── ArrowLeft  → forrige begrep
+└── ArrowRight → neste begrep
+
+Search / overlays
+└── Escape-policy eies av den aktuelle flaten
+```
+
+`KeyboardNavigation` skal ikke utvikles til et globalt shortcut-register, en feature-action-dispatcher eller en samling av domenehandlinger.
 
 ### Eierskap for spørsmål og øktflyt
 
@@ -140,6 +190,8 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 `ExamPage` og `LearningSessionPage` er konsumenter, ikke eiere. Læringsmoduser stopper ved fasaden og innfører
 ikke egne oppgaverenderere eller modusflagg i `QuestionCard`.
 
+`QuestionCard/QuestionTypes` eier fortsatt den konkrete drag/drop-handlingen. `KeyboardNavigation/isActivationKey()` eier kun den delte beslutningen om at `Enter` og `Space` er aktiveringstaster; den eier ikke hva den enkelte kontrollen gjør ved aktivering.
+
 ## Delte utilities og avledninger
 
 | Komponent | Gjør | Fil | Konsumenter |
@@ -149,6 +201,9 @@ ikke egne oppgaverenderere eller modusflagg i `QuestionCard`.
 | `combineLoadStatuses()` | Avleder samlet status fra flere ressursstatuser | `viewmodel/LoadState/combineLoadStatuses.js` | Ren avledning |
 | `normalizeSearchTerm()` | Søkenormalisering | `viewmodel/Utils/normalizeSearchTerm.js` | Flere feature-konsumenter |
 | `shuffleInPlace(items, randomNumber)` | Fisher-Yates med injisert RNG | `viewmodel/Utils/shuffleInPlace.js` | `answerOptionOrder`, `matchCardsSlots`, `matchCardsSession` og `flipcardDeckToolState`. `Math.random` sendes inn, ikke gjentatt |
+| `isShortcutEvent()` | Avgjør om et globalt shortcut-event kan behandles ut fra `repeat`, modifier-taster og composition-state | `src/ui/view/KeyboardNavigation/useKeyboardShortcuts.js` | Exam, Flipcards, Glossary og andre globale shortcuts som deler denne event-semantikken |
+| `isEditableTarget()` | Avgjør om keyboard-target er et delt redigerbart/form-eid target som skal beholde tastetrykket selv | `src/ui/view/KeyboardNavigation/isEditableTarget.js` | Exam, Flipcards, Glossary; ekstra feature-spesifikke fokusregler forblir lokale |
+| `isActivationKey()` | Avleder om en tast er standard keyboard-aktivering (`Enter` eller `Space`) | `src/ui/view/KeyboardNavigation/isActivationKey.js` | QuestionCard drag/drop-komponenter og andre custom interactive controls med samme aktiveringssemantikk |
 
 ## CSS- og token-eiere
 
@@ -208,6 +263,8 @@ Arkitekturtestenes verdi vurderes etter invariant, ikke antall filer.
 - model-laget importerer ikke ui-laget.
 - frontend implementerer ikke lokale assessment-thresholds når backend eier klassifiseringen.
 - private feature-submoduler importeres ikke utenfor eiergrensen.
+- Global `window`-basert `keydown` listener-lifecycle i View-laget eies av `src/ui/view/KeyboardNavigation/useKeyboardShortcuts.js`. Arkitekturtesten avviser rå global `keydown`-registrering via både `window` og `document` utenfor denne eieren; lokale React-`onKeyDown`-handlers er fortsatt legitime.
+- Alle direkte `useKeyboardShortcuts()`-consumers sender den komplette kontrakten eksplisitt: `isEnabled` og `onKeyDown` er required, og eksporterte KeyboardNavigation-kontrakter har ingen parameter-defaults.
 
 **Ikke stående arkitekturevidens:**
 
@@ -438,6 +495,8 @@ Det er da `AppNavigationViewModel` og next-state-beregningen som først blir pre
 Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i ViewModelen og rendering i `App.jsx`. Utvid ved å legge til en node og en gren, ikke ved å innføre et rammeverk.
 
 ## LearningPath — eierskap og faktisk status 2026-08-24
+
+Denne feature-spesifikke statusrevisjonen beholdes datert 2026-08-24. Den grønne globale Jest-/build-gaten 2026-08-29 omklassifiserer ikke disse radene uten en egen LearningPath-revisjon.
 
 | Ansvar | Autoritativ eier | Status | Evidens / avvik i snapshot |
 |---|---|---|---|
