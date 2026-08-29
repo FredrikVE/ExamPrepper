@@ -1,5 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { GLOSSARY_NETWORK_EDGE_ROLE, GLOSSARY_RELATION_TYPE } from "../../../src/constants/GlossaryContracts.js";
+import { GLOSSARY_NETWORK_EDGE_ROLE } from "../../../src/constants/GlossaryNetworkEdgeRole.js";
+import { GLOSSARY_RELATION_TYPE } from "../../../src/constants/GlossaryRelationType.js";
 import { createGlossaryDetailPresentation } from "../../../src/ui/viewmodel/GlossaryPage/glossaryDetailModel.js";
 
 const t = Object.freeze({

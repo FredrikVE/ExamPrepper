@@ -1,5 +1,5 @@
 // src/ui/viewmodel/GlossaryPage/glossaryDetailGraphModel.js
-import { GLOSSARY_NETWORK_EDGE_ROLE } from "../../../constants/GlossaryContracts.js";
+import { GLOSSARY_NETWORK_EDGE_ROLE } from "../../../constants/GlossaryNetworkEdgeRole.js";
 
 const LAYOUT_ITERATION_COUNT = 260;
 const DIRECT_LINK_LENGTH = 31;
