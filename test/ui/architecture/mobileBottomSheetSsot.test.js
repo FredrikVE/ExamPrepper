@@ -12,7 +12,6 @@ const LEGACY_MODAL_SHEET_PATH = path.resolve("src/ui/view/components/MobileBotto
 const STYLE_DIRECTORY = path.resolve("src/ui/style");
 const CONSUMER_PATHS = [
 	path.resolve("src/ui/view/components/PageTools/PageToolsMobileFooterSheet.jsx"),
-	path.resolve("src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx"),
 	path.resolve("src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx")
 ];
 

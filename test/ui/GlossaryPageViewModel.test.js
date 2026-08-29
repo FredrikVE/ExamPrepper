@@ -2,7 +2,6 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { ALL_TOPIC_AREAS } from "../../src/constants/TopicAreas.js";
 import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../src/navigation/navigation.js";
-import { APP_SHELL_MODE } from "../../src/ui/presentation/appShellMode.js";
 import { PRESENTATION_MODE } from "../../src/ui/presentation/presentationMode.js";
 import { GLOSSARY_AUTOCOMPLETE_LIST_ID, createGlossaryAutocompleteOptionId } from "../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
 import { LOAD_STATUS } from "../../src/ui/viewmodel/LoadState/loadStatus.js";
@@ -16,7 +15,6 @@ const setIsSearchAutocompleteOpen = jest.fn();
 const setSearchNarrowedGlossaryEntryKey = jest.fn();
 const setExpandedGlossaryEntryKey = jest.fn();
 const setGlossaryTableSort = jest.fn();
-const setIsMobileChapterSheetOpen = jest.fn();
 const setGlossaryDetailTrailKeys = jest.fn();
 const setGlossaryDetailRenderSnapshot = jest.fn();
 const setAreGlossaryDetailRelationsExpanded = jest.fn();
@@ -29,23 +27,17 @@ const stateSetters = [
 	setSearchNarrowedGlossaryEntryKey,
 	setExpandedGlossaryEntryKey,
 	setGlossaryTableSort,
-	setIsMobileChapterSheetOpen,
 	setGlossaryDetailTrailKeys,
 	setGlossaryDetailRenderSnapshot,
 	setAreGlossaryDetailRelationsExpanded
 ];
 let loadModelQueue = [];
 let currentTableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" };
-let currentMobileChapterSheetOpen = false;
 let currentDetailRefs = null;
 
 const useState = jest.fn((initialValue) => {
 	if (typeof initialValue === "object" && initialValue !== null && "key" in initialValue) {
 		return [currentTableSort, setGlossaryTableSort];
-	}
-
-	if (initialValue === false) {
-		return [currentMobileChapterSheetOpen, setIsMobileChapterSheetOpen];
 	}
 
 	throw new Error(`Unexpected page ViewModel useState initial value: ${String(initialValue)}`);
@@ -54,7 +46,6 @@ const useEffect = jest.fn((effect) => effect());
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
 const useLoadModel = jest.fn(() => loadModelQueue.shift());
-const useAppShellMode = jest.fn(() => APP_SHELL_MODE.FULL);
 const usePresentationMode = jest.fn(() => PRESENTATION_MODE.DESKTOP);
 const useGlossarySearchModel = jest.fn();
 const useGlossaryTopicAreaSelectionModel = jest.fn();
@@ -82,10 +73,6 @@ jest.unstable_mockModule("react", () => ({
 
 jest.unstable_mockModule("../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({
 	default: useLoadModel
-}));
-
-jest.unstable_mockModule("../../src/ui/presentation/useAppShellMode.js", () => ({
-	default: useAppShellMode
 }));
 
 jest.unstable_mockModule("../../src/ui/presentation/usePresentationMode.js", () => ({
@@ -186,10 +173,6 @@ const translations = {
 	glossaryPageNoEntriesBody: "Ingen begreper finnes.",
 	glossaryPageNoEntriesInSelectionTitle: "Ingen begreper i utvalget",
 	glossaryPageNoEntriesInSelectionBody: "Velg et annet kapittel.",
-	glossaryPageMobileChapterSheetTitle: "Velg kapitler",
-	glossaryPageMobileChapterSheetSubtitle: "Velg ett eller flere kapitler",
-	glossaryPageMobileChapterSheetOpenLabel: "Åpne kapittelvelger",
-	glossaryPageMobileChapterSheetCloseLabel: "Lukk kapittelvelger",
 	glossaryPageErrorTitle: "Kunne ikke laste",
 	glossaryPageErrorMessage: "Prøv igjen.",
 	glossaryPageLoadingTitle: "Laster",
@@ -346,15 +329,12 @@ function createViewModel({
 	language = "no",
 	isActive = true,
 	expandedMobileToggleButtonGroupId = null,
-	isMobileChapterSheetOpen = false,
 	glossaryDetailTrailKeys = [],
 	glossaryDetailRenderSnapshot = null,
 	areGlossaryDetailRelationsExpanded = false,
-	presentationMode = PRESENTATION_MODE.DESKTOP,
-	appShellMode = APP_SHELL_MODE.FULL
+	presentationMode = PRESENTATION_MODE.DESKTOP
 } = {}) {
 	currentTableSort = tableSort;
-	currentMobileChapterSheetOpen = isMobileChapterSheetOpen;
 	currentDetailRefs = createDetailRefs(presentationMode);
 	useGlossarySearchModel.mockReturnValue({
 		glossarySearchTerm: searchTerm,
@@ -431,7 +411,6 @@ function createViewModel({
 		navigationLabel: "Navigasjon",
 		onBack: jest.fn()
 	};
-	useAppShellMode.mockReturnValue(appShellMode);
 	usePresentationMode.mockReturnValue(presentationMode);
 	const viewModel = useGlossaryPageViewModel({
 		getGlossaryOverviewUseCase,
@@ -476,7 +455,6 @@ function expectSetContents(actualSet, expectedValues) {
 beforeEach(() => {
 	loadModelQueue = [];
 	currentTableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" };
-	currentMobileChapterSheetOpen = false;
 	currentDetailRefs = null;
 	clearStateSetterCalls();
 	useState.mockClear();
@@ -484,8 +462,6 @@ beforeEach(() => {
 	useMemo.mockClear();
 	useCallback.mockClear();
 	useLoadModel.mockClear();
-	useAppShellMode.mockReset();
-	useAppShellMode.mockReturnValue(APP_SHELL_MODE.FULL);
 	usePresentationMode.mockReset();
 	usePresentationMode.mockReturnValue(PRESENTATION_MODE.DESKTOP);
 	useGlossarySearchModel.mockReset();
@@ -501,16 +477,6 @@ describe("useGlossaryPageViewModel", () => {
 		expect(useGlossarySearchModel).toHaveBeenCalledWith({ resetKey: "in2120:null" });
 		expect(useGlossaryTopicAreaSelectionModel).toHaveBeenCalledWith({ resetKey: "in2120:null" });
 		expect(useGlossaryDetailModel).toHaveBeenCalledWith({ presentationMode: PRESENTATION_MODE.DESKTOP, resetKey: "in2120:null" });
-	});
-
-	test("keeps narrow desktop feature presentation desktop while using the compact app shell", () => {
-		const { viewModel } = createViewModel({
-			presentationMode: PRESENTATION_MODE.DESKTOP,
-			appShellMode: APP_SHELL_MODE.COMPACT
-		});
-
-		expect(viewModel.presentationMode).toBe(PRESENTATION_MODE.DESKTOP);
-		expect(viewModel.usesCompactShell).toBe(true);
 	});
 
 	test("returns the glossary-aware mobile toggle-button contract", () => {
@@ -708,6 +674,13 @@ describe("useGlossaryPageViewModel", () => {
 		});
 		expect(viewModel).not.toHaveProperty("glossarySearchScope");
 		expect(viewModel).not.toHaveProperty("searchScopeOptions");
+	});
+
+	test("keeps an existing multi-select unchanged without a Search chapter action", () => {
+		createViewModel({ selectedTopicAreaKeys: new Set(["networking", "cryptography"]) });
+		clearStateSetterCalls();
+
+		expect(setSelectedTopicAreaKeys).not.toHaveBeenCalled();
 	});
 
 	test("a chapter filter replaces the current selection and preserves a qualifying search", () => {
@@ -1484,17 +1457,6 @@ describe("useGlossaryPageViewModel", () => {
 		const updateExpanded = setAreGlossaryDetailRelationsExpanded.mock.calls[0][0];
 		expect(updateExpanded(false)).toBe(true);
 		expect(updateExpanded(true)).toBe(false);
-	});
-
-	test("owns mobile chapter-sheet open state in GlossaryPageViewModel", () => {
-		const { viewModel } = createViewModel({ isMobileChapterSheetOpen: true });
-
-		expect(viewModel.isMobileChapterSheetOpen).toBe(true);
-		expect(viewModel.mobileChapterSheetSearchKeyboardHint).toBe("Bruk piltastene");
-
-		clearStateSetterCalls();
-		viewModel.changeMobileChapterSheetOpen(false);
-		expect(setIsMobileChapterSheetOpen).toHaveBeenCalledWith(false);
 	});
 
 	test("keeps table rows independent of network presentation state", () => {

@@ -1,55 +1,6 @@
 /* src/ui/style/GlossaryPage/mobile.css */
-.glossary-entry-card-list,
-.glossary-mobile-chapter-sheet {
+.glossary-entry-card-list {
 	display: none;
-}
-
-@media (max-width: 1200px) {
-	.glossary-mobile-chapter-sheet {
-		display: block;
-	}
-
-	.glossary-mobile-chapter-sheet__search {
-		width: 100%;
-		flex: 0 0 auto;
-	}
-
-	.glossary-mobile-chapter-sheet__body {
-		display: flex;
-		min-height: 0;
-		flex-direction: column;
-	}
-
-	.glossary-mobile-chapter-sheet .glossary-topic-area-navigation {
-		margin-top: var(--space-2);
-	}
-
-	.glossary-mobile-chapter-sheet .glossary-topic-area-list {
-		grid-auto-rows: minmax(78px, auto);
-		align-content: start;
-		gap: var(--space-2);
-		margin-top: var(--space-2);
-		padding: 0 var(--space-1) var(--space-3);
-	}
-
-	.glossary-mobile-chapter-sheet .glossary-topic-area-button {
-		min-height: 78px;
-		height: auto;
-		border-color: var(--line);
-		background: color-mix(in srgb, var(--panel-strong) 62%, transparent);
-	}
-
-	.glossary-mobile-chapter-sheet .glossary-topic-area-button[data-active="true"] {
-		border-color: color-mix(in srgb, var(--accent) 54%, transparent);
-		background: linear-gradient(100deg, color-mix(in srgb, var(--accent) 22%, var(--panel-strong)), var(--accent-soft));
-		box-shadow: inset 4px 0 0 var(--accent);
-	}
-
-	.glossary-mobile-chapter-sheet__body > .search-sheet-list {
-		width: 100%;
-		max-height: none;
-		padding-top: var(--space-2);
-	}
 }
 
 @media (max-width: 932px) {

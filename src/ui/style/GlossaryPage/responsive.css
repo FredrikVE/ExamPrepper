@@ -8,15 +8,17 @@
 		padding-right: var(--learning-content-page-inline);
 		padding-left: var(--learning-content-page-inline);
 	}
-}
-
-@media (min-width: 933px) and (max-width: 1200px) {
-	.glossary-workspace {
-		--glossary-footer-overlay-space: var(--mobile-sheet-scroll-reserve);
-	}
 
 	.glossary-page__content {
 		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.glossary-topic-area-panel {
+		display: none;
+	}
+
+	.glossary-panel-heading {
+		display: flex;
 	}
 }
 
@@ -36,10 +38,6 @@
 }
 
 @media (max-width: 932px) {
-	.glossary-workspace {
-		--glossary-footer-overlay-space: 0px;
-	}
-
 	.glossary-workspace .workspace-scaffold-body {
 		overflow-x: hidden;
 		overflow-y: auto;
@@ -50,7 +48,10 @@
 		height: auto;
 		flex: 0 0 auto;
 		overflow: visible;
-		padding: var(--learning-content-page-top) var(--learning-content-page-inline) 0;
+		padding:
+			var(--learning-content-page-top)
+			var(--learning-content-page-inline)
+			calc(var(--space-2) + var(--glossary-footer-overlay-space));
 	}
 
 

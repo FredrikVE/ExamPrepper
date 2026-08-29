@@ -42,14 +42,11 @@
 
 @media (max-width: 1200px) {
 	.glossary-search-footer {
-		position: static;
-		z-index: var(--z-search-footer-content);
-		display: block;
-		height: 0;
-		flex: 0 0 0;
-		padding: 0;
-		border: 0;
-		border-radius: 0;
-		background: transparent;
+		padding: var(--space-3) var(--learning-content-page-inline) var(--space-4);
+	}
+
+	.glossary-search-footer__content {
+		width: min(760px, 100%);
+		min-width: 0;
 	}
 }

@@ -28,22 +28,13 @@ export default function GlossaryPage({ viewModel }) {
 		/>
 	);
 
-	const footer = viewModel.shouldShowWorkspaceFooter ? (
-		<GlossaryFooter
-			usesCompactShell={viewModel.usesCompactShell}
-			search={viewModel.search}
-			mobileSearchKeyboardHint={viewModel.mobileChapterSheetSearchKeyboardHint}
-			allTopicAreaListItem={viewModel.allTopicAreaListItem}
-			topicAreaListItems={viewModel.topicAreaListItems}
-			topicAreaListAriaLabel={viewModel.pageTitle}
-			sheetTitle={viewModel.mobileChapterSheetTitle}
-			sheetSubtitle={viewModel.mobileChapterSheetSubtitle}
-			sheetOpenLabel={viewModel.mobileChapterSheetOpenLabel}
-			sheetCloseLabel={viewModel.mobileChapterSheetCloseLabel}
-			isMobileChapterSheetOpen={viewModel.isMobileChapterSheetOpen}
-			onMobileChapterSheetOpenChange={viewModel.changeMobileChapterSheetOpen}
-		/>
-	) : null;
+	let footer = null;
+
+	if (viewModel.shouldShowWorkspaceFooter) {
+		footer = (
+			<GlossaryFooter search={viewModel.search} />
+		);
+	}
 
 	const overlay = (
 		<SearchBackdrop
@@ -82,13 +73,11 @@ export default function GlossaryPage({ viewModel }) {
 					<div className="glossary-page__content">
 						<WorkspaceState state={viewModel.workspaceState}>
 							<>
-								{!viewModel.usesCompactShell && (
-									<TopicAreaPanel
-										allTopicAreaListItem={viewModel.allTopicAreaListItem}
-										topicAreaListItems={viewModel.topicAreaListItems}
-										topicAreaListAriaLabel={viewModel.pageTitle}
-									/>
-								)}
+								<TopicAreaPanel
+									allTopicAreaListItem={viewModel.allTopicAreaListItem}
+									topicAreaListItems={viewModel.topicAreaListItems}
+									topicAreaListAriaLabel={viewModel.pageTitle}
+								/>
 
 								<GlossaryPanel
 									heading={viewModel.glossaryPanelHeading}

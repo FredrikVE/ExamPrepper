@@ -1,7 +1,5 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { APP_SHELL_MODE } from "../presentation/appShellMode.js";
-import useAppShellMode from "../presentation/useAppShellMode.js";
 import { PRESENTATION_MODE } from "../presentation/presentationMode.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { LEARNING_CONTENT_TYPES } from "../../navigation/navigation.js";
@@ -46,7 +44,6 @@ export default function useGlossaryPageViewModel({
 	openMobileToggleButtonGroup,
 	closeMobileToggleButtonGroup
 }) {
-	const appShellMode = useAppShellMode();
 	const presentationMode = usePresentationMode();
 	const resetKey = `${subjectId}:${initialTopicAreaKey}`;
 	const {
@@ -81,17 +78,8 @@ export default function useGlossaryPageViewModel({
 		resolveGlossaryDetailTriggerRef
 	} = useGlossaryDetailModel({ presentationMode, resetKey });
 	const [glossaryTableSort, setGlossaryTableSort] = useState(DEFAULT_GLOSSARY_TABLE_SORT);
-	const [isMobileChapterSheetOpen, setIsMobileChapterSheetOpen] = useState(false);
-
-	useEffect(() => {
-		if (appShellMode === APP_SHELL_MODE.FULL) {
-			setIsMobileChapterSheetOpen(false);
-		}
-	}, [appShellMode]);
-
 	useEffect(() => {
 		setGlossaryTableSort(DEFAULT_GLOSSARY_TABLE_SORT);
-		setIsMobileChapterSheetOpen(false);
 	}, [resetKey]);
 
 	const executeGlossaryOverviewLoad = useCallback(() => {
@@ -460,15 +448,26 @@ export default function useGlossaryPageViewModel({
 	const selectGlossaryChapterFilter = useCallback((nextTopicAreaKey) => {
 		if (nextTopicAreaKey === ALL_TOPIC_AREAS) {
 			setSelectedTopicAreaKeys(createAllTopicAreaKeySet(topicAreas));
-		} else if (topicAreaByKey.has(nextTopicAreaKey)) {
+		}
+
+		else if (topicAreaByKey.has(nextTopicAreaKey)) {
 			setSelectedTopicAreaKeys(new Set([nextTopicAreaKey]));
-		} else {
+		}
+
+		else {
 			return;
 		}
 
 		setSearchNarrowedGlossaryEntryKey(null);
+
 		const shouldOpenAutocomplete = normalizedSearchTerm.length >= GLOSSARY_AUTOCOMPLETE_MIN_LENGTH;
-		setSearchKeyboardIndex(shouldOpenAutocomplete ? 0 : -1);
+		let nextKeyboardIndex = -1;
+
+		if (shouldOpenAutocomplete) {
+			nextKeyboardIndex = 0;
+		}
+
+		setSearchKeyboardIndex(nextKeyboardIndex);
 		setIsSearchFilterOptionsOpen(false);
 		setIsSearchAutocompleteOpen(shouldOpenAutocomplete);
 	}, [normalizedSearchTerm.length, topicAreaByKey, topicAreas]);
@@ -741,10 +740,6 @@ export default function useGlossaryPageViewModel({
 		setExpandedGlossaryEntryKey(null);
 	}, [expandedGlossaryEntryKey]);
 
-	const changeMobileChapterSheetOpen = useCallback((nextIsOpen) => {
-		setIsMobileChapterSheetOpen(nextIsOpen);
-	}, []);
-
 	const selectGlossaryNetworkConcept = useCallback((glossaryEntryKey) => {
 		const targetEntry = localizedEntryByKey.get(glossaryEntryKey);
 		if (!targetEntry) {
@@ -901,15 +896,10 @@ export default function useGlossaryPageViewModel({
 		directNeighborColumnHeader: t.glossaryPageConnectionsColumnHeader,
 		tableSortAscendingLabel: t.glossaryPageTableSortAscendingLabel,
 		tableSortDescendingLabel: t.glossaryPageTableSortDescendingLabel,
-		mobileChapterSheetTitle: t.glossaryPageMobileChapterSheetTitle,
-		mobileChapterSheetSubtitle: t.glossaryPageMobileChapterSheetSubtitle,
-		mobileChapterSheetOpenLabel: t.glossaryPageMobileChapterSheetOpenLabel,
-		mobileChapterSheetCloseLabel: t.glossaryPageMobileChapterSheetCloseLabel,
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 		contentToggleBackLabel: t.contentToggleBackLabel,
 
 		presentationMode,
-		usesCompactShell: appShellMode === APP_SHELL_MODE.COMPACT,
 		workspaceState,
 		shouldShowWorkspaceFooter,
 		glossaryPanelEmptyState,
@@ -929,8 +919,6 @@ export default function useGlossaryPageViewModel({
 		contentToggleEntries,
 		mobileToggleButtonItems,
 		expandedMobileToggleButtonGroupId,
-		isMobileChapterSheetOpen,
-		mobileChapterSheetSearchKeyboardHint: isMobileChapterSheetOpen ? t.glossaryPageSearchKeyboardHint : null,
 		mobileActiveEntryId: activeContentType,
 		openMobileToggleButtonGroup,
 		closeMobileToggleButtonGroup,
@@ -949,7 +937,6 @@ export default function useGlossaryPageViewModel({
 		openNextGlossaryDetail,
 		toggleGlossaryNetworkConcept,
 		selectGlossaryNetworkConcept,
-		changeMobileChapterSheetOpen,
 		selectContentType
 	};
 }
