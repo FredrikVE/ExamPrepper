@@ -1,6 +1,8 @@
 // src/ui/view/KeyboardNavigation/useKeyboardShortcuts.js
 import { useEffect } from "react";
 
+const KEYDOWN_LISTENER_OPTIONS = { capture: true };
+
 export function isShortcutEvent(event) {
 	return !(
 		event.repeat ||
@@ -18,10 +20,10 @@ export default function useKeyboardShortcuts({ isEnabled, onKeyDown }) {
 			return undefined;
 		}
 
-		window.addEventListener("keydown", onKeyDown);
+		window.addEventListener("keydown", onKeyDown, KEYDOWN_LISTENER_OPTIONS);
 
 		return () => {
-			window.removeEventListener("keydown", onKeyDown);
+			window.removeEventListener("keydown", onKeyDown, KEYDOWN_LISTENER_OPTIONS);
 		};
 	}, [isEnabled, onKeyDown]);
 }

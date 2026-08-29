@@ -38,12 +38,20 @@ describe("useKeyboardShortcuts", () => {
 			onKeyDown
 		});
 
-		expect(global.window.addEventListener).toHaveBeenCalledWith("keydown", onKeyDown);
+		expect(global.window.addEventListener).toHaveBeenCalledWith(
+			"keydown",
+			onKeyDown,
+			{ capture: true }
+		);
 		expect(effectCleanup).toEqual(expect.any(Function));
 
 		effectCleanup();
 
-		expect(global.window.removeEventListener).toHaveBeenCalledWith("keydown", onKeyDown);
+		expect(global.window.removeEventListener).toHaveBeenCalledWith(
+			"keydown",
+			onKeyDown,
+			{ capture: true }
+		);
 	});
 
 	test("does not register a global keydown callback when disabled", () => {
