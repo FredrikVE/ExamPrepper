@@ -990,25 +990,24 @@ function bindGlossaryDetailNetwork(network, onExploreConcept) {
 }
 
 function bindGlossaryDetailRelations(relations, onExploreConcept, onToggleRelations) {
-	if (relations.display.kind !== GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT) {
-		return relations;
+	let display = relations.display;
+
+	if (relations.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT) {
+		display = {
+			...relations.display,
+			items: relations.display.items.map((item) => ({
+				...item,
+				onActivate: () => {
+					onExploreConcept(item.glossaryEntryKey);
+				}
+			}))
+		};
 	}
 
 	return {
 		...relations,
-		display: {
-			...relations.display,
-			items: relations.display.items.map((item) => ({
-				...item,
-				onActivate: () => onExploreConcept(item.glossaryEntryKey)
-			})),
-			toggle: relations.display.toggle === null
-				? null
-				: {
-					...relations.display.toggle,
-					onActivate: onToggleRelations
-				}
-		}
+		display,
+		onActivate: onToggleRelations
 	};
 }
 

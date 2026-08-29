@@ -5,8 +5,6 @@ import { createGlossaryMasteryPresentation } from "./glossaryMasteryModel.js";
 import { requireGlossaryEntry, requireTopicArea, requireTopicAreaReference } from "./glossaryLookups.js";
 import { GLOSSARY_NETWORK_DISPLAY_KIND, resolveGlossaryRelationLabel } from "./glossaryNetworkModel.js";
 
-const COLLAPSED_RELATION_COUNT = 4;
-
 export function createGlossaryDetailPresentation(params) {
 	if (params.activeGlossaryEntryKey === null) {
 		return null;
@@ -122,34 +120,42 @@ function createGlossaryDetailNetworkPresentation(params) {
 }
 
 function createGlossaryDetailRelationsPresentation(params) {
-	const associationCount = params.activeEntry.directNeighborGlossaryKeys.length;
+	let display;
 
 	if (params.networkDisplay.kind === GLOSSARY_NETWORK_DISPLAY_KIND.LOADING) {
-		return {
-			heading: params.t.glossaryPageDetailRelationsHeading,
-			count: associationCount,
-			display: {
-				kind: GLOSSARY_NETWORK_DISPLAY_KIND.LOADING,
-				message: params.t.glossaryPageDetailRelationsLoadingLabel
-			}
+		display = {
+			kind: GLOSSARY_NETWORK_DISPLAY_KIND.LOADING,
+			message: params.t.glossaryPageDetailRelationsLoadingLabel
 		};
 	}
 
-	if (params.networkDisplay.kind === GLOSSARY_NETWORK_DISPLAY_KIND.ERROR) {
-		return {
-			heading: params.t.glossaryPageDetailRelationsHeading,
-			count: associationCount,
-			display: {
-				kind: GLOSSARY_NETWORK_DISPLAY_KIND.ERROR,
-				message: params.networkDisplay.message
-			}
+	else if (params.networkDisplay.kind === GLOSSARY_NETWORK_DISPLAY_KIND.ERROR) {
+		display = {
+			kind: GLOSSARY_NETWORK_DISPLAY_KIND.ERROR,
+			message: params.networkDisplay.message
 		};
 	}
 
-	if (params.networkDisplay.kind !== GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT) {
+	else if (params.networkDisplay.kind === GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT) {
+		display = createGlossaryDetailRelationsContentPresentation(params);
+	}
+
+	else {
 		throw new Error(`Glossary detail relations require a visible network state, received: ${params.networkDisplay.kind}`);
 	}
 
+	return {
+		ariaLabel: params.t.glossaryPageDetailRelationsHeading,
+		contentId: `glossary-detail-relations-${params.activeEntry.glossaryEntryKey}`,
+		contentHeading: params.t.glossaryPageDetailRelatedConceptsHeading,
+		openLabel: params.t.glossaryPageDetailRelationsOpenLabel,
+		closeLabel: params.t.glossaryPageDetailRelationsCloseLabel,
+		isExpanded: params.areRelationsExpanded,
+		display
+	};
+}
+
+function createGlossaryDetailRelationsContentPresentation(params) {
 	const relationByNeighborKey = new Map();
 
 	for (const relation of params.networkDisplay.model.directRelations) {
@@ -194,26 +200,10 @@ function createGlossaryDetailRelationsPresentation(params) {
 		throw new Error("Glossary detail direct relations do not match overview associations.");
 	}
 
-	const visibleItems = params.areRelationsExpanded
-		? items
-		: items.slice(0, COLLAPSED_RELATION_COUNT);
-
 	return {
-		heading: params.t.glossaryPageDetailRelationsHeading,
-		count: items.length,
-		display: {
-			kind: GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT,
-			emptyLabel: params.t.glossaryPageDetailRelationsEmptyLabel,
-			items: visibleItems,
-			toggle: items.length > COLLAPSED_RELATION_COUNT
-				? {
-					isExpanded: params.areRelationsExpanded,
-					label: params.areRelationsExpanded
-						? params.t.glossaryPageDetailRelationsShowLessLabel
-						: params.t.glossaryPageDetailRelationsShowAllLabel(items.length)
-				}
-				: null
-		}
+		kind: GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT,
+		emptyLabel: params.t.glossaryPageDetailRelationsEmptyLabel,
+		items
 	};
 }
 

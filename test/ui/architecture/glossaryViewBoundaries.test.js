@@ -6,6 +6,7 @@ import { describe, expect, test } from "@jest/globals";
 
 const UI_ROOT = path.resolve("src/ui");
 const GLOSSARY_PAGE_VIEWMODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPageViewModel.js");
+const GLOSSARY_RELATIONS_COMPONENT_PATH = path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailRelations.jsx");
 const GLOSSARY_VIEW_ROOTS = [
 	path.resolve("src/ui/view/pages/GlossaryPage.jsx"),
 	path.resolve("src/ui/view/components/GlossaryPage")
@@ -126,6 +127,15 @@ describe("Glossary view boundaries", () => {
 				expect(FORBIDDEN_GLOSSARY_PRESENTATION_PATHS.has(importedPath)).toBe(false);
 			}
 		}
+	});
+
+	test("keeps relation disclosure body and controller persistent in the DOM contract", () => {
+		const source = fs.readFileSync(GLOSSARY_RELATIONS_COMPONENT_PATH, "utf8");
+
+		expect(source).toContain("id={model.contentId}");
+		expect(source).toContain("hidden={!model.isExpanded}");
+		expect(source).toContain("aria-controls={model.contentId}");
+		expect(source).not.toContain("display.toggle");
 	});
 
 	test("keeps visualization-library dependencies out of the Glossary feature", () => {

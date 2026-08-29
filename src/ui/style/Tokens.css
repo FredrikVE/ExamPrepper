@@ -31,10 +31,10 @@
 	--glossary-detail-close-icon-stroke-width: 2;
 	--glossary-detail-navigation-icon-size: 18px;
 	--glossary-detail-navigation-icon-stroke-width: 2.1;
-	--glossary-detail-relations-icon-size: 17px;
-	--glossary-detail-relations-icon-stroke-width: 1.9;
 	--glossary-detail-relations-toggle-icon-size: 18px;
 	--glossary-detail-relations-toggle-icon-stroke-width: 2.2;
+	--glossary-detail-row-alt-bg: color-mix(in srgb, var(--accent) 3%, var(--panel-bg));
+	--glossary-detail-row-hover-bg: color-mix(in srgb, var(--accent) 7%, transparent);
 
     /* ── Spacing ───────────────────────────── */
     --space-1: 4px;

@@ -26,8 +26,9 @@ const t = Object.freeze({
 	glossaryPageDetailRelationsHeading: "Relasjoner",
 	glossaryPageDetailRelationsLoadingLabel: "Laster relasjoner …",
 	glossaryPageDetailRelationsEmptyLabel: "Ingen relasjoner er lagt til ennå.",
-	glossaryPageDetailRelationsShowAllLabel: (count) => `Vis alle ${count} relasjoner`,
-	glossaryPageDetailRelationsShowLessLabel: "Vis færre relasjoner",
+	glossaryPageDetailRelatedConceptsHeading: "Relaterte begreper",
+	glossaryPageDetailRelationsOpenLabel: "Trykk for mer detaljer",
+	glossaryPageDetailRelationsCloseLabel: "Trykk her for å lukke",
 	glossaryPageDetailNavigationAriaLabel: "Naviger mellom begreper",
 	glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
 	glossaryPageMasteryPracticeLabel: "Øve mer",
@@ -152,8 +153,12 @@ describe("glossaryDetailModel", () => {
 			]
 		});
 		expect(presentation.relations).toEqual({
-			heading: "Relasjoner",
-			count: 2,
+			ariaLabel: "Relasjoner",
+			contentId: "glossary-detail-relations-aes",
+			contentHeading: "Relaterte begreper",
+			openLabel: "Trykk for mer detaljer",
+			closeLabel: "Trykk her for å lukke",
+			isExpanded: false,
 			display: {
 				kind: "content",
 				emptyLabel: "Ingen relasjoner er lagt til ennå.",
@@ -174,8 +179,7 @@ describe("glossaryDetailModel", () => {
 						sourceGlossaryEntryKey: "hash",
 						targetGlossaryEntryKey: "aes"
 					}
-				],
-				toggle: null
+				]
 			}
 		});
 		expect(presentation.navigation).toEqual({
@@ -249,8 +253,12 @@ describe("glossaryDetailModel", () => {
 			message: "Laster sammenhengsgraf …"
 		});
 		expect(loadingPresentation.relations).toEqual({
-			heading: "Relasjoner",
-			count: 2,
+			ariaLabel: "Relasjoner",
+			contentId: "glossary-detail-relations-aes",
+			contentHeading: "Relaterte begreper",
+			openLabel: "Trykk for mer detaljer",
+			closeLabel: "Trykk her for å lukke",
+			isExpanded: false,
 			display: {
 				kind: "loading",
 				message: "Laster relasjoner …"
@@ -281,7 +289,7 @@ describe("glossaryDetailModel", () => {
 		expect(presentation.network.display.limitNote).toBe("1 skjulte koblinger");
 	});
 
-	test("collapses a large relation presentation to four rows", () => {
+	test("keeps every relation in the persistent content while collapsed", () => {
 		const presentation = createGlossaryDetailPresentation(
 			createDetailInputWithRelationCount({
 				relationCount: 19,
@@ -289,15 +297,13 @@ describe("glossaryDetailModel", () => {
 			})
 		);
 
-		expect(presentation.relations.count).toBe(19);
-		expect(presentation.relations.display.items).toHaveLength(4);
-		expect(presentation.relations.display.toggle).toEqual({
-			isExpanded: false,
-			label: "Vis alle 19 relasjoner"
-		});
+		expect(presentation.relations.isExpanded).toBe(false);
+		expect(presentation.relations.openLabel).toBe("Trykk for mer detaljer");
+		expect(presentation.relations.display.items).toHaveLength(19);
+		expect(presentation.relations.display).not.toHaveProperty("toggle");
 	});
 
-	test("shows every relation when the relation presentation is expanded", () => {
+	test("keeps every relation in the same content when expanded", () => {
 		const presentation = createGlossaryDetailPresentation(
 			createDetailInputWithRelationCount({
 				relationCount: 19,
@@ -305,11 +311,10 @@ describe("glossaryDetailModel", () => {
 			})
 		);
 
+		expect(presentation.relations.isExpanded).toBe(true);
+		expect(presentation.relations.closeLabel).toBe("Trykk her for å lukke");
 		expect(presentation.relations.display.items).toHaveLength(19);
-		expect(presentation.relations.display.toggle).toEqual({
-			isExpanded: true,
-			label: "Vis færre relasjoner"
-		});
+		expect(presentation.relations.display).not.toHaveProperty("toggle");
 	});
 
 	test("throws when an active entry references a missing association", () => {

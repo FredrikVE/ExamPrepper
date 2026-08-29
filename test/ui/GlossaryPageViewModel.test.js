@@ -112,8 +112,9 @@ const translations = {
 	glossaryPageDetailRelationsHeading: "Relasjoner",
 	glossaryPageDetailRelationsLoadingLabel: "Laster relasjoner …",
 	glossaryPageDetailRelationsEmptyLabel: "Ingen relasjoner er lagt til ennå.",
-	glossaryPageDetailRelationsShowAllLabel: (count) => `Vis alle ${count} relasjoner`,
-	glossaryPageDetailRelationsShowLessLabel: "Vis færre relasjoner",
+	glossaryPageDetailRelatedConceptsHeading: "Relaterte begreper",
+	glossaryPageDetailRelationsOpenLabel: "Trykk for mer detaljer",
+	glossaryPageDetailRelationsCloseLabel: "Trykk her for å lukke",
 	glossaryPageDetailNavigationAriaLabel: "Naviger mellom begreper",
 	glossaryPageNetworkCenterLabel: "Valgt begrep",
 	glossaryPageNetworkEmptyLabel: "Ingen koblinger.",
@@ -1336,15 +1337,23 @@ describe("useGlossaryPageViewModel", () => {
 			}
 		});
 
-		const toggle = viewModel.glossaryDetailModal.content.relations.display.toggle;
-		expect(toggle).toMatchObject({
+		const relations = viewModel.glossaryDetailModal.content.relations;
+		expect(relations).toMatchObject({
 			isExpanded: false,
-			label: "Vis alle 5 relasjoner",
-			onActivate: expect.any(Function)
+			openLabel: "Trykk for mer detaljer",
+			closeLabel: "Trykk her for å lukke",
+			onActivate: expect.any(Function),
+			display: {
+				kind: "content",
+				items: expect.arrayContaining([
+					expect.objectContaining({ onActivate: expect.any(Function) })
+				])
+			}
 		});
+		expect(relations.display.items).toHaveLength(5);
 
 		clearStateSetterCalls();
-		toggle.onActivate();
+		relations.onActivate();
 		expect(setAreGlossaryDetailRelationsExpanded).toHaveBeenCalledWith(expect.any(Function));
 		const updateExpanded = setAreGlossaryDetailRelationsExpanded.mock.calls[0][0];
 		expect(updateExpanded(false)).toBe(true);

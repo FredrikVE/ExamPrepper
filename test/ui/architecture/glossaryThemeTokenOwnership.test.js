@@ -89,7 +89,6 @@ describe("Glossary theme token ownership", () => {
 			"--glossary-detail-trail-back-icon-size: 15px;",
 			"--glossary-detail-close-icon-size: 22px;",
 			"--glossary-detail-navigation-icon-size: 18px;",
-			"--glossary-detail-relations-icon-size: 17px;",
 			"--glossary-detail-relations-toggle-icon-size: 18px;",
 			"--glossary-detail-surface-bg:"
 		]) {
@@ -100,6 +99,16 @@ describe("Glossary theme token ownership", () => {
 		expect(glossaryStyles).toContain("var(--glossary-detail-navigation-icon-size)");
 		expect(glossaryStyles).toContain("var(--glossary-detail-surface-bg)");
 		expect(detailComponents).not.toMatch(/\b(?:size|strokeWidth|style)=\{/);
+	});
+
+	test("keeps Glossary relation row surfaces in Tokens.css", () => {
+		const relationStyles = readSource(path.resolve("src/ui/style/GlossaryPage/DetailModal/modal-relations.css"));
+		const tokens = readSource(TOKENS_PATH);
+
+		expect(tokens).toContain("--glossary-detail-row-alt-bg:");
+		expect(tokens).toContain("--glossary-detail-row-hover-bg:");
+		expect(relationStyles).toContain("background: var(--glossary-detail-row-alt-bg);");
+		expect(relationStyles).toContain("background: var(--glossary-detail-row-hover-bg);");
 	});
 
 	test("does not copy rendered prototype palette literals into glossary styles", () => {

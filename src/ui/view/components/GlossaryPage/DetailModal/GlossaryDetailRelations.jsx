@@ -1,55 +1,50 @@
 // src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailRelations.jsx
-import { ChevronDown, ChevronUp, Link2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { GLOSSARY_NETWORK_DISPLAY_KIND } from "../../../../viewmodel/GlossaryPage/glossaryNetworkModel.js";
 
 export default function GlossaryDetailRelations({ model, isInteractive }) {
 	return (
-		<section className="glossary-detail-modal__relations">
-			<h3 className="glossary-detail-modal__relations-heading">
-				<Link2 className="glossary-detail-modal__relations-icon" aria-hidden="true" />
-				<span>{model.heading}</span>
-				<span className="glossary-detail-modal__relations-count">
-					({model.count})
-				</span>
-			</h3>
-
+		<section className="glossary-detail-modal__relations" aria-label={model.ariaLabel}>
 			<div className="glossary-detail-modal__relations-card">
-				<RelationContent
-					model={model}
-					isInteractive={isInteractive}
-				/>
+				<div id={model.contentId} hidden={!model.isExpanded}>
+					<RelationContent model={model} isInteractive={isInteractive} />
+				</div>
+
+				<RelationToggle model={model} isInteractive={isInteractive} />
 			</div>
 		</section>
 	);
 }
 
 function RelationContent({ model, isInteractive }) {
+	let body;
+
 	if (model.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.LOADING) {
-		return (
+		body = (
 			<p className="glossary-detail-modal__relations-status" role="status">
 				{model.display.message}
 			</p>
 		);
 	}
 
-	if (model.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.ERROR) {
-		return (
+	else if (model.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.ERROR) {
+		body = (
 			<p className="glossary-detail-modal__relations-status" role="alert">
 				{model.display.message}
 			</p>
 		);
 	}
 
-	if (model.display.items.length === 0) {
-		return (
+	else if (model.display.items.length === 0) {
+		body = (
 			<p className="glossary-detail-modal__relations-status">
 				{model.display.emptyLabel}
 			</p>
 		);
 	}
 
-	return (
-		<>
+	else {
+		body = (
 			<div className="glossary-detail-modal__relation-list">
 				{model.display.items.map((item) => (
 					<RelationRow
@@ -59,13 +54,16 @@ function RelationContent({ model, isInteractive }) {
 					/>
 				))}
 			</div>
+		);
+	}
 
-			{model.display.toggle !== null ? (
-				<RelationToggle
-					model={model.display.toggle}
-					isInteractive={isInteractive}
-				/>
-			) : null}
+	return (
+		<>
+			<div className="glossary-detail-modal__relations-inner-header">
+				{model.contentHeading}
+			</div>
+
+			{body}
 		</>
 	);
 }
@@ -106,14 +104,23 @@ function RelationRow({ item, isInteractive }) {
 }
 
 function RelationToggle({ model, isInteractive }) {
-	const icon = model.isExpanded
-		? <ChevronUp className="glossary-detail-modal__relations-toggle-icon" aria-hidden="true" />
-		: <ChevronDown className="glossary-detail-modal__relations-toggle-icon" aria-hidden="true" />;
+	let icon;
+	let label;
+
+	if (model.isExpanded) {
+		icon = <ChevronUp className="glossary-detail-modal__relations-toggle-icon" aria-hidden="true" />;
+		label = model.closeLabel;
+	}
+
+	else {
+		icon = <ChevronDown className="glossary-detail-modal__relations-toggle-icon" aria-hidden="true" />;
+		label = model.openLabel;
+	}
 
 	if (!isInteractive) {
 		return (
 			<div className="glossary-detail-modal__relations-toggle">
-				<span>{model.label}</span>
+				<span>{label}</span>
 				{icon}
 			</div>
 		);
@@ -124,9 +131,10 @@ function RelationToggle({ model, isInteractive }) {
 			type="button"
 			className="glossary-detail-modal__relations-toggle"
 			aria-expanded={model.isExpanded}
+			aria-controls={model.contentId}
 			onClick={model.onActivate}
 		>
-			<span>{model.label}</span>
+			<span>{label}</span>
 			{icon}
 		</button>
 	);
