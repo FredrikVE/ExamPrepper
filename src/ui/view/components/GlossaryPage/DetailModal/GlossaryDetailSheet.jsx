@@ -1,11 +1,41 @@
 // src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailSheet.jsx
+import { useCallback } from "react";
 import { BookOpen } from "lucide-react";
+import isEditableTarget from "../../../KeyboardNavigation/isEditableTarget.js";
+import useKeyboardShortcuts, { isShortcutEvent } from "../../../KeyboardNavigation/useKeyboardShortcuts.js";
 import FormattedText from "../../Shared/FormattedText.jsx";
 import GlossaryDetailModalContent from "./GlossaryDetailModalContent.jsx";
 import GlossaryDetailHeader from "./GlossaryDetailHeader.jsx";
 import GlossaryDetailNavigation from "./GlossaryDetailNavigation.jsx";
 
 export default function GlossaryDetailSheet({ model }) {
+	const handleGlossaryKeyboardNavigation = useCallback((event) => {
+		if (!isShortcutEvent(event) || isEditableTarget(event.target)) {
+			return;
+		}
+
+		if (event.key === "ArrowLeft" && !model.navigation.previous.isDisabled) {
+			event.preventDefault();
+			model.navigation.previous.onActivate();
+			return;
+		}
+
+		if (event.key === "ArrowRight" && !model.navigation.next.isDisabled) {
+			event.preventDefault();
+			model.navigation.next.onActivate();
+		}
+	}, [
+		model.navigation.next.isDisabled,
+		model.navigation.next.onActivate,
+		model.navigation.previous.isDisabled,
+		model.navigation.previous.onActivate
+	]);
+
+	useKeyboardShortcuts({
+		isEnabled: model.isInteractive,
+		onKeyDown: handleGlossaryKeyboardNavigation
+	});
+
 	return (
 		<div className="glossary-detail-modal__sheet" inert={!model.isInteractive}>
 			<GlossaryDetailHeader model={model.header} />
