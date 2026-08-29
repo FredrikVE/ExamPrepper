@@ -64,6 +64,8 @@ export default function useGlossaryPageViewModel({
 		setGlossaryDetailTrailKeys,
 		glossaryDetailRenderSnapshot,
 		setGlossaryDetailRenderSnapshot,
+		areGlossaryDetailRelationsExpanded,
+		setAreGlossaryDetailRelationsExpanded,
 		glossaryDetailOriginEntryKeyRef,
 		glossaryDetailTitleFocusRequestKeyRef,
 		previousPresentationModeRef,
@@ -290,11 +292,13 @@ export default function useGlossaryPageViewModel({
 	}, [baseGlossaryTableRows]);
 
 	useGlossaryDetailPresentationModeSync({
+		areGlossaryDetailRelationsExpanded,
 		expandedGlossaryEntryKey,
 		glossaryDetailOriginEntryKeyRef,
 		glossaryDetailTitleFocusRequestKeyRef,
 		previousPresentationModeRef,
 		presentationMode,
+		setAreGlossaryDetailRelationsExpanded,
 		setExpandedGlossaryEntryKey,
 		setGlossaryDetailTrailKeys,
 		visibleGlossaryEntryKeys
@@ -309,10 +313,10 @@ export default function useGlossaryPageViewModel({
 			networkDisplay: glossaryNetworkDisplay,
 			visibleGlossaryEntryKeys,
 			trailKeys: glossaryDetailTrailKeys,
-			areRelationsExpanded: false,
+			areRelationsExpanded: areGlossaryDetailRelationsExpanded,
 			t
 		});
-	}, [expandedGlossaryEntryKey, glossaryDetailTrailKeys, glossaryNetworkDisplay, localizedEntryByKey, t, topicAreaByKey, topicAreaReferenceByKey, visibleGlossaryEntryKeys]);
+	}, [areGlossaryDetailRelationsExpanded, expandedGlossaryEntryKey, glossaryDetailTrailKeys, glossaryNetworkDisplay, localizedEntryByKey, t, topicAreaByKey, topicAreaReferenceByKey, visibleGlossaryEntryKeys]);
 
 	const glossaryPanelHeading = useMemo(() => {
 		return createGlossaryPanelHeading({
@@ -583,12 +587,14 @@ export default function useGlossaryPageViewModel({
 		}
 
 		glossaryDetailOriginEntryKeyRef.current = glossaryEntryKey;
+		setAreGlossaryDetailRelationsExpanded(false);
 		glossaryDetailTitleFocusRequestKeyRef.current = null;
 		setGlossaryDetailTrailKeys([]);
 		setExpandedGlossaryEntryKey(glossaryEntryKey);
 	}, [localizedEntryByKey]);
 
 	const closeGlossaryDetail = useCallback(() => {
+		setAreGlossaryDetailRelationsExpanded(false);
 		setGlossaryDetailTrailKeys([]);
 		glossaryDetailTitleFocusRequestKeyRef.current = null;
 		setExpandedGlossaryEntryKey(null);
@@ -638,6 +644,7 @@ export default function useGlossaryPageViewModel({
 			return;
 		}
 
+		setAreGlossaryDetailRelationsExpanded(false);
 		setGlossaryDetailTrailKeys((currentTrailKeys) => [
 			...currentTrailKeys,
 			expandedGlossaryEntryKey
@@ -652,6 +659,7 @@ export default function useGlossaryPageViewModel({
 		}
 
 		const targetGlossaryEntryKey = glossaryDetailTrailKeys[glossaryDetailTrailKeys.length - 1];
+		setAreGlossaryDetailRelationsExpanded(false);
 		glossaryDetailTitleFocusRequestKeyRef.current = targetGlossaryEntryKey;
 		setGlossaryDetailTrailKeys((currentTrailKeys) => currentTrailKeys.slice(0, -1));
 		setExpandedGlossaryEntryKey(targetGlossaryEntryKey);
@@ -665,6 +673,7 @@ export default function useGlossaryPageViewModel({
 		}
 
 		const targetGlossaryEntryKey = visibleGlossaryEntryKeys[currentIndex - 1];
+		setAreGlossaryDetailRelationsExpanded(false);
 		setGlossaryDetailTrailKeys([]);
 		glossaryDetailTitleFocusRequestKeyRef.current = targetGlossaryEntryKey;
 		setExpandedGlossaryEntryKey(targetGlossaryEntryKey);
@@ -678,12 +687,14 @@ export default function useGlossaryPageViewModel({
 		}
 
 		const targetGlossaryEntryKey = visibleGlossaryEntryKeys[currentIndex + 1];
+		setAreGlossaryDetailRelationsExpanded(false);
 		setGlossaryDetailTrailKeys([]);
 		glossaryDetailTitleFocusRequestKeyRef.current = targetGlossaryEntryKey;
 		setExpandedGlossaryEntryKey(targetGlossaryEntryKey);
 	}, [expandedGlossaryEntryKey, visibleGlossaryEntryKeys]);
 
 	const toggleGlossaryNetworkConcept = useCallback((glossaryEntryKey) => {
+		setAreGlossaryDetailRelationsExpanded(false);
 		setExpandedGlossaryEntryKey((currentGlossaryEntryKey) => (
 			currentGlossaryEntryKey === glossaryEntryKey ? null : glossaryEntryKey
 		));
@@ -709,6 +720,7 @@ export default function useGlossaryPageViewModel({
 
 		event.preventDefault();
 		event.stopPropagation();
+		setAreGlossaryDetailRelationsExpanded(false);
 		setExpandedGlossaryEntryKey(null);
 	}, [expandedGlossaryEntryKey]);
 
@@ -727,6 +739,7 @@ export default function useGlossaryPageViewModel({
 		setIsSearchFilterOptionsOpen(false);
 		setIsSearchAutocompleteOpen(false);
 		setSearchNarrowedGlossaryEntryKey(null);
+		setAreGlossaryDetailRelationsExpanded(false);
 		setSelectedTopicAreaKeys((previousSelectedTopicAreaKeys) => {
 			const nextSelectedTopicAreaKeys = resolveSelectedTopicAreaKeys({
 				selectedTopicAreaKeys: previousSelectedTopicAreaKeys,
@@ -739,6 +752,10 @@ export default function useGlossaryPageViewModel({
 		setExpandedGlossaryEntryKey(glossaryEntryKey);
 	}, [initialTopicAreaKey, localizedEntryByKey, topicAreas]);
 
+
+	const toggleGlossaryDetailRelations = useCallback(() => {
+		setAreGlossaryDetailRelationsExpanded((isExpanded) => !isExpanded);
+	}, []);
 
 	const search = useMemo(() => ({
 		term: glossarySearchTerm,
@@ -814,12 +831,13 @@ export default function useGlossaryPageViewModel({
 		return bindGlossaryDetailInteractions({
 			presentation: glossaryDetailPresentation,
 			onExploreConcept: exploreGlossaryDetailConcept,
+			onToggleRelations: toggleGlossaryDetailRelations,
 			onNavigateTrailBack: navigateBackGlossaryDetailTrail,
 			onNavigatePrevious: openPreviousGlossaryDetail,
 			onNavigateNext: openNextGlossaryDetail,
 			titleRef: glossaryDetailTitleElementRef
 		});
-	}, [exploreGlossaryDetailConcept, glossaryDetailPresentation, navigateBackGlossaryDetailTrail, openNextGlossaryDetail, openPreviousGlossaryDetail]);
+	}, [exploreGlossaryDetailConcept, glossaryDetailPresentation, navigateBackGlossaryDetailTrail, openNextGlossaryDetail, openPreviousGlossaryDetail, toggleGlossaryDetailRelations]);
 
 	const glossaryMobileDetailPresentation = useMemo(() => {
 		return bindGlossaryMobileDetailPresentation({
@@ -989,6 +1007,11 @@ function bindGlossaryDetailInteractions(params) {
 				}
 		},
 		network: bindGlossaryDetailNetwork(params.presentation.network, params.onExploreConcept),
+		relations: bindGlossaryDetailRelations(
+			params.presentation.relations,
+			params.onExploreConcept,
+			params.onToggleRelations
+		),
 		associations: {
 			...params.presentation.associations,
 			items: params.presentation.associations.items.map((item) => ({
@@ -1030,7 +1053,31 @@ function bindGlossaryDetailNetwork(network, onExploreConcept) {
 		...network,
 		display: {
 			...network.display,
-			model: bindGlossaryNetworkModel(network.display.model, onExploreConcept)
+			model: bindGlossaryNetworkModel(network.display.model, onExploreConcept),
+			detailGraph: bindGlossaryNetworkModel(network.display.detailGraph, onExploreConcept)
+		}
+	};
+}
+
+function bindGlossaryDetailRelations(relations, onExploreConcept, onToggleRelations) {
+	if (relations.display.kind !== GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT) {
+		return relations;
+	}
+
+	return {
+		...relations,
+		display: {
+			...relations.display,
+			items: relations.display.items.map((item) => ({
+				...item,
+				onActivate: () => onExploreConcept(item.glossaryEntryKey)
+			})),
+			toggle: relations.display.toggle === null
+				? null
+				: {
+					...relations.display.toggle,
+					onActivate: onToggleRelations
+				}
 		}
 	};
 }

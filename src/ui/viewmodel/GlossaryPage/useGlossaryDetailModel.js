@@ -6,6 +6,7 @@ export default function useGlossaryDetailModel({ presentationMode, resetKey }) {
 	const [expandedGlossaryEntryKey, setExpandedGlossaryEntryKey] = useState(null);
 	const [glossaryDetailTrailKeys, setGlossaryDetailTrailKeys] = useState([]);
 	const [glossaryDetailRenderSnapshot, setGlossaryDetailRenderSnapshot] = useState(null);
+	const [areGlossaryDetailRelationsExpanded, setAreGlossaryDetailRelationsExpanded] = useState(false);
 	const glossaryRowElementByKey = useRef(new Map());
 	const glossaryDisclosureElementByKey = useRef(new Map());
 	const glossaryDetailOriginEntryKeyRef = useRef(null);
@@ -19,6 +20,7 @@ export default function useGlossaryDetailModel({ presentationMode, resetKey }) {
 		setExpandedGlossaryEntryKey(null);
 		setGlossaryDetailTrailKeys([]);
 		setGlossaryDetailRenderSnapshot(null);
+		setAreGlossaryDetailRelationsExpanded(false);
 		glossaryDetailOriginEntryKeyRef.current = null;
 		glossaryDetailTitleFocusRequestKeyRef.current = null;
 		glossaryRowElementByKey.current.clear();
@@ -80,6 +82,8 @@ export default function useGlossaryDetailModel({ presentationMode, resetKey }) {
 		setGlossaryDetailTrailKeys,
 		glossaryDetailRenderSnapshot,
 		setGlossaryDetailRenderSnapshot,
+		areGlossaryDetailRelationsExpanded,
+		setAreGlossaryDetailRelationsExpanded,
 		glossaryDetailOriginEntryKeyRef,
 		glossaryDetailTitleFocusRequestKeyRef,
 		previousPresentationModeRef,
@@ -91,13 +95,17 @@ export default function useGlossaryDetailModel({ presentationMode, resetKey }) {
 	};
 }
 
-export function useGlossaryDetailPresentationModeSync({ expandedGlossaryEntryKey, glossaryDetailOriginEntryKeyRef, glossaryDetailTitleFocusRequestKeyRef, previousPresentationModeRef, presentationMode, setExpandedGlossaryEntryKey, setGlossaryDetailTrailKeys, visibleGlossaryEntryKeys }) {
+export function useGlossaryDetailPresentationModeSync({ areGlossaryDetailRelationsExpanded, expandedGlossaryEntryKey, glossaryDetailOriginEntryKeyRef, glossaryDetailTitleFocusRequestKeyRef, previousPresentationModeRef, presentationMode, setAreGlossaryDetailRelationsExpanded, setExpandedGlossaryEntryKey, setGlossaryDetailTrailKeys, visibleGlossaryEntryKeys }) {
 	useEffect(() => {
 		const previousPresentationMode = previousPresentationModeRef.current;
 		previousPresentationModeRef.current = presentationMode;
 
 		if (previousPresentationMode === presentationMode) {
 			return;
+		}
+
+		if (areGlossaryDetailRelationsExpanded) {
+			setAreGlossaryDetailRelationsExpanded(false);
 		}
 
 		if (previousPresentationMode === PRESENTATION_MODE.DESKTOP && presentationMode === PRESENTATION_MODE.MOBILE) {
@@ -122,7 +130,7 @@ export function useGlossaryDetailPresentationModeSync({ expandedGlossaryEntryKey
 			glossaryDetailTitleFocusRequestKeyRef.current = null;
 			glossaryDetailOriginEntryKeyRef.current = expandedGlossaryEntryKey;
 		}
-	}, [expandedGlossaryEntryKey, glossaryDetailOriginEntryKeyRef, glossaryDetailTitleFocusRequestKeyRef, presentationMode, previousPresentationModeRef, setExpandedGlossaryEntryKey, setGlossaryDetailTrailKeys, visibleGlossaryEntryKeys]);
+	}, [areGlossaryDetailRelationsExpanded, expandedGlossaryEntryKey, glossaryDetailOriginEntryKeyRef, glossaryDetailTitleFocusRequestKeyRef, presentationMode, previousPresentationModeRef, setAreGlossaryDetailRelationsExpanded, setExpandedGlossaryEntryKey, setGlossaryDetailTrailKeys, visibleGlossaryEntryKeys]);
 }
 
 export function resolveMobileGlossaryDetailEntryKey(params) {

@@ -19,6 +19,7 @@ const setGlossaryTableSort = jest.fn();
 const setIsMobileChapterSheetOpen = jest.fn();
 const setGlossaryDetailTrailKeys = jest.fn();
 const setGlossaryDetailRenderSnapshot = jest.fn();
+const setAreGlossaryDetailRelationsExpanded = jest.fn();
 const stateSetters = [
 	setGlossarySearchTerm,
 	setSelectedTopicAreaKeys,
@@ -30,7 +31,8 @@ const stateSetters = [
 	setGlossaryTableSort,
 	setIsMobileChapterSheetOpen,
 	setGlossaryDetailTrailKeys,
-	setGlossaryDetailRenderSnapshot
+	setGlossaryDetailRenderSnapshot,
+	setAreGlossaryDetailRelationsExpanded
 ];
 let loadModelQueue = [];
 let currentTableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" };
@@ -345,6 +347,7 @@ function createViewModel({
 	isMobileChapterSheetOpen = false,
 	glossaryDetailTrailKeys = [],
 	glossaryDetailRenderSnapshot = null,
+	areGlossaryDetailRelationsExpanded = false,
 	presentationMode = PRESENTATION_MODE.DESKTOP,
 	appShellMode = APP_SHELL_MODE.FULL
 } = {}) {
@@ -374,6 +377,8 @@ function createViewModel({
 		setGlossaryDetailTrailKeys,
 		glossaryDetailRenderSnapshot,
 		setGlossaryDetailRenderSnapshot,
+		areGlossaryDetailRelationsExpanded,
+		setAreGlossaryDetailRelationsExpanded,
 		glossaryDetailOriginEntryKeyRef: currentDetailRefs.origin,
 		glossaryDetailTitleFocusRequestKeyRef: currentDetailRefs.titleFocusRequest,
 		previousPresentationModeRef: currentDetailRefs.previousPresentationMode,
@@ -1321,10 +1326,20 @@ describe("useGlossaryPageViewModel", () => {
 			},
 			network: {
 				display: {
-				kind: "content",
+					kind: "content",
 					model: {
 						nodes: [{ glossaryEntryKey: "packet", onActivate: expect.any(Function) }]
+					},
+					detailGraph: {
+						nodes: [{ glossaryEntryKey: "packet", onActivate: expect.any(Function) }]
 					}
+				}
+			},
+			relations: {
+				display: {
+					items: expect.arrayContaining([
+						expect.objectContaining({ glossaryEntryKey: "public-key", onActivate: expect.any(Function) })
+					])
 				}
 			},
 			associations: {
@@ -1340,12 +1355,20 @@ describe("useGlossaryPageViewModel", () => {
 
 		clearStateSetterCalls();
 		modalPresentation.network.display.model.nodes[0].onActivate();
+		expect(setAreGlossaryDetailRelationsExpanded).toHaveBeenCalledWith(false);
 		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith(expect.any(Function));
 		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("packet");
 		expect(setGlossarySearchTerm).not.toHaveBeenCalled();
 		expect(setSelectedTopicAreaKeys).not.toHaveBeenCalled();
 		expect(setSearchNarrowedGlossaryEntryKey).not.toHaveBeenCalled();
 		expect(setGlossaryTableSort).not.toHaveBeenCalled();
+
+		clearStateSetterCalls();
+		const publicKeyRelation = modalPresentation.relations.display.items.find((item) => item.glossaryEntryKey === "public-key");
+		publicKeyRelation.onActivate();
+		expect(setAreGlossaryDetailRelationsExpanded).toHaveBeenCalledWith(false);
+		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith(expect.any(Function));
+		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("public-key");
 
 		clearStateSetterCalls();
 		const publicKeyAssociation = modalPresentation.associations.items.find((item) => item.glossaryEntryKey === "public-key");
@@ -1362,6 +1385,72 @@ describe("useGlossaryPageViewModel", () => {
 		modalPresentation.navigation.next.onActivate();
 		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
 		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("packet");
+	});
+
+	test("binds relation disclosure to ViewModel-owned expansion state", () => {
+		const extraEntries = [
+			{
+				glossaryEntryKey: "neighbor-four",
+				topicAreaKey: "networking",
+				term: { no: "Nabo fire", en: "Neighbor four" },
+				explanation: { no: "Fire.", en: "Four." },
+				position: 3,
+				directNeighborCount: 1,
+				directNeighborGlossaryKeys: ["transport-layer"],
+				mastery: null
+			},
+			{
+				glossaryEntryKey: "neighbor-five",
+				topicAreaKey: "networking",
+				term: { no: "Nabo fem", en: "Neighbor five" },
+				explanation: { no: "Fem.", en: "Five." },
+				position: 4,
+				directNeighborCount: 1,
+				directNeighborGlossaryKeys: ["transport-layer"],
+				mastery: null
+			}
+		];
+		const neighborKeys = ["packet", "public-key", "asymmetric-key", "neighbor-four", "neighbor-five"];
+		const center = {
+			...glossaryEntries[0],
+			directNeighborCount: neighborKeys.length,
+			directNeighborGlossaryKeys: neighborKeys
+		};
+		const loadedGlossaryEntries = [center, ...glossaryEntries.slice(1), ...extraEntries];
+		const entryByKey = new Map(loadedGlossaryEntries.map((entry) => [entry.glossaryEntryKey, entry]));
+		const directRelations = neighborKeys.map((targetGlossaryKey) => ({
+			subjectId: "in2120",
+			sourceGlossaryKey: "transport-layer",
+			targetGlossaryKey,
+			type: "related"
+		}));
+		const { viewModel } = createViewModel({
+			expandedGlossaryEntryKey: "transport-layer",
+			loadedGlossaryEntries,
+			loadedNetwork: {
+				subjectId: "in2120",
+				center,
+				nodes: neighborKeys.map((glossaryEntryKey) => entryByKey.get(glossaryEntryKey)),
+				relations: [],
+				directRelations,
+				limit: 8,
+				depth: 1
+			}
+		});
+
+		const toggle = viewModel.glossaryDetailModal.content.relations.display.toggle;
+		expect(toggle).toMatchObject({
+			isExpanded: false,
+			label: "Vis alle 5 relasjoner",
+			onActivate: expect.any(Function)
+		});
+
+		clearStateSetterCalls();
+		toggle.onActivate();
+		expect(setAreGlossaryDetailRelationsExpanded).toHaveBeenCalledWith(expect.any(Function));
+		const updateExpanded = setAreGlossaryDetailRelationsExpanded.mock.calls[0][0];
+		expect(updateExpanded(false)).toBe(true);
+		expect(updateExpanded(true)).toBe(false);
 	});
 
 	test("owns mobile chapter-sheet open state in GlossaryPageViewModel", () => {

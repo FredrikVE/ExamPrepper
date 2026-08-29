@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { PRESENTATION_MODE } from "../../../../src/ui/presentation/presentationMode.js";
 
-const stateSetters = [jest.fn(), jest.fn(), jest.fn()];
+const stateSetters = [jest.fn(), jest.fn(), jest.fn(), jest.fn()];
 const refs = [];
 const effects = [];
 let stateIndex = 0;
 let refIndex = 0;
-let stateValues = [null, [], null];
+let stateValues = [null, [], null, false];
 const useState = jest.fn((initialValue) => {
 	const currentIndex = stateIndex;
 	stateIndex += 1;
@@ -48,7 +48,7 @@ function renderDetailModel({ presentationMode, values }) {
 beforeEach(() => {
 	stateIndex = 0;
 	refIndex = 0;
-	stateValues = [null, [], null];
+	stateValues = [null, [], null, false];
 	refs.length = 0;
 	effects.length = 0;
 	useState.mockClear();
@@ -62,7 +62,7 @@ beforeEach(() => {
 
 describe("useGlossaryDetailModel", () => {
 	test("owns detail state and clears retained refs on reset", () => {
-		const model = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: ["packet", ["transport-layer"], { key: "snapshot" }] });
+		const model = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: ["packet", ["transport-layer"], { key: "snapshot" }, true] });
 		model.resolveGlossaryRowRef("packet")({});
 		model.resolveGlossaryDisclosureRef("packet")({});
 		model.resolveGlossaryDetailTriggerRef("packet")({});
@@ -72,16 +72,17 @@ describe("useGlossaryDetailModel", () => {
 		expect(stateSetters[0]).toHaveBeenCalledWith(null);
 		expect(stateSetters[1]).toHaveBeenCalledWith([]);
 		expect(stateSetters[2]).toHaveBeenCalledWith(null);
+		expect(stateSetters[3]).toHaveBeenCalledWith(false);
 		expect(model.resolveGlossaryRowRef("packet")).not.toBeNull();
 	});
 
 	test("reuses row, disclosure and detail-trigger callback refs across rerenders", () => {
-		const first = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: [null, [], null] });
+		const first = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: [null, [], null, false] });
 		const firstRowRef = first.resolveGlossaryRowRef("packet");
 		const firstDisclosureRef = first.resolveGlossaryDisclosureRef("packet");
 		const firstTriggerRef = first.resolveGlossaryDetailTriggerRef("packet");
 
-		const second = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: [null, [], null] });
+		const second = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: [null, [], null, false] });
 
 		expect(second.resolveGlossaryRowRef("packet")).toBe(firstRowRef);
 		expect(second.resolveGlossaryDisclosureRef("packet")).toBe(firstDisclosureRef);
@@ -89,7 +90,7 @@ describe("useGlossaryDetailModel", () => {
 	});
 
 	test("keeps mobile disclosure focus and row scrolling inside the detail submodel", () => {
-		const model = renderDetailModel({ presentationMode: PRESENTATION_MODE.MOBILE, values: ["packet", [], null] });
+		const model = renderDetailModel({ presentationMode: PRESENTATION_MODE.MOBILE, values: ["packet", [], null, false] });
 		const rowElement = { scrollIntoView: jest.fn() };
 		const disclosureElement = { focus: jest.fn() };
 		model.resolveGlossaryRowRef("packet")(rowElement);
@@ -102,7 +103,7 @@ describe("useGlossaryDetailModel", () => {
 	});
 
 	test("moves desktop focus to the requested detail title", () => {
-		const model = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: ["packet", [], null] });
+		const model = renderDetailModel({ presentationMode: PRESENTATION_MODE.DESKTOP, values: ["packet", [], null, false] });
 		const titleElement = { focus: jest.fn() };
 		model.glossaryDetailTitleFocusRequestKeyRef.current = "packet";
 		model.glossaryDetailTitleElementRef.current = titleElement;
@@ -136,21 +137,25 @@ describe("useGlossaryDetailModel", () => {
 		const titleFocusRequestRef = { current: "public-key" };
 		const previousModeRef = { current: PRESENTATION_MODE.DESKTOP };
 		const setExpanded = jest.fn();
+		const setRelationsExpanded = jest.fn();
 		const setTrail = jest.fn();
 		const effectCountBeforeSync = effects.length;
 
 		useGlossaryDetailPresentationModeSync({
+			areGlossaryDetailRelationsExpanded: true,
 			expandedGlossaryEntryKey: "public-key",
 			glossaryDetailOriginEntryKeyRef: originRef,
 			glossaryDetailTitleFocusRequestKeyRef: titleFocusRequestRef,
 			previousPresentationModeRef: previousModeRef,
 			presentationMode: PRESENTATION_MODE.MOBILE,
+			setAreGlossaryDetailRelationsExpanded: setRelationsExpanded,
 			setExpandedGlossaryEntryKey: setExpanded,
 			setGlossaryDetailTrailKeys: setTrail,
 			visibleGlossaryEntryKeys: ["packet", "transport-layer"]
 		});
 		effects[effectCountBeforeSync]();
 
+		expect(setRelationsExpanded).toHaveBeenCalledWith(false);
 		expect(setTrail).toHaveBeenCalledWith([]);
 		expect(setExpanded).toHaveBeenCalledWith("packet");
 		expect(originRef.current).toBeNull();
