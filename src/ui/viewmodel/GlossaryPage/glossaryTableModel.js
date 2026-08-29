@@ -1,11 +1,13 @@
 // src/ui/viewmodel/GlossaryPage/glossaryTableModel.js
 import { requireTopicAreaReference } from "./glossaryLookups.js";
 import { createDirectNeighborLevelPresentation } from "./directNeighborLevelModel.js";
-import { createGlossaryMasteryPresentation } from "./glossaryMasteryModel.js";
+import { createGlossaryMasteryPresentation, getGlossaryMasterySortRank } from "./glossaryMasteryModel.js";
 
 export const GLOSSARY_TABLE_SORT_KEYS = Object.freeze({
 	TERM: "TERM",
-	DIRECT_NEIGHBOR_COUNT: "DIRECT_NEIGHBOR_COUNT"
+	EXPLANATION_LENGTH: "EXPLANATION_LENGTH",
+	DIRECT_NEIGHBOR_COUNT: "DIRECT_NEIGHBOR_COUNT",
+	MASTERY: "MASTERY"
 });
 
 export const GLOSSARY_TABLE_SORT_DIRECTIONS = Object.freeze({
@@ -13,6 +15,15 @@ export const GLOSSARY_TABLE_SORT_DIRECTIONS = Object.freeze({
 	DESCENDING: "DESCENDING"
 });
 
+export function getInitialGlossaryTableSortDirection(sortKey) {
+	assertGlossaryTableSortKey(sortKey);
+
+	if (sortKey === GLOSSARY_TABLE_SORT_KEYS.TERM) {
+		return GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING;
+	}
+
+	return GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING;
+}
 
 export function createGlossaryTableRows({ localizedEntries, topicAreaReferenceByKey, t }) {
 	const rows = [];
@@ -39,9 +50,7 @@ export function createGlossaryTableRows({ localizedEntries, topicAreaReferenceBy
 }
 
 export function sortGlossaryTableRows({ rows, sortKey, sortDirection, language }) {
-	if (sortKey !== GLOSSARY_TABLE_SORT_KEYS.TERM && sortKey !== GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT) {
-		throw new Error(`Unknown glossary table sort key: ${String(sortKey)}`);
-	}
+	assertGlossaryTableSortKey(sortKey);
 	if (sortDirection !== GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING && sortDirection !== GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING) {
 		throw new Error(`Unknown glossary table sort direction: ${String(sortDirection)}`);
 	}
@@ -52,6 +61,11 @@ export function sortGlossaryTableRows({ rows, sortKey, sortDirection, language }
 	return rows
 		.map((row, originalIndex) => ({ row, originalIndex }))
 		.sort((left, right) => {
+			const missingMasteryComparison = compareMissingMastery(left.row, right.row, sortKey);
+			if (missingMasteryComparison !== 0) {
+				return missingMasteryComparison;
+			}
+
 			let comparison = compareRows(left.row, right.row, sortKey, locale);
 			if (comparison === 0) {
 				comparison = compareTerms(left.row.term, right.row.term, locale);
@@ -64,11 +78,57 @@ export function sortGlossaryTableRows({ rows, sortKey, sortDirection, language }
 		.map(({ row }) => row);
 }
 
+function assertGlossaryTableSortKey(sortKey) {
+	if (!Object.values(GLOSSARY_TABLE_SORT_KEYS).includes(sortKey)) {
+		throw new Error(`Unknown glossary table sort key: ${String(sortKey)}`);
+	}
+}
+
 function compareRows(left, right, sortKey, locale) {
+	if (sortKey === GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH) {
+		return measureExplanationLength(left.explanation) - measureExplanationLength(right.explanation);
+	}
+
 	if (sortKey === GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT) {
 		return left.directNeighborCount - right.directNeighborCount;
 	}
+
+	if (sortKey === GLOSSARY_TABLE_SORT_KEYS.MASTERY) {
+		if (!left.mastery.isAssessed && !right.mastery.isAssessed) {
+			return 0;
+		}
+
+		return compareMasteryStatus(left.mastery.status, right.mastery.status);
+	}
+
 	return compareTerms(left.term, right.term, locale);
+}
+
+function compareMissingMastery(left, right, sortKey) {
+	if (sortKey !== GLOSSARY_TABLE_SORT_KEYS.MASTERY) {
+		return 0;
+	}
+
+	const leftIsAssessed = left.mastery.isAssessed;
+	const rightIsAssessed = right.mastery.isAssessed;
+
+	if (leftIsAssessed === rightIsAssessed) {
+		return 0;
+	}
+
+	if (!leftIsAssessed) {
+		return 1;
+	}
+
+	return -1;
+}
+
+function compareMasteryStatus(leftStatus, rightStatus) {
+	return getGlossaryMasterySortRank(leftStatus) - getGlossaryMasterySortRank(rightStatus);
+}
+
+function measureExplanationLength(explanation) {
+	return Array.from(explanation.trim()).length;
 }
 
 function compareTerms(leftTerm, rightTerm, locale) {

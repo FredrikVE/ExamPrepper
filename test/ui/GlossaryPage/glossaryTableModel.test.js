@@ -1,6 +1,11 @@
 // test/ui/GlossaryPage/glossaryTableModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import { createGlossaryTableRows } from "../../../src/ui/viewmodel/GlossaryPage/glossaryTableModel.js";
+import {
+	GLOSSARY_TABLE_SORT_DIRECTIONS,
+	GLOSSARY_TABLE_SORT_KEYS,
+	createGlossaryTableRows,
+	sortGlossaryTableRows
+} from "../../../src/ui/viewmodel/GlossaryPage/glossaryTableModel.js";
 
 const t = Object.freeze({
 	glossaryPageSingleAssociationLabel: "1 assosiert begrep",
@@ -53,6 +58,66 @@ describe("glossaryTableModel", () => {
 		});
 	});
 
+	test("sorts explanations by localized text length in both directions", () => {
+		const rows = createGlossaryTableRows(createSortableTableModelInput());
+
+		const longestFirst = sortGlossaryTableRows({
+			rows,
+			sortKey: GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH,
+			sortDirection: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING,
+			language: "no"
+		});
+		const shortestFirst = sortGlossaryTableRows({
+			rows,
+			sortKey: GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH,
+			sortDirection: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING,
+			language: "no"
+		});
+
+		expect(longestFirst.map((row) => row.glossaryEntryKey)).toEqual([
+			"understood",
+			"progress",
+			"practice",
+			"not-assessed"
+		]);
+		expect(shortestFirst.map((row) => row.glossaryEntryKey)).toEqual([
+			"not-assessed",
+			"practice",
+			"progress",
+			"understood"
+		]);
+	});
+
+	test("sorts assessed mastery from understood to practice and back while keeping not assessed last", () => {
+		const rows = createGlossaryTableRows(createSortableTableModelInput());
+
+		const strongestFirst = sortGlossaryTableRows({
+			rows,
+			sortKey: GLOSSARY_TABLE_SORT_KEYS.MASTERY,
+			sortDirection: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING,
+			language: "no"
+		});
+		const weakestFirst = sortGlossaryTableRows({
+			rows,
+			sortKey: GLOSSARY_TABLE_SORT_KEYS.MASTERY,
+			sortDirection: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING,
+			language: "no"
+		});
+
+		expect(strongestFirst.map((row) => row.glossaryEntryKey)).toEqual([
+			"understood",
+			"progress",
+			"practice",
+			"not-assessed"
+		]);
+		expect(weakestFirst.map((row) => row.glossaryEntryKey)).toEqual([
+			"practice",
+			"progress",
+			"understood",
+			"not-assessed"
+		]);
+	});
+
 	test("prepares the canonical detail-trigger label without mobile disclosure state", () => {
 		const rows = createGlossaryTableRows(createTableModelInput(2));
 
@@ -87,5 +152,36 @@ function createGlossaryEntry(glossaryEntryKey, term, directNeighborCount) {
 		directNeighborCount,
 		directNeighborGlossaryKeys: [],
 		mastery: null
+	};
+}
+
+function createSortableTableModelInput() {
+	return {
+		localizedEntries: [
+			createSortableGlossaryEntry("practice", "Øve mer", "Kort forklaring", "practice"),
+			createSortableGlossaryEntry("understood", "Forstått", "Dette er den klart lengste forklaringen i settet", "understood"),
+			createSortableGlossaryEntry("not-assessed", "Ikke vurdert", "Kort", null),
+			createSortableGlossaryEntry("progress", "Underveis", "Dette er en middels lang forklaring", "progress")
+		],
+		topicAreaReferenceByKey: new Map([["topic-1", "Kapittel 1"]]),
+		t
+	};
+}
+
+function createSortableGlossaryEntry(glossaryEntryKey, term, explanation, masteryStatus) {
+	let mastery = null;
+
+	if (masteryStatus !== null) {
+		mastery = { status: masteryStatus };
+	}
+
+	return {
+		glossaryEntryKey,
+		topicAreaKey: "topic-1",
+		term,
+		explanation,
+		directNeighborCount: 0,
+		directNeighborGlossaryKeys: [],
+		mastery
 	};
 }

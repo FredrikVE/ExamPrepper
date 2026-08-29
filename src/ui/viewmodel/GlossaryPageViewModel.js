@@ -13,7 +13,7 @@ import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { GLOSSARY_AUTOCOMPLETE_LIST_ID, GLOSSARY_AUTOCOMPLETE_MIN_LENGTH, SEARCH_POPUP_CONTENT, createGlossaryAutocompleteSuggestions, resolveGlossarySearchPopupContent } from "./GlossaryPage/glossarySearchModel.js";
 import normalizeSearchTerm from "./Utils/normalizeSearchTerm.js";
 import { applyGlossaryTopicAreaInteractionState, createGlossaryAllTopicAreaListItem, createGlossaryTopicAreaListItems } from "./GlossaryPage/glossaryTopicAreaListModel.js";
-import { GLOSSARY_TABLE_SORT_DIRECTIONS, GLOSSARY_TABLE_SORT_KEYS, createGlossaryTableRows, sortGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
+import { GLOSSARY_TABLE_SORT_DIRECTIONS, GLOSSARY_TABLE_SORT_KEYS, createGlossaryTableRows, getInitialGlossaryTableSortDirection, sortGlossaryTableRows } from "./GlossaryPage/glossaryTableModel.js";
 import { GLOSSARY_NETWORK_DISPLAY_KIND, createGlossaryNetworkDisplay, createGlossaryNetworkPresentation } from "./GlossaryPage/glossaryNetworkModel.js";
 import { assertGlossaryEntriesReferenceKnownTopicAreas } from "./GlossaryPage/glossaryDataContract.js";
 import { createGlossaryDetailPresentation } from "./GlossaryPage/glossaryDetailModel.js";
@@ -537,25 +537,13 @@ export default function useGlossaryPageViewModel({
 	}, [autocompleteSuggestions, isSearchAutocompleteActive, resolvedSearchKeyboardIndex, selectAutocompleteSuggestion]);
 
 	const changeGlossaryTableSort = useCallback((sortKey) => {
-		if (sortKey !== GLOSSARY_TABLE_SORT_KEYS.TERM && sortKey !== GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT) {
-			throw new Error(`Unknown glossary table sort key: ${String(sortKey)}`);
-		}
+		const initialDirection = getInitialGlossaryTableSortDirection(sortKey);
 
 		setGlossaryTableSort((currentSort) => {
 			if (currentSort.key !== sortKey) {
-				let direction;
-
-				if (sortKey === GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT) {
-					direction = GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING;
-				}
-
-				else {
-					direction = GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING;
-				}
-
 				return {
 					key: sortKey,
-					direction
+					direction: initialDirection
 				};
 			}
 
@@ -871,12 +859,14 @@ function createGlossaryTableHeaderPresentations({ tableSort, t, onSort }) {
 			onSort,
 			t
 		}),
-		{
-			key: "EXPLANATION",
+		createSortableGlossaryTableHeader({
+			key: GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH,
 			label: t.glossaryPageExplanationColumnHeader,
-			className: "",
-			isSortable: false
-		},
+			className: "glossary-table__sortable-header",
+			tableSort,
+			onSort,
+			t
+		}),
 		createSortableGlossaryTableHeader({
 			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
 			label: t.glossaryPageConnectionsColumnHeader,
@@ -885,12 +875,14 @@ function createGlossaryTableHeaderPresentations({ tableSort, t, onSort }) {
 			onSort,
 			t
 		}),
-		{
-			key: "MASTERY",
+		createSortableGlossaryTableHeader({
+			key: GLOSSARY_TABLE_SORT_KEYS.MASTERY,
 			label: t.glossaryPageMasteryColumnHeader,
-			className: "glossary-table__mastery-header",
-			isSortable: false
-		}
+			className: "glossary-table__sortable-header glossary-table__mastery-header",
+			tableSort,
+			onSort,
+			t
+		})
 	];
 }
 
@@ -899,9 +891,8 @@ function createSortableGlossaryTableHeader({ key, label, className, tableSort, o
 	const isAscending = isActive && tableSort.direction === GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING;
 	const ariaSort = !isActive ? "none" : isAscending ? "ascending" : "descending";
 	const sortIconKind = !isActive ? "UNSORTED" : isAscending ? "ASCENDING" : "DESCENDING";
-	const actionLabel = isAscending
-		? t.glossaryPageTableSortDescendingLabel(label)
-		: t.glossaryPageTableSortAscendingLabel(label);
+	const nextDirection = resolveNextGlossaryTableSortDirection({ key, isActive, currentDirection: tableSort.direction });
+	const actionLabel = createGlossaryTableSortActionLabel({ key, label, nextDirection, t });
 
 	return {
 		key,
@@ -916,6 +907,42 @@ function createSortableGlossaryTableHeader({ key, label, className, tableSort, o
 		actionLabel,
 		onActivate: () => onSort(key)
 	};
+}
+
+function resolveNextGlossaryTableSortDirection({ key, isActive, currentDirection }) {
+	if (!isActive) {
+		return getInitialGlossaryTableSortDirection(key);
+	}
+
+	if (currentDirection === GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING) {
+		return GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING;
+	}
+
+	return GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING;
+}
+
+function createGlossaryTableSortActionLabel({ key, label, nextDirection, t }) {
+	if (key === GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH) {
+		if (nextDirection === GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING) {
+			return t.glossaryPageExplanationSortLongestFirstLabel;
+		}
+
+		return t.glossaryPageExplanationSortShortestFirstLabel;
+	}
+
+	if (key === GLOSSARY_TABLE_SORT_KEYS.MASTERY) {
+		if (nextDirection === GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING) {
+			return t.glossaryPageMasterySortStrongestFirstLabel;
+		}
+
+		return t.glossaryPageMasterySortWeakestFirstLabel;
+	}
+
+	if (nextDirection === GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING) {
+		return t.glossaryPageTableSortDescendingLabel(label);
+	}
+
+	return t.glossaryPageTableSortAscendingLabel(label);
 }
 
 function bindGlossaryDetailInteractions(params) {

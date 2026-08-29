@@ -14,6 +14,16 @@ const GLOSSARY_MASTERY_SCALE_STATUSES = Object.freeze([
 	CONCEPT_MASTERY_STATUS.UNDERSTOOD
 ]);
 
+export function getGlossaryMasterySortRank(status) {
+	const sortRank = GLOSSARY_MASTERY_SCALE_STATUSES.indexOf(status);
+
+	if (sortRank === -1) {
+		throw new Error(`Unknown assessed glossary mastery status: ${String(status)}`);
+	}
+
+	return sortRank;
+}
+
 export function createGlossaryMasteryPresentation(mastery, t) {
 	let status;
 

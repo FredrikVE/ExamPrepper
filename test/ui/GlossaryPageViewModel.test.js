@@ -92,6 +92,10 @@ const translations = {
 	glossaryPageExplanationColumnHeader: "Forklaring",
 	glossaryPageTableSortAscendingLabel: (label) => `Sorter ${label} stigende`,
 	glossaryPageTableSortDescendingLabel: (label) => `Sorter ${label} synkende`,
+	glossaryPageExplanationSortLongestFirstLabel: "Sorter forklaring fra lengst til kortest",
+	glossaryPageExplanationSortShortestFirstLabel: "Sorter forklaring fra kortest til lengst",
+	glossaryPageMasterySortStrongestFirstLabel: "Sorter vurdering fra mest til minst forstått",
+	glossaryPageMasterySortWeakestFirstLabel: "Sorter vurdering fra minst til mest forstått",
 	glossaryPageConnectionsColumnHeader: "Viktighet",
 	glossaryPageMasteryColumnHeader: "Vurdering",
 	glossaryPageMasteryAriaLabel: (statusLabel) => `Vurdering: ${statusLabel}`,
@@ -837,6 +841,14 @@ describe("useGlossaryPageViewModel", () => {
 		});
 
 		clearStateSetterCalls();
+		viewModel.changeGlossaryTableSort("EXPLANATION_LENGTH");
+		const selectExplanationSort = setGlossaryTableSort.mock.calls[0][0];
+		expect(selectExplanationSort({ key: "TERM", direction: "ASCENDING" })).toEqual({
+			key: "EXPLANATION_LENGTH",
+			direction: "DESCENDING"
+		});
+
+		clearStateSetterCalls();
 		viewModel.changeGlossaryTableSort("DIRECT_NEIGHBOR_COUNT");
 		const selectImportanceSort = setGlossaryTableSort.mock.calls[0][0];
 		expect(selectImportanceSort({ key: "TERM", direction: "ASCENDING" })).toEqual({
@@ -846,6 +858,19 @@ describe("useGlossaryPageViewModel", () => {
 
 		expect(selectImportanceSort({ key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" })).toEqual({
 			key: "DIRECT_NEIGHBOR_COUNT",
+			direction: "ASCENDING"
+		});
+
+		clearStateSetterCalls();
+		viewModel.changeGlossaryTableSort("MASTERY");
+		const selectMasterySort = setGlossaryTableSort.mock.calls[0][0];
+		expect(selectMasterySort({ key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" })).toEqual({
+			key: "MASTERY",
+			direction: "DESCENDING"
+		});
+
+		expect(selectMasterySort({ key: "MASTERY", direction: "DESCENDING" })).toEqual({
+			key: "MASTERY",
 			direction: "ASCENDING"
 		});
 	});
@@ -864,11 +889,15 @@ describe("useGlossaryPageViewModel", () => {
 			actionLabel: "Sorter Begrep synkende",
 			onActivate: expect.any(Function)
 		});
-		expect(explanationHeader).toEqual({
-			key: "EXPLANATION",
+		expect(explanationHeader).toMatchObject({
+			key: "EXPLANATION_LENGTH",
 			label: "Forklaring",
-			className: "",
-			isSortable: false
+			className: "glossary-table__sortable-header",
+			isSortable: true,
+			ariaSort: "none",
+			sortIconKind: "UNSORTED",
+			actionLabel: "Sorter forklaring fra lengst til kortest",
+			onActivate: expect.any(Function)
 		});
 		expect(connectionsHeader).toMatchObject({
 			key: "DIRECT_NEIGHBOR_COUNT",
@@ -876,11 +905,15 @@ describe("useGlossaryPageViewModel", () => {
 			ariaSort: "none",
 			sortIconKind: "UNSORTED"
 		});
-		expect(masteryHeader).toEqual({
+		expect(masteryHeader).toMatchObject({
 			key: "MASTERY",
 			label: "Vurdering",
-			className: "glossary-table__mastery-header",
-			isSortable: false
+			className: "glossary-table__sortable-header glossary-table__mastery-header",
+			isSortable: true,
+			ariaSort: "none",
+			sortIconKind: "UNSORTED",
+			actionLabel: "Sorter vurdering fra mest til minst forstått",
+			onActivate: expect.any(Function)
 		});
 
 		clearStateSetterCalls();
