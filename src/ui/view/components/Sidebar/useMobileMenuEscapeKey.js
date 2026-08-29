@@ -1,5 +1,5 @@
 // src/ui/view/components/Sidebar/useMobileMenuEscapeKey.js
-import { useEffect } from "react";
+import useKeyboardShortcuts from "../../KeyboardNavigation/useKeyboardShortcuts.js";
 
 export default function useMobileMenuEscapeKey({
 	isMobileDropDownTopBarMenuOpen,
@@ -11,47 +11,31 @@ export default function useMobileMenuEscapeKey({
 	isMobileSubjectPickerOpen,
 	onCloseMobileSubjectPicker
 }) {
-	useEffect(() => {
-		if (!isMobileDropDownTopBarMenuOpen || typeof window === "undefined") {
-			return undefined;
+	function closeActiveMobileMenuLayerOnEscape(event) {
+		if (event.key !== "Escape") {
+			return;
 		}
 
-		const handleEscape = (event) => {
-			if (event.key !== "Escape") {
-				return;
-			}
+		if (isSettingsPresentationOpen) {
+			onCloseSettingsPresentation();
+			return;
+		}
 
-			if (isSettingsPresentationOpen && onCloseSettingsPresentation) {
-				onCloseSettingsPresentation();
-				return;
-			}
+		if (isSubmitConfirmOpen) {
+			onCloseSubmitConfirm();
+			return;
+		}
 
-			if (isSubmitConfirmOpen) {
-				onCloseSubmitConfirm?.();
-				return;
-			}
+		if (isMobileSubjectPickerOpen) {
+			onCloseMobileSubjectPicker();
+			return;
+		}
 
-			if (isMobileSubjectPickerOpen) {
-				onCloseMobileSubjectPicker?.();
-				return;
-			}
+		onCloseMobileDropDownTopBarMenu();
+	}
 
-			onCloseMobileDropDownTopBarMenu();
-		};
-
-		window.addEventListener("keydown", handleEscape);
-
-		return () => {
-			window.removeEventListener("keydown", handleEscape);
-		};
-	}, [
-		isMobileDropDownTopBarMenuOpen,
-		onCloseMobileDropDownTopBarMenu,
-		isSettingsPresentationOpen,
-		onCloseSettingsPresentation,
-		isSubmitConfirmOpen,
-		onCloseSubmitConfirm,
-		isMobileSubjectPickerOpen,
-		onCloseMobileSubjectPicker
-	]);
+	useKeyboardShortcuts({
+		isEnabled: isMobileDropDownTopBarMenuOpen,
+		onKeyDown: closeActiveMobileMenuLayerOnEscape
+	});
 }
