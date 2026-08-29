@@ -1,7 +1,7 @@
 // src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailSheet.jsx
 import { BookOpen } from "lucide-react";
 import FormattedText from "../../Shared/FormattedText.jsx";
-import GlossaryDetailContent from "./GlossaryDetailContent.jsx";
+import GlossaryDetailModalContent from "./GlossaryDetailModalContent.jsx";
 import GlossaryDetailHeader from "./GlossaryDetailHeader.jsx";
 import GlossaryDetailNavigation from "./GlossaryDetailNavigation.jsx";
 
@@ -21,7 +21,7 @@ export default function GlossaryDetailSheet({ model }) {
 					</div>
 				</section>
 
-				<GlossaryDetailContent model={model} isInteractive={model.isInteractive} />
+				<GlossaryDetailModalContent model={model} />
 			</div>
 
 			<GlossaryDetailNavigation model={model.navigation} />

@@ -6,23 +6,34 @@ export default function GlossaryDetailHeader({ model }) {
 	return (
 		<header className="glossary-detail-modal__header">
 			<div className="glossary-detail-modal__header-main">
-				{model.trailBack !== null ? (
-					<button type="button" className="glossary-detail-modal__trail-back" onClick={model.trailBack.onActivate}>
-						<ChevronLeft size={15} strokeWidth={2.2} aria-hidden="true" />
-						<span>{model.trailBack.label}</span>
-					</button>
-				) : null}
-
-				<Dialog.Title className="glossary-detail-modal__title" ref={model.titleRef} tabIndex={-1}>
+				<Dialog.Title
+					className="glossary-detail-modal__title"
+					ref={model.titleRef}
+					tabIndex={-1}
+				>
 					{model.title}
 				</Dialog.Title>
 
 				<Dialog.Description className="glossary-detail-modal__subtitle">
 					{model.subtitle}
 				</Dialog.Description>
+
+				{model.trailBack !== null ? (
+					<button
+						type="button"
+						className="glossary-detail-modal__trail-back"
+						onClick={model.trailBack.onActivate}
+					>
+						<ChevronLeft size={15} strokeWidth={2.2} aria-hidden="true" />
+						<span>{model.trailBack.label}</span>
+					</button>
+				) : null}
 			</div>
 
-			<Dialog.Close className="glossary-detail-modal__close" aria-label={model.closeLabel}>
+			<Dialog.Close
+				className="glossary-detail-modal__close"
+				aria-label={model.closeLabel}
+			>
 				<X size={22} strokeWidth={2} aria-hidden="true" />
 			</Dialog.Close>
 		</header>
