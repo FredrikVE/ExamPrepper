@@ -2,6 +2,7 @@
 import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import CategorySortFeedbackCard from "../Feedback/CategorySortFeedbackCard.jsx";
 import CategorySortPlacedItemCard from "./CategorySortPlacedItemCard.jsx";
+import isActivationKey from "../../../../../../KeyboardNavigation/isActivationKey.js";
 
 export default function CategorySortDropZone(props) {
     if (props.feedbackMode) {
@@ -32,10 +33,7 @@ function CategorySortDropZoneContent(props) {
     });
 
     const handleKeyDown = (event) => {
-        const userPressedEnter = event.key === "Enter";
-        const userPressedSpace = event.key === " ";
-
-        if (!userPressedEnter && !userPressedSpace) {
+        if (!isActivationKey(event.key)) {
             return;
         }
 
