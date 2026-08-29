@@ -34,6 +34,15 @@ describe("glossaryDetailGraphModel", () => {
 		);
 	});
 
+	test("keeps graph positions as presentation data instead of inline style objects", () => {
+		const presentation = createGlossaryDetailGraphPresentation(createNetworkModel());
+
+		expect(presentation.center).not.toHaveProperty("style");
+		for (const node of presentation.nodes) {
+			expect(node).not.toHaveProperty("style");
+		}
+	});
+
 	test("maps every edge to the positions of its stable source and target keys", () => {
 		const presentation = createGlossaryDetailGraphPresentation(createNetworkModel());
 		const positionByKey = new Map([

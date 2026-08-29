@@ -24,7 +24,7 @@ export default function GlossaryDetailHeader({ model }) {
 						className="glossary-detail-modal__trail-back"
 						onClick={model.trailBack.onActivate}
 					>
-						<ChevronLeft size={15} strokeWidth={2.2} aria-hidden="true" />
+						<ChevronLeft className="glossary-detail-modal__trail-back-icon" aria-hidden="true" />
 						<span>{model.trailBack.label}</span>
 					</button>
 				) : null}
@@ -34,7 +34,7 @@ export default function GlossaryDetailHeader({ model }) {
 				className="glossary-detail-modal__close"
 				aria-label={model.closeLabel}
 			>
-				<X size={22} strokeWidth={2} aria-hidden="true" />
+				<X className="glossary-detail-modal__close-icon" aria-hidden="true" />
 			</Dialog.Close>
 		</header>
 	);

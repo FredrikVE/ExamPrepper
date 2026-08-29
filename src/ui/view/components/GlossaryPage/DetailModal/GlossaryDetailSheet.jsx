@@ -21,7 +21,7 @@ export default function GlossaryDetailSheet({ model }) {
 			<div className="glossary-detail-modal__body">
 				<section className="glossary-detail-modal__explanation">
 					<h3 className="glossary-detail__section-heading">
-						<BookOpen size={21} strokeWidth={1.9} aria-hidden="true" />
+						<BookOpen className="glossary-detail-modal__section-icon" aria-hidden="true" />
 						<span>{model.explanation.heading}</span>
 					</h3>
 					<div className="glossary-detail-modal__explanation-content">

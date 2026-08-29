@@ -6,7 +6,7 @@ export default function GlossaryDetailGraph({ model, isInteractive }) {
 	return (
 		<section className="glossary-detail-modal__graph-card">
 			<h3 className="glossary-detail__section-heading">
-				<Network size={21} strokeWidth={1.9} aria-hidden="true" />
+				<Network className="glossary-detail-modal__section-icon" aria-hidden="true" />
 				<span>{model.heading}</span>
 			</h3>
 
@@ -69,27 +69,28 @@ function GraphContent({ model, isInteractive }) {
 					))}
 				</svg>
 
-				<div
-					className="glossary-detail-modal__graph-node glossary-detail-modal__graph-node--center"
-					style={graph.center.style}
-					aria-hidden="true"
-				>
-					<span className="glossary-detail-modal__graph-node-meta">
-						{model.display.centerLabel}
-					</span>
-					<strong>{graph.center.term}</strong>
-					<span className="glossary-detail-modal__graph-node-chapter">
-						{graph.center.chapterLabel}
-					</span>
-				</div>
+				<svg className="glossary-detail-modal__graph-nodes">
+					<GraphNodeAnchor position={graph.center.position}>
+						<div
+							className="glossary-detail-modal__graph-node glossary-detail-modal__graph-node--center"
+							aria-hidden="true"
+						>
+							<span className="glossary-detail-modal__graph-node-meta">
+								{model.display.centerLabel}
+							</span>
+							<strong>{graph.center.term}</strong>
+							<span className="glossary-detail-modal__graph-node-chapter">
+								{graph.center.chapterLabel}
+							</span>
+						</div>
+					</GraphNodeAnchor>
 
-				{graph.nodes.map((node) => (
-					<GraphNode
-						key={node.glossaryEntryKey}
-						node={node}
-						isInteractive={isInteractive}
-					/>
-				))}
+					{graph.nodes.map((node) => (
+						<GraphNodeAnchor key={node.glossaryEntryKey} position={node.position}>
+							<GraphNode node={node} isInteractive={isInteractive} />
+						</GraphNodeAnchor>
+					))}
+				</svg>
 			</div>
 
 			<ul className="sr-only" aria-label={model.heading}>
@@ -105,6 +106,18 @@ function GraphContent({ model, isInteractive }) {
 	);
 }
 
+function GraphNodeAnchor({ position, children }) {
+	return (
+		<foreignObject
+			className="glossary-detail-modal__graph-node-anchor"
+			x={`${position.x}%`}
+			y={`${position.y}%`}
+		>
+			{children}
+		</foreignObject>
+	);
+}
+
 function GraphNode({ node, isInteractive }) {
 	const content = (
 		<>
@@ -117,10 +130,7 @@ function GraphNode({ node, isInteractive }) {
 
 	if (!isInteractive) {
 		return (
-			<div
-				className="glossary-detail-modal__graph-node"
-				style={node.style}
-			>
+			<div className="glossary-detail-modal__graph-node">
 				{content}
 			</div>
 		);
@@ -130,7 +140,6 @@ function GraphNode({ node, isInteractive }) {
 		<button
 			type="button"
 			className="glossary-detail-modal__graph-node"
-			style={node.style}
 			onClick={node.onActivate}
 		>
 			{content}

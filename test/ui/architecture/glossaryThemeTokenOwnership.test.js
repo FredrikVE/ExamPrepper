@@ -19,6 +19,13 @@ const GLOSSARY_TABLE_COMPONENT_PATHS = [
 	path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTable.jsx"),
 	path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableRow.jsx")
 ];
+const GLOSSARY_DETAIL_COMPONENT_PATHS = [
+	path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailGraph.jsx"),
+	path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailHeader.jsx"),
+	path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailNavigation.jsx"),
+	path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailRelations.jsx"),
+	path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailSheet.jsx")
+];
 
 const readSource = (filePath) => fs.readFileSync(filePath, "utf8");
 const removeMaskLines = (source) => source.split("\n").filter((line) => line.includes("mask-image:") === false).join("\n");
@@ -70,6 +77,29 @@ describe("Glossary theme token ownership", () => {
 		expect(tableStyles).toContain("width: var(--glossary-table-detail-icon-size);");
 		expect(tableStyles).toContain("stroke-width: var(--glossary-table-detail-icon-stroke-width);");
 		expect(tableComponents).not.toMatch(/\b(?:size|strokeWidth|style)=\{/);
+	});
+
+	test("keeps Glossary detail icon geometry and visual styling out of JSX", () => {
+		const detailComponents = GLOSSARY_DETAIL_COMPONENT_PATHS.map(readSource).join("\n");
+		const glossaryStyles = readGlossaryStyles();
+		const tokens = readSource(TOKENS_PATH);
+
+		for (const token of [
+			"--glossary-detail-section-icon-size: 21px;",
+			"--glossary-detail-trail-back-icon-size: 15px;",
+			"--glossary-detail-close-icon-size: 22px;",
+			"--glossary-detail-navigation-icon-size: 18px;",
+			"--glossary-detail-relations-icon-size: 17px;",
+			"--glossary-detail-relations-toggle-icon-size: 18px;",
+			"--glossary-detail-surface-bg:"
+		]) {
+			expect(tokens).toContain(token);
+		}
+
+		expect(glossaryStyles).toContain("var(--glossary-detail-section-icon-size)");
+		expect(glossaryStyles).toContain("var(--glossary-detail-navigation-icon-size)");
+		expect(glossaryStyles).toContain("var(--glossary-detail-surface-bg)");
+		expect(detailComponents).not.toMatch(/\b(?:size|strokeWidth|style)=\{/);
 	});
 
 	test("does not copy rendered prototype palette literals into glossary styles", () => {

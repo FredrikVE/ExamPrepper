@@ -35,8 +35,7 @@ export function createGlossaryDetailGraphPresentation(networkModel) {
 			glossaryEntryKey: node.glossaryEntryKey,
 			term: node.term,
 			chapterLabel: node.chapterLabel,
-			position,
-			style: createPositionStyle(position)
+			position
 		};
 	});
 
@@ -59,8 +58,7 @@ export function createGlossaryDetailGraphPresentation(networkModel) {
 			glossaryEntryKey: networkModel.center.glossaryEntryKey,
 			term: networkModel.center.term,
 			chapterLabel: networkModel.center.chapterLabel,
-			position: layout.center,
-			style: createPositionStyle(layout.center)
+			position: layout.center
 		},
 		nodes,
 		edges,
@@ -218,12 +216,6 @@ function seededNetworkUnit(seed) {
 	return (value >>> 0) / 4294967295;
 }
 
-function createPositionStyle(position) {
-	return {
-		left: `${position.x}%`,
-		top: `${position.y}%`
-	};
-}
 
 function toPosition(node) {
 	return {

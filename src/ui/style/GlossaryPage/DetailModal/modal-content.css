@@ -4,6 +4,7 @@
 	min-height: 0;
 	flex: 1;
 	flex-direction: column;
+	container: glossary-detail / inline-size;
 }
 
 .glossary-detail-modal__header {
@@ -14,6 +15,26 @@
 	gap: 24px;
 	padding: 24px var(--space-9) var(--space-7);
 	border-bottom: 1px solid var(--line);
+}
+
+.glossary-detail-modal__section-icon {
+	width: var(--glossary-detail-section-icon-size);
+	height: var(--glossary-detail-section-icon-size);
+	flex: none;
+	stroke-width: var(--glossary-detail-section-icon-stroke-width);
+}
+
+.glossary-detail-modal__trail-back-icon {
+	width: var(--glossary-detail-trail-back-icon-size);
+	height: var(--glossary-detail-trail-back-icon-size);
+	flex: none;
+	stroke-width: var(--glossary-detail-trail-back-icon-stroke-width);
+}
+
+.glossary-detail-modal__close-icon {
+	width: var(--glossary-detail-close-icon-size);
+	height: var(--glossary-detail-close-icon-size);
+	stroke-width: var(--glossary-detail-close-icon-stroke-width);
 }
 
 .glossary-detail-modal__header-main {
@@ -126,4 +147,44 @@
 	min-width: 0;
 	flex-direction: column;
 	gap: var(--space-5);
+}
+
+@container glossary-detail (max-width: 430px) {
+	.glossary-detail-modal__header {
+		gap: var(--space-5);
+		padding: var(--space-7) var(--space-6) var(--space-5);
+	}
+
+	.glossary-detail-modal__body {
+		gap: var(--space-5);
+		padding: var(--space-5) var(--space-6) var(--space-6);
+	}
+
+	.glossary-detail-modal__explanation {
+		gap: var(--space-3);
+		padding: var(--space-5) var(--space-6) var(--space-6);
+	}
+}
+
+@container glossary-detail (max-width: 350px) {
+	.glossary-detail-modal__header {
+		gap: var(--space-3);
+		padding-inline: var(--space-4);
+	}
+
+	.glossary-detail-modal__title {
+		font-size: 23px;
+	}
+
+	.glossary-detail-modal__body {
+		padding-inline: var(--space-4);
+	}
+
+	.glossary-detail-modal__explanation {
+		padding-inline: var(--space-5);
+	}
+
+	.glossary-detail-modal__explanation-content {
+		font-size: 15px;
+	}
 }

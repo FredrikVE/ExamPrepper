@@ -22,6 +22,19 @@
 	--glossary-table-sort-icon-stroke-width: 2;
 	--glossary-table-detail-icon-size: 19px;
 	--glossary-table-detail-icon-stroke-width: 2.25;
+	--glossary-detail-surface-bg: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+	--glossary-detail-section-icon-size: 21px;
+	--glossary-detail-section-icon-stroke-width: 1.9;
+	--glossary-detail-trail-back-icon-size: 15px;
+	--glossary-detail-trail-back-icon-stroke-width: 2.2;
+	--glossary-detail-close-icon-size: 22px;
+	--glossary-detail-close-icon-stroke-width: 2;
+	--glossary-detail-navigation-icon-size: 18px;
+	--glossary-detail-navigation-icon-stroke-width: 2.1;
+	--glossary-detail-relations-icon-size: 17px;
+	--glossary-detail-relations-icon-stroke-width: 1.9;
+	--glossary-detail-relations-toggle-icon-size: 18px;
+	--glossary-detail-relations-toggle-icon-stroke-width: 2.2;
 
     /* ── Spacing ───────────────────────────── */
     --space-1: 4px;

@@ -31,7 +31,7 @@
 	overflow: hidden;
 	border: 1px solid var(--line);
 	border-radius: 13px;
-	background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+	background: var(--glossary-detail-surface-bg);
 }
 
 .glossary-detail-modal__relation-list {
@@ -158,4 +158,18 @@ button.glossary-detail-modal__relations-toggle:focus-visible {
 	button.glossary-detail-modal__relations-toggle {
 		transition: none;
 	}
+}
+
+.glossary-detail-modal__relations-icon {
+	width: var(--glossary-detail-relations-icon-size);
+	height: var(--glossary-detail-relations-icon-size);
+	flex: none;
+	stroke-width: var(--glossary-detail-relations-icon-stroke-width);
+}
+
+.glossary-detail-modal__relations-toggle-icon {
+	width: var(--glossary-detail-relations-toggle-icon-size);
+	height: var(--glossary-detail-relations-toggle-icon-size);
+	flex: none;
+	stroke-width: var(--glossary-detail-relations-toggle-icon-stroke-width);
 }

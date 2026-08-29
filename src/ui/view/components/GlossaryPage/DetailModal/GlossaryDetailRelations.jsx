@@ -6,7 +6,7 @@ export default function GlossaryDetailRelations({ model, isInteractive }) {
 	return (
 		<section className="glossary-detail-modal__relations">
 			<h3 className="glossary-detail-modal__relations-heading">
-				<Link2 size={17} strokeWidth={1.9} aria-hidden="true" />
+				<Link2 className="glossary-detail-modal__relations-icon" aria-hidden="true" />
 				<span>{model.heading}</span>
 				<span className="glossary-detail-modal__relations-count">
 					({model.count})
@@ -107,8 +107,8 @@ function RelationRow({ item, isInteractive }) {
 
 function RelationToggle({ model, isInteractive }) {
 	const icon = model.isExpanded
-		? <ChevronUp size={16} strokeWidth={2} aria-hidden="true" />
-		: <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />;
+		? <ChevronUp className="glossary-detail-modal__relations-toggle-icon" aria-hidden="true" />
+		: <ChevronDown className="glossary-detail-modal__relations-toggle-icon" aria-hidden="true" />;
 
 	if (!isInteractive) {
 		return (
