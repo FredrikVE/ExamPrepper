@@ -257,13 +257,10 @@ describe("DockedMobileBottomSheet SSOT", () => {
 
 	test("keeps search and filter interaction independent from the open sheet state", () => {
 		const pageToolsAst = parseJsxFile(CONSUMER_PATHS[0]);
-		const glossaryAst = parseJsxFile(CONSUMER_PATHS[1]);
 
 		expect(containsPropsMember(pageToolsAst, "onOpenSheet")).toBe(false);
 		expect(containsJsxAttribute(pageToolsAst, "onFocusCapture")).toBe(false);
 		expect(containsJsxAttribute(pageToolsAst, "onPointerDownCapture")).toBe(false);
-		expect(containsIdentifierCall(glossaryAst, "setIsOpen")).toBe(false);
-		expect(containsJsxAttribute(glossaryAst, "onPointerDownCapture")).toBe(false);
 	});
 
 	test("keeps shared internals out of feature CSS", () => {

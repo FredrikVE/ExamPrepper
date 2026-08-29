@@ -55,7 +55,7 @@ function GlossaryTableHeader({ header }) {
 				onClick={header.onActivate}
 			>
 				<span>{header.label}</span>
-				<SortIcon className="glossary-table__sort-icon" size={16} strokeWidth={2} aria-hidden="true" />
+				<SortIcon className="glossary-table__sort-icon" aria-hidden="true" />
 			</button>
 		</th>
 	);

@@ -1,7 +1,5 @@
 // src/ui/viewmodel/GlossaryPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { PRESENTATION_MODE } from "../presentation/presentationMode.js";
-import usePresentationMode from "../presentation/usePresentationMode.js";
 import { LEARNING_CONTENT_TYPES } from "../../navigation/navigation.js";
 import { resolveLocalizedText } from "./GlossaryPage/resolveLocalizedText.js";
 import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
@@ -21,7 +19,7 @@ import { assertGlossaryEntriesReferenceKnownTopicAreas } from "./GlossaryPage/gl
 import { createGlossaryDetailPresentation } from "./GlossaryPage/glossaryDetailModel.js";
 import useGlossarySearchModel from "./GlossaryPage/useGlossarySearchModel.js";
 import useGlossaryTopicAreaSelectionModel from "./GlossaryPage/useGlossaryTopicAreaSelectionModel.js";
-import useGlossaryDetailModel, { useGlossaryDetailPresentationModeSync } from "./GlossaryPage/useGlossaryDetailModel.js";
+import useGlossaryDetailModel from "./GlossaryPage/useGlossaryDetailModel.js";
 
 const DEFAULT_GLOSSARY_TABLE_SORT = Object.freeze({
 	key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
@@ -44,7 +42,6 @@ export default function useGlossaryPageViewModel({
 	openMobileToggleButtonGroup,
 	closeMobileToggleButtonGroup
 }) {
-	const presentationMode = usePresentationMode();
 	const resetKey = `${subjectId}:${initialTopicAreaKey}`;
 	const {
 		glossarySearchTerm,
@@ -70,13 +67,10 @@ export default function useGlossaryPageViewModel({
 		setAreGlossaryDetailRelationsExpanded,
 		glossaryDetailOriginEntryKeyRef,
 		glossaryDetailTitleFocusRequestKeyRef,
-		previousPresentationModeRef,
 		glossaryDetailTitleElementRef,
 		glossaryDetailTriggerElementByKey,
-		resolveGlossaryRowRef,
-		resolveGlossaryDisclosureRef,
 		resolveGlossaryDetailTriggerRef
-	} = useGlossaryDetailModel({ presentationMode, resetKey });
+	} = useGlossaryDetailModel({ resetKey });
 	const [glossaryTableSort, setGlossaryTableSort] = useState(DEFAULT_GLOSSARY_TABLE_SORT);
 	useEffect(() => {
 		setGlossaryTableSort(DEFAULT_GLOSSARY_TABLE_SORT);
@@ -262,7 +256,6 @@ export default function useGlossaryPageViewModel({
 		const rows = createGlossaryTableRows({
 			localizedEntries: visibleGlossaryEntries,
 			topicAreaReferenceByKey,
-			expandedGlossaryEntryKey,
 			t
 		});
 
@@ -272,24 +265,11 @@ export default function useGlossaryPageViewModel({
 			sortDirection: glossaryTableSort.direction,
 			language
 		});
-	}, [expandedGlossaryEntryKey, glossaryTableSort.direction, glossaryTableSort.key, language, t, topicAreaReferenceByKey, visibleGlossaryEntries]);
+	}, [glossaryTableSort.direction, glossaryTableSort.key, language, t, topicAreaReferenceByKey, visibleGlossaryEntries]);
 
 	const visibleGlossaryEntryKeys = useMemo(() => {
 		return baseGlossaryTableRows.map((row) => row.glossaryEntryKey);
 	}, [baseGlossaryTableRows]);
-
-	useGlossaryDetailPresentationModeSync({
-		areGlossaryDetailRelationsExpanded,
-		expandedGlossaryEntryKey,
-		glossaryDetailOriginEntryKeyRef,
-		glossaryDetailTitleFocusRequestKeyRef,
-		previousPresentationModeRef,
-		presentationMode,
-		setAreGlossaryDetailRelationsExpanded,
-		setExpandedGlossaryEntryKey,
-		setGlossaryDetailTrailKeys,
-		visibleGlossaryEntryKeys
-	});
 
 	const glossaryDetailPresentation = useMemo(() => {
 		return createGlossaryDetailPresentation({
@@ -635,17 +615,20 @@ export default function useGlossaryPageViewModel({
 	}, []);
 
 	const resolveGlossaryDetailFinalFocus = useCallback(() => {
-		if (presentationMode !== PRESENTATION_MODE.DESKTOP) {
-			return false;
-		}
-
 		const originGlossaryEntryKey = glossaryDetailOriginEntryKeyRef.current;
+
 		if (originGlossaryEntryKey === null) {
 			return false;
 		}
 
-		return glossaryDetailTriggerElementByKey.current.get(originGlossaryEntryKey) ?? false;
-	}, [presentationMode]);
+		const triggerElement = glossaryDetailTriggerElementByKey.current.get(originGlossaryEntryKey);
+
+		if (triggerElement === undefined) {
+			return false;
+		}
+
+		return triggerElement;
+	}, []);
 
 	const exploreGlossaryDetailConcept = useCallback((targetGlossaryEntryKey) => {
 		if (!localizedEntryByKey.has(targetGlossaryEntryKey)) {
@@ -709,13 +692,6 @@ export default function useGlossaryPageViewModel({
 		setExpandedGlossaryEntryKey(targetGlossaryEntryKey);
 	}, [expandedGlossaryEntryKey, visibleGlossaryEntryKeys]);
 
-	const toggleGlossaryNetworkConcept = useCallback((glossaryEntryKey) => {
-		setAreGlossaryDetailRelationsExpanded(false);
-		setExpandedGlossaryEntryKey((currentGlossaryEntryKey) => (
-			currentGlossaryEntryKey === glossaryEntryKey ? null : glossaryEntryKey
-		));
-	}, []);
-
 	const activateGlossaryTableRow = useCallback((event, glossaryEntryKey) => {
 		if (isInteractiveGlossaryRowTarget(event.target)) {
 			return;
@@ -723,46 +699,6 @@ export default function useGlossaryPageViewModel({
 
 		openGlossaryDetailFromTable(glossaryEntryKey);
 	}, [openGlossaryDetailFromTable]);
-
-	const activateGlossaryDisclosure = useCallback((event, glossaryEntryKey) => {
-		event.stopPropagation();
-		toggleGlossaryNetworkConcept(glossaryEntryKey);
-	}, [toggleGlossaryNetworkConcept]);
-
-	const handleGlossaryDisclosureKeyDown = useCallback((event, glossaryEntryKey) => {
-		if (event.key !== "Escape" || expandedGlossaryEntryKey !== glossaryEntryKey) {
-			return;
-		}
-
-		event.preventDefault();
-		event.stopPropagation();
-		setAreGlossaryDetailRelationsExpanded(false);
-		setExpandedGlossaryEntryKey(null);
-	}, [expandedGlossaryEntryKey]);
-
-	const selectGlossaryNetworkConcept = useCallback((glossaryEntryKey) => {
-		const targetEntry = localizedEntryByKey.get(glossaryEntryKey);
-		if (!targetEntry) {
-			throw new Error(`Cannot navigate to unknown glossary entry: ${glossaryEntryKey}`);
-		}
-
-		setGlossarySearchTerm("");
-		setSearchKeyboardIndex(-1);
-		setIsSearchFilterOptionsOpen(false);
-		setIsSearchAutocompleteOpen(false);
-		setSearchNarrowedGlossaryEntryKey(null);
-		setAreGlossaryDetailRelationsExpanded(false);
-		setSelectedTopicAreaKeys((previousSelectedTopicAreaKeys) => {
-			const nextSelectedTopicAreaKeys = resolveSelectedTopicAreaKeys({
-				selectedTopicAreaKeys: previousSelectedTopicAreaKeys,
-				topicAreas,
-				initialTopicAreaKey
-			});
-			nextSelectedTopicAreaKeys.add(targetEntry.topicAreaKey);
-			return nextSelectedTopicAreaKeys;
-		});
-		setExpandedGlossaryEntryKey(glossaryEntryKey);
-	}, [initialTopicAreaKey, localizedEntryByKey, topicAreas]);
 
 
 	const toggleGlossaryDetailRelations = useCallback(() => {
@@ -831,15 +767,11 @@ export default function useGlossaryPageViewModel({
 			rows: baseGlossaryTableRows,
 			onActivateRow: activateGlossaryTableRow,
 			onOpenDetail: openGlossaryDetailFromTable,
-			onActivateDisclosure: activateGlossaryDisclosure,
-			onDisclosureKeyDown: handleGlossaryDisclosureKeyDown,
-			resolveRowRef: resolveGlossaryRowRef,
-			resolveDisclosureRef: resolveGlossaryDisclosureRef,
 			resolveDetailTriggerRef: resolveGlossaryDetailTriggerRef
 		});
-	}, [activateGlossaryDisclosure, activateGlossaryTableRow, baseGlossaryTableRows, handleGlossaryDisclosureKeyDown, openGlossaryDetailFromTable, resolveGlossaryDetailTriggerRef, resolveGlossaryDisclosureRef, resolveGlossaryRowRef]);
+	}, [activateGlossaryTableRow, baseGlossaryTableRows, openGlossaryDetailFromTable, resolveGlossaryDetailTriggerRef]);
 
-	const glossaryDesktopDetailPresentation = useMemo(() => {
+	const interactiveGlossaryDetailPresentation = useMemo(() => {
 		return bindGlossaryDetailInteractions({
 			presentation: glossaryDetailPresentation,
 			onExploreConcept: exploreGlossaryDetailConcept,
@@ -851,32 +783,24 @@ export default function useGlossaryPageViewModel({
 		});
 	}, [exploreGlossaryDetailConcept, glossaryDetailPresentation, navigateBackGlossaryDetailTrail, openNextGlossaryDetail, openPreviousGlossaryDetail, toggleGlossaryDetailRelations]);
 
-	const glossaryMobileDetailPresentation = useMemo(() => {
-		return bindGlossaryMobileDetailPresentation({
-			presentation: glossaryDetailPresentation,
-			onSelectNetworkConcept: selectGlossaryNetworkConcept,
-			networkHeading: t.glossaryPageNetworkInlineTitle,
-			networkInstructions: t.glossaryPageNetworkInlineInstructions
-		});
-	}, [glossaryDetailPresentation, selectGlossaryNetworkConcept, t.glossaryPageNetworkInlineInstructions, t.glossaryPageNetworkInlineTitle]);
 
-	const isGlossaryDetailModalOpen = presentationMode === PRESENTATION_MODE.DESKTOP && expandedGlossaryEntryKey !== null;
+	const isGlossaryDetailModalOpen = expandedGlossaryEntryKey !== null;
 
 	useEffect(() => {
-		if (!isGlossaryDetailModalOpen || glossaryDesktopDetailPresentation === null) {
+		if (!isGlossaryDetailModalOpen || interactiveGlossaryDetailPresentation === null) {
 			return;
 		}
 
-		setGlossaryDetailRenderSnapshot(glossaryDesktopDetailPresentation);
-	}, [glossaryDesktopDetailPresentation, isGlossaryDetailModalOpen]);
+		setGlossaryDetailRenderSnapshot(interactiveGlossaryDetailPresentation);
+	}, [interactiveGlossaryDetailPresentation, isGlossaryDetailModalOpen]);
 
 	const glossaryDetailModalContent = useMemo(() => {
 		if (isGlossaryDetailModalOpen) {
-			return glossaryDesktopDetailPresentation;
+			return interactiveGlossaryDetailPresentation;
 		}
 
 		return createGlossaryDetailClosingSnapshot(glossaryDetailRenderSnapshot);
-	}, [glossaryDesktopDetailPresentation, glossaryDetailRenderSnapshot, isGlossaryDetailModalOpen]);
+	}, [interactiveGlossaryDetailPresentation, glossaryDetailRenderSnapshot, isGlossaryDetailModalOpen]);
 
 	const glossaryDetailModal = useMemo(() => ({
 		isOpen: isGlossaryDetailModalOpen,
@@ -899,7 +823,6 @@ export default function useGlossaryPageViewModel({
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 		contentToggleBackLabel: t.contentToggleBackLabel,
 
-		presentationMode,
 		workspaceState,
 		shouldShowWorkspaceFooter,
 		glossaryPanelEmptyState,
@@ -913,7 +836,6 @@ export default function useGlossaryPageViewModel({
 		expandedGlossaryEntryKey,
 		glossaryDetailTrailKeys,
 		glossaryDetailPresentation,
-		glossaryMobileDetailPresentation,
 		glossaryDetailModal,
 		isGlossaryDetailModalOpen,
 		contentToggleEntries,
@@ -935,8 +857,6 @@ export default function useGlossaryPageViewModel({
 		navigateBackGlossaryDetailTrail,
 		openPreviousGlossaryDetail,
 		openNextGlossaryDetail,
-		toggleGlossaryNetworkConcept,
-		selectGlossaryNetworkConcept,
 		selectContentType
 	};
 }
@@ -1092,25 +1012,6 @@ function bindGlossaryDetailRelations(relations, onExploreConcept, onToggleRelati
 	};
 }
 
-function bindGlossaryMobileDetailPresentation(params) {
-	if (params.presentation === null) {
-		return null;
-	}
-
-	return {
-		...params.presentation,
-		network: bindGlossaryDetailNetwork({
-			...params.presentation.network,
-			heading: params.networkHeading,
-			display: {
-				...params.presentation.network.display,
-				instructions: params.presentation.network.display.kind === GLOSSARY_NETWORK_DISPLAY_KIND.CONTENT
-					? params.networkInstructions
-					: null
-			}
-		}, params.onSelectNetworkConcept)
-	};
-}
 
 function bindGlossaryNetworkModel(model, onSelectNetworkConcept) {
 	return {
@@ -1122,29 +1023,19 @@ function bindGlossaryNetworkModel(model, onSelectNetworkConcept) {
 	};
 }
 
-function bindGlossaryTableInteractions({ rows, onActivateRow, onOpenDetail, onActivateDisclosure, onDisclosureKeyDown, resolveRowRef, resolveDisclosureRef, resolveDetailTriggerRef }) {
+function bindGlossaryTableInteractions({ rows, onActivateRow, onOpenDetail, resolveDetailTriggerRef }) {
 	return rows.map((row) => ({
 		...row,
 		className: "glossary-table-row",
-		ref: resolveRowRef(row.glossaryEntryKey),
-		onActivate: (event) => onActivateRow(event, row.glossaryEntryKey),
+		onActivate: (event) => {
+			onActivateRow(event, row.glossaryEntryKey);
+		},
 		detailTrigger: {
 			label: row.detailTriggerLabel,
 			ref: resolveDetailTriggerRef(row.glossaryEntryKey),
-			onActivate: () => onOpenDetail(row.glossaryEntryKey)
-		},
-		mobileClassName: row.isExpanded
-			? "glossary-entry-card glossary-entry-card--expanded"
-			: "glossary-entry-card",
-		mobileDisclosure: {
-			className: "glossary-entry-card__direct-neighbor-toggle",
-			count: row.directNeighborCount,
-			ariaExpanded: row.isExpanded,
-			controlsId: row.detailsId,
-			label: row.disclosureLabel,
-			ref: resolveDisclosureRef(row.glossaryEntryKey),
-			onActivate: (event) => onActivateDisclosure(event, row.glossaryEntryKey),
-			onKeyDown: (event) => onDisclosureKeyDown(event, row.glossaryEntryKey)
+			onActivate: () => {
+				onOpenDetail(row.glossaryEntryKey);
+			}
 		}
 	}));
 }

@@ -5,8 +5,6 @@ import { createGlossaryTableRows } from "../../../src/ui/viewmodel/GlossaryPage/
 const t = Object.freeze({
 	glossaryPageSingleAssociationLabel: "1 assosiert begrep",
 	glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
-	glossaryPageShowAssociationsLabel: (associationLabel, term) => `Vis ${associationLabel} for ${term}`,
-	glossaryPageHideAssociationsLabel: (associationLabel, term) => `Skjul ${associationLabel} for ${term}`,
 	glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`,
 	glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
 	glossaryPageMasteryPracticeLabel: "Øve mer",
@@ -55,12 +53,13 @@ describe("glossaryTableModel", () => {
 		});
 	});
 
-	test("prepares a semantic desktop detail-trigger label without changing mobile disclosure data", () => {
+	test("prepares the canonical detail-trigger label without mobile disclosure state", () => {
 		const rows = createGlossaryTableRows(createTableModelInput(2));
 
 		expect(rows[0].detailTriggerLabel).toBe("Åpne detaljvisning for Aktivt begrep");
-		expect(rows[0].disclosureLabel).toBe("Vis 2 assosierte begreper for Aktivt begrep");
-		expect(rows[0]).not.toHaveProperty("details");
+		expect(rows[0]).not.toHaveProperty("isExpanded");
+		expect(rows[0]).not.toHaveProperty("detailsId");
+		expect(rows[0]).not.toHaveProperty("disclosureLabel");
 	});
 
 });
@@ -75,7 +74,6 @@ function createTableModelInput(directNeighborCount) {
 	return {
 		localizedEntries: [glossaryEntry],
 		topicAreaReferenceByKey: new Map([[glossaryEntry.topicAreaKey, "Kapittel 1"]]),
-		expandedGlossaryEntryKey: null,
 		t
 	};
 }

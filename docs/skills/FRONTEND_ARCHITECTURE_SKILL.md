@@ -204,7 +204,8 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-07-26 | Appens feature-presentasjonsgrense er en synkronisert JS/CSS-kontrakt: `APP_MOBILE_MAX_WIDTH = 932`, desktop starter på `933`, og `appBreakpointContract` håndhever de tillatte verdiene og en eksplisitt allowlist for lokale terskler. |
 | 2026-07-27 | `<ToggleButtonRow/>` er canonical responsiv innholdstypevelger. `navigation.js` eier statisk desktop- og mobilpolicy; Page-ViewModelene leverer ferdige mobilitems; fasaden velger presentasjonsvariant. |
 | 2026-07-29 | `LearningContentSelectPageViewModel` eier `expandedMobileToggleButtonGroupId` som ordinær `useState` og deler en komplett, påkrevd disclosure-kontrakt med Glossary-ruten. Mobilvarianten eier DOM-fokus; bare den eksplisitte lukkeknappen lukker gruppen. Mobilgruppenes underoppføringer følger desktopens relative rekkefølge. |
-| 2026-08-20 | App-shell har en separat compact/full-kontrakt: `APP_NARROW_DESKTOP_MAX_WIDTH = 1200`, full desktop-shell starter på `1201`. Intervallet `933–1200` beholder `PRESENTATION_MODE.DESKTOP`, men bruker `MobileDropDownTopBar`; PageTools og Glossary kan bruke canonical `DockedMobileBottomSheet` uten å bytte feature-presentasjon. |
+| 2026-08-20 | App-shell har en separat compact/full-kontrakt: `APP_NARROW_DESKTOP_MAX_WIDTH = 1200`, full desktop-shell starter på `1201`. Intervallet `933–1200` beholder `PRESENTATION_MODE.DESKTOP`, men bruker `MobileDropDownTopBar`; app-shell-kontrakten er separat fra feature-presentasjon. |
+| 2026-08-29 | Glossary er table-first på alle bredder: `GlossaryTable` er eneste result surface, `GlossaryDetailModal` er eneste detail surface, og `expandedGlossaryEntryKey` er eneste active-detail state. Glossary konsumerer ikke `appShellMode` eller `presentationMode`; responsiv Glossary-layout eies av CSS. Search-familien og `ToggleButtonRow` beholder sine canonical responsive eierskap. |
 
 ---
 
@@ -504,7 +505,7 @@ Eksempler:
 ```txt
 SidebarNavigation
 DesktopPopOutMenu
-GlossaryMobileChapterSheet
+GlossaryDetailModal
 QuestionCard
 FlipcardDeck
 ExamSubmitConfirmation
@@ -523,9 +524,8 @@ Regler:
   `onSelectTopicArea`.
 
 Feature-komponenter konsolideres ikke bare fordi de bruker samme primitive.
-`GlossaryMobileChapterSheet` og en page-tools-sheet kan begge bruke
-`DockedMobileBottomSheet`, men de har ulike data, handlinger og endringsårsaker.
-De skal derfor være separate feature-komponenter.
+To feature-komponenter som bruker samme primitive skal fortsatt være separate når de har ulike data,
+handlinger og endringsårsaker.
 
 ### App-shell og sidemaler — templates
 
@@ -578,28 +578,22 @@ Regler:
 ### GlossaryPage / Fagnettverk
 
 `useGlossaryPageViewModel()` eier glossary-feature-state og all GlossaryPage-spesifikk UI-mekanikk.
-`expandedGlossaryEntryKey` er eneste expansion-state og sannhet om hvilket begrep som har aktiv detalj.
+`expandedGlossaryEntryKey` er eneste active-detail state og sannhet om hvilket begrep som har aktiv detalj.
 Nettverkslasting bruker canonical `useLoadModel()` og `glossaryNetworkDisplay` er en ren avledning av
-expansion-key, load-status og data/error. `glossaryDetailPresentation`, bygget av
-`createGlossaryDetailPresentation()`, er eneste presentasjonsmodell for begrepsdetaljen. Den konsumeres
-av to flater: `GlossaryDetailModal` på desktop og expanded card i `GlossaryEntryCardList` på mobil.
-`row.details` og en separat inline nettverksmodell finnes ikke; tabellmodellen avhenger ikke av
-nettverkets load-status.
+active-detail-key, load-status og data/error. `glossaryDetailPresentation`, bygget av
+`createGlossaryDetailPresentation()`, er eneste presentasjonsmodell for begrepsdetaljen.
+`GlossaryTable` er eneste result surface på alle bredder, og `GlossaryDetailModal` er eneste detail
+surface på alle bredder. Tabellmodellen avhenger ikke av nettverkets load-status.
 
-Desktop og mobil kan binde samme rene detaljmodell til ulik ViewModel-eid interaksjonspolicy når
-produktadferden faktisk er ulik. Desktop graph/chip-navigasjon endrer ikke Search eller kapittelutvalg
-og kan derfor vise «utenfor utvalget». Mobil beholder expanded-card-policyen, inkludert nødvendig
-utvidelse av kapittelutvalget og mobil focus/scroll-policy. Dette er to bindinger over én modell, ikke
-to konkurrerende detaljmodeller.
+Glossary konsumerer ikke `appShellMode` eller `presentationMode`. Responsive Glossary-layout,
+kolonneprioritering og lokal tetthet eies av CSS. Search-familien eier search/filter/listbox/backdrop,
+mens `selectedTopicAreaKeys` forblir eneste chapter-selection state. `ToggleButtonRow` eier sin egen
+responsive presentasjon gjennom den canonical offentlige inngangen.
 
-Rad-/disclosure-handlers, sorteringshandlinger, graph-navigasjon, kapittel-sheet open-state og
-registrering av React-ref-er eies av ViewModelen. Imperativt fokus/scroll som er nødvendig for
-tilgjengelig navigasjon utføres i ViewModelen via React-ref-er til elementer som React selv eier.
-Glossary-komponentene mottar ferdige presentation models og callbacks, rendrer deklarativt og
-oppretter ikke konkurrerende feature-state eller event-policy. De manipulerer heller ikke DOM-struktur
-med `document`, `querySelector` eller `innerHTML`. Canonical delte mekanismer som Search og
-`DockedMobileBottomSheet` beholder sitt dokumenterte interne eierskap. Mobilflaten er fortsatt expanded
-card; eventuell overgang til modal/sheet på mobil er en separat produktbeslutning.
+Radaktivering, sorteringshandlinger, modal graph-/relations-navigasjon og registrering av detail-trigger
+React-ref-er eies av ViewModelen. Glossary-komponentene mottar ferdige presentation models og callbacks,
+rendrer deklarativt og oppretter ikke konkurrerende feature-state eller event-policy. De manipulerer
+heller ikke DOM-struktur med `document`, `querySelector` eller `innerHTML`.
 
 Glossary-kontrakten er fail-fast: alle `glossaryEntry.topicAreaKey` skal referere en kjent `topicArea`,
 og brudd kaster i alle miljøer. `MASTERY_STATUS` og `GLOSSARY_RELATION_TYPE` er autoritative registre
@@ -667,7 +661,7 @@ Eksempel:
 ```txt
 DockedMobileBottomSheet
   ├── PageToolsMobileFooterSheet
-  └── GlossaryMobileChapterSheet
+  └── FlipcardsMobileFooterSheet
 ```
 
 `DockedMobileBottomSheet` eier sheet-struktur og geometri. Den mottar eksplisitte
@@ -678,7 +672,7 @@ og `inert` når sheetet er docked, og synlig og scrollbart når sheetet er
 åpent. Bare grip, chevron og drag endrer åpen-state. Feature-CSS overstyrer ikke interne
 `.mobile-bottom-sheet-*`-selectors eller lokal collapsed-height.
 `PageToolsMobileFooterSheet` eier sidehandlinger.
-`GlossaryMobileChapterSheet` eier søk, filter og kapittelvalg.
+`FlipcardsMobileFooterSheet` eier Flipcards-spesifikk mobilverktøyflate.
 
 ### Prop-kontrakter per nivå
 
@@ -753,7 +747,7 @@ Dedikerte callback-preconditions, nullstillinger og sideeffekter eies av ViewMod
 `getScreenConfig(screen)` er eneste produksjonsaksessor og kaster på ukjent skjerm. Ukjent skjerm
 er en programmeringsfeil; stille fallback er forbudt.
 
-`NAV_ITEMS` eier data for sidebar, seks desktopoppføringer, mobile underoppføringer, mobilgrupper og pop-out-menyer. Menydata er ikke runtime-state. `toggleButtonItems` låser rekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`; `Læringsti` er deaktivert. `TEST_TYPES` eier `chapter-test` og `exam`; de to testoppføringene mapper begge til `LEARNING_CONTENT_TYPES.EXAMS`, og mobilgruppen gjenbruker dem. Glossarys dynamiske søk og kapittel-sheet hører fortsatt til Glossary-featuret, ikke til pop-out-registeret.
+`NAV_ITEMS` eier data for sidebar, seks desktopoppføringer, mobile underoppføringer, mobilgrupper og pop-out-menyer. Menydata er ikke runtime-state. `toggleButtonItems` låser rekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`; `Læringsti` er deaktivert. `TEST_TYPES` eier `chapter-test` og `exam`; de to testoppføringene mapper begge til `LEARNING_CONTENT_TYPES.EXAMS`, og mobilgruppen gjenbruker dem. Glossarys dynamiske søk og kapittelutvalg hører fortsatt til Glossary-featuret, ikke til pop-out-registeret.
 
 ### Scoped TestSet-porter i `LearningContentSelectPageViewModel`
 

@@ -3,6 +3,7 @@
 	--glossary-sidebar-width: minmax(315px, 32%);
 	--glossary-term-column-width: 27%;
 	--glossary-connections-column-width: 106px;
+	--glossary-mastery-column-width: clamp(156px, 13vw, 184px);
 	--glossary-footer-overlay-space: 104px;
 }
 

@@ -14,11 +14,10 @@ export const GLOSSARY_TABLE_SORT_DIRECTIONS = Object.freeze({
 });
 
 
-export function createGlossaryTableRows({ localizedEntries, topicAreaReferenceByKey, expandedGlossaryEntryKey, t }) {
+export function createGlossaryTableRows({ localizedEntries, topicAreaReferenceByKey, t }) {
 	const rows = [];
 
 	for (const localizedEntry of localizedEntries) {
-		const isExpanded = localizedEntry.glossaryEntryKey === expandedGlossaryEntryKey;
 		const associationLabel = localizedEntry.directNeighborCount === 1
 			? t.glossaryPageSingleAssociationLabel
 			: t.glossaryPageMultipleAssociationsLabel(localizedEntry.directNeighborCount);
@@ -32,11 +31,6 @@ export function createGlossaryTableRows({ localizedEntries, topicAreaReferenceBy
 			directNeighborCount: localizedEntry.directNeighborCount,
 			directNeighborLevel: createDirectNeighborLevelPresentation({ directNeighborCount: localizedEntry.directNeighborCount, ariaLabel: associationLabel }),
 			mastery: createGlossaryMasteryPresentation(localizedEntry.mastery, t),
-			isExpanded,
-			detailsId: `glossary-details-${localizedEntry.glossaryEntryKey}`,
-			disclosureLabel: isExpanded
-				? t.glossaryPageHideAssociationsLabel(associationLabel, localizedEntry.term)
-				: t.glossaryPageShowAssociationsLabel(associationLabel, localizedEntry.term),
 			detailTriggerLabel: t.glossaryPageOpenDetailLabel(localizedEntry.term)
 		});
 	}

@@ -1,5 +1,4 @@
 // src/ui/view/pages/GlossaryPage.jsx
-import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
 import GlossaryDetailModal from "../components/GlossaryPage/DetailModal/GlossaryDetailModal.jsx";
 import GlossaryFooter from "../components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx";
 import GlossaryPanel from "../components/GlossaryPage/GlossaryPanel/GlossaryPanel.jsx";
@@ -14,8 +13,6 @@ import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKe
 
 export default function GlossaryPage({ viewModel }) {
 	useSearchSheetEscapeKey(viewModel.search.isPopupOpen, viewModel.search.onRequestClose);
-
-	const isMobile = viewModel.presentationMode === PRESENTATION_MODE.MOBILE;
 
 	const header = (
 		<Header
@@ -83,12 +80,7 @@ export default function GlossaryPage({ viewModel }) {
 									heading={viewModel.glossaryPanelHeading}
 									rows={viewModel.glossaryTableRows}
 									tableHeaders={viewModel.glossaryTableHeaders}
-									termColumnHeader={viewModel.termColumnHeader}
-									explanationColumnHeader={viewModel.explanationColumnHeader}
-									directNeighborColumnHeader={viewModel.directNeighborColumnHeader}
-									detailPresentation={viewModel.glossaryMobileDetailPresentation}
 									emptyState={viewModel.glossaryPanelEmptyState}
-									isMobile={isMobile}
 								/>
 							</>
 						</WorkspaceState>

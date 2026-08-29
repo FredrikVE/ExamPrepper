@@ -2,6 +2,9 @@
 @media (max-width: 1320px) {
 	.glossary-workspace {
 		--glossary-sidebar-width: 310px;
+		--glossary-term-column-width: clamp(150px, 16vw, 170px);
+		--glossary-connections-column-width: clamp(100px, 10.5vw, 112px);
+		--glossary-mastery-column-width: clamp(156px, 18vw, 184px);
 	}
 
 	.glossary-page {
@@ -80,13 +83,52 @@
 		margin: 0 0 var(--space-4);
 	}
 
-	.glossary-table-scroll {
+	.glossary-table__mastery-column {
+		width: 0 !important;
+		visibility: collapse;
+	}
+
+	.glossary-table__mastery-header,
+	.glossary-table__mastery-cell {
 		display: none;
+	}
+
+	.glossary-table thead th:first-child,
+	.glossary-table tbody th:first-child {
+		position: sticky;
+		left: 0;
+	}
+
+	.glossary-table thead th:first-child {
+		z-index: 22;
+	}
+
+	.glossary-table tbody th:first-child {
+		z-index: 8;
+		background: var(--glossary-table-sticky-cell-bg);
 	}
 }
 
 @media (max-width: 640px) {
 	.glossary-panel-heading {
 		margin-bottom: var(--space-3);
+	}
+
+	.glossary-table__connections-column {
+		width: 0 !important;
+		visibility: collapse;
+	}
+
+	.glossary-table__connections-header,
+	.glossary-table__connections-cell {
+		display: none;
+	}
+
+	.glossary-table__term-column {
+		width: 35%;
+	}
+
+	.glossary-table__explanation-column {
+		width: 65%;
 	}
 }

@@ -6,7 +6,7 @@ import MasteryBadge from "../Mastery/MasteryBadge.jsx";
 
 export default function GlossaryTableRow({ row }) {
 	return (
-		<tr className={row.className} onClick={row.onActivate} ref={row.ref}>
+		<tr className={row.className} onClick={row.onActivate}>
 			<th scope="row">
 				<span className="glossary-table-term"><FormattedText text={row.term} /></span>
 				<span className="glossary-table-topic-area-reference">{row.topicAreaReference}</span>
@@ -22,7 +22,7 @@ export default function GlossaryTableRow({ row }) {
 					onClick={row.detailTrigger.onActivate}
 					ref={row.detailTrigger.ref}
 				>
-					<ChevronDown size={19} strokeWidth={2.25} aria-hidden="true" />
+					<ChevronDown className="glossary-table__detail-trigger-icon" aria-hidden="true" />
 				</button>
 			</td>
 			<td className="glossary-table__connections-cell">

@@ -17,6 +17,12 @@ const PRIVATE_GLOSSARY_HOOKS = new Set([
 ]);
 const VIEW_OWNED_REACT_HOOKS = new Set(["useState", "useEffect", "useRef", "useMemo", "useCallback"]);
 const FORBIDDEN_VISUALIZATION_PACKAGES = new Set(["reactflow", "react-flow", "@xyflow/react", "recharts"]);
+const FORBIDDEN_GLOSSARY_PRESENTATION_PATHS = new Set([
+	path.resolve("src/ui/presentation/usePresentationMode.js"),
+	path.resolve("src/ui/presentation/presentationMode.js"),
+	path.resolve("src/ui/presentation/useAppShellMode.js"),
+	path.resolve("src/ui/presentation/appShellMode.js")
+]);
 
 function collectSourceFiles(targetPath) {
 	const stats = fs.statSync(targetPath);
@@ -104,6 +110,20 @@ describe("Glossary view boundaries", () => {
 						expect(VIEW_OWNED_REACT_HOOKS.has(importedName)).toBe(false);
 					}
 				}
+			}
+		}
+	});
+
+	test("keeps shell and viewport presentation state out of the Glossary feature", () => {
+		const glossaryFiles = [
+			GLOSSARY_PAGE_VIEWMODEL_PATH,
+			...GLOSSARY_VIEW_ROOTS.flatMap((root) => collectSourceFiles(root))
+		];
+
+		for (const filePath of glossaryFiles) {
+			for (const importNode of readImports(filePath)) {
+				const importedPath = resolveImport(filePath, importNode.source.value);
+				expect(FORBIDDEN_GLOSSARY_PRESENTATION_PATHS.has(importedPath)).toBe(false);
 			}
 		}
 	});

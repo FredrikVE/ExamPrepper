@@ -44,13 +44,9 @@ describe("GlossaryEntry presentation contract", () => {
 				"security-architecture",
 				"Kapittel 1"
 			]]),
-			expandedGlossaryEntryKey: null,
-			networkDisplay: { kind: "hidden" },
 			t: {
 				glossaryPageSingleAssociationLabel: "1 assosiert begrep",
 				glossaryPageMultipleAssociationsLabel: (count) => `${count} assosierte begreper`,
-				glossaryPageShowAssociationsLabel: (label, term) => `Vis ${label} for ${term}`,
-				glossaryPageHideAssociationsLabel: (label, term) => `Skjul ${label} for ${term}`,
 				glossaryPageOpenDetailLabel: (term) => `Åpne detaljvisning for ${term}`,
 				glossaryPageMasteryNotAssessedLabel: "Ikke vurdert",
 				glossaryPageMasteryPracticeLabel: "Øve mer",

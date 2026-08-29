@@ -18,6 +18,10 @@
 	/* ── Glossary ───────────────────────────── */
 	--glossary-mastery-selected-mark-size: 12px;
 	--glossary-mastery-selected-mark-stroke-width: 2.5;
+	--glossary-table-sort-icon-size: 16px;
+	--glossary-table-sort-icon-stroke-width: 2;
+	--glossary-table-detail-icon-size: 19px;
+	--glossary-table-detail-icon-stroke-width: 2.25;
 
     /* ── Spacing ───────────────────────────── */
     --space-1: 4px;
@@ -101,6 +105,7 @@
             color-mix(in srgb, var(--accent) 28%, transparent),
             color-mix(in srgb, var(--accent-soft) 92%, transparent));
     --glossary-table-row-hover-bg: color-mix(in srgb, var(--accent) 12%, var(--panel-strong));
+    --glossary-table-sticky-cell-bg: color-mix(in srgb, var(--panel-strong) 96%, var(--app-bg));
 
     /* ── Buttons / segmented controls ─────────
        Shared button tokens keep select toggles, header controls, settings
@@ -330,6 +335,7 @@
             color-mix(in srgb, var(--accent) 30%, transparent),
             color-mix(in srgb, var(--accent-soft) 92%, transparent));
     --glossary-table-row-hover-bg: color-mix(in srgb, var(--accent) 18%, var(--panel-strong));
+    --glossary-table-sticky-cell-bg: color-mix(in srgb, var(--panel-strong) 96%, var(--app-bg));
 
     /* ── Buttons / segmented controls ───────── */
     --button-primary-bg: var(--accent-gradient);
