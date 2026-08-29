@@ -40,11 +40,6 @@
 }
 
 @media (max-width: 932px) {
-	.glossary-workspace .workspace-scaffold-body {
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
-
 	.glossary-page {
 		min-height: 100%;
 		height: auto;
@@ -80,6 +75,15 @@
 
 	.glossary-panel-heading {
 		margin: 0 0 var(--space-4);
+	}
+
+	.glossary-table-scroll {
+		height: auto;
+		flex: none;
+		overflow: visible;
+		overscroll-behavior-y: auto;
+		touch-action: auto;
+		scrollbar-gutter: auto;
 	}
 
 	.glossary-table__mastery-column {

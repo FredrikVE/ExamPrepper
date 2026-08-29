@@ -8,6 +8,7 @@ const UI_ROOT = path.resolve("src/ui");
 const GLOSSARY_PAGE_VIEWMODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPageViewModel.js");
 const GLOSSARY_RELATIONS_COMPONENT_PATH = path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailRelations.jsx");
 const GLOSSARY_PANEL_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/glossary-panel.css");
+const GLOSSARY_PAGE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/page.css");
 const GLOSSARY_RESPONSIVE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/responsive.css");
 const GLOSSARY_VIEW_ROOTS = [
 	path.resolve("src/ui/view/pages/GlossaryPage.jsx"),
@@ -138,6 +139,15 @@ describe("Glossary view boundaries", () => {
 		expect(panelStyles).toMatch(/\.glossary-panel-heading\s*\{[^}]*display:\s*none;/s);
 		expect(responsiveStyles).toMatch(/@media \(max-width: 1320px\)[\s\S]*?\.glossary-topic-area-panel\s*\{[^}]*display:\s*none;/);
 		expect(responsiveStyles).toMatch(/@media \(max-width: 1320px\)[\s\S]*?\.glossary-panel-heading\s*\{[^}]*display:\s*flex;/);
+	});
+
+	test("keeps WorkspaceScaffold as the Glossary scroll owner across responsive transitions", () => {
+		const pageStyles = fs.readFileSync(GLOSSARY_PAGE_STYLE_PATH, "utf8");
+		const responsiveStyles = fs.readFileSync(GLOSSARY_RESPONSIVE_STYLE_PATH, "utf8");
+
+		expect(pageStyles).not.toMatch(/\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow(?:-[xy])?:/s);
+		expect(responsiveStyles).not.toMatch(/\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow(?:-[xy])?:/s);
+		expect(responsiveStyles).toMatch(/@media \(max-width: 932px\)[\s\S]*?\.glossary-table-scroll\s*\{[^}]*height:\s*auto;[^}]*flex:\s*none;[^}]*overflow:\s*visible;[^}]*overscroll-behavior-y:\s*auto;[^}]*touch-action:\s*auto;/);
 	});
 
 	test("keeps relation disclosure body and controller persistent in the DOM contract", () => {

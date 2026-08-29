@@ -10,7 +10,6 @@
 	display: flex;
 	min-height: 0;
 	flex-direction: column;
-	overflow: hidden;
 }
 
 .glossary-page {
