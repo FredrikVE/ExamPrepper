@@ -1,4 +1,5 @@
 //src/navigation/navigation.js
+import { CONTENT_ICON_KEYS } from "../constants/ContentIconKeys.js";
 export const NAV_SCREENS = {
 	SUBJECTS: "subjects",
 	SELECT: "select",
@@ -249,14 +250,14 @@ export const NAV_ITEMS = {
 				{
 					id: "app-create-subject",
 					labelKey: "pageToolsCreateSubjectLabel",
-					iconKey: "plus",
+					iconKey: CONTENT_ICON_KEYS.PLUS,
 					isDisabled: true,
 					onSelect: null
 				},
 				{
 					id: "app-import-subject-materials",
 					labelKey: "pageToolsImportSubjectMaterialsLabel",
-					iconKey: "file-text",
+					iconKey: CONTENT_ICON_KEYS.FILE_TEXT,
 					isDisabled: true,
 					onSelect: null
 				}
@@ -272,7 +273,7 @@ export const NAV_ITEMS = {
 				{
 					id: "app-import-subject-materials",
 					labelKey: "pageToolsImportSubjectMaterialsLabel",
-					iconKey: "file-text",
+					iconKey: CONTENT_ICON_KEYS.FILE_TEXT,
 					isDisabled: true,
 					onSelect: null
 				}
@@ -288,28 +289,28 @@ export const NAV_ITEMS = {
 				{
 					id: "all-cards",
 					labelKey: "flipcardsToolMenuAllCardsLabel",
-					iconKey: "list",
+					iconKey: CONTENT_ICON_KEYS.LIST,
 					isDisabled: false,
 					onSelect: null
 				},
 				{
 					id: "shuffle",
 					labelKey: "flipcardsToolMenuShuffleLabel",
-					iconKey: "shuffle",
+					iconKey: CONTENT_ICON_KEYS.SHUFFLE,
 					isDisabled: false,
 					onSelect: null
 				},
 				{
 					id: "repeat-difficult",
 					labelKey: "flipcardsToolMenuRepeatDifficultLabel",
-					iconKey: "refresh-cw",
+					iconKey: CONTENT_ICON_KEYS.REFRESH_CW,
 					isDisabled: false,
 					onSelect: null
 				},
 				{
 					id: "add-card",
 					labelKey: "flipcardsToolMenuAddCardLabel",
-					iconKey: "plus",
+					iconKey: CONTENT_ICON_KEYS.PLUS,
 					isDisabled: true,
 					onSelect: null
 				}

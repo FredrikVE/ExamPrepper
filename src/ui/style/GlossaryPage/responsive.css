@@ -40,9 +40,9 @@
 }
 
 @media (max-width: 932px) {
-	.glossary-workspace .workspace-scaffold-body {
-		overflow-x: hidden;
-		overflow-y: auto;
+	.glossary-workspace {
+		--scaffold-body-overflow-x: hidden;
+		--scaffold-body-overflow-y: auto;
 	}
 
 	.glossary-page {
@@ -92,7 +92,7 @@
 	}
 
 	.glossary-table__mastery-column {
-		width: 0 !important;
+		width: 0;
 		visibility: collapse;
 	}
 
@@ -123,7 +123,7 @@
 	}
 
 	.glossary-table__connections-column {
-		width: 0 !important;
+		width: 0;
 		visibility: collapse;
 	}
 

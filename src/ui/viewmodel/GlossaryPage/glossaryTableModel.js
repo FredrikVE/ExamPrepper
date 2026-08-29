@@ -1,19 +1,10 @@
 // src/ui/viewmodel/GlossaryPage/glossaryTableModel.js
+import { GLOSSARY_TABLE_SORT_DIRECTIONS, GLOSSARY_TABLE_SORT_KEYS } from "../../../constants/GlossaryTableSort.js";
 import { requireTopicAreaReference } from "./glossaryLookups.js";
 import { createDirectNeighborLevelPresentation } from "./directNeighborLevelModel.js";
 import { createGlossaryMasteryPresentation, getGlossaryMasterySortRank } from "./glossaryMasteryModel.js";
 
-export const GLOSSARY_TABLE_SORT_KEYS = Object.freeze({
-	TERM: "TERM",
-	EXPLANATION_LENGTH: "EXPLANATION_LENGTH",
-	DIRECT_NEIGHBOR_COUNT: "DIRECT_NEIGHBOR_COUNT",
-	MASTERY: "MASTERY"
-});
-
-export const GLOSSARY_TABLE_SORT_DIRECTIONS = Object.freeze({
-	ASCENDING: "ASCENDING",
-	DESCENDING: "DESCENDING"
-});
+export { GLOSSARY_TABLE_SORT_DIRECTIONS, GLOSSARY_TABLE_SORT_KEYS } from "../../../constants/GlossaryTableSort.js";
 
 export function getInitialGlossaryTableSortDirection(sortKey) {
 	assertGlossaryTableSortKey(sortKey);

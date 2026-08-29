@@ -1,5 +1,5 @@
 // src/ui/view/components/ToolCard/ToolCard.jsx
-import { getToolIcon } from "./toolIcons.js";
+import { getContentIcon } from "../Shared/contentIconRegistry.js";
 import { TOOL_CARD_SURFACES } from "./toolCardSurfaces.js";
 
 const TOOL_CARD_CLASS_NAMES_BY_SURFACE = {
@@ -34,7 +34,7 @@ function createToolCardClassName(surface, toolItem) {
 }
 
 export default function ToolCard({ surface, toolItem, onSelect }) {
-    const Icon = getToolIcon(toolItem.iconKey);
+    const Icon = getContentIcon(toolItem.iconKey);
 
     const selectTool = () => {
         if (toolItem.isDisabled) {

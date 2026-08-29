@@ -89,17 +89,17 @@
 	white-space: nowrap;
 }
 
-.glossary-table__mastery-header,
-.glossary-table__mastery-cell {
-	text-align: center !important;
+.glossary-table .glossary-table__mastery-header,
+.glossary-table .glossary-table__mastery-cell {
+	text-align: center;
 }
 
-.glossary-table__mastery-cell {
-	vertical-align: middle !important;
+.glossary-table .glossary-table__mastery-cell {
+	vertical-align: middle;
 }
 
-.glossary-table__sortable-header {
-	padding: 0 !important;
+.glossary-table .glossary-table__sortable-header {
+	padding: 0;
 }
 
 .glossary-table__sort-button {
@@ -212,9 +212,9 @@
 	white-space: nowrap;
 }
 
-.glossary-table__explanation-cell {
+.glossary-table .glossary-table__explanation-cell {
 	position: relative;
-	padding-bottom: 38px !important;
+	padding-bottom: 38px;
 }
 
 .glossary-table__detail-trigger {
@@ -269,11 +269,11 @@
 	color: var(--text-main);
 }
 
-.glossary-table__connections-cell {
-	padding: 5px 8px !important;
+.glossary-table .glossary-table__connections-cell {
+	padding: 5px 8px;
 	border-left: 1px solid color-mix(in srgb, var(--line) 52%, transparent);
-	vertical-align: middle !important;
-	text-align: center !important;
+	vertical-align: middle;
+	text-align: center;
 }
 
 .glossary-table tbody tr:last-child td,

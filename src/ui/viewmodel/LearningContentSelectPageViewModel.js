@@ -5,6 +5,7 @@ import createLearningContentSelectPageHeading from "./LearningContentSelectPage/
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel from "./Search/useSearchSheetModel.js";
 import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
+import { CONTENT_ICON_KEYS } from "../../constants/ContentIconKeys.js";
 import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
 import { filterTestSets } from "./LearningContentSelectPage/testSetFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
@@ -14,22 +15,7 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { createContentToggleEntries, createMobileToggleButtonItems, findToggleEntryConfig } from "./Shared/contentToggleModel.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
-export default function useLearningContentSelectPageViewModel({
-	getAvailableExamsUseCase,
-	getAvailableChapterTestsUseCase,
-	getTopicAreasUseCase,
-	getFlipcardDeckSummariesUseCase,
-	language,
-	t,
-	selectedSubject,
-	onSelectTestSet,
-	onSelectFlipcardDeck,
-	onSelectMatchCardsDeck,
-	isActive,
-	onChangeScreen,
-	backContract,
-	actionErrorMessage
-}) {
+export default function useLearningContentSelectPageViewModel({ getAvailableExamsUseCase, getAvailableChapterTestsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectTestSet, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage }) {
 	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
 	const [selectedTestType, setSelectedTestType] = useState(TEST_TYPES.EXAM);
 	const [expandedMobileToggleButtonGroupId, setExpandedMobileToggleButtonGroupId] = useState(null);
@@ -526,7 +512,7 @@ function createTopicAreaToolItems(params) {
 		{
 			id: `topic-area-${ALL_TOPIC_AREAS}`,
 			topicAreaKey: ALL_TOPIC_AREAS,
-			iconKey: "list",
+			iconKey: CONTENT_ICON_KEYS.LIST,
 			label: params.t.topicAreaAllLabel,
 			selectedStatusLabel: params.selectedStatusLabel,
 			onSelect: () => params.onSelectTopicArea(ALL_TOPIC_AREAS)

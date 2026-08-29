@@ -1,5 +1,6 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { CONTENT_ICON_KEYS } from "../../constants/ContentIconKeys.js";
 import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
@@ -478,7 +479,7 @@ function createTopicAreaDeckToolItems(topicAreas, activeTopicAreaKey, labels) {
 	const items = [
 		{
 			key: createTopicAreaDeckToolKey(ALL_TOPIC_AREAS),
-			iconKey: "list",
+			iconKey: CONTENT_ICON_KEYS.LIST,
 			label: labels.topicAreaAllLabel,
 			statusLabel: labels.topicAreaToolStatusLabel,
 			ariaLabel: createTopicAreaDeckToolAriaLabel(

@@ -7,6 +7,7 @@ import { describe, expect, test } from "@jest/globals";
 const UI_ROOT = path.resolve("src/ui");
 const GLOSSARY_PAGE_VIEWMODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPageViewModel.js");
 const GLOSSARY_RELATIONS_COMPONENT_PATH = path.resolve("src/ui/view/components/GlossaryPage/DetailModal/GlossaryDetailRelations.jsx");
+const GLOSSARY_INTERACTION_BINDINGS_PATH = path.resolve("src/ui/viewmodel/GlossaryPage/glossaryInteractionBindings.js");
 const GLOSSARY_PANEL_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/glossary-panel.css");
 const GLOSSARY_PAGE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/page.css");
 const GLOSSARY_RESPONSIVE_STYLE_PATH = path.resolve("src/ui/style/GlossaryPage/responsive.css");
@@ -15,10 +16,13 @@ const GLOSSARY_VIEW_ROOTS = [
 	path.resolve("src/ui/view/pages/GlossaryPage.jsx"),
 	path.resolve("src/ui/view/components/GlossaryPage")
 ];
-const PRIVATE_GLOSSARY_HOOKS = new Set([
+const PRIVATE_GLOSSARY_MODULES = new Set([
 	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossarySearchModel.js"),
 	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryDetailModel.js"),
-	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryTopicAreaSelectionModel.js")
+	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryTopicAreaSelectionModel.js"),
+	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryPageResources.js"),
+	path.resolve("src/ui/viewmodel/GlossaryPage/glossaryPageDerivations.js"),
+	path.resolve("src/ui/viewmodel/GlossaryPage/glossaryInteractionBindings.js")
 ]);
 const VIEW_OWNED_REACT_HOOKS = new Set(["useState", "useEffect", "useRef", "useMemo", "useCallback"]);
 const FORBIDDEN_VISUALIZATION_PACKAGES = new Set(["reactflow", "react-flow", "@xyflow/react", "recharts"]);
@@ -53,6 +57,24 @@ function collectSourceFiles(targetPath) {
 	return files;
 }
 
+function collectCssFiles(directoryPath) {
+	const files = [];
+
+	for (const entry of fs.readdirSync(directoryPath, { withFileTypes: true })) {
+		const entryPath = path.join(directoryPath, entry.name);
+
+		if (entry.isDirectory()) {
+			files.push(...collectCssFiles(entryPath));
+		}
+
+		else if (entry.name.endsWith(".css")) {
+			files.push(entryPath);
+		}
+	}
+
+	return files;
+}
+
 function readImports(filePath) {
 	const ast = parse(fs.readFileSync(filePath, "utf8"), {
 		sourceType: "module",
@@ -77,26 +99,35 @@ function resolveImport(filePath, source) {
 }
 
 describe("Glossary view boundaries", () => {
-	test("keeps private Glossary hooks behind GlossaryPageViewModel", () => {
-		const importersByPrivateHook = new Map();
+	test("keeps private Glossary modules behind GlossaryPageViewModel", () => {
+		const importersByPrivateModule = new Map();
 
-		for (const privateHookPath of PRIVATE_GLOSSARY_HOOKS) {
-			importersByPrivateHook.set(privateHookPath, []);
+		for (const privateModulePath of PRIVATE_GLOSSARY_MODULES) {
+			importersByPrivateModule.set(privateModulePath, []);
 		}
 
 		for (const filePath of collectSourceFiles(UI_ROOT)) {
 			for (const importNode of readImports(filePath)) {
 				const importedPath = resolveImport(filePath, importNode.source.value);
 
-				if (PRIVATE_GLOSSARY_HOOKS.has(importedPath)) {
-					importersByPrivateHook.get(importedPath).push(filePath);
+				if (PRIVATE_GLOSSARY_MODULES.has(importedPath)) {
+					importersByPrivateModule.get(importedPath).push(filePath);
 				}
 			}
 		}
 
-		for (const importers of importersByPrivateHook.values()) {
+		for (const importers of importersByPrivateModule.values()) {
 			expect(importers).toEqual([GLOSSARY_PAGE_VIEWMODEL_PATH]);
 		}
+	});
+
+	test("keeps DOM and CSS presentation out of Glossary interaction bindings", () => {
+		const source = fs.readFileSync(GLOSSARY_INTERACTION_BINDINGS_PATH, "utf8");
+
+		expect(source).not.toContain("className");
+		expect(source).not.toContain("ariaSort");
+		expect(source).not.toContain("sortIconKind");
+		expect(source).not.toContain(".closest(");
 	});
 
 	test("keeps feature state and effects out of Glossary views", () => {
@@ -142,20 +173,36 @@ describe("Glossary view boundaries", () => {
 		expect(responsiveStyles).toMatch(/@media \(max-width: 1320px\)[\s\S]*?\.glossary-panel-heading\s*\{[^}]*display:\s*flex;/);
 	});
 
-	test("centers mastery badges within assessment table cells", () => {
+	test("centers mastery badges without specificity overrides", () => {
 		const tableStyles = fs.readFileSync(GLOSSARY_TABLE_STYLE_PATH, "utf8");
 
-		expect(tableStyles).toMatch(/\.glossary-table__mastery-header,[\s\S]*?\.glossary-table__mastery-cell\s*\{[^}]*text-align:\s*center\s*!important;/);
-		expect(tableStyles).toMatch(/\.glossary-table__mastery-cell\s*\{[^}]*vertical-align:\s*middle\s*!important;/);
+		expect(tableStyles).toMatch(/\.glossary-table \.glossary-table__mastery-header,[\s\S]*?\.glossary-table \.glossary-table__mastery-cell\s*\{[^}]*text-align:\s*center;/);
+		expect(tableStyles).toMatch(/\.glossary-table \.glossary-table__mastery-cell\s*\{[^}]*vertical-align:\s*middle;/);
 	});
 
-	test("switches Glossary scroll ownership without retaining a hidden desktop offset", () => {
+	test("customizes scaffold scrolling only through canonical scaffold hooks", () => {
 		const pageStyles = fs.readFileSync(GLOSSARY_PAGE_STYLE_PATH, "utf8");
 		const responsiveStyles = fs.readFileSync(GLOSSARY_RESPONSIVE_STYLE_PATH, "utf8");
 
-		expect(pageStyles).toMatch(/\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow:\s*clip;/s);
-		expect(responsiveStyles).toMatch(/@media \(max-width: 932px\)[\s\S]*?\.glossary-workspace \.workspace-scaffold-body\s*\{[^}]*overflow-x:\s*hidden;[^}]*overflow-y:\s*auto;/);
-		expect(responsiveStyles).toMatch(/@media \(max-width: 932px\)[\s\S]*?\.glossary-table-scroll\s*\{[^}]*height:\s*auto;[^}]*flex:\s*none;[^}]*overflow:\s*visible;[^}]*overscroll-behavior-y:\s*auto;[^}]*touch-action:\s*auto;/);
+		expect(pageStyles).not.toContain(".workspace-scaffold-body");
+		expect(responsiveStyles).not.toContain(".workspace-scaffold-body");
+		expect(pageStyles).toContain("--scaffold-body-overflow-x: clip;");
+		expect(pageStyles).toContain("--scaffold-body-overflow-y: clip;");
+		expect(responsiveStyles).toContain("--scaffold-body-overflow-x: hidden;");
+		expect(responsiveStyles).toContain("--scaffold-body-overflow-y: auto;");
+	});
+
+	test("keeps Glossary styles free of important specificity overrides", () => {
+		const glossaryStyleRoot = path.resolve("src/ui/style/GlossaryPage");
+		const offenders = [];
+
+		for (const filePath of collectCssFiles(glossaryStyleRoot)) {
+			if (fs.readFileSync(filePath, "utf8").includes("!important")) {
+				offenders.push(path.relative(process.cwd(), filePath));
+			}
+		}
+
+		expect(offenders).toEqual([]);
 	});
 
 	test("keeps relation disclosure body and controller persistent in the DOM contract", () => {

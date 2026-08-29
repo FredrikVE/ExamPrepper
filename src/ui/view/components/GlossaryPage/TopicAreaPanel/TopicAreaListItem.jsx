@@ -1,9 +1,9 @@
 // src/ui/view/components/GlossaryPage/TopicAreaPanel/TopicAreaListItem.jsx
 import { Check } from "lucide-react";
-import { getTopicAreaIcon } from "./topicAreaIcons.js";
+import { getContentIcon } from "../../Shared/contentIconRegistry.js";
 
 export default function TopicAreaListItem({ item }) {
-	const TopicAreaIcon = getTopicAreaIcon(item.iconKey);
+	const TopicAreaIcon = getContentIcon(item.iconKey);
 
 	return (
 		<>

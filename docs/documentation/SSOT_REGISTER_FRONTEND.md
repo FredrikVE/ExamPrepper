@@ -91,7 +91,7 @@ De viktigste åpne avvikene er:
 | `NAV_ITEMS{}` `LEARNING_CONTENT_TYPES{}` `TEST_TYPES{}` | Sidebar, seks desktopvalg, mobilgrupper, testtypeoppføringer, pop-out-menyer og stabile identiteter | `src/navigation/navigation.js` | `toggleButtonItems` eier desktoprekkefølgen `Læringsti`, `Begrepsliste`, `Flipcards`, `Begrepsmatch`, `Kapitteltester`, `Eksamener`. `Læringsti` er deklarert deaktivert. De to testoppføringene peker til `LEARNING_CONTENT_TYPES.EXAMS` med hver sin `testType`; mobilgruppen `Tester` gjenbruker dem |
 | `WORKSPACE_STATE_KINDS{}` | Page-state-unionen (loading/error/empty/content) | `viewmodel/WorkspaceState/` | (`createWorkspaceState()` er avledningen — se «utilities») |
 | `LOAD_STATUS{}` `useLoadModel()` | Ressursstatus-enum + reaktiv innlastingstilstand | `viewmodel/LoadState/` | (`combineLoadStatuses()` er avledningen — se «utilities») |
-| `useGlossaryPageViewModel()` | Glossary feature-state og GlossaryPage-spesifikk UI-mekanikk: søk, kapittelutvalg, sortering og eneste active-detail state `expandedGlossaryEntryKey`; teknisk nettverksstatus eies fortsatt av `useLoadModel()` | `src/ui/viewmodel/GlossaryPageViewModel.js` | Eneste offentlige kontrakt mot View. Kan komponere private hooks under `viewmodel/GlossaryPage/`, men re-eksponerer navngitte felter. Eier radaktivering, modal graph-/relations-binding, detail-trigger refs og modal focus-intent. Glossary konsumerer ikke app-shell- eller presentation-mode-state; responsiv layout eies av CSS |
+| `useGlossaryPageViewModel()` | Glossary feature-state og GlossaryPage-spesifikk UI-mekanikk: søk, kapittelutvalg, sortering og eneste active-detail state `expandedGlossaryEntryKey`; teknisk nettverksstatus eies fortsatt av `useLoadModel()` | `src/ui/viewmodel/GlossaryPageViewModel.js` | Eneste offentlige kontrakt mot View. Komponerer private ressurs-, derivasjons-, binding- og state-moduler under `viewmodel/GlossaryPage/`, men re-eksponerer navngitte felter. Eier radaktivering, modal graph-/relations-binding, detail-trigger refs og modal focus-intent. Glossary konsumerer ikke app-shell- eller presentation-mode-state; responsiv layout eies av CSS |
 | `CONCEPT_MASTERY_STATUS{}` | Autoritative mastery-statusverdier for glossary concepts | `src/constants/ConceptMasteryStatus.js` | Glossary-presentasjon konsumerer samme statuskontrakt |
 | `GLOSSARY_RELATION_TYPE{}` | Autoritative glossary-relasjonstyper og directed-relation-settet | `src/constants/GlossaryRelationType.js` | Relasjons- og grafpresentasjon konsumerer samme kontrakt |
 | `GLOSSARY_NETWORK_EDGE_ROLE{}` | Autoritative roller for projected glossary-network edges | `src/constants/GlossaryNetworkEdgeRole.js` | Network-presentasjonen bruker `DIRECT` / `SECONDARY` fra samme kontrakt |
@@ -118,7 +118,7 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 
 | Komponent | Eier | Fil | Bruk |
 |---|---|---|---|
-| `<WorkspaceScaffold/>` | Sidestillas | `components/WorkspaceScaffold/` | Hovedsidene bruker scaffoldet; dependency-/content-kontrakten håndheves av relevante arkitekturgater |
+| `<WorkspaceScaffold/>` | Sidestillas | `components/WorkspaceScaffold/` | Hovedsidene bruker scaffoldet. Scaffoldet eier body-layout/scroll og deklarerer `--scaffold-body-*` hooks for eksplisitte feature-varianter; features styler ikke intern body direkte |
 | `<WorkspaceState/>` | Rendring av page-state | `components/WorkspaceState/` | 7 importører |
 | `<Header/>` + slot-komponenter | Scaffold-header, struktur og utseende | `components/Header/` | Alle 7 sider, Statistics inkludert. `headerArchitecture` krever at hver side velger appearance, layout og slots eksplisitt |
 | `<Footer/>` | Footer-skall | `components/Footer/` | Direkte av `SubjectSelectPage` og `LearningContentSelectPage`; komponert av `<GlossaryFooter/>` |
@@ -131,6 +131,8 @@ Eier rendering, struktur, styling eller en delt infrastrukturmekanisme — ikke 
 | `<DesktopPopOutMenu/>` | Desktop pop-out-struktur og lagmekanikk | `components/DesktopPopOutMenu/` | PageTools- og Flipcards-verktøymenyene |
 | Search-familien (`<SearchField/>` m.fl.) | Søkefelt, filter, backdrop, forslag | `components/Search/` | Delt av SubjectSelect, LearningContentSelect, Glossary |
 | `<ToolCardGrid/>` `<ToolCard/>` | Verktøykort-flate | `components/ToolCard/` | PageTools + Flipcards |
+| `CONTENT_ICON_KEYS` + `CONTENT_ICON_FALLBACK_KEY` | Canonical innholdsikon-vokabular | `src/constants/ContentIconKeys.js` | Frontend-genererte icon keys bruker constants; backend-eide `topicArea.iconKey` passeres gjennom uendret |
+| `getContentIcon()` | Delt innholdsikon-renderer | `components/Shared/contentIconRegistry.js` | Én canonical `iconKey → Lucide`-mapping for TopicAreaPanel og ToolCard |
 | `<AppErrorBoundary/>` | Root render-crash-grense | `components/AppErrorBoundary/` | Rot-nivå recovery |
 | `class DataSource` | Canonical HTTP-transportbase (URL-bygging, fetch, auth-header, JSON, feilmapping) | `model/datasource/DataSource.js` | Alle konkrete datakilder arver. Eier **ikke** base-URL — den injiseres fra `dependencies.js` |
 | `useKeyboardShortcuts()` | Global `window`-basert `keydown` listener-lifecycle for View-laget | `src/ui/view/KeyboardNavigation/useKeyboardShortcuts.js` | Exam, Flipcards, Glossary, Search, Sidebar og dialogflater bruker den felles listener-mekanismen. Glossary binder den gjennom den tynne `KeyboardShortcutBinding`-adapteren. Hooken eier registrering og cleanup av global `keydown`; den eier ikke betydningen av tastene. Alle consumers sender `isEnabled` og `onKeyDown` eksplisitt; ingen parameter-defaults. |
@@ -210,7 +212,7 @@ ikke egne oppgaverenderere eller modusflagg i `QuestionCard`.
 | Eier | Kontrakt | Fil | Evidens / enforcement |
 |---|---|---|---|
 | `:root{}` `--space-*` `--z-*` | Designtokens og lagstige | `style/Tokens.css` | Global-lag låst av `globalLayerPolicy` |
-| `--scaffold-header-height` `--scaffold-inset` | Scaffoldets geometri-hooks | `style/WorkspaceScaffold/workspace-scaffold.css` | Erklært på `.workspace-scaffold`, null fallbacks. Låst av `scaffoldTokenOwnership` |
+| `--scaffold-header-height` `--scaffold-inset` `--scaffold-body-*` | Scaffoldets geometri-/body-hooks | `style/WorkspaceScaffold/workspace-scaffold.css` | Erklært på `.workspace-scaffold`, null fallbacks. Body-hooks eier display/flex-direction/overflow-varianter. Låst av `scaffoldTokenOwnership` |
 | `workspace-card` (CSS) | Navngitt kort-flate | `style/Shared/WorkSpaceCard/workspace-card.css` | Brukes av **kun `QuestionCard`**. React-wrapperen `WorkSpaceCard.jsx` er slettet i patch 41; CSS-klassen beholdes som lokal kortflate, ikke dokumentert app-bred canonical primitive |
 
 ---

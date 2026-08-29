@@ -3,10 +3,19 @@ import { ChevronDown } from "lucide-react";
 import FormattedText from "../../Shared/FormattedText.jsx";
 import DirectNeighborMeter from "./DirectNeighborMeter.jsx";
 import MasteryBadge from "../Mastery/MasteryBadge.jsx";
+import { isInteractiveGlossaryTableRowTarget } from "./glossaryTableRowInteraction.js";
 
 export default function GlossaryTableRow({ row }) {
+	const activateRow = (event) => {
+		if (isInteractiveGlossaryTableRowTarget(event.target)) {
+			return;
+		}
+
+		row.onActivate();
+	};
+
 	return (
-		<tr className={row.className} onClick={row.onActivate}>
+		<tr className="glossary-table-row" onClick={activateRow}>
 			<th scope="row">
 				<span className="glossary-table-term"><FormattedText text={row.term} /></span>
 				<span className="glossary-table-topic-area-reference">{row.topicAreaReference}</span>

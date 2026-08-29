@@ -4,13 +4,10 @@
 	--glossary-connections-column-width: 106px;
 	--glossary-mastery-column-width: var(--glossary-table-mastery-column-width);
 	--glossary-footer-overlay-space: 104px;
-}
-
-.glossary-workspace .workspace-scaffold-body {
-	display: flex;
-	min-height: 0;
-	flex-direction: column;
-	overflow: clip;
+	--scaffold-body-display: flex;
+	--scaffold-body-flex-direction: column;
+	--scaffold-body-overflow-x: clip;
+	--scaffold-body-overflow-y: clip;
 }
 
 .glossary-page {

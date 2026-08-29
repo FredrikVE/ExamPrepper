@@ -26,7 +26,7 @@ Før en ny delt komponent opprettes:
 
 | Ansvar | Canonical implementasjon | Offentlig bruk | Grense |
 |---|---|---|---|
-| Ytre workspace-skall | `WorkspaceScaffold` | `src/ui/view/components/WorkspaceScaffold/` | Eier shell, slots og scrollflate. Feature-layout ligger i innholdet. |
+| Ytre workspace-skall | `WorkspaceScaffold` | `src/ui/view/components/WorkspaceScaffold/` | Eier shell, slots og scrollflate. Body-varianter uttrykkes gjennom deklarerte `--scaffold-body-*` hooks på scaffold-roten; features styler ikke intern body direkte. |
 | Loading/error/empty/content | `WorkspaceState` | `src/ui/view/components/WorkspaceState/` | Rendrer ferdig page-state. Eier ikke ressursstatus. |
 | Desktop app-shell-header | `Header` + slots | `src/ui/view/components/Header/` | Page velger appearance, layout og slots eksplisitt. |
 | Footer-skall | `Footer` | `src/ui/view/components/Footer/` | Delte footere komponerer denne i stedet for å inline konkurrerende shell. |
@@ -41,6 +41,8 @@ Før en ny delt komponent opprettes:
 | Desktop pop-out | `DesktopPopOutMenu` | `src/ui/view/components/DesktopPopOutMenu/` | Eier delt struktur og layer-mekanikk. |
 | Søk | Search-familien | `src/ui/view/components/Search/` | Eier felt/listbox/filter-mekanikk. Feature-ViewModel eier kandidater, rangering og policy. |
 | Verktøykort | `ToolCardGrid`, `ToolCard` | `src/ui/view/components/ToolCard/` | Brukes når den samme verktøykort-semantikken faktisk deles. |
+| Innholdsikon-vokabular | `CONTENT_ICON_KEYS` + `CONTENT_ICON_FALLBACK_KEY` | `src/constants/ContentIconKeys.js` | Canonical frontend-vokabular for innholdsikon-keys som resolveren støtter. Frontend-genererte keys bruker disse konstantene; backend-eide `topicArea.iconKey` passeres gjennom uendret. |
+| Innholdsikon-renderer | `getContentIcon()` | `src/ui/view/components/Shared/contentIconRegistry.js` | Én delt `iconKey → Lucide`-mapping for topic areas og verktøykort. Mappingen bruker canonical keys og kontrollert fallback fra `ContentIconKeys.js`. |
 
 ## Spørsmålskapabilitet
 

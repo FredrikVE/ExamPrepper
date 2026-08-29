@@ -1,5 +1,6 @@
 //test/ui/GlossaryPageViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import { GLOSSARY_TABLE_SORT_DIRECTIONS, GLOSSARY_TABLE_SORT_KEYS } from "../../src/constants/GlossaryTableSort.js";
 import { ALL_TOPIC_AREAS } from "../../src/constants/TopicAreas.js";
 import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../src/navigation/navigation.js";
 import { GLOSSARY_AUTOCOMPLETE_LIST_ID, createGlossaryAutocompleteOptionId } from "../../src/ui/viewmodel/GlossaryPage/glossarySearchModel.js";
@@ -31,7 +32,7 @@ const stateSetters = [
 	setAreGlossaryDetailRelationsExpanded
 ];
 let loadModelQueue = [];
-let currentTableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" };
+let currentTableSort = { key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING };
 let currentDetailRefs = null;
 
 const useState = jest.fn((initialValue) => {
@@ -282,7 +283,7 @@ function createViewModel({
 	isSearchAutocompleteOpen = false,
 	searchNarrowedGlossaryEntryKey = null,
 	expandedGlossaryEntryKey = null,
-	tableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" },
+	tableSort = { key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING },
 	loadedGlossaryEntries = glossaryEntries,
 	loadedTopicAreas = topicAreas,
 	loadedNetwork = null,
@@ -421,7 +422,7 @@ function expectSetContents(actualSet, expectedValues) {
 
 beforeEach(() => {
 	loadModelQueue = [];
-	currentTableSort = { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" };
+	currentTableSort = { key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING };
 	currentDetailRefs = null;
 	clearStateSetterCalls();
 	useState.mockClear();
@@ -589,9 +590,9 @@ describe("useGlossaryPageViewModel", () => {
 			"asymmetric-key"
 		]);
 		expect(viewModel.glossaryTableHeaders[2]).toMatchObject({
-			key: "DIRECT_NEIGHBOR_COUNT",
-			ariaSort: "descending",
-			sortIconKind: "DESCENDING",
+			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+			isActive: true,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING,
 			actionLabel: "Sorter Viktighet stigende"
 		});
 	});
@@ -859,7 +860,7 @@ describe("useGlossaryPageViewModel", () => {
 
 	test("uses the locked default table sort and starts each sort key in its intended direction", () => {
 		const { viewModel } = createViewModel({
-			tableSort: { key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" }
+			tableSort: { key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING }
 		});
 
 		expect(viewModel.glossaryTableRows.map((row) => row.glossaryEntryKey)).toEqual([
@@ -870,85 +871,79 @@ describe("useGlossaryPageViewModel", () => {
 		]);
 
 		clearStateSetterCalls();
-		viewModel.changeGlossaryTableSort("TERM");
+		viewModel.changeGlossaryTableSort(GLOSSARY_TABLE_SORT_KEYS.TERM);
 		const selectTermSort = setGlossaryTableSort.mock.calls[0][0];
-		expect(selectTermSort({ key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" })).toEqual({
-			key: "TERM",
-			direction: "ASCENDING"
+		expect(selectTermSort({ key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING })).toEqual({
+			key: GLOSSARY_TABLE_SORT_KEYS.TERM,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
 		});
 
 		clearStateSetterCalls();
-		viewModel.changeGlossaryTableSort("EXPLANATION_LENGTH");
+		viewModel.changeGlossaryTableSort(GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH);
 		const selectExplanationSort = setGlossaryTableSort.mock.calls[0][0];
-		expect(selectExplanationSort({ key: "TERM", direction: "ASCENDING" })).toEqual({
-			key: "EXPLANATION_LENGTH",
-			direction: "DESCENDING"
+		expect(selectExplanationSort({ key: GLOSSARY_TABLE_SORT_KEYS.TERM, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING })).toEqual({
+			key: GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 		});
 
 		clearStateSetterCalls();
-		viewModel.changeGlossaryTableSort("DIRECT_NEIGHBOR_COUNT");
+		viewModel.changeGlossaryTableSort(GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT);
 		const selectImportanceSort = setGlossaryTableSort.mock.calls[0][0];
-		expect(selectImportanceSort({ key: "TERM", direction: "ASCENDING" })).toEqual({
-			key: "DIRECT_NEIGHBOR_COUNT",
-			direction: "DESCENDING"
+		expect(selectImportanceSort({ key: GLOSSARY_TABLE_SORT_KEYS.TERM, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING })).toEqual({
+			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 		});
 
-		expect(selectImportanceSort({ key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" })).toEqual({
-			key: "DIRECT_NEIGHBOR_COUNT",
-			direction: "ASCENDING"
+		expect(selectImportanceSort({ key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING })).toEqual({
+			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
 		});
 
 		clearStateSetterCalls();
-		viewModel.changeGlossaryTableSort("MASTERY");
+		viewModel.changeGlossaryTableSort(GLOSSARY_TABLE_SORT_KEYS.MASTERY);
 		const selectMasterySort = setGlossaryTableSort.mock.calls[0][0];
-		expect(selectMasterySort({ key: "DIRECT_NEIGHBOR_COUNT", direction: "DESCENDING" })).toEqual({
-			key: "MASTERY",
-			direction: "DESCENDING"
+		expect(selectMasterySort({ key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING })).toEqual({
+			key: GLOSSARY_TABLE_SORT_KEYS.MASTERY,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 		});
 
-		expect(selectMasterySort({ key: "MASTERY", direction: "DESCENDING" })).toEqual({
-			key: "MASTERY",
-			direction: "ASCENDING"
+		expect(selectMasterySort({ key: GLOSSARY_TABLE_SORT_KEYS.MASTERY, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING })).toEqual({
+			key: GLOSSARY_TABLE_SORT_KEYS.MASTERY,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING
 		});
 	});
 
 	test("prepares table header interaction and accessibility in the page ViewModel", () => {
 		const { viewModel } = createViewModel({
-			tableSort: { key: "TERM", direction: "ASCENDING" }
+			tableSort: { key: GLOSSARY_TABLE_SORT_KEYS.TERM, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING }
 		});
 		const [termHeader, explanationHeader, connectionsHeader, masteryHeader] = viewModel.glossaryTableHeaders;
 
 		expect(termHeader).toMatchObject({
-			key: "TERM",
-			isSortable: true,
-			ariaSort: "ascending",
-			sortIconKind: "ASCENDING",
+			key: GLOSSARY_TABLE_SORT_KEYS.TERM,
+			isActive: true,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING,
 			actionLabel: "Sorter Begrep synkende",
 			onActivate: expect.any(Function)
 		});
 		expect(explanationHeader).toMatchObject({
-			key: "EXPLANATION_LENGTH",
+			key: GLOSSARY_TABLE_SORT_KEYS.EXPLANATION_LENGTH,
 			label: "Forklaring",
-			className: "glossary-table__sortable-header",
-			isSortable: true,
-			ariaSort: "none",
-			sortIconKind: "UNSORTED",
+			isActive: false,
+			direction: null,
 			actionLabel: "Sorter forklaring fra lengst til kortest",
 			onActivate: expect.any(Function)
 		});
 		expect(connectionsHeader).toMatchObject({
-			key: "DIRECT_NEIGHBOR_COUNT",
-			isSortable: true,
-			ariaSort: "none",
-			sortIconKind: "UNSORTED"
+			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+			isActive: false,
+			direction: null
 		});
 		expect(masteryHeader).toMatchObject({
-			key: "MASTERY",
+			key: GLOSSARY_TABLE_SORT_KEYS.MASTERY,
 			label: "Vurdering",
-			className: "glossary-table__sortable-header glossary-table__mastery-header",
-			isSortable: true,
-			ariaSort: "none",
-			sortIconKind: "UNSORTED",
+			isActive: false,
+			direction: null,
 			actionLabel: "Sorter vurdering fra mest til minst forstått",
 			onActivate: expect.any(Function)
 		});
@@ -961,11 +956,8 @@ describe("useGlossaryPageViewModel", () => {
 	test("prepares canonical table activation and detail-trigger mechanics in the page ViewModel", () => {
 		const { viewModel } = createViewModel({ expandedGlossaryEntryKey: "transport-layer" });
 		const transportLayer = viewModel.glossaryTableRows.find((row) => row.glossaryEntryKey === "transport-layer");
-		const rowTarget = { closest: jest.fn(() => null) };
-		const interactiveTarget = { closest: jest.fn(() => ({ tagName: "BUTTON" })) };
 
 		expect(transportLayer).toMatchObject({
-			className: "glossary-table-row",
 			onActivate: expect.any(Function),
 			detailTrigger: {
 				label: "Åpne detaljvisning for Transportlag",
@@ -978,15 +970,9 @@ describe("useGlossaryPageViewModel", () => {
 		expect(transportLayer).not.toHaveProperty("mobileDisclosure");
 
 		clearStateSetterCalls();
-		transportLayer.onActivate({ target: rowTarget });
-		expect(rowTarget.closest).toHaveBeenCalledWith('button, a, input, select, textarea, [role="button"]');
+		transportLayer.onActivate();
 		expect(setGlossaryDetailTrailKeys).toHaveBeenCalledWith([]);
 		expect(setExpandedGlossaryEntryKey).toHaveBeenCalledWith("transport-layer");
-
-		clearStateSetterCalls();
-		transportLayer.onActivate({ target: interactiveTarget });
-		expect(setGlossaryDetailTrailKeys).not.toHaveBeenCalled();
-		expect(setExpandedGlossaryEntryKey).not.toHaveBeenCalled();
 
 		clearStateSetterCalls();
 		transportLayer.detailTrigger.onActivate();
@@ -1101,7 +1087,7 @@ describe("useGlossaryPageViewModel", () => {
 		const { viewModel } = createViewModel({
 			expandedGlossaryEntryKey: "packet",
 			glossaryDetailTrailKeys: ["public-key"],
-			tableSort: { key: "TERM", direction: "ASCENDING" }
+			tableSort: { key: GLOSSARY_TABLE_SORT_KEYS.TERM, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.ASCENDING }
 		});
 		const titleFocusRequestRef = currentDetailRefs.titleFocusRequest;
 		clearStateSetterCalls();

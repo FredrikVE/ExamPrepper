@@ -75,7 +75,7 @@ forbudt i `QuestionCard`-kapabiliteten og API-transformasjonen og håndheves av 
 
 | Ansvar | Canonical implementasjon | Regel |
 |---|---|---|
-| Ytre sidestillas | `<WorkspaceScaffold/>` | Alle hovedsider bruker samme shell, slots og scrollflate. |
+| Ytre sidestillas | `<WorkspaceScaffold/>` | Alle hovedsider bruker samme shell, slots og scrollflate. Scaffoldet deklarerer `--scaffold-body-*` hooks for eksplisitte body-layout-/overflow-varianter; feature-CSS styler ikke intern `.workspace-scaffold-body` direkte. |
 | Rendring av page-state | `<WorkspaceState/>` | Ingen Page lager en konkurrerende loading/error/empty/content-grense. |
 | Desktop app-shell-header | `<Header/>` og slot-komponentene | Appearance, layout og slots velges eksplisitt per Page. |
 | Footer-skall | `<Footer/>` | Delte footere komponerer denne; den inlines ikke per side. |
@@ -191,7 +191,7 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-07 | Back-kontrakten flyter som ett objekt (`backContract`), ikke som løse argumenter mellom app-shell og side-ViewModels. |
 | 2026-07, presisert 2026-07-26 | `LOAD_STATUS` og `useLoadModel` eier teknisk ressursstatus. `WORKSPACE_STATE_KINDS` eier page-state-unionen. `combineLoadStatuses` og `createWorkspaceState` er avledninger; `WorkspaceState` er canonical renderer. Views importerer ikke `LOAD_STATUS`. |
 | 2026-07-05 | Feiltekst til bruker er produkttekst fra i18n. Teknisk feilobjekt logges kun i dev og lekker ikke direkte til UI. |
-| 2026-07-07, presisert 2026-07-24 | `WorkspaceScaffold` i `components/WorkspaceScaffold/` er canonical eier av ytre workspace-skall, header-/footer-/overlay-slots og scrollflaten `.workspace-scaffold-body`. |
+| 2026-07-07, presisert 2026-07-24 | `WorkspaceScaffold` i `components/WorkspaceScaffold/` er canonical eier av ytre workspace-skall, header-/footer-/overlay-slots og scrollflaten `.workspace-scaffold-body`. Sidefamilier som trenger annen body-layout eller overflow-policy bruker scaffoldets deklarerte `--scaffold-body-*` hooks på scaffold-roten og styler ikke intern body direkte. |
 | 2026-07-07, erstattet 2026-07-26 | React-wrapperen `WorkSpaceCard.jsx` er fjernet. `.workspace-card` i `style/Shared/WorkSpaceCard/workspace-card.css` er en navngitt lokal flate som brukes av `QuestionCard`, ikke en app-bred canonical primitive. En ny delt kortprimitive innføres bare ved dokumentert felles semantikk og kontrakt. |
 | 2026-07-07, presisert 2026-07-26 | WorkspaceScaffold-arv skjer med multiklasse + deklarerte scaffold-variabler. Sideklasser setter bare dokumenterte utvidelsespunkter og egen geometri; de redeklarerer ikke scaffoldets kjerneegenskaper. |
 | 2026-07-07, presisert 2026-07-26 | Flipcard-faces, `QuestionCard` og feature-eide utvalgskort beholder egne semantiske og visuelle kontrakter. Delte utvalgskort-dimensjoner kan ligge i `style/Shared/SelectionCard/`, men det finnes ingen canonical `SelectionCard`-komponent. |
@@ -590,8 +590,8 @@ kolonneprioritering og lokal tetthet eies av CSS. Search-familien eier search/fi
 mens `selectedTopicAreaKeys` forblir eneste chapter-selection state. `ToggleButtonRow` eier sin egen
 responsive presentasjon gjennom den canonical offentlige inngangen.
 
-Radaktivering, sorteringshandlinger, modal graph-/relations-navigasjon og registrering av detail-trigger
-React-ref-er eies av ViewModelen. Glossary-komponentene mottar ferdige presentation models og callbacks,
+Ressurslasting, rene derivasjoner og interaction-binding kan komponeres i private moduler under `viewmodel/GlossaryPage/`; `useGlossaryPageViewModel()` forblir eneste offentlige kontrakt. Radaktivering, sorteringshandlinger, modal graph-/relations-navigasjon og registrering av detail-trigger
+React-ref-er eies bak denne kontrakten. Glossary-komponentene mottar ferdige presentation models og callbacks,
 rendrer deklarativt og oppretter ikke konkurrerende feature-state eller event-policy. De manipulerer
 heller ikke DOM-struktur med `document`, `querySelector` eller `innerHTML`.
 
@@ -929,7 +929,10 @@ children
 ```
 
 Det finnes ingen `contentClassName`-escape hatch. Side-spesifikk padding og indre layout ligger på
-wrappere inne i `children`, ikke som en dynamisk klasse på scaffoldets body.
+wrappere inne i `children`, ikke som en dynamisk klasse på scaffoldets body. Når en side trenger en
+annen body-layout eller overflow-policy, setter den de deklarerte `--scaffold-body-display`,
+`--scaffold-body-flex-direction`, `--scaffold-body-overflow-x` og `--scaffold-body-overflow-y` på
+scaffold-roten; den selekterer ikke `.workspace-scaffold-body` fra feature-CSS.
 
 Komponenten eier:
 

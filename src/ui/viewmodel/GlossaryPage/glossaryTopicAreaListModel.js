@@ -1,3 +1,4 @@
+import { CONTENT_ICON_KEYS } from "../../../constants/ContentIconKeys.js";
 import { ALL_TOPIC_AREAS } from "../../../constants/TopicAreas.js";
 
 export const GLOSSARY_TOPIC_AREA_LIST_ID = "glossary-topic-area-list";
@@ -31,7 +32,7 @@ export function createGlossaryAllTopicAreaListItem({ entryCount, isSelected, lab
 		label: labels.allTopicAreas,
 		subtitle: labels.chapterSubtitle(entryCount),
 		eyebrow: null,
-		iconKey: "book-open",
+		iconKey: CONTENT_ICON_KEYS.BOOK_OPEN,
 		position: 0,
 		entryCount,
 		isAllTopicAreas: true,
