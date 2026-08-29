@@ -1,0 +1,225 @@
+/* src/ui/style/GlossaryPage/DetailModal/modal-network.css */
+.glossary-detail-modal__graph-card {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: 13px;
+	padding: 17px var(--space-7) var(--space-7);
+	border: 1px solid var(--line);
+	border-radius: 13px;
+	background: color-mix(in srgb, var(--panel-bg) 76%, transparent);
+}
+
+.glossary-detail-modal__graph-card .glossary-detail__section-heading {
+	margin: 0;
+	font-size: 18px;
+	letter-spacing: -0.02em;
+}
+
+.glossary-detail-modal__graph-canvas {
+	position: relative;
+	width: 100%;
+	min-height: clamp(285px, 36vh, 410px);
+	overflow: hidden;
+	border: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+	border-radius: var(--radius-sm);
+	background:
+		radial-gradient(
+			circle at 42% 44%,
+			color-mix(in srgb, var(--accent) 9%, transparent),
+			transparent 12rem
+		),
+		linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--panel-strong) 70%, transparent),
+			color-mix(in srgb, var(--panel-bg) 54%, transparent)
+		);
+	isolation: isolate;
+}
+
+.glossary-detail-modal__graph-canvas::before {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	content: "";
+	opacity: 0.26;
+	background-image:
+		linear-gradient(
+			color-mix(in srgb, var(--text-soft) 7%, transparent) 1px,
+			transparent 1px
+		),
+		linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--text-soft) 7%, transparent) 1px,
+			transparent 1px
+		);
+	background-size: 28px 28px;
+}
+
+.glossary-detail-modal__graph-edges {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.glossary-detail-modal__graph-edge {
+	vector-effect: non-scaling-stroke;
+	stroke: color-mix(in srgb, var(--accent) 54%, transparent);
+	stroke-width: 1.8;
+	stroke-linecap: round;
+}
+
+.glossary-detail-modal__graph-edge[data-edge-role="SECONDARY"] {
+	stroke: color-mix(in srgb, var(--text-muted) 38%, transparent);
+	stroke-width: 1.35;
+	stroke-dasharray: 5 6;
+}
+
+.glossary-detail-modal__graph-node {
+	position: absolute;
+	z-index: 2;
+	display: grid;
+	width: min(150px, 23%);
+	min-height: 58px;
+	place-items: center;
+	gap: var(--space-1);
+	padding: 9px 11px;
+	border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--line));
+	border-radius: 11px;
+	background: color-mix(in srgb, var(--panel-bg) 96%, transparent);
+	box-shadow:
+		var(--shadow-card),
+		inset 0 1px 0 color-mix(in srgb, var(--text-main) 4%, transparent);
+	color: var(--text-main);
+	transform: translate(-50%, -50%);
+	font: inherit;
+	font-size: 12px;
+	font-weight: 720;
+	line-height: 1.25;
+	text-align: center;
+	overflow-wrap: anywhere;
+}
+
+button.glossary-detail-modal__graph-node {
+	cursor: pointer;
+	transition:
+		color var(--transition-fast),
+		border-color var(--transition-fast),
+		background var(--transition-fast),
+		box-shadow var(--transition-fast),
+		transform var(--transition-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	button.glossary-detail-modal__graph-node:hover {
+		border-color: color-mix(in srgb, var(--accent) 78%, var(--line));
+		background: color-mix(in srgb, var(--panel-bg) 88%, var(--accent) 12%);
+		box-shadow:
+			var(--shadow-card),
+			0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent);
+		transform: translate(-50%, calc(-50% - 2px));
+	}
+}
+
+button.glossary-detail-modal__graph-node:active {
+	transform: translate(-50%, -50%) scale(0.97);
+}
+
+button.glossary-detail-modal__graph-node:focus-visible {
+	outline: none;
+	border-color: color-mix(in srgb, var(--accent) 94%, var(--button-primary-text));
+	box-shadow:
+		0 0 0 4px var(--button-focus-ring),
+		var(--shadow-card);
+}
+
+.glossary-detail-modal__graph-node--center {
+	z-index: 3;
+	width: min(172px, 27%);
+	min-height: 68px;
+	border-color: color-mix(in srgb, var(--accent) 72%, var(--line));
+	background:
+		radial-gradient(
+			circle at 25% 0%,
+			color-mix(in srgb, var(--button-primary-text) 12%, transparent),
+			transparent 5rem
+		),
+		var(--accent-gradient);
+	box-shadow:
+		var(--shadow-button),
+		0 0 0 4px color-mix(in srgb, var(--accent) 11%, transparent),
+		inset 0 1px 0 color-mix(in srgb, var(--button-primary-text) 18%, transparent);
+	color: var(--button-primary-text);
+	font-size: 13px;
+	font-weight: 820;
+}
+
+.glossary-detail-modal__graph-node-meta {
+	display: block;
+	margin-bottom: 3px;
+	color: color-mix(in srgb, var(--button-primary-text) 70%, transparent);
+	font-size: 9px;
+	font-weight: 760;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.glossary-detail-modal__graph-node strong {
+	font-size: 12px;
+	line-height: 1.25;
+}
+
+.glossary-detail-modal__graph-node-chapter {
+	display: block;
+	margin-top: var(--space-1);
+	color: var(--text-soft);
+	font-size: 10px;
+	font-weight: 620;
+	line-height: 1.25;
+}
+
+.glossary-detail-modal__graph-node--center .glossary-detail-modal__graph-node-chapter {
+	color: color-mix(in srgb, var(--button-primary-text) 76%, transparent);
+}
+
+.glossary-detail-modal__graph-status,
+.glossary-detail-modal__graph-empty {
+	margin: 0;
+	padding: var(--space-7) var(--space-8);
+	border: 1px dashed color-mix(in srgb, var(--line) 72%, transparent);
+	border-radius: var(--radius-sm);
+	background: color-mix(in srgb, var(--panel-strong) 24%, transparent);
+	color: var(--text-muted);
+	font-size: 13px;
+	line-height: 1.5;
+	text-align: center;
+}
+
+.glossary-detail-modal__graph-empty {
+	display: grid;
+	min-height: 150px;
+	place-items: center;
+}
+
+@media (max-width: 1200px) and (min-width: 933px) {
+	.glossary-detail-modal__graph-canvas {
+		min-height: 330px;
+	}
+
+	.glossary-detail-modal__graph-node {
+		width: min(138px, 25%);
+		font-size: 11px;
+	}
+
+	.glossary-detail-modal__graph-node--center {
+		width: min(158px, 29%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	button.glossary-detail-modal__graph-node {
+		transition: none;
+	}
+}
