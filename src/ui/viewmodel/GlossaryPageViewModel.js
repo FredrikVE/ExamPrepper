@@ -309,6 +309,7 @@ export default function useGlossaryPageViewModel({
 			networkDisplay: glossaryNetworkDisplay,
 			visibleGlossaryEntryKeys,
 			trailKeys: glossaryDetailTrailKeys,
+			areRelationsExpanded: false,
 			t
 		});
 	}, [expandedGlossaryEntryKey, glossaryDetailTrailKeys, glossaryNetworkDisplay, localizedEntryByKey, t, topicAreaByKey, topicAreaReferenceByKey, visibleGlossaryEntryKeys]);
