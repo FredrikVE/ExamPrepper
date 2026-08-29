@@ -9,7 +9,7 @@ export default function GlossaryDetailRelations({ model, isInteractive }) {
 				<Link2 size={17} strokeWidth={1.9} aria-hidden="true" />
 				<span>{model.heading}</span>
 				<span className="glossary-detail-modal__relations-count">
-					· {model.count}
+					({model.count})
 				</span>
 			</h3>
 

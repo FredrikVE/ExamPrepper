@@ -38,7 +38,7 @@ export default function createExamStatusModel({
 			visibleQuestions.length
 		),
 		feedbackToggleLabel: getFeedbackToggleLabel(showAllFeedback),
-		mobileWorkStatusLabel: `${elapsedTimeLabel} · ${answeredPercentLabel} ${answeredLabel}`,
+		mobileWorkStatusLabel: `${elapsedTimeLabel}, ${answeredPercentLabel} ${answeredLabel}`,
 		canSubmitExam: !submitted && questions.length > 0
 	};
 }

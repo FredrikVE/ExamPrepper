@@ -36,7 +36,7 @@ describe("createExamStatusModel", () => {
 			scoreLabel: "—",
 			questionProgressLabel: "1 / 2",
 			feedbackToggleLabel: "Skjul fasit",
-			mobileWorkStatusLabel: "00:12 · 0% besvart",
+			mobileWorkStatusLabel: "00:12, 0% besvart",
 			canSubmitExam: true
 		});
 		expect(calculateExamScoreUseCase.execute).toHaveBeenCalledWith(questions, {});
@@ -72,7 +72,7 @@ describe("createExamStatusModel", () => {
 			scoreLabel: "1.5/2",
 			questionProgressLabel: "2 / 2",
 			feedbackToggleLabel: "Vis fasit",
-			mobileWorkStatusLabel: "03:45 · 100% besvart",
+			mobileWorkStatusLabel: "03:45, 100% besvart",
 			canSubmitExam: false
 		});
 	});

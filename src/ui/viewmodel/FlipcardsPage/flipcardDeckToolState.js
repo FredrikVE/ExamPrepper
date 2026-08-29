@@ -17,7 +17,7 @@ function haveSameOrder(firstCardIds, secondCardIds) {
 }
 
 function createDeckToolAriaLabel(label, statusLabel, isSelected, selectedLabel) {
-	return [label, statusLabel, isSelected ? selectedLabel : null].filter(Boolean).join(" · ");
+	return [label, statusLabel, isSelected ? selectedLabel : null].filter(Boolean).join(", ");
 }
 
 export function createShuffledFlipcardIds(cards) {

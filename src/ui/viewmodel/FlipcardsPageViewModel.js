@@ -521,7 +521,7 @@ function createTopicAreaDeckToolAriaLabel(label, statusLabel, isSelected, select
 		labelParts.push(selectedLabel);
 	}
 
-	return labelParts.join(" · ");
+	return labelParts.join(", ");
 }
 
 function createTopicAreaDeckToolKey(topicAreaKey) {

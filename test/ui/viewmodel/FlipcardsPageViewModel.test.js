@@ -69,13 +69,13 @@ function createTranslations() {
 
 			if (property === "flipcardsProgressLabel") {
 				return (completedCount, totalCount, masteredCount, practiceCount) => (
-					`${completedCount}/${totalCount} reviewed · ${masteredCount} mastered · ${practiceCount} practice`
+					`${completedCount}/${totalCount} reviewed, ${masteredCount} mastered, ${practiceCount} practice`
 				);
 			}
 
 			if (property === "flipcardsCompleteBody") {
 				return (masteredCount, practiceCount, totalCount) => (
-					`${totalCount} total · ${masteredCount} mastered · ${practiceCount} practice`
+					`${totalCount} total, ${masteredCount} mastered, ${practiceCount} practice`
 				);
 			}
 

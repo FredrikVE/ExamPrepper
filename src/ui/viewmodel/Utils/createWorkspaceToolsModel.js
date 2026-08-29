@@ -29,7 +29,7 @@ export default function createWorkspaceToolsModel(params) {
 function createWorkspaceActionToolItemModel(params) {
 	const label = params.t[params.toolItem.labelKey];
 	const statusLabel = params.toolItem.isDisabled ? params.t.pageToolsUnavailableLabel : "";
-	const ariaLabel = statusLabel ? `${label} · ${statusLabel}` : label;
+	const ariaLabel = statusLabel ? `${label}, ${statusLabel}` : label;
 
 	return {
 		id: params.toolItem.id,
@@ -45,7 +45,7 @@ function createWorkspaceActionToolItemModel(params) {
 function createTopicAreaToolItemModel(params) {
 	const isSelected = params.topicAreaToolItem.topicAreaKey === params.activeTopicAreaKey;
 	const statusLabel = isSelected ? params.topicAreaToolItem.selectedStatusLabel : "";
-	const ariaLabel = statusLabel ? `${params.topicAreaToolItem.label} · ${statusLabel}` : params.topicAreaToolItem.label;
+	const ariaLabel = statusLabel ? `${params.topicAreaToolItem.label}, ${statusLabel}` : params.topicAreaToolItem.label;
 
 	return {
 		id: params.topicAreaToolItem.id,

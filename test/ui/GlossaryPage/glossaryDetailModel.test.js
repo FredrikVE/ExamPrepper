@@ -19,7 +19,7 @@ const t = Object.freeze({
 	glossaryPageDetailOutsideSelectionLabel: "Utenfor utvalget",
 	glossaryPageDetailPreviousLabel: "Forrige",
 	glossaryPageDetailNextLabel: "Neste",
-	glossaryPageDetailSubtitle: (chapterReference, chapterLabel, associationLabel) => `${chapterReference} · ${chapterLabel} · ${associationLabel}`,
+	glossaryPageDetailSubtitle: (chapterReference, chapterLabel, associationLabel) => `${chapterReference}, ${chapterLabel}, ${associationLabel}`,
 	glossaryPageDetailCloseLabel: "Lukk detaljvisningen",
 	glossaryPageDetailExplanationHeading: "Forklaring",
 	glossaryPageDetailNetworkHeading: "Plass i pensum",
@@ -118,7 +118,7 @@ describe("glossaryDetailModel", () => {
 
 		expect(presentation.header).toEqual({
 			title: "AES",
-			subtitle: "Kapittel 2 · Kryptografi · 2 assosierte begreper",
+			subtitle: "Kapittel 2, Kryptografi, 2 assosierte begreper",
 			closeLabel: "Lukk detaljvisningen",
 			trailBack: null
 		});
