@@ -531,6 +531,43 @@ describe("useGlossaryPageViewModel", () => {
 		});
 	});
 
+	test.each([
+		{
+			name: "glossary overview completes before topic areas",
+			glossaryStatus: LOAD_STATUS.READY,
+			topicAreaStatus: LOAD_STATUS.LOADING,
+			loadedGlossaryEntries: glossaryEntries,
+			loadedTopicAreas: []
+		},
+		{
+			name: "topic areas complete before glossary overview",
+			glossaryStatus: LOAD_STATUS.LOADING,
+			topicAreaStatus: LOAD_STATUS.READY,
+			loadedGlossaryEntries: [],
+			loadedTopicAreas: topicAreas
+		}
+	])("keeps the canonical workspace loading state while $name during a subject switch", (loadState) => {
+		const { viewModel } = createViewModel({
+			...loadState,
+			expandedGlossaryEntryKey: "transport-layer"
+		});
+
+		expect(viewModel.workspaceState).toEqual({
+			kind: WORKSPACE_STATE_KINDS.LOADING,
+			label: "Laster"
+		});
+		expect(viewModel.glossaryDetailPresentation).toBeNull();
+		expect(viewModel.isGlossaryDetailModalOpen).toBe(false);
+		expect(viewModel.glossaryDetailModal).toMatchObject({
+			isOpen: false,
+			content: null
+		});
+		expect(useLoadModel.mock.calls[2][0]).toMatchObject({
+			resourceKey: "in2120:no-concept",
+			isEnabled: false
+		});
+	});
+
 	test("selects all chapters by default and sorts the most important concepts first", () => {
 		const { viewModel } = createViewModel();
 

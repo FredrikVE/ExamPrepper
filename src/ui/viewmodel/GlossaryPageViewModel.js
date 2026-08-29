@@ -128,21 +128,22 @@ export default function useGlossaryPageViewModel({
 		onLoaded: null
 	});
 
-	const glossaryNetworkLoad = useLoadModel({
-		execute: executeGlossaryNetworkLoad,
-		emptyData: null,
-		errorMessage: t.glossaryPageNetworkErrorMessage,
-		resourceKey: `${subjectId ?? "no-subject"}:${expandedGlossaryEntryKey ?? "no-concept"}`,
-		isEnabled: isLoadEnabled && expandedGlossaryEntryKey !== null,
-		onLoaded: null
-	});
-
 	const glossaryEntries = glossaryOverviewLoad.data;
 	const topicAreas = topicAreaLoad.data;
 	const pageStatus = combineLoadStatuses([
 		glossaryOverviewLoad.status,
 		topicAreaLoad.status
 	]);
+	const isPageContentReady = pageStatus === LOAD_STATUS.READY;
+	const activeGlossaryDetailEntryKey = isPageContentReady ? expandedGlossaryEntryKey : null;
+	const glossaryNetworkLoad = useLoadModel({
+		execute: executeGlossaryNetworkLoad,
+		emptyData: null,
+		errorMessage: t.glossaryPageNetworkErrorMessage,
+		resourceKey: `${subjectId ?? "no-subject"}:${activeGlossaryDetailEntryKey ?? "no-concept"}`,
+		isEnabled: isLoadEnabled && activeGlossaryDetailEntryKey !== null,
+		onLoaded: null
+	});
 	const pageErrorMessage = resolveFirstLoadError([
 		glossaryOverviewLoad,
 		topicAreaLoad
@@ -236,21 +237,21 @@ export default function useGlossaryPageViewModel({
 
 	const glossaryNetwork = useMemo(() => {
 		return createGlossaryNetworkPresentation({
-			network: glossaryNetworkLoad.data,
+			network: isPageContentReady ? glossaryNetworkLoad.data : null,
 			language,
 			topicAreaReferenceByKey,
 			t
 		});
-	}, [glossaryNetworkLoad.data, language, t, topicAreaReferenceByKey]);
+	}, [glossaryNetworkLoad.data, isPageContentReady, language, t, topicAreaReferenceByKey]);
 
 	const glossaryNetworkDisplay = useMemo(() => {
 		return createGlossaryNetworkDisplay({
-			expandedGlossaryEntryKey,
+			expandedGlossaryEntryKey: activeGlossaryDetailEntryKey,
 			loadStatus: glossaryNetworkLoad.status,
 			network: glossaryNetwork,
 			error: glossaryNetworkLoad.error
 		});
-	}, [expandedGlossaryEntryKey, glossaryNetwork, glossaryNetworkLoad.error, glossaryNetworkLoad.status]);
+	}, [activeGlossaryDetailEntryKey, glossaryNetwork, glossaryNetworkLoad.error, glossaryNetworkLoad.status]);
 
 	const baseGlossaryTableRows = useMemo(() => {
 		const rows = createGlossaryTableRows({
@@ -273,7 +274,7 @@ export default function useGlossaryPageViewModel({
 
 	const glossaryDetailPresentation = useMemo(() => {
 		return createGlossaryDetailPresentation({
-			activeGlossaryEntryKey: expandedGlossaryEntryKey,
+			activeGlossaryEntryKey: activeGlossaryDetailEntryKey,
 			localizedEntryByKey,
 			topicAreaByKey,
 			topicAreaReferenceByKey,
@@ -283,7 +284,7 @@ export default function useGlossaryPageViewModel({
 			areRelationsExpanded: areGlossaryDetailRelationsExpanded,
 			t
 		});
-	}, [areGlossaryDetailRelationsExpanded, expandedGlossaryEntryKey, glossaryDetailTrailKeys, glossaryNetworkDisplay, localizedEntryByKey, t, topicAreaByKey, topicAreaReferenceByKey, visibleGlossaryEntryKeys]);
+	}, [activeGlossaryDetailEntryKey, areGlossaryDetailRelationsExpanded, glossaryDetailTrailKeys, glossaryNetworkDisplay, localizedEntryByKey, t, topicAreaByKey, topicAreaReferenceByKey, visibleGlossaryEntryKeys]);
 
 	const glossaryPanelHeading = useMemo(() => {
 		return createGlossaryPanelHeading({
@@ -772,7 +773,7 @@ export default function useGlossaryPageViewModel({
 	}, [exploreGlossaryDetailConcept, glossaryDetailPresentation, navigateBackGlossaryDetailTrail, openNextGlossaryDetail, openPreviousGlossaryDetail, toggleGlossaryDetailRelations]);
 
 
-	const isGlossaryDetailModalOpen = expandedGlossaryEntryKey !== null;
+	const isGlossaryDetailModalOpen = activeGlossaryDetailEntryKey !== null;
 
 	useEffect(() => {
 		if (!isGlossaryDetailModalOpen || interactiveGlossaryDetailPresentation === null) {
