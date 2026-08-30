@@ -131,6 +131,47 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	});
 
 
+	test("resumes the matching roadmap session without posting another start request", async () => {
+		const moduleId = learningPath.modules[0].id;
+		const activeSession = learningPath.modules[0].sections[0].sessions[1];
+
+		learningPath.resumableSession = {
+			sessionId: "session-active",
+			moduleId,
+			planKey: activeSession.planKey,
+			sectionId: learningPath.modules[0].sections[0].id,
+			currentQuestionPosition: 0,
+			questionCount: activeSession.questionCount
+		};
+
+		const execute = jest.fn();
+		const onLearningSessionStarted = jest.fn();
+		const render = () => renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const initialViewModel = render();
+
+		initialViewModel.onModuleToggle(moduleId);
+
+		const viewModel = render();
+		const sessions = viewModel.roadmapModel.entries[0].detailModel.sections[0].sessions;
+		const activeAction = sessions[1].actionModel;
+
+		expect(activeAction).toMatchObject({
+			intent: "resume",
+			sessionId: "session-active",
+			isDisabled: false
+		});
+
+		expect(sessions[0].actionModel).toMatchObject({
+			intent: "start",
+			isDisabled: true
+		});
+
+		await viewModel.onLearningPathAction(activeAction);
+
+		expect(onLearningSessionStarted).toHaveBeenCalledWith("session-active");
+		expect(execute).not.toHaveBeenCalled();
+	});
+
 	test("opens backend-selected ChapterTest without starting a LearningSession", async () => {
 		learningPath.nextActivity = {
 			kind: "chapter-test",

@@ -45,6 +45,7 @@ function createModel(status, performancePercent = null, performanceBand = "not-a
 	return createLearningPathSectionModel({
 		section: createSection(status, performancePercent, performanceBand, isStartable),
 		moduleId: "module-1",
+		resumableSession: null,
 		startingActionKey: null,
 		canStartLearningSessions: true,
 		t

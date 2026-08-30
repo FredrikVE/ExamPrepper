@@ -5,11 +5,12 @@ import createLearningPathActionKey from "./createLearningPathActionKey.js";
 import createLearningPathProgressModel from "./createLearningPathProgressModel.js";
 import createLearningPathSessionModel from "./createLearningPathSessionModel.js";
 
-export default function createLearningPathSectionModel({ section, moduleId, startingActionKey, canStartLearningSessions, t }) {
+export default function createLearningPathSectionModel({ section, moduleId, resumableSession, startingActionKey, canStartLearningSessions, t }) {
 	const sessions = section.sessions.map((session) => {
 		return createLearningPathSessionModel({
 			session,
 			moduleId,
+			resumableSession,
 			startingActionKey,
 			canStartLearningSessions,
 			t
@@ -35,6 +36,7 @@ export default function createLearningPathSectionModel({ section, moduleId, star
 		actionModel: createSectionActionModel({
 			section,
 			moduleId,
+			resumableSession,
 			startingActionKey,
 			canStartLearningSessions,
 			t
@@ -43,7 +45,7 @@ export default function createLearningPathSectionModel({ section, moduleId, star
 	};
 }
 
-function createSectionActionModel({ section, moduleId, startingActionKey, canStartLearningSessions, t }) {
+function createSectionActionModel({ section, moduleId, resumableSession, startingActionKey, canStartLearningSessions, t }) {
 	const hasStartableSession = section.sessions.some((session) => session.isStartable);
 
 	if (!hasStartableSession) {
@@ -73,7 +75,7 @@ function createSectionActionModel({ section, moduleId, startingActionKey, canSta
 		sessionId: null,
 		target,
 		label,
-		isDisabled: !canStartLearningSessions || startingActionKey !== null,
+		isDisabled: !canStartLearningSessions || resumableSession !== null || startingActionKey !== null,
 		isPending: startingActionKey === actionKey
 	};
 }

@@ -35,6 +35,7 @@ export default function createLearningPathModuleModel({ module, resumableSession
 	if (isExpanded) {
 		detailModel = createModuleDetailModel({
 			module,
+			resumableSession,
 			actionModel,
 			progressModel,
 			startingActionKey,
@@ -74,11 +75,12 @@ export default function createLearningPathModuleModel({ module, resumableSession
 	};
 }
 
-function createModuleDetailModel({ module, actionModel, progressModel, startingActionKey, canStartLearningSessions, t }) {
+function createModuleDetailModel({ module, resumableSession, actionModel, progressModel, startingActionKey, canStartLearningSessions, t }) {
 	const sections = module.sections.map((section) => {
 		return createLearningPathSectionModel({
 			section,
 			moduleId: module.id,
+			resumableSession,
 			startingActionKey,
 			canStartLearningSessions,
 			t

@@ -48,6 +48,31 @@ describe("createLearningPathActionModel", () => {
 		expect(action).toMatchObject({ intent: "start", actionKey: "module:module-1:start", target: { kind: "module" }, label: "Continue" });
 	});
 
+	test("disables a different module start while another persisted session is active", () => {
+		const action = createLearningPathActionModel({
+			module,
+
+			resumableSession: {
+				sessionId: "s1",
+				moduleId: "module-other"
+			},
+
+			nextActivity: {
+				kind: "start-authored-session",
+				moduleId: "module-1"
+			},
+
+			startingActionKey: null,
+			canStartLearningSessions: true,
+			t
+		});
+
+		expect(action).toMatchObject({
+			intent: "start",
+			isDisabled: true
+		});
+	});
+
 	test("disables start actions when auth does not allow LearningSession creation", () => {
 		const action = createLearningPathActionModel({ module, resumableSession: null, nextActivity: { kind: "start-authored-session", moduleId: "module-1" }, startingActionKey: null, canStartLearningSessions: false, t });
 

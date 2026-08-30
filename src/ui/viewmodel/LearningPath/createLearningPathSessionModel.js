@@ -3,7 +3,7 @@ import { LEARNING_PATH_ROADMAP_STATUS } from "../../../constants/LearningPathRoa
 import { LEARNING_PATH_ACTION_INTENT } from "./LearningPathActionIntent.js";
 import createLearningPathActionKey from "./createLearningPathActionKey.js";
 
-export default function createLearningPathSessionModel({ session, moduleId, startingActionKey, canStartLearningSessions, t }) {
+export default function createLearningPathSessionModel({ session, moduleId, resumableSession, startingActionKey, canStartLearningSessions, t }) {
 	const appearance = createSessionAppearance(session.status);
 	const iconKey = createSessionIconKey(session);
 	const scoreModel = createSessionScoreModel({ session, t });
@@ -11,6 +11,7 @@ export default function createLearningPathSessionModel({ session, moduleId, star
 	const actionModel = createSessionActionModel({
 		session,
 		moduleId,
+		resumableSession,
 		startingActionKey,
 		canStartLearningSessions,
 		t
@@ -100,9 +101,21 @@ function createSessionReplayHoverLabel({ session, t }) {
 	return t.learningPathSessionReplayLabel;
 }
 
-function createSessionActionModel({ session, moduleId, startingActionKey, canStartLearningSessions, t }) {
+function createSessionActionModel({ session, moduleId, resumableSession, startingActionKey, canStartLearningSessions, t }) {
 	if (!session.isStartable) {
 		return null;
+	}
+
+	if (isResumableSession({ session, moduleId, resumableSession })) {
+		return {
+			intent: LEARNING_PATH_ACTION_INTENT.RESUME,
+			moduleId,
+			sessionId: resumableSession.sessionId,
+			target: null,
+			label: t.learningPathResumeLabel,
+			isDisabled: false,
+			isPending: false
+		};
 	}
 
 	const target = {
@@ -128,9 +141,17 @@ function createSessionActionModel({ session, moduleId, startingActionKey, canSta
 		sessionId: null,
 		target,
 		label,
-		isDisabled: !canStartLearningSessions || startingActionKey !== null,
+		isDisabled: !canStartLearningSessions || resumableSession !== null || startingActionKey !== null,
 		isPending: startingActionKey === actionKey
 	};
+}
+
+function isResumableSession({ session, moduleId, resumableSession }) {
+	if (resumableSession === null) {
+		return false;
+	}
+
+	return resumableSession.moduleId === moduleId && resumableSession.planKey === session.planKey;
 }
 
 function createSessionStatusLabel({ status, t }) {

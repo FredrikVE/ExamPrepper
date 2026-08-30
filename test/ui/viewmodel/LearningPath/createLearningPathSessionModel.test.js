@@ -13,7 +13,8 @@ const t = {
 	learningPathSessionScoreLabel: (position, percentage) => `Session ${position}: ${percentage}% result`,
 	learningPathSessionNotAssessedScoreLabel: (position) => `Session ${position}: not assessed`,
 	learningPathSessionOpenLabel: (position) => `Start session ${position}`,
-	learningPathSessionReplayLabel: "Take session again"
+	learningPathSessionReplayLabel: "Take session again",
+	learningPathResumeLabel: "Resume"
 };
 
 function session(overrides = {}) {
@@ -33,6 +34,7 @@ function options(overrides = {}) {
 	return {
 		session: session(),
 		moduleId: "module-1",
+		resumableSession: null,
 		startingActionKey: null,
 		canStartLearningSessions: true,
 		t,
@@ -122,6 +124,51 @@ describe("createLearningPathSessionModel", () => {
 		expect(current.actionModel.label).toBe("Start session 1");
 		expect(completedLocked.replayHoverLabel).toBeNull();
 		expect(completedLocked.actionModel).toBeNull();
+	});
+
+	test("resumes the active persisted session instead of starting the same plan again", () => {
+		const model = createLearningPathSessionModel(
+			options({
+				session: session({
+					status: "current",
+					performancePercent: null,
+					performanceBand: "not-assessed"
+				}),
+
+				resumableSession: {
+					sessionId: "session-active",
+					moduleId: "module-1",
+					planKey: "plan-1"
+				}
+			})
+		);
+
+		expect(model.actionModel).toEqual({
+			intent: "resume",
+			moduleId: "module-1",
+			sessionId: "session-active",
+			target: null,
+			label: "Resume",
+			isDisabled: false,
+			isPending: false
+		});
+	});
+
+	test("disables another session start while a persisted session is active", () => {
+		const model = createLearningPathSessionModel(
+			options({
+				resumableSession: {
+					sessionId: "session-active",
+					moduleId: "module-1",
+					planKey: "plan-2"
+				}
+			})
+		);
+
+		expect(model.actionModel).toMatchObject({
+			intent: "start",
+			isDisabled: true
+		});
 	});
 
 	test("keeps backend selectability while auth disables the runtime action", () => {

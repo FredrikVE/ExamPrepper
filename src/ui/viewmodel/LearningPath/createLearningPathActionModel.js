@@ -27,7 +27,7 @@ export default function createLearningPathActionModel({ module, resumableSession
 			sessionId: null,
 			target,
 			label: t.learningPathContinueLabel,
-			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || startingActionKey !== null,
+			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || resumableSession !== null || startingActionKey !== null,
 			isPending: startingActionKey === actionKey
 		};
 	}
@@ -60,7 +60,7 @@ export default function createLearningPathActionModel({ module, resumableSession
 			sessionId: null,
 			target,
 			label: createReplayActionLabel({ module, t }),
-			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || startingActionKey !== null,
+			isDisabled: !canStartLearningSessions || !module.availability.isUnlocked || resumableSession !== null || startingActionKey !== null,
 			isPending: startingActionKey === actionKey
 		};
 	}
