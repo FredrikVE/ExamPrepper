@@ -10,6 +10,8 @@ import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./MatchCardsPage/matchCard
 import { canStartMatchCardsSession, createMatchCardsSession } from "./MatchCardsPage/matchCardsSession.js";
 import { selectMatchSlot } from "./MatchCardsPage/matchCardsSelectionTransitions.js";
 import { advanceMatchedPair, markSuccessfulSlotsForFadeOut, resetWrongSlots, settleFadingInSlots } from "./MatchCardsPage/matchCardsRoundTransitions.js";
+import { createSuccessfulMatchResult } from "./MatchCardsPage/matchCardsResultModel.js";
+import createConceptPracticeEventId from "./Shared/createConceptPracticeEventId.js";
 
 const MATCH_CARDS_ROUND_PAIR_COUNT = 6;
 const MATCH_CARDS_VISIBLE_PAIR_COUNT = 4;
@@ -21,16 +23,19 @@ const FADING_IN_SETTLE_DELAY_MS = 720;
 export default function useMatchCardsPageViewModel({
 	getGlossaryEntriesForSubjectUseCase,
 	getTopicAreasUseCase,
+	recordMatchCardResultUseCase,
 	subjectId,
 	initialTopicAreaKey,
 	language,
 	t,
 	isActive,
-	backContract
+	backContract,
+	authState
 }) {
 	const [topicAreaKey, setTopicAreaKey] = useState(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
 	const [session, setSession] = useState(null);
 	const timersRef = useRef([]);
+	const recordedMatchResultKeysRef = useRef(new Set());
 
 	useEffect(() => {
 		setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
@@ -136,6 +141,8 @@ export default function useMatchCardsPageViewModel({
 	});
 
 	const createSession = useCallback(() => {
+		recordedMatchResultKeysRef.current.clear();
+
 		if (!canStartMatchCardsSession(glossaryEntries)) {
 			setSession(null);
 			return;
@@ -216,6 +223,29 @@ export default function useMatchCardsPageViewModel({
 		}, FADING_IN_SETTLE_DELAY_MS);
 	}, [clearTimers, registerTimer]);
 
+	const persistMatchCardResult = useCallback((result) => {
+		if (!authState.isLoaded || !authState.isSignedIn) {
+			return;
+		}
+
+		if (!subjectId) {
+			throw new Error("Signed-in MatchCards persistence requires subjectId");
+		}
+
+		if (recordedMatchResultKeysRef.current.has(result.glossaryEntryKey)) {
+			return;
+		}
+
+		recordedMatchResultKeysRef.current.add(result.glossaryEntryKey);
+
+		void recordMatchCardResultUseCase.execute({
+			eventId: createConceptPracticeEventId(),
+			subjectId,
+			glossaryEntryKey: result.glossaryEntryKey,
+			wrongAttemptCount: result.wrongAttemptCount
+		}).catch(reportMatchCardWriteError);
+	}, [authState.isLoaded, authState.isSignedIn, recordMatchCardResultUseCase, subjectId]);
+
 	const handleSelectSlot = useCallback((slotId) => {
 		if (!session || isSessionFeedbackLocked(session)) {
 			return;
@@ -231,9 +261,15 @@ export default function useMatchCardsPageViewModel({
 		}
 
 		if (hasSlotStatus(nextSession.slots, MATCH_SLOT_STATUS.SUCCESS)) {
+			const result = createSuccessfulMatchResult(nextSession);
+
+			if (result !== null) {
+				persistMatchCardResult(result);
+			}
+
 			scheduleMatchedPairAdvance();
 		}
-	}, [scheduleMatchedPairAdvance, scheduleWrongReset, session]);
+	}, [persistMatchCardResult, scheduleMatchedPairAdvance, scheduleWrongReset, session]);
 
 	const restartSession = useCallback(() => {
 		clearTimers();
@@ -370,4 +406,10 @@ function isSessionFeedbackLocked(session) {
 	}
 
 	return false;
+}
+
+function reportMatchCardWriteError(error) {
+	if (import.meta.env?.DEV === true) {
+		console.error("[MatchCards] Could not persist concept result", error);
+	}
 }

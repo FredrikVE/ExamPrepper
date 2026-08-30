@@ -33,7 +33,7 @@ import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoun
 import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
 import { NAV_SCREENS, TEST_TYPES } from "./navigation/navigation.js";
-import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, recordFlipcardAssessmentUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, recordFlipcardAssessmentUseCase, recordMatchCardResultUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -390,16 +390,34 @@ function FlipcardsPageWithViewModel({ subjectId, initialTopicAreaKey, language, 
 	);
 }
 
-function MatchCardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onHeaderProgressBarModelChange }) {
+function MatchCardsPageWrapper(props) {
+	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+
+	if (!hasClerkAuth) {
+		return <MatchCardsPageWithViewModel {...props} authState={{ isLoaded: true, isSignedIn: false }} />;
+	}
+
+	return <AuthenticatedMatchCardsPageWrapper {...props} />;
+}
+
+function AuthenticatedMatchCardsPageWrapper(props) {
+	const { isLoaded, isSignedIn } = useAuth();
+
+	return <MatchCardsPageWithViewModel {...props} authState={{ isLoaded, isSignedIn }} />;
+}
+
+function MatchCardsPageWithViewModel({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onHeaderProgressBarModelChange, authState }) {
 	const matchCardsPageViewModel = useMatchCardsPageViewModel({
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
+		recordMatchCardResultUseCase,
 		subjectId,
 		initialTopicAreaKey,
 		language,
 		t,
 		isActive,
-		backContract
+		backContract,
+		authState
 	});
 
 	useEffect(() => {
