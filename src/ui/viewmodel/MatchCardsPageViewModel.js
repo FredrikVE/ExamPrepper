@@ -1,24 +1,17 @@
-import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
+// src/ui/viewmodel/MatchCardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
-import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
+import useLoadModel from "./LoadState/useLoadModel.js";
+import useMatchCardsRoundModel from "./MatchCards/useMatchCardsRoundModel.js";
+import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
+import createConceptPracticeEventId from "./Shared/createConceptPracticeEventId.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
-import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./MatchCardsPage/matchCardsConstants.js";
-import { canStartMatchCardsSession, createMatchCardsSession } from "./MatchCardsPage/matchCardsSession.js";
-import { selectMatchSlot } from "./MatchCardsPage/matchCardsSelectionTransitions.js";
-import { advanceMatchedPair, markSuccessfulSlotsForFadeOut, resetWrongSlots, settleFadingInSlots } from "./MatchCardsPage/matchCardsRoundTransitions.js";
-import { createSuccessfulMatchResult } from "./MatchCardsPage/matchCardsResultModel.js";
-import createConceptPracticeEventId from "./Shared/createConceptPracticeEventId.js";
 
 const MATCH_CARDS_ROUND_PAIR_COUNT = 6;
 const MATCH_CARDS_VISIBLE_PAIR_COUNT = 4;
-const WRONG_RESET_DELAY_MS = 700;
-const SUCCESS_FADE_OUT_DELAY_MS = 220;
-const SUCCESS_ADVANCE_DELAY_MS = 480;
-const FADING_IN_SETTLE_DELAY_MS = 720;
 
 export default function useMatchCardsPageViewModel({
 	getGlossaryEntriesForSubjectUseCase,
@@ -33,8 +26,6 @@ export default function useMatchCardsPageViewModel({
 	authState
 }) {
 	const [topicAreaKey, setTopicAreaKey] = useState(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
-	const [session, setSession] = useState(null);
-	const timersRef = useRef([]);
 	const recordedMatchResultKeysRef = useRef(new Set());
 
 	useEffect(() => {
@@ -127,9 +118,45 @@ export default function useMatchCardsPageViewModel({
 		};
 	}, [activeTopicArea, t]);
 
+	useEffect(() => {
+		recordedMatchResultKeysRef.current.clear();
+	}, [glossaryEntries]);
+
+	const persistMatchCardResult = useCallback((matchCardResult) => {
+		if (!authState.isLoaded || !authState.isSignedIn) {
+			return;
+		}
+
+		if (!subjectId) {
+			throw new Error("Signed-in MatchCards persistence requires subjectId");
+		}
+
+		if (recordedMatchResultKeysRef.current.has(matchCardResult.glossaryEntryKey)) {
+			return;
+		}
+
+		recordedMatchResultKeysRef.current.add(matchCardResult.glossaryEntryKey);
+
+		void recordMatchCardResultUseCase.execute({
+			eventId: createConceptPracticeEventId(),
+			subjectId,
+			glossaryEntryKey: matchCardResult.glossaryEntryKey,
+			wrongAttemptCount: matchCardResult.wrongAttemptCount
+		}).catch(reportMatchCardWriteError);
+	}, [authState.isLoaded, authState.isSignedIn, recordMatchCardResultUseCase, subjectId]);
+
+	const roundModel = useMatchCardsRoundModel({
+		glossaryEntries,
+		roundPairCount: MATCH_CARDS_ROUND_PAIR_COUNT,
+		visiblePairCount: MATCH_CARDS_VISIBLE_PAIR_COUNT,
+		language,
+		randomNumber: Math.random,
+		onSuccessfulMatch: persistMatchCardResult
+	});
+
 	const workspaceState = createWorkspaceState({
 		loadStatus: pageStatus,
-		isEmpty: session === null,
+		isEmpty: roundModel.session === null,
 		labels: {
 			loading: t.matchCardsLoadingTitle,
 			errorTitle: t.matchCardsErrorTitle,
@@ -140,181 +167,25 @@ export default function useMatchCardsPageViewModel({
 		errorAction: null
 	});
 
-	const createSession = useCallback(() => {
-		recordedMatchResultKeysRef.current.clear();
-
-		if (!canStartMatchCardsSession(glossaryEntries)) {
-			setSession(null);
-			return;
-		}
-
-		setSession(createMatchCardsSession({
-			glossaryEntries,
-			roundPairCount: MATCH_CARDS_ROUND_PAIR_COUNT,
-			visiblePairCount: MATCH_CARDS_VISIBLE_PAIR_COUNT,
-			randomNumber: Math.random
-		}));
-	}, [glossaryEntries]);
-
-	const clearTimers = useCallback(() => {
-		for (const timerId of timersRef.current) {
-			clearTimeout(timerId);
-		}
-
-		timersRef.current = [];
-	}, []);
-
-	const registerTimer = useCallback((callback, delayMs) => {
-		const timerId = setTimeout(callback, delayMs);
-		timersRef.current.push(timerId);
-	}, []);
-
-	useEffect(() => {
-		clearTimers();
-		createSession();
-
-		return clearTimers;
-	}, [clearTimers, createSession]);
-
-	const scheduleWrongReset = useCallback(() => {
-		clearTimers();
-		registerTimer(() => {
-			setSession((currentSession) => {
-				if (!currentSession) {
-					return currentSession;
-				}
-
-				return resetWrongSlots(currentSession);
-			});
-		}, WRONG_RESET_DELAY_MS);
-	}, [clearTimers, registerTimer]);
-
-	const scheduleMatchedPairAdvance = useCallback(() => {
-		clearTimers();
-		// Timer order is one transition: fade out, advance one queued pair, settle new slots.
-		registerTimer(() => {
-			setSession((currentSession) => {
-				if (!currentSession) {
-					return currentSession;
-				}
-
-				return markSuccessfulSlotsForFadeOut(currentSession);
-			});
-		}, SUCCESS_FADE_OUT_DELAY_MS);
-
-		registerTimer(() => {
-			setSession((currentSession) => {
-				if (!currentSession) {
-					return currentSession;
-				}
-
-				return advanceMatchedPair(currentSession);
-			});
-		}, SUCCESS_ADVANCE_DELAY_MS);
-
-		registerTimer(() => {
-			setSession((currentSession) => {
-				if (!currentSession) {
-					return currentSession;
-				}
-
-				return settleFadingInSlots(currentSession);
-			});
-		}, FADING_IN_SETTLE_DELAY_MS);
-	}, [clearTimers, registerTimer]);
-
-	const persistMatchCardResult = useCallback((result) => {
-		if (!authState.isLoaded || !authState.isSignedIn) {
-			return;
-		}
-
-		if (!subjectId) {
-			throw new Error("Signed-in MatchCards persistence requires subjectId");
-		}
-
-		if (recordedMatchResultKeysRef.current.has(result.glossaryEntryKey)) {
-			return;
-		}
-
-		recordedMatchResultKeysRef.current.add(result.glossaryEntryKey);
-
-		void recordMatchCardResultUseCase.execute({
-			eventId: createConceptPracticeEventId(),
-			subjectId,
-			glossaryEntryKey: result.glossaryEntryKey,
-			wrongAttemptCount: result.wrongAttemptCount
-		}).catch(reportMatchCardWriteError);
-	}, [authState.isLoaded, authState.isSignedIn, recordMatchCardResultUseCase, subjectId]);
-
-	const handleSelectSlot = useCallback((slotId) => {
-		if (!session || isSessionFeedbackLocked(session)) {
-			return;
-		}
-
-		const nextSession = selectMatchSlot(session, slotId);
-
-		setSession(nextSession);
-
-		if (hasSlotStatus(nextSession.slots, MATCH_SLOT_STATUS.WRONG)) {
-			scheduleWrongReset();
-			return;
-		}
-
-		if (hasSlotStatus(nextSession.slots, MATCH_SLOT_STATUS.SUCCESS)) {
-			const result = createSuccessfulMatchResult(nextSession);
-
-			if (result !== null) {
-				persistMatchCardResult(result);
-			}
-
-			scheduleMatchedPairAdvance();
-		}
-	}, [persistMatchCardResult, scheduleMatchedPairAdvance, scheduleWrongReset, session]);
-
-	const restartSession = useCallback(() => {
-		clearTimers();
-		createSession();
-	}, [clearTimers, createSession]);
-
-	const termSlots = useMemo(() => {
-		return selectPresentedSlotsByColumn({
-			slots: session?.slots ?? [],
-			column: MATCH_CARD_COLUMN.TERM,
-			language
-		});
-	}, [language, session]);
-
-	const explanationSlots = useMemo(() => {
-		return selectPresentedSlotsByColumn({
-			slots: session?.slots ?? [],
-			column: MATCH_CARD_COLUMN.EXPLANATION,
-			language
-		});
-	}, [language, session]);
-
-	const isInteractionLocked = session ? isSessionFeedbackLocked(session) : false;
-	const visiblePairCount = session?.visiblePairCount ?? MATCH_CARDS_VISIBLE_PAIR_COUNT;
-	const boardStyle = useMemo(() => {
-		return {
-			"--matchcards-visible-pair-count": visiblePairCount
-		};
-	}, [visiblePairCount]);
-	const matchedPairCount = session?.matchedPairCount ?? 0;
-	const totalPairCount = session?.roundPairCount ?? 0;
-	const progressLabel = labels.progressLabel(matchedPairCount, totalPairCount);
+	const progressLabel = labels.progressLabel(roundModel.matchedPairCount, roundModel.totalPairCount);
 	const progressBarModel = useMemo(() => {
 		return buildProgressBarModel({
-			totalSteps: totalPairCount,
-			currentStep: Math.max(matchedPairCount, 1),
+			totalSteps: roundModel.totalPairCount,
+			currentStep: Math.max(roundModel.matchedPairCount, 1),
 			ariaLabel: labels.progressAriaLabel,
 			startLabel: labels.progressStartLabel,
 			formatStepLabel: labels.progressLabel,
 			onActivateStep: null
 		});
-	}, [labels, matchedPairCount, totalPairCount]);
+	}, [labels, roundModel.matchedPairCount, roundModel.totalPairCount]);
 	const headerProgressBarModel = workspaceState.kind === WORKSPACE_STATE_KINDS.CONTENT
 		? progressBarModel
 		: null;
+
+	const restartSession = useCallback(() => {
+		recordedMatchResultKeysRef.current.clear();
+		roundModel.restart();
+	}, [roundModel.restart]);
 
 	return {
 		labels,
@@ -323,89 +194,19 @@ export default function useMatchCardsPageViewModel({
 		topicAreaKey,
 		workspaceState,
 		backContract,
-		session,
-		termSlots,
-		explanationSlots,
-		matchedPairCount,
-		totalPairCount,
+		session: roundModel.session,
+		termSlots: roundModel.termSlots,
+		explanationSlots: roundModel.explanationSlots,
+		matchedPairCount: roundModel.matchedPairCount,
+		totalPairCount: roundModel.totalPairCount,
 		progressLabel,
 		headerProgressBarModel,
-		boardStyle,
-		isInteractionLocked,
-		isRoundComplete: Boolean(session?.isRoundComplete),
-		handleSelectSlot,
+		boardStyle: roundModel.boardStyle,
+		isInteractionLocked: roundModel.isInteractionLocked,
+		isRoundComplete: roundModel.isRoundComplete,
+		handleSelectSlot: roundModel.selectSlot,
 		restartSession
 	};
-}
-
-function selectPresentedSlotsByColumn({ slots, column, language }) {
-	const selectedSlots = [];
-
-	for (const slot of slots) {
-		if (slot.column === column) {
-			selectedSlots.push(createPresentedSlot({
-				slot,
-				language
-			}));
-		}
-	}
-
-	return selectedSlots;
-}
-
-function createPresentedSlot({ slot, language }) {
-	return {
-		...slot,
-		text: getLocalizedSlotText({
-			textByLanguage: slot.textByLanguage,
-			language
-		})
-	};
-}
-
-function getLocalizedSlotText({ textByLanguage, language }) {
-	if (textByLanguage === null) {
-		return null;
-	}
-
-	const languageText = textByLanguage[language];
-
-	if (languageText) {
-		return languageText;
-	}
-
-	if (textByLanguage.no) {
-		return textByLanguage.no;
-	}
-
-	return textByLanguage.en;
-}
-
-function hasSlotStatus(slots, status) {
-	for (const slot of slots) {
-		if (slot.status === status) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function isSessionFeedbackLocked(session) {
-	const lockedStatuses = [
-		MATCH_SLOT_STATUS.WRONG,
-		MATCH_SLOT_STATUS.SUCCESS,
-		MATCH_SLOT_STATUS.FADING_OUT,
-		MATCH_SLOT_STATUS.FADING_IN
-	];
-
-	for (const status of lockedStatuses) {
-		if (hasSlotStatus(session.slots, status)) {
-			return true;
-		}
-	}
-
-	return false;
 }
 
 function reportMatchCardWriteError(error) {

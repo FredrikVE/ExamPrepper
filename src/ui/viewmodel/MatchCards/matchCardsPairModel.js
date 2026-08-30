@@ -1,4 +1,4 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsPairModel.js
+// src/ui/viewmodel/MatchCards/matchCardsPairModel.js
 export function createPairsFromGlossaryEntries(glossaryEntries) {
 	const pairs = [];
 

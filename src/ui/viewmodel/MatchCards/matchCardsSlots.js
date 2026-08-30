@@ -1,4 +1,4 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsSlots.js
+// src/ui/viewmodel/MatchCards/matchCardsSlots.js
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./matchCardsConstants.js";
 import shuffleInPlace from "../Utils/shuffleInPlace.js";
 

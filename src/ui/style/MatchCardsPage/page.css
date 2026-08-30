@@ -1,3 +1,4 @@
+/* src/ui/style/MatchCardsPage/page.css */
 .matchcards-ambient-light {
 	position: absolute;
 	inset: 0;
@@ -14,6 +15,12 @@
 		calc(var(--scaffold-header-height) + clamp(76px, 10vh, 108px))
 		clamp(var(--space-5), 2.3vw, var(--space-8))
 		calc(var(--space-5) + env(safe-area-inset-bottom));
+}
+
+.matchcards-workspace .matchcards-board {
+	height: min(100%, calc(100dvh - var(--scaffold-header-height) - clamp(118px, 15vh, 150px)));
+	min-height: min(700px, calc(100dvh - var(--scaffold-header-height) - clamp(118px, 15vh, 150px)));
+	flex: 1 1 auto;
 }
 
 .matchcards-round-complete {

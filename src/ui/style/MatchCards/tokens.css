@@ -1,5 +1,5 @@
-/* src/ui/style/MatchCardsPage/tokens.css */
-.matchcards-workspace {
+/* src/ui/style/MatchCards/tokens.css */
+.matchcards-board {
 	--matchcard-border-color: color-mix(in srgb, var(--accent) 28%, var(--line-strong));
 	--matchcard-border-color-hover: color-mix(in srgb, var(--accent) 52%, var(--line));
 	--matchcard-border-color-selected: color-mix(in srgb, var(--accent) 70%, var(--line));

@@ -1,4 +1,4 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsConstants.js
+// src/ui/viewmodel/MatchCards/matchCardsConstants.js
 export const MATCH_CARD_COLUMN = Object.freeze({
 	TERM: "term",
 	EXPLANATION: "explanation"

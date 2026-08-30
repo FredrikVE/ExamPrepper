@@ -1,4 +1,4 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.js
+// src/ui/viewmodel/MatchCards/matchCardsSelectionTransitions.js
 import { MATCH_SLOT_STATUS } from "./matchCardsConstants.js";
 
 export function isMatchingPair(firstSlot, secondSlot) {

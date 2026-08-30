@@ -1,9 +1,9 @@
-// test/ui/viewmodel/MatchCardsPage/matchCardsResultModel.test.js
+// test/ui/viewmodel/MatchCards/matchCardsResultModel.test.js
 import { describe, expect, test } from "@jest/globals";
-import { createSuccessfulMatchResult } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsResultModel.js";
-import { resetWrongSlots } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsRoundTransitions.js";
-import { selectMatchSlot } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.js";
-import { createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSession.js";
+import { createSuccessfulMatchResult } from "../../../../src/ui/viewmodel/MatchCards/matchCardsResultModel.js";
+import { resetWrongSlots } from "../../../../src/ui/viewmodel/MatchCards/matchCardsRoundTransitions.js";
+import { selectMatchSlot } from "../../../../src/ui/viewmodel/MatchCards/matchCardsSelectionTransitions.js";
+import { createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCards/matchCardsSession.js";
 import { createGlossaryEntries, keepOrderRandomNumber } from "./matchCardsTestFixtures.js";
 
 describe("matchCardsResultModel", () => {

@@ -1,4 +1,4 @@
-// test/ui/viewmodel/MatchCardsPage/matchCardsTestFixtures.js
+// test/ui/viewmodel/MatchCards/matchCardsTestFixtures.js
 export const keepOrderRandomNumber = () => 0.999;
 
 export const reverseRandomNumber = () => 0;

@@ -1,7 +1,7 @@
 <!-- docs/skills/SSOT_COMPONENTS.md -->
 # SSOT_COMPONENTS.md — Canonical komponentkontrakter i ExamPrepper frontend
 
-Oppdatert: 2026-08-24
+Oppdatert: 2026-08-30
 
 Dette registeret viser hvilke delte UI-flater og mekanismer som allerede har en canonical implementasjon.
 Det er ikke et register over all React-kode, og «canonical» betyr ikke at komponenten eier domene- eller runtime-state.
@@ -52,6 +52,13 @@ Før en ny delt komponent opprettes:
 | Valg av type-renderer | `QuestionCardContent` | `src/ui/view/components/QuestionCard/QuestionCardContent.jsx` | Eksplisitt router over `QUESTION_TYPES`; ikke offentlig capability. |
 | Spørsmålspresentasjon | `src/ui/view/components/QuestionCard/QuestionTypes/**` | Kun gjennom `QuestionCard` | Eier type-spesifikk interaksjon og rendering, ikke øktflyt. |
 | Feedback | `src/ui/view/components/QuestionCard/Shared/Feedback/**` | Kun gjennom `QuestionCard` | Presenterer spørsmålsfeedback; læringsmodus eier tidspunkt/state for retting. |
+
+## MatchCards-kapabilitet
+
+| Ansvar | Canonical implementasjon | Offentlig bruk | Grense |
+|---|---|---|---|
+| MatchCards-brett | `MatchCardsGrid` + `MatchCard` | `src/ui/view/components/MatchCards/` | Delt renderer for MatchCards i standalone `MatchCardsPage` og LearningSession. Eier ikke valg av authored begreper eller LearningSession-progresjon. |
+| MatchCards round-state | `useMatchCardsRoundModel()` | `src/ui/viewmodel/MatchCards/` | Eier lokal kortinteraksjon, feil/suksess-transitioner og round completion. Page-/LearningSession-ViewModel eier den overordnede flyten. |
 
 Læringsmoduser som `ExamPage` og `LearningSessionPage` eier spørsmålvalg, svarstate, rettingstidspunkt,
 fremdrift, resultat og navigasjon. De lager ikke egne oppgaverenderere og importerer ikke private

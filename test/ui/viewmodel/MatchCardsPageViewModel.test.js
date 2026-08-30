@@ -1,10 +1,10 @@
 // test/ui/viewmodel/MatchCardsPageViewModel.test.js
 import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
-import { createMatchCardsSession } from "../../../src/ui/viewmodel/MatchCardsPage/matchCardsSession.js";
-import { resetWrongSlots } from "../../../src/ui/viewmodel/MatchCardsPage/matchCardsRoundTransitions.js";
-import { selectMatchSlot } from "../../../src/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.js";
-import { createGlossaryEntries, keepOrderRandomNumber } from "./MatchCardsPage/matchCardsTestFixtures.js";
+import { createMatchCardsSession } from "../../../src/ui/viewmodel/MatchCards/matchCardsSession.js";
+import { resetWrongSlots } from "../../../src/ui/viewmodel/MatchCards/matchCardsRoundTransitions.js";
+import { selectMatchSlot } from "../../../src/ui/viewmodel/MatchCards/matchCardsSelectionTransitions.js";
+import { createGlossaryEntries, keepOrderRandomNumber } from "./MatchCards/matchCardsTestFixtures.js";
 
 const stateValues = [];
 const stateSetters = [];

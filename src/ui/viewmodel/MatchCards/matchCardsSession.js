@@ -1,4 +1,4 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsSession.js
+// src/ui/viewmodel/MatchCards/matchCardsSession.js
 import { createPairsFromGlossaryEntries } from "./matchCardsPairModel.js";
 import { createIdleSlotsForPairs } from "./matchCardsSlots.js";
 import shuffleInPlace from "../Utils/shuffleInPlace.js";

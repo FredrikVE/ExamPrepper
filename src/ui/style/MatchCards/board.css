@@ -1,11 +1,10 @@
+/* src/ui/style/MatchCards/board.css */
 .matchcards-board {
 	width: 100%;
 	min-width: 0;
-	height: min(100%, calc(100dvh - var(--scaffold-header-height) - clamp(118px, 15vh, 150px)));
-	min-height: min(700px, calc(100dvh - var(--scaffold-header-height) - clamp(118px, 15vh, 150px)));
+	min-height: clamp(520px, 62vh, 700px);
 	margin: 0 auto;
 	padding: clamp(var(--space-4), 1.6vw, var(--space-6));
-	flex: 1 1 auto;
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	column-gap: clamp(var(--space-5), 2vw, var(--space-7));

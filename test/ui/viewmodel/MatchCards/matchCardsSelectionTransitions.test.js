@@ -1,9 +1,9 @@
-// test/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.test.js
+// test/ui/viewmodel/MatchCards/matchCardsSelectionTransitions.test.js
 import { describe, expect, test } from "@jest/globals";
-import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsConstants.js";
-import { createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSession.js";
-import { isMatchingPair, selectMatchSlot } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.js";
-import { resetWrongSlots } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsRoundTransitions.js";
+import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "../../../../src/ui/viewmodel/MatchCards/matchCardsConstants.js";
+import { createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCards/matchCardsSession.js";
+import { isMatchingPair, selectMatchSlot } from "../../../../src/ui/viewmodel/MatchCards/matchCardsSelectionTransitions.js";
+import { resetWrongSlots } from "../../../../src/ui/viewmodel/MatchCards/matchCardsRoundTransitions.js";
 import { createGlossaryEntries, findSlot, keepOrderRandomNumber } from "./matchCardsTestFixtures.js";
 
 describe("matchCardsSelectionTransitions", () => {

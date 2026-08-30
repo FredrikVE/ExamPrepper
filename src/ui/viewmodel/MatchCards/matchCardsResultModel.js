@@ -1,4 +1,4 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsResultModel.js
+// src/ui/viewmodel/MatchCards/matchCardsResultModel.js
 import { MATCH_SLOT_STATUS } from "./matchCardsConstants.js";
 
 export function createSuccessfulMatchResult(session) {

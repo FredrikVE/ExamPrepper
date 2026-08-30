@@ -1,13 +1,7 @@
+// src/ui/view/components/MatchCards/MatchCardsGrid.jsx
 import MatchCard from "./MatchCard.jsx";
 
-export default function MatchCardsGrid({
-	termSlots,
-	explanationSlots,
-	labels,
-	boardStyle,
-	isInteractionLocked,
-	onSelectSlot
-}) {
+export default function MatchCardsGrid({ termSlots, explanationSlots, labels, boardStyle, isInteractionLocked, onSelectSlot }) {
 	return (
 		<section className="matchcards-board" style={boardStyle} aria-label={labels.pageTitle}>
 			<MatchCardsColumn

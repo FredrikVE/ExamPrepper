@@ -1,4 +1,4 @@
-// src/ui/viewmodel/MatchCardsPage/matchCardsRoundTransitions.js
+// src/ui/viewmodel/MatchCards/matchCardsRoundTransitions.js
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "./matchCardsConstants.js";
 
 export function resetWrongSlots(session) {
