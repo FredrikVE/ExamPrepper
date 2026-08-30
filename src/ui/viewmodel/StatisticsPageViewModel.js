@@ -1,5 +1,6 @@
 // src/ui/viewmodel/StatisticsPageViewModel.js
 import { useCallback, useMemo } from "react";
+import { APP_AUTH_STATUS } from "../../auth/AppAuthState.js";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
 import createStatisticsDashboardModel from "./StatisticsPage/createStatisticsDashboardModel.js";
@@ -9,31 +10,39 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 
 export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, formatDate, t, authState, backContract, onStartNewExam }) {
-	const isAuthLoaded = authState.isLoaded;
-	const isSignedIn = authState.isSignedIn === true;
-	const hasClerkAuth = authState.hasClerkAuth === true;
-	const userId = authState.userId;
+	const isAuthLoading = authState.status === APP_AUTH_STATUS.LOADING;
+	const isSignedIn = authState.status === APP_AUTH_STATUS.SIGNED_IN;
+	const isSignedOut = (
+		authState.status === APP_AUTH_STATUS.DISABLED
+		|| authState.status === APP_AUTH_STATUS.SIGNED_OUT
+	);
+
+	let userId = null;
+
+	if (isSignedIn) {
+		userId = authState.userId;
+	}
 
 	const text = useMemo(() => createStatisticsTextModel(t), [t]);
 
 	const executeStatisticsLoad = useCallback(() => {
-		if (!isAuthLoaded || !isSignedIn) {
+		if (!isSignedIn) {
 			return Promise.resolve(null);
 		}
 
 		return getMyStatisticsUseCase.execute();
-	}, [getMyStatisticsUseCase, isAuthLoaded, isSignedIn]);
+	}, [getMyStatisticsUseCase, isSignedIn]);
 
 	const statisticsLoad = useLoadModel({
 		execute: executeStatisticsLoad,
 		emptyData: null,
 		errorMessage: text.loadErrorMessage,
 		resourceKey: userId,
-		isEnabled: isAuthLoaded && isSignedIn && userId !== null,
+		isEnabled: isSignedIn,
 		onLoaded: null
 	});
 
-	const authStatus = resolveAuthLoadStatus(hasClerkAuth, isAuthLoaded);
+	const authStatus = resolveAuthLoadStatus(isAuthLoading);
 	const pageStatus = combineLoadStatuses([
 		authStatus,
 		statisticsLoad.status
@@ -55,7 +64,7 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 
 	const workspaceState = createStatisticsWorkspaceState({
 		pageStatus,
-		isSignedOut: !hasClerkAuth || (isAuthLoaded && !isSignedIn),
+		isSignedOut,
 		isStatisticsEmpty: dashboard.isStatisticsEmpty,
 		text,
 		pageErrorMessage,
@@ -64,18 +73,10 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 	});
 
 	return {
-		// Auth state
-		hasClerkAuth,
-		isAuthLoaded,
-		isSignedIn,
-		isSignedOut: !hasClerkAuth || (isAuthLoaded && !isSignedIn),
-
-		// Data state
 		statistics,
 		workspaceState,
 		backContract,
 
-		// Text
 		pageTitle: text.pageTitle,
 		pageSubtitle: text.pageSubtitle,
 		loadingTitle: text.loadingTitle,
@@ -88,10 +89,8 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 		retryButtonLabel: text.retryButton,
 		startNewExamLabel: text.startNewExamButton,
 
-		// Dashboard model
 		...dashboard,
 
-		// Handlers
 		onRetryLoadStatistics: retryLoadStatistics,
 		onStartNewExam: startNewExam
 	};
@@ -155,8 +154,8 @@ function createStatisticsWorkspaceState({
 	};
 }
 
-function resolveAuthLoadStatus(hasClerkAuth, isAuthLoaded) {
-	if (hasClerkAuth && !isAuthLoaded) {
+function resolveAuthLoadStatus(isAuthLoading) {
+	if (isAuthLoading) {
 		return LOAD_STATUS.LOADING;
 	}
 

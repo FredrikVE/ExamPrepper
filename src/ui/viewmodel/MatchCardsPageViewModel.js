@@ -1,5 +1,6 @@
 // src/ui/viewmodel/MatchCardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { APP_AUTH_STATUS } from "../../auth/AppAuthState.js";
 import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
@@ -123,7 +124,7 @@ export default function useMatchCardsPageViewModel({
 	}, [glossaryEntries]);
 
 	const persistMatchCardResult = useCallback((matchCardResult) => {
-		if (!authState.isLoaded || !authState.isSignedIn) {
+		if (authState.status !== APP_AUTH_STATUS.SIGNED_IN) {
 			return;
 		}
 
@@ -143,7 +144,7 @@ export default function useMatchCardsPageViewModel({
 			glossaryEntryKey: matchCardResult.glossaryEntryKey,
 			wrongAttemptCount: matchCardResult.wrongAttemptCount
 		}).catch(reportMatchCardWriteError);
-	}, [authState.isLoaded, authState.isSignedIn, recordMatchCardResultUseCase, subjectId]);
+	}, [authState.status, recordMatchCardResultUseCase, subjectId]);
 
 	const roundModel = useMatchCardsRoundModel({
 		glossaryEntries,

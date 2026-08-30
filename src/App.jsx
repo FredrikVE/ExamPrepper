@@ -1,6 +1,6 @@
 //src/App.jsx
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAuth } from "@clerk/clerk-react";
+import { useAppAuth } from "./auth/AppAuthContext.jsx";
 
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
@@ -244,18 +244,9 @@ function AppContent() {
 }
 
 function LearningPathPageWrapper(props) {
-	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+	const authState = useAppAuth();
 
-	if (!hasClerkAuth) {
-		return <LearningPathPageWithViewModel {...props} authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false, userId: null }} />;
-	}
-
-	return <AuthenticatedLearningPathPageWrapper {...props} />;
-}
-
-function AuthenticatedLearningPathPageWrapper(props) {
-	const { isLoaded, isSignedIn, userId } = useAuth();
-	return <LearningPathPageWithViewModel {...props} authState={{ hasClerkAuth: true, isLoaded, isSignedIn, userId: userId ?? null }} />;
+	return <LearningPathPageWithViewModel {...props} authState={authState} />;
 }
 
 function LearningPathPageWithViewModel({ selectedSubject, language, t, isActive, backContract, contentSelectViewModel, onLearningSessionStarted, onChapterTestSelected, authState }) {
@@ -356,19 +347,9 @@ function getQuestionsUseCaseForTestType(testType) {
 }
 
 function FlipcardsPageWrapper(props) {
-	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+	const authState = useAppAuth();
 
-	if (!hasClerkAuth) {
-		return <FlipcardsPageWithViewModel {...props} authState={{ isLoaded: true, isSignedIn: false }} />;
-	}
-
-	return <AuthenticatedFlipcardsPageWrapper {...props} />;
-}
-
-function AuthenticatedFlipcardsPageWrapper(props) {
-	const { isLoaded, isSignedIn } = useAuth();
-
-	return <FlipcardsPageWithViewModel {...props} authState={{ isLoaded, isSignedIn }} />;
+	return <FlipcardsPageWithViewModel {...props} authState={authState} />;
 }
 
 function FlipcardsPageWithViewModel({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, authState }) {
@@ -391,19 +372,9 @@ function FlipcardsPageWithViewModel({ subjectId, initialTopicAreaKey, language, 
 }
 
 function MatchCardsPageWrapper(props) {
-	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+	const authState = useAppAuth();
 
-	if (!hasClerkAuth) {
-		return <MatchCardsPageWithViewModel {...props} authState={{ isLoaded: true, isSignedIn: false }} />;
-	}
-
-	return <AuthenticatedMatchCardsPageWrapper {...props} />;
-}
-
-function AuthenticatedMatchCardsPageWrapper(props) {
-	const { isLoaded, isSignedIn } = useAuth();
-
-	return <MatchCardsPageWithViewModel {...props} authState={{ isLoaded, isSignedIn }} />;
+	return <MatchCardsPageWithViewModel {...props} authState={authState} />;
 }
 
 function MatchCardsPageWithViewModel({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, onHeaderProgressBarModelChange, authState }) {
@@ -461,32 +432,7 @@ function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, 
 }
 
 function StatisticsPageWrapper({ formatDate, t, backContract, onStartNewExam }) {
-	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
-
-	if (!hasClerkAuth) {
-		return (
-			<StatisticsPageWithViewModel
-				formatDate={formatDate}
-				t={t}
-				backContract={backContract}
-				onStartNewExam={onStartNewExam}
-				authState={{ hasClerkAuth: false, isLoaded: true, isSignedIn: false, userId: null }}
-			/>
-		);
-	}
-
-	return (
-		<AuthenticatedStatisticsPageWrapper
-			formatDate={formatDate}
-			t={t}
-			backContract={backContract}
-			onStartNewExam={onStartNewExam}
-		/>
-	);
-}
-
-function AuthenticatedStatisticsPageWrapper({ formatDate, t, backContract, onStartNewExam }) {
-	const { isLoaded, isSignedIn, userId } = useAuth();
+	const authState = useAppAuth();
 
 	return (
 		<StatisticsPageWithViewModel
@@ -494,7 +440,7 @@ function AuthenticatedStatisticsPageWrapper({ formatDate, t, backContract, onSta
 			t={t}
 			backContract={backContract}
 			onStartNewExam={onStartNewExam}
-			authState={{ hasClerkAuth: true, isLoaded, isSignedIn, userId: userId ?? null }}
+			authState={authState}
 		/>
 	);
 }

@@ -75,7 +75,7 @@ describe("useMatchCardsPageViewModel concept practice persistence", () => {
 		const selectedSession = createSelectedSessionWithWrongAttempts(2);
 		const { recordMatchCardResultUseCase, viewModel } = createViewModel({
 			session: selectedSession,
-			authState: { isLoaded: true, isSignedIn: true }
+			authState: { status: "signed-in", userId: "user-1" }
 		});
 
 		viewModel.handleSelectSlot("explanation-0");
@@ -93,7 +93,7 @@ describe("useMatchCardsPageViewModel concept practice persistence", () => {
 		const selectedSession = createSelectedSessionWithWrongAttempts(1);
 		const { recordMatchCardResultUseCase, viewModel } = createViewModel({
 			session: selectedSession,
-			authState: { isLoaded: true, isSignedIn: true }
+			authState: { status: "signed-in", userId: "user-1" }
 		});
 
 		viewModel.handleSelectSlot("explanation-0");
@@ -112,7 +112,7 @@ describe("useMatchCardsPageViewModel concept practice persistence", () => {
 		const selectedSession = createSelectedSessionWithWrongAttempts(1);
 		const { recordMatchCardResultUseCase, viewModel } = createViewModel({
 			session: selectedSession,
-			authState: { isLoaded: true, isSignedIn: false }
+			authState: { status: "signed-out" }
 		});
 
 		viewModel.handleSelectSlot("explanation-0");

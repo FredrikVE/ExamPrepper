@@ -1,5 +1,6 @@
 // src/ui/viewmodel/LearningPathPageViewModel.js
 import { useCallback, useState } from "react";
+import { APP_AUTH_STATUS } from "../../auth/AppAuthState.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { LEARNING_PATH_ACTION_INTENT } from "./LearningPath/LearningPathActionIntent.js";
@@ -20,11 +21,10 @@ export default function useLearningPathPageViewModel(props) {
 		subjectId = selectedSubject.id;
 	}
 
-	const isAuthLoaded = authState.isLoaded;
-	const isSignedIn = authState.isSignedIn === true;
-	const canStartLearningSessions = isAuthLoaded && isSignedIn;
-	const canLoadLearningPath = isActive && subjectId !== null && isAuthLoaded;
-	const resourceKey = createLearningPathResourceKey({ subjectId, language, isAuthLoaded, isSignedIn, userId: authState.userId });
+	const isAuthLoading = authState.status === APP_AUTH_STATUS.LOADING;
+	const canStartLearningSessions = authState.status === APP_AUTH_STATUS.SIGNED_IN;
+	const canLoadLearningPath = isActive && subjectId !== null && !isAuthLoading;
+	const resourceKey = createLearningPathResourceKey({ subjectId, language, authState });
 	const emptyLearningPath = createEmptyLearningPath(subjectId);
 
 	const executeLoad = useCallback(() => {
@@ -259,24 +259,27 @@ function createEmptyLearningPath(subjectId) {
 	};
 }
 
-function createLearningPathResourceKey({ subjectId, language, isAuthLoaded, isSignedIn, userId }) {
+function createLearningPathResourceKey({ subjectId, language, authState }) {
 	if (subjectId === null) {
 		return "no-subject";
 	}
 
-	if (!isAuthLoaded) {
+	if (authState.status === APP_AUTH_STATUS.LOADING) {
 		return `${subjectId}:${language}:auth-loading`;
 	}
 
-	if (!isSignedIn) {
+	if (authState.status === APP_AUTH_STATUS.SIGNED_IN) {
+		return `${subjectId}:${language}:${authState.userId}`;
+	}
+
+	if (
+		authState.status === APP_AUTH_STATUS.DISABLED
+		|| authState.status === APP_AUTH_STATUS.SIGNED_OUT
+	) {
 		return `${subjectId}:${language}:signed-out`;
 	}
 
-	if (userId === null || userId === undefined) {
-		return `${subjectId}:${language}:signed-in`;
-	}
-
-	return `${subjectId}:${language}:${userId}`;
+	throw new Error(`Unknown app auth status '${String(authState.status)}'`);
 }
 
 function findModuleById(modules, moduleId) {

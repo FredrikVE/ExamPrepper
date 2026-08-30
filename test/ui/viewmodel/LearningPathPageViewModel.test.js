@@ -75,15 +75,27 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	});
 
 	test("keeps the optional-auth LearningPath load enabled for a signed-out user", () => {
-		renderViewModel({ authState: { isLoaded: true, isSignedIn: false, userId: null }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+		renderViewModel({ authState: { status: "signed-out" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
 
 		expect(useLoadModel).toHaveBeenCalledTimes(1);
 		expect(useLoadModel.mock.calls[0][0]).toMatchObject({ resourceKey: "in2120:no:signed-out", isEnabled: true });
 	});
 
+	test("keeps the optional-auth LearningPath load enabled when auth is disabled", () => {
+		renderViewModel({ authState: { status: "disabled" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+
+		expect(useLoadModel.mock.calls[0][0]).toMatchObject({ resourceKey: "in2120:no:signed-out", isEnabled: true });
+	});
+
+	test("waits to load LearningPath while auth state is loading", () => {
+		renderViewModel({ authState: { status: "loading" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+
+		expect(useLoadModel.mock.calls[0][0]).toMatchObject({ resourceKey: "in2120:no:auth-loading", isEnabled: false });
+	});
+
 	test("keeps authored selectability but blocks anonymous LearningSession starts", async () => {
 		const execute = jest.fn();
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: false, userId: null }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
+		const viewModel = renderViewModel({ authState: { status: "signed-out" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
 		const action = viewModel.roadmapModel.entries[0].actionModel;
 
 		expect(action).toMatchObject({ intent: "start", isDisabled: true });
@@ -94,7 +106,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	test("starts the backend-selected module target for a signed-in user", async () => {
 		const execute = jest.fn().mockResolvedValue({ sessionId: "session-new" });
 		const onLearningSessionStarted = jest.fn();
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const viewModel = renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
 		const action = viewModel.roadmapModel.entries[0].actionModel;
 
 		expect(action).toMatchObject({ intent: "start", isDisabled: false });
@@ -107,7 +119,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		learningPath.resumableSession = { sessionId: "session-active", moduleId: learningPath.modules[0].id, currentQuestionPosition: 0 };
 		const execute = jest.fn();
 		const onLearningSessionStarted = jest.fn();
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: false, userId: null }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const viewModel = renderViewModel({ authState: { status: "signed-out" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
 		const action = viewModel.roadmapModel.entries[0].actionModel;
 
 		expect(action).toMatchObject({ intent: "resume", sessionId: "session-active", isDisabled: false });
@@ -119,7 +131,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	test("does not let a resumable session hijack an explicit start action", async () => {
 		const execute = jest.fn().mockResolvedValue({ sessionId: "session-selected" });
 		const onLearningSessionStarted = jest.fn();
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const viewModel = renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
 		const action = viewModel.roadmapModel.entries[0].actionModel;
 
 		learningPath.resumableSession = { sessionId: "session-other", moduleId: "module-other", currentQuestionPosition: 0 };
@@ -146,7 +158,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 
 		const execute = jest.fn();
 		const onLearningSessionStarted = jest.fn();
-		const render = () => renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const render = () => renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
 		const initialViewModel = render();
 
 		initialViewModel.onModuleToggle(moduleId);
@@ -181,7 +193,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		};
 		const execute = jest.fn();
 		const onLearningSessionStarted = jest.fn();
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const viewModel = renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
 		const action = viewModel.roadmapModel.entries[0].actionModel;
 
 		expect(action).toMatchObject({ intent: "open-chapter-test", examId: "chapter-1a-test-no", isDisabled: false });
@@ -192,7 +204,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	});
 
 	test("rejects ChapterTest action without examId", async () => {
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+		const viewModel = renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
 
 		await expect(viewModel.onLearningPathAction({ intent: "open-chapter-test", moduleId: learningPath.modules[0].id, isDisabled: false })).rejects.toThrow("LearningPath chapter test action requires examId");
 	});
@@ -201,7 +213,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		const deferred = createDeferred();
 		const execute = jest.fn(() => deferred.promise);
 		const onLearningSessionStarted = jest.fn();
-		const render = () => renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const render = () => renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
 		const initialViewModel = render();
 		const moduleId = learningPath.modules[0].id;
 		initialViewModel.onModuleToggle(moduleId);
@@ -227,9 +239,9 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	test("sends the selected session target without collapsing request identity to module id", async () => {
 		const execute = jest.fn().mockResolvedValue({ sessionId: "session-new" });
 		const moduleId = learningPath.modules[0].id;
-		const initialViewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
+		const initialViewModel = renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
 		initialViewModel.onModuleToggle(moduleId);
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
+		const viewModel = renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
 		const action = viewModel.roadmapModel.entries[0].detailModel.sections[0].sessions[0].actionModel;
 
 		expect(action.actionKey).toBe(`module:${moduleId}:session:${action.target.planKey}`);
@@ -242,7 +254,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		const conflict = { code: "learning_session_resume_conflict", payload: { activeSessionId: "session-conflict" } };
 		const execute = jest.fn().mockRejectedValue(conflict);
 		const onLearningSessionStarted = jest.fn();
-		const render = () => renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
+		const render = () => renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted });
 		const viewModel = render();
 
 		await viewModel.onLearningPathAction(viewModel.roadmapModel.entries[0].actionModel);
@@ -254,7 +266,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 
 	test("exposes the start error when a LearningSession start fails", async () => {
 		const execute = jest.fn().mockRejectedValue(new Error("network failed"));
-		const render = () => renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
+		const render = () => renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
 
 		const viewModel = render();
 		await viewModel.onLearningPathAction(viewModel.roadmapModel.entries[0].actionModel);
@@ -264,7 +276,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	});
 
 	test("fails fast for an unknown internal action intent", async () => {
-		const viewModel = renderViewModel({ authState: { isLoaded: true, isSignedIn: true, userId: "user-1" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+		const viewModel = renderViewModel({ authState: { status: "signed-in", userId: "user-1" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
 		const action = { intent: "unknown", isDisabled: false };
 
 		await expect(viewModel.onLearningPathAction(action)).rejects.toThrow("Unknown LearningPath action intent 'unknown'");

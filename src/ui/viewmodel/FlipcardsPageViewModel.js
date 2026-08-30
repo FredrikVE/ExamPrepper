@@ -1,5 +1,6 @@
 // src/ui/viewmodel/FlipcardsPageViewModel.js
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { APP_AUTH_STATUS } from "../../auth/AppAuthState.js";
 import { CONTENT_ICON_KEYS } from "../../constants/ContentIconKeys.js";
 import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
 import { CONCEPT_MASTERY_STATUS } from "../../constants/ConceptMasteryStatus.js";
@@ -383,7 +384,7 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 	}, []);
 
 	const persistFlipcardAssessment = useCallback((cardId, assessment) => {
-		if (!authState.isLoaded || !authState.isSignedIn) {
+		if (authState.status !== APP_AUTH_STATUS.SIGNED_IN) {
 			return;
 		}
 
@@ -399,7 +400,7 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 			glossaryEntryKey: cardId,
 			assessment
 		}).catch(reportConceptPracticeWriteError);
-	}, [authState.isLoaded, authState.isSignedIn, recordFlipcardAssessmentUseCase, subjectId]);
+	}, [authState.status, recordFlipcardAssessmentUseCase, subjectId]);
 
 	const completeCardForPractice = useCallback((cardId) => {
 		if (!activeCard || activeCard.id !== cardId) {

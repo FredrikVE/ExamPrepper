@@ -1,6 +1,6 @@
 // test/auth/AuthTokenProvider.test.js
 import { expect, test } from "@jest/globals";
-import { setAuthTokenProvider, subscribeAuthTokenProviderChange } from "../../src/auth/AuthTokenProvider.js";
+import { clearAuthTokenProvider, getActiveAuthToken, setAuthTokenProvider, subscribeAuthTokenProviderChange } from "../../src/auth/AuthTokenProvider.js";
 
 test("notifies model wiring when the active auth token provider changes", () => {
 	let changes = 0;
@@ -11,8 +11,21 @@ test("notifies model wiring when the active auth token provider changes", () => 
 
 	setAuthTokenProvider(tokenProvider);
 	setAuthTokenProvider(tokenProvider);
-	setAuthTokenProvider(null);
+	clearAuthTokenProvider();
+	clearAuthTokenProvider();
 	unsubscribe();
 
 	expect(changes).toBe(2);
+});
+
+test("fails fast when auth token provider is not a function", () => {
+	expect(() => setAuthTokenProvider(null)).toThrow("Auth token provider must be a function");
+});
+
+test("returns null after the auth token provider is cleared", async () => {
+	setAuthTokenProvider(async () => "token");
+	expect(await getActiveAuthToken()).toBe("token");
+
+	clearAuthTokenProvider();
+	expect(await getActiveAuthToken()).toBeNull();
 });

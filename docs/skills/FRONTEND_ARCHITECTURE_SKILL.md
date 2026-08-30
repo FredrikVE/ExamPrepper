@@ -55,7 +55,8 @@ Dokumentet skiller derfor fire roller:
 | Aktivt språk | `LanguageProvider`, `useLanguage()` | `src/i18n/LanguageContext.jsx` | Ingen konkurrerende språk-state. |
 | Aktivt tema | `ThemeProvider`, `useTheme()` | `src/ui/theme/ThemeContext.jsx` | Eier reaktiv theme-state og `.dark` på DOM. Persistens eies separat av `themePreference.js`. |
 | Brukerinnstillinger | `SettingsProvider`, `useSettings()` | `src/ui/settings/SettingsContext.jsx` | Ingen lokal kopi av globale settings. |
-| Auth-token til transport | `setAuthTokenProvider()`, `getActiveAuthToken()` | `src/auth/AuthTokenProvider.js` | Modulbro, ikke React-provider; injiseres i transportlaget. |
+| Frontend auth-state | `APP_AUTH_STATUS`, `AppAuthProvider`, `useAppAuth()` | `src/auth/AppAuthState.js` + `src/auth/AppAuthContext.jsx` | `ClerkAppProvider` mapper vendor-state én gang. Feature-kode leser ikke Clerk-config eller `useAuth()` direkte. |
+| Auth-token til transport | `setAuthTokenProvider()`, `clearAuthTokenProvider()`, `getActiveAuthToken()` | `src/auth/AuthTokenProvider.js` | Modulbro, ikke React-provider; injiseres i transportlaget. Clear er eksplisitt og bruker ikke `null` som dependency-sentinel. |
 | Spørsmålstype-ID-er | `QUESTION_TYPES` | `src/constants/QuestionTypes.js` | Sammenlign mot konstantene, aldri rå `"single"`/`"multi"`/`"fill"`-strenger. |
 | Spørsmålskonfigurasjon | `QUESTION_CONFIG` | `src/constants/QuestionConfig.js` | Konfigurasjonsgrenser holdes separat fra type-ID-er. |
 | Mobil/desktop-modus | `PRESENTATION_MODE`, `APP_MOBILE_MAX_WIDTH`, `APP_DESKTOP_MIN_WIDTH`, `usePresentationMode()` | `src/ui/presentation/` | Eier feature-presentasjon: mobil til og med `932`, desktop fra `933`. Breakpoint endres i JS, CSS og kontrakttest i samme patch. |
@@ -179,12 +180,13 @@ ikke historisk dagbok; historikken bor i git.
 |---|---|
 | 2026-05, presisert 2026-08-24 | MVVM-lagdeling med manuell DI via `dependencies.js`. Én offentlig Page-ViewModel-kontrakt per side; kontrakten kan komponere private undermodeller. App-shell-kapabiliteter kan ha egne ViewModels. |
 | 2026-08-24 | Public DataSources wires uten auth-dependency. Auth-aware DataSources får `getToken` som en påkrevd funksjon når capability-en er til stede; eksplisitt `null`/`undefined` er ugyldig wiring. En token-funksjon kan returnere fravær av token når auth faktisk er optional eller bruker er utlogget. |
+| 2026-08-30 | Frontend IAM-state er samlet i `AppAuthContext`: `ClerkAppProvider` er eneste eier av Clerk-config og `useAuth()`-mapping; `APP_AUTH_STATUS` erstatter parallelle `hasClerkAuth`/`isLoaded`/`isSignedIn`-objekter i feature-wiring. |
 | 2026-08-24 | `ThemeContext` eier reaktiv theme-state og `.dark` på dokumentroten. `themePreference.js` eier den feil-tolerante `localStorage`-grensen; storage-feil skal ikke knekke rendering. |
 | 2026-08-24 | `QuestionCard.jsx` er offentlig fasade for spørsmålskapabiliteten. `QuestionCardContent.jsx` er intern, eksplisitt type-router og importeres ikke som offentlig inngang av læringsmoduser. |
 | 2026-05 | CSS-mapper speiler komponentmapper. `App.css` er eneste CSS-entry point. |
 | 2026-07-29 | `QuestionCard` er en delt kapabilitet på `components/QuestionCard/`, ikke eid av `ExamPage`, `LearningPath` eller en annen læringsmodus. Eksterne konsumenter importerer bare `QuestionCard.jsx`; `App.css` er eneste CSS-entry. |
 | 2026-08-24 | LearningPath action precedence er `resumableSession → nextActivity → explicit replay → ingen start-action`. Frontend gjenopptar aktiv økt direkte, tilbyr ikke discard-valg, og bruker `activeSessionId` fra en eventuell `learning_session_resume_conflict` som defensiv resume-fallback. |
-| 2026-08-24 | Backend `isStartable` er eneste autoritet for authored LearningPath-læringspolicy. Autentisering er en separat runtime-precondition (`isLoaded`/`isSignedIn`) for authenticated mutations og skal ikke bygges inn i eller rekonstruere `isStartable`. |
+| 2026-08-24 | Backend `isStartable` er eneste autoritet for authored LearningPath-læringspolicy. Autentisering er en separat runtime-precondition (`APP_AUTH_STATUS`) for authenticated mutations og skal ikke bygges inn i eller rekonstruere `isStartable`. |
 | 2026-06, presisert 2026-07-24 | `Header.jsx` og `Footer.jsx` er canonical app-shell-implementasjoner for desktop-header og footer. De skal ikke inlines eller dupliseres som konkurrerende app-shell. Semantiske innholdsheadere er tillatt. |
 | 2026-06, erstattet 2026-07-26 | `src/navigation/navigation.js` eier `NAV_SCREENS`, `SCREEN_CONFIG`, `getScreenConfig`, `NAV_ITEMS` og `LEARNING_CONTENT_TYPES`. `SCREEN_CONFIG` eier bare `requiresSubject`, `requiresExam`, `backTo`, `showsSubjectSwitcher`, `pageClassName` og `shellClassName`. `AppNavigationViewModel` eier runtime-state, preconditions, nullstillinger, sideeffekter og eksplisitte overganger. `App.jsx` eier bare render-mapping og dokumenterte persistensunntak. |
 | 2026-06 | Ingen `.dark`-selektorer i komponent-CSS. Dark mode går utelukkende via tokens. |
@@ -270,12 +272,19 @@ karakteriseringstestet. Ikke flytt nullstillingene til generisk `clears`-metadat
 på skjermnoder nå. Vurder en lokal next-state-modell først når overgangsreglene blir vesentlig flere
 eller begynner å drive fra hverandre.
 
-### Bevisst lokal policy
+### IAM-grense
 
-`ClerkAppProvider`, `AuthButton` og Statistics-grenen kan sjekke
-`VITE_CLERK_PUBLISHABLE_KEY` lokalt ved sine egne rendergrenser. En triviell identisk boolsk sjekk
-er ikke en ny SSOT-kandidat. Sentraliser først dersom validering, normalisering eller fallback-policy
-blir mer kompleks.
+`ClerkAppProvider` er eneste eier av Clerk-konfigurasjon og runtime-auth mapping. Bare denne grensen leser `VITE_CLERK_PUBLISHABLE_KEY` og bruker `useAuth()`. Den publiserer canonical frontend-state gjennom `APP_AUTH_STATUS` og `AppAuthContext`.
+
+```text
+ClerkAppProvider
+  ↓
+AppAuthContext
+  ↓
+App / Page-ViewModels / AuthButton
+```
+
+`AuthButton` kan bruke Clerk sine presentasjonsprimitives og profil-hook, men auth-statusen kommer fra `useAppAuth()`. `AuthTokenProvider` er en separat transportbro og skal ikke brukes som UI-state-SSOT.
 
 ---
 
@@ -1667,7 +1676,7 @@ LearningPath- og LearningSession-frontenden klassifiserer aldri assessment-prose
 
 ChapterTest-noder i LearningPath følger samme regel: backend sender siste lagrede `performancePercent` + `performanceBand`, repositoryet validerer paret, og ViewModelen lager kun presentasjonsmodell for den samme score-donuten som brukes på LearningSession. Et lagret Exam/ChapterTest-attempt tømmer LearningPath-repositoryets read-cache før siden leses på nytt.
 
-For authored LearningPath-sessions er backend `isStartable` eneste autoritet for **læringspolicyen** om en authored session kan velges/startes. Frontend kan avlede `isSelectable = session.isStartable`, men skal aldri rekonstruere starttillatelse fra `status`, completion eller lokal rekkefølge. Autentisering er en separat runtime-precondition for authenticated mutations: `isLoaded` og `isSignedIn` kan avgjøre om en start-action kan utføres nå, men skal ikke endre betydningen av eller beregne en ny variant av `isStartable`.
+For authored LearningPath-sessions er backend `isStartable` eneste autoritet for **læringspolicyen** om en authored session kan velges/startes. Frontend kan avlede `isSelectable = session.isStartable`, men skal aldri rekonstruere starttillatelse fra `status`, completion eller lokal rekkefølge. Autentisering er en separat runtime-precondition for authenticated mutations: canonical `APP_AUTH_STATUS` avgjør om en start-action kan utføres nå, men skal ikke endre betydningen av eller beregne en ny variant av `isStartable`.
 
 Backend eier også `isComplete`, `isReplayAvailable`, `nextActivity` og `resumableSession`. Når flere av disse signalene kan gi en handling, gjelder denne prioriteten:
 

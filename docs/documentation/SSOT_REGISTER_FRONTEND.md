@@ -100,7 +100,8 @@ De viktigste åpne avvikene er:
 | `<LanguageProvider/>` `useLanguage()` | Aktivt språk + språkbytte (runtime) | `src/i18n/LanguageContext.jsx` | Én provider. Eier reaktiv språk-state; registeret over er den statiske teksten |
 | `<ThemeProvider/>` `useTheme()` | Aktivt tema + DOM-klassen `.dark` | `ui/theme/ThemeContext.jsx` | Én provider, reaktiv theme-state |
 | `<SettingsProvider/>` `useSettings()` | Aktive brukerinnstillinger | `ui/settings/SettingsContext.jsx` | Én provider, reaktiv settings-state |
-| `AuthTokenProvider`-modulen (`setAuthTokenProvider()` `getActiveAuthToken()`) | Aktiv token-henter for transportlaget | `src/auth/AuthTokenProvider.js` | Modulglobal bro — ikke en React-provider. Injiseres i datakildene via `dependencies.js` |
+| `APP_AUTH_STATUS{}` `<AppAuthProvider/>` `useAppAuth()` | Canonical frontend auth-state: disabled/loading/signed-out/signed-in og signed-in user identity | `src/auth/AppAuthState.js` + `src/auth/AppAuthContext.jsx` | `ClerkAppProvider` er eneste eier av Clerk-konfigurasjon og `useAuth()`-mapping. Feature-ViewModels og `App.jsx` konsumerer bare canonical state |
+| `AuthTokenProvider`-modulen (`setAuthTokenProvider()` `clearAuthTokenProvider()` `getActiveAuthToken()`) | Aktiv token-henter for transportlaget | `src/auth/AuthTokenProvider.js` | Modulglobal bro — ikke en React-provider. `null` brukes ikke som dependency-sentinel; clear er en eksplisitt operasjon. Injiseres i datakildene via `dependencies.js` |
 | `QUESTION_TYPES{}` | Spørsmålstype-ID-er | `src/constants/QuestionTypes.js` | Autoritativt register brukt av `QuestionCard`, grading og API-transformasjon. Rå typeavgjørelser i `QuestionCard` og `transformAnswersForApi.js` avvises av `questionCardArchitecture` |
 | `QUESTION_CONFIG{}` | Konfigurasjonsgrenser for spørsmålstyper (i dag: `FILL_MAX_LENGTH`) | `src/constants/QuestionConfig.js` | Egen fil, egen beslutning — ikke type-ID-er |
 | `PRESENTATION_MODE{}` `APP_MOBILE_MAX_WIDTH` `usePresentationMode()` | Mobil/desktop feature-presentasjon + breakpoint-tall | `ui/presentation/` | `932`/`933` låst av `appBreakpointContract`; narrow desktop forblir `PRESENTATION_MODE.DESKTOP` |
@@ -247,13 +248,21 @@ Duplisering som er reell, men der riktig beslutning ved dagens omfang er å la d
 
 ---
 
-## Bevisst lokal policy — ikke SSOT-kandidat nå
+## IAM SSOT
 
-Gjentatt kode som med vilje *ikke* er sentralisert, dokumentert her så en senere SSOT-gjennomgang ikke feilflagger den.
+Frontend har én canonical auth-state-grense. `ClerkAppProvider` er eneste produksjonssted som leser `VITE_CLERK_PUBLISHABLE_KEY` og mapper Clerk runtime-auth via `useAuth()`. Den publiserer en eksplisitt `APP_AUTH_STATUS`-state gjennom `AppAuthContext`.
 
-| Observasjon | Beslutning |
-|---|---|
-| `ClerkAppProvider`, `AuthButton` og Statistics-grenen i `App.jsx` sjekker `VITE_CLERK_PUBLISHABLE_KEY` lokalt (3 steder) | Beholdes. Hvert sted beskytter sin egen rendergrense, og regelen er en identisk, triviell boolsk sjekk uten delt validerings-, normaliserings- eller fallback-policy. `AUTH_CONFIG` eller en `isClerkConfigured()`-helper innføres først dersom regelen faktisk blir mer kompleks eller begynner å drifte. Samsvarer med dokumentets SSOT-definisjon: én autoritet per reell policy, ikke sentralisering av enhver gjentatt linje |
+```text
+Clerk config + runtime auth
+  ↓
+ClerkAppProvider
+  ↓
+AppAuthContext
+  ↓
+App / Page-ViewModels / Auth-presentasjon
+```
+
+`AuthButton` kan bruke Clerk sine UI-primitives og profil-hook for innlogging/avatar, men avgjør ikke om Clerk er konfigurert eller om brukeren er innlogget. Transport-token eies separat av `AuthTokenProvider`; dette er en transport-capability, ikke en konkurrerende frontend auth-state.
 
 ---
 

@@ -103,7 +103,7 @@ function createViewModelParams(overrides) {
 		selectedDeckCardIds: [],
 		activeCardIndex: 0,
 		isActiveCardFlipped: false,
-		authState: { isLoaded: true, isSignedIn: false },
+		authState: { status: "signed-out" },
 		...overrides
 	};
 }
@@ -289,7 +289,7 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 	test("persists an understood checkpoint for a signed-in user", () => {
 		const { recordFlipcardAssessmentUseCase, viewModel } = createViewModel(createViewModelParams({
 			activeCardIndex: 0,
-			authState: { isLoaded: true, isSignedIn: true }
+			authState: { status: "signed-in", userId: "user-1" }
 		}));
 
 		clearStateSetterCalls();
@@ -307,7 +307,7 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 	test("persists a practice checkpoint for a signed-in user", () => {
 		const { recordFlipcardAssessmentUseCase, viewModel } = createViewModel(createViewModelParams({
 			activeCardIndex: 1,
-			authState: { isLoaded: true, isSignedIn: true }
+			authState: { status: "signed-in", userId: "user-1" }
 		}));
 
 		clearStateSetterCalls();
@@ -325,7 +325,7 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 	test("keeps signed-out FlipCards local without persistence", () => {
 		const { recordFlipcardAssessmentUseCase, viewModel } = createViewModel(createViewModelParams({
 			activeCardIndex: 0,
-			authState: { isLoaded: true, isSignedIn: false }
+			authState: { status: "signed-out" }
 		}));
 
 		clearStateSetterCalls();

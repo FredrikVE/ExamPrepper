@@ -1,19 +1,22 @@
 // src/auth/AuthTokenProvider.js
-let activeAuthTokenProvider = null;
 const authTokenProviderChangeListeners = new Set();
 
+async function readAnonymousAuthToken() {
+	return null;
+}
+
+let activeAuthTokenProvider = readAnonymousAuthToken;
+
 export function setAuthTokenProvider(authTokenProvider) {
-	if (activeAuthTokenProvider === authTokenProvider) {
-
-		return;
-
+	if (typeof authTokenProvider !== "function") {
+		throw new Error("Auth token provider must be a function");
 	}
 
-	activeAuthTokenProvider = authTokenProvider;
+	replaceAuthTokenProvider(authTokenProvider);
+}
 
-	for (const listener of authTokenProviderChangeListeners) {
-		listener();
-	}
+export function clearAuthTokenProvider() {
+	replaceAuthTokenProvider(readAnonymousAuthToken);
 }
 
 export function subscribeAuthTokenProviderChange(listener) {
@@ -25,11 +28,17 @@ export function subscribeAuthTokenProviderChange(listener) {
 }
 
 export async function getActiveAuthToken() {
-	if (!activeAuthTokenProvider) {
+	return await activeAuthTokenProvider();
+}
 
-		return null;
-
+function replaceAuthTokenProvider(authTokenProvider) {
+	if (activeAuthTokenProvider === authTokenProvider) {
+		return;
 	}
 
-	return await activeAuthTokenProvider();
+	activeAuthTokenProvider = authTokenProvider;
+
+	for (const listener of authTokenProviderChangeListeners) {
+		listener();
+	}
 }
