@@ -57,6 +57,10 @@ Se full oversikt i [FEATURES.md](./docs/documentation/FEATURES.md).
         <td><a href="./docs/documentation/DESIGN_DECISIONS.md">Begrunnelse for sentrale tekniske og strukturelle valg.</a></td>
     </tr>
     <tr>
+        <td>Vurderingsalgoritme</td>
+        <td><a href="./docs/documentation/ASSESSMENT_ALGORITHM.md">Hvordan FlipCards, MatchCards og spørsmålsresultater påvirker vurderingen som GlossaryPage viser.</a></td>
+    </tr>
+    <tr>
         <td>Testing</td>
         <td><a href="./docs/documentation/TESTING.md">Teststruktur, teststrategi, enhetstester og integrasjonstester.</a></td>
     </tr>
