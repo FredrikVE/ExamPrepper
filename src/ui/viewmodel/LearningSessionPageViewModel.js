@@ -1,21 +1,25 @@
 // src/ui/viewmodel/LearningSessionPageViewModel.js
-import { useCallback, useEffect, useReducer } from "react";
-import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
-import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
-import { updateObjectAnswerSelection, updateSingleAnswerSelection, toggleMultiAnswerSelection } from "./QuestionSession/updateAnswers.js";
-import createRewardModel from "./LearningSession/createRewardModel.js";
-import createSessionResultModel from "./LearningSession/createSessionResultModel.js";
+import { LEARNING_SESSION_STATES } from "./LearningSession/LearningSessionStates.js";
 import createCheckedAnswerResult from "./LearningSession/createCheckedAnswerResult.js";
-import createLearningSessionQuestionCardModel from "./LearningSession/createLearningSessionQuestionCardModel.js";
 import createLearningSessionActionPanelModel from "./LearningSession/createLearningSessionActionPanelModel.js";
 import createLearningSessionHeaderModel from "./LearningSession/createLearningSessionHeaderModel.js";
+import createLearningSessionQuestionCardModel from "./LearningSession/createLearningSessionQuestionCardModel.js";
+import createRewardModel from "./LearningSession/createRewardModel.js";
+import createSessionResultModel from "./LearningSession/createSessionResultModel.js";
 import sessionReducer, { createInitialSessionState, SESSION_ACTIONS } from "./LearningSession/sessionReducer.js";
-import { LEARNING_SESSION_STATES } from "./LearningSession/LearningSessionStates.js";
-import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
+import useMatchCardsRoundModel from "./MatchCards/useMatchCardsRoundModel.js";
+import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./QuestionSession/updateAnswers.js";
 import transformLearningSessionAnswersForApi from "./QuestionSession/transformLearningSessionAnswersForApi.js";
+import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarModel.js";
+import isQuestionAnswered from "./Utils/isQuestionAnswered.js";
+import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 
-export default function useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, t, isActive, backContract }) {
+const EMPTY_MATCH_CARD_ENTRIES = Object.freeze([]);
+const LEARNING_SESSION_MATCH_CARDS_VISIBLE_PAIR_COUNT = 4;
+
+export default function useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, language, t, isActive, backContract }) {
 	const [state, dispatch] = useReducer(sessionReducer, undefined, createInitialSessionState);
 
 	useEffect(() => {
@@ -27,7 +31,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 
 		async function loadSession() {
 			try {
-				const session = await getLearningSessionUseCase.execute(sessionId);
+				const loadedSession = await getLearningSessionUseCase.execute(sessionId);
 
 				if (!isCurrent) {
 					return;
@@ -35,7 +39,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 
 				dispatch({
 					type: SESSION_ACTIONS.SESSION_LOADED,
-					session
+					session: loadedSession
 				});
 			}
 
@@ -59,6 +63,24 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	}, [getLearningSessionUseCase, isActive, sessionId, t.learningSessionLoadErrorMessage]);
 
 	const session = state.session ?? null;
+	const matchCardEntries = session === null ? EMPTY_MATCH_CARD_ENTRIES : session.matchCardsTask.pairs;
+
+	const recordMatchCardResult = useCallback((matchCardResult) => {
+		dispatch({
+			type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
+			result: matchCardResult
+		});
+	}, []);
+
+	const matchCardsRoundModel = useMatchCardsRoundModel({
+		glossaryEntries: matchCardEntries,
+		roundPairCount: matchCardEntries.length,
+		visiblePairCount: LEARNING_SESSION_MATCH_CARDS_VISIBLE_PAIR_COUNT,
+		language,
+		randomNumber: Math.random,
+		onSuccessfulMatch: recordMatchCardResult
+	});
+
 	let currentQuestion = null;
 	let currentQuestionRenderKey = null;
 	let currentResult = null;
@@ -77,7 +99,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	}
 
 	const changeAnswers = useCallback((updater) => {
-		if (session === null) {
+		if (session === null || !matchCardsRoundModel.isRoundComplete) {
 			return;
 		}
 
@@ -87,7 +109,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 			type: SESSION_ACTIONS.ANSWER_CHANGED,
 			answersBySessionQuestionId
 		});
-	}, [session]);
+	}, [matchCardsRoundModel.isRoundComplete, session]);
 
 	const setSingleAnswer = useCallback((_questionId, selectedValue) => {
 		if (currentQuestion === null || currentResult !== null) {
@@ -133,15 +155,14 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 	}, [changeAnswers, currentQuestion, currentResult]);
 
 	const checkAnswer = useCallback(() => {
-		if (session === null || currentQuestion === null || currentResult !== null) {
+		if (!matchCardsRoundModel.isRoundComplete || session === null || currentQuestion === null || currentResult !== null) {
 			return;
 		}
 
-		const sessionQuestionId = currentQuestion.sessionQuestionId;
+		const currentSessionQuestionId = currentQuestion.sessionQuestionId;
 		const question = currentQuestion.question;
-		const currentAnswer = session.answersBySessionQuestionId[sessionQuestionId] ?? null;
-
-		const result = createCheckedAnswerResult({
+		const currentAnswer = session.answersBySessionQuestionId[currentSessionQuestionId] ?? null;
+		const checkedAnswerResult = createCheckedAnswerResult({
 			question,
 			answer: currentAnswer,
 			gradeAnswerUseCase
@@ -149,13 +170,13 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 
 		dispatch({
 			type: SESSION_ACTIONS.ANSWER_CHECKED,
-			sessionQuestionId,
-			result
+			sessionQuestionId: currentSessionQuestionId,
+			result: checkedAnswerResult
 		});
-	}, [currentQuestion, currentResult, gradeAnswerUseCase, session]);
+	}, [currentQuestion, currentResult, gradeAnswerUseCase, matchCardsRoundModel.isRoundComplete, session]);
 
 	const submitSession = useCallback(async () => {
-		if (session === null) {
+		if (session === null || !matchCardsRoundModel.isRoundComplete) {
 			return;
 		}
 
@@ -172,19 +193,23 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		});
 
 		try {
+			const matchCardResults = createMatchCardResultsForSubmit(
+				session.matchCardsTask,
+				session.matchCardResults
+			);
 			const answers = transformLearningSessionAnswersForApi(
 				session.questions,
 				session.answersBySessionQuestionId
 			);
-
-			const result = await submitLearningSessionUseCase.execute({
+			const submitResult = await submitLearningSessionUseCase.execute({
 				sessionId: session.sessionId,
+				matchCardResults,
 				answers
 			});
 
 			dispatch({
 				type: SESSION_ACTIONS.SUBMIT_SUCCEEDED,
-				result
+				result: submitResult
 			});
 		}
 
@@ -194,10 +219,10 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 				errorMessage: t.learningSessionSubmitErrorMessage
 			});
 		}
-	}, [session, state.status, submitLearningSessionUseCase, t.learningSessionSubmitErrorMessage]);
+	}, [matchCardsRoundModel.isRoundComplete, session, state.status, submitLearningSessionUseCase, t.learningSessionSubmitErrorMessage]);
 
 	const continueSession = useCallback(() => {
-		if (currentResult === null) {
+		if (!matchCardsRoundModel.isRoundComplete || currentResult === null) {
 			return;
 		}
 
@@ -209,12 +234,25 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		dispatch({
 			type: SESSION_ACTIONS.CONTINUED
 		});
-	}, [currentResult, isLastQuestion, submitSession]);
+	}, [currentResult, isLastQuestion, matchCardsRoundModel.isRoundComplete, submitSession]);
+
+	const matchCardsLabels = useMemo(() => {
+		return {
+			pageTitle: t.matchCardsTitle,
+			selectedSlotLabel: t.matchCardsSelectedSlotLabel,
+			wrongSlotLabel: t.matchCardsWrongSlotLabel,
+			successSlotLabel: t.matchCardsSuccessSlotLabel,
+			emptySlotLabel: t.matchCardsEmptySlotLabel,
+			cardAriaLabel: t.matchCardsCardAriaLabel
+		};
+	}, [t]);
 
 	const workspaceState = createLearningSessionWorkspaceState({ state, t });
 	let headerModel = null;
 	let progressBarModel = null;
+	let matchCardsModel = null;
 	let questionCardModel = null;
+	let renderedCurrentQuestionRenderKey = null;
 	let actionPanelModel = null;
 	let sessionResultModel = null;
 	let rewardModel = null;
@@ -222,38 +260,56 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 
 	if (session !== null) {
 		const isSessionComplete = state.status === LEARNING_SESSION_STATES.COMPLETED;
+		const isMatchCardsActive = matchCardsRoundModel.session !== null
+			&& !matchCardsRoundModel.isRoundComplete
+			&& !isSessionComplete;
 		const answerReady = currentQuestion !== null && isQuestionAnswered(currentQuestion.question, answer);
 		const submitResult = isSessionComplete ? state.result : null;
 		const feedbackBody = state.status === LEARNING_SESSION_STATES.SUBMIT_FAILED
 			? state.errorMessage
 			: null;
 
-		questionCardModel = createLearningSessionQuestionCardModel({
-			currentQuestion,
-			currentResult,
-			currentIndex: session.currentIndex,
-			answer,
-			answerOptionOrderBySessionQuestionId: session.answerOptionOrderBySessionQuestionId,
-			setSingleAnswer,
-			toggleMultiAnswer,
-			selectObjectAnswer
-		});
+		if (isMatchCardsActive) {
+			matchCardsModel = {
+				termSlots: matchCardsRoundModel.termSlots,
+				explanationSlots: matchCardsRoundModel.explanationSlots,
+				labels: matchCardsLabels,
+				boardStyle: matchCardsRoundModel.boardStyle,
+				isInteractionLocked: matchCardsRoundModel.isInteractionLocked,
+				onSelectSlot: matchCardsRoundModel.selectSlot
+			};
+		}
 
-		actionPanelModel = createLearningSessionActionPanelModel({
-			currentResult,
-			isLastQuestion,
-			answerReady,
-			sessionStatus: state.status,
-			feedbackBody,
-			checkAnswer,
-			continueSession,
-			submitSession,
-			t
-		});
+		if (matchCardsRoundModel.isRoundComplete && !isSessionComplete) {
+			questionCardModel = createLearningSessionQuestionCardModel({
+				currentQuestion,
+				currentResult,
+				currentIndex: session.currentIndex,
+				answer,
+				answerOptionOrderBySessionQuestionId: session.answerOptionOrderBySessionQuestionId,
+				setSingleAnswer,
+				toggleMultiAnswer,
+				selectObjectAnswer
+			});
+			renderedCurrentQuestionRenderKey = currentQuestionRenderKey;
+
+			actionPanelModel = createLearningSessionActionPanelModel({
+				currentResult,
+				isLastQuestion,
+				answerReady,
+				sessionStatus: state.status,
+				feedbackBody,
+				checkAnswer,
+				continueSession,
+				submitSession,
+				t
+			});
+		}
 
 		progressBarModel = createLearningSessionProgressBarModel({
 			currentIndex: session.currentIndex,
 			questionCount: session.questions.length,
+			isMatchCardsComplete: matchCardsRoundModel.isRoundComplete,
 			t
 		});
 
@@ -272,16 +328,19 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 			submitResult,
 			currentIndex: session.currentIndex,
 			questionCount: session.questions.length,
+			isMatchCardsActive,
 			t
 		});
 
-		rewardModel = createRewardModel({
-			pendingRewardKind: session.pendingRewardKind,
-			combo: session.combo,
-			xp: session.xp,
-			t,
-			onContinue: continueSession
-		});
+		if (matchCardsRoundModel.isRoundComplete) {
+			rewardModel = createRewardModel({
+				pendingRewardKind: session.pendingRewardKind,
+				combo: session.combo,
+				xp: session.xp,
+				t,
+				onContinue: continueSession
+			});
+		}
 
 		scrollToTopRequestId = session.scrollToTopRequestId;
 	}
@@ -291,8 +350,9 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		backContract,
 		headerModel,
 		progressBarModel,
+		matchCardsModel,
 		questionCardModel,
-		currentQuestionRenderKey,
+		currentQuestionRenderKey: renderedCurrentQuestionRenderKey,
 		questionFocusLabel: t.learningSessionQuestionFocusLabel,
 		actionPanelModel,
 		sessionResultModel,
@@ -300,6 +360,31 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		scrollToTopRequestId,
 		isSessionComplete: state.status === LEARNING_SESSION_STATES.COMPLETED
 	};
+}
+
+function createMatchCardResultsForSubmit(matchCardsTask, matchCardResults) {
+	const resultByGlossaryEntryKey = new Map();
+
+	for (const matchCardResult of matchCardResults) {
+		resultByGlossaryEntryKey.set(matchCardResult.glossaryEntryKey, matchCardResult);
+	}
+
+	const orderedResults = [];
+
+	for (const pair of matchCardsTask.pairs) {
+		const matchCardResult = resultByGlossaryEntryKey.get(pair.glossaryEntryKey);
+
+		if (matchCardResult === undefined) {
+			throw new Error(`Missing LearningSession MatchCards result: ${pair.glossaryEntryKey}`);
+		}
+
+		orderedResults.push({
+			glossaryEntryKey: matchCardResult.glossaryEntryKey,
+			wrongAttemptCount: matchCardResult.wrongAttemptCount
+		});
+	}
+
+	return orderedResults;
 }
 
 function createLearningSessionWorkspaceState({ state, t }) {
@@ -318,7 +403,6 @@ function createLearningSessionWorkspaceState({ state, t }) {
 	return createWorkspaceState({
 		loadStatus,
 		isEmpty: false,
-
 		labels: {
 			loading: t.learningSessionLoadingMessage,
 			errorTitle: t.errorPrefix,
@@ -326,19 +410,25 @@ function createLearningSessionWorkspaceState({ state, t }) {
 			emptyTitle: "",
 			emptyBody: ""
 		},
-
 		errorAction: null
 	});
 }
 
-function createLearningSessionProgressBarModel({ currentIndex, questionCount, t }) {
+function createLearningSessionProgressBarModel({ currentIndex, questionCount, isMatchCardsComplete, t }) {
 	if (questionCount === 0) {
 		return null;
 	}
 
+	const totalSteps = questionCount + 1;
+	let currentStep = 1;
+
+	if (isMatchCardsComplete) {
+		currentStep = Math.min(currentIndex + 2, totalSteps);
+	}
+
 	return buildProgressBarModel({
-		totalSteps: questionCount,
-		currentStep: Math.min(currentIndex + 1, questionCount),
+		totalSteps,
+		currentStep,
 		ariaLabel: t.learningSessionProgressAriaLabel,
 		startLabel: t.learningSessionProgressStartLabel,
 		formatStepLabel: t.learningSessionProgressStepLabel,

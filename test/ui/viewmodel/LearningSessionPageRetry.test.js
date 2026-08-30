@@ -11,7 +11,13 @@ describe("LearningSession submit retry", () => {
 				moduleId: "module-1",
 				modulePosition: 1,
 				moduleTitle: "Concepts",
-					questions: []
+				matchCardsTask: {
+					pairs: [
+						{ glossaryEntryKey: "glossary-a" },
+						{ glossaryEntryKey: "glossary-b" }
+					]
+				},
+				questions: []
 			}
 		});
 		const state = {
@@ -19,7 +25,11 @@ describe("LearningSession submit retry", () => {
 			session: {
 				...loaded.session,
 				answersBySessionQuestionId: { q1: "answer" },
-				resultsBySessionQuestionId: { q1: { isCorrect: true } }
+				resultsBySessionQuestionId: { q1: { isCorrect: true } },
+				matchCardResults: [
+					{ glossaryEntryKey: "glossary-a", wrongAttemptCount: 1 },
+					{ glossaryEntryKey: "glossary-b", wrongAttemptCount: 0 }
+				]
 			}
 		};
 
@@ -30,6 +40,7 @@ describe("LearningSession submit retry", () => {
 
 		expect(failed.session.answersBySessionQuestionId).toEqual(state.session.answersBySessionQuestionId);
 		expect(failed.session.resultsBySessionQuestionId).toEqual(state.session.resultsBySessionQuestionId);
+		expect(failed.session.matchCardResults).toEqual(state.session.matchCardResults);
 		expect(failed.status).toBe("submitFailed");
 		expect(failed.errorMessage).toBe("temporary");
 	});

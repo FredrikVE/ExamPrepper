@@ -4,6 +4,7 @@ import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
 
 const MATCH_CARDS_PAGE_PATH = path.resolve("src/ui/view/pages/MatchCardsPage.jsx");
+const LEARNING_SESSION_PAGE_PATH = path.resolve("src/ui/view/pages/LearningSessionPage.jsx");
 const MATCH_CARDS_COMPONENT_ROOT = path.resolve("src/ui/view/components/MatchCards");
 const MATCH_CARDS_VIEWMODEL_ROOT = path.resolve("src/ui/viewmodel/MatchCards");
 const MATCH_CARDS_ROUND_MODEL_PATH = path.join(MATCH_CARDS_VIEWMODEL_ROOT, "useMatchCardsRoundModel.js");
@@ -38,6 +39,13 @@ describe("MatchCards architecture", () => {
 		const pageSource = readSource(MATCH_CARDS_PAGE_PATH);
 
 		expect(pageSource).toContain('import MatchCardsGrid from "../components/MatchCards/MatchCardsGrid.jsx";');
+	});
+
+	test("keeps LearningSession as a consumer of the shared MatchCards renderer", () => {
+		const pageSource = readSource(LEARNING_SESSION_PAGE_PATH);
+
+		expect(pageSource).toContain('import MatchCardsGrid from "../components/MatchCards/MatchCardsGrid.jsx";');
+		expect(pageSource).not.toContain("components/MatchCardsPage/");
 	});
 
 	test("keeps shared MatchCards components independent of page-owned code", () => {

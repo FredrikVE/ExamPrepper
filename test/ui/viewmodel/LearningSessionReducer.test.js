@@ -9,6 +9,12 @@ function createLoadedState() {
 			moduleId: "m1",
 			modulePosition: 1,
 			moduleTitle: "Concepts",
+			matchCardsTask: {
+				pairs: [
+					{ glossaryEntryKey: "glossary-a" },
+					{ glossaryEntryKey: "glossary-b" }
+				]
+			},
 			questions: [
 				{
 					sessionQuestionId: "q1",
@@ -56,7 +62,14 @@ describe("learning session reducer", () => {
 				moduleId: "m1",
 				modulePosition: 1,
 				moduleTitle: "Concepts",
-					questions: expect.any(Array),
+				matchCardsTask: {
+					pairs: [
+						{ glossaryEntryKey: "glossary-a" },
+						{ glossaryEntryKey: "glossary-b" }
+					]
+				},
+				matchCardResults: [],
+				questions: expect.any(Array),
 				currentIndex: 0,
 				answersBySessionQuestionId: {},
 				resultsBySessionQuestionId: {},
@@ -74,6 +87,40 @@ describe("learning session reducer", () => {
 		expect(state).not.toHaveProperty("submitStatus");
 		expect(state).not.toHaveProperty("submitResult");
 		expect(state).not.toHaveProperty("submitErrorMessage");
+	});
+
+	test("records MatchCards results without changing question progress", () => {
+		const loaded = createLoadedState();
+		const result = { glossaryEntryKey: "glossary-a", wrongAttemptCount: 2 };
+
+		const updated = sessionReducer(loaded, {
+			type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
+			result
+		});
+
+		expect(updated).toMatchObject({
+			status: "answering",
+			session: {
+				currentIndex: 0,
+				matchCardResults: [result]
+			}
+		});
+	});
+
+	test("fails fast when the same MatchCards pair result is recorded twice", () => {
+		const loaded = createLoadedState();
+		const result = { glossaryEntryKey: "glossary-a", wrongAttemptCount: 0 };
+		const recorded = sessionReducer(loaded, {
+			type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
+			result
+		});
+
+		expect(() => {
+			sessionReducer(recorded, {
+				type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
+				result
+			});
+		}).toThrow("Duplicate LearningSession MatchCards result: glossary-a");
 	});
 
 	test("records checked answer, awards xp, and surfaces every third combo before the final question", () => {

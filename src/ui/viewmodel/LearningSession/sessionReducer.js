@@ -7,6 +7,7 @@ const XP_PER_POINT = 10;
 export const SESSION_ACTIONS = {
 	SESSION_LOADED: "sessionLoaded",
 	LOAD_FAILED: "loadFailed",
+	MATCH_CARD_RESULT_RECORDED: "matchCardResultRecorded",
 	ANSWER_CHANGED: "answerChanged",
 	ANSWER_CHECKED: "answerChecked",
 	CONTINUED: "continued",
@@ -34,6 +35,9 @@ export default function sessionReducer(state, action) {
 				status: LEARNING_SESSION_STATES.LOAD_FAILED,
 				errorMessage: action.errorMessage
 			};
+
+		case SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED:
+			return applyMatchCardResultRecorded(state, action);
 
 		case SESSION_ACTIONS.ANSWER_CHANGED:
 			return {
@@ -77,6 +81,8 @@ function createLoadedSessionData(session) {
 		moduleId: session.moduleId,
 		modulePosition: session.modulePosition,
 		moduleTitle: session.moduleTitle,
+		matchCardsTask: session.matchCardsTask,
+		matchCardResults: [],
 		questions: session.questions,
 		currentIndex: 0,
 		answersBySessionQuestionId: {},
@@ -86,6 +92,27 @@ function createLoadedSessionData(session) {
 		xp: 0,
 		pendingRewardKind: null,
 		scrollToTopRequestId: 0
+	};
+}
+
+function applyMatchCardResultRecorded(state, action) {
+	const session = requireSessionData(state, action.type);
+
+	for (const matchCardResult of session.matchCardResults) {
+		if (matchCardResult.glossaryEntryKey === action.result.glossaryEntryKey) {
+			throw new Error(`Duplicate LearningSession MatchCards result: ${action.result.glossaryEntryKey}`);
+		}
+	}
+
+	return {
+		...state,
+		session: {
+			...session,
+			matchCardResults: [
+				...session.matchCardResults,
+				action.result
+			]
+		}
 	};
 }
 

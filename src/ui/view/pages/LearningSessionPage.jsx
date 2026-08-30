@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import Header from "../components/Header/Header.jsx";
 import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import LearningSessionHeader from "../components/LearningSessionPage/LearningSessionHeader.jsx";
+import MatchCardsGrid from "../components/MatchCards/MatchCardsGrid.jsx";
 import LearningSessionStage from "../components/LearningSessionPage/LearningSessionStage.jsx";
 import SessionActionPanel from "../components/LearningSessionPage/SessionActionPanel.jsx";
 import SessionResultPanel from "../components/LearningSessionPage/SessionResultPanel.jsx";
@@ -69,6 +70,12 @@ export default function LearningSessionPage({ viewModel }) {
 			<WorkspaceState state={viewModel.workspaceState}>
 				<div className="learning-session-content">
 					<LearningSessionHeader model={viewModel.headerModel} />
+
+					{viewModel.matchCardsModel !== null && (
+						<div className="learning-session-matchcards">
+							<MatchCardsGrid {...viewModel.matchCardsModel} />
+						</div>
+					)}
 
 					{viewModel.questionCardModel !== null && (
 						<LearningSessionStage

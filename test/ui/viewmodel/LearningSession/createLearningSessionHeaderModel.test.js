@@ -4,6 +4,7 @@ import createLearningSessionHeaderModel from "../../../../src/ui/viewmodel/Learn
 
 const t = {
 	learningSessionModuleTitle: (position, title) => `Module ${position}: ${title}`,
+	learningSessionMatchCardsCounter: "Concept match",
 	learningSessionQuestionCounter: (current, total) => `${current} / ${total}`,
 	learningSessionResultHeaderLabel: "Result"
 };
@@ -15,24 +16,29 @@ function createModel(overrides = {}) {
 		submitResult: null,
 		currentIndex: 1,
 		questionCount: 4,
+		isMatchCardsActive: false,
 		t,
 		...overrides
 	});
 }
 
 describe("createLearningSessionHeaderModel", () => {
-	test("presents the module and question counter without a session mode label", () => {
+	test("presents the module and question counter after MatchCards", () => {
 		expect(createModel()).toEqual({
 			title: "Module 2: Protocols",
 			counterLabel: "2 / 4"
 		});
 	});
 
+	test("presents MatchCards as the active LearningSession activity", () => {
+		expect(createModel({ isMatchCardsActive: true }).counterLabel).toBe("Concept match");
+	});
+
 	test("uses the result label after submit succeeds", () => {
 		expect(createModel({
 			submitResult: {
 				score: {}
-			}
+		}
 		}).counterLabel).toBe("Result");
 	});
 });

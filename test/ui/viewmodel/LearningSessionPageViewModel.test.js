@@ -9,13 +9,30 @@ let reducerState;
 
 const useCallback = jest.fn((callback) => callback);
 const useEffect = jest.fn();
+const useMemo = jest.fn((factory) => factory());
 const useReducer = jest.fn(() => [reducerState, dispatch]);
+const useMatchCardsRoundModel = jest.fn();
 
-jest.unstable_mockModule("react", () => ({ useCallback, useEffect, useReducer }));
+jest.unstable_mockModule("react", () => ({ useCallback, useEffect, useMemo, useReducer }));
+jest.unstable_mockModule("../../../src/ui/viewmodel/MatchCards/useMatchCardsRoundModel.js", () => ({ default: useMatchCardsRoundModel }));
 
 const { default: useLearningSessionPageViewModel } = await import("../../../src/ui/viewmodel/LearningSessionPageViewModel.js");
 
 const t = translations[LANGUAGES.EN];
+const MATCH_CARDS_TASK = {
+	pairs: [
+		{
+			glossaryEntryKey: "glossary-a",
+			term: { no: "Begrep A", en: "Concept A" },
+			explanation: { no: "Forklaring A", en: "Explanation A" }
+		},
+		{
+			glossaryEntryKey: "glossary-b",
+			term: { no: "Begrep B", en: "Concept B" },
+			explanation: { no: "Forklaring B", en: "Explanation B" }
+		}
+	]
+};
 
 const question = {
 	type: QUESTION_TYPES.FILL,
@@ -23,12 +40,25 @@ const question = {
 	acceptedAnswers: ["discount rate"]
 };
 
+function createCompletedMatchCardsRoundModel() {
+	return {
+		session: {},
+		termSlots: [],
+		explanationSlots: [],
+		boardStyle: {},
+		isInteractionLocked: false,
+		isRoundComplete: true,
+		selectSlot: jest.fn()
+	};
+}
+
 function createViewModel({ gradeAnswerUseCase, submitLearningSessionUseCase }) {
 	return useLearningSessionPageViewModel({
 		getLearningSessionUseCase: { execute: jest.fn() },
 		submitLearningSessionUseCase,
 		gradeAnswerUseCase,
 		sessionId: "session-1",
+		language: LANGUAGES.EN,
 		t,
 		isActive: true,
 		backContract: { onBack: jest.fn() }
@@ -43,6 +73,7 @@ function createLoadedReducerState(loadedQuestion = question) {
 			moduleId: "module-1",
 			modulePosition: 1,
 			moduleTitle: "Concepts",
+			matchCardsTask: MATCH_CARDS_TASK,
 			questions: [{ sessionQuestionId: "session-question-1", question: loadedQuestion }]
 		}
 	});
@@ -61,8 +92,64 @@ describe("useLearningSessionPageViewModel behavior", () => {
 		dispatch.mockClear();
 		useCallback.mockClear();
 		useEffect.mockClear();
+		useMemo.mockClear();
 		useReducer.mockClear();
+		useMatchCardsRoundModel.mockReset();
+		useMatchCardsRoundModel.mockReturnValue(createCompletedMatchCardsRoundModel());
 		reducerState = createLoadedReducerState();
+	});
+
+	test("starts with MatchCards and hides question actions until the round is complete", () => {
+		const selectSlot = jest.fn();
+		useMatchCardsRoundModel.mockReturnValue({
+			session: {},
+			termSlots: [{ slotId: "term-a" }],
+			explanationSlots: [{ slotId: "explanation-a" }],
+			boardStyle: { "--matchcards-visible-pair-count": 2 },
+			isInteractionLocked: false,
+			isRoundComplete: false,
+			selectSlot
+		});
+
+		const viewModel = createViewModel({
+			gradeAnswerUseCase: { execute: jest.fn(), getQuestionScore: jest.fn(), getFillMatchType: jest.fn() },
+			submitLearningSessionUseCase: { execute: jest.fn() }
+		});
+
+		expect(viewModel.matchCardsModel).toMatchObject({
+			termSlots: [{ slotId: "term-a" }],
+			explanationSlots: [{ slotId: "explanation-a" }],
+			isInteractionLocked: false,
+			onSelectSlot: selectSlot
+		});
+		expect(viewModel.questionCardModel).toBeNull();
+		expect(viewModel.actionPanelModel).toBeNull();
+		expect(viewModel.currentQuestionRenderKey).toBeNull();
+		expect(viewModel.headerModel.counterLabel).toBe(t.learningSessionMatchCardsCounter);
+		expect(viewModel.progressBarModel.points.at(-1).label).toBe(t.learningSessionProgressStepLabel(2, 2));
+		expect(viewModel.progressBarModel.fillPercent).toBe(0);
+	});
+
+	test("records a successful MatchCards pair through the LearningSession reducer", () => {
+		let roundModelInput = null;
+		useMatchCardsRoundModel.mockImplementation((input) => {
+			roundModelInput = input;
+			return createCompletedMatchCardsRoundModel();
+		});
+		createViewModel({
+			gradeAnswerUseCase: { execute: jest.fn(), getQuestionScore: jest.fn(), getFillMatchType: jest.fn() },
+			submitLearningSessionUseCase: { execute: jest.fn() }
+		});
+		const result = { glossaryEntryKey: "glossary-a", wrongAttemptCount: 2 };
+
+		roundModelInput.onSuccessfulMatch(result);
+
+		expect(roundModelInput.glossaryEntries).toEqual(MATCH_CARDS_TASK.pairs);
+		expect(roundModelInput.roundPairCount).toBe(MATCH_CARDS_TASK.pairs.length);
+		expect(dispatch).toHaveBeenCalledWith({
+			type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
+			result
+		});
 	});
 
 	test("preserves fuzzy fill feedback in the checked answer result", () => {
@@ -116,6 +203,7 @@ describe("useLearningSessionPageViewModel behavior", () => {
 			submitLearningSessionUseCase: { execute: jest.fn() }
 		});
 
+		expect(viewModel.matchCardsModel).toBeNull();
 		expect(viewModel.questionCardModel).not.toBeNull();
 		expect(viewModel.actionPanelModel).toMatchObject({
 			primaryLabel: t.learningSessionSubmittingLabel,
@@ -124,7 +212,7 @@ describe("useLearningSessionPageViewModel behavior", () => {
 		expect(viewModel.isSessionComplete).toBe(false);
 	});
 
-	test("serializes answers before submitting the LearningSession", () => {
+	test("serializes MatchCards results in authored order before question answers", () => {
 		const choiceQuestion = {
 			type: QUESTION_TYPES.SINGLE,
 			points: 1,
@@ -139,6 +227,10 @@ describe("useLearningSessionPageViewModel behavior", () => {
 			...reducerState,
 			session: {
 				...reducerState.session,
+				matchCardResults: [
+					{ glossaryEntryKey: "glossary-b", wrongAttemptCount: 1 },
+					{ glossaryEntryKey: "glossary-a", wrongAttemptCount: 0 }
+				],
 				answersBySessionQuestionId: { "session-question-1": 1 },
 				resultsBySessionQuestionId: {
 					"session-question-1": {
@@ -174,6 +266,10 @@ describe("useLearningSessionPageViewModel behavior", () => {
 		});
 		expect(submitLearningSessionUseCase.execute).toHaveBeenCalledWith({
 			sessionId: "session-1",
+			matchCardResults: [
+				{ glossaryEntryKey: "glossary-a", wrongAttemptCount: 0 },
+				{ glossaryEntryKey: "glossary-b", wrongAttemptCount: 1 }
+			],
 			answers: [
 				{
 					sessionQuestionId: "session-question-1",
