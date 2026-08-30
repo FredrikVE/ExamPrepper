@@ -2,17 +2,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LOAD_STATUS } from "./loadStatus.js";
 
-export default function useLoadModel({
-	execute,
-	emptyData,
-	errorMessage,
-	resourceKey,
-	isEnabled,
-	onLoaded
-}) {
-	const hasLoadedOnceRef = useRef(false);
+export default function useLoadModel({ execute, emptyData, errorMessage, resourceKey, isEnabled, onLoaded }) {
 	const activeRunIdRef = useRef(0);
-	const activeResourceKeyRef = useRef(resourceKey);
 	const emptyDataRef = useRef(emptyData);
 	const onLoadedRef = useRef(onLoaded);
 
@@ -20,8 +11,10 @@ export default function useLoadModel({
 	onLoadedRef.current = onLoaded;
 
 	const [resource, setResource] = useState({
+		resourceKey,
 		status: LOAD_STATUS.LOADING,
-		data: emptyData
+		data: emptyData,
+		hasLoadedOnce: false
 	});
 
 	const runLoad = useCallback(() => {
@@ -29,25 +22,31 @@ export default function useLoadModel({
 			return () => {};
 		}
 
-		const hasResourceChanged = activeResourceKeyRef.current !== resourceKey;
-
-		if (hasResourceChanged) {
-			activeResourceKeyRef.current = resourceKey;
-			hasLoadedOnceRef.current = false;
-		}
-
 		activeRunIdRef.current = activeRunIdRef.current + 1;
 		const runId = activeRunIdRef.current;
 
 		const run = async () => {
-			const inFlightStatus = hasLoadedOnceRef.current
-				? LOAD_STATUS.READY
-				: LOAD_STATUS.LOADING;
+			setResource((previousResource) => {
+				if (previousResource.resourceKey !== resourceKey) {
+					return {
+						resourceKey,
+						status: LOAD_STATUS.LOADING,
+						data: emptyDataRef.current,
+						hasLoadedOnce: false
+					};
+				}
 
-			setResource((previousResource) => ({
-				status: inFlightStatus,
-				data: hasResourceChanged ? emptyDataRef.current : previousResource.data
-			}));
+				let status = LOAD_STATUS.LOADING;
+
+				if (previousResource.hasLoadedOnce) {
+					status = LOAD_STATUS.READY;
+				}
+
+				return {
+					...previousResource,
+					status
+				};
+			});
 
 			try {
 				const loadedData = await execute();
@@ -56,10 +55,11 @@ export default function useLoadModel({
 					return;
 				}
 
-				hasLoadedOnceRef.current = true;
 				setResource({
+					resourceKey,
 					status: LOAD_STATUS.READY,
-					data: loadedData
+					data: loadedData,
+					hasLoadedOnce: true
 				});
 
 				if (onLoadedRef.current !== null) {
@@ -75,8 +75,8 @@ export default function useLoadModel({
 				logLoadError(loadError);
 
 				setResource((previousResource) => ({
-					status: LOAD_STATUS.ERROR,
-					data: previousResource.data
+					...previousResource,
+					status: LOAD_STATUS.ERROR
 				}));
 			}
 		};
@@ -92,18 +92,18 @@ export default function useLoadModel({
 
 	useEffect(runLoad, [runLoad]);
 
-	const hasPendingResourceChange = isEnabled && activeResourceKeyRef.current !== resourceKey;
-	const visibleResource = hasPendingResourceChange
-		? {
-			status: LOAD_STATUS.LOADING,
-			data: emptyData
-		}
-		: resource;
+	let visibleStatus = resource.status;
+	let visibleData = resource.data;
+
+	if (isEnabled && resource.resourceKey !== resourceKey) {
+		visibleStatus = LOAD_STATUS.LOADING;
+		visibleData = emptyData;
+	}
 
 	return {
-		status: visibleResource.status,
-		data: visibleResource.data,
-		error: visibleResource.status === LOAD_STATUS.ERROR ? errorMessage : null,
+		status: visibleStatus,
+		data: visibleData,
+		error: visibleStatus === LOAD_STATUS.ERROR ? errorMessage : null,
 		reload: runLoad
 	};
 }
