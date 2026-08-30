@@ -33,7 +33,7 @@ import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoun
 import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
 import { NAV_SCREENS, TEST_TYPES } from "./navigation/navigation.js";
-import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, recordFlipcardAssessmentUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -355,17 +355,35 @@ function getQuestionsUseCaseForTestType(testType) {
 	throw new Error(`Unknown selected test type: ${String(testType)}`);
 }
 
-function FlipcardsPageWrapper({ subjectId, initialTopicAreaKey, language, t, isActive, backContract }) {
-	const flipcardsPageViewModel = useFlipcardsPageViewModel(
+function FlipcardsPageWrapper(props) {
+	const hasClerkAuth = Boolean(import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY);
+
+	if (!hasClerkAuth) {
+		return <FlipcardsPageWithViewModel {...props} authState={{ isLoaded: true, isSignedIn: false }} />;
+	}
+
+	return <AuthenticatedFlipcardsPageWrapper {...props} />;
+}
+
+function AuthenticatedFlipcardsPageWrapper(props) {
+	const { isLoaded, isSignedIn } = useAuth();
+
+	return <FlipcardsPageWithViewModel {...props} authState={{ isLoaded, isSignedIn }} />;
+}
+
+function FlipcardsPageWithViewModel({ subjectId, initialTopicAreaKey, language, t, isActive, backContract, authState }) {
+	const flipcardsPageViewModel = useFlipcardsPageViewModel({
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
+		recordFlipcardAssessmentUseCase,
 		subjectId,
 		initialTopicAreaKey,
 		language,
 		t,
 		isActive,
-		backContract
-	);
+		backContract,
+		authState
+	});
 
 	return (
 		<FlipcardsPage viewModel={flipcardsPageViewModel} />

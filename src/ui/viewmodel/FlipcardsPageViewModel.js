@@ -2,6 +2,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CONTENT_ICON_KEYS } from "../../constants/ContentIconKeys.js";
 import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
+import { CONCEPT_MASTERY_STATUS } from "../../constants/ConceptMasteryStatus.js";
+import createConceptPracticeEventId from "./Shared/createConceptPracticeEventId.js";
 import usePresentationMode from "../presentation/usePresentationMode.js";
 import { createFlipcardsProgressModel, FLIPCARD_PROGRESS_STATUS, resolveUpdatedFlipcardProgress } from "./FlipcardsPage/flipcardsProgressModel.js";
 import { createFlipcardsFromGlossaryEntries } from "./FlipcardsPage/glossaryEntryFlipcardModel.js";
@@ -14,7 +16,7 @@ import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
 
-export default function useFlipcardsPageViewModel(getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, subjectId, initialTopicAreaKey, language, t, isActive, backContract) {
+export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, recordFlipcardAssessmentUseCase, subjectId, initialTopicAreaKey, language, t, isActive, backContract, authState }) {
 	const presentationMode = usePresentationMode();
 	const [topicAreaKey, setTopicAreaKey] = useState(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
 	const [masteredCardIds, setMasteredCardIds] = useState([]);
@@ -380,15 +382,35 @@ export default function useFlipcardsPageViewModel(getGlossaryEntriesForSubjectUs
 		setIsActiveCardFlipped((isCurrentlyFlipped) => !isCurrentlyFlipped);
 	}, []);
 
+	const persistFlipcardAssessment = useCallback((cardId, assessment) => {
+		if (!authState.isLoaded || !authState.isSignedIn) {
+			return;
+		}
+
+		if (!subjectId) {
+			throw new Error("Signed-in FlipCards persistence requires subjectId");
+		}
+
+		const eventId = createConceptPracticeEventId();
+
+		void recordFlipcardAssessmentUseCase.execute({
+			eventId,
+			subjectId,
+			glossaryEntryKey: cardId,
+			assessment
+		}).catch(reportConceptPracticeWriteError);
+	}, [authState.isLoaded, authState.isSignedIn, recordFlipcardAssessmentUseCase, subjectId]);
+
 	const completeCardForPractice = useCallback((cardId) => {
 		if (!activeCard || activeCard.id !== cardId) {
 			return;
 		}
 
 		markCardForPractice(cardId);
+		persistFlipcardAssessment(cardId, CONCEPT_MASTERY_STATUS.PRACTICE);
 		setIsActiveCardFlipped(false);
 		setActiveCardIndex((currentIndex) => Math.min(currentIndex + 1, visibleCards.length));
-	}, [activeCard, markCardForPractice, visibleCards.length]);
+	}, [activeCard, markCardForPractice, persistFlipcardAssessment, visibleCards.length]);
 
 	const completeCardAsMastered = useCallback((cardId) => {
 		if (!activeCard || activeCard.id !== cardId) {
@@ -396,9 +418,10 @@ export default function useFlipcardsPageViewModel(getGlossaryEntriesForSubjectUs
 		}
 
 		markCardAsMastered(cardId);
+		persistFlipcardAssessment(cardId, CONCEPT_MASTERY_STATUS.UNDERSTOOD);
 		setIsActiveCardFlipped(false);
 		setActiveCardIndex((currentIndex) => Math.min(currentIndex + 1, visibleCards.length));
-	}, [activeCard, markCardAsMastered, visibleCards.length]);
+	}, [activeCard, markCardAsMastered, persistFlipcardAssessment, visibleCards.length]);
 
 	const restartFlipcardSession = useCallback(() => {
 		resetFlipcardsProgress();
@@ -543,4 +566,10 @@ function filterFlipcardsByTopicArea(flipcards, topicAreaKey) {
 	}
 
 	return flipcards.filter((flipcard) => flipcard.topicAreaKey === topicAreaKey);
+}
+
+function reportConceptPracticeWriteError(error) {
+	if (import.meta.env?.DEV === true) {
+		console.error("[Flipcards] Could not persist concept assessment", error);
+	}
 }
