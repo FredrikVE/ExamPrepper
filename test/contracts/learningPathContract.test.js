@@ -11,6 +11,7 @@ describe("LearningPath authored roadmap transport contract", () => {
 		const pathResponse = readJson("learning-path-response.json");
 		const startCommand = readJson("start-session-command.json");
 		const session = readJson("learning-session-response.json");
+		const submitCommand = readJson("submit-session-command.json");
 		const submit = readJson("submit-session-response.json");
 
 		expect(pathResponse.nextActivity).toMatchObject({ kind: "start-authored-session", planKey: expect.any(String), sectionId: expect.any(String) });
@@ -18,8 +19,28 @@ describe("LearningPath authored roadmap transport contract", () => {
 		expect(pathResponse.modules[0].sections[0].chapterTests).toHaveLength(2);
 		expect(startCommand).toEqual({ subjectId: "in2120", moduleId: "11111111-1111-4111-8111-111111111111", lang: "no", target: { kind: "module" }, discardActiveSession: false });
 		expect(startCommand).not.toHaveProperty("round");
-		expect(session).toMatchObject({ planKey: expect.any(String), sectionId: "section-1", matchCardsTask: { pairs: expect.any(Array) } });
-		expect(session.matchCardsTask.pairs).toHaveLength(2);
+		expect(session).toMatchObject({ planKey: "authored:v1:chapter-1:step-1:1-6", sectionId: "section-1", matchCardsTask: { pairs: expect.any(Array) } });
+		expect(session.matchCardsTask.pairs).toEqual([
+			{
+				glossaryEntryKey: "glossary-a",
+				term: { no: "Begrep A", en: "Concept A" },
+				explanation: { no: "Forklaring A", en: "Explanation A" }
+			},
+			{
+				glossaryEntryKey: "glossary-b",
+				term: { no: "Begrep B", en: "Concept B" },
+				explanation: { no: "Forklaring B", en: "Explanation B" }
+			}
+		]);
+		expect(submitCommand).toEqual({
+			matchCardResults: [
+				{ glossaryEntryKey: "glossary-a", wrongAttemptCount: 0 },
+				{ glossaryEntryKey: "glossary-b", wrongAttemptCount: 1 }
+			],
+			answers: [
+				{ sessionQuestionId: "30000000-0000-4000-8000-000000000001", answer: "a" }
+			]
+		});
 		expect(session).not.toHaveProperty("round");
 		expect(submit).toEqual({ sessionId: "22222222-2222-4222-8222-222222222222", status: "completed", score: { earnedPoints: 8.5, availablePoints: 13, percentage: 65.38, performanceBand: "progress" } });
 	});
