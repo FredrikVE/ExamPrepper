@@ -29,6 +29,7 @@ describe("matchCardsSession", () => {
 
 		expect(session.roundPairCount).toBe(3);
 		expect(session.visiblePairCount).toBe(2);
+		expect(session.wrongAttemptCounts).toEqual([]);
 		expect(session.queuedPairs).toEqual([
 			{
 				glossaryEntryKey: "entry-c",
@@ -96,6 +97,7 @@ describe("matchCardsSession", () => {
 
 		expect(session.roundPairCount).toBe(2);
 		expect(session.visiblePairCount).toBe(2);
+		expect(session.wrongAttemptCounts).toEqual([]);
 		expect(session.queuedPairs).toEqual([]);
 		expect(session.slots).toHaveLength(4);
 	});

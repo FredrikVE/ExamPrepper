@@ -38,7 +38,7 @@ export function selectMatchSlot(session, slotId) {
 		return markPair(session, previousSlot.slotId, slotId, MATCH_SLOT_STATUS.SUCCESS);
 	}
 
-	return markPair(session, previousSlot.slotId, slotId, MATCH_SLOT_STATUS.WRONG);
+	return markWrongPair(session, previousSlot, selectedSlot);
 }
 
 const findSlotById = (slots, slotId) => {
@@ -78,6 +78,58 @@ const markPair = (session, firstSlotId, secondSlotId, status) => ({
 	selectedSlotId: null,
 	slots: updateSlotStatuses(session.slots, [firstSlotId, secondSlotId], status)
 });
+
+const markWrongPair = (session, firstSlot, secondSlot) => {
+	const markedSession = markPair(
+		session,
+		firstSlot.slotId,
+		secondSlot.slotId,
+		MATCH_SLOT_STATUS.WRONG
+	);
+	const glossaryEntryKeys = collectWrongPairGlossaryEntryKeys(firstSlot, secondSlot);
+
+	return {
+		...markedSession,
+		wrongAttemptCounts: incrementWrongAttemptCounts(session.wrongAttemptCounts, glossaryEntryKeys)
+	};
+};
+
+const collectWrongPairGlossaryEntryKeys = (firstSlot, secondSlot) => {
+	const glossaryEntryKeys = [];
+
+	if (firstSlot.glossaryEntryKey !== null) {
+		glossaryEntryKeys.push(firstSlot.glossaryEntryKey);
+	}
+
+	if (
+		secondSlot.glossaryEntryKey !== null
+		&& secondSlot.glossaryEntryKey !== firstSlot.glossaryEntryKey
+	) {
+		glossaryEntryKeys.push(secondSlot.glossaryEntryKey);
+	}
+
+	return glossaryEntryKeys;
+};
+
+const incrementWrongAttemptCounts = (currentCounts, glossaryEntryKeys) => {
+	const nextCounts = currentCounts.map((item) => ({ ...item }));
+
+	for (const glossaryEntryKey of glossaryEntryKeys) {
+		const existing = nextCounts.find((item) => item.glossaryEntryKey === glossaryEntryKey);
+
+		if (existing) {
+			existing.wrongAttemptCount += 1;
+			continue;
+		}
+
+		nextCounts.push({
+			glossaryEntryKey,
+			wrongAttemptCount: 1
+		});
+	}
+
+	return nextCounts;
+};
 
 const updateSlotStatuses = (slots, slotIds, status) => {
 	const updatedSlots = [];

@@ -3,6 +3,7 @@ import { describe, expect, test } from "@jest/globals";
 import { MATCH_CARD_COLUMN, MATCH_SLOT_STATUS } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsConstants.js";
 import { createMatchCardsSession } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSession.js";
 import { isMatchingPair, selectMatchSlot } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsSelectionTransitions.js";
+import { resetWrongSlots } from "../../../../src/ui/viewmodel/MatchCardsPage/matchCardsRoundTransitions.js";
 import { createGlossaryEntries, findSlot, keepOrderRandomNumber } from "./matchCardsTestFixtures.js";
 
 describe("matchCardsSelectionTransitions", () => {
@@ -47,6 +48,28 @@ describe("matchCardsSelectionTransitions", () => {
 		expect(wrongSelection.selectedSlotId).toBe(null);
 		expect(findSlot(wrongSelection.slots, "term-0").status).toBe(MATCH_SLOT_STATUS.WRONG);
 		expect(findSlot(wrongSelection.slots, "explanation-1").status).toBe(MATCH_SLOT_STATUS.WRONG);
+		expect(wrongSelection.wrongAttemptCounts).toEqual([
+			{ glossaryEntryKey: "entry-a", wrongAttemptCount: 1 },
+			{ glossaryEntryKey: "entry-b", wrongAttemptCount: 1 }
+		]);
+	});
+
+	test("increments wrong attempts for each concept on repeated mismatches", () => {
+		const session = createTestSession();
+		const firstWrongSelection = selectMatchSlot(
+			selectMatchSlot(session, "term-0"),
+			"explanation-1"
+		);
+		const resetSession = resetWrongSlots(firstWrongSelection);
+		const secondWrongSelection = selectMatchSlot(
+			selectMatchSlot(resetSession, "term-0"),
+			"explanation-1"
+		);
+
+		expect(secondWrongSelection.wrongAttemptCounts).toEqual([
+			{ glossaryEntryKey: "entry-a", wrongAttemptCount: 2 },
+			{ glossaryEntryKey: "entry-b", wrongAttemptCount: 2 }
+		]);
 	});
 
 	test("marks a matching pair as success", () => {

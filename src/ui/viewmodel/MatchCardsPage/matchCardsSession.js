@@ -28,6 +28,7 @@ export function createMatchCardsSession({
 		matchedPairCount: 0,
 		selectedSlotId: null,
 		isRoundComplete: actualRoundPairCount === 0,
+		wrongAttemptCounts: [],
 		queuedPairs,
 		slots: createIdleSlotsForPairs(activePairs, randomNumber)
 	};
