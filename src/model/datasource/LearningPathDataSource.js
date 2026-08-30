@@ -21,8 +21,11 @@ export default class LearningPathDataSource extends DataSource {
 		return this.get(`/learning-sessions/${encodeURIComponent(sessionId)}`);
 	}
 
-	fetchSubmitLearningSession({ sessionId, answers }) {
-		return this.post(`/learning-sessions/${encodeURIComponent(sessionId)}/submit`, { answers });
+	fetchSubmitLearningSession({ sessionId, matchCardResults, answers }) {
+		return this.post(`/learning-sessions/${encodeURIComponent(sessionId)}/submit`, {
+			matchCardResults,
+			answers
+		});
 	}
 
 }

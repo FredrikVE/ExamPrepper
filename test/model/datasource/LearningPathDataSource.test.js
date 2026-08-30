@@ -14,6 +14,23 @@ describe("LearningPathDataSource", () => {
 		expect(options.body).not.toContain("round");
 	});
 
+	test("submits required MatchCards results together with question answers", async () => {
+		const fetchMock = jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => "{}" });
+		const dataSource = new LearningPathDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
+		const matchCardResults = [
+			{ glossaryEntryKey: "glossary-a", wrongAttemptCount: 0 },
+			{ glossaryEntryKey: "glossary-b", wrongAttemptCount: 1 }
+		];
+
+		await dataSource.fetchSubmitLearningSession({ sessionId: "session-1", matchCardResults, answers: [] });
+
+		const [, options] = fetchMock.mock.calls[0];
+		expect(JSON.parse(options.body)).toEqual({
+			matchCardResults,
+			answers: []
+		});
+	});
+
 	test("preserves the structured active-session conflict for the ViewModel", async () => {
 		jest.spyOn(globalThis, "fetch").mockResolvedValue({
 			ok: false,

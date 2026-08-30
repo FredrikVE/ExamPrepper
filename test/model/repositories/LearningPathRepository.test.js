@@ -10,6 +10,10 @@ const EXPECTED_TRANSPORT_READ_COUNT = 1;
 const fixturesDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../fixtures/learning-path");
 const readFixture = (name) => JSON.parse(fs.readFileSync(path.join(fixturesDirectory, name), "utf8"));
 const SESSION_ID = readFixture("learning-session-response.json").sessionId;
+const MATCH_CARD_RESULTS = [
+	{ glossaryEntryKey: "glossary-a", wrongAttemptCount: 0 },
+	{ glossaryEntryKey: "glossary-b", wrongAttemptCount: 1 }
+];
 function createRepository(overrides = {}) {
 	return new LearningPathRepository(new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json"), ...overrides }));
 }
@@ -19,7 +23,7 @@ describe("LearningPathRepository", () => {
 		const repository = createRepository();
 		const pathModel = await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 		const session = await repository.startLearningSession({ subjectId: "in2120", moduleId: pathModel.modules[0].id, language: "no" });
-		const result = await repository.submitLearningSession({ sessionId: session.sessionId, answers: [] });
+		const result = await repository.submitLearningSession({ sessionId: session.sessionId, matchCardResults: MATCH_CARD_RESULTS, answers: [] });
 		expect(pathModel.nextActivity.kind).toBe("start-authored-session");
 		expect(pathModel.modules[0]).toMatchObject({ isReplayAvailable: false, progress: { completedSessions: 1, totalSessions: 4, completionPercent: 25, isComplete: false } });
 		expect(pathModel.modules[0].sections[0].progress).toMatchObject({ completedSessions: 1, totalSessions: 2, completionPercent: 50, isComplete: false });
@@ -105,7 +109,7 @@ describe("LearningPathRepository", () => {
 	});
 
 	test("accepts the backend-owned submit assessment band", async () => {
-		const result = await createRepository().submitLearningSession({ sessionId: "session-1", answers: [] });
+		const result = await createRepository().submitLearningSession({ sessionId: "session-1", matchCardResults: MATCH_CARD_RESULTS, answers: [] });
 		expect(result.score).toMatchObject({ percentage: 65.38, performanceBand: "progress" });
 	});
 
@@ -113,21 +117,21 @@ describe("LearningPathRepository", () => {
 		const response = readFixture("submit-session-response.json");
 		response.score.percentage = null;
 		response.score.performanceBand = "not-assessed";
-		const result = await createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] });
+		const result = await createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", matchCardResults: MATCH_CARD_RESULTS, answers: [] });
 		expect(result.score).toMatchObject({ percentage: null, performanceBand: "not-assessed" });
 	});
 
 	test("rejects a partial submit assessment pair", async () => {
 		const response = readFixture("submit-session-response.json");
 		response.score.percentage = null;
-		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] })).rejects.toThrow("Invalid learning session result");
+		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", matchCardResults: MATCH_CARD_RESULTS, answers: [] })).rejects.toThrow("Invalid learning session result");
 	});
 
 	test("rejects an out-of-range submit percentage", async () => {
 		const response = readFixture("submit-session-response.json");
 		response.score.percentage = 500;
 
-		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", answers: [] })).rejects.toThrow("Invalid learning session result");
+		await expect(createRepository({ submitSessionResponse: response }).submitLearningSession({ sessionId: "session-1", matchCardResults: MATCH_CARD_RESULTS, answers: [] })).rejects.toThrow("Invalid learning session result");
 	});
 
 	test("rejects a roadmap session with a completely missing performance pair", async () => {
@@ -181,6 +185,50 @@ describe("LearningPathRepository", () => {
 		expect(pathModel.modules[0]).not.toHaveProperty("transportOnly");
 		expect(pathModel.modules[0].availability).not.toHaveProperty("transportOnly");
 		expect(pathModel.modules[0].sections[0].sessions[0]).not.toHaveProperty("transportOnly");
+	});
+
+	test("maps the required LearningSession MatchCards task in authored order", async () => {
+		const session = await createRepository().getLearningSession("session-1");
+
+		expect(session.matchCardsTask.pairs).toEqual([
+			{
+				glossaryEntryKey: "glossary-a",
+				term: { no: "Begrep A", en: "Concept A" },
+				explanation: { no: "Forklaring A", en: "Explanation A" }
+			},
+			{
+				glossaryEntryKey: "glossary-b",
+				term: { no: "Begrep B", en: "Concept B" },
+				explanation: { no: "Forklaring B", en: "Explanation B" }
+			}
+		]);
+	});
+
+	test("rejects a LearningSession without the required MatchCards task", async () => {
+		const response = readFixture("learning-session-response.json");
+		delete response.matchCardsTask;
+
+		await expect(createRepository({ learningSessionResponse: response }).getLearningSession("session-1")).rejects.toThrow("Invalid learning session response");
+	});
+
+	test("rejects a LearningSession MatchCards task with fewer than two pairs", async () => {
+		const response = readFixture("learning-session-response.json");
+		response.matchCardsTask.pairs = response.matchCardsTask.pairs.slice(0, 1);
+
+		await expect(createRepository({ learningSessionResponse: response }).getLearningSession("session-1")).rejects.toThrow("Invalid learning session response");
+	});
+
+	test("forwards MatchCards results when submitting a LearningSession", async () => {
+		const dataSource = new FakeLearningPathDataSource({ learningPathResponse: readFixture("learning-path-response.json"), learningSessionResponse: readFixture("learning-session-response.json"), submitSessionResponse: readFixture("submit-session-response.json") });
+		const repository = new LearningPathRepository(dataSource);
+
+		await repository.submitLearningSession({ sessionId: SESSION_ID, matchCardResults: MATCH_CARD_RESULTS, answers: [] });
+
+		expect(dataSource.calls.find((call) => call.method === "fetchSubmitLearningSession").input).toEqual({
+			sessionId: SESSION_ID,
+			matchCardResults: MATCH_CARD_RESULTS,
+			answers: []
+		});
 	});
 
 	test("keeps canonical question fields in LearningSession responses", async () => {
@@ -255,7 +303,7 @@ describe("LearningPathRepository cache", () => {
 		const repository = new LearningPathRepository(dataSource);
 
 		await repository.getLearningSession(SESSION_ID);
-		await repository.submitLearningSession({ sessionId: SESSION_ID, answers: [] });
+		await repository.submitLearningSession({ sessionId: SESSION_ID, matchCardResults: MATCH_CARD_RESULTS, answers: [] });
 		await repository.getLearningSession(SESSION_ID);
 
 		expect(dataSource.calls.filter((call) => call.method === "fetchLearningSession")).toHaveLength(2);
@@ -342,7 +390,7 @@ describe("LearningPathRepository cache", () => {
 		const repository = new LearningPathRepository(dataSource);
 
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
-		await repository.submitLearningSession({ sessionId: "session-1", answers: [] });
+		await repository.submitLearningSession({ sessionId: "session-1", matchCardResults: MATCH_CARD_RESULTS, answers: [] });
 		await repository.getLearningPath({ subjectId: "in2120", language: "no" });
 
 		expect(dataSource.calls.filter((call) => call.method === "fetchLearningPath")).toHaveLength(2);

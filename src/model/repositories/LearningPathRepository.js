@@ -76,11 +76,12 @@ export default class LearningPathRepository {
 		}
 	}
 
-	async submitLearningSession({ sessionId, answers }) {
+	async submitLearningSession({ sessionId, matchCardResults, answers }) {
 		try {
 			return this.#toLearningSessionResult(
 				await this.#learningPathDataSource.fetchSubmitLearningSession({
 					sessionId,
+					matchCardResults,
 					answers
 				})
 			);
@@ -413,6 +414,9 @@ export default class LearningPathRepository {
 			|| typeof response.moduleTitle !== "string"
 			|| !this.#isNullableString(response.planKey)
 			|| !this.#isNullableString(response.sectionId)
+			|| !this.#isObject(response.matchCardsTask)
+			|| !Array.isArray(response.matchCardsTask.pairs)
+			|| response.matchCardsTask.pairs.length < 2
 			|| !Number.isInteger(response.questionCount)
 			|| !Array.isArray(response.questions)
 		) {
@@ -426,9 +430,41 @@ export default class LearningPathRepository {
 			moduleTitle: response.moduleTitle,
 			planKey: response.planKey,
 			sectionId: response.sectionId,
+			matchCardsTask: {
+				pairs: response.matchCardsTask.pairs.map((pair) => this.#toLearningSessionMatchCardPair(pair))
+			},
 			questionCount: response.questionCount,
 			questions: response.questions.map((entry) => this.#toLearningSessionQuestion(entry))
 		};
+	}
+
+	#toLearningSessionMatchCardPair(pair) {
+		if (
+			!this.#isObject(pair)
+			|| typeof pair.glossaryEntryKey !== "string"
+			|| !this.#isLocalizedText(pair.term)
+			|| !this.#isLocalizedText(pair.explanation)
+		) {
+			throw new Error(INVALID_LEARNING_SESSION_RESPONSE);
+		}
+
+		return {
+			glossaryEntryKey: pair.glossaryEntryKey,
+			term: {
+				no: pair.term.no,
+				en: pair.term.en
+			},
+			explanation: {
+				no: pair.explanation.no,
+				en: pair.explanation.en
+			}
+		};
+	}
+
+	#isLocalizedText(value) {
+		return this.#isObject(value)
+			&& typeof value.no === "string"
+			&& typeof value.en === "string";
 	}
 
 	#toLearningSessionQuestion(entry) {

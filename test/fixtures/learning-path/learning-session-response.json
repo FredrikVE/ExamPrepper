@@ -198,5 +198,31 @@
 		}
 	],
 	"planKey": "authored:chapter-1:step-1:1-6",
-	"sectionId": "section-1"
+	"sectionId": "section-1",
+	"matchCardsTask": {
+		"pairs": [
+			{
+				"glossaryEntryKey": "glossary-a",
+				"term": {
+					"no": "Begrep A",
+					"en": "Concept A"
+				},
+				"explanation": {
+					"no": "Forklaring A",
+					"en": "Explanation A"
+				}
+			},
+			{
+				"glossaryEntryKey": "glossary-b",
+				"term": {
+					"no": "Begrep B",
+					"en": "Concept B"
+				},
+				"explanation": {
+					"no": "Forklaring B",
+					"en": "Explanation B"
+				}
+			}
+		]
+	}
 }
