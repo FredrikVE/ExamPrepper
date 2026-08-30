@@ -8,12 +8,14 @@ import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.j
 import GlossaryDataSource from "../model/datasource/GlossaryDataSource.js";
 import ExamAttemptDataSource from "../model/datasource/ExamAttemptDataSource.js";
 import LearningPathDataSource from "../model/datasource/LearningPathDataSource.js";
+import ConceptPracticeDataSource from "../model/datasource/ConceptPracticeDataSource.js";
 
 import TestSetRepository from "../model/repositories/TestSetRepository.js";
 import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
 import GlossaryRepository from "../model/repositories/GlossaryRepository.js";
 import LearningPathRepository from "../model/repositories/LearningPathRepository.js";
+import ConceptPracticeRepository from "../model/repositories/ConceptPracticeRepository.js";
 
 import GetTestSetQuestionsUseCase from "../model/domain/testSets/GetTestSetQuestionsUseCase.js";
 import GetAvailableTestSetsUseCase from "../model/domain/testSets/GetAvailableTestSetsUseCase.js";
@@ -30,6 +32,8 @@ import GetLearningPathUseCase from "../model/domain/learningPath/GetLearningPath
 import StartLearningSessionUseCase from "../model/domain/learningPath/StartLearningSessionUseCase.js";
 import GetLearningSessionUseCase from "../model/domain/learningPath/GetLearningSessionUseCase.js";
 import SubmitLearningSessionUseCase from "../model/domain/learningPath/SubmitLearningSessionUseCase.js";
+import RecordFlipcardAssessmentUseCase from "../model/domain/mastery/RecordFlipcardAssessmentUseCase.js";
+import RecordMatchCardResultUseCase from "../model/domain/mastery/RecordMatchCardResultUseCase.js";
 
 import GradeAnswerUseCase from "../model/domain/grading/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/exams/CalculateExamScoreUseCase.js";
@@ -55,31 +59,15 @@ const imageBaseUrl = requiredEnv("VITE_IMAGE_BASE_URL");
 
 // Datasources
 const subjectDataSource = new SubjectDataSource({ baseUrl: apiBaseUrl });
-const examDataSource = new ExamDataSource({
-    baseUrl: apiBaseUrl
-});
-const examQuestionDataSource = new ExamQuestionDataSource({
-    baseUrl: apiBaseUrl
-});
-const chapterTestDataSource = new ChapterTestDataSource({
-    baseUrl: apiBaseUrl
-});
-const chapterTestQuestionDataSource = new ChapterTestQuestionDataSource({
-    baseUrl: apiBaseUrl
-});
-const conceptImageDataSource = new ConceptImageDataSource({
-    baseUrl: apiBaseUrl,
-    imageBaseUrl
-});
-const glossaryDataSource = new GlossaryDataSource({
-    baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken
-});
-const examAttemptDataSource = new ExamAttemptDataSource({
-    baseUrl: apiBaseUrl,
-    getToken: getActiveAuthToken
-});
+const examDataSource = new ExamDataSource({ baseUrl: apiBaseUrl });
+const examQuestionDataSource = new ExamQuestionDataSource({ baseUrl: apiBaseUrl });
+const chapterTestDataSource = new ChapterTestDataSource({ baseUrl: apiBaseUrl });
+const chapterTestQuestionDataSource = new ChapterTestQuestionDataSource({ baseUrl: apiBaseUrl });
+const conceptImageDataSource = new ConceptImageDataSource({ baseUrl: apiBaseUrl, imageBaseUrl });
+const glossaryDataSource = new GlossaryDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const examAttemptDataSource = new ExamAttemptDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 const learningPathDataSource = new LearningPathDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const conceptPracticeDataSource = new ConceptPracticeDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 
 // Repositories
 const examRepository = new TestSetRepository(examDataSource, examQuestionDataSource, conceptImageDataSource);
@@ -88,6 +76,7 @@ const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource);
 const glossaryRepository = new GlossaryRepository(glossaryDataSource);
 const learningPathRepository = new LearningPathRepository(learningPathDataSource);
+const conceptPracticeRepository = new ConceptPracticeRepository(conceptPracticeDataSource);
 subscribeAuthTokenProviderChange(() => learningPathRepository.clearUserState());
 
 // Use cases
@@ -114,6 +103,8 @@ const getLearningPathUseCase = new GetLearningPathUseCase(learningPathRepository
 const startLearningSessionUseCase = new StartLearningSessionUseCase(learningPathRepository);
 const getLearningSessionUseCase = new GetLearningSessionUseCase(learningPathRepository);
 const submitLearningSessionUseCase = new SubmitLearningSessionUseCase(learningPathRepository);
+const recordFlipcardAssessmentUseCase = new RecordFlipcardAssessmentUseCase(conceptPracticeRepository);
+const recordMatchCardResultUseCase = new RecordMatchCardResultUseCase(conceptPracticeRepository);
 
 // Export
 export {
@@ -139,5 +130,7 @@ export {
     getLearningPathUseCase,
     startLearningSessionUseCase,
     getLearningSessionUseCase,
-    submitLearningSessionUseCase
+    submitLearningSessionUseCase,
+	recordFlipcardAssessmentUseCase,
+	recordMatchCardResultUseCase
 };

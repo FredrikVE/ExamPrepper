@@ -22,6 +22,8 @@ describe("dependency composition", () => {
 		expect(dependencies.getGlossaryOverviewUseCase).toBeDefined();
 		expect(dependencies.getLearningPathUseCase).toBeDefined();
 		expect(dependencies.submitExamAttemptUseCase).toBeDefined();
+		expect(dependencies.recordFlipcardAssessmentUseCase).toBeDefined();
+		expect(dependencies.recordMatchCardResultUseCase).toBeDefined();
 	});
 });
 
