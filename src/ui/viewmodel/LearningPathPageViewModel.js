@@ -19,26 +19,15 @@ const EMPTY_LEARNING_PATH = Object.freeze({
 	})
 });
 
-export default function useLearningPathPageViewModel({
-	getLearningPathUseCase,
-	startLearningSessionUseCase,
-	selectedSubject,
-	language,
-	t,
-	backContract,
-	onSelectContentType,
-	onLearningSessionStarted,
-	onChapterTestSelected,
-	authState
-}) {
+export default function useLearningPathPageViewModel(props) {
 	const [expandedModuleId, setExpandedModuleId] = useState(null);
 	const [startingActionKey, setStartingActionKey] = useState(null);
 	const [startSessionError, setStartSessionError] = useState(null);
 
-	const subjectId = selectedSubject?.id ?? null;
-	const isAuthLoading = authState.status === APP_AUTH_STATUS.LOADING;
+	const subjectId = props.selectedSubject?.id ?? null;
+	const isAuthLoading = props.authState.status === APP_AUTH_STATUS.LOADING;
 	const canStartLearningSessions =
-		authState.status === APP_AUTH_STATUS.SIGNED_IN;
+		props.authState.status === APP_AUTH_STATUS.SIGNED_IN;
 	const canLoadLearningPath =
 		subjectId !== null
 		&& !isAuthLoading;
@@ -48,20 +37,20 @@ export default function useLearningPathPageViewModel({
 			throw new Error("LearningPath load requires a subject");
 		}
 
-		return getLearningPathUseCase.execute({
+		return props.getLearningPathUseCase.execute({
 			subjectId,
-			language
+			language: props.language
 		});
-	}, [getLearningPathUseCase, language, subjectId]);
+	}, [props.getLearningPathUseCase, props.language, subjectId]);
 
 	const loadModel = useLoadModel({
 		execute: executeLoad,
 		emptyData: EMPTY_LEARNING_PATH,
-		errorMessage: t.learningPathLoadErrorMessage,
+		errorMessage: props.t.learningPathLoadErrorMessage,
 		resourceKey: createLearningPathResourceKey({
 			subjectId,
-			language,
-			authState
+			language: props.language,
+			authState: props.authState
 		}),
 		isEnabled: canLoadLearningPath,
 		onLoaded: null
@@ -126,30 +115,30 @@ export default function useLearningPathPageViewModel({
 		setStartSessionError(null);
 
 		try {
-			const session = await startLearningSessionUseCase.execute({
+			const session = await props.startLearningSessionUseCase.execute({
 				subjectId,
 				moduleId: actionModel.moduleId,
-				language,
+				language: props.language,
 				target: actionModel.target,
 				discardActiveSession: false
 			});
 
-			onLearningSessionStarted(session.sessionId);
+			props.onLearningSessionStarted(session.sessionId);
 		}
 		catch {
-			setStartSessionError(t.learningPathStartErrorMessage);
+			setStartSessionError(props.t.learningPathStartErrorMessage);
 		}
 		finally {
 			setStartingActionKey(null);
 		}
 	}, [
-		language,
+		props.language,
 		learningPath.modules,
-		onLearningSessionStarted,
-		startLearningSessionUseCase,
+		props.onLearningSessionStarted,
+		props.startLearningSessionUseCase,
 		startingActionKey,
 		subjectId,
-		t.learningPathStartErrorMessage
+		props.t.learningPathStartErrorMessage
 	]);
 
 	const onLearningPathAction = useCallback(async (actionModel) => {
@@ -165,7 +154,7 @@ export default function useLearningPathPageViewModel({
 					);
 				}
 
-				onLearningSessionStarted(actionModel.sessionId);
+				props.onLearningSessionStarted(actionModel.sessionId);
 				return;
 
 			case LEARNING_PATH_ACTION_INTENT.START:
@@ -182,7 +171,7 @@ export default function useLearningPathPageViewModel({
 					);
 				}
 
-				onChapterTestSelected(
+				props.onChapterTestSelected(
 					actionModel.examId,
 					TEST_TYPES.CHAPTER_TEST
 				);
@@ -195,8 +184,8 @@ export default function useLearningPathPageViewModel({
 		}
 	}, [
 		canStartLearningSessions,
-		onChapterTestSelected,
-		onLearningSessionStarted,
+		props.onChapterTestSelected,
+		props.onLearningSessionStarted,
 		startLearningSession
 	]);
 
@@ -205,49 +194,49 @@ export default function useLearningPathPageViewModel({
 		expandedModuleId,
 		startingActionKey,
 		canStartLearningSessions,
-		t
+		t: props.t
 	});
 
 	const workspaceState = createWorkspaceState({
 		loadStatus: loadModel.status,
 		isEmpty: learningPath.modules.length === 0,
 		labels: {
-			loading: t.learningPathLoadingMessage,
-			errorTitle: t.errorPrefix,
-			errorBody: loadModel.error ?? t.learningPathLoadErrorMessage,
-			emptyTitle: t.learningPathEmptyTitle,
-			emptyBody: t.learningPathEmptyBody
+			loading: props.t.learningPathLoadingMessage,
+			errorTitle: props.t.errorPrefix,
+			errorBody: loadModel.error ?? props.t.learningPathLoadErrorMessage,
+			emptyTitle: props.t.learningPathEmptyTitle,
+			emptyBody: props.t.learningPathEmptyBody
 		},
 		errorAction: null
 	});
 
 	const contentToggleEntries = useMemo(
-		() => createContentToggleEntries(t),
-		[t]
+		() => createContentToggleEntries(props.t),
+		[props.t]
 	);
 
 	const mobileToggleButtonItems = useMemo(() => createMobileToggleButtonItems({
 		contentToggleEntries,
 		activeContentType: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 		selectedTestType: null,
-		t
-	}), [contentToggleEntries, t]);
+		t: props.t
+	}), [contentToggleEntries, props.t]);
 
 	return {
 		workspaceState,
-		backContract,
+		backContract: props.backContract,
 		contentHeaderModel: {
 			entries: contentToggleEntries,
 			activeEntryId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			mobileItems: mobileToggleButtonItems,
 			mobileActiveEntryId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
-			onSelectEntry: onSelectContentType,
-			mobileBackLabel: t.contentToggleBackLabel,
-			ariaLabel: t.contentToggleAriaLabel,
-			title: t.learningPathTitle,
-			subtitle: selectedSubject === null
-				? t.learningPathSubtitleFallback
-				: t.learningPathSubtitle(selectedSubject.code),
+			onSelectEntry: props.onSelectContentType,
+			mobileBackLabel: props.t.contentToggleBackLabel,
+			ariaLabel: props.t.contentToggleAriaLabel,
+			title: props.t.learningPathTitle,
+			subtitle: props.selectedSubject === null
+				? props.t.learningPathSubtitleFallback
+				: props.t.learningPathSubtitle(props.selectedSubject.code),
 			titleId: "learning-path-title"
 		},
 		continuePanelModel: presentation.continuePanelModel,

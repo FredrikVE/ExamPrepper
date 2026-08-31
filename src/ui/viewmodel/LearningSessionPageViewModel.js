@@ -14,23 +14,23 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 const EMPTY_MATCH_CARD_ENTRIES = Object.freeze([]);
 const LEARNING_SESSION_MATCH_CARDS_VISIBLE_PAIR_COUNT = 4;
 
-export default function useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, language, t, backContract, authScopeKey }) {
+export default function useLearningSessionPageViewModel(props) {
 	const [state, dispatch] = useReducer(sessionReducer, undefined, createInitialSessionState);
 
 	const executeLoad = useCallback(() => {
-		if (sessionId === null) {
+		if (props.sessionId === null) {
 			throw new Error("LearningSession load requires sessionId");
 		}
 
-		return getLearningSessionUseCase.execute(sessionId);
-	}, [getLearningSessionUseCase, sessionId]);
+		return props.getLearningSessionUseCase.execute(props.sessionId);
+	}, [props.getLearningSessionUseCase, props.sessionId]);
 
 	const loadModel = useLoadModel({
 		execute: executeLoad,
 		emptyData: null,
-		errorMessage: t.learningSessionLoadErrorMessage,
-		resourceKey: `${sessionId ?? "no-session"}:${authScopeKey}`,
-		isEnabled: sessionId !== null,
+		errorMessage: props.t.learningSessionLoadErrorMessage,
+		resourceKey: `${props.sessionId ?? "no-session"}:${props.authScopeKey}`,
+		isEnabled: props.sessionId !== null,
 		onLoaded: ({ loadedData }) => {
 			dispatch({
 				type: SESSION_ACTIONS.SESSION_LOADED,
@@ -53,7 +53,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		glossaryEntries: matchCardEntries,
 		roundPairCount: matchCardEntries.length,
 		visiblePairCount: LEARNING_SESSION_MATCH_CARDS_VISIBLE_PAIR_COUNT,
-		language,
+		language: props.language,
 		randomNumber: Math.random,
 		onSuccessfulMatch: recordMatchCardResult
 	});
@@ -144,10 +144,10 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		const question = currentQuestion.question;
 		const currentAnswer = session.answersBySessionQuestionId[currentSessionQuestionId] ?? null;
 		const checkedAnswerResult = {
-			isCorrect: gradeAnswerUseCase.execute(question, currentAnswer),
-			pointsAwarded: gradeAnswerUseCase.getQuestionScore(question, currentAnswer),
+			isCorrect: props.gradeAnswerUseCase.execute(question, currentAnswer),
+			pointsAwarded: props.gradeAnswerUseCase.getQuestionScore(question, currentAnswer),
 			maxPoints: question.points,
-			fillMatchType: gradeAnswerUseCase.getFillMatchType(question, currentAnswer)
+			fillMatchType: props.gradeAnswerUseCase.getFillMatchType(question, currentAnswer)
 		};
 
 		dispatch({
@@ -155,7 +155,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 			sessionQuestionId: currentSessionQuestionId,
 			result: checkedAnswerResult
 		});
-	}, [currentQuestion, currentResult, gradeAnswerUseCase, isMatchCardsPhaseComplete, session]);
+	}, [currentQuestion, currentResult, props.gradeAnswerUseCase, isMatchCardsPhaseComplete, session]);
 
 	const submitSession = useCallback(async () => {
 		if (session === null || !isMatchCardsPhaseComplete) {
@@ -183,7 +183,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 				session.questions,
 				session.answersBySessionQuestionId
 			);
-			const submitResult = await submitLearningSessionUseCase.execute({
+			const submitResult = await props.submitLearningSessionUseCase.execute({
 				sessionId: session.sessionId,
 				matchCardResults,
 				answers
@@ -198,10 +198,10 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		catch {
 			dispatch({
 				type: SESSION_ACTIONS.SUBMIT_FAILED,
-				errorMessage: t.learningSessionSubmitErrorMessage
+				errorMessage: props.t.learningSessionSubmitErrorMessage
 			});
 		}
-	}, [isMatchCardsPhaseComplete, session, state.status, submitLearningSessionUseCase, t.learningSessionSubmitErrorMessage]);
+	}, [isMatchCardsPhaseComplete, session, state.status, props.submitLearningSessionUseCase, props.t.learningSessionSubmitErrorMessage]);
 
 	const continueSession = useCallback(() => {
 		if (!isMatchCardsPhaseComplete || currentResult === null) {
@@ -220,22 +220,22 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 
 	const matchCardsLabels = useMemo(() => {
 		return {
-			pageTitle: t.matchCardsTitle,
-			selectedSlotLabel: t.matchCardsSelectedSlotLabel,
-			wrongSlotLabel: t.matchCardsWrongSlotLabel,
-			successSlotLabel: t.matchCardsSuccessSlotLabel,
-			emptySlotLabel: t.matchCardsEmptySlotLabel,
-			cardAriaLabel: t.matchCardsCardAriaLabel
+			pageTitle: props.t.matchCardsTitle,
+			selectedSlotLabel: props.t.matchCardsSelectedSlotLabel,
+			wrongSlotLabel: props.t.matchCardsWrongSlotLabel,
+			successSlotLabel: props.t.matchCardsSuccessSlotLabel,
+			emptySlotLabel: props.t.matchCardsEmptySlotLabel,
+			cardAriaLabel: props.t.matchCardsCardAriaLabel
 		};
-	}, [t]);
+	}, [props.t]);
 
 	const workspaceState = createWorkspaceState({
 		loadStatus: loadModel.status,
 		isEmpty: false,
 		labels: {
-			loading: t.learningSessionLoadingMessage,
-			errorTitle: t.errorPrefix,
-			errorBody: loadModel.error ?? t.learningSessionLoadErrorMessage,
+			loading: props.t.learningSessionLoadingMessage,
+			errorTitle: props.t.errorPrefix,
+			errorBody: loadModel.error ?? props.t.learningSessionLoadErrorMessage,
 			emptyTitle: "",
 			emptyBody: ""
 		},
@@ -262,7 +262,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 			currentIndex: session.currentIndex,
 			questionCount: session.questions.length,
 			isMatchCardsComplete: isMatchCardsPhaseComplete,
-			t
+			t: props.t
 		});
 	}
 
@@ -294,13 +294,13 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 		checkAnswer,
 		continueSession,
 		submitSession,
-		backContract,
-		t
+		backContract: props.backContract,
+		t: props.t
 	});
 
 	return {
 		workspaceState,
-		backContract,
+		backContract: props.backContract,
 		headerModel: presentation.headerModel,
 		progressBarModel,
 		matchCardsModel,
@@ -309,7 +309,7 @@ export default function useLearningSessionPageViewModel({ getLearningSessionUseC
 			presentation.questionCardModel === null
 				? null
 				: currentQuestionRenderKey,
-		questionFocusLabel: t.learningSessionQuestionFocusLabel,
+		questionFocusLabel: props.t.learningSessionQuestionFocusLabel,
 		actionPanelModel: presentation.actionPanelModel,
 		sessionResultModel: presentation.sessionResultModel,
 		rewardModel: presentation.rewardModel,

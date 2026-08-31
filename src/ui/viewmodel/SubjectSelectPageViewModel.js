@@ -8,7 +8,7 @@ import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
 import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
 
-export default function useSubjectSelectPageViewModel({ subjects, loadStatus, loadError, t, onSelectSubject, backContract }) {
+export default function useSubjectSelectPageViewModel(props) {
 	const subjectSearchSheet = useSearchSheetModel({
 		defaultFilterValue: ALL_FACULTIES
 	});
@@ -30,21 +30,21 @@ export default function useSubjectSelectPageViewModel({ subjects, loadStatus, lo
 	} = subjectSearchSheet;
 
 	const faculties = useMemo(() => {
-		return buildSubjectFaculties(subjects);
-	}, [subjects]);
+		return buildSubjectFaculties(props.subjects);
+	}, [props.subjects]);
 
 	const filteredSubjects = useMemo(() => {
-		return filterSubjects(subjects, searchTerm, faculty);
-	}, [subjects, searchTerm, faculty]);
+		return filterSubjects(props.subjects, searchTerm, faculty);
+	}, [props.subjects, searchTerm, faculty]);
 
 	const workspaceState = createWorkspaceState({
-		loadStatus,
+		loadStatus: props.loadStatus,
 		isEmpty: filteredSubjects.length === 0,
 		labels: {
-			loading: t.subjectLoadingMessage,
-			errorTitle: t.errorPrefix,
-			errorBody: loadError,
-			emptyTitle: subjects.length === 0 ? t.subjectSwitcherEmptyLabel : t.subjectEmptyMessage,
+			loading: props.t.subjectLoadingMessage,
+			errorTitle: props.t.errorPrefix,
+			errorBody: props.loadError,
+			emptyTitle: props.subjects.length === 0 ? props.t.subjectSwitcherEmptyLabel : props.t.subjectEmptyMessage,
 			emptyBody: ""
 		},
 		errorAction: null
@@ -63,7 +63,7 @@ export default function useSubjectSelectPageViewModel({ subjects, loadStatus, lo
 			{
 				id: ALL_FACULTIES,
 				value: ALL_FACULTIES,
-				label: t.subjectAllFaculties
+				label: props.t.subjectAllFaculties
 			},
 			...faculties.map((facultyOption) => ({
 				id: facultyOption,
@@ -71,41 +71,41 @@ export default function useSubjectSelectPageViewModel({ subjects, loadStatus, lo
 				label: facultyOption
 			}))
 		];
-	}, [faculties, t.subjectAllFaculties]);
+	}, [faculties, props.t.subjectAllFaculties]);
 
 	const facultyLabel = useMemo(() => {
-		return faculty === ALL_FACULTIES ? t.filterAllLabel : faculty;
-	}, [faculty, t.filterAllLabel]);
+		return faculty === ALL_FACULTIES ? props.t.filterAllLabel : faculty;
+	}, [faculty, props.t.filterAllLabel]);
 
 	const selectSubject = useCallback((subjectId) => {
 		closeSubjectSearchSheet();
 		changeSubjectFooterSheetOpen(false);
-		onSelectSubject(subjectId);
-	}, [changeSubjectFooterSheetOpen, closeSubjectSearchSheet, onSelectSubject]);
+		props.onSelectSubject(subjectId);
+	}, [changeSubjectFooterSheetOpen, closeSubjectSearchSheet, props.onSelectSubject]);
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
 			pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SUBJECTS],
-			t,
+			t: props.t,
 			topicAreaToolItems: [],
 			activeTopicAreaKey: null
 		});
-	}, [t]);
+	}, [props.t]);
 
 	return {
 		// Data
-		subjects,
+		subjects: props.subjects,
 		filteredSubjects,
 		faculties,
 		workspaceState,
 		pageTools,
 
 		// Navigasjon
-		backContract,
+		backContract: props.backContract,
 
 		// Tekster
-		t,
-		searchCloseLabel: t.searchCloseLabel,
+		t: props.t,
+		searchCloseLabel: props.t.searchCloseLabel,
 
 		// Filter-verdier
 		searchTerm,

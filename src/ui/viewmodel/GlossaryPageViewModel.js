@@ -24,7 +24,7 @@ const DEFAULT_GLOSSARY_TABLE_SORT = Object.freeze({
 	direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 });
 
-export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, getGlossaryNetworkUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, authScopeKey, t, isActive, backContract, onSelectContentType }) {
+export default function useGlossaryPageViewModel(props) {
 	const {
 		glossarySearchTerm,
 		setGlossarySearchTerm,
@@ -64,26 +64,26 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		glossaryNetworkLoad,
 		pageErrorMessage
 	} = useGlossaryPageResources({
-		getGlossaryOverviewUseCase,
-		getGlossaryNetworkUseCase,
-		getTopicAreasUseCase,
-		subjectId,
-		language,
-		authScopeKey,
-		isActive,
+		getGlossaryOverviewUseCase: props.getGlossaryOverviewUseCase,
+		getGlossaryNetworkUseCase: props.getGlossaryNetworkUseCase,
+		getTopicAreasUseCase: props.getTopicAreasUseCase,
+		subjectId: props.subjectId,
+		language: props.language,
+		authScopeKey: props.authScopeKey,
+		isActive: props.isActive,
 		expandedGlossaryEntryKey,
-		t
+		t: props.t
 	});
 
 	const localizedEntries = useMemo(() => {
-		const entries = localizeGlossaryEntries(glossaryEntries, language);
+		const entries = localizeGlossaryEntries(glossaryEntries, props.language);
 
 		if (isPageContentReady) {
 			assertGlossaryEntriesReferenceKnownTopicAreas({ localizedEntries: entries, topicAreas });
 		}
 
 		return entries;
-	}, [glossaryEntries, isPageContentReady, language, topicAreas]);
+	}, [glossaryEntries, isPageContentReady, props.language, topicAreas]);
 
 	const localizedEntryByKey = useMemo(() => {
 		return createGlossaryEntryByKey(localizedEntries);
@@ -101,9 +101,9 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		return resolveSelectedTopicAreaKeys({
 			selectedTopicAreaKeys,
 			topicAreas,
-			initialTopicAreaKey
+			initialTopicAreaKey: props.initialTopicAreaKey
 		});
-	}, [initialTopicAreaKey, selectedTopicAreaKeys, topicAreas]);
+	}, [props.initialTopicAreaKey, selectedTopicAreaKeys, topicAreas]);
 
 	const isAllTopicAreasSelected = topicAreas.length > 0
 		&& resolvedSelectedTopicAreaKeys.size === topicAreas.length;
@@ -120,10 +120,10 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 			topicAreas,
 			entriesByTopicAreaKey,
 			labels: {
-				chapterSubtitle: t.glossaryPageChapterSubtitle
+				chapterSubtitle: props.t.glossaryPageChapterSubtitle
 			}
 		});
-	}, [entriesByTopicAreaKey, t.glossaryPageChapterSubtitle, topicAreas]);
+	}, [entriesByTopicAreaKey, props.t.glossaryPageChapterSubtitle, topicAreas]);
 
 	const baseTopicAreaListItemsWithInteractionState = useMemo(() => {
 		return applyGlossaryTopicAreaInteractionState({
@@ -139,15 +139,15 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 			entryCount: localizedEntries.length,
 			isSelected: isAllTopicAreasSelected,
 			labels: {
-				allTopicAreas: t.glossaryPageAllChaptersHeading,
-				chapterSubtitle: t.glossaryPageChapterSubtitle
+				allTopicAreas: props.t.glossaryPageAllChaptersHeading,
+				chapterSubtitle: props.t.glossaryPageChapterSubtitle
 			}
 		});
-	}, [isAllTopicAreasSelected, localizedEntries.length, t.glossaryPageAllChaptersHeading, t.glossaryPageChapterSubtitle]);
+	}, [isAllTopicAreasSelected, localizedEntries.length, props.t.glossaryPageAllChaptersHeading, props.t.glossaryPageChapterSubtitle]);
 
 	const topicAreaReferenceByKey = useMemo(() => {
-		return createTopicAreaReferenceByKey(topicAreas, t.glossaryPageChapterReference);
-	}, [t.glossaryPageChapterReference, topicAreas]);
+		return createTopicAreaReferenceByKey(topicAreas, props.t.glossaryPageChapterReference);
+	}, [props.t.glossaryPageChapterReference, topicAreas]);
 
 	const selectedTopicAreaEntries = useMemo(() => {
 		return collectSelectedTopicAreaEntries({
@@ -164,11 +164,11 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 	const glossaryNetwork = useMemo(() => {
 		return createGlossaryNetworkPresentation({
 			network: isPageContentReady ? glossaryNetworkLoad.data : null,
-			language,
+			language: props.language,
 			topicAreaReferenceByKey,
-			t
+			t: props.t
 		});
-	}, [glossaryNetworkLoad.data, isPageContentReady, language, t, topicAreaReferenceByKey]);
+	}, [glossaryNetworkLoad.data, isPageContentReady, props.language, props.t, topicAreaReferenceByKey]);
 
 	const glossaryNetworkDisplay = useMemo(() => {
 		return createGlossaryNetworkDisplay({
@@ -183,16 +183,16 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		const rows = createGlossaryTableRows({
 			localizedEntries: visibleGlossaryEntries,
 			topicAreaReferenceByKey,
-			t
+			t: props.t
 		});
 
 		return sortGlossaryTableRows({
 			rows,
 			sortKey: glossaryTableSort.key,
 			sortDirection: glossaryTableSort.direction,
-			language
+			language: props.language
 		});
-	}, [glossaryTableSort.direction, glossaryTableSort.key, language, t, topicAreaReferenceByKey, visibleGlossaryEntries]);
+	}, [glossaryTableSort.direction, glossaryTableSort.key, props.language, props.t, topicAreaReferenceByKey, visibleGlossaryEntries]);
 
 	const visibleGlossaryEntryKeys = useMemo(() => {
 		return baseGlossaryTableRows.map((row) => row.glossaryEntryKey);
@@ -208,9 +208,9 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 			visibleGlossaryEntryKeys,
 			trailKeys: glossaryDetailTrailKeys,
 			areRelationsExpanded: areGlossaryDetailRelationsExpanded,
-			t
+			t: props.t
 		});
-	}, [activeGlossaryDetailEntryKey, areGlossaryDetailRelationsExpanded, glossaryDetailTrailKeys, glossaryNetworkDisplay, localizedEntryByKey, t, topicAreaByKey, topicAreaReferenceByKey, visibleGlossaryEntryKeys]);
+	}, [activeGlossaryDetailEntryKey, areGlossaryDetailRelationsExpanded, glossaryDetailTrailKeys, glossaryNetworkDisplay, localizedEntryByKey, props.t, topicAreaByKey, topicAreaReferenceByKey, visibleGlossaryEntryKeys]);
 
 	const glossaryPanelHeading = useMemo(() => {
 		return createGlossaryPanelHeading({
@@ -218,9 +218,9 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 			selectedTopicAreaKeys: resolvedSelectedTopicAreaKeys,
 			isAllTopicAreasSelected,
 			visibleEntryCount: visibleGlossaryEntries.length,
-			t
+			t: props.t
 		});
-	}, [isAllTopicAreasSelected, resolvedSelectedTopicAreaKeys, t, topicAreaByKey, visibleGlossaryEntries.length]);
+	}, [isAllTopicAreasSelected, resolvedSelectedTopicAreaKeys, props.t, topicAreaByKey, visibleGlossaryEntries.length]);
 
 	const autocompleteSuggestions = useMemo(() => {
 		return createGlossaryAutocompleteSuggestions({
@@ -245,7 +245,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 			{
 				id: ALL_TOPIC_AREAS,
 				value: ALL_TOPIC_AREAS,
-				label: t.glossaryPageAllChaptersHeading
+				label: props.t.glossaryPageAllChaptersHeading
 			}
 		];
 
@@ -258,7 +258,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		}
 
 		return options;
-	}, [t.glossaryPageAllChaptersHeading, topicAreas]);
+	}, [props.t.glossaryPageAllChaptersHeading, topicAreas]);
 	const selectedChapterFilterValue = resolveSelectedChapterFilterValue({
 		selectedTopicAreaKeys: resolvedSelectedTopicAreaKeys,
 		topicAreaCount: topicAreas.length
@@ -267,7 +267,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		selectedChapterFilterValue,
 		selectedTopicAreaCount,
 		topicAreaByKey,
-		t
+		t: props.t
 	});
 	const searchPopupContent = resolveGlossarySearchPopupContent({
 		isFilterOptionsOpen: isSearchFilterOptionsOpen,
@@ -284,7 +284,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 	});
 	const pageEmptyState = createGlossaryEmptyState({
 		emptyStateKind: pageEmptyStateKind,
-		t
+		t: props.t
 	});
 	const pageEmptyTitle = pageEmptyState === null ? "" : pageEmptyState.title;
 	const pageEmptyBody = pageEmptyState === null ? "" : pageEmptyState.body;
@@ -292,8 +292,8 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		loadStatus: pageStatus,
 		isEmpty: pageEmptyState !== null,
 		labels: {
-			loading: t.glossaryPageLoadingTitle,
-			errorTitle: t.glossaryPageErrorTitle,
+			loading: props.t.glossaryPageLoadingTitle,
+			errorTitle: props.t.glossaryPageErrorTitle,
 			errorBody: pageErrorMessage,
 			emptyTitle: pageEmptyTitle,
 			emptyBody: pageEmptyBody
@@ -304,18 +304,18 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 	const glossaryPanelEmptyStateKind = resolveGlossaryPanelEmptyStateKind(visibleGlossaryEntries.length);
 	const glossaryPanelEmptyState = createGlossaryEmptyState({
 		emptyStateKind: glossaryPanelEmptyStateKind,
-		t
+		t: props.t
 	});
 
 	const activeContentType = LEARNING_CONTENT_TYPES.GLOSSARY;
 
-	const contentToggleEntries = useMemo(() => createContentToggleEntries(t), [t]);
+	const contentToggleEntries = useMemo(() => createContentToggleEntries(props.t), [props.t]);
 	const mobileToggleButtonItems = useMemo(() => createMobileToggleButtonItems({
 		contentToggleEntries,
 		activeContentType,
 		selectedTestType: null,
-		t
-	}), [activeContentType, contentToggleEntries, t]);
+		t: props.t
+	}), [activeContentType, contentToggleEntries, props.t]);
 
 	const changeGlossarySearchTerm = useCallback((nextSearchTerm) => {
 		const shouldOpenAutocomplete = normalizeSearchTerm(nextSearchTerm).length >= GLOSSARY_AUTOCOMPLETE_MIN_LENGTH;
@@ -396,7 +396,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 			const currentSelectedTopicAreaKeys = resolveSelectedTopicAreaKeys({
 				selectedTopicAreaKeys: previousSelectedTopicAreaKeys,
 				topicAreas,
-				initialTopicAreaKey
+				initialTopicAreaKey: props.initialTopicAreaKey
 			});
 
 			if (currentSelectedTopicAreaKeys.size === topicAreas.length) {
@@ -416,7 +416,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 				: nextSelectedTopicAreaKeys;
 		});
 		setSearchKeyboardIndex(isSearchAutocompleteActive ? 0 : -1);
-	}, [initialTopicAreaKey, isSearchAutocompleteActive, topicAreaByKey, topicAreas]);
+	}, [props.initialTopicAreaKey, isSearchAutocompleteActive, topicAreaByKey, topicAreas]);
 
 	const moveSearchSelection = useCallback((direction) => {
 		if (!isSearchAutocompleteActive || autocompleteSuggestions.length === 0) {
@@ -613,13 +613,13 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 
 	const search = useMemo(() => ({
 		term: glossarySearchTerm,
-		placeholder: t.glossaryPageSearchPlaceholder,
-		label: t.glossaryPageSearchLabel,
-		closeLabel: t.searchCloseLabel,
-		clearLabel: t.glossaryPageSearchClearLabel,
-		keyboardHint: t.glossaryPageSearchKeyboardHint,
-		suggestionListAriaLabel: t.glossaryPageAutocompleteAriaLabel,
-		filterAriaLabel: t.glossaryPageChapterFilterAriaLabel,
+		placeholder: props.t.glossaryPageSearchPlaceholder,
+		label: props.t.glossaryPageSearchLabel,
+		closeLabel: props.t.searchCloseLabel,
+		clearLabel: props.t.glossaryPageSearchClearLabel,
+		keyboardHint: props.t.glossaryPageSearchKeyboardHint,
+		suggestionListAriaLabel: props.t.glossaryPageAutocompleteAriaLabel,
+		filterAriaLabel: props.t.glossaryPageChapterFilterAriaLabel,
 		filterLabel: chapterFilterLabel,
 		filterValue: selectedChapterFilterValue,
 		filterOptions: chapterFilterOptions,
@@ -642,15 +642,15 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		onMoveDown: moveSearchSelectionDown,
 		onMoveUp: moveSearchSelectionUp,
 		onSelectActive: openSearchKeyboardSelection
-	}), [autocompleteSuggestions, changeGlossarySearchTerm, chapterFilterLabel, chapterFilterOptions, clearGlossarySearch, closeGlossarySearchPopup, focusGlossarySearch, isSearchAutocompleteActive, isSearchFilterOptionsOpen, isSearchPopupOpen, isSearching, moveSearchSelectionDown, moveSearchSelectionUp, openGlossarySearchFilterOptions, openSearchKeyboardSelection, searchActiveDescendantId, searchPopupContent, selectAutocompleteSuggestion, selectGlossaryChapterFilter, selectedChapterFilterValue, t]);
+	}), [autocompleteSuggestions, changeGlossarySearchTerm, chapterFilterLabel, chapterFilterOptions, clearGlossarySearch, closeGlossarySearchPopup, focusGlossarySearch, isSearchAutocompleteActive, isSearchFilterOptionsOpen, isSearchPopupOpen, isSearching, moveSearchSelectionDown, moveSearchSelectionUp, openGlossarySearchFilterOptions, openSearchKeyboardSelection, searchActiveDescendantId, searchPopupContent, selectAutocompleteSuggestion, selectGlossaryChapterFilter, selectedChapterFilterValue, props.t]);
 
 	const selectContentType = useCallback((contentTypeId) => {
 		if (contentTypeId === LEARNING_CONTENT_TYPES.GLOSSARY) {
 			return;
 		}
 
-		onSelectContentType(contentTypeId);
-	}, [onSelectContentType]);
+		props.onSelectContentType(contentTypeId);
+	}, [props.onSelectContentType]);
 
 	const allTopicAreaListItem = useMemo(() => {
 		return bindTopicAreaInteraction(baseAllTopicAreaListItem, selectTopicArea);
@@ -663,10 +663,10 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 	const glossaryTableHeaders = useMemo(() => {
 		return createGlossaryTableHeaderPresentations({
 			tableSort: glossaryTableSort,
-			t,
+			t: props.t,
 			onSort: changeGlossaryTableSort
 		});
-	}, [changeGlossaryTableSort, glossaryTableSort, t]);
+	}, [changeGlossaryTableSort, glossaryTableSort, props.t]);
 
 	const glossaryTableRows = useMemo(() => {
 		return bindGlossaryTableInteractions({
@@ -718,15 +718,15 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 
 
 	return {
-		pageTitle: t.glossaryPageTitle,
-		pageSubtitle: createGlossaryPageSubtitle(t, selectedSubject),
-		termColumnHeader: t.glossaryPageTermColumnHeader,
-		explanationColumnHeader: t.glossaryPageExplanationColumnHeader,
-		directNeighborColumnHeader: t.glossaryPageConnectionsColumnHeader,
-		tableSortAscendingLabel: t.glossaryPageTableSortAscendingLabel,
-		tableSortDescendingLabel: t.glossaryPageTableSortDescendingLabel,
-		contentToggleAriaLabel: t.contentToggleAriaLabel,
-		contentToggleBackLabel: t.contentToggleBackLabel,
+		pageTitle: props.t.glossaryPageTitle,
+		pageSubtitle: createGlossaryPageSubtitle(props.t, props.selectedSubject),
+		termColumnHeader: props.t.glossaryPageTermColumnHeader,
+		explanationColumnHeader: props.t.glossaryPageExplanationColumnHeader,
+		directNeighborColumnHeader: props.t.glossaryPageConnectionsColumnHeader,
+		tableSortAscendingLabel: props.t.glossaryPageTableSortAscendingLabel,
+		tableSortDescendingLabel: props.t.glossaryPageTableSortDescendingLabel,
+		contentToggleAriaLabel: props.t.contentToggleAriaLabel,
+		contentToggleBackLabel: props.t.contentToggleBackLabel,
 
 		workspaceState,
 		shouldShowWorkspaceFooter,
@@ -749,7 +749,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		pageTools: null,
 		activeContentType,
 
-		backContract,
+		backContract: props.backContract,
 
 		selectTopicArea,
 		changeGlossaryTableSort,
