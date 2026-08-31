@@ -362,5 +362,3 @@ https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 <b>Øvrelid, E.</b> (2026d, Mai 4).<br> <i>Accountability Framework and External Developer Platform.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
-
-
