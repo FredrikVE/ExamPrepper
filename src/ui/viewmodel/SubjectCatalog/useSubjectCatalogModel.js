@@ -11,33 +11,33 @@ const SUBJECT_SWITCHER_KINDS = Object.freeze({
 	READY: "ready"
 });
 
-export default function useSubjectCatalogModel({ getAvailableSubjectsUseCase, language, selectedSubjectId, t }) {
+export default function useSubjectCatalogModel(props) {
 	const executeLoad = useCallback(() => {
-		return getAvailableSubjectsUseCase.execute({ language });
-	}, [getAvailableSubjectsUseCase, language]);
+		return props.getAvailableSubjectsUseCase.execute({ language: props.language });
+	}, [props.getAvailableSubjectsUseCase, props.language]);
 
 	const loadModel = useLoadModel({
 		execute: executeLoad,
 		emptyData: [],
-		errorMessage: t.subjectErrorMessage,
-		resourceKey: language,
+		errorMessage: props.t.subjectErrorMessage,
+		resourceKey: props.language,
 		isEnabled: true,
 		onLoaded: null
 	});
 
 	const selectedSubject = findSubjectById(
 		loadModel.data,
-		selectedSubjectId
+		props.selectedSubjectId
 	);
 	const subjectSwitcher = createSubjectSwitcherModel({
 		loadStatus: loadModel.status,
 		subjects: loadModel.data,
 		selectedSubject,
 		labels: {
-			loading: t.subjectLoadingMessage,
-			error: t.subjectErrorMessage,
-			empty: t.subjectSwitcherEmptyLabel,
-			unselected: t.subjectSwitcherSelectLabel
+			loading: props.t.subjectLoadingMessage,
+			error: props.t.subjectErrorMessage,
+			empty: props.t.subjectSwitcherEmptyLabel,
+			unselected: props.t.subjectSwitcherSelectLabel
 		}
 	});
 

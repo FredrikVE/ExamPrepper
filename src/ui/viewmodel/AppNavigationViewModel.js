@@ -5,7 +5,7 @@ import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBa
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
 
-export default function useAppNavigationViewModel(params) {
+export default function useAppNavigationViewModel(props) {
 	const [activeScreen, setActiveScreen] = useState(NAV_SCREENS.SUBJECTS);
 	const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 	const [selectedExamId, setSelectedExamId] = useState(null);
@@ -247,18 +247,18 @@ export default function useAppNavigationViewModel(params) {
 
 	const handleSyncedExamUnavailable = useCallback(() => {
 		changeScreen(NAV_SCREENS.SELECT);
-		setExamLanguageSyncError(params.examUnavailableMessage);
-	}, [changeScreen, params.examUnavailableMessage]);
+		setExamLanguageSyncError(props.examUnavailableMessage);
+	}, [changeScreen, props.examUnavailableMessage]);
 
 	const handleSyncedExamSyncFailed = useCallback(() => {
 		changeScreen(NAV_SCREENS.SELECT);
-		setExamLanguageSyncError(params.examSyncFailedMessage);
-	}, [changeScreen, params.examSyncFailedMessage]);
+		setExamLanguageSyncError(props.examSyncFailedMessage);
+	}, [changeScreen, props.examSyncFailedMessage]);
 
-	const selectedTestSetReadPort = resolveSelectedTestSetReadPort(params, selectedExamTestType);
+	const selectedTestSetReadPort = resolveSelectedTestSetReadPort(props, selectedExamTestType);
 
 	useSyncSelectedExamWithLanguage({
-		language: params.language,
+		language: props.language,
 		activeScreen,
 		selectedExamId,
 		selectedSubjectId,
@@ -277,8 +277,8 @@ export default function useAppNavigationViewModel(params) {
 
 	const backContract = {
 		showBackButton,
-		backLabel: params.backLabel,
-		navigationLabel: params.navigationLabel,
+		backLabel: props.backLabel,
+		navigationLabel: props.navigationLabel,
 		onBack: goBack
 	};
 
