@@ -228,10 +228,10 @@ export default function useLearningPathPageViewModel(props) {
 		contentHeaderModel: {
 			entries: contentToggleEntries,
 			activeEntryId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
-			mobileItems: mobileToggleButtonItems,
+			mobileToggleButtonItems,
 			mobileActiveEntryId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			onSelectEntry: props.onSelectContentType,
-			mobileBackLabel: props.t.contentToggleBackLabel,
+			contentToggleBackLabel: props.t.contentToggleBackLabel,
 			ariaLabel: props.t.contentToggleAriaLabel,
 			title: props.t.learningPathTitle,
 			subtitle: props.selectedSubject === null

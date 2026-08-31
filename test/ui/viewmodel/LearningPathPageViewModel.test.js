@@ -95,6 +95,14 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		expect(useLoadModel.mock.calls[0][0]).toMatchObject({ resourceKey: "in2120:no:auth-loading", isEnabled: false });
 	});
 
+	test("provides the mobile LearningContentHeader contract", () => {
+		const viewModel = renderViewModel({ authState: { status: "signed-out" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
+
+		expect(Array.isArray(viewModel.contentHeaderModel.mobileToggleButtonItems)).toBe(true);
+		expect(viewModel.contentHeaderModel.mobileToggleButtonItems.length).toBeGreaterThan(0);
+		expect(viewModel.contentHeaderModel.contentToggleBackLabel).toBe(t.contentToggleBackLabel);
+	});
+
 	test("keeps authored selectability but blocks anonymous LearningSession starts", async () => {
 		const execute = jest.fn();
 		const viewModel = renderViewModel({ authState: { status: "signed-out" }, startLearningSessionUseCase: { execute }, onLearningSessionStarted: jest.fn() });
