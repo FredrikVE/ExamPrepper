@@ -1,0 +1,106 @@
+{
+	"subjectId": "in2120",
+	"activeModuleId": "11111111-1111-4111-8111-111111111111",
+	"resumableSession": null,
+	"nextActivity": {
+		"kind": "start-authored-session",
+		"moduleId": "11111111-1111-4111-8111-111111111111",
+		"sectionId": "section-1",
+		"sectionKey": "chapter-1",
+		"planKey": "authored:chapter-1:step-1:1-6",
+		"sessionPosition": 1,
+		"questionCount": 6
+	},
+	"modules": [
+		{
+			"id": "11111111-1111-4111-8111-111111111111",
+			"moduleKey": "grunnbegreper",
+			"position": 1,
+			"title": "Grunnbegreper",
+			"description": "Bygg et sikkert fundament før du går videre.",
+			"isReplayAvailable": false,
+			"availability": {
+				"isUnlocked": true,
+				"isCurrent": true,
+				"lockReason": null
+			},
+			"topics": [
+				{
+					"key": "sikkerhetsbegreper",
+					"label": "Sikkerhetsbegreper"
+				},
+				{
+					"key": "grunnprinsipper",
+					"label": "Grunnprinsipper"
+				}
+			],
+			"progress": {
+				"completedSessions": 1,
+				"totalSessions": 4,
+				"completionPercent": 25,
+				"isComplete": false,
+				"performancePercent": 67.5,
+				"coveragePercent": 50,
+				"lastSessionAt": "2026-07-29T12:00:00Z",
+				"performanceBand": "progress"
+			},
+			"currentRun": null,
+			"sections": [
+				{
+					"id": "section-1",
+					"sectionKey": "chapter-1",
+					"chapterKey": "chapter-1",
+					"position": 1,
+					"label": "Sikkerhetsbegreper",
+					"progress": {
+						"completedSessions": 1,
+						"totalSessions": 2,
+						"completionPercent": 50,
+						"isComplete": false
+					},
+					"sessions": [
+						{
+							"planKey": "authored:chapter-1:step-1:1-6",
+							"position": 1,
+							"questionCount": 6,
+							"status": "completed",
+							"performancePercent": 65.38,
+							"performanceBand": "progress",
+							"isStartable": true
+						},
+						{
+							"planKey": "authored:chapter-1:step-2:1-4",
+							"position": 2,
+							"questionCount": 4,
+							"status": "current",
+							"performancePercent": null,
+							"performanceBand": "not-assessed",
+							"isStartable": true
+						}
+					],
+					"chapterTests": [
+						{
+							"id": "chapter-1a-test-no",
+							"position": 1,
+							"isStartable": false,
+							"status": "locked",
+							"performancePercent": 82.5,
+							"performanceBand": "understood"
+						},
+						{
+							"id": "chapter-1b-test-no",
+							"position": 2,
+							"isStartable": false,
+							"status": "locked",
+							"performancePercent": null,
+							"performanceBand": "not-assessed"
+						}
+					]
+				}
+			]
+		}
+	],
+	"examGate": {
+		"isUnlocked": false
+	}
+}

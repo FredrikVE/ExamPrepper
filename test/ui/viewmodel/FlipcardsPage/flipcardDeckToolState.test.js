@@ -84,7 +84,7 @@ describe("flipcardDeckToolState", () => {
 				iconKey: "list",
 				label: "Se alle kort",
 				statusLabel: "3 kort",
-				ariaLabel: "Se alle kort · 3 kort · Aktiv",
+				ariaLabel: "Se alle kort, 3 kort, Aktiv",
 				isSelected: true,
 				isDisabled: false
 			}),

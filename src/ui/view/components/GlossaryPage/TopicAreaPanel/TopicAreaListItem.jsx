@@ -1,10 +1,13 @@
 // src/ui/view/components/GlossaryPage/TopicAreaPanel/TopicAreaListItem.jsx
-import { BookOpen, Check } from "lucide-react";
+import { Check } from "lucide-react";
+import { getContentIcon } from "../../Shared/contentIconRegistry.js";
 
 export default function TopicAreaListItem({ item }) {
+	const TopicAreaIcon = getContentIcon(item.iconKey);
+
 	return (
 		<>
-			<BookOpen className="glossary-topic-area-item__icon" aria-hidden="true" focusable="false" />
+			<TopicAreaIcon className="glossary-topic-area-item__icon" aria-hidden="true" focusable="false" />
 
 			<span className="glossary-topic-area-item__copy">
 				{item.eyebrow ? (

@@ -9,6 +9,7 @@ const SEARCH_BACKDROP_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchBackdr
 const SEARCH_SUGGESTION_LIST_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchSuggestionList.jsx");
 const SEARCH_FILTER_FIELD_PATH = path.join(SEARCH_COMPONENT_DIRECTORY, "SearchFilterField.jsx");
 const LEGACY_GLOSSARY_SEARCH_FIELD_PATH = path.resolve("src/ui/view/components/GlossaryPage/TopicAreaPanel/GlossarySearchField.jsx");
+const GLOSSARY_SEARCH_PANEL_PATH = path.resolve("src/ui/view/components/GlossaryPage/GlossarySearchPanel.jsx");
 const GLOSSARY_SEARCH_MODEL_PATH = path.resolve("src/ui/viewmodel/GlossaryPage/glossarySearchModel.js");
 const SEARCH_SUGGESTION_CONTRACT_PATH = path.resolve("src/ui/viewmodel/Search/searchSuggestionContract.js");
 const SHARED_SEARCH_SHEET_STYLE_PATH = path.resolve("src/ui/style/Search/search-sheet.css");
@@ -117,10 +118,7 @@ describe("search experience SSOT", () => {
 
 	test("uses one canonical search/filter field for standard search and Glossary autocomplete", () => {
 		const sharedFieldSource = readSource(SEARCH_FILTER_FIELD_PATH);
-		const glossaryConsumers = [
-			path.resolve("src/ui/view/components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx"),
-			path.resolve("src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx")
-		];
+		const glossarySearchImports = collectImportedNames(GLOSSARY_SEARCH_PANEL_PATH, "../Search/SearchFilterField.jsx");
 
 		expect(fs.existsSync(LEGACY_GLOSSARY_SEARCH_FIELD_PATH)).toBe(false);
 		expect(sharedFieldSource).toContain("props.clearAction");
@@ -129,13 +127,8 @@ describe("search experience SSOT", () => {
 		expect(sharedFieldSource).toContain('aria-autocomplete={autocomplete === null ? null : "list"}');
 		expect(sharedFieldSource).toContain('event.key === "ArrowDown"');
 		expect(sharedFieldSource).toContain('event.key === "Enter"');
-
-		for (const consumerPath of glossaryConsumers) {
-			const imports = collectImportedNames(consumerPath, "../../Search/SearchFilterField.jsx");
-
-			expect(imports.has("SearchFilterField")).toBe(true);
-			expect(containsJsxElement(consumerPath, "SearchFilterField")).toBe(true);
-		}
+		expect(glossarySearchImports.has("SearchFilterField")).toBe(true);
+		expect(containsJsxElement(GLOSSARY_SEARCH_PANEL_PATH, "SearchFilterField")).toBe(true);
 	});
 
 	test("uses the shared six-result contract and shared popup height on Glossary", () => {
@@ -178,7 +171,7 @@ describe("search experience SSOT", () => {
 
 		expect(modelSource).not.toContain("filterEntriesBySearchTerm");
 		expect(modelSource).not.toContain("countEntryMatchesByTopicArea");
-		expect(viewModelSource).toContain("selectedGlossaryEntryKey");
+		expect(viewModelSource).toContain("searchNarrowedGlossaryEntryKey");
 		expect(viewModelSource).not.toContain("searchSummaryLabel");
 		expect(viewModelSource).not.toContain("filterEntriesByNormalizedSearchTerm");
 		expect(tableModelSource).not.toContain("normalizedSearchTerm");

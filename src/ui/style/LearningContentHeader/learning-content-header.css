@@ -26,9 +26,15 @@
 	}
 }
 
+@media (min-width: 933px) and (max-width: 1200px) {
+	.learning-content-workspace {
+		--learning-content-page-top: calc(var(--mobile-topbar-height) + var(--space-5));
+	}
+}
+
 @media (max-width: 932px) {
 	.learning-content-workspace {
-		--learning-content-page-top: calc(var(--mobile-topbar-height) + 14px);
+		--learning-content-page-top: calc(var(--mobile-topbar-height) + var(--space-5));
 		--learning-content-page-inline: 24px;
 	}
 }

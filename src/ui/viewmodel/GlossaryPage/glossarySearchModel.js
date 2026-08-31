@@ -1,9 +1,27 @@
+// src/ui/viewmodel/GlossaryPage/glossarySearchModel.js
 import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
 import { SEARCH_SUGGESTION_LIMIT } from "../Search/searchSuggestionContract.js";
 
-// src/ui/viewmodel/GlossaryPage/glossarySearchModel.js
 export const GLOSSARY_AUTOCOMPLETE_MIN_LENGTH = 1;
 export const GLOSSARY_AUTOCOMPLETE_LIST_ID = "glossary-search-suggestions";
+
+export const SEARCH_POPUP_CONTENT = Object.freeze({
+	NONE: "none",
+	FILTER_OPTIONS: "filter-options",
+	SUGGESTIONS: "suggestions"
+});
+
+export function resolveGlossarySearchPopupContent({ isFilterOptionsOpen, isAutocompleteActive, filterOptionCount, suggestionCount }) {
+	if (isFilterOptionsOpen) {
+		return filterOptionCount > 0 ? SEARCH_POPUP_CONTENT.FILTER_OPTIONS : SEARCH_POPUP_CONTENT.NONE;
+	}
+
+	if (isAutocompleteActive && suggestionCount > 0) {
+		return SEARCH_POPUP_CONTENT.SUGGESTIONS;
+	}
+
+	return SEARCH_POPUP_CONTENT.NONE;
+}
 
 export function createGlossaryAutocompleteSuggestions(params) {
 	if (params.normalizedSearchTerm.length < GLOSSARY_AUTOCOMPLETE_MIN_LENGTH) {

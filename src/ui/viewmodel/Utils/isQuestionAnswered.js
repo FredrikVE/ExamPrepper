@@ -1,7 +1,11 @@
-// src/ui/viewmodel/Utils/isQuestionAnswered.js
+//src/ui/viewmodel/Utils/isQuestionAnswered.js
 import { QUESTION_TYPES } from "../../../constants/QuestionTypes.js";
 
 export default function isQuestionAnswered(question, answer) {
+	if (answer === null || answer === undefined) {
+		return false;
+	}
+
 	if (question.type === QUESTION_TYPES.MULTI) {
 		return Array.isArray(answer) && answer.length > 0;
 	}
@@ -40,6 +44,18 @@ export default function isQuestionAnswered(question, answer) {
 		);
 	}
 
+
+	if (question.type === QUESTION_TYPES.TAP_TO_FILL_MULTIPLE_BLANK) {
+		const items = Array.isArray(question.items) ? question.items : [];
+
+		return Boolean(answer && typeof answer === "object" && !Array.isArray(answer) && items.every((item) => Boolean(answer[item.id])));
+	}
+
+	if (question.type === QUESTION_TYPES.WRITE_TO_FILL_MULTIPLE_BLANK) {
+		const items = Array.isArray(question.items) ? question.items : [];
+
+		return Boolean(answer && typeof answer === "object" && !Array.isArray(answer) && items.every((item) => String(answer[item.id] ?? "").trim() !== ""));
+	}
 
 	if (question.type === QUESTION_TYPES.RADIO_BUTTON_GRID) {
 		const rows = Array.isArray(question.rows) ? question.rows : [];

@@ -1,5 +1,7 @@
 // src/ui/view/components/QuestionCard/Shared/Feedback/FeedbackPanel/Utils/AnswerLabelFormatter.js
 import { QUESTION_TYPES } from "../../../../../../../../constants/QuestionTypes.js";
+import getFillBlankCorrectAnswer from "../../../../QuestionTypes/FillBlankInputField/Utils/getFillBlankCorrectAnswer.js";
+
 export default class AnswerLabelFormatter {
     constructor(separator = " | ") {
         this.separator = separator;
@@ -7,7 +9,7 @@ export default class AnswerLabelFormatter {
 
     format(question) {
         if (question.type === QUESTION_TYPES.FILL) {
-            return question.answerKey;
+            return getFillBlankCorrectAnswer(question);
         }
 
         const correctOptionLabels = this.#getCorrectOptionLabels(question);
@@ -23,7 +25,7 @@ export default class AnswerLabelFormatter {
         const correctOptionLabels = [];
 
         question.options.forEach((option, index) => {
-            if (option.correct) {
+            if (option.isCorrect) {
                 const optionLabel = this.#createOptionLabel(option, index);
 
                 correctOptionLabels.push(optionLabel);

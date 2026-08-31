@@ -1,25 +1,34 @@
-// src/ui/viewmodel/LearningContentSelectPageViewModel.js
-import { useCallback, useMemo, useState } from "react";
+//src/ui/viewmodel/LearningContentSelectPageViewModel.js
+import { useCallback, useMemo } from "react";
 import { LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
-import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel from "./Search/useSearchSheetModel.js";
 import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
-import { ALL_TOPIC_AREAS, findTopicAreaByKey } from "../../model/domain/utils/topicAreaFilters.js";
-import { filterExams } from "./LearningContentSelectPage/examFilters.js";
+import { CONTENT_ICON_KEYS } from "../../constants/ContentIconKeys.js";
+import { ALL_TOPIC_AREAS } from "../../constants/TopicAreas.js";
+import { filterTestSets } from "./LearningContentSelectPage/testSetFilters.js";
 import { filterDeckSummaries } from "./LearningContentSelectPage/flashcardDeckFilters.js";
 import useLoadModel from "./LoadState/useLoadModel.js";
 import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
+import { createContentToggleEntries, createMobileToggleButtonItems, findToggleEntryConfig } from "./Shared/contentToggleModel.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
-export default function useLearningContentSelectPageViewModel(getAvailableExamsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectExam, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage) {
-	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
-	const [selectedTestType, setSelectedTestType] = useState(TEST_TYPES.EXAM);
-	const [expandedMobileToggleButtonGroupId, setExpandedMobileToggleButtonGroupId] = useState(null);
+export default function useLearningContentSelectPageViewModel(props) {
+	const activeEntry = findToggleEntryConfig(props.activeEntryId);
+
+	if (activeEntry === null || activeEntry.isDisabled) {
+		throw new Error(`Invalid active SELECT content entry: ${String(props.activeEntryId)}`);
+	}
+
+	if (activeEntry.contentTypeId === null) {
+		throw new Error(`Active SELECT content entry has no content type: ${String(props.activeEntryId)}`);
+	}
+
+	const activeContentType = activeEntry.contentTypeId;
+	const selectedTestType = activeEntry.testType;
 
 	const examSearchSheet = useSearchSheetModel({
-		isActive,
 		defaultFilterValue: ALL_TOPIC_AREAS
 	});
 	const {
@@ -40,56 +49,87 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		closeSearchSheet: closeExamSearchSheet
 	} = examSearchSheet;
 
-	const subjectId = selectedSubject?.id ?? null;
-	const loadResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
-	const isLoadEnabled = isActive && subjectId !== null;
+	const subjectId = props.selectedSubject?.id ?? null;
+	const loadResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${props.language}`;
+	const isLoadEnabled = subjectId !== null;
+	const isTestSetContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
+	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
+	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
+	const isDeckContentActive = isFlipcardsContentActive || isMatchCardsContentActive;
+	const isExamLoadEnabled = isLoadEnabled
+		&& isTestSetContentActive
+		&& selectedTestType === TEST_TYPES.EXAM;
+	const isChapterTestLoadEnabled = isLoadEnabled
+		&& isTestSetContentActive
+		&& selectedTestType === TEST_TYPES.CHAPTER_TEST;
+	const isFlipcardDeckLoadEnabled = isLoadEnabled && isDeckContentActive;
 
 	const executeExamLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
+		if (!isExamLoadEnabled) {
 			return Promise.resolve([]);
 		}
 
-		return getAvailableExamsUseCase.execute({
+		return props.getAvailableExamsUseCase.execute({
 			subjectId,
-			language
+			language: props.language
 		});
-	}, [getAvailableExamsUseCase, isActive, subjectId, language]);
+	}, [props.getAvailableExamsUseCase, isExamLoadEnabled, subjectId, props.language]);
+
+	const executeChapterTestLoad = useCallback(() => {
+		if (!isChapterTestLoadEnabled) {
+			return Promise.resolve([]);
+		}
+
+		return props.getAvailableChapterTestsUseCase.execute({
+			subjectId,
+			language: props.language
+		});
+	}, [props.getAvailableChapterTestsUseCase, isChapterTestLoadEnabled, subjectId, props.language]);
 
 	const executeTopicAreaLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
+		if (!isLoadEnabled) {
 			return Promise.resolve([]);
 		}
 
-		return getTopicAreasUseCase.execute({
+		return props.getTopicAreasUseCase.execute({
 			subjectId,
-			language
+			language: props.language
 		});
-	}, [getTopicAreasUseCase, isActive, subjectId, language]);
+	}, [props.getTopicAreasUseCase, isLoadEnabled, subjectId, props.language]);
 
 	const executeFlipcardDeckLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
+		if (!isFlipcardDeckLoadEnabled) {
 			return Promise.resolve([]);
 		}
 
-		return getFlipcardDeckSummariesUseCase.execute({
+		return props.getFlipcardDeckSummariesUseCase.execute({
 			subjectId,
-			language
+			language: props.language
 		});
-	}, [getFlipcardDeckSummariesUseCase, isActive, subjectId, language]);
+	}, [props.getFlipcardDeckSummariesUseCase, isFlipcardDeckLoadEnabled, subjectId, props.language]);
 
 	const examLoad = useLoadModel({
 		execute: executeExamLoad,
 		emptyData: [],
-		errorMessage: t.selectErrorMessage,
+		errorMessage: props.t.selectErrorMessage,
 		resourceKey: loadResourceKey,
-		isEnabled: isLoadEnabled,
+		isEnabled: isExamLoadEnabled,
+		onLoaded: null
+	});
+
+	const chapterTestLoad = useLoadModel({
+		execute: executeChapterTestLoad,
+		emptyData: [],
+		errorMessage: props.t.selectErrorMessage,
+		resourceKey: loadResourceKey,
+		isEnabled: isChapterTestLoadEnabled,
 		onLoaded: null
 	});
 
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
-		errorMessage: t.selectErrorMessage,
+		errorMessage: props.t.selectErrorMessage,
 		resourceKey: loadResourceKey,
 		isEnabled: isLoadEnabled,
 		onLoaded: null
@@ -98,139 +138,92 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 	const flipcardDeckLoad = useLoadModel({
 		execute: executeFlipcardDeckLoad,
 		emptyData: [],
-		errorMessage: t.selectErrorMessage,
+		errorMessage: props.t.selectErrorMessage,
 		resourceKey: loadResourceKey,
-		isEnabled: isLoadEnabled,
+		isEnabled: isFlipcardDeckLoadEnabled,
 		onLoaded: null
 	});
 
-	const exams = examLoad.data;
+	const activeTestSetLoad = selectedTestType === TEST_TYPES.CHAPTER_TEST
+		? chapterTestLoad
+		: examLoad;
+	const activeTestSets = isTestSetContentActive
+		? activeTestSetLoad.data
+		: [];
 	const topicAreas = topicAreaLoad.data;
 	const flipcardDeckSummaries = flipcardDeckLoad.data;
+	const activeContentLoad = isTestSetContentActive ? activeTestSetLoad : flipcardDeckLoad;
 	const pageStatus = combineLoadStatuses([
-		examLoad.status,
-		topicAreaLoad.status,
-		flipcardDeckLoad.status
+		activeContentLoad.status,
+		topicAreaLoad.status
 	]);
 	const pageErrorMessage = resolveFirstLoadError([
-		examLoad,
-		topicAreaLoad,
-		flipcardDeckLoad
-	], t.selectErrorMessage);
+		activeContentLoad,
+		topicAreaLoad
+	], props.t.selectErrorMessage);
 
-	const activeToggleEntryId = resolveActiveToggleEntryId(activeContentType, selectedTestType);
 	const pageHeading = useMemo(() => {
-		return createLearningContentSelectPageHeading(t, selectedSubject, activeToggleEntryId);
-	}, [t, selectedSubject, activeToggleEntryId]);
+		return createLearningContentSelectPageHeading(props.t, props.selectedSubject, props.activeEntryId);
+	}, [props.t, props.selectedSubject, props.activeEntryId]);
 
 	const selectContentType = useCallback((entryId) => {
-		const toggleEntry = findToggleEntryConfig(entryId);
-
-		if (toggleEntry === null || toggleEntry.isDisabled) {
-			return;
-		}
-
-		if (toggleEntry.contentTypeId === null) {
-			throw new Error(`Enabled toggle entry is missing contentTypeId: ${String(entryId)}`);
-		}
-
-		const contentType = getContentTypeEntry(toggleEntry.contentTypeId);
-
-		resetSearchSheet(ALL_TOPIC_AREAS);
-		setSelectedTestType(toggleEntry.testType);
-
-		if (contentType.targetScreen !== NAV_SCREENS.SELECT) {
-			onChangeScreen(contentType.targetScreen);
-			return;
-		}
-
-		setActiveContentType(contentType.id);
-
-		if (!isActive) {
-			onChangeScreen(contentType.targetScreen);
-		}
-	}, [isActive, onChangeScreen, resetSearchSheet]);
-
-	const openMobileToggleButtonGroup = useCallback((groupId) => {
-		const group = findMobileToggleButtonGroup(groupId);
-
-		if (group === null || group.isDisabled || group.entryIds.length === 0) {
-			return;
-		}
-
-		setExpandedMobileToggleButtonGroupId(group.id);
-	}, []);
-
-	const closeMobileToggleButtonGroup = useCallback(() => {
-		setExpandedMobileToggleButtonGroupId(null);
-	}, []);
+		resetSearchSheet();
+		props.onSelectContentType(entryId);
+	}, [props.onSelectContentType, resetSearchSheet]);
 
 	const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
 		changeTopicAreaKey(nextTopicAreaKey);
 	}, [changeTopicAreaKey]);
 
-	const contentToggleEntries = useMemo(() => {
-		return NAV_ITEMS.toggleButtonItems.map((entry) => ({
-			id: entry.id,
-			label: t[entry.labelKey],
-			isDisabled: entry.isDisabled
-		}));
-	}, [t]);
+	const contentToggleEntries = useMemo(() => createContentToggleEntries(props.t), [props.t]);
+	const mobileToggleButtonItems = useMemo(() => createMobileToggleButtonItems({
+		contentToggleEntries,
+		activeContentType,
+		selectedTestType,
+		t: props.t
+	}), [activeContentType, contentToggleEntries, selectedTestType, props.t]);
 
-	const mobileToggleButtonItems = [];
-
-	for (const item of NAV_ITEMS.mobileToggleButtonItems) {
-		const entries = [];
-
-		for (const entryId of item.entryIds) {
-			entries.push(findMobileToggleEntry(contentToggleEntries, entryId, t));
-		}
-
-		mobileToggleButtonItems.push({
-			id: item.id,
-			label: t[item.labelKey],
-			contentTypeId: item.contentTypeId,
-			isDisabled: item.isDisabled,
-			isActive: isMobileToggleButtonItemActive(item, activeContentType, selectedTestType),
-			entries
-		});
-	}
-
-	const visibleExams = useMemo(() => {
-		return filterExams(exams, searchTerm, topicAreaKey, selectedTestType);
-	}, [exams, searchTerm, selectedTestType, topicAreaKey]);
+	const visibleTestSets = useMemo(() => {
+		return filterTestSets(activeTestSets, searchTerm, topicAreaKey);
+	}, [activeTestSets, searchTerm, topicAreaKey]);
 
 	const visibleFlipcardDecks = useMemo(() => {
 		return filterDeckSummaries(flipcardDeckSummaries, searchTerm, topicAreaKey);
 	}, [flipcardDeckSummaries, searchTerm, topicAreaKey]);
 
-	const desktopActiveEntryId = activeToggleEntryId;
-	const mobileActiveEntryId = activeToggleEntryId;
-	const isExamsContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
-	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
-	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
+	const desktopActiveEntryId = props.activeEntryId;
+	const mobileActiveEntryId = props.activeEntryId;
 
-	const activeContentItems = isExamsContentActive ? visibleExams : visibleFlipcardDecks;
-	const activeEmptyTitle = isExamsContentActive
-		? selectedTestType === TEST_TYPES.CHAPTER_TEST
-			? t.selectChapterTestsEmptyTitle
-			: t.selectEmptyTitle
+	const activeContentItems = isTestSetContentActive ? visibleTestSets : visibleFlipcardDecks;
+	const isTestSetFilterActive = searchTerm.trim().length > 0 || topicAreaKey !== ALL_TOPIC_AREAS;
+	const isFilteredToNothing = isTestSetContentActive
+		&& isTestSetFilterActive
+		&& activeTestSets.length > 0
+		&& visibleTestSets.length === 0;
+	const activeEmptyTitle = isTestSetContentActive
+		? isFilteredToNothing
+			? props.t.selectFilteredEmptyTitle
+			: selectedTestType === TEST_TYPES.CHAPTER_TEST
+				? props.t.selectChapterTestsEmptyTitle
+				: props.t.selectEmptyTitle
 		: isMatchCardsContentActive
-			? t.matchCardsDeckEmptyTitle
-			: t.deckEmptyTitle;
-	const activeEmptyBody = isExamsContentActive
-		? selectedTestType === TEST_TYPES.CHAPTER_TEST
-			? t.selectChapterTestsEmptyMessage
-			: t.selectEmptyMessage
+			? props.t.matchCardsDeckEmptyTitle
+			: props.t.deckEmptyTitle;
+	const activeEmptyBody = isTestSetContentActive
+		? isFilteredToNothing
+			? props.t.selectFilteredEmptyMessage
+			: selectedTestType === TEST_TYPES.CHAPTER_TEST
+				? props.t.selectChapterTestsEmptyMessage
+				: props.t.selectEmptyMessage
 		: isMatchCardsContentActive
-			? t.matchCardsDeckEmptyMessage
-			: t.deckEmptyMessage;
+			? props.t.matchCardsDeckEmptyMessage
+			: props.t.deckEmptyMessage;
 	const workspaceState = createWorkspaceState({
 		loadStatus: pageStatus,
 		isEmpty: activeContentItems.length === 0,
 		labels: {
-			loading: t.selectLoadingMessage,
-			errorTitle: t.errorPrefix,
+			loading: props.t.selectLoadingMessage,
+			errorTitle: props.t.errorPrefix,
 			errorBody: pageErrorMessage,
 			emptyTitle: activeEmptyTitle,
 			emptyBody: activeEmptyBody
@@ -243,15 +236,15 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 			return createDeckSearchSuggestions(visibleFlipcardDecks);
 		}
 
-		return createExamSearchSuggestions(visibleExams);
-	}, [isFlipcardsContentActive, isMatchCardsContentActive, visibleExams, visibleFlipcardDecks]);
+		return createTestSetSearchSuggestions(visibleTestSets);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, visibleFlipcardDecks, visibleTestSets]);
 
 	const topicAreaFilterOptions = useMemo(() => {
 		const filterOptions = [
 			{
 				id: ALL_TOPIC_AREAS,
 				value: ALL_TOPIC_AREAS,
-				label: t.topicAreaAllLabel
+				label: props.t.topicAreaAllLabel
 			}
 		];
 
@@ -264,41 +257,43 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		}
 
 		return filterOptions;
-	}, [topicAreas, t.topicAreaAllLabel]);
+	}, [topicAreas, props.t.topicAreaAllLabel]);
 
 	const topicAreaLabel = useMemo(() => {
 		if (topicAreaKey === ALL_TOPIC_AREAS) {
-			return t.filterAllLabel;
+			return props.t.filterAllLabel;
 		}
 
-		const topicArea = findTopicAreaByKey(topicAreas, topicAreaKey);
+		const topicArea = topicAreas.find((candidate) => candidate.key === topicAreaKey) ?? null;
 
-		return topicArea?.label ?? t.filterAllLabel;
-	}, [topicAreas, topicAreaKey, t.filterAllLabel]);
+		return topicArea?.label ?? props.t.filterAllLabel;
+	}, [topicAreas, topicAreaKey, props.t.filterAllLabel]);
 
 	const searchPlaceholder = useMemo(() => {
-		const activeEntry = getContentTypeEntry(activeContentType);
+		return props.t[activeEntry.searchPlaceholderKey];
+	}, [activeEntry.searchPlaceholderKey, props.t]);
 
-		return t[activeEntry.searchPlaceholderKey];
-	}, [activeContentType, t]);
+	const selectTestSet = useCallback((testSetId) => {
+		if (selectedTestType !== TEST_TYPES.EXAM && selectedTestType !== TEST_TYPES.CHAPTER_TEST) {
+			throw new Error(`Unknown selected test type: ${String(selectedTestType)}`);
+		}
 
-	const selectExam = useCallback((examId) => {
 		closeExamSearchSheet();
 		changeExamFooterSheetOpen(false);
-		onSelectExam(examId);
-	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectExam]);
+		props.onSelectTestSet(testSetId, selectedTestType);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, props.onSelectTestSet, selectedTestType]);
 
 	const selectFlipcardDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
 		changeExamFooterSheetOpen(false);
-		onSelectFlipcardDeck(nextTopicAreaKey);
-	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectFlipcardDeck]);
+		props.onSelectFlipcardDeck(nextTopicAreaKey);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, props.onSelectFlipcardDeck]);
 
 	const selectMatchCardsDeck = useCallback((nextTopicAreaKey) => {
 		closeExamSearchSheet();
 		changeExamFooterSheetOpen(false);
-		onSelectMatchCardsDeck(nextTopicAreaKey);
-	}, [changeExamFooterSheetOpen, closeExamSearchSheet, onSelectMatchCardsDeck]);
+		props.onSelectMatchCardsDeck(nextTopicAreaKey);
+	}, [changeExamFooterSheetOpen, closeExamSearchSheet, props.onSelectMatchCardsDeck]);
 
 	const selectSearchSuggestion = useCallback((suggestionId) => {
 		if (isFlipcardsContentActive) {
@@ -311,46 +306,43 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 			return;
 		}
 
-		selectExam(suggestionId);
-	}, [isFlipcardsContentActive, isMatchCardsContentActive, selectExam, selectFlipcardDeck, selectMatchCardsDeck]);
+		selectTestSet(suggestionId);
+	}, [isFlipcardsContentActive, isMatchCardsContentActive, selectFlipcardDeck, selectMatchCardsDeck, selectTestSet]);
 
 	const topicAreaToolItems = useMemo(() => {
 		return createTopicAreaToolItems({
 			topicAreas,
-			t,
-			selectedStatusLabel: t.pageToolsSelectedLabel,
+			t: props.t,
+			selectedStatusLabel: props.t.pageToolsSelectedLabel,
 			onSelectTopicArea: selectTopicAreaKey
 		});
-	}, [selectTopicAreaKey, t, topicAreas]);
+	}, [selectTopicAreaKey, props.t, topicAreas]);
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
 			pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SELECT],
-			t,
+			t: props.t,
 			topicAreaToolItems,
 			activeTopicAreaKey: topicAreaKey
 		});
-	}, [t, topicAreaKey, topicAreaToolItems]);
+	}, [props.t, topicAreaKey, topicAreaToolItems]);
 
 	return {
 		// Data
-		exams: visibleExams,
-		visibleExams,
+		visibleTestSets,
 		visibleFlipcardDecks,
 		workspaceState,
-		actionErrorMessage,
-		topicAreas,
-		topicAreaKey,
+		actionErrorMessage: props.actionErrorMessage,
 		pageTools,
 		...pageHeading,
-		practiceExamLabel: t.selectPracticeExamLabel,
-		questionLabel: t.selectQuestionLabel,
-		minuteLabel: t.selectMinuteLabel,
+		practiceExamLabel: props.t.selectPracticeExamLabel,
+		questionLabel: props.t.selectQuestionLabel,
+		minuteLabel: props.t.selectMinuteLabel,
 
-		addPlaceholderCode: t.examAddPlaceholderCode,
-		addPlaceholderTitle: t.examAddPlaceholderTitle,
-		addPlaceholderDescription: t.examAddPlaceholderDescription,
-		addPlaceholderNote: t.examAddPlaceholderNote,
+		addPlaceholderCode: props.t.examAddPlaceholderCode,
+		addPlaceholderTitle: props.t.examAddPlaceholderTitle,
+		addPlaceholderDescription: props.t.examAddPlaceholderDescription,
+		addPlaceholderNote: props.t.examAddPlaceholderNote,
 
 		// Innholdstyper
 		activeContentType,
@@ -359,26 +351,23 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		mobileActiveEntryId,
 		contentToggleEntries,
 		mobileToggleButtonItems,
-		expandedMobileToggleButtonGroupId,
-		contentToggleBackLabel: t.contentToggleBackLabel,
-		contentToggleAriaLabel: t.contentToggleAriaLabel,
-		isExamsContentActive,
+		contentToggleBackLabel: props.t.contentToggleBackLabel,
+		contentToggleAriaLabel: props.t.contentToggleAriaLabel,
+		isTestSetContentActive,
 		isFlipcardsContentActive,
 		isMatchCardsContentActive,
-		deckCardCountLabel: t.deckCardCountLabel,
-		deckCardUnitLabel: t.deckCardUnitLabel,
-		flipcardsDeckEyebrow: t.contentToggleFlipcardsLabel,
-		matchCardsDeckEyebrow: t.contentToggleMatchCardsLabel,
+		deckCardCountLabel: props.t.deckCardCountLabel,
+		deckCardUnitLabel: props.t.deckCardUnitLabel,
+		flipcardsDeckEyebrow: props.t.contentToggleFlipcardsLabel,
+		matchCardsDeckEyebrow: props.t.contentToggleMatchCardsLabel,
 
 		// Navigasjon
-		backContract,
+		backContract: props.backContract,
 
 		// Søk og filter
 		searchTerm,
 		category: topicAreaKey,
 		categoryLabel: topicAreaLabel,
-		topicAreaKey,
-		topicAreaLabel,
 		isSearchSheetOpen,
 		isSearchSuggestionsMode,
 		isFilterOptionsMode,
@@ -386,134 +375,40 @@ export default function useLearningContentSelectPageViewModel(getAvailableExamsU
 		isFooterOpen,
 		searchSuggestions,
 		categoryFilterOptions: topicAreaFilterOptions,
-		topicAreaFilterOptions,
-		searchCloseLabel: t.searchCloseLabel,
-		searchLabel: t.examSearchLabel,
+		searchCloseLabel: props.t.searchCloseLabel,
+		searchLabel: props.t.examSearchLabel,
 		searchPlaceholder,
-		categoryAriaLabel: t.topicAreaFilterAriaLabel,
-		allCategoriesLabel: t.topicAreaAllLabel,
+		categoryAriaLabel: props.t.topicAreaFilterAriaLabel,
+		allCategoriesLabel: props.t.topicAreaAllLabel,
 
 		// Handlers
 		changeExamSearchTerm,
 		changeCategory: changeTopicAreaKey,
-		changeTopicAreaKey,
 		selectCategoryFilterOption: selectTopicAreaFilterOption,
-		selectTopicAreaFilterOption,
 		openExamSearchSuggestions,
 		openExamCategoryOptions: openTopicAreaOptions,
-		openTopicAreaOptions,
 		changeExamFooterSheetOpen,
 		closeExamSearchSheet,
-		selectExam,
+		selectTestSet,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
 		selectContentType,
-		openMobileToggleButtonGroup,
-		closeMobileToggleButtonGroup,
 		selectTopicAreaKey,
 		selectSearchSuggestion
 	};
 }
 
-function findMobileToggleButtonGroup(groupId) {
-	for (const group of NAV_ITEMS.mobileToggleButtonItems) {
-		if (group.id === groupId) {
-			return group;
-		}
-	}
-
-	return null;
-}
-
-function findMobileToggleEntry(entries, entryId, t) {
-	for (const entry of entries) {
-		if (entry.id === entryId) {
-			return entry;
-		}
-	}
-
-	for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
-		if (entry.id === entryId) {
-			return {
-				id: entry.id,
-				label: t[entry.labelKey],
-				isDisabled: entry.isDisabled
-			};
-		}
-	}
-
-	throw new Error(`Unknown mobile toggle entry: ${String(entryId)}`);
-}
-
-function isMobileToggleButtonItemActive(item, activeContentType, selectedTestType) {
-	if (item.contentTypeId !== null) {
-		return item.contentTypeId === activeContentType;
-	}
-
-	for (const entryId of item.entryIds) {
-		if (entryId === activeContentType || entryId === selectedTestType) {
-			return true;
-		}
-
-		const toggleEntry = findToggleEntryConfig(entryId);
-
-		if (toggleEntry !== null && toggleEntry.contentTypeId === activeContentType) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function findToggleEntryConfig(entryId) {
-	for (const entry of NAV_ITEMS.toggleButtonItems) {
-		if (entry.id === entryId) {
-			return entry;
-		}
-	}
-
-	for (const entry of NAV_ITEMS.mobileToggleEntryItems) {
-		if (entry.id === entryId) {
-			return entry;
-		}
-	}
-
-	return null;
-}
-
-function resolveActiveToggleEntryId(activeContentType, selectedTestType) {
-	if (activeContentType !== LEARNING_CONTENT_TYPES.EXAMS) {
-		return activeContentType;
-	}
-
-	if (selectedTestType === TEST_TYPES.CHAPTER_TEST) {
-		return TEST_TYPES.CHAPTER_TEST;
-	}
-
-	return LEARNING_CONTENT_TYPES.EXAMS;
-}
-
-function getContentTypeEntry(contentTypeId) {
-	for (const entry of NAV_ITEMS.toggleButtonItems) {
-		if (entry.id === contentTypeId) {
-			return entry;
-		}
-	}
-
-	throw new Error(`Unknown learning content type: ${String(contentTypeId)}`);
-}
-
-function createExamSearchSuggestions(exams) {
+function createTestSetSearchSuggestions(testSets) {
 	const searchSuggestions = [];
 
-	for (const exam of exams) {
+	for (const testSet of testSets) {
 		if (searchSuggestions.length >= SEARCH_SUGGESTION_LIMIT) {
 			break;
 		}
 
 		searchSuggestions.push({
-			id: exam.id,
-			label: exam.title
+			id: testSet.id,
+			label: testSet.title
 		});
 	}
 
@@ -542,7 +437,7 @@ function createTopicAreaToolItems(params) {
 		{
 			id: `topic-area-${ALL_TOPIC_AREAS}`,
 			topicAreaKey: ALL_TOPIC_AREAS,
-			iconKey: "list",
+			iconKey: CONTENT_ICON_KEYS.LIST,
 			label: params.t.topicAreaAllLabel,
 			selectedStatusLabel: params.selectedStatusLabel,
 			onSelect: () => params.onSelectTopicArea(ALL_TOPIC_AREAS)
@@ -561,4 +456,30 @@ function createTopicAreaToolItems(params) {
 	}
 
 	return items;
+}
+
+function createLearningContentSelectPageHeading(t, selectedSubject, activeContentType) {
+	const activeEntry = findLearningContentEntry(activeContentType);
+	const subtitle = selectedSubject === null
+		? t[activeEntry.subtitleFallbackKey]
+		: t[activeEntry.subtitleKey](selectedSubject.code);
+
+	return {
+		title: t[activeEntry.titleKey],
+		subtitle
+	};
+}
+
+function findLearningContentEntry(activeContentType) {
+	for (const entry of NAV_ITEMS.toggleButtonItems) {
+		if (entry.id === activeContentType) {
+			if (entry.titleKey === null || entry.subtitleKey === null || entry.subtitleFallbackKey === null) {
+				throw new Error(`Learning content entry '${String(activeContentType)}' has no SELECT heading contract`);
+			}
+
+			return entry;
+		}
+	}
+
+	throw new Error(`Unknown learning content entry: ${String(activeContentType)}`);
 }

@@ -1,4 +1,4 @@
-/* src/ui/style/ExamPage/page.css */
+/*src/ui/style/ExamPage/page.css*/
 .exam-page {
     height: 100vh;
     padding: 16px;
@@ -26,6 +26,7 @@
 	height: 100%;
 	flex-direction: column;
 	padding-top: var(--scaffold-header-height);
+	scroll-padding-top: var(--scaffold-header-height);
 	padding-bottom: clamp(112px, 14vh, 152px);
 }
 

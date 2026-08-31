@@ -2,32 +2,14 @@
 import { useCallback, useMemo } from "react";
 import { NAV_ITEMS, NAV_SCREENS } from "../../navigation/navigation.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
-import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import useSearchSheetModel from "./Search/useSearchSheetModel.js";
 import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
-import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
-import { createSubjectSwitcherModel } from "./SubjectSelectPage/createSubjectSwitcherModel.js";
+import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, backContract) {
-	const executeSubjectLoad = useCallback(() => {
-		return getAvailableSubjectsUseCase.execute({
-			language
-		});
-	}, [getAvailableSubjectsUseCase, language]);
-
-	const subjectLoad = useLoadModel({
-		execute: executeSubjectLoad,
-		emptyData: [],
-		errorMessage: t.subjectErrorMessage,
-		resourceKey: language,
-		isEnabled: isActive,
-		onLoaded: null
-	});
-	const subjects = subjectLoad.data;
+export default function useSubjectSelectPageViewModel(props) {
 	const subjectSearchSheet = useSearchSheetModel({
-		isActive,
 		defaultFilterValue: ALL_FACULTIES
 	});
 	const {
@@ -47,38 +29,22 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		closeSearchSheet: closeSubjectSearchSheet
 	} = subjectSearchSheet;
 
-	const selectedSubject = useMemo(() => {
-		return findSubjectById(subjects, selectedSubjectId);
-	}, [subjects, selectedSubjectId]);
-
-	const subjectSwitcher = createSubjectSwitcherModel({
-		loadStatus: subjectLoad.status,
-		subjects,
-		selectedSubject,
-		labels: {
-			loading: t.subjectLoadingMessage,
-			error: t.subjectErrorMessage,
-			empty: t.subjectSwitcherEmptyLabel,
-			unselected: t.subjectSwitcherSelectLabel
-		}
-	});
-
 	const faculties = useMemo(() => {
-		return buildSubjectFaculties(subjects);
-	}, [subjects]);
+		return buildSubjectFaculties(props.subjects);
+	}, [props.subjects]);
 
 	const filteredSubjects = useMemo(() => {
-		return filterSubjects(subjects, searchTerm, faculty);
-	}, [subjects, searchTerm, faculty]);
+		return filterSubjects(props.subjects, searchTerm, faculty);
+	}, [props.subjects, searchTerm, faculty]);
 
 	const workspaceState = createWorkspaceState({
-		loadStatus: subjectLoad.status,
+		loadStatus: props.loadStatus,
 		isEmpty: filteredSubjects.length === 0,
 		labels: {
-			loading: t.subjectLoadingMessage,
-			errorTitle: t.errorPrefix,
-			errorBody: subjectLoad.error,
-			emptyTitle: subjects.length === 0 ? t.subjectSwitcherEmptyLabel : t.subjectEmptyMessage,
+			loading: props.t.subjectLoadingMessage,
+			errorTitle: props.t.errorPrefix,
+			errorBody: props.loadError,
+			emptyTitle: props.subjects.length === 0 ? props.t.subjectSwitcherEmptyLabel : props.t.subjectEmptyMessage,
 			emptyBody: ""
 		},
 		errorAction: null
@@ -97,7 +63,7 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 			{
 				id: ALL_FACULTIES,
 				value: ALL_FACULTIES,
-				label: t.subjectAllFaculties
+				label: props.t.subjectAllFaculties
 			},
 			...faculties.map((facultyOption) => ({
 				id: facultyOption,
@@ -105,43 +71,41 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 				label: facultyOption
 			}))
 		];
-	}, [faculties, t.subjectAllFaculties]);
+	}, [faculties, props.t.subjectAllFaculties]);
 
 	const facultyLabel = useMemo(() => {
-		return faculty === ALL_FACULTIES ? t.filterAllLabel : faculty;
-	}, [faculty, t.filterAllLabel]);
+		return faculty === ALL_FACULTIES ? props.t.filterAllLabel : faculty;
+	}, [faculty, props.t.filterAllLabel]);
 
 	const selectSubject = useCallback((subjectId) => {
 		closeSubjectSearchSheet();
 		changeSubjectFooterSheetOpen(false);
-		onSelectSubject(subjectId);
-	}, [changeSubjectFooterSheetOpen, closeSubjectSearchSheet, onSelectSubject]);
+		props.onSelectSubject(subjectId);
+	}, [changeSubjectFooterSheetOpen, closeSubjectSearchSheet, props.onSelectSubject]);
 
 	const pageTools = useMemo(() => {
 		return createWorkspaceToolsModel({
 			pageToolGroup: NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SUBJECTS],
-			t,
+			t: props.t,
 			topicAreaToolItems: [],
 			activeTopicAreaKey: null
 		});
-	}, [t]);
+	}, [props.t]);
 
 	return {
 		// Data
-		subjects,
-		selectedSubject,
-		subjectSwitcher,
+		subjects: props.subjects,
 		filteredSubjects,
 		faculties,
 		workspaceState,
 		pageTools,
 
 		// Navigasjon
-		backContract,
+		backContract: props.backContract,
 
 		// Tekster
-		t,
-		searchCloseLabel: t.searchCloseLabel,
+		t: props.t,
+		searchCloseLabel: props.t.searchCloseLabel,
 
 		// Filter-verdier
 		searchTerm,

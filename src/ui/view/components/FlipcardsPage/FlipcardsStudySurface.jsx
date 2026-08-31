@@ -1,14 +1,16 @@
 // src/ui/view/components/FlipcardsPage/FlipcardsStudySurface.jsx
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { PRESENTATION_MODE } from "../../../presentation/presentationMode.js";
-import { FLIPCARD_SWIPE_RESULT } from "./FlipcardDeck/flipcardSwipe.js";
+import isActivationKey from "../../KeyboardNavigation/isActivationKey.js";
+import isEditableTarget from "../../KeyboardNavigation/isEditableTarget.js";
+import useKeyboardShortcuts, { isShortcutEvent } from "../../KeyboardNavigation/useKeyboardShortcuts.js";
+import { FLIPCARD_SWIPE_RESULT, resolveFlipcardKeyboardSwipeResult } from "./FlipcardDeck/flipcardSwipe.js";
 import { useFlipcardFeedbackToast } from "./FlipcardDeck/useFlipcardFeedbackToast.js";
 import { useFlipcardSwipeInteraction } from "./FlipcardDeck/useFlipcardSwipeInteraction.js";
 import FlipcardDeck from "./FlipcardDeck/FlipcardDeck.jsx";
 import FlipcardsMobileFooterSheet from "./FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx";
 import ProgressPager from "../ProgressPager/ProgressPager.jsx";
 import createProgressPagerEntries from "../ProgressPager/createProgressPagerEntries.js";
-import shouldHandleFlipcardKeyboardShortcut, { resolveFlipcardKeyboardSwipeResult } from "./FlipcardDeck/shouldHandleFlipcardKeyboardShortcut.js";
 
 const resolveFlipcardProgressCorrectness = () => false;
 
@@ -72,7 +74,11 @@ export default function FlipcardsStudySurface(props) {
 	}, [props.labels.masteredFeedbackLabel, props.labels.practiceFeedbackLabel, showFeedbackToast]);
 
 	const handleFlipcardKeyboardShortcut = useCallback((event) => {
-		if (!shouldHandleFlipcardKeyboardShortcut(event)) {
+		if (
+			!isShortcutEvent(event) ||
+			!isFlipcardKeyboardShortcutKey(event.key) ||
+			isFlipcardShortcutHandledByFocusedElement(event.target)
+		) {
 			return;
 		}
 
@@ -94,7 +100,7 @@ export default function FlipcardsStudySurface(props) {
 			return;
 		}
 
-		if (event.key === "Enter" || event.key === " ") {
+		if (isActivationKey(event.key)) {
 			event.preventDefault();
 			props.onToggleActiveCard();
 		}
@@ -107,11 +113,10 @@ export default function FlipcardsStudySurface(props) {
 		requestPracticeSwipe
 	]);
 
-	useEffect(() => {
-		window.addEventListener("keydown", handleFlipcardKeyboardShortcut);
-
-		return () => window.removeEventListener("keydown", handleFlipcardKeyboardShortcut);
-	}, [handleFlipcardKeyboardShortcut]);
+	useKeyboardShortcuts({
+		isEnabled: true,
+		onKeyDown: handleFlipcardKeyboardShortcut
+	});
 
 	const studySurfaceClassName = isDesktopToolsPanelOpen
 		? "flipcards-study-surface flipcards-study-surface-desktop-tools-open"
@@ -200,4 +205,20 @@ export default function FlipcardsStudySurface(props) {
 			/>
 		</section>
 	);
+}
+
+function isFlipcardKeyboardShortcutKey(key) {
+	return key === "ArrowLeft" || key === "ArrowRight" || isActivationKey(key);
+}
+
+function isFlipcardShortcutHandledByFocusedElement(target) {
+	if (isEditableTarget(target)) {
+		return true;
+	}
+
+	if (typeof Element === "undefined" || !(target instanceof Element)) {
+		return false;
+	}
+
+	return Boolean(target.closest("button, a, [role='button']"));
 }

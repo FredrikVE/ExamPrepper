@@ -3,6 +3,7 @@ import FormattedText from "../../../../../Shared/FormattedText.jsx";
 import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import TableMatchMobilePlacedCard from "./TableMatchMobilePlacedCard.jsx";
+import isActivationKey from "../../../../../../KeyboardNavigation/isActivationKey.js";
 
 export default function TableMatchMobileTargetCard(props) {
 	return (
@@ -31,10 +32,7 @@ function TableMatchMobileTargetCardContent(props) {
 	});
 
 	const handleKeyDown = (event) => {
-		const userPressedEnter = event.key === "Enter";
-		const userPressedSpace = event.key === " ";
-
-		if (!userPressedEnter && !userPressedSpace) {
+		if (!isActivationKey(event.key)) {
 			return;
 		}
 

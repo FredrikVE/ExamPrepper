@@ -1,6 +1,6 @@
-// test/ui/viewmodel/AppNavigationViewModel.test.js
+//test/ui/viewmodel/AppNavigationViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { NAV_SCREENS } from "../../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
 
 let hookState;
 let stateIndex;
@@ -64,15 +64,14 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/AppNavigation/useSyncSelecte
 
 const { default: useAppNavigationViewModel } = await import("../../../src/ui/viewmodel/AppNavigationViewModel.js");
 
-function setNavigationState({
-	activeScreen = NAV_SCREENS.SUBJECTS,
-	selectedSubjectId = null,
-	selectedExamId = null,
-	selectedTopicAreaKey = null,
-	examLanguageSyncError = null
-} = {}) {
-	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, examLanguageSyncError];
+function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null, examReturnScreen = null, selectedLearningContentEntryId = LEARNING_CONTENT_TYPES.EXAMS) {
+	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType, examReturnScreen, selectedLearningContentEntryId];
 }
+
+const examByIdUseCase = { id: "exam-by-id" };
+const examByBaseIdAndLangUseCase = { id: "exam-by-base-lang" };
+const chapterTestByIdUseCase = { id: "chapter-by-id" };
+const chapterTestByBaseIdAndLangUseCase = { id: "chapter-by-base-lang" };
 
 function createViewModel() {
 	stateIndex = 0;
@@ -80,15 +79,17 @@ function createViewModel() {
 		backLabel: "Tilbake",
 		navigationLabel: "Navigasjon",
 		language: "nb",
-		getExamByIdUseCase: {},
-		getExamByBaseIdAndLangUseCase: {},
+		getExamByIdUseCase: examByIdUseCase,
+		getExamByBaseIdAndLangUseCase: examByBaseIdAndLangUseCase,
+		getChapterTestByIdUseCase: chapterTestByIdUseCase,
+		getChapterTestByBaseIdAndLangUseCase: chapterTestByBaseIdAndLangUseCase,
 		examUnavailableMessage: "Eksamen finnes ikke på språket.",
 		examSyncFailedMessage: "Kunne ikke synkronisere eksamen."
 	});
 }
 
 beforeEach(() => {
-	setNavigationState();
+	setNavigationState(NAV_SCREENS.SUBJECTS, null, null, null, null, null);
 	jest.clearAllMocks();
 });
 
@@ -99,32 +100,78 @@ describe("useAppNavigationViewModel", () => {
 		expect(viewModel.activeScreen).toBe(NAV_SCREENS.SUBJECTS);
 		expect(viewModel.selectedSubjectId).toBeNull();
 		expect(viewModel.selectedExamId).toBeNull();
+		expect(viewModel.selectedExamTestType).toBeNull();
 		expect(viewModel.selectedTopicAreaKey).toBeNull();
 		expect(viewModel.examLanguageSyncError).toBeNull();
+		expect(viewModel.selectedLearningContentEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
 	});
 
-	test("valg av fag åpner begrepslisten og nullstiller gamle valg", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "old-subject",
-			selectedExamId: "old-exam",
-			selectedTopicAreaKey: "old-topic"
-		});
+	test("SubjectSelect subject selection går til LearningPath", () => {
+		setNavigationState(NAV_SCREENS.EXAM, "old-subject", "old-exam", "old-topic", null, null);
 
-		createViewModel().selectSubject("inf1010");
+		createViewModel().selectSubject("in2120");
 
 		expect(hookState.slice(0, 4)).toEqual([
-			NAV_SCREENS.GLOSSARY,
-			"inf1010",
+			NAV_SCREENS.LEARNING_PATH,
+			"in2120",
 			null,
 			null
 		]);
 	});
 
-	test("valg av eksamen går direkte til eksamensskjermen", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+	test.each([
+		[NAV_SCREENS.GLOSSARY, NAV_SCREENS.GLOSSARY],
+		[NAV_SCREENS.SELECT, NAV_SCREENS.SELECT],
+		[NAV_SCREENS.LEARNING_PATH, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.OVERVIEW, NAV_SCREENS.OVERVIEW],
+		[NAV_SCREENS.EXAM, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.FLIPCARDS, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.MATCHCARDS, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.LEARNING_SESSION, NAV_SCREENS.LEARNING_PATH]
+	])("switchSubject fra %s går til %s", (fromScreen, expectedScreen) => {
+		setNavigationState(fromScreen, "in2120", "old-exam", "old-topic", "old-session", null, TEST_TYPES.EXAM, NAV_SCREENS.SELECT);
 
-		createViewModel().selectExam("exam-2");
+		const navigation = createViewModel();
+		navigation.switchSubject("in5140");
+
+		expect(hookState[0]).toBe(expectedScreen);
+		expect(hookState[1]).toBe("in5140");
+		expect(hookState[2]).toBeNull();
+		expect(hookState[3]).toBeNull();
+		expect(hookState[4]).toBeNull();
+		expect(hookState[6]).toBeNull();
+		expect(hookState[7]).toBeNull();
+	});
+
+	test.each([
+		[LEARNING_CONTENT_TYPES.GLOSSARY, NAV_SCREENS.GLOSSARY],
+		[LEARNING_CONTENT_TYPES.FLIPCARDS, NAV_SCREENS.SELECT],
+		[LEARNING_CONTENT_TYPES.MATCHCARDS, NAV_SCREENS.SELECT],
+		[TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.SELECT],
+		[LEARNING_CONTENT_TYPES.EXAMS, NAV_SCREENS.SELECT],
+		[LEARNING_CONTENT_TYPES.LEARNING_PATH, NAV_SCREENS.LEARNING_PATH]
+	])("selectLearningContent %s går til %s", (entryId, expectedScreen) => {
+		setNavigationState(NAV_SCREENS.SELECT, "in2120", "old-exam", "old-topic", "old-session", null, TEST_TYPES.EXAM, NAV_SCREENS.SELECT);
+
+		createViewModel().selectLearningContent(entryId);
+
+		expect(hookState[0]).toBe(expectedScreen);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[3]).toBeNull();
+		expect(hookState[4]).toBeNull();
+		expect(hookState[8]).toBe(entryId);
+	});
+
+	test("selectLearningContent feiler tydelig for ukjent entry", () => {
+		expect(() => createViewModel().selectLearningContent("missing")).toThrow(
+			"Unknown learning content navigation entry: missing"
+		);
+	});
+
+	test("valg av eksamen går direkte til eksamensskjermen", () => {
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
+
+		createViewModel().selectExam("exam-2", TEST_TYPES.EXAM);
 
 		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.EXAM,
@@ -132,14 +179,47 @@ describe("useAppNavigationViewModel", () => {
 			"exam-2",
 			null
 		]);
+		expect(hookState[6]).toBe(TEST_TYPES.EXAM);
+		expect(hookState[7]).toBe(NAV_SCREENS.SELECT);
+	});
+
+	test("ChapterTest valgt fra Læringsstien returnerer dit etter lagret forsøk", () => {
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "in2120", null, null, null, null);
+
+		createViewModel().selectExam("chapter-1-test-no", TEST_TYPES.CHAPTER_TEST);
+
+		expect(hookState[0]).toBe(NAV_SCREENS.EXAM);
+		expect(hookState[7]).toBe(NAV_SCREENS.LEARNING_PATH);
+
+		setNavigationState(NAV_SCREENS.EXAM, "in2120", "chapter-1-test-no", null, null, null, TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.LEARNING_PATH);
+
+		createViewModel().completeExamAttempt();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_PATH);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[6]).toBeNull();
+		expect(hookState[7]).toBeNull();
+	});
+
+	test("ChapterTest valgt fra innholdsvalg blir på resultatet etter lagret forsøk", () => {
+		setNavigationState(NAV_SCREENS.EXAM, "in2120", "chapter-1-test-no", null, null, null, TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.SELECT);
+
+		createViewModel().completeExamAttempt();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.EXAM);
+		expect(hookState[2]).toBe("chapter-1-test-no");
+	});
+
+	test("tilbake fra ChapterTest åpnet fra Læringsstien går tilbake til Læringsstien", () => {
+		setNavigationState(NAV_SCREENS.EXAM, "in2120", "chapter-1-test-no", null, null, null, TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.LEARNING_PATH);
+
+		createViewModel().goBack();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_PATH);
 	});
 
 	test("valg av flipcard-bunke beholder fag og lagrer topic area", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.SELECT,
-			selectedSubjectId: "inf1010",
-			selectedExamId: "old-exam"
-		});
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", "old-exam", null, null, null);
 
 		createViewModel().selectFlipcardDeck("loops");
 
@@ -163,7 +243,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("eksamensskjermen kan ikke åpnes uten valgt eksamen", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
 		createViewModel().changeScreen(NAV_SCREENS.EXAM);
 
@@ -171,18 +251,14 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("ukjent skjerm feiler tydelig", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
 		expect(() => createViewModel().changeScreen("missing-screen")).toThrow("Unknown navigation screen: missing-screen");
 		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
 	});
 
 	test("tilbake fra arbeidsskjerm går til innholdsvalg", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.FLIPCARDS,
-			selectedSubjectId: "inf1010",
-			selectedTopicAreaKey: "loops"
-		});
+		setNavigationState(NAV_SCREENS.FLIPCARDS, "inf1010", null, "loops", null, null);
 
 		createViewModel().goBack();
 
@@ -195,12 +271,7 @@ describe("useAppNavigationViewModel", () => {
 	});
 
 	test("tilbake fra ordlisten går direkte til fagoversikten", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.GLOSSARY,
-			selectedSubjectId: "inf1010",
-			selectedExamId: "old-exam",
-			selectedTopicAreaKey: "loops"
-		});
+		setNavigationState(NAV_SCREENS.GLOSSARY, "inf1010", "old-exam", "loops", null, null);
 
 		createViewModel().goBack();
 
@@ -212,8 +283,22 @@ describe("useAppNavigationViewModel", () => {
 		]);
 	});
 
+	test("tilbake fra Læringsstien går direkte til fagoversikten", () => {
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "inf1010", null, null, null, null);
+
+		createViewModel().goBack();
+
+		expect(hookState.slice(0, 5)).toEqual([
+			NAV_SCREENS.SUBJECTS,
+			null,
+			null,
+			null,
+			null
+		]);
+	});
+
 	test("tilbake fra innholdsvalg går til fagoversikten", () => {
-		setNavigationState({ activeScreen: NAV_SCREENS.SELECT, selectedSubjectId: "inf1010" });
+		setNavigationState(NAV_SCREENS.SELECT, "inf1010", null, null, null, null);
 
 		createViewModel().goBack();
 
@@ -233,12 +318,18 @@ describe("useAppNavigationViewModel", () => {
 		expect(closeMobileSubjectPicker).toHaveBeenCalledTimes(1);
 	});
 
+	test("språksynk bruker den eksplisitte ChapterTest-read-porten", () => {
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "chapter-1", null, null, null, TEST_TYPES.CHAPTER_TEST);
+		createViewModel();
+
+		const syncContract = useSyncSelectedExamWithLanguage.mock.calls[0][0];
+
+		expect(syncContract.getExamByIdUseCase).toBe(chapterTestByIdUseCase);
+		expect(syncContract.getExamByBaseIdAndLangUseCase).toBe(chapterTestByBaseIdAndLangUseCase);
+	});
+
 	test("språksynk oppdaterer valg uten å lukke overlays", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "inf1000",
-			selectedExamId: "exam-1"
-		});
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "exam-1", null, null, null);
 		createViewModel();
 
 		const onExamResolved = useSyncSelectedExamWithLanguage.mock.calls[0][0].onExamResolved;
@@ -252,29 +343,39 @@ describe("useAppNavigationViewModel", () => {
 
 
 	test("skiller utilgjengelig eksamen fra teknisk språksynkfeil", () => {
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "inf1000",
-			selectedExamId: "exam-1"
-		});
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "exam-1", null, null, null);
 		createViewModel();
 
 		const syncContract = useSyncSelectedExamWithLanguage.mock.calls[0][0];
 		syncContract.onExamUnavailable();
 		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
 		expect(hookState[2]).toBeNull();
-		expect(hookState[4]).toBe("Eksamen finnes ikke på språket.");
+		expect(hookState[5]).toBe("Eksamen finnes ikke på språket.");
 
-		setNavigationState({
-			activeScreen: NAV_SCREENS.EXAM,
-			selectedSubjectId: "inf1000",
-			selectedExamId: "exam-1"
-		});
+		setNavigationState(NAV_SCREENS.EXAM, "inf1000", "exam-1", null, null, null);
 		createViewModel();
 		useSyncSelectedExamWithLanguage.mock.calls.at(-1)[0].onExamSyncFailed();
 		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
 		expect(hookState[2]).toBeNull();
-		expect(hookState[4]).toBe("Kunne ikke synkronisere eksamen.");
+		expect(hookState[5]).toBe("Kunne ikke synkronisere eksamen.");
+	});
+
+	test("opens a persisted learning session only when a subject is selected", () => {
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "in2120", null, null, null, null);
+
+		createViewModel().openLearningSession("session-1");
+
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_SESSION);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[4]).toBe("session-1");
+	});
+
+	test("clears selected learning session outside the session screen", () => {
+		setNavigationState(NAV_SCREENS.LEARNING_SESSION, "in2120", null, null, "session-1", null);
+
+		createViewModel().changeScreen(NAV_SCREENS.LEARNING_PATH);
+
+		expect(hookState[4]).toBeNull();
 	});
 
 	test.each([
@@ -284,9 +385,11 @@ describe("useAppNavigationViewModel", () => {
 		[NAV_SCREENS.FLIPCARDS, "exam-page flipcards-theme-scope", "exam-shell", true],
 		[NAV_SCREENS.MATCHCARDS, "exam-page flipcards-theme-scope", "exam-shell", true],
 		[NAV_SCREENS.GLOSSARY, "exam-select-page", "exam-select-shell", true],
+		[NAV_SCREENS.LEARNING_PATH, "exam-select-page", "exam-select-shell", true],
+		[NAV_SCREENS.LEARNING_SESSION, "exam-page", "exam-shell", true],
 		[NAV_SCREENS.OVERVIEW, "exam-select-page", "exam-select-shell", true]
 	])("deriverer enkel chrome for %s", (screen, pageClassName, shellClassName, showBackButton) => {
-		setNavigationState({ activeScreen: screen, selectedSubjectId: "inf1000" });
+		setNavigationState(screen, "inf1000", null, null, null, null);
 
 		const viewModel = createViewModel();
 
@@ -310,6 +413,24 @@ describe("useAppNavigationViewModel", () => {
 		expect(viewModel.onBack).toBeUndefined();
 	});
 
+	test("opens a persisted learning session only when a subject is selected", () => {
+		setNavigationState(NAV_SCREENS.LEARNING_PATH, "in2120", null, null, null, null);
+
+		createViewModel().openLearningSession("session-1");
+
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_SESSION);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[4]).toBe("session-1");
+	});
+
+	test("clears selected learning session outside the session screen", () => {
+		setNavigationState(NAV_SCREENS.LEARNING_SESSION, "in2120", null, null, "session-1", null);
+
+		createViewModel().changeScreen(NAV_SCREENS.LEARNING_PATH);
+
+		expect(hookState[4]).toBeNull();
+	});
+
 	test.each([
 		[NAV_SCREENS.SUBJECTS, false],
 		[NAV_SCREENS.SELECT, true],
@@ -317,9 +438,11 @@ describe("useAppNavigationViewModel", () => {
 		[NAV_SCREENS.FLIPCARDS, true],
 		[NAV_SCREENS.MATCHCARDS, true],
 		[NAV_SCREENS.GLOSSARY, true],
+		[NAV_SCREENS.LEARNING_PATH, true],
+		[NAV_SCREENS.LEARNING_SESSION, false],
 		[NAV_SCREENS.OVERVIEW, false]
 	])("fagbytteren vises på %s: %s", (screen, expected) => {
-		setNavigationState({ activeScreen: screen });
+		setNavigationState(screen, null, null, null, null, null);
 		expect(createViewModel().shouldShowSubjectSwitcher).toBe(expected);
 	});
 });

@@ -1,16 +1,13 @@
 /* src/ui/style/GlossaryPage/page.css */
 .glossary-workspace {
-	--glossary-sidebar-width: minmax(315px, 32%);
-	--glossary-term-column-width: 40%;
-	--glossary-explanation-column-width: 60%;
+	--glossary-term-column-width: 27%;
+	--glossary-connections-column-width: 106px;
+	--glossary-mastery-column-width: var(--glossary-table-mastery-column-width);
 	--glossary-footer-overlay-space: 104px;
-}
-
-.glossary-workspace .workspace-scaffold-body {
-	display: flex;
-	min-height: 0;
-	flex-direction: column;
-	overflow: hidden;
+	--scaffold-body-display: flex;
+	--scaffold-body-flex-direction: column;
+	--scaffold-body-overflow-x: clip;
+	--scaffold-body-overflow-y: clip;
 }
 
 .glossary-page {
@@ -29,23 +26,27 @@
 
 .glossary-page__content {
 	display: grid;
-	grid-template-columns: var(--glossary-sidebar-width) minmax(0, 1fr);
+	grid-template-columns: var(--glossary-topic-area-panel-width) minmax(0, 1fr);
 	width: 100%;
-	max-width: 1240px;
+	max-width: 1480px;
 	min-width: 0;
 	min-height: 0;
 	flex: 1;
-	gap: var(--space-3);
+	gap: 0;
 	margin: 0 auto;
-	overflow: visible;
+	overflow: hidden;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-lg);
+	background: radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 22rem), color-mix(in srgb, var(--panel-bg) 78%, transparent);
+	box-shadow: var(--shadow-card), inset 0 1px 0 color-mix(in srgb, var(--text-main) 3%, transparent);
 }
 
 .glossary-topic-area-panel,
 .glossary-panel {
-	border: 1px solid var(--line-strong);
-	border-radius: var(--radius-lg);
-	background: color-mix(in srgb, var(--panel-bg) 88%, transparent);
-	box-shadow: var(--shadow-card), inset 0 1px 0 color-mix(in srgb, var(--text-main) 3%, transparent);
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
 }
 
 .glossary-page__content > .workspace-state {

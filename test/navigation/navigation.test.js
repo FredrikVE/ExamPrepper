@@ -1,3 +1,4 @@
+//test/navigation/navigation.test.js
 import { describe, expect, test } from "@jest/globals";
 import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG, TEST_TYPES } from "../../src/navigation/navigation.js";
 
@@ -10,7 +11,9 @@ describe("navigation configuration", () => {
 			FLIPCARDS: "flipcards",
 			MATCHCARDS: "matchcards",
 			GLOSSARY: "glossary",
-			OVERVIEW: "overview"
+			OVERVIEW: "overview",
+			LEARNING_PATH: "learningPath",
+			LEARNING_SESSION: "learningSession"
 		});
 	});
 
@@ -26,7 +29,7 @@ describe("navigation configuration", () => {
 		expect(NAV_ITEMS.sidebarItems.some((item) => item.screen === NAV_SCREENS.FLIPCARDS)).toBe(false);
 	});
 
-	test("defines the desktop learning-content order and disabled learning path", () => {
+	test("defines the desktop learning-content order and enabled learning path", () => {
 		expect(NAV_ITEMS.toggleButtonItems.map((item) => item.id)).toEqual([
 			"learning-path",
 			LEARNING_CONTENT_TYPES.GLOSSARY,
@@ -37,16 +40,16 @@ describe("navigation configuration", () => {
 		]);
 
 		expect(NAV_ITEMS.toggleButtonItems[0]).toEqual({
-			id: "learning-path",
-			contentTypeId: null,
+			id: LEARNING_CONTENT_TYPES.LEARNING_PATH,
+			contentTypeId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			testType: null,
 			labelKey: "contentToggleLearningPathDesktopLabel",
 			titleKey: null,
 			subtitleKey: null,
 			subtitleFallbackKey: null,
 			searchPlaceholderKey: null,
-			targetScreen: null,
-			isDisabled: true
+			targetScreen: NAV_SCREENS.LEARNING_PATH,
+			isDisabled: false
 		});
 
 		for (const item of NAV_ITEMS.toggleButtonItems.slice(1)) {
@@ -144,8 +147,9 @@ describe("navigation configuration", () => {
 		expect(NAV_ITEMS.popOutMenuItems[NAV_SCREENS.GLOSSARY]).toBeUndefined();
 	});
 
-	test("routes Glossary back directly to SubjectSelectPage", () => {
+	test("routes Glossary and LearningPath back directly to SubjectSelectPage", () => {
 		expect(getScreenConfig(NAV_SCREENS.GLOSSARY).backTo).toBe(NAV_SCREENS.SUBJECTS);
+		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH).backTo).toBe(NAV_SCREENS.SUBJECTS);
 	});
 
 	test("uses direct ids and explicit action properties", () => {

@@ -1,3 +1,4 @@
+/* src/ui/style/MatchCardsPage/responsive.css */
 @media (max-width: 932px) {
 	.workspace-scaffold.matchcards-workspace {
 		height: 100svh;
@@ -12,11 +13,10 @@
 			calc(var(--space-4) + env(safe-area-inset-bottom));
 	}
 
-	.matchcards-board {
+	.matchcards-workspace .matchcards-board {
 		width: min(100%, 860px);
 		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-8) - env(safe-area-inset-bottom)));
 		min-height: 0;
-		padding: clamp(var(--space-3), 3vw, var(--space-5));
 	}
 
 	.matchcards-workspace .progress-bar {
@@ -44,15 +44,6 @@
 		height: 16px;
 	}
 
-	.matchcards-board {
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		column-gap: clamp(var(--space-3), 3.2vw, var(--space-5));
-	}
-
-	.matchcards-column-slots {
-		gap: clamp(var(--space-3), 2vh, var(--space-5));
-	}
-
 	.matchcards-round-complete {
 		min-height: calc(100dvh - var(--mobile-topbar-height) - var(--space-8) - env(safe-area-inset-bottom));
 		align-items: center;
@@ -72,28 +63,6 @@
 	.matchcards-restart-button {
 		width: 100%;
 	}
-
-	.matchcard {
-		padding: clamp(var(--space-3), 3.3vw, var(--space-5));
-		border-radius: clamp(18px, 4.8vw, 28px);
-		box-shadow: var(--matchcard-shadow);
-	}
-
-	.matchcard-text {
-		font-size: clamp(0.86rem, 3.45vw, 1.32rem);
-		line-height: 1.06;
-		letter-spacing: -0.022em;
-	}
-
-	.matchcard--explanation .matchcard-text {
-		font-size: clamp(0.58rem, 2.28vw, 0.9rem);
-		line-height: 1.06;
-		letter-spacing: -0.027em;
-	}
-
-	.matchcard-status {
-		font-size: clamp(0.52rem, 2vw, 0.66rem);
-	}
 }
 
 @media (max-width: 520px) {
@@ -101,9 +70,8 @@
 		padding-inline: var(--space-3);
 	}
 
-	.matchcards-board {
+	.matchcards-workspace .matchcards-board {
 		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-7) - env(safe-area-inset-bottom)));
-		padding: var(--space-3);
 	}
 
 	.matchcards-workspace .progress-bar {
@@ -116,30 +84,10 @@
 		min-width: 46px;
 		font-size: 0.68rem;
 	}
-
-	.matchcards-board {
-		column-gap: var(--space-3);
-	}
-
-	.matchcards-column-slots {
-		gap: var(--space-3);
-	}
-
-	.matchcard {
-		padding: var(--space-3);
-	}
-
-	.matchcard-text {
-		font-size: clamp(0.74rem, 3.25vw, 1.08rem);
-	}
-
-	.matchcard--explanation .matchcard-text {
-		font-size: clamp(0.48rem, 2.05vw, 0.74rem);
-	}
 }
 
 @media (max-height: 740px) and (max-width: 932px) {
-	.matchcards-board {
+	.matchcards-workspace .matchcards-board {
 		height: min(100%, calc(100dvh - var(--mobile-topbar-height) - var(--space-5) - env(safe-area-inset-bottom)));
 	}
 
@@ -147,21 +95,5 @@
 		--progress-bar-track-height: 42px;
 		--progress-bar-line-top: 17px;
 		--progress-bar-label-offset: 8px;
-	}
-
-	.matchcards-column-slots {
-		gap: var(--space-2);
-	}
-
-	.matchcard {
-		padding-block: var(--space-2);
-	}
-
-	.matchcard-text {
-		font-size: clamp(0.66rem, 2.9vh, 0.98rem);
-	}
-
-	.matchcard--explanation .matchcard-text {
-		font-size: clamp(0.42rem, 1.9vh, 0.64rem);
 	}
 }

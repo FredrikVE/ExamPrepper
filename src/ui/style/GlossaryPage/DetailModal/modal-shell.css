@@ -1,0 +1,64 @@
+/* src/ui/style/GlossaryPage/DetailModal/modal-shell.css */
+.glossary-detail-modal__backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: var(--z-modal-backdrop);
+	background: var(--modal-backdrop-bg);
+	backdrop-filter: blur(18px) brightness(0.48) saturate(0.84);
+	-webkit-backdrop-filter: blur(18px) brightness(0.48) saturate(0.84);
+	transition: opacity var(--transition-normal);
+}
+
+.glossary-detail-modal__viewport {
+	position: fixed;
+	inset: 0;
+	z-index: var(--z-modal-dialog);
+	display: grid;
+	place-items: center;
+	padding: clamp(12px, 2.5vw, 32px);
+	overflow: auto;
+}
+
+.glossary-detail-modal__popup {
+	display: flex;
+	width: min(1080px, calc(100vw - 32px));
+	max-height: min(900px, calc(100dvh - 32px));
+	min-height: 0;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid color-mix(in srgb, var(--accent) 46%, var(--line-strong));
+	border-radius: 22px;
+	background:
+		radial-gradient(
+			circle at 82% 0%,
+			color-mix(in srgb, var(--accent) 10%, transparent),
+			transparent 25rem
+		),
+		var(--panel-strong);
+	box-shadow: var(--shadow-heavy);
+	transition:
+		opacity var(--transition-normal),
+		transform var(--transition-normal);
+}
+
+.glossary-detail-modal__backdrop[data-starting-style],
+.glossary-detail-modal__backdrop[data-ending-style] {
+	opacity: 0;
+}
+
+.glossary-detail-modal__popup[data-starting-style] {
+	opacity: 0;
+	transform: translateY(14px) scale(0.985);
+}
+
+.glossary-detail-modal__popup[data-ending-style] {
+	opacity: 0;
+	transform: translateY(10px) scale(0.99);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.glossary-detail-modal__backdrop,
+	.glossary-detail-modal__popup {
+		transition: none;
+	}
+}

@@ -4,7 +4,6 @@ import SubjectRepository from "../../../src/model/repositories/SubjectRepository
 
 describe("SubjectRepository", () => {
     let subjectDataSource;
-    let examRepository;
     let repository;
 
     const subjects = [
@@ -16,7 +15,8 @@ describe("SubjectRepository", () => {
             description: "Description",
             faculty: "Informatikk",
             icon: "clipboard",
-            recommended: true
+            recommended: true,
+            practiceTestCount: 16
         },
         {
             id: "in2000",
@@ -24,79 +24,65 @@ describe("SubjectRepository", () => {
             name: "Software Engineering",
             faculty: "Informatikk",
             iconKey: "shield",
-            isVisible: false
+            isVisible: false,
+            practiceTestCount: 3
         }
     ];
 
     beforeEach(() => {
         subjectDataSource = {
-            fetchSubjects: jest.fn().mockResolvedValue(subjects)
+            fetchSubjects: jest.fn().mockResolvedValue(subjects),
+            fetchSubjectById: jest.fn(({ subjectId }) => Promise.resolve(
+                subjects.find((subject) => subject.id === subjectId) ?? null
+            )),
+            fetchTopicAreasBySubject: jest.fn().mockResolvedValue([])
         };
 
-        examRepository = {
-            getAllExams: jest.fn().mockResolvedValue([
-                { id: "exam-1-no", baseId: "exam-1", subjectId: "in5431", lang: "no" },
-                { id: "exam-1-en", baseId: "exam-1", subjectId: "in5431", lang: "en" },
-                { id: "exam-2-no", baseId: "exam-2", subjectId: "in5431", lang: "no" },
-                { id: "exam-3-no", subjectId: "in2000", lang: "no" },
-                { id: "ignored", lang: "no" }
-            ])
-        };
-
-        repository = new SubjectRepository(subjectDataSource, examRepository);
+        repository = new SubjectRepository(subjectDataSource);
     });
 
-    test("maps subjects and applies defaults", async () => {
-        const result = await repository.getSubjects();
+    test("maps backend-owned practiceTestCount and applies subject defaults", async () => {
+        const result = await repository.getSubjectsWithPracticeTestCount({ language: "no" });
 
+        expect(subjectDataSource.fetchSubjects).toHaveBeenCalledWith({ language: "no" });
         expect(result[0]).toMatchObject({
             id: "in5431",
             recommended: true,
-            isVisible: true
+            isVisible: true,
+            practiceTestCount: 16
         });
         expect(result[1]).toMatchObject({
             id: "in2000",
             icon: "shield",
             recommended: false,
-            isVisible: false
+            isVisible: false,
+            practiceTestCount: 3
         });
     });
 
-    test("finds subject by id", async () => {
-        const result = await repository.getSubjectById("in5431");
-
-        expect(result).toMatchObject({ id: "in5431" });
-    });
-
-    test("returns null when subject does not exist", async () => {
-        const result = await repository.getSubjectById("missing");
-
-        expect(result).toBeNull();
-    });
-
-    test("counts unique exams by baseId", async () => {
-        const result = await repository.getSubjectsWithExamCount();
-
-        expect(result.find((subject) => subject.id === "in5431").examCount).toBe(2);
-        expect(result.find((subject) => subject.id === "in2000").examCount).toBe(1);
-    });
-
-    test("counts exams for selected language only", async () => {
-        const result = await repository.getSubjectsWithExamCount({ language: "en" });
-
-        expect(result.find((subject) => subject.id === "in5431").examCount).toBe(1);
-        expect(result.find((subject) => subject.id === "in2000").examCount).toBe(0);
-    });
-
-    test("finds subject with exam count", async () => {
-        const result = await repository.getSubjectByIdWithExamCount({
+    test("uses the direct subject detail read instead of listing all subjects", async () => {
+        const result = await repository.getSubjectByIdWithPracticeTestCount({
             subjectId: "in5431",
-            language: "no"
+            language: "en"
         });
 
         expect(result).toMatchObject({
             id: "in5431",
-            examCount: 2
+            practiceTestCount: 16
         });
+        expect(subjectDataSource.fetchSubjectById).toHaveBeenCalledWith({
+            subjectId: "in5431",
+            language: "en"
+        });
+        expect(subjectDataSource.fetchSubjects).not.toHaveBeenCalled();
+    });
+
+    test("returns null when the direct detail read returns null", async () => {
+        const result = await repository.getSubjectByIdWithPracticeTestCount({
+            subjectId: "missing",
+            language: "no"
+        });
+
+        expect(result).toBeNull();
     });
 });

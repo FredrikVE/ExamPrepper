@@ -69,13 +69,13 @@ function createTranslations() {
 
 			if (property === "flipcardsProgressLabel") {
 				return (completedCount, totalCount, masteredCount, practiceCount) => (
-					`${completedCount}/${totalCount} reviewed · ${masteredCount} mastered · ${practiceCount} practice`
+					`${completedCount}/${totalCount} reviewed, ${masteredCount} mastered, ${practiceCount} practice`
 				);
 			}
 
 			if (property === "flipcardsCompleteBody") {
 				return (masteredCount, practiceCount, totalCount) => (
-					`${totalCount} total · ${masteredCount} mastered · ${practiceCount} practice`
+					`${totalCount} total, ${masteredCount} mastered, ${practiceCount} practice`
 				);
 			}
 
@@ -103,6 +103,7 @@ function createViewModelParams(overrides) {
 		selectedDeckCardIds: [],
 		activeCardIndex: 0,
 		isActiveCardFlipped: false,
+		authState: { status: "signed-out" },
 		...overrides
 	};
 }
@@ -130,6 +131,9 @@ function createViewModel(params) {
 	const getTopicAreasUseCase = {
 		execute: jest.fn()
 	};
+	const recordFlipcardAssessmentUseCase = {
+		execute: jest.fn().mockResolvedValue(undefined)
+	};
 
 	const onBack = jest.fn();
 	const backContract = {
@@ -138,20 +142,23 @@ function createViewModel(params) {
 		navigationLabel: "sidebarMobileNavigation",
 		onBack
 	};
-	const viewModel = useFlipcardsPageViewModel(
+	const viewModel = useFlipcardsPageViewModel({
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
-		"in2120",
-		params.topicAreaKey,
-		"no",
-		createTranslations(),
-		false,
-		backContract
-	);
+		recordFlipcardAssessmentUseCase,
+		subjectId: "in2120",
+		initialTopicAreaKey: params.topicAreaKey,
+		language: "no",
+		t: createTranslations(),
+		isActive: false,
+		backContract,
+		authState: params.authState
+	});
 
 	return {
 		getGlossaryEntriesForSubjectUseCase,
 		getTopicAreasUseCase,
+		recordFlipcardAssessmentUseCase,
 		onBack,
 		viewModel
 	};
@@ -279,4 +286,54 @@ describe("useFlipcardsPageViewModel flipcard session state", () => {
 		expect(stateSetters[6]).toHaveBeenCalledWith(false);
 		expect(stateSetters[5].mock.calls[0][0](1)).toBe(2);
 	});
+	test("persists an understood checkpoint for a signed-in user", () => {
+		const { recordFlipcardAssessmentUseCase, viewModel } = createViewModel(createViewModelParams({
+			activeCardIndex: 0,
+			authState: { status: "signed-in", userId: "user-1" }
+		}));
+
+		clearStateSetterCalls();
+		viewModel.completeCardAsMastered("card-a");
+
+		expect(recordFlipcardAssessmentUseCase.execute).toHaveBeenCalledWith({
+			eventId: expect.stringMatching(/^[0-9a-f-]{36}$/i),
+			subjectId: "in2120",
+			glossaryEntryKey: "card-a",
+			assessment: "understood"
+		});
+		expect(stateSetters[1]).toHaveBeenCalledWith(["card-a"]);
+	});
+
+	test("persists a practice checkpoint for a signed-in user", () => {
+		const { recordFlipcardAssessmentUseCase, viewModel } = createViewModel(createViewModelParams({
+			activeCardIndex: 1,
+			authState: { status: "signed-in", userId: "user-1" }
+		}));
+
+		clearStateSetterCalls();
+		viewModel.completeCardForPractice("card-b");
+
+		expect(recordFlipcardAssessmentUseCase.execute).toHaveBeenCalledWith({
+			eventId: expect.stringMatching(/^[0-9a-f-]{36}$/i),
+			subjectId: "in2120",
+			glossaryEntryKey: "card-b",
+			assessment: "practice"
+		});
+		expect(stateSetters[2]).toHaveBeenCalledWith(["card-b"]);
+	});
+
+	test("keeps signed-out FlipCards local without persistence", () => {
+		const { recordFlipcardAssessmentUseCase, viewModel } = createViewModel(createViewModelParams({
+			activeCardIndex: 0,
+			authState: { status: "signed-out" }
+		}));
+
+		clearStateSetterCalls();
+		viewModel.completeCardAsMastered("card-a");
+
+		expect(recordFlipcardAssessmentUseCase.execute).not.toHaveBeenCalled();
+		expect(stateSetters[1]).toHaveBeenCalledWith(["card-a"]);
+		expect(stateSetters[5]).toHaveBeenCalled();
+	});
+
 });

@@ -106,9 +106,10 @@ describe("ToggleButtonRow architecture", () => {
 		expect(facadeSource).toContain("<ToggleButtonRowMobile");
 		expect(facadeSource).toContain("activeEntryId={props.mobileActiveEntryId}");
 		expect(facadeSource).not.toContain("?? props.activeEntryId");
-		expect(facadeSource).toContain("expandedGroupId={props.expandedMobileGroupId}");
-		expect(facadeSource).toContain("onOpenGroup={props.onOpenMobileGroup}");
-		expect(facadeSource).toContain("onCloseGroup={props.onCloseMobileGroup}");
+		expect(facadeSource).not.toContain("expandedMobileGroupId");
+		expect(facadeSource).not.toContain("onOpenMobileGroup");
+		expect(facadeSource).not.toContain("onCloseMobileGroup");
+		expect(readSource(INTERACTION_PATH)).toContain("useState(null)");
 		expect(desktopSource).not.toContain("usePresentationMode");
 		expect(mobileSource).not.toContain("usePresentationMode");
 	});

@@ -5,7 +5,7 @@ import ProgressBar from "../components/Shared/ProgressBar/ProgressBar.jsx";
 import { PROGRESS_BAR_VARIANTS } from "../components/Shared/ProgressBar/progressBarVariants.js";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
-import MatchCardsGrid from "../components/MatchCardsPage/MatchCardsGrid.jsx";
+import MatchCardsGrid from "../components/MatchCards/MatchCardsGrid.jsx";
 
 export default function MatchCardsPage({ viewModel }) {
 	let headerHeading = null;

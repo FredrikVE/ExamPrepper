@@ -2,16 +2,26 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../../../src/navigation/navigation.js";
 
-let expandedGroupId = null;
+let stateIndex = 0;
 let refIndex = 0;
+const states = [];
 const refs = [];
-const onOpenGroup = jest.fn((nextExpandedGroupId) => {
-	expandedGroupId = nextExpandedGroupId;
-});
-const onCloseGroup = jest.fn(() => {
-	expandedGroupId = null;
-});
 const useEffect = jest.fn((effect) => effect());
+const useState = jest.fn((initialValue) => {
+	const currentStateIndex = stateIndex;
+	stateIndex += 1;
+
+	if (states[currentStateIndex] === undefined) {
+		states[currentStateIndex] = initialValue;
+	}
+
+	return [
+		states[currentStateIndex],
+		(nextValue) => {
+			states[currentStateIndex] = nextValue;
+		}
+	];
+});
 const useRef = jest.fn((initialValue) => {
 	const currentRefIndex = refIndex;
 	refIndex += 1;
@@ -25,7 +35,8 @@ const useRef = jest.fn((initialValue) => {
 
 jest.unstable_mockModule("react", () => ({
 	useEffect,
-	useRef
+	useRef,
+	useState
 }));
 
 const { default: useToggleButtonRowMobile } = await import(
@@ -88,27 +99,25 @@ const items = [
 	}
 ];
 
-function renderInteraction(onSelectEntry, activeEntryId = LEARNING_CONTENT_TYPES.EXAMS) {
+function renderInteraction(onSelectEntry, activeEntryId = LEARNING_CONTENT_TYPES.EXAMS, nextItems = items) {
+	stateIndex = 0;
 	refIndex = 0;
 
 	return useToggleButtonRowMobile({
-		items,
+		items: nextItems,
 		activeEntryId,
-		expandedGroupId,
-		onOpenGroup,
-		onCloseGroup,
 		onSelectEntry
 	});
 }
 
 beforeEach(() => {
-	expandedGroupId = null;
+	stateIndex = 0;
 	refIndex = 0;
+	states.length = 0;
 	refs.length = 0;
-	onOpenGroup.mockClear();
-	onCloseGroup.mockClear();
 	useEffect.mockClear();
 	useRef.mockClear();
+	useState.mockClear();
 });
 
 describe("useToggleButtonRowMobile", () => {
@@ -127,7 +136,6 @@ describe("useToggleButtonRowMobile", () => {
 
 		interaction.selectItem(items[0]);
 
-		expect(onOpenGroup).not.toHaveBeenCalled();
 		expect(onSelectEntry).not.toHaveBeenCalled();
 	});
 
@@ -142,7 +150,6 @@ describe("useToggleButtonRowMobile", () => {
 			LEARNING_CONTENT_TYPES.FLIPCARDS,
 			LEARNING_CONTENT_TYPES.MATCHCARDS
 		]);
-		expect(onOpenGroup).toHaveBeenCalledWith("practice");
 		expect(onSelectEntry).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.GLOSSARY);
 
 		const focusCloseButton = jest.fn();
@@ -173,7 +180,6 @@ describe("useToggleButtonRowMobile", () => {
 
 		collapsedInteraction.selectItem(items[2]);
 
-		expect(onOpenGroup).toHaveBeenCalledWith("tests");
 		expect(onSelectEntry).toHaveBeenCalledWith(TEST_TYPES.CHAPTER_TEST);
 
 		const expandedInteraction = renderInteraction(onSelectEntry, TEST_TYPES.CHAPTER_TEST);
@@ -184,8 +190,6 @@ describe("useToggleButtonRowMobile", () => {
 		expandedInteraction.selectEntry(testEntries[1]);
 
 		expect(onSelectEntry).toHaveBeenNthCalledWith(2, LEARNING_CONTENT_TYPES.EXAMS);
-		expect(expandedGroupId).toBe("tests");
-		expect(onCloseGroup).not.toHaveBeenCalled();
 	});
 
 	test("preserves the active exam test type when the tests group opens", () => {
@@ -215,13 +219,8 @@ describe("useToggleButtonRowMobile", () => {
 
 		expandedInteraction.selectEntry(practiceEntries[1]);
 
-		expect(expandedGroupId).toBe("practice");
-		expect(onCloseGroup).not.toHaveBeenCalled();
 
 		expandedInteraction.collapseGroup();
-
-		expect(onCloseGroup).toHaveBeenCalledTimes(1);
-		expect(expandedGroupId).toBeNull();
 
 		const restoredInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.FLIPCARDS);
 
@@ -230,11 +229,14 @@ describe("useToggleButtonRowMobile", () => {
 		expect(restoredInteraction.resolveItemButtonRef("practice")).toBeNull();
 	});
 
-	test("fails clearly when controlled expanded state references an unknown item", () => {
-		expandedGroupId = "missing";
+	test("collapses when items are replaced and the local expanded group no longer exists", () => {
+		const onSelectEntry = jest.fn();
+		const interaction = renderInteraction(onSelectEntry);
+		interaction.selectItem(items[1]);
 
-		expect(() => renderInteraction(jest.fn())).toThrow(
-			"Unknown expanded toggle-button item: missing"
-		);
+		const replacedItems = items.filter((item) => item.id !== "practice");
+		const replacedInteraction = renderInteraction(onSelectEntry, LEARNING_CONTENT_TYPES.GLOSSARY, replacedItems);
+
+		expect(replacedInteraction.expandedItem).toBeNull();
 	});
 });

@@ -21,9 +21,6 @@ export default function LearningContentHeader(props) {
 				onSelectEntry={props.onSelectEntry}
 				ariaLabel={props.ariaLabel}
 				mobileItems={props.mobileToggleButtonItems}
-				expandedMobileGroupId={props.expandedMobileToggleButtonGroupId}
-				onOpenMobileGroup={props.onOpenMobileToggleButtonGroup}
-				onCloseMobileGroup={props.onCloseMobileToggleButtonGroup}
 				mobileBackLabel={props.contentToggleBackLabel}
 			/>
 		</header>

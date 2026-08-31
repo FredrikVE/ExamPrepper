@@ -8,7 +8,7 @@
 	height: 30px;
 }
 
-@media (max-width: 932px) {
+@media (max-width: 1200px) {
 	.sidebar-close-button {
 		display: grid;
 		place-items: center;

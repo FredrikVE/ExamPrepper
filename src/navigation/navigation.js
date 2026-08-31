@@ -1,4 +1,5 @@
-// src/navigation/navigation.js
+//src/navigation/navigation.js
+import { CONTENT_ICON_KEYS } from "../constants/ContentIconKeys.js";
 export const NAV_SCREENS = {
 	SUBJECTS: "subjects",
 	SELECT: "select",
@@ -6,7 +7,9 @@ export const NAV_SCREENS = {
 	FLIPCARDS: "flipcards",
 	MATCHCARDS: "matchcards",
 	GLOSSARY: "glossary",
-	OVERVIEW: "overview"
+	OVERVIEW: "overview",
+	LEARNING_PATH: "learningPath",
+	LEARNING_SESSION: "learningSession"
 };
 
 export const SCREEN_CONFIG = {
@@ -58,6 +61,22 @@ export const SCREEN_CONFIG = {
 		pageClassName: "exam-select-page",
 		shellClassName: "exam-select-shell"
 	},
+	[NAV_SCREENS.LEARNING_PATH]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.SUBJECTS,
+		showsSubjectSwitcher: true,
+		pageClassName: "exam-select-page",
+		shellClassName: "exam-select-shell"
+	},
+	[NAV_SCREENS.LEARNING_SESSION]: {
+		requiresSubject: true,
+		requiresExam: false,
+		backTo: NAV_SCREENS.LEARNING_PATH,
+		showsSubjectSwitcher: false,
+		pageClassName: "exam-page",
+		shellClassName: "exam-shell"
+	},
 	[NAV_SCREENS.OVERVIEW]: {
 		requiresSubject: false,
 		requiresExam: false,
@@ -67,6 +86,13 @@ export const SCREEN_CONFIG = {
 		shellClassName: "exam-select-shell"
 	}
 };
+
+export const SUBJECT_SWITCH_TARGET_SCREENS = Object.freeze({
+	[NAV_SCREENS.GLOSSARY]: NAV_SCREENS.GLOSSARY,
+	[NAV_SCREENS.SELECT]: NAV_SCREENS.SELECT,
+	[NAV_SCREENS.LEARNING_PATH]: NAV_SCREENS.LEARNING_PATH,
+	[NAV_SCREENS.OVERVIEW]: NAV_SCREENS.OVERVIEW
+});
 
 export function getScreenConfig(screen) {
 	const screenConfig = SCREEN_CONFIG[screen];
@@ -82,7 +108,8 @@ export const LEARNING_CONTENT_TYPES = {
 	EXAMS: "exams",
 	FLIPCARDS: "flipcards",
 	MATCHCARDS: "matchcards",
-	GLOSSARY: "glossary"
+	GLOSSARY: "glossary",
+	LEARNING_PATH: "learning-path"
 };
 
 export const TEST_TYPES = {
@@ -114,16 +141,16 @@ export const NAV_ITEMS = {
 
 	toggleButtonItems: [
 		{
-			id: "learning-path",
-			contentTypeId: null,
+			id: LEARNING_CONTENT_TYPES.LEARNING_PATH,
+			contentTypeId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			testType: null,
 			labelKey: "contentToggleLearningPathDesktopLabel",
 			titleKey: null,
 			subtitleKey: null,
 			subtitleFallbackKey: null,
 			searchPlaceholderKey: null,
-			targetScreen: null,
-			isDisabled: true
+			targetScreen: NAV_SCREENS.LEARNING_PATH,
+			isDisabled: false
 		},
 		{
 			id: LEARNING_CONTENT_TYPES.GLOSSARY,
@@ -191,11 +218,11 @@ export const NAV_ITEMS = {
 
 	mobileToggleButtonItems: [
 		{
-			id: "learning-path",
+			id: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			labelKey: "contentToggleLearningPathLabel",
-			contentTypeId: null,
+			contentTypeId: LEARNING_CONTENT_TYPES.LEARNING_PATH,
 			entryIds: [],
-			isDisabled: true
+			isDisabled: false
 		},
 		{
 			id: "practice",
@@ -230,14 +257,14 @@ export const NAV_ITEMS = {
 				{
 					id: "app-create-subject",
 					labelKey: "pageToolsCreateSubjectLabel",
-					iconKey: "plus",
+					iconKey: CONTENT_ICON_KEYS.PLUS,
 					isDisabled: true,
 					onSelect: null
 				},
 				{
 					id: "app-import-subject-materials",
 					labelKey: "pageToolsImportSubjectMaterialsLabel",
-					iconKey: "file-text",
+					iconKey: CONTENT_ICON_KEYS.FILE_TEXT,
 					isDisabled: true,
 					onSelect: null
 				}
@@ -253,7 +280,7 @@ export const NAV_ITEMS = {
 				{
 					id: "app-import-subject-materials",
 					labelKey: "pageToolsImportSubjectMaterialsLabel",
-					iconKey: "file-text",
+					iconKey: CONTENT_ICON_KEYS.FILE_TEXT,
 					isDisabled: true,
 					onSelect: null
 				}
@@ -269,28 +296,28 @@ export const NAV_ITEMS = {
 				{
 					id: "all-cards",
 					labelKey: "flipcardsToolMenuAllCardsLabel",
-					iconKey: "list",
+					iconKey: CONTENT_ICON_KEYS.LIST,
 					isDisabled: false,
 					onSelect: null
 				},
 				{
 					id: "shuffle",
 					labelKey: "flipcardsToolMenuShuffleLabel",
-					iconKey: "shuffle",
+					iconKey: CONTENT_ICON_KEYS.SHUFFLE,
 					isDisabled: false,
 					onSelect: null
 				},
 				{
 					id: "repeat-difficult",
 					labelKey: "flipcardsToolMenuRepeatDifficultLabel",
-					iconKey: "refresh-cw",
+					iconKey: CONTENT_ICON_KEYS.REFRESH_CW,
 					isDisabled: false,
 					onSelect: null
 				},
 				{
 					id: "add-card",
 					labelKey: "flipcardsToolMenuAddCardLabel",
-					iconKey: "plus",
+					iconKey: CONTENT_ICON_KEYS.PLUS,
 					isDisabled: true,
 					onSelect: null
 				}
@@ -298,3 +325,13 @@ export const NAV_ITEMS = {
 		}
 	}
 };
+
+export function getLearningContentNavigationEntry(entryId) {
+	for (const entry of NAV_ITEMS.toggleButtonItems) {
+		if (entry.id === entryId) {
+			return entry;
+		}
+	}
+
+	throw new Error(`Unknown learning content navigation entry: ${String(entryId)}`);
+}

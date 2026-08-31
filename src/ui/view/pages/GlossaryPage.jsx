@@ -1,6 +1,5 @@
 // src/ui/view/pages/GlossaryPage.jsx
-import { PRESENTATION_MODE } from "../../presentation/presentationMode.js";
-import usePresentationMode from "../../presentation/usePresentationMode.js";
+import GlossaryDetailModal from "../components/GlossaryPage/DetailModal/GlossaryDetailModal.jsx";
 import GlossaryFooter from "../components/GlossaryPage/GlossaryFooter/GlossaryFooter.jsx";
 import GlossaryPanel from "../components/GlossaryPage/GlossaryPanel/GlossaryPanel.jsx";
 import TopicAreaPanel from "../components/GlossaryPage/TopicAreaPanel/TopicAreaPanel.jsx";
@@ -13,10 +12,7 @@ import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 
 export default function GlossaryPage({ viewModel }) {
-	useSearchSheetEscapeKey(viewModel.isSearchPopupOpen, viewModel.closeGlossarySearchPopup);
-
-	const presentationMode = usePresentationMode();
-	const isMobile = presentationMode === PRESENTATION_MODE.MOBILE;
+	useSearchSheetEscapeKey(viewModel.search.isPopupOpen, viewModel.search.onRequestClose);
 
 	const header = (
 		<Header
@@ -29,104 +25,67 @@ export default function GlossaryPage({ viewModel }) {
 		/>
 	);
 
-	const footer = viewModel.shouldShowWorkspaceFooter ? (
-		<GlossaryFooter
-			isMobile={isMobile}
-			searchTerm={viewModel.glossarySearchTerm}
-			searchPlaceholder={viewModel.searchPlaceholder}
-			searchLabel={viewModel.searchLabel}
-			searchClearLabel={viewModel.searchClearLabel}
-			searchKeyboardHint={viewModel.searchKeyboardHint}
-			searchSuggestionListAriaLabel={viewModel.searchSuggestionListAriaLabel}
-			chapterFilterValue={viewModel.chapterFilterValue}
-			chapterFilterLabel={viewModel.chapterFilterLabel}
-			searchFilterAriaLabel={viewModel.searchFilterAriaLabel}
-			chapterFilterOptions={viewModel.chapterFilterOptions}
-			isSearchPopupOpen={viewModel.isSearchPopupOpen}
-			isSearchFilterOptionsOpen={viewModel.isSearchFilterOptionsOpen}
-			isSearchAutocompleteActive={viewModel.isSearchAutocompleteActive}
-			isSearching={viewModel.isSearching}
-			autocompleteSuggestions={viewModel.autocompleteSuggestions}
-			autocompleteListId={viewModel.autocompleteListId}
-			searchActiveDescendantId={viewModel.searchActiveDescendantId}
-			allTopicAreaListItem={viewModel.allTopicAreaListItem}
-			topicAreaListItems={viewModel.topicAreaListItems}
-			topicAreaListAriaLabel={viewModel.pageTitle}
-			sheetTitle={viewModel.mobileChapterSheetTitle}
-			sheetSubtitle={viewModel.mobileChapterSheetSubtitle}
-			sheetOpenLabel={viewModel.mobileChapterSheetOpenLabel}
-			sheetCloseLabel={viewModel.mobileChapterSheetCloseLabel}
-			onSearchTermChange={viewModel.changeGlossarySearchTerm}
-			onFocusSearch={viewModel.focusGlossarySearch}
-			onClearSearch={viewModel.clearGlossarySearch}
-			onRequestClose={viewModel.closeGlossarySearchPopup}
-			onOpenFilterOptions={viewModel.openGlossarySearchFilterOptions}
-			onSelectFilterOption={viewModel.selectGlossaryChapterFilter}
-			onSelectSearchSuggestion={viewModel.selectAutocompleteSuggestion}
-			onMoveSearchSelectionDown={viewModel.moveSearchSelectionDown}
-			onMoveSearchSelectionUp={viewModel.moveSearchSelectionUp}
-			onOpenSearchKeyboardSelection={viewModel.openSearchKeyboardSelection}
-			onSelectTopicArea={viewModel.selectTopicArea}
-		/>
-	) : null;
+	let footer = null;
+
+	if (viewModel.shouldShowWorkspaceFooter) {
+		footer = (
+			<GlossaryFooter search={viewModel.search} />
+		);
+	}
 
 	const overlay = (
 		<SearchBackdrop
-			isOpen={viewModel.isSearchPopupOpen}
-			closeLabel={viewModel.searchCloseLabel}
-			onClose={viewModel.closeGlossarySearchPopup}
+			isOpen={viewModel.search.isPopupOpen}
+			closeLabel={viewModel.search.closeLabel}
+			onClose={viewModel.search.onRequestClose}
 		/>
 	);
 
 	return (
-		<WorkspaceScaffold
-			className="learning-content-workspace glossary-workspace"
-			header={header}
-			footer={footer}
-			overlay={overlay}
-			scrollToTopRequestId={null}
-		>
-			<section className="glossary-page" aria-labelledby="glossary-page-title">
-				<LearningContentHeader
-					title={viewModel.pageTitle}
-					subtitle={viewModel.pageSubtitle}
-					titleId="glossary-page-title"
-					entries={viewModel.contentToggleEntries}
-					activeEntryId={viewModel.activeContentType}
-					mobileActiveEntryId={viewModel.mobileActiveEntryId}
-					onSelectEntry={viewModel.selectContentType}
-					ariaLabel={viewModel.contentToggleAriaLabel}
-					mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
-					expandedMobileToggleButtonGroupId={viewModel.expandedMobileToggleButtonGroupId}
-					onOpenMobileToggleButtonGroup={viewModel.openMobileToggleButtonGroup}
-					onCloseMobileToggleButtonGroup={viewModel.closeMobileToggleButtonGroup}
-					contentToggleBackLabel={viewModel.contentToggleBackLabel}
-				/>
+		<>
+			<WorkspaceScaffold
+				className="learning-content-workspace glossary-workspace"
+				header={header}
+				footer={footer}
+				overlay={overlay}
+				scrollToTopRequestId={null}
+			>
+				<section className="glossary-page" aria-labelledby="glossary-page-title">
+					<LearningContentHeader
+						title={viewModel.pageTitle}
+						subtitle={viewModel.pageSubtitle}
+						titleId="glossary-page-title"
+						entries={viewModel.contentToggleEntries}
+						activeEntryId={viewModel.activeContentType}
+						mobileActiveEntryId={viewModel.mobileActiveEntryId}
+						onSelectEntry={viewModel.selectContentType}
+						ariaLabel={viewModel.contentToggleAriaLabel}
+						mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
+						contentToggleBackLabel={viewModel.contentToggleBackLabel}
+					/>
 
-				<div className="glossary-page__content">
-					<WorkspaceState state={viewModel.workspaceState}>
-						<>
-							{!isMobile && (
+					<div className="glossary-page__content">
+						<WorkspaceState state={viewModel.workspaceState}>
+							<>
 								<TopicAreaPanel
 									allTopicAreaListItem={viewModel.allTopicAreaListItem}
 									topicAreaListItems={viewModel.topicAreaListItems}
 									topicAreaListAriaLabel={viewModel.pageTitle}
-									onSelectTopicArea={viewModel.selectTopicArea}
 								/>
-							)}
 
-							<GlossaryPanel
-								heading={viewModel.glossaryPanelHeading}
-								rows={viewModel.glossaryTableRows}
-								termColumnHeader={viewModel.termColumnHeader}
-								explanationColumnHeader={viewModel.explanationColumnHeader}
-								emptyState={viewModel.glossaryPanelEmptyState}
-								isMobile={isMobile}
-							/>
-						</>
-					</WorkspaceState>
-				</div>
-			</section>
-		</WorkspaceScaffold>
+								<GlossaryPanel
+									heading={viewModel.glossaryPanelHeading}
+									rows={viewModel.glossaryTableRows}
+									tableHeaders={viewModel.glossaryTableHeaders}
+									emptyState={viewModel.glossaryPanelEmptyState}
+								/>
+							</>
+						</WorkspaceState>
+					</div>
+				</section>
+			</WorkspaceScaffold>
+
+			<GlossaryDetailModal model={viewModel.glossaryDetailModal} />
+		</>
 	);
 }

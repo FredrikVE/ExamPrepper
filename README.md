@@ -50,11 +50,15 @@ Se full oversikt i [FEATURES.md](./docs/documentation/FEATURES.md).
     </tr>
     <tr>
         <td>Arkitektur</td>
-        <td><a href="./docs/architecture/ARCHITECTURE.md">Forklaring av MVVM-inspirert lagdeling, dataflyt og arkitektur.</a></td>
+        <td><a href="./docs/documentation/ARCHITECTURE.md">Forklaring av MVVM-inspirert lagdeling, dataflyt og arkitektur.</a></td>
     </tr>
     <tr>
         <td>Designvalg</td>
         <td><a href="./docs/documentation/DESIGN_DECISIONS.md">Begrunnelse for sentrale tekniske og strukturelle valg.</a></td>
+    </tr>
+    <tr>
+        <td>Vurderingsalgoritme</td>
+        <td><a href="./docs/documentation/ASSESSMENT_ALGORITHM.md">Hvordan FlipCards, MatchCards og spørsmålsresultater påvirker vurderingen som GlossaryPage viser.</a></td>
     </tr>
     <tr>
         <td>Testing</td>
@@ -93,8 +97,7 @@ ExamPrepper/
 ├── public/
 │   └── subjects/              # Bilder og visuelle ressurser knyttet til fag/tema
 ├── docs/
-│   ├── documentation/         # Utfyllende prosjektdokumentasjon
-│   ├── architecture/          # Arkitekturdiagrammer og arkitekturforklaring
+│   ├── documentation/         # Prosjekt-, arkitektur- og testdokumentasjon
 │   └── images/                # README- og dokumentasjonsbilder
 ├── test/
 │   ├── integration/           # Integrasjonstester for eksamensflyt
@@ -147,10 +150,10 @@ UI Components
 
 Skisse som viser appen oppbygging visuelt
 
-![Arkitekturdiagram](./docs/architecture/ARCHITECTURE.png)
+![Arkitekturdiagram](./docs/documentation/ARCHITECTURE.png)
 
 
-Les mer i [ARCHITECTURE.md](./docs/architecture/ARCHITECTURE.md).
+Les mer i [ARCHITECTURE.md](./docs/documentation/ARCHITECTURE.md).
 
 ---
 
@@ -359,5 +362,3 @@ https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
 <b>Øvrelid, E.</b> (2026d, Mai 4).<br> <i>Accountability Framework and External Developer Platform.</i><br>
 Hentet fra IT and Management: Timeplan V26:<br>
 https://www.uio.no/studier/emner/matnat/ifi/IN5431/v26/timeplan/<br><br>
-
-

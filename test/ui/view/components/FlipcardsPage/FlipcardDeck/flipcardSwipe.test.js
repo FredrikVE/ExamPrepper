@@ -2,9 +2,23 @@ import { describe, expect, test } from "@jest/globals";
 import {
 	FLIPCARD_SWIPE_COMMAND_DIRECTION,
 	FLIPCARD_SWIPE_RESULT,
+	resolveFlipcardKeyboardSwipeResult,
 	resolveFlipcardSwipeResult,
 	resolveFlipcardSwipeResultFromCommand
 } from "../../../../../../src/ui/view/components/FlipcardsPage/FlipcardDeck/flipcardSwipe.js";
+
+describe("resolveFlipcardKeyboardSwipeResult", () => {
+	test("maps left arrow to practice and right arrow to mastered", () => {
+		expect(resolveFlipcardKeyboardSwipeResult("ArrowLeft"))
+			.toBe(FLIPCARD_SWIPE_RESULT.PRACTICE);
+		expect(resolveFlipcardKeyboardSwipeResult("ArrowRight"))
+			.toBe(FLIPCARD_SWIPE_RESULT.MASTERED);
+	});
+
+	test("returns null for non-swipe keys", () => {
+		expect(resolveFlipcardKeyboardSwipeResult("Enter")).toBeNull();
+	});
+});
 
 describe("resolveFlipcardSwipeResult", () => {
 	test("returns mastered when swiped far enough left", () => {

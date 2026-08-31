@@ -8,10 +8,10 @@ import {
 
 const labels = {
     progressLabel: (completedCount, totalCount, masteredCount, practiceCount) => (
-        `${completedCount}/${totalCount} reviewed · ${masteredCount} mastered · ${practiceCount} practice`
+        `${completedCount}/${totalCount} reviewed, ${masteredCount} mastered, ${practiceCount} practice`
     ),
     completeBody: (masteredCount, practiceCount, totalCount) => (
-        `${totalCount} total · ${masteredCount} mastered · ${practiceCount} practice`
+        `${totalCount} total, ${masteredCount} mastered, ${practiceCount} practice`
     )
 };
 
@@ -52,8 +52,8 @@ describe("flipcardsProgressModel", () => {
             practiceCount: 1,
             completedCount: 2,
             remainingCount: 2,
-            progressLabel: "2/4 reviewed · 1 mastered · 1 practice",
-            completeBody: "4 total · 1 mastered · 1 practice"
+            progressLabel: "2/4 reviewed, 1 mastered, 1 practice",
+            completeBody: "4 total, 1 mastered, 1 practice"
         });
     });
 });

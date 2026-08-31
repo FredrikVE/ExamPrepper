@@ -1,16 +1,30 @@
 /* src/ui/style/GlossaryPage/responsive.css */
 @media (max-width: 1320px) {
 	.glossary-workspace {
-		--glossary-sidebar-width: 310px;
+		--glossary-term-column-width: clamp(150px, 16vw, 170px);
+		--glossary-connections-column-width: clamp(100px, 10.5vw, 112px);
+		--glossary-mastery-column-width: var(--glossary-table-mastery-column-width-compact);
 	}
 
 	.glossary-page {
 		padding-right: var(--learning-content-page-inline);
 		padding-left: var(--learning-content-page-inline);
 	}
+
+	.glossary-page__content {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.glossary-topic-area-panel {
+		display: none;
+	}
+
+	.glossary-panel-heading {
+		display: flex;
+	}
 }
 
-@media (max-height: 760px) and (min-width: 933px) {
+@media (max-height: 760px) and (min-width: 1201px) {
 	.glossary-page {
 		padding-bottom: 14px;
 	}
@@ -27,12 +41,8 @@
 
 @media (max-width: 932px) {
 	.glossary-workspace {
-		--glossary-footer-overlay-space: 0px;
-	}
-
-	.glossary-workspace .workspace-scaffold-body {
-		overflow-x: hidden;
-		overflow-y: auto;
+		--scaffold-body-overflow-x: hidden;
+		--scaffold-body-overflow-y: auto;
 	}
 
 	.glossary-page {
@@ -40,7 +50,10 @@
 		height: auto;
 		flex: 0 0 auto;
 		overflow: visible;
-		padding: var(--learning-content-page-top) var(--learning-content-page-inline) 0;
+		padding:
+			var(--learning-content-page-top)
+			var(--learning-content-page-inline)
+			calc(var(--space-2) + var(--glossary-footer-overlay-space));
 	}
 
 
@@ -70,12 +83,60 @@
 	}
 
 	.glossary-table-scroll {
+		height: auto;
+		flex: none;
+		overflow: visible;
+		overscroll-behavior-y: auto;
+		touch-action: auto;
+		scrollbar-gutter: auto;
+	}
+
+	.glossary-table__mastery-column {
+		width: 0;
+		visibility: collapse;
+	}
+
+	.glossary-table__mastery-header,
+	.glossary-table__mastery-cell {
 		display: none;
+	}
+
+	.glossary-table thead th:first-child,
+	.glossary-table tbody th:first-child {
+		position: sticky;
+		left: 0;
+	}
+
+	.glossary-table thead th:first-child {
+		z-index: 22;
+	}
+
+	.glossary-table tbody th:first-child {
+		z-index: 8;
+		background: var(--glossary-table-sticky-cell-bg);
 	}
 }
 
 @media (max-width: 640px) {
 	.glossary-panel-heading {
 		margin-bottom: var(--space-3);
+	}
+
+	.glossary-table__connections-column {
+		width: 0;
+		visibility: collapse;
+	}
+
+	.glossary-table__connections-header,
+	.glossary-table__connections-cell {
+		display: none;
+	}
+
+	.glossary-table__term-column {
+		width: 35%;
+	}
+
+	.glossary-table__explanation-column {
+		width: 65%;
 	}
 }

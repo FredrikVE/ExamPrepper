@@ -93,8 +93,10 @@ describe("useLoadModel", () => {
 		expect(execute).toHaveBeenCalledWith();
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(1, expect.any(Function));
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.READY,
-			data: loadedData
+			data: loadedData,
+			hasLoadedOnce: true
 		});
 		expect(onLoaded).toHaveBeenCalledWith({ loadedData });
 	});
@@ -116,19 +118,27 @@ describe("useLoadModel", () => {
 
 		expect(execute).toHaveBeenCalledWith();
 		expect(stateSetters[0]).toHaveBeenNthCalledWith(2, {
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.READY,
-			data: loadedData
+			data: loadedData,
+			hasLoadedOnce: true
 		});
 	});
 
 	test("keeps ready status with previous data during refresh after first successful load", () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.READY,
-			data: previousData
+			data: previousData,
+			hasLoadedOnce: true
 		};
 
-		refValues.push({ current: true });
+		refValues.push(
+			{ current: 0 },
+			{ current: [] },
+			{ current: null }
+		);
 		stateValues.push(previousResource);
 
 		useLoadModel({
@@ -144,16 +154,20 @@ describe("useLoadModel", () => {
 		const inFlightResource = updateInFlightResource(previousResource);
 
 		expect(inFlightResource).toEqual({
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.READY,
-			data: previousData
+			data: previousData,
+			hasLoadedOnce: true
 		});
 	});
 
 	test("sets error status when load fails without message", async () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.LOADING,
-			data: previousData
+			data: previousData,
+			hasLoadedOnce: false
 		};
 		const execute = jest.fn(async () => {
 			throw null;
@@ -175,8 +189,10 @@ describe("useLoadModel", () => {
 		const failedResource = updateFailedResource(previousResource);
 
 		expect(failedResource).toEqual({
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.ERROR,
-			data: previousData
+			data: previousData,
+			hasLoadedOnce: false
 		});
 		expect(onLoaded).not.toHaveBeenCalled();
 	});
@@ -187,8 +203,10 @@ describe("useLoadModel", () => {
 		});
 
 		stateValues.push({
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.ERROR,
-			data: []
+			data: [],
+			hasLoadedOnce: false
 		});
 
 		const loadModel = useLoadModel({
@@ -207,8 +225,10 @@ describe("useLoadModel", () => {
 
 	test("returns current error text so a language switch updates the message without reload", () => {
 		const erroredResource = {
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.ERROR,
-			data: []
+			data: [],
+			hasLoadedOnce: false
 		};
 
 		stateValues.push(erroredResource);
@@ -253,23 +273,65 @@ describe("useLoadModel", () => {
 		expect(stateSetters[0]).not.toHaveBeenCalled();
 	});
 
+	test("skjuler data fra en annen resourceKey også når modellen er deaktivert", () => {
+		stateValues.push({
+			resourceKey: "subject-a",
+			status: LOAD_STATUS.READY,
+			data: [{ id: "a" }],
+			hasLoadedOnce: true
+		});
+
+		const loadModel = useLoadModel({
+			execute: jest.fn(() => new Promise(() => {})),
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "subject-b",
+			isEnabled: false,
+			onLoaded: null
+		});
+
+		expect(loadModel.status).toBe(LOAD_STATUS.LOADING);
+		expect(loadModel.data).toEqual([]);
+	});
+
+	test("beholder data når disabled-modellen fortsatt ber om samme resourceKey", () => {
+		stateValues.push({
+			resourceKey: "subject-a",
+			status: LOAD_STATUS.READY,
+			data: [{ id: "a" }],
+			hasLoadedOnce: true
+		});
+
+		const loadModel = useLoadModel({
+			execute: jest.fn(() => new Promise(() => {})),
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "subject-a",
+			isEnabled: false,
+			onLoaded: null
+		});
+
+		expect(loadModel.status).toBe(LOAD_STATUS.READY);
+		expect(loadModel.data).toEqual([{ id: "a" }]);
+	});
+
 	test("resets to loading with empty data when resourceKey changes", () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {
+			resourceKey: "resource-a",
 			status: LOAD_STATUS.READY,
-			data: previousData
+			data: previousData,
+			hasLoadedOnce: true
 		};
 
 		refValues.push(
-			{ current: true },
 			{ current: 4 },
-			{ current: "resource-a" },
 			{ current: [] },
 			{ current: null }
 		);
 		stateValues.push(previousResource);
 
-		useLoadModel({
+		const loadModel = useLoadModel({
 			execute: jest.fn(() => new Promise(() => {})),
 			emptyData: [],
 			errorMessage: "Kunne ikke laste.",
@@ -281,20 +343,22 @@ describe("useLoadModel", () => {
 		const updateInFlightResource = stateSetters[0].mock.calls[0][0];
 
 		expect(updateInFlightResource(previousResource)).toEqual({
+			resourceKey: "resource-b",
 			status: LOAD_STATUS.LOADING,
-			data: []
+			data: [],
+			hasLoadedOnce: false
 		});
+		expect(loadModel.status).toBe(LOAD_STATUS.LOADING);
+		expect(loadModel.data).toEqual([]);
 	});
 
 	test("runs a first load when a disabled model becomes enabled", () => {
 		const execute = jest.fn(() => new Promise(() => {}));
-		const hasLoadedOnceRef = { current: false };
 		const activeRunIdRef = { current: 0 };
-		const activeResourceKeyRef = { current: "resource-a" };
 		const emptyDataRef = { current: [] };
 		const onLoadedRef = { current: null };
 
-		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		refValues.push(activeRunIdRef, emptyDataRef, onLoadedRef);
 		useLoadModel({
 			execute,
 			emptyData: [],
@@ -304,7 +368,7 @@ describe("useLoadModel", () => {
 			onLoaded: null
 		});
 
-		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		refValues.push(activeRunIdRef, emptyDataRef, onLoadedRef);
 		useLoadModel({
 			execute,
 			emptyData: [],
@@ -328,13 +392,11 @@ describe("useLoadModel", () => {
 		const secondExecute = jest.fn(() => new Promise((resolve) => {
 			resolveSecondLoad = resolve;
 		}));
-		const hasLoadedOnceRef = { current: false };
 		const activeRunIdRef = { current: 0 };
-		const activeResourceKeyRef = { current: "resource-a" };
 		const emptyDataRef = { current: [] };
 		const onLoadedRef = { current: null };
 
-		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		refValues.push(activeRunIdRef, emptyDataRef, onLoadedRef);
 		useLoadModel({
 			execute: firstExecute,
 			emptyData: [],
@@ -344,7 +406,7 @@ describe("useLoadModel", () => {
 			onLoaded: null
 		});
 
-		refValues.push(hasLoadedOnceRef, activeRunIdRef, activeResourceKeyRef, emptyDataRef, onLoadedRef);
+		refValues.push(activeRunIdRef, emptyDataRef, onLoadedRef);
 		useLoadModel({
 			execute: secondExecute,
 			emptyData: [],
@@ -360,8 +422,10 @@ describe("useLoadModel", () => {
 		await flushPromises();
 
 		expect(stateSetters[1]).toHaveBeenLastCalledWith({
+			resourceKey: "resource-b",
 			status: LOAD_STATUS.READY,
-			data: [{ id: "new" }]
+			data: [{ id: "new" }],
+			hasLoadedOnce: true
 		});
 		expect(stateSetters[0]).toHaveBeenCalledTimes(1);
 	});

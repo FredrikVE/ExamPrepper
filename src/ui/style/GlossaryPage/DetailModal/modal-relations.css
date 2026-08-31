@@ -1,0 +1,170 @@
+/* src/ui/style/GlossaryPage/DetailModal/modal-relations.css */
+.glossary-detail-modal__relations {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+}
+
+.glossary-detail-modal__relations-card {
+	overflow: hidden;
+	border: 1px solid var(--line);
+	border-radius: 13px;
+	background: var(--glossary-detail-surface-bg);
+}
+
+.glossary-detail-modal__relations-inner-header {
+	padding: var(--space-4) var(--space-6);
+	border-bottom: 1px solid var(--line);
+	color: var(--text-main);
+	font-size: 14px;
+	font-weight: 820;
+	line-height: 1.3;
+}
+
+.glossary-detail-modal__relation-list {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+}
+
+.glossary-detail-modal__relation-row {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--space-6);
+	width: 100%;
+	min-height: 54px;
+	padding: 9px var(--space-6);
+	border: 0;
+	border-top: 1px solid color-mix(in srgb, var(--line) 64%, transparent);
+	color: var(--text-main);
+	background: transparent;
+	font: inherit;
+	text-align: left;
+}
+
+.glossary-detail-modal__relation-row:first-child {
+	border-top: 0;
+}
+
+.glossary-detail-modal__relation-row:nth-child(even) {
+	background: var(--glossary-detail-row-alt-bg);
+}
+
+button.glossary-detail-modal__relation-row {
+	cursor: pointer;
+	transition:
+		color var(--transition-fast),
+		background var(--transition-fast),
+		box-shadow var(--transition-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	button.glossary-detail-modal__relation-row:hover {
+		background: var(--glossary-detail-row-hover-bg);
+		box-shadow: inset 3px 0 0 color-mix(in srgb, var(--accent) 72%, transparent);
+	}
+}
+
+button.glossary-detail-modal__relation-row:focus-visible {
+	outline: none;
+	background: var(--glossary-detail-row-hover-bg);
+	box-shadow: inset 0 0 0 3px var(--button-focus-ring);
+}
+
+.glossary-detail-modal__relation-term {
+	min-width: 0;
+	overflow: hidden;
+	color: inherit;
+	font-size: 13px;
+	font-weight: 620;
+	line-height: 1.35;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.glossary-detail-modal__relation-type {
+	display: inline-flex;
+	min-height: 24px;
+	align-items: center;
+	justify-content: center;
+	padding: 3px var(--space-2);
+	border: 1px solid color-mix(in srgb, var(--accent) 27%, transparent);
+	border-radius: 7px;
+	color: var(--accent);
+	background: color-mix(in srgb, var(--accent) 9%, transparent);
+	font-size: 9px;
+	font-weight: 820;
+	line-height: 1;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.glossary-detail-modal__relations-status {
+	margin: 0;
+	padding: var(--space-6);
+	color: var(--text-soft);
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.glossary-detail-modal__relations-toggle {
+	display: flex;
+	width: 100%;
+	min-height: 42px;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	padding: var(--space-2) var(--space-5);
+	border: 0;
+	border-top: 1px solid var(--line);
+	color: var(--accent);
+	background: color-mix(in srgb, var(--panel-bg) 58%, transparent);
+	font: inherit;
+	font-size: 12px;
+	font-weight: 760;
+}
+
+.glossary-detail-modal__relations-toggle-icon {
+	width: var(--glossary-detail-relations-toggle-icon-size);
+	height: var(--glossary-detail-relations-toggle-icon-size);
+	flex: none;
+	stroke-width: var(--glossary-detail-relations-toggle-icon-stroke-width);
+}
+
+button.glossary-detail-modal__relations-toggle {
+	cursor: pointer;
+	transition:
+		color var(--transition-fast),
+		background var(--transition-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	button.glossary-detail-modal__relations-toggle:hover {
+		background: color-mix(in srgb, var(--accent) 8%, var(--panel-bg));
+	}
+}
+
+button.glossary-detail-modal__relations-toggle:focus-visible {
+	outline: none;
+	box-shadow: inset 0 0 0 3px var(--button-focus-ring);
+}
+
+@container glossary-detail (max-width: 430px) {
+	.glossary-detail-modal__relations-inner-header,
+	.glossary-detail-modal__relation-row {
+		padding-inline: var(--space-4);
+	}
+
+	.glossary-detail-modal__relation-row {
+		gap: var(--space-3);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	button.glossary-detail-modal__relation-row,
+	button.glossary-detail-modal__relations-toggle {
+		transition: none;
+	}
+}

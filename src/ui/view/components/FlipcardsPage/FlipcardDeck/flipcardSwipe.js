@@ -9,6 +9,18 @@ export const FLIPCARD_SWIPE_COMMAND_DIRECTION = {
     RIGHT: "right"
 };
 
+export function resolveFlipcardKeyboardSwipeResult(key) {
+    if (key === "ArrowLeft") {
+        return FLIPCARD_SWIPE_RESULT.PRACTICE;
+    }
+
+    if (key === "ArrowRight") {
+        return FLIPCARD_SWIPE_RESULT.MASTERED;
+    }
+
+    return null;
+}
+
 const SWIPE_OFFSET_THRESHOLD = 120;
 const SWIPE_VELOCITY_THRESHOLD = 700;
 

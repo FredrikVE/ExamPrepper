@@ -1,7 +1,9 @@
-/* src/ui/style/QuestionCard/QuestionTypes/index.css */
+/*src/ui/style/QuestionCard/QuestionTypes/index.css*/
 @import "./FillBlankInputField/index.css";
 @import "./ChoiceShared/index.css";
 @import "./DragDrop/index.css";
 
 @import "./DropdownFill/index.css";
 @import "./RadioButtonGrid/index.css";
+
+@import "./multiple-blank.css";

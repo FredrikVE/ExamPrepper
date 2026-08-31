@@ -1,0 +1,6 @@
+/* src/ui/style/GlossaryPage/DetailModal/index.css */
+@import "./modal-shell.css";
+@import "./modal-content.css";
+@import "./modal-network.css";
+@import "./modal-relations.css";
+@import "./modal-navigation.css";

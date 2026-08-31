@@ -5,6 +5,7 @@ import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
 import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 import Droppable from "../../Shared/Dnd/Droppable.jsx";
+import isActivationKey from "../../../../../../KeyboardNavigation/isActivationKey.js";
 
 export default function TableMatchAnswerSlot(props) {
     return (
@@ -34,10 +35,7 @@ function TableMatchAnswerSlotContent(props) {
     const ariaLabel = `${props.t.dragDropDropHere}: ${props.target.description}`;
 
     const handleKeyDown = (event) => {
-        const userPressedEnter = event.key === "Enter";
-        const userPressedSpace = event.key === " ";
-
-        if (!userPressedEnter && !userPressedSpace) {
+        if (!isActivationKey(event.key)) {
             return;
         }
 

@@ -1,0 +1,190 @@
+/* src/ui/style/GlossaryPage/DetailModal/modal-content.css */
+.glossary-detail-modal__sheet {
+	display: flex;
+	min-height: 0;
+	flex: 1;
+	flex-direction: column;
+	container: glossary-detail / inline-size;
+}
+
+.glossary-detail-modal__header {
+	display: flex;
+	flex: none;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 24px var(--space-9) var(--space-7);
+	border-bottom: 1px solid var(--line);
+}
+
+.glossary-detail-modal__section-icon {
+	width: var(--glossary-detail-section-icon-size);
+	height: var(--glossary-detail-section-icon-size);
+	flex: none;
+	stroke-width: var(--glossary-detail-section-icon-stroke-width);
+}
+
+.glossary-detail-modal__trail-back-icon {
+	width: var(--glossary-detail-trail-back-icon-size);
+	height: var(--glossary-detail-trail-back-icon-size);
+	flex: none;
+	stroke-width: var(--glossary-detail-trail-back-icon-stroke-width);
+}
+
+.glossary-detail-modal__close-icon {
+	width: var(--glossary-detail-close-icon-size);
+	height: var(--glossary-detail-close-icon-size);
+	stroke-width: var(--glossary-detail-close-icon-stroke-width);
+}
+
+.glossary-detail-modal__header-main {
+	min-width: 0;
+}
+
+.glossary-detail-modal__title {
+	margin: 1px 0 5px;
+	color: var(--text-main);
+	font-size: 28px;
+	font-weight: 900;
+	line-height: 1.12;
+	letter-spacing: -0.035em;
+	overflow-wrap: anywhere;
+}
+
+.glossary-detail-modal__subtitle {
+	margin: 0;
+	color: var(--text-muted);
+	font-size: 14px;
+	font-weight: 650;
+	line-height: 1.45;
+}
+
+.glossary-detail-modal__trail-back {
+	display: inline-flex;
+	min-height: 32px;
+	align-items: center;
+	gap: 5px;
+	margin-top: 9px;
+	padding: 0 var(--space-2) 0 var(--space-1);
+	border: 0;
+	border-radius: var(--radius-xs);
+	color: var(--accent);
+	background: transparent;
+	font: inherit;
+	font-size: 12px;
+	font-weight: 720;
+	cursor: pointer;
+}
+
+.glossary-detail-modal__trail-back:hover {
+	background: var(--accent-soft);
+}
+
+.glossary-detail-modal__title:focus-visible,
+.glossary-detail-modal__trail-back:focus-visible,
+.glossary-detail-modal__close:focus-visible,
+.glossary-detail__association:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+}
+
+.glossary-detail-modal__close {
+	display: grid;
+	width: 42px;
+	height: 42px;
+	flex: none;
+	place-items: center;
+	padding: 0;
+	border: 1px solid var(--button-secondary-border);
+	border-radius: var(--radius-sm);
+	color: var(--button-secondary-icon);
+	background: var(--button-secondary-bg);
+	box-shadow: var(--button-surface-shadow);
+	cursor: pointer;
+}
+
+.glossary-detail-modal__close:hover {
+	border-color: var(--button-secondary-border-hover);
+	background: var(--button-secondary-bg-hover);
+}
+
+.glossary-detail-modal__body {
+	display: flex;
+	min-height: 0;
+	flex: 1;
+	flex-direction: column;
+	gap: var(--space-7);
+	padding: 22px var(--space-9) 24px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	scrollbar-gutter: stable;
+}
+
+.glossary-detail-modal__explanation {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-4);
+	padding: var(--space-7) var(--space-8) var(--space-8);
+	border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line-strong));
+	border-radius: var(--radius-md);
+	background: color-mix(in srgb, var(--accent) 10%, var(--panel-strong));
+}
+
+.glossary-detail-modal__explanation .glossary-detail__section-heading {
+	margin-bottom: 0;
+}
+
+.glossary-detail-modal__explanation-content {
+	color: var(--text-main);
+	font-size: 16px;
+	line-height: 1.68;
+	overflow-wrap: anywhere;
+}
+
+.glossary-detail-modal__content {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: var(--space-5);
+}
+
+@container glossary-detail (max-width: 430px) {
+	.glossary-detail-modal__header {
+		gap: var(--space-5);
+		padding: var(--space-7) var(--space-6) var(--space-5);
+	}
+
+	.glossary-detail-modal__body {
+		gap: var(--space-5);
+		padding: var(--space-5) var(--space-6) var(--space-6);
+	}
+
+	.glossary-detail-modal__explanation {
+		gap: var(--space-3);
+		padding: var(--space-5) var(--space-6) var(--space-6);
+	}
+}
+
+@container glossary-detail (max-width: 350px) {
+	.glossary-detail-modal__header {
+		gap: var(--space-3);
+		padding-inline: var(--space-4);
+	}
+
+	.glossary-detail-modal__title {
+		font-size: 23px;
+	}
+
+	.glossary-detail-modal__body {
+		padding-inline: var(--space-4);
+	}
+
+	.glossary-detail-modal__explanation {
+		padding-inline: var(--space-5);
+	}
+
+	.glossary-detail-modal__explanation-content {
+		font-size: 15px;
+	}
+}

@@ -4,8 +4,7 @@ import { parse } from "@babel/parser";
 import { describe, expect, test } from "@jest/globals";
 
 const GLOSSARY_RENDERER_PATHS = [
-	path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableRow.jsx"),
-	path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryEntryCardList.jsx")
+	path.resolve("src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryTableRow.jsx")
 ];
 
 function parseModule(filePath) {

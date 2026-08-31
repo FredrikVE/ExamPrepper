@@ -10,13 +10,14 @@
 export default async function resolveTranslatedExamId(currentExamId, targetLanguage, getExamByIdUseCase, getExamByBaseIdAndLangUseCase) {
     const currentExam = await getExamByIdUseCase.execute(currentExamId);
 
-    if (!currentExam?.baseId) {
+    if (!currentExam?.baseId || !currentExam?.subjectId) {
         return null;
     }
 
     const translatedExam = await getExamByBaseIdAndLangUseCase.execute({
         baseId: currentExam.baseId,
-        lang: targetLanguage
+        lang: targetLanguage,
+        subjectId: currentExam.subjectId
     });
 
     if (!translatedExam) {

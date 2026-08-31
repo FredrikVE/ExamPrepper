@@ -1,4 +1,4 @@
-/* src/ui/style/App.css */
+/*src/ui/style/App.css*/
 
 /* Global */
 @import "./Tokens.css";
@@ -11,9 +11,12 @@
 /* Pages */
 @import "./SubjectSelectPage/index.css";
 @import "./LearningContentSelectPage/index.css";
+@import "./LearningPathPage/index.css";
+@import "./LearningSessionPage/index.css";
 @import "./ExamPage/index.css";
 @import "./StatisticsPage/index.css";
 @import "./FlipcardsPage/index.css";
+@import "./MatchCards/index.css";
 @import "./MatchCardsPage/index.css";
 @import "./GlossaryPage/index.css";
 

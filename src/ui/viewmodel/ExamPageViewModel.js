@@ -1,4 +1,4 @@
-// src/ui/viewmodel/ExamPageViewModel.js
+//src/ui/viewmodel/ExamPageViewModel.js
 import { useCallback, useMemo, useState } from "react";
 import { useSettings } from "../settings/SettingsContext.jsx";
 import toggleExpandedAnswerOptionIndexes from "./Utils/toggleExpandedAnswerOptionIndexes.js";
@@ -21,7 +21,7 @@ function formatExamProgressStepLabel(stepNumber, totalSteps) {
 	return `${stepNumber}/${totalSteps}`;
 }
 
-export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, backContract) {
+export default function useExamPageViewModel(props) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [answers, setAnswers] = useState({});
@@ -55,11 +55,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		closeSubmitConfirmation,
 		confirmSubmitExamAttempt
 	} = useExamSubmitModel({
-		attemptSaveErrorMessage: t.examAttemptSaveErrorMessage,
+		attemptSaveErrorMessage: props.t.examAttemptSaveErrorMessage,
 		isSubmitted: submitted,
-		submitExamAttemptUseCase,
+		submitExamAttemptUseCase: props.submitExamAttemptUseCase,
 		onExamSubmitted: markExamSubmitted,
-		onSubmitStarted: requestScrollToTop
+		onSubmitStarted: requestScrollToTop,
+		onAttemptSaved: props.onAttemptSaved
 	});
 
 	/* SSOT for hard reset av eksamensforsøket: svar, submit-tilstand, feedback,
@@ -96,9 +97,9 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		questionsStatus,
 		questionsError
 	} = useExamQuestionLoadModel({
-		getExamQuestionsUseCase,
-		examId,
-		questionsLoadErrorMessage: t.examLoadErrorMessage,
+		getExamQuestionsUseCase: props.getExamQuestionsUseCase,
+		examId: props.examId,
+		questionsLoadErrorMessage: props.t.examLoadErrorMessage,
 		onQuestionsLoaded: handleQuestionsLoaded
 	});
 
@@ -106,10 +107,10 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		loadStatus: questionsStatus,
 		isEmpty: questions.length === 0,
 		labels: {
-			loading: t.loadingMessage,
-			errorTitle: t.errorPrefix,
+			loading: props.t.loadingMessage,
+			errorTitle: props.t.errorPrefix,
 			errorBody: questionsError,
-			emptyTitle: t.emptyMessage,
+			emptyTitle: props.t.emptyMessage,
 			emptyBody: ""
 		},
 		errorAction: null
@@ -125,6 +126,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const currentQuestionIndex = clampExamQuestionIndex(rawCurrentQuestionIndex, visibleQuestionCount);
 
 	const currentQuestion = visibleQuestions[currentQuestionIndex] ?? null;
+	const currentQuestionRenderKey = currentQuestion?.id ?? null;
 
 	const workspaceClassName = useMemo(() => {
 		return deriveWorkspaceClassName(currentQuestion, submitted, isSubmitConfirmOpen);
@@ -161,7 +163,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			visibleQuestions,
 			currentQuestionIndex,
 			answers,
-			gradeAnswerUseCase
+			gradeAnswerUseCase: props.gradeAnswerUseCase
 		});
 	}, [
 		submitted,
@@ -170,7 +172,7 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		visibleQuestions,
 		currentQuestionIndex,
 		answers,
-		gradeAnswerUseCase
+		props.gradeAnswerUseCase
 	]);
 
 	const {
@@ -198,8 +200,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 			submitted,
 			showAllFeedback,
 			elapsedTimeLabel,
-			calculateExamScoreUseCase,
-			answeredLabel: t.examAnsweredLabel
+			calculateExamScoreUseCase: props.calculateExamScoreUseCase,
+			answeredLabel: props.t.examAnsweredLabel
 		});
 	}, [
 		questions,
@@ -209,8 +211,8 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		submitted,
 		showAllFeedback,
 		elapsedTimeLabel,
-		calculateExamScoreUseCase,
-		t.examAnsweredLabel
+		props.calculateExamScoreUseCase,
+		props.t.examAnsweredLabel
 	]);
 
 	const {
@@ -264,12 +266,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		return buildProgressBarModel({
 			totalSteps: visibleQuestionCount,
 			currentStep: currentQuestionNumber,
-			ariaLabel: t.examProgressAriaLabel,
-			startLabel: t.examProgressStartLabel,
+			ariaLabel: props.t.examProgressAriaLabel,
+			startLabel: props.t.examProgressStartLabel,
 			formatStepLabel: formatExamProgressStepLabel,
 			onActivateStep: activateExamProgressStep
 		});
-	}, [visibleQuestionCount, currentQuestionNumber, t.examProgressAriaLabel, t.examProgressStartLabel, activateExamProgressStep]);
+	}, [visibleQuestionCount, currentQuestionNumber, props.t.examProgressAriaLabel, props.t.examProgressStartLabel, activateExamProgressStep]);
 
 	const setSingleAnswer = useCallback((questionId, selectedValue) => {
 		if (submitted) {
@@ -332,12 +334,12 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 	const createSubmitAttemptInput = useCallback(() => {
 		return {
 			answers,
-			examId,
-			language,
+			examId: props.examId,
+			language: props.language,
 			questions,
 			durationSeconds: elapsedSeconds
 		};
-	}, [answers, elapsedSeconds, examId, language, questions]);
+	}, [answers, elapsedSeconds, props.examId, props.language, questions]);
 
 	const submitExam = useCallback(async () => {
 		await submitExamAttempt(createSubmitAttemptInput());
@@ -356,26 +358,46 @@ export default function useExamPageViewModel(getExamQuestionsUseCase, gradeAnswe
 		setShowAllFeedback((shouldShowAllFeedback) => !shouldShowAllFeedback);
 	}, []);
 
+	const questionCardModel = currentQuestion === null ? null : {
+		question: currentQuestion,
+		questionNumber: currentQuestionNumber,
+		answer: answers[currentQuestion.id] ?? null,
+		answerOptionOrder: currentAnswerOptionOrder,
+		submitted,
+		showAllFeedback,
+		correct: currentQuestionIsCorrect,
+		fillMatchType: currentQuestionFillMatchType,
+		expandedAnswerOptionIndexes,
+		onToggleAnswerOptionExpanded: toggleAnswerOptionExpanded,
+		onSingleAnswer: setSingleAnswer,
+		onToggleMultiAnswer: toggleMultiAnswer,
+		onDropdownFillAnswer: selectDropdownFillAnswer,
+		onRadioButtonGridAnswer: selectRadioButtonGridAnswer,
+		onMultipleBlankAnswer: selectDropdownFillAnswer
+	};
+
 	return {
 		questions,
 		visibleQuestions,
 		currentQuestion,
+		currentQuestionRenderKey,
 		currentQuestionIndex,
 		currentQuestionNumber,
 		currentQuestionIsCorrect,
 		currentQuestionFillMatchType,
 		answers,
+		questionCardModel,
 
 		workspaceState,
 		shouldShowExamChrome,
-		attemptSavingMessage: t.examAttemptSavingMessage,
+		attemptSavingMessage: props.t.examAttemptSavingMessage,
 
 		submitted,
 		showAllFeedback,
 		currentAnswerOptionOrder,
 		workspaceClassName,
 		examProgressBarModel,
-		backContract,
+		backContract: props.backContract,
 
 		score: examScore.score,
 		totalPoints: examScore.totalPoints,

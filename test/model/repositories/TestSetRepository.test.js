@@ -1,0 +1,314 @@
+// test/model/repositories/TestSetRepository.test.js
+import { describe, expect, jest, test, beforeEach } from "@jest/globals";
+import TestSetRepository from "../../../src/model/repositories/TestSetRepository.js";
+
+describe("TestSetRepository", () => {
+    let dataSource;
+    let questionDataSource;
+    let repository;
+
+    const testSets = [
+        {
+            id: "exam-no",
+            baseId: "exam",
+            subjectId: "in5431",
+            testType: "exam",
+            lang: "no",
+            title: "Norsk eksamen",
+            description: "Beskrivelse",
+            modeLabel: "FULL ØVEKSAMEN",
+            estimatedMinutes: "45–60",
+            sortOrder: 20,
+            questionCount: 2,
+            topicAreaKeys: ["topic-a"]
+        },
+        {
+            id: "exam-en",
+            baseId: "exam",
+            subjectId: "in5431",
+            testType: "exam",
+            lang: "en",
+            title: "English exam",
+            description: null,
+            modeLabel: null,
+            estimatedMinutes: null,
+            sortOrder: 10,
+            questionCount: 1,
+            topicAreaKeys: []
+        },
+        {
+            id: "other-subject",
+            baseId: "other",
+            subjectId: "in2000",
+            testType: "exam",
+            lang: "no",
+            title: "Other exam",
+            description: null,
+            modeLabel: null,
+            estimatedMinutes: null,
+            sortOrder: 30,
+            questionCount: 7,
+            topicAreaKeys: []
+        }
+    ];
+
+    const questionsByTestSetId = {
+        "exam-no": [{ id: 1 }, { id: 2 }],
+        "exam-en": [{ id: 3 }],
+        "other-subject": []
+    };
+
+    beforeEach(() => {
+        dataSource = {
+            fetchTestSetsBySubject: jest.fn(({ subjectId, language }) => Promise.resolve(
+                testSets.filter((testSet) => testSet.subjectId === subjectId && (!language || testSet.lang === language))
+            )),
+            fetchTestSetById: jest.fn((testSetId) => Promise.resolve(
+                testSets.find((testSet) => testSet.id === testSetId) ?? null
+            ))
+        };
+        questionDataSource = {
+            fetchPracticeQuestions: jest.fn((testSetId) => Promise.resolve(
+                questionsByTestSetId[testSetId] ?? []
+            ))
+        };
+
+        repository = new TestSetRepository(dataSource, questionDataSource);
+    });
+
+    test("loads only the requested subject and language scope", async () => {
+        const result = await repository.getAvailableTestSets({
+            subjectId: "in5431",
+            language: "no"
+        });
+
+        expect(result).toHaveLength(1);
+        expect(result[0]).toMatchObject({
+            id: "exam-no",
+            subjectId: "in5431",
+            lang: "no",
+            testType: "exam",
+            questionCount: 2
+        });
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledWith({
+            subjectId: "in5431",
+            language: "no"
+        });
+    });
+
+    test("requires a subject scope instead of falling back to a global catalog", async () => {
+        await expect(repository.getAvailableTestSets({ language: "no" })).resolves.toEqual([]);
+        expect(dataSource.fetchTestSetsBySubject).not.toHaveBeenCalled();
+    });
+
+    test("caches list requests per subject and language", async () => {
+        await repository.getAvailableTestSets({ subjectId: "in5431", language: "no" });
+        await repository.getAvailableTestSets({ subjectId: "in5431", language: "no" });
+        await repository.getAvailableTestSets({ subjectId: "in5431", language: "en" });
+
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledTimes(2);
+    });
+
+    test("retries scoped list requests after failures", async () => {
+        dataSource.fetchTestSetsBySubject
+            .mockRejectedValueOnce(new Error("network down"))
+            .mockResolvedValueOnce([testSets[0]]);
+
+        await expect(repository.getAvailableTestSets({ subjectId: "in5431", language: "no" }))
+            .rejects.toThrow("network down");
+        await expect(repository.getAvailableTestSets({ subjectId: "in5431", language: "no" }))
+            .resolves.toHaveLength(1);
+
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledTimes(2);
+    });
+
+    test("returns questions for a test set and caches detail/question reads by id", async () => {
+        const firstResult = await repository.getTestSetQuestions("exam-no");
+        const secondResult = await repository.getTestSetQuestions("exam-no");
+
+        expect(firstResult).toEqual([{ id: 1 }, { id: 2 }]);
+        expect(secondResult).toEqual([{ id: 1 }, { id: 2 }]);
+        expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(1);
+        expect(questionDataSource.fetchPracticeQuestions).toHaveBeenCalledTimes(1);
+    });
+
+    test("dedupes parallel detail requests and retries after failure", async () => {
+        const deferredTestSet = createDeferred();
+        dataSource.fetchTestSetById.mockReset();
+        dataSource.fetchTestSetById.mockReturnValueOnce(deferredTestSet.promise);
+
+        const firstRequest = repository.getTestSetById("exam-no");
+        const secondRequest = repository.getTestSetById("exam-no");
+        expect(dataSource.fetchTestSetById).toHaveBeenCalledTimes(1);
+
+        deferredTestSet.resolve(testSets[0]);
+        await expect(Promise.all([firstRequest, secondRequest])).resolves.toEqual([testSets[0], testSets[0]]);
+
+        dataSource.fetchTestSetById
+            .mockRejectedValueOnce(new Error("detail failed"))
+            .mockResolvedValueOnce(testSets[1]);
+
+        await expect(repository.getTestSetById("exam-en")).rejects.toThrow("detail failed");
+        await expect(repository.getTestSetById("exam-en")).resolves.toBe(testSets[1]);
+    });
+
+    test("finds translated test set through the scoped subject-language cache", async () => {
+        const result = await repository.getTestSetByBaseIdAndLang({
+            baseId: "exam",
+            language: "en",
+            subjectId: "in5431"
+        });
+
+        expect(result).toBe(testSets[1]);
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledWith({
+            subjectId: "in5431",
+            language: "en"
+        });
+    });
+
+    test("hydrates answer options with subject-scoped concept images", async () => {
+        const examWithImage = {
+            id: "exam-with-image",
+            baseId: "exam-with-image",
+            subjectId: "in5431",
+            lang: "no",
+            title: "Exam with image",
+            questions: [
+                {
+                    id: 1,
+                    moduleId: "designed-for-digital",
+                    groupId: "d4d-building-blocks",
+                    options: [
+                        {
+                            text: "Operational Backbone",
+                            whyExtendedImageRefs: [
+                                "operational-backbone"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        const localDataSource = {
+            fetchTestSetsBySubject: jest.fn().mockResolvedValue([examWithImage]),
+            fetchTestSetById: jest.fn().mockResolvedValue(examWithImage)
+        };
+        const localQuestionDataSource = {
+            fetchPracticeQuestions: jest.fn().mockResolvedValue(examWithImage.questions)
+        };
+
+        const conceptImageDataSource = {
+            fetchConceptImages: jest.fn().mockReturnValue([
+                {
+                    id: "operational-backbone",
+                    src: "/subjects/in5431/designed-for-digital/d4d-building-blocks/operational-backbone.svg",
+                    alt: "Operational Backbone i praksis",
+                    title: "Operational Backbone",
+                    caption: "Caption"
+                }
+            ])
+        };
+
+        const localRepository = new TestSetRepository(localDataSource, localQuestionDataSource, conceptImageDataSource);
+
+        const result = await localRepository.getTestSetQuestions("exam-with-image");
+
+        expect(conceptImageDataSource.fetchConceptImages).toHaveBeenCalledWith(
+            ["operational-backbone"],
+            {
+                subjectId: "in5431",
+                moduleId: "designed-for-digital",
+                groupId: "d4d-building-blocks",
+                language: "no"
+            }
+        );
+        expect(result[0].options[0].whyExtendedImages).toEqual([
+            expect.objectContaining({
+                id: "operational-backbone",
+                src: "/subjects/in5431/designed-for-digital/d4d-building-blocks/operational-backbone.svg",
+                alt: "Operational Backbone i praksis"
+            })
+        ]);
+        expect(examWithImage.questions[0].options[0].whyExtendedImages).toBeUndefined();
+    });
+
+    test("returns empty questions when exam is not found", async () => {
+        const result = await repository.getTestSetQuestions("missing");
+
+        expect(result).toEqual([]);
+    });
+
+    test("keeps the canonical practice response without legacy aliases", async () => {
+        questionDataSource.fetchPracticeQuestions.mockResolvedValueOnce([
+            {
+                id: "single-1",
+                type: "single",
+                options: [
+                    { id: "a", isCorrect: true, feedback: "Riktig" },
+                    { id: "b", isCorrect: false }
+                ]
+            },
+            {
+                id: "fill-1",
+                type: "fill",
+                acceptedAnswers: ["COBIT"]
+            }
+        ]);
+
+        const result = await repository.getTestSetQuestions("exam-no");
+
+        expect(result[0].options[0]).toMatchObject({
+            isCorrect: true,
+            feedback: "Riktig"
+        });
+        expect(result[0].options[0]).not.toHaveProperty("correct");
+        expect(result[0].options[0]).not.toHaveProperty("why");
+        expect(result[0].options[1]).toMatchObject({
+            isCorrect: false
+        });
+        expect(result[0].options[1]).not.toHaveProperty("correct");
+        expect(result[1]).toMatchObject({
+            acceptedAnswers: ["COBIT"]
+        });
+        expect(result[1]).not.toHaveProperty("answers");
+    });
+
+    test("rejects missing canonical correctness instead of treating it as false", async () => {
+        questionDataSource.fetchPracticeQuestions.mockResolvedValueOnce([
+            {
+                id: "single-invalid",
+                type: "single",
+                options: [{ id: "a", feedback: "Manglende correctness" }]
+            }
+        ]);
+
+        await expect(repository.getTestSetQuestions("exam-no")).rejects.toThrow(
+            "Invalid canonical practice question single-invalid: option a requires isCorrect"
+        );
+    });
+
+    test("finds exam by base id and language through cached exam list", async () => {
+        const result = await repository.getTestSetByBaseIdAndLang({ baseId: "exam", language: "en", subjectId: "in5431" });
+
+        expect(result).toMatchObject({ id: "exam-en" });
+        expect(dataSource.fetchTestSetsBySubject).toHaveBeenCalledTimes(1);
+        expect(dataSource.fetchTestSetById).not.toHaveBeenCalledWith("exam-en");
+    });
+});
+
+function createDeferred() {
+    let resolve;
+    let reject;
+
+    const promise = new Promise((resolvePromise, rejectPromise) => {
+        resolve = resolvePromise;
+        reject = rejectPromise;
+    });
+
+    return {
+        promise,
+        resolve,
+        reject
+    };
+}

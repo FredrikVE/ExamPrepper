@@ -4,7 +4,6 @@ import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
 const stateSetters = [];
-let subjectLoadModel;
 
 const useState = jest.fn((initialValue) => {
 	const value = typeof initialValue === "function" ? initialValue() : initialValue;
@@ -21,17 +20,12 @@ const useEffect = jest.fn((effect) => {
 
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
-const useLoadModel = jest.fn(() => subjectLoadModel);
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
 	useEffect,
 	useMemo,
 	useState
-}));
-
-jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({
-	default: useLoadModel
 }));
 
 const { default: useSubjectSelectPageViewModel } = await import("../../../src/ui/viewmodel/SubjectSelectPageViewModel.js");
@@ -70,7 +64,7 @@ function createT() {
 	};
 }
 
-function createViewModel({ getAvailableSubjectsUseCase }) {
+function createViewModel({ subjects = [], loadStatus = LOAD_STATUS.LOADING, loadError = null } = {}) {
 	const backContract = {
 		showBackButton: false,
 		backLabel: "Tilbake",
@@ -78,37 +72,27 @@ function createViewModel({ getAvailableSubjectsUseCase }) {
 		onBack: null
 	};
 
-	return useSubjectSelectPageViewModel(
-		getAvailableSubjectsUseCase,
-		"nb",
-		createT(),
-		null,
-		jest.fn(),
-		true,
+	return useSubjectSelectPageViewModel({
+		subjects,
+		loadStatus,
+		loadError,
+		t: createT(),
+		onSelectSubject: jest.fn(),
 		backContract
-	);
+	});
 }
 
 describe("useSubjectSelectPageViewModel", () => {
 	beforeEach(() => {
 		stateSetters.length = 0;
-		subjectLoadModel = {
-			status: LOAD_STATUS.LOADING,
-			data: [],
-			error: null,
-			reload: jest.fn()
-		};
 		useState.mockClear();
 		useEffect.mockClear();
 		useMemo.mockClear();
 		useCallback.mockClear();
-		useLoadModel.mockClear();
 	});
 
 	test("returns root navigation props without a back action", () => {
-		const viewModel = createViewModel({
-			getAvailableSubjectsUseCase: { execute: jest.fn().mockResolvedValue([]) }
-		});
+		const viewModel = createViewModel();
 
 		expect(viewModel.backContract).toEqual({
 			showBackButton: false,
@@ -118,35 +102,10 @@ describe("useSubjectSelectPageViewModel", () => {
 		});
 	});
 
-	test("loads subjects through the shared load model", async () => {
-		const loadedSubjects = [
-			{ id: "sub-1", name: "Psykologi", code: "PSY", faculty: "HF" }
-		];
-		const execute = jest.fn().mockResolvedValue(loadedSubjects);
-
-		createViewModel({
-			getAvailableSubjectsUseCase: { execute }
-		});
-
-		const loadConfiguration = useLoadModel.mock.calls[0][0];
-		const subjects = await loadConfiguration.execute();
-
-		expect(subjects).toBe(loadedSubjects);
-		expect(execute).toHaveBeenCalledWith({ language: "nb" });
-		expect(loadConfiguration.emptyData).toEqual([]);
-		expect(loadConfiguration.errorMessage).toBe("Kunne ikke hente fag");
-	});
-
-	test("exposes page status and error message from the shared load model", () => {
-		subjectLoadModel = {
-			status: LOAD_STATUS.ERROR,
-			data: [],
-			error: "Kunne ikke hente fag",
-			reload: jest.fn()
-		};
-
+	test("uses subject catalog load status and error as page input", () => {
 		const viewModel = createViewModel({
-			getAvailableSubjectsUseCase: { execute: jest.fn().mockResolvedValue([]) }
+			loadStatus: LOAD_STATUS.ERROR,
+			loadError: "Kunne ikke hente fag"
 		});
 
 		expect(viewModel.workspaceState).toEqual({
@@ -155,12 +114,20 @@ describe("useSubjectSelectPageViewModel", () => {
 			body: "Kunne ikke hente fag",
 			action: null
 		});
-		expect(viewModel.subjectSwitcher).toEqual({
-			kind: "error",
-			subjects: [],
-			currentSubject: null,
-			label: "Kunne ikke hente fag",
-			canOpen: false
+	});
+
+	test("filters the subjects supplied by the catalog owner", () => {
+		const subjects = [
+			{ id: "sub-1", name: "Psykologi", code: "PSY", faculty: "HF" }
+		];
+		const viewModel = createViewModel({
+			subjects,
+			loadStatus: LOAD_STATUS.READY
 		});
+
+		expect(viewModel.subjects).toBe(subjects);
+		expect(viewModel.filteredSubjects).toEqual(subjects);
+		expect(viewModel.selectedSubject).toBeUndefined();
+		expect(viewModel.subjectSwitcher).toBeUndefined();
 	});
 });

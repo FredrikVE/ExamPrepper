@@ -1,12 +1,12 @@
 // src/ui/viewmodel/Search/useSearchSheetModel.js
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 const SEARCH_SHEET_MODES = {
 	SEARCH_SUGGESTIONS: "searchSuggestions",
 	FILTER_OPTIONS: "filterOptions"
 };
 
-export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
+export default function useSearchSheetModel({ defaultFilterValue }) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterValue, setFilterValue] = useState(defaultFilterValue);
 	const [isSearchSheetOpen, setIsSearchSheetOpen] = useState(false);
@@ -34,13 +34,6 @@ export default function useSearchSheetModel({ isActive, defaultFilterValue }) {
 	const changeFooterSheetOpen = useCallback((nextIsOpen) => {
 		setIsFooterSheetOpen(nextIsOpen);
 	}, []);
-
-	useEffect(() => {
-		if (!isActive) {
-			closeSearchSheet();
-			setIsFooterSheetOpen(false);
-		}
-	}, [isActive, closeSearchSheet]);
 
 	const openSearchSuggestions = useCallback(() => {
 		setIsSearchSheetOpen(true);

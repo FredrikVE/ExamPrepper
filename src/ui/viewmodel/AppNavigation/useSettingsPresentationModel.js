@@ -1,30 +1,30 @@
 // src/ui/viewmodel/AppNavigation/useSettingsPresentationModel.js
 import { useCallback, useEffect, useState } from "react";
-import { getPresentationMode, PRESENTATION_MODE, subscribeToPresentationMode } from "../../presentation/presentationMode.js";
+import { APP_SHELL_MODE, getAppShellMode, subscribeToAppShellMode } from "../../presentation/appShellMode.js";
 
-function resolveSettingsPresentationMode(presentationMode) {
-	return presentationMode === PRESENTATION_MODE.MOBILE ? "sheet" : "sidebar";
+function resolveSettingsPresentationMode(appShellMode) {
+	return appShellMode === APP_SHELL_MODE.COMPACT ? "sheet" : "sidebar";
 }
 
 function getSettingsPresentationMode() {
-	return resolveSettingsPresentationMode(getPresentationMode());
+	return resolveSettingsPresentationMode(getAppShellMode());
 }
 
 export default function useSettingsPresentationModel() {
 	const [isSettingsPresentationOpen, setIsSettingsPresentationOpen] = useState(false);
 	const [settingsPresentationMode, setSettingsPresentationMode] = useState(getSettingsPresentationMode);
 
-	// Settings skal ikke overleve et layout-mode-bytte. Når breakpointet krysses
+	// Settings skal ikke overleve et shell-mode-bytte. Når compact/full-grensen krysses
 	// settes presentasjonsmodus og settings presentation-open i samme handler, slik at React
 	// batcher dem til én commit: den nye varianten mountes lukket og rekker aldri
 	// å vises i feil geometri.
 	useEffect(() => {
-		const handlePresentationModeChange = () => {
+		const handleAppShellModeChange = () => {
 			setSettingsPresentationMode(getSettingsPresentationMode());
 			setIsSettingsPresentationOpen(false);
 		};
 
-		return subscribeToPresentationMode(handlePresentationModeChange);
+		return subscribeToAppShellMode(handleAppShellModeChange);
 	}, []);
 
 	const openSettingsPresentation = useCallback(() => {

@@ -6,11 +6,11 @@
 	height: 100%;
 	flex-direction: column;
 	overflow: hidden;
-	padding: 0;
+	padding: 18px 14px 14px;
 }
 
 .glossary-panel-heading {
-	display: flex;
+	display: none;
 	align-items: center;
 	gap: 14px;
 	flex: 0 0 auto;
@@ -71,4 +71,20 @@
 .glossary-panel-empty h2,
 .glossary-panel-empty p {
 	margin: 0;
+}
+
+.glossary-panel__content {
+	display: flex;
+	min-width: 0;
+	min-height: 0;
+	height: 100%;
+	flex-direction: column;
+}
+
+@media (max-width: 932px) {
+	.glossary-panel__content {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		height: auto;
+	}
 }

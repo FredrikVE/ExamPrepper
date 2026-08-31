@@ -1,0 +1,57 @@
+/* src/ui/style/GlossaryPage/direct-neighbor-meter.css */
+.glossary-direct-neighbor-meter {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 28px;
+}
+
+.glossary-direct-neighbor-meter__visual {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.glossary-direct-neighbor-meter__value {
+	min-width: 18px;
+	color: var(--text-main);
+	font-size: 15px;
+	font-weight: 800;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+	text-align: right;
+}
+
+.glossary-direct-neighbor-meter__meter {
+	display: inline-flex;
+	height: 14px;
+	align-items: flex-end;
+	gap: 3px;
+}
+
+.glossary-direct-neighbor-meter__bar {
+	width: 4px;
+	border-radius: 2px;
+	background: var(--line);
+}
+
+/* Four ascending bars. Count is bound to DIRECT_NEIGHBOR_LEVELS.length in directNeighborLevelModel.js. */
+.glossary-direct-neighbor-meter__bar:nth-child(1) {
+	height: 5px;
+}
+
+.glossary-direct-neighbor-meter__bar:nth-child(2) {
+	height: 8px;
+}
+
+.glossary-direct-neighbor-meter__bar:nth-child(3) {
+	height: 11px;
+}
+
+.glossary-direct-neighbor-meter__bar:nth-child(4) {
+	height: 14px;
+}
+
+.glossary-direct-neighbor-meter__bar--filled {
+	background: var(--accent);
+}

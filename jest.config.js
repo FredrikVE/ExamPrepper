@@ -2,6 +2,7 @@
 export default {
     testEnvironment: "node",
     transform: {},
+    extensionsToTreatAsEsm: [".jsx"],
     testMatch: [
         "**/test/**/*.test.js",
         "**/test/**/*.integration.test.js"

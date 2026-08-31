@@ -1,22 +1,16 @@
 // src/ui/view/components/Search/useSearchSheetEscapeKey.js
-import { useEffect } from "react";
+import useKeyboardShortcuts from "../../KeyboardNavigation/useKeyboardShortcuts.js";
 
 export default function useSearchSheetEscapeKey(isSearchSheetOpen, onCloseSearchSheet) {
-	useEffect(() => {
-		if (!isSearchSheetOpen) {
-			return undefined;
+	function closeSearchSheetOnEscape(event) {
+		if (event.key === "Escape") {
+			event.preventDefault();
+			onCloseSearchSheet();
 		}
+	}
 
-		function closeSearchSheetOnEscape(event) {
-			if (event.key === "Escape") {
-				event.preventDefault();
-				onCloseSearchSheet();
-			}
-		}
-
-		document.addEventListener("keydown", closeSearchSheetOnEscape);
-		return () => {
-			document.removeEventListener("keydown", closeSearchSheetOnEscape);
-		};
-	}, [isSearchSheetOpen, onCloseSearchSheet]);
+	useKeyboardShortcuts({
+		isEnabled: isSearchSheetOpen,
+		onKeyDown: closeSearchSheetOnEscape
+	});
 }

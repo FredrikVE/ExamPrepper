@@ -39,6 +39,7 @@
 	column-gap: clamp(var(--space-5), 3vw, var(--space-8));
 }
 
+.scaffold-header--layout-full-progress,
 .scaffold-header--layout-matchcards-progress {
 	grid-template-columns: 64px minmax(0, 1fr) 64px;
 	column-gap: clamp(var(--space-6), 4vw, var(--space-10));
@@ -78,6 +79,7 @@
 	justify-content: stretch;
 }
 
+.scaffold-header--layout-full-progress .scaffold-header__heading,
 .scaffold-header--layout-matchcards-progress .scaffold-header__heading {
 	width: 100%;
 	max-width: none;

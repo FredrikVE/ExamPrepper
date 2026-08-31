@@ -8,11 +8,11 @@ import FormattedText from "../../Shared/FormattedText.jsx";
 
 export default function AnswerOptionCard({ questionId, option, optionIndex, displayIndex, isSelected, isExpanded, onToggleExpanded, t }) {
     const letter = getOptionLetter(displayIndex);
-    const statusText = option.correct
+    const statusText = option.isCorrect
         ? t?.resultCorrect ?? "Riktig"
         : t?.resultWrong ?? "Feil";
 
-    const StatusIcon = option.correct ? CheckCircle2 : XCircle;
+    const StatusIcon = option.isCorrect ? CheckCircle2 : XCircle;
 
     const extendedPoints = getExtendedExplanationPoints(option);
     const extendedImages = getExtendedExplanationImages(option);
@@ -23,13 +23,13 @@ export default function AnswerOptionCard({ questionId, option, optionIndex, disp
     return (
         <article
             className={`question-card-answer-card ${getAnswerCardClassName({
-                correct: option.correct,
+                correct: option.isCorrect,
                 isSelected
             })}`}
         >
             <AnswerOptionMarker
                 letter={letter}
-                correct={option.correct}
+                correct={option.isCorrect}
                 isSelected={isSelected}
             />
 
@@ -40,15 +40,15 @@ export default function AnswerOptionCard({ questionId, option, optionIndex, disp
                             <FormattedText text={option.text} />
                         </h4>
 
-                        {option.why ? (
+                        {option.feedback ? (
                             <p className="question-card-answer-card-reason">
-                                <FormattedText text={option.why} />
+                                <FormattedText text={option.feedback} />
                             </p>
                         ) : null}
                     </div>
 
                     <AnswerOptionActions
-                        correct={option.correct}
+                        correct={option.isCorrect}
                         statusText={statusText}
                         StatusIcon={StatusIcon}
                         hasExtended={hasExtended}

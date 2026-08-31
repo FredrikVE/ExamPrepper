@@ -1,6 +1,6 @@
 import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
 // src/ui/viewmodel/LearningContentSelectPage/flashcardDeckFilters.js
-import { ALL_TOPIC_AREAS } from "../../../model/domain/utils/topicAreaFilters.js";
+import { ALL_TOPIC_AREAS } from "../../../constants/TopicAreas.js";
 
 export function filterDeckSummaries(deckSummaries, searchTerm, topicAreaKey) {
     const normalizedSearchTerm = normalizeSearchTerm(searchTerm);

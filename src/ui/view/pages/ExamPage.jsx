@@ -1,11 +1,11 @@
-// src/ui/view/pages/ExamPage.jsx
+//src/ui/view/pages/ExamPage.jsx
 import Header from "../components/Header/Header.jsx";
 import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import ProgressBar from "../components/Shared/ProgressBar/ProgressBar.jsx";
 import { PROGRESS_BAR_VARIANTS } from "../components/Shared/ProgressBar/progressBarVariants.js";
 import ExamToolbarActions from "../components/ExamPage/ExamToolbarActions.jsx";
 import ExamFooter from "../components/ExamPage/ExamFooter.jsx";
-import ExamPageContent from "../components/ExamPage/ExamPageContent.jsx";
+import QuestionCard from "../components/QuestionCard/QuestionCard.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
@@ -90,7 +90,9 @@ export default function ExamPage({ viewModel }) {
 
 						<div className="exam-page-main">
 							<div className="exam-page-content">
-								<ExamPageContent viewModel={viewModel} />
+								{viewModel.questionCardModel !== null && (
+									<QuestionCard key={viewModel.currentQuestionRenderKey} {...viewModel.questionCardModel} />
+								)}
 							</div>
 						</div>
 					</>

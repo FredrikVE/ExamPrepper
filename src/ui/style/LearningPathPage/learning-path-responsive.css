@@ -1,0 +1,82 @@
+/* src/ui/style/LearningPathPage/learning-path-responsive.css */
+@media (max-width: 720px) {
+	.learning-path-workspace .workspace-scaffold-body {
+		padding-right: var(--learning-content-page-inline);
+		padding-left: var(--learning-content-page-inline);
+	}
+
+	.learning-path-continue-panel {
+		grid-template-columns: 1fr;
+	}
+
+	.learning-path-continue-action {
+		width: 100%;
+	}
+
+	.learning-path-step {
+		grid-template-columns: 48px minmax(0, 1fr);
+		column-gap: var(--space-3);
+	}
+
+	.learning-path-roadmap::before {
+		left: 23px;
+	}
+
+	.learning-path-step--active::after {
+		left: 36px;
+		width: 24px;
+	}
+
+	.learning-path-step__node {
+		padding-top: 31px;
+	}
+
+	.learning-path-step__node::before {
+		top: 26px;
+		width: 54px;
+		height: 54px;
+	}
+
+	.learning-path-node,
+	.learning-path-node--completed,
+	.learning-path-node--understood,
+	.learning-path-node--progress,
+	.learning-path-node--practice {
+		width: 46px;
+		height: 46px;
+	}
+
+	.learning-path-node svg {
+		width: 21px;
+		height: 21px;
+	}
+
+	.learning-path-module-card,
+	.learning-path-exam-gate {
+		padding: var(--space-4);
+	}
+
+	.learning-path-module-card__trailing {
+		gap: var(--space-2);
+		margin-left: var(--space-2);
+	}
+
+	.learning-path-module-detail {
+		grid-column: 1 / -1;
+		padding: var(--space-5);
+	}
+}
+
+@media (max-width: 460px) {
+	.learning-path-module-card__chevron {
+		display: none;
+	}
+
+	.learning-path-progress-row {
+		grid-template-columns: 10px minmax(0, 1fr) 72px 42px;
+	}
+
+	.learning-path-progress-row__track {
+		width: 72px;
+	}
+}

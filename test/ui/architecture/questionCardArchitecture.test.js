@@ -1,4 +1,4 @@
-// test/ui/architecture/questionCardArchitecture.test.js
+//test/ui/architecture/questionCardArchitecture.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { parse } from "@babel/parser";
@@ -11,7 +11,7 @@ const COMPONENT_ROOT = path.resolve("src/ui/view/components");
 const PAGE_ROOT = path.resolve("src/ui/view/pages");
 const QUESTION_CARD_DIRECTORY = path.join(COMPONENT_ROOT, "QuestionCard");
 const QUESTION_CARD_PUBLIC_ENTRY = path.join(QUESTION_CARD_DIRECTORY, "QuestionCard.jsx");
-const EXAM_PAGE_CONTENT_PATH = path.join(COMPONENT_ROOT, "ExamPage", "ExamPageContent.jsx");
+const EXAM_PAGE_PATH = path.join(PAGE_ROOT, "ExamPage.jsx");
 const STYLE_ROOT = path.resolve("src/ui/style");
 const APP_STYLE_PATH = path.join(STYLE_ROOT, "App.css");
 const QUESTION_CARD_STYLE_ENTRY = path.join(STYLE_ROOT, "QuestionCard", "index.css");
@@ -288,8 +288,8 @@ describe("QuestionCard architecture", () => {
 	test("keeps ExamPage on the public QuestionCard facade", () => {
 		const questionCardImports = [];
 
-		for (const importSource of collectImports(EXAM_PAGE_CONTENT_PATH)) {
-			const resolvedPath = resolveImportPath(EXAM_PAGE_CONTENT_PATH, importSource);
+		for (const importSource of collectImports(EXAM_PAGE_PATH)) {
+			const resolvedPath = resolveImportPath(EXAM_PAGE_PATH, importSource);
 
 			if (resolvedPath !== null && isInsideDirectory(resolvedPath, QUESTION_CARD_DIRECTORY)) {
 				questionCardImports.push(resolvedPath);
@@ -298,4 +298,5 @@ describe("QuestionCard architecture", () => {
 
 		expect(questionCardImports).toEqual([QUESTION_CARD_PUBLIC_ENTRY]);
 	});
+
 });

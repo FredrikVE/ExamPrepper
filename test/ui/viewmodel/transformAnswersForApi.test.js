@@ -52,20 +52,49 @@ describe("transformAnswersForApi", () => {
 		expect(result).toEqual({ q3: "prosess" });
 	});
 
-	test("passes drag-drop answers through unchanged", () => {
+	test("converts drag-drop answers from target-to-card to card-to-target", () => {
 		const questions = [
 			{
 				id: "q4",
 				type: "dragDrop",
 				options: null,
-				targets: [{ id: "t1" }],
-				cards: [{ id: "c1" }]
+				targets: [{ id: "t1" }, { id: "t2" }],
+				cards: [{ id: "c1" }, { id: "c2" }]
 			}
 		];
 
-		const result = transformAnswersForApi(questions, { q4: { t1: "c1" } });
+		const result = transformAnswersForApi(questions, { q4: { t1: "c1", t2: "c2" } });
 
-		expect(result).toEqual({ q4: { t1: "c1" } });
+		expect(result).toEqual({ q4: { c1: "t1", c2: "t2" } });
+	});
+
+	test("converts drag-categorize answers from category arrays to item-to-category", () => {
+		const questions = [{ id: "q-category", type: "drag-categorize" }];
+
+		const result = transformAnswersForApi(questions, {
+			"q-category": { categoryA: ["item1", "item2"], categoryB: ["item3"] }
+		});
+
+		expect(result).toEqual({
+			"q-category": { item1: "categoryA", item2: "categoryA", item3: "categoryB" }
+		});
+	});
+
+	test("keeps already serialized drag answers unchanged", () => {
+		const questions = [
+			{ id: "q-drag", type: "dragDrop", targets: [{ id: "t1" }], cards: [{ id: "c1" }] },
+			{ id: "q-category", type: "drag-categorize" }
+		];
+
+		const result = transformAnswersForApi(questions, {
+			"q-drag": { c1: "t1" },
+			"q-category": { item1: "categoryA" }
+		});
+
+		expect(result).toEqual({
+			"q-drag": { c1: "t1" },
+			"q-category": { item1: "categoryA" }
+		});
 	});
 
 	test("passes sequence order answers through unchanged", () => {

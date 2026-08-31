@@ -1,0 +1,59 @@
+/* src/ui/style/LearningPathPage/learning-path-progress.css */
+.learning-path-progress-row {
+	display: grid;
+	grid-template-columns: 10px minmax(0, 1fr) 110px 42px;
+	align-items: center;
+	gap: var(--space-3);
+	margin-top: 0;
+	font-size: 0.84rem;
+}
+
+.learning-path-progress-row__marker {
+	width: 10px;
+	height: 10px;
+	border-radius: var(--radius-full);
+	background: var(--assessment-not-assessed);
+	box-shadow: 0 0 12px color-mix(in srgb, var(--assessment-not-assessed) 30%, transparent);
+}
+
+.learning-path-progress-row__label,
+.learning-path-progress-row__value {
+	color: var(--text-main);
+	font-weight: 700;
+}
+
+.learning-path-progress-row__track {
+	width: 110px;
+	height: 7px;
+	overflow: hidden;
+	justify-self: end;
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--text-main) 8%, transparent);
+}
+
+.learning-path-progress-row__track > span {
+	display: block;
+	height: 100%;
+	border-radius: inherit;
+	background: var(--assessment-not-assessed);
+}
+
+.learning-path-progress-row__value {
+	text-align: right;
+}
+
+.learning-path-progress-row--practice .learning-path-progress-row__marker,
+.learning-path-progress-row--practice .learning-path-progress-row__track > span { background: var(--assessment-practice); }
+
+.learning-path-progress-row--progress .learning-path-progress-row__marker,
+.learning-path-progress-row--progress .learning-path-progress-row__track > span { background: var(--assessment-progress); }
+
+.learning-path-progress-row--understood .learning-path-progress-row__marker,
+.learning-path-progress-row--understood .learning-path-progress-row__track > span { background: var(--assessment-understood); }
+
+.learning-path-progress-row--not-assessed .learning-path-progress-row__marker,
+.learning-path-progress-row--not-assessed .learning-path-progress-row__track > span { background: var(--assessment-not-assessed); }
+
+.learning-path-progress-row--practice .learning-path-progress-row__marker { box-shadow: 0 0 12px color-mix(in srgb, var(--assessment-practice) 30%, transparent); }
+.learning-path-progress-row--progress .learning-path-progress-row__marker { box-shadow: 0 0 12px color-mix(in srgb, var(--assessment-progress) 30%, transparent); }
+.learning-path-progress-row--understood .learning-path-progress-row__marker { box-shadow: 0 0 12px color-mix(in srgb, var(--assessment-understood) 30%, transparent); }

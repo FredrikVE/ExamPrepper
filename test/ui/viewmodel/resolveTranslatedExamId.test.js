@@ -43,7 +43,8 @@ describe("resolveTranslatedExamId", () => {
         expect(getExamByIdUseCase.execute).toHaveBeenCalledWith("exam-no");
         expect(getExamByBaseIdAndLangUseCase.execute).toHaveBeenCalledWith({
             baseId: "exam",
-            lang: "en"
+            lang: "en",
+            subjectId: "in5431"
         });
     });
 

@@ -5,6 +5,7 @@ import MatrixPlacementFeedbackCard from "../Feedback/MatrixPlacementFeedbackCard
 import { getItemLabel, getItemsInQuadrant, getMissingCorrectItemsInQuadrant } from "../Utils/matrixPlacementAnswerLogic.js";
 import MatrixPlacementPlacedItemCard from "./MatrixPlacementPlacedItemCard.jsx";
 import FormattedText from "../../../../../Shared/FormattedText.jsx";
+import isActivationKey from "../../../../../../KeyboardNavigation/isActivationKey.js";
 
 export default function MatrixPlacementDropZone(props) {
     if (props.feedbackMode) {
@@ -42,10 +43,7 @@ function MatrixPlacementDropZoneContent(props) {
     });
 
     const handleKeyDown = (event) => {
-        const userPressedEnter = event.key === "Enter";
-        const userPressedSpace = event.key === " ";
-
-        if (!userPressedEnter && !userPressedSpace) {
+        if (!isActivationKey(event.key)) {
             return;
         }
 

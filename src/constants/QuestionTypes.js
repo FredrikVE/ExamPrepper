@@ -1,4 +1,4 @@
-// src/constants/QuestionTypes.js
+//src/constants/QuestionTypes.js
 export const QUESTION_TYPES = {
 	SINGLE: "single",
 	MULTI: "multi",
@@ -8,5 +8,7 @@ export const QUESTION_TYPES = {
 	MATRIX_PLACEMENT: "matrix-placement",
 	SEQUENCE_ORDER: "SequenceOrder",
 	DROPDOWN_FILL: "dropdownFill",
-	RADIO_BUTTON_GRID: "radioButtonGrid"
+	RADIO_BUTTON_GRID: "radioButtonGrid",
+	TAP_TO_FILL_MULTIPLE_BLANK: "tapToFillMultipleBlank",
+	WRITE_TO_FILL_MULTIPLE_BLANK: "writeToFillMultipleBlank"
 };

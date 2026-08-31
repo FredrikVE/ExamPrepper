@@ -27,7 +27,7 @@ describe("createWorkspaceToolsModel", () => {
 		expect(tools.mobileHandleLabel).toBe("Verktøy");
 		expect(importMaterialsTool).toEqual(expect.objectContaining({
 			statusLabel: "Kommer senere",
-			ariaLabel: "Legg inn notater eller forelesningsslides · Kommer senere",
+			ariaLabel: "Legg inn notater eller forelesningsslides, Kommer senere",
 			isDisabled: true,
 			onSelect: null
 		}));

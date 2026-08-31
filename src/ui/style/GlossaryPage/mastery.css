@@ -1,0 +1,92 @@
+/* src/ui/style/GlossaryPage/mastery.css */
+.glossary-mastery-badge {
+	display: inline-flex;
+	width: fit-content;
+	align-items: center;
+	border: 1px solid var(--assessment-not-assessed);
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--panel-strong) 78%, transparent);
+	padding: 3px 8px;
+	color: var(--text-muted);
+	font-size: 10px;
+	font-weight: 800;
+	line-height: 1.2;
+}
+
+.glossary-mastery-badge[data-mastery-status="practice"] {
+	border-color: color-mix(in srgb, var(--assessment-practice) 45%, var(--line));
+	color: var(--assessment-practice);
+}
+
+.glossary-mastery-badge[data-mastery-status="progress"] {
+	border-color: color-mix(in srgb, var(--assessment-progress) 58%, var(--line));
+	color: color-mix(in srgb, var(--assessment-progress) 74%, var(--text-main));
+}
+
+.glossary-mastery-badge[data-mastery-status="understood"] {
+	border-color: color-mix(in srgb, var(--assessment-understood) 48%, var(--line));
+	background: color-mix(in srgb, var(--assessment-understood) 12%, transparent);
+	color: var(--assessment-understood);
+}
+
+.glossary-mastery-scale-shell {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: clamp(6px, 1.2cqi, var(--space-2));
+	padding: 0;
+}
+
+.glossary-mastery-scale {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	width: min(460px, 100%);
+	padding: clamp(3px, 0.8cqi, 4px);
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius-sm);
+	background: var(--segmented-control-bg);
+}
+
+.glossary-mastery-scale__item {
+	display: inline-flex;
+	min-width: 0;
+	min-height: 32px;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	border-radius: var(--radius-xs);
+	color: var(--text-muted);
+	font-size: 11px;
+	font-weight: 720;
+	text-align: center;
+}
+
+.glossary-mastery-scale__item[data-active="true"] {
+	background: color-mix(in srgb, currentColor 11%, transparent);
+	font-weight: 820;
+}
+
+.glossary-mastery-scale__item[data-mastery-status="practice"] {
+	color: var(--assessment-practice);
+}
+
+.glossary-mastery-scale__item[data-mastery-status="progress"] {
+	color: color-mix(in srgb, var(--assessment-progress) 74%, var(--text-main));
+}
+
+.glossary-mastery-scale__item[data-mastery-status="understood"] {
+	color: var(--assessment-understood);
+}
+
+.glossary-mastery-scale__selected-mark {
+	width: var(--glossary-mastery-selected-mark-size);
+	height: var(--glossary-mastery-selected-mark-size);
+	flex: none;
+	stroke-width: var(--glossary-mastery-selected-mark-stroke-width);
+}
+
+.glossary-mastery-scale__status {
+	color: var(--text-muted);
+	font-size: 11px;
+	font-weight: 700;
+}

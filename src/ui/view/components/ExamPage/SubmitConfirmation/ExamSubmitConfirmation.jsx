@@ -1,5 +1,6 @@
 // src/ui/view/components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx
 import { useEffect, useRef } from "react";
+import useKeyboardShortcuts from "../../../KeyboardNavigation/useKeyboardShortcuts.js";
 
 export default function ExamSubmitConfirmation({
 	title,
@@ -11,21 +12,21 @@ export default function ExamSubmitConfirmation({
 }) {
 	const cancelButtonRef = useRef(null);
 
-	useEffect(() => {
-		const handleEscape = (event) => {
-			if (event.key === "Escape") {
-				onCancel?.();
-			}
-		};
+	function cancelOnEscape(event) {
+		if (event.key === "Escape") {
+			onCancel();
+		}
+	}
 
-		window.addEventListener("keydown", handleEscape);
+	useKeyboardShortcuts({
+		isEnabled: true,
+		onKeyDown: cancelOnEscape
+	});
+
+	useEffect(() => {
 		window.requestAnimationFrame(() => {
 			cancelButtonRef.current?.focus();
 		});
-
-		return () => {
-			window.removeEventListener("keydown", handleEscape);
-		};
 	}, [onCancel]);
 
 	return (

@@ -12,7 +12,6 @@ const LEGACY_MODAL_SHEET_PATH = path.resolve("src/ui/view/components/MobileBotto
 const STYLE_DIRECTORY = path.resolve("src/ui/style");
 const CONSUMER_PATHS = [
 	path.resolve("src/ui/view/components/PageTools/PageToolsMobileFooterSheet.jsx"),
-	path.resolve("src/ui/view/components/GlossaryPage/MobileChapterSheet/GlossaryMobileChapterSheet.jsx"),
 	path.resolve("src/ui/view/components/FlipcardsPage/FlipcardToolMenu/FlipcardsMobileFooterSheet.jsx")
 ];
 
@@ -258,13 +257,10 @@ describe("DockedMobileBottomSheet SSOT", () => {
 
 	test("keeps search and filter interaction independent from the open sheet state", () => {
 		const pageToolsAst = parseJsxFile(CONSUMER_PATHS[0]);
-		const glossaryAst = parseJsxFile(CONSUMER_PATHS[1]);
 
 		expect(containsPropsMember(pageToolsAst, "onOpenSheet")).toBe(false);
 		expect(containsJsxAttribute(pageToolsAst, "onFocusCapture")).toBe(false);
 		expect(containsJsxAttribute(pageToolsAst, "onPointerDownCapture")).toBe(false);
-		expect(containsIdentifierCall(glossaryAst, "setIsOpen")).toBe(false);
-		expect(containsJsxAttribute(glossaryAst, "onPointerDownCapture")).toBe(false);
 	});
 
 	test("keeps shared internals out of feature CSS", () => {

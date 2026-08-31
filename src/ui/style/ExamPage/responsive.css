@@ -7,6 +7,19 @@
     }
 }
 
+@media (max-width: 1200px) {
+	.exam-shell {
+		display: block;
+	}
+}
+
+@media (min-width: 933px) and (max-width: 1200px) {
+	.exam-workspace .workspace-scaffold-body {
+		padding-top: calc(var(--mobile-topbar-height) + var(--space-5));
+		scroll-padding-top: calc(var(--mobile-topbar-height) + var(--space-5));
+	}
+}
+
 @media (max-width: 932px) {
 	.exam-page {
 		min-height: 0;

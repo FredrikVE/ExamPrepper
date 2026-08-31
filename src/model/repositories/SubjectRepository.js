@@ -1,22 +1,24 @@
 // src/model/repositories/SubjectRepository.js
 export default class SubjectRepository {
-    constructor(subjectDataSource, examRepository) {
+    constructor(subjectDataSource) {
         this.subjectDataSource = subjectDataSource;
-        this.examRepository = examRepository;
     }
 
-    async getSubjects() {
-        const subjects = await this.subjectDataSource.fetchSubjects();
+    async getSubjectsWithPracticeTestCount({ language } = {}) {
+        const subjects = await this.subjectDataSource.fetchSubjects({ language });
 
         return subjects.map((subject) => this.toSubject(subject));
     }
 
-    async getSubjectById(subjectId) {
-        const subjects = await this.getSubjects();
+    async getSubjectByIdWithPracticeTestCount({ subjectId, language } = {}) {
+        const subject = await this.subjectDataSource.fetchSubjectById({
+            subjectId,
+            language
+        });
 
-        return subjects.find((subject) => {
-            return subject.id === subjectId;
-        }) ?? null;
+        return subject === null
+            ? null
+            : this.toSubject(subject);
     }
 
     async getTopicAreasBySubject(subjectId) {
@@ -38,61 +40,6 @@ export default class SubjectRepository {
         return topicAreas;
     }
 
-    async getSubjectsWithExamCount({ language } = {}) {
-        const [subjects, exams] = await Promise.all([
-            this.subjectDataSource.fetchSubjects(),
-            this.examRepository.getAllExams()
-        ]);
-
-        const examCountsBySubject = this.buildExamCountsBySubject({
-            exams,
-            language
-        });
-
-        return subjects.map((subject) => ({
-            ...this.toSubject(subject),
-            examCount: examCountsBySubject.get(subject.id) ?? 0
-        }));
-    }
-
-    async getSubjectByIdWithExamCount({ subjectId, language } = {}) {
-        const subjects = await this.getSubjectsWithExamCount({ language });
-
-        return subjects.find((subject) => {
-            return subject.id === subjectId;
-        }) ?? null;
-    }
-
-    buildExamCountsBySubject({ exams, language } = {}) {
-        const examKeysBySubject = new Map();
-
-        for (const exam of exams) {
-            if (language && exam.lang !== language) {
-                continue;
-            }
-
-            if (!exam.subjectId) {
-                continue;
-            }
-
-            const examKey = exam.baseId ?? exam.id;
-
-            if (!examKeysBySubject.has(exam.subjectId)) {
-                examKeysBySubject.set(exam.subjectId, new Set());
-            }
-
-            examKeysBySubject.get(exam.subjectId).add(examKey);
-        }
-
-        const counts = new Map();
-
-        for (const [subjectId, examKeys] of examKeysBySubject.entries()) {
-            counts.set(subjectId, examKeys.size);
-        }
-
-        return counts;
-    }
-
     toSubject(subject) {
         return {
             id: subject.id,
@@ -103,7 +50,8 @@ export default class SubjectRepository {
             faculty: subject.faculty,
             icon: subject.icon ?? subject.iconKey,
             recommended: subject.recommended ?? false,
-            isVisible: subject.isVisible ?? true
+            isVisible: subject.isVisible ?? true,
+            practiceTestCount: subject.practiceTestCount
         };
     }
 }

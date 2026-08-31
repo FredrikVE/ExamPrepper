@@ -1,22 +1,32 @@
 // src/ui/view/components/GlossaryPage/GlossaryPanel/GlossaryPanel.jsx
 import GlossaryPanelHeading from "./GlossaryPanelHeading.jsx";
-import GlossaryEntryCardList from "./GlossaryEntryCardList.jsx";
 import GlossaryTable from "./GlossaryTable.jsx";
 
-export default function GlossaryPanel({ heading, rows, termColumnHeader, explanationColumnHeader, emptyState, isMobile }) {
+export default function GlossaryPanel({ heading, rows, tableHeaders, emptyState }) {
+	let glossaryContent;
+
+	if (emptyState !== null) {
+		glossaryContent = (
+			<section className="glossary-panel-empty" role="status">
+				<h2>{emptyState.title}</h2>
+				<p>{emptyState.body}</p>
+			</section>
+		);
+	}
+
+	else {
+		glossaryContent = (
+			<GlossaryTable headers={tableHeaders} rows={rows} />
+		);
+	}
+
 	return (
 		<article className="glossary-panel">
-			{isMobile ? <GlossaryPanelHeading heading={heading} /> : null}
-			{emptyState !== null ? (
-				<section className="glossary-panel-empty" role="status">
-					<h2>{emptyState.title}</h2>
-					<p>{emptyState.body}</p>
-				</section>
-			) : isMobile ? (
-				<GlossaryEntryCardList rows={rows} termLabel={termColumnHeader} explanationLabel={explanationColumnHeader} />
-			) : (
-				<GlossaryTable rows={rows} termColumnHeader={termColumnHeader} explanationColumnHeader={explanationColumnHeader} />
-			)}
+			<GlossaryPanelHeading heading={heading} />
+
+			<div className="glossary-panel__content">
+				{glossaryContent}
+			</div>
 		</article>
 	);
 }

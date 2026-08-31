@@ -16,6 +16,8 @@ const GLOBAL_LAYER_CONTRACT = {
 	".mobile-dropdown": "var(--z-navigation-panel)",
 	".mobile-topbar": "var(--z-mobile-topbar)",
 	".exam-submit-confirmation-overlay": "var(--z-exam-submit-confirmation)",
+	".glossary-detail-modal__backdrop": "var(--z-modal-backdrop)",
+	".glossary-detail-modal__viewport": "var(--z-modal-dialog)",
 	".settings-sidebar": "var(--z-settings-dialog)"
 };
 

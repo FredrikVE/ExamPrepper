@@ -4,6 +4,7 @@ import Draggable from "../../Shared/Dnd/Draggable.jsx";
 import FormattedText from "../../../../../Shared/FormattedText.jsx";
 import DragGrip from "../../Shared/Dnd/DragGrip.jsx";
 import ClearButton from "../../Shared/Dnd/ClearButton.jsx";
+import isActivationKey from "../../../../../../KeyboardNavigation/isActivationKey.js";
 
 export default function CategorySortPlacedItemCard(props) {
     return (
@@ -35,10 +36,7 @@ function CategorySortPlacedItemCardContent(props) {
     };
 
     const handleKeyDown = (event) => {
-        const userPressedEnter = event.key === "Enter";
-        const userPressedSpace = event.key === " ";
-
-        if (!userPressedEnter && !userPressedSpace) {
+        if (!isActivationKey(event.key)) {
             return;
         }
 

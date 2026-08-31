@@ -16,14 +16,14 @@ examFlowApiDescribe("exam flow API integration", () => {
 		await context.load();
 	});
 
-	test("loads visible subjects with exam counts from API", async () => {
+	test("loads visible subjects with practice-test counts from API", async () => {
 		const subjects = await context.loadSubjects("no");
 		const in5431Subject = assertions.getSubjectById(subjects, "in5431");
 
 		expect(subjects.length).toBeGreaterThan(0);
 		expect(in5431Subject).toMatchObject({
 			code: "IN5431",
-			examCount: 12,
+			practiceTestCount: 12,
 			isVisible: true
 		});
 	});
@@ -122,13 +122,13 @@ examFlowApiDescribe("exam flow API integration", () => {
 		});
 	});
 
-	test("finds subject by id with exam count", async () => {
+	test("finds subject by id with practice-test count", async () => {
 		const subject = await context.loadSubject("in5431", "en");
 
 		expect(subject).toMatchObject({
 			id: "in5431",
 			code: "IN5431",
-			examCount: 11
+			practiceTestCount: 11
 		});
 	});
 });

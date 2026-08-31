@@ -1,6 +1,7 @@
 // src/ui/view/components/QuestionCard/QuestionTypes/DragDrop/SequenceOrder/Board/SequenceOrderDropZone.jsx
 import Droppable from "../../Shared/Dnd/Droppable.jsx";
 import SequenceOrderPlacedItemCard from "./SequenceOrderPlacedItemCard.jsx";
+import isActivationKey from "../../../../../../KeyboardNavigation/isActivationKey.js";
 
 export default function SequenceOrderDropZone(props) {
     return (
@@ -32,10 +33,7 @@ function SequenceOrderDropZoneContent(props) {
     };
 
     const activateDropZoneWithKeyboard = (event) => {
-        const userPressedEnter = event.key === "Enter";
-        const userPressedSpace = event.key === " ";
-
-        if (!userPressedEnter && !userPressedSpace) {
+        if (!isActivationKey(event.key)) {
             return;
         }
 

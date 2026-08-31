@@ -34,7 +34,7 @@ export default function SubjectSelectCard({ t, subject, index, isSelected, onSel
             <span className="subject-card-footer">
                 <span className="subject-card-meta">
                     <FileText className="subject-card-meta-icon" />
-                    <span>{t.subjectMockExamCount(subject.examCount)}</span>
+                    <span>{t.subjectPracticeTestCount(subject.practiceTestCount)}</span>
                 </span>
 
                 <span className="subject-card-arrow" aria-hidden="true">
