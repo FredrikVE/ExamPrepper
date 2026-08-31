@@ -14,55 +14,44 @@ import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 const MATCH_CARDS_ROUND_PAIR_COUNT = 6;
 const MATCH_CARDS_VISIBLE_PAIR_COUNT = 4;
 
-export default function useMatchCardsPageViewModel({
-	getGlossaryEntriesForSubjectUseCase,
-	getTopicAreasUseCase,
-	recordMatchCardResultUseCase,
-	subjectId,
-	initialTopicAreaKey,
-	language,
-	t,
-	isActive,
-	backContract,
-	authState
-}) {
-	const [topicAreaKey, setTopicAreaKey] = useState(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
+export default function useMatchCardsPageViewModel(props) {
+	const [topicAreaKey, setTopicAreaKey] = useState(props.initialTopicAreaKey ?? ALL_TOPIC_AREAS);
 	const recordedMatchResultKeysRef = useRef(new Set());
 
 	useEffect(() => {
-		setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
-	}, [initialTopicAreaKey, subjectId]);
+		setTopicAreaKey(props.initialTopicAreaKey ?? ALL_TOPIC_AREAS);
+	}, [props.initialTopicAreaKey, props.subjectId]);
 
 	const executeGlossaryEntryLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
+		if (!props.isActive || !props.subjectId) {
 			return Promise.resolve([]);
 		}
 
-		return getGlossaryEntriesForSubjectUseCase.execute({
-			subjectId,
+		return props.getGlossaryEntriesForSubjectUseCase.execute({
+			subjectId: props.subjectId,
 			topicAreaKey
 		});
-	}, [getGlossaryEntriesForSubjectUseCase, isActive, subjectId, topicAreaKey]);
+	}, [props.getGlossaryEntriesForSubjectUseCase, props.isActive, props.subjectId, topicAreaKey]);
 
 	const executeTopicAreaLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
+		if (!props.isActive || !props.subjectId) {
 			return Promise.resolve([]);
 		}
 
-		return getTopicAreasUseCase.execute({
-			subjectId,
-			language
+		return props.getTopicAreasUseCase.execute({
+			subjectId: props.subjectId,
+			language: props.language
 		});
-	}, [getTopicAreasUseCase, isActive, subjectId, language]);
+	}, [props.getTopicAreasUseCase, props.isActive, props.subjectId, props.language]);
 
-	const glossaryResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${topicAreaKey}`;
-	const topicAreaResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
-	const isLoadEnabled = isActive && subjectId !== null;
+	const glossaryResourceKey = props.subjectId === null ? "no-subject" : `${props.subjectId}:${topicAreaKey}`;
+	const topicAreaResourceKey = props.subjectId === null ? "no-subject" : `${props.subjectId}:${props.language}`;
+	const isLoadEnabled = props.isActive && props.subjectId !== null;
 
 	const glossaryEntryLoad = useLoadModel({
 		execute: executeGlossaryEntryLoad,
 		emptyData: [],
-		errorMessage: t.matchCardsErrorMessage,
+		errorMessage: props.t.matchCardsErrorMessage,
 		resourceKey: glossaryResourceKey,
 		isEnabled: isLoadEnabled,
 		onLoaded: null
@@ -71,7 +60,7 @@ export default function useMatchCardsPageViewModel({
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
-		errorMessage: t.matchCardsErrorMessage,
+		errorMessage: props.t.matchCardsErrorMessage,
 		resourceKey: topicAreaResourceKey,
 		isEnabled: isLoadEnabled,
 		onLoaded: null
@@ -86,7 +75,7 @@ export default function useMatchCardsPageViewModel({
 	const pageErrorMessage = resolveFirstLoadError([
 		glossaryEntryLoad,
 		topicAreaLoad
-	], t.matchCardsErrorMessage);
+	], props.t.matchCardsErrorMessage);
 
 	const activeTopicArea = useMemo(() => {
 		return topicAreas.find((topicArea) => topicArea.key === topicAreaKey) ?? null;
@@ -95,40 +84,40 @@ export default function useMatchCardsPageViewModel({
 	const labels = useMemo(() => {
 		const topicAreaLabel = activeTopicArea?.label ?? null;
 		const pageTitle = topicAreaLabel
-			? t.matchCardsTopicAreaTitle(topicAreaLabel)
-			: t.matchCardsTitle;
+			? props.t.matchCardsTopicAreaTitle(topicAreaLabel)
+			: props.t.matchCardsTitle;
 		const pageIntro = topicAreaLabel
-			? t.matchCardsTopicAreaIntro(topicAreaLabel)
-			: t.matchCardsIntro;
+			? props.t.matchCardsTopicAreaIntro(topicAreaLabel)
+			: props.t.matchCardsIntro;
 
 		return {
 			pageTitle,
-			pageEyebrow: t.matchCardsEyebrow,
+			pageEyebrow: props.t.matchCardsEyebrow,
 			pageIntro,
-			selectedSlotLabel: t.matchCardsSelectedSlotLabel,
-			wrongSlotLabel: t.matchCardsWrongSlotLabel,
-			successSlotLabel: t.matchCardsSuccessSlotLabel,
-			emptySlotLabel: t.matchCardsEmptySlotLabel,
-			progressLabel: t.matchCardsProgressLabel,
-			progressAriaLabel: t.matchCardsProgressAriaLabel,
-			progressStartLabel: t.matchCardsProgressStartLabel,
-			roundCompleteTitle: t.matchCardsRoundCompleteTitle,
-			roundCompleteBody: t.matchCardsRoundCompleteBody,
-			restartLabel: t.matchCardsRestartLabel,
-			cardAriaLabel: t.matchCardsCardAriaLabel
+			selectedSlotLabel: props.t.matchCardsSelectedSlotLabel,
+			wrongSlotLabel: props.t.matchCardsWrongSlotLabel,
+			successSlotLabel: props.t.matchCardsSuccessSlotLabel,
+			emptySlotLabel: props.t.matchCardsEmptySlotLabel,
+			progressLabel: props.t.matchCardsProgressLabel,
+			progressAriaLabel: props.t.matchCardsProgressAriaLabel,
+			progressStartLabel: props.t.matchCardsProgressStartLabel,
+			roundCompleteTitle: props.t.matchCardsRoundCompleteTitle,
+			roundCompleteBody: props.t.matchCardsRoundCompleteBody,
+			restartLabel: props.t.matchCardsRestartLabel,
+			cardAriaLabel: props.t.matchCardsCardAriaLabel
 		};
-	}, [activeTopicArea, t]);
+	}, [activeTopicArea, props.t]);
 
 	useEffect(() => {
 		recordedMatchResultKeysRef.current.clear();
 	}, [glossaryEntries]);
 
 	const persistMatchCardResult = useCallback((matchCardResult) => {
-		if (authState.status !== APP_AUTH_STATUS.SIGNED_IN) {
+		if (props.authState.status !== APP_AUTH_STATUS.SIGNED_IN) {
 			return;
 		}
 
-		if (!subjectId) {
+		if (!props.subjectId) {
 			throw new Error("Signed-in MatchCards persistence requires subjectId");
 		}
 
@@ -138,19 +127,19 @@ export default function useMatchCardsPageViewModel({
 
 		recordedMatchResultKeysRef.current.add(matchCardResult.glossaryEntryKey);
 
-		void recordMatchCardResultUseCase.execute({
+		void props.recordMatchCardResultUseCase.execute({
 			eventId: createConceptPracticeEventId(),
-			subjectId,
+			subjectId: props.subjectId,
 			glossaryEntryKey: matchCardResult.glossaryEntryKey,
 			wrongAttemptCount: matchCardResult.wrongAttemptCount
 		}).catch(reportMatchCardWriteError);
-	}, [authState.status, recordMatchCardResultUseCase, subjectId]);
+	}, [props.authState.status, props.recordMatchCardResultUseCase, props.subjectId]);
 
 	const roundModel = useMatchCardsRoundModel({
 		glossaryEntries,
 		roundPairCount: MATCH_CARDS_ROUND_PAIR_COUNT,
 		visiblePairCount: MATCH_CARDS_VISIBLE_PAIR_COUNT,
-		language,
+		language: props.language,
 		randomNumber: Math.random,
 		onSuccessfulMatch: persistMatchCardResult
 	});
@@ -159,11 +148,11 @@ export default function useMatchCardsPageViewModel({
 		loadStatus: pageStatus,
 		isEmpty: roundModel.session === null,
 		labels: {
-			loading: t.matchCardsLoadingTitle,
-			errorTitle: t.matchCardsErrorTitle,
+			loading: props.t.matchCardsLoadingTitle,
+			errorTitle: props.t.matchCardsErrorTitle,
 			errorBody: pageErrorMessage,
-			emptyTitle: t.matchCardsEmptyTitle,
-			emptyBody: t.matchCardsEmptyBody
+			emptyTitle: props.t.matchCardsEmptyTitle,
+			emptyBody: props.t.matchCardsEmptyBody
 		},
 		errorAction: null
 	});
@@ -194,7 +183,7 @@ export default function useMatchCardsPageViewModel({
 		topicAreas,
 		topicAreaKey,
 		workspaceState,
-		backContract,
+		backContract: props.backContract,
 		session: roundModel.session,
 		termSlots: roundModel.termSlots,
 		explanationSlots: roundModel.explanationSlots,

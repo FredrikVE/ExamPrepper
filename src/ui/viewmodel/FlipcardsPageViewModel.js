@@ -17,9 +17,9 @@ import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
 const TOPIC_AREA_DECK_TOOL_PREFIX = "topic-area-";
 
-export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubjectUseCase, getTopicAreasUseCase, recordFlipcardAssessmentUseCase, subjectId, initialTopicAreaKey, language, t, isActive, backContract, authState }) {
+export default function useFlipcardsPageViewModel(props) {
 	const presentationMode = usePresentationMode();
-	const [topicAreaKey, setTopicAreaKey] = useState(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
+	const [topicAreaKey, setTopicAreaKey] = useState(props.initialTopicAreaKey ?? ALL_TOPIC_AREAS);
 	const [masteredCardIds, setMasteredCardIds] = useState([]);
 	const [practiceCardIds, setPracticeCardIds] = useState([]);
 	const [activeDeckToolKey, setActiveDeckToolKey] = useState("all-cards");
@@ -28,44 +28,44 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 	const [isActiveCardFlipped, setIsActiveCardFlipped] = useState(false);
 
 	useEffect(() => {
-		setTopicAreaKey(initialTopicAreaKey ?? ALL_TOPIC_AREAS);
-	}, [initialTopicAreaKey, subjectId]);
+		setTopicAreaKey(props.initialTopicAreaKey ?? ALL_TOPIC_AREAS);
+	}, [props.initialTopicAreaKey, props.subjectId]);
 
 	const executeGlossaryEntryLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
+		if (!props.isActive || !props.subjectId) {
 			return Promise.resolve([]);
 		}
 
-		return getGlossaryEntriesForSubjectUseCase.execute({
-			subjectId,
+		return props.getGlossaryEntriesForSubjectUseCase.execute({
+			subjectId: props.subjectId,
 			topicAreaKey: ALL_TOPIC_AREAS
 		});
-	}, [getGlossaryEntriesForSubjectUseCase, isActive, subjectId]);
+	}, [props.getGlossaryEntriesForSubjectUseCase, props.isActive, props.subjectId]);
 
 	const executeTopicAreaLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
+		if (!props.isActive || !props.subjectId) {
 			return Promise.resolve([]);
 		}
 
-		return getTopicAreasUseCase.execute({
-			subjectId,
-			language
+		return props.getTopicAreasUseCase.execute({
+			subjectId: props.subjectId,
+			language: props.language
 		});
-	}, [getTopicAreasUseCase, isActive, subjectId, language]);
+	}, [props.getTopicAreasUseCase, props.isActive, props.subjectId, props.language]);
 
 	const noteGlossaryEntriesLoaded = useCallback(() => {
 		setMasteredCardIds([]);
 		setPracticeCardIds([]);
 	}, []);
 
-	const glossaryResourceKey = subjectId;
-	const topicAreaResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
-	const isLoadEnabled = isActive && subjectId !== null;
+	const glossaryResourceKey = props.subjectId;
+	const topicAreaResourceKey = props.subjectId === null ? "no-subject" : `${props.subjectId}:${props.language}`;
+	const isLoadEnabled = props.isActive && props.subjectId !== null;
 
 	const glossaryEntryLoad = useLoadModel({
 		execute: executeGlossaryEntryLoad,
 		emptyData: [],
-		errorMessage: t.flipcardsErrorMessage,
+		errorMessage: props.t.flipcardsErrorMessage,
 		resourceKey: glossaryResourceKey,
 		isEnabled: isLoadEnabled,
 		onLoaded: noteGlossaryEntriesLoaded
@@ -74,7 +74,7 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 	const topicAreaLoad = useLoadModel({
 		execute: executeTopicAreaLoad,
 		emptyData: [],
-		errorMessage: t.flipcardsErrorMessage,
+		errorMessage: props.t.flipcardsErrorMessage,
 		resourceKey: topicAreaResourceKey,
 		isEnabled: isLoadEnabled,
 		onLoaded: null
@@ -82,8 +82,8 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 
 	const glossaryEntries = glossaryEntryLoad.data;
 	const flashcards = useMemo(() => {
-		return createFlipcardsFromGlossaryEntries(glossaryEntries, language);
-	}, [glossaryEntries, language]);
+		return createFlipcardsFromGlossaryEntries(glossaryEntries, props.language);
+	}, [glossaryEntries, props.language]);
 	const topicAreas = topicAreaLoad.data;
 	const pageStatus = combineLoadStatuses([
 		glossaryEntryLoad.status,
@@ -92,7 +92,7 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 	const pageErrorMessage = resolveFirstLoadError([
 		glossaryEntryLoad,
 		topicAreaLoad
-	], t.flipcardsErrorMessage);
+	], props.t.flipcardsErrorMessage);
 
 	const topicFilteredFlashcards = useMemo(() => {
 		return filterFlipcardsByTopicArea(flashcards, topicAreaKey);
@@ -139,11 +139,11 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 			masteredCardIds: visibleMasteredCardIds,
 			practiceCardIds: visiblePracticeCardIds,
 			labels: {
-				progressLabel: t.flipcardsProgressLabel,
-				completeBody: t.flipcardsCompleteBody
+				progressLabel: props.t.flipcardsProgressLabel,
+				completeBody: props.t.flipcardsCompleteBody
 			}
 		});
-	}, [topicFilteredFlashcards.length, visibleMasteredCardIds, visiblePracticeCardIds, t.flipcardsCompleteBody, t.flipcardsProgressLabel]);
+	}, [topicFilteredFlashcards.length, visibleMasteredCardIds, visiblePracticeCardIds, props.t.flipcardsCompleteBody, props.t.flipcardsProgressLabel]);
 
 	const deckKey = useMemo(() => {
 		return createDeckKey(topicFilteredFlashcards);
@@ -161,74 +161,74 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 	const labels = useMemo(() => {
 		const topicAreaLabel = activeTopicArea?.label ?? null;
 		const pageTitle = topicAreaLabel
-			? t.flipcardsTopicAreaTitle(topicAreaLabel)
-			: t.flipcardsTitle;
+			? props.t.flipcardsTopicAreaTitle(topicAreaLabel)
+			: props.t.flipcardsTitle;
 		const pageIntro = topicAreaLabel
-			? t.flipcardsTopicAreaIntro(topicAreaLabel)
-			: t.flipcardsIntro;
+			? props.t.flipcardsTopicAreaIntro(topicAreaLabel)
+			: props.t.flipcardsIntro;
 
 		return {
-			pageEyebrow: t.flipcardsEyebrow,
+			pageEyebrow: props.t.flipcardsEyebrow,
 			pageTitle,
 			pageIntro,
-			loadingTitle: t.flipcardsLoadingTitle,
-			errorTitle: t.flipcardsErrorTitle,
-			emptyTitle: t.flipcardsEmptyTitle,
-			emptyBody: t.flipcardsEmptyBody,
-			summaryLabel: t.flipcardsSummaryLabel,
-			cardCountLabel: t.flipcardsCardCountLabel,
-			studySurfaceLabel: t.flipcardsStudySurfaceLabel,
-			studyKicker: t.flipcardsStudyKicker,
-			studyTitle: t.flipcardsStudyTitle,
-			progressSummaryLabel: t.flipcardsProgressSummaryLabel,
-			deckLabel: t.flipcardsDeckLabel,
-			emptyDeckTitle: t.flipcardsEmptyDeckTitle,
-			completeTitle: t.flipcardsCompleteTitle,
-			completeStatsLabel: t.flipcardsCompleteStatsLabel,
-			completedCardsLabel: t.flipcardsCompletedCardsLabel,
-			masteredCardsLabel: t.flipcardsMasteredCardsLabel,
-			practiceCardsLabel: t.flipcardsPracticeCardsLabel,
-			restartDeckLabel: t.flipcardsRestartDeckLabel,
-			previousCardLabel: t.flipcardsPreviousCardLabel,
-			nextCardLabel: t.flipcardsNextCardLabel,
-			practiceCardLabel: t.flipcardsPracticeCardLabel,
-			flipCardLabel: t.flipcardsFlipCardLabel,
-			masteredCardLabel: t.flipcardsMasteredCardLabel,
-			practiceFeedbackLabel: t.flipcardsPracticeFeedbackLabel,
-			masteredFeedbackLabel: t.flipcardsMasteredFeedbackLabel,
-			quickActionsLabel: t.flipcardsQuickActionsLabel,
-			completePositionLabel: t.flipcardsCompletePositionLabel,
-			completeBody: t.flipcardsCompleteBody,
-			deckPositionLabel: t.flipcardsDeckPositionLabel,
-			activeCardLabel: t.flipcardsActiveCardLabel,
-			toolMenuLabel: t.flipcardsToolMenuLabel,
-			openToolMenuLabel: t.flipcardsOpenToolMenuLabel,
-			closeToolMenuLabel: t.flipcardsCloseToolMenuLabel,
-			toolMenuTitle: t.flipcardsToolMenuTitle,
-			toolMenuSubtitle: t.flipcardsToolMenuSubtitle,
-			toolMenuPagerLabel: t.flipcardsToolMenuPagerLabel,
-			toolMenuCurrentCardLabel: t.flipcardsToolMenuCurrentCardLabel,
-			toolMenuActionsLabel: t.flipcardsToolMenuActionsLabel,
-			toolMenuStatsLabel: t.flipcardsToolMenuStatsLabel,
-			goToCardLabel: t.flipcardsGoToCardLabel,
-			toolMenuAllCardsLabel: t.flipcardsToolMenuAllCardsLabel,
-			toolMenuShuffleLabel: t.flipcardsToolMenuShuffleLabel,
-			toolMenuRepeatDifficultLabel: t.flipcardsToolMenuRepeatDifficultLabel,
-			toolMenuAddCardLabel: t.flipcardsToolMenuAddCardLabel,
-			toolMenuUnavailableLabel: t.flipcardsToolMenuUnavailableLabel,
-			toolMenuSelectedLabel: t.flipcardsToolMenuSelectedLabel,
-			toolMenuAllCardsStatusLabel: t.flipcardsToolMenuAllCardsStatusLabel,
-			toolMenuShuffleStatusLabel: t.flipcardsToolMenuShuffleStatusLabel,
-			toolMenuRepeatDifficultCountLabel: t.flipcardsToolMenuRepeatDifficultCountLabel,
-			toolMenuNoPracticeCardsLabel: t.flipcardsToolMenuNoPracticeCardsLabel,
-			toolMenuPracticeDescription: t.flipcardsToolMenuPracticeDescription,
-			toolMenuFlipDescription: t.flipcardsToolMenuFlipDescription,
-			toolMenuMasteredDescription: t.flipcardsToolMenuMasteredDescription,
-			topicAreaAllLabel: t.topicAreaAllLabel,
-			topicAreaToolStatusLabel: t.flipcardsTopicAreaToolStatusLabel,
-			topicAreaSelectedLabel: t.flipcardsToolMenuSelectedLabel
+			loadingTitle: props.t.flipcardsLoadingTitle,
+			errorTitle: props.t.flipcardsErrorTitle,
+			emptyTitle: props.t.flipcardsEmptyTitle,
+			emptyBody: props.t.flipcardsEmptyBody,
+			summaryLabel: props.t.flipcardsSummaryLabel,
+			cardCountLabel: props.t.flipcardsCardCountLabel,
+			studySurfaceLabel: props.t.flipcardsStudySurfaceLabel,
+			studyKicker: props.t.flipcardsStudyKicker,
+			studyTitle: props.t.flipcardsStudyTitle,
+			progressSummaryLabel: props.t.flipcardsProgressSummaryLabel,
+			deckLabel: props.t.flipcardsDeckLabel,
+			emptyDeckTitle: props.t.flipcardsEmptyDeckTitle,
+			completeTitle: props.t.flipcardsCompleteTitle,
+			completeStatsLabel: props.t.flipcardsCompleteStatsLabel,
+			completedCardsLabel: props.t.flipcardsCompletedCardsLabel,
+			masteredCardsLabel: props.t.flipcardsMasteredCardsLabel,
+			practiceCardsLabel: props.t.flipcardsPracticeCardsLabel,
+			restartDeckLabel: props.t.flipcardsRestartDeckLabel,
+			previousCardLabel: props.t.flipcardsPreviousCardLabel,
+			nextCardLabel: props.t.flipcardsNextCardLabel,
+			practiceCardLabel: props.t.flipcardsPracticeCardLabel,
+			flipCardLabel: props.t.flipcardsFlipCardLabel,
+			masteredCardLabel: props.t.flipcardsMasteredCardLabel,
+			practiceFeedbackLabel: props.t.flipcardsPracticeFeedbackLabel,
+			masteredFeedbackLabel: props.t.flipcardsMasteredFeedbackLabel,
+			quickActionsLabel: props.t.flipcardsQuickActionsLabel,
+			completePositionLabel: props.t.flipcardsCompletePositionLabel,
+			completeBody: props.t.flipcardsCompleteBody,
+			deckPositionLabel: props.t.flipcardsDeckPositionLabel,
+			activeCardLabel: props.t.flipcardsActiveCardLabel,
+			toolMenuLabel: props.t.flipcardsToolMenuLabel,
+			openToolMenuLabel: props.t.flipcardsOpenToolMenuLabel,
+			closeToolMenuLabel: props.t.flipcardsCloseToolMenuLabel,
+			toolMenuTitle: props.t.flipcardsToolMenuTitle,
+			toolMenuSubtitle: props.t.flipcardsToolMenuSubtitle,
+			toolMenuPagerLabel: props.t.flipcardsToolMenuPagerLabel,
+			toolMenuCurrentCardLabel: props.t.flipcardsToolMenuCurrentCardLabel,
+			toolMenuActionsLabel: props.t.flipcardsToolMenuActionsLabel,
+			toolMenuStatsLabel: props.t.flipcardsToolMenuStatsLabel,
+			goToCardLabel: props.t.flipcardsGoToCardLabel,
+			toolMenuAllCardsLabel: props.t.flipcardsToolMenuAllCardsLabel,
+			toolMenuShuffleLabel: props.t.flipcardsToolMenuShuffleLabel,
+			toolMenuRepeatDifficultLabel: props.t.flipcardsToolMenuRepeatDifficultLabel,
+			toolMenuAddCardLabel: props.t.flipcardsToolMenuAddCardLabel,
+			toolMenuUnavailableLabel: props.t.flipcardsToolMenuUnavailableLabel,
+			toolMenuSelectedLabel: props.t.flipcardsToolMenuSelectedLabel,
+			toolMenuAllCardsStatusLabel: props.t.flipcardsToolMenuAllCardsStatusLabel,
+			toolMenuShuffleStatusLabel: props.t.flipcardsToolMenuShuffleStatusLabel,
+			toolMenuRepeatDifficultCountLabel: props.t.flipcardsToolMenuRepeatDifficultCountLabel,
+			toolMenuNoPracticeCardsLabel: props.t.flipcardsToolMenuNoPracticeCardsLabel,
+			toolMenuPracticeDescription: props.t.flipcardsToolMenuPracticeDescription,
+			toolMenuFlipDescription: props.t.flipcardsToolMenuFlipDescription,
+			toolMenuMasteredDescription: props.t.flipcardsToolMenuMasteredDescription,
+			topicAreaAllLabel: props.t.topicAreaAllLabel,
+			topicAreaToolStatusLabel: props.t.flipcardsTopicAreaToolStatusLabel,
+			topicAreaSelectedLabel: props.t.flipcardsToolMenuSelectedLabel
 		};
-	}, [activeTopicArea, t]);
+	}, [activeTopicArea, props.t]);
 
 	const workspaceState = createWorkspaceState({
 		loadStatus: pageStatus,
@@ -289,8 +289,8 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 	}, [topicFilteredFlashcards.length, labels, repeatDifficultCardIds.length]);
 
 	const baseDeckToolItems = useMemo(() => {
-		return createDeckToolItems(t, labels, activeDeckToolKey, disabledDeckToolKeys, deckToolStatusLabels);
-	}, [activeDeckToolKey, deckToolStatusLabels, disabledDeckToolKeys, labels, t]);
+		return createDeckToolItems(props.t, labels, activeDeckToolKey, disabledDeckToolKeys, deckToolStatusLabels);
+	}, [activeDeckToolKey, deckToolStatusLabels, disabledDeckToolKeys, labels, props.t]);
 
 	const topicAreaDeckToolItems = useMemo(() => {
 		return createTopicAreaDeckToolItems(topicAreas, topicAreaKey, labels);
@@ -384,23 +384,23 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 	}, []);
 
 	const persistFlipcardAssessment = useCallback((cardId, assessment) => {
-		if (authState.status !== APP_AUTH_STATUS.SIGNED_IN) {
+		if (props.authState.status !== APP_AUTH_STATUS.SIGNED_IN) {
 			return;
 		}
 
-		if (!subjectId) {
+		if (!props.subjectId) {
 			throw new Error("Signed-in FlipCards persistence requires subjectId");
 		}
 
 		const eventId = createConceptPracticeEventId();
 
-		void recordFlipcardAssessmentUseCase.execute({
+		void props.recordFlipcardAssessmentUseCase.execute({
 			eventId,
-			subjectId,
+			subjectId: props.subjectId,
 			glossaryEntryKey: cardId,
 			assessment
 		}).catch(reportConceptPracticeWriteError);
-	}, [authState.status, recordFlipcardAssessmentUseCase, subjectId]);
+	}, [props.authState.status, props.recordFlipcardAssessmentUseCase, props.subjectId]);
 
 	const completeCardForPractice = useCallback((cardId) => {
 		if (!activeCard || activeCard.id !== cardId) {
@@ -445,7 +445,7 @@ export default function useFlipcardsPageViewModel({ getGlossaryEntriesForSubject
 		visibleDeckKey,
 		activeDeckToolKey,
 		deckToolItems,
-		backContract,
+		backContract: props.backContract,
 		activeCardIndex,
 		activeCard,
 		nextCard,

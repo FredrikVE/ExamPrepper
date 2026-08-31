@@ -9,29 +9,29 @@ import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 
-export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, formatDate, t, authState, backContract, onStartNewExam }) {
-	const isAuthLoading = authState.status === APP_AUTH_STATUS.LOADING;
-	const isSignedIn = authState.status === APP_AUTH_STATUS.SIGNED_IN;
+export default function useStatisticsPageViewModel(props) {
+	const isAuthLoading = props.authState.status === APP_AUTH_STATUS.LOADING;
+	const isSignedIn = props.authState.status === APP_AUTH_STATUS.SIGNED_IN;
 	const isSignedOut = (
-		authState.status === APP_AUTH_STATUS.DISABLED
-		|| authState.status === APP_AUTH_STATUS.SIGNED_OUT
+		props.authState.status === APP_AUTH_STATUS.DISABLED
+		|| props.authState.status === APP_AUTH_STATUS.SIGNED_OUT
 	);
 
 	let userId = null;
 
 	if (isSignedIn) {
-		userId = authState.userId;
+		userId = props.authState.userId;
 	}
 
-	const text = useMemo(() => createStatisticsTextModel(t), [t]);
+	const text = useMemo(() => createStatisticsTextModel(props.t), [props.t]);
 
 	const executeStatisticsLoad = useCallback(() => {
 		if (!isSignedIn) {
 			return Promise.resolve(null);
 		}
 
-		return getMyStatisticsUseCase.execute();
-	}, [getMyStatisticsUseCase, isSignedIn]);
+		return props.getMyStatisticsUseCase.execute();
+	}, [props.getMyStatisticsUseCase, isSignedIn]);
 
 	const statisticsLoad = useLoadModel({
 		execute: executeStatisticsLoad,
@@ -51,16 +51,16 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 	const pageErrorMessage = statisticsLoad.error ?? text.loadErrorMessage;
 
 	const dashboard = useMemo(() => createStatisticsDashboardModel(
-		statistics, formatDate, text
-	), [statistics, formatDate, text]);
+		statistics, props.formatDate, text
+	), [statistics, props.formatDate, text]);
 
 	const retryLoadStatistics = useCallback(() => {
 		statisticsLoad.reload();
 	}, [statisticsLoad.reload]);
 
 	const startNewExam = useCallback(() => {
-		onStartNewExam();
-	}, [onStartNewExam]);
+		props.onStartNewExam();
+	}, [props.onStartNewExam]);
 
 	const workspaceState = createStatisticsWorkspaceState({
 		pageStatus,
@@ -75,7 +75,7 @@ export default function useStatisticsPageViewModel({ getMyStatisticsUseCase, for
 	return {
 		statistics,
 		workspaceState,
-		backContract,
+		backContract: props.backContract,
 
 		pageTitle: text.pageTitle,
 		pageSubtitle: text.pageSubtitle,

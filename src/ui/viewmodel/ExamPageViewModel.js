@@ -21,7 +21,7 @@ function formatExamProgressStepLabel(stepNumber, totalSteps) {
 	return `${stepNumber}/${totalSteps}`;
 }
 
-export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAnswerUseCase, calculateExamScoreUseCase, submitExamAttemptUseCase, examId, language, t, backContract, onAttemptSaved }) {
+export default function useExamPageViewModel(props) {
 	const { randomizeAnswerOptions } = useSettings();
 
 	const [answers, setAnswers] = useState({});
@@ -55,12 +55,12 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 		closeSubmitConfirmation,
 		confirmSubmitExamAttempt
 	} = useExamSubmitModel({
-		attemptSaveErrorMessage: t.examAttemptSaveErrorMessage,
+		attemptSaveErrorMessage: props.t.examAttemptSaveErrorMessage,
 		isSubmitted: submitted,
-		submitExamAttemptUseCase,
+		submitExamAttemptUseCase: props.submitExamAttemptUseCase,
 		onExamSubmitted: markExamSubmitted,
 		onSubmitStarted: requestScrollToTop,
-		onAttemptSaved
+		onAttemptSaved: props.onAttemptSaved
 	});
 
 	/* SSOT for hard reset av eksamensforsøket: svar, submit-tilstand, feedback,
@@ -97,9 +97,9 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 		questionsStatus,
 		questionsError
 	} = useExamQuestionLoadModel({
-		getExamQuestionsUseCase,
-		examId,
-		questionsLoadErrorMessage: t.examLoadErrorMessage,
+		getExamQuestionsUseCase: props.getExamQuestionsUseCase,
+		examId: props.examId,
+		questionsLoadErrorMessage: props.t.examLoadErrorMessage,
 		onQuestionsLoaded: handleQuestionsLoaded
 	});
 
@@ -107,10 +107,10 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 		loadStatus: questionsStatus,
 		isEmpty: questions.length === 0,
 		labels: {
-			loading: t.loadingMessage,
-			errorTitle: t.errorPrefix,
+			loading: props.t.loadingMessage,
+			errorTitle: props.t.errorPrefix,
 			errorBody: questionsError,
-			emptyTitle: t.emptyMessage,
+			emptyTitle: props.t.emptyMessage,
 			emptyBody: ""
 		},
 		errorAction: null
@@ -163,7 +163,7 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 			visibleQuestions,
 			currentQuestionIndex,
 			answers,
-			gradeAnswerUseCase
+			gradeAnswerUseCase: props.gradeAnswerUseCase
 		});
 	}, [
 		submitted,
@@ -172,7 +172,7 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 		visibleQuestions,
 		currentQuestionIndex,
 		answers,
-		gradeAnswerUseCase
+		props.gradeAnswerUseCase
 	]);
 
 	const {
@@ -200,8 +200,8 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 			submitted,
 			showAllFeedback,
 			elapsedTimeLabel,
-			calculateExamScoreUseCase,
-			answeredLabel: t.examAnsweredLabel
+			calculateExamScoreUseCase: props.calculateExamScoreUseCase,
+			answeredLabel: props.t.examAnsweredLabel
 		});
 	}, [
 		questions,
@@ -211,8 +211,8 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 		submitted,
 		showAllFeedback,
 		elapsedTimeLabel,
-		calculateExamScoreUseCase,
-		t.examAnsweredLabel
+		props.calculateExamScoreUseCase,
+		props.t.examAnsweredLabel
 	]);
 
 	const {
@@ -266,12 +266,12 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 		return buildProgressBarModel({
 			totalSteps: visibleQuestionCount,
 			currentStep: currentQuestionNumber,
-			ariaLabel: t.examProgressAriaLabel,
-			startLabel: t.examProgressStartLabel,
+			ariaLabel: props.t.examProgressAriaLabel,
+			startLabel: props.t.examProgressStartLabel,
 			formatStepLabel: formatExamProgressStepLabel,
 			onActivateStep: activateExamProgressStep
 		});
-	}, [visibleQuestionCount, currentQuestionNumber, t.examProgressAriaLabel, t.examProgressStartLabel, activateExamProgressStep]);
+	}, [visibleQuestionCount, currentQuestionNumber, props.t.examProgressAriaLabel, props.t.examProgressStartLabel, activateExamProgressStep]);
 
 	const setSingleAnswer = useCallback((questionId, selectedValue) => {
 		if (submitted) {
@@ -334,12 +334,12 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 	const createSubmitAttemptInput = useCallback(() => {
 		return {
 			answers,
-			examId,
-			language,
+			examId: props.examId,
+			language: props.language,
 			questions,
 			durationSeconds: elapsedSeconds
 		};
-	}, [answers, elapsedSeconds, examId, language, questions]);
+	}, [answers, elapsedSeconds, props.examId, props.language, questions]);
 
 	const submitExam = useCallback(async () => {
 		await submitExamAttempt(createSubmitAttemptInput());
@@ -390,14 +390,14 @@ export default function useExamPageViewModel({ getExamQuestionsUseCase, gradeAns
 
 		workspaceState,
 		shouldShowExamChrome,
-		attemptSavingMessage: t.examAttemptSavingMessage,
+		attemptSavingMessage: props.t.examAttemptSavingMessage,
 
 		submitted,
 		showAllFeedback,
 		currentAnswerOptionOrder,
 		workspaceClassName,
 		examProgressBarModel,
-		backContract,
+		backContract: props.backContract,
 
 		score: examScore.score,
 		totalPoints: examScore.totalPoints,
