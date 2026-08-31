@@ -87,6 +87,13 @@ export const SCREEN_CONFIG = {
 	}
 };
 
+export const SUBJECT_SWITCH_TARGET_SCREENS = Object.freeze({
+	[NAV_SCREENS.GLOSSARY]: NAV_SCREENS.GLOSSARY,
+	[NAV_SCREENS.SELECT]: NAV_SCREENS.SELECT,
+	[NAV_SCREENS.LEARNING_PATH]: NAV_SCREENS.LEARNING_PATH,
+	[NAV_SCREENS.OVERVIEW]: NAV_SCREENS.OVERVIEW
+});
+
 export function getScreenConfig(screen) {
 	const screenConfig = SCREEN_CONFIG[screen];
 
@@ -318,3 +325,13 @@ export const NAV_ITEMS = {
 		}
 	}
 };
+
+export function getLearningContentNavigationEntry(entryId) {
+	for (const entry of NAV_ITEMS.toggleButtonItems) {
+		if (entry.id === entryId) {
+			return entry;
+		}
+	}
+
+	throw new Error(`Unknown learning content navigation entry: ${String(entryId)}`);
+}

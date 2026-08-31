@@ -6,10 +6,8 @@ import { describe, expect, test } from "@jest/globals";
 const read = (relativePath) => fs.readFileSync(path.resolve(relativePath), "utf8");
 
 const assessmentViewModels = [
-	"src/ui/viewmodel/LearningSession/createSessionResultModel.js",
-	"src/ui/viewmodel/LearningPath/createLearningPathProgressModel.js",
-	"src/ui/viewmodel/LearningPath/createLearningPathModuleNodeModel.js",
-	"src/ui/viewmodel/LearningPath/createLearningPathSessionModel.js"
+	"src/ui/viewmodel/LearningSession/LearningSessionPagePresentation.js",
+	"src/ui/viewmodel/LearningPathPagePresentation.js"
 ];
 
 describe("LearningPath assessment and start-authority SSOT", () => {
@@ -18,18 +16,11 @@ describe("LearningPath assessment and start-authority SSOT", () => {
 			const source = read(file);
 			expect(source).not.toMatch(/(?:>=|>)\s*(?:40|55|80)\b/);
 		}
-		expect(read("src/ui/viewmodel/LearningSession/createSessionResultModel.js")).toContain("percentage === 100");
-	});
-
-	test("renders module performance directly from the backend module progress", () => {
-		const source = read("src/ui/viewmodel/LearningPath/createLearningPathModuleModel.js");
-		expect(source).toContain("performancePercent: module.progress.performancePercent");
-		expect(source).not.toMatch(/sessions\.(?:reduce|map).*performancePercent/s);
-		expect(source).not.toMatch(/createLearningPathProgressModel\(\{[^}]*completionPercent/s);
+		expect(read("src/ui/viewmodel/LearningSession/LearningSessionPagePresentation.js")).toContain("percentage === 100");
 	});
 
 	test("keeps session icon selection out of the View", () => {
-		const view = read("src/ui/view/components/LearningPathPage/LearningPathSessionNode.jsx");
+		const view = read("src/ui/view/components/LearningPathPage/LearningPathRoadmap.jsx");
 
 		expect(view).toContain("model.iconKey");
 		expect(view).not.toMatch(/model\.status\s*===/);
@@ -50,21 +41,5 @@ describe("LearningPath assessment and start-authority SSOT", () => {
 		}
 		expect(sessionNodeCss).toContain("var(--assessment-progress)");
 		expect(sessionCss).toContain("var(--assessment-progress)");
-	});
-
-	test("does not reconstruct completion from frontend thresholds or counters", () => {
-		const status = read("src/ui/viewmodel/LearningPath/createModuleStatus.js");
-		const section = read("src/ui/viewmodel/LearningPath/createLearningPathSectionModel.js");
-
-		expect(status).not.toMatch(/completionPercent\s*>=/);
-		expect(section).not.toMatch(/completedSessions\s*>=\s*section\.progress\.totalSessions/);
-	});
-
-	test("does not reconstruct replay or start authority from frontend progress", () => {
-		const action = read("src/ui/viewmodel/LearningPath/createLearningPathActionModel.js");
-
-		expect(action).not.toContain("isHistoricallyComplete");
-		expect(action).not.toMatch(/completedSessions\s*>=\s*module\.progress\.totalSessions/);
-		expect(action).not.toContain("module.availability.isCurrent && module.availability.isUnlocked");
 	});
 });

@@ -29,6 +29,27 @@ export function createSignedInAppAuthState(userId) {
 	};
 }
 
+export function createAppAuthScopeKey(authState) {
+	assertAppAuthState(authState);
+
+	switch (authState.status) {
+		case APP_AUTH_STATUS.SIGNED_IN:
+			return `user:${authState.userId}`;
+
+		case APP_AUTH_STATUS.DISABLED:
+			return "auth-disabled";
+
+		case APP_AUTH_STATUS.LOADING:
+			return "auth-loading";
+
+		case APP_AUTH_STATUS.SIGNED_OUT:
+			return "signed-out";
+
+		default:
+			throw new Error(`Unknown app auth status '${String(authState.status)}'`);
+	}
+}
+
 export function assertAppAuthState(authState) {
 	if (!authState || typeof authState !== "object") {
 		throw new Error("App auth state must be an object");

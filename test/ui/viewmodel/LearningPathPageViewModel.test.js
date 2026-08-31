@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { LANGUAGES, translations } from "../../../src/i18n/translations.js";
+import { TEST_TYPES } from "../../../src/navigation/navigation.js";
 
 const stateValues = [];
 let stateCursor = 0;
@@ -24,9 +25,10 @@ const useState = jest.fn((initialValue) => {
 	return [stateValues[stateIndex], setter];
 });
 const useCallback = jest.fn((callback) => callback);
+const useMemo = jest.fn((factory) => factory());
 const useLoadModel = jest.fn(() => ({ status: "ready", data: learningPath, error: null, reload: jest.fn() }));
 
-jest.unstable_mockModule("react", () => ({ useCallback, useState }));
+jest.unstable_mockModule("react", () => ({ useCallback, useMemo, useState }));
 jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({ default: useLoadModel }));
 
 const { default: useLearningPathPageViewModel } = await import("../../../src/ui/viewmodel/LearningPathPageViewModel.js");
@@ -43,9 +45,8 @@ function renderViewModel({ authState, startLearningSessionUseCase, onLearningSes
 		selectedSubject: { id: "in2120", code: "IN2120" },
 		language: "no",
 		t,
-		isActive: true,
 		backContract: { onBack: jest.fn() },
-		contentToggleContract: {},
+		onSelectContentType: jest.fn(),
 		onLearningSessionStarted,
 		onChapterTestSelected,
 		authState
@@ -71,6 +72,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 		onChapterTestSelected = jest.fn();
 		useState.mockClear();
 		useCallback.mockClear();
+		useMemo.mockClear();
 		useLoadModel.mockClear();
 	});
 
@@ -84,7 +86,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 	test("keeps the optional-auth LearningPath load enabled when auth is disabled", () => {
 		renderViewModel({ authState: { status: "disabled" }, startLearningSessionUseCase: { execute: jest.fn() }, onLearningSessionStarted: jest.fn() });
 
-		expect(useLoadModel.mock.calls[0][0]).toMatchObject({ resourceKey: "in2120:no:signed-out", isEnabled: true });
+		expect(useLoadModel.mock.calls[0][0]).toMatchObject({ resourceKey: "in2120:no:auth-disabled", isEnabled: true });
 	});
 
 	test("waits to load LearningPath while auth state is loading", () => {
@@ -198,7 +200,7 @@ describe("useLearningPathPageViewModel LearningPath actions", () => {
 
 		expect(action).toMatchObject({ intent: "open-chapter-test", examId: "chapter-1a-test-no", isDisabled: false });
 		await viewModel.onLearningPathAction(action);
-		expect(onChapterTestSelected).toHaveBeenCalledWith("chapter-1a-test-no");
+		expect(onChapterTestSelected).toHaveBeenCalledWith("chapter-1a-test-no", TEST_TYPES.CHAPTER_TEST);
 		expect(execute).not.toHaveBeenCalled();
 		expect(onLearningSessionStarted).not.toHaveBeenCalled();
 	});

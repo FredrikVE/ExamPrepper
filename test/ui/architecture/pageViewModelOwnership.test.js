@@ -4,11 +4,13 @@ import path from "node:path";
 import { parse } from "@babel/parser";
 import { describe, expect, test } from "@jest/globals";
 
+const APP_PATH = path.resolve("src/App.jsx");
 const PAGE_ROOT = path.resolve("src/ui/view/pages");
 const COMPONENT_ROOT = path.resolve("src/ui/view/components");
 const EXAM_PAGE_PATH = path.join(PAGE_ROOT, "ExamPage.jsx");
 const EXAM_PAGE_COMPONENT_DIRECTORY = path.join(COMPONENT_ROOT, "ExamPage");
 const EXAM_PAGE_VIEW_MODEL_PATH = path.resolve("src/ui/viewmodel/ExamPageViewModel.js");
+const SUBJECT_CATALOG_PATH = path.resolve("src/ui/viewmodel/SubjectCatalog/useSubjectCatalogModel.js");
 const FUTURE_PAGE_COMPONENT_DIRECTORIES = [
 	path.join(COMPONENT_ROOT, "LearningPathPage"),
 	path.join(COMPONENT_ROOT, "LearningSessionPage")
@@ -213,6 +215,23 @@ function collectFutureOwnershipFindings(directoryPath) {
 }
 
 describe("Page ViewModel ownership", () => {
+	test("keeps SubjectCatalog independent of SubjectSelect page internals", () => {
+		const subjectCatalogSource = fs.readFileSync(SUBJECT_CATALOG_PATH, "utf8");
+
+		expect(subjectCatalogSource).not.toContain("../SubjectSelectPage/");
+	});
+
+	test("mounts SubjectSelect and LearningContentSelect ViewModels inside screen wrappers", () => {
+		const appSource = fs.readFileSync(APP_PATH, "utf8");
+
+		expect(appSource).toContain("function SubjectSelectPageWrapper(props)");
+		expect(appSource).toContain("function LearningContentSelectPageWrapper(props)");
+		expect(appSource).toContain("<SubjectSelectPageWrapper");
+		expect(appSource).toContain("<LearningContentSelectPageWrapper");
+		expect(appSource).not.toContain("const subjectSelectPageViewModel = useSubjectSelectPageViewModel");
+		expect(appSource).not.toContain("const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel");
+	});
+
 	test("allows the ExamPage composition root to receive its ViewModel", () => {
 		const ast = parseModule(EXAM_PAGE_PATH);
 		const defaultExport = ast.program.body.find((node) => node.type === "ExportDefaultDeclaration");

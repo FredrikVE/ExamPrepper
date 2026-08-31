@@ -155,8 +155,9 @@ describe("workspace architecture", () => {
 		expect(appSource).not.toMatch(
 			/NAV_SCREENS\.GLOSSARY\s*&&\s*\(\s*<GlossaryPageWrapper/
 		);
+		expect(appSource).toContain('key={`${props.subjectId ?? "no-subject"}:${props.initialTopicAreaKey ?? "all"}:${authScopeKey}`}');
 		expect(appSource).toMatch(
-			/function GlossaryPageWrapper[\s\S]*if \(!isActive\) \{\s*return null;\s*\}/
+			/function GlossaryPageWithViewModel[\s\S]*if \(!props\.isActive\) \{\s*return null;\s*\}/
 		);
 	});
 

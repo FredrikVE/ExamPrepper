@@ -4,9 +4,8 @@ import { LEARNING_SESSION_REWARD_KINDS, LEARNING_SESSION_STATES } from "./Learni
 const COMBO_REWARD_INTERVAL = 3;
 const XP_PER_POINT = 10;
 
-export const SESSION_ACTIONS = {
+export const SESSION_ACTIONS = Object.freeze({
 	SESSION_LOADED: "sessionLoaded",
-	LOAD_FAILED: "loadFailed",
 	MATCH_CARD_RESULT_RECORDED: "matchCardResultRecorded",
 	ANSWER_CHANGED: "answerChanged",
 	ANSWER_CHECKED: "answerChecked",
@@ -14,11 +13,11 @@ export const SESSION_ACTIONS = {
 	SUBMIT_STARTED: "submitStarted",
 	SUBMIT_SUCCEEDED: "submitSucceeded",
 	SUBMIT_FAILED: "submitFailed"
-};
+});
 
 export function createInitialSessionState() {
 	return {
-		status: LEARNING_SESSION_STATES.LOADING
+		status: LEARNING_SESSION_STATES.ANSWERING
 	};
 }
 
@@ -28,12 +27,6 @@ export default function sessionReducer(state, action) {
 			return {
 				status: LEARNING_SESSION_STATES.ANSWERING,
 				session: createLoadedSessionData(action.session)
-			};
-
-		case SESSION_ACTIONS.LOAD_FAILED:
-			return {
-				status: LEARNING_SESSION_STATES.LOAD_FAILED,
-				errorMessage: action.errorMessage
 			};
 
 		case SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED:
@@ -87,11 +80,9 @@ function createLoadedSessionData(session) {
 		currentIndex: 0,
 		answersBySessionQuestionId: {},
 		resultsBySessionQuestionId: {},
-		answerOptionOrderBySessionQuestionId: createAnswerOptionOrderMap(session.questions),
 		combo: 0,
 		xp: 0,
-		pendingRewardKind: null,
-		scrollToTopRequestId: 0
+		pendingRewardKind: null
 	};
 }
 
@@ -99,8 +90,11 @@ function applyMatchCardResultRecorded(state, action) {
 	const session = requireSessionData(state, action.type);
 
 	for (const matchCardResult of session.matchCardResults) {
-		if (matchCardResult.glossaryEntryKey === action.result.glossaryEntryKey) {
-			throw new Error(`Duplicate LearningSession MatchCards result: ${action.result.glossaryEntryKey}`);
+		if (
+			matchCardResult.glossaryEntryKey
+			=== action.result.glossaryEntryKey
+		) {
+			return state;
 		}
 	}
 
@@ -124,8 +118,7 @@ function applyContinued(state, actionType) {
 		session: {
 			...session,
 			currentIndex: session.currentIndex + 1,
-			pendingRewardKind: null,
-			scrollToTopRequestId: session.scrollToTopRequestId + 1
+			pendingRewardKind: null
 		}
 	};
 }
@@ -208,24 +201,4 @@ function resolvePendingRewardKind({ currentIndex, questionCount, nextCombo }) {
 	}
 
 	return LEARNING_SESSION_REWARD_KINDS.COMBO;
-}
-
-function createAnswerOptionOrderMap(questions) {
-	const orderBySessionQuestionId = {};
-
-	for (const entry of questions) {
-		const options = entry.question.options;
-
-		if (!Array.isArray(options) || options.length === 0) {
-			orderBySessionQuestionId[entry.sessionQuestionId] = null;
-			continue;
-		}
-
-		orderBySessionQuestionId[entry.sessionQuestionId] = Array.from(
-			{ length: options.length },
-			(_value, index) => index
-		);
-	}
-
-	return orderBySessionQuestionId;
 }

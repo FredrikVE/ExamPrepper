@@ -61,9 +61,6 @@ export default function GlossaryPage({ viewModel }) {
 						onSelectEntry={viewModel.selectContentType}
 						ariaLabel={viewModel.contentToggleAriaLabel}
 						mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
-						expandedMobileToggleButtonGroupId={viewModel.expandedMobileToggleButtonGroupId}
-						onOpenMobileToggleButtonGroup={viewModel.openMobileToggleButtonGroup}
-						onCloseMobileToggleButtonGroup={viewModel.closeMobileToggleButtonGroup}
 						contentToggleBackLabel={viewModel.contentToggleBackLabel}
 					/>
 

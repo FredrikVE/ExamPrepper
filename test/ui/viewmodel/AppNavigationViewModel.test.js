@@ -1,6 +1,6 @@
 //test/ui/viewmodel/AppNavigationViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
 
 let hookState;
 let stateIndex;
@@ -64,8 +64,8 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/AppNavigation/useSyncSelecte
 
 const { default: useAppNavigationViewModel } = await import("../../../src/ui/viewmodel/AppNavigationViewModel.js");
 
-function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null, examReturnScreen = null) {
-	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType, examReturnScreen];
+function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null, examReturnScreen = null, selectedLearningContentEntryId = LEARNING_CONTENT_TYPES.EXAMS) {
+	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType, examReturnScreen, selectedLearningContentEntryId];
 }
 
 const examByIdUseCase = { id: "exam-by-id" };
@@ -103,19 +103,69 @@ describe("useAppNavigationViewModel", () => {
 		expect(viewModel.selectedExamTestType).toBeNull();
 		expect(viewModel.selectedTopicAreaKey).toBeNull();
 		expect(viewModel.examLanguageSyncError).toBeNull();
+		expect(viewModel.selectedLearningContentEntryId).toBe(LEARNING_CONTENT_TYPES.EXAMS);
 	});
 
-	test("valg av fag åpner Læringsstien og nullstiller gamle valg", () => {
+	test("SubjectSelect subject selection går til LearningPath", () => {
 		setNavigationState(NAV_SCREENS.EXAM, "old-subject", "old-exam", "old-topic", null, null);
 
-		createViewModel().selectSubject("inf1010");
+		createViewModel().selectSubject("in2120");
 
 		expect(hookState.slice(0, 4)).toEqual([
 			NAV_SCREENS.LEARNING_PATH,
-			"inf1010",
+			"in2120",
 			null,
 			null
 		]);
+	});
+
+	test.each([
+		[NAV_SCREENS.GLOSSARY, NAV_SCREENS.GLOSSARY],
+		[NAV_SCREENS.SELECT, NAV_SCREENS.SELECT],
+		[NAV_SCREENS.LEARNING_PATH, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.OVERVIEW, NAV_SCREENS.OVERVIEW],
+		[NAV_SCREENS.EXAM, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.FLIPCARDS, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.MATCHCARDS, NAV_SCREENS.LEARNING_PATH],
+		[NAV_SCREENS.LEARNING_SESSION, NAV_SCREENS.LEARNING_PATH]
+	])("switchSubject fra %s går til %s", (fromScreen, expectedScreen) => {
+		setNavigationState(fromScreen, "in2120", "old-exam", "old-topic", "old-session", null, TEST_TYPES.EXAM, NAV_SCREENS.SELECT);
+
+		const navigation = createViewModel();
+		navigation.switchSubject("in5140");
+
+		expect(hookState[0]).toBe(expectedScreen);
+		expect(hookState[1]).toBe("in5140");
+		expect(hookState[2]).toBeNull();
+		expect(hookState[3]).toBeNull();
+		expect(hookState[4]).toBeNull();
+		expect(hookState[6]).toBeNull();
+		expect(hookState[7]).toBeNull();
+	});
+
+	test.each([
+		[LEARNING_CONTENT_TYPES.GLOSSARY, NAV_SCREENS.GLOSSARY],
+		[LEARNING_CONTENT_TYPES.FLIPCARDS, NAV_SCREENS.SELECT],
+		[LEARNING_CONTENT_TYPES.MATCHCARDS, NAV_SCREENS.SELECT],
+		[TEST_TYPES.CHAPTER_TEST, NAV_SCREENS.SELECT],
+		[LEARNING_CONTENT_TYPES.EXAMS, NAV_SCREENS.SELECT],
+		[LEARNING_CONTENT_TYPES.LEARNING_PATH, NAV_SCREENS.LEARNING_PATH]
+	])("selectLearningContent %s går til %s", (entryId, expectedScreen) => {
+		setNavigationState(NAV_SCREENS.SELECT, "in2120", "old-exam", "old-topic", "old-session", null, TEST_TYPES.EXAM, NAV_SCREENS.SELECT);
+
+		createViewModel().selectLearningContent(entryId);
+
+		expect(hookState[0]).toBe(expectedScreen);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[3]).toBeNull();
+		expect(hookState[4]).toBeNull();
+		expect(hookState[8]).toBe(entryId);
+	});
+
+	test("selectLearningContent feiler tydelig for ukjent entry", () => {
+		expect(() => createViewModel().selectLearningContent("missing")).toThrow(
+			"Unknown learning content navigation entry: missing"
+		);
 	});
 
 	test("valg av eksamen går direkte til eksamensskjermen", () => {

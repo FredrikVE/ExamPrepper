@@ -8,10 +8,8 @@ const useState = jest.fn((initialValue) => {
 	stateIndex += 1;
 	return [initialValue, stateSetters[currentIndex]];
 });
-const useEffect = jest.fn((effect) => effect());
 
 jest.unstable_mockModule("react", () => ({
-	useEffect,
 	useState
 }));
 
@@ -22,7 +20,6 @@ const { default: useGlossarySearchModel } = await import(
 beforeEach(() => {
 	stateIndex = 0;
 	useState.mockClear();
-	useEffect.mockClear();
 	for (const setter of stateSetters) {
 		setter.mockClear();
 	}
@@ -30,7 +27,7 @@ beforeEach(() => {
 
 describe("useGlossarySearchModel", () => {
 	test("owns the glossary search state behind named fields", () => {
-		const model = useGlossarySearchModel({ resetKey: "in2120:none" });
+		const model = useGlossarySearchModel();
 
 		expect(model.glossarySearchTerm).toBe("");
 		expect(model.searchKeyboardIndex).toBe(-1);
@@ -39,15 +36,5 @@ describe("useGlossarySearchModel", () => {
 		expect(model.searchNarrowedGlossaryEntryKey).toBeNull();
 		expect(model.setGlossarySearchTerm).toBe(stateSetters[0]);
 		expect(model.setSearchNarrowedGlossaryEntryKey).toBe(stateSetters[4]);
-	});
-
-	test("resets only search-owned state when the reset key changes", () => {
-		useGlossarySearchModel({ resetKey: "in2120:none" });
-
-		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[1]).toHaveBeenCalledWith(-1);
-		expect(stateSetters[2]).toHaveBeenCalledWith(false);
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(stateSetters[4]).toHaveBeenCalledWith(null);
 	});
 });

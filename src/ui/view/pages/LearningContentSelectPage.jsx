@@ -77,9 +77,6 @@ export default function LearningContentSelectPage({ viewModel }) {
 				onSelectEntry={viewModel.selectContentType}
 				ariaLabel={viewModel.contentToggleAriaLabel}
 				mobileToggleButtonItems={viewModel.mobileToggleButtonItems}
-				expandedMobileToggleButtonGroupId={viewModel.expandedMobileToggleButtonGroupId}
-				onOpenMobileToggleButtonGroup={viewModel.openMobileToggleButtonGroup}
-				onCloseMobileToggleButtonGroup={viewModel.closeMobileToggleButtonGroup}
 				contentToggleBackLabel={viewModel.contentToggleBackLabel}
 			/>
 

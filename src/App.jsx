@@ -1,6 +1,7 @@
 //src/App.jsx
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppAuth } from "./auth/AppAuthContext.jsx";
+import { createAppAuthScopeKey } from "./auth/AppAuthState.js";
 
 import { ThemeProvider } from "./ui/theme/ThemeContext.jsx";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext.jsx";
@@ -8,6 +9,7 @@ import { SettingsProvider } from "./ui/settings/SettingsContext.jsx";
 
 import useAppNavigationViewModel from "./ui/viewmodel/AppNavigationViewModel.js";
 import useSubjectSelectPageViewModel from "./ui/viewmodel/SubjectSelectPageViewModel.js";
+import useSubjectCatalogModel from "./ui/viewmodel/SubjectCatalog/useSubjectCatalogModel.js";
 import useLearningContentSelectPageViewModel from "./ui/viewmodel/LearningContentSelectPageViewModel.js";
 import useExamPageViewModel from "./ui/viewmodel/ExamPageViewModel.js";
 import useStatisticsPageViewModel from "./ui/viewmodel/StatisticsPageViewModel.js";
@@ -94,32 +96,13 @@ function AppContent() {
 		examWorkModeActionsRef.current?.confirmSubmit();
 	}, [navigationViewModel.closeMobileDropDownTopBarMenu]);
 
-	const subjectSelectPageViewModel = useSubjectSelectPageViewModel(
+	const subjectCatalog = useSubjectCatalogModel({
 		getAvailableSubjectsUseCase,
 		language,
-		t,
-		navigationViewModel.selectedSubjectId,
-		navigationViewModel.selectSubject,
-		navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS,
-		navigationViewModel.backContract
-	);
-
-	const learningContentSelectPageViewModel = useLearningContentSelectPageViewModel({
-		getAvailableExamsUseCase,
-		getAvailableChapterTestsUseCase,
-		getTopicAreasUseCase,
-		getFlipcardDeckSummariesUseCase,
-		language,
-		t,
-		selectedSubject: subjectSelectPageViewModel.selectedSubject,
-		onSelectTestSet: navigationViewModel.selectExam,
-		onSelectFlipcardDeck: navigationViewModel.selectFlipcardDeck,
-		onSelectMatchCardsDeck: navigationViewModel.selectMatchCardsDeck,
-		isActive: navigationViewModel.activeScreen === NAV_SCREENS.SELECT,
-		onChangeScreen: navigationViewModel.changeScreen,
-		backContract: navigationViewModel.backContract,
-		actionErrorMessage: navigationViewModel.examLanguageSyncError
+		selectedSubjectId: navigationViewModel.selectedSubjectId,
+		t
 	});
+
 
 
 	return (
@@ -140,8 +123,8 @@ function AppContent() {
 					onCloseMobileSubjectPicker={navigationViewModel.closeMobileSubjectPicker}
 					showSubjectSwitcher={navigationViewModel.shouldShowSubjectSwitcher}
 					backContract={navigationViewModel.backContract}
-					subjectSwitcher={subjectSelectPageViewModel.subjectSwitcher}
-					onSelectSubject={navigationViewModel.selectSubject}
+					subjectSwitcher={subjectCatalog.subjectSwitcher}
+					onSelectSubject={navigationViewModel.switchSubject}
 					isExamWorkMode={navigationViewModel.activeScreen === NAV_SCREENS.EXAM}
 					examWorkStatusLabel={examWorkMode?.statusLabel ?? ""}
 					showExamSubmitAction={Boolean(examWorkMode?.canSubmit)}
@@ -158,19 +141,37 @@ function AppContent() {
 				/>
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.SUBJECTS && (
-					<SubjectSelectPage viewModel={subjectSelectPageViewModel} />
+					<SubjectSelectPageWrapper
+						subjects={subjectCatalog.subjects}
+						loadStatus={subjectCatalog.loadStatus}
+						loadError={subjectCatalog.errorMessage}
+						t={t}
+						onSelectSubject={navigationViewModel.selectSubject}
+						backContract={navigationViewModel.backContract}
+					/>
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.SELECT && (
-					<LearningContentSelectPage viewModel={learningContentSelectPageViewModel} />
+					<LearningContentSelectPageWrapper
+						selectedSubject={subjectCatalog.selectedSubject}
+						activeEntryId={navigationViewModel.selectedLearningContentEntryId}
+						onSelectContentType={navigationViewModel.selectLearningContent}
+						language={language}
+						t={t}
+						onSelectTestSet={navigationViewModel.selectExam}
+						onSelectFlipcardDeck={navigationViewModel.selectFlipcardDeck}
+						onSelectMatchCardsDeck={navigationViewModel.selectMatchCardsDeck}
+						backContract={navigationViewModel.backContract}
+						actionErrorMessage={navigationViewModel.examLanguageSyncError}
+					/>
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_PATH && (
-					<LearningPathPageWrapper selectedSubject={subjectSelectPageViewModel.selectedSubject} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} contentSelectViewModel={learningContentSelectPageViewModel} onLearningSessionStarted={navigationViewModel.openLearningSession} onChapterTestSelected={(chapterTestId) => navigationViewModel.selectExam(chapterTestId, TEST_TYPES.CHAPTER_TEST)} />
+					<LearningPathPageWrapper selectedSubject={subjectCatalog.selectedSubject} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} onSelectContentType={navigationViewModel.selectLearningContent} onLearningSessionStarted={navigationViewModel.openLearningSession} onChapterTestSelected={(chapterTestId) => navigationViewModel.selectExam(chapterTestId, TEST_TYPES.CHAPTER_TEST)} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.LEARNING_SESSION && (
-					<LearningSessionPageWrapper sessionId={navigationViewModel.selectedLearningSessionId} language={language} t={t} isActive={true} backContract={navigationViewModel.backContract} />
+					<LearningSessionPageWrapper sessionId={navigationViewModel.selectedLearningSessionId} language={language} t={t} backContract={navigationViewModel.backContract} />
 				)}
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.EXAM && (
@@ -212,16 +213,13 @@ function AppContent() {
 
 				<GlossaryPageWrapper
 					subjectId={navigationViewModel.selectedSubjectId}
-					selectedSubject={subjectSelectPageViewModel.selectedSubject}
+					selectedSubject={subjectCatalog.selectedSubject}
 					initialTopicAreaKey={navigationViewModel.selectedTopicAreaKey}
 					language={language}
 					t={t}
 					isActive={navigationViewModel.activeScreen === NAV_SCREENS.GLOSSARY}
 					backContract={navigationViewModel.backContract}
-					onSelectContentType={learningContentSelectPageViewModel.selectContentType}
-					expandedMobileToggleButtonGroupId={learningContentSelectPageViewModel.expandedMobileToggleButtonGroupId}
-					onOpenMobileToggleButtonGroup={learningContentSelectPageViewModel.openMobileToggleButtonGroup}
-					onCloseMobileToggleButtonGroup={learningContentSelectPageViewModel.closeMobileToggleButtonGroup}
+					onSelectContentType={navigationViewModel.selectLearningContent}
 				/>
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
@@ -243,32 +241,81 @@ function AppContent() {
 	);
 }
 
+function SubjectSelectPageWrapper(props) {
+	const viewModel = useSubjectSelectPageViewModel({
+		subjects: props.subjects,
+		loadStatus: props.loadStatus,
+		loadError: props.loadError,
+		t: props.t,
+		onSelectSubject: props.onSelectSubject,
+		backContract: props.backContract
+	});
+
+	return <SubjectSelectPage viewModel={viewModel} />;
+}
+
+function LearningContentSelectPageWrapper(props) {
+	const viewModel = useLearningContentSelectPageViewModel({
+		getAvailableExamsUseCase,
+		getAvailableChapterTestsUseCase,
+		getTopicAreasUseCase,
+		getFlipcardDeckSummariesUseCase,
+		language: props.language,
+		t: props.t,
+		selectedSubject: props.selectedSubject,
+		activeEntryId: props.activeEntryId,
+		onSelectContentType: props.onSelectContentType,
+		onSelectTestSet: props.onSelectTestSet,
+		onSelectFlipcardDeck: props.onSelectFlipcardDeck,
+		onSelectMatchCardsDeck: props.onSelectMatchCardsDeck,
+		backContract: props.backContract,
+		actionErrorMessage: props.actionErrorMessage
+	});
+
+	return <LearningContentSelectPage viewModel={viewModel} />;
+}
+
 function LearningPathPageWrapper(props) {
 	const authState = useAppAuth();
 
 	return <LearningPathPageWithViewModel {...props} authState={authState} />;
 }
 
-function LearningPathPageWithViewModel({ selectedSubject, language, t, isActive, backContract, contentSelectViewModel, onLearningSessionStarted, onChapterTestSelected, authState }) {
-	const contentToggleContract = {
-		entries: contentSelectViewModel.contentToggleEntries,
-		activeEntryId: "learning-path",
-		mobileActiveEntryId: "learning-path",
-		onSelectEntry: contentSelectViewModel.selectContentType,
-		ariaLabel: contentSelectViewModel.contentToggleAriaLabel,
-		mobileToggleButtonItems: contentSelectViewModel.mobileToggleButtonItems,
-		expandedMobileToggleButtonGroupId: contentSelectViewModel.expandedMobileToggleButtonGroupId,
-		onOpenMobileToggleButtonGroup: contentSelectViewModel.openMobileToggleButtonGroup,
-		onCloseMobileToggleButtonGroup: contentSelectViewModel.closeMobileToggleButtonGroup,
-		contentToggleBackLabel: contentSelectViewModel.contentToggleBackLabel
-	};
-	const viewModel = useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, contentToggleContract, onLearningSessionStarted, onChapterTestSelected, authState });
+function LearningPathPageWithViewModel({ selectedSubject, language, t, isActive, backContract, onSelectContentType, onLearningSessionStarted, onChapterTestSelected, authState }) {
+	const viewModel = useLearningPathPageViewModel({ getLearningPathUseCase, startLearningSessionUseCase, selectedSubject, language, t, isActive, backContract, onSelectContentType, onLearningSessionStarted, onChapterTestSelected, authState });
 
 	return <LearningPathPage viewModel={viewModel} />;
 }
 
-function LearningSessionPageWrapper({ sessionId, language, t, isActive, backContract }) {
-	const viewModel = useLearningSessionPageViewModel({ getLearningSessionUseCase, submitLearningSessionUseCase, gradeAnswerUseCase, sessionId, language, t, isActive, backContract });
+function LearningSessionPageWrapper(props) {
+	const authState = useAppAuth();
+	const authScopeKey = createAppAuthScopeKey(authState);
+
+	return (
+		<LearningSessionPageWithViewModel
+			key={`${props.sessionId ?? "no-session"}:${authScopeKey}`}
+			sessionId={props.sessionId}
+			language={props.language}
+			t={props.t}
+			backContract={props.backContract}
+			authState={authState}
+			authScopeKey={authScopeKey}
+		/>
+	);
+}
+
+function LearningSessionPageWithViewModel(props) {
+	const viewModel = useLearningSessionPageViewModel({
+		getLearningSessionUseCase,
+		submitLearningSessionUseCase,
+		gradeAnswerUseCase,
+		sessionId: props.sessionId,
+		language: props.language,
+		t: props.t,
+		backContract: props.backContract,
+		authState: props.authState,
+		authScopeKey: props.authScopeKey
+	});
 
 	return <LearningSessionPage viewModel={viewModel} />;
 }
@@ -404,31 +451,41 @@ function MatchCardsPageWithViewModel({ subjectId, initialTopicAreaKey, language,
 	);
 }
 
-function GlossaryPageWrapper({ subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType, expandedMobileToggleButtonGroupId, onOpenMobileToggleButtonGroup, onCloseMobileToggleButtonGroup }) {
+function GlossaryPageWrapper(props) {
+	const authState = useAppAuth();
+	const authScopeKey = createAppAuthScopeKey(authState);
+
+	return (
+		<GlossaryPageWithViewModel
+			key={`${props.subjectId ?? "no-subject"}:${props.initialTopicAreaKey ?? "all"}:${authScopeKey}`}
+			{...props}
+			authState={authState}
+		/>
+	);
+}
+
+function GlossaryPageWithViewModel(props) {
+	const authScopeKey = createAppAuthScopeKey(props.authState);
 	const glossaryPageViewModel = useGlossaryPageViewModel({
 		getGlossaryOverviewUseCase,
 		getGlossaryNetworkUseCase,
 		getTopicAreasUseCase,
-		subjectId,
-		selectedSubject,
-		initialTopicAreaKey,
-		language,
-		t,
-		isActive,
-		backContract,
-		onSelectContentType,
-		expandedMobileToggleButtonGroupId,
-		openMobileToggleButtonGroup: onOpenMobileToggleButtonGroup,
-		closeMobileToggleButtonGroup: onCloseMobileToggleButtonGroup
+		subjectId: props.subjectId,
+		selectedSubject: props.selectedSubject,
+		initialTopicAreaKey: props.initialTopicAreaKey,
+		language: props.language,
+		authScopeKey,
+		t: props.t,
+		isActive: props.isActive,
+		backContract: props.backContract,
+		onSelectContentType: props.onSelectContentType
 	});
 
-	if (!isActive) {
+	if (!props.isActive) {
 		return null;
 	}
 
-	return (
-		<GlossaryPage viewModel={glossaryPageViewModel} />
-	);
+	return <GlossaryPage viewModel={glossaryPageViewModel} />;
 }
 
 function StatisticsPageWrapper({ formatDate, t, backContract, onStartNewExam }) {

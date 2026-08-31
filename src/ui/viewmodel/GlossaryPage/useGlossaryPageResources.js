@@ -5,43 +5,31 @@ import useLoadModel from "../LoadState/useLoadModel.js";
 import combineLoadStatuses from "../LoadState/combineLoadStatuses.js";
 import resolveFirstLoadError from "../Utils/resolveFirstLoadError.js";
 
-export default function useGlossaryPageResources({ getGlossaryOverviewUseCase, getGlossaryNetworkUseCase, getTopicAreasUseCase, subjectId, language, isActive, expandedGlossaryEntryKey, t }) {
+export default function useGlossaryPageResources({ getGlossaryOverviewUseCase, getGlossaryNetworkUseCase, getTopicAreasUseCase, subjectId, language, authScopeKey, isActive, expandedGlossaryEntryKey, t }) {
 	const executeGlossaryOverviewLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
-			return Promise.resolve([]);
-		}
-
 		return getGlossaryOverviewUseCase.execute({ subjectId });
-	}, [getGlossaryOverviewUseCase, isActive, subjectId]);
+	}, [getGlossaryOverviewUseCase, subjectId]);
 
 	const executeTopicAreaLoad = useCallback(() => {
-		if (!isActive || !subjectId) {
-			return Promise.resolve([]);
-		}
-
 		return getTopicAreasUseCase.execute({
 			subjectId,
 			language
 		});
-	}, [getTopicAreasUseCase, isActive, language, subjectId]);
+	}, [getTopicAreasUseCase, language, subjectId]);
 
 	const executeGlossaryNetworkLoad = useCallback(() => {
-		if (!isActive || !subjectId || !expandedGlossaryEntryKey) {
-			return Promise.resolve(null);
-		}
-
 		return getGlossaryNetworkUseCase.execute({
 			subjectId,
 			glossaryEntryKey: expandedGlossaryEntryKey
 		});
-	}, [getGlossaryNetworkUseCase, isActive, expandedGlossaryEntryKey, subjectId]);
+	}, [getGlossaryNetworkUseCase, expandedGlossaryEntryKey, subjectId]);
 
 	const isLoadEnabled = isActive && subjectId !== null;
 	const glossaryOverviewLoad = useLoadModel({
 		execute: executeGlossaryOverviewLoad,
 		emptyData: [],
 		errorMessage: t.glossaryPageErrorMessage,
-		resourceKey: subjectId,
+		resourceKey: `${subjectId ?? "no-subject"}:${authScopeKey}`,
 		isEnabled: isLoadEnabled,
 		onLoaded: null
 	});
@@ -63,7 +51,7 @@ export default function useGlossaryPageResources({ getGlossaryOverviewUseCase, g
 		execute: executeGlossaryNetworkLoad,
 		emptyData: null,
 		errorMessage: t.glossaryPageNetworkErrorMessage,
-		resourceKey: `${subjectId ?? "no-subject"}:${activeGlossaryDetailEntryKey ?? "no-concept"}`,
+		resourceKey: `${subjectId ?? "no-subject"}:${activeGlossaryDetailEntryKey ?? "no-concept"}:${authScopeKey}`,
 		isEnabled: isLoadEnabled && activeGlossaryDetailEntryKey !== null,
 		onLoaded: null
 	});

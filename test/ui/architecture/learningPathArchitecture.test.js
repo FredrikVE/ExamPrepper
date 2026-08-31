@@ -23,6 +23,20 @@ function importSources(filePath) {
 }
 
 describe("LearningPath architecture", () => {
+	test("keeps the LearningPath production surface collapsed to four JS/JSX files", () => {
+		const learningPathFiles = [
+			"src/ui/viewmodel/LearningPathPageViewModel.js",
+			"src/ui/viewmodel/LearningPathPagePresentation.js",
+			"src/ui/view/pages/LearningPathPage.jsx",
+			"src/ui/view/components/LearningPathPage/LearningPathRoadmap.jsx"
+		];
+
+		expect(learningPathFiles.every((filePath) => fs.existsSync(path.resolve(filePath)))).toBe(true);
+		expect(fs.existsSync(path.resolve("src/ui/viewmodel/LearningPath"))).toBe(false);
+		expect(collectFiles(path.resolve("src/ui/view/components/LearningPathPage"))).toEqual([
+			path.resolve("src/ui/view/components/LearningPathPage/LearningPathRoadmap.jsx")
+		]);
+	});
 	test("keeps contract tests and fixtures under test", () => {
 		expect(fs.existsSync(path.resolve("contracts"))).toBe(false);
 		expect(fs.existsSync(path.resolve("test/contracts"))).toBe(true);

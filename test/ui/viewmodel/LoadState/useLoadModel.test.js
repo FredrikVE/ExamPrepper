@@ -273,6 +273,48 @@ describe("useLoadModel", () => {
 		expect(stateSetters[0]).not.toHaveBeenCalled();
 	});
 
+	test("skjuler data fra en annen resourceKey også når modellen er deaktivert", () => {
+		stateValues.push({
+			resourceKey: "subject-a",
+			status: LOAD_STATUS.READY,
+			data: [{ id: "a" }],
+			hasLoadedOnce: true
+		});
+
+		const loadModel = useLoadModel({
+			execute: jest.fn(() => new Promise(() => {})),
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "subject-b",
+			isEnabled: false,
+			onLoaded: null
+		});
+
+		expect(loadModel.status).toBe(LOAD_STATUS.LOADING);
+		expect(loadModel.data).toEqual([]);
+	});
+
+	test("beholder data når disabled-modellen fortsatt ber om samme resourceKey", () => {
+		stateValues.push({
+			resourceKey: "subject-a",
+			status: LOAD_STATUS.READY,
+			data: [{ id: "a" }],
+			hasLoadedOnce: true
+		});
+
+		const loadModel = useLoadModel({
+			execute: jest.fn(() => new Promise(() => {})),
+			emptyData: [],
+			errorMessage: "Kunne ikke laste.",
+			resourceKey: "subject-a",
+			isEnabled: false,
+			onLoaded: null
+		});
+
+		expect(loadModel.status).toBe(LOAD_STATUS.READY);
+		expect(loadModel.data).toEqual([{ id: "a" }]);
+	});
+
 	test("resets to loading with empty data when resourceKey changes", () => {
 		const previousData = [{ id: "old" }];
 		const previousResource = {

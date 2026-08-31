@@ -1,7 +1,8 @@
 // src/ui/view/components/ToggleButtonRow/useToggleButtonRowMobile.js
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function useToggleButtonRowMobile({ items, activeEntryId, expandedGroupId, onOpenGroup, onCloseGroup, onSelectEntry }) {
+export default function useToggleButtonRowMobile({ items, activeEntryId, onSelectEntry }) {
+	const [expandedGroupId, setExpandedGroupId] = useState(null);
 	const backButtonRef = useRef(null);
 	const restoreFocusButtonRef = useRef(null);
 	const restoreFocusItemIdRef = useRef(null);
@@ -29,7 +30,7 @@ export default function useToggleButtonRowMobile({ items, activeEntryId, expande
 
 		if (item.entries.length > 0) {
 			restoreFocusItemIdRef.current = item.id;
-			onOpenGroup(item.id);
+			setExpandedGroupId(item.id);
 
 			if (!containsEntryId(item.entries, activeEntryId)) {
 				const firstEnabledEntry = findFirstEnabledEntry(item.entries);
@@ -48,11 +49,9 @@ export default function useToggleButtonRowMobile({ items, activeEntryId, expande
 	};
 
 	const selectEntry = (entry) => {
-		if (entry.isDisabled) {
-			return;
+		if (!entry.isDisabled) {
+			onSelectEntry(entry.id);
 		}
-
-		onSelectEntry(entry.id);
 	};
 
 	const collapseGroup = () => {
@@ -61,15 +60,13 @@ export default function useToggleButtonRowMobile({ items, activeEntryId, expande
 		}
 
 		restoreFocusItemIdRef.current = expandedGroupId;
-		onCloseGroup();
+		setExpandedGroupId(null);
 	};
 
 	const resolveItemButtonRef = (itemId) => {
-		if (itemId === restoreFocusItemIdRef.current) {
-			return restoreFocusButtonRef;
-		}
-
-		return null;
+		return itemId === restoreFocusItemIdRef.current
+			? restoreFocusButtonRef
+			: null;
 	};
 
 	return {
@@ -94,7 +91,9 @@ function findExpandedItem(items, itemId) {
 		}
 	}
 
-	throw new Error(`Unknown expanded toggle-button item: ${String(itemId)}`);
+	// items kan lovlig erstattes ved språk/config-endring.
+	// Lokal disclosure-state betyr da "ingen gruppe er åpen".
+	return null;
 }
 
 function resolveExpandedActiveEntryId(expandedItem, activeEntryId) {
@@ -107,8 +106,7 @@ function resolveExpandedActiveEntryId(expandedItem, activeEntryId) {
 	}
 
 	const firstEnabledEntry = findFirstEnabledEntry(expandedItem.entries);
-
-	return firstEnabledEntry === null ? null : firstEnabledEntry.id;
+	return firstEnabledEntry?.id ?? null;
 }
 
 function containsEntryId(entries, entryId) {
@@ -132,9 +130,7 @@ function findFirstEnabledEntry(entries) {
 }
 
 function focusElement(element) {
-	if (element === null) {
-		return;
+	if (element !== null) {
+		element.focus();
 	}
-
-	element.focus();
 }

@@ -19,7 +19,6 @@ const GLOSSARY_VIEW_ROOTS = [
 const PRIVATE_GLOSSARY_MODULES = new Set([
 	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossarySearchModel.js"),
 	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryDetailModel.js"),
-	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryTopicAreaSelectionModel.js"),
 	path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryPageResources.js"),
 	path.resolve("src/ui/viewmodel/GlossaryPage/glossaryPageDerivations.js"),
 	path.resolve("src/ui/viewmodel/GlossaryPage/glossaryInteractionBindings.js")

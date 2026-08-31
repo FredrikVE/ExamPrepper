@@ -8,12 +8,13 @@ const dispatch = jest.fn();
 let reducerState;
 
 const useCallback = jest.fn((callback) => callback);
-const useEffect = jest.fn();
 const useMemo = jest.fn((factory) => factory());
 const useReducer = jest.fn(() => [reducerState, dispatch]);
+const useLoadModel = jest.fn();
 const useMatchCardsRoundModel = jest.fn();
 
-jest.unstable_mockModule("react", () => ({ useCallback, useEffect, useMemo, useReducer }));
+jest.unstable_mockModule("react", () => ({ useCallback, useMemo, useReducer }));
+jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({ default: useLoadModel }));
 jest.unstable_mockModule("../../../src/ui/viewmodel/MatchCards/useMatchCardsRoundModel.js", () => ({ default: useMatchCardsRoundModel }));
 
 const { default: useLearningSessionPageViewModel } = await import("../../../src/ui/viewmodel/LearningSessionPageViewModel.js");
@@ -60,8 +61,8 @@ function createViewModel({ gradeAnswerUseCase, submitLearningSessionUseCase }) {
 		sessionId: "session-1",
 		language: LANGUAGES.EN,
 		t,
-		isActive: true,
-		backContract: { onBack: jest.fn() }
+		backContract: { onBack: jest.fn() },
+		authScopeKey: "user:user-1"
 	});
 }
 
@@ -82,6 +83,10 @@ function createLoadedReducerState(loadedQuestion = question) {
 		...state,
 		session: {
 			...state.session,
+			matchCardResults: MATCH_CARDS_TASK.pairs.map((pair) => ({
+				glossaryEntryKey: pair.glossaryEntryKey,
+				wrongAttemptCount: 0
+			})),
 			answersBySessionQuestionId: { "session-question-1": "discount rat" }
 		}
 	};
@@ -91,15 +96,69 @@ describe("useLearningSessionPageViewModel behavior", () => {
 	beforeEach(() => {
 		dispatch.mockClear();
 		useCallback.mockClear();
-		useEffect.mockClear();
 		useMemo.mockClear();
 		useReducer.mockClear();
+		useLoadModel.mockReset();
+		useLoadModel.mockReturnValue({ status: "ready", error: null });
 		useMatchCardsRoundModel.mockReset();
 		useMatchCardsRoundModel.mockReturnValue(createCompletedMatchCardsRoundModel());
 		reducerState = createLoadedReducerState();
 	});
 
+	test("loads technical session state through useLoadModel with auth-scoped identity", () => {
+		let loadInput = null;
+		useLoadModel.mockImplementation((input) => {
+			loadInput = input;
+			return { status: "ready", error: null };
+		});
+
+		createViewModel({
+			gradeAnswerUseCase: { execute: jest.fn(), getQuestionScore: jest.fn(), getFillMatchType: jest.fn() },
+			submitLearningSessionUseCase: { execute: jest.fn() }
+		});
+
+		expect(loadInput.resourceKey).toBe("session-1:user:user-1");
+		expect(loadInput.isEnabled).toBe(true);
+		expect(loadInput.emptyData).toBeNull();
+
+		const loadedData = { sessionId: "session-1" };
+		loadInput.onLoaded({ loadedData });
+
+		expect(dispatch).toHaveBeenCalledWith({
+			type: SESSION_ACTIONS.SESSION_LOADED,
+			session: loadedData
+		});
+	});
+
+	test("uses recorded MatchCards results as progression truth instead of visual round timing", () => {
+		useMatchCardsRoundModel.mockReturnValue({
+			session: {},
+			termSlots: [],
+			explanationSlots: [],
+			boardStyle: {},
+			isInteractionLocked: true,
+			isRoundComplete: false,
+			selectSlot: jest.fn()
+		});
+
+		const viewModel = createViewModel({
+			gradeAnswerUseCase: { execute: jest.fn(), getQuestionScore: jest.fn(), getFillMatchType: jest.fn() },
+			submitLearningSessionUseCase: { execute: jest.fn() }
+		});
+
+		expect(viewModel.matchCardsModel).toBeNull();
+		expect(viewModel.questionCardModel).not.toBeNull();
+		expect(viewModel.actionPanelModel).not.toBeNull();
+	});
+
 	test("starts with MatchCards and hides question actions until the round is complete", () => {
+		reducerState = {
+			...reducerState,
+			session: {
+				...reducerState.session,
+				matchCardResults: []
+			}
+		};
 		const selectSlot = jest.fn();
 		useMatchCardsRoundModel.mockReturnValue({
 			session: {},

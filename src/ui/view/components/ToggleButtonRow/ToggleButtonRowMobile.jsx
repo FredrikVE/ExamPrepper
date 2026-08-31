@@ -6,9 +6,6 @@ export default function ToggleButtonRowMobile(props) {
 	const interaction = useToggleButtonRowMobile({
 		items: props.items,
 		activeEntryId: props.activeEntryId,
-		expandedGroupId: props.expandedGroupId,
-		onOpenGroup: props.onOpenGroup,
-		onCloseGroup: props.onCloseGroup,
 		onSelectEntry: props.onSelectEntry
 	});
 	const buttons = [];

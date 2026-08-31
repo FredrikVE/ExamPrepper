@@ -25,6 +25,16 @@ describe("frontend IAM ownership", () => {
 		const owners = findSourceFilesContaining("hasClerkAuth");
 		expect(owners).toEqual([]);
 	});
+
+	test("scopes Glossary and LearningSession page identity to canonical app auth identity", () => {
+		const appSource = fs.readFileSync(path.resolve("src/App.jsx"), "utf8");
+		const glossaryResourcesSource = fs.readFileSync(path.resolve("src/ui/viewmodel/GlossaryPage/useGlossaryPageResources.js"), "utf8");
+
+		expect(appSource).toContain('key={`${props.subjectId ?? "no-subject"}:${props.initialTopicAreaKey ?? "all"}:${authScopeKey}`}');
+		expect(appSource).toContain('key={`${props.sessionId ?? "no-session"}:${authScopeKey}`}');
+		expect(glossaryResourcesSource).toContain('`${subjectId ?? "no-subject"}:${authScopeKey}`');
+		expect(glossaryResourcesSource).toContain('`${subjectId ?? "no-subject"}:${activeGlossaryDetailEntryKey ?? "no-concept"}:${authScopeKey}`');
+	});
 });
 
 function findSourceFilesContaining(searchText) {

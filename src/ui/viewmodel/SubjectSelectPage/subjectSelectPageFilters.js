@@ -1,21 +1,6 @@
-import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
-
 // src/ui/viewmodel/SubjectSelectPage/subjectSelectPageFilters.js
+import normalizeSearchTerm from "../Utils/normalizeSearchTerm.js";
 export const ALL_FACULTIES = "all";
-
-export function findSubjectById(subjects, subjectId) {
-	if (!subjectId) {
-		return null;
-	}
-
-	for (const subject of subjects) {
-		if (subject.id === subjectId) {
-			return subject;
-		}
-	}
-
-	return null;
-}
 
 export function buildSubjectFaculties(subjects) {
 	const faculties = [];

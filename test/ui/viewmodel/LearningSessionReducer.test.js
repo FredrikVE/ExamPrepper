@@ -34,22 +34,11 @@ function createLoadedState() {
 }
 
 describe("learning session reducer", () => {
-	test("represents loading without nullable session placeholders", () => {
+	test("starts with interaction state only before a session is loaded", () => {
 		expect(createInitialSessionState()).toEqual({
-			status: "loading"
+			status: "answering"
 		});
-	});
-
-	test("represents load failure without pretending a session exists", () => {
-		const state = sessionReducer(createInitialSessionState(), {
-			type: SESSION_ACTIONS.LOAD_FAILED,
-			errorMessage: "Could not load"
-		});
-
-		expect(state).toEqual({
-			status: "loadFailed",
-			errorMessage: "Could not load"
-		});
+		expect(SESSION_ACTIONS).not.toHaveProperty("LOAD_FAILED");
 	});
 
 	test("loads complete session data and resets transient state", () => {
@@ -73,14 +62,9 @@ describe("learning session reducer", () => {
 				currentIndex: 0,
 				answersBySessionQuestionId: {},
 				resultsBySessionQuestionId: {},
-				answerOptionOrderBySessionQuestionId: {
-					q1: [0, 1],
-					q2: null
-				},
 				combo: 0,
 				xp: 0,
-				pendingRewardKind: null,
-				scrollToTopRequestId: 0
+				pendingRewardKind: null
 			}
 		});
 
@@ -107,20 +91,20 @@ describe("learning session reducer", () => {
 		});
 	});
 
-	test("fails fast when the same MatchCards pair result is recorded twice", () => {
+	test("ignores the same MatchCards result when the UI callback is delivered twice", () => {
 		const loaded = createLoadedState();
 		const result = { glossaryEntryKey: "glossary-a", wrongAttemptCount: 0 };
 		const recorded = sessionReducer(loaded, {
 			type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
 			result
 		});
+		const duplicate = sessionReducer(recorded, {
+			type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
+			result
+		});
 
-		expect(() => {
-			sessionReducer(recorded, {
-				type: SESSION_ACTIONS.MATCH_CARD_RESULT_RECORDED,
-				result
-			});
-		}).toThrow("Duplicate LearningSession MatchCards result: glossary-a");
+		expect(duplicate).toBe(recorded);
+		expect(duplicate.session.matchCardResults).toEqual([result]);
 	});
 
 	test("records checked answer, awards xp, and surfaces every third combo before the final question", () => {
@@ -207,8 +191,7 @@ describe("learning session reducer", () => {
 			session: {
 				...loaded.session,
 				currentIndex: 0,
-				pendingRewardKind: "combo",
-				scrollToTopRequestId: 4
+				pendingRewardKind: "combo"
 			}
 		};
 
@@ -220,10 +203,10 @@ describe("learning session reducer", () => {
 			status: "answering",
 			session: {
 				currentIndex: 1,
-				pendingRewardKind: null,
-				scrollToTopRequestId: 5
+				pendingRewardKind: null
 			}
 		});
+		expect(continued.session).not.toHaveProperty("scrollToTopRequestId");
 	});
 
 	test("represents submit progress with the lifecycle status only", () => {

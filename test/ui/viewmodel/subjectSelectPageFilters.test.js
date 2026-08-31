@@ -1,11 +1,6 @@
 // test/ui/viewmodel/subjectSelectPageFilters.test.js
 import { describe, expect, test } from "@jest/globals";
-import {
-	ALL_FACULTIES,
-	buildSubjectFaculties,
-	filterSubjects,
-	findSubjectById
-} from "../../../src/ui/viewmodel/SubjectSelectPage/subjectSelectPageFilters.js";
+import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects } from "../../../src/ui/viewmodel/SubjectSelectPage/subjectSelectPageFilters.js";
 
 const subjects = [
 	{
@@ -39,15 +34,6 @@ const subjects = [
 ];
 
 describe("subjectSelectPageFilters", () => {
-	test("finds selected subject by id", () => {
-		expect(findSubjectById(subjects, "jur1000")).toEqual(subjects[1]);
-	});
-
-	test("returns null when selected subject id is missing", () => {
-		expect(findSubjectById(subjects, null)).toBeNull();
-		expect(findSubjectById(subjects, "missing")).toBeNull();
-	});
-
 	test("builds unique faculty options and skips empty values", () => {
 		expect(buildSubjectFaculties(subjects)).toEqual([
 			"Informatikk",

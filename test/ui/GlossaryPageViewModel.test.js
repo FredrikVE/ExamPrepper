@@ -34,8 +34,13 @@ const stateSetters = [
 let loadModelQueue = [];
 let currentTableSort = { key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING };
 let currentDetailRefs = null;
+let currentSelectedTopicAreaKeys = null;
 
 const useState = jest.fn((initialValue) => {
+	if (initialValue === null) {
+		return [currentSelectedTopicAreaKeys, setSelectedTopicAreaKeys];
+	}
+
 	if (typeof initialValue === "object" && initialValue !== null && "key" in initialValue) {
 		return [currentTableSort, setGlossaryTableSort];
 	}
@@ -47,7 +52,6 @@ const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
 const useLoadModel = jest.fn(() => loadModelQueue.shift());
 const useGlossarySearchModel = jest.fn();
-const useGlossaryTopicAreaSelectionModel = jest.fn();
 const useGlossaryDetailModel = jest.fn();
 jest.unstable_mockModule("react", () => ({
 	useCallback,
@@ -62,10 +66,6 @@ jest.unstable_mockModule("../../src/ui/viewmodel/LoadState/useLoadModel.js", () 
 
 jest.unstable_mockModule("../../src/ui/viewmodel/GlossaryPage/useGlossarySearchModel.js", () => ({
 	default: useGlossarySearchModel
-}));
-
-jest.unstable_mockModule("../../src/ui/viewmodel/GlossaryPage/useGlossaryTopicAreaSelectionModel.js", () => ({
-	default: useGlossaryTopicAreaSelectionModel
 }));
 
 jest.unstable_mockModule("../../src/ui/viewmodel/GlossaryPage/useGlossaryDetailModel.js", () => ({
@@ -300,13 +300,14 @@ function createViewModel({
 	},
 	initialTopicAreaKey = null,
 	language = "no",
+	authScopeKey = "user:user-1",
 	isActive = true,
-	expandedMobileToggleButtonGroupId = null,
 	glossaryDetailTrailKeys = [],
 	glossaryDetailRenderSnapshot = null,
 	areGlossaryDetailRelationsExpanded = false
 } = {}) {
 	currentTableSort = tableSort;
+	currentSelectedTopicAreaKeys = selectedTopicAreaKeys;
 	currentDetailRefs = createDetailRefs();
 	useGlossarySearchModel.mockReturnValue({
 		glossarySearchTerm: searchTerm,
@@ -319,10 +320,6 @@ function createViewModel({
 		setIsSearchAutocompleteOpen,
 		searchNarrowedGlossaryEntryKey,
 		setSearchNarrowedGlossaryEntryKey
-	});
-	useGlossaryTopicAreaSelectionModel.mockReturnValue({
-		selectedTopicAreaKeys,
-		setSelectedTopicAreaKeys
 	});
 	useGlossaryDetailModel.mockReturnValue({
 		expandedGlossaryEntryKey,
@@ -372,8 +369,6 @@ function createViewModel({
 		execute: jest.fn(async () => loadedTopicAreas)
 	};
 	const onSelectContentType = jest.fn();
-	const onOpenMobileToggleButtonGroup = jest.fn();
-	const onCloseMobileToggleButtonGroup = jest.fn();
 	const backContract = {
 		showBackButton: true,
 		backLabel: "Tilbake",
@@ -388,13 +383,11 @@ function createViewModel({
 		selectedSubject,
 		initialTopicAreaKey,
 		language,
+		authScopeKey,
 		t: translations,
 		isActive,
 		backContract,
-		onSelectContentType,
-		expandedMobileToggleButtonGroupId,
-		openMobileToggleButtonGroup: onOpenMobileToggleButtonGroup,
-		closeMobileToggleButtonGroup: onCloseMobileToggleButtonGroup
+		onSelectContentType
 	});
 
 	return {
@@ -403,8 +396,6 @@ function createViewModel({
 		getGlossaryNetworkUseCase,
 		getTopicAreasUseCase,
 		onSelectContentType,
-		onOpenMobileToggleButtonGroup,
-		onCloseMobileToggleButtonGroup,
 		viewModel
 	};
 }
@@ -424,6 +415,7 @@ beforeEach(() => {
 	loadModelQueue = [];
 	currentTableSort = { key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT, direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING };
 	currentDetailRefs = null;
+	currentSelectedTopicAreaKeys = null;
 	clearStateSetterCalls();
 	useState.mockClear();
 	useEffect.mockClear();
@@ -431,17 +423,20 @@ beforeEach(() => {
 	useCallback.mockClear();
 	useLoadModel.mockClear();
 	useGlossarySearchModel.mockReset();
-	useGlossaryTopicAreaSelectionModel.mockReset();
 	useGlossaryDetailModel.mockReset();
 });
 
 describe("useGlossaryPageViewModel", () => {
-	test("composes private state models behind the page ViewModel contract", () => {
+	test("keeps local state behind the keyed Glossary page identity", () => {
 		createViewModel();
 
-		expect(useGlossarySearchModel).toHaveBeenCalledWith({ resetKey: "in2120:null" });
-		expect(useGlossaryTopicAreaSelectionModel).toHaveBeenCalledWith({ resetKey: "in2120:null" });
-		expect(useGlossaryDetailModel).toHaveBeenCalledWith({ resetKey: "in2120:null" });
+		expect(useGlossarySearchModel).toHaveBeenCalledWith();
+		expect(useGlossaryDetailModel).toHaveBeenCalledWith();
+		expect(useState).toHaveBeenCalledWith(null);
+		expect(useState).toHaveBeenCalledWith({
+			key: GLOSSARY_TABLE_SORT_KEYS.DIRECT_NEIGHBOR_COUNT,
+			direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
+		});
 	});
 
 	test("returns the glossary-aware mobile toggle-button contract", () => {
@@ -502,21 +497,6 @@ describe("useGlossaryPageViewModel", () => {
 	});
 
 
-	test("reuses the shared mobile disclosure state across the glossary route", () => {
-		const {
-			onOpenMobileToggleButtonGroup,
-			onCloseMobileToggleButtonGroup,
-			viewModel
-		} = createViewModel({
-			expandedMobileToggleButtonGroupId: "practice"
-		});
-
-		expect(viewModel.expandedMobileToggleButtonGroupId).toBe("practice");
-		expect(viewModel.mobileActiveEntryId).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
-		expect(viewModel.openMobileToggleButtonGroup).toBe(onOpenMobileToggleButtonGroup);
-		expect(viewModel.closeMobileToggleButtonGroup).toBe(onCloseMobileToggleButtonGroup);
-	});
-
 	test("loads the canonical glossary overview once and topic areas for the active language", async () => {
 		const { getGlossaryOverviewUseCase, getTopicAreasUseCase } = createViewModel();
 
@@ -530,6 +510,8 @@ describe("useGlossaryPageViewModel", () => {
 			subjectId: "in2120",
 			language: "no"
 		});
+		expect(useLoadModel.mock.calls[0][0].resourceKey).toBe("in2120:user:user-1");
+		expect(useLoadModel.mock.calls[1][0].resourceKey).toBe("in2120:no");
 	});
 
 	test.each([
@@ -564,7 +546,7 @@ describe("useGlossaryPageViewModel", () => {
 			content: null
 		});
 		expect(useLoadModel.mock.calls[2][0]).toMatchObject({
-			resourceKey: "in2120:no-concept",
+			resourceKey: "in2120:no-concept:user:user-1",
 			isEnabled: false
 		});
 	});

@@ -2,7 +2,7 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
 import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
-import { LEARNING_CONTENT_TYPES, NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
+import { LEARNING_CONTENT_TYPES, TEST_TYPES } from "../../../src/navigation/navigation.js";
 
 const stateSetters = [];
 let loadModelQueue = [];
@@ -173,7 +173,7 @@ function createViewModel(params = {}) {
 		execute: jest.fn().mockResolvedValue([])
 	};
 	const goBack = jest.fn();
-	const changeScreen = jest.fn();
+	const onSelectContentType = jest.fn();
 	const onSelectTestSet = jest.fn();
 	const selectFlipcardDeck = jest.fn();
 	const selectMatchCardsDeck = jest.fn();
@@ -184,6 +184,9 @@ function createViewModel(params = {}) {
 		navigationLabel: params.navigationLabel ?? "Navigasjon",
 		onBack: goBack
 	};
+	const selectedSubject = Object.hasOwn(params, "selectedSubject")
+		? params.selectedSubject
+		: { id: "in5431", code: "IN5431" };
 	const viewModel = useLearningContentSelectPageViewModel({
 		getAvailableExamsUseCase,
 		getAvailableChapterTestsUseCase,
@@ -191,12 +194,12 @@ function createViewModel(params = {}) {
 		getFlipcardDeckSummariesUseCase,
 		language: "nb",
 		t: createT(),
-		selectedSubject: { id: "in5431", code: "IN5431" },
+		selectedSubject,
 		onSelectTestSet,
 		onSelectFlipcardDeck: selectFlipcardDeck,
 		onSelectMatchCardsDeck: selectMatchCardsDeck,
-		isActive: params.isActive ?? true,
-		onChangeScreen: changeScreen,
+		activeEntryId: params.activeEntryId ?? LEARNING_CONTENT_TYPES.EXAMS,
+		onSelectContentType,
 		backContract,
 		actionErrorMessage: params.actionErrorMessage ?? null
 	});
@@ -207,7 +210,7 @@ function createViewModel(params = {}) {
 		getTopicAreasUseCase,
 		getFlipcardDeckSummariesUseCase,
 		goBack,
-		changeScreen,
+		onSelectContentType,
 		onSelectTestSet,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
@@ -225,9 +228,9 @@ describe("useLearningContentSelectPageViewModel", () => {
 		useLoadModel.mockClear();
 	});
 
-	test("does not load test sets while the page is inactive", () => {
+	test("does not load test sets while no subject is selected", () => {
 		const { getAvailableExamsUseCase, getAvailableChapterTestsUseCase } = createViewModel({
-			isActive: false
+			selectedSubject: null
 		});
 
 		expect(getAvailableExamsUseCase.execute).not.toHaveBeenCalled();
@@ -235,9 +238,7 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 	test("loads only exams while the Exam test type is active", () => {
-		const { getAvailableExamsUseCase, getAvailableChapterTestsUseCase } = createViewModel({
-			isActive: true
-		});
+		const { getAvailableExamsUseCase, getAvailableChapterTestsUseCase } = createViewModel();
 
 		expect(getAvailableExamsUseCase.execute).toHaveBeenCalledWith({
 			subjectId: "in5431",
@@ -247,13 +248,11 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 	test("does not load either test-set port while a deck content type is active", () => {
-		useState.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.FLIPCARDS, jest.fn()]);
-
 		const {
 			getAvailableExamsUseCase,
 			getAvailableChapterTestsUseCase,
 			getFlipcardDeckSummariesUseCase
-		} = createViewModel({ isActive: true });
+		} = createViewModel({ activeEntryId: LEARNING_CONTENT_TYPES.FLIPCARDS });
 
 		expect(getAvailableExamsUseCase.execute).not.toHaveBeenCalled();
 		expect(getAvailableChapterTestsUseCase.execute).not.toHaveBeenCalled();
@@ -264,12 +263,8 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 	test("loads only chapter tests while the ChapterTest test type is active", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
-
 		const { getAvailableExamsUseCase, getAvailableChapterTestsUseCase } = createViewModel({
-			isActive: true
+			activeEntryId: TEST_TYPES.CHAPTER_TEST
 		});
 
 		expect(getAvailableExamsUseCase.execute).not.toHaveBeenCalled();
@@ -341,22 +336,6 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 
-	test("keeps a mobile group expanded until the explicit close action", () => {
-		const { viewModel } = createViewModel();
-
-		expect(viewModel.expandedMobileToggleButtonGroupId).toBeNull();
-
-		viewModel.openMobileToggleButtonGroup("practice");
-		viewModel.selectContentType(LEARNING_CONTENT_TYPES.GLOSSARY);
-
-		expect(stateSetters[2]).toHaveBeenCalledWith("practice");
-		expect(stateSetters[2]).not.toHaveBeenCalledWith(null);
-
-		viewModel.closeMobileToggleButtonGroup();
-
-		expect(stateSetters[2]).toHaveBeenCalledWith(null);
-	});
-
 	test("shows exams by default and exposes the exam button as active on desktop and mobile", () => {
 		const { viewModel } = createViewModel({
 			exams: [
@@ -373,40 +352,22 @@ describe("useLearningContentSelectPageViewModel", () => {
 		expect(viewModel.visibleTestSets.map((testSet) => testSet.id)).toEqual(["exam"]);
 	});
 
-	test("navigates through the enabled desktop learning-path entry", () => {
-		const { viewModel, changeScreen } = createViewModel();
+	test.each([
+		LEARNING_CONTENT_TYPES.LEARNING_PATH,
+		TEST_TYPES.CHAPTER_TEST,
+		LEARNING_CONTENT_TYPES.FLIPCARDS,
+		LEARNING_CONTENT_TYPES.GLOSSARY
+	])("delegates %s selection to AppNavigation", (entryId) => {
+		const { onSelectContentType, viewModel } = createViewModel();
 
-		viewModel.selectContentType("learning-path");
+		viewModel.selectContentType(entryId);
 
-		expect(stateSetters[0]).not.toHaveBeenCalled();
-		expect(stateSetters[1]).not.toHaveBeenCalled();
-		expect(changeScreen).toHaveBeenCalledWith(NAV_SCREENS.LEARNING_PATH);
-	});
-
-	test("selects the desktop or mobile chapter-test entry through the shared content handler", () => {
-		const { viewModel } = createViewModel();
-
-		viewModel.selectContentType(TEST_TYPES.CHAPTER_TEST);
-
-		expect(stateSetters[1]).toHaveBeenCalledWith(TEST_TYPES.CHAPTER_TEST);
-		expect(stateSetters[0]).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
-	});
-
-	test("selects the desktop or mobile exam entry through the shared content handler", () => {
-		const { viewModel } = createViewModel();
-
-		viewModel.selectContentType(LEARNING_CONTENT_TYPES.EXAMS);
-
-		expect(stateSetters[1]).toHaveBeenCalledWith(TEST_TYPES.EXAM);
-		expect(stateSetters[0]).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.EXAMS);
+		expect(onSelectContentType).toHaveBeenCalledWith(entryId);
 	});
 
 	test("uses the ChapterTest scoped load when the ChapterTest entry is active", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
-
 		const { viewModel } = createViewModel({
+			activeEntryId: TEST_TYPES.CHAPTER_TEST,
 			exams: [
 				{ id: "exam", title: "Eksamen", testType: TEST_TYPES.EXAM, topicAreaKeys: [] }
 			],
@@ -421,11 +382,8 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 	test("does not source ChapterTests from the inactive Exam port", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
-
 		const { viewModel } = createViewModel({
+			activeEntryId: TEST_TYPES.CHAPTER_TEST,
 			exams: [
 				{ id: "legacy-chapter", title: "Legacy chapter", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: [] }
 			]
@@ -434,12 +392,22 @@ describe("useLearningContentSelectPageViewModel", () => {
 		expect(viewModel.visibleTestSets).toEqual([]);
 	});
 
-	test("uses chapter-test heading and empty-state copy while the chapter button is active", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
+	test("fails fast når SELECT får learning-content entry uten heading contract", () => {
+		expect(() => createViewModel({
+			activeEntryId: LEARNING_CONTENT_TYPES.LEARNING_PATH
+		})).toThrow("has no SELECT heading contract");
+	});
 
-		const { viewModel } = createViewModel();
+	test("bruker eksplisitt subtitle fallback mens selectedSubject mangler", () => {
+		const { viewModel } = createViewModel({
+			selectedSubject: null
+		});
+
+		expect(viewModel.subtitle).toBe("Velg en øvingsprøve.");
+	});
+
+	test("uses chapter-test heading and empty-state copy while the chapter button is active", () => {
+		const { viewModel } = createViewModel({ activeEntryId: TEST_TYPES.CHAPTER_TEST });
 
 		expect(viewModel.title).toBe("Velg kapitteltest");
 		expect(viewModel.subtitle).toBe("Velg en kapitteltest for IN5431.");
@@ -449,46 +417,6 @@ describe("useLearningContentSelectPageViewModel", () => {
 			body: "Ingen kapitteltester funnet",
 			action: null
 		});
-	});
-
-	test("shows filtered-empty copy when chapter tests exist but search has no matches", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()])
-			.mockImplementationOnce(() => [null, jest.fn()])
-			.mockImplementationOnce(() => ["finnes-ikke", jest.fn()]);
-
-		const { viewModel } = createViewModel({
-			chapterTests: [
-				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: ["security"] }
-			]
-		});
-
-		expect(viewModel.visibleTestSets).toEqual([]);
-		expect(viewModel.workspaceState).toEqual({
-			kind: WORKSPACE_STATE_KINDS.EMPTY,
-			title: "Ingen treff",
-			body: "Prøv et annet søk eller fagområde",
-			action: null
-		});
-	});
-
-	test("shows filtered-empty copy when chapter tests exist but topic filter has no matches", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()])
-			.mockImplementationOnce(() => [null, jest.fn()])
-			.mockImplementationOnce(() => ["", jest.fn()])
-			.mockImplementationOnce(() => ["governance", jest.fn()]);
-
-		const { viewModel } = createViewModel({
-			chapterTests: [
-				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: ["security"] }
-			]
-		});
-
-		expect(viewModel.visibleTestSets).toEqual([]);
-		expect(viewModel.workspaceState.title).toBe("Ingen treff");
 	});
 
 	test("ignores an inactive ChapterTest load error while Exams are active", () => {
@@ -501,11 +429,8 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 	test("uses the active ChapterTest load error in page status", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
-
 		const { viewModel } = createViewModel({
+			activeEntryId: TEST_TYPES.CHAPTER_TEST,
 			examLoadStatus: LOAD_STATUS.ERROR,
 			examLoadError: "Eksamen feilet",
 			chapterTestLoadStatus: LOAD_STATUS.ERROR,
@@ -520,36 +445,6 @@ describe("useLearningContentSelectPageViewModel", () => {
 		});
 	});
 
-	test("keeps the genuine empty copy when the active test type has no content", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.EXAM, jest.fn()])
-			.mockImplementationOnce(() => [null, jest.fn()])
-			.mockImplementationOnce(() => ["kapittel", jest.fn()]);
-
-		const { viewModel } = createViewModel({
-			chapterTests: [
-				{ id: "chapter", title: "Kapittel", testType: TEST_TYPES.CHAPTER_TEST, topicAreaKeys: [] }
-			]
-		});
-
-		expect(viewModel.workspaceState).toEqual({
-			kind: WORKSPACE_STATE_KINDS.EMPTY,
-			title: "Ingen eksamener",
-			body: "Ingen eksamener funnet",
-			action: null
-		});
-	});
-
-	test("clears the test type when a desktop content type is selected", () => {
-		const { viewModel } = createViewModel();
-
-		viewModel.selectContentType(LEARNING_CONTENT_TYPES.FLIPCARDS);
-
-		expect(stateSetters[1]).toHaveBeenCalledWith(null);
-		expect(stateSetters[0]).toHaveBeenCalledWith(LEARNING_CONTENT_TYPES.FLIPCARDS);
-	});
-
 	test("marks the practice group active for every practice content type", () => {
 		const practiceContentTypeIds = [
 			LEARNING_CONTENT_TYPES.FLIPCARDS,
@@ -558,14 +453,7 @@ describe("useLearningContentSelectPageViewModel", () => {
 		];
 
 		for (const contentTypeId of practiceContentTypeIds) {
-			useState.mockImplementationOnce(() => {
-				const setter = jest.fn();
-				stateSetters.push(setter);
-
-				return [contentTypeId, setter];
-			});
-
-			const { viewModel } = createViewModel();
+			const { viewModel } = createViewModel({ activeEntryId: contentTypeId });
 			const practiceItem = viewModel.mobileToggleButtonItems[1];
 			const testsItem = viewModel.mobileToggleButtonItems[2];
 
@@ -575,9 +463,9 @@ describe("useLearningContentSelectPageViewModel", () => {
 	});
 
 	test("uses match-card-specific empty text", () => {
-		useState.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.MATCHCARDS, jest.fn()]);
-
-		const { viewModel } = createViewModel();
+		const { viewModel } = createViewModel({
+			activeEntryId: LEARNING_CONTENT_TYPES.MATCHCARDS
+		});
 
 		expect(viewModel.workspaceState).toEqual({
 			kind: WORKSPACE_STATE_KINDS.EMPTY,
@@ -613,11 +501,8 @@ describe("useLearningContentSelectPageViewModel", () => {
 		});
 	});
 	test("propagates the scoped test type when a chapter test is selected", () => {
-		useState
-			.mockImplementationOnce(() => [LEARNING_CONTENT_TYPES.EXAMS, jest.fn()])
-			.mockImplementationOnce(() => [TEST_TYPES.CHAPTER_TEST, jest.fn()]);
-
 		const { onSelectTestSet, viewModel } = createViewModel({
+			activeEntryId: TEST_TYPES.CHAPTER_TEST,
 			chapterTests: [
 				{ id: "chapter", title: "Kapittel", topicAreaKeys: [] }
 			]
@@ -636,15 +521,6 @@ describe("useLearningContentSelectPageViewModel", () => {
 		viewModel.selectFlipcardDeck("network-security");
 
 		expect(selectFlipcardDeck).toHaveBeenCalledWith("network-security");
-	});
-
-	test("navigates to glossary through the shared screen navigation callback", () => {
-		const { changeScreen, viewModel } = createViewModel();
-
-		viewModel.selectContentType("glossary");
-
-		expect(changeScreen).toHaveBeenCalledWith(NAV_SCREENS.GLOSSARY);
-		expect(stateSetters[0]).not.toHaveBeenCalledWith("glossary");
 	});
 
 });

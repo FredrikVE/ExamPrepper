@@ -1,6 +1,6 @@
 //src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
-import { getScreenConfig, NAV_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
+import { getLearningContentNavigationEntry, getScreenConfig, LEARNING_CONTENT_TYPES, NAV_SCREENS, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
@@ -14,6 +14,7 @@ export default function useAppNavigationViewModel(params) {
 	const [examLanguageSyncError, setExamLanguageSyncError] = useState(null);
 	const [selectedExamTestType, setSelectedExamTestType] = useState(null);
 	const [examReturnScreen, setExamReturnScreen] = useState(null);
+	const [selectedLearningContentEntryId, setSelectedLearningContentEntryId] = useState(LEARNING_CONTENT_TYPES.EXAMS);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
@@ -81,14 +82,54 @@ export default function useAppNavigationViewModel(params) {
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays, selectedExamId, selectedSubjectId, showAllSubjects]);
 
-	const selectSubject = useCallback((subjectId) => {
+	const applySubjectSelection = useCallback((subjectId, nextScreen) => {
 		setExamLanguageSyncError(null);
 		setSelectedSubjectId(subjectId);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
 		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(null);
-		setActiveScreen(NAV_SCREENS.LEARNING_PATH);
+		setSelectedLearningSessionId(null);
+		setActiveScreen(nextScreen);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays]);
+
+	const selectSubject = useCallback((subjectId) => {
+		applySubjectSelection(subjectId, NAV_SCREENS.LEARNING_PATH);
+	}, [applySubjectSelection]);
+
+	const switchSubject = useCallback((subjectId) => {
+		const nextScreen = SUBJECT_SWITCH_TARGET_SCREENS[activeScreen] ?? NAV_SCREENS.LEARNING_PATH;
+
+		applySubjectSelection(subjectId, nextScreen);
+	}, [activeScreen, applySubjectSelection]);
+
+	const selectLearningContent = useCallback((entryId) => {
+		const entry = getLearningContentNavigationEntry(entryId);
+
+		if (entry.isDisabled) {
+			return;
+		}
+
+		if (entry.contentTypeId === null) {
+			throw new Error(`Enabled learning content entry '${String(entryId)}' has no contentTypeId`);
+		}
+
+		setExamLanguageSyncError(null);
+		setSelectedLearningContentEntryId(entry.id);
+		setSelectedTopicAreaKey(null);
+
+		if (entry.targetScreen !== NAV_SCREENS.EXAM) {
+			setSelectedExamId(null);
+			setSelectedExamTestType(null);
+			setExamReturnScreen(null);
+		}
+
+		if (entry.targetScreen !== NAV_SCREENS.LEARNING_SESSION) {
+			setSelectedLearningSessionId(null);
+		}
+
+		setActiveScreen(entry.targetScreen);
 		closeNavigationOverlays();
 	}, [closeNavigationOverlays]);
 
@@ -248,6 +289,7 @@ export default function useAppNavigationViewModel(params) {
 		selectedExamTestType,
 		selectedTopicAreaKey,
 		selectedLearningSessionId,
+		selectedLearningContentEntryId,
 		examLanguageSyncError,
 		shouldShowSubjectSwitcher,
 		backContract,
@@ -268,6 +310,8 @@ export default function useAppNavigationViewModel(params) {
 		closeMobileSubjectPicker: mobileTopBar.closeMobileSubjectPicker,
 		changeScreen,
 		selectSubject,
+		switchSubject,
+		selectLearningContent,
 		showAllSubjects,
 		selectExam,
 		selectFlipcardDeck,

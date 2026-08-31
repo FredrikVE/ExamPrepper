@@ -13,16 +13,11 @@ const useState = jest.fn((initialValue) => {
 	return [value, setter];
 });
 
-const useEffect = jest.fn((effect) => {
-	return effect();
-});
-
 const useMemo = jest.fn((factory) => factory());
 const useCallback = jest.fn((callback) => callback);
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
-	useEffect,
 	useMemo,
 	useState
 }));
@@ -35,14 +30,12 @@ describe("useSearchSheetModel", () => {
 		stateValues.length = 0;
 		stateSetters.length = 0;
 		useState.mockClear();
-		useEffect.mockClear();
 		useMemo.mockClear();
 		useCallback.mockClear();
 	});
 
 	test("returns default search sheet state", () => {
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -56,23 +49,10 @@ describe("useSearchSheetModel", () => {
 		expect(viewModel.isFooterOpen).toBe(false);
 	});
 
-	test("closes search content and the footer sheet when the owner page becomes inactive", () => {
-		useSearchSheetModel({
-			isActive: false,
-			defaultFilterValue: "all"
-		});
-
-		expect(stateSetters[0]).toHaveBeenCalledWith("");
-		expect(stateSetters[2]).toHaveBeenCalledWith(false);
-		expect(stateSetters[3]).toHaveBeenCalledWith("searchSuggestions");
-		expect(stateSetters[4]).toHaveBeenCalledWith(false);
-	});
-
 	test("toggles open filter options without changing the footer sheet state", () => {
 		stateValues.push("", "all", true, "filterOptions", true);
 
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -86,7 +66,6 @@ describe("useSearchSheetModel", () => {
 
 	test("opens search suggestions without expanding the footer sheet", () => {
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -99,7 +78,6 @@ describe("useSearchSheetModel", () => {
 
 	test("opens filter options without expanding the footer sheet", () => {
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -112,7 +90,6 @@ describe("useSearchSheetModel", () => {
 
 	test("changes the search term without expanding the footer sheet", () => {
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -128,7 +105,6 @@ describe("useSearchSheetModel", () => {
 		stateValues.push("term", "all", true, "searchSuggestions", true);
 
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -144,7 +120,6 @@ describe("useSearchSheetModel", () => {
 		stateValues.push("term", "all", true, "searchSuggestions", true);
 
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -158,7 +133,6 @@ describe("useSearchSheetModel", () => {
 
 	test("selects a filter option without expanding the footer sheet", () => {
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 
@@ -174,7 +148,6 @@ describe("useSearchSheetModel", () => {
 		stateValues.push("term", "all", true, "searchSuggestions", false);
 
 		const viewModel = useSearchSheetModel({
-			isActive: true,
 			defaultFilterValue: "all"
 		});
 

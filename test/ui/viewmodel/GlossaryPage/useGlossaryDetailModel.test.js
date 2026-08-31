@@ -43,7 +43,7 @@ function renderDetailModel(values) {
 	stateIndex = 0;
 	refIndex = 0;
 	stateValues = values;
-	return useGlossaryDetailModel({ resetKey: "in2120:none" });
+	return useGlossaryDetailModel();
 }
 
 beforeEach(() => {
@@ -63,18 +63,15 @@ beforeEach(() => {
 });
 
 describe("useGlossaryDetailModel", () => {
-	test("owns detail state and clears retained detail-trigger refs on reset", () => {
+	test("owns detail state and detail-trigger refs", () => {
 		const model = renderDetailModel(["packet", ["transport-layer"], { key: "snapshot" }, true]);
 		model.resolveGlossaryDetailTriggerRef("packet")({ id: "trigger" });
 
+		expect(model.expandedGlossaryEntryKey).toBe("packet");
+		expect(model.glossaryDetailTrailKeys).toEqual(["transport-layer"]);
+		expect(model.glossaryDetailRenderSnapshot).toEqual({ key: "snapshot" });
+		expect(model.areGlossaryDetailRelationsExpanded).toBe(true);
 		expect(model.glossaryDetailTriggerElementByKey.current.size).toBe(1);
-		effects[0]();
-
-		expect(stateSetters[0]).toHaveBeenCalledWith(null);
-		expect(stateSetters[1]).toHaveBeenCalledWith([]);
-		expect(stateSetters[2]).toHaveBeenCalledWith(null);
-		expect(stateSetters[3]).toHaveBeenCalledWith(false);
-		expect(model.glossaryDetailTriggerElementByKey.current.size).toBe(0);
 	});
 
 	test("reuses detail-trigger callback refs across rerenders", () => {
@@ -91,7 +88,7 @@ describe("useGlossaryDetailModel", () => {
 		model.glossaryDetailTitleFocusRequestKeyRef.current = "packet";
 		model.glossaryDetailTitleElementRef.current = titleElement;
 
-		effects[1]();
+		effects[0]();
 
 		expect(titleElement.focus).toHaveBeenCalledWith({ preventScroll: true });
 		expect(model.glossaryDetailTitleFocusRequestKeyRef.current).toBeNull();

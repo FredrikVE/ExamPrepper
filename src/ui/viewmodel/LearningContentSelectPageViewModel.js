@@ -1,7 +1,6 @@
 //src/ui/viewmodel/LearningContentSelectPageViewModel.js
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
-import createLearningContentSelectPageHeading from "./LearningContentSelectPage/createLearningContentSelectPageHeading.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
 import useSearchSheetModel from "./Search/useSearchSheetModel.js";
 import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
@@ -15,13 +14,21 @@ import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { createContentToggleEntries, createMobileToggleButtonItems, findToggleEntryConfig } from "./Shared/contentToggleModel.js";
 import resolveFirstLoadError from "./Utils/resolveFirstLoadError.js";
 
-export default function useLearningContentSelectPageViewModel({ getAvailableExamsUseCase, getAvailableChapterTestsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, onSelectTestSet, onSelectFlipcardDeck, onSelectMatchCardsDeck, isActive, onChangeScreen, backContract, actionErrorMessage }) {
-	const [activeContentType, setActiveContentType] = useState(LEARNING_CONTENT_TYPES.EXAMS);
-	const [selectedTestType, setSelectedTestType] = useState(TEST_TYPES.EXAM);
-	const [expandedMobileToggleButtonGroupId, setExpandedMobileToggleButtonGroupId] = useState(null);
+export default function useLearningContentSelectPageViewModel({ getAvailableExamsUseCase, getAvailableChapterTestsUseCase, getTopicAreasUseCase, getFlipcardDeckSummariesUseCase, language, t, selectedSubject, activeEntryId, onSelectContentType, onSelectTestSet, onSelectFlipcardDeck, onSelectMatchCardsDeck, backContract, actionErrorMessage }) {
+	const activeEntry = findToggleEntryConfig(activeEntryId);
+
+	if (activeEntry === null || activeEntry.isDisabled) {
+		throw new Error(`Invalid active SELECT content entry: ${String(activeEntryId)}`);
+	}
+
+	if (activeEntry.contentTypeId === null) {
+		throw new Error(`Active SELECT content entry has no content type: ${String(activeEntryId)}`);
+	}
+
+	const activeContentType = activeEntry.contentTypeId;
+	const selectedTestType = activeEntry.testType;
 
 	const examSearchSheet = useSearchSheetModel({
-		isActive,
 		defaultFilterValue: ALL_TOPIC_AREAS
 	});
 	const {
@@ -44,7 +51,7 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 
 	const subjectId = selectedSubject?.id ?? null;
 	const loadResourceKey = subjectId === null ? "no-subject" : `${subjectId}:${language}`;
-	const isLoadEnabled = isActive && subjectId !== null;
+	const isLoadEnabled = subjectId !== null;
 	const isTestSetContentActive = activeContentType === LEARNING_CONTENT_TYPES.EXAMS;
 	const isFlipcardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.FLIPCARDS;
 	const isMatchCardsContentActive = activeContentType === LEARNING_CONTENT_TYPES.MATCHCARDS;
@@ -155,51 +162,14 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 		topicAreaLoad
 	], t.selectErrorMessage);
 
-	const activeToggleEntryId = resolveActiveToggleEntryId(activeContentType, selectedTestType);
 	const pageHeading = useMemo(() => {
-		return createLearningContentSelectPageHeading(t, selectedSubject, activeToggleEntryId);
-	}, [t, selectedSubject, activeToggleEntryId]);
+		return createLearningContentSelectPageHeading(t, selectedSubject, activeEntryId);
+	}, [t, selectedSubject, activeEntryId]);
 
 	const selectContentType = useCallback((entryId) => {
-		const toggleEntry = findToggleEntryConfig(entryId);
-
-		if (toggleEntry === null || toggleEntry.isDisabled) {
-			return;
-		}
-
-		if (toggleEntry.contentTypeId === null) {
-			throw new Error(`Enabled toggle entry is missing contentTypeId: ${String(entryId)}`);
-		}
-
-		const contentType = getContentTypeEntry(toggleEntry.contentTypeId);
-
-		if (contentType.targetScreen !== NAV_SCREENS.SELECT) {
-			onChangeScreen(contentType.targetScreen);
-			return;
-		}
-
-		resetSearchSheet(ALL_TOPIC_AREAS);
-		setSelectedTestType(toggleEntry.testType);
-		setActiveContentType(contentType.id);
-
-		if (!isActive) {
-			onChangeScreen(contentType.targetScreen);
-		}
-	}, [isActive, onChangeScreen, resetSearchSheet]);
-
-	const openMobileToggleButtonGroup = useCallback((groupId) => {
-		const group = findMobileToggleButtonGroup(groupId);
-
-		if (group === null || group.isDisabled || group.entryIds.length === 0) {
-			return;
-		}
-
-		setExpandedMobileToggleButtonGroupId(group.id);
-	}, []);
-
-	const closeMobileToggleButtonGroup = useCallback(() => {
-		setExpandedMobileToggleButtonGroupId(null);
-	}, []);
+		resetSearchSheet();
+		onSelectContentType(entryId);
+	}, [onSelectContentType, resetSearchSheet]);
 
 	const selectTopicAreaKey = useCallback((nextTopicAreaKey) => {
 		changeTopicAreaKey(nextTopicAreaKey);
@@ -221,8 +191,8 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 		return filterDeckSummaries(flipcardDeckSummaries, searchTerm, topicAreaKey);
 	}, [flipcardDeckSummaries, searchTerm, topicAreaKey]);
 
-	const desktopActiveEntryId = activeToggleEntryId;
-	const mobileActiveEntryId = activeToggleEntryId;
+	const desktopActiveEntryId = activeEntryId;
+	const mobileActiveEntryId = activeEntryId;
 
 	const activeContentItems = isTestSetContentActive ? visibleTestSets : visibleFlipcardDecks;
 	const isTestSetFilterActive = searchTerm.trim().length > 0 || topicAreaKey !== ALL_TOPIC_AREAS;
@@ -300,10 +270,8 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 	}, [topicAreas, topicAreaKey, t.filterAllLabel]);
 
 	const searchPlaceholder = useMemo(() => {
-		const activeEntry = getContentTypeEntry(activeContentType);
-
 		return t[activeEntry.searchPlaceholderKey];
-	}, [activeContentType, t]);
+	}, [activeEntry.searchPlaceholderKey, t]);
 
 	const selectTestSet = useCallback((testSetId) => {
 		if (selectedTestType !== TEST_TYPES.EXAM && selectedTestType !== TEST_TYPES.CHAPTER_TEST) {
@@ -365,8 +333,6 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 		visibleFlipcardDecks,
 		workspaceState,
 		actionErrorMessage,
-		topicAreas,
-		topicAreaKey,
 		pageTools,
 		...pageHeading,
 		practiceExamLabel: t.selectPracticeExamLabel,
@@ -385,7 +351,6 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 		mobileActiveEntryId,
 		contentToggleEntries,
 		mobileToggleButtonItems,
-		expandedMobileToggleButtonGroupId,
 		contentToggleBackLabel: t.contentToggleBackLabel,
 		contentToggleAriaLabel: t.contentToggleAriaLabel,
 		isTestSetContentActive,
@@ -403,8 +368,6 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 		searchTerm,
 		category: topicAreaKey,
 		categoryLabel: topicAreaLabel,
-		topicAreaKey,
-		topicAreaLabel,
 		isSearchSheetOpen,
 		isSearchSuggestionsMode,
 		isFilterOptionsMode,
@@ -412,7 +375,6 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 		isFooterOpen,
 		searchSuggestions,
 		categoryFilterOptions: topicAreaFilterOptions,
-		topicAreaFilterOptions,
 		searchCloseLabel: t.searchCloseLabel,
 		searchLabel: t.examSearchLabel,
 		searchPlaceholder,
@@ -422,55 +384,18 @@ export default function useLearningContentSelectPageViewModel({ getAvailableExam
 		// Handlers
 		changeExamSearchTerm,
 		changeCategory: changeTopicAreaKey,
-		changeTopicAreaKey,
 		selectCategoryFilterOption: selectTopicAreaFilterOption,
-		selectTopicAreaFilterOption,
 		openExamSearchSuggestions,
 		openExamCategoryOptions: openTopicAreaOptions,
-		openTopicAreaOptions,
 		changeExamFooterSheetOpen,
 		closeExamSearchSheet,
 		selectTestSet,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
 		selectContentType,
-		openMobileToggleButtonGroup,
-		closeMobileToggleButtonGroup,
 		selectTopicAreaKey,
 		selectSearchSuggestion
 	};
-}
-
-function findMobileToggleButtonGroup(groupId) {
-	for (const group of NAV_ITEMS.mobileToggleButtonItems) {
-		if (group.id === groupId) {
-			return group;
-		}
-	}
-
-	return null;
-}
-
-function resolveActiveToggleEntryId(activeContentType, selectedTestType) {
-	if (activeContentType !== LEARNING_CONTENT_TYPES.EXAMS) {
-		return activeContentType;
-	}
-
-	if (selectedTestType === TEST_TYPES.CHAPTER_TEST) {
-		return TEST_TYPES.CHAPTER_TEST;
-	}
-
-	return LEARNING_CONTENT_TYPES.EXAMS;
-}
-
-function getContentTypeEntry(contentTypeId) {
-	for (const entry of NAV_ITEMS.toggleButtonItems) {
-		if (entry.id === contentTypeId) {
-			return entry;
-		}
-	}
-
-	throw new Error(`Unknown learning content type: ${String(contentTypeId)}`);
 }
 
 function createTestSetSearchSuggestions(testSets) {
@@ -531,4 +456,30 @@ function createTopicAreaToolItems(params) {
 	}
 
 	return items;
+}
+
+function createLearningContentSelectPageHeading(t, selectedSubject, activeContentType) {
+	const activeEntry = findLearningContentEntry(activeContentType);
+	const subtitle = selectedSubject === null
+		? t[activeEntry.subtitleFallbackKey]
+		: t[activeEntry.subtitleKey](selectedSubject.code);
+
+	return {
+		title: t[activeEntry.titleKey],
+		subtitle
+	};
+}
+
+function findLearningContentEntry(activeContentType) {
+	for (const entry of NAV_ITEMS.toggleButtonItems) {
+		if (entry.id === activeContentType) {
+			if (entry.titleKey === null || entry.subtitleKey === null || entry.subtitleFallbackKey === null) {
+				throw new Error(`Learning content entry '${String(activeContentType)}' has no SELECT heading contract`);
+			}
+
+			return entry;
+		}
+	}
+
+	throw new Error(`Unknown learning content entry: ${String(activeContentType)}`);
 }

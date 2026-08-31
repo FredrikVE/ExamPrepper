@@ -1,7 +1,7 @@
 // src/ui/viewmodel/GlossaryPage/useGlossaryDetailModel.js
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export default function useGlossaryDetailModel({ resetKey }) {
+export default function useGlossaryDetailModel() {
 	const [expandedGlossaryEntryKey, setExpandedGlossaryEntryKey] = useState(null);
 	const [glossaryDetailTrailKeys, setGlossaryDetailTrailKeys] = useState([]);
 	const [glossaryDetailRenderSnapshot, setGlossaryDetailRenderSnapshot] = useState(null);
@@ -11,17 +11,6 @@ export default function useGlossaryDetailModel({ resetKey }) {
 	const glossaryDetailTitleElementRef = useRef(null);
 	const glossaryDetailTriggerElementByKey = useRef(new Map());
 	const glossaryDetailTriggerRefByKey = useRef(new Map());
-
-	useEffect(() => {
-		setExpandedGlossaryEntryKey(null);
-		setGlossaryDetailTrailKeys([]);
-		setGlossaryDetailRenderSnapshot(null);
-		setAreGlossaryDetailRelationsExpanded(false);
-		glossaryDetailOriginEntryKeyRef.current = null;
-		glossaryDetailTitleFocusRequestKeyRef.current = null;
-		glossaryDetailTriggerElementByKey.current.clear();
-		glossaryDetailTriggerRefByKey.current.clear();
-	}, [resetKey]);
 
 	useEffect(() => {
 		if (expandedGlossaryEntryKey === null) {

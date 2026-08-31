@@ -65,7 +65,7 @@ export default function LearningSessionPage({ viewModel }) {
 			header={header}
 			footer={null}
 			overlay={overlay}
-			scrollToTopRequestId={viewModel.scrollToTopRequestId}
+			scrollToTopRequestId={viewModel.currentQuestionRenderKey}
 		>
 			<WorkspaceState state={viewModel.workspaceState}>
 				<div className="learning-session-content">

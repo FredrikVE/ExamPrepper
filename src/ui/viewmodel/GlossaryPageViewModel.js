@@ -14,7 +14,6 @@ import { createGlossaryNetworkDisplay, createGlossaryNetworkPresentation } from 
 import { assertGlossaryEntriesReferenceKnownTopicAreas } from "./GlossaryPage/glossaryDataContract.js";
 import { createGlossaryDetailPresentation } from "./GlossaryPage/glossaryDetailModel.js";
 import useGlossarySearchModel from "./GlossaryPage/useGlossarySearchModel.js";
-import useGlossaryTopicAreaSelectionModel from "./GlossaryPage/useGlossaryTopicAreaSelectionModel.js";
 import useGlossaryDetailModel from "./GlossaryPage/useGlossaryDetailModel.js";
 import useGlossaryPageResources from "./GlossaryPage/useGlossaryPageResources.js";
 import { calculateNextSearchKeyboardIndex, collectSelectedTopicAreaEntries, createAllTopicAreaKeySet, createGlossaryEmptyState, createGlossaryEntryByKey, createGlossaryPageSubtitle, createGlossaryPanelHeading, createTopicAreaByKey, createTopicAreaReferenceByKey, groupGlossaryEntriesByTopicAreaKey, localizeGlossaryEntries, resolveChapterFilterLabel, resolveGlossaryPanelEmptyStateKind, resolvePageEmptyStateKind, resolveSearchKeyboardIndex, resolveSelectedChapterFilterValue, resolveSelectedTopicAreaKeys, selectGlossaryEntriesForPresentation } from "./GlossaryPage/glossaryPageDerivations.js";
@@ -25,8 +24,7 @@ const DEFAULT_GLOSSARY_TABLE_SORT = Object.freeze({
 	direction: GLOSSARY_TABLE_SORT_DIRECTIONS.DESCENDING
 });
 
-export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, getGlossaryNetworkUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, t, isActive, backContract, onSelectContentType, expandedMobileToggleButtonGroupId, openMobileToggleButtonGroup, closeMobileToggleButtonGroup }) {
-	const resetKey = `${subjectId}:${initialTopicAreaKey}`;
+export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, getGlossaryNetworkUseCase, getTopicAreasUseCase, subjectId, selectedSubject, initialTopicAreaKey, language, authScopeKey, t, isActive, backContract, onSelectContentType }) {
 	const {
 		glossarySearchTerm,
 		setGlossarySearchTerm,
@@ -38,8 +36,8 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		setIsSearchAutocompleteOpen,
 		searchNarrowedGlossaryEntryKey,
 		setSearchNarrowedGlossaryEntryKey
-	} = useGlossarySearchModel({ resetKey });
-	const { selectedTopicAreaKeys, setSelectedTopicAreaKeys } = useGlossaryTopicAreaSelectionModel({ resetKey });
+	} = useGlossarySearchModel();
+	const [selectedTopicAreaKeys, setSelectedTopicAreaKeys] = useState(null);
 	const {
 		expandedGlossaryEntryKey,
 		setExpandedGlossaryEntryKey,
@@ -54,11 +52,8 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		glossaryDetailTitleElementRef,
 		glossaryDetailTriggerElementByKey,
 		resolveGlossaryDetailTriggerRef
-	} = useGlossaryDetailModel({ resetKey });
+	} = useGlossaryDetailModel();
 	const [glossaryTableSort, setGlossaryTableSort] = useState(DEFAULT_GLOSSARY_TABLE_SORT);
-	useEffect(() => {
-		setGlossaryTableSort(DEFAULT_GLOSSARY_TABLE_SORT);
-	}, [resetKey]);
 
 	const {
 		glossaryEntries,
@@ -74,6 +69,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		getTopicAreasUseCase,
 		subjectId,
 		language,
+		authScopeKey,
 		isActive,
 		expandedGlossaryEntryKey,
 		t
@@ -749,10 +745,7 @@ export default function useGlossaryPageViewModel({ getGlossaryOverviewUseCase, g
 		isGlossaryDetailModalOpen,
 		contentToggleEntries,
 		mobileToggleButtonItems,
-		expandedMobileToggleButtonGroupId,
 		mobileActiveEntryId: activeContentType,
-		openMobileToggleButtonGroup,
-		closeMobileToggleButtonGroup,
 		pageTools: null,
 		activeContentType,
 

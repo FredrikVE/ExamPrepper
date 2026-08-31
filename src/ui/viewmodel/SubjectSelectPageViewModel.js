@@ -2,32 +2,14 @@
 import { useCallback, useMemo } from "react";
 import { NAV_ITEMS, NAV_SCREENS } from "../../navigation/navigation.js";
 import createWorkspaceToolsModel from "./Utils/createWorkspaceToolsModel.js";
-import useLoadModel from "./LoadState/useLoadModel.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import useSearchSheetModel from "./Search/useSearchSheetModel.js";
 import { SEARCH_SUGGESTION_LIMIT } from "./Search/searchSuggestionContract.js";
-import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects, findSubjectById } from "./SubjectSelectPage/subjectSelectPageFilters.js";
-import { createSubjectSwitcherModel } from "./SubjectSelectPage/createSubjectSwitcherModel.js";
+import { ALL_FACULTIES, buildSubjectFaculties, filterSubjects } from "./SubjectSelectPage/subjectSelectPageFilters.js";
 
 
-export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCase, language, t, selectedSubjectId, onSelectSubject, isActive, backContract) {
-	const executeSubjectLoad = useCallback(() => {
-		return getAvailableSubjectsUseCase.execute({
-			language
-		});
-	}, [getAvailableSubjectsUseCase, language]);
-
-	const subjectLoad = useLoadModel({
-		execute: executeSubjectLoad,
-		emptyData: [],
-		errorMessage: t.subjectErrorMessage,
-		resourceKey: language,
-		isEnabled: isActive,
-		onLoaded: null
-	});
-	const subjects = subjectLoad.data;
+export default function useSubjectSelectPageViewModel({ subjects, loadStatus, loadError, t, onSelectSubject, backContract }) {
 	const subjectSearchSheet = useSearchSheetModel({
-		isActive,
 		defaultFilterValue: ALL_FACULTIES
 	});
 	const {
@@ -47,22 +29,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 		closeSearchSheet: closeSubjectSearchSheet
 	} = subjectSearchSheet;
 
-	const selectedSubject = useMemo(() => {
-		return findSubjectById(subjects, selectedSubjectId);
-	}, [subjects, selectedSubjectId]);
-
-	const subjectSwitcher = createSubjectSwitcherModel({
-		loadStatus: subjectLoad.status,
-		subjects,
-		selectedSubject,
-		labels: {
-			loading: t.subjectLoadingMessage,
-			error: t.subjectErrorMessage,
-			empty: t.subjectSwitcherEmptyLabel,
-			unselected: t.subjectSwitcherSelectLabel
-		}
-	});
-
 	const faculties = useMemo(() => {
 		return buildSubjectFaculties(subjects);
 	}, [subjects]);
@@ -72,12 +38,12 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	}, [subjects, searchTerm, faculty]);
 
 	const workspaceState = createWorkspaceState({
-		loadStatus: subjectLoad.status,
+		loadStatus,
 		isEmpty: filteredSubjects.length === 0,
 		labels: {
 			loading: t.subjectLoadingMessage,
 			errorTitle: t.errorPrefix,
-			errorBody: subjectLoad.error,
+			errorBody: loadError,
 			emptyTitle: subjects.length === 0 ? t.subjectSwitcherEmptyLabel : t.subjectEmptyMessage,
 			emptyBody: ""
 		},
@@ -129,8 +95,6 @@ export default function useSubjectSelectPageViewModel(getAvailableSubjectsUseCas
 	return {
 		// Data
 		subjects,
-		selectedSubject,
-		subjectSwitcher,
 		filteredSubjects,
 		faculties,
 		workspaceState,

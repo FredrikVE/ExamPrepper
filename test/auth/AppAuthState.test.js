@@ -6,6 +6,7 @@ import {
 	LOADING_APP_AUTH_STATE,
 	SIGNED_OUT_APP_AUTH_STATE,
 	assertAppAuthState,
+	createAppAuthScopeKey,
 	createSignedInAppAuthState
 } from "../../src/auth/AppAuthState.js";
 
@@ -24,6 +25,13 @@ describe("AppAuthState", () => {
 
 		expect(() => createSignedInAppAuthState("")).toThrow("Signed-in auth state requires userId");
 		expect(() => createSignedInAppAuthState(null)).toThrow("Signed-in auth state requires userId");
+	});
+
+	test("creates stable resource scope keys for every valid auth state", () => {
+		expect(createAppAuthScopeKey(DISABLED_APP_AUTH_STATE)).toBe("auth-disabled");
+		expect(createAppAuthScopeKey(LOADING_APP_AUTH_STATE)).toBe("auth-loading");
+		expect(createAppAuthScopeKey(SIGNED_OUT_APP_AUTH_STATE)).toBe("signed-out");
+		expect(createAppAuthScopeKey(createSignedInAppAuthState("user-1"))).toBe("user:user-1");
 	});
 
 	test("rejects impossible auth state combinations", () => {

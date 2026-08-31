@@ -95,7 +95,10 @@ export default function useLoadModel({ execute, emptyData, errorMessage, resourc
 	let visibleStatus = resource.status;
 	let visibleData = resource.data;
 
-	if (isEnabled && resource.resourceKey !== resourceKey) {
+	// Data er bare gyldig for resourceKey-en de ble lastet for.
+	// isEnabled bestemmer om vi starter en load, ikke om gammel data
+	// kan presenteres som den nye ressursen.
+	if (resource.resourceKey !== resourceKey) {
 		visibleStatus = LOAD_STATUS.LOADING;
 		visibleData = emptyData;
 	}
