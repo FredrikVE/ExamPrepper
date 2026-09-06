@@ -148,6 +148,27 @@ describe("createLearningPathPagePresentation", () => {
 		});
 	});
 
+	test("keeps a session blocked by an active resumable session separate from pending state", () => {
+		const learningPath = createPath();
+		const module = learningPath.modules[0];
+		const firstSession = module.sections[0].sessions[0];
+		learningPath.resumableSession = {
+			sessionId: "session-active",
+			moduleId: module.id,
+			planKey: firstSession.planKey
+		};
+
+		const sessions = createPresentation(learningPath).roadmapModel.entries[0].detailModel.sections[0].sessions;
+
+		expect(sessions[1].actionModel).toMatchObject({
+			intent: "start",
+			isBlockedByActiveSession: true,
+			isDisabled: true,
+			isPending: false
+		});
+		expect(sessions[1].statusLabel).toBe(t.learningPathSessionBlockedByActiveLabel);
+	});
+
 	test("marks pending state only for the exact action key", () => {
 		const learningPath = createPath();
 		const moduleId = learningPath.modules[0].id;

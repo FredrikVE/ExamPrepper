@@ -367,7 +367,9 @@ function createSessionModel({
 		actionModel,
 		label: t.learningPathSessionLabel(session.position),
 		metaLabel: t.learningPathSessionQuestionCount(session.questionCount),
-		statusLabel: createSessionStatusLabel(session.status, t)
+		statusLabel: actionModel?.isBlockedByActiveSession === true
+			? t.learningPathSessionBlockedByActiveLabel
+			: createSessionStatusLabel(session.status, t)
 	};
 }
 
@@ -468,6 +470,9 @@ function createSessionActionModel({
 	};
 	const actionKey = createActionKey(moduleId, target);
 
+	const isBlockedByActiveSession = resumableSession !== null;
+	const isPending = startingActionKey === actionKey;
+
 	return {
 		intent: LEARNING_PATH_ACTION_INTENT.START,
 		actionKey,
@@ -477,11 +482,12 @@ function createSessionActionModel({
 		label: session.status === LEARNING_PATH_ROADMAP_STATUS.COMPLETED
 			? t.learningPathSessionReplayLabel
 			: t.learningPathSessionOpenLabel(session.position),
+		isBlockedByActiveSession,
 		isDisabled:
 			!canStartLearningSessions
-			|| resumableSession !== null
+			|| isBlockedByActiveSession
 			|| startingActionKey !== null,
-		isPending: startingActionKey === actionKey
+		isPending
 	};
 }
 

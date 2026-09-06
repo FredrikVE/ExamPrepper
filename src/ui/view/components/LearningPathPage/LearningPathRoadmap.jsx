@@ -319,6 +319,7 @@ function SessionNode({ model, onActionPressed }) {
 						disabled={model.actionModel.isDisabled}
 						onClick={() => onActionPressed(model.actionModel)}
 						aria-label={model.actionModel.label}
+						aria-busy={model.actionModel.isPending ? "true" : undefined}
 					>
 						{content}
 					</button>

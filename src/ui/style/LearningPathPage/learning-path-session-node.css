@@ -57,8 +57,12 @@
 }
 
 .learning-path-session-node__button:disabled {
-	cursor: wait;
+	cursor: not-allowed;
 	opacity: 0.68;
+}
+
+.learning-path-session-node__button[aria-busy="true"] {
+	cursor: wait;
 }
 
 .learning-path-session-node__visual {
