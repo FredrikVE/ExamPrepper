@@ -5,7 +5,7 @@ export default class GetSubjectStatisticsUseCase {
 	}
 
 	async execute({ subjectId }) {
-		if (!subjectId) {
+		if (typeof subjectId !== "string" || subjectId.length === 0) {
 			throw new Error("GetSubjectStatisticsUseCase requires subjectId");
 		}
 
