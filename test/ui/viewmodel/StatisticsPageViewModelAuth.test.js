@@ -13,7 +13,7 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/StatisticsPage/Overview/useS
 }));
 
 jest.unstable_mockModule("../../../src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js", () => ({
-	default: () => ({ pageTitle: "statistics", pageSubtitle: "subtitle" })
+	default: () => ({ pageTitle: "statistics", pageSubtitle: "subtitle", subjectSelectorMenuLabel: "Choose subject", subjectSelectorCloseLabel: "Close subject picker" })
 }));
 
 const { default: useStatisticsPageViewModel } = await import("../../../src/ui/viewmodel/StatisticsPageViewModel.js");
@@ -27,7 +27,7 @@ test("wires subject-scoped statistics into the overview model", () => {
 		subjectId: "in2120",
 		selectedSubject: { id: "in2120", name: "IN2120" },
 		language: "no",
-		subjectSwitcher: { kind: "ready" },
+		subjectSwitcher: { kind: "ready", subjects: [], currentSubject: null, label: "Choose subject", canOpen: true },
 		onSelectSubject: jest.fn(),
 		formatDate: jest.fn(),
 		t: {},
@@ -45,6 +45,7 @@ test("wires subject-scoped statistics into the overview model", () => {
 	}));
 	expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
 	expect(viewModel.overview).toEqual({ isEmpty: false });
+	expect(viewModel.subjectSelector).toEqual({ kind: "ready", subjects: [], currentSubject: null, label: "Choose subject", canOpen: true, menuLabel: "Choose subject", closeLabel: "Close subject picker" });
 });
 
 beforeEach(() => {

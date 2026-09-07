@@ -1,6 +1,6 @@
 //test/navigation/navigation.test.js
 import { describe, expect, test } from "@jest/globals";
-import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG, TEST_TYPES } from "../../src/navigation/navigation.js";
+import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../src/navigation/navigation.js";
 
 describe("navigation configuration", () => {
 	test("contains only the screens rendered by App", () => {
@@ -161,6 +161,7 @@ describe("navigation configuration", () => {
 			pageClassName: "exam-select-page",
 			shellClassName: "exam-select-shell"
 		});
+		expect(SUBJECT_SWITCH_TARGET_SCREENS[NAV_SCREENS.OVERVIEW]).toBe(NAV_SCREENS.OVERVIEW);
 	});
 
 	test("uses direct ids and explicit action properties", () => {

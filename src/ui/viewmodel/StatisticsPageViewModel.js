@@ -14,6 +14,12 @@ export default function useStatisticsPageViewModel(props) {
 		onStartNewExam: props.onStartNewExam
 	});
 
+	const subjectSelector = {
+		...props.subjectSwitcher,
+		menuLabel: text.subjectSelectorMenuLabel,
+		closeLabel: text.subjectSelectorCloseLabel
+	};
+
 	return {
 		workspaceState: overview.workspaceState,
 		overview: overview.presentation,
@@ -21,6 +27,7 @@ export default function useStatisticsPageViewModel(props) {
 		subjectId: props.subjectId,
 		selectedSubject: props.selectedSubject,
 		subjectSwitcher: props.subjectSwitcher,
+		subjectSelector,
 		onSelectSubject: props.onSelectSubject,
 		backContract: props.backContract,
 		pageTitle: text.pageTitle,

@@ -13,6 +13,8 @@ export default function createStatisticsTextModel(t) {
 	return {
 		pageTitle: t.selectStatistics,
 		pageSubtitle: t.statisticsPageSubtitle,
+		subjectSelectorMenuLabel: t.sidebarSubjectMenuLabel,
+		subjectSelectorCloseLabel: t.sidebarCloseSubjectMenu,
 		loadingTitle: t.statisticsLoadingTitle,
 		loadingBody: t.statisticsLoadingBody,
 		signedOutTitle: t.statisticsSignedOutTitle,
