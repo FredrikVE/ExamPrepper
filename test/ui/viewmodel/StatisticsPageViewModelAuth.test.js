@@ -4,7 +4,6 @@ import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
 import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
 
 const useCallback = jest.fn((callback) => callback);
-const useMemo = jest.fn((factory) => factory());
 const useLoadModel = jest.fn(() => ({
 	status: LOAD_STATUS.READY,
 	data: null,
@@ -14,7 +13,6 @@ const useLoadModel = jest.fn(() => ({
 
 jest.unstable_mockModule("react", () => ({
 	useCallback,
-	useMemo
 }));
 
 jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({
@@ -73,7 +71,6 @@ function renderViewModel(authState) {
 describe("Statistics auth state", () => {
 	beforeEach(() => {
 		useCallback.mockClear();
-		useMemo.mockClear();
 		useLoadModel.mockClear();
 	});
 

@@ -1,5 +1,5 @@
 // src/ui/viewmodel/StatisticsPageViewModel.js
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { APP_AUTH_STATUS } from "../../auth/AppAuthState.js";
 import { LOAD_STATUS } from "./LoadState/loadStatus.js";
 import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
@@ -23,7 +23,7 @@ export default function useStatisticsPageViewModel(props) {
 		userId = props.authState.userId;
 	}
 
-	const text = useMemo(() => createStatisticsTextModel(props.t), [props.t]);
+	const text = createStatisticsTextModel(props.t);
 
 	const executeStatisticsLoad = useCallback(() => {
 		if (!isSignedIn) {
@@ -50,9 +50,7 @@ export default function useStatisticsPageViewModel(props) {
 	const statistics = statisticsLoad.data;
 	const pageErrorMessage = statisticsLoad.error ?? text.loadErrorMessage;
 
-	const dashboard = useMemo(() => createStatisticsDashboardModel(
-		statistics, props.formatDate, text
-	), [statistics, props.formatDate, text]);
+	const dashboard = createStatisticsDashboardModel(statistics, props.formatDate, text);
 
 	const retryLoadStatistics = useCallback(() => {
 		statisticsLoad.reload();

@@ -1,4 +1,14 @@
 // src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js
+import { STATISTICS_PERIODS } from "../../../constants/StatisticsContracts.js";
+
+const SINGULAR_COUNT = 1;
+const MINUTES_PER_HOUR = 60;
+const NO_REMAINDER = 0;
+const STRING_INDEX_STEP = 1;
+const NOT_FOUND_INDEX = -1;
+const PERCENTAGE_DECIMAL_PLACES = 1;
+const HISTORY_PAGE_NUMBER_OFFSET = 1;
+
 export default function createStatisticsTextModel(t) {
 	return {
 		pageTitle: t.selectStatistics,
@@ -12,6 +22,39 @@ export default function createStatisticsTextModel(t) {
 		errorTitle: t.statisticsErrorTitle,
 		retryButton: t.statisticsRetryButton,
 		startNewExamButton: t.statisticsStartNewExamButton,
+		emptyValueLabel: t.statisticsEmptyValueLabel,
+
+		developmentTitle: t.statisticsOverviewDevelopmentTitle,
+		developmentSubtitle: t.statisticsOverviewDevelopmentSubtitle,
+		periodLabel: t.statisticsOverviewPeriodLabel,
+		periodOptions: Object.freeze([
+			{ key: STATISTICS_PERIODS.WEEK, label: t.statisticsOverviewPeriodWeek },
+			{ key: STATISTICS_PERIODS.MONTH, label: t.statisticsOverviewPeriodMonth },
+			{ key: STATISTICS_PERIODS.THREE_MONTHS, label: t.statisticsOverviewPeriodThreeMonths },
+			{ key: STATISTICS_PERIODS.SIX_MONTHS, label: t.statisticsOverviewPeriodSixMonths },
+			{ key: STATISTICS_PERIODS.YEAR, label: t.statisticsOverviewPeriodYear },
+			{ key: STATISTICS_PERIODS.ALL, label: t.statisticsOverviewPeriodAll }
+		]),
+		averageScoreLabel: t.statisticsOverviewAverageScoreLabel,
+		progressLabel: t.statisticsOverviewProgressLabel,
+		completedLabel: t.statisticsOverviewCompletedLabel,
+		summaryLabel: t.statisticsOverviewSummaryLabel,
+		chartLabel: t.statisticsOverviewChartLabel,
+		chartEmptyLabel: t.statisticsOverviewChartEmptyLabel,
+		chaptersTitle: t.statisticsOverviewChaptersTitle,
+		chaptersSubtitle: t.statisticsOverviewChaptersSubtitle,
+		historyTitle: t.statisticsOverviewHistoryTitle,
+		historySubtitle: t.statisticsOverviewHistorySubtitle,
+		historyDateLabel: t.statisticsOverviewHistoryDateLabel,
+		historyNameLabel: t.statisticsOverviewHistoryNameLabel,
+		historyScoreLabel: t.statisticsOverviewHistoryScoreLabel,
+		historyShowAllLabel: t.statisticsOverviewHistoryShowAllLabel,
+		historyShowLessLabel: t.statisticsOverviewHistoryShowLessLabel,
+		historyPagerLabel: t.statisticsOverviewHistoryPagerLabel,
+		historyPreviousPageLabel: t.statisticsOverviewHistoryPreviousPageLabel,
+		historyNextPageLabel: t.statisticsOverviewHistoryNextPageLabel,
+
+		// Legacy Statistics-felter beholdes frem til Patch 11, slik at mellomsteg fortsatt kan rendres.
 		heroBody: t.statisticsHeroBody,
 		heroNoTrend: t.statisticsHeroNoTrend,
 		kpiGridLabel: t.statisticsKpiGridLabel,
@@ -46,7 +89,42 @@ export default function createStatisticsTextModel(t) {
 		},
 		attemptScoreLabel: t.statisticsAttemptScoreLabel,
 		loadErrorMessage: t.statisticsLoadErrorMessage,
-		emptyValueLabel: t.statisticsEmptyValueLabel,
+
+		createPercentageLabel(value) {
+			return value === null ? t.statisticsEmptyValueLabel : `${formatNumber(value)} %`;
+		},
+
+		createPercentagePointLabel(value) {
+			return `${formatNumber(value)} ${selectSingularOrPlural(Math.abs(value), t.statisticsPercentagePointSingular, t.statisticsPercentagePointPlural)}`;
+		},
+
+		createEvidenceCountLabel(count) {
+			return `${count} ${selectSingularOrPlural(count, t.statisticsOverviewEvidenceUnitSingular, t.statisticsOverviewEvidenceUnitPlural)}`;
+		},
+
+		createPointsLabel(scorePoints, totalPoints) {
+			return `${scorePoints} / ${totalPoints} ${t.statisticsAttemptPointUnit}`;
+		},
+
+		createCorrectCountLabel(correctCount) {
+			return `${correctCount} ${t.statisticsOverviewCorrectLabel}`;
+		},
+
+		createIncorrectCountLabel(incorrectCount) {
+			return `${incorrectCount} ${t.statisticsOverviewIncorrectLabel}`;
+		},
+
+		createDurationSecondsLabel(durationSeconds) {
+			return `${durationSeconds} ${t.statisticsOverviewSecondsShort}`;
+		},
+
+		createGoToHistoryPageLabel(pageIndex) {
+			return t.statisticsOverviewHistoryGoToPageLabel(pageIndex + HISTORY_PAGE_NUMBER_OFFSET);
+		},
+
+		createHistoryPageCounterLabel(pageIndex, pageCount) {
+			return t.statisticsOverviewHistoryPageCounterLabel(pageIndex + HISTORY_PAGE_NUMBER_OFFSET, pageCount);
+		},
 
 		createHeroTitle(count) {
 			return `${t.statisticsHeroTitlePrefix} ${count} ${selectSingularOrPlural(count, t.statisticsHeroTitleUnitSingular, t.statisticsHeroTitleUnitPlural)}`;
@@ -81,14 +159,14 @@ export default function createStatisticsTextModel(t) {
 		},
 
 		createDurationLabel(totalMinutes) {
-			const hours = Math.floor(totalMinutes / 60);
-			const minutes = totalMinutes % 60;
+			const hours = Math.floor(totalMinutes / MINUTES_PER_HOUR);
+			const minutes = totalMinutes % MINUTES_PER_HOUR;
 
-			if (hours === 0) {
+			if (hours === NO_REMAINDER) {
 				return `${minutes} ${t.statisticsActivityMinuteShort}`;
 			}
 
-			if (minutes === 0) {
+			if (minutes === NO_REMAINDER) {
 				return `${hours} ${t.statisticsActivityHourShort}`;
 			}
 
@@ -122,19 +200,19 @@ function createAttemptTitleFromExamId(examId, t) {
 function findExamNumber(value, prefix) {
 	const prefixStart = value.indexOf(prefix);
 
-	if (prefixStart === -1) {
+	if (prefixStart === NOT_FOUND_INDEX) {
 		return null;
 	}
 
 	let numberStart = prefixStart + prefix.length;
 
 	while (value[numberStart] === "-" || value[numberStart] === "_") {
-		numberStart += 1;
+		numberStart += STRING_INDEX_STEP;
 	}
 
 	let numberText = "";
 
-	for (let index = numberStart; index < value.length; index += 1) {
+	for (let index = numberStart; index < value.length; index += STRING_INDEX_STEP) {
 		const character = value[index];
 
 		if (character < "0" || character > "9") {
@@ -152,9 +230,9 @@ function findExamNumber(value, prefix) {
 }
 
 function selectSingularOrPlural(count, singular, plural) {
-	if (count === 1) {
-		return singular;
-	}
+	return count === SINGULAR_COUNT ? singular : plural;
+}
 
-	return plural;
+function formatNumber(value) {
+	return Number.isInteger(value) ? String(value) : value.toFixed(PERCENTAGE_DECIMAL_PLACES);
 }
