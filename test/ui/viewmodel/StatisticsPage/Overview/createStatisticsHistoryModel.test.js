@@ -52,9 +52,19 @@ describe("createStatisticsHistoryModel", () => {
 		const expanded = createStatisticsHistoryModel({ attempts, sortKey: STATISTICS_HISTORY_SORT.DATE, sortDirection: SORT_DIRECTION.DESC, expanded: true, page: 1, formatDate: (value) => value, text });
 
 		expect(collapsed.items).toHaveLength(3);
+		expect(collapsed.showExpansionToggle).toBe(true);
 		expect(collapsed.canToggleExpanded).toBe(true);
 		expect(expanded.items).toHaveLength(2);
 		expect(expanded.pageCount).toBe(2);
+	});
+
+	test("shows the history footer for sparse history without enabling a fake expansion", () => {
+		const attempts = [createAttempt(1), createAttempt(2)];
+		const model = createStatisticsHistoryModel({ attempts, sortKey: STATISTICS_HISTORY_SORT.DATE, sortDirection: SORT_DIRECTION.DESC, expanded: false, page: 0, formatDate: (value) => value, text });
+
+		expect(model.items).toHaveLength(2);
+		expect(model.showExpansionToggle).toBe(true);
+		expect(model.canToggleExpanded).toBe(false);
 	});
 
 	test("maps backend performance bands to Statistics presentation without score thresholds", () => {

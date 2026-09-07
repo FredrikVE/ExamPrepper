@@ -8,7 +8,6 @@ import StatisticsHistoryRow from "./StatisticsHistoryRow.jsx";
 
 const FIRST_HISTORY_PAGE_INDEX = 0;
 const HISTORY_PAGE_INDEX_STEP = 1;
-const MINIMUM_PAGED_HISTORY_PAGE_COUNT = 2;
 const NEUTRAL_ENTRY_CORRECTNESS = false;
 const STATISTICS_HISTORY_LIST_ID = "statistics-history-list";
 
@@ -17,7 +16,7 @@ const resolveNeutralEntryCorrectness = () => NEUTRAL_ENTRY_CORRECTNESS;
 export default function StatisticsHistory({ model, actions }) {
 	const [expandedAttemptId, setExpandedAttemptId] = useState(null);
 	const pagerEntries = createProgressPagerEntries({ count: model.pageCount, activeIndex: model.page, keyPrefix: "statistics-history-page", resolveIsCorrect: resolveNeutralEntryCorrectness });
-	const showPager = model.expanded && model.pageCount >= MINIMUM_PAGED_HISTORY_PAGE_COUNT;
+	const showPager = model.expanded;
 
 	const toggleAttempt = (attemptId) => {
 		setExpandedAttemptId((currentAttemptId) => {
@@ -93,8 +92,8 @@ export default function StatisticsHistory({ model, actions }) {
 				/>
 			)}
 
-			{model.canToggleExpanded && (
-				<button type="button" className="statistics-history-toggle" aria-controls={STATISTICS_HISTORY_LIST_ID} aria-expanded={model.expanded} onClick={toggleHistoryExpanded}>
+			{model.showExpansionToggle && (
+				<button type="button" className="statistics-history-toggle" aria-controls={STATISTICS_HISTORY_LIST_ID} aria-expanded={model.expanded} disabled={!model.canToggleExpanded} onClick={toggleHistoryExpanded}>
 					<span>{model.toggleLabel}</span>
 					<ChevronDown className="statistics-history-toggle-chevron" aria-hidden="true" focusable="false" />
 				</button>

@@ -6,13 +6,14 @@ const EMPTY_ATTEMPT_COUNT = 0;
 const EMPTY_ATTEMPTS = Object.freeze([]);
 const EMPTY_CHAPTERS = Object.freeze([]);
 const EMPTY_DEVELOPMENT_METRICS = Object.freeze({
+	windowStartAt: null,
+	windowEndAt: null,
 	averageScorePercentage: null,
 	progressPercentagePoints: null,
+	progressAttemptCount: 0,
 	chartPoints: Object.freeze([])
 });
-const FIRST_CHART_POINT_INDEX = 0;
 const CHART_POINT_INDEX_STEP = 1;
-const CHART_AXIS_LABEL_COUNT_THRESHOLD = 3;
 
 export default function createStatisticsOverviewModel({ statistics, period, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate, language, text }) {
 	let attempts = EMPTY_ATTEMPTS;
@@ -29,6 +30,7 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 
 	const history = createStatisticsHistoryModel({ attempts, sortKey: historySortKey, sortDirection: historySortDirection, expanded: historyExpanded, page: historyPage, formatDate, text });
 	const chartPoints = createChartPointModels(developmentMetrics.chartPoints, formatDate, text);
+	const chartWindow = createChartWindowModel(developmentMetrics, formatDate, text);
 	let historyToggleLabel = text.historyShowAllLabel;
 	let progressValue = text.emptyValueLabel;
 	let progressNumberValue = text.emptyValueLabel;
@@ -68,10 +70,14 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			averageScoreLabel: text.averageScoreLabel,
 			averageScoreValue: text.createPercentageLabel(developmentMetrics.averageScorePercentage),
 			progressLabel: text.progressLabel,
+			progressAttemptContextLabel: text.createProgressAttemptContextLabel(developmentMetrics.progressAttemptCount),
 			progressValue,
 			progressDirection,
 			chartLabel: text.chartLabel,
 			chartPoints,
+			chartAxisStartLabel: chartWindow.startLabel,
+			chartAxisEndLabel: chartWindow.endLabel,
+			periodRangeLabel: chartWindow.rangeLabel,
 			chartEmptyLabel: text.chartEmptyLabel
 		},
 		summary: {
@@ -126,35 +132,50 @@ function findDevelopmentPeriod(developmentPeriods, selectedPeriod) {
 
 function createChartPointModels(chartPoints, formatDate, text) {
 	const lastIndex = chartPoints.length - CHART_POINT_INDEX_STEP;
-	const middleIndex = Math.floor(lastIndex / 2);
 
 	return chartPoints.map((chartPoint, index) => {
-		let label = formatDate(chartPoint.submittedAt);
-
-		if (label === null || label === undefined) {
-			label = chartPoint.submittedAt;
-		}
-
-		let showAxisLabel = chartPoints.length <= CHART_AXIS_LABEL_COUNT_THRESHOLD;
-
-		if (!showAxisLabel && (index === FIRST_CHART_POINT_INDEX || index === middleIndex || index === lastIndex)) {
-			showAxisLabel = true;
-		}
-
-		let axisLabel = "";
-
-		if (showAxisLabel) {
-			axisLabel = label;
-		}
+		const label = formatStatisticsDate(chartPoint.submittedAt, formatDate);
 
 		return {
 			key: chartPoint.attemptId,
 			value: chartPoint.percentage,
 			label,
 			valueLabel: text.createPercentageLabel(chartPoint.percentage),
-			isLatest: index === lastIndex,
-			showAxisLabel,
-			axisLabel
+			isLatest: index === lastIndex
 		};
 	});
+}
+
+function createChartWindowModel(developmentMetrics, formatDate, text) {
+	if (developmentMetrics.windowEndAt === null) {
+		return { startLabel: "", endLabel: "", rangeLabel: "" };
+	}
+
+	const endLabel = formatStatisticsDate(developmentMetrics.windowEndAt, formatDate);
+
+	if (developmentMetrics.windowStartAt === null) {
+		return { startLabel: "", endLabel, rangeLabel: endLabel };
+	}
+
+	const startLabel = formatStatisticsDate(developmentMetrics.windowStartAt, formatDate);
+
+	if (startLabel === endLabel) {
+		return { startLabel, endLabel: "", rangeLabel: startLabel };
+	}
+
+	return {
+		startLabel,
+		endLabel,
+		rangeLabel: text.createPeriodRangeLabel(startLabel, endLabel)
+	};
+}
+
+function formatStatisticsDate(timestamp, formatDate) {
+	const label = formatDate(timestamp);
+
+	if (label === null || label === undefined) {
+		return timestamp;
+	}
+
+	return label;
 }

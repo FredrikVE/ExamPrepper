@@ -12,8 +12,10 @@ function createText() {
 		previousPeriodLabel: "Previous periods",
 		nextPeriodLabel: "Next periods",
 		periodOptions: [],
+		createPeriodRangeLabel: (startLabel, endLabel) => `${startLabel} – ${endLabel}`,
 		averageScoreLabel: "Average",
 		progressLabel: "Progress",
+		createProgressAttemptContextLabel: (count) => `(last ${count} attempts)`,
 		emptyValueLabel: "—",
 		summaryLabel: "Summary",
 		completedLabel: "Completed",
@@ -57,7 +59,7 @@ function createText() {
 			return `${value} %`;
 		},
 		createPercentagePointShortLabel: (value) => `${createSignedNumberLabel(value)} pp`,
-		createPercentagePointNumberLabel: createSignedNumberLabel,
+		createPercentagePointNumberLabel: (value) => `${createSignedNumberLabel(value)} %`,
 		createPercentagePointUnitLabel: () => "pp",
 		createEvidenceCountLabel: (count) => `${count} attempts`,
 		createPointsLabel: (score, total) => `${score}/${total}`,
@@ -83,17 +85,19 @@ function createStatistics() {
 		subjectId: "in2120",
 		completedAttemptCount: 28,
 		developmentPeriods: [
-			{ period: STATISTICS_PERIODS.WEEK, averageScorePercentage: 90, progressPercentagePoints: 5, chartPoints: [] },
-			{ period: STATISTICS_PERIODS.MONTH, averageScorePercentage: 80, progressPercentagePoints: 10, chartPoints: [] },
-			{
-				period: STATISTICS_PERIODS.THREE_MONTHS,
-				averageScorePercentage: 70,
-				progressPercentagePoints: 20,
-				chartPoints: [{ attemptId: "attempt-chart", submittedAt: "2026-09-01T10:00:00.000Z", submittedAtEpochMs: 1, percentage: 70 }]
-			},
-			{ period: STATISTICS_PERIODS.SIX_MONTHS, averageScorePercentage: 60, progressPercentagePoints: 15, chartPoints: [] },
-			{ period: STATISTICS_PERIODS.YEAR, averageScorePercentage: 50, progressPercentagePoints: 10, chartPoints: [] },
-			{ period: STATISTICS_PERIODS.ALL, averageScorePercentage: 40, progressPercentagePoints: 5, chartPoints: [] }
+			createDevelopmentPeriod(STATISTICS_PERIODS.WEEK, "2026-08-31T12:00:00.000Z", 90, 5, 2, []),
+			createDevelopmentPeriod(STATISTICS_PERIODS.MONTH, "2026-08-07T12:00:00.000Z", 80, 10, 4, []),
+			createDevelopmentPeriod(
+				STATISTICS_PERIODS.THREE_MONTHS,
+				"2026-06-07T12:00:00.000Z",
+				70,
+				20,
+				7,
+				[{ attemptId: "attempt-chart", submittedAt: "2026-09-01T10:00:00.000Z", submittedAtEpochMs: 1, percentage: 70 }]
+			),
+			createDevelopmentPeriod(STATISTICS_PERIODS.SIX_MONTHS, "2026-03-07T12:00:00.000Z", 60, 15, 9, []),
+			createDevelopmentPeriod(STATISTICS_PERIODS.YEAR, "2025-09-07T12:00:00.000Z", 50, 10, 12, []),
+			createDevelopmentPeriod(STATISTICS_PERIODS.ALL, "2025-01-10T12:00:00.000Z", 40, 5, 28, [])
 		],
 		attempts: [
 			{
@@ -124,6 +128,18 @@ function createStatistics() {
 	};
 }
 
+function createDevelopmentPeriod(period, windowStartAt, averageScorePercentage, progressPercentagePoints, progressAttemptCount, chartPoints) {
+	return {
+		period,
+		windowStartAt,
+		windowEndAt: "2026-09-07T12:00:00.000Z",
+		averageScorePercentage,
+		progressPercentagePoints,
+		progressAttemptCount,
+		chartPoints
+	};
+}
+
 function createModel(statistics, period) {
 	return createStatisticsOverviewModel({
 		statistics,
@@ -144,13 +160,34 @@ describe("createStatisticsOverviewModel", () => {
 
 		expect(model.development.averageScoreValue).toBe("70 %");
 		expect(model.development.progressValue).toBe("+20 pp");
+		expect(model.development.progressAttemptContextLabel).toBe("(last 7 attempts)");
 		expect(model.development.chartPoints).toEqual([
-			{ key: "attempt-chart", value: 70, label: "2026-09-01", valueLabel: "70 %", isLatest: true, showAxisLabel: true, axisLabel: "2026-09-01" }
+			{ key: "attempt-chart", value: 70, label: "2026-09-01", valueLabel: "70 %", isLatest: true }
 		]);
+		expect(model.development.chartAxisStartLabel).toBe("2026-06-07");
+		expect(model.development.chartAxisEndLabel).toBe("2026-09-07");
+		expect(model.development.periodRangeLabel).toBe("2026-06-07 – 2026-09-07");
 		expect(model.summary.completedValue).toBe("28");
-		expect(model.summary.progressNumberValue).toBe("+20");
+		expect(model.summary.progressNumberValue).toBe("+20 %");
 		expect(model.summary.progressUnitLabel).toBe("pp");
 		expect(model.summary.hasProgress).toBe(true);
+	});
+
+	test("switches the complete Development presentation to the selected backend zoom period", () => {
+		const statistics = createStatistics();
+		const week = createModel(statistics, STATISTICS_PERIODS.WEEK);
+		const year = createModel(statistics, STATISTICS_PERIODS.YEAR);
+
+		expect(week.development.period).toBe(STATISTICS_PERIODS.WEEK);
+		expect(week.development.averageScoreValue).toBe("90 %");
+		expect(week.development.progressValue).toBe("+5 pp");
+		expect(week.development.progressAttemptContextLabel).toBe("(last 2 attempts)");
+		expect(week.development.periodRangeLabel).toBe("2026-08-31 – 2026-09-07");
+		expect(year.development.period).toBe(STATISTICS_PERIODS.YEAR);
+		expect(year.development.averageScoreValue).toBe("50 %");
+		expect(year.development.progressValue).toBe("+10 pp");
+		expect(year.development.progressAttemptContextLabel).toBe("(last 12 attempts)");
+		expect(year.development.periodRangeLabel).toBe("2025-09-07 – 2026-09-07");
 	});
 
 	test("passes backend performance bands through the presentation boundary", () => {
@@ -180,5 +217,6 @@ describe("createStatisticsOverviewModel", () => {
 		expect(model.summary.progressUnitLabel).toBe("");
 		expect(model.summary.hasProgress).toBe(false);
 		expect(model.development.chartPoints).toEqual([]);
+		expect(model.development.periodRangeLabel).toBe("");
 	});
 });

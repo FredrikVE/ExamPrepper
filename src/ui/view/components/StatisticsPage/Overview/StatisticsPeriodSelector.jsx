@@ -5,15 +5,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const SCROLL_EDGE_TOLERANCE_PX = 2;
 const SCROLL_DISTANCE_FACTOR = 0.72;
 
-export default function StatisticsPeriodSelector({ label, options, selectedPeriod, previousLabel, nextLabel, onSelectPeriod }) {
+export default function StatisticsPeriodSelector({ label, options, selectedPeriod, rangeLabel, controlsId, previousLabel, nextLabel, onSelectPeriod }) {
 	const viewportRef = useRef(null);
 	const [scrollState, setScrollState] = useState({ hasOverflow: false, canScrollPrevious: false, canScrollNext: false });
-	let selectorClassName = "statistics-period-selector";
-
-	if (!scrollState.hasOverflow) {
-		selectorClassName += " statistics-period-selector-static";
-	}
-
 	useEffect(() => {
 		const viewport = viewportRef.current;
 
@@ -51,26 +45,28 @@ export default function StatisticsPeriodSelector({ label, options, selectedPerio
 	};
 
 	return (
-		<div className={selectorClassName} aria-label={label}>
-			{scrollState.hasOverflow && (
-				<button type="button" className="statistics-period-scroll-button" aria-label={previousLabel} disabled={!scrollState.canScrollPrevious} onClick={() => scrollPeriods(-1)}>
-					<ChevronLeft aria-hidden="true" focusable="false" />
-				</button>
-			)}
-			<div ref={viewportRef} className="statistics-period-viewport">
-				<div className="statistics-period-selector-options">
-					{options.map((option) => (
-						<button key={option.key} type="button" className="statistics-period-selector-button" aria-pressed={selectedPeriod === option.key} onClick={() => onSelectPeriod(option.key)}>
-							{option.label}
-						</button>
-					))}
+		<div className="statistics-period-selector">
+			<div className="statistics-period-selector-controls">
+				{scrollState.hasOverflow && (
+					<button type="button" className="statistics-period-scroll-button" aria-label={previousLabel} disabled={!scrollState.canScrollPrevious} onClick={() => scrollPeriods(-1)}>
+						<ChevronLeft aria-hidden="true" focusable="false" />
+					</button>
+				)}
+				<div ref={viewportRef} className="statistics-period-viewport">
+					<div className="statistics-period-selector-options" role="group" aria-label={`${label}. ${rangeLabel}`}>
+						{options.map((option) => (
+							<button key={option.key} type="button" className="statistics-period-selector-button" aria-pressed={selectedPeriod === option.key} aria-controls={controlsId} onClick={() => onSelectPeriod(option.key)}>
+								{option.label}
+							</button>
+						))}
+					</div>
 				</div>
+				{scrollState.hasOverflow && (
+					<button type="button" className="statistics-period-scroll-button" aria-label={nextLabel} disabled={!scrollState.canScrollNext} onClick={() => scrollPeriods(1)}>
+						<ChevronRight aria-hidden="true" focusable="false" />
+					</button>
+				)}
 			</div>
-			{scrollState.hasOverflow && (
-				<button type="button" className="statistics-period-scroll-button" aria-label={nextLabel} disabled={!scrollState.canScrollNext} onClick={() => scrollPeriods(1)}>
-					<ChevronRight aria-hidden="true" focusable="false" />
-				</button>
-			)}
 		</div>
 	);
 }

@@ -56,8 +56,11 @@ function validateDevelopmentPeriods(periods) {
 function validateDevelopmentPeriod(developmentPeriod) {
 	requireObject(developmentPeriod, "statistics development period");
 	requireStatisticsPeriod(developmentPeriod.period);
+	requireNullableString(developmentPeriod.windowStartAt, "statistics windowStartAt");
+	requireString(developmentPeriod.windowEndAt, "statistics windowEndAt");
 	requireNullableNumber(developmentPeriod.averageScorePercentage, "statistics averageScorePercentage");
 	requireNullableNumber(developmentPeriod.progressPercentagePoints, "statistics progressPercentagePoints");
+	requireNonNegativeInteger(developmentPeriod.progressAttemptCount, "statistics progressAttemptCount");
 	requireArray(developmentPeriod.chartPoints, "statistics chartPoints");
 
 	for (const chartPoint of developmentPeriod.chartPoints) {
@@ -156,5 +159,13 @@ function requireNumber(value, fieldName) {
 function requireNullableNumber(value, fieldName) {
 	if (value !== null) {
 		requireNumber(value, fieldName);
+	}
+}
+
+function requireNonNegativeInteger(value, fieldName) {
+	requireNumber(value, fieldName);
+
+	if (!Number.isInteger(value) || value < 0) {
+		throw new Error(`Invalid ${fieldName}`);
 	}
 }

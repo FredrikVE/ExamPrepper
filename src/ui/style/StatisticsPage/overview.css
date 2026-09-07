@@ -72,31 +72,29 @@
 .statistics-summary-progress-value {
 	display: flex;
 	width: 100%;
-	align-items: flex-start;
-	justify-content: flex-end;
-	gap: 7px;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: center;
+	gap: var(--space-2);
 	margin-top: var(--space-3);
 	line-height: 1;
 }
 
 .statistics-summary-progress-value strong {
 	color: var(--statistics-kpi-value);
-	font-size: clamp(2rem, 3.2vw, 2.55rem);
+	font-size: 1.6rem;
 	font-weight: 900;
-	letter-spacing: -0.055em;
+	letter-spacing: -0.035em;
 	white-space: nowrap;
 }
 
 .statistics-summary-progress-unit {
-	max-width: 74px;
-	margin-top: 2px;
 	color: var(--statistics-kpi-progress-unit);
-	font-size: 0.93rem;
+	font-size: 0.82rem;
 	font-weight: 900;
-	hyphens: auto;
-	line-height: 1.02;
-	overflow-wrap: break-word;
-	text-align: left;
+	line-height: 1.05;
+	text-align: right;
+	white-space: nowrap;
 }
 
 .statistics-summary-card-progress[data-direction="down"] .statistics-summary-progress-unit {
@@ -111,9 +109,9 @@
 	width: 100%;
 	margin-top: var(--space-5);
 	color: var(--statistics-kpi-value);
-	font-size: clamp(2rem, 3.2vw, 2.55rem);
+	font-size: 1.5rem;
 	font-weight: 900;
-	letter-spacing: -0.055em;
+	letter-spacing: -0.035em;
 	line-height: 1;
 	text-align: right;
 }

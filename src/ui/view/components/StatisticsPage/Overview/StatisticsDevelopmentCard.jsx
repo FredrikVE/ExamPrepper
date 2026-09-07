@@ -1,7 +1,9 @@
 // src/ui/view/components/StatisticsPage/Overview/StatisticsDevelopmentCard.jsx
-import { Minus, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import StatisticsPeriodSelector from "./StatisticsPeriodSelector.jsx";
 import StatisticsScoreChart from "./StatisticsScoreChart.jsx";
+
+const DEVELOPMENT_CHART_ID = "statistics-development-chart";
 
 export default function StatisticsDevelopmentCard({ model, onSelectPeriod }) {
 	const ProgressIcon = resolveProgressIcon(model.progressDirection);
@@ -23,19 +25,24 @@ export default function StatisticsDevelopmentCard({ model, onSelectPeriod }) {
 					</div>
 					<div className="statistics-development-progress" data-direction={model.progressDirection}>
 						<div className="statistics-development-progress-value">
-							<ProgressIcon aria-hidden="true" focusable="false" />
+							<ProgressIcon aria-hidden="true" focusable="false" strokeWidth={3} />
 							<strong>{model.progressValue}</strong>
 						</div>
-						<span>{model.progressLabel}</span>
+						<div className="statistics-development-progress-copy">
+							<span>{model.progressLabel}</span>
+							<span>{model.progressAttemptContextLabel}</span>
+						</div>
 					</div>
 				</div>
 
 				<div className="statistics-development-chart-column">
-					<StatisticsScoreChart label={model.chartLabel} points={model.chartPoints} emptyLabel={model.chartEmptyLabel} />
+					<StatisticsScoreChart id={DEVELOPMENT_CHART_ID} label={model.chartLabel} points={model.chartPoints} axisStartLabel={model.chartAxisStartLabel} axisEndLabel={model.chartAxisEndLabel} emptyLabel={model.chartEmptyLabel} />
 					<StatisticsPeriodSelector
 						label={model.periodLabel}
 						options={model.periodOptions}
 						selectedPeriod={model.period}
+						rangeLabel={model.periodRangeLabel}
+						controlsId={DEVELOPMENT_CHART_ID}
 						previousLabel={model.previousPeriodLabel}
 						nextLabel={model.nextPeriodLabel}
 						onSelectPeriod={onSelectPeriod}
@@ -48,11 +55,11 @@ export default function StatisticsDevelopmentCard({ model, onSelectPeriod }) {
 
 function resolveProgressIcon(direction) {
 	if (direction === "up") {
-		return TrendingUp;
+		return ArrowUp;
 	}
 
 	if (direction === "down") {
-		return TrendingDown;
+		return ArrowDown;
 	}
 
 	return Minus;

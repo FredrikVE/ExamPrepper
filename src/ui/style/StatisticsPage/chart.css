@@ -1,22 +1,21 @@
 /* src/ui/style/StatisticsPage/chart.css */
 .statistics-score-chart {
 	min-width: 0;
-	overflow-x: auto;
+	width: 100%;
 	padding-top: var(--space-1);
-	scrollbar-width: thin;
-	scrollbar-color: var(--statistics-scroll-thumb) transparent;
 }
 
 .statistics-score-chart-plot {
 	position: relative;
-	min-width: 500px;
-	height: 188px;
-	padding: var(--space-2) 0 24px 42px;
+	min-width: 0;
+	width: 100%;
+	height: 180px;
+	padding: var(--space-2) 0 24px 40px;
 }
 
 .statistics-score-chart-grid {
 	position: absolute;
-	inset: var(--space-2) 0 24px 42px;
+	inset: var(--space-2) 0 24px 40px;
 	display: grid;
 	grid-template-rows: repeat(4, 1fr) auto;
 	pointer-events: none;
@@ -31,7 +30,7 @@
 	position: absolute;
 	right: calc(100% + var(--space-2));
 	top: -0.55em;
-	width: 36px;
+	width: 38px;
 	color: var(--text-soft);
 	font-size: 0.62rem;
 	font-weight: 650;
@@ -41,14 +40,14 @@
 .statistics-score-chart-list {
 	position: absolute;
 	top: var(--space-2);
+	right: 0;
 	bottom: 24px;
 	left: 50px;
 	display: flex;
-	width: max-content;
-	min-width: calc(100% - 50px);
+	min-width: 0;
 	align-items: stretch;
 	justify-content: flex-start;
-	gap: var(--space-4);
+	gap: clamp(var(--space-2), 0.8vw, var(--space-3));
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -56,16 +55,16 @@
 
 .statistics-score-chart-point {
 	display: grid;
-	width: 46px;
-	min-width: 46px;
-	flex: 0 0 46px;
+	min-width: 0;
+	flex: 0 1 38px;
 	height: 100%;
 	align-items: end;
-	text-align: left;
 }
 
 .statistics-score-chart-bar-area {
 	display: flex;
+	width: 100%;
+	min-width: 0;
 	height: 100%;
 	align-items: flex-end;
 	justify-content: flex-start;
@@ -73,16 +72,23 @@
 
 .statistics-score-chart-bar {
 	display: block;
-	width: 34px;
+	width: 100%;
+	max-width: 38px;
 	height: var(--statistics-score-chart-value);
 	min-height: 2px;
-	border-radius: 5px 5px 0 0;
+	border-radius: 6px 6px 0 0;
 	background: var(--statistics-chart-bar);
 	transition: transform var(--transition-fast), filter var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .statistics-score-chart-bar[data-latest="true"] {
 	background: var(--statistics-chart-bar-latest);
+}
+
+.statistics-score-chart-point:hover .statistics-score-chart-bar {
+	transform: translateY(-2px);
+	filter: brightness(1.04);
+	box-shadow: 0 7px 16px var(--statistics-chart-hover-shadow);
 }
 
 .statistics-score-chart-axis-labels {
@@ -100,17 +106,13 @@
 }
 
 .statistics-score-chart-axis-labels span {
+	min-width: 0;
 	white-space: nowrap;
-}
-.statistics-score-chart-point:hover .statistics-score-chart-bar {
-	transform: translateY(-2px);
-	filter: brightness(1.04);
-	box-shadow: 0 7px 16px var(--statistics-chart-hover-shadow);
 }
 
 .statistics-score-chart-empty {
 	display: grid;
-	min-height: 188px;
+	min-height: 180px;
 	place-items: center;
 	margin: 0;
 	border: 1px dashed var(--statistics-overview-border);

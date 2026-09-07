@@ -1,13 +1,13 @@
 // src/ui/view/components/StatisticsPage/Overview/StatisticsScoreChart.jsx
 const STATISTICS_CHART_GRID_LINES = Object.freeze([100, 75, 50, 25, 0]);
 
-export default function StatisticsScoreChart({ label, points, emptyLabel }) {
+export default function StatisticsScoreChart({ id, label, points, axisStartLabel, axisEndLabel, emptyLabel }) {
 	if (points.length === 0) {
-		return <p className="statistics-score-chart-empty">{emptyLabel}</p>;
+		return <p id={id} className="statistics-score-chart-empty">{emptyLabel}</p>;
 	}
 
 	return (
-		<div className="statistics-score-chart" aria-label={label}>
+		<div id={id} className="statistics-score-chart" aria-label={label}>
 			<div className="statistics-score-chart-plot">
 				<div className="statistics-score-chart-grid" aria-hidden="true">
 					{STATISTICS_CHART_GRID_LINES.map((value) => (
@@ -26,13 +26,8 @@ export default function StatisticsScoreChart({ label, points, emptyLabel }) {
 					))}
 				</ol>
 				<div className="statistics-score-chart-axis-labels" aria-hidden="true">
-					{points.map((point) => {
-						if (!point.showAxisLabel) {
-							return null;
-						}
-
-						return <span key={point.key}>{point.axisLabel}</span>;
-					})}
+					<span>{axisStartLabel}</span>
+					<span>{axisEndLabel}</span>
 				</div>
 			</div>
 		</div>

@@ -345,9 +345,13 @@
 	transition: background var(--transition-fast), color var(--transition-fast);
 }
 
-.statistics-history-toggle:hover {
+.statistics-history-toggle:hover:not(:disabled) {
 	background: var(--statistics-history-row-hover);
 	color: var(--accent);
+}
+
+.statistics-history-toggle:disabled {
+	cursor: default;
 }
 
 .statistics-history-toggle-chevron {
@@ -358,4 +362,12 @@
 
 .statistics-history-toggle[aria-expanded="true"] .statistics-history-toggle-chevron {
 	transform: rotate(180deg);
+}
+
+.statistics-history-toggle:hover:not(:disabled) .statistics-history-toggle-chevron {
+	transform: translateY(2px);
+}
+
+.statistics-history-toggle[aria-expanded="true"]:hover:not(:disabled) .statistics-history-toggle-chevron {
+	transform: rotate(180deg) translateY(2px);
 }

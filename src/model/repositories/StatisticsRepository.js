@@ -37,6 +37,12 @@ function mapAttempt(attempt) {
 function mapDevelopmentPeriod(developmentPeriod) {
 	const chartPoints = [];
 
+	if (developmentPeriod.windowStartAt !== null) {
+		parseStatisticsTimestamp(developmentPeriod.windowStartAt);
+	}
+
+	parseStatisticsTimestamp(developmentPeriod.windowEndAt);
+
 	for (const chartPoint of developmentPeriod.chartPoints) {
 		chartPoints.push({
 			...chartPoint,

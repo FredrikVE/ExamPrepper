@@ -1,5 +1,6 @@
 /* src/ui/style/StatisticsPage/chapters.css */
 .statistics-chapter-overview {
+	--statistics-chapter-card-width: clamp(220px, 24vw, 258px);
 	display: grid;
 	gap: var(--space-4);
 	min-width: 0;
@@ -50,8 +51,8 @@
 
 .statistics-chapter-card {
 	display: grid;
-	width: clamp(220px, 24vw, 258px);
-	min-width: 220px;
+	width: var(--statistics-chapter-card-width);
+	min-width: var(--statistics-chapter-card-width);
 	min-height: 112px;
 	flex: 0 0 auto;
 	grid-template-columns: 44px minmax(0, 1fr);
@@ -223,11 +224,12 @@
 .statistics-chapter-overview-expanded .statistics-chapter-track {
 	display: grid;
 	width: 100%;
-	grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+	grid-template-columns: repeat(auto-fill, var(--statistics-chapter-card-width));
+	justify-content: start;
 	gap: var(--space-3);
 }
 
 .statistics-chapter-overview-expanded .statistics-chapter-card {
-	width: auto;
-	min-width: 0;
+	width: var(--statistics-chapter-card-width);
+	min-width: var(--statistics-chapter-card-width);
 }

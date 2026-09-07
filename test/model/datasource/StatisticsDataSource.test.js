@@ -51,8 +51,11 @@ function createPayload() {
 function createDevelopmentPeriod(period) {
 	return {
 		period,
+		windowStartAt: "2026-08-31T12:00:00.000Z",
+		windowEndAt: "2026-09-07T12:00:00.000Z",
 		averageScorePercentage: 80,
 		progressPercentagePoints: 10,
+		progressAttemptCount: 1,
 		chartPoints: [
 			{
 				attemptId: "attempt-1",
@@ -81,6 +84,24 @@ describe("StatisticsDataSource", () => {
 		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
 
 		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Missing statistics period 1y");
+	});
+
+	test("rejects a development period without its backend-owned zoom window", async () => {
+		const payload = createPayload();
+		delete payload.developmentPeriods[0].windowEndAt;
+		jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => JSON.stringify(payload) });
+		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
+
+		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Invalid statistics windowEndAt");
+	});
+
+	test("rejects a development period without its backend-owned progress attempt count", async () => {
+		const payload = createPayload();
+		delete payload.developmentPeriods[0].progressAttemptCount;
+		jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => JSON.stringify(payload) });
+		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
+
+		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Invalid statistics progressAttemptCount");
 	});
 
 	test("rejects a performance band that disagrees with an unmeasurable score", async () => {

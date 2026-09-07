@@ -11,8 +11,11 @@ function createResponse() {
 		developmentPeriods: [
 			{
 				period: "3m",
+				windowStartAt: "2026-06-07T12:00:00.000Z",
+				windowEndAt: "2026-09-07T12:00:00.000Z",
 				averageScorePercentage: 75,
 				progressPercentagePoints: 20,
+				progressAttemptCount: 1,
 				chartPoints: [{ attemptId: "attempt-1", submittedAt: TIMESTAMP, percentage: 75 }]
 			}
 		],
@@ -60,8 +63,11 @@ describe("StatisticsRepository", () => {
 		expect(result.completedAttemptCount).toBe(1);
 		expect(result.developmentPeriods[0]).toMatchObject({
 			period: "3m",
+			windowStartAt: "2026-06-07T12:00:00.000Z",
+			windowEndAt: "2026-09-07T12:00:00.000Z",
 			averageScorePercentage: 75,
-			progressPercentagePoints: 20
+			progressPercentagePoints: 20,
+			progressAttemptCount: 1
 		});
 		expect(result.developmentPeriods[0].chartPoints[0].submittedAtEpochMs).toBe(Date.parse(TIMESTAMP));
 		expect(result.attempts[0]).toMatchObject({
@@ -70,6 +76,15 @@ describe("StatisticsRepository", () => {
 			submittedAtEpochMs: Date.parse(TIMESTAMP)
 		});
 		expect(result.chapters[0].performanceBand).toBe("progress");
+	});
+
+	test("fails fast when a backend zoom-window timestamp is invalid", async () => {
+		const response = createResponse();
+		response.developmentPeriods[0].windowStartAt = "invalid";
+		const statisticsDataSource = { fetchSubjectStatistics: jest.fn().mockResolvedValue(response) };
+		const repository = new StatisticsRepository(statisticsDataSource);
+
+		await expect(repository.getSubjectStatistics("in2120")).rejects.toThrow("Invalid statistics timestamp");
 	});
 
 	test("fails fast when a mapped Statistics timestamp is invalid", async () => {

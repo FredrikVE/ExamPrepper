@@ -28,6 +28,7 @@ export default function createStatisticsTextModel(t) {
 		developmentTitle: t.statisticsOverviewDevelopmentTitle,
 		developmentSubtitle: t.statisticsOverviewDevelopmentSubtitle,
 		periodLabel: t.statisticsOverviewPeriodLabel,
+		createPeriodRangeLabel: t.statisticsOverviewPeriodRangeLabel,
 		previousPeriodLabel: t.statisticsOverviewPreviousPeriodLabel,
 		nextPeriodLabel: t.statisticsOverviewNextPeriodLabel,
 		periodOptions: Object.freeze([
@@ -40,6 +41,7 @@ export default function createStatisticsTextModel(t) {
 		]),
 		averageScoreLabel: t.statisticsOverviewAverageScoreLabel,
 		progressLabel: t.statisticsOverviewProgressLabel,
+		createProgressAttemptContextLabel: t.statisticsOverviewProgressAttemptContextLabel,
 		completedLabel: t.statisticsOverviewCompletedLabel,
 		completedUnitLabel: t.statisticsOverviewEvidenceUnitPlural,
 		summaryLabel: t.statisticsOverviewSummaryLabel,
@@ -88,7 +90,7 @@ export default function createStatisticsTextModel(t) {
 		},
 
 		createPercentagePointNumberLabel(value) {
-			return formatSignedNumber(value);
+			return `${formatSignedNumber(value)} %`;
 		},
 
 		createPercentagePointUnitLabel(value) {

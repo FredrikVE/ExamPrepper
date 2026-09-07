@@ -68,6 +68,17 @@ describe("Statistics Overview architecture", () => {
 		expect(statisticsViews).not.toMatch(/<svg\b/);
 	});
 
+	test("keeps chapter cards fixed-width between carousel and expanded grid", () => {
+		const chaptersCss = read("src/ui/style/StatisticsPage/chapters.css");
+
+		expect(chaptersCss).toContain("--statistics-chapter-card-width: clamp(220px, 24vw, 258px)");
+		expect(chaptersCss).toContain("overflow-x: auto");
+		expect(chaptersCss).toContain("grid-template-columns: repeat(auto-fill, var(--statistics-chapter-card-width))");
+		expect(chaptersCss).toContain("width: var(--statistics-chapter-card-width)");
+		expect(chaptersCss).not.toContain("repeat(auto-fit, minmax(210px, 1fr))");
+		expect(chaptersCss).not.toContain(".statistics-chapter-overview-expanded .statistics-chapter-card {\n\twidth: auto");
+	});
+
 	test("keeps Statistics theme and color ownership in Tokens.css", () => {
 		const featureCss = readDirectory("src/ui/style/StatisticsPage");
 		const tokens = read("src/ui/style/Tokens.css");

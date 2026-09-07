@@ -8,7 +8,7 @@ export const STATISTICS_PERIODS = Object.freeze({
 	ALL: "all"
 });
 
-export const DEFAULT_STATISTICS_PERIOD = STATISTICS_PERIODS.THREE_MONTHS;
+export const DEFAULT_STATISTICS_PERIOD = STATISTICS_PERIODS.WEEK;
 
 export const STATISTICS_HISTORY_SORT = Object.freeze({
 	DATE: "date",

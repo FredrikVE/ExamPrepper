@@ -28,6 +28,7 @@
 	}
 
 	.statistics-summary-progress-value {
+		align-items: center;
 		justify-content: center;
 	}
 
@@ -90,8 +91,8 @@
 		grid-template-columns: 1fr;
 	}
 
-	.statistics-score-chart-plot {
-		min-width: 460px;
+	.statistics-period-selector-options {
+		justify-content: flex-start;
 	}
 
 	.statistics-chapter-carousel {
@@ -104,13 +105,8 @@
 		height: 34px;
 	}
 
-	.statistics-chapter-card {
-		width: min(78vw, 250px);
-		min-width: min(78vw, 250px);
-	}
-
-	.statistics-chapter-overview-expanded .statistics-chapter-track {
-		grid-template-columns: 1fr;
+	.statistics-chapter-overview {
+		--statistics-chapter-card-width: min(78vw, 250px);
 	}
 
 	.statistics-history-table-head {
@@ -193,6 +189,7 @@
 	.statistics-subject-selector-trigger,
 	.statistics-subject-selector-chevron,
 	.statistics-score-chart-bar,
+	.statistics-period-selector-button,
 	.statistics-chapter-scroll-button,
 	.statistics-chapter-toggle svg,
 	.statistics-history-toggle-chevron {

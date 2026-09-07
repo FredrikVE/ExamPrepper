@@ -38,6 +38,7 @@ export default function createStatisticsHistoryModel({ attempts, sortKey, sortDi
 		pageCount,
 		sortKey,
 		sortDirection,
+		showExpansionToggle: sortedAttempts.length > FIRST_HISTORY_ITEM_OFFSET,
 		canToggleExpanded: sortedAttempts.length > STATISTICS_HISTORY_COLLAPSED_ITEM_COUNT
 	};
 }
