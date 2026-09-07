@@ -1,5 +1,5 @@
 // src/ui/view/components/StatisticsPage/Overview/StatisticsHistoryHeader.jsx
-import { STATISTICS_HISTORY_SORT } from "../../../../constants/StatisticsContracts.js";
+import { STATISTICS_HISTORY_SORT } from "../../../../../constants/StatisticsContracts.js";
 
 export default function StatisticsHistoryHeader({ model, onChangeSort }) {
 	return (

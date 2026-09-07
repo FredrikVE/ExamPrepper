@@ -1,3 +1,4 @@
+// test/ui/architecture/appBreakpointContract.test.js
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "@jest/globals";
@@ -30,6 +31,7 @@ const LOCAL_WIDTH_FEATURE_ALLOWLIST = {
 	"max-width:880": "category-sort intermediate fit",
 	"max-width:900": "sequence-order intermediate fit",
 	"max-width:920": "progress-pager intermediate fit",
+	"max-width:980": "Statistics overview chapter grid and header fit",
 	"max-width:1100": "large drag-and-drop and flipcard fit",
 	"max-width:1138": "sequence-order geometry threshold",
 	"max-width:1180": "wide component layout threshold",
