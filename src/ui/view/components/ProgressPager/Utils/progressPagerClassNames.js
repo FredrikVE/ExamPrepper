@@ -1,5 +1,5 @@
 // src/ui/view/components/ProgressPager/Utils/progressPagerClassNames.js
-export function getProgressDotClassName(isActive, submitted, isCorrect, dotDisplayMode) {
+export function getProgressDotClassName(isActive, showEntryOutcome, isCorrect, dotDisplayMode) {
     const progressDotClassNames = ["progress-pager-dot"];
 
     if (dotDisplayMode === "filled-compact") {
@@ -14,7 +14,7 @@ export function getProgressDotClassName(isActive, submitted, isCorrect, dotDispl
         progressDotClassNames.push("progress-pager-dot-active");
     }
 
-    if (submitted) {
+    if (showEntryOutcome) {
         progressDotClassNames.push(isCorrect ? "progress-pager-dot-correct" : "progress-pager-dot-wrong");
     }
 

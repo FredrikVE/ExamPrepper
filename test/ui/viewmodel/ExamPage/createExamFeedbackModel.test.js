@@ -32,16 +32,16 @@ describe("createExamFeedbackModel", () => {
 			{
 				key: "q1",
 				questionId: "q1",
-				questionIndex: 0,
-				questionNumber: 1,
+				entryIndex: 0,
+				entryNumber: 1,
 				isActive: true,
 				isCorrect: false
 			},
 			{
 				key: "q2",
 				questionId: "q2",
-				questionIndex: 1,
-				questionNumber: 2,
+				entryIndex: 1,
+				entryNumber: 2,
 				isActive: false,
 				isCorrect: false
 			}
@@ -73,16 +73,16 @@ describe("createExamFeedbackModel", () => {
 			{
 				key: "q1",
 				questionId: "q1",
-				questionIndex: 0,
-				questionNumber: 1,
+				entryIndex: 0,
+				entryNumber: 1,
 				isActive: false,
 				isCorrect: false
 			},
 			{
 				key: "q2",
 				questionId: "q2",
-				questionIndex: 1,
-				questionNumber: 2,
+				entryIndex: 1,
+				entryNumber: 2,
 				isActive: true,
 				isCorrect: true
 			}

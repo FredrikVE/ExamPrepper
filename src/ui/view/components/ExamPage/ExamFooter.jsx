@@ -41,7 +41,7 @@ export default function ExamFooter({
             minimalCompactEntries={minimalCompactQuestionDotEntries}
             shouldUseCompactDots={shouldUseCompactDots}
             shouldUseResponsiveCompactDots={shouldUseResponsiveCompactDots}
-            submitted={submitted}
+            showEntryOutcome={submitted}
             onSelectEntry={onGoToQuestion}
             dotsLabel={t.footerQuestionNavigationLabel}
             goToEntryLabel={t.footerGoToQuestion}

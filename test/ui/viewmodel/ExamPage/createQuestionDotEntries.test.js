@@ -17,16 +17,16 @@ describe("createQuestionDotEntries", () => {
 			{
 				key: "q1",
 				questionId: "q1",
-				questionIndex: 0,
-				questionNumber: 1,
+				entryIndex: 0,
+				entryNumber: 1,
 				isActive: false,
 				isCorrect: true
 			},
 			{
 				key: "q2",
 				questionId: "q2",
-				questionIndex: 1,
-				questionNumber: 2,
+				entryIndex: 1,
+				entryNumber: 2,
 				isActive: true,
 				isCorrect: false
 			}
@@ -54,8 +54,8 @@ describe("createCompactQuestionDotEntries", () => {
 		expect(result).toEqual([
 			{
 				key: "q1",
-				questionIndex: 0,
-				questionNumber: 1,
+				entryIndex: 0,
+				entryNumber: 1,
 				isActive: false,
 				isCorrect: false,
 				questionId: "q1"
@@ -63,8 +63,8 @@ describe("createCompactQuestionDotEntries", () => {
 			{ key: "ellipsis-1", type: "ellipsis" },
 			{
 				key: "q3",
-				questionIndex: 2,
-				questionNumber: 3,
+				entryIndex: 2,
+				entryNumber: 3,
 				isActive: true,
 				isCorrect: true,
 				questionId: "q3"
