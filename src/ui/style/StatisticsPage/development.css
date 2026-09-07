@@ -1,0 +1,38 @@
+/* src/ui/style/StatisticsPage/development.css */
+.statistics-development-card {
+	display: grid;
+	gap: var(--space-7);
+	min-width: 0;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-xl);
+	background: var(--statistics-overview-surface);
+	box-shadow: var(--statistics-overview-shadow);
+	padding: clamp(var(--space-6), 3vw, var(--space-9));
+}
+
+.statistics-development-metrics {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-5);
+}
+
+.statistics-development-metric {
+	display: grid;
+	gap: var(--space-1);
+	min-width: 180px;
+	border-left: 3px solid var(--accent);
+	padding-left: var(--space-4);
+}
+
+.statistics-development-metric span {
+	color: var(--text-muted);
+	font-size: 0.82rem;
+	font-weight: 700;
+}
+
+.statistics-development-metric strong {
+	color: var(--text-main);
+	font-size: 1.65rem;
+	font-weight: 900;
+	letter-spacing: -0.045em;
+}

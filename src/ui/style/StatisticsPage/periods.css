@@ -1,0 +1,47 @@
+/* src/ui/style/StatisticsPage/periods.css */
+.statistics-period-selector {
+	display: grid;
+	justify-items: end;
+	gap: var(--space-2);
+}
+
+.statistics-period-selector-label {
+	color: var(--text-soft);
+	font-size: 0.75rem;
+	font-weight: 750;
+}
+
+.statistics-period-selector-options {
+	display: flex;
+	max-width: 100%;
+	gap: var(--space-1);
+	border: 1px solid var(--segmented-control-border);
+	border-radius: var(--radius-full);
+	background: var(--segmented-control-bg);
+	padding: var(--space-1);
+}
+
+.statistics-period-selector-button {
+	min-height: 36px;
+	border: 0;
+	border-radius: var(--radius-full);
+	background: transparent;
+	padding: 0 var(--space-4);
+	color: var(--text-muted);
+	font: inherit;
+	font-size: 0.78rem;
+	font-weight: 800;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.statistics-period-selector-button[aria-pressed="true"] {
+	background: var(--button-primary-bg);
+	box-shadow: var(--button-primary-shadow);
+	color: var(--button-primary-text);
+}
+
+.statistics-period-selector-button:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+}
