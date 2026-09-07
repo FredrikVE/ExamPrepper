@@ -42,7 +42,10 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 				? null
 				: text.createPercentagePointLabel(developmentMetrics.progressPercentagePoints),
 			chartLabel: text.chartLabel,
-			chartPoints: developmentMetrics.chartPoints,
+			chartPoints: developmentMetrics.chartPoints.map((point) => ({
+				...point,
+				valueLabel: text.createPercentageLabel(point.value)
+			})),
 			chartEmptyLabel: text.chartEmptyLabel
 		},
 		summary: {

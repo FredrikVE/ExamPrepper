@@ -35,7 +35,7 @@ import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoun
 import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
 import { NAV_SCREENS, TEST_TYPES } from "./navigation/navigation.js";
-import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getMyStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, recordFlipcardAssessmentUseCase, recordMatchCardResultUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getSubjectStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, recordFlipcardAssessmentUseCase, recordMatchCardResultUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -226,6 +226,7 @@ function AppContent() {
 					<StatisticsPageWrapper
 						subjectId={navigationViewModel.selectedSubjectId}
 						selectedSubject={subjectCatalog.selectedSubject}
+						language={language}
 						subjectSwitcher={subjectCatalog.subjectSwitcher}
 						onSelectSubject={navigationViewModel.switchSubject}
 						formatDate={formatDate}
@@ -492,13 +493,14 @@ function GlossaryPageWithViewModel(props) {
 	return <GlossaryPage viewModel={glossaryPageViewModel} />;
 }
 
-function StatisticsPageWrapper({ subjectId, selectedSubject, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam }) {
+function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam }) {
 	const authState = useAppAuth();
 
 	return (
 		<StatisticsPageWithViewModel
 			subjectId={subjectId}
 			selectedSubject={selectedSubject}
+			language={language}
 			subjectSwitcher={subjectSwitcher}
 			onSelectSubject={onSelectSubject}
 			formatDate={formatDate}
@@ -510,11 +512,12 @@ function StatisticsPageWrapper({ subjectId, selectedSubject, subjectSwitcher, on
 	);
 }
 
-function StatisticsPageWithViewModel({ subjectId, selectedSubject, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam, authState }) {
+function StatisticsPageWithViewModel({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam, authState }) {
 	const statisticsPageViewModel = useStatisticsPageViewModel({
-		getMyStatisticsUseCase,
+		getSubjectStatisticsUseCase,
 		subjectId,
 		selectedSubject,
+		language,
 		subjectSwitcher,
 		onSelectSubject,
 		formatDate,

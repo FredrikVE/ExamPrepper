@@ -118,8 +118,8 @@ export default function createStatisticsTextModel(t) {
 			return `${durationSeconds} ${t.statisticsOverviewSecondsShort}`;
 		},
 
-		createGoToHistoryPageLabel(pageIndex) {
-			return t.statisticsOverviewHistoryGoToPageLabel(pageIndex + HISTORY_PAGE_NUMBER_OFFSET);
+		createGoToHistoryPageLabel(pageNumber) {
+			return t.statisticsOverviewHistoryGoToPageLabel(pageNumber);
 		},
 
 		createHistoryPageCounterLabel(pageIndex, pageCount) {

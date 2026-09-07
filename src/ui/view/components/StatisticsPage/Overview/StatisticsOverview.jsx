@@ -1,0 +1,16 @@
+// src/ui/view/components/StatisticsPage/Overview/StatisticsOverview.jsx
+import StatisticsChapterOverview from "./StatisticsChapterOverview.jsx";
+import StatisticsDevelopmentCard from "./StatisticsDevelopmentCard.jsx";
+import StatisticsHistory from "./StatisticsHistory.jsx";
+import StatisticsSummaryCards from "./StatisticsSummaryCards.jsx";
+
+export default function StatisticsOverview({ model, actions }) {
+	return (
+		<div className="statistics-overview">
+			<StatisticsDevelopmentCard model={model.development} onSelectPeriod={actions.selectPeriod} />
+			<StatisticsSummaryCards model={model.summary} />
+			<StatisticsChapterOverview model={model.chapters} />
+			<StatisticsHistory model={model.history} actions={actions} />
+		</div>
+	);
+}
