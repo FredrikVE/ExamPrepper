@@ -42,6 +42,7 @@ function createHistoryRowModel(attempt, formatDate, text) {
 		title: attempt.title,
 		submittedAtLabel: formatDate(attempt.submittedAt) ?? attempt.submittedAt,
 		scoreLabel: text.createPercentageLabel(attempt.percentage),
+		performanceBand: attempt.performanceBand,
 		pointsLabel: text.createPointsLabel(attempt.scorePoints, attempt.totalPoints),
 		correctLabel: text.createCorrectCountLabel(attempt.correctCount),
 		incorrectLabel: text.createIncorrectCountLabel(attempt.incorrectCount),

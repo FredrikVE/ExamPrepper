@@ -7,6 +7,7 @@ export default function createStatisticsChapterModels({ chapters, language, text
 		label: language === LANGUAGES.EN ? chapter.labelEn : chapter.labelNo,
 		iconKey: chapter.iconKey,
 		scorePercentage: chapter.scorePercentage,
+		performanceBand: chapter.performanceBand,
 		scoreLabel: text.createPercentageLabel(chapter.scorePercentage),
 		evidenceLabel: text.createEvidenceCountLabel(chapter.evidenceCount)
 	}));

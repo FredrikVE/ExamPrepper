@@ -22,7 +22,11 @@ export default function useStatisticsOverviewModel(props) {
 	const isSignedOut = props.authState.status === APP_AUTH_STATUS.DISABLED
 		|| props.authState.status === APP_AUTH_STATUS.SIGNED_OUT;
 	const isEnabled = isSignedIn && Boolean(props.subjectId);
-	const resourceKey = isEnabled ? `${props.authState.userId}:${props.subjectId}` : null;
+	let resourceKey = null;
+
+	if (isEnabled) {
+		resourceKey = `${props.authState.userId}:${props.subjectId}`;
+	}
 
 	const executeLoad = useCallback(() => {
 		if (!isEnabled) {
@@ -32,40 +36,25 @@ export default function useStatisticsOverviewModel(props) {
 		return props.getSubjectStatisticsUseCase.execute({ subjectId: props.subjectId });
 	}, [isEnabled, props.getSubjectStatisticsUseCase, props.subjectId]);
 
-	const load = useLoadModel({
-		execute: executeLoad,
-		emptyData: null,
-		errorMessage: props.text.loadErrorMessage,
-		resourceKey,
-		isEnabled,
-		onLoaded: null
-	});
-	const presentation = createStatisticsOverviewModel({
-		statistics: load.data,
-		period,
-		historySortKey,
-		historySortDirection,
-		historyExpanded,
-		historyPage,
-		nowEpochMs: Date.now(),
-		formatDate: props.formatDate,
-		language: props.language,
-		text: props.text
-	});
-	const workspaceState = createStatisticsWorkspaceState({
-		load,
-		presentation,
-		isAuthLoading,
-		isSignedOut,
-		text: props.text,
-		onStartNewExam: props.onStartNewExam
-	});
+	const load = useLoadModel({ execute: executeLoad, emptyData: null, errorMessage: props.text.loadErrorMessage, resourceKey, isEnabled, onLoaded: null });
+	const presentation = createStatisticsOverviewModel({ statistics: load.data, period, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate: props.formatDate, language: props.language, text: props.text });
+	const workspaceState = createStatisticsWorkspaceState({ load, presentation, isAuthLoading, isSignedOut, text: props.text, onStartNewExam: props.onStartNewExam });
+
+	const selectPeriod = useCallback((nextPeriod) => {
+		setPeriod(nextPeriod);
+	}, []);
 
 	const changeHistorySort = useCallback((nextSortKey) => {
 		setHistoryPage(FIRST_HISTORY_PAGE_INDEX);
 
 		if (nextSortKey === historySortKey) {
-			setHistorySortDirection((currentDirection) => currentDirection === SORT_DIRECTION.ASC ? SORT_DIRECTION.DESC : SORT_DIRECTION.ASC);
+			setHistorySortDirection((currentDirection) => {
+				if (currentDirection === SORT_DIRECTION.ASC) {
+					return SORT_DIRECTION.DESC;
+				}
+
+				return SORT_DIRECTION.ASC;
+			});
 			return;
 		}
 
@@ -76,6 +65,10 @@ export default function useStatisticsOverviewModel(props) {
 	const toggleHistoryExpanded = useCallback(() => {
 		setHistoryExpanded((value) => !value);
 		setHistoryPage(FIRST_HISTORY_PAGE_INDEX);
+	}, []);
+
+	const selectHistoryPage = useCallback((pageIndex) => {
+		setHistoryPage(pageIndex);
 	}, []);
 
 	const goToPreviousHistoryPage = useCallback(() => {
@@ -90,10 +83,10 @@ export default function useStatisticsOverviewModel(props) {
 		workspaceState,
 		presentation,
 		actions: {
-			selectPeriod: setPeriod,
+			selectPeriod,
 			changeHistorySort,
 			toggleHistoryExpanded,
-			setHistoryPage,
+			selectHistoryPage,
 			goToPreviousHistoryPage,
 			goToNextHistoryPage
 		}

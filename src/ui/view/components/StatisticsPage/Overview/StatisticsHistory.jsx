@@ -48,7 +48,7 @@ export default function StatisticsHistory({ model, actions }) {
 					shouldUseCompactDots={false}
 					shouldUseResponsiveCompactDots={true}
 					showEntryOutcome={false}
-					onSelectEntry={actions.setHistoryPage}
+					onSelectEntry={actions.selectHistoryPage}
 					dotsLabel={model.pagerLabel}
 					goToEntryLabel={model.createGoToPageLabel}
 					counterLabel={model.createPageCounterLabel(model.page, model.pageCount)}

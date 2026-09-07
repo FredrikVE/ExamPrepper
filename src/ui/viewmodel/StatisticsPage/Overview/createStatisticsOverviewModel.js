@@ -1,34 +1,39 @@
 // src/ui/viewmodel/StatisticsPage/Overview/createStatisticsOverviewModel.js
 import createStatisticsChapterModels from "./createStatisticsChapterModels.js";
-import createStatisticsDevelopmentModel from "./createStatisticsDevelopmentModel.js";
 import createStatisticsHistoryModel from "./createStatisticsHistoryModel.js";
 
 const EMPTY_ATTEMPT_COUNT = 0;
-const EMPTY_STATISTICS = Object.freeze({
-	attempts: Object.freeze([]),
-	chapters: Object.freeze([])
+const EMPTY_ATTEMPTS = Object.freeze([]);
+const EMPTY_CHAPTERS = Object.freeze([]);
+const EMPTY_DEVELOPMENT_METRICS = Object.freeze({
+	averageScorePercentage: null,
+	progressPercentagePoints: null,
+	chartPoints: Object.freeze([])
 });
 
-export default function createStatisticsOverviewModel({ statistics, period, historySortKey, historySortDirection, historyExpanded, historyPage, nowEpochMs, formatDate, language, text }) {
-	const source = statistics ?? EMPTY_STATISTICS;
-	const developmentMetrics = createStatisticsDevelopmentModel({
-		attempts: source.attempts,
-		period,
-		nowEpochMs,
-		formatDate
-	});
-	const history = createStatisticsHistoryModel({
-		attempts: source.attempts,
-		sortKey: historySortKey,
-		sortDirection: historySortDirection,
-		expanded: historyExpanded,
-		page: historyPage,
-		formatDate,
-		text
-	});
+export default function createStatisticsOverviewModel({ statistics, period, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate, language, text }) {
+	let attempts = EMPTY_ATTEMPTS;
+	let chapters = EMPTY_CHAPTERS;
+	let completedAttemptCount = EMPTY_ATTEMPT_COUNT;
+	let developmentMetrics = EMPTY_DEVELOPMENT_METRICS;
+
+	if (statistics !== null) {
+		attempts = statistics.attempts;
+		chapters = statistics.chapters;
+		completedAttemptCount = statistics.completedAttemptCount;
+		developmentMetrics = findDevelopmentPeriod(statistics.developmentPeriods, period);
+	}
+
+	const history = createStatisticsHistoryModel({ attempts, sortKey: historySortKey, sortDirection: historySortDirection, expanded: historyExpanded, page: historyPage, formatDate, text });
+	const chartPoints = createChartPointModels(developmentMetrics.chartPoints, formatDate, text);
+	let progressValue = null;
+
+	if (developmentMetrics.progressPercentagePoints !== null) {
+		progressValue = text.createPercentagePointLabel(developmentMetrics.progressPercentagePoints);
+	}
 
 	return {
-		isEmpty: source.attempts.length === EMPTY_ATTEMPT_COUNT,
+		isEmpty: attempts.length === EMPTY_ATTEMPT_COUNT,
 		development: {
 			title: text.developmentTitle,
 			subtitle: text.developmentSubtitle,
@@ -38,29 +43,22 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			averageScoreLabel: text.averageScoreLabel,
 			averageScoreValue: text.createPercentageLabel(developmentMetrics.averageScorePercentage),
 			progressLabel: text.progressLabel,
-			progressValue: developmentMetrics.progressPercentagePoints === null
-				? null
-				: text.createPercentagePointLabel(developmentMetrics.progressPercentagePoints),
+			progressValue,
 			chartLabel: text.chartLabel,
-			chartPoints: developmentMetrics.chartPoints.map((point) => ({
-				...point,
-				valueLabel: text.createPercentageLabel(point.value)
-			})),
+			chartPoints,
 			chartEmptyLabel: text.chartEmptyLabel
 		},
 		summary: {
 			ariaLabel: text.summaryLabel,
 			completedLabel: text.completedLabel,
-			completedValue: String(source.attempts.length),
+			completedValue: String(completedAttemptCount),
 			progressLabel: text.progressLabel,
-			progressValue: developmentMetrics.progressPercentagePoints === null
-				? null
-				: text.createPercentagePointLabel(developmentMetrics.progressPercentagePoints)
+			progressValue
 		},
 		chapters: {
 			title: text.chaptersTitle,
 			subtitle: text.chaptersSubtitle,
-			items: createStatisticsChapterModels({ chapters: source.chapters, language, text })
+			items: createStatisticsChapterModels({ chapters, language, text })
 		},
 		history: {
 			...history,
@@ -77,4 +75,31 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			createPageCounterLabel: text.createHistoryPageCounterLabel
 		}
 	};
+}
+
+function findDevelopmentPeriod(developmentPeriods, selectedPeriod) {
+	for (const developmentPeriod of developmentPeriods) {
+		if (developmentPeriod.period === selectedPeriod) {
+			return developmentPeriod;
+		}
+	}
+
+	throw new Error(`Missing Statistics development period ${String(selectedPeriod)}`);
+}
+
+function createChartPointModels(chartPoints, formatDate, text) {
+	return chartPoints.map((chartPoint) => {
+		let label = formatDate(chartPoint.submittedAt);
+
+		if (label === null || label === undefined) {
+			label = chartPoint.submittedAt;
+		}
+
+		return {
+			key: chartPoint.attemptId,
+			value: chartPoint.percentage,
+			label,
+			valueLabel: text.createPercentageLabel(chartPoint.percentage)
+		};
+	});
 }
