@@ -21,14 +21,11 @@
 .statistics-development-summary {
 	display: flex;
 	min-width: 0;
-	flex-direction: column;
-	justify-content: space-between;
-	gap: var(--space-6);
+	align-items: flex-start;
 	padding: var(--space-3) 0 var(--space-2);
 }
 
-.statistics-development-average,
-.statistics-development-progress {
+.statistics-development-average {
 	display: grid;
 	gap: var(--space-2);
 }
@@ -41,43 +38,11 @@
 	letter-spacing: -0.03em;
 }
 
-.statistics-development-average span,
-.statistics-development-progress-copy {
+.statistics-development-average span {
 	color: var(--text-muted);
 	font-size: 0.75rem;
 	font-weight: 650;
 	line-height: 1.35;
-}
-
-.statistics-development-progress-value {
-	display: flex;
-	align-items: center;
-	gap: var(--space-2);
-	color: var(--text-muted);
-}
-
-.statistics-development-progress-value svg {
-	width: 22px;
-	height: 22px;
-}
-
-.statistics-development-progress-value strong {
-	font-size: 1.25rem;
-	font-weight: 900;
-	letter-spacing: -0.025em;
-}
-
-.statistics-development-progress-copy {
-	display: grid;
-	gap: 0;
-}
-
-.statistics-development-progress[data-direction="up"] .statistics-development-progress-value {
-	color: var(--statistics-positive);
-}
-
-.statistics-development-progress[data-direction="down"] .statistics-development-progress-value {
-	color: var(--statistics-danger);
 }
 
 .statistics-development-chart-column {

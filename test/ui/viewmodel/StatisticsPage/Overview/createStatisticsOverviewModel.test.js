@@ -16,6 +16,7 @@ function createText() {
 		averageScoreLabel: "Average",
 		progressLabel: "Progress",
 		createProgressAttemptContextLabel: (count) => `(last ${count} attempts)`,
+		createProgressAttemptSummaryLabel: (count) => `Last ${count} attempts`,
 		emptyValueLabel: "—",
 		summaryLabel: "Summary",
 		completedLabel: "Completed",
@@ -59,7 +60,7 @@ function createText() {
 			return `${value} %`;
 		},
 		createPercentagePointShortLabel: (value) => `${createSignedNumberLabel(value)} pp`,
-		createPercentagePointNumberLabel: (value) => `${createSignedNumberLabel(value)} %`,
+		createPercentagePointNumberLabel: (value) => `${value} %`,
 		createPercentagePointUnitLabel: () => "pp",
 		createEvidenceCountLabel: (count) => `${count} attempts`,
 		createPointsLabel: (score, total) => `${score}/${total}`,
@@ -168,8 +169,9 @@ describe("createStatisticsOverviewModel", () => {
 		expect(model.development.chartAxisEndLabel).toBe("2026-09-07");
 		expect(model.development.periodRangeLabel).toBe("2026-06-07 – 2026-09-07");
 		expect(model.summary.completedValue).toBe("28");
-		expect(model.summary.progressNumberValue).toBe("+20 %");
+		expect(model.summary.progressNumberValue).toBe("20 %");
 		expect(model.summary.progressUnitLabel).toBe("pp");
+		expect(model.summary.progressAttemptSummaryLabel).toBe("Last 7 attempts");
 		expect(model.summary.hasProgress).toBe(true);
 	});
 
@@ -215,6 +217,7 @@ describe("createStatisticsOverviewModel", () => {
 		expect(model.summary.completedValue).toBe("0");
 		expect(model.summary.progressNumberValue).toBe("—");
 		expect(model.summary.progressUnitLabel).toBe("");
+		expect(model.summary.progressAttemptSummaryLabel).toBe("");
 		expect(model.summary.hasProgress).toBe(false);
 		expect(model.development.chartPoints).toEqual([]);
 		expect(model.development.periodRangeLabel).toBe("");

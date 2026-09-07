@@ -58,6 +58,27 @@ describe("Statistics Overview architecture", () => {
 		expect(componentSource).not.toMatch(/Date\.now\s*\(/);
 	});
 
+	test("keeps Development focused and centers the period controls", () => {
+		const development = read("src/ui/view/components/StatisticsPage/Overview/StatisticsDevelopmentCard.jsx");
+		const periodsCss = read("src/ui/style/StatisticsPage/periods.css");
+		const responsiveCss = read("src/ui/style/StatisticsPage/responsive.css");
+
+		expect(development).not.toContain("statistics-development-progress");
+		expect(development).not.toContain("progressAttemptContextLabel");
+		expect(periodsCss).toContain(".statistics-period-selector-controls {\n\tdisplay: flex;\n\tmin-width: 0;\n\talign-items: center;\n\tjustify-content: center;");
+		expect(responsiveCss).toContain(".statistics-summary-cards {\n\t\tgrid-template-columns: repeat(2, minmax(0, 1fr));");
+	});
+
+	test("keeps the progress KPI directional and contextual", () => {
+		const summary = read("src/ui/view/components/StatisticsPage/Overview/StatisticsSummaryCards.jsx");
+		const overviewCss = read("src/ui/style/StatisticsPage/overview.css");
+
+		expect(summary).toContain('import { ArrowDown, ArrowUp } from "lucide-react";');
+		expect(summary).toContain("progressAttemptSummaryLabel");
+		expect(overviewCss).toContain('.statistics-summary-card-progress[data-direction="up"] .statistics-summary-progress-icon');
+		expect(overviewCss).toContain('.statistics-summary-card-progress[data-direction="down"] .statistics-summary-progress-icon');
+	});
+
 	test("keeps canonical pager and Lucide icon ownership", () => {
 		const history = read("src/ui/view/components/StatisticsPage/Overview/StatisticsHistory.jsx");
 		const statisticsViews = readDirectory("src/ui/view/components/StatisticsPage");
@@ -77,6 +98,14 @@ describe("Statistics Overview architecture", () => {
 		expect(chaptersCss).toContain("width: var(--statistics-chapter-card-width)");
 		expect(chaptersCss).not.toContain("repeat(auto-fit, minmax(210px, 1fr))");
 		expect(chaptersCss).not.toContain(".statistics-chapter-overview-expanded .statistics-chapter-card {\n\twidth: auto");
+	});
+
+	test("keeps the mobile chapter viewport full-width when the carousel has no overflow", () => {
+		const responsiveCss = read("src/ui/style/StatisticsPage/responsive.css");
+
+		expect(responsiveCss).toContain(".statistics-chapter-carousel:not(.statistics-chapter-carousel-static)");
+		expect(responsiveCss).toContain(".statistics-chapter-carousel-static {\n\t\tgrid-template-columns: minmax(0, 1fr);");
+		expect(responsiveCss).not.toContain("\n\t.statistics-chapter-carousel {\n\t\tgrid-template-columns: 34px minmax(0, 1fr) 34px;");
 	});
 
 	test("keeps Statistics theme and color ownership in Tokens.css", () => {

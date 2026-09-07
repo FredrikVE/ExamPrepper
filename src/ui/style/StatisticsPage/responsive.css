@@ -32,6 +32,10 @@
 		justify-content: center;
 	}
 
+	.statistics-summary-progress-number-row {
+		justify-content: center;
+	}
+
 	.statistics-history-table-head,
 	.statistics-history-row-grid {
 		grid-template-columns: 78px minmax(0, 1fr) 92px 64px 74px;
@@ -88,16 +92,26 @@
 	}
 
 	.statistics-summary-cards {
-		grid-template-columns: 1fr;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-3);
+	}
+
+	.statistics-summary-card {
+		min-height: 104px;
+		padding: var(--space-5) var(--space-4);
 	}
 
 	.statistics-period-selector-options {
 		justify-content: flex-start;
 	}
 
-	.statistics-chapter-carousel {
+	.statistics-chapter-carousel:not(.statistics-chapter-carousel-static) {
 		grid-template-columns: 34px minmax(0, 1fr) 34px;
 		gap: var(--space-1);
+	}
+
+	.statistics-chapter-carousel-static {
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	.statistics-chapter-scroll-button {

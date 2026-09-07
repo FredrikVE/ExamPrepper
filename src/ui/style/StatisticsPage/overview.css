@@ -80,6 +80,27 @@
 	line-height: 1;
 }
 
+.statistics-summary-progress-number-row {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-2);
+}
+
+.statistics-summary-progress-icon {
+	width: 22px;
+	height: 22px;
+	flex: 0 0 22px;
+}
+
+.statistics-summary-card-progress[data-direction="up"] .statistics-summary-progress-icon {
+	color: var(--statistics-positive);
+}
+
+.statistics-summary-card-progress[data-direction="down"] .statistics-summary-progress-icon {
+	color: var(--statistics-danger);
+}
+
 .statistics-summary-progress-value strong {
 	color: var(--statistics-kpi-value);
 	font-size: 1.6rem;

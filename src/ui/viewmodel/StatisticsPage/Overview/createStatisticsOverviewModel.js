@@ -35,6 +35,7 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 	let progressValue = text.emptyValueLabel;
 	let progressNumberValue = text.emptyValueLabel;
 	let progressUnitLabel = "";
+	let progressAttemptSummaryLabel = "";
 	let progressDirection = "neutral";
 	let hasProgress = false;
 
@@ -47,6 +48,7 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 		progressValue = text.createPercentagePointShortLabel(developmentMetrics.progressPercentagePoints);
 		progressNumberValue = text.createPercentagePointNumberLabel(developmentMetrics.progressPercentagePoints);
 		progressUnitLabel = text.createPercentagePointUnitLabel(developmentMetrics.progressPercentagePoints);
+		progressAttemptSummaryLabel = text.createProgressAttemptSummaryLabel(developmentMetrics.progressAttemptCount);
 
 		if (developmentMetrics.progressPercentagePoints > 0) {
 			progressDirection = "up";
@@ -88,6 +90,7 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			progressLabel: text.progressLabel,
 			progressNumberValue,
 			progressUnitLabel,
+			progressAttemptSummaryLabel,
 			hasProgress,
 			progressDirection
 		},

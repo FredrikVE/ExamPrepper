@@ -42,6 +42,7 @@ export default function createStatisticsTextModel(t) {
 		averageScoreLabel: t.statisticsOverviewAverageScoreLabel,
 		progressLabel: t.statisticsOverviewProgressLabel,
 		createProgressAttemptContextLabel: t.statisticsOverviewProgressAttemptContextLabel,
+		createProgressAttemptSummaryLabel: t.statisticsOverviewProgressAttemptSummaryLabel,
 		completedLabel: t.statisticsOverviewCompletedLabel,
 		completedUnitLabel: t.statisticsOverviewEvidenceUnitPlural,
 		summaryLabel: t.statisticsOverviewSummaryLabel,
@@ -90,7 +91,7 @@ export default function createStatisticsTextModel(t) {
 		},
 
 		createPercentagePointNumberLabel(value) {
-			return `${formatSignedNumber(value)} %`;
+			return `${formatNumber(value)} %`;
 		},
 
 		createPercentagePointUnitLabel(value) {
