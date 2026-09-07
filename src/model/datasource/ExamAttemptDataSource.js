@@ -9,8 +9,4 @@ export default class ExamAttemptDataSource extends DataSource {
 	async fetchAttemptById(attemptId) {
 		return await this.get(`/exam-attempts/${encodeURIComponent(attemptId)}`);
 	}
-
-	async fetchMyStatistics() {
-		return await this.get("/my/statistics");
-	}
 }
