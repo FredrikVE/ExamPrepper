@@ -75,6 +75,10 @@ export default function useStatisticsPageViewModel(props) {
 	return {
 		statistics,
 		workspaceState,
+		subjectId: props.subjectId,
+		selectedSubject: props.selectedSubject,
+		subjectSwitcher: props.subjectSwitcher,
+		onSelectSubject: props.onSelectSubject,
 		backContract: props.backContract,
 
 		pageTitle: text.pageTitle,

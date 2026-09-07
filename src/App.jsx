@@ -224,6 +224,10 @@ function AppContent() {
 
 				{navigationViewModel.activeScreen === NAV_SCREENS.OVERVIEW && (
 					<StatisticsPageWrapper
+						subjectId={navigationViewModel.selectedSubjectId}
+						selectedSubject={subjectCatalog.selectedSubject}
+						subjectSwitcher={subjectCatalog.subjectSwitcher}
+						onSelectSubject={navigationViewModel.switchSubject}
 						formatDate={formatDate}
 						t={t}
 						backContract={navigationViewModel.backContract}
@@ -488,11 +492,15 @@ function GlossaryPageWithViewModel(props) {
 	return <GlossaryPage viewModel={glossaryPageViewModel} />;
 }
 
-function StatisticsPageWrapper({ formatDate, t, backContract, onStartNewExam }) {
+function StatisticsPageWrapper({ subjectId, selectedSubject, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam }) {
 	const authState = useAppAuth();
 
 	return (
 		<StatisticsPageWithViewModel
+			subjectId={subjectId}
+			selectedSubject={selectedSubject}
+			subjectSwitcher={subjectSwitcher}
+			onSelectSubject={onSelectSubject}
 			formatDate={formatDate}
 			t={t}
 			backContract={backContract}
@@ -502,9 +510,13 @@ function StatisticsPageWrapper({ formatDate, t, backContract, onStartNewExam }) 
 	);
 }
 
-function StatisticsPageWithViewModel({ formatDate, t, backContract, onStartNewExam, authState }) {
+function StatisticsPageWithViewModel({ subjectId, selectedSubject, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam, authState }) {
 	const statisticsPageViewModel = useStatisticsPageViewModel({
 		getMyStatisticsUseCase,
+		subjectId,
+		selectedSubject,
+		subjectSwitcher,
+		onSelectSubject,
 		formatDate,
 		t,
 		authState,

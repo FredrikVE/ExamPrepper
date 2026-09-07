@@ -78,7 +78,7 @@ export const SCREEN_CONFIG = {
 		shellClassName: "exam-shell"
 	},
 	[NAV_SCREENS.OVERVIEW]: {
-		requiresSubject: false,
+		requiresSubject: true,
 		requiresExam: false,
 		backTo: NAV_SCREENS.SELECT,
 		showsSubjectSwitcher: false,

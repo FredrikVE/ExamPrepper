@@ -53,6 +53,10 @@ function renderViewModel(authState) {
 
 	const viewModel = useStatisticsPageViewModel({
 		getMyStatisticsUseCase,
+		subjectId: "in2120",
+		selectedSubject: { id: "in2120", name: "IN2120" },
+		subjectSwitcher: { kind: "ready" },
+		onSelectSubject: jest.fn(),
 		formatDate: jest.fn(),
 		t: {},
 		authState,

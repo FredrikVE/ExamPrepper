@@ -152,6 +152,17 @@ describe("navigation configuration", () => {
 		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH).backTo).toBe(NAV_SCREENS.SUBJECTS);
 	});
 
+	test("makes Statistics subject-scoped with the page-owned subject selector policy", () => {
+		expect(getScreenConfig(NAV_SCREENS.OVERVIEW)).toEqual({
+			requiresSubject: true,
+			requiresExam: false,
+			backTo: NAV_SCREENS.SELECT,
+			showsSubjectSwitcher: false,
+			pageClassName: "exam-select-page",
+			shellClassName: "exam-select-shell"
+		});
+	});
+
 	test("uses direct ids and explicit action properties", () => {
 		expect(NAV_ITEMS.popOutMenuItems[NAV_SCREENS.SUBJECTS].items.map((item) => item.id)).toEqual([
 			"app-create-subject",
