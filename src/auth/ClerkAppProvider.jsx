@@ -7,7 +7,7 @@ import { clearAuthTokenProvider, setAuthTokenProvider } from "./AuthTokenProvide
 
 export default function ClerkAppProvider({ children }) {
 	const publishableKey = import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY;
-	const afterSignOutUrl = import.meta.env.BASE_URL;
+	const appBaseUrl = import.meta.env.BASE_URL;
 
 	if (!publishableKey) {
 		return (
@@ -18,7 +18,12 @@ export default function ClerkAppProvider({ children }) {
 	}
 
 	return (
-		<ClerkProvider publishableKey={publishableKey} afterSignOutUrl={afterSignOutUrl}>
+		<ClerkProvider
+			publishableKey={publishableKey}
+			afterSignOutUrl={appBaseUrl}
+			signInFallbackRedirectUrl={appBaseUrl}
+			signUpFallbackRedirectUrl={appBaseUrl}
+		>
 			<ClerkTokenBridge />
 			<ClerkAuthStateBoundary>
 				{children}

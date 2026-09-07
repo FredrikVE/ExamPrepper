@@ -16,6 +16,15 @@ describe("frontend IAM ownership", () => {
 		expect(owners).toEqual([CLERK_CONFIG_OWNER]);
 	});
 
+	test("keeps Clerk auth redirects on the Vite application base URL", () => {
+		const source = fs.readFileSync(path.resolve(CLERK_CONFIG_OWNER), "utf8");
+
+		expect(source).toContain("const appBaseUrl = import.meta.env.BASE_URL;");
+		expect(source).toContain("afterSignOutUrl={appBaseUrl}");
+		expect(source).toContain("signInFallbackRedirectUrl={appBaseUrl}");
+		expect(source).toContain("signUpFallbackRedirectUrl={appBaseUrl}");
+	});
+
 	test("keeps Clerk package imports limited to the auth adapter and auth presentation", () => {
 		const owners = findSourceFilesContaining("@clerk/clerk-react");
 		expect(owners).toEqual(CLERK_PACKAGE_OWNERS);
