@@ -1,5 +1,6 @@
 // src/ui/viewmodel/StatisticsPage/Overview/createStatisticsHistoryModel.js
 import { createStatisticsHistoryComparator } from "./statisticsHistoryComparators.js";
+import createStatisticsPerformancePresentation from "./createStatisticsPerformancePresentation.js";
 
 const FIRST_HISTORY_PAGE_INDEX = 0;
 const FIRST_HISTORY_ITEM_OFFSET = 0;
@@ -12,16 +13,21 @@ export default function createStatisticsHistoryModel({ attempts, sortKey, sortDi
 	const sortedAttempts = [...attempts];
 	sortedAttempts.sort(createStatisticsHistoryComparator({ sortKey, sortDirection }));
 
-	const pageCount = expanded
-		? Math.max(MINIMUM_HISTORY_PAGE_COUNT, Math.ceil(sortedAttempts.length / STATISTICS_HISTORY_EXPANDED_PAGE_SIZE))
-		: MINIMUM_HISTORY_PAGE_COUNT;
+	let pageCount = MINIMUM_HISTORY_PAGE_COUNT;
+
+	if (expanded) {
+		pageCount = Math.max(MINIMUM_HISTORY_PAGE_COUNT, Math.ceil(sortedAttempts.length / STATISTICS_HISTORY_EXPANDED_PAGE_SIZE));
+	}
+
 	const safePage = Math.min(Math.max(page, FIRST_HISTORY_PAGE_INDEX), pageCount - HISTORY_PAGE_INDEX_STEP);
-	const start = expanded
-		? safePage * STATISTICS_HISTORY_EXPANDED_PAGE_SIZE
-		: FIRST_HISTORY_ITEM_OFFSET;
-	const count = expanded
-		? STATISTICS_HISTORY_EXPANDED_PAGE_SIZE
-		: STATISTICS_HISTORY_COLLAPSED_ITEM_COUNT;
+	let start = FIRST_HISTORY_ITEM_OFFSET;
+	let count = STATISTICS_HISTORY_COLLAPSED_ITEM_COUNT;
+
+	if (expanded) {
+		start = safePage * STATISTICS_HISTORY_EXPANDED_PAGE_SIZE;
+		count = STATISTICS_HISTORY_EXPANDED_PAGE_SIZE;
+	}
+
 	const visible = sortedAttempts.slice(start, start + count);
 
 	return {
@@ -37,15 +43,35 @@ export default function createStatisticsHistoryModel({ attempts, sortKey, sortDi
 }
 
 function createHistoryRowModel(attempt, formatDate, text) {
+	const performance = createStatisticsPerformancePresentation({ performanceBand: attempt.performanceBand, text });
+	let submittedAtLabel = formatDate(attempt.submittedAt);
+
+	if (submittedAtLabel === null || submittedAtLabel === undefined) {
+		submittedAtLabel = attempt.submittedAt;
+	}
+
+	const scoreLabel = text.createPercentageLabel(attempt.percentage);
+	const pointsLabel = text.createPointsLabel(attempt.scorePoints, attempt.totalPoints);
+	const correctLabel = text.createCorrectCountLabel(attempt.correctCount);
+	const incorrectLabel = text.createIncorrectCountLabel(attempt.incorrectCount);
+	const durationLabel = text.createDurationSecondsLabel(attempt.durationSeconds);
+
 	return {
 		attemptId: attempt.attemptId,
 		title: attempt.title,
-		submittedAtLabel: formatDate(attempt.submittedAt) ?? attempt.submittedAt,
-		scoreLabel: text.createPercentageLabel(attempt.percentage),
+		submittedAtLabel,
+		scoreLabel,
 		performanceBand: attempt.performanceBand,
-		pointsLabel: text.createPointsLabel(attempt.scorePoints, attempt.totalPoints),
-		correctLabel: text.createCorrectCountLabel(attempt.correctCount),
-		incorrectLabel: text.createIncorrectCountLabel(attempt.incorrectCount),
-		durationLabel: text.createDurationSecondsLabel(attempt.durationSeconds)
+		statusTone: performance.tone,
+		statusLabel: performance.label,
+		showDetailsLabel: text.historyShowDetailsLabel,
+		hideDetailsLabel: text.historyHideDetailsLabel,
+		detailMetrics: [
+			{ key: "score", label: text.historyScoreLabel, value: scoreLabel },
+			{ key: "points", label: text.historyPointsLabel, value: pointsLabel },
+			{ key: "correct", label: text.historyCorrectAnswersLabel, value: correctLabel },
+			{ key: "incorrect", label: text.historyIncorrectAnswersLabel, value: incorrectLabel },
+			{ key: "duration", label: text.historyTimeUsedLabel, value: durationLabel }
+		]
 	};
 }

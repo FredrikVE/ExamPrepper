@@ -1,47 +1,82 @@
 /* src/ui/style/StatisticsPage/periods.css */
 .statistics-period-selector {
 	display: grid;
-	justify-items: end;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
 	gap: var(--space-2);
+	min-width: 0;
 }
 
-.statistics-period-selector-label {
-	color: var(--text-soft);
-	font-size: 0.75rem;
-	font-weight: 750;
+.statistics-period-selector-static {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.statistics-period-viewport {
+	min-width: 0;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	scrollbar-width: none;
+}
+
+.statistics-period-viewport::-webkit-scrollbar {
+	display: none;
 }
 
 .statistics-period-selector-options {
 	display: flex;
-	max-width: 100%;
+	width: max-content;
+	min-width: 100%;
+	justify-content: center;
 	gap: var(--space-1);
-	border: 1px solid var(--segmented-control-border);
-	border-radius: var(--radius-full);
-	background: var(--segmented-control-bg);
-	padding: var(--space-1);
 }
 
 .statistics-period-selector-button {
-	min-height: 36px;
-	border: 0;
-	border-radius: var(--radius-full);
-	background: transparent;
-	padding: 0 var(--space-4);
+	min-width: 54px;
+	height: 30px;
+	flex: 0 0 auto;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-md);
+	background: var(--statistics-overview-surface);
+	padding: 0 var(--space-3);
 	color: var(--text-muted);
 	font: inherit;
-	font-size: 0.78rem;
+	font-size: 0.68rem;
 	font-weight: 800;
 	white-space: nowrap;
 	cursor: pointer;
 }
 
 .statistics-period-selector-button[aria-pressed="true"] {
+	border-color: var(--button-primary-border);
 	background: var(--button-primary-bg);
 	box-shadow: var(--button-primary-shadow);
 	color: var(--button-primary-text);
 }
 
-.statistics-period-selector-button:focus-visible {
+.statistics-period-selector-button:focus-visible,
+.statistics-period-scroll-button:focus-visible {
 	outline: 3px solid var(--button-focus-ring);
 	outline-offset: 2px;
+}
+
+.statistics-period-scroll-button {
+	display: grid;
+	width: 32px;
+	height: 32px;
+	place-items: center;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-full);
+	background: var(--statistics-overview-surface);
+	color: var(--text-muted);
+	cursor: pointer;
+}
+
+.statistics-period-scroll-button svg {
+	width: 17px;
+	height: 17px;
+}
+
+.statistics-period-scroll-button:disabled {
+	cursor: default;
+	opacity: 0.32;
 }

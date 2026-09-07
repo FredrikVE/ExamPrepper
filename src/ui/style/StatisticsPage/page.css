@@ -10,11 +10,11 @@
 
 .statistics-page-content {
 	display: grid;
-	gap: var(--space-7);
-	width: min(100%, 1180px);
+	gap: var(--space-6);
+	width: min(100%, 1120px);
 	min-height: 100%;
 	margin: 0 auto;
-	padding: calc(var(--scaffold-header-height) + var(--space-7)) clamp(var(--space-6), 4vw, var(--space-10)) var(--space-10);
+	padding: calc(var(--scaffold-header-height) + var(--space-6)) clamp(var(--space-5), 3vw, var(--space-8)) var(--space-9);
 }
 
 .statistics-page-content > .workspace-state {
@@ -35,19 +35,25 @@
 	z-index: 2;
 	display: grid;
 	width: 100%;
-	min-height: 74px;
-	grid-template-columns: auto minmax(0, 1fr) auto;
+	min-height: 84px;
+	grid-template-columns: 48px minmax(0, 1fr) 24px;
 	align-items: center;
-	gap: var(--space-5);
+	gap: var(--space-4);
 	border: 1px solid var(--statistics-overview-border);
-	border-radius: var(--radius-lg);
+	border-radius: var(--radius-xl);
 	background: var(--statistics-subject-surface);
 	box-shadow: var(--statistics-overview-shadow);
-	padding: var(--space-5) var(--space-6);
+	padding: var(--space-4) var(--space-5);
 	color: var(--text-main);
 	font: inherit;
 	text-align: left;
 	cursor: pointer;
+	transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.statistics-subject-selector-trigger:hover:not(:disabled) {
+	border-color: var(--button-secondary-border-hover);
+	background: var(--statistics-subject-option-hover);
 }
 
 .statistics-subject-selector-trigger:disabled {
@@ -64,18 +70,19 @@
 .statistics-subject-selector-icon,
 .statistics-subject-selector-option-icon {
 	display: grid;
-	width: 42px;
-	height: 42px;
+	width: 46px;
+	height: 46px;
 	place-items: center;
-	border-radius: var(--radius-md);
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-lg);
 	background: var(--statistics-chapter-icon-surface);
 	color: var(--accent);
 }
 
 .statistics-subject-selector-icon svg,
 .statistics-subject-selector-option-icon svg {
-	width: 21px;
-	height: 21px;
+	width: 22px;
+	height: 22px;
 }
 
 .statistics-subject-selector-copy,
@@ -87,16 +94,16 @@
 
 .statistics-subject-selector-copy strong,
 .statistics-subject-selector-option-copy strong {
-	font-size: 0.95rem;
-	font-weight: 850;
-	letter-spacing: -0.02em;
+	font-size: 1rem;
+	font-weight: 900;
+	letter-spacing: -0.025em;
 }
 
 .statistics-subject-selector-copy span,
 .statistics-subject-selector-option-copy span {
 	overflow: hidden;
 	color: var(--text-muted);
-	font-size: 0.84rem;
+	font-size: 0.78rem;
 	font-weight: 650;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -125,13 +132,13 @@
 
 .statistics-subject-selector-options {
 	position: absolute;
-	top: calc(100% + var(--space-3));
+	top: calc(100% + var(--space-2));
 	left: 0;
 	z-index: 2;
 	display: grid;
 	width: 100%;
 	max-height: min(420px, 56vh);
-	gap: var(--space-2);
+	gap: var(--space-1);
 	overflow-y: auto;
 	border: 1px solid var(--statistics-overview-border);
 	border-radius: var(--radius-lg);
@@ -144,13 +151,13 @@
 	display: grid;
 	width: 100%;
 	min-height: 62px;
-	grid-template-columns: auto minmax(0, 1fr) auto;
+	grid-template-columns: 38px minmax(0, 1fr) 24px;
 	align-items: center;
-	gap: var(--space-4);
+	gap: var(--space-3);
 	border: 1px solid transparent;
 	border-radius: var(--radius-md);
 	background: transparent;
-	padding: var(--space-3) var(--space-4);
+	padding: var(--space-2) var(--space-3);
 	color: var(--text-main);
 	font: inherit;
 	text-align: left;
@@ -164,6 +171,17 @@
 .statistics-subject-selector-option-selected {
 	border-color: var(--button-secondary-border-hover);
 	background: var(--statistics-subject-selected-surface);
+}
+
+.statistics-subject-selector-option-icon {
+	width: 36px;
+	height: 36px;
+	border-radius: var(--radius-md);
+}
+
+.statistics-subject-selector-option-icon svg {
+	width: 19px;
+	height: 19px;
 }
 
 .statistics-subject-selector-check {

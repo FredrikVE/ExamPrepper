@@ -9,9 +9,11 @@ const SORT_DIRECTION_ASCENDING = 1;
 const SORT_DIRECTION_DESCENDING = -1;
 
 export function createStatisticsHistoryComparator({ sortKey, sortDirection }) {
-	const direction = sortDirection === SORT_DIRECTION.ASC
-		? SORT_DIRECTION_ASCENDING
-		: SORT_DIRECTION_DESCENDING;
+	let direction = SORT_DIRECTION_DESCENDING;
+
+	if (sortDirection === SORT_DIRECTION.ASC) {
+		direction = SORT_DIRECTION_ASCENDING;
+	}
 
 	return (left, right) => {
 		const primary = comparePrimaryHistoryValue({ left, right, sortKey, direction });
@@ -31,7 +33,7 @@ export function createStatisticsHistoryComparator({ sortKey, sortDirection }) {
 }
 
 function comparePrimaryHistoryValue({ left, right, sortKey, direction }) {
-	if (sortKey === STATISTICS_HISTORY_SORT.SCORE) {
+	if (sortKey === STATISTICS_HISTORY_SORT.SCORE || sortKey === STATISTICS_HISTORY_SORT.STATUS) {
 		return compareNullablePercentage(left.percentage, right.percentage, direction);
 	}
 

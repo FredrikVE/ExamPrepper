@@ -1,3 +1,4 @@
+// src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js
 import { STATISTICS_PERIODS } from "../../../constants/StatisticsContracts.js";
 
 const SINGULAR_COUNT = 1;
@@ -19,9 +20,12 @@ export default function createStatisticsTextModel(t) {
 		retryButton: t.statisticsRetryButton,
 		startNewExamButton: t.statisticsStartNewExamButton,
 		loadErrorMessage: t.statisticsLoadErrorMessage,
+		emptyValueLabel: t.statisticsEmptyValueLabel,
 		developmentTitle: t.statisticsOverviewDevelopmentTitle,
 		developmentSubtitle: t.statisticsOverviewDevelopmentSubtitle,
 		periodLabel: t.statisticsOverviewPeriodLabel,
+		previousPeriodLabel: t.statisticsOverviewPreviousPeriodLabel,
+		nextPeriodLabel: t.statisticsOverviewNextPeriodLabel,
 		periodOptions: Object.freeze([
 			{ key: STATISTICS_PERIODS.WEEK, label: t.statisticsOverviewPeriodWeek },
 			{ key: STATISTICS_PERIODS.MONTH, label: t.statisticsOverviewPeriodMonth },
@@ -33,16 +37,34 @@ export default function createStatisticsTextModel(t) {
 		averageScoreLabel: t.statisticsOverviewAverageScoreLabel,
 		progressLabel: t.statisticsOverviewProgressLabel,
 		completedLabel: t.statisticsOverviewCompletedLabel,
+		completedUnitLabel: t.statisticsOverviewEvidenceUnitPlural,
 		summaryLabel: t.statisticsOverviewSummaryLabel,
 		chartLabel: t.statisticsOverviewChartLabel,
 		chartEmptyLabel: t.statisticsOverviewChartEmptyLabel,
 		chaptersTitle: t.statisticsOverviewChaptersTitle,
 		chaptersSubtitle: t.statisticsOverviewChaptersSubtitle,
+		chaptersCarouselLabel: t.statisticsOverviewChaptersCarouselLabel,
+		chaptersPreviousLabel: t.statisticsOverviewChaptersPreviousLabel,
+		chaptersNextLabel: t.statisticsOverviewChaptersNextLabel,
+		chaptersShowAllLabel: t.statisticsOverviewChaptersShowAllLabel,
+		chaptersShowLessLabel: t.statisticsOverviewChaptersShowLessLabel,
 		historyTitle: t.statisticsOverviewHistoryTitle,
 		historySubtitle: t.statisticsOverviewHistorySubtitle,
 		historyDateLabel: t.statisticsOverviewHistoryDateLabel,
 		historyNameLabel: t.statisticsOverviewHistoryNameLabel,
+		historyStatusLabel: t.statisticsOverviewHistoryStatusLabel,
 		historyScoreLabel: t.statisticsOverviewHistoryScoreLabel,
+		historyDetailsLabel: t.statisticsOverviewHistoryDetailsLabel,
+		historyShowDetailsLabel: t.statisticsOverviewHistoryShowDetailsLabel,
+		historyHideDetailsLabel: t.statisticsOverviewHistoryHideDetailsLabel,
+		historyStatusGoodLabel: t.statisticsOverviewHistoryStatusGoodLabel,
+		historyStatusAttentionLabel: t.statisticsOverviewHistoryStatusAttentionLabel,
+		historyStatusRiskLabel: t.statisticsOverviewHistoryStatusRiskLabel,
+		historyStatusNotAssessedLabel: t.statisticsOverviewHistoryStatusNotAssessedLabel,
+		historyPointsLabel: t.statisticsOverviewHistoryPointsLabel,
+		historyCorrectAnswersLabel: t.statisticsOverviewHistoryCorrectAnswersLabel,
+		historyIncorrectAnswersLabel: t.statisticsOverviewHistoryIncorrectAnswersLabel,
+		historyTimeUsedLabel: t.statisticsOverviewHistoryTimeUsedLabel,
 		historyShowAllLabel: t.statisticsOverviewHistoryShowAllLabel,
 		historyShowLessLabel: t.statisticsOverviewHistoryShowLessLabel,
 		historyPagerLabel: t.statisticsOverviewHistoryPagerLabel,
@@ -50,11 +72,23 @@ export default function createStatisticsTextModel(t) {
 		historyNextPageLabel: t.statisticsOverviewHistoryNextPageLabel,
 
 		createPercentageLabel(value) {
-			return value === null ? t.statisticsEmptyValueLabel : `${formatNumber(value)} %`;
+			if (value === null) {
+				return t.statisticsEmptyValueLabel;
+			}
+
+			return `${formatNumber(value)} %`;
 		},
 
-		createPercentagePointLabel(value) {
-			return `${formatNumber(value)} ${selectSingularOrPlural(Math.abs(value), t.statisticsPercentagePointSingular, t.statisticsPercentagePointPlural)}`;
+		createPercentagePointShortLabel(value) {
+			return `${formatSignedNumber(value)} ${t.statisticsPercentagePointShort}`;
+		},
+
+		createPercentagePointNumberLabel(value) {
+			return formatSignedNumber(value);
+		},
+
+		createPercentagePointUnitLabel(value) {
+			return selectSingularOrPlural(Math.abs(value), t.statisticsPercentagePointSingular, t.statisticsPercentagePointPlural);
 		},
 
 		createEvidenceCountLabel(count) {
@@ -88,9 +122,27 @@ export default function createStatisticsTextModel(t) {
 }
 
 function selectSingularOrPlural(count, singular, plural) {
-	return count === SINGULAR_COUNT ? singular : plural;
+	if (count === SINGULAR_COUNT) {
+		return singular;
+	}
+
+	return plural;
 }
 
 function formatNumber(value) {
-	return Number.isInteger(value) ? String(value) : value.toFixed(PERCENTAGE_DECIMAL_PLACES);
+	if (Number.isInteger(value)) {
+		return String(value);
+	}
+
+	return value.toFixed(PERCENTAGE_DECIMAL_PLACES);
+}
+
+function formatSignedNumber(value) {
+	const numberLabel = formatNumber(value);
+
+	if (value > 0) {
+		return `+${numberLabel}`;
+	}
+
+	return numberLabel;
 }

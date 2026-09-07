@@ -2,15 +2,17 @@
 export default function StatisticsSummaryCards({ model }) {
 	return (
 		<section className="statistics-summary-cards" aria-label={model.ariaLabel}>
-			{model.progressValue !== null && (
-				<article className="statistics-summary-card statistics-summary-card-progress">
-					<span>{model.progressLabel}</span>
-					<strong>{model.progressValue}</strong>
-				</article>
-			)}
+			<article className="statistics-summary-card statistics-summary-card-progress" data-direction={model.progressDirection}>
+				<span className="statistics-summary-card-label">{model.progressLabel}</span>
+				<div className="statistics-summary-progress-value">
+					<strong>{model.progressNumberValue}</strong>
+					{model.hasProgress && <span className="statistics-summary-progress-unit">{model.progressUnitLabel}</span>}
+				</div>
+			</article>
 			<article className="statistics-summary-card statistics-summary-card-completed">
-				<span>{model.completedLabel}</span>
-				<strong>{model.completedValue}</strong>
+				<span className="statistics-summary-card-label">{model.completedLabel}</span>
+				<strong className="statistics-summary-completed-value">{model.completedValue}</strong>
+				<small>{model.completedUnitLabel}</small>
 			</article>
 		</section>
 	);

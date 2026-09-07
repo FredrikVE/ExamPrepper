@@ -1,3 +1,4 @@
+// test/ui/viewmodel/StatisticsPage/Overview/statisticsHistoryComparators.test.js
 import { describe, expect, test } from "@jest/globals";
 import { SORT_DIRECTION, STATISTICS_HISTORY_SORT } from "../../../../../src/constants/StatisticsContracts.js";
 import { createStatisticsHistoryComparator } from "../../../../../src/ui/viewmodel/StatisticsPage/Overview/statisticsHistoryComparators.js";
@@ -32,4 +33,15 @@ describe("createStatisticsHistoryComparator", () => {
 
 		expect(result.map((attempt) => attempt.attemptId)).toEqual(["c", "a", "b"]);
 	});
+	test("sorts the status column by backend score evidence without recreating thresholds", () => {
+		const attempts = [
+			createAttempt({ attemptId: "low", title: "Low", submittedAtEpochMs: 1, percentage: 20 }),
+			createAttempt({ attemptId: "high", title: "High", submittedAtEpochMs: 2, percentage: 90 }),
+			createAttempt({ attemptId: "mid", title: "Mid", submittedAtEpochMs: 3, percentage: 60 })
+		];
+		const result = [...attempts].sort(createStatisticsHistoryComparator({ sortKey: STATISTICS_HISTORY_SORT.STATUS, sortDirection: SORT_DIRECTION.DESC }));
+
+		expect(result.map((attempt) => attempt.attemptId)).toEqual(["high", "mid", "low"]);
+	});
+
 });

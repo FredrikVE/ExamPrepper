@@ -10,6 +10,9 @@ const EMPTY_DEVELOPMENT_METRICS = Object.freeze({
 	progressPercentagePoints: null,
 	chartPoints: Object.freeze([])
 });
+const FIRST_CHART_POINT_INDEX = 0;
+const CHART_POINT_INDEX_STEP = 1;
+const CHART_AXIS_LABEL_COUNT_THRESHOLD = 3;
 
 export default function createStatisticsOverviewModel({ statistics, period, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate, language, text }) {
 	let attempts = EMPTY_ATTEMPTS;
@@ -26,10 +29,30 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 
 	const history = createStatisticsHistoryModel({ attempts, sortKey: historySortKey, sortDirection: historySortDirection, expanded: historyExpanded, page: historyPage, formatDate, text });
 	const chartPoints = createChartPointModels(developmentMetrics.chartPoints, formatDate, text);
-	let progressValue = null;
+	let historyToggleLabel = text.historyShowAllLabel;
+	let progressValue = text.emptyValueLabel;
+	let progressNumberValue = text.emptyValueLabel;
+	let progressUnitLabel = "";
+	let progressDirection = "neutral";
+	let hasProgress = false;
+
+	if (history.expanded) {
+		historyToggleLabel = text.historyShowLessLabel;
+	}
 
 	if (developmentMetrics.progressPercentagePoints !== null) {
-		progressValue = text.createPercentagePointLabel(developmentMetrics.progressPercentagePoints);
+		hasProgress = true;
+		progressValue = text.createPercentagePointShortLabel(developmentMetrics.progressPercentagePoints);
+		progressNumberValue = text.createPercentagePointNumberLabel(developmentMetrics.progressPercentagePoints);
+		progressUnitLabel = text.createPercentagePointUnitLabel(developmentMetrics.progressPercentagePoints);
+
+		if (developmentMetrics.progressPercentagePoints > 0) {
+			progressDirection = "up";
+		}
+
+		else if (developmentMetrics.progressPercentagePoints < 0) {
+			progressDirection = "down";
+		}
 	}
 
 	return {
@@ -40,10 +63,13 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			periodLabel: text.periodLabel,
 			period,
 			periodOptions: text.periodOptions,
+			previousPeriodLabel: text.previousPeriodLabel,
+			nextPeriodLabel: text.nextPeriodLabel,
 			averageScoreLabel: text.averageScoreLabel,
 			averageScoreValue: text.createPercentageLabel(developmentMetrics.averageScorePercentage),
 			progressLabel: text.progressLabel,
 			progressValue,
+			progressDirection,
 			chartLabel: text.chartLabel,
 			chartPoints,
 			chartEmptyLabel: text.chartEmptyLabel
@@ -52,12 +78,21 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			ariaLabel: text.summaryLabel,
 			completedLabel: text.completedLabel,
 			completedValue: String(completedAttemptCount),
+			completedUnitLabel: text.completedUnitLabel,
 			progressLabel: text.progressLabel,
-			progressValue
+			progressNumberValue,
+			progressUnitLabel,
+			hasProgress,
+			progressDirection
 		},
 		chapters: {
 			title: text.chaptersTitle,
 			subtitle: text.chaptersSubtitle,
+			carouselLabel: text.chaptersCarouselLabel,
+			previousLabel: text.chaptersPreviousLabel,
+			nextLabel: text.chaptersNextLabel,
+			showAllLabel: text.chaptersShowAllLabel,
+			showLessLabel: text.chaptersShowLessLabel,
 			items: createStatisticsChapterModels({ chapters, language, text })
 		},
 		history: {
@@ -66,8 +101,10 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			subtitle: text.historySubtitle,
 			dateLabel: text.historyDateLabel,
 			nameLabel: text.historyNameLabel,
+			statusLabel: text.historyStatusLabel,
 			scoreLabel: text.historyScoreLabel,
-			toggleLabel: history.expanded ? text.historyShowLessLabel : text.historyShowAllLabel,
+			detailsLabel: text.historyDetailsLabel,
+			toggleLabel: historyToggleLabel,
 			pagerLabel: text.historyPagerLabel,
 			previousPageLabel: text.historyPreviousPageLabel,
 			nextPageLabel: text.historyNextPageLabel,
@@ -88,18 +125,36 @@ function findDevelopmentPeriod(developmentPeriods, selectedPeriod) {
 }
 
 function createChartPointModels(chartPoints, formatDate, text) {
-	return chartPoints.map((chartPoint) => {
+	const lastIndex = chartPoints.length - CHART_POINT_INDEX_STEP;
+	const middleIndex = Math.floor(lastIndex / 2);
+
+	return chartPoints.map((chartPoint, index) => {
 		let label = formatDate(chartPoint.submittedAt);
 
 		if (label === null || label === undefined) {
 			label = chartPoint.submittedAt;
 		}
 
+		let showAxisLabel = chartPoints.length <= CHART_AXIS_LABEL_COUNT_THRESHOLD;
+
+		if (!showAxisLabel && (index === FIRST_CHART_POINT_INDEX || index === middleIndex || index === lastIndex)) {
+			showAxisLabel = true;
+		}
+
+		let axisLabel = "";
+
+		if (showAxisLabel) {
+			axisLabel = label;
+		}
+
 		return {
 			key: chartPoint.attemptId,
 			value: chartPoint.percentage,
 			label,
-			valueLabel: text.createPercentageLabel(chartPoint.percentage)
+			valueLabel: text.createPercentageLabel(chartPoint.percentage),
+			isLatest: index === lastIndex,
+			showAxisLabel,
+			axisLabel
 		};
 	});
 }

@@ -7,8 +7,10 @@ import StatisticsSummaryCards from "./StatisticsSummaryCards.jsx";
 export default function StatisticsOverview({ model, actions }) {
 	return (
 		<div className="statistics-overview">
-			<StatisticsDevelopmentCard model={model.development} onSelectPeriod={actions.selectPeriod} />
-			<StatisticsSummaryCards model={model.summary} />
+			<div className="statistics-overview-top-grid">
+				<StatisticsDevelopmentCard model={model.development} onSelectPeriod={actions.selectPeriod} />
+				<StatisticsSummaryCards model={model.summary} />
+			</div>
 			<StatisticsChapterOverview model={model.chapters} />
 			<StatisticsHistory model={model.history} actions={actions} />
 		</div>

@@ -1,27 +1,40 @@
 /* src/ui/style/StatisticsPage/responsive.css */
 @media (max-width: 1200px) {
 	.statistics-page-content {
-		padding-top: calc(var(--mobile-topbar-height) + var(--space-7));
+		padding-top: calc(var(--mobile-topbar-height) + var(--space-6));
 	}
 }
 
 @media (max-width: 980px) {
-	.statistics-chapter-grid {
+	.statistics-overview-top-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.statistics-summary-cards {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-rows: none;
 	}
 
-	.statistics-overview-section-header,
-	.statistics-history-header {
-		align-items: stretch;
-		flex-direction: column;
+	.statistics-summary-card {
+		min-height: 120px;
+		align-items: center;
+		text-align: center;
 	}
 
-	.statistics-period-selector {
-		justify-items: start;
+	.statistics-summary-card-label,
+	.statistics-summary-completed-value,
+	.statistics-summary-card small {
+		text-align: center;
 	}
 
-	.statistics-history-sort {
-		justify-content: flex-start;
+	.statistics-summary-progress-value {
+		justify-content: center;
+	}
+
+	.statistics-history-table-head,
+	.statistics-history-row-grid {
+		grid-template-columns: 78px minmax(0, 1fr) 92px 64px 74px;
+		gap: var(--space-1);
 	}
 }
 
@@ -33,12 +46,12 @@
 	}
 
 	.statistics-page-content {
-		gap: var(--space-6);
-		padding: calc(var(--mobile-topbar-height) + var(--space-5)) var(--space-5) calc(var(--space-10) + env(safe-area-inset-bottom));
+		gap: var(--space-5);
+		padding: calc(var(--mobile-topbar-height) + var(--space-5)) var(--space-5) calc(var(--space-9) + env(safe-area-inset-bottom));
 	}
 
 	.statistics-subject-selector-trigger {
-		min-height: 68px;
+		min-height: 76px;
 	}
 
 	.statistics-subject-selector-options {
@@ -52,78 +65,142 @@
 	}
 
 	.statistics-development-card,
+	.statistics-chapter-overview,
 	.statistics-history {
-		border-radius: var(--radius-lg);
-		padding: var(--space-5);
+		border-radius: var(--radius-md);
 	}
 
-	.statistics-period-selector-options {
-		width: 100%;
-		overflow-x: auto;
+	.statistics-development-content {
+		grid-template-columns: 1fr;
+		gap: var(--space-3);
 	}
 
-	.statistics-period-selector-button {
-		flex: 0 0 auto;
+	.statistics-development-summary {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-4);
+		padding-bottom: 0;
 	}
 
-	.statistics-chapter-grid {
+	.statistics-development-progress {
+		align-content: end;
+	}
+
+	.statistics-summary-cards {
 		grid-template-columns: 1fr;
 	}
 
-	.statistics-history-row-primary {
-		grid-template-columns: 1fr auto;
-		gap: var(--space-2) var(--space-4);
+	.statistics-score-chart-plot {
+		min-width: 460px;
+	}
+
+	.statistics-chapter-carousel {
+		grid-template-columns: 34px minmax(0, 1fr) 34px;
+		gap: var(--space-1);
+	}
+
+	.statistics-chapter-scroll-button {
+		width: 34px;
+		height: 34px;
+	}
+
+	.statistics-chapter-card {
+		width: min(78vw, 250px);
+		min-width: min(78vw, 250px);
+	}
+
+	.statistics-chapter-overview-expanded .statistics-chapter-track {
+		grid-template-columns: 1fr;
+	}
+
+	.statistics-history-table-head {
+		display: none;
+	}
+
+	.statistics-history-list {
+		border-radius: var(--radius-md);
+	}
+
+	.statistics-history-row-grid {
+		grid-template-columns: 70px minmax(0, 1fr) 32px;
+		grid-template-areas:
+			"date name score"
+			"status status details";
+		row-gap: var(--space-2);
+		padding: var(--space-3);
 	}
 
 	.statistics-history-date {
-		grid-column: 1 / -1;
+		grid-area: date;
+	}
+
+	.statistics-history-name {
+		grid-area: name;
+	}
+
+	.statistics-history-status {
+		grid-area: status;
 	}
 
 	.statistics-history-score {
-		grid-column: 2;
-		grid-row: 2;
+		grid-area: score;
+	}
+
+	.statistics-history-details-link {
+		grid-area: details;
+		justify-self: end;
 	}
 
 	.statistics-history-detail {
-		padding-left: 0;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	.statistics-history-pager-container.progress-pager-container {
-		grid-template-columns: 1fr 1fr;
-	}
-
-	.statistics-history-pager-counter {
-		grid-column: 1 / -1;
-		grid-row: 1;
+		grid-template-columns: 32px auto 32px;
+		gap: var(--space-3);
+		padding-inline: var(--space-3);
 	}
 
 	.statistics-history-pager-button.progress-pager-button {
-		min-width: 0;
-		width: 100%;
+		width: 32px;
+		height: 32px;
+		min-width: 32px;
+		min-height: 32px;
 	}
 }
 
 @media (max-width: 420px) {
-	.statistics-subject-selector-trigger,
-	.statistics-chapter-card {
+	.statistics-subject-selector-trigger {
+		grid-template-columns: 40px minmax(0, 1fr) 20px;
 		padding-inline: var(--space-4);
 	}
 
-	.statistics-subject-selector-icon,
-	.statistics-subject-selector-option-icon,
-	.statistics-chapter-card-icon {
-		width: 38px;
-		height: 38px;
+	.statistics-subject-selector-icon {
+		width: 40px;
+		height: 40px;
 	}
 
-	.statistics-score-chart-list {
-		gap: var(--space-3);
+	.statistics-development-summary {
+		grid-template-columns: 1fr;
+	}
+
+	.statistics-history-detail {
+		grid-template-columns: 1fr;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.statistics-subject-selector-trigger,
 	.statistics-subject-selector-chevron,
-	.statistics-score-chart-bar {
+	.statistics-score-chart-bar,
+	.statistics-chapter-scroll-button,
+	.statistics-chapter-toggle svg,
+	.statistics-history-toggle-chevron {
 		transition: none;
+	}
+
+	.statistics-period-viewport,
+	.statistics-chapter-viewport {
+		scroll-behavior: auto;
 	}
 }

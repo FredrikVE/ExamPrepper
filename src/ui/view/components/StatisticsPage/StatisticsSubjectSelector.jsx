@@ -6,8 +6,31 @@ export default function StatisticsSubjectSelector({ model, onSelectSubject }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const triggerRef = useRef(null);
 	const currentSubject = model.currentSubject;
-	const currentSubjectId = currentSubject === null ? null : currentSubject.id;
-	const selectorClassName = isOpen ? "statistics-subject-selector statistics-subject-selector-open" : "statistics-subject-selector";
+	let currentSubjectId = null;
+	let selectorClassName = "statistics-subject-selector";
+	let triggerCopy = <strong>{model.label}</strong>;
+
+	if (currentSubject !== null) {
+		currentSubjectId = currentSubject.id;
+		triggerCopy = (
+			<>
+				<strong>{currentSubject.code}</strong>
+				<span>{currentSubject.name}</span>
+			</>
+		);
+	}
+
+	if (isOpen) {
+		selectorClassName += " statistics-subject-selector-open";
+	}
+
+	const focusTrigger = () => {
+		const trigger = triggerRef.current;
+
+		if (trigger !== null) {
+			trigger.focus({ preventScroll: true });
+		}
+	};
 
 	const toggleOpen = () => {
 		if (!model.canOpen) {
@@ -19,13 +42,13 @@ export default function StatisticsSubjectSelector({ model, onSelectSubject }) {
 
 	const close = () => {
 		setIsOpen(false);
-		triggerRef.current.focus();
+		focusTrigger();
 	};
 
 	const selectSubject = (subjectId) => {
 		onSelectSubject(subjectId);
 		setIsOpen(false);
-		triggerRef.current.focus();
+		focusTrigger();
 	};
 
 	const handleKeyDown = (event) => {
@@ -41,28 +64,24 @@ export default function StatisticsSubjectSelector({ model, onSelectSubject }) {
 				<span className="statistics-subject-selector-icon" aria-hidden="true">
 					<BookOpen />
 				</span>
-				<span className="statistics-subject-selector-copy">
-					{currentSubject === null ? (
-						<strong>{model.label}</strong>
-					) : (
-						<>
-							<strong>{currentSubject.code}</strong>
-							<span>{currentSubject.name}</span>
-						</>
-					)}
-				</span>
+				<span className="statistics-subject-selector-copy">{triggerCopy}</span>
 				<ChevronDown className="statistics-subject-selector-chevron" aria-hidden="true" focusable="false" />
 			</button>
 
 			{isOpen && (
 				<>
 					<button type="button" className="statistics-subject-selector-backdrop" onClick={close} aria-label={model.closeLabel} tabIndex={-1} />
-					<div id="statistics-subject-selector-options" className="statistics-subject-selector-options" role="listbox" aria-label={model.menuLabel}>
+					<div id="statistics-subject-selector-options" className="statistics-subject-selector-options" aria-label={model.menuLabel}>
 						{model.subjects.map((subject) => {
 							const isSelected = subject.id === currentSubjectId;
+							let optionClassName = "statistics-subject-selector-option";
+
+							if (isSelected) {
+								optionClassName += " statistics-subject-selector-option-selected";
+							}
 
 							return (
-								<button key={subject.id} type="button" role="option" className={isSelected ? "statistics-subject-selector-option statistics-subject-selector-option-selected" : "statistics-subject-selector-option"} aria-selected={isSelected} onClick={() => selectSubject(subject.id)}>
+								<button key={subject.id} type="button" className={optionClassName} aria-pressed={isSelected} onClick={() => selectSubject(subject.id)}>
 									<span className="statistics-subject-selector-option-icon" aria-hidden="true">
 										<BookOpen />
 									</span>

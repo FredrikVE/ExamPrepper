@@ -9,27 +9,56 @@ function createText() {
 		developmentTitle: "Development",
 		developmentSubtitle: "Development subtitle",
 		periodLabel: "Period",
+		previousPeriodLabel: "Previous periods",
+		nextPeriodLabel: "Next periods",
 		periodOptions: [],
 		averageScoreLabel: "Average",
 		progressLabel: "Progress",
+		emptyValueLabel: "—",
 		summaryLabel: "Summary",
 		completedLabel: "Completed",
+		completedUnitLabel: "attempts",
 		chartLabel: "Chart",
 		chartEmptyLabel: "No chart",
 		chaptersTitle: "Chapters",
 		chaptersSubtitle: "Chapter subtitle",
+		chaptersCarouselLabel: "Chapters",
+		chaptersPreviousLabel: "Previous chapters",
+		chaptersNextLabel: "Next chapters",
+		chaptersShowAllLabel: "Show all chapters",
+		chaptersShowLessLabel: "Show fewer chapters",
 		historyTitle: "History",
 		historySubtitle: "History subtitle",
 		historyDateLabel: "Date",
-		historyNameLabel: "Name",
-		historyScoreLabel: "Score",
+		historyNameLabel: "Attempt",
+		historyStatusLabel: "Status",
+		historyScoreLabel: "Result",
+		historyDetailsLabel: "Details",
+		historyShowDetailsLabel: "Show details",
+		historyHideDetailsLabel: "Hide details",
+		historyStatusGoodLabel: "Good",
+		historyStatusAttentionLabel: "Watch",
+		historyStatusRiskLabel: "Risk",
+		historyStatusNotAssessedLabel: "Not assessed",
+		historyPointsLabel: "Points",
+		historyCorrectAnswersLabel: "Correct answers",
+		historyIncorrectAnswersLabel: "Incorrect answers",
+		historyTimeUsedLabel: "Time used",
 		historyShowLessLabel: "Show less",
 		historyShowAllLabel: "Show all",
 		historyPagerLabel: "History pages",
 		historyPreviousPageLabel: "Previous",
 		historyNextPageLabel: "Next",
-		createPercentageLabel: (value) => value === null ? "—" : `${value} %`,
-		createPercentagePointLabel: (value) => `${value} pp`,
+		createPercentageLabel: (value) => {
+			if (value === null) {
+				return "—";
+			}
+
+			return `${value} %`;
+		},
+		createPercentagePointShortLabel: (value) => `${createSignedNumberLabel(value)} pp`,
+		createPercentagePointNumberLabel: createSignedNumberLabel,
+		createPercentagePointUnitLabel: () => "pp",
 		createEvidenceCountLabel: (count) => `${count} attempts`,
 		createPointsLabel: (score, total) => `${score}/${total}`,
 		createCorrectCountLabel: (count) => `${count} correct`,
@@ -38,6 +67,15 @@ function createText() {
 		createGoToHistoryPageLabel: (page) => `Go to ${page}`,
 		createHistoryPageCounterLabel: (page, count) => `${page}/${count}`
 	};
+}
+
+
+function createSignedNumberLabel(value) {
+	if (value > 0) {
+		return `+${value}`;
+	}
+
+	return String(value);
 }
 
 function createStatistics() {
@@ -105,18 +143,24 @@ describe("createStatisticsOverviewModel", () => {
 		const model = createModel(createStatistics(), STATISTICS_PERIODS.THREE_MONTHS);
 
 		expect(model.development.averageScoreValue).toBe("70 %");
-		expect(model.development.progressValue).toBe("20 pp");
+		expect(model.development.progressValue).toBe("+20 pp");
 		expect(model.development.chartPoints).toEqual([
-			{ key: "attempt-chart", value: 70, label: "2026-09-01", valueLabel: "70 %" }
+			{ key: "attempt-chart", value: 70, label: "2026-09-01", valueLabel: "70 %", isLatest: true, showAxisLabel: true, axisLabel: "2026-09-01" }
 		]);
 		expect(model.summary.completedValue).toBe("28");
+		expect(model.summary.progressNumberValue).toBe("+20");
+		expect(model.summary.progressUnitLabel).toBe("pp");
+		expect(model.summary.hasProgress).toBe(true);
 	});
 
 	test("passes backend performance bands through the presentation boundary", () => {
 		const model = createModel(createStatistics(), STATISTICS_PERIODS.THREE_MONTHS);
 
 		expect(model.chapters.items[0].performanceBand).toBe("understood");
+		expect(model.chapters.items[0].performanceTone).toBe("positive");
 		expect(model.history.items[0].performanceBand).toBe("progress");
+		expect(model.history.items[0].statusLabel).toBe("Watch");
+		expect(model.history.items[0].statusTone).toBe("warning");
 	});
 
 	test("fails fast when loaded Statistics data omits the selected backend period", () => {
@@ -132,6 +176,9 @@ describe("createStatisticsOverviewModel", () => {
 		expect(model.isEmpty).toBe(true);
 		expect(model.development.averageScoreValue).toBe("—");
 		expect(model.summary.completedValue).toBe("0");
+		expect(model.summary.progressNumberValue).toBe("—");
+		expect(model.summary.progressUnitLabel).toBe("");
+		expect(model.summary.hasProgress).toBe(false);
 		expect(model.development.chartPoints).toEqual([]);
 	});
 });

@@ -13,6 +13,7 @@ export const DEFAULT_STATISTICS_PERIOD = STATISTICS_PERIODS.THREE_MONTHS;
 export const STATISTICS_HISTORY_SORT = Object.freeze({
 	DATE: "date",
 	NAME: "name",
+	STATUS: "status",
 	SCORE: "score"
 });
 
