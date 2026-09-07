@@ -25,6 +25,7 @@ function createText() {
 		chartEmptyLabel: "No chart",
 		chaptersTitle: "Chapters",
 		chaptersSubtitle: "Chapter subtitle",
+		masteryLabel: "Mastery",
 		chaptersCarouselLabel: "Chapters",
 		chaptersPreviousLabel: "Previous chapters",
 		chaptersNextLabel: "Next chapters",
@@ -62,7 +63,6 @@ function createText() {
 		createPercentagePointShortLabel: (value) => `${createSignedNumberLabel(value)} pp`,
 		createPercentagePointNumberLabel: (value) => `${value} %`,
 		createPercentagePointUnitLabel: () => "pp",
-		createEvidenceCountLabel: (count) => `${count} attempts`,
 		createPointsLabel: (score, total) => `${score}/${total}`,
 		createCorrectCountLabel: (count) => `${count} correct`,
 		createIncorrectCountLabel: (count) => `${count} incorrect`,
@@ -121,9 +121,8 @@ function createStatistics() {
 				labelNo: "Kapittel 1",
 				labelEn: "Chapter 1",
 				iconKey: null,
-				scorePercentage: 80,
-				performanceBand: "understood",
-				evidenceCount: 4
+				masteryPercentage: 79.6,
+				performanceBand: "understood"
 			}
 		]
 	};
@@ -196,6 +195,8 @@ describe("createStatisticsOverviewModel", () => {
 		const model = createModel(createStatistics(), STATISTICS_PERIODS.THREE_MONTHS);
 
 		expect(model.chapters.items[0].performanceBand).toBe("understood");
+		expect(model.chapters.items[0].masteryPercentageLabel).toBe("80 %");
+		expect(model.chapters.items[0].masteryLabel).toBe("Mastery");
 		expect(model.chapters.items[0].performanceTone).toBe("positive");
 		expect(model.history.items[0].performanceBand).toBe("progress");
 		expect(model.history.items[0].statusLabel).toBe("Watch");

@@ -8,6 +8,7 @@ export default class StatisticsRepository {
 		const dto = await this.statisticsDataSource.fetchSubjectStatistics(subjectId);
 		const attempts = [];
 		const developmentPeriods = [];
+		const chapters = [];
 
 		for (const attempt of dto.attempts) {
 			attempts.push(mapAttempt(attempt));
@@ -17,14 +18,30 @@ export default class StatisticsRepository {
 			developmentPeriods.push(mapDevelopmentPeriod(developmentPeriod));
 		}
 
+		for (const chapter of dto.chapters) {
+			chapters.push(mapChapter(chapter));
+		}
+
 		return {
 			subjectId: dto.subjectId,
 			completedAttemptCount: dto.completedAttemptCount,
 			developmentPeriods,
 			attempts,
-			chapters: dto.chapters
+			chapters
 		};
 	}
+}
+
+function mapChapter(chapter) {
+	return {
+		topicAreaKey: chapter.topicAreaKey,
+		labelNo: chapter.labelNo,
+		labelEn: chapter.labelEn,
+		iconKey: chapter.iconKey,
+		position: chapter.position,
+		masteryPercentage: chapter.masteryPercentage,
+		performanceBand: chapter.performanceBand
+	};
 }
 
 function mapAttempt(attempt) {

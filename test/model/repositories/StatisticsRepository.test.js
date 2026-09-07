@@ -43,9 +43,8 @@ function createResponse() {
 				labelEn: "Chapter 1",
 				iconKey: null,
 				position: 1,
-				scorePercentage: 75,
-				performanceBand: "progress",
-				evidenceCount: 2
+				masteryPercentage: 75,
+				performanceBand: "progress"
 			}
 		]
 	};
@@ -75,7 +74,7 @@ describe("StatisticsRepository", () => {
 			performanceBand: "progress",
 			submittedAtEpochMs: Date.parse(TIMESTAMP)
 		});
-		expect(result.chapters[0].performanceBand).toBe("progress");
+		expect(result.chapters[0]).toEqual({ topicAreaKey: "chapter-1", labelNo: "Kapittel 1", labelEn: "Chapter 1", iconKey: null, position: 1, masteryPercentage: 75, performanceBand: "progress" });
 	});
 
 	test("fails fast when a backend zoom-window timestamp is invalid", async () => {

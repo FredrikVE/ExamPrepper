@@ -99,9 +99,8 @@ function validateChapter(chapter) {
 	requireString(chapter.labelEn, "statistics labelEn");
 	requireNullableString(chapter.iconKey, "statistics iconKey");
 	requireNumber(chapter.position, "statistics position");
-	requireNullableNumber(chapter.scorePercentage, "statistics scorePercentage");
-	requireAssessmentBand(chapter.scorePercentage, chapter.performanceBand, "statistics chapter performanceBand");
-	requireNumber(chapter.evidenceCount, "statistics evidenceCount");
+	requireNullableNumber(chapter.masteryPercentage, "statistics masteryPercentage");
+	requireAssessmentBand(chapter.masteryPercentage, chapter.performanceBand, "statistics chapter performanceBand");
 }
 
 function requireAssessmentBand(percentage, performanceBand, fieldName) {

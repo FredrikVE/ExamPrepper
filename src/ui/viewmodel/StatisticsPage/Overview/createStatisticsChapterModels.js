@@ -1,10 +1,12 @@
 // src/ui/viewmodel/StatisticsPage/Overview/createStatisticsChapterModels.js
 import { LANGUAGES } from "../../../../i18n/translations.js";
+import roundMasteryPercentage from "../../Shared/roundMasteryPercentage.js";
 import createStatisticsPerformancePresentation from "./createStatisticsPerformancePresentation.js";
 
 export default function createStatisticsChapterModels({ chapters, language, text }) {
 	return chapters.map((chapter) => {
 		const performance = createStatisticsPerformancePresentation({ performanceBand: chapter.performanceBand, text });
+		const roundedMasteryPercentage = roundMasteryPercentage(chapter.masteryPercentage);
 		let label = chapter.labelNo;
 
 		if (language === LANGUAGES.EN) {
@@ -15,11 +17,11 @@ export default function createStatisticsChapterModels({ chapters, language, text
 			key: chapter.topicAreaKey,
 			label,
 			iconKey: chapter.iconKey,
-			scorePercentage: chapter.scorePercentage,
+			masteryPercentage: chapter.masteryPercentage,
 			performanceBand: chapter.performanceBand,
 			performanceTone: performance.tone,
-			scoreLabel: text.createPercentageLabel(chapter.scorePercentage),
-			evidenceLabel: text.createEvidenceCountLabel(chapter.evidenceCount)
+			masteryPercentageLabel: text.createPercentageLabel(roundedMasteryPercentage),
+			masteryLabel: text.masteryLabel
 		};
 	});
 }

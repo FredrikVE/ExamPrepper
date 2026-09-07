@@ -40,9 +40,8 @@ function createPayload() {
 				labelEn: "Chapter 1",
 				iconKey: "shield",
 				position: 1,
-				scorePercentage: 80,
-				performanceBand: "understood",
-				evidenceCount: 4
+				masteryPercentage: 80,
+				performanceBand: "understood"
 			}
 		]
 	};

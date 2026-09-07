@@ -92,7 +92,7 @@ describe("Statistics Overview architecture", () => {
 	test("keeps chapter cards fixed-width between carousel and expanded grid", () => {
 		const chaptersCss = read("src/ui/style/StatisticsPage/chapters.css");
 
-		expect(chaptersCss).toContain("--statistics-chapter-card-width: clamp(220px, 24vw, 258px)");
+		expect(chaptersCss).toContain("--statistics-chapter-card-width: clamp(196px, 18vw, 216px)");
 		expect(chaptersCss).toContain("overflow-x: auto");
 		expect(chaptersCss).toContain("grid-template-columns: repeat(auto-fill, var(--statistics-chapter-card-width))");
 		expect(chaptersCss).toContain("width: var(--statistics-chapter-card-width)");
@@ -106,6 +106,19 @@ describe("Statistics Overview architecture", () => {
 		expect(responsiveCss).toContain(".statistics-chapter-carousel:not(.statistics-chapter-carousel-static)");
 		expect(responsiveCss).toContain(".statistics-chapter-carousel-static {\n\t\tgrid-template-columns: minmax(0, 1fr);");
 		expect(responsiveCss).not.toContain("\n\t.statistics-chapter-carousel {\n\t\tgrid-template-columns: 34px minmax(0, 1fr) 34px;");
+	});
+
+	test("uses the LearningPath mastery vocabulary in chapter cards", () => {
+		const dataSource = read("src/model/datasource/StatisticsDataSource.js");
+		const chapterModel = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsChapterModels.js");
+		const chapterCard = read("src/ui/view/components/StatisticsPage/Overview/StatisticsChapterCard.jsx");
+
+		expect(dataSource).toContain("chapter.masteryPercentage");
+		expect(dataSource).not.toContain("chapter.scorePercentage");
+		expect(dataSource).not.toContain("chapter.evidenceCount");
+		expect(chapterModel).toContain("roundMasteryPercentage");
+		expect(chapterCard).toContain("model.masteryPercentageLabel");
+		expect(chapterCard).toContain("model.masteryLabel");
 	});
 
 	test("keeps Statistics theme and color ownership in Tokens.css", () => {

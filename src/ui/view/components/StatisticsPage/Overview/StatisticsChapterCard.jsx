@@ -11,8 +11,8 @@ export default function StatisticsChapterCard({ model }) {
 			</div>
 			<div className="statistics-chapter-card-copy">
 				<h3>{model.label}</h3>
-				<strong className="statistics-chapter-card-score">{model.scoreLabel}</strong>
-				<p>{model.evidenceLabel}</p>
+				<strong className="statistics-chapter-card-score">{model.masteryPercentageLabel}</strong>
+				<p>{model.masteryLabel}</p>
 			</div>
 		</article>
 	);

@@ -50,6 +50,7 @@ export default function createStatisticsTextModel(t) {
 		chartEmptyLabel: t.statisticsOverviewChartEmptyLabel,
 		chaptersTitle: t.statisticsOverviewChaptersTitle,
 		chaptersSubtitle: t.statisticsOverviewChaptersSubtitle,
+		masteryLabel: t.statisticsOverviewMasteryLabel,
 		chaptersCarouselLabel: t.statisticsOverviewChaptersCarouselLabel,
 		chaptersPreviousLabel: t.statisticsOverviewChaptersPreviousLabel,
 		chaptersNextLabel: t.statisticsOverviewChaptersNextLabel,
@@ -98,9 +99,6 @@ export default function createStatisticsTextModel(t) {
 			return selectSingularOrPlural(Math.abs(value), t.statisticsPercentagePointSingular, t.statisticsPercentagePointPlural);
 		},
 
-		createEvidenceCountLabel(count) {
-			return `${count} ${selectSingularOrPlural(count, t.statisticsOverviewEvidenceUnitSingular, t.statisticsOverviewEvidenceUnitPlural)}`;
-		},
 
 		createPointsLabel(scorePoints, totalPoints) {
 			return `${scorePoints} / ${totalPoints} ${t.statisticsAttemptPointUnit}`;

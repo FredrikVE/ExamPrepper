@@ -1,4 +1,5 @@
 // src/ui/viewmodel/LearningPathPagePresentation.js
+import roundMasteryPercentage from "./Shared/roundMasteryPercentage.js";
 import { LEARNING_PATH_ACTIVITY_KIND } from "../../constants/LearningPathActivityKind.js";
 import { LEARNING_PATH_ROADMAP_STATUS } from "../../constants/LearningPathRoadmapStatus.js";
 
@@ -675,9 +676,7 @@ function createProgressModel({
 	performanceBand,
 	t
 }) {
-	const roundedPercentage = performancePercent === null
-		? null
-		: Math.round(performancePercent);
+	const roundedPercentage = roundMasteryPercentage(performancePercent);
 
 	const displayValue = roundedPercentage === null
 		? t.learningPathPerformanceNotAssessedLabel

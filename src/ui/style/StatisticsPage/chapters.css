@@ -1,6 +1,6 @@
 /* src/ui/style/StatisticsPage/chapters.css */
 .statistics-chapter-overview {
-	--statistics-chapter-card-width: clamp(220px, 24vw, 258px);
+	--statistics-chapter-card-width: clamp(196px, 18vw, 216px);
 	display: grid;
 	gap: var(--space-4);
 	min-width: 0;
@@ -53,22 +53,22 @@
 	display: grid;
 	width: var(--statistics-chapter-card-width);
 	min-width: var(--statistics-chapter-card-width);
-	min-height: 112px;
+	min-height: 96px;
 	flex: 0 0 auto;
-	grid-template-columns: 44px minmax(0, 1fr);
+	grid-template-columns: 38px minmax(0, 1fr);
 	align-items: start;
-	gap: var(--space-3);
+	gap: var(--space-2);
 	border: 1px solid var(--statistics-overview-border);
 	border-radius: var(--radius-md);
 	background: var(--statistics-chapter-surface);
-	padding: var(--space-4);
+	padding: var(--space-3);
 	scroll-snap-align: start;
 }
 
 .statistics-chapter-card-icon {
 	display: grid;
-	width: 42px;
-	height: 42px;
+	width: 36px;
+	height: 36px;
 	place-items: center;
 	border-radius: var(--radius-full);
 	background: var(--statistics-chapter-icon-surface);
@@ -91,8 +91,8 @@
 }
 
 .statistics-chapter-card-icon svg {
-	width: 21px;
-	height: 21px;
+	width: 19px;
+	height: 19px;
 }
 
 .statistics-chapter-card-copy {
@@ -112,12 +112,12 @@
 	color: var(--text-main);
 	font-size: 0.78rem;
 	font-weight: 850;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	line-height: 1.25;
+	overflow-wrap: anywhere;
 }
 
 .statistics-chapter-card-score {
-	margin-top: var(--space-3);
+	margin-top: var(--space-2);
 	color: var(--text-main);
 	font-size: 1.25rem;
 	font-weight: 900;

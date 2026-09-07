@@ -120,7 +120,7 @@
 	}
 
 	.statistics-chapter-overview {
-		--statistics-chapter-card-width: min(78vw, 250px);
+		--statistics-chapter-card-width: min(72vw, 208px);
 	}
 
 	.statistics-history-table-head {
