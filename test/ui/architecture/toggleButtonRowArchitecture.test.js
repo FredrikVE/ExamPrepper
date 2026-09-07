@@ -91,9 +91,10 @@ describe("ToggleButtonRow architecture", () => {
 		}
 
 		expect(externalVariantImporters).toEqual([]);
-		expect(externalFacadeImporters).toEqual([
-			path.resolve("src/ui/view/components/LearningContentHeader/LearningContentHeader.jsx")
-		]);
+		expect(externalFacadeImporters.sort()).toEqual([
+			path.resolve("src/ui/view/components/LearningContentHeader/LearningContentHeader.jsx"),
+			path.resolve("src/ui/view/pages/StatisticsPage.jsx")
+		].sort());
 	});
 
 	test("keeps presentation-mode selection in the facade", () => {

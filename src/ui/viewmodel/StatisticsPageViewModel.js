@@ -3,10 +3,12 @@ import { useEffect } from "react";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { SUBJECT_SWITCHER_KINDS } from "./SubjectCatalog/subjectSwitcherKinds.js";
 import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
+import { createStatisticsViewToggleModel, selectStatisticsView } from "./StatisticsPage/statisticsViewToggle.js";
 import useStatisticsOverviewModel from "./StatisticsPage/Overview/useStatisticsOverviewModel.js";
 
 export default function useStatisticsPageViewModel(props) {
 	const text = createStatisticsTextModel(props.t);
+	const viewToggle = createStatisticsViewToggleModel(text);
 	const overview = useStatisticsOverviewModel({
 		getSubjectStatisticsUseCase: props.getSubjectStatisticsUseCase,
 		subjectId: props.subjectId,
@@ -58,7 +60,11 @@ export default function useStatisticsPageViewModel(props) {
 		onSelectSubject: props.onSelectSubject,
 		backContract: props.backContract,
 		pageTitle: text.pageTitle,
-		pageSubtitle: text.pageSubtitle
+		pageSubtitle: text.pageSubtitle,
+		viewToggle: {
+			...viewToggle,
+			onSelectEntry: selectStatisticsView
+		}
 	};
 }
 

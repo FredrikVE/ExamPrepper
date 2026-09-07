@@ -4,6 +4,7 @@ import HeaderTitle from "../components/Header/HeaderTitle.jsx";
 import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import StatisticsOverview from "../components/StatisticsPage/Overview/StatisticsOverview.jsx";
 import StatisticsSubjectSelector from "../components/StatisticsPage/StatisticsSubjectSelector.jsx";
+import ToggleButtonRow from "../components/ToggleButtonRow/ToggleButtonRow.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 
@@ -23,6 +24,17 @@ export default function StatisticsPage({ viewModel }) {
 		<WorkspaceScaffold className="statistics-page-workspace" header={header} footer={null} overlay={null} scrollToTopRequestId={null}>
 			<div className="statistics-page-content">
 				<StatisticsSubjectSelector model={viewModel.subjectSelector} onSelectSubject={viewModel.onSelectSubject} />
+				<div className="statistics-page-view-toggle">
+					<ToggleButtonRow
+						entries={viewModel.viewToggle.entries}
+						activeEntryId={viewModel.viewToggle.activeEntryId}
+						mobileItems={viewModel.viewToggle.mobileItems}
+						mobileActiveEntryId={viewModel.viewToggle.mobileActiveEntryId}
+						onSelectEntry={viewModel.viewToggle.onSelectEntry}
+						ariaLabel={viewModel.viewToggle.ariaLabel}
+						mobileBackLabel={viewModel.viewToggle.mobileBackLabel}
+					/>
+				</div>
 				<WorkspaceState state={viewModel.workspaceState}>
 					<StatisticsOverview model={viewModel.overview} actions={viewModel.overviewActions} />
 				</WorkspaceState>

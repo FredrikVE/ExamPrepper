@@ -9,6 +9,10 @@ export default function createStatisticsTextModel(t) {
 	return {
 		pageTitle: t.selectStatistics,
 		pageSubtitle: t.statisticsPageSubtitle,
+		viewToggleOverviewLabel: t.statisticsViewOverviewLabel,
+		viewToggleInsightsLabel: t.statisticsViewInsightsLabel,
+		viewToggleAriaLabel: t.statisticsViewToggleAriaLabel,
+		viewToggleBackLabel: t.statisticsViewToggleBackLabel,
 		subjectSelectorMenuLabel: t.sidebarSubjectMenuLabel,
 		subjectSelectorCloseLabel: t.sidebarCloseSubjectMenu,
 		loadingTitle: t.statisticsLoadingTitle,
