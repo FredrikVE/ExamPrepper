@@ -121,6 +121,22 @@ describe("Statistics Overview architecture", () => {
 		expect(chapterCard).toContain("model.masteryLabel");
 	});
 
+	test("uses chapter cards as an explicit mastery-scope selector with the subject first", () => {
+		const contracts = read("src/constants/StatisticsContracts.js");
+		const overviewModel = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsOverviewModel.js");
+		const chapterModels = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsChapterModels.js");
+		const chapterOverview = read("src/ui/view/components/StatisticsPage/Overview/StatisticsChapterOverview.jsx");
+		const chapterCard = read("src/ui/view/components/StatisticsPage/Overview/StatisticsChapterCard.jsx");
+
+		expect(contracts).toContain('SUBJECT: "subject"');
+		expect(contracts).toContain('TOPIC_AREA: "topic-area"');
+		expect(chapterModels).toContain('const items = [createSubjectScopeModel');
+		expect(chapterOverview).toContain('onSelectScope');
+		expect(chapterCard).toContain('aria-pressed={model.isSelected}');
+		expect(overviewModel).toContain('statistics.subjectMastery');
+		expect(overviewModel).toContain('chapter.developmentPeriods');
+	});
+
 	test("keeps Statistics theme and color ownership in Tokens.css", () => {
 		const featureCss = readDirectory("src/ui/style/StatisticsPage");
 		const tokens = read("src/ui/style/Tokens.css");

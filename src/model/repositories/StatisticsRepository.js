@@ -7,15 +7,10 @@ export default class StatisticsRepository {
 	async getSubjectStatistics(subjectId) {
 		const dto = await this.statisticsDataSource.fetchSubjectStatistics(subjectId);
 		const attempts = [];
-		const developmentPeriods = [];
 		const chapters = [];
 
 		for (const attempt of dto.attempts) {
 			attempts.push(mapAttempt(attempt));
-		}
-
-		for (const developmentPeriod of dto.developmentPeriods) {
-			developmentPeriods.push(mapDevelopmentPeriod(developmentPeriod));
 		}
 
 		for (const chapter of dto.chapters) {
@@ -25,11 +20,19 @@ export default class StatisticsRepository {
 		return {
 			subjectId: dto.subjectId,
 			completedAttemptCount: dto.completedAttemptCount,
-			developmentPeriods,
+			subjectMastery: mapMasteryScope(dto.subjectMastery),
 			attempts,
 			chapters
 		};
 	}
+}
+
+function mapMasteryScope(scope) {
+	return {
+		masteryPercentage: scope.masteryPercentage,
+		performanceBand: scope.performanceBand,
+		developmentPeriods: mapDevelopmentPeriods(scope.developmentPeriods)
+	};
 }
 
 function mapChapter(chapter) {
@@ -40,15 +43,38 @@ function mapChapter(chapter) {
 		iconKey: chapter.iconKey,
 		position: chapter.position,
 		masteryPercentage: chapter.masteryPercentage,
-		performanceBand: chapter.performanceBand
+		performanceBand: chapter.performanceBand,
+		developmentPeriods: mapDevelopmentPeriods(chapter.developmentPeriods)
 	};
 }
 
 function mapAttempt(attempt) {
 	return {
-		...attempt,
-		submittedAtEpochMs: parseStatisticsTimestamp(attempt.submittedAt)
+		attemptId: attempt.attemptId,
+		examId: attempt.examId,
+		baseId: attempt.baseId,
+		testType: attempt.testType,
+		title: attempt.title,
+		submittedAt: attempt.submittedAt,
+		submittedAtEpochMs: parseStatisticsTimestamp(attempt.submittedAt),
+		scorePoints: attempt.scorePoints,
+		totalPoints: attempt.totalPoints,
+		percentage: attempt.percentage,
+		performanceBand: attempt.performanceBand,
+		correctCount: attempt.correctCount,
+		incorrectCount: attempt.incorrectCount,
+		durationSeconds: attempt.durationSeconds
 	};
+}
+
+function mapDevelopmentPeriods(developmentPeriods) {
+	const mappedPeriods = [];
+
+	for (const developmentPeriod of developmentPeriods) {
+		mappedPeriods.push(mapDevelopmentPeriod(developmentPeriod));
+	}
+
+	return mappedPeriods;
 }
 
 function mapDevelopmentPeriod(developmentPeriod) {
@@ -62,13 +88,20 @@ function mapDevelopmentPeriod(developmentPeriod) {
 
 	for (const chartPoint of developmentPeriod.chartPoints) {
 		chartPoints.push({
-			...chartPoint,
-			submittedAtEpochMs: parseStatisticsTimestamp(chartPoint.submittedAt)
+			key: chartPoint.key,
+			occurredAt: chartPoint.occurredAt,
+			occurredAtEpochMs: parseStatisticsTimestamp(chartPoint.occurredAt),
+			percentage: chartPoint.percentage,
+			evidenceCount: chartPoint.evidenceCount
 		});
 	}
 
 	return {
-		...developmentPeriod,
+		period: developmentPeriod.period,
+		windowStartAt: developmentPeriod.windowStartAt,
+		windowEndAt: developmentPeriod.windowEndAt,
+		progressPercentagePoints: developmentPeriod.progressPercentagePoints,
+		progressEvidenceCount: developmentPeriod.progressEvidenceCount,
 		chartPoints
 	};
 }

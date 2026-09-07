@@ -11,7 +11,7 @@ export default function StatisticsOverview({ model, actions }) {
 				<StatisticsDevelopmentCard model={model.development} onSelectPeriod={actions.selectPeriod} />
 				<StatisticsSummaryCards model={model.summary} />
 			</div>
-			<StatisticsChapterOverview model={model.chapters} />
+			<StatisticsChapterOverview model={model.chapters} onSelectScope={actions.selectMasteryScope} />
 			<StatisticsHistory model={model.history} actions={actions} />
 		</div>
 	);

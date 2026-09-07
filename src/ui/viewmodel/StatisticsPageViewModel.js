@@ -14,6 +14,7 @@ export default function useStatisticsPageViewModel(props) {
 		subjectId: props.subjectId,
 		formatDate: props.formatDate,
 		language: props.language,
+		selectedSubject: props.selectedSubject,
 		text,
 		authState: props.authState,
 		onStartNewExam: props.onStartNewExam

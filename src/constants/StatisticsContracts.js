@@ -10,6 +10,16 @@ export const STATISTICS_PERIODS = Object.freeze({
 
 export const DEFAULT_STATISTICS_PERIOD = STATISTICS_PERIODS.WEEK;
 
+export const STATISTICS_MASTERY_SCOPE_KINDS = Object.freeze({
+	SUBJECT: "subject",
+	TOPIC_AREA: "topic-area"
+});
+
+export const DEFAULT_STATISTICS_MASTERY_SCOPE = Object.freeze({
+	kind: STATISTICS_MASTERY_SCOPE_KINDS.SUBJECT,
+	topicAreaKey: null
+});
+
 export const STATISTICS_HISTORY_SORT = Object.freeze({
 	DATE: "date",
 	NAME: "name",

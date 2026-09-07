@@ -1,9 +1,8 @@
 // src/ui/viewmodel/StatisticsPage/Overview/useStatisticsOverviewModel.js
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { APP_AUTH_STATUS } from "../../../../auth/AppAuthState.js";
-import { DEFAULT_STATISTICS_PERIOD, SORT_DIRECTION, STATISTICS_HISTORY_SORT } from "../../../../constants/StatisticsContracts.js";
+import { DEFAULT_STATISTICS_MASTERY_SCOPE, DEFAULT_STATISTICS_PERIOD, SORT_DIRECTION, STATISTICS_HISTORY_SORT } from "../../../../constants/StatisticsContracts.js";
 import useLoadModel from "../../LoadState/useLoadModel.js";
-import { LOAD_STATUS } from "../../LoadState/loadStatus.js";
 import { createWorkspaceState } from "../../WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "../../WorkspaceState/workspaceStateKinds.js";
 import createStatisticsOverviewModel from "./createStatisticsOverviewModel.js";
@@ -13,6 +12,7 @@ const HISTORY_PAGE_INDEX_STEP = 1;
 
 export default function useStatisticsOverviewModel(props) {
 	const [period, setPeriod] = useState(DEFAULT_STATISTICS_PERIOD);
+	const [masteryScope, setMasteryScope] = useState(DEFAULT_STATISTICS_MASTERY_SCOPE);
 	const [historySortKey, setHistorySortKey] = useState(STATISTICS_HISTORY_SORT.DATE);
 	const [historySortDirection, setHistorySortDirection] = useState(SORT_DIRECTION.DESC);
 	const [historyExpanded, setHistoryExpanded] = useState(false);
@@ -37,11 +37,19 @@ export default function useStatisticsOverviewModel(props) {
 	}, [isEnabled, props.getSubjectStatisticsUseCase, props.subjectId]);
 
 	const load = useLoadModel({ execute: executeLoad, emptyData: null, errorMessage: props.text.loadErrorMessage, resourceKey, isEnabled, onLoaded: null });
-	const presentation = createStatisticsOverviewModel({ statistics: load.data, period, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate: props.formatDate, language: props.language, text: props.text });
+	const presentation = createStatisticsOverviewModel({ statistics: load.data, period, masteryScope, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate: props.formatDate, language: props.language, subject: props.selectedSubject, text: props.text });
 	const workspaceState = createStatisticsWorkspaceState({ load, presentation, isAuthLoading, isSignedOut, text: props.text, onStartNewExam: props.onStartNewExam });
+
+	useEffect(() => {
+		setMasteryScope(DEFAULT_STATISTICS_MASTERY_SCOPE);
+	}, [props.subjectId]);
 
 	const selectPeriod = useCallback((nextPeriod) => {
 		setPeriod(nextPeriod);
+	}, []);
+
+	const selectMasteryScope = useCallback((nextScope) => {
+		setMasteryScope(nextScope);
 	}, []);
 
 	const changeHistorySort = useCallback((nextSortKey) => {
@@ -84,6 +92,7 @@ export default function useStatisticsOverviewModel(props) {
 		presentation,
 		actions: {
 			selectPeriod,
+			selectMasteryScope,
 			changeHistorySort,
 			toggleHistoryExpanded,
 			selectHistoryPage,

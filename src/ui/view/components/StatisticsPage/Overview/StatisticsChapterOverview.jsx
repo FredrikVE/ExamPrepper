@@ -6,7 +6,7 @@ import StatisticsChapterCard from "./StatisticsChapterCard.jsx";
 const SCROLL_EDGE_TOLERANCE_PX = 2;
 const FIRST_SCROLL_POSITION = 0;
 
-export default function StatisticsChapterOverview({ model }) {
+export default function StatisticsChapterOverview({ model, onSelectScope }) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [scrollState, setScrollState] = useState({ hasOverflow: false, canScrollPrevious: false, canScrollNext: false });
 	const viewportRef = useRef(null);
@@ -163,7 +163,7 @@ export default function StatisticsChapterOverview({ model }) {
 				)}
 				<div ref={viewportRef} className="statistics-chapter-viewport" tabIndex={viewportTabIndex} aria-label={model.carouselLabel} onKeyDown={handleViewportKeyDown}>
 					<div className="statistics-chapter-track">
-						{model.items.map((chapter) => <StatisticsChapterCard key={chapter.key} model={chapter} />)}
+						{model.items.map((chapter) => <StatisticsChapterCard key={chapter.key} model={chapter} onSelect={onSelectScope} />)}
 					</div>
 				</div>
 				{scrollState.hasOverflow && (

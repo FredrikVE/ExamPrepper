@@ -62,7 +62,28 @@
 	border-radius: var(--radius-md);
 	background: var(--statistics-chapter-surface);
 	padding: var(--space-3);
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
 	scroll-snap-align: start;
+	transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.statistics-chapter-card:hover {
+	transform: translateY(-1px);
+	border-color: var(--button-secondary-border-hover);
+	background: var(--statistics-history-row-hover);
+}
+
+.statistics-chapter-card[aria-pressed="true"] {
+	border-color: var(--accent);
+	background: var(--statistics-history-row-hover);
+	box-shadow: 0 0 0 1px var(--accent);
+}
+
+.statistics-chapter-card:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
 }
 
 .statistics-chapter-card-icon {
@@ -101,13 +122,13 @@
 	align-content: start;
 }
 
-.statistics-chapter-card-copy h3,
-.statistics-chapter-card-copy p,
+.statistics-chapter-card-title,
+.statistics-chapter-card-label,
 .statistics-chapter-card-score {
 	margin: 0;
 }
 
-.statistics-chapter-card-copy h3 {
+.statistics-chapter-card-title {
 	overflow: hidden;
 	color: var(--text-main);
 	font-size: 0.78rem;
@@ -124,7 +145,7 @@
 	letter-spacing: -0.035em;
 }
 
-.statistics-chapter-card-copy p {
+.statistics-chapter-card-label {
 	margin-top: var(--space-1);
 	color: var(--text-soft);
 	font-size: 0.68rem;

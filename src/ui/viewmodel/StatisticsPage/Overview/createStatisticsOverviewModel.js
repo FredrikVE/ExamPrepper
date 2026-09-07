@@ -1,4 +1,7 @@
 // src/ui/viewmodel/StatisticsPage/Overview/createStatisticsOverviewModel.js
+import { STATISTICS_MASTERY_SCOPE_KINDS } from "../../../../constants/StatisticsContracts.js";
+import { LANGUAGES } from "../../../../i18n/translations.js";
+import roundMasteryPercentage from "../../Shared/roundMasteryPercentage.js";
 import createStatisticsChapterModels from "./createStatisticsChapterModels.js";
 import createStatisticsHistoryModel from "./createStatisticsHistoryModel.js";
 
@@ -8,31 +11,47 @@ const EMPTY_CHAPTERS = Object.freeze([]);
 const EMPTY_DEVELOPMENT_METRICS = Object.freeze({
 	windowStartAt: null,
 	windowEndAt: null,
-	averageScorePercentage: null,
 	progressPercentagePoints: null,
-	progressAttemptCount: 0,
+	progressEvidenceCount: 0,
 	chartPoints: Object.freeze([])
+});
+const EMPTY_MASTERY_SCOPE = Object.freeze({
+	masteryPercentage: null,
+	performanceBand: "not-assessed",
+	developmentPeriods: Object.freeze([])
 });
 const CHART_POINT_INDEX_STEP = 1;
 
-export default function createStatisticsOverviewModel({ statistics, period, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate, language, text }) {
+export default function createStatisticsOverviewModel({ statistics, period, masteryScope, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate, language, subject, text }) {
 	let attempts = EMPTY_ATTEMPTS;
 	let chapters = EMPTY_CHAPTERS;
 	let completedAttemptCount = EMPTY_ATTEMPT_COUNT;
+	let selectedMastery = EMPTY_MASTERY_SCOPE;
+	let selectedScopeLabel = "";
+	let selectedMasteryLabel = text.masteryLabel;
 	let developmentMetrics = EMPTY_DEVELOPMENT_METRICS;
+	let chapterItems = EMPTY_CHAPTERS;
 
 	if (statistics !== null) {
+		if (subject === null) {
+			throw new Error("Loaded Statistics requires a selected subject");
+		}
+
 		attempts = statistics.attempts;
 		chapters = statistics.chapters;
 		completedAttemptCount = statistics.completedAttemptCount;
-		developmentMetrics = findDevelopmentPeriod(statistics.developmentPeriods, period);
+		const selectedScope = resolveMasteryScope({ statistics, masteryScope, subject, language, text });
+		selectedMastery = selectedScope.mastery;
+		selectedScopeLabel = selectedScope.label;
+		selectedMasteryLabel = selectedScope.masteryLabel;
+		developmentMetrics = findDevelopmentPeriod(selectedMastery.developmentPeriods, period);
+		chapterItems = createStatisticsChapterModels({ chapters, subjectMastery: statistics.subjectMastery, selectedScope: masteryScope, subject, language, text });
 	}
 
 	const history = createStatisticsHistoryModel({ attempts, sortKey: historySortKey, sortDirection: historySortDirection, expanded: historyExpanded, page: historyPage, formatDate, text });
 	const chartPoints = createChartPointModels(developmentMetrics.chartPoints, formatDate, text);
 	const chartWindow = createChartWindowModel(developmentMetrics, formatDate, text);
 	let historyToggleLabel = text.historyShowAllLabel;
-	let progressValue = text.emptyValueLabel;
 	let progressNumberValue = text.emptyValueLabel;
 	let progressUnitLabel = "";
 	let progressAttemptSummaryLabel = "";
@@ -45,37 +64,31 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 
 	if (developmentMetrics.progressPercentagePoints !== null) {
 		hasProgress = true;
-		progressValue = text.createPercentagePointShortLabel(developmentMetrics.progressPercentagePoints);
 		progressNumberValue = text.createPercentagePointNumberLabel(developmentMetrics.progressPercentagePoints);
 		progressUnitLabel = text.createPercentagePointUnitLabel(developmentMetrics.progressPercentagePoints);
-		progressAttemptSummaryLabel = text.createProgressAttemptSummaryLabel(developmentMetrics.progressAttemptCount);
+		progressAttemptSummaryLabel = text.createProgressAttemptSummaryLabel(developmentMetrics.progressEvidenceCount);
 
 		if (developmentMetrics.progressPercentagePoints > 0) {
 			progressDirection = "up";
 		}
-
 		else if (developmentMetrics.progressPercentagePoints < 0) {
 			progressDirection = "down";
 		}
 	}
 
 	return {
-		isEmpty: attempts.length === EMPTY_ATTEMPT_COUNT,
+		isEmpty: statistics === null || (attempts.length === EMPTY_ATTEMPT_COUNT && chapters.length === 0),
 		development: {
 			title: text.developmentTitle,
-			subtitle: text.developmentSubtitle,
+			subtitle: text.createDevelopmentSubtitle(selectedScopeLabel),
 			periodLabel: text.periodLabel,
 			period,
 			periodOptions: text.periodOptions,
 			previousPeriodLabel: text.previousPeriodLabel,
 			nextPeriodLabel: text.nextPeriodLabel,
-			averageScoreLabel: text.averageScoreLabel,
-			averageScoreValue: text.createPercentageLabel(developmentMetrics.averageScorePercentage),
-			progressLabel: text.progressLabel,
-			progressAttemptContextLabel: text.createProgressAttemptContextLabel(developmentMetrics.progressAttemptCount),
-			progressValue,
-			progressDirection,
-			chartLabel: text.chartLabel,
+			masteryLabel: selectedMasteryLabel,
+			masteryValue: text.createPercentageLabel(roundMasteryPercentage(selectedMastery.masteryPercentage)),
+			chartLabel: text.createChartLabel(selectedScopeLabel),
 			chartPoints,
 			chartAxisStartLabel: chartWindow.startLabel,
 			chartAxisEndLabel: chartWindow.endLabel,
@@ -102,7 +115,7 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 			nextLabel: text.chaptersNextLabel,
 			showAllLabel: text.chaptersShowAllLabel,
 			showLessLabel: text.chaptersShowLessLabel,
-			items: createStatisticsChapterModels({ chapters, language, text })
+			items: chapterItems
 		},
 		history: {
 			...history,
@@ -123,6 +136,34 @@ export default function createStatisticsOverviewModel({ statistics, period, hist
 	};
 }
 
+function resolveMasteryScope({ statistics, masteryScope, subject, language, text }) {
+	if (masteryScope.kind === STATISTICS_MASTERY_SCOPE_KINDS.SUBJECT) {
+		return {
+			mastery: statistics.subjectMastery,
+			label: text.createSubjectScopeLabel(subject.name),
+			masteryLabel: text.subjectMasteryLabel
+		};
+	}
+
+	if (masteryScope.kind === STATISTICS_MASTERY_SCOPE_KINDS.TOPIC_AREA) {
+		for (const chapter of statistics.chapters) {
+			if (chapter.topicAreaKey === masteryScope.topicAreaKey) {
+				let label = chapter.labelNo;
+
+				if (language === LANGUAGES.EN) {
+					label = chapter.labelEn;
+				}
+
+				return { mastery: chapter, label, masteryLabel: text.masteryLabel };
+			}
+		}
+
+		throw new Error(`Missing Statistics mastery scope ${String(masteryScope.topicAreaKey)}`);
+	}
+
+	throw new Error(`Unknown Statistics mastery scope kind: ${String(masteryScope.kind)}`);
+}
+
 function findDevelopmentPeriod(developmentPeriods, selectedPeriod) {
 	for (const developmentPeriod of developmentPeriods) {
 		if (developmentPeriod.period === selectedPeriod) {
@@ -137,10 +178,10 @@ function createChartPointModels(chartPoints, formatDate, text) {
 	const lastIndex = chartPoints.length - CHART_POINT_INDEX_STEP;
 
 	return chartPoints.map((chartPoint, index) => {
-		const label = formatStatisticsDate(chartPoint.submittedAt, formatDate);
+		const label = formatStatisticsDate(chartPoint.occurredAt, formatDate);
 
 		return {
-			key: chartPoint.attemptId,
+			key: chartPoint.key,
 			value: chartPoint.percentage,
 			label,
 			valueLabel: text.createPercentageLabel(chartPoint.percentage),

@@ -19,10 +19,9 @@ function validateSubjectStatistics(payload) {
 	requireObject(payload, "statistics payload");
 	requireString(payload.subjectId, "statistics subjectId");
 	requireNumber(payload.completedAttemptCount, "statistics completedAttemptCount");
-	requireArray(payload.developmentPeriods, "statistics developmentPeriods");
+	validateMasteryScope(payload.subjectMastery, "statistics subjectMastery");
 	requireArray(payload.attempts, "statistics attempts");
 	requireArray(payload.chapters, "statistics chapters");
-	validateDevelopmentPeriods(payload.developmentPeriods);
 
 	for (const attempt of payload.attempts) {
 		validateAttempt(attempt);
@@ -31,6 +30,14 @@ function validateSubjectStatistics(payload) {
 	for (const chapter of payload.chapters) {
 		validateChapter(chapter);
 	}
+}
+
+function validateMasteryScope(scope, fieldName) {
+	requireObject(scope, fieldName);
+	requireNullableNumber(scope.masteryPercentage, `${fieldName} masteryPercentage`);
+	requireAssessmentBand(scope.masteryPercentage, scope.performanceBand, `${fieldName} performanceBand`);
+	requireArray(scope.developmentPeriods, `${fieldName} developmentPeriods`);
+	validateDevelopmentPeriods(scope.developmentPeriods);
 }
 
 function validateDevelopmentPeriods(periods) {
@@ -58,9 +65,8 @@ function validateDevelopmentPeriod(developmentPeriod) {
 	requireStatisticsPeriod(developmentPeriod.period);
 	requireNullableString(developmentPeriod.windowStartAt, "statistics windowStartAt");
 	requireString(developmentPeriod.windowEndAt, "statistics windowEndAt");
-	requireNullableNumber(developmentPeriod.averageScorePercentage, "statistics averageScorePercentage");
 	requireNullableNumber(developmentPeriod.progressPercentagePoints, "statistics progressPercentagePoints");
-	requireNonNegativeInteger(developmentPeriod.progressAttemptCount, "statistics progressAttemptCount");
+	requireNonNegativeInteger(developmentPeriod.progressEvidenceCount, "statistics progressEvidenceCount");
 	requireArray(developmentPeriod.chartPoints, "statistics chartPoints");
 
 	for (const chartPoint of developmentPeriod.chartPoints) {
@@ -70,9 +76,10 @@ function validateDevelopmentPeriod(developmentPeriod) {
 
 function validateChartPoint(chartPoint) {
 	requireObject(chartPoint, "statistics chart point");
-	requireString(chartPoint.attemptId, "statistics chart attemptId");
-	requireString(chartPoint.submittedAt, "statistics chart submittedAt");
+	requireString(chartPoint.key, "statistics chart key");
+	requireString(chartPoint.occurredAt, "statistics chart occurredAt");
 	requireNumber(chartPoint.percentage, "statistics chart percentage");
+	requirePositiveInteger(chartPoint.evidenceCount, "statistics chart evidenceCount");
 }
 
 function validateAttempt(attempt) {
@@ -99,8 +106,7 @@ function validateChapter(chapter) {
 	requireString(chapter.labelEn, "statistics labelEn");
 	requireNullableString(chapter.iconKey, "statistics iconKey");
 	requireNumber(chapter.position, "statistics position");
-	requireNullableNumber(chapter.masteryPercentage, "statistics masteryPercentage");
-	requireAssessmentBand(chapter.masteryPercentage, chapter.performanceBand, "statistics chapter performanceBand");
+	validateMasteryScope(chapter, "statistics chapter");
 }
 
 function requireAssessmentBand(percentage, performanceBand, fieldName) {
@@ -165,6 +171,14 @@ function requireNonNegativeInteger(value, fieldName) {
 	requireNumber(value, fieldName);
 
 	if (!Number.isInteger(value) || value < 0) {
+		throw new Error(`Invalid ${fieldName}`);
+	}
+}
+
+function requirePositiveInteger(value, fieldName) {
+	requireNonNegativeInteger(value, fieldName);
+
+	if (value === 0) {
 		throw new Error(`Invalid ${fieldName}`);
 	}
 }

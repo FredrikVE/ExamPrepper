@@ -5,17 +5,16 @@ import StatisticsDataSource from "../../../src/model/datasource/StatisticsDataSo
 const SUBJECT_ID = "in2120";
 
 function createPayload() {
+	const developmentPeriods = ["1w", "1m", "3m", "6m", "1y", "all"].map(createDevelopmentPeriod);
+
 	return {
 		subjectId: SUBJECT_ID,
 		completedAttemptCount: 1,
-		developmentPeriods: [
-			createDevelopmentPeriod("1w"),
-			createDevelopmentPeriod("1m"),
-			createDevelopmentPeriod("3m"),
-			createDevelopmentPeriod("6m"),
-			createDevelopmentPeriod("1y"),
-			createDevelopmentPeriod("all")
-		],
+		subjectMastery: {
+			masteryPercentage: 40,
+			performanceBand: "progress",
+			developmentPeriods
+		},
 		attempts: [
 			{
 				attemptId: "attempt-1",
@@ -41,7 +40,8 @@ function createPayload() {
 				iconKey: "shield",
 				position: 1,
 				masteryPercentage: 80,
-				performanceBand: "understood"
+				performanceBand: "understood",
+				developmentPeriods
 			}
 		]
 	};
@@ -52,14 +52,14 @@ function createDevelopmentPeriod(period) {
 		period,
 		windowStartAt: "2026-08-31T12:00:00.000Z",
 		windowEndAt: "2026-09-07T12:00:00.000Z",
-		averageScorePercentage: 80,
 		progressPercentagePoints: 10,
-		progressAttemptCount: 1,
+		progressEvidenceCount: 1,
 		chartPoints: [
 			{
-				attemptId: "attempt-1",
-				submittedAt: "2026-09-07T10:00:00.000Z",
-				percentage: 80
+				key: "learning-session:one",
+				occurredAt: "2026-09-07T10:00:00.000Z",
+				percentage: 80,
+				evidenceCount: 1
 			}
 		]
 	};
@@ -68,7 +68,7 @@ function createDevelopmentPeriod(period) {
 afterEach(() => jest.restoreAllMocks());
 
 describe("StatisticsDataSource", () => {
-	test("accepts the complete backend Statistics Overview contract", async () => {
+	test("accepts subject and chapter mastery scopes with backend-owned history", async () => {
 		const payload = createPayload();
 		jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => JSON.stringify(payload) });
 		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
@@ -76,40 +76,31 @@ describe("StatisticsDataSource", () => {
 		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).resolves.toEqual(payload);
 	});
 
-	test("rejects an incomplete development period contract", async () => {
+	test("rejects a subject mastery scope with an incomplete period contract", async () => {
 		const payload = createPayload();
-		payload.developmentPeriods = payload.developmentPeriods.filter((developmentPeriod) => developmentPeriod.period !== "1y");
+		payload.subjectMastery.developmentPeriods = payload.subjectMastery.developmentPeriods.filter((developmentPeriod) => developmentPeriod.period !== "1y");
 		jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => JSON.stringify(payload) });
 		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
 
 		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Missing statistics period 1y");
 	});
 
-	test("rejects a development period without its backend-owned zoom window", async () => {
+	test("rejects a mastery period without its backend-owned evidence count", async () => {
 		const payload = createPayload();
-		delete payload.developmentPeriods[0].windowEndAt;
+		delete payload.subjectMastery.developmentPeriods[0].progressEvidenceCount;
 		jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => JSON.stringify(payload) });
 		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
 
-		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Invalid statistics windowEndAt");
+		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Invalid statistics progressEvidenceCount");
 	});
 
-	test("rejects a development period without its backend-owned progress attempt count", async () => {
+	test("rejects a chapter mastery band that disagrees with an unassessed percentage", async () => {
 		const payload = createPayload();
-		delete payload.developmentPeriods[0].progressAttemptCount;
+		payload.chapters[0].masteryPercentage = null;
+		payload.chapters[0].performanceBand = "practice";
 		jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => JSON.stringify(payload) });
 		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
 
-		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Invalid statistics progressAttemptCount");
-	});
-
-	test("rejects a performance band that disagrees with an unmeasurable score", async () => {
-		const payload = createPayload();
-		payload.attempts[0].percentage = null;
-		payload.attempts[0].performanceBand = "practice";
-		jest.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true, status: 200, text: async () => JSON.stringify(payload) });
-		const dataSource = new StatisticsDataSource({ baseUrl: "https://example.test/api", getToken: async () => "token" });
-
-		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Invalid statistics attempt performanceBand");
+		await expect(dataSource.fetchSubjectStatistics(SUBJECT_ID)).rejects.toThrow("Invalid statistics chapter performanceBand");
 	});
 });

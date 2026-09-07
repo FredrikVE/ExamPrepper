@@ -14,7 +14,7 @@ describe("GetSubjectStatisticsUseCase", () => {
 	});
 
 	test("loads statistics only for the requested subject", async () => {
-		const statistics = { subjectId: "in2120", completedAttemptCount: 0, developmentPeriods: [], attempts: [], chapters: [] };
+		const statistics = { subjectId: "in2120", completedAttemptCount: 0, subjectMastery: { masteryPercentage: 0, performanceBand: "practice", developmentPeriods: [] }, attempts: [], chapters: [] };
 		const repository = { getSubjectStatistics: jest.fn().mockResolvedValue(statistics) };
 		const useCase = new GetSubjectStatisticsUseCase(repository);
 

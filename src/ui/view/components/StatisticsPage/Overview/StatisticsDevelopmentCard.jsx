@@ -16,9 +16,9 @@ export default function StatisticsDevelopmentCard({ model, onSelectPeriod }) {
 
 			<div className="statistics-development-content">
 				<div className="statistics-development-summary">
-					<div className="statistics-development-average">
-						<strong>{model.averageScoreValue}</strong>
-						<span>{model.averageScoreLabel}</span>
+					<div className="statistics-development-mastery">
+						<strong>{model.masteryValue}</strong>
+						<span>{model.masteryLabel}</span>
 					</div>
 				</div>
 
