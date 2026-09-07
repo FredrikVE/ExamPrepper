@@ -1,4 +1,4 @@
-//test/ui/viewmodel/AppNavigationViewModel.test.js
+// test/ui/viewmodel/AppNavigationViewModel.test.js
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { LEARNING_CONTENT_TYPES, NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
 
@@ -240,6 +240,13 @@ describe("useAppNavigationViewModel", () => {
 			null,
 			null
 		]);
+	});
+
+	test("Statistics kan åpnes uten valgt fag", () => {
+		createViewModel().changeScreen(NAV_SCREENS.OVERVIEW);
+
+		expect(hookState[0]).toBe(NAV_SCREENS.OVERVIEW);
+		expect(hookState[1]).toBeNull();
 	});
 
 	test("eksamensskjermen kan ikke åpnes uten valgt eksamen", () => {

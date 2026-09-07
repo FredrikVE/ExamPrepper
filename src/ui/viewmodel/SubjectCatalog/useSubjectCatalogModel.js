@@ -2,14 +2,7 @@
 import { useCallback } from "react";
 import { LOAD_STATUS } from "../LoadState/loadStatus.js";
 import useLoadModel from "../LoadState/useLoadModel.js";
-
-const SUBJECT_SWITCHER_KINDS = Object.freeze({
-	LOADING: "loading",
-	ERROR: "error",
-	EMPTY: "empty",
-	UNSELECTED: "unselected",
-	READY: "ready"
-});
+import { SUBJECT_SWITCHER_KINDS } from "./subjectSwitcherKinds.js";
 
 export default function useSubjectCatalogModel(props) {
 	const executeLoad = useCallback(() => {

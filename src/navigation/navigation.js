@@ -1,4 +1,4 @@
-//src/navigation/navigation.js
+// src/navigation/navigation.js
 import { CONTENT_ICON_KEYS } from "../constants/ContentIconKeys.js";
 export const NAV_SCREENS = {
 	SUBJECTS: "subjects",
@@ -78,7 +78,7 @@ export const SCREEN_CONFIG = {
 		shellClassName: "exam-shell"
 	},
 	[NAV_SCREENS.OVERVIEW]: {
-		requiresSubject: true,
+		requiresSubject: false,
 		requiresExam: false,
 		backTo: NAV_SCREENS.SELECT,
 		showsSubjectSwitcher: false,

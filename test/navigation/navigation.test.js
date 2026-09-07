@@ -1,4 +1,4 @@
-//test/navigation/navigation.test.js
+// test/navigation/navigation.test.js
 import { describe, expect, test } from "@jest/globals";
 import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../src/navigation/navigation.js";
 
@@ -152,9 +152,9 @@ describe("navigation configuration", () => {
 		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH).backTo).toBe(NAV_SCREENS.SUBJECTS);
 	});
 
-	test("makes Statistics subject-scoped with the page-owned subject selector policy", () => {
+	test("lets Statistics open before a subject is selected and keeps the page-owned subject selector policy", () => {
 		expect(getScreenConfig(NAV_SCREENS.OVERVIEW)).toEqual({
-			requiresSubject: true,
+			requiresSubject: false,
 			requiresExam: false,
 			backTo: NAV_SCREENS.SELECT,
 			showsSubjectSwitcher: false,
