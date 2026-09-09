@@ -1,6 +1,6 @@
 //src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
-import { getLearningContentNavigationEntry, getScreenConfig, LEARNING_CONTENT_TYPES, NAV_SCREENS, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
+import { DEFAULT_SELECT_CONTENT_ENTRY_ID, getLearningContentNavigationEntry, getScreenConfig, NAV_SCREENS, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
@@ -14,7 +14,7 @@ export default function useAppNavigationViewModel(props) {
 	const [examLanguageSyncError, setExamLanguageSyncError] = useState(null);
 	const [selectedExamTestType, setSelectedExamTestType] = useState(null);
 	const [examReturnScreen, setExamReturnScreen] = useState(null);
-	const [selectedLearningContentEntryId, setSelectedLearningContentEntryId] = useState(LEARNING_CONTENT_TYPES.EXAMS);
+	const [selectedLearningContentEntryId, setSelectedLearningContentEntryId] = useState(DEFAULT_SELECT_CONTENT_ENTRY_ID);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
@@ -64,6 +64,16 @@ export default function useAppNavigationViewModel(props) {
 
 		setExamLanguageSyncError(null);
 
+		/* SELECT viser bare innholdstyper som faktisk bor der. Registeret uttrykker dette
+		   gjennom targetScreen; andre entries resettes til den canonical standardentryen. */
+		if (nextScreen === NAV_SCREENS.SELECT) {
+			const activeEntry = getLearningContentNavigationEntry(selectedLearningContentEntryId);
+
+			if (activeEntry.targetScreen !== NAV_SCREENS.SELECT) {
+				setSelectedLearningContentEntryId(DEFAULT_SELECT_CONTENT_ENTRY_ID);
+			}
+		}
+
 		if (nextScreen !== NAV_SCREENS.EXAM) {
 			setSelectedExamId(null);
 			setSelectedExamTestType(null);
@@ -80,7 +90,7 @@ export default function useAppNavigationViewModel(props) {
 
 		setActiveScreen(nextScreen);
 		closeNavigationOverlays();
-	}, [closeNavigationOverlays, selectedExamId, selectedSubjectId, showAllSubjects]);
+	}, [activeScreen, closeNavigationOverlays, selectedExamId, selectedLearningContentEntryId, selectedSubjectId, showAllSubjects]);
 
 	const applySubjectSelection = useCallback((subjectId, nextScreen) => {
 		setExamLanguageSyncError(null);

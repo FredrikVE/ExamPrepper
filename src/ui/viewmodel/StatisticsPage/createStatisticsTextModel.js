@@ -1,160 +1,144 @@
 // src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js
+import { STATISTICS_PERIODS } from "../../../constants/StatisticsContracts.js";
+
+const SINGULAR_COUNT = 1;
+const PERCENTAGE_DECIMAL_PLACES = 1;
+const HISTORY_PAGE_NUMBER_OFFSET = 1;
+
 export default function createStatisticsTextModel(t) {
 	return {
 		pageTitle: t.selectStatistics,
 		pageSubtitle: t.statisticsPageSubtitle,
+		viewToggleOverviewLabel: t.statisticsViewOverviewLabel,
+		viewToggleInsightsLabel: t.statisticsViewInsightsLabel,
+		viewToggleAriaLabel: t.statisticsViewToggleAriaLabel,
+		viewToggleBackLabel: t.statisticsViewToggleBackLabel,
+		subjectSelectorMenuLabel: t.sidebarSubjectMenuLabel,
+		subjectSelectorCloseLabel: t.sidebarCloseSubjectMenu,
 		loadingTitle: t.statisticsLoadingTitle,
-		loadingBody: t.statisticsLoadingBody,
 		signedOutTitle: t.statisticsSignedOutTitle,
 		signedOutBody: t.statisticsSignedOutBody,
-		emptyTitle: t.statisticsHeroEmptyTitle,
-		emptyBody: t.statisticsHeroEmptyBody,
 		errorTitle: t.statisticsErrorTitle,
 		retryButton: t.statisticsRetryButton,
 		startNewExamButton: t.statisticsStartNewExamButton,
-		heroBody: t.statisticsHeroBody,
-		heroNoTrend: t.statisticsHeroNoTrend,
-		kpiGridLabel: t.statisticsKpiGridLabel,
-		kpiAttemptCount: t.statisticsKpiAttemptCount,
-		kpiAverageScore: t.statisticsKpiAverageScore,
-		kpiBestScore: t.statisticsKpiBestScore,
-		kpiCorrectAnswers: t.statisticsKpiCorrectAnswers,
-		kpiUniqueExams: t.statisticsKpiUniqueExams,
-		scoreTrendTitle: t.statisticsScoreTrendTitle,
-		scoreTrendSubtitle: t.statisticsScoreTrendSubtitle,
-		scoreTrendEmptySummary: t.statisticsScoreTrendEmptySummary,
-		recentAttemptsTitle: t.statisticsRecentAttemptsTitle,
-		recentAttemptsSubtitle: t.statisticsRecentAttemptsSubtitle,
-		recentAttemptsEmpty: t.statisticsRecentAttemptsEmpty,
-		recommendedTitle: t.statisticsRecommendedTitle,
-		recommendedBody: t.statisticsRecommendedBody,
-		recommendedBadge: t.statisticsRecommendedBadge,
-		weeklyActivityTitle: t.statisticsWeeklyActivityTitle,
-		weeklyActivityTotalTimeCaption: t.statisticsWeeklyActivityTotalTimeCaption,
-		weeklyActivityChangeSuffix: t.statisticsWeeklyActivityChangeSuffix,
-		weeklyActivityNoComparisonLabel: t.statisticsWeeklyActivityNoComparisonLabel,
-		weeklyActivityNoChangeLabel: t.statisticsWeeklyActivityNoChangeLabel,
-		weeklyActivityNote: t.statisticsWeeklyActivityNote,
-		weekdayLabels: {
-			mon: t.statisticsWeekdayMonday,
-			tue: t.statisticsWeekdayTuesday,
-			wed: t.statisticsWeekdayWednesday,
-			thu: t.statisticsWeekdayThursday,
-			fri: t.statisticsWeekdayFriday,
-			sat: t.statisticsWeekdaySaturday,
-			sun: t.statisticsWeekdaySunday
-		},
-		attemptScoreLabel: t.statisticsAttemptScoreLabel,
 		loadErrorMessage: t.statisticsLoadErrorMessage,
+		sectionLoadingLabel: t.statisticsSectionLoadingLabel,
+		sectionEmptyTitle: t.statisticsSectionEmptyTitle,
+		developmentEmptyBody: t.statisticsSectionDevelopmentEmptyBody,
+		progressEmptyBody: t.statisticsSectionProgressEmptyBody,
+		completedEmptyBody: t.statisticsSectionCompletedEmptyBody,
+		chaptersEmptyBody: t.statisticsSectionChaptersEmptyBody,
+		historyEmptyBody: t.statisticsSectionHistoryEmptyBody,
 		emptyValueLabel: t.statisticsEmptyValueLabel,
+		developmentTitle: t.statisticsOverviewDevelopmentTitle,
+		createDevelopmentSubtitle: t.statisticsOverviewDevelopmentSubtitle,
+		periodLabel: t.statisticsOverviewPeriodLabel,
+		createPeriodRangeLabel: t.statisticsOverviewPeriodRangeLabel,
+		previousPeriodLabel: t.statisticsOverviewPreviousPeriodLabel,
+		nextPeriodLabel: t.statisticsOverviewNextPeriodLabel,
+		periodOptions: Object.freeze([
+			{ key: STATISTICS_PERIODS.WEEK, label: t.statisticsOverviewPeriodWeek },
+			{ key: STATISTICS_PERIODS.MONTH, label: t.statisticsOverviewPeriodMonth },
+			{ key: STATISTICS_PERIODS.THREE_MONTHS, label: t.statisticsOverviewPeriodThreeMonths },
+			{ key: STATISTICS_PERIODS.SIX_MONTHS, label: t.statisticsOverviewPeriodSixMonths },
+			{ key: STATISTICS_PERIODS.YEAR, label: t.statisticsOverviewPeriodYear },
+			{ key: STATISTICS_PERIODS.ALL, label: t.statisticsOverviewPeriodAll }
+		]),
+		subjectMasteryLabel: t.statisticsOverviewSubjectMasteryLabel,
+		createSubjectScopeLabel: t.statisticsOverviewSubjectScopeLabel,
+		progressLabel: t.statisticsOverviewProgressLabel,
+		createProgressAttemptSummaryLabel: t.statisticsOverviewProgressAttemptSummaryLabel,
+		completedLabel: t.statisticsOverviewCompletedLabel,
+		completedUnitLabel: t.statisticsOverviewEvidenceUnitPlural,
+		summaryLabel: t.statisticsOverviewSummaryLabel,
+		createChartLabel: t.statisticsOverviewChartLabel,
+		chartEmptyLabel: t.statisticsOverviewChartEmptyLabel,
+		chaptersTitle: t.statisticsOverviewChaptersTitle,
+		chaptersSubtitle: t.statisticsOverviewChaptersSubtitle,
+		masteryLabel: t.statisticsOverviewMasteryLabel,
+		chaptersCarouselLabel: t.statisticsOverviewChaptersCarouselLabel,
+		chaptersPreviousLabel: t.statisticsOverviewChaptersPreviousLabel,
+		chaptersNextLabel: t.statisticsOverviewChaptersNextLabel,
+		chaptersShowAllLabel: t.statisticsOverviewChaptersShowAllLabel,
+		chaptersShowLessLabel: t.statisticsOverviewChaptersShowLessLabel,
+		historyTitle: t.statisticsOverviewHistoryTitle,
+		historySubtitle: t.statisticsOverviewHistorySubtitle,
+		historyDateLabel: t.statisticsOverviewHistoryDateLabel,
+		historyNameLabel: t.statisticsOverviewHistoryNameLabel,
+		historyStatusLabel: t.statisticsOverviewHistoryStatusLabel,
+		historyScoreLabel: t.statisticsOverviewHistoryScoreLabel,
+		historyDetailsLabel: t.statisticsOverviewHistoryDetailsLabel,
+		historyShowDetailsLabel: t.statisticsOverviewHistoryShowDetailsLabel,
+		historyHideDetailsLabel: t.statisticsOverviewHistoryHideDetailsLabel,
+		historyStatusGoodLabel: t.statisticsOverviewHistoryStatusGoodLabel,
+		historyStatusAttentionLabel: t.statisticsOverviewHistoryStatusAttentionLabel,
+		historyStatusRiskLabel: t.statisticsOverviewHistoryStatusRiskLabel,
+		historyStatusNotAssessedLabel: t.statisticsOverviewHistoryStatusNotAssessedLabel,
+		historyPointsLabel: t.statisticsOverviewHistoryPointsLabel,
+		historyCorrectAnswersLabel: t.statisticsOverviewHistoryCorrectAnswersLabel,
+		historyIncorrectAnswersLabel: t.statisticsOverviewHistoryIncorrectAnswersLabel,
+		historyTimeUsedLabel: t.statisticsOverviewHistoryTimeUsedLabel,
+		historyShowAllLabel: t.statisticsOverviewHistoryShowAllLabel,
+		historyShowLessLabel: t.statisticsOverviewHistoryShowLessLabel,
+		historyPagerLabel: t.statisticsOverviewHistoryPagerLabel,
+		historyPreviousPageLabel: t.statisticsOverviewHistoryPreviousPageLabel,
+		historyNextPageLabel: t.statisticsOverviewHistoryNextPageLabel,
 
-		createHeroTitle(count) {
-			return `${t.statisticsHeroTitlePrefix} ${count} ${selectSingularOrPlural(count, t.statisticsHeroTitleUnitSingular, t.statisticsHeroTitleUnitPlural)}`;
+		createPercentageLabel(value) {
+			if (value === null) {
+				return t.statisticsEmptyValueLabel;
+			}
+
+			return `${formatNumber(value)} %`;
 		},
 
-		createTrendPointLabel(number) {
-			return `${t.statisticsTrendPointLabel} ${number}`;
+		createPercentagePointNumberLabel(value) {
+			return `${formatNumber(value)} %`;
 		},
 
-		createAttemptCountDescription(count) {
-			return `${count} ${selectSingularOrPlural(count, t.statisticsAttemptUnitSingular, t.statisticsAttemptUnitPlural)}`;
+		createPercentagePointUnitLabel(value) {
+			return selectSingularOrPlural(Math.abs(value), t.statisticsPercentagePointSingular, t.statisticsPercentagePointPlural);
 		},
 
-		createCorrectAnswersDescription(correct, total) {
-			return `${correct} ${t.statisticsOfLabel} ${total} ${selectSingularOrPlural(total, t.statisticsQuestionUnitSingular, t.statisticsQuestionUnitPlural)}`;
-		},
 
-		createUniqueExamsDescription(count) {
-			return `${count} ${selectSingularOrPlural(count, t.statisticsExamUnitSingular, t.statisticsExamUnitPlural)}`;
-		},
-
-		createAttemptFallbackTitle(value) {
-			return `${t.statisticsAttemptFallbackTitlePrefix} ${value}`;
-		},
-
-		createAttemptTitleFromExamId(examId) {
-			return createAttemptTitleFromExamId(examId, t);
-		},
-
-		createAttemptPointsLabel(scorePoints, totalPoints) {
+		createPointsLabel(scorePoints, totalPoints) {
 			return `${scorePoints} / ${totalPoints} ${t.statisticsAttemptPointUnit}`;
 		},
 
-		createDurationLabel(totalMinutes) {
-			const hours = Math.floor(totalMinutes / 60);
-			const minutes = totalMinutes % 60;
+		createCorrectCountLabel(correctCount) {
+			return `${correctCount} ${t.statisticsOverviewCorrectLabel}`;
+		},
 
-			if (hours === 0) {
-				return `${minutes} ${t.statisticsActivityMinuteShort}`;
-			}
+		createIncorrectCountLabel(incorrectCount) {
+			return `${incorrectCount} ${t.statisticsOverviewIncorrectLabel}`;
+		},
 
-			if (minutes === 0) {
-				return `${hours} ${t.statisticsActivityHourShort}`;
-			}
+		createDurationSecondsLabel(durationSeconds) {
+			return `${durationSeconds} ${t.statisticsOverviewSecondsShort}`;
+		},
 
-			return `${hours} ${t.statisticsActivityHourShort} ${minutes} ${t.statisticsActivityMinuteShort}`;
+		createGoToHistoryPageLabel(pageNumber) {
+			return t.statisticsOverviewHistoryGoToPageLabel(pageNumber);
+		},
+
+		createHistoryPageCounterLabel(pageIndex, pageCount) {
+			return t.statisticsOverviewHistoryPageCounterLabel(pageIndex + HISTORY_PAGE_NUMBER_OFFSET, pageCount);
 		}
 	};
 }
 
-function createAttemptTitleFromExamId(examId, t) {
-	const examIdText = String(examId).toLowerCase();
-
-	if (examIdText.includes("demo")) {
-		return t.statisticsDemoExamFallbackTitle;
-	}
-
-	const mockExamNumber = findExamNumber(examIdText, "mock-exam");
-
-	if (mockExamNumber !== null) {
-		return `${t.statisticsPracticeExamFallbackTitlePrefix} ${mockExamNumber}`;
-	}
-
-	const examNumber = findExamNumber(examIdText, "exam");
-
-	if (examNumber !== null) {
-		return `${t.statisticsAttemptFallbackTitlePrefix} ${examNumber}`;
-	}
-
-	return null;
-}
-
-function findExamNumber(value, prefix) {
-	const prefixStart = value.indexOf(prefix);
-
-	if (prefixStart === -1) {
-		return null;
-	}
-
-	let numberStart = prefixStart + prefix.length;
-
-	while (value[numberStart] === "-" || value[numberStart] === "_") {
-		numberStart += 1;
-	}
-
-	let numberText = "";
-
-	for (let index = numberStart; index < value.length; index += 1) {
-		const character = value[index];
-
-		if (character < "0" || character > "9") {
-			break;
-		}
-
-		numberText += character;
-	}
-
-	if (numberText === "") {
-		return null;
-	}
-
-	return Number(numberText);
-}
-
 function selectSingularOrPlural(count, singular, plural) {
-	if (count === 1) {
+	if (count === SINGULAR_COUNT) {
 		return singular;
 	}
 
 	return plural;
+}
+
+function formatNumber(value) {
+	if (Number.isInteger(value)) {
+		return String(value);
+	}
+
+	return value.toFixed(PERCENTAGE_DECIMAL_PLACES);
 }

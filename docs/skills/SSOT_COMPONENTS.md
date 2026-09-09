@@ -27,7 +27,7 @@ Før en ny delt komponent opprettes:
 | Ansvar | Canonical implementasjon | Offentlig bruk | Grense |
 |---|---|---|---|
 | Ytre workspace-skall | `WorkspaceScaffold` | `src/ui/view/components/WorkspaceScaffold/` | Eier shell, slots og scrollflate. Body-varianter uttrykkes gjennom deklarerte `--scaffold-body-*` hooks på scaffold-roten; features styler ikke intern body direkte. |
-| Loading/error/empty/content | `WorkspaceState` | `src/ui/view/components/WorkspaceState/` | Rendrer ferdig page-state. Eier ikke ressursstatus. |
+| Loading/error/empty/content | `WorkspaceState` | `src/ui/view/components/WorkspaceState/` | Rendrer ferdig state på page- eller embedded nivå. Konsumenten velger `scope` og `emptyIcon` eksplisitt. Scope styrer også live-region-oppførsel: page annonserer, embedded gjør det ikke. Eier ikke ressursstatus og ikke tomhetsbeslutningen. Overstyrbare størrelser deklareres på `.workspace-state` og må overstyres på samme element, ikke på forelderen. |
 | Desktop app-shell-header | `Header` + slots | `src/ui/view/components/Header/` | Page velger appearance, layout og slots eksplisitt. |
 | Footer-skall | `Footer` | `src/ui/view/components/Footer/` | Delte footere komponerer denne i stedet for å inline konkurrerende shell. |
 | Root render-crash | `AppErrorBoundary` | `src/ui/view/components/AppErrorBoundary/` | Root recovery. Erstatter ikke ordinær page-load-/action-feilhåndtering. |

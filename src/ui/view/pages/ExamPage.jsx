@@ -9,6 +9,7 @@ import QuestionCard from "../components/QuestionCard/QuestionCard.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import ExamSubmitConfirmation from "../components/ExamPage/SubmitConfirmation/ExamSubmitConfirmation.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 import useExamFooterNavigationKeys from "../components/ExamPage/useExamFooterNavigationKeys.js";
 import { useLanguage } from "../../../i18n/LanguageContext.jsx";
 
@@ -78,7 +79,7 @@ export default function ExamPage({ viewModel }) {
 				overlay={null}
 				scrollToTopRequestId={viewModel.shouldShowExamChrome ? viewModel.scrollToTopRequestId : null}
 			>
-				<WorkspaceState state={viewModel.workspaceState}>
+				<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
 					<>
 						{viewModel.attemptSaving && (
 							<p className="exam-attempt-save-status">{viewModel.attemptSavingMessage}</p>

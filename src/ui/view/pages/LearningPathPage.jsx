@@ -6,6 +6,7 @@ import LearningContentHeader from "../components/LearningContentHeader/LearningC
 import LearningPathRoadmap from "../components/LearningPathPage/LearningPathRoadmap.jsx";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 
 export default function LearningPathPage({ viewModel }) {
 	const header = (
@@ -31,7 +32,7 @@ export default function LearningPathPage({ viewModel }) {
 				<LearningContentHeader {...viewModel.contentHeaderModel} />
 
 				<div className="learning-path-page-content">
-					<WorkspaceState state={viewModel.workspaceState}>
+					<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
 						<div className="learning-path-page-state-content">
 							<ContinueLearningPanel
 								model={viewModel.continuePanelModel}

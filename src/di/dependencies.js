@@ -7,11 +7,13 @@ import ChapterTestQuestionDataSource from "../model/datasource/ChapterTestQuesti
 import ConceptImageDataSource from "../model/datasource/ConceptImageDataSource.js";
 import GlossaryDataSource from "../model/datasource/GlossaryDataSource.js";
 import ExamAttemptDataSource from "../model/datasource/ExamAttemptDataSource.js";
+import StatisticsDataSource from "../model/datasource/StatisticsDataSource.js";
 import LearningPathDataSource from "../model/datasource/LearningPathDataSource.js";
 import ConceptPracticeDataSource from "../model/datasource/ConceptPracticeDataSource.js";
 
 import TestSetRepository from "../model/repositories/TestSetRepository.js";
 import ExamAttemptRepository from "../model/repositories/ExamAttemptRepository.js";
+import StatisticsRepository from "../model/repositories/StatisticsRepository.js";
 import SubjectRepository from "../model/repositories/SubjectRepository.js";
 import GlossaryRepository from "../model/repositories/GlossaryRepository.js";
 import LearningPathRepository from "../model/repositories/LearningPathRepository.js";
@@ -38,7 +40,7 @@ import RecordMatchCardResultUseCase from "../model/domain/mastery/RecordMatchCar
 import GradeAnswerUseCase from "../model/domain/grading/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/exams/CalculateExamScoreUseCase.js";
 import SubmitExamAttemptUseCase from "../model/domain/exams/SubmitExamAttemptUseCase.js";
-import GetMyStatisticsUseCase from "../model/domain/statistics/GetMyStatisticsUseCase.js";
+import GetSubjectStatisticsUseCase from "../model/domain/statistics/GetSubjectStatisticsUseCase.js";
 import { getActiveAuthToken, subscribeAuthTokenProviderChange } from "../auth/AuthTokenProvider.js";
 
 function requiredEnv(name) {
@@ -66,6 +68,7 @@ const chapterTestQuestionDataSource = new ChapterTestQuestionDataSource({ baseUr
 const conceptImageDataSource = new ConceptImageDataSource({ baseUrl: apiBaseUrl, imageBaseUrl });
 const glossaryDataSource = new GlossaryDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 const examAttemptDataSource = new ExamAttemptDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
+const statisticsDataSource = new StatisticsDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 const learningPathDataSource = new LearningPathDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 const conceptPracticeDataSource = new ConceptPracticeDataSource({ baseUrl: apiBaseUrl, getToken: getActiveAuthToken });
 
@@ -73,6 +76,7 @@ const conceptPracticeDataSource = new ConceptPracticeDataSource({ baseUrl: apiBa
 const examRepository = new TestSetRepository(examDataSource, examQuestionDataSource, conceptImageDataSource);
 const chapterTestRepository = new TestSetRepository(chapterTestDataSource, chapterTestQuestionDataSource, conceptImageDataSource);
 const examAttemptRepository = new ExamAttemptRepository(examAttemptDataSource);
+const statisticsRepository = new StatisticsRepository(statisticsDataSource);
 const subjectRepository = new SubjectRepository(subjectDataSource);
 const glossaryRepository = new GlossaryRepository(glossaryDataSource);
 const learningPathRepository = new LearningPathRepository(learningPathDataSource);
@@ -93,7 +97,7 @@ const getChapterTestByBaseIdAndLangUseCase = new GetTestSetByBaseIdAndLangUseCas
 const getChapterTestByIdUseCase = new GetTestSetByIdUseCase(chapterTestRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository, learningPathRepository);
-const getMyStatisticsUseCase = new GetMyStatisticsUseCase(examAttemptRepository);
+const getSubjectStatisticsUseCase = new GetSubjectStatisticsUseCase(statisticsRepository);
 const getGlossaryEntriesForSubjectUseCase = new GetGlossaryEntriesForSubjectUseCase(glossaryRepository);
 const getGlossaryOverviewUseCase = new GetGlossaryOverviewUseCase(glossaryRepository);
 const getGlossaryNetworkUseCase = new GetGlossaryNetworkUseCase(glossaryRepository);
@@ -121,7 +125,7 @@ export {
     gradeAnswerUseCase,
     calculateExamScoreUseCase,
     submitExamAttemptUseCase,
-    getMyStatisticsUseCase,
+    getSubjectStatisticsUseCase,
     getGlossaryEntriesForSubjectUseCase,
     getGlossaryOverviewUseCase,
     getGlossaryNetworkUseCase,

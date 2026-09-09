@@ -1,4 +1,5 @@
 // src/model/repositories/LearningPathRepository.js
+import { ASSESSMENT_BAND_VALUES, NOT_ASSESSED_BAND } from "../../constants/AssessmentBands.js";
 import { QUESTION_TYPES } from "../../constants/QuestionTypes.js";
 import { LEARNING_PATH_ACTIVITY_KIND } from "../../constants/LearningPathActivityKind.js";
 import { LEARNING_PATH_ROADMAP_STATUSES } from "../../constants/LearningPathRoadmapStatus.js";
@@ -6,9 +7,8 @@ import { LEARNING_PATH_ROADMAP_STATUSES } from "../../constants/LearningPathRoad
 const INVALID_LEARNING_PATH_RESPONSE = "Invalid learning path response";
 const INVALID_LEARNING_SESSION_RESPONSE = "Invalid learning session response";
 const INVALID_LEARNING_SESSION_RESULT = "Invalid learning session result";
-const NOT_ASSESSED = "not-assessed";
 const ROADMAP_STATUSES = new Set(LEARNING_PATH_ROADMAP_STATUSES);
-const ASSESSMENT_BANDS = new Set(["practice", "progress", "understood"]);
+const ASSESSED_BANDS = new Set(ASSESSMENT_BAND_VALUES);
 
 export default class LearningPathRepository {
 	#learningPathDataSource;
@@ -545,13 +545,13 @@ export default class LearningPathRepository {
 
 	#isValidPerformancePair(percentage, performanceBand) {
 		if (percentage === null) {
-			return performanceBand === NOT_ASSESSED;
+			return performanceBand === NOT_ASSESSED_BAND;
 		}
 
 		return Number.isFinite(percentage)
 			&& percentage >= 0
 			&& percentage <= 100
-			&& ASSESSMENT_BANDS.has(performanceBand);
+			&& ASSESSED_BANDS.has(performanceBand);
 	}
 
 	#isNullableString(value) {

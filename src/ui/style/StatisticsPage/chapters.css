@@ -1,0 +1,256 @@
+/* src/ui/style/StatisticsPage/chapters.css */
+.statistics-chapter-overview {
+	--statistics-chapter-card-width: clamp(196px, 18vw, 216px);
+	display: grid;
+	gap: var(--space-4);
+	min-width: 0;
+	overflow: hidden;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-lg);
+	background: var(--statistics-overview-surface);
+	box-shadow: var(--statistics-overview-shadow);
+	padding: var(--space-4) var(--space-5) 0;
+}
+
+.statistics-chapter-carousel {
+	display: grid;
+	grid-template-columns: 42px minmax(0, 1fr) 42px;
+	align-items: center;
+	gap: var(--space-2);
+	min-width: 0;
+}
+
+.statistics-chapter-carousel-static {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.statistics-chapter-viewport {
+	min-width: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: var(--space-1) 0 var(--space-3);
+	scroll-behavior: smooth;
+	scroll-snap-type: x proximity;
+	scrollbar-width: thin;
+	scrollbar-color: var(--statistics-scroll-thumb) transparent;
+}
+
+.statistics-chapter-viewport:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+	border-radius: var(--radius-md);
+}
+
+.statistics-chapter-track {
+	display: flex;
+	width: max-content;
+	min-width: 100%;
+	align-items: stretch;
+	gap: var(--space-3);
+}
+
+.statistics-chapter-card {
+	display: grid;
+	width: var(--statistics-chapter-card-width);
+	min-width: var(--statistics-chapter-card-width);
+	min-height: 96px;
+	flex: 0 0 auto;
+	grid-template-columns: 38px minmax(0, 1fr);
+	align-items: start;
+	gap: var(--space-2);
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-md);
+	background: var(--statistics-chapter-surface);
+	padding: var(--space-3);
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	scroll-snap-align: start;
+	transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.statistics-chapter-card:hover {
+	transform: translateY(-1px);
+	border-color: var(--button-secondary-border-hover);
+	background: var(--statistics-history-row-hover);
+}
+
+.statistics-chapter-card[aria-pressed="true"] {
+	border-color: var(--accent);
+	background: var(--statistics-history-row-hover);
+	box-shadow: 0 0 0 1px var(--accent);
+}
+
+.statistics-chapter-card:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+}
+
+.statistics-chapter-card-icon {
+	display: grid;
+	width: 36px;
+	height: 36px;
+	place-items: center;
+	border-radius: var(--radius-full);
+	background: var(--statistics-chapter-icon-surface);
+	color: var(--accent);
+}
+
+.statistics-chapter-card[data-performance-tone="positive"] .statistics-chapter-card-icon {
+	background: var(--statistics-positive-surface);
+	color: var(--statistics-positive);
+}
+
+.statistics-chapter-card[data-performance-tone="warning"] .statistics-chapter-card-icon {
+	background: var(--statistics-warning-surface);
+	color: var(--statistics-warning);
+}
+
+.statistics-chapter-card[data-performance-tone="danger"] .statistics-chapter-card-icon {
+	background: var(--statistics-danger-surface);
+	color: var(--statistics-danger);
+}
+
+.statistics-chapter-card-icon svg {
+	width: 19px;
+	height: 19px;
+}
+
+.statistics-chapter-card-copy {
+	display: grid;
+	min-width: 0;
+	align-content: start;
+}
+
+.statistics-chapter-card-title,
+.statistics-chapter-card-label,
+.statistics-chapter-card-score {
+	margin: 0;
+}
+
+.statistics-chapter-card-title {
+	overflow: hidden;
+	color: var(--text-main);
+	font-size: 0.78rem;
+	font-weight: 850;
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+}
+
+.statistics-chapter-card-score {
+	margin-top: var(--space-2);
+	color: var(--text-main);
+	font-size: 1.25rem;
+	font-weight: 900;
+	letter-spacing: -0.035em;
+}
+
+.statistics-chapter-card-label {
+	margin-top: var(--space-1);
+	color: var(--text-soft);
+	font-size: 0.68rem;
+	font-weight: 650;
+}
+
+.statistics-chapter-scroll-button {
+	display: grid;
+	width: 42px;
+	height: 42px;
+	place-items: center;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-full);
+	background: var(--statistics-overview-surface);
+	color: var(--text-muted);
+	box-shadow: var(--statistics-control-shadow);
+	cursor: pointer;
+	transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.statistics-chapter-scroll-button:hover:not(:disabled) {
+	transform: translateY(-1px);
+	border-color: var(--button-secondary-border-hover);
+	background: var(--statistics-history-row-hover);
+	color: var(--accent);
+}
+
+.statistics-chapter-scroll-button:active:not(:disabled) {
+	transform: scale(0.96);
+}
+
+.statistics-chapter-scroll-button svg {
+	width: 19px;
+	height: 19px;
+}
+
+.statistics-chapter-scroll-button:disabled {
+	cursor: default;
+	opacity: 0.32;
+	box-shadow: none;
+}
+
+.statistics-chapter-scroll-button:focus-visible,
+.statistics-chapter-toggle:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+}
+
+.statistics-chapter-toggle {
+	display: flex;
+	width: calc(100% + (2 * var(--space-5)));
+	min-height: 58px;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	margin-left: calc(-1 * var(--space-5));
+	border: 0;
+	border-top: 1px solid var(--statistics-overview-border);
+	background: transparent;
+	color: var(--text-main);
+	font: inherit;
+	font-size: 0.72rem;
+	font-weight: 850;
+	cursor: pointer;
+	transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.statistics-chapter-toggle:hover {
+	background: var(--statistics-history-row-hover);
+	color: var(--accent);
+}
+
+.statistics-chapter-toggle svg {
+	width: 17px;
+	height: 17px;
+	transition: transform var(--transition-fast);
+}
+
+.statistics-chapter-toggle[aria-expanded="true"] svg {
+	transform: rotate(180deg);
+}
+
+.statistics-chapter-overview-expanded .statistics-chapter-carousel {
+	display: block;
+}
+
+.statistics-chapter-overview-expanded .statistics-chapter-carousel-static {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.statistics-chapter-overview-expanded .statistics-chapter-viewport {
+	overflow: visible;
+	padding-bottom: var(--space-3);
+}
+
+.statistics-chapter-overview-expanded .statistics-chapter-track {
+	display: grid;
+	width: 100%;
+	grid-template-columns: repeat(auto-fill, var(--statistics-chapter-card-width));
+	justify-content: start;
+	gap: var(--space-3);
+}
+
+.statistics-chapter-overview-expanded .statistics-chapter-card {
+	width: var(--statistics-chapter-card-width);
+	min-width: var(--statistics-chapter-card-width);
+}

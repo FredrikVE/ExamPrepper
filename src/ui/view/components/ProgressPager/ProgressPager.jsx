@@ -28,7 +28,7 @@ export default function ProgressPager(props) {
                         minimalCompactEntries={props.minimalCompactEntries}
                         shouldUseCompactDots={props.shouldUseCompactDots}
                         shouldUseResponsiveCompactDots={props.shouldUseResponsiveCompactDots}
-                        submitted={props.submitted}
+                        showEntryOutcome={props.showEntryOutcome}
                         onSelectEntry={props.onSelectEntry}
                         dotsLabel={props.dotsLabel}
                         goToEntryLabel={props.goToEntryLabel}

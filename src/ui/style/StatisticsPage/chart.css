@@ -1,109 +1,126 @@
 /* src/ui/style/StatisticsPage/chart.css */
-.statistics-chart-panel {
-	display: grid;
-	grid-template-rows: auto minmax(360px, 1fr);
-	min-height: 460px;
-}
-
-.statistics-chart {
+.statistics-score-chart {
 	min-width: 0;
-	min-height: 360px;
-	height: 100%;
+	width: 100%;
+	padding-top: var(--space-1);
 }
 
-.statistics-chart-tooltip {
+.statistics-score-chart-plot {
+	position: relative;
+	min-width: 0;
+	width: 100%;
+	height: 180px;
+	padding: var(--space-2) 0 24px 40px;
+}
+
+.statistics-score-chart-grid {
+	position: absolute;
+	inset: var(--space-2) 0 24px 40px;
 	display: grid;
-	gap: 4px;
-	border: 1px solid var(--line-strong);
-	border-radius: var(--radius-sm);
-	background: var(--panel-strong);
-	box-shadow: var(--shadow-card);
-	padding: var(--space-4);
-	color: var(--text-main);
+	grid-template-rows: repeat(4, 1fr) auto;
+	pointer-events: none;
 }
 
-.statistics-chart-tooltip span {
+.statistics-score-chart-gridline {
+	position: relative;
+	border-top: 1px solid var(--statistics-chart-grid);
+}
+
+.statistics-score-chart-gridline span {
+	position: absolute;
+	right: calc(100% + var(--space-2));
+	top: -0.55em;
+	width: 38px;
+	color: var(--text-soft);
+	font-size: 0.62rem;
+	font-weight: 650;
+	text-align: right;
+}
+
+.statistics-score-chart-list {
+	position: absolute;
+	top: var(--space-2);
+	right: 0;
+	bottom: 24px;
+	left: 50px;
+	display: flex;
+	min-width: 0;
+	align-items: stretch;
+	justify-content: flex-start;
+	gap: clamp(var(--space-2), 0.8vw, var(--space-3));
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.statistics-score-chart-point {
+	display: grid;
+	min-width: 0;
+	flex: 0 1 38px;
+	height: 100%;
+	align-items: end;
+}
+
+.statistics-score-chart-bar-area {
+	display: flex;
+	width: 100%;
+	min-width: 0;
+	height: 100%;
+	align-items: flex-end;
+	justify-content: flex-start;
+}
+
+.statistics-score-chart-bar {
+	display: block;
+	width: 100%;
+	max-width: 38px;
+	height: var(--statistics-score-chart-value);
+	min-height: 2px;
+	border-radius: 6px 6px 0 0;
+	background: var(--statistics-chart-bar);
+	transition: transform var(--transition-fast), filter var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.statistics-score-chart-bar[data-latest="true"] {
+	background: var(--statistics-chart-bar-latest);
+}
+
+.statistics-score-chart-point:hover .statistics-score-chart-bar {
+	transform: translateY(-2px);
+	filter: brightness(1.04);
+	box-shadow: 0 7px 16px var(--statistics-chart-hover-shadow);
+}
+
+.statistics-score-chart-axis-labels {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 50px;
+	display: flex;
+	align-items: end;
+	justify-content: space-between;
+	color: var(--text-soft);
+	font-size: 0.62rem;
+	font-weight: 650;
+	pointer-events: none;
+}
+
+.statistics-score-chart-axis-labels span {
+	min-width: 0;
+	white-space: nowrap;
+}
+
+.statistics-score-chart-empty {
+	display: grid;
+	min-height: 180px;
+	place-items: center;
+	margin: 0;
+	border: 1px dashed var(--statistics-overview-border);
+	border-radius: var(--radius-md);
+	background: var(--statistics-history-head-surface);
+	padding: var(--space-6);
 	color: var(--text-muted);
-	font-size: 12px;
-	font-weight: 700;
-}
-
-.statistics-chart {
-	--statistics-score-low: #1463ff;
-	--statistics-score-building: #12b6aa;
-	--statistics-score-mid: #7c3aed;
-	--statistics-score-strong: #ff8a00;
-	--statistics-score-excellent: #20a83a;
-	--statistics-trend-dot-stroke: #fff;
-}
-
-.statistics-score-gradient-stop-low {
-	stop-color: var(--statistics-score-low);
-}
-
-.statistics-score-gradient-stop-building {
-	stop-color: var(--statistics-score-building);
-}
-
-.statistics-score-gradient-stop-mid {
-	stop-color: var(--statistics-score-mid);
-}
-
-.statistics-score-gradient-stop-strong {
-	stop-color: var(--statistics-score-strong);
-}
-
-.statistics-score-gradient-stop-excellent {
-	stop-color: var(--statistics-score-excellent);
-}
-
-.statistics-chart .recharts-cartesian-grid line {
-	stroke: var(--line);
-	stroke-dasharray: 4 4;
-}
-
-.statistics-trend-axis text,
-.statistics-trend-xaxis-label {
-	fill: var(--text-soft);
-}
-
-.statistics-trend-xaxis-label {
-	font-size: 12px;
-	font-weight: 600;
-}
-
-.statistics-score-line .recharts-line-curve {
-	stroke: url(#scoreTrendGradient);
-	stroke-width: 3;
-}
-
-.statistics-trend-dot,
-.statistics-trend-active-dot {
-	stroke: var(--statistics-trend-dot-stroke);
-	stroke-width: 2.5;
-}
-
-.statistics-trend-label {
-	font-size: 12px;
-	font-weight: 700;
-}
-
-.statistics-trend-score-low {
-	fill: var(--statistics-score-low);
-}
-
-.statistics-trend-score-building {
-	fill: var(--statistics-score-building);
-}
-
-.statistics-trend-score-mid {
-	fill: var(--statistics-score-mid);
-}
-
-.statistics-trend-score-strong {
-	fill: var(--statistics-score-strong);
-}
-
-.statistics-trend-score-excellent {
-	fill: var(--statistics-score-excellent);
+	font-size: 0.78rem;
+	font-weight: 650;
+	text-align: center;
 }

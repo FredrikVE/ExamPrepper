@@ -192,6 +192,7 @@ ikke historisk dagbok; historikken bor i git.
 | 2026-06 | Ingen `.dark`-selektorer i komponent-CSS. Dark mode går utelukkende via tokens. |
 | 2026-07 | Back-kontrakten flyter som ett objekt (`backContract`), ikke som løse argumenter mellom app-shell og side-ViewModels. |
 | 2026-07, presisert 2026-07-26 | `LOAD_STATUS` og `useLoadModel` eier teknisk ressursstatus. `WORKSPACE_STATE_KINDS` eier page-state-unionen. `combineLoadStatuses` og `createWorkspaceState` er avledninger; `WorkspaceState` er canonical renderer. Views importerer ikke `LOAD_STATUS`. |
+| 2026-09 | `WorkspaceState` er generalisert fra page-level state surface til workspace state surface med eksplisitt `PAGE`/`EMBEDDED` scope. Scope styrer presentasjon og live-region-oppførsel. `WORKSPACE_STATE_KINDS` og `createWorkspaceState` er uendret og forblir eneste union og eneste canonical avledning. |
 | 2026-07-05 | Feiltekst til bruker er produkttekst fra i18n. Teknisk feilobjekt logges kun i dev og lekker ikke direkte til UI. |
 | 2026-07-07, presisert 2026-07-24 | `WorkspaceScaffold` i `components/WorkspaceScaffold/` er canonical eier av ytre workspace-skall, header-/footer-/overlay-slots og scrollflaten `.workspace-scaffold-body`. Sidefamilier som trenger annen body-layout eller overflow-policy bruker scaffoldets deklarerte `--scaffold-body-*` hooks på scaffold-roten og styler ikke intern body direkte. |
 | 2026-07-07, erstattet 2026-07-26 | React-wrapperen `WorkSpaceCard.jsx` er fjernet. `.workspace-card` i `style/Shared/WorkSpaceCard/workspace-card.css` er en navngitt lokal flate som brukes av `QuestionCard`, ikke en app-bred canonical primitive. En ny delt kortprimitive innføres bare ved dokumentert felles semantikk og kontrakt. |
@@ -869,11 +870,11 @@ forlater og går tilbake til Glossary. Nye persistensunntak krever et eksplisitt
 ### Fallgruven ved `backTo`
 
 `backTo` er ikke en ubetinget destinasjon. Målet går gjennom `changeScreen()` og målskjermens guards.
-`OVERVIEW` kan være aktiv uten valgt fag, men har `SELECT` som tilbake-mål; siden SELECT krever fag,
-kan tilbake fra OVERVIEW ende på SUBJECTS. Nye slike asymmetrier skal unngås eller låses med en
-eksplisitt forventningstest. Den eksisterende OVERVIEW-asymmetrien er dokumentert, men
-`backTo`-nåbarhet er foreløpig ikke testlåst som en generell invariant; dagens config-test verifiserer
-bare at `backTo` peker på en gyldig skjerm-ID.
+`OVERVIEW` har `LEARNING_PATH` som deklarert tilbake-mål. Fordi Statistics kan åpnes uten globalt valgt fag,
+binder Statistics-ViewModelen back-handlingen til subject-id-en siden faktisk viser og bruker den eksisterende
+subject-selection-overgangen til Læringsstien. Navigation-ViewModelen lagrer derfor ikke en historisk
+Statistics-returskjerm. Back-adferd som trenger feature-kontekst holdes ved feature-grensen i stedet for å
+utvide global navigation-state.
 
 ### Når dagens modell ikke lenger er nok
 

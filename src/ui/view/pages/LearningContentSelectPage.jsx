@@ -4,6 +4,7 @@ import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerV
 import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
 import Footer from "../components/Footer/Footer.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 import TestSetGrid from "../components/LearningContentSelectPage/TestSetGrid.jsx";
 import FlashcardDeckGrid from "../components/LearningContentSelectPage/FlashcardDeckGrid.jsx";
 import SearchSheetBody from "../components/Search/SearchSheetBody.jsx";
@@ -80,7 +81,7 @@ export default function LearningContentSelectPage({ viewModel }) {
 				contentToggleBackLabel={viewModel.contentToggleBackLabel}
 			/>
 
-			<WorkspaceState state={viewModel.workspaceState}>
+			<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
 				<>
 					{viewModel.isTestSetContentActive && (
 						<TestSetGrid

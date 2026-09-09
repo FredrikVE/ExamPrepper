@@ -486,9 +486,9 @@ Eksempel: en ny `SUMMARY`-skjerm som krever valgt fag.
 
 ### Fallgruve ved `backTo`
 
-`goBack()` sender ikke direkte til `backTo`; målet går gjennom `changeScreen()` og målskjermens guards. `OVERVIEW` kan nås uten valgt fag, men peker til `SELECT`, som krever fag. Tilbake fra OVERVIEW uten valgt fag ender derfor på SUBJECTS via guarden.
+`goBack()` sender ikke direkte til `backTo`; målet går gjennom `changeScreen()` og målskjermens guards. `OVERVIEW` peker deklarativt til `LEARNING_PATH`. Statistics kan åpnes uten globalt valgt fag, så Statistics-ViewModelen binder back-handlingen til faget siden faktisk viser og bruker den eksisterende subject-selection-overgangen for å åpne Læringsstien med dette faget. Dersom ingen visningssubject kan avledes fordi katalogen ikke er klar, brukes den generiske back-kontrakten.
 
-`navigation.test.js` låser allerede config-kompletthet, felttyper, gyldige skjermreferanser og at ukjent skjerm kaster. Den identifiserte luken er **nåbarhet/forventet redirect for `backTo`**. Nye asymmetrier bør enten unngås eller låses med en eksplisitt test; en generell «må ikke være strengere»-regel kan ikke legges inn uten å håndtere dagens OVERVIEW-unntak.
+`navigation.test.js` låser config-kompletthet, felttyper, gyldige skjermreferanser og at ukjent skjerm kaster. Back-adferd som trenger sidekontekst, slik som Statistics sitt viste fag, bindes i den aktuelle Page-ViewModelen i stedet for å lagre historisk returskjerm i global navigation-state.
 
 Du trenger fortsatt ingen dispatcher, action-typer eller adapter. Legg til deklarativ skjermdata, en overgang bare når nødvendig, og en rendergren.
 
@@ -506,6 +506,16 @@ En tyngre overgangsmodell blir først berettiget når én eller flere av disse o
 Det er da `AppNavigationViewModel` og next-state-beregningen som først blir presset. `App.jsx` kan fortsatt beholde enkel `activeScreen`-mapping så lenge overgangsmodellen produserer én aktiv skjerm.
 
 Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i ViewModelen og rendering i `App.jsx`. Utvid ved å legge til en node og en gren, ikke ved å innføre et rammeverk.
+
+## Statistics — lokale presentasjonskontrakter 2026-09-09
+
+Disse reglene er feature-spesifikke Statistics-kontrakter, ikke globale frontend-arkitekturlover:
+
+- **S1 — Feilgrensen følger ressursgrensen.** Statistics bruker én `useLoadModel()`, én page-feilflate og én retry. De fem embedded kortene deler ressursen og rendrer ikke egne feilflater.
+- **S2 — Kortets tomhet avgjøres i Statistics-ViewModel.** De fem kortnivå-predikatene eies samlet av `createStatisticsCardStates.js`. Grafens eksisterende `points.length === 0` er rendererens håndtering av degenerert input og forblir lokal i `StatisticsScoreChart`.
+- **S3 — En boolean er enten state-input eller render-conditional, aldri begge.** Evidence-/progress-/history-feltene som bestemmer kortstate sendes inn i state-avledningen og brukes ikke samtidig som konkurrerende empty-conditionals i View.
+
+S1 er kandidat for opprykk til en generell regel først dersom en andre feature får samme ressurs-/embedded-mønster.
 
 ## LearningPath — eierskap og faktisk status 2026-08-24
 

@@ -1,4 +1,4 @@
-//src/navigation/navigation.js
+// src/navigation/navigation.js
 import { CONTENT_ICON_KEYS } from "../constants/ContentIconKeys.js";
 export const NAV_SCREENS = {
 	SUBJECTS: "subjects",
@@ -80,7 +80,7 @@ export const SCREEN_CONFIG = {
 	[NAV_SCREENS.OVERVIEW]: {
 		requiresSubject: false,
 		requiresExam: false,
-		backTo: NAV_SCREENS.SELECT,
+		backTo: NAV_SCREENS.LEARNING_PATH,
 		showsSubjectSwitcher: false,
 		pageClassName: "exam-select-page",
 		shellClassName: "exam-select-shell"
@@ -111,6 +111,10 @@ export const LEARNING_CONTENT_TYPES = {
 	GLOSSARY: "glossary",
 	LEARNING_PATH: "learning-path"
 };
+
+/* Innholdstypen SELECT faller tilbake til når aktiv entry targeter en annen skjerm.
+   Samme verdi som AppNavigationViewModel bruker som initial state. */
+export const DEFAULT_SELECT_CONTENT_ENTRY_ID = LEARNING_CONTENT_TYPES.EXAMS;
 
 export const TEST_TYPES = {
 	CHAPTER_TEST: "chapter-test",

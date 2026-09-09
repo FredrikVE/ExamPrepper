@@ -1,163 +1,140 @@
 // src/ui/viewmodel/StatisticsPageViewModel.js
-import { useCallback, useMemo } from "react";
-import { APP_AUTH_STATUS } from "../../auth/AppAuthState.js";
-import { LOAD_STATUS } from "./LoadState/loadStatus.js";
-import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
-import createStatisticsDashboardModel from "./StatisticsPage/createStatisticsDashboardModel.js";
-import useLoadModel from "./LoadState/useLoadModel.js";
-import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
-import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
+import { SUBJECT_SWITCHER_KINDS } from "./SubjectCatalog/subjectSwitcherKinds.js";
+import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
+import { createStatisticsViewToggleModel, selectStatisticsView } from "./StatisticsPage/statisticsViewToggle.js";
+import useStatisticsOverviewModel from "./StatisticsPage/Overview/useStatisticsOverviewModel.js";
 
 export default function useStatisticsPageViewModel(props) {
-	const isAuthLoading = props.authState.status === APP_AUTH_STATUS.LOADING;
-	const isSignedIn = props.authState.status === APP_AUTH_STATUS.SIGNED_IN;
-	const isSignedOut = (
-		props.authState.status === APP_AUTH_STATUS.DISABLED
-		|| props.authState.status === APP_AUTH_STATUS.SIGNED_OUT
-	);
-
-	let userId = null;
-
-	if (isSignedIn) {
-		userId = props.authState.userId;
-	}
-
-	const text = useMemo(() => createStatisticsTextModel(props.t), [props.t]);
-
-	const executeStatisticsLoad = useCallback(() => {
-		if (!isSignedIn) {
-			return Promise.resolve(null);
-		}
-
-		return props.getMyStatisticsUseCase.execute();
-	}, [props.getMyStatisticsUseCase, isSignedIn]);
-
-	const statisticsLoad = useLoadModel({
-		execute: executeStatisticsLoad,
-		emptyData: null,
-		errorMessage: text.loadErrorMessage,
-		resourceKey: userId,
-		isEnabled: isSignedIn,
-		onLoaded: null
+	const text = createStatisticsTextModel(props.t);
+	const viewToggle = createStatisticsViewToggleModel(text);
+	const displayedSubject = resolveDisplayedStatisticsSubject({ subjectId: props.subjectId, selectedSubject: props.selectedSubject, subjectSwitcher: props.subjectSwitcher });
+	const displayedSubjectId = displayedSubject?.id ?? props.subjectId;
+	const overview = useStatisticsOverviewModel({
+		getSubjectStatisticsUseCase: props.getSubjectStatisticsUseCase,
+		subjectId: displayedSubjectId,
+		formatDate: props.formatDate,
+		language: props.language,
+		selectedSubject: displayedSubject,
+		text,
+		authState: props.authState,
+		onStartNewExam: props.onStartNewExam
 	});
 
-	const authStatus = resolveAuthLoadStatus(isAuthLoading);
-	const pageStatus = combineLoadStatuses([
-		authStatus,
-		statisticsLoad.status
-	]);
-	const statistics = statisticsLoad.data;
-	const pageErrorMessage = statisticsLoad.error ?? text.loadErrorMessage;
-
-	const dashboard = useMemo(() => createStatisticsDashboardModel(
-		statistics, props.formatDate, text
-	), [statistics, props.formatDate, text]);
-
-	const retryLoadStatistics = useCallback(() => {
-		statisticsLoad.reload();
-	}, [statisticsLoad.reload]);
-
-	const startNewExam = useCallback(() => {
-		props.onStartNewExam();
-	}, [props.onStartNewExam]);
-
-	const workspaceState = createStatisticsWorkspaceState({
-		pageStatus,
-		isSignedOut,
-		isStatisticsEmpty: dashboard.isStatisticsEmpty,
-		text,
-		pageErrorMessage,
-		onRetryLoadStatistics: retryLoadStatistics,
-		onStartNewExam: startNewExam
+	const subjectSelector = createStatisticsSubjectSelector({
+		subjectSwitcher: props.subjectSwitcher,
+		displayedSubject,
+		text
+	});
+	const workspaceState = createStatisticsPageWorkspaceState({
+		subjectId: displayedSubjectId,
+		subjectSwitcher: props.subjectSwitcher,
+		overviewWorkspaceState: overview.workspaceState,
+		t: props.t
+	});
+	const backContract = createStatisticsBackContract({
+		backContract: props.backContract,
+		displayedSubjectId,
+		onBackToLearningPath: props.onBackToLearningPath
 	});
 
 	return {
-		statistics,
 		workspaceState,
-		backContract: props.backContract,
-
+		overview: overview.presentation,
+		overviewCardStates: overview.cardStates,
+		overviewActions: overview.actions,
+		subjectId: displayedSubjectId,
+		selectedSubject: displayedSubject,
+		subjectSwitcher: props.subjectSwitcher,
+		subjectSelector,
+		onSelectSubject: props.onSelectSubject,
+		backContract,
 		pageTitle: text.pageTitle,
 		pageSubtitle: text.pageSubtitle,
-		loadingTitle: text.loadingTitle,
-		loadingBody: text.loadingBody,
-		signedOutTitle: text.signedOutTitle,
-		signedOutBody: text.signedOutBody,
-		emptyTitle: text.emptyTitle,
-		emptyBody: text.emptyBody,
-		errorTitle: text.errorTitle,
-		retryButtonLabel: text.retryButton,
-		startNewExamLabel: text.startNewExamButton,
-
-		...dashboard,
-
-		onRetryLoadStatistics: retryLoadStatistics,
-		onStartNewExam: startNewExam
+		viewToggle: {
+			...viewToggle,
+			onSelectEntry: selectStatisticsView
+		}
 	};
 }
 
-function createStatisticsWorkspaceState({
-	pageStatus,
-	isSignedOut,
-	isStatisticsEmpty,
-	text,
-	pageErrorMessage,
-	onRetryLoadStatistics,
-	onStartNewExam
-}) {
-	const loadWorkspaceState = createWorkspaceState({
-		loadStatus: pageStatus,
-		isEmpty: false,
-		labels: {
-			loading: text.loadingTitle,
-			errorTitle: text.errorTitle,
-			errorBody: pageErrorMessage,
-			emptyTitle: "",
-			emptyBody: ""
-		},
-		errorAction: {
-			label: text.retryButton,
-			onAction: onRetryLoadStatistics
-		}
-	});
-
-	if (loadWorkspaceState.kind !== WORKSPACE_STATE_KINDS.CONTENT) {
-		return loadWorkspaceState;
+function createStatisticsBackContract({ backContract, displayedSubjectId, onBackToLearningPath }) {
+	if (displayedSubjectId === null) {
+		return backContract;
 	}
 
-	if (isSignedOut) {
-		return {
-			kind: WORKSPACE_STATE_KINDS.EMPTY,
-			title: text.signedOutTitle,
-			body: text.signedOutBody,
-			action: {
-				label: text.startNewExamButton,
-				onAction: onStartNewExam
-			}
-		};
+	return {
+		...backContract,
+		onBack: () => onBackToLearningPath(displayedSubjectId)
+	};
+}
+
+function resolveDisplayedStatisticsSubject({ subjectId, selectedSubject, subjectSwitcher }) {
+	if (subjectId !== null) {
+		return selectedSubject;
 	}
 
-	if (isStatisticsEmpty) {
+	if (subjectSwitcher.kind !== SUBJECT_SWITCHER_KINDS.UNSELECTED) {
+		return null;
+	}
+
+	const firstSubject = subjectSwitcher.subjects[0];
+
+	if (firstSubject === undefined) {
+		throw new Error("Unselected subject switcher requires at least one subject");
+	}
+
+	return firstSubject;
+}
+
+function createStatisticsSubjectSelector({ subjectSwitcher, displayedSubject, text }) {
+	if (displayedSubject === null) {
 		return {
-			kind: WORKSPACE_STATE_KINDS.EMPTY,
-			title: text.emptyTitle,
-			body: text.emptyBody,
-			action: {
-				label: text.startNewExamButton,
-				onAction: onStartNewExam
-			}
+			...subjectSwitcher,
+			menuLabel: text.subjectSelectorMenuLabel,
+			closeLabel: text.subjectSelectorCloseLabel
 		};
 	}
 
 	return {
-		kind: WORKSPACE_STATE_KINDS.CONTENT
+		...subjectSwitcher,
+		kind: SUBJECT_SWITCHER_KINDS.READY,
+		currentSubject: displayedSubject,
+		label: displayedSubject.name,
+		menuLabel: text.subjectSelectorMenuLabel,
+		closeLabel: text.subjectSelectorCloseLabel
 	};
 }
 
-function resolveAuthLoadStatus(isAuthLoading) {
-	if (isAuthLoading) {
-		return LOAD_STATUS.LOADING;
+function createStatisticsPageWorkspaceState({ subjectId, subjectSwitcher, overviewWorkspaceState, t }) {
+	if (subjectId !== null) {
+		return overviewWorkspaceState;
 	}
 
-	return LOAD_STATUS.READY;
+	switch (subjectSwitcher.kind) {
+		case SUBJECT_SWITCHER_KINDS.LOADING:
+			return {
+				kind: WORKSPACE_STATE_KINDS.LOADING,
+				label: subjectSwitcher.label
+			};
+
+		case SUBJECT_SWITCHER_KINDS.ERROR:
+			return {
+				kind: WORKSPACE_STATE_KINDS.ERROR,
+				title: t.errorPrefix,
+				body: subjectSwitcher.label,
+				action: null
+			};
+
+		case SUBJECT_SWITCHER_KINDS.EMPTY:
+			return {
+				kind: WORKSPACE_STATE_KINDS.EMPTY,
+				title: subjectSwitcher.label,
+				body: "",
+				action: null
+			};
+
+		default:
+			throw new Error(`Unknown subject switcher kind: ${String(subjectSwitcher.kind)}`);
+	}
 }

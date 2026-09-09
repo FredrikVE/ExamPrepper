@@ -30,7 +30,7 @@ export default function FlipcardsMobileFooterSheet(props) {
 			minimalCompactEntries={props.progressEntries}
 			shouldUseCompactDots={props.progressEntries.length > 9}
 			shouldUseResponsiveCompactDots={true}
-			submitted={false}
+			showEntryOutcome={false}
 			onSelectEntry={props.onGoToCard}
 			dotsLabel={props.labels.toolMenuPagerLabel}
 			goToEntryLabel={props.labels.goToCardLabel}

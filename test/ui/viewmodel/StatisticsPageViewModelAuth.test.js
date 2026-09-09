@@ -1,115 +1,146 @@
 // test/ui/viewmodel/StatisticsPageViewModelAuth.test.js
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { LOAD_STATUS } from "../../../src/ui/viewmodel/LoadState/loadStatus.js";
+import { beforeEach, expect, jest, test } from "@jest/globals";
 import { WORKSPACE_STATE_KINDS } from "../../../src/ui/viewmodel/WorkspaceState/workspaceStateKinds.js";
+import { SUBJECT_SWITCHER_KINDS } from "../../../src/ui/viewmodel/SubjectCatalog/subjectSwitcherKinds.js";
 
-const useCallback = jest.fn((callback) => callback);
-const useMemo = jest.fn((factory) => factory());
-const useLoadModel = jest.fn(() => ({
-	status: LOAD_STATUS.READY,
-	data: null,
-	error: null,
-	reload: jest.fn()
+const useStatisticsOverviewModel = jest.fn(() => ({
+	workspaceState: { kind: WORKSPACE_STATE_KINDS.CONTENT },
+	presentation: { isEmpty: false },
+	actions: { selectPeriod: jest.fn() }
 }));
 
-jest.unstable_mockModule("react", () => ({
-	useCallback,
-	useMemo
-}));
-
-jest.unstable_mockModule("../../../src/ui/viewmodel/LoadState/useLoadModel.js", () => ({
-	default: useLoadModel
+jest.unstable_mockModule("../../../src/ui/viewmodel/StatisticsPage/Overview/useStatisticsOverviewModel.js", () => ({
+	default: useStatisticsOverviewModel
 }));
 
 jest.unstable_mockModule("../../../src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js", () => ({
-	default: () => ({
-		loadErrorMessage: "load error",
-		loadingTitle: "loading",
-		errorTitle: "error",
-		retryButton: "retry",
-		signedOutTitle: "signed out",
-		signedOutBody: "sign in",
-		startNewExamButton: "start",
-		emptyTitle: "empty",
-		emptyBody: "empty body",
-		pageTitle: "statistics",
-		pageSubtitle: "subtitle",
-		loadingBody: "loading body"
-	})
-}));
-
-jest.unstable_mockModule("../../../src/ui/viewmodel/StatisticsPage/createStatisticsDashboardModel.js", () => ({
-	default: () => ({
-		isStatisticsEmpty: true
-	})
+	default: () => ({ pageTitle: "statistics", pageSubtitle: "subtitle", subjectSelectorMenuLabel: "Choose subject", subjectSelectorCloseLabel: "Close subject picker" })
 }));
 
 const { default: useStatisticsPageViewModel } = await import("../../../src/ui/viewmodel/StatisticsPageViewModel.js");
 
-function renderViewModel(authState) {
-	const getMyStatisticsUseCase = {
-		execute: jest.fn().mockResolvedValue(null)
-	};
-
+test("wires subject-scoped statistics into the overview model", () => {
+	const getSubjectStatisticsUseCase = { execute: jest.fn() };
+	const onStartNewExam = jest.fn();
+	const authState = { status: "signed-in", userId: "user-1" };
 	const viewModel = useStatisticsPageViewModel({
-		getMyStatisticsUseCase,
+		getSubjectStatisticsUseCase,
+		subjectId: "in2120",
+		selectedSubject: { id: "in2120", name: "IN2120" },
+		language: "no",
+		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.READY, subjects: [{ id: "in2120", name: "IN2120" }], currentSubject: { id: "in2120", name: "IN2120" }, label: "IN2120", canOpen: true },
+		onSelectSubject: jest.fn(),
+		onBackToLearningPath: jest.fn(),
 		formatDate: jest.fn(),
 		t: {},
 		authState,
 		backContract: { onBack: jest.fn() },
+		onStartNewExam
+	});
+
+	expect(useStatisticsOverviewModel).toHaveBeenCalledWith(expect.objectContaining({
+		getSubjectStatisticsUseCase,
+		subjectId: "in2120",
+		language: "no",
+		authState,
+		onStartNewExam
+	}));
+	expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
+	expect(viewModel.overview).toEqual({ isEmpty: false });
+	expect(viewModel.subjectSelector).toEqual({ kind: SUBJECT_SWITCHER_KINDS.READY, subjects: [{ id: "in2120", name: "IN2120" }], currentSubject: { id: "in2120", name: "IN2120" }, label: "IN2120", canOpen: true, menuLabel: "Choose subject", closeLabel: "Close subject picker" });
+});
+
+test("viser første SubjectSelect-fag i Statistics uten å velge det globalt", () => {
+	const getSubjectStatisticsUseCase = { execute: jest.fn() };
+	const onSelectSubject = jest.fn();
+	const onBackToLearningPath = jest.fn();
+	const firstSubject = { id: "in4150", code: "IN4150", name: "IN4150" };
+	const secondSubject = { id: "in2120", code: "IN2120", name: "IN2120" };
+
+	const viewModel = useStatisticsPageViewModel({
+		getSubjectStatisticsUseCase,
+		subjectId: null,
+		selectedSubject: null,
+		language: "no",
+		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.UNSELECTED, subjects: [firstSubject, secondSubject], currentSubject: null, label: "Choose subject", canOpen: true },
+		onSelectSubject,
+		onBackToLearningPath,
+		formatDate: jest.fn(),
+		t: {},
+		authState: { status: "signed-in", userId: "user-1" },
+		backContract: { onBack: jest.fn() },
 		onStartNewExam: jest.fn()
 	});
 
-	return {
-		getMyStatisticsUseCase,
-		viewModel
-	};
-}
+	expect(onSelectSubject).not.toHaveBeenCalled();
+	expect(useStatisticsOverviewModel).toHaveBeenCalledWith(expect.objectContaining({
+		getSubjectStatisticsUseCase,
+		subjectId: "in4150",
+		selectedSubject: firstSubject
+	}));
+	expect(viewModel.subjectId).toBe("in4150");
+	expect(viewModel.selectedSubject).toBe(firstSubject);
+	expect(viewModel.subjectSelector).toEqual({
+		kind: SUBJECT_SWITCHER_KINDS.READY,
+		subjects: [firstSubject, secondSubject],
+		currentSubject: firstSubject,
+		label: "IN4150",
+		canOpen: true,
+		menuLabel: "Choose subject",
+		closeLabel: "Close subject picker"
+	});
+	expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
 
-describe("Statistics auth state", () => {
-	beforeEach(() => {
-		useCallback.mockClear();
-		useMemo.mockClear();
-		useLoadModel.mockClear();
+	viewModel.backContract.onBack();
+
+	expect(onBackToLearningPath).toHaveBeenCalledWith("in4150");
+});
+
+test("does not replace a non-null subject id when the catalog cannot resolve it", () => {
+	const onSelectSubject = jest.fn();
+
+	useStatisticsPageViewModel({
+		getSubjectStatisticsUseCase: { execute: jest.fn() },
+		subjectId: "missing-subject",
+		selectedSubject: null,
+		language: "no",
+		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.UNSELECTED, subjects: [{ id: "in4150", name: "IN4150" }], currentSubject: null, label: "Choose subject", canOpen: true },
+		onSelectSubject,
+		onBackToLearningPath: jest.fn(),
+		formatDate: jest.fn(),
+		t: {},
+		authState: { status: "signed-in", userId: "user-1" },
+		backContract: { onBack: jest.fn() },
+		onStartNewExam: jest.fn()
 	});
 
-	test("keeps statistics disabled while auth is loading", () => {
-		const { viewModel } = renderViewModel({ status: "loading" });
+	expect(onSelectSubject).not.toHaveBeenCalled();
+});
 
-		expect(useLoadModel.mock.calls[0][0]).toMatchObject({
-			resourceKey: null,
-			isEnabled: false
-		});
-		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
+test("uses canonical error state when the subject catalog fails before a default can be selected", () => {
+	const viewModel = useStatisticsPageViewModel({
+		getSubjectStatisticsUseCase: { execute: jest.fn() },
+		subjectId: null,
+		selectedSubject: null,
+		language: "no",
+		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.ERROR, subjects: [], currentSubject: null, label: "Could not load subjects", canOpen: false },
+		onSelectSubject: jest.fn(),
+		onBackToLearningPath: jest.fn(),
+		formatDate: jest.fn(),
+		t: { errorPrefix: "Error" },
+		authState: { status: "signed-in", userId: "user-1" },
+		backContract: { onBack: jest.fn() },
+		onStartNewExam: jest.fn()
 	});
 
-	test("treats disabled auth as signed out without loading user statistics", async () => {
-		const { getMyStatisticsUseCase, viewModel } = renderViewModel({ status: "disabled" });
-		const executeStatisticsLoad = useLoadModel.mock.calls[0][0].execute;
-
-		expect(useLoadModel.mock.calls[0][0]).toMatchObject({
-			resourceKey: null,
-			isEnabled: false
-		});
-		expect(viewModel.workspaceState).toMatchObject({
-			kind: WORKSPACE_STATE_KINDS.EMPTY,
-			title: "signed out"
-		});
-
-		await expect(executeStatisticsLoad()).resolves.toBeNull();
-		expect(getMyStatisticsUseCase.execute).not.toHaveBeenCalled();
+	expect(viewModel.workspaceState).toEqual({
+		kind: WORKSPACE_STATE_KINDS.ERROR,
+		title: "Error",
+		body: "Could not load subjects",
+		action: null
 	});
+});
 
-	test("loads statistics with the signed-in user identity as resource key", async () => {
-		const { getMyStatisticsUseCase } = renderViewModel({ status: "signed-in", userId: "user-1" });
-		const loadOptions = useLoadModel.mock.calls[0][0];
-
-		expect(loadOptions).toMatchObject({
-			resourceKey: "user-1",
-			isEnabled: true
-		});
-
-		await loadOptions.execute();
-		expect(getMyStatisticsUseCase.execute).toHaveBeenCalledTimes(1);
-	});
+beforeEach(() => {
+	useStatisticsOverviewModel.mockClear();
 });

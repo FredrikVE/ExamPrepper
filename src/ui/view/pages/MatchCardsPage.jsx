@@ -4,6 +4,7 @@ import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerV
 import ProgressBar from "../components/Shared/ProgressBar/ProgressBar.jsx";
 import { PROGRESS_BAR_VARIANTS } from "../components/Shared/ProgressBar/progressBarVariants.js";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import MatchCardsGrid from "../components/MatchCards/MatchCardsGrid.jsx";
 
@@ -59,7 +60,7 @@ export default function MatchCardsPage({ viewModel }) {
 			overlay={null}
 			scrollToTopRequestId={null}
 		>
-			<WorkspaceState state={viewModel.workspaceState}>
+			<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
 				{workspaceContent}
 			</WorkspaceState>
 		</WorkspaceScaffold>

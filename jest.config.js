@@ -1,7 +1,9 @@
 //jest.config.js
 export default {
     testEnvironment: "node",
-    transform: {},
+    transform: {
+        "\\.jsx$": "<rootDir>/test/helpers/jsxOxcTransformer.cjs"
+    },
     extensionsToTreatAsEsm: [".jsx"],
     testMatch: [
         "**/test/**/*.test.js",

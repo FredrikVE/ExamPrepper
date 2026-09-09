@@ -13,6 +13,7 @@ import ProgressBar from "../components/Shared/ProgressBar/ProgressBar.jsx";
 import { PROGRESS_BAR_VARIANTS } from "../components/Shared/ProgressBar/progressBarVariants.js";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 
 export default function LearningSessionPage({ viewModel }) {
 	const questionFocusRef = useRef(null);
@@ -67,7 +68,7 @@ export default function LearningSessionPage({ viewModel }) {
 			overlay={overlay}
 			scrollToTopRequestId={viewModel.currentQuestionRenderKey}
 		>
-			<WorkspaceState state={viewModel.workspaceState}>
+			<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
 				<div className="learning-session-content">
 					<LearningSessionHeader model={viewModel.headerModel} />
 

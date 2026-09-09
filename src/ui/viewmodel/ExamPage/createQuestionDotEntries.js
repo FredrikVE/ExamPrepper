@@ -1,18 +1,20 @@
 // src/ui/viewmodel/ExamPage/createQuestionDotEntries.js
+const FIRST_QUESTION_INDEX = 0;
+const QUESTION_INDEX_STEP = 1;
+const ENTRY_NUMBER_OFFSET = 1;
+
 export function createQuestionDotEntries(questions, currentQuestionIndex, questionCorrectnessByQuestionId) {
 	const questionDotEntries = [];
 
-	for (let questionIndex = 0; questionIndex < questions.length; questionIndex += 1) {
+	for (let questionIndex = FIRST_QUESTION_INDEX; questionIndex < questions.length; questionIndex += QUESTION_INDEX_STEP) {
 		const question = questions[questionIndex];
 
-		questionDotEntries.push(
-			createQuestionDotEntry(
-				question.id,
-				questionIndex,
-				currentQuestionIndex,
-				questionCorrectnessByQuestionId[question.id]
-			)
-		);
+		questionDotEntries.push(createQuestionDotEntry(
+			question.id,
+			questionIndex,
+			currentQuestionIndex,
+			questionCorrectnessByQuestionId[question.id]
+		));
 	}
 
 	return questionDotEntries;
@@ -27,14 +29,16 @@ export function createCompactQuestionDotEntries(compactQuestionDotEntries, quest
 			continue;
 		}
 
-		const question = questions[compactQuestionDotEntry.questionIndex] ?? null;
+		const questionIndex = compactQuestionDotEntry.questionIndex;
+		const question = questions[questionIndex] ?? null;
 		const questionId = question?.id ?? compactQuestionDotEntry.key;
 		const isCorrect = question ? questionCorrectnessByQuestionId[question.id] : false;
 
 		enrichedQuestionDotEntries.push({
-			...compactQuestionDotEntry,
-			questionNumber: compactQuestionDotEntry.questionIndex + 1,
-			isActive: compactQuestionDotEntry.questionIndex === currentQuestionIndex,
+			key: compactQuestionDotEntry.key,
+			entryIndex: questionIndex,
+			entryNumber: questionIndex + ENTRY_NUMBER_OFFSET,
+			isActive: questionIndex === currentQuestionIndex,
 			isCorrect: isCorrect ?? false,
 			questionId
 		});
@@ -47,8 +51,8 @@ function createQuestionDotEntry(questionId, questionIndex, currentQuestionIndex,
 	return {
 		key: questionId,
 		questionId,
-		questionIndex,
-		questionNumber: questionIndex + 1,
+		entryIndex: questionIndex,
+		entryNumber: questionIndex + ENTRY_NUMBER_OFFSET,
 		isActive: questionIndex === currentQuestionIndex,
 		isCorrect: isCorrect ?? false
 	};

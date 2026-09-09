@@ -136,7 +136,7 @@ export default function FlipcardsStudySurface(props) {
 			minimalCompactEntries={progressEntries}
 			shouldUseCompactDots={props.cards.length > 9}
 			shouldUseResponsiveCompactDots={true}
-			submitted={false}
+			showEntryOutcome={false}
 			onSelectEntry={props.onGoToCard}
 			dotsLabel={props.labels.toolMenuPagerLabel}
 			goToEntryLabel={props.labels.goToCardLabel}

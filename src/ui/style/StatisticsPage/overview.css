@@ -1,0 +1,169 @@
+/* src/ui/style/StatisticsPage/overview.css */
+.statistics-overview {
+	display: grid;
+	gap: var(--space-5);
+	min-width: 0;
+}
+
+.statistics-overview-top-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) clamp(190px, 18vw, 210px);
+	align-items: stretch;
+	gap: var(--space-6);
+	min-width: 0;
+}
+
+.statistics-overview-section-header h2,
+.statistics-history-heading h2 {
+	margin: 0;
+	color: var(--text-main);
+	font-size: 1rem;
+	font-weight: 900;
+	letter-spacing: -0.02em;
+}
+
+.statistics-overview-section-header p,
+.statistics-history-heading p {
+	margin: var(--space-1) 0 0;
+	color: var(--text-muted);
+	font-size: 0.76rem;
+	font-weight: 600;
+	line-height: 1.45;
+}
+
+.statistics-summary-cards {
+	display: grid;
+	grid-template-rows: repeat(2, minmax(0, 1fr));
+	gap: var(--space-4);
+	min-width: 0;
+}
+
+.statistics-summary-card {
+	display: flex;
+	min-width: 0;
+	min-height: 0;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: center;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-lg);
+	background: var(--statistics-overview-surface);
+	box-shadow: var(--statistics-overview-shadow);
+	padding: var(--space-7) var(--space-6);
+	text-align: right;
+}
+
+.statistics-summary-card-label {
+	width: 100%;
+	font-size: 0.82rem;
+	font-weight: 850;
+	line-height: 1.15;
+	text-align: right;
+}
+
+.statistics-summary-card-progress .statistics-summary-card-label {
+	color: var(--statistics-kpi-progress-label);
+}
+
+.statistics-summary-card-completed .statistics-summary-card-label {
+	color: var(--statistics-kpi-completed-label);
+}
+
+.statistics-summary-progress-value {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: center;
+	gap: var(--space-2);
+	margin-top: var(--space-3);
+	line-height: 1;
+}
+
+.statistics-summary-progress-number-row {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-2);
+}
+
+.statistics-summary-progress-icon {
+	width: 22px;
+	height: 22px;
+	flex: 0 0 22px;
+}
+
+.statistics-summary-card-progress[data-direction="up"] .statistics-summary-progress-icon {
+	color: var(--statistics-positive);
+}
+
+.statistics-summary-card-progress[data-direction="down"] .statistics-summary-progress-icon {
+	color: var(--statistics-danger);
+}
+
+.statistics-summary-progress-value strong {
+	color: var(--statistics-kpi-value);
+	font-size: 1.6rem;
+	font-weight: 900;
+	letter-spacing: -0.035em;
+	white-space: nowrap;
+}
+
+.statistics-summary-progress-unit {
+	color: var(--statistics-kpi-progress-unit);
+	font-size: 0.82rem;
+	font-weight: 900;
+	line-height: 1.05;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.statistics-summary-card-progress[data-direction="down"] .statistics-summary-progress-unit {
+	color: var(--statistics-danger);
+}
+
+.statistics-summary-card-progress[data-direction="neutral"] .statistics-summary-progress-unit {
+	color: var(--statistics-kpi-footnote);
+}
+
+.statistics-summary-completed-value {
+	width: 100%;
+	margin-top: var(--space-5);
+	color: var(--statistics-kpi-value);
+	font-size: 1.5rem;
+	font-weight: 900;
+	letter-spacing: -0.035em;
+	line-height: 1;
+	text-align: right;
+}
+
+.statistics-summary-card small {
+	width: 100%;
+	margin-top: var(--space-3);
+	color: var(--statistics-kpi-footnote);
+	font-size: 0.78rem;
+	font-weight: 650;
+	line-height: 1.2;
+	text-align: right;
+}
+
+/* WorkspaceState deklarerer --workspace-state-embedded-min-height på sitt eget
+   element. Overstyring må derfor targete elementet, ikke kortforelderen. */
+.statistics-development-card > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 236px;
+}
+
+.statistics-summary-card > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 104px;
+
+	width: 100%;
+	flex: 1 1 auto;
+}
+
+.statistics-chapter-overview > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 188px;
+}
+
+.statistics-history > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 188px;
+}

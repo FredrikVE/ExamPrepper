@@ -1,0 +1,102 @@
+/* src/ui/style/StatisticsPage/periods.css */
+.statistics-period-selector {
+	min-width: 0;
+}
+
+.statistics-period-selector-controls {
+	display: flex;
+	min-width: 0;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+}
+
+.statistics-period-viewport {
+	min-width: 0;
+	max-width: 100%;
+	flex: 0 1 auto;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	scrollbar-width: none;
+}
+
+.statistics-period-viewport::-webkit-scrollbar {
+	display: none;
+}
+
+.statistics-period-selector-options {
+	display: flex;
+	width: max-content;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 6px;
+}
+
+.statistics-period-selector-button {
+	min-width: 58px;
+	height: 32px;
+	flex: 0 0 auto;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-xs);
+	background: transparent;
+	padding: 0 var(--space-3);
+	color: var(--text-muted);
+	font: inherit;
+	font-size: 0.68rem;
+	font-weight: 800;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.statistics-period-selector-button:hover:not([aria-pressed="true"]) {
+	border-color: var(--button-secondary-border-hover);
+	background: var(--statistics-history-row-hover);
+	color: var(--text-main);
+}
+
+.statistics-period-selector-button:active {
+	transform: scale(0.97);
+}
+
+.statistics-period-selector-button[aria-pressed="true"] {
+	border-color: var(--button-primary-border);
+	background: var(--button-primary-bg);
+	box-shadow: var(--button-primary-shadow);
+	color: var(--button-primary-text);
+}
+
+.statistics-period-selector-button:focus-visible,
+.statistics-period-scroll-button:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+}
+
+.statistics-period-scroll-button {
+	display: grid;
+	width: 32px;
+	height: 32px;
+	flex: 0 0 32px;
+	place-items: center;
+	border: 1px solid var(--statistics-overview-border);
+	border-radius: var(--radius-full);
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+}
+
+.statistics-period-scroll-button:hover:not(:disabled) {
+	border-color: var(--button-secondary-border-hover);
+	background: var(--statistics-history-row-hover);
+	color: var(--accent);
+}
+
+.statistics-period-scroll-button svg {
+	width: 17px;
+	height: 17px;
+}
+
+.statistics-period-scroll-button:disabled {
+	cursor: default;
+	opacity: 0.32;
+}
