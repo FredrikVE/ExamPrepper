@@ -1,5 +1,4 @@
 // src/ui/viewmodel/StatisticsPageViewModel.js
-import { useEffect } from "react";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { SUBJECT_SWITCHER_KINDS } from "./SubjectCatalog/subjectSwitcherKinds.js";
 import createStatisticsTextModel from "./StatisticsPage/createStatisticsTextModel.js";
@@ -20,24 +19,6 @@ export default function useStatisticsPageViewModel(props) {
 		onStartNewExam: props.onStartNewExam
 	});
 
-	useEffect(() => {
-		if (props.subjectId !== null) {
-			return;
-		}
-
-		if (props.subjectSwitcher.kind !== SUBJECT_SWITCHER_KINDS.UNSELECTED) {
-			return;
-		}
-
-		const firstSubject = props.subjectSwitcher.subjects[0];
-
-		if (firstSubject === undefined) {
-			throw new Error("Unselected subject switcher requires at least one subject");
-		}
-
-		props.onSelectSubject(firstSubject.id);
-	}, [props.onSelectSubject, props.subjectId, props.subjectSwitcher.kind, props.subjectSwitcher.subjects]);
-
 	const subjectSelector = {
 		...props.subjectSwitcher,
 		menuLabel: text.subjectSelectorMenuLabel,
@@ -53,6 +34,7 @@ export default function useStatisticsPageViewModel(props) {
 	return {
 		workspaceState,
 		overview: overview.presentation,
+		overviewCardStates: overview.cardStates,
 		overviewActions: overview.actions,
 		subjectId: props.subjectId,
 		selectedSubject: props.selectedSubject,
@@ -96,15 +78,6 @@ function createStatisticsPageWorkspaceState({ subjectId, subjectSwitcher, overvi
 				body: "",
 				action: null
 			};
-
-		case SUBJECT_SWITCHER_KINDS.UNSELECTED:
-			return {
-				kind: WORKSPACE_STATE_KINDS.LOADING,
-				label: t.statisticsLoadingTitle
-			};
-
-		case SUBJECT_SWITCHER_KINDS.READY:
-			throw new Error("Ready subject switcher requires a selected subject id");
 
 		default:
 			throw new Error(`Unknown subject switcher kind: ${String(subjectSwitcher.kind)}`);

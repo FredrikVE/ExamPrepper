@@ -1,5 +1,6 @@
 // src/ui/view/pages/SubjectSelectPage.jsx
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 import Header from "../components/Header/Header.jsx";
 import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerVariants.js";
 import PageToolsDesktopPanel from "../components/PageTools/PageToolsDesktopPanel.jsx";
@@ -62,7 +63,7 @@ export default function SubjectSelectPage({ viewModel }) {
 
 	const renderPageContent = () => (
 		<div className="subject-select-page-content">
-			<WorkspaceState state={viewModel.workspaceState}>
+			<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
 				<>
 				<SubjectSelectTopbar t={viewModel.t} />
 

@@ -46,7 +46,7 @@ export function selectStatisticsView(viewId) {
 	}
 
 	if (viewId === STATISTICS_VIEW_IDS.INSIGHTS) {
-		throw new Error("Statistics insights view is locked");
+		return;
 	}
 
 	throw new Error(`Unknown statistics view: ${String(viewId)}`);

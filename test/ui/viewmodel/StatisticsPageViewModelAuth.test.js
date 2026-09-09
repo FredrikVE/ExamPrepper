@@ -9,12 +9,6 @@ const useStatisticsOverviewModel = jest.fn(() => ({
 	actions: { selectPeriod: jest.fn() }
 }));
 
-const useEffect = jest.fn((effect) => effect());
-
-jest.unstable_mockModule("react", () => ({
-	useEffect
-}));
-
 jest.unstable_mockModule("../../../src/ui/viewmodel/StatisticsPage/Overview/useStatisticsOverviewModel.js", () => ({
 	default: useStatisticsOverviewModel
 }));
@@ -53,31 +47,6 @@ test("wires subject-scoped statistics into the overview model", () => {
 	expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
 	expect(viewModel.overview).toEqual({ isEmpty: false });
 	expect(viewModel.subjectSelector).toEqual({ kind: SUBJECT_SWITCHER_KINDS.READY, subjects: [{ id: "in2120", name: "IN2120" }], currentSubject: { id: "in2120", name: "IN2120" }, label: "IN2120", canOpen: true, menuLabel: "Choose subject", closeLabel: "Close subject picker" });
-});
-
-
-test("selects the first SubjectSelector subject when Statistics opens without a selected subject", () => {
-	const onSelectSubject = jest.fn();
-	const firstSubject = { id: "in4150", name: "IN4150" };
-	const secondSubject = { id: "in2120", name: "IN2120" };
-
-	const viewModel = useStatisticsPageViewModel({
-		getSubjectStatisticsUseCase: { execute: jest.fn() },
-		subjectId: null,
-		selectedSubject: null,
-		language: "no",
-		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.UNSELECTED, subjects: [firstSubject, secondSubject], currentSubject: null, label: "Choose subject", canOpen: true },
-		onSelectSubject,
-		formatDate: jest.fn(),
-		t: { statisticsLoadingTitle: "Loading statistics" },
-		authState: { status: "signed-in", userId: "user-1" },
-		backContract: { onBack: jest.fn() },
-		onStartNewExam: jest.fn()
-	});
-
-	expect(onSelectSubject).toHaveBeenCalledTimes(1);
-	expect(onSelectSubject).toHaveBeenCalledWith("in4150");
-	expect(viewModel.workspaceState).toEqual({ kind: WORKSPACE_STATE_KINDS.LOADING, label: "Loading statistics" });
 });
 
 test("does not replace a non-null subject id when the catalog cannot resolve it", () => {
@@ -125,5 +94,4 @@ test("uses canonical error state when the subject catalog fails before a default
 
 beforeEach(() => {
 	useStatisticsOverviewModel.mockClear();
-	useEffect.mockClear();
 });

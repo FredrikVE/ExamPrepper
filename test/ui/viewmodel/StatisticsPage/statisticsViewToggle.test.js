@@ -23,9 +23,9 @@ describe("statisticsViewToggle", () => {
 		expect(model.mobileItems[1].isDisabled).toBe(true);
 	});
 
-	test("accepts reselecting Overview but fails fast for locked or unknown views", () => {
+	test("accepts reselecting Overview and ignores the visibly locked Insights view", () => {
 		expect(() => selectStatisticsView(STATISTICS_VIEW_IDS.OVERVIEW)).not.toThrow();
-		expect(() => selectStatisticsView(STATISTICS_VIEW_IDS.INSIGHTS)).toThrow("Statistics insights view is locked");
+		expect(() => selectStatisticsView(STATISTICS_VIEW_IDS.INSIGHTS)).not.toThrow();
 		expect(() => selectStatisticsView("unknown")).toThrow("Unknown statistics view");
 	});
 });

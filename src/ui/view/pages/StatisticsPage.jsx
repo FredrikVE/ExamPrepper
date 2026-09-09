@@ -6,6 +6,7 @@ import StatisticsOverview from "../components/StatisticsPage/Overview/Statistics
 import StatisticsSubjectSelector from "../components/StatisticsPage/StatisticsSubjectSelector.jsx";
 import ToggleButtonRow from "../components/ToggleButtonRow/ToggleButtonRow.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 
 export default function StatisticsPage({ viewModel }) {
@@ -35,8 +36,8 @@ export default function StatisticsPage({ viewModel }) {
 						mobileBackLabel={viewModel.viewToggle.mobileBackLabel}
 					/>
 				</div>
-				<WorkspaceState state={viewModel.workspaceState}>
-					<StatisticsOverview model={viewModel.overview} actions={viewModel.overviewActions} />
+				<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
+					<StatisticsOverview model={viewModel.overview} cardStates={viewModel.overviewCardStates} actions={viewModel.overviewActions} />
 				</WorkspaceState>
 			</div>
 		</WorkspaceScaffold>

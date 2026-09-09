@@ -507,6 +507,16 @@ Det er da `AppNavigationViewModel` og next-state-beregningen som først blir pre
 
 Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i ViewModelen og rendering i `App.jsx`. Utvid ved å legge til en node og en gren, ikke ved å innføre et rammeverk.
 
+## Statistics — lokale presentasjonskontrakter 2026-09-09
+
+Disse reglene er feature-spesifikke Statistics-kontrakter, ikke globale frontend-arkitekturlover:
+
+- **S1 — Feilgrensen følger ressursgrensen.** Statistics bruker én `useLoadModel()`, én page-feilflate og én retry. De fem embedded kortene deler ressursen og rendrer ikke egne feilflater.
+- **S2 — Kortets tomhet avgjøres i Statistics-ViewModel.** De fem kortnivå-predikatene eies samlet av `createStatisticsCardStates.js`. Grafens eksisterende `points.length === 0` er rendererens håndtering av degenerert input og forblir lokal i `StatisticsScoreChart`.
+- **S3 — En boolean er enten state-input eller render-conditional, aldri begge.** Evidence-/progress-/history-feltene som bestemmer kortstate sendes inn i state-avledningen og brukes ikke samtidig som konkurrerende empty-conditionals i View.
+
+S1 er kandidat for opprykk til en generell regel først dersom en andre feature får samme ressurs-/embedded-mønster.
+
 ## LearningPath — eierskap og faktisk status 2026-08-24
 
 Denne feature-spesifikke statusrevisjonen beholdes datert 2026-08-24. Den grønne globale Jest-/build-gaten 2026-08-29 omklassifiserer ikke disse radene uten en egen LearningPath-revisjon.

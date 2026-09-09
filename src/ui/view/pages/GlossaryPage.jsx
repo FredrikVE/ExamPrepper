@@ -8,6 +8,7 @@ import { HEADER_APPEARANCES, HEADER_LAYOUTS } from "../components/Header/headerV
 import WorkspaceScaffold from "../components/WorkspaceScaffold/WorkspaceScaffold.jsx";
 import LearningContentHeader from "../components/LearningContentHeader/LearningContentHeader.jsx";
 import WorkspaceState from "../components/WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../components/WorkspaceState/workspaceStateVariants.js";
 import SearchBackdrop from "../components/Search/SearchBackdrop.jsx";
 import useSearchSheetEscapeKey from "../components/Search/useSearchSheetEscapeKey.js";
 
@@ -65,7 +66,7 @@ export default function GlossaryPage({ viewModel }) {
 					/>
 
 					<div className="glossary-page__content">
-						<WorkspaceState state={viewModel.workspaceState}>
+						<WorkspaceState scope={WORKSPACE_STATE_SCOPES.PAGE} state={viewModel.workspaceState} emptyIcon={null}>
 							<>
 								<TopicAreaPanel
 									allTopicAreaListItem={viewModel.allTopicAreaListItem}

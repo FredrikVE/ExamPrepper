@@ -146,3 +146,24 @@
 	line-height: 1.2;
 	text-align: right;
 }
+
+/* WorkspaceState deklarerer --workspace-state-embedded-min-height på sitt eget
+   element. Overstyring må derfor targete elementet, ikke kortforelderen. */
+.statistics-development-card > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 236px;
+}
+
+.statistics-summary-card > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 104px;
+
+	width: 100%;
+	flex: 1 1 auto;
+}
+
+.statistics-chapter-overview > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 188px;
+}
+
+.statistics-history > .workspace-state--scope-embedded {
+	--workspace-state-embedded-min-height: 188px;
+}

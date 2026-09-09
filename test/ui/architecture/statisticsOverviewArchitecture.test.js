@@ -73,7 +73,8 @@ describe("Statistics Overview architecture", () => {
 		const summary = read("src/ui/view/components/StatisticsPage/Overview/StatisticsSummaryCards.jsx");
 		const overviewCss = read("src/ui/style/StatisticsPage/overview.css");
 
-		expect(summary).toContain('import { ArrowDown, ArrowUp } from "lucide-react";');
+		expect(summary).toContain("return ArrowUp;");
+		expect(summary).toContain("return ArrowDown;");
 		expect(summary).toContain("progressAttemptSummaryLabel");
 		expect(overviewCss).toContain('.statistics-summary-card-progress[data-direction="up"] .statistics-summary-progress-icon');
 		expect(overviewCss).toContain('.statistics-summary-card-progress[data-direction="down"] .statistics-summary-progress-icon');
@@ -113,7 +114,7 @@ describe("Statistics Overview architecture", () => {
 		const chapterModel = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsChapterModels.js");
 		const chapterCard = read("src/ui/view/components/StatisticsPage/Overview/StatisticsChapterCard.jsx");
 
-		expect(dataSource).toContain("chapter.masteryPercentage");
+		expect(dataSource).toContain('validateMasteryScope(chapter, "statistics chapter")');
 		expect(dataSource).not.toContain("chapter.scorePercentage");
 		expect(dataSource).not.toContain("chapter.evidenceCount");
 		expect(chapterModel).toContain("roundMasteryPercentage");
@@ -134,7 +135,7 @@ describe("Statistics Overview architecture", () => {
 		expect(chapterOverview).toContain('onSelectScope');
 		expect(chapterCard).toContain('aria-pressed={model.isSelected}');
 		expect(overviewModel).toContain('statistics.subjectMastery');
-		expect(overviewModel).toContain('chapter.developmentPeriods');
+		expect(overviewModel).toContain('selectedMastery.developmentPeriods');
 	});
 
 	test("keeps Statistics theme and color ownership in Tokens.css", () => {

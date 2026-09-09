@@ -1,5 +1,5 @@
 // src/ui/viewmodel/StatisticsPage/Overview/createStatisticsOverviewModel.js
-import { STATISTICS_MASTERY_SCOPE_KINDS } from "../../../../constants/StatisticsContracts.js";
+import { STATISTICS_MASTERY_SCOPE_KINDS, STATISTICS_PERIODS } from "../../../../constants/StatisticsContracts.js";
 import { LANGUAGES } from "../../../../i18n/translations.js";
 import roundMasteryPercentage from "../../Shared/roundMasteryPercentage.js";
 import createStatisticsChapterModels from "./createStatisticsChapterModels.js";
@@ -31,6 +31,8 @@ export default function createStatisticsOverviewModel({ statistics, period, mast
 	let selectedMasteryLabel = text.masteryLabel;
 	let developmentMetrics = EMPTY_DEVELOPMENT_METRICS;
 	let chapterItems = EMPTY_CHAPTERS;
+	let hasDevelopmentEvidence = false;
+	let hasChapterEvidence = false;
 
 	if (statistics !== null) {
 		if (subject === null) {
@@ -46,6 +48,8 @@ export default function createStatisticsOverviewModel({ statistics, period, mast
 		selectedMasteryLabel = selectedScope.masteryLabel;
 		developmentMetrics = findDevelopmentPeriod(selectedMastery.developmentPeriods, period);
 		chapterItems = createStatisticsChapterModels({ chapters, subjectMastery: statistics.subjectMastery, selectedScope: masteryScope, subject, language, text });
+		hasDevelopmentEvidence = resolveDevelopmentEvidence(selectedMastery);
+		hasChapterEvidence = resolveChapterEvidence(chapters);
 	}
 
 	const history = createStatisticsHistoryModel({ attempts, sortKey: historySortKey, sortDirection: historySortDirection, expanded: historyExpanded, page: historyPage, formatDate, text });
@@ -77,8 +81,8 @@ export default function createStatisticsOverviewModel({ statistics, period, mast
 	}
 
 	return {
-		isEmpty: statistics === null || (attempts.length === EMPTY_ATTEMPT_COUNT && chapters.length === 0),
 		development: {
+			hasEvidence: hasDevelopmentEvidence,
 			title: text.developmentTitle,
 			subtitle: text.createDevelopmentSubtitle(selectedScopeLabel),
 			periodLabel: text.periodLabel,
@@ -108,6 +112,7 @@ export default function createStatisticsOverviewModel({ statistics, period, mast
 			progressDirection
 		},
 		chapters: {
+			hasEvidence: hasChapterEvidence,
 			title: text.chaptersTitle,
 			subtitle: text.chaptersSubtitle,
 			carouselLabel: text.chaptersCarouselLabel,
@@ -162,6 +167,22 @@ function resolveMasteryScope({ statistics, masteryScope, subject, language, text
 	}
 
 	throw new Error(`Unknown Statistics mastery scope kind: ${String(masteryScope.kind)}`);
+}
+
+function resolveDevelopmentEvidence(selectedMastery) {
+	const allDevelopmentMetrics = findDevelopmentPeriod(selectedMastery.developmentPeriods, STATISTICS_PERIODS.ALL);
+
+	return allDevelopmentMetrics.chartPoints.length > 0;
+}
+
+function resolveChapterEvidence(chapters) {
+	for (const chapter of chapters) {
+		if (chapter.masteryPercentage !== null) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function findDevelopmentPeriod(developmentPeriods, selectedPeriod) {

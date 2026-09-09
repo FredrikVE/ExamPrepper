@@ -12,14 +12,11 @@ describe("createStatisticsTextModel", () => {
 		expect(text.createPercentagePointUnitLabel(44.4)).toBe("prosentpoeng");
 	});
 
-	test("formats the dynamic progress attempt context", () => {
+	test("formats the dynamic progress attempt summary", () => {
 		const no = createStatisticsTextModel(translations[LANGUAGES.NO]);
 		const en = createStatisticsTextModel(translations[LANGUAGES.EN]);
 
-		expect(no.createProgressAttemptContextLabel(7)).toBe("(siste 7 forsøk)");
 		expect(no.createProgressAttemptSummaryLabel(7)).toBe("Siste 7 forsøk");
-		expect(en.createProgressAttemptContextLabel(1)).toBe("(last 1 attempt)");
-		expect(en.createProgressAttemptContextLabel(7)).toBe("(last 7 attempts)");
 		expect(en.createProgressAttemptSummaryLabel(1)).toBe("Last 1 attempt");
 		expect(en.createProgressAttemptSummaryLabel(7)).toBe("Last 7 attempts");
 	});

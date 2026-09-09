@@ -1,6 +1,6 @@
 // test/navigation/navigation.test.js
 import { describe, expect, test } from "@jest/globals";
-import { getScreenConfig, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, SCREEN_CONFIG, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../src/navigation/navigation.js";
+import { getScreenConfig, isOverviewReturnableScreen, LEARNING_CONTENT_TYPES, NAV_ITEMS, NAV_SCREENS, OVERVIEW_RETURNABLE_SCREENS, SCREEN_CONFIG, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../src/navigation/navigation.js";
 
 describe("navigation configuration", () => {
 	test("contains only the screens rendered by App", () => {
@@ -152,9 +152,22 @@ describe("navigation configuration", () => {
 		expect(getScreenConfig(NAV_SCREENS.LEARNING_PATH).backTo).toBe(NAV_SCREENS.SUBJECTS);
 	});
 
-	test("lets Statistics open before a subject is selected and keeps the page-owned subject selector policy", () => {
+	test("defines the safe Statistics return screens", () => {
+		expect(OVERVIEW_RETURNABLE_SCREENS).toEqual([
+			NAV_SCREENS.SELECT,
+			NAV_SCREENS.GLOSSARY,
+			NAV_SCREENS.LEARNING_PATH,
+			NAV_SCREENS.FLIPCARDS,
+			NAV_SCREENS.MATCHCARDS
+		]);
+		expect(isOverviewReturnableScreen(NAV_SCREENS.EXAM)).toBe(false);
+		expect(isOverviewReturnableScreen(NAV_SCREENS.LEARNING_SESSION)).toBe(false);
+		expect(isOverviewReturnableScreen(NAV_SCREENS.SUBJECTS)).toBe(false);
+	});
+
+	test("requires a selected subject before Statistics opens", () => {
 		expect(getScreenConfig(NAV_SCREENS.OVERVIEW)).toEqual({
-			requiresSubject: false,
+			requiresSubject: true,
 			requiresExam: false,
 			backTo: NAV_SCREENS.SELECT,
 			showsSubjectSwitcher: false,

@@ -1,12 +1,14 @@
 // src/ui/view/components/StatisticsPage/Overview/StatisticsChapterOverview.jsx
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import WorkspaceState from "../../WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../../WorkspaceState/workspaceStateVariants.js";
 import StatisticsChapterCard from "./StatisticsChapterCard.jsx";
 
 const SCROLL_EDGE_TOLERANCE_PX = 2;
 const FIRST_SCROLL_POSITION = 0;
 
-export default function StatisticsChapterOverview({ model, onSelectScope }) {
+export default function StatisticsChapterOverview({ model, state, onSelectScope }) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [scrollState, setScrollState] = useState({ hasOverflow: false, canScrollPrevious: false, canScrollNext: false });
 	const viewportRef = useRef(null);
@@ -147,38 +149,40 @@ export default function StatisticsChapterOverview({ model, onSelectScope }) {
 	};
 
 	return (
-		<section className={sectionClassName} aria-labelledby="statistics-chapters-title" onKeyDown={handleSectionKeyDown}>
-			<header className="statistics-overview-section-header">
-				<div>
-					<h2 id="statistics-chapters-title">{model.title}</h2>
-					<p>{model.subtitle}</p>
-				</div>
-			</header>
-
-			<div className={carouselClassName}>
-				{scrollState.hasOverflow && (
-					<button type="button" className="statistics-chapter-scroll-button" aria-label={model.previousLabel} disabled={!scrollState.canScrollPrevious} onClick={() => scrollChapters(-1)}>
-						<ChevronLeft aria-hidden="true" focusable="false" />
-					</button>
-				)}
-				<div ref={viewportRef} className="statistics-chapter-viewport" tabIndex={viewportTabIndex} aria-label={model.carouselLabel} onKeyDown={handleViewportKeyDown}>
-					<div className="statistics-chapter-track">
-						{model.items.map((chapter) => <StatisticsChapterCard key={chapter.key} model={chapter} onSelect={onSelectScope} />)}
+		<section className={sectionClassName} aria-label={model.title} onKeyDown={handleSectionKeyDown}>
+			<WorkspaceState scope={WORKSPACE_STATE_SCOPES.EMBEDDED} state={state} emptyIcon={<FileText />}>
+				<header className="statistics-overview-section-header">
+					<div>
+						<h2 id="statistics-chapters-title">{model.title}</h2>
+						<p>{model.subtitle}</p>
 					</div>
+				</header>
+
+				<div className={carouselClassName}>
+					{scrollState.hasOverflow && (
+						<button type="button" className="statistics-chapter-scroll-button" aria-label={model.previousLabel} disabled={!scrollState.canScrollPrevious} onClick={() => scrollChapters(-1)}>
+							<ChevronLeft aria-hidden="true" focusable="false" />
+						</button>
+					)}
+					<div ref={viewportRef} className="statistics-chapter-viewport" tabIndex={viewportTabIndex} aria-label={model.carouselLabel} onKeyDown={handleViewportKeyDown}>
+						<div className="statistics-chapter-track">
+							{model.items.map((chapter) => <StatisticsChapterCard key={chapter.key} model={chapter} onSelect={onSelectScope} />)}
+						</div>
+					</div>
+					{scrollState.hasOverflow && (
+						<button type="button" className="statistics-chapter-scroll-button" aria-label={model.nextLabel} disabled={!scrollState.canScrollNext} onClick={() => scrollChapters(1)}>
+							<ChevronRight aria-hidden="true" focusable="false" />
+						</button>
+					)}
 				</div>
-				{scrollState.hasOverflow && (
-					<button type="button" className="statistics-chapter-scroll-button" aria-label={model.nextLabel} disabled={!scrollState.canScrollNext} onClick={() => scrollChapters(1)}>
-						<ChevronRight aria-hidden="true" focusable="false" />
+
+				{model.items.length > 0 && (
+					<button ref={toggleRef} type="button" className="statistics-chapter-toggle" aria-expanded={isExpanded} onClick={toggleExpanded}>
+						<span>{toggleLabel}</span>
+						<ChevronDown aria-hidden="true" focusable="false" />
 					</button>
 				)}
-			</div>
-
-			{model.items.length > 0 && (
-				<button ref={toggleRef} type="button" className="statistics-chapter-toggle" aria-expanded={isExpanded} onClick={toggleExpanded}>
-					<span>{toggleLabel}</span>
-					<ChevronDown aria-hidden="true" focusable="false" />
-				</button>
-			)}
+			</WorkspaceState>
 		</section>
 	);
 }

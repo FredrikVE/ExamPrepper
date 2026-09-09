@@ -64,8 +64,8 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/AppNavigation/useSyncSelecte
 
 const { default: useAppNavigationViewModel } = await import("../../../src/ui/viewmodel/AppNavigationViewModel.js");
 
-function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null, examReturnScreen = null, selectedLearningContentEntryId = LEARNING_CONTENT_TYPES.EXAMS) {
-	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType, examReturnScreen, selectedLearningContentEntryId];
+function setNavigationState(activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType = null, examReturnScreen = null, selectedLearningContentEntryId = LEARNING_CONTENT_TYPES.EXAMS, overviewReturnScreen = null) {
+	hookState = [activeScreen, selectedSubjectId, selectedExamId, selectedTopicAreaKey, selectedLearningSessionId, examLanguageSyncError, selectedExamTestType, examReturnScreen, selectedLearningContentEntryId, overviewReturnScreen];
 }
 
 const examByIdUseCase = { id: "exam-by-id" };
@@ -242,10 +242,10 @@ describe("useAppNavigationViewModel", () => {
 		]);
 	});
 
-	test("Statistics kan åpnes uten valgt fag", () => {
+	test("Statistics uten valgt fag går til fagoversikten", () => {
 		createViewModel().changeScreen(NAV_SCREENS.OVERVIEW);
 
-		expect(hookState[0]).toBe(NAV_SCREENS.OVERVIEW);
+		expect(hookState[0]).toBe(NAV_SCREENS.SUBJECTS);
 		expect(hookState[1]).toBeNull();
 	});
 
@@ -315,6 +315,57 @@ describe("useAppNavigationViewModel", () => {
 			null,
 			null
 		]);
+	});
+
+	test.each([
+		NAV_SCREENS.SELECT,
+		NAV_SCREENS.GLOSSARY,
+		NAV_SCREENS.LEARNING_PATH,
+		NAV_SCREENS.FLIPCARDS,
+		NAV_SCREENS.MATCHCARDS
+	])("Statistics returnerer til trygg kildeskjerm %s", (sourceScreen) => {
+		setNavigationState(sourceScreen, "inf1010", null, null, null, null);
+
+		createViewModel().changeScreen(NAV_SCREENS.OVERVIEW);
+
+		expect(hookState[0]).toBe(NAV_SCREENS.OVERVIEW);
+		expect(hookState[9]).toBe(sourceScreen);
+
+		createViewModel().goBack();
+
+		expect(hookState[0]).toBe(sourceScreen);
+	});
+
+	test.each([NAV_SCREENS.EXAM, NAV_SCREENS.LEARNING_SESSION])("Statistics husker ikke utrygg kildeskjerm %s", (sourceScreen) => {
+		const selectedExamId = sourceScreen === NAV_SCREENS.EXAM ? "exam-1" : null;
+		const selectedLearningSessionId = sourceScreen === NAV_SCREENS.LEARNING_SESSION ? "session-1" : null;
+		setNavigationState(sourceScreen, "inf1010", selectedExamId, null, selectedLearningSessionId, null);
+
+		createViewModel().changeScreen(NAV_SCREENS.OVERVIEW);
+
+		expect(hookState[9]).toBeNull();
+
+		createViewModel().goBack();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
+	});
+
+	test("Statistics åpnet fra fagoversikten bruker vanlig backTo uten throw", () => {
+		setNavigationState(NAV_SCREENS.SUBJECTS, null, null, null, null, null);
+
+		createViewModel().changeScreen(NAV_SCREENS.OVERVIEW);
+
+		expect(hookState[9]).toBeNull();
+		expect(() => createViewModel().goBack()).not.toThrow();
+		expect(hookState[0]).toBe(NAV_SCREENS.SUBJECTS);
+	});
+
+	test("Statistics blir aldri sin egen returskjerm", () => {
+		setNavigationState(NAV_SCREENS.OVERVIEW, "inf1010", null, null, null, null);
+
+		createViewModel().changeScreen(NAV_SCREENS.OVERVIEW);
+
+		expect(hookState[9]).toBeNull();
 	});
 
 	test("navigasjon lukker åpne overlays", () => {

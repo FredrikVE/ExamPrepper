@@ -141,6 +141,10 @@ function createModel(statistics, period, masteryScope = DEFAULT_STATISTICS_MASTE
 }
 
 describe("createStatisticsOverviewModel", () => {
+	test("sentinel-banen validerer ikke backend-kontrakten", () => {
+		expect(() => createModel(null, STATISTICS_PERIODS.WEEK)).not.toThrow();
+	});
+
 	test("defaults Development to the whole-subject mastery scope", () => {
 		const model = createModel(createStatistics(), STATISTICS_PERIODS.THREE_MONTHS);
 
@@ -181,14 +185,31 @@ describe("createStatisticsOverviewModel", () => {
 		expect(() => createModel(createStatistics(), STATISTICS_PERIODS.WEEK, scope)).toThrow("Missing Statistics mastery scope missing");
 	});
 
-	test("does not treat a subject with mastery chapters but no exam attempts as empty", () => {
+	test("bevarer utviklings- og kapittelevidens uten exam attempts", () => {
 		const statistics = createStatistics();
 		statistics.attempts = [];
 		statistics.completedAttemptCount = 0;
 		const model = createModel(statistics, STATISTICS_PERIODS.WEEK);
 
-		expect(model.isEmpty).toBe(false);
+		expect(model.development.hasEvidence).toBe(true);
+		expect(model.chapters.hasEvidence).toBe(true);
 		expect(model.development.masteryValue).toBe("23 %");
 		expect(model.summary.completedValue).toBe("0");
+	});
+
+	test("kapittelevidens leser rå kapitler og ignorerer fag-scope sin nullsemantikk", () => {
+		const statistics = createStatistics();
+		statistics.subjectMastery.masteryPercentage = 0;
+		statistics.chapters[0].masteryPercentage = null;
+		const model = createModel(statistics, STATISTICS_PERIODS.WEEK);
+
+		expect(model.chapters.hasEvidence).toBe(false);
+	});
+
+	test("lastet Statistics uten ALL-periode feiler høyt", () => {
+		const statistics = createStatistics();
+		statistics.subjectMastery.developmentPeriods = statistics.subjectMastery.developmentPeriods.filter((developmentPeriod) => developmentPeriod.period !== STATISTICS_PERIODS.ALL);
+
+		expect(() => createModel(statistics, STATISTICS_PERIODS.WEEK)).toThrow("Missing Statistics development period all");
 	});
 });

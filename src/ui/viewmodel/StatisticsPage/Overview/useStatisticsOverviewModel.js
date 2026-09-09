@@ -2,9 +2,10 @@
 import { useCallback, useState } from "react";
 import { APP_AUTH_STATUS } from "../../../../auth/AppAuthState.js";
 import { DEFAULT_STATISTICS_MASTERY_SCOPE, DEFAULT_STATISTICS_PERIOD, SORT_DIRECTION, STATISTICS_HISTORY_SORT } from "../../../../constants/StatisticsContracts.js";
+import { LOAD_STATUS } from "../../LoadState/loadStatus.js";
 import useLoadModel from "../../LoadState/useLoadModel.js";
-import { createWorkspaceState } from "../../WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "../../WorkspaceState/workspaceStateKinds.js";
+import createStatisticsCardStates from "./createStatisticsCardStates.js";
 import createStatisticsOverviewModel from "./createStatisticsOverviewModel.js";
 
 const FIRST_HISTORY_PAGE_INDEX = 0;
@@ -46,8 +47,8 @@ export default function useStatisticsOverviewModel(props) {
 	}
 
 	const presentation = createStatisticsOverviewModel({ statistics: load.data, period, masteryScope, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate: props.formatDate, language: props.language, subject: props.selectedSubject, text: props.text });
-	const workspaceState = createStatisticsWorkspaceState({ load, presentation, isAuthLoading, isSignedOut, text: props.text, onStartNewExam: props.onStartNewExam });
-
+	const cardStates = createStatisticsCardStates({ loadStatus: load.status, statistics: load.data, presentation, text: props.text });
+	const workspaceState = createStatisticsPageState({ load, isAuthLoading, isSignedOut, text: props.text, onStartNewExam: props.onStartNewExam });
 
 	const selectPeriod = useCallback((nextPeriod) => {
 		setPeriod(nextPeriod);
@@ -95,6 +96,7 @@ export default function useStatisticsOverviewModel(props) {
 	return {
 		workspaceState,
 		presentation,
+		cardStates,
 		actions: {
 			selectPeriod,
 			selectMasteryScope,
@@ -107,7 +109,7 @@ export default function useStatisticsOverviewModel(props) {
 	};
 }
 
-function createStatisticsWorkspaceState({ load, presentation, isAuthLoading, isSignedOut, text, onStartNewExam }) {
+function createStatisticsPageState({ load, isAuthLoading, isSignedOut, text, onStartNewExam }) {
 	if (isAuthLoading) {
 		return {
 			kind: WORKSPACE_STATE_KINDS.LOADING,
@@ -127,31 +129,19 @@ function createStatisticsWorkspaceState({ load, presentation, isAuthLoading, isS
 		};
 	}
 
-	const workspaceState = createWorkspaceState({
-		loadStatus: load.status,
-		isEmpty: presentation.isEmpty,
-		labels: {
-			loading: text.loadingTitle,
-			errorTitle: text.errorTitle,
-			errorBody: load.error ?? text.loadErrorMessage,
-			emptyTitle: text.emptyTitle,
-			emptyBody: text.emptyBody
-		},
-		errorAction: {
-			label: text.retryButton,
-			onAction: load.reload
-		}
-	});
-
-	if (workspaceState.kind !== WORKSPACE_STATE_KINDS.EMPTY) {
-		return workspaceState;
+	if (load.status === LOAD_STATUS.ERROR) {
+		return {
+			kind: WORKSPACE_STATE_KINDS.ERROR,
+			title: text.errorTitle,
+			body: load.error,
+			action: {
+				label: text.retryButton,
+				onAction: load.reload
+			}
+		};
 	}
 
 	return {
-		...workspaceState,
-		action: {
-			label: text.startNewExamButton,
-			onAction: onStartNewExam
-		}
+		kind: WORKSPACE_STATE_KINDS.CONTENT
 	};
 }

@@ -39,9 +39,18 @@ const createStatisticsOverviewModel = jest.fn(({ statistics, masteryScope, subje
 		throw new Error("loaded Statistics requires selected subject");
 	}
 
+	const hasStatistics = statistics !== null;
+	let historyTotalCount = 0;
+
+	if (hasStatistics) {
+		historyTotalCount = 1;
+	}
+
 	return {
-		isEmpty: false,
-		history: { pageCount: 1 },
+		development: { hasEvidence: hasStatistics },
+		summary: { hasProgress: hasStatistics },
+		chapters: { hasEvidence: hasStatistics },
+		history: { pageCount: 1, totalCount: historyTotalCount },
 		observedMasteryScope: masteryScope
 	};
 });
@@ -71,8 +80,13 @@ function createProps(subjectId, selectedSubject) {
 			loadErrorMessage: "Kunne ikke laste statistikk",
 			loadingTitle: "Laster statistikk",
 			errorTitle: "Feil",
-			emptyTitle: "Tom",
-			emptyBody: "Ingen data",
+			sectionLoadingLabel: "Laster",
+			sectionEmptyTitle: "Ingen data tilgjengelig",
+			developmentEmptyBody: "Ingen utvikling",
+			progressEmptyBody: "Ingen fremgang",
+			completedEmptyBody: "Ingen forsøk",
+			chaptersEmptyBody: "Ingen mestringsdata",
+			historyEmptyBody: "Ingen historikk",
 			signedOutTitle: "Logg inn",
 			signedOutBody: "Logg inn for å se statistikk",
 			startNewExamButton: "Start eksamen",
@@ -95,7 +109,7 @@ beforeEach(() => {
 });
 
 describe("Statistics resource invariants", () => {
-	test("selectedSubject null gir LOADING uten å eksponere gammel Statistics-data", () => {
+	test("selectedSubject null gir CONTENT-side med fem LOADING-kort uten gammel Statistics-data", () => {
 		const props = createProps("in2120", null);
 
 		const viewModel = renderOverview(props);
@@ -108,7 +122,12 @@ describe("Statistics resource invariants", () => {
 			statistics: null,
 			subject: null
 		}));
-		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
+		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
+		expect(viewModel.cardStates.development.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
+		expect(viewModel.cardStates.progress.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
+		expect(viewModel.cardStates.completed.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
+		expect(viewModel.cardStates.chapters.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
+		expect(viewModel.cardStates.history.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
 	});
 
 	test("fagbytte tilbakestiller masteryScope i samme render", () => {

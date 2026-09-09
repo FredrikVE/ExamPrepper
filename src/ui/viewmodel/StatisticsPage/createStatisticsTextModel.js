@@ -18,12 +18,17 @@ export default function createStatisticsTextModel(t) {
 		loadingTitle: t.statisticsLoadingTitle,
 		signedOutTitle: t.statisticsSignedOutTitle,
 		signedOutBody: t.statisticsSignedOutBody,
-		emptyTitle: t.statisticsHeroEmptyTitle,
-		emptyBody: t.statisticsHeroEmptyBody,
 		errorTitle: t.statisticsErrorTitle,
 		retryButton: t.statisticsRetryButton,
 		startNewExamButton: t.statisticsStartNewExamButton,
 		loadErrorMessage: t.statisticsLoadErrorMessage,
+		sectionLoadingLabel: t.statisticsSectionLoadingLabel,
+		sectionEmptyTitle: t.statisticsSectionEmptyTitle,
+		developmentEmptyBody: t.statisticsSectionDevelopmentEmptyBody,
+		progressEmptyBody: t.statisticsSectionProgressEmptyBody,
+		completedEmptyBody: t.statisticsSectionCompletedEmptyBody,
+		chaptersEmptyBody: t.statisticsSectionChaptersEmptyBody,
+		historyEmptyBody: t.statisticsSectionHistoryEmptyBody,
 		emptyValueLabel: t.statisticsEmptyValueLabel,
 		developmentTitle: t.statisticsOverviewDevelopmentTitle,
 		createDevelopmentSubtitle: t.statisticsOverviewDevelopmentSubtitle,
@@ -42,7 +47,6 @@ export default function createStatisticsTextModel(t) {
 		subjectMasteryLabel: t.statisticsOverviewSubjectMasteryLabel,
 		createSubjectScopeLabel: t.statisticsOverviewSubjectScopeLabel,
 		progressLabel: t.statisticsOverviewProgressLabel,
-		createProgressAttemptContextLabel: t.statisticsOverviewProgressAttemptContextLabel,
 		createProgressAttemptSummaryLabel: t.statisticsOverviewProgressAttemptSummaryLabel,
 		completedLabel: t.statisticsOverviewCompletedLabel,
 		completedUnitLabel: t.statisticsOverviewEvidenceUnitPlural,
@@ -86,10 +90,6 @@ export default function createStatisticsTextModel(t) {
 			}
 
 			return `${formatNumber(value)} %`;
-		},
-
-		createPercentagePointShortLabel(value) {
-			return `${formatSignedNumber(value)} ${t.statisticsPercentagePointShort}`;
 		},
 
 		createPercentagePointNumberLabel(value) {
@@ -141,14 +141,4 @@ function formatNumber(value) {
 	}
 
 	return value.toFixed(PERCENTAGE_DECIMAL_PLACES);
-}
-
-function formatSignedNumber(value) {
-	const numberLabel = formatNumber(value);
-
-	if (value > 0) {
-		return `+${numberLabel}`;
-	}
-
-	return numberLabel;
 }

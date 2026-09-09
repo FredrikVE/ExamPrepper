@@ -1,10 +1,24 @@
 /* src/ui/style/WorkspaceState/workspace-state.css */
 .workspace-state {
+	--workspace-state-spinner-size: 44px;
+
 	display: grid;
 	height: 100%;
 	min-height: 0;
 	place-items: center;
 	padding: clamp(16px, 4vw, 32px);
+}
+
+.workspace-state--scope-embedded {
+	--workspace-state-spinner-size: 28px;
+	--workspace-state-embedded-min-height: 132px;
+	--workspace-state-embedded-max-width: 34ch;
+	--workspace-state-embedded-icon-box: 40px;
+	--workspace-state-embedded-icon-size: 20px;
+
+	height: auto;
+	min-height: var(--workspace-state-embedded-min-height);
+	padding: var(--space-6);
 }
 
 .workspace-state-card {
@@ -21,6 +35,51 @@
 	text-align: center;
 	opacity: 0;
 	animation: workspace-state-appear 1ms linear 200ms forwards;
+}
+
+.workspace-state--scope-embedded .workspace-state-card {
+	max-width: var(--workspace-state-embedded-max-width);
+	gap: var(--space-3);
+	border: 0;
+	background: none;
+	box-shadow: none;
+	padding: 0;
+}
+
+.workspace-state--scope-embedded .workspace-state-icon {
+	display: grid;
+	width: var(--workspace-state-embedded-icon-box);
+	height: var(--workspace-state-embedded-icon-box);
+	place-items: center;
+	border-radius: var(--radius-md);
+	background: var(--accent-soft);
+	color: var(--accent);
+}
+
+.workspace-state--scope-embedded .workspace-state-icon svg {
+	width: var(--workspace-state-embedded-icon-size);
+	height: var(--workspace-state-embedded-icon-size);
+}
+
+.workspace-state--scope-embedded .workspace-state-card h2 {
+	margin: 0;
+	color: var(--text-main);
+	font-size: 0.86rem;
+	font-weight: 900;
+}
+
+.workspace-state--scope-embedded .workspace-state-card p {
+	margin: 0;
+	color: var(--text-muted);
+	font-size: 0.78rem;
+	font-weight: 650;
+	line-height: 1.45;
+}
+
+.workspace-state--scope-embedded .workspace-state-loading-label {
+	font-size: 0.72rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
 }
 
 .workspace-state-card-error {

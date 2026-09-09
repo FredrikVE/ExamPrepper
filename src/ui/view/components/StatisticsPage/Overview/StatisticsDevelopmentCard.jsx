@@ -1,41 +1,46 @@
 // src/ui/view/components/StatisticsPage/Overview/StatisticsDevelopmentCard.jsx
+import { FileText } from "lucide-react";
+import WorkspaceState from "../../WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../../WorkspaceState/workspaceStateVariants.js";
 import StatisticsPeriodSelector from "./StatisticsPeriodSelector.jsx";
 import StatisticsScoreChart from "./StatisticsScoreChart.jsx";
 
 const DEVELOPMENT_CHART_ID = "statistics-development-chart";
 
-export default function StatisticsDevelopmentCard({ model, onSelectPeriod }) {
+export default function StatisticsDevelopmentCard({ model, state, onSelectPeriod }) {
 	return (
-		<section className="statistics-development-card" aria-labelledby="statistics-development-title">
-			<header className="statistics-overview-section-header">
-				<div>
-					<h2 id="statistics-development-title">{model.title}</h2>
-					<p>{model.subtitle}</p>
-				</div>
-			</header>
+		<section className="statistics-development-card" aria-label={model.title}>
+			<WorkspaceState scope={WORKSPACE_STATE_SCOPES.EMBEDDED} state={state} emptyIcon={<FileText />}>
+				<header className="statistics-overview-section-header">
+					<div>
+						<h2>{model.title}</h2>
+						<p>{model.subtitle}</p>
+					</div>
+				</header>
 
-			<div className="statistics-development-content">
-				<div className="statistics-development-summary">
-					<div className="statistics-development-mastery">
-						<strong>{model.masteryValue}</strong>
-						<span>{model.masteryLabel}</span>
+				<div className="statistics-development-content">
+					<div className="statistics-development-summary">
+						<div className="statistics-development-mastery">
+							<strong>{model.masteryValue}</strong>
+							<span>{model.masteryLabel}</span>
+						</div>
+					</div>
+
+					<div className="statistics-development-chart-column">
+						<StatisticsScoreChart id={DEVELOPMENT_CHART_ID} label={model.chartLabel} points={model.chartPoints} axisStartLabel={model.chartAxisStartLabel} axisEndLabel={model.chartAxisEndLabel} emptyLabel={model.chartEmptyLabel} />
+						<StatisticsPeriodSelector
+							label={model.periodLabel}
+							options={model.periodOptions}
+							selectedPeriod={model.period}
+							rangeLabel={model.periodRangeLabel}
+							controlsId={DEVELOPMENT_CHART_ID}
+							previousLabel={model.previousPeriodLabel}
+							nextLabel={model.nextPeriodLabel}
+							onSelectPeriod={onSelectPeriod}
+						/>
 					</div>
 				</div>
-
-				<div className="statistics-development-chart-column">
-					<StatisticsScoreChart id={DEVELOPMENT_CHART_ID} label={model.chartLabel} points={model.chartPoints} axisStartLabel={model.chartAxisStartLabel} axisEndLabel={model.chartAxisEndLabel} emptyLabel={model.chartEmptyLabel} />
-					<StatisticsPeriodSelector
-						label={model.periodLabel}
-						options={model.periodOptions}
-						selectedPeriod={model.period}
-						rangeLabel={model.periodRangeLabel}
-						controlsId={DEVELOPMENT_CHART_ID}
-						previousLabel={model.previousPeriodLabel}
-						nextLabel={model.nextPeriodLabel}
-						onSelectPeriod={onSelectPeriod}
-					/>
-				</div>
-			</div>
+			</WorkspaceState>
 		</section>
 	);
 }
