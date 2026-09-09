@@ -229,6 +229,7 @@ function AppContent() {
 						language={language}
 						subjectSwitcher={subjectCatalog.subjectSwitcher}
 						onSelectSubject={navigationViewModel.switchSubject}
+						onBackToLearningPath={navigationViewModel.selectSubject}
 						formatDate={formatDate}
 						t={t}
 						backContract={navigationViewModel.backContract}
@@ -493,7 +494,7 @@ function GlossaryPageWithViewModel(props) {
 	return <GlossaryPage viewModel={glossaryPageViewModel} />;
 }
 
-function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam }) {
+function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, onBackToLearningPath, formatDate, t, backContract, onStartNewExam }) {
 	const authState = useAppAuth();
 
 	return (
@@ -503,6 +504,7 @@ function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSw
 			language={language}
 			subjectSwitcher={subjectSwitcher}
 			onSelectSubject={onSelectSubject}
+			onBackToLearningPath={onBackToLearningPath}
 			formatDate={formatDate}
 			t={t}
 			backContract={backContract}
@@ -512,7 +514,7 @@ function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSw
 	);
 }
 
-function StatisticsPageWithViewModel({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, formatDate, t, backContract, onStartNewExam, authState }) {
+function StatisticsPageWithViewModel({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, onBackToLearningPath, formatDate, t, backContract, onStartNewExam, authState }) {
 	const statisticsPageViewModel = useStatisticsPageViewModel({
 		getSubjectStatisticsUseCase,
 		subjectId,
@@ -520,6 +522,7 @@ function StatisticsPageWithViewModel({ subjectId, selectedSubject, language, sub
 		language,
 		subjectSwitcher,
 		onSelectSubject,
+		onBackToLearningPath,
 		formatDate,
 		t,
 		authState,

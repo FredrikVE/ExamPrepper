@@ -1,6 +1,6 @@
 //src/ui/viewmodel/AppNavigationViewModel.js
 import { useCallback, useState } from "react";
-import { DEFAULT_SELECT_CONTENT_ENTRY_ID, getLearningContentNavigationEntry, getScreenConfig, isOverviewReturnableScreen, NAV_SCREENS, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
+import { DEFAULT_SELECT_CONTENT_ENTRY_ID, getLearningContentNavigationEntry, getScreenConfig, NAV_SCREENS, SUBJECT_SWITCH_TARGET_SCREENS, TEST_TYPES } from "../../navigation/navigation.js";
 import useMobileDropDownTopBarModel from "./AppNavigation/useMobileDropDownTopBarModel.js";
 import useSettingsPresentationModel from "./AppNavigation/useSettingsPresentationModel.js";
 import useSyncSelectedExamWithLanguage from "./AppNavigation/useSyncSelectedExamWithLanguage.js";
@@ -15,7 +15,6 @@ export default function useAppNavigationViewModel(props) {
 	const [selectedExamTestType, setSelectedExamTestType] = useState(null);
 	const [examReturnScreen, setExamReturnScreen] = useState(null);
 	const [selectedLearningContentEntryId, setSelectedLearningContentEntryId] = useState(DEFAULT_SELECT_CONTENT_ENTRY_ID);
-	const [overviewReturnScreen, setOverviewReturnScreen] = useState(null);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
@@ -41,7 +40,6 @@ export default function useAppNavigationViewModel(props) {
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
 		setExamReturnScreen(null);
-		setOverviewReturnScreen(null);
 		setSelectedTopicAreaKey(null);
 		setSelectedLearningSessionId(null);
 		closeNavigationOverlays();
@@ -73,16 +71,6 @@ export default function useAppNavigationViewModel(props) {
 
 			if (activeEntry.targetScreen !== NAV_SCREENS.SELECT) {
 				setSelectedLearningContentEntryId(DEFAULT_SELECT_CONTENT_ENTRY_ID);
-			}
-		}
-
-		if (nextScreen === NAV_SCREENS.OVERVIEW && activeScreen !== NAV_SCREENS.OVERVIEW) {
-			if (isOverviewReturnableScreen(activeScreen)) {
-				setOverviewReturnScreen(activeScreen);
-			}
-
-			else {
-				setOverviewReturnScreen(null);
 			}
 		}
 
@@ -224,12 +212,6 @@ export default function useAppNavigationViewModel(props) {
 
 		}
 
-		if (activeScreen === NAV_SCREENS.OVERVIEW && overviewReturnScreen !== null) {
-			changeScreen(overviewReturnScreen);
-
-			return;
-		}
-
 		const activeScreenConfig = getScreenConfig(activeScreen);
 
 		if (activeScreenConfig.backTo === null) {
@@ -242,7 +224,7 @@ export default function useAppNavigationViewModel(props) {
 		}
 
 		changeScreen(activeScreenConfig.backTo);
-	}, [activeScreen, changeScreen, examReturnScreen, overviewReturnScreen, showAllSubjects]);
+	}, [activeScreen, changeScreen, examReturnScreen, showAllSubjects]);
 
 	const completeExamAttempt = useCallback(() => {
 		if (activeScreen !== NAV_SCREENS.EXAM) {

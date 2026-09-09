@@ -30,6 +30,7 @@ test("wires subject-scoped statistics into the overview model", () => {
 		language: "no",
 		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.READY, subjects: [{ id: "in2120", name: "IN2120" }], currentSubject: { id: "in2120", name: "IN2120" }, label: "IN2120", canOpen: true },
 		onSelectSubject: jest.fn(),
+		onBackToLearningPath: jest.fn(),
 		formatDate: jest.fn(),
 		t: {},
 		authState,
@@ -52,6 +53,7 @@ test("wires subject-scoped statistics into the overview model", () => {
 test("viser første SubjectSelect-fag i Statistics uten å velge det globalt", () => {
 	const getSubjectStatisticsUseCase = { execute: jest.fn() };
 	const onSelectSubject = jest.fn();
+	const onBackToLearningPath = jest.fn();
 	const firstSubject = { id: "in4150", code: "IN4150", name: "IN4150" };
 	const secondSubject = { id: "in2120", code: "IN2120", name: "IN2120" };
 
@@ -62,6 +64,7 @@ test("viser første SubjectSelect-fag i Statistics uten å velge det globalt", (
 		language: "no",
 		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.UNSELECTED, subjects: [firstSubject, secondSubject], currentSubject: null, label: "Choose subject", canOpen: true },
 		onSelectSubject,
+		onBackToLearningPath,
 		formatDate: jest.fn(),
 		t: {},
 		authState: { status: "signed-in", userId: "user-1" },
@@ -87,6 +90,10 @@ test("viser første SubjectSelect-fag i Statistics uten å velge det globalt", (
 		closeLabel: "Close subject picker"
 	});
 	expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
+
+	viewModel.backContract.onBack();
+
+	expect(onBackToLearningPath).toHaveBeenCalledWith("in4150");
 });
 
 test("does not replace a non-null subject id when the catalog cannot resolve it", () => {
@@ -99,6 +106,7 @@ test("does not replace a non-null subject id when the catalog cannot resolve it"
 		language: "no",
 		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.UNSELECTED, subjects: [{ id: "in4150", name: "IN4150" }], currentSubject: null, label: "Choose subject", canOpen: true },
 		onSelectSubject,
+		onBackToLearningPath: jest.fn(),
 		formatDate: jest.fn(),
 		t: {},
 		authState: { status: "signed-in", userId: "user-1" },
@@ -117,6 +125,7 @@ test("uses canonical error state when the subject catalog fails before a default
 		language: "no",
 		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.ERROR, subjects: [], currentSubject: null, label: "Could not load subjects", canOpen: false },
 		onSelectSubject: jest.fn(),
+		onBackToLearningPath: jest.fn(),
 		formatDate: jest.fn(),
 		t: { errorPrefix: "Error" },
 		authState: { status: "signed-in", userId: "user-1" },

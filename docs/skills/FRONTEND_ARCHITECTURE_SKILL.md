@@ -870,11 +870,11 @@ forlater og går tilbake til Glossary. Nye persistensunntak krever et eksplisitt
 ### Fallgruven ved `backTo`
 
 `backTo` er ikke en ubetinget destinasjon. Målet går gjennom `changeScreen()` og målskjermens guards.
-`OVERVIEW` kan være aktiv uten valgt fag, men har `SELECT` som tilbake-mål; siden SELECT krever fag,
-kan tilbake fra OVERVIEW ende på SUBJECTS. Nye slike asymmetrier skal unngås eller låses med en
-eksplisitt forventningstest. Den eksisterende OVERVIEW-asymmetrien er dokumentert, men
-`backTo`-nåbarhet er foreløpig ikke testlåst som en generell invariant; dagens config-test verifiserer
-bare at `backTo` peker på en gyldig skjerm-ID.
+`OVERVIEW` har `LEARNING_PATH` som deklarert tilbake-mål. Fordi Statistics kan åpnes uten globalt valgt fag,
+binder Statistics-ViewModelen back-handlingen til subject-id-en siden faktisk viser og bruker den eksisterende
+subject-selection-overgangen til Læringsstien. Navigation-ViewModelen lagrer derfor ikke en historisk
+Statistics-returskjerm. Back-adferd som trenger feature-kontekst holdes ved feature-grensen i stedet for å
+utvide global navigation-state.
 
 ### Når dagens modell ikke lenger er nok
 

@@ -32,6 +32,11 @@ export default function useStatisticsPageViewModel(props) {
 		overviewWorkspaceState: overview.workspaceState,
 		t: props.t
 	});
+	const backContract = createStatisticsBackContract({
+		backContract: props.backContract,
+		displayedSubjectId,
+		onBackToLearningPath: props.onBackToLearningPath
+	});
 
 	return {
 		workspaceState,
@@ -43,13 +48,24 @@ export default function useStatisticsPageViewModel(props) {
 		subjectSwitcher: props.subjectSwitcher,
 		subjectSelector,
 		onSelectSubject: props.onSelectSubject,
-		backContract: props.backContract,
+		backContract,
 		pageTitle: text.pageTitle,
 		pageSubtitle: text.pageSubtitle,
 		viewToggle: {
 			...viewToggle,
 			onSelectEntry: selectStatisticsView
 		}
+	};
+}
+
+function createStatisticsBackContract({ backContract, displayedSubjectId, onBackToLearningPath }) {
+	if (displayedSubjectId === null) {
+		return backContract;
+	}
+
+	return {
+		...backContract,
+		onBack: () => onBackToLearningPath(displayedSubjectId)
 	};
 }
 

@@ -110,21 +110,24 @@ describe("SELECT-invarianten gjennom offentlig navigasjonskontrakt", () => {
 		expect(hookState[8]).toBe(entryId);
 	});
 
-	test("Læringsti → Statistikk → goBack ender på SELECT uten throw", () => {
+});
+
+describe("Statistics tilbakekontrakt gjennom offentlig navigasjon", () => {
+	test("Læringsti → Statistikk → goBack går tilbake til Læringsti uten throw", () => {
 		setNavigationState(NAV_SCREENS.OVERVIEW, LEARNING_CONTENT_TYPES.LEARNING_PATH);
 		const viewModel = createViewModel();
 
 		expect(() => viewModel.goBack()).not.toThrow();
-		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
-		expect(hookState[8]).toBe(DEFAULT_SELECT_CONTENT_ENTRY_ID);
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_PATH);
+		expect(hookState[8]).toBe(LEARNING_CONTENT_TYPES.LEARNING_PATH);
 	});
 
-	test("Begrepsliste → Statistikk → goBack ender på SELECT med standardentryen", () => {
+	test("Begrepsliste → Statistikk → goBack går til Læringsti uten SELECT-reset", () => {
 		setNavigationState(NAV_SCREENS.OVERVIEW, LEARNING_CONTENT_TYPES.GLOSSARY);
 
 		createViewModel().goBack();
 
-		expect(hookState[0]).toBe(NAV_SCREENS.SELECT);
-		expect(hookState[8]).toBe(DEFAULT_SELECT_CONTENT_ENTRY_ID);
+		expect(hookState[0]).toBe(NAV_SCREENS.LEARNING_PATH);
+		expect(hookState[8]).toBe(LEARNING_CONTENT_TYPES.GLOSSARY);
 	});
 });

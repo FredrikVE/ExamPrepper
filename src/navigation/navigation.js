@@ -80,7 +80,7 @@ export const SCREEN_CONFIG = {
 	[NAV_SCREENS.OVERVIEW]: {
 		requiresSubject: false,
 		requiresExam: false,
-		backTo: NAV_SCREENS.SELECT,
+		backTo: NAV_SCREENS.LEARNING_PATH,
 		showsSubjectSwitcher: false,
 		pageClassName: "exam-select-page",
 		shellClassName: "exam-select-shell"
@@ -93,20 +93,6 @@ export const SUBJECT_SWITCH_TARGET_SCREENS = Object.freeze({
 	[NAV_SCREENS.LEARNING_PATH]: NAV_SCREENS.LEARNING_PATH,
 	[NAV_SCREENS.OVERVIEW]: NAV_SCREENS.OVERVIEW
 });
-
-/* Skjermer det er trygt å returnere til fra Statistics. EXAM og LEARNING_SESSION
-   er utelatt fordi Statistics-overgangen nullstiller deres nødvendige id-er. */
-export const OVERVIEW_RETURNABLE_SCREENS = Object.freeze([
-	NAV_SCREENS.SELECT,
-	NAV_SCREENS.GLOSSARY,
-	NAV_SCREENS.LEARNING_PATH,
-	NAV_SCREENS.FLIPCARDS,
-	NAV_SCREENS.MATCHCARDS
-]);
-
-export function isOverviewReturnableScreen(screen) {
-	return OVERVIEW_RETURNABLE_SCREENS.includes(screen);
-}
 
 export function getScreenConfig(screen) {
 	const screenConfig = SCREEN_CONFIG[screen];

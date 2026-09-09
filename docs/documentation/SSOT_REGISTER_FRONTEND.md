@@ -486,9 +486,9 @@ Eksempel: en ny `SUMMARY`-skjerm som krever valgt fag.
 
 ### Fallgruve ved `backTo`
 
-`goBack()` sender ikke direkte til `backTo`; målet går gjennom `changeScreen()` og målskjermens guards. `OVERVIEW` kan nås uten valgt fag, men peker til `SELECT`, som krever fag. Tilbake fra OVERVIEW uten valgt fag ender derfor på SUBJECTS via guarden.
+`goBack()` sender ikke direkte til `backTo`; målet går gjennom `changeScreen()` og målskjermens guards. `OVERVIEW` peker deklarativt til `LEARNING_PATH`. Statistics kan åpnes uten globalt valgt fag, så Statistics-ViewModelen binder back-handlingen til faget siden faktisk viser og bruker den eksisterende subject-selection-overgangen for å åpne Læringsstien med dette faget. Dersom ingen visningssubject kan avledes fordi katalogen ikke er klar, brukes den generiske back-kontrakten.
 
-`navigation.test.js` låser allerede config-kompletthet, felttyper, gyldige skjermreferanser og at ukjent skjerm kaster. Den identifiserte luken er **nåbarhet/forventet redirect for `backTo`**. Nye asymmetrier bør enten unngås eller låses med en eksplisitt test; en generell «må ikke være strengere»-regel kan ikke legges inn uten å håndtere dagens OVERVIEW-unntak.
+`navigation.test.js` låser config-kompletthet, felttyper, gyldige skjermreferanser og at ukjent skjerm kaster. Back-adferd som trenger sidekontekst, slik som Statistics sitt viste fag, bindes i den aktuelle Page-ViewModelen i stedet for å lagre historisk returskjerm i global navigation-state.
 
 Du trenger fortsatt ingen dispatcher, action-typer eller adapter. Legg til deklarativ skjermdata, en overgang bare når nødvendig, og en rendergren.
 
