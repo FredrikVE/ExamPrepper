@@ -112,6 +112,10 @@ export const LEARNING_CONTENT_TYPES = {
 	LEARNING_PATH: "learning-path"
 };
 
+/* Innholdstypen SELECT faller tilbake til når aktiv entry targeter en annen skjerm.
+   Samme verdi som AppNavigationViewModel bruker som initial state. */
+export const DEFAULT_SELECT_CONTENT_ENTRY_ID = LEARNING_CONTENT_TYPES.EXAMS;
+
 export const TEST_TYPES = {
 	CHAPTER_TEST: "chapter-test",
 	EXAM: "exam"
