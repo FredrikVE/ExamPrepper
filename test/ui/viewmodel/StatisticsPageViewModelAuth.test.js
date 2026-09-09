@@ -49,6 +49,46 @@ test("wires subject-scoped statistics into the overview model", () => {
 	expect(viewModel.subjectSelector).toEqual({ kind: SUBJECT_SWITCHER_KINDS.READY, subjects: [{ id: "in2120", name: "IN2120" }], currentSubject: { id: "in2120", name: "IN2120" }, label: "IN2120", canOpen: true, menuLabel: "Choose subject", closeLabel: "Close subject picker" });
 });
 
+test("viser første SubjectSelect-fag i Statistics uten å velge det globalt", () => {
+	const getSubjectStatisticsUseCase = { execute: jest.fn() };
+	const onSelectSubject = jest.fn();
+	const firstSubject = { id: "in4150", code: "IN4150", name: "IN4150" };
+	const secondSubject = { id: "in2120", code: "IN2120", name: "IN2120" };
+
+	const viewModel = useStatisticsPageViewModel({
+		getSubjectStatisticsUseCase,
+		subjectId: null,
+		selectedSubject: null,
+		language: "no",
+		subjectSwitcher: { kind: SUBJECT_SWITCHER_KINDS.UNSELECTED, subjects: [firstSubject, secondSubject], currentSubject: null, label: "Choose subject", canOpen: true },
+		onSelectSubject,
+		formatDate: jest.fn(),
+		t: {},
+		authState: { status: "signed-in", userId: "user-1" },
+		backContract: { onBack: jest.fn() },
+		onStartNewExam: jest.fn()
+	});
+
+	expect(onSelectSubject).not.toHaveBeenCalled();
+	expect(useStatisticsOverviewModel).toHaveBeenCalledWith(expect.objectContaining({
+		getSubjectStatisticsUseCase,
+		subjectId: "in4150",
+		selectedSubject: firstSubject
+	}));
+	expect(viewModel.subjectId).toBe("in4150");
+	expect(viewModel.selectedSubject).toBe(firstSubject);
+	expect(viewModel.subjectSelector).toEqual({
+		kind: SUBJECT_SWITCHER_KINDS.READY,
+		subjects: [firstSubject, secondSubject],
+		currentSubject: firstSubject,
+		label: "IN4150",
+		canOpen: true,
+		menuLabel: "Choose subject",
+		closeLabel: "Close subject picker"
+	});
+	expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.CONTENT);
+});
+
 test("does not replace a non-null subject id when the catalog cannot resolve it", () => {
 	const onSelectSubject = jest.fn();
 

@@ -165,9 +165,9 @@ describe("navigation configuration", () => {
 		expect(isOverviewReturnableScreen(NAV_SCREENS.SUBJECTS)).toBe(false);
 	});
 
-	test("requires a selected subject before Statistics opens", () => {
+	test("lets Statistics open before a subject is selected", () => {
 		expect(getScreenConfig(NAV_SCREENS.OVERVIEW)).toEqual({
-			requiresSubject: true,
+			requiresSubject: false,
 			requiresExam: false,
 			backTo: NAV_SCREENS.SELECT,
 			showsSubjectSwitcher: false,

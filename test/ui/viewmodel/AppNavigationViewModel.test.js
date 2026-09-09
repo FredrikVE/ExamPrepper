@@ -242,10 +242,10 @@ describe("useAppNavigationViewModel", () => {
 		]);
 	});
 
-	test("Statistics uten valgt fag går til fagoversikten", () => {
+	test("Statistics kan åpnes uten valgt fag", () => {
 		createViewModel().changeScreen(NAV_SCREENS.OVERVIEW);
 
-		expect(hookState[0]).toBe(NAV_SCREENS.SUBJECTS);
+		expect(hookState[0]).toBe(NAV_SCREENS.OVERVIEW);
 		expect(hookState[1]).toBeNull();
 	});
 

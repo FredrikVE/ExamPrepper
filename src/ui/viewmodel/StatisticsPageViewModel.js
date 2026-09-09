@@ -8,24 +8,26 @@ import useStatisticsOverviewModel from "./StatisticsPage/Overview/useStatisticsO
 export default function useStatisticsPageViewModel(props) {
 	const text = createStatisticsTextModel(props.t);
 	const viewToggle = createStatisticsViewToggleModel(text);
+	const displayedSubject = resolveDisplayedStatisticsSubject({ subjectId: props.subjectId, selectedSubject: props.selectedSubject, subjectSwitcher: props.subjectSwitcher });
+	const displayedSubjectId = displayedSubject?.id ?? props.subjectId;
 	const overview = useStatisticsOverviewModel({
 		getSubjectStatisticsUseCase: props.getSubjectStatisticsUseCase,
-		subjectId: props.subjectId,
+		subjectId: displayedSubjectId,
 		formatDate: props.formatDate,
 		language: props.language,
-		selectedSubject: props.selectedSubject,
+		selectedSubject: displayedSubject,
 		text,
 		authState: props.authState,
 		onStartNewExam: props.onStartNewExam
 	});
 
-	const subjectSelector = {
-		...props.subjectSwitcher,
-		menuLabel: text.subjectSelectorMenuLabel,
-		closeLabel: text.subjectSelectorCloseLabel
-	};
+	const subjectSelector = createStatisticsSubjectSelector({
+		subjectSwitcher: props.subjectSwitcher,
+		displayedSubject,
+		text
+	});
 	const workspaceState = createStatisticsPageWorkspaceState({
-		subjectId: props.subjectId,
+		subjectId: displayedSubjectId,
 		subjectSwitcher: props.subjectSwitcher,
 		overviewWorkspaceState: overview.workspaceState,
 		t: props.t
@@ -36,8 +38,8 @@ export default function useStatisticsPageViewModel(props) {
 		overview: overview.presentation,
 		overviewCardStates: overview.cardStates,
 		overviewActions: overview.actions,
-		subjectId: props.subjectId,
-		selectedSubject: props.selectedSubject,
+		subjectId: displayedSubjectId,
+		selectedSubject: displayedSubject,
 		subjectSwitcher: props.subjectSwitcher,
 		subjectSelector,
 		onSelectSubject: props.onSelectSubject,
@@ -48,6 +50,43 @@ export default function useStatisticsPageViewModel(props) {
 			...viewToggle,
 			onSelectEntry: selectStatisticsView
 		}
+	};
+}
+
+function resolveDisplayedStatisticsSubject({ subjectId, selectedSubject, subjectSwitcher }) {
+	if (subjectId !== null) {
+		return selectedSubject;
+	}
+
+	if (subjectSwitcher.kind !== SUBJECT_SWITCHER_KINDS.UNSELECTED) {
+		return null;
+	}
+
+	const firstSubject = subjectSwitcher.subjects[0];
+
+	if (firstSubject === undefined) {
+		throw new Error("Unselected subject switcher requires at least one subject");
+	}
+
+	return firstSubject;
+}
+
+function createStatisticsSubjectSelector({ subjectSwitcher, displayedSubject, text }) {
+	if (displayedSubject === null) {
+		return {
+			...subjectSwitcher,
+			menuLabel: text.subjectSelectorMenuLabel,
+			closeLabel: text.subjectSelectorCloseLabel
+		};
+	}
+
+	return {
+		...subjectSwitcher,
+		kind: SUBJECT_SWITCHER_KINDS.READY,
+		currentSubject: displayedSubject,
+		label: displayedSubject.name,
+		menuLabel: text.subjectSelectorMenuLabel,
+		closeLabel: text.subjectSelectorCloseLabel
 	};
 }
 
