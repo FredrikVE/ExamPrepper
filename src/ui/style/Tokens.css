@@ -92,10 +92,10 @@
 	--statistics-scroll-thumb: color-mix(in srgb, var(--text-soft) 48%, transparent);
 	--statistics-chart-grid: var(--line);
 	--statistics-chart-track: color-mix(in srgb, var(--accent) 5%, var(--panel-strong));
-	--statistics-chart-bar: #7f91de;
-	--statistics-chart-bar-latest: #6852ee;
-	--statistics-chart-bar-hover: #7661f2;
-	--statistics-chart-hover-shadow: color-mix(in srgb, #6852ee 24%, transparent);
+	--statistics-chart-bar: color-mix(in srgb, var(--accent) 42%, white);
+	--statistics-chart-bar-latest: var(--accent);
+	--statistics-chart-bar-hover: var(--accent-strong);
+	--statistics-chart-hover-shadow: color-mix(in srgb, var(--accent) 22%, transparent);
 	--statistics-chart-tooltip-bg: color-mix(in srgb, var(--panel-strong) 96%, white);
 	--statistics-chart-tooltip-border: color-mix(in srgb, var(--accent) 18%, var(--line));
 	--statistics-chart-tooltip-shadow: 0 16px 30px rgba(35, 55, 84, 0.18);
