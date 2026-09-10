@@ -1,5 +1,5 @@
 // src/ui/viewmodel/StatisticsPage/createStatisticsTextModel.js
-import { STATISTICS_PERIODS } from "../../../constants/StatisticsContracts.js";
+import { STATISTICS_CHART_PERIODS } from "../../../constants/StatisticsContracts.js";
 
 const SINGULAR_COUNT = 1;
 const PERCENTAGE_DECIMAL_PLACES = 1;
@@ -37,19 +37,45 @@ export default function createStatisticsTextModel(t) {
 		previousPeriodLabel: t.statisticsOverviewPreviousPeriodLabel,
 		nextPeriodLabel: t.statisticsOverviewNextPeriodLabel,
 		periodOptions: Object.freeze([
-			{ key: STATISTICS_PERIODS.WEEK, label: t.statisticsOverviewPeriodWeek },
-			{ key: STATISTICS_PERIODS.MONTH, label: t.statisticsOverviewPeriodMonth },
-			{ key: STATISTICS_PERIODS.THREE_MONTHS, label: t.statisticsOverviewPeriodThreeMonths },
-			{ key: STATISTICS_PERIODS.SIX_MONTHS, label: t.statisticsOverviewPeriodSixMonths },
-			{ key: STATISTICS_PERIODS.YEAR, label: t.statisticsOverviewPeriodYear },
-			{ key: STATISTICS_PERIODS.ALL, label: t.statisticsOverviewPeriodAll }
+			{ key: STATISTICS_CHART_PERIODS.TODAY, label: t.statisticsOverviewPeriodToday },
+			{ key: STATISTICS_CHART_PERIODS.WEEK, label: t.statisticsOverviewPeriodWeek },
+			{ key: STATISTICS_CHART_PERIODS.MONTH, label: t.statisticsOverviewPeriodMonth },
+			{ key: STATISTICS_CHART_PERIODS.THREE_MONTHS, label: t.statisticsOverviewPeriodThreeMonths },
+			{ key: STATISTICS_CHART_PERIODS.SIX_MONTHS, label: t.statisticsOverviewPeriodSixMonths },
+			{ key: STATISTICS_CHART_PERIODS.YEAR, label: t.statisticsOverviewPeriodYear },
+			{ key: STATISTICS_CHART_PERIODS.ALL, label: t.statisticsOverviewPeriodAll }
 		]),
+		weekdayShortLabels: Object.freeze([
+			t.statisticsWeekdaySundayShort,
+			t.statisticsWeekdayMondayShort,
+			t.statisticsWeekdayTuesdayShort,
+			t.statisticsWeekdayWednesdayShort,
+			t.statisticsWeekdayThursdayShort,
+			t.statisticsWeekdayFridayShort,
+			t.statisticsWeekdaySaturdayShort
+		]),
+		monthShortLabels: Object.freeze([
+			t.statisticsMonthJanuaryShort,
+			t.statisticsMonthFebruaryShort,
+			t.statisticsMonthMarchShort,
+			t.statisticsMonthAprilShort,
+			t.statisticsMonthMayShort,
+			t.statisticsMonthJuneShort,
+			t.statisticsMonthJulyShort,
+			t.statisticsMonthAugustShort,
+			t.statisticsMonthSeptemberShort,
+			t.statisticsMonthOctoberShort,
+			t.statisticsMonthNovemberShort,
+			t.statisticsMonthDecemberShort
+		]),
+		dailyBestLabel: t.statisticsOverviewDailyBestLabel,
+		averageLabel: t.statisticsOverviewAverageLabel,
 		subjectMasteryLabel: t.statisticsOverviewSubjectMasteryLabel,
 		createSubjectScopeLabel: t.statisticsOverviewSubjectScopeLabel,
 		progressLabel: t.statisticsOverviewProgressLabel,
 		createProgressAttemptSummaryLabel: t.statisticsOverviewProgressAttemptSummaryLabel,
 		completedLabel: t.statisticsOverviewCompletedLabel,
-		completedUnitLabel: t.statisticsOverviewEvidenceUnitPlural,
+		completedUnitLabel: t.statisticsOverviewCompletedUnitLabel,
 		summaryLabel: t.statisticsOverviewSummaryLabel,
 		createChartLabel: t.statisticsOverviewChartLabel,
 		chartEmptyLabel: t.statisticsOverviewChartEmptyLabel,

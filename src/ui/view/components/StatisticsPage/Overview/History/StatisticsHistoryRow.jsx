@@ -1,4 +1,4 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsHistoryRow.jsx
+// src/ui/view/components/StatisticsPage/Overview/History/StatisticsHistoryRow.jsx
 import { Check, CircleAlert, TriangleAlert } from "lucide-react";
 import StatisticsHistoryDetail from "./StatisticsHistoryDetail.jsx";
 

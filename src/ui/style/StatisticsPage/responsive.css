@@ -62,6 +62,10 @@
 	.statistics-subject-selector-options {
 		max-height: min(360px, 54vh);
 	}
+
+	.statistics-score-chart-axis-labels span:nth-child(even):not(:last-child) {
+		display: none;
+	}
 }
 
 @media (max-width: 680px) {

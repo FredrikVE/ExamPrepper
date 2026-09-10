@@ -512,8 +512,11 @@ Til da: deklarativ skjermpolicy i `navigation.js`, eksplisitte overganger i View
 Disse reglene er feature-spesifikke Statistics-kontrakter, ikke globale frontend-arkitekturlover:
 
 - **S1 — Feilgrensen følger ressursgrensen.** Statistics bruker én `useLoadModel()`, én page-feilflate og én retry. De fem embedded kortene deler ressursen og rendrer ikke egne feilflater.
-- **S2 — Kortets tomhet avgjøres i Statistics-ViewModel.** De fem kortnivå-predikatene eies samlet av `createStatisticsCardStates.js`. Grafens eksisterende `points.length === 0` er rendererens håndtering av degenerert input og forblir lokal i `StatisticsScoreChart`.
+- **S2 — Kortets tomhet avgjøres i Statistics-ViewModel.** De fem kortnivå-predikatene eies samlet av `createStatisticsCardStates.js`. Grafens eksisterende `points.length === 0` er rendererens håndtering av degenerert input og forblir lokal i `Overview/Development/Charts/StatisticsScoreChart.jsx`.
 - **S3 — En boolean er enten state-input eller render-conditional, aldri begge.** Evidence-/progress-/history-feltene som bestemmer kortstate sendes inn i state-avledningen og brukes ikke samtidig som konkurrerende empty-conditionals i View.
+- **S4 — `Overview/Development/Charts/StatisticsScoreChart.jsx` eier én felles tooltip.** Tooltip-markup, posisjonering og hover/focus-presentasjon er layoutuavhengig og rendres utenfor grafens scroll-container. `STATISTICS_CHART_LAYOUT_MODES` i `src/constants/StatisticsContracts.js` er SSOT for layoutidentitet; `layoutMode` er en påkrevd komponentkontrakt som kan styre X-aksegeometri og horisontal scrolling, men skal ikke introdusere egne tooltip-varianter eller layout-spesifikk tooltip-CSS.
+- **S5 — Dagsaggregering i `1 uke` og `1 mnd` er dagens beste.** Begge periodene viser maksimalt én søyle per lokal kalenderdag. Hvis en dag har flere mestringspunkter, beholdes bare punktet med høyest prosent for den dagen. `I dag` og `Alt` aggregerer ikke bort enkeltpunkter.
+- **S6 — Statistics Overview-komponenter grupperes etter feature og komponentrolle.** `StatisticsOverview.jsx` ligger i Overview-roten. Summary eier `StatisticsSummaryCards.jsx`; Development eier `Cards/`, `Charts/` og `Controls/`; Chapters eier oversikten og `Cards/`; History eier hele history-familien. Ikke flat ut disse filene tilbake i `Overview/` eller lag parallelle kopier.
 
 S1 er kandidat for opprykk til en generell regel først dersom en andre feature får samme ressurs-/embedded-mønster.
 

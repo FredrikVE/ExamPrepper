@@ -1,10 +1,10 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsHistory.jsx
+// src/ui/view/components/StatisticsPage/Overview/History/StatisticsHistory.jsx
 import { useState } from "react";
 import { ChevronDown, FileText } from "lucide-react";
-import WorkspaceState from "../../WorkspaceState/WorkspaceState.jsx";
-import { WORKSPACE_STATE_SCOPES } from "../../WorkspaceState/workspaceStateVariants.js";
-import ProgressPager from "../../ProgressPager/ProgressPager.jsx";
-import createProgressPagerEntries from "../../ProgressPager/createProgressPagerEntries.js";
+import WorkspaceState from "../../../WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../../../WorkspaceState/workspaceStateVariants.js";
+import ProgressPager from "../../../ProgressPager/ProgressPager.jsx";
+import createProgressPagerEntries from "../../../ProgressPager/createProgressPagerEntries.js";
 import StatisticsHistoryHeader from "./StatisticsHistoryHeader.jsx";
 import StatisticsHistoryRow from "./StatisticsHistoryRow.jsx";
 

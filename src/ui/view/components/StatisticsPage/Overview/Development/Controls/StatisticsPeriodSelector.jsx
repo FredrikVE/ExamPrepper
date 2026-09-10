@@ -1,4 +1,4 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsPeriodSelector.jsx
+// src/ui/view/components/StatisticsPage/Overview/Development/Controls/StatisticsPeriodSelector.jsx
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

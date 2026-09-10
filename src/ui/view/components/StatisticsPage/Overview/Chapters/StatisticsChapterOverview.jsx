@@ -1,9 +1,9 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsChapterOverview.jsx
+// src/ui/view/components/StatisticsPage/Overview/Chapters/StatisticsChapterOverview.jsx
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, FileText } from "lucide-react";
-import WorkspaceState from "../../WorkspaceState/WorkspaceState.jsx";
-import { WORKSPACE_STATE_SCOPES } from "../../WorkspaceState/workspaceStateVariants.js";
-import StatisticsChapterCard from "./StatisticsChapterCard.jsx";
+import WorkspaceState from "../../../WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../../../WorkspaceState/workspaceStateVariants.js";
+import StatisticsChapterCard from "./Cards/StatisticsChapterCard.jsx";
 
 const SCROLL_EDGE_TOLERANCE_PX = 2;
 const FIRST_SCROLL_POSITION = 0;

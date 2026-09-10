@@ -1,4 +1,4 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsHistoryDetail.jsx
+// src/ui/view/components/StatisticsPage/Overview/History/StatisticsHistoryDetail.jsx
 export default function StatisticsHistoryDetail({ id, model }) {
 	return (
 		<div id={id} className="statistics-history-detail">

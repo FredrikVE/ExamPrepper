@@ -1,9 +1,9 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsDevelopmentCard.jsx
+// src/ui/view/components/StatisticsPage/Overview/Development/Cards/StatisticsDevelopmentCard.jsx
 import { FileText } from "lucide-react";
-import WorkspaceState from "../../WorkspaceState/WorkspaceState.jsx";
-import { WORKSPACE_STATE_SCOPES } from "../../WorkspaceState/workspaceStateVariants.js";
-import StatisticsPeriodSelector from "./StatisticsPeriodSelector.jsx";
-import StatisticsScoreChart from "./StatisticsScoreChart.jsx";
+import WorkspaceState from "../../../../WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../../../../WorkspaceState/workspaceStateVariants.js";
+import StatisticsPeriodSelector from "../Controls/StatisticsPeriodSelector.jsx";
+import StatisticsScoreChart from "../Charts/StatisticsScoreChart.jsx";
 
 const DEVELOPMENT_CHART_ID = "statistics-development-chart";
 
@@ -23,11 +23,19 @@ export default function StatisticsDevelopmentCard({ model, state, onSelectPeriod
 						<div className="statistics-development-mastery">
 							<strong>{model.masteryValue}</strong>
 							<span>{model.masteryLabel}</span>
+							<small>{model.averageLabel}: {model.averageValue}</small>
 						</div>
 					</div>
 
 					<div className="statistics-development-chart-column">
-						<StatisticsScoreChart id={DEVELOPMENT_CHART_ID} label={model.chartLabel} points={model.chartPoints} axisStartLabel={model.chartAxisStartLabel} axisEndLabel={model.chartAxisEndLabel} emptyLabel={model.chartEmptyLabel} />
+						<StatisticsScoreChart
+							id={DEVELOPMENT_CHART_ID}
+							label={model.chartLabel}
+							points={model.chartPoints}
+							axisTicks={model.chartAxisTicks}
+							layoutMode={model.chartLayoutMode}
+							emptyLabel={model.chartEmptyLabel}
+						/>
 						<StatisticsPeriodSelector
 							label={model.periodLabel}
 							options={model.periodOptions}

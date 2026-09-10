@@ -1,7 +1,7 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsSummaryCards.jsx
+// src/ui/view/components/StatisticsPage/Overview/Summary/StatisticsSummaryCards.jsx
 import { ArrowDown, ArrowUp, FileText } from "lucide-react";
-import WorkspaceState from "../../WorkspaceState/WorkspaceState.jsx";
-import { WORKSPACE_STATE_SCOPES } from "../../WorkspaceState/workspaceStateVariants.js";
+import WorkspaceState from "../../../WorkspaceState/WorkspaceState.jsx";
+import { WORKSPACE_STATE_SCOPES } from "../../../WorkspaceState/workspaceStateVariants.js";
 
 export default function StatisticsSummaryCards({ model, progressState, completedState }) {
 	const ProgressIcon = resolveProgressIcon(model.progressDirection);

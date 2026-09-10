@@ -1,8 +1,8 @@
 // src/ui/view/components/StatisticsPage/Overview/StatisticsOverview.jsx
-import StatisticsChapterOverview from "./StatisticsChapterOverview.jsx";
-import StatisticsDevelopmentCard from "./StatisticsDevelopmentCard.jsx";
-import StatisticsHistory from "./StatisticsHistory.jsx";
-import StatisticsSummaryCards from "./StatisticsSummaryCards.jsx";
+import StatisticsChapterOverview from "./Chapters/StatisticsChapterOverview.jsx";
+import StatisticsDevelopmentCard from "./Development/Cards/StatisticsDevelopmentCard.jsx";
+import StatisticsHistory from "./History/StatisticsHistory.jsx";
+import StatisticsSummaryCards from "./Summary/StatisticsSummaryCards.jsx";
 
 export default function StatisticsOverview({ model, cardStates, actions }) {
 	return (

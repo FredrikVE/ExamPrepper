@@ -45,6 +45,13 @@
 	line-height: 1.35;
 }
 
+.statistics-development-mastery small {
+	color: var(--text-soft);
+	font-size: 0.68rem;
+	font-weight: 650;
+	line-height: 1.35;
+}
+
 .statistics-development-chart-column {
 	display: grid;
 	min-width: 0;

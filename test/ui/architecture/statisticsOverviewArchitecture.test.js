@@ -59,7 +59,7 @@ describe("Statistics Overview architecture", () => {
 	});
 
 	test("keeps Development focused and centers the period controls", () => {
-		const development = read("src/ui/view/components/StatisticsPage/Overview/StatisticsDevelopmentCard.jsx");
+		const development = read("src/ui/view/components/StatisticsPage/Overview/Development/Cards/StatisticsDevelopmentCard.jsx");
 		const periodsCss = read("src/ui/style/StatisticsPage/periods.css");
 		const responsiveCss = read("src/ui/style/StatisticsPage/responsive.css");
 
@@ -70,7 +70,7 @@ describe("Statistics Overview architecture", () => {
 	});
 
 	test("keeps the progress KPI directional and contextual", () => {
-		const summary = read("src/ui/view/components/StatisticsPage/Overview/StatisticsSummaryCards.jsx");
+		const summary = read("src/ui/view/components/StatisticsPage/Overview/Summary/StatisticsSummaryCards.jsx");
 		const overviewCss = read("src/ui/style/StatisticsPage/overview.css");
 
 		expect(summary).toContain("return ArrowUp;");
@@ -81,7 +81,7 @@ describe("Statistics Overview architecture", () => {
 	});
 
 	test("keeps canonical pager and Lucide icon ownership", () => {
-		const history = read("src/ui/view/components/StatisticsPage/Overview/StatisticsHistory.jsx");
+		const history = read("src/ui/view/components/StatisticsPage/Overview/History/StatisticsHistory.jsx");
 		const statisticsViews = readDirectory("src/ui/view/components/StatisticsPage");
 
 		expect(history).toContain("ProgressPager");
@@ -112,7 +112,7 @@ describe("Statistics Overview architecture", () => {
 	test("uses the LearningPath mastery vocabulary in chapter cards", () => {
 		const dataSource = read("src/model/datasource/StatisticsDataSource.js");
 		const chapterModel = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsChapterModels.js");
-		const chapterCard = read("src/ui/view/components/StatisticsPage/Overview/StatisticsChapterCard.jsx");
+		const chapterCard = read("src/ui/view/components/StatisticsPage/Overview/Chapters/Cards/StatisticsChapterCard.jsx");
 
 		expect(dataSource).toContain('validateMasteryScope(chapter, "statistics chapter")');
 		expect(dataSource).not.toContain("chapter.scorePercentage");
@@ -126,8 +126,8 @@ describe("Statistics Overview architecture", () => {
 		const contracts = read("src/constants/StatisticsContracts.js");
 		const overviewModel = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsOverviewModel.js");
 		const chapterModels = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsChapterModels.js");
-		const chapterOverview = read("src/ui/view/components/StatisticsPage/Overview/StatisticsChapterOverview.jsx");
-		const chapterCard = read("src/ui/view/components/StatisticsPage/Overview/StatisticsChapterCard.jsx");
+		const chapterOverview = read("src/ui/view/components/StatisticsPage/Overview/Chapters/StatisticsChapterOverview.jsx");
+		const chapterCard = read("src/ui/view/components/StatisticsPage/Overview/Chapters/Cards/StatisticsChapterCard.jsx");
 
 		expect(contracts).toContain('SUBJECT: "subject"');
 		expect(contracts).toContain('TOPIC_AREA: "topic-area"');
@@ -136,6 +136,34 @@ describe("Statistics Overview architecture", () => {
 		expect(chapterCard).toContain('aria-pressed={model.isSelected}');
 		expect(overviewModel).toContain('statistics.subjectMastery');
 		expect(overviewModel).toContain('selectedMastery.developmentPeriods');
+	});
+
+	test("keeps chart layout identity and tooltip behavior in their canonical owners", () => {
+		const contracts = read("src/constants/StatisticsContracts.js");
+		const chartModel = read("src/ui/viewmodel/StatisticsPage/Overview/createStatisticsDevelopmentChartModel.js");
+		const chart = read("src/ui/view/components/StatisticsPage/Overview/Development/Charts/StatisticsScoreChart.jsx");
+		const chartCss = read("src/ui/style/StatisticsPage/chart.css");
+		let tooltipOccurrences = chart.match(/className="statistics-score-chart-tooltip"/g);
+
+		if (tooltipOccurrences === null) {
+			tooltipOccurrences = [];
+		}
+
+		const scrollIndex = chart.indexOf('className="statistics-score-chart-scroll"');
+		const tooltipLayerIndex = chart.indexOf('className="statistics-score-chart-tooltip-layer"');
+
+		expect(contracts).toContain("export const STATISTICS_CHART_LAYOUT_MODES");
+		expect(chartModel).toContain("STATISTICS_CHART_LAYOUT_MODES");
+		expect(chart).toContain("STATISTICS_CHART_LAYOUT_MODES");
+		expect(chart).not.toContain("const CHART_LAYOUT_COMPACT");
+		expect(chart).not.toContain("const CHART_LAYOUT_SEQUENCE");
+		expect(chart).not.toContain("const CHART_LAYOUT_TIME");
+		expect(tooltipOccurrences).toHaveLength(1);
+		expect(scrollIndex).toBeGreaterThan(-1);
+		expect(tooltipLayerIndex).toBeGreaterThan(scrollIndex);
+		expect(chartCss).toContain(".statistics-score-chart-tooltip-layer {");
+		expect(chartCss).not.toContain('[data-layout-mode="sequence"] .statistics-score-chart-tooltip');
+		expect(chartCss).not.toContain('[data-layout-mode="compact"] .statistics-score-chart-tooltip');
 	});
 
 	test("keeps Statistics theme and color ownership in Tokens.css", () => {

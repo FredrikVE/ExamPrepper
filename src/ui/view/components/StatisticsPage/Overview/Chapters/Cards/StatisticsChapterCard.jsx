@@ -1,6 +1,6 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsChapterCard.jsx
-import SubjectIcon from "../../SubjectIcon.jsx";
-import { getContentIcon } from "../../Shared/contentIconRegistry.js";
+// src/ui/view/components/StatisticsPage/Overview/Chapters/Cards/StatisticsChapterCard.jsx
+import SubjectIcon from "../../../../SubjectIcon.jsx";
+import { getContentIcon } from "../../../../Shared/contentIconRegistry.js";
 
 export default function StatisticsChapterCard({ model, onSelect }) {
 	let icon = null;

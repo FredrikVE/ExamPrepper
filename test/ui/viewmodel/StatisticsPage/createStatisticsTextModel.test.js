@@ -24,6 +24,17 @@ describe("createStatisticsTextModel", () => {
 	test("uses compact period labels for the chart control", () => {
 		const text = createStatisticsTextModel(translations[LANGUAGES.NO]);
 
-		expect(text.periodOptions.map((option) => option.label)).toEqual(["1 uke", "1 mnd", "3 mnd", "6 mnd", "1 år", "Alt"]);
+		expect(text.periodOptions.map((option) => option.label)).toEqual(["I dag", "1 uke", "1 mnd", "3 mnd", "6 mnd", "1 år", "Alt"]);
+	});
+
+	test("uses explicit Statistics labels for daily best, weekdays and completed tests", () => {
+		const text = createStatisticsTextModel(translations[LANGUAGES.NO]);
+
+		expect(text.dailyBestLabel).toBe("Dagens beste");
+		expect(text.averageLabel).toBe("Gjennomsnitt");
+		expect(text.weekdayShortLabels).toEqual(["søn", "man", "tir", "ons", "tor", "fre", "lør"]);
+		expect(text.monthShortLabels).toEqual(["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"]);
+		expect(text.completedLabel).toBe("Gjennomførte");
+		expect(text.completedUnitLabel).toBe("kapitteltester eller eksamener");
 	});
 });

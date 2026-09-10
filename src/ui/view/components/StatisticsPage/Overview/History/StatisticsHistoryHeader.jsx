@@ -1,6 +1,6 @@
-// src/ui/view/components/StatisticsPage/Overview/StatisticsHistoryHeader.jsx
+// src/ui/view/components/StatisticsPage/Overview/History/StatisticsHistoryHeader.jsx
 import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
-import { SORT_DIRECTION, STATISTICS_HISTORY_SORT } from "../../../../../constants/StatisticsContracts.js";
+import { SORT_DIRECTION, STATISTICS_HISTORY_SORT } from "../../../../../../constants/StatisticsContracts.js";
 
 export default function StatisticsHistoryHeader({ model, onChangeSort }) {
 	return (

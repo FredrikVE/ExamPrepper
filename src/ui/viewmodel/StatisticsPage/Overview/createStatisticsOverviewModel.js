@@ -1,13 +1,15 @@
 // src/ui/viewmodel/StatisticsPage/Overview/createStatisticsOverviewModel.js
-import { STATISTICS_MASTERY_SCOPE_KINDS, STATISTICS_PERIODS } from "../../../../constants/StatisticsContracts.js";
+import { STATISTICS_CHART_LAYOUT_MODES, STATISTICS_CHART_PERIODS, STATISTICS_MASTERY_SCOPE_KINDS, STATISTICS_PERIODS } from "../../../../constants/StatisticsContracts.js";
 import { LANGUAGES } from "../../../../i18n/translations.js";
-import roundMasteryPercentage from "../../Shared/roundMasteryPercentage.js";
 import createStatisticsChapterModels from "./createStatisticsChapterModels.js";
+import createStatisticsDevelopmentChartModel from "./createStatisticsDevelopmentChartModel.js";
 import createStatisticsHistoryModel from "./createStatisticsHistoryModel.js";
 
 const EMPTY_ATTEMPT_COUNT = 0;
 const EMPTY_ATTEMPTS = Object.freeze([]);
 const EMPTY_CHAPTERS = Object.freeze([]);
+const EMPTY_CHART_POINTS = Object.freeze([]);
+const EMPTY_AXIS_TICKS = Object.freeze([]);
 const EMPTY_DEVELOPMENT_METRICS = Object.freeze({
 	windowStartAt: null,
 	windowEndAt: null,
@@ -20,7 +22,6 @@ const EMPTY_MASTERY_SCOPE = Object.freeze({
 	performanceBand: "not-assessed",
 	developmentPeriods: Object.freeze([])
 });
-const CHART_POINT_INDEX_STEP = 1;
 
 export default function createStatisticsOverviewModel({ statistics, period, masteryScope, historySortKey, historySortDirection, historyExpanded, historyPage, formatDate, language, subject, text }) {
 	let attempts = EMPTY_ATTEMPTS;
@@ -28,8 +29,15 @@ export default function createStatisticsOverviewModel({ statistics, period, mast
 	let completedAttemptCount = EMPTY_ATTEMPT_COUNT;
 	let selectedMastery = EMPTY_MASTERY_SCOPE;
 	let selectedScopeLabel = "";
-	let selectedMasteryLabel = text.masteryLabel;
 	let developmentMetrics = EMPTY_DEVELOPMENT_METRICS;
+	let chartPoints = EMPTY_CHART_POINTS;
+	let chartAxisTicks = EMPTY_AXIS_TICKS;
+	let selectedPeriod = period;
+	let periodOptions = text.periodOptions;
+	let periodRangeLabel = "";
+	let chartLayoutMode = STATISTICS_CHART_LAYOUT_MODES.TIME;
+	let dailyBestValue = text.emptyValueLabel;
+	let averageValue = text.emptyValueLabel;
 	let chapterItems = EMPTY_CHAPTERS;
 	let hasDevelopmentEvidence = false;
 	let hasChapterEvidence = false;
@@ -45,16 +53,27 @@ export default function createStatisticsOverviewModel({ statistics, period, mast
 		const selectedScope = resolveMasteryScope({ statistics, masteryScope, subject, language, text });
 		selectedMastery = selectedScope.mastery;
 		selectedScopeLabel = selectedScope.label;
-		selectedMasteryLabel = selectedScope.masteryLabel;
-		developmentMetrics = findDevelopmentPeriod(selectedMastery.developmentPeriods, period);
+		const developmentChart = createStatisticsDevelopmentChartModel({
+			developmentPeriods: selectedMastery.developmentPeriods,
+			selectedPeriod: period,
+			formatDate,
+			text
+		});
+		developmentMetrics = developmentChart.developmentMetrics;
+		chartPoints = developmentChart.chartPoints;
+		chartAxisTicks = developmentChart.axisTicks;
+		selectedPeriod = developmentChart.period;
+		periodOptions = createAvailablePeriodOptions(text.periodOptions, developmentChart.hasTodayData);
+		periodRangeLabel = developmentChart.rangeLabel;
+		chartLayoutMode = developmentChart.layoutMode;
+		dailyBestValue = developmentChart.dailyBestValue;
+		averageValue = developmentChart.averageValue;
 		chapterItems = createStatisticsChapterModels({ chapters, subjectMastery: statistics.subjectMastery, selectedScope: masteryScope, subject, language, text });
 		hasDevelopmentEvidence = resolveDevelopmentEvidence(selectedMastery);
 		hasChapterEvidence = resolveChapterEvidence(chapters);
 	}
 
 	const history = createStatisticsHistoryModel({ attempts, sortKey: historySortKey, sortDirection: historySortDirection, expanded: historyExpanded, page: historyPage, formatDate, text });
-	const chartPoints = createChartPointModels(developmentMetrics.chartPoints, formatDate, text);
-	const chartWindow = createChartWindowModel(developmentMetrics, formatDate, text);
 	let historyToggleLabel = text.historyShowAllLabel;
 	let progressNumberValue = text.emptyValueLabel;
 	let progressUnitLabel = "";
@@ -86,17 +105,19 @@ export default function createStatisticsOverviewModel({ statistics, period, mast
 			title: text.developmentTitle,
 			subtitle: text.createDevelopmentSubtitle(selectedScopeLabel),
 			periodLabel: text.periodLabel,
-			period,
-			periodOptions: text.periodOptions,
+			period: selectedPeriod,
+			periodOptions,
 			previousPeriodLabel: text.previousPeriodLabel,
 			nextPeriodLabel: text.nextPeriodLabel,
-			masteryLabel: selectedMasteryLabel,
-			masteryValue: text.createPercentageLabel(roundMasteryPercentage(selectedMastery.masteryPercentage)),
+			masteryLabel: text.dailyBestLabel,
+			masteryValue: dailyBestValue,
+			averageLabel: text.averageLabel,
+			averageValue,
 			chartLabel: text.createChartLabel(selectedScopeLabel),
 			chartPoints,
-			chartAxisStartLabel: chartWindow.startLabel,
-			chartAxisEndLabel: chartWindow.endLabel,
-			periodRangeLabel: chartWindow.rangeLabel,
+			chartAxisTicks,
+			chartLayoutMode,
+			periodRangeLabel,
 			chartEmptyLabel: text.chartEmptyLabel
 		},
 		summary: {
@@ -145,8 +166,7 @@ function resolveMasteryScope({ statistics, masteryScope, subject, language, text
 	if (masteryScope.kind === STATISTICS_MASTERY_SCOPE_KINDS.SUBJECT) {
 		return {
 			mastery: statistics.subjectMastery,
-			label: text.createSubjectScopeLabel(subject.name),
-			masteryLabel: text.subjectMasteryLabel
+			label: text.createSubjectScopeLabel(subject.name)
 		};
 	}
 
@@ -159,7 +179,7 @@ function resolveMasteryScope({ statistics, masteryScope, subject, language, text
 					label = chapter.labelEn;
 				}
 
-				return { mastery: chapter, label, masteryLabel: text.masteryLabel };
+				return { mastery: chapter, label };
 			}
 		}
 
@@ -195,52 +215,10 @@ function findDevelopmentPeriod(developmentPeriods, selectedPeriod) {
 	throw new Error(`Missing Statistics development period ${String(selectedPeriod)}`);
 }
 
-function createChartPointModels(chartPoints, formatDate, text) {
-	const lastIndex = chartPoints.length - CHART_POINT_INDEX_STEP;
-
-	return chartPoints.map((chartPoint, index) => {
-		const label = formatStatisticsDate(chartPoint.occurredAt, formatDate);
-
-		return {
-			key: chartPoint.key,
-			value: chartPoint.percentage,
-			label,
-			valueLabel: text.createPercentageLabel(chartPoint.percentage),
-			isLatest: index === lastIndex
-		};
-	});
-}
-
-function createChartWindowModel(developmentMetrics, formatDate, text) {
-	if (developmentMetrics.windowEndAt === null) {
-		return { startLabel: "", endLabel: "", rangeLabel: "" };
+function createAvailablePeriodOptions(periodOptions, hasTodayData) {
+	if (hasTodayData) {
+		return periodOptions;
 	}
 
-	const endLabel = formatStatisticsDate(developmentMetrics.windowEndAt, formatDate);
-
-	if (developmentMetrics.windowStartAt === null) {
-		return { startLabel: "", endLabel, rangeLabel: endLabel };
-	}
-
-	const startLabel = formatStatisticsDate(developmentMetrics.windowStartAt, formatDate);
-
-	if (startLabel === endLabel) {
-		return { startLabel, endLabel: "", rangeLabel: startLabel };
-	}
-
-	return {
-		startLabel,
-		endLabel,
-		rangeLabel: text.createPeriodRangeLabel(startLabel, endLabel)
-	};
-}
-
-function formatStatisticsDate(timestamp, formatDate) {
-	const label = formatDate(timestamp);
-
-	if (label === null || label === undefined) {
-		return timestamp;
-	}
-
-	return label;
+	return periodOptions.filter((option) => option.key !== STATISTICS_CHART_PERIODS.TODAY);
 }
