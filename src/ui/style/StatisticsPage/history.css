@@ -125,6 +125,59 @@
 	white-space: nowrap;
 }
 
+/* Navnet som knapp: åpner det leverte forsøket i lesemodus. */
+.statistics-history-name-button {
+	display: inline-flex;
+	min-width: 0;
+	max-width: 100%;
+	align-items: center;
+	justify-self: start;
+	gap: 4px;
+	border: 0;
+	background: transparent;
+	padding: 0;
+	font-family: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.statistics-history-name-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.statistics-history-name-icon {
+	width: 13px;
+	height: 13px;
+	flex: 0 0 auto;
+	color: var(--text-muted);
+	transition: transform 120ms ease;
+}
+
+/* Ser ut som en lenke ved hover og tastaturfokus: blå og understreket. */
+.statistics-history-name-button:hover,
+.statistics-history-name-button:focus-visible {
+	color: var(--statistics-history-link);
+}
+
+.statistics-history-name-button:hover .statistics-history-name-text,
+.statistics-history-name-button:focus-visible .statistics-history-name-text {
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.statistics-history-name-button:hover .statistics-history-name-icon,
+.statistics-history-name-button:focus-visible .statistics-history-name-icon {
+	color: var(--statistics-history-link);
+	transform: translateX(2px);
+}
+
+.statistics-history-name-button:focus-visible {
+	outline: 3px solid var(--button-focus-ring);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
 .statistics-history-status {
 	display: flex;
 	min-width: 0;

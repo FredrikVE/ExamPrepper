@@ -18,7 +18,8 @@ export default function useStatisticsPageViewModel(props) {
 		selectedSubject: displayedSubject,
 		text,
 		authState: props.authState,
-		onStartNewExam: props.onStartNewExam
+		onStartNewExam: props.onStartNewExam,
+		onOpenAttempt: props.onOpenAttempt ?? null
 	});
 
 	const subjectSelector = createStatisticsSubjectSelector({

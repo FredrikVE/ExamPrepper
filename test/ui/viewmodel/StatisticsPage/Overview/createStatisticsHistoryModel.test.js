@@ -16,6 +16,7 @@ const text = {
 	historyCorrectAnswersLabel: "Correct",
 	historyIncorrectAnswersLabel: "Incorrect",
 	historyTimeUsedLabel: "Time",
+	historyOpenAttemptLabel: "View completed test",
 	createPercentageLabel: (value) => {
 		if (value === null) {
 			return "—";
@@ -75,5 +76,19 @@ describe("createStatisticsHistoryModel", () => {
 		expect(model.items[0].statusLabel).toBe("Good");
 		expect(model.items[0].statusTone).toBe("positive");
 		expect(model.items[0].detailMetrics).toHaveLength(5);
+	});
+
+	test("gives each row what is needed to open the attempt in review mode", () => {
+		const attempt = { ...createAttempt(1), examId: "exam-en", baseId: "historical-exam-in5140-2018", testType: "exam", durationSeconds: 300 };
+		const model = createStatisticsHistoryModel({ attempts: [attempt], sortKey: STATISTICS_HISTORY_SORT.DATE, sortDirection: SORT_DIRECTION.DESC, expanded: false, page: 0, formatDate: (value) => value, text });
+
+		expect(model.items[0].openAttemptLabel).toBe("View completed test: Attempt 1");
+		expect(model.items[0].openAttemptRequest).toEqual({
+			attemptId: "attempt-1",
+			examId: "exam-en",
+			baseId: "historical-exam-in5140-2018",
+			testType: "exam",
+			durationSeconds: 300
+		});
 	});
 });

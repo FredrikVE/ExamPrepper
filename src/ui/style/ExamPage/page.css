@@ -66,9 +66,16 @@
     font-weight: 650;
 }
 .exam-attempt-save-status,
-.exam-attempt-save-error {
+.exam-attempt-save-error,
+.exam-review-notice {
 	margin: var(--space-4) auto 0;
 	max-width: var(--exam-page-content-max-width);
+}
+
+.exam-review-notice {
+	color: var(--text-soft);
+	font-size: 0.85rem;
+	font-weight: 650;
 }
 
 .exam-attempt-save-error {

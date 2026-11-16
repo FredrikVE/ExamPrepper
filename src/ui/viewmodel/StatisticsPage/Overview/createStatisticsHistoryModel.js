@@ -60,6 +60,14 @@ function createHistoryRowModel(attempt, formatDate, text) {
 	return {
 		attemptId: attempt.attemptId,
 		title: attempt.title,
+		openAttemptLabel: `${text.historyOpenAttemptLabel}: ${attempt.title}`,
+		openAttemptRequest: {
+			attemptId: attempt.attemptId,
+			examId: attempt.examId,
+			baseId: attempt.baseId,
+			testType: attempt.testType,
+			durationSeconds: attempt.durationSeconds
+		},
 		submittedAtLabel,
 		scoreLabel,
 		performanceBand: attempt.performanceBand,

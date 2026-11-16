@@ -1,5 +1,5 @@
 // test/ui/viewmodel/AppNavigationViewModel.test.js
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { LEARNING_CONTENT_TYPES, NAV_SCREENS, TEST_TYPES } from "../../../src/navigation/navigation.js";
 
 let hookState;
@@ -460,5 +460,78 @@ describe("useAppNavigationViewModel", () => {
 	])("fagbytteren vises på %s: %s", (screen, expected) => {
 		setNavigationState(screen, null, null, null, null, null);
 		expect(createViewModel().shouldShowSubjectSwitcher).toBe(expected);
+	});
+});
+
+describe("useAppNavigationViewModel lesemodus for leverte forsøk", () => {
+	const reviewRequest = {
+		attemptId: "attempt-1",
+		examId: "exam-no",
+		baseId: "historical-exam-in5140-2018",
+		testType: TEST_TYPES.EXAM,
+		durationSeconds: 300
+	};
+
+	afterEach(() => {
+		delete examByBaseIdAndLangUseCase.execute;
+		delete chapterTestByBaseIdAndLangUseCase.execute;
+	});
+
+	test("åpner et levert forsøk på gjeldende språk og går tilbake til statistikk", async () => {
+		setNavigationState(NAV_SCREENS.OVERVIEW, "in5140", null, null, null, null);
+		examByBaseIdAndLangUseCase.execute = jest.fn(async () => ({ id: "exam-current-language" }));
+
+		await createViewModel().openExamAttemptReview(reviewRequest);
+
+		expect(examByBaseIdAndLangUseCase.execute).toHaveBeenCalledWith({ baseId: "historical-exam-in5140-2018", lang: "nb", subjectId: "in5140" });
+		expect(hookState[0]).toBe(NAV_SCREENS.EXAM);
+		expect(hookState[2]).toBe("exam-current-language");
+		expect(hookState[6]).toBe(TEST_TYPES.EXAM);
+		expect(hookState[7]).toBe(NAV_SCREENS.OVERVIEW);
+		expect(hookState[9]).toEqual({ attemptId: "attempt-1", durationSeconds: 300 });
+	});
+
+	test("bruker read-porten for kapittelprøver", async () => {
+		setNavigationState(NAV_SCREENS.OVERVIEW, "in5140", null, null, null, null);
+		chapterTestByBaseIdAndLangUseCase.execute = jest.fn(async () => ({ id: "chapter-current-language" }));
+
+		await createViewModel().openExamAttemptReview({ ...reviewRequest, testType: TEST_TYPES.CHAPTER_TEST });
+
+		expect(chapterTestByBaseIdAndLangUseCase.execute).toHaveBeenCalled();
+		expect(hookState[2]).toBe("chapter-current-language");
+		expect(hookState[6]).toBe(TEST_TYPES.CHAPTER_TEST);
+	});
+
+	test("viser forsøket på språket det ble tatt på når oppslaget feiler", async () => {
+		setNavigationState(NAV_SCREENS.OVERVIEW, "in5140", null, null, null, null);
+		examByBaseIdAndLangUseCase.execute = jest.fn(async () => {
+			throw new Error("not found");
+		});
+
+		await createViewModel().openExamAttemptReview(reviewRequest);
+
+		expect(hookState[0]).toBe(NAV_SCREENS.EXAM);
+		expect(hookState[2]).toBe("exam-no");
+	});
+
+	test("tilbake fra et levert forsøk går til statistikk og avslutter lesemodus", async () => {
+		setNavigationState(NAV_SCREENS.EXAM, "in5140", "exam-no", null, null, null, TEST_TYPES.EXAM, NAV_SCREENS.OVERVIEW);
+		hookState[9] = { attemptId: "attempt-1", durationSeconds: 300 };
+
+		createViewModel().goBack();
+
+		expect(hookState[0]).toBe(NAV_SCREENS.OVERVIEW);
+		expect(hookState[2]).toBeNull();
+		expect(hookState[9]).toBeNull();
+	});
+
+	test("vanlig valg av eksamen avslutter lesemodus", () => {
+		setNavigationState(NAV_SCREENS.SELECT, "in5140", null, null, null, null);
+		hookState[9] = { attemptId: "attempt-1", durationSeconds: 300 };
+
+		createViewModel().selectExam("exam-no", TEST_TYPES.EXAM);
+
+		expect(hookState[0]).toBe(NAV_SCREENS.EXAM);
+		expect(hookState[9]).toBeNull();
 	});
 });

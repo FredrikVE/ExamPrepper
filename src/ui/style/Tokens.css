@@ -126,6 +126,7 @@
 	--statistics-history-warning: #9a6500;
 	--statistics-history-warning-icon-surface: #fff7df;
 	--statistics-history-details: var(--accent);
+	--statistics-history-link: var(--accent);
 	--statistics-history-detail-surface: color-mix(in srgb, var(--accent) 3%, var(--panel-strong));
 	--statistics-subject-surface: var(--panel-strong);
 	--statistics-subject-option-hover: color-mix(in srgb, var(--accent) 5%, var(--panel-strong));
@@ -390,6 +391,7 @@
 	--statistics-history-warning: #f8963b;
 	--statistics-history-warning-icon-surface: rgba(245, 197, 66, 0.12);
 	--statistics-history-details: #eef4ff;
+	--statistics-history-link: #6ea8ff;
 	--statistics-history-detail-surface: #061426;
 	--statistics-subject-surface: var(--workspace-card-surface);
 	--statistics-subject-option-hover: color-mix(in srgb, var(--accent) 8%, var(--workspace-card-surface));

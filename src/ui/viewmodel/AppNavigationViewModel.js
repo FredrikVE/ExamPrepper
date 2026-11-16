@@ -15,6 +15,8 @@ export default function useAppNavigationViewModel(props) {
 	const [selectedExamTestType, setSelectedExamTestType] = useState(null);
 	const [examReturnScreen, setExamReturnScreen] = useState(null);
 	const [selectedLearningContentEntryId, setSelectedLearningContentEntryId] = useState(DEFAULT_SELECT_CONTENT_ENTRY_ID);
+	// Satt når eksamenssiden viser et levert forsøk fra historikken: { attemptId, durationSeconds }.
+	const [selectedReviewAttempt, setSelectedReviewAttempt] = useState(null);
 
 	const mobileTopBar = useMobileDropDownTopBarModel();
 	const settingsPresentation = useSettingsPresentationModel();
@@ -39,6 +41,7 @@ export default function useAppNavigationViewModel(props) {
 		setSelectedSubjectId(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setSelectedReviewAttempt(null);
 		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(null);
 		setSelectedLearningSessionId(null);
@@ -77,6 +80,7 @@ export default function useAppNavigationViewModel(props) {
 		if (nextScreen !== NAV_SCREENS.EXAM) {
 			setSelectedExamId(null);
 			setSelectedExamTestType(null);
+			setSelectedReviewAttempt(null);
 			setExamReturnScreen(null);
 		}
 
@@ -97,6 +101,7 @@ export default function useAppNavigationViewModel(props) {
 		setSelectedSubjectId(subjectId);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setSelectedReviewAttempt(null);
 		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(null);
 		setSelectedLearningSessionId(null);
@@ -132,6 +137,7 @@ export default function useAppNavigationViewModel(props) {
 		if (entry.targetScreen !== NAV_SCREENS.EXAM) {
 			setSelectedExamId(null);
 			setSelectedExamTestType(null);
+			setSelectedReviewAttempt(null);
 			setExamReturnScreen(null);
 		}
 
@@ -155,10 +161,40 @@ export default function useAppNavigationViewModel(props) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(examId);
 		setSelectedExamTestType(testType);
+		setSelectedReviewAttempt(null);
 		setExamReturnScreen(activeScreen === NAV_SCREENS.LEARNING_PATH ? NAV_SCREENS.LEARNING_PATH : NAV_SCREENS.SELECT);
 		setActiveScreen(NAV_SCREENS.EXAM);
 		closeNavigationOverlays();
 	}, [activeScreen, closeNavigationOverlays]);
+
+	/* Åpner et levert forsøk fra historikken i lesemodus. Settet slås opp på
+	   gjeldende språk, slik at forsøket vises på samme språk som resten av appen.
+	   Finnes ikke settet på dette språket, vises det på språket forsøket ble tatt på. */
+	const openExamAttemptReview = useCallback(async ({ attemptId, examId, baseId, testType, durationSeconds }) => {
+		if (!attemptId || !examId) {
+			return;
+		}
+
+		if (testType !== TEST_TYPES.EXAM && testType !== TEST_TYPES.CHAPTER_TEST) {
+			throw new Error(`Unknown selected test type: ${String(testType)}`);
+		}
+
+		const resolvedExamId = await resolveReviewExamId({
+			examId,
+			baseId,
+			language: props.language,
+			subjectId: selectedSubjectId,
+			readPort: resolveSelectedTestSetReadPort(props, testType)
+		});
+
+		setExamLanguageSyncError(null);
+		setSelectedExamId(resolvedExamId);
+		setSelectedExamTestType(testType);
+		setSelectedReviewAttempt({ attemptId, durationSeconds: durationSeconds ?? null });
+		setExamReturnScreen(NAV_SCREENS.OVERVIEW);
+		setActiveScreen(NAV_SCREENS.EXAM);
+		closeNavigationOverlays();
+	}, [closeNavigationOverlays, props, selectedSubjectId]);
 
 	const selectFlipcardDeck = useCallback((topicAreaKey) => {
 		if (!selectedSubjectId) {
@@ -169,6 +205,7 @@ export default function useAppNavigationViewModel(props) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setSelectedReviewAttempt(null);
 		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.FLIPCARDS);
@@ -184,6 +221,7 @@ export default function useAppNavigationViewModel(props) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setSelectedReviewAttempt(null);
 		setExamReturnScreen(null);
 		setSelectedTopicAreaKey(topicAreaKey ?? null);
 		setActiveScreen(NAV_SCREENS.MATCHCARDS);
@@ -198,6 +236,7 @@ export default function useAppNavigationViewModel(props) {
 		setExamLanguageSyncError(null);
 		setSelectedExamId(null);
 		setSelectedExamTestType(null);
+		setSelectedReviewAttempt(null);
 		setExamReturnScreen(null);
 		setSelectedLearningSessionId(sessionId);
 		setActiveScreen(NAV_SCREENS.LEARNING_SESSION);
@@ -297,6 +336,7 @@ export default function useAppNavigationViewModel(props) {
 		selectedSubjectId,
 		selectedExamId,
 		selectedExamTestType,
+		selectedReviewAttempt,
 		selectedTopicAreaKey,
 		selectedLearningSessionId,
 		selectedLearningContentEntryId,
@@ -324,6 +364,7 @@ export default function useAppNavigationViewModel(props) {
 		selectLearningContent,
 		showAllSubjects,
 		selectExam,
+		openExamAttemptReview,
 		selectFlipcardDeck,
 		selectMatchCardsDeck,
 		openLearningSession,
@@ -352,4 +393,22 @@ function resolveSelectedTestSetReadPort(params, testType) {
 	}
 
 	throw new Error(`Unknown selected test type: ${String(testType)}`);
+}
+
+async function resolveReviewExamId({ examId, baseId, language, subjectId, readPort }) {
+	if (!baseId || !subjectId || !readPort?.getByBaseIdAndLangUseCase) {
+		return examId;
+	}
+
+	try {
+		const translatedExam = await readPort.getByBaseIdAndLangUseCase.execute({ baseId, lang: language, subjectId });
+
+		return translatedExam?.id ?? examId;
+	} catch (error) {
+		if (import.meta.env?.DEV === true) {
+			console.error("[openExamAttemptReview] Could not resolve exam for language", error);
+		}
+
+		return examId;
+	}
 }

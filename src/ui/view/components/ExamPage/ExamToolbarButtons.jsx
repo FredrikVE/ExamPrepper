@@ -3,8 +3,13 @@ import { CheckCircle2 } from "lucide-react";
 import ExamToolbarSubmittedActions from "./ExamToolbarSubmittedActions.jsx";
 import { useLanguage } from "../../../../i18n/LanguageContext.jsx";
 
-export default function ExamToolbarButtons({ submitted, onSubmit, onReset }) {
+export default function ExamToolbarButtons({ submitted, isReview, onSubmit, onReset }) {
     const { t } = useLanguage();
+
+    // Et levert forsøk fra historikken kan bare leses, ikke leveres eller tas på nytt.
+    if (isReview) {
+        return null;
+    }
 
     if (submitted) {
         return (

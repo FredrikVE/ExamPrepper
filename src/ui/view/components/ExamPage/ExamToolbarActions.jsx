@@ -29,6 +29,7 @@ export default function ExamToolbarActions(props) {
 
             <ExamToolbarButtons
                 submitted={props.submitted}
+                isReview={props.isReview}
                 onSubmit={props.onSubmit}
                 onReset={props.onReset}
             />

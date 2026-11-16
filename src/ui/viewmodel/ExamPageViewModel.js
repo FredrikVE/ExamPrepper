@@ -13,6 +13,11 @@ import { buildProgressBarModel } from "./Shared/ProgressBar/buildProgressBarMode
 import useExamElapsedTimerModel from "./ExamPage/useExamElapsedTimerModel.js";
 import useExamQuestionLoadModel from "./ExamPage/useExamQuestionLoadModel.js";
 import useExamSubmitModel from "./ExamPage/useExamSubmitModel.js";
+import useExamAttemptReviewModel from "./ExamPage/useExamAttemptReviewModel.js";
+import createExamAttemptReview from "./ExamPage/createExamAttemptReview.js";
+import formatElapsedTime from "./ExamPage/formatElapsedTime.js";
+import getScoreLabel from "./Utils/getScoreLabel.js";
+import combineLoadStatuses from "./LoadState/combineLoadStatuses.js";
 import { createWorkspaceState } from "./WorkspaceState/createWorkspaceState.js";
 import { WORKSPACE_STATE_KINDS } from "./WorkspaceState/workspaceStateKinds.js";
 import { toggleMultiAnswerSelection, updateObjectAnswerSelection, updateSingleAnswerSelection } from "./ExamPage/updateExamAnswers.js";
@@ -24,13 +29,20 @@ function formatExamProgressStepLabel(stepNumber, totalSteps) {
 export default function useExamPageViewModel(props) {
 	const { randomizeAnswerOptions } = useSettings();
 
-	const [answers, setAnswers] = useState({});
-	const [submitted, setSubmitted] = useState(false);
+	const [workingAnswers, setAnswers] = useState({});
+	const [workingSubmitted, setSubmitted] = useState(false);
 	const [showAllFeedback, setShowAllFeedback] = useState(true);
 	const [rawCurrentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [expandedAnswerOptionIndexesByQuestionId, setExpandedAnswerOptionIndexesByQuestionId] = useState({});
 	const [answerOptionOrderByQuestionId, setAnswerOptionOrderByQuestionId] = useState({});
 	const [scrollToTopRequestId, setScrollToTopRequestId] = useState(null);
+
+	/* Lesemodus: et levert forsøk fra historikken vises som en innlevert prøve.
+	   Svar og innlevert-tilstand avledes da fra forsøket i stedet for fra state,
+	   slik at ingenting kan endres eller leveres på nytt. */
+	const reviewAttempt = props.reviewAttempt ?? null;
+	const isReview = reviewAttempt !== null;
+	const submitted = isReview || workingSubmitted;
 
 	const requestScrollToTop = useCallback(() => {
 		setScrollToTopRequestId((requestId) => requestId === null ? 1 : requestId + 1);
@@ -103,14 +115,38 @@ export default function useExamPageViewModel(props) {
 		onQuestionsLoaded: handleQuestionsLoaded
 	});
 
+	const {
+		attempt: reviewedAttempt,
+		attemptStatus,
+		attemptError
+	} = useExamAttemptReviewModel({
+		getExamAttemptUseCase: props.getExamAttemptUseCase,
+		attemptId: isReview ? reviewAttempt.attemptId : null,
+		attemptLoadErrorMessage: props.t.examAttemptLoadErrorMessage
+	});
+
+	const attemptReview = useMemo(() => {
+		if (!isReview) {
+			return null;
+		}
+
+		return createExamAttemptReview({
+			questions,
+			attempt: reviewedAttempt,
+			gradeAnswerUseCase: props.gradeAnswerUseCase
+		});
+	}, [isReview, questions, reviewedAttempt, props.gradeAnswerUseCase]);
+
+	const answers = attemptReview === null ? workingAnswers : attemptReview.answers;
+
 	const workspaceState = createWorkspaceState({
-		loadStatus: questionsStatus,
+		loadStatus: combineLoadStatuses([questionsStatus, attemptStatus]),
 		isEmpty: questions.length === 0,
 		labels: {
 			loading: props.t.loadingMessage,
 			errorTitle: props.t.errorPrefix,
-			errorBody: questionsError,
-			emptyTitle: props.t.emptyMessage,
+			errorBody: questionsError ?? attemptError,
+			emptyTitle: isReview ? props.t.examReviewUnavailableMessage : props.t.emptyMessage,
 			emptyBody: ""
 		},
 		errorAction: null
@@ -191,6 +227,12 @@ export default function useExamPageViewModel(props) {
 		);
 	}, [currentQuestion, randomizeAnswerOptions, answerOptionOrderByQuestionId]);
 
+	let displayedElapsedTimeLabel = elapsedTimeLabel;
+
+	if (isReview) {
+		displayedElapsedTimeLabel = formatElapsedTime(reviewAttempt.durationSeconds ?? 0);
+	}
+
 	const statusModel = useMemo(() => {
 		return createExamStatusModel({
 			questions,
@@ -199,7 +241,7 @@ export default function useExamPageViewModel(props) {
 			answers,
 			submitted,
 			showAllFeedback,
-			elapsedTimeLabel,
+			elapsedTimeLabel: displayedElapsedTimeLabel,
 			calculateExamScoreUseCase: props.calculateExamScoreUseCase,
 			answeredLabel: props.t.examAnsweredLabel
 		});
@@ -210,7 +252,7 @@ export default function useExamPageViewModel(props) {
 		answers,
 		submitted,
 		showAllFeedback,
-		elapsedTimeLabel,
+		displayedElapsedTimeLabel,
 		props.calculateExamScoreUseCase,
 		props.t.examAnsweredLabel
 	]);
@@ -226,6 +268,26 @@ export default function useExamPageViewModel(props) {
 		mobileWorkStatusLabel,
 		canSubmitExam
 	} = statusModel;
+
+	/* I lesemodus er den registrerte poengsummen fasit, også om en oppgave
+	   er endret etter at forsøket ble levert. */
+	let displayedScore = examScore;
+	let displayedScoreLabel = scoreLabel;
+
+	if (isReview && reviewedAttempt !== null) {
+		displayedScore = {
+			score: reviewedAttempt.scorePoints,
+			totalPoints: reviewedAttempt.totalPoints,
+			percentage: reviewedAttempt.percentage
+		};
+		displayedScoreLabel = getScoreLabel(true, reviewedAttempt.scorePoints, reviewedAttempt.totalPoints);
+	}
+
+	let reviewNotice = null;
+
+	if (attemptReview !== null && attemptReview.hasChangedQuestions) {
+		reviewNotice = props.t.examReviewChangedQuestionsNotice;
+	}
 
 	const previousQuestion = useCallback(() => {
 		setCurrentQuestionIndex((previousIndex) => {
@@ -399,19 +461,22 @@ export default function useExamPageViewModel(props) {
 		examProgressBarModel,
 		backContract: props.backContract,
 
-		score: examScore.score,
-		totalPoints: examScore.totalPoints,
-		percentage: examScore.percentage,
+		isReview,
+		reviewNotice,
+
+		score: displayedScore.score,
+		totalPoints: displayedScore.totalPoints,
+		percentage: displayedScore.percentage,
 		savedAttempt,
 		attemptSaving,
 		attemptSaveError,
 		answeredCount,
 		answeredCountLabel,
 		answeredPercentLabel,
-		scoreLabel,
+		scoreLabel: displayedScoreLabel,
 		questionProgressLabel,
 		feedbackToggleLabel,
-		elapsedTimeLabel,
+		elapsedTimeLabel: displayedElapsedTimeLabel,
 		mobileWorkStatusLabel,
 		canSubmitExam,
 		isSubmitConfirmOpen,

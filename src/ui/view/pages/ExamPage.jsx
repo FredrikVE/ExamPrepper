@@ -31,6 +31,7 @@ export default function ExamPage({ viewModel }) {
 			scoreLabel={viewModel.scoreLabel}
 			elapsedTimeLabel={viewModel.elapsedTimeLabel}
 			submitted={viewModel.submitted}
+			isReview={viewModel.isReview}
 			onSubmit={viewModel.openSubmitConfirmation}
 			onReset={viewModel.resetExam}
 		/>
@@ -87,6 +88,10 @@ export default function ExamPage({ viewModel }) {
 
 						{viewModel.attemptSaveError && (
 							<p className="exam-attempt-save-error">{viewModel.attemptSaveError}</p>
+						)}
+
+						{viewModel.reviewNotice && (
+							<p className="exam-review-notice">{viewModel.reviewNotice}</p>
 						)}
 
 						<div className="exam-page-main">

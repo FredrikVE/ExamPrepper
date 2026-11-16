@@ -61,7 +61,7 @@ export default function StatisticsHistory({ model, state, actions }) {
 				<StatisticsHistoryHeader model={model} onChangeSort={changeHistorySort} />
 				<ol id={STATISTICS_HISTORY_LIST_ID} className="statistics-history-list">
 					{model.items.map((item) => (
-						<StatisticsHistoryRow key={item.attemptId} model={item} isExpanded={expandedAttemptId === item.attemptId} onToggle={toggleAttempt} />
+						<StatisticsHistoryRow key={item.attemptId} model={item} isExpanded={expandedAttemptId === item.attemptId} onToggle={toggleAttempt} onOpenAttempt={actions.openAttempt} />
 					))}
 				</ol>
 

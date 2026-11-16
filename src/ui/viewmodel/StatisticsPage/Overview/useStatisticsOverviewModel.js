@@ -104,7 +104,8 @@ export default function useStatisticsOverviewModel(props) {
 			toggleHistoryExpanded,
 			selectHistoryPage,
 			goToPreviousHistoryPage,
-			goToNextHistoryPage
+			goToNextHistoryPage,
+			openAttempt: props.onOpenAttempt ?? null
 		}
 	};
 }

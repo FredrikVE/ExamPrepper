@@ -95,6 +95,7 @@ export default function createStatisticsTextModel(t) {
 		historyScoreLabel: t.statisticsOverviewHistoryScoreLabel,
 		historyDetailsLabel: t.statisticsOverviewHistoryDetailsLabel,
 		historyShowDetailsLabel: t.statisticsOverviewHistoryShowDetailsLabel,
+		historyOpenAttemptLabel: t.statisticsOverviewHistoryOpenAttemptLabel,
 		historyHideDetailsLabel: t.statisticsOverviewHistoryHideDetailsLabel,
 		historyStatusGoodLabel: t.statisticsOverviewHistoryStatusGoodLabel,
 		historyStatusAttentionLabel: t.statisticsOverviewHistoryStatusAttentionLabel,

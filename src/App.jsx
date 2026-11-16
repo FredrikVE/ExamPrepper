@@ -35,7 +35,7 @@ import AppErrorBoundary from "./ui/view/components/AppErrorBoundary/AppErrorBoun
 import AppErrorFallback from "./ui/view/components/AppErrorBoundary/AppErrorFallback.jsx";
 
 import { NAV_SCREENS, TEST_TYPES } from "./navigation/navigation.js";
-import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getSubjectStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, recordFlipcardAssessmentUseCase, recordMatchCardResultUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
+import { calculateExamScoreUseCase, getAvailableChapterTestsUseCase, getAvailableExamsUseCase, getAvailableSubjectsUseCase, getChapterTestByBaseIdAndLangUseCase, getChapterTestByIdUseCase, getChapterTestQuestionsUseCase, getExamByBaseIdAndLangUseCase, getExamByIdUseCase, getExamQuestionsUseCase, getExamAttemptUseCase, getFlipcardDeckSummariesUseCase, getGlossaryEntriesForSubjectUseCase, getGlossaryNetworkUseCase, getGlossaryOverviewUseCase, getLearningPathUseCase, getLearningSessionUseCase, getSubjectStatisticsUseCase, getTopicAreasUseCase, gradeAnswerUseCase, recordFlipcardAssessmentUseCase, recordMatchCardResultUseCase, startLearningSessionUseCase, submitExamAttemptUseCase, submitLearningSessionUseCase } from "./di/dependencies.js";
 
 import "./ui/style/App.css";
 
@@ -178,6 +178,7 @@ function AppContent() {
 					<ExamPageWrapper
 						examId={navigationViewModel.selectedExamId}
 						testType={navigationViewModel.selectedExamTestType}
+						reviewAttempt={navigationViewModel.selectedReviewAttempt}
 						language={language}
 						t={t}
 						backContract={navigationViewModel.backContract}
@@ -234,6 +235,7 @@ function AppContent() {
 						t={t}
 						backContract={navigationViewModel.backContract}
 						onStartNewExam={navigationViewModel.showAllSubjects}
+						onOpenAttempt={navigationViewModel.openExamAttemptReview}
 					/>
 				)}
 
@@ -326,14 +328,16 @@ function LearningSessionPageWithViewModel(props) {
 	return <LearningSessionPage viewModel={viewModel} />;
 }
 
-function ExamPageWrapper({ examId, testType, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef, onAttemptSaved }) {
+function ExamPageWrapper({ examId, testType, reviewAttempt, language, t, backContract, onExamWorkModeChange, onHeaderProgressBarModelChange, examWorkModeActionsRef, onAttemptSaved }) {
 	const testSetQuestionsUseCase = getQuestionsUseCaseForTestType(testType);
 	const examPageViewModel = useExamPageViewModel({
 		getExamQuestionsUseCase: testSetQuestionsUseCase,
 		gradeAnswerUseCase,
 		calculateExamScoreUseCase,
 		submitExamAttemptUseCase,
+		getExamAttemptUseCase,
 		examId,
+		reviewAttempt,
 		language,
 		t,
 		backContract,
@@ -494,7 +498,7 @@ function GlossaryPageWithViewModel(props) {
 	return <GlossaryPage viewModel={glossaryPageViewModel} />;
 }
 
-function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, onBackToLearningPath, formatDate, t, backContract, onStartNewExam }) {
+function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, onBackToLearningPath, formatDate, t, backContract, onStartNewExam, onOpenAttempt }) {
 	const authState = useAppAuth();
 
 	return (
@@ -509,12 +513,13 @@ function StatisticsPageWrapper({ subjectId, selectedSubject, language, subjectSw
 			t={t}
 			backContract={backContract}
 			onStartNewExam={onStartNewExam}
+			onOpenAttempt={onOpenAttempt}
 			authState={authState}
 		/>
 	);
 }
 
-function StatisticsPageWithViewModel({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, onBackToLearningPath, formatDate, t, backContract, onStartNewExam, authState }) {
+function StatisticsPageWithViewModel({ subjectId, selectedSubject, language, subjectSwitcher, onSelectSubject, onBackToLearningPath, formatDate, t, backContract, onStartNewExam, onOpenAttempt, authState }) {
 	const statisticsPageViewModel = useStatisticsPageViewModel({
 		getSubjectStatisticsUseCase,
 		subjectId,
@@ -527,7 +532,8 @@ function StatisticsPageWithViewModel({ subjectId, selectedSubject, language, sub
 		t,
 		authState,
 		backContract,
-		onStartNewExam
+		onStartNewExam,
+		onOpenAttempt
 	});
 
 	return (

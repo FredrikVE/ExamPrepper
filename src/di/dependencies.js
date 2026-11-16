@@ -40,6 +40,7 @@ import RecordMatchCardResultUseCase from "../model/domain/mastery/RecordMatchCar
 import GradeAnswerUseCase from "../model/domain/grading/GradeAnswerUseCase.js";
 import CalculateExamScoreUseCase from "../model/domain/exams/CalculateExamScoreUseCase.js";
 import SubmitExamAttemptUseCase from "../model/domain/exams/SubmitExamAttemptUseCase.js";
+import GetExamAttemptUseCase from "../model/domain/exams/GetExamAttemptUseCase.js";
 import GetSubjectStatisticsUseCase from "../model/domain/statistics/GetSubjectStatisticsUseCase.js";
 import { getActiveAuthToken, subscribeAuthTokenProviderChange } from "../auth/AuthTokenProvider.js";
 
@@ -97,6 +98,7 @@ const getChapterTestByBaseIdAndLangUseCase = new GetTestSetByBaseIdAndLangUseCas
 const getChapterTestByIdUseCase = new GetTestSetByIdUseCase(chapterTestRepository);
 const calculateExamScoreUseCase = new CalculateExamScoreUseCase(gradeAnswerUseCase);
 const submitExamAttemptUseCase = new SubmitExamAttemptUseCase(examAttemptRepository, learningPathRepository);
+const getExamAttemptUseCase = new GetExamAttemptUseCase(examAttemptRepository);
 const getSubjectStatisticsUseCase = new GetSubjectStatisticsUseCase(statisticsRepository);
 const getGlossaryEntriesForSubjectUseCase = new GetGlossaryEntriesForSubjectUseCase(glossaryRepository);
 const getGlossaryOverviewUseCase = new GetGlossaryOverviewUseCase(glossaryRepository);
@@ -125,6 +127,7 @@ export {
     gradeAnswerUseCase,
     calculateExamScoreUseCase,
     submitExamAttemptUseCase,
+    getExamAttemptUseCase,
     getSubjectStatisticsUseCase,
     getGlossaryEntriesForSubjectUseCase,
     getGlossaryOverviewUseCase,

@@ -21,6 +21,8 @@ const useExamElapsedTimerModel = jest.fn(() => ({
 	elapsedTimeLabel: "00:00",
 	resetElapsedSeconds
 }));
+let attemptReviewModel;
+const useExamAttemptReviewModel = jest.fn(() => attemptReviewModel);
 const useExamSubmitModel = jest.fn(() => ({
 	savedAttempt: null,
 	attemptSaving: false,
@@ -55,6 +57,10 @@ jest.unstable_mockModule("../../../src/ui/viewmodel/ExamPage/useExamSubmitModel.
 	default: useExamSubmitModel
 }));
 
+jest.unstable_mockModule("../../../src/ui/viewmodel/ExamPage/useExamAttemptReviewModel.js", () => ({
+	default: useExamAttemptReviewModel
+}));
+
 const { default: useExamPageViewModel } = await import("../../../src/ui/viewmodel/ExamPageViewModel.js");
 
 const translations = {
@@ -66,12 +72,16 @@ const translations = {
 	examAnsweredLabel: "besvart",
 	examProgressAriaLabel: "Eksamensfremdrift",
 	examProgressStartLabel: "Start",
-	examAttemptSavingMessage: "Lagrer..."
+	examAttemptSavingMessage: "Lagrer...",
+	examAttemptLoadErrorMessage: "Kunne ikke laste forsøket.",
+	examReviewChangedQuestionsNotice: "Noen oppgaver er endret.",
+	examReviewUnavailableMessage: "Prøven finnes ikke lenger."
 };
 
-const createViewModel = () => {
+const createViewModel = (overrides = {}) => {
 	return useExamPageViewModel({
 		getExamQuestionsUseCase: { execute: jest.fn() },
+		getExamAttemptUseCase: { execute: jest.fn() },
 		gradeAnswerUseCase: { execute: jest.fn(), getFillMatchType: jest.fn(() => "none") },
 		calculateExamScoreUseCase: { execute: jest.fn(() => ({ score: 0, totalPoints: 1, percentage: 0 })) },
 		submitExamAttemptUseCase: { execute: jest.fn() },
@@ -79,7 +89,8 @@ const createViewModel = () => {
 		language: "no",
 		t: translations,
 		backContract: { onBack: jest.fn() },
-		onAttemptSaved: jest.fn()
+		onAttemptSaved: jest.fn(),
+		...overrides
 	});
 };
 
@@ -101,7 +112,15 @@ describe("useExamPageViewModel questionCardModel", () => {
 		useExamQuestionLoadModel.mockClear();
 		useExamElapsedTimerModel.mockClear();
 		useExamSubmitModel.mockClear();
+		useExamAttemptReviewModel.mockClear();
 		resetElapsedSeconds.mockClear();
+		attemptReviewModel = { attempt: null, attemptStatus: LOAD_STATUS.READY, attemptError: null };
+	});
+
+	test("does not load an attempt outside review mode", () => {
+		createViewModel();
+
+		expect(useExamAttemptReviewModel).toHaveBeenCalledWith(expect.objectContaining({ attemptId: null }));
 	});
 
 	test("returns null while questions are loading", () => {
@@ -173,5 +192,96 @@ describe("useExamPageViewModel questionCardModel", () => {
 		const viewModel = createViewModel();
 
 		expect(viewModel.questionCardModel.answer).toBe(null);
+	});
+});
+
+describe("useExamPageViewModel review mode", () => {
+	const reviewedQuestion = {
+		id: "q-1",
+		type: QUESTION_TYPES.SINGLE,
+		options: [{ id: "option-1" }, { id: "option-2" }]
+	};
+	const reviewedAttempt = {
+		attemptId: "attempt-1",
+		examId: "exam-1",
+		scorePoints: 1,
+		totalPoints: 2,
+		percentage: 50,
+		submittedAt: "2026-11-16T10:00:00.000Z",
+		results: [
+			{ questionKey: "q-1", submittedAnswer: "option-2", pointsAwarded: 1, maxPoints: 2, isCorrect: true }
+		]
+	};
+
+	beforeEach(() => {
+		stateValues.length = 0;
+		useExamAttemptReviewModel.mockClear();
+		questionLoadModel = {
+			questions: [reviewedQuestion],
+			questionsStatus: LOAD_STATUS.READY,
+			questionsError: null
+		};
+		attemptReviewModel = { attempt: reviewedAttempt, attemptStatus: LOAD_STATUS.READY, attemptError: null };
+	});
+
+	const createReviewViewModel = (gradeResult) => {
+		return createViewModel({
+			reviewAttempt: { attemptId: "attempt-1", durationSeconds: 125 },
+			gradeAnswerUseCase: { execute: jest.fn(() => gradeResult), getFillMatchType: jest.fn(() => "none") }
+		});
+	};
+
+	test("shows the stored answers as a submitted, read-only attempt", () => {
+		const viewModel = createReviewViewModel(true);
+
+		expect(useExamAttemptReviewModel).toHaveBeenCalledWith(expect.objectContaining({ attemptId: "attempt-1" }));
+		expect(viewModel.isReview).toBe(true);
+		expect(viewModel.submitted).toBe(true);
+		expect(viewModel.questionCardModel.answer).toBe(1);
+		expect(viewModel.questionCardModel.submitted).toBe(true);
+		expect(viewModel.canSubmitExam).toBe(false);
+		expect(viewModel.showSubmitButton).toBe(false);
+	});
+
+	test("uses the recorded score and time instead of the live values", () => {
+		const viewModel = createReviewViewModel(true);
+
+		expect(viewModel.scoreLabel).toBe("1/2");
+		expect(viewModel.score).toBe(1);
+		expect(viewModel.totalPoints).toBe(2);
+		expect(viewModel.elapsedTimeLabel).toBe("02:05");
+		expect(viewModel.reviewNotice).toBe(null);
+	});
+
+	test("flags questions that grade differently today than when the attempt was submitted", () => {
+		const viewModel = createReviewViewModel(false);
+
+		expect(viewModel.reviewNotice).toBe(translations.examReviewChangedQuestionsNotice);
+		expect(viewModel.scoreLabel).toBe("1/2");
+	});
+
+	test("waits for the attempt before showing the questions", () => {
+		attemptReviewModel = { attempt: null, attemptStatus: LOAD_STATUS.LOADING, attemptError: null };
+
+		const viewModel = createReviewViewModel(true);
+
+		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.LOADING);
+	});
+
+	test("explains that a removed test cannot be shown", () => {
+		questionLoadModel = { questions: [], questionsStatus: LOAD_STATUS.READY, questionsError: null };
+
+		const viewModel = createReviewViewModel(true);
+
+		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.EMPTY);
+		expect(viewModel.workspaceState.title).toBe(translations.examReviewUnavailableMessage);
+	});
+
+	test("shows an error when the attempt cannot be loaded", () => {
+		attemptReviewModel = { attempt: null, attemptStatus: LOAD_STATUS.ERROR, attemptError: translations.examAttemptLoadErrorMessage };
+
+		const viewModel = createReviewViewModel(true);
+
+		expect(viewModel.workspaceState.kind).toBe(WORKSPACE_STATE_KINDS.ERROR);
 	});
 });
